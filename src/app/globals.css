@@ -1,17 +1,23 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Montserrat:wght@500;600;700;800&display=swap');
 
 @theme {
-  --color-plava: #0AB3D7;
-  --color-plava-light: #E8F7FC;
-  --color-plava-dark: #088BAD;
-  --color-koral: #F78687;
-  --color-koral-light: #FFF3F3;
-  --color-koral-dark: #E06566;
-  --font-sans: "Inter", system-ui, sans-serif;
+  --color-plava: #4fb1d3;
+  --color-plava-light: #f8fcfd;
+  --color-plava-dark: #3a8fa8;
+  --color-koral: #e57b78;
+  --color-koral-light: #fdf2f2;
+  --color-koral-dark: #c95b58;
+  --font-sans: "Lato", system-ui, sans-serif;
+  --font-heading: "Montserrat", system-ui, sans-serif;
 }
 
 body {
   font-family: var(--font-sans);
   color: #1a1a2e;
-  background: #fafbfc;
+  background: #ffffff;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
 }
