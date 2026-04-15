@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { createClient } from "@/lib/supabase/client";
 import KursKartica from "@/components/KursKartica";
 import type { Course } from "@/lib/types";
 
 export default function Pocetna() {
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
 
