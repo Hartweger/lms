@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Navigacija from "@/components/Navigacija";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Hartweger — Škola nemačkog jezika",
@@ -23,6 +24,7 @@ export default function RootLayout({
       <body className="min-h-screen flex flex-col">
         <Navigacija />
         <main className="flex-1">{children}</main>
+        <Footer />
       </body>
     </html>
   );
