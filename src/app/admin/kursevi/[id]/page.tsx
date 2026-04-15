@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import type { Course, Lesson } from "@/lib/types";
 
@@ -205,6 +206,12 @@ export default function IzmeniKurs() {
                     className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm"
                   />
                 </div>
+                <Link
+                  href={`/admin/vezbe/${lesson.id}`}
+                  className="text-plava hover:underline text-sm shrink-0"
+                >
+                  Vežbe
+                </Link>
                 <button
                   onClick={() => handleDeleteLesson(lesson.id)}
                   className="text-koral hover:text-koral-dark text-sm shrink-0"
