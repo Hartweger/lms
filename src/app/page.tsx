@@ -17,6 +17,7 @@ export default function Pocetna() {
           .from("courses")
           .select("*")
           .eq("is_published", true)
+          .eq("course_type", "video")
           .order("created_at", { ascending: false });
         if (data) setCourses(data as Course[]);
       } catch (e) {

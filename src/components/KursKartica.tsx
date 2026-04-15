@@ -1,12 +1,6 @@
 import Link from "next/link";
 import type { Course } from "@/lib/types";
 
-const typeLabels: Record<string, string> = {
-  video: "Video kurs",
-  individual: "1:1 Nastava",
-  group: "Grupna nastava",
-};
-
 const typeColors: Record<string, string> = {
   video: "bg-plava",
   individual: "bg-koral",
@@ -17,9 +11,9 @@ export default function KursKartica({ course }: { course: Course }) {
   return (
     <Link href={`/kurs/${course.slug}`} className="block group">
       <div className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-        <div className={`${typeColors[course.course_type]} p-8 text-center`}>
-          <span className="text-white text-xs font-semibold uppercase tracking-wider">
-            {typeLabels[course.course_type]}
+        <div className="bg-plava p-8 text-center">
+          <span className="text-white text-lg font-bold">
+            {course.title}
           </span>
         </div>
         <div className="p-5">
@@ -29,10 +23,7 @@ export default function KursKartica({ course }: { course: Course }) {
           <p className="text-sm text-gray-500 mt-2 line-clamp-2">
             {course.description}
           </p>
-          <div className="mt-4 flex items-center justify-between">
-            <span className="text-plava font-bold">
-              {course.price > 0 ? `${course.price.toLocaleString("sr-RS")} RSD` : "Besplatno"}
-            </span>
+          <div className="mt-4 flex items-center justify-end">
             <span className="text-xs text-gray-400 group-hover:text-plava transition-colors">
               Saznaj više →
             </span>

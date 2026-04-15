@@ -7,6 +7,7 @@ import FillBlankExercise from "./FillBlankExercise";
 import MatchPairsExercise from "./MatchPairsExercise";
 import WordOrderExercise from "./WordOrderExercise";
 import EssayExercise from "./EssayExercise";
+import WordwallExercise from "./WordwallExercise";
 import type { Exercise, ExerciseQuestion } from "@/lib/types";
 
 interface ExerciseRunnerProps {
@@ -26,6 +27,36 @@ export default function ExerciseRunner({ exercise, questions }: ExerciseRunnerPr
   const [xpGained, setXpGained] = useState(0);
 
   const question = questions[currentIndex];
+
+  // Parse options — handles both old format (string[]) and new format ({ type, items })
+  function parseOptions(opts: unknown): { type: string; items: unknown } {
+    if (!opts) return { type: "quiz", items: [] };
+
+    // New format: { type: "quiz", items: [...] }
+    if (typeof opts === "object" && !Array.isArray(opts) && opts !== null) {
+      const o = opts as Record<string, unknown>;
+      if (o.type && o.items !== undefined) {
+        return { type: o.type as string, items: o.items };
+      }
+    }
+
+    // Old format: string[] or JSON string
+    if (Array.isArray(opts)) return { type: "quiz", items: opts };
+    if (typeof opts === "string") {
+      try {
+        const parsed = JSON.parse(opts);
+        if (typeof parsed === "object" && parsed.type) return { type: parsed.type, items: parsed.items };
+        if (Array.isArray(parsed)) return { type: "quiz", items: parsed };
+      } catch { /* not JSON */ }
+      return { type: "quiz", items: [opts] };
+    }
+    return { type: "quiz", items: [] };
+  }
+
+  function getItemsAsStringArray(items: unknown): string[] {
+    if (Array.isArray(items)) return items.map(String);
+    return [];
+  }
 
   const handleAnswer = (correct: boolean) => {
     if (correct) {
@@ -154,52 +185,81 @@ export default function ExerciseRunner({ exercise, questions }: ExerciseRunnerPr
         </div>
       )}
 
-      {/* Question */}
+      {/* Question — type determined per-question from options.type */}
       <div className="bg-white rounded-xl p-6 shadow-sm">
-        {exercise.exercise_type === "quiz" && (
-          <QuizExercise
-            key={question.id}
-            question={question.question}
-            options={question.options as string[]}
-            correctAnswer={parseInt(question.correct_answer)}
-            explanation={question.explanation}
-            onAnswer={handleAnswer}
-          />
-        )}
-        {exercise.exercise_type === "fill_blank" && (
-          <FillBlankExercise
-            key={question.id}
-            question={question.question}
-            options={question.options as string[]}
-            correctAnswer={question.correct_answer}
-            explanation={question.explanation}
-            onAnswer={handleAnswer}
-          />
-        )}
-        {exercise.exercise_type === "match_pairs" && (
-          <MatchPairsExercise
-            key={question.id}
-            pairs={question.options as { de: string; sr: string }[]}
-            onAnswer={handleAnswer}
-          />
-        )}
-        {exercise.exercise_type === "word_order" && (
-          <WordOrderExercise
-            key={question.id}
-            words={question.options as string[]}
-            correctAnswer={question.correct_answer}
-            hint={question.question}
-            onAnswer={handleAnswer}
-          />
-        )}
-        {exercise.exercise_type === "listen_write" && (
-          <EssayExercise
-            key={question.id}
-            task={question.question}
-            level="A1"
-            onAnswer={handleAnswer}
-          />
-        )}
+        {(() => {
+          const parsed = parseOptions(question.options);
+          const qType = parsed.type;
+          const items = parsed.items;
+
+          if (qType === "quiz") {
+            return (
+              <QuizExercise
+                key={question.id}
+                question={question.question}
+                options={getItemsAsStringArray(items)}
+                correctAnswer={parseInt(question.correct_answer)}
+                explanation={question.explanation}
+                onAnswer={handleAnswer}
+              />
+            );
+          }
+          if (qType === "fill_blank") {
+            return (
+              <FillBlankExercise
+                key={question.id}
+                question={question.question}
+                options={getItemsAsStringArray(items)}
+                correctAnswer={question.correct_answer}
+                explanation={question.explanation}
+                onAnswer={handleAnswer}
+              />
+            );
+          }
+          if (qType === "match_pairs") {
+            return (
+              <MatchPairsExercise
+                key={question.id}
+                pairs={Array.isArray(items) ? items as { de: string; sr: string }[] : []}
+                onAnswer={handleAnswer}
+              />
+            );
+          }
+          if (qType === "word_order") {
+            return (
+              <WordOrderExercise
+                key={question.id}
+                words={getItemsAsStringArray(items)}
+                correctAnswer={question.correct_answer}
+                hint={question.question}
+                onAnswer={handleAnswer}
+              />
+            );
+          }
+          if (qType === "wordwall") {
+            const url = typeof items === "string" ? items : Array.isArray(items) ? items[0] : "";
+            return (
+              <WordwallExercise
+                key={question.id}
+                url={url as string}
+                onAnswer={(correct) => {
+                  handleAnswer(correct);
+                  // Auto-advance after wordwall — no need for extra "next" click
+                  setTimeout(() => handleNext(), 800);
+                }}
+              />
+            );
+          }
+          // Fallback: essay
+          return (
+            <EssayExercise
+              key={question.id}
+              task={question.question}
+              level="A1"
+              onAnswer={handleAnswer}
+            />
+          );
+        })()}
       </div>
 
       {/* Next button */}

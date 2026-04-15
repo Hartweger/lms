@@ -31,12 +31,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export const dynamic = "force-dynamic";
 
-const typeLabels: Record<string, string> = {
-  video: "Video kurs",
-  individual: "1:1 Nastava",
-  group: "Grupna nastava",
-};
-
 export default async function KursStranica({ params }: PageProps) {
   const { slug } = await params;
   const supabase = await createClient();
@@ -60,6 +54,9 @@ export default async function KursStranica({ params }: PageProps) {
     .eq("is_free_preview", true)
     .order("order_index");
 
+  // Fetch all lessons if user has access
+  let allLessons: Lesson[] = [];
+
   // Check if current user has access
   const { data: { user } } = await supabase.auth.getUser();
   let hasAccess = false;
@@ -71,6 +68,14 @@ export default async function KursStranica({ params }: PageProps) {
       .eq("course_id", typedCourse.id)
       .single();
     hasAccess = !!access;
+    if (hasAccess) {
+      const { data: lessons } = await supabase
+        .from("lessons")
+        .select("*")
+        .eq("course_id", typedCourse.id)
+        .order("order_index");
+      allLessons = (lessons as Lesson[]) || [];
+    }
   }
 
   // Get total lesson count
@@ -83,23 +88,17 @@ export default async function KursStranica({ params }: PageProps) {
     <div className="max-w-4xl mx-auto px-4 py-12">
       {/* Header */}
       <div className="mb-8">
-        <span className="text-xs font-semibold uppercase tracking-wider text-plava">
-          {typeLabels[typedCourse.course_type]}
-        </span>
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mt-2">
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
           {typedCourse.title}
         </h1>
         <p className="text-gray-500 mt-4 text-lg">{typedCourse.description}</p>
       </div>
 
-      {/* Price + CTA */}
+      {/* CTA */}
       <div className="bg-white rounded-xl p-6 shadow-sm mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <div className="text-3xl font-bold text-plava">
-            {typedCourse.price.toLocaleString("sr-RS")} RSD
-          </div>
           {lessonCount && (
-            <div className="text-sm text-gray-400 mt-1">{lessonCount} lekcija</div>
+            <div className="text-sm text-gray-500">{lessonCount} lekcija</div>
           )}
         </div>
         {hasAccess ? (
@@ -110,17 +109,50 @@ export default async function KursStranica({ params }: PageProps) {
             Nastavi učenje →
           </Link>
         ) : (
-          <Link
-            href={user ? "#kupovina" : "/prijava"}
+          <a
+            href={user ? "https://www.hartweger.rs/prodavnica/" : "/prijava"}
             className="bg-koral text-white px-8 py-3 rounded-lg font-medium hover:bg-koral-dark transition-colors"
           >
-            {user ? "Kupi kurs" : "Prijavi se za kupovinu"}
-          </Link>
+            {user ? "Kupi na hartweger.rs →" : "Prijavi se"}
+          </a>
         )}
       </div>
 
-      {/* Free preview lessons */}
-      {previewLessons && previewLessons.length > 0 && (
+      {/* All lessons — for users with access */}
+      {hasAccess && allLessons.length > 0 && (
+        <div className="mb-8">
+          <details open className="group">
+            <summary className="flex items-center justify-between cursor-pointer mb-4">
+              <h2 className="text-xl font-bold text-gray-900">
+                Lekcije ({allLessons.length})
+              </h2>
+              <span className="text-sm text-plava group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <div className="space-y-2">
+              {allLessons.map((lesson, i) => (
+                <Link
+                  key={lesson.id}
+                  href={`/lekcija/${lesson.id}`}
+                  className="block bg-white rounded-lg p-3 md:p-4 shadow-sm hover:shadow-md transition-shadow"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-plava-light text-plava text-xs md:text-sm font-bold flex items-center justify-center shrink-0">
+                      {i + 1}
+                    </span>
+                    <span className="font-medium text-gray-900 text-sm md:text-base">{lesson.title}</span>
+                    {lesson.lesson_type === "video" && (
+                      <span className="text-xs text-gray-400 ml-auto shrink-0">▶</span>
+                    )}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </details>
+        </div>
+      )}
+
+      {/* Free preview lessons — for users without access */}
+      {!hasAccess && previewLessons && previewLessons.length > 0 && (
         <div className="mb-8">
           <h2 className="text-xl font-bold text-gray-900 mb-4">
             Besplatne probne lekcije

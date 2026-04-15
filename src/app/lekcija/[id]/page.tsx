@@ -133,11 +133,14 @@ export default async function LekcijaStranica({ params }: PageProps) {
         )}
       </div>
 
-      {/* Sidebar: lesson list */}
+      {/* Sidebar: lesson list — collapsible */}
       {allLessons && allLessons.length > 1 && (
-        <div className="mt-8 bg-white rounded-xl p-5 shadow-sm">
-          <h3 className="font-semibold text-gray-900 mb-3">Sve lekcije</h3>
-          <div className="space-y-2">
+        <details className="mt-8 bg-white rounded-xl p-5 shadow-sm group">
+          <summary className="flex items-center justify-between cursor-pointer">
+            <h3 className="font-semibold text-gray-900">Sve lekcije ({allLessons.length})</h3>
+            <span className="text-sm text-plava group-open:rotate-180 transition-transform">▼</span>
+          </summary>
+          <div className="space-y-2 mt-3">
             {allLessons.map((l, i) => (
               <Link
                 key={l.id}
@@ -148,19 +151,14 @@ export default async function LekcijaStranica({ params }: PageProps) {
                     : "text-gray-600 hover:bg-gray-50"
                 }`}
               >
-                <span className="w-6 h-6 rounded-full bg-gray-100 text-xs flex items-center justify-center font-medium">
+                <span className="w-6 h-6 rounded-full bg-gray-100 text-xs flex items-center justify-center font-medium shrink-0">
                   {i + 1}
                 </span>
-                {l.title}
-                {l.is_free_preview && (
-                  <span className="text-[10px] text-plava bg-plava-light px-2 py-0.5 rounded-full ml-auto">
-                    Besplatno
-                  </span>
-                )}
+                <span className="truncate">{l.title}</span>
               </Link>
             ))}
           </div>
-        </div>
+        </details>
       )}
     </div>
   );
