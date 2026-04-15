@@ -6,6 +6,7 @@ import QuizExercise from "./QuizExercise";
 import FillBlankExercise from "./FillBlankExercise";
 import MatchPairsExercise from "./MatchPairsExercise";
 import WordOrderExercise from "./WordOrderExercise";
+import EssayExercise from "./EssayExercise";
 import type { Exercise, ExerciseQuestion } from "@/lib/types";
 
 interface ExerciseRunnerProps {
@@ -119,6 +120,14 @@ export default function ExerciseRunner({ exercise, questions }: ExerciseRunnerPr
             words={question.options as string[]}
             correctAnswer={question.correct_answer}
             hint={question.question}
+            onAnswer={handleAnswer}
+          />
+        )}
+        {exercise.exercise_type === "listen_write" && (
+          <EssayExercise
+            key={question.id}
+            task={question.question}
+            level="A1"
             onAnswer={handleAnswer}
           />
         )}

@@ -11,7 +11,7 @@ const typeLabels: Record<string, string> = {
   fill_blank: "Popuni prazninu",
   match_pairs: "Spoji parove",
   word_order: "Poredaj reči",
-  listen_write: "Slušaj i piši",
+  listen_write: "Slobodan odgovor (AI)",
 };
 
 export default function AdminVezbe() {
@@ -327,9 +327,18 @@ export default function AdminVezbe() {
                       </div>
                     )}
 
-                    {/* Listen write placeholder */}
+                    {/* Essay / free-writing editor */}
                     {ex.exercise_type === "listen_write" && (
-                      <p className="text-sm text-gray-400">Editor za &quot;slušaj i piši&quot; dolazi uskoro.</p>
+                      <div className="space-y-3">
+                        <textarea
+                          value={q.question}
+                          onChange={(e) => updateQuestion(q.id, ex.id, "question", e.target.value)}
+                          placeholder="Zadatak za studenta (npr: Napiši 3-4 rečenice o svojoj porodici na nemačkom...)"
+                          rows={3}
+                          className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-plava resize-none"
+                        />
+                        <p className="text-xs text-gray-400">AI (Claude) će automatski proveriti gramatiku i dati feedback studentu na srpskom.</p>
+                      </div>
                     )}
                   </div>
                 ))}
