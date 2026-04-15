@@ -20,11 +20,27 @@ export default function ExerciseRunner({ exercise, questions }: ExerciseRunnerPr
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
   const [showNext, setShowNext] = useState(false);
+  const [streak, setStreak] = useState(0);
+  const [xp, setXp] = useState(0);
+  const [showXpAnimation, setShowXpAnimation] = useState(false);
+  const [xpGained, setXpGained] = useState(0);
 
   const question = questions[currentIndex];
 
   const handleAnswer = (correct: boolean) => {
-    if (correct) setScore((s) => s + 1);
+    if (correct) {
+      const newStreak = streak + 1;
+      setStreak(newStreak);
+      const bonus = newStreak >= 3 ? 5 : 0;
+      const gained = 10 + bonus;
+      setXp(xp + gained);
+      setXpGained(gained);
+      setShowXpAnimation(true);
+      setTimeout(() => setShowXpAnimation(false), 1000);
+      setScore(score + 1);
+    } else {
+      setStreak(0);
+    }
     setShowNext(true);
   };
 
@@ -49,12 +65,44 @@ export default function ExerciseRunner({ exercise, questions }: ExerciseRunnerPr
 
   if (finished) {
     const percent = Math.round((score / questions.length) * 100);
+    const stars = percent >= 90 ? 3 : percent >= 50 ? 2 : 1;
+    const isPerfect = percent === 100;
+
     return (
-      <div className="text-center py-8">
+      <div className="text-center py-8 relative overflow-hidden">
+        {/* Confetti for perfect score */}
+        {isPerfect && (
+          <div className="absolute inset-0 pointer-events-none">
+            {Array.from({ length: 50 }).map((_, i) => (
+              <div
+                key={i}
+                className="absolute w-2 h-2 rounded-full"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `-10px`,
+                  backgroundColor: ['#4fb1d3', '#e57b78', '#fbbf24', '#34d399', '#a78bfa'][i % 5],
+                  animation: `confetti-fall ${1.5 + Math.random() * 2}s ease-in forwards`,
+                  animationDelay: `${Math.random() * 0.5}s`,
+                }}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Stars */}
+        <div className="text-4xl mb-4">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <span key={i} className={i < stars ? "opacity-100" : "opacity-20"}>
+              ⭐
+            </span>
+          ))}
+        </div>
+
         <div className="text-5xl font-bold text-plava mb-2">{percent}%</div>
         <p className="text-gray-500 mb-1">Tacnih odgovora: {score} od {questions.length}</p>
+        <p className="text-plava font-bold mb-1">{xp} XP zaradjeno</p>
         <p className="text-sm text-gray-400">
-          {percent === 100 ? "Savrseno!" : percent >= 70 ? "Odlicno!" : percent >= 50 ? "Dobro, nastavi da vezbas!" : "Pokusaj ponovo!"}
+          {percent === 100 ? "Savrseno! 🎉" : percent >= 90 ? "Odlicno!" : percent >= 70 ? "Vrlo dobro!" : percent >= 50 ? "Dobro, nastavi da vezbas!" : "Pokusaj ponovo!"}
         </p>
         <button
           onClick={() => {
@@ -62,6 +110,8 @@ export default function ExerciseRunner({ exercise, questions }: ExerciseRunnerPr
             setScore(0);
             setFinished(false);
             setShowNext(false);
+            setStreak(0);
+            setXp(0);
           }}
           className="mt-6 bg-plava text-white px-6 py-3 rounded-lg hover:bg-plava-dark transition-colors"
         >
@@ -76,7 +126,17 @@ export default function ExerciseRunner({ exercise, questions }: ExerciseRunnerPr
       {/* Progress */}
       <div className="flex items-center justify-between mb-4">
         <span className="text-sm font-medium text-plava">{exercise.title}</span>
-        <span className="text-sm text-gray-400">{currentIndex + 1} / {questions.length}</span>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-plava font-bold">{xp} XP</span>
+            {showXpAnimation && (
+              <span className="text-xs text-green-500 font-bold animate-bounce">
+                +{xpGained}
+              </span>
+            )}
+          </div>
+          <span className="text-sm text-gray-400">{currentIndex + 1} / {questions.length}</span>
+        </div>
       </div>
       <div className="bg-gray-100 rounded-full h-2 mb-6 overflow-hidden">
         <div
@@ -84,6 +144,15 @@ export default function ExerciseRunner({ exercise, questions }: ExerciseRunnerPr
           style={{ width: `${((currentIndex + 1) / questions.length) * 100}%` }}
         />
       </div>
+
+      {/* Streak counter */}
+      {streak >= 2 && (
+        <div className="text-center mb-4 animate-bounce">
+          <span className="text-lg font-bold text-orange-500">
+            🔥 {streak} u nizu!
+          </span>
+        </div>
+      )}
 
       {/* Question */}
       <div className="bg-white rounded-xl p-6 shadow-sm">
