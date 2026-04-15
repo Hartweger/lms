@@ -1,17 +1,17 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import KursKartica from "@/components/KursKartica";
 import type { Course } from "@/lib/types";
 
 export default function Pocetna() {
-  const supabase = useMemo(() => createClient(), []);
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const load = async () => {
+      const supabase = createClient();
       const { data } = await supabase
         .from("courses")
         .select("*")
@@ -21,7 +21,7 @@ export default function Pocetna() {
       setLoading(false);
     };
     load();
-  }, [supabase]);
+  }, []);
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-12">
