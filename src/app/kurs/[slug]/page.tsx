@@ -29,6 +29,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
+export const dynamic = "force-dynamic";
+
 const typeLabels: Record<string, string> = {
   video: "Video kurs",
   individual: "1:1 Nastava",

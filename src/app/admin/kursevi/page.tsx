@@ -2,6 +2,8 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import type { Course } from "@/lib/types";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminKursevi() {
   const supabase = await createClient();
   const { data: courses } = await supabase

@@ -3,6 +3,8 @@ import { createClient } from "@/lib/supabase/server";
 import ProgressBar from "@/components/ProgressBar";
 import type { Course } from "@/lib/types";
 
+export const dynamic = "force-dynamic";
+
 export default async function Dashboard() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();

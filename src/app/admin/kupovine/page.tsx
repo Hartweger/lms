@@ -1,5 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminKupovine() {
   const supabase = await createClient();
   const { data: purchases } = await supabase

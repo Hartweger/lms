@@ -1,5 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminTestNivoa() {
   const supabase = await createClient();
   const { data: results } = await supabase.from("placement_test_results").select("*").order("created_at", { ascending: false }).limit(100);
