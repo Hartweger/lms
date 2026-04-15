@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import LekcijaContent from "@/components/LekcijaContent";
-import type { Lesson } from "@/lib/types";
+import type { Lesson, Exercise } from "@/lib/types";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -51,6 +51,13 @@ export default async function LekcijaStranica({ params }: PageProps) {
     );
   }
 
+  // Fetch exercises for this lesson
+  const { data: exercises } = await supabase
+    .from("exercises")
+    .select("*")
+    .eq("lesson_id", typedLesson.id)
+    .order("order_index");
+
   // Find prev/next lessons
   const currentIndex = allLessons?.findIndex((l) => l.id === typedLesson.id) ?? -1;
   const prevLesson = currentIndex > 0 ? allLessons?.[currentIndex - 1] : null;
@@ -76,6 +83,29 @@ export default async function LekcijaStranica({ params }: PageProps) {
 
       {/* Lesson content */}
       <LekcijaContent lesson={typedLesson} />
+
+      {/* Exercises */}
+      {exercises && exercises.length > 0 && (
+        <div className="mt-8">
+          <h3 className="font-semibold text-gray-900 mb-3">Vezbe</h3>
+          <div className="space-y-2">
+            {(exercises as Exercise[]).map((ex) => (
+              <Link
+                key={ex.id}
+                href={`/vezba/${ex.id}`}
+                className="block bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="font-medium text-gray-900">{ex.title}</span>
+                  <span className="text-xs text-plava bg-plava-light px-3 py-1 rounded-full">
+                    {ex.exercise_type === "quiz" ? "Kviz" : ex.exercise_type === "fill_blank" ? "Popuni" : ex.exercise_type === "match_pairs" ? "Spoji" : ex.exercise_type === "word_order" ? "Poredaj" : "Slusaj"}
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Lesson navigation */}
       <div className="flex justify-between items-center mt-8 pt-6 border-t border-gray-100">

@@ -58,3 +58,34 @@ export interface Purchase {
   status: "pending" | "completed" | "failed";
   created_at: string;
 }
+
+export type ExerciseType = "quiz" | "fill_blank" | "match_pairs" | "word_order" | "listen_write";
+
+export interface Exercise {
+  id: string;
+  lesson_id: string;
+  title: string;
+  exercise_type: ExerciseType;
+  order_index: number;
+  created_at: string;
+}
+
+export interface ExerciseQuestion {
+  id: string;
+  exercise_id: string;
+  question: string;
+  options: unknown;
+  correct_answer: string;
+  explanation: string | null;
+  audio_url: string | null;
+  order_index: number;
+}
+
+export interface ExerciseAttempt {
+  id: string;
+  user_id: string;
+  exercise_id: string;
+  score: number;
+  total_questions: number;
+  completed_at: string;
+}
