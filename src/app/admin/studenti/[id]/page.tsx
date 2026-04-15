@@ -20,7 +20,7 @@ export default function AdminStudentDetalji() {
       const { data: courses } = await supabase.from("courses").select("*");
       if (courses) setAllCourses(courses as Course[]);
       const { data: access } = await supabase.from("course_access").select("course_id").eq("user_id", params.id);
-      if (access) setAccessCourseIds(access.map((a) => a.course_id));
+      if (access) setAccessCourseIds(access.map((a: { course_id: string }) => a.course_id));
       setLoading(false);
     };
     load();
