@@ -11,13 +11,18 @@ export default function Pocetna() {
 
   useEffect(() => {
     const load = async () => {
-      const supabase = createClient();
-      const { data } = await supabase
-        .from("courses")
-        .select("*")
-        .eq("is_published", true)
-        .order("created_at", { ascending: false });
-      if (data) setCourses(data as Course[]);
+      try {
+        const supabase = createClient();
+        const { data, error } = await supabase
+          .from("courses")
+          .select("*")
+          .eq("is_published", true)
+          .order("created_at", { ascending: false });
+        console.log("Supabase response:", { data, error });
+        if (data) setCourses(data as Course[]);
+      } catch (e) {
+        console.error("Fetch error:", e);
+      }
       setLoading(false);
     };
     load();
