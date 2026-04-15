@@ -19,6 +19,7 @@ export default function Pocetna() {
           .eq("is_published", true)
           .order("created_at", { ascending: false });
         console.log("Supabase response:", { data, error });
+        alert("Courses: " + JSON.stringify(data?.length) + " Error: " + JSON.stringify(error));
         if (data) setCourses(data as Course[]);
       } catch (e) {
         console.error("Fetch error:", e);
