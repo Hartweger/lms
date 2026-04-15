@@ -21,6 +21,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="sr">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet" />
+      </head>
       <body className="min-h-screen flex flex-col">
         <Navigacija />
         <main className="flex-1">{children}</main>
