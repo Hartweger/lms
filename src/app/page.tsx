@@ -2,6 +2,8 @@ import { createClient } from "@/lib/supabase/server";
 import KursKartica from "@/components/KursKartica";
 import type { Course } from "@/lib/types";
 
+export const dynamic = "force-dynamic";
+
 export default async function Pocetna() {
   const supabase = await createClient();
   const { data: courses } = await supabase
