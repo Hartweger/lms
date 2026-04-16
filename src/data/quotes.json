@@ -1,0 +1,29 @@
+{
+  "quotes": [
+    {
+      "text_de": "Übung macht den Meister.",
+      "text_sr": "Vežba čini majstora.",
+      "show_translation": true
+    },
+    {
+      "text_de": "Wer rastet, der rostet.",
+      "text_sr": "Ko stane, zarđa.",
+      "show_translation": true
+    },
+    {
+      "text_de": "Aller Anfang ist schwer.",
+      "text_sr": "Svaki početak je težak.",
+      "show_translation": false
+    },
+    {
+      "text_de": "Es ist noch kein Meister vom Himmel gefallen.",
+      "text_sr": "Nijedan majstor nije pao s neba.",
+      "show_translation": true
+    },
+    {
+      "text_de": "Ohne Fleiß kein Preis.",
+      "text_sr": "Bez truda nema uspeha.",
+      "show_translation": false
+    }
+  ]
+}
