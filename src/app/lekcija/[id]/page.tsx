@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import LekcijaContent from "@/components/LekcijaContent";
+import LessonDrawer from "@/components/LessonDrawer";
 import type { Lesson, Exercise } from "@/lib/types";
 
 interface PageProps {
@@ -14,7 +15,6 @@ export default async function LekcijaStranica({ params }: PageProps) {
   const { id } = await params;
   const supabase = await createClient();
 
-  // Fetch lesson — RLS handles access control
   const { data: lesson } = await supabase
     .from("lessons")
     .select("*")
@@ -25,22 +25,21 @@ export default async function LekcijaStranica({ params }: PageProps) {
 
   const typedLesson = lesson as Lesson;
 
-  // Get course info
   const { data: course } = await supabase
     .from("courses")
     .select("id, title, slug")
     .eq("id", typedLesson.course_id)
     .single();
 
-  // Get all lessons in this course that the user can see
   const { data: allLessons } = await supabase
     .from("lessons")
     .select("id, title, order_index, is_free_preview")
     .eq("course_id", typedLesson.course_id)
     .order("order_index");
 
-  // Mark lesson as completed if user is logged in
   const { data: { user } } = await supabase.auth.getUser();
+
+  // Mark lesson as completed
   if (user && !typedLesson.is_free_preview) {
     await supabase.from("lesson_progress").upsert(
       {
@@ -53,31 +52,62 @@ export default async function LekcijaStranica({ params }: PageProps) {
     );
   }
 
-  // Fetch exercises for this lesson
+  // Get completion status for all lessons
+  let completedLessonIds = new Set<string>();
+  if (user && allLessons) {
+    const lessonIds = allLessons.map((l) => l.id);
+    const { data: progress } = await supabase
+      .from("lesson_progress")
+      .select("lesson_id")
+      .eq("user_id", user.id)
+      .eq("completed", true)
+      .in("lesson_id", lessonIds);
+
+    completedLessonIds = new Set(progress?.map((p) => p.lesson_id) ?? []);
+  }
+
+  // Build lesson list for drawer
+  const drawerLessons = (allLessons ?? []).map((l) => ({
+    id: l.id,
+    title: l.title,
+    order_index: l.order_index,
+    completed: completedLessonIds.has(l.id),
+  }));
+
+  const completedCount = drawerLessons.filter((l) => l.completed).length;
+
+  // Fetch exercises
   const { data: exercises } = await supabase
     .from("exercises")
     .select("*")
     .eq("lesson_id", typedLesson.id)
     .order("order_index");
 
-  // Find prev/next lessons
+  // Find prev/next
   const currentIndex = allLessons?.findIndex((l) => l.id === typedLesson.id) ?? -1;
   const prevLesson = currentIndex > 0 ? allLessons?.[currentIndex - 1] : null;
   const nextLesson = allLessons && currentIndex < allLessons.length - 1
     ? allLessons[currentIndex + 1]
     : null;
 
+  const totalLessons = allLessons?.length ?? 0;
+  const lessonNumber = currentIndex + 1;
+
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      {/* Breadcrumb */}
-      {course && (
-        <Link
-          href={`/kurs/${course.slug}`}
-          className="text-sm text-plava hover:underline mb-4 inline-block"
-        >
-          ← {course.title}
-        </Link>
-      )}
+    <div className="max-w-4xl mx-auto px-4 py-4">
+      {/* Top bar */}
+      <div className="flex items-center justify-between mb-4">
+        <LessonDrawer
+          courseTitle={course?.title ?? ""}
+          lessons={drawerLessons}
+          currentLessonId={typedLesson.id}
+          totalLessons={totalLessons}
+          completedCount={completedCount}
+        />
+        <span className="text-sm text-gray-400">
+          {lessonNumber} / {totalLessons}
+        </span>
+      </div>
 
       <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6">
         {typedLesson.title}
@@ -89,7 +119,7 @@ export default async function LekcijaStranica({ params }: PageProps) {
       {/* Exercises */}
       {exercises && exercises.length > 0 && (
         <div className="mt-8">
-          <h3 className="font-semibold text-gray-900 mb-3">Vezbe</h3>
+          <h3 className="font-semibold text-gray-900 mb-3">Vežbe</h3>
           <div className="space-y-2">
             {(exercises as Exercise[]).map((ex) => (
               <Link
@@ -100,7 +130,7 @@ export default async function LekcijaStranica({ params }: PageProps) {
                 <div className="flex items-center justify-between">
                   <span className="font-medium text-gray-900">{ex.title}</span>
                   <span className="text-xs text-plava bg-plava-light px-3 py-1 rounded-full">
-                    {ex.exercise_type === "quiz" ? "Kviz" : ex.exercise_type === "fill_blank" ? "Popuni" : ex.exercise_type === "match_pairs" ? "Spoji" : ex.exercise_type === "word_order" ? "Poredaj" : "Slusaj"}
+                    {ex.exercise_type === "quiz" ? "Kviz" : ex.exercise_type === "fill_blank" ? "Popuni" : ex.exercise_type === "match_pairs" ? "Spoji" : ex.exercise_type === "word_order" ? "Poredaj" : "Slušaj"}
                   </span>
                 </div>
               </Link>
@@ -109,57 +139,29 @@ export default async function LekcijaStranica({ params }: PageProps) {
         </div>
       )}
 
-      {/* Lesson navigation */}
-      <div className="flex justify-between items-center mt-8 pt-6 border-t border-gray-100">
+      {/* Bottom navigation */}
+      <div className="flex gap-3 mt-8 pt-6 border-t border-gray-100">
         {prevLesson ? (
           <Link
             href={`/lekcija/${prevLesson.id}`}
-            className="text-sm text-plava hover:underline"
+            className="flex-1 text-center py-3 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50 transition-colors"
           >
-            ← {prevLesson.title}
+            ← Prethodna
           </Link>
         ) : (
-          <div />
+          <div className="flex-1" />
         )}
         {nextLesson ? (
           <Link
             href={`/lekcija/${nextLesson.id}`}
-            className="text-sm text-plava hover:underline"
+            className="flex-1 text-center py-3 bg-plava text-white rounded-lg text-sm font-bold hover:bg-plava-dark transition-colors"
           >
-            {nextLesson.title} →
+            Sledeća →
           </Link>
         ) : (
-          <div />
+          <div className="flex-1" />
         )}
       </div>
-
-      {/* Sidebar: lesson list — collapsible */}
-      {allLessons && allLessons.length > 1 && (
-        <details className="mt-8 bg-white rounded-xl p-5 shadow-sm group">
-          <summary className="flex items-center justify-between cursor-pointer">
-            <h3 className="font-semibold text-gray-900">Sve lekcije ({allLessons.length})</h3>
-            <span className="text-sm text-plava group-open:rotate-180 transition-transform">▼</span>
-          </summary>
-          <div className="space-y-2 mt-3">
-            {allLessons.map((l, i) => (
-              <Link
-                key={l.id}
-                href={`/lekcija/${l.id}`}
-                className={`flex items-center gap-3 p-2 rounded-lg text-sm ${
-                  l.id === typedLesson.id
-                    ? "bg-plava-light text-plava font-medium"
-                    : "text-gray-600 hover:bg-gray-50"
-                }`}
-              >
-                <span className="w-6 h-6 rounded-full bg-gray-100 text-xs flex items-center justify-center font-medium shrink-0">
-                  {i + 1}
-                </span>
-                <span className="truncate">{l.title}</span>
-              </Link>
-            ))}
-          </div>
-        </details>
-      )}
     </div>
   );
 }
