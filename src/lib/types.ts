@@ -39,6 +39,7 @@ export interface CourseAccess {
   user_id: string;
   course_id: string;
   granted_at: string;
+  expires_at: string | null;
 }
 
 export interface LessonProgress {
