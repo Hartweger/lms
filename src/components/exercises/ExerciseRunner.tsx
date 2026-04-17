@@ -13,9 +13,10 @@ import type { Exercise, ExerciseQuestion } from "@/lib/types";
 interface ExerciseRunnerProps {
   exercise: Exercise;
   questions: ExerciseQuestion[];
+  level?: string;
 }
 
-export default function ExerciseRunner({ exercise, questions }: ExerciseRunnerProps) {
+export default function ExerciseRunner({ exercise, questions, level = "A1" }: ExerciseRunnerProps) {
   const supabase = createClient();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -185,9 +186,21 @@ export default function ExerciseRunner({ exercise, questions }: ExerciseRunnerPr
         </div>
       )}
 
-      {/* Question — type determined per-question from options.type */}
+      {/* Question — type determined per-question from options.type, or exercise_type as fallback */}
       <div className="bg-white rounded-xl p-6 shadow-sm">
         {(() => {
+          // For listen_write exercises, always use EssayExercise
+          if (exercise.exercise_type === "listen_write") {
+            return (
+              <EssayExercise
+                key={question.id}
+                task={question.question}
+                level={level}
+                onAnswer={handleAnswer}
+              />
+            );
+          }
+
           const parsed = parseOptions(question.options);
           const qType = parsed.type;
           const items = parsed.items;

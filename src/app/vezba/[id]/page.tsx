@@ -30,12 +30,17 @@ export default async function VezbaStranica({ params }: PageProps) {
     .eq("exercise_id", typedExercise.id)
     .order("order_index");
 
-  // Get lesson info for breadcrumb
+  // Get lesson + course info for breadcrumb and level
   const { data: lesson } = await supabase
     .from("lessons")
-    .select("id, title, course_id")
+    .select("id, title, course_id, courses(title)")
     .eq("id", typedExercise.lesson_id)
     .single();
+
+  // Extract level from course title (e.g. "Nemački A1.1" → "A1")
+  const courseTitle = (lesson?.courses as unknown as { title: string } | null)?.title || "";
+  const levelMatch = courseTitle.match(/(A1|A2|B1|B2|C1|C2)/i);
+  const courseLevel = levelMatch ? levelMatch[1].toUpperCase() : "A1";
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
@@ -46,7 +51,7 @@ export default async function VezbaStranica({ params }: PageProps) {
       )}
 
       {questions && questions.length > 0 ? (
-        <ExerciseRunner exercise={typedExercise} questions={questions as ExerciseQuestion[]} />
+        <ExerciseRunner exercise={typedExercise} questions={questions as ExerciseQuestion[]} level={courseLevel} />
       ) : (
         <p className="text-gray-400 text-center py-8">Ova vezba nema pitanja.</p>
       )}

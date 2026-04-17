@@ -29,32 +29,39 @@ export async function POST(request: Request) {
           role: "user",
           content: `Ti si profesor nemačkog jezika. Student je na nivou ${level || "A1"}.
 
-Zadatak koji je student dobio:
-"${task}"
+Kriterijumi za ocenjivanje prema nivou:
+- A1: Očekuju se jednostavne rečenice, osnovni vokabular. Tolerišu se greške u redu reči. Važno je da student koristi prave glagole i osnovna pravila (član, rod).
+- A2: Očekuju se povezane rečenice, prošlo vreme (Perfekt), modalni glagoli. Manje tolerancije za osnovne greške.
+- B1: Očekuju se složenije rečenice, veznici (weil, dass, obwohl), Konjunktiv II za želje. Greške u osnovnoj gramatici se strogo ocenjuju.
+- B2: Očekuje se tečan izraz, pasiv, indirektni govor, bogat vokabular. Visoki standardi.
 
-Student je napisao:
-"${text}"
+Zadatak: "${task}"
+Student je napisao: "${text}"
 
-Proveri tekst i daj feedback NA SRPSKOM JEZIKU. Budi ohrabrujući ali tačan.
+Pravila:
+- Feedback na SRPSKOM jeziku, kratak (1-2 rečenice)
+- Maksimum 3 najvažnije ispravke
+- Objašnjenja kratka (1 rečenica)
+- Ocenjuj STROGO prema nivou — isti tekst na A1 može biti 4/5, a na B1 samo 2/5
+- Budi ohrabrujući ali tačan
 
-Odgovori u JSON formatu:
-{
-  "feedback": "Kratka poruka studentu na srpskom (2-3 rečenice, pohvali šta je dobro, ukaži na greške)",
-  "corrections": [
-    {"original": "pogrešan deo", "corrected": "ispravljen deo", "explanation": "kratko objašnjenje na srpskom"}
-  ],
-  "score": broj od 1 do 5 (1=treba dosta rada, 5=odlično)
-}
-
-Samo JSON, ništa drugo.`,
+Odgovori SAMO sa validnim JSON objektom, bez markdown blokova:
+{"feedback":"kratka pohvala i savet","corrections":[{"original":"greška","corrected":"ispravka","explanation":"zašto"}],"score":3}`,
         },
       ],
     });
 
-    const responseText = message.content[0].type === "text" ? message.content[0].text : "";
+    let responseText = message.content[0].type === "text" ? message.content[0].text : "";
+
+    // Strip markdown code block if AI wraps it
+    responseText = responseText.replace(/^```json\s*/i, "").replace(/```\s*$/, "").trim();
 
     try {
       const parsed = JSON.parse(responseText);
+      // Limit to max 3 corrections
+      if (parsed.corrections && parsed.corrections.length > 3) {
+        parsed.corrections = parsed.corrections.slice(0, 3);
+      }
       return NextResponse.json(parsed);
     } catch {
       return NextResponse.json({
