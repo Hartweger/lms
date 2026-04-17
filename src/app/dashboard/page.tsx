@@ -134,6 +134,16 @@ export default async function Dashboard() {
   const secondaryCourses = courses.slice(1);
   const allCompleted = primaryCourse?.progress === 100;
 
+  // Check for existing certificates
+  const { data: certificates } = await supabase
+    .from("certificates")
+    .select("id, course_id")
+    .eq("user_id", user.id);
+
+  const certifiedCourseIds = new Set(certificates?.map((c) => c.course_id) ?? []);
+  const getCertificateId = (courseId: string) =>
+    certificates?.find((c) => c.course_id === courseId)?.id ?? null;
+
   return (
     <div className="max-w-lg mx-auto px-4 py-8">
       {/* Greeting + Quote */}
@@ -168,6 +178,21 @@ export default async function Dashboard() {
             <p className="text-xs text-gray-400 mb-4">
               {primaryCourse.completedLessons} od {primaryCourse.totalLessons} lekcija
             </p>
+            {/* Certificate status */}
+            {allCompleted && certifiedCourseIds.has(primaryCourse.id) && (
+              <Link
+                href={`/sertifikat/${getCertificateId(primaryCourse.id)}`}
+                className="block w-full text-center bg-green-50 text-green-700 border border-green-200 py-3 rounded-lg font-bold text-sm mb-2 hover:bg-green-100 transition-colors"
+              >
+                Preuzmi sertifikat
+              </Link>
+            )}
+            {allCompleted && !certifiedCourseIds.has(primaryCourse.id) && (
+              <div className="bg-plava-light text-plava-dark text-sm rounded-lg p-3 mb-2 text-center">
+                Sve lekcije završene! Položi završni ispit za sertifikat.
+              </div>
+            )}
+
             <Link
               href={primaryCourse.currentLessonId ? `/lekcija/${primaryCourse.currentLessonId}` : `/kurs/${primaryCourse.slug}`}
               className="block w-full text-center bg-plava text-white py-3 rounded-lg font-bold text-sm hover:bg-plava-dark transition-colors"
@@ -184,23 +209,30 @@ export default async function Dashboard() {
               </p>
               <div className="space-y-2">
                 {secondaryCourses.map((course) => (
-                  <Link
-                    key={course.id}
-                    href={course.currentLessonId ? `/lekcija/${course.currentLessonId}` : `/kurs/${course.slug}`}
-                    className="flex items-center justify-between bg-white rounded-xl p-4 border border-gray-100 hover:shadow-sm transition-shadow"
-                  >
-                    <div>
-                      <h3 className="font-bold text-sm text-gray-900">
-                        {course.title}
-                      </h3>
-                      <p className="text-xs text-gray-400 mt-0.5">
-                        {course.completedLessons} od {course.totalLessons} lekcija
-                      </p>
-                    </div>
-                    <span className="text-xs font-semibold text-plava bg-plava-light px-3 py-1.5 rounded-lg">
-                      Nastavi →
-                    </span>
-                  </Link>
+                  <div key={course.id} className="bg-white rounded-xl p-4 border border-gray-100">
+                    <Link
+                      href={course.currentLessonId ? `/lekcija/${course.currentLessonId}` : `/kurs/${course.slug}`}
+                      className="flex items-center justify-between hover:opacity-80 transition-opacity"
+                    >
+                      <div>
+                        <h3 className="font-bold text-sm text-gray-900">
+                          {course.title}
+                        </h3>
+                        <p className="text-xs text-gray-400 mt-0.5">
+                          {course.completedLessons} od {course.totalLessons} lekcija
+                        </p>
+                      </div>
+                      {course.progress === 100 && certifiedCourseIds.has(course.id) ? (
+                        <span className="text-xs font-semibold text-green-700 bg-green-50 px-3 py-1.5 rounded-lg">
+                          Sertifikat
+                        </span>
+                      ) : (
+                        <span className="text-xs font-semibold text-plava bg-plava-light px-3 py-1.5 rounded-lg">
+                          Nastavi →
+                        </span>
+                      )}
+                    </Link>
+                  </div>
                 ))}
               </div>
             </div>
