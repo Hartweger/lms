@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
@@ -149,25 +149,31 @@ export default function AdminVezbe() {
     });
   };
 
-  // Ref keeps the latest dialog options to prevent fields overwriting each other
-  const dialogOptionsRef = useRef<Record<string, Record<string, unknown>>>({});
+  const [dialogSaved, setDialogSaved] = useState(false);
 
-  const updateDialogField = (questionId: string, exerciseId: string, fieldName: string, fieldValue: unknown) => {
-    // Merge into ref (always has latest complete state)
-    const currentQ = questions[exerciseId]?.find((q) => q.id === questionId);
-    const base = dialogOptionsRef.current[questionId] || (currentQ?.options as Record<string, unknown>) || {};
-    const newOpts = { ...base, [fieldName]: fieldValue };
-    dialogOptionsRef.current[questionId] = newOpts;
+  // Dialog: update local state only (no DB save until "Sačuvaj" clicked)
+  const updateDialogLocal = (questionId: string, exerciseId: string, fieldName: string, fieldValue: unknown) => {
+    setDialogSaved(false);
+    setQuestions((prev) => ({
+      ...prev,
+      [exerciseId]: prev[exerciseId].map((q) => {
+        if (q.id !== questionId) return q;
+        const opts = (q.options as Record<string, unknown>) || {};
+        return { ...q, options: { ...opts, [fieldName]: fieldValue } };
+      }),
+    }));
+  };
 
-    // Update local state
-    setQuestions({
-      ...questions,
-      [exerciseId]: questions[exerciseId].map((q) =>
-        q.id === questionId ? { ...q, options: newOpts } : q
-      ),
-    });
-    // Fire-and-forget save
-    supabase.from("exercise_questions").update({ options: newOpts }).eq("id", questionId);
+  const saveDialogToDB = async (questionId: string, exerciseId: string) => {
+    const q = questions[exerciseId]?.find((q) => q.id === questionId);
+    if (!q) return;
+    const { error } = await supabase.from("exercise_questions").update({ options: q.options }).eq("id", questionId);
+    if (error) {
+      alert("Greška pri čuvanju: " + error.message);
+    } else {
+      setDialogSaved(true);
+      setTimeout(() => setDialogSaved(false), 2000);
+    }
   };
 
   const deleteQuestion = async (questionId: string, exerciseId: string) => {
@@ -395,7 +401,7 @@ export default function AdminVezbe() {
                           <label className="text-xs text-gray-500 block mb-1">Uvod za studenta (srpski)</label>
                           <textarea
                             value={(q.options as Record<string, unknown>)?.intro_text as string || ""}
-                            onChange={(e) => updateDialogField(q.id, ex.id, "intro_text", e.target.value)}
+                            onChange={(e) => updateDialogLocal(q.id, ex.id, "intro_text", e.target.value)}
                             placeholder="Ti si gost u restoranu u Berlinu. Konobar te dočekuje."
                             rows={2}
                             className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-plava resize-none"
@@ -406,7 +412,7 @@ export default function AdminVezbe() {
                             <label className="text-xs text-gray-500 block mb-1">Situacija</label>
                             <input
                               value={(q.options as Record<string, unknown>)?.scenario as string || ""}
-                              onChange={(e) => updateDialogField(q.id, ex.id, "scenario", e.target.value)}
+                              onChange={(e) => updateDialogLocal(q.id, ex.id, "scenario", e.target.value)}
                               placeholder="Restoran u Berlinu"
                               className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-plava"
                             />
@@ -415,7 +421,7 @@ export default function AdminVezbe() {
                             <label className="text-xs text-gray-500 block mb-1">AI uloga</label>
                             <input
                               value={(q.options as Record<string, unknown>)?.ai_role as string || ""}
-                              onChange={(e) => updateDialogField(q.id, ex.id, "ai_role", e.target.value)}
+                              onChange={(e) => updateDialogLocal(q.id, ex.id, "ai_role", e.target.value)}
                               placeholder="Konobar"
                               className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-plava"
                             />
@@ -429,12 +435,9 @@ export default function AdminVezbe() {
                               onChange={(e) => {
                                 const newLevel = e.target.value;
                                 const isBasic = newLevel === "A1" || newLevel === "A2";
-                                // Level changes multiple fields at once
-                                const base = dialogOptionsRef.current[q.id] || (q.options as Record<string, unknown>) || {};
-                                const newOpts = { ...base, level: newLevel, dialog_mode: isBasic ? "guided" : "free", max_turns: isBasic ? 6 : 8 };
-                                dialogOptionsRef.current[q.id] = newOpts;
-                                setQuestions({ ...questions, [ex.id]: questions[ex.id].map((qq) => qq.id === q.id ? { ...qq, options: newOpts } : qq) });
-                                supabase.from("exercise_questions").update({ options: newOpts }).eq("id", q.id);
+                                updateDialogLocal(q.id, ex.id, "level", newLevel);
+                                updateDialogLocal(q.id, ex.id, "dialog_mode", isBasic ? "guided" : "free");
+                                updateDialogLocal(q.id, ex.id, "max_turns", isBasic ? 6 : 8);
                               }}
                               className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-plava"
                             >
@@ -448,7 +451,7 @@ export default function AdminVezbe() {
                             <label className="text-xs text-gray-500 block mb-1">Tip dijaloga</label>
                             <select
                               value={(q.options as Record<string, unknown>)?.dialog_mode as string || "guided"}
-                              onChange={(e) => updateDialogField(q.id, ex.id, "dialog_mode", e.target.value)}
+                              onChange={(e) => updateDialogLocal(q.id, ex.id, "dialog_mode", e.target.value)}
                               className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-plava"
                             >
                               <option value="guided">Vođeni (ponuđeni odgovori)</option>
@@ -460,7 +463,7 @@ export default function AdminVezbe() {
                           <label className="text-xs text-gray-500 block mb-1">Prva poruka AI-ja (nemački)</label>
                           <textarea
                             value={(q.options as Record<string, unknown>)?.opening_message as string || ""}
-                            onChange={(e) => updateDialogField(q.id, ex.id, "opening_message", e.target.value)}
+                            onChange={(e) => updateDialogLocal(q.id, ex.id, "opening_message", e.target.value)}
                             placeholder="Guten Tag! Willkommen im Restaurant. Haben Sie reserviert?"
                             rows={2}
                             className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-plava resize-none"
@@ -474,10 +477,10 @@ export default function AdminVezbe() {
                               <input
                                 value={goal}
                                 onChange={(e) => {
-                                  const base = dialogOptionsRef.current[q.id] || (q.options as Record<string, unknown>) || {};
-                                  const goals = [...((base.goals as string[]) || [""])];
+                                  const opts = (q.options as Record<string, unknown>) || {};
+                                  const goals = [...((opts.goals as string[]) || [""])];
                                   goals[gi] = e.target.value;
-                                  updateDialogField(q.id, ex.id, "goals", goals);
+                                  updateDialogLocal(q.id, ex.id, "goals", goals);
                                 }}
                                 placeholder="Naruči jelo i piće"
                                 className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-plava"
@@ -485,9 +488,9 @@ export default function AdminVezbe() {
                               {((q.options as Record<string, unknown>)?.goals as string[] || []).length > 1 && (
                                 <button
                                   onClick={() => {
-                                    const base = dialogOptionsRef.current[q.id] || (q.options as Record<string, unknown>) || {};
-                                    const goals = ((base.goals as string[]) || []).filter((_: string, i: number) => i !== gi);
-                                    updateDialogField(q.id, ex.id, "goals", goals);
+                                    const opts = (q.options as Record<string, unknown>) || {};
+                                    const goals = ((opts.goals as string[]) || []).filter((_: string, i: number) => i !== gi);
+                                    updateDialogLocal(q.id, ex.id, "goals", goals);
                                   }}
                                   className="text-koral text-sm"
                                 >
@@ -498,9 +501,9 @@ export default function AdminVezbe() {
                           ))}
                           <button
                             onClick={() => {
-                              const base = dialogOptionsRef.current[q.id] || (q.options as Record<string, unknown>) || {};
-                              const goals = [...((base.goals as string[]) || []), ""];
-                              updateDialogField(q.id, ex.id, "goals", goals);
+                              const opts = (q.options as Record<string, unknown>) || {};
+                              const goals = [...((opts.goals as string[]) || []), ""];
+                              updateDialogLocal(q.id, ex.id, "goals", goals);
                             }}
                             className="text-sm text-plava hover:underline"
                           >
@@ -511,12 +514,18 @@ export default function AdminVezbe() {
                           <label className="text-xs text-gray-500 block mb-1">Dodatne instrukcije za AI (opciono)</label>
                           <textarea
                             value={(q.options as Record<string, unknown>)?.system_prompt_extra as string || ""}
-                            onChange={(e) => updateDialogField(q.id, ex.id, "system_prompt_extra", e.target.value)}
+                            onChange={(e) => updateDialogLocal(q.id, ex.id, "system_prompt_extra", e.target.value)}
                             placeholder="Koristi samo Präsens. Meni: Schnitzel, Bratwurst, Salat."
                             rows={2}
                             className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-plava resize-none"
                           />
                         </div>
+                        <button
+                          onClick={() => saveDialogToDB(q.id, ex.id)}
+                          className="w-full py-3 bg-plava text-white rounded-lg hover:bg-plava-dark transition-colors font-medium"
+                        >
+                          {dialogSaved ? "✓ Sačuvano!" : "Sačuvaj dijalog"}
+                        </button>
                         <p className="text-xs text-gray-400">AI (Claude) će igrati ulogu i voditi dijalog sa studentom. Korekcije grešaka se daju na kraju.</p>
                       </div>
                     )}
