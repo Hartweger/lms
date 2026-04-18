@@ -12,6 +12,7 @@ const typeLabels: Record<string, string> = {
   match_pairs: "Spoji parove",
   word_order: "Poredaj reči",
   listen_write: "Slobodan odgovor (AI)",
+  dialog: "Dijalog (AI)",
 };
 
 export default function AdminVezbe() {
@@ -59,7 +60,32 @@ export default function AdminVezbe() {
       .select().single();
     if (data) {
       setExercises([...exercises, data as Exercise]);
-      setQuestions({ ...questions, [data.id]: [] });
+      if (type === "dialog") {
+        // Auto-create one question with dialog config
+        const { data: qData } = await supabase
+          .from("exercise_questions")
+          .insert({
+            exercise_id: data.id,
+            question: "Dijalog",
+            options: {
+              scenario: "",
+              ai_role: "",
+              level: "A1",
+              dialog_mode: "guided",
+              max_turns: 6,
+              goals: [""],
+              intro_text: "",
+              opening_message: "",
+              system_prompt_extra: "",
+            },
+            correct_answer: "dialog",
+            order_index: 0,
+          })
+          .select().single();
+        setQuestions({ ...questions, [data.id]: qData ? [qData as ExerciseQuestion] : [] });
+      } else {
+        setQuestions({ ...questions, [data.id]: [] });
+      }
       setOpenExercise(data.id);
     }
   };
@@ -340,15 +366,150 @@ export default function AdminVezbe() {
                         <p className="text-xs text-gray-400">AI (Claude) će automatski proveriti gramatiku i dati feedback studentu na srpskom.</p>
                       </div>
                     )}
+
+                    {/* Dialog editor */}
+                    {ex.exercise_type === "dialog" && (
+                      <div className="space-y-3">
+                        <div>
+                          <label className="text-xs text-gray-500 block mb-1">Uvod za studenta (srpski)</label>
+                          <textarea
+                            value={(q.options as Record<string, unknown>)?.intro_text as string || ""}
+                            onChange={(e) => updateQuestion(q.id, ex.id, "options", { ...(q.options as Record<string, unknown>), intro_text: e.target.value })}
+                            placeholder="Ti si gost u restoranu u Berlinu. Konobar te dočekuje."
+                            rows={2}
+                            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-plava resize-none"
+                          />
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="text-xs text-gray-500 block mb-1">Situacija</label>
+                            <input
+                              value={(q.options as Record<string, unknown>)?.scenario as string || ""}
+                              onChange={(e) => updateQuestion(q.id, ex.id, "options", { ...(q.options as Record<string, unknown>), scenario: e.target.value })}
+                              placeholder="Restoran u Berlinu"
+                              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-plava"
+                            />
+                          </div>
+                          <div>
+                            <label className="text-xs text-gray-500 block mb-1">AI uloga</label>
+                            <input
+                              value={(q.options as Record<string, unknown>)?.ai_role as string || ""}
+                              onChange={(e) => updateQuestion(q.id, ex.id, "options", { ...(q.options as Record<string, unknown>), ai_role: e.target.value })}
+                              placeholder="Konobar"
+                              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-plava"
+                            />
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="text-xs text-gray-500 block mb-1">Nivo</label>
+                            <select
+                              value={(q.options as Record<string, unknown>)?.level as string || "A1"}
+                              onChange={(e) => {
+                                const newLevel = e.target.value;
+                                const isBasic = newLevel === "A1" || newLevel === "A2";
+                                updateQuestion(q.id, ex.id, "options", {
+                                  ...(q.options as Record<string, unknown>),
+                                  level: newLevel,
+                                  dialog_mode: isBasic ? "guided" : "free",
+                                  max_turns: isBasic ? 6 : 8,
+                                });
+                              }}
+                              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-plava"
+                            >
+                              <option value="A1">A1</option>
+                              <option value="A2">A2</option>
+                              <option value="B1">B1</option>
+                              <option value="B2">B2</option>
+                            </select>
+                          </div>
+                          <div>
+                            <label className="text-xs text-gray-500 block mb-1">Tip dijaloga</label>
+                            <select
+                              value={(q.options as Record<string, unknown>)?.dialog_mode as string || "guided"}
+                              onChange={(e) => updateQuestion(q.id, ex.id, "options", { ...(q.options as Record<string, unknown>), dialog_mode: e.target.value })}
+                              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-plava"
+                            >
+                              <option value="guided">Vođeni (ponuđeni odgovori)</option>
+                              <option value="free">Slobodni (slobodan tekst)</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div>
+                          <label className="text-xs text-gray-500 block mb-1">Prva poruka AI-ja (nemački)</label>
+                          <textarea
+                            value={(q.options as Record<string, unknown>)?.opening_message as string || ""}
+                            onChange={(e) => updateQuestion(q.id, ex.id, "options", { ...(q.options as Record<string, unknown>), opening_message: e.target.value })}
+                            placeholder="Guten Tag! Willkommen im Restaurant. Haben Sie reserviert?"
+                            rows={2}
+                            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-plava resize-none"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-xs text-gray-500 block mb-1">Ciljevi za studenta</label>
+                          {((q.options as Record<string, unknown>)?.goals as string[] || [""]).map((goal: string, gi: number) => (
+                            <div key={gi} className="flex items-center gap-2 mb-2">
+                              <span className="text-xs text-gray-400 w-5">{gi + 1}.</span>
+                              <input
+                                value={goal}
+                                onChange={(e) => {
+                                  const opts = q.options as Record<string, unknown>;
+                                  const goals = [...((opts.goals as string[]) || [""])];
+                                  goals[gi] = e.target.value;
+                                  updateQuestion(q.id, ex.id, "options", { ...opts, goals });
+                                }}
+                                placeholder="Naruči jelo i piće"
+                                className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-plava"
+                              />
+                              {((q.options as Record<string, unknown>)?.goals as string[] || []).length > 1 && (
+                                <button
+                                  onClick={() => {
+                                    const opts = q.options as Record<string, unknown>;
+                                    const goals = ((opts.goals as string[]) || []).filter((_: string, i: number) => i !== gi);
+                                    updateQuestion(q.id, ex.id, "options", { ...opts, goals });
+                                  }}
+                                  className="text-koral text-sm"
+                                >
+                                  ✕
+                                </button>
+                              )}
+                            </div>
+                          ))}
+                          <button
+                            onClick={() => {
+                              const opts = q.options as Record<string, unknown>;
+                              const goals = [...((opts.goals as string[]) || []), ""];
+                              updateQuestion(q.id, ex.id, "options", { ...opts, goals });
+                            }}
+                            className="text-sm text-plava hover:underline"
+                          >
+                            + Dodaj cilj
+                          </button>
+                        </div>
+                        <div>
+                          <label className="text-xs text-gray-500 block mb-1">Dodatne instrukcije za AI (opciono)</label>
+                          <textarea
+                            value={(q.options as Record<string, unknown>)?.system_prompt_extra as string || ""}
+                            onChange={(e) => updateQuestion(q.id, ex.id, "options", { ...(q.options as Record<string, unknown>), system_prompt_extra: e.target.value })}
+                            placeholder="Koristi samo Präsens. Meni: Schnitzel, Bratwurst, Salat."
+                            rows={2}
+                            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-plava resize-none"
+                          />
+                        </div>
+                        <p className="text-xs text-gray-400">AI (Claude) će igrati ulogu i voditi dijalog sa studentom. Korekcije grešaka se daju na kraju.</p>
+                      </div>
+                    )}
                   </div>
                 ))}
 
-                <button
-                  onClick={() => addQuestion(ex.id, ex.exercise_type)}
-                  className="w-full py-3 border-2 border-dashed border-gray-200 rounded-lg text-sm text-gray-400 hover:border-plava hover:text-plava transition-colors"
-                >
-                  + Dodaj pitanje
-                </button>
+                {ex.exercise_type !== "dialog" && (
+                  <button
+                    onClick={() => addQuestion(ex.id, ex.exercise_type)}
+                    className="w-full py-3 border-2 border-dashed border-gray-200 rounded-lg text-sm text-gray-400 hover:border-plava hover:text-plava transition-colors"
+                  >
+                    + Dodaj pitanje
+                  </button>
+                )}
               </div>
             )}
           </div>
