@@ -1,10 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import type { Exercise, ExerciseQuestion } from "@/lib/types";
+
+// Debounced save for dialog options — saves 500ms after last keystroke
+function useDebouncedSave(supabase: ReturnType<typeof createClient>) {
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  return useCallback((questionId: string, field: string, value: unknown) => {
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => {
+      supabase.from("exercise_questions").update({ [field]: value }).eq("id", questionId);
+    }, 500);
+  }, [supabase]);
+}
 
 const typeLabels: Record<string, string> = {
   quiz: "Kviz",
@@ -24,6 +35,7 @@ export default function AdminVezbe() {
   const [questions, setQuestions] = useState<Record<string, ExerciseQuestion[]>>({});
   const [loading, setLoading] = useState(true);
   const [openExercise, setOpenExercise] = useState<string | null>(null);
+  const debouncedSave = useDebouncedSave(supabase);
 
   useEffect(() => {
     const load = async () => {
@@ -147,6 +159,17 @@ export default function AdminVezbe() {
         q.id === questionId ? { ...q, [field]: value } : q
       ),
     });
+  };
+
+  // Dialog fields: update local state instantly, save to DB with debounce
+  const updateDialogQuestion = (questionId: string, exerciseId: string, field: string, value: unknown) => {
+    setQuestions({
+      ...questions,
+      [exerciseId]: questions[exerciseId].map((q) =>
+        q.id === questionId ? { ...q, [field]: value } : q
+      ),
+    });
+    debouncedSave(questionId, field, value);
   };
 
   const deleteQuestion = async (questionId: string, exerciseId: string) => {
@@ -374,7 +397,7 @@ export default function AdminVezbe() {
                           <label className="text-xs text-gray-500 block mb-1">Uvod za studenta (srpski)</label>
                           <textarea
                             value={(q.options as Record<string, unknown>)?.intro_text as string || ""}
-                            onChange={(e) => updateQuestion(q.id, ex.id, "options", { ...(q.options as Record<string, unknown>), intro_text: e.target.value })}
+                            onChange={(e) => updateDialogQuestion(q.id, ex.id, "options", { ...(q.options as Record<string, unknown>), intro_text: e.target.value })}
                             placeholder="Ti si gost u restoranu u Berlinu. Konobar te dočekuje."
                             rows={2}
                             className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-plava resize-none"
@@ -385,7 +408,7 @@ export default function AdminVezbe() {
                             <label className="text-xs text-gray-500 block mb-1">Situacija</label>
                             <input
                               value={(q.options as Record<string, unknown>)?.scenario as string || ""}
-                              onChange={(e) => updateQuestion(q.id, ex.id, "options", { ...(q.options as Record<string, unknown>), scenario: e.target.value })}
+                              onChange={(e) => updateDialogQuestion(q.id, ex.id, "options", { ...(q.options as Record<string, unknown>), scenario: e.target.value })}
                               placeholder="Restoran u Berlinu"
                               className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-plava"
                             />
@@ -394,7 +417,7 @@ export default function AdminVezbe() {
                             <label className="text-xs text-gray-500 block mb-1">AI uloga</label>
                             <input
                               value={(q.options as Record<string, unknown>)?.ai_role as string || ""}
-                              onChange={(e) => updateQuestion(q.id, ex.id, "options", { ...(q.options as Record<string, unknown>), ai_role: e.target.value })}
+                              onChange={(e) => updateDialogQuestion(q.id, ex.id, "options", { ...(q.options as Record<string, unknown>), ai_role: e.target.value })}
                               placeholder="Konobar"
                               className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-plava"
                             />
@@ -408,7 +431,7 @@ export default function AdminVezbe() {
                               onChange={(e) => {
                                 const newLevel = e.target.value;
                                 const isBasic = newLevel === "A1" || newLevel === "A2";
-                                updateQuestion(q.id, ex.id, "options", {
+                                updateDialogQuestion(q.id, ex.id, "options", {
                                   ...(q.options as Record<string, unknown>),
                                   level: newLevel,
                                   dialog_mode: isBasic ? "guided" : "free",
@@ -427,7 +450,7 @@ export default function AdminVezbe() {
                             <label className="text-xs text-gray-500 block mb-1">Tip dijaloga</label>
                             <select
                               value={(q.options as Record<string, unknown>)?.dialog_mode as string || "guided"}
-                              onChange={(e) => updateQuestion(q.id, ex.id, "options", { ...(q.options as Record<string, unknown>), dialog_mode: e.target.value })}
+                              onChange={(e) => updateDialogQuestion(q.id, ex.id, "options", { ...(q.options as Record<string, unknown>), dialog_mode: e.target.value })}
                               className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-plava"
                             >
                               <option value="guided">Vođeni (ponuđeni odgovori)</option>
@@ -439,7 +462,7 @@ export default function AdminVezbe() {
                           <label className="text-xs text-gray-500 block mb-1">Prva poruka AI-ja (nemački)</label>
                           <textarea
                             value={(q.options as Record<string, unknown>)?.opening_message as string || ""}
-                            onChange={(e) => updateQuestion(q.id, ex.id, "options", { ...(q.options as Record<string, unknown>), opening_message: e.target.value })}
+                            onChange={(e) => updateDialogQuestion(q.id, ex.id, "options", { ...(q.options as Record<string, unknown>), opening_message: e.target.value })}
                             placeholder="Guten Tag! Willkommen im Restaurant. Haben Sie reserviert?"
                             rows={2}
                             className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-plava resize-none"
@@ -456,7 +479,7 @@ export default function AdminVezbe() {
                                   const opts = q.options as Record<string, unknown>;
                                   const goals = [...((opts.goals as string[]) || [""])];
                                   goals[gi] = e.target.value;
-                                  updateQuestion(q.id, ex.id, "options", { ...opts, goals });
+                                  updateDialogQuestion(q.id, ex.id, "options", { ...opts, goals });
                                 }}
                                 placeholder="Naruči jelo i piće"
                                 className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-plava"
@@ -466,7 +489,7 @@ export default function AdminVezbe() {
                                   onClick={() => {
                                     const opts = q.options as Record<string, unknown>;
                                     const goals = ((opts.goals as string[]) || []).filter((_: string, i: number) => i !== gi);
-                                    updateQuestion(q.id, ex.id, "options", { ...opts, goals });
+                                    updateDialogQuestion(q.id, ex.id, "options", { ...opts, goals });
                                   }}
                                   className="text-koral text-sm"
                                 >
@@ -479,7 +502,7 @@ export default function AdminVezbe() {
                             onClick={() => {
                               const opts = q.options as Record<string, unknown>;
                               const goals = [...((opts.goals as string[]) || []), ""];
-                              updateQuestion(q.id, ex.id, "options", { ...opts, goals });
+                              updateDialogQuestion(q.id, ex.id, "options", { ...opts, goals });
                             }}
                             className="text-sm text-plava hover:underline"
                           >
@@ -490,7 +513,7 @@ export default function AdminVezbe() {
                           <label className="text-xs text-gray-500 block mb-1">Dodatne instrukcije za AI (opciono)</label>
                           <textarea
                             value={(q.options as Record<string, unknown>)?.system_prompt_extra as string || ""}
-                            onChange={(e) => updateQuestion(q.id, ex.id, "options", { ...(q.options as Record<string, unknown>), system_prompt_extra: e.target.value })}
+                            onChange={(e) => updateDialogQuestion(q.id, ex.id, "options", { ...(q.options as Record<string, unknown>), system_prompt_extra: e.target.value })}
                             placeholder="Koristi samo Präsens. Meni: Schnitzel, Bratwurst, Salat."
                             rows={2}
                             className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-plava resize-none"
