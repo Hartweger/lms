@@ -215,11 +215,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1" }: Ex
                 exerciseId={exercise.id}
                 config={dialogConfig}
                 onComplete={(dialogScore, total) => {
-                  const earnedXp = dialogScore * 10;
-                  setXp(earnedXp);
-                  setScore(dialogScore);
-                  setDialogTotal(total);
-                  setFinished(true);
+                  // Save attempt to DB, but don't set finished — DialogExercise shows its own summary
                   supabase.auth.getUser().then(({ data: { user } }: { data: { user: { id: string } | null } }) => {
                     if (user) {
                       supabase.from("exercise_attempts").insert({

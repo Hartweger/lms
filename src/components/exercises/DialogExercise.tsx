@@ -187,8 +187,35 @@ export default function DialogExercise({ exerciseId, config, onComplete }: Dialo
 
   // --- SUMMARY SCREEN ---
   if (phase === "summary" && summary) {
+    const percent = summary.total > 0 ? Math.round((summary.score / summary.total) * 100) : 0;
+    const stars = percent >= 90 ? 3 : percent >= 50 ? 2 : 1;
+    const earnedXp = summary.score * 10;
+
+    const handleRetry = () => {
+      setPhase("intro");
+      setMessages([]);
+      setInput("");
+      setTurnNumber(0);
+      setLoading(false);
+      setCompletedGoals([]);
+      setSummary(null);
+      setChoices([]);
+    };
+
     return (
       <div className="py-6">
+        {/* Stars + Score */}
+        <div className="text-center mb-6">
+          <div className="text-4xl mb-2">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <span key={i} className={i < stars ? "opacity-100" : "opacity-20"}>⭐</span>
+            ))}
+          </div>
+          <div className="text-4xl font-bold text-plava mb-1">{percent}%</div>
+          <p className="text-gray-500">Ispunjeno ciljeva: {summary.score} od {summary.total}</p>
+          <p className="text-plava font-bold">{earnedXp} XP</p>
+        </div>
+
         {/* Goals checklist */}
         <div className="bg-gray-50 rounded-xl p-4 mb-4">
           <h3 className="text-sm font-semibold text-gray-700 mb-3">Ciljevi:</h3>
@@ -224,6 +251,16 @@ export default function DialogExercise({ exerciseId, config, onComplete }: Dialo
             ))}
           </div>
         )}
+
+        {/* Retry button */}
+        <div className="text-center mt-6">
+          <button
+            onClick={handleRetry}
+            className="bg-plava text-white px-6 py-3 rounded-lg hover:bg-plava-dark transition-colors"
+          >
+            Pokusaj ponovo
+          </button>
+        </div>
       </div>
     );
   }
