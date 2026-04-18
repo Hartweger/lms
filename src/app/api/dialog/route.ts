@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
+import { createClient } from "@/lib/supabase/server";
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -10,36 +11,56 @@ interface DialogMessage {
   content: string;
 }
 
-interface DialogRequest {
-  exerciseId: string;
-  messages: DialogMessage[];
-  turnNumber: number;
+interface DialogConfig {
   scenario: string;
-  aiRole: string;
+  ai_role: string;
   level: string;
-  dialogMode: "guided" | "free";
-  maxTurns: number;
+  dialog_mode: "guided" | "free";
+  max_turns: number;
   goals: string[];
-  systemPromptExtra?: string;
+  opening_message: string;
+  system_prompt_extra?: string;
 }
 
 export async function POST(request: Request) {
-  const body: DialogRequest = await request.json();
-  const {
-    messages,
-    turnNumber,
-    scenario,
-    aiRole,
-    level,
-    dialogMode,
-    maxTurns,
-    goals,
-    systemPromptExtra,
-  } = body;
+  // Auth check
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
-  if (!messages || !scenario || !aiRole || !goals) {
+  const { exerciseId, messages, turnNumber } = await request.json() as {
+    exerciseId: string;
+    messages: DialogMessage[];
+    turnNumber: number;
+  };
+
+  if (!exerciseId || !messages || !turnNumber) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
   }
+
+  // Validate turn bounds
+  if (turnNumber < 1 || turnNumber > 20) {
+    return NextResponse.json({ error: "Invalid turn number" }, { status: 400 });
+  }
+  if (messages.length > 40) {
+    return NextResponse.json({ error: "Too many messages" }, { status: 400 });
+  }
+
+  // Fetch dialog config from database — never trust client
+  const { data: question } = await supabase
+    .from("exercise_questions")
+    .select("options")
+    .eq("exercise_id", exerciseId)
+    .single();
+
+  if (!question?.options) {
+    return NextResponse.json({ error: "Exercise not found" }, { status: 404 });
+  }
+
+  const config = question.options as DialogConfig;
+  const { scenario, ai_role: aiRole, level, dialog_mode: dialogMode, max_turns: maxTurns, goals, system_prompt_extra: systemPromptExtra } = config;
 
   if (!process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_API_KEY === "placeholder_key") {
     return NextResponse.json({

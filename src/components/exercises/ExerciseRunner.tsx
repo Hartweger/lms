@@ -196,7 +196,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1" }: Ex
       {/* Question — type determined per-question from options.type, or exercise_type as fallback */}
       <div className="bg-white rounded-xl p-6 shadow-sm">
         {(() => {
-          // Dialog exercise — handles its own flow
+          // Dialog exercise — handles its own flow, including summary
           if (exercise.exercise_type === "dialog") {
             const dialogConfig = question.options as {
               scenario: string;
@@ -212,9 +212,12 @@ export default function ExerciseRunner({ exercise, questions, level = "A1" }: Ex
             return (
               <DialogExercise
                 key={question.id}
+                exerciseId={exercise.id}
                 config={dialogConfig}
-                onComplete={(score, total) => {
-                  setScore(score);
+                onComplete={(dialogScore, total) => {
+                  const earnedXp = dialogScore * 10;
+                  setXp(earnedXp);
+                  setScore(dialogScore);
                   setDialogTotal(total);
                   setFinished(true);
                   supabase.auth.getUser().then(({ data: { user } }: { data: { user: { id: string } | null } }) => {
@@ -222,7 +225,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1" }: Ex
                       supabase.from("exercise_attempts").insert({
                         exercise_id: exercise.id,
                         user_id: user.id,
-                        score,
+                        score: dialogScore,
                         total_questions: total,
                       });
                     }

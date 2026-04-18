@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 interface DialogConfig {
   scenario: string;
@@ -38,11 +38,12 @@ interface DialogSummary {
 }
 
 interface DialogExerciseProps {
+  exerciseId: string;
   config: DialogConfig;
   onComplete: (score: number, total: number) => void;
 }
 
-export default function DialogExercise({ config, onComplete }: DialogExerciseProps) {
+export default function DialogExercise({ exerciseId, config, onComplete }: DialogExerciseProps) {
   const [phase, setPhase] = useState<"intro" | "chat" | "summary">("intro");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
@@ -51,6 +52,11 @@ export default function DialogExercise({ config, onComplete }: DialogExercisePro
   const [completedGoals, setCompletedGoals] = useState<number[]>([]);
   const [summary, setSummary] = useState<DialogSummary | null>(null);
   const [choices, setChoices] = useState<string[]>([]);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, loading]);
 
   const startDialog = () => {
     setMessages([{ role: "assistant", content: config.opening_message }]);
@@ -74,16 +80,9 @@ export default function DialogExercise({ config, onComplete }: DialogExercisePro
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          exerciseId: "",
+          exerciseId,
           messages: updatedMessages,
           turnNumber: newTurn,
-          scenario: config.scenario,
-          aiRole: config.ai_role,
-          level: config.level,
-          dialogMode: config.dialog_mode,
-          maxTurns: config.max_turns,
-          goals: config.goals,
-          systemPromptExtra: config.system_prompt_extra,
         }),
       });
 
@@ -108,9 +107,9 @@ export default function DialogExercise({ config, onComplete }: DialogExercisePro
         ...updatedMessages,
         { role: "assistant", content: "Greška pri komunikaciji. Pokušaj ponovo." },
       ]);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -153,25 +152,8 @@ export default function DialogExercise({ config, onComplete }: DialogExercisePro
 
   // --- SUMMARY SCREEN ---
   if (phase === "summary" && summary) {
-    const percent = Math.round((summary.score / summary.total) * 100);
-    const stars = percent >= 90 ? 3 : percent >= 50 ? 2 : 1;
-
     return (
       <div className="py-6">
-        {/* Stars */}
-        <div className="text-center mb-6">
-          <div className="text-4xl mb-2">
-            {Array.from({ length: 3 }).map((_, i) => (
-              <span key={i} className={i < stars ? "opacity-100" : "opacity-20"}>
-                ⭐
-              </span>
-            ))}
-          </div>
-          <p className="text-lg font-bold text-plava">
-            {summary.score}/{summary.total} ciljeva ispunjeno
-          </p>
-        </div>
-
         {/* Goals checklist */}
         <div className="bg-gray-50 rounded-xl p-4 mb-4">
           <h3 className="text-sm font-semibold text-gray-700 mb-3">Ciljevi:</h3>
@@ -261,6 +243,7 @@ export default function DialogExercise({ config, onComplete }: DialogExercisePro
             </div>
           </div>
         )}
+        <div ref={messagesEndRef} />
       </div>
 
       {/* Guided mode: choices */}
