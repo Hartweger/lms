@@ -120,10 +120,20 @@ export default function DialogExercise({ exerciseId, config, onComplete }: Dialo
         setCompletedGoals(data.completed_goals);
       }
 
-      if (data.is_finished && data.summary) {
-        setSummary(data.summary);
+      if (data.is_finished) {
+        const goalsCount = config.goals.filter((g) => g.trim()).length;
+        const summaryData: DialogSummary = data.summary || {
+          goals_completed: config.goals.map((g) => ({ goal: g, completed: false })),
+          corrections: [],
+          score: 0,
+          total: goalsCount,
+        };
+        // Ensure score and total are valid numbers
+        summaryData.score = typeof summaryData.score === "number" ? summaryData.score : 0;
+        summaryData.total = typeof summaryData.total === "number" ? summaryData.total : goalsCount;
+        setSummary(summaryData);
         setPhase("summary");
-        onComplete(data.summary.score, data.summary.total);
+        onComplete(summaryData.score, summaryData.total);
       } else if (data.choices) {
         setChoices(data.choices);
       }
