@@ -58,9 +58,34 @@ export default function DialogExercise({ exerciseId, config, onComplete }: Dialo
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
 
-  const startDialog = () => {
-    setMessages([{ role: "assistant", content: config.opening_message }]);
+  const startDialog = async () => {
+    const initialMessages: ChatMessage[] = [{ role: "assistant", content: config.opening_message }];
+    setMessages(initialMessages);
     setPhase("chat");
+
+    // For guided mode, ask AI for the first set of choices
+    if (config.dialog_mode === "guided") {
+      setLoading(true);
+      try {
+        const response = await fetch("/api/dialog", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            exerciseId,
+            messages: [...initialMessages, { role: "user", content: "(Student razmišlja šta da kaže...)" }],
+            turnNumber: 0,
+          }),
+        });
+        const data = await response.json();
+        if (data.choices) {
+          setChoices(data.choices);
+        }
+      } catch {
+        // If fetching choices fails, fall back to showing text input
+      } finally {
+        setLoading(false);
+      }
+    }
   };
 
   const sendMessage = async (text: string) => {
@@ -261,8 +286,8 @@ export default function DialogExercise({ exerciseId, config, onComplete }: Dialo
         </div>
       )}
 
-      {/* Free mode: text input */}
-      {config.dialog_mode === "free" && !loading && (
+      {/* Free mode OR guided fallback: text input */}
+      {(config.dialog_mode === "free" || (config.dialog_mode === "guided" && choices.length === 0)) && !loading && (
         <div className="flex gap-2">
           <input
             type="text"
