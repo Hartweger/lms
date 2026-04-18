@@ -369,7 +369,7 @@ export default function AdminVezbe() {
 
                     {/* Dialog editor */}
                     {ex.exercise_type === "dialog" && (
-                      <div className="space-y-3">
+                      <div className="space-y-3" spellCheck={false} autoCorrect="off">
                         <div>
                           <label className="text-xs text-gray-500 block mb-1">Uvod za studenta (srpski)</label>
                           <textarea
