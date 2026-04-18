@@ -37,6 +37,18 @@ export default async function VezbaStranica({ params }: PageProps) {
     .eq("id", typedExercise.lesson_id)
     .single();
 
+  // Check if current user is admin
+  const { data: { user } } = await supabase.auth.getUser();
+  let isAdmin = false;
+  if (user) {
+    const { data: profile } = await supabase
+      .from("user_profiles")
+      .select("role")
+      .eq("id", user.id)
+      .single();
+    isAdmin = profile?.role === "admin";
+  }
+
   // Extract level from course title (e.g. "Nemački A1.1" → "A1")
   const courseTitle = (lesson?.courses as unknown as { title: string } | null)?.title || "";
   const levelMatch = courseTitle.match(/(A1|A2|B1|B2|C1|C2)/i);
@@ -44,11 +56,18 @@ export default async function VezbaStranica({ params }: PageProps) {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
-      {lesson && (
-        <Link href={`/lekcija/${lesson.id}`} className="text-sm text-plava hover:underline mb-4 inline-block">
-          &larr; {lesson.title}
-        </Link>
-      )}
+      <div className="flex items-center justify-between mb-4">
+        {lesson && (
+          <Link href={`/lekcija/${lesson.id}`} className="text-sm text-plava hover:underline">
+            &larr; {lesson.title}
+          </Link>
+        )}
+        {isAdmin && lesson && (
+          <Link href={`/admin/vezbe/${lesson.id}`} className="text-xs bg-gray-100 text-gray-500 px-3 py-1 rounded-full hover:bg-gray-200 transition-colors">
+            Uredi vežbu
+          </Link>
+        )}
+      </div>
 
       {questions && questions.length > 0 ? (
         <ExerciseRunner exercise={typedExercise} questions={questions as ExerciseQuestion[]} level={courseLevel} />
