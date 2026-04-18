@@ -8,6 +8,7 @@ import MatchPairsExercise from "./MatchPairsExercise";
 import WordOrderExercise from "./WordOrderExercise";
 import EssayExercise from "./EssayExercise";
 import WordwallExercise from "./WordwallExercise";
+import DialogExercise from "./DialogExercise";
 import type { Exercise, ExerciseQuestion } from "@/lib/types";
 
 interface ExerciseRunnerProps {
@@ -26,6 +27,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1" }: Ex
   const [xp, setXp] = useState(0);
   const [showXpAnimation, setShowXpAnimation] = useState(false);
   const [xpGained, setXpGained] = useState(0);
+  const [dialogTotal, setDialogTotal] = useState(0);
 
   const question = questions[currentIndex];
 
@@ -96,7 +98,8 @@ export default function ExerciseRunner({ exercise, questions, level = "A1" }: Ex
   };
 
   if (finished) {
-    const percent = Math.round((score / questions.length) * 100);
+    const totalForScore = exercise.exercise_type === "dialog" ? dialogTotal : questions.length;
+    const percent = Math.round((score / totalForScore) * 100);
     const stars = percent >= 90 ? 3 : percent >= 50 ? 2 : 1;
     const isPerfect = percent === 100;
 
@@ -131,7 +134,11 @@ export default function ExerciseRunner({ exercise, questions, level = "A1" }: Ex
         </div>
 
         <div className="text-5xl font-bold text-plava mb-2">{percent}%</div>
-        <p className="text-gray-500 mb-1">Tacnih odgovora: {score} od {questions.length}</p>
+        <p className="text-gray-500 mb-1">
+          {exercise.exercise_type === "dialog"
+            ? `Ispunjeno ciljeva: ${score} od ${totalForScore}`
+            : `Tacnih odgovora: ${score} od ${totalForScore}`}
+        </p>
         <p className="text-plava font-bold mb-1">{xp} XP zaradjeno</p>
         <p className="text-sm text-gray-400">
           {percent === 100 ? "Savrseno! 🎉" : percent >= 90 ? "Odlicno!" : percent >= 70 ? "Vrlo dobro!" : percent >= 50 ? "Dobro, nastavi da vezbas!" : "Pokusaj ponovo!"}
@@ -189,6 +196,42 @@ export default function ExerciseRunner({ exercise, questions, level = "A1" }: Ex
       {/* Question — type determined per-question from options.type, or exercise_type as fallback */}
       <div className="bg-white rounded-xl p-6 shadow-sm">
         {(() => {
+          // Dialog exercise — handles its own flow
+          if (exercise.exercise_type === "dialog") {
+            const dialogConfig = question.options as {
+              scenario: string;
+              ai_role: string;
+              level: string;
+              dialog_mode: "guided" | "free";
+              max_turns: number;
+              goals: string[];
+              intro_text: string;
+              opening_message: string;
+              system_prompt_extra?: string;
+            };
+            return (
+              <DialogExercise
+                key={question.id}
+                config={dialogConfig}
+                onComplete={(score, total) => {
+                  setScore(score);
+                  setDialogTotal(total);
+                  setFinished(true);
+                  supabase.auth.getUser().then(({ data: { user } }) => {
+                    if (user) {
+                      supabase.from("exercise_attempts").insert({
+                        exercise_id: exercise.id,
+                        user_id: user.id,
+                        score,
+                        total_questions: total,
+                      });
+                    }
+                  });
+                }}
+              />
+            );
+          }
+
           // For listen_write exercises, always use EssayExercise
           if (exercise.exercise_type === "listen_write") {
             return (
