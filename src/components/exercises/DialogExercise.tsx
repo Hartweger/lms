@@ -40,10 +40,13 @@ interface DialogSummary {
 interface DialogExerciseProps {
   exerciseId: string;
   config: DialogConfig;
+  previousAttempts: number;
   onComplete: (score: number, total: number) => void;
 }
 
-export default function DialogExercise({ exerciseId, config, onComplete }: DialogExerciseProps) {
+const MAX_ATTEMPTS = 2;
+
+export default function DialogExercise({ exerciseId, config, previousAttempts, onComplete }: DialogExerciseProps) {
   const [phase, setPhase] = useState<"intro" | "chat" | "summary">("intro");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
@@ -52,6 +55,7 @@ export default function DialogExercise({ exerciseId, config, onComplete }: Dialo
   const [completedGoals, setCompletedGoals] = useState<number[]>([]);
   const [summary, setSummary] = useState<DialogSummary | null>(null);
   const [choices, setChoices] = useState<string[]>([]);
+  const [attemptCount, setAttemptCount] = useState(previousAttempts);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -133,6 +137,7 @@ export default function DialogExercise({ exerciseId, config, onComplete }: Dialo
         summaryData.total = typeof summaryData.total === "number" ? summaryData.total : goalsCount;
         setSummary(summaryData);
         setPhase("summary");
+        setAttemptCount((prev) => prev + 1);
         onComplete(summaryData.score, summaryData.total);
       } else if (data.choices) {
         setChoices(data.choices);
@@ -252,14 +257,18 @@ export default function DialogExercise({ exerciseId, config, onComplete }: Dialo
           </div>
         )}
 
-        {/* Retry button */}
+        {/* Retry button — max 2 attempts */}
         <div className="text-center mt-6">
-          <button
-            onClick={handleRetry}
-            className="bg-plava text-white px-6 py-3 rounded-lg hover:bg-plava-dark transition-colors"
-          >
-            Pokusaj ponovo
-          </button>
+          {attemptCount < MAX_ATTEMPTS ? (
+            <button
+              onClick={handleRetry}
+              className="bg-plava text-white px-6 py-3 rounded-lg hover:bg-plava-dark transition-colors"
+            >
+              Pokusaj ponovo ({MAX_ATTEMPTS - attemptCount} preostalo)
+            </button>
+          ) : (
+            <p className="text-sm text-gray-400">Iskoristio/la si oba pokušaja.</p>
+          )}
         </div>
       </div>
     );

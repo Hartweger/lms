@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import QuizExercise from "./QuizExercise";
 import FillBlankExercise from "./FillBlankExercise";
@@ -28,6 +28,20 @@ export default function ExerciseRunner({ exercise, questions, level = "A1" }: Ex
   const [showXpAnimation, setShowXpAnimation] = useState(false);
   const [xpGained, setXpGained] = useState(0);
   const [dialogTotal, setDialogTotal] = useState(0);
+  const [dialogAttempts, setDialogAttempts] = useState(0);
+
+  // Fetch previous dialog attempts count
+  useEffect(() => {
+    if (exercise.exercise_type !== "dialog") return;
+    supabase.auth.getUser().then(({ data: { user } }: { data: { user: { id: string } | null } }) => {
+      if (!user) return;
+      supabase.from("exercise_attempts")
+        .select("id", { count: "exact", head: true })
+        .eq("exercise_id", exercise.id)
+        .eq("user_id", user.id)
+        .then(({ count }: { count: number | null }) => { setDialogAttempts(count || 0); });
+    });
+  }, [exercise.id, exercise.exercise_type, supabase]);
 
   const question = questions[currentIndex];
 
@@ -214,6 +228,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1" }: Ex
                 key={question.id}
                 exerciseId={exercise.id}
                 config={dialogConfig}
+                previousAttempts={dialogAttempts}
                 onComplete={(dialogScore, total) => {
                   // Save attempt to DB, but don't set finished — DialogExercise shows its own summary
                   supabase.auth.getUser().then(({ data: { user } }: { data: { user: { id: string } | null } }) => {
