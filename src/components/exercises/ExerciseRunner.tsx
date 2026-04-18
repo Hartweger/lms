@@ -217,7 +217,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1" }: Ex
                   setScore(score);
                   setDialogTotal(total);
                   setFinished(true);
-                  supabase.auth.getUser().then(({ data: { user } }) => {
+                  supabase.auth.getUser().then(({ data: { user } }: { data: { user: { id: string } | null } }) => {
                     if (user) {
                       supabase.from("exercise_attempts").insert({
                         exercise_id: exercise.id,
