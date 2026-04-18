@@ -242,7 +242,7 @@ export default function AdminVezbe() {
                           placeholder="Pitanje..."
                           className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-plava"
                         />
-                        {(q.options as string[] || ["", "", "", ""]).map((opt, oi) => (
+                        {(Array.isArray(q.options) ? q.options as string[] : ["", "", "", ""]).map((opt, oi) => (
                           <div key={oi} className="flex items-center gap-2">
                             <input
                               type="radio"
