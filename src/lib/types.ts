@@ -1,3 +1,5 @@
+import type { Section } from "./section-types";
+
 export type UserRole = "student" | "professor" | "admin";
 export type CourseType = "video" | "individual" | "group";
 export type LessonType = "video" | "pdf" | "text" | "image";
@@ -31,6 +33,7 @@ export interface Lesson {
   vimeo_video_id: string | null;
   order_index: number;
   is_free_preview: boolean;
+  sections: Section[] | null;
   created_at: string;
 }
 
