@@ -27,7 +27,8 @@ export default function WordOrderExercise({ words, correctAnswer, hint, onAnswer
   };
 
   const handleCheck = () => {
-    const result = placed.join(" ");
+    // Join words, removing space before punctuation
+    const result = placed.join(" ").replace(/\s+([.,!?;:])/g, "$1");
     const correct = result === correctAnswer;
     setIsCorrect(correct);
     setAnswered(true);
@@ -36,7 +37,7 @@ export default function WordOrderExercise({ words, correctAnswer, hint, onAnswer
 
   return (
     <div>
-      <p className="text-lg font-medium text-gray-900 mb-2">Poredaj reci u pravilnu recenicu:</p>
+      <p className="text-lg font-medium text-gray-900 mb-2">Poredaj reči u pravilnu rečenicu:</p>
       <p className="text-sm text-gray-400 mb-6">Prevod: {hint}</p>
 
       {/* Sentence area */}
@@ -51,7 +52,7 @@ export default function WordOrderExercise({ words, correctAnswer, hint, onAnswer
           </button>
         ))}
         {placed.length === 0 && (
-          <span className="text-gray-300 text-sm py-2">Klikni na reci ispod...</span>
+          <span className="text-gray-300 text-sm py-2">Klikni na reči ispod...</span>
         )}
       </div>
 
@@ -80,12 +81,12 @@ export default function WordOrderExercise({ words, correctAnswer, hint, onAnswer
 
       {answered && isCorrect && (
         <div className="bg-green-50 border-l-4 border-green-500 rounded-lg p-4 text-sm text-green-700">
-          Tacno! Bravo!
+          Tačno! Bravo!
         </div>
       )}
       {answered && !isCorrect && (
         <div className="bg-koral-light border-l-4 border-koral rounded-lg p-4 text-sm text-koral-dark">
-          Netacno. Tacan odgovor: <strong>{correctAnswer}</strong>
+          Netačno. Tačan odgovor: <strong>{correctAnswer}</strong>
         </div>
       )}
     </div>

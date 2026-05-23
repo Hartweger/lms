@@ -155,11 +155,11 @@ export default function ExerciseRunner({ exercise, questions, level = "A1" }: Ex
         <p className="text-gray-500 mb-1">
           {exercise.exercise_type === "dialog"
             ? `Ispunjeno ciljeva: ${score} od ${totalForScore}`
-            : `Tacnih odgovora: ${score} od ${totalForScore}`}
+            : `Tačnih odgovora: ${score} od ${totalForScore}`}
         </p>
         <p className="text-plava font-bold mb-1">{xp} XP zaradjeno</p>
         <p className="text-sm text-gray-400">
-          {percent === 100 ? "Savrseno! 🎉" : percent >= 90 ? "Odlicno!" : percent >= 70 ? "Vrlo dobro!" : percent >= 50 ? "Dobro, nastavi da vezbas!" : "Pokusaj ponovo!"}
+          {percent === 100 ? "Savršeno! 🎉" : percent >= 90 ? "Odlično!" : percent >= 70 ? "Vrlo dobro!" : percent >= 50 ? "Dobro, nastavi da vežbaš!" : "Pokušaj ponovo!"}
         </p>
         <button
           onClick={() => {
@@ -172,7 +172,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1" }: Ex
           }}
           className="mt-6 bg-plava text-white px-6 py-3 rounded-lg hover:bg-plava-dark transition-colors"
         >
-          Pokusaj ponovo
+          Pokušaj ponovo
         </button>
       </div>
     );
@@ -391,7 +391,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1" }: Ex
             onClick={handleNext}
             className="bg-plava text-white px-6 py-3 rounded-lg hover:bg-plava-dark transition-colors"
           >
-            {currentIndex < questions.length - 1 ? "Sledece pitanje \u2192" : "Zavrsi vezbu"}
+            {currentIndex < questions.length - 1 ? "Sledeće pitanje \u2192" : "Završi vežbu"}
           </button>
         </div>
       )}

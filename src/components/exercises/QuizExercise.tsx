@@ -50,7 +50,7 @@ export default function QuizExercise({ question, options, correctAnswer, explana
       )}
       {answered && selected === correctAnswer && (
         <div className="mt-4 bg-green-50 border-l-4 border-green-500 rounded-lg p-4 text-sm text-green-700">
-          Tacno! Bravo!
+          Tačno! Bravo!
         </div>
       )}
     </div>
