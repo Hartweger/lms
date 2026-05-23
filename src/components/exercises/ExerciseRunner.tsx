@@ -34,6 +34,16 @@ export default function ExerciseRunner({ exercise, questions, level = "A1" }: Ex
   const [dialogTotal, setDialogTotal] = useState(0);
   const [dialogAttempts, setDialogAttempts] = useState(0);
 
+  // Enter key advances to next question
+  useEffect(() => {
+    if (!showNext) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Enter") handleNext();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [showNext]);
+
   // Fetch previous dialog attempts count
   useEffect(() => {
     if (exercise.exercise_type !== "dialog") return;
