@@ -11,7 +11,7 @@ const categoryStyles: Record<BadgeCategory, string> = {
 const categoryLabels: Record<BadgeCategory, string> = {
   grammatik: "Gramatika",
   lesen: "Lesen",
-  hoeren: "Horen",
+  hoeren: "Hören",
   schreiben: "Schreiben",
   wortschatz: "Wortschatz",
 };
