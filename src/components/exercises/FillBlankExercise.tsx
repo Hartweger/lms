@@ -81,6 +81,7 @@ export default function FillBlankExercise({ question, options, correctAnswer, ex
 
   return (
     <div>
+      <p className="text-sm text-gray-500 mb-3">Dopuni rečenicu — izaberi tačnu reč:</p>
       {/* Word bank */}
       <div className="flex gap-2 flex-wrap mb-6">
         {wordBank.map((word, i) => {
