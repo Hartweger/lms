@@ -257,13 +257,17 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
       </div>
 
       {/* Audio player for Hören exercises */}
-      {exercise.title.toLowerCase().includes("hören") && currentIndex === 0 && (
-        <div className="mb-6 bg-gray-50 rounded-xl p-4">
-          <p className="text-sm text-gray-500 mb-2">Posušaj audio pa odgovori na pitanja:</p>
-          <audio controls className="w-full">
-            <source src="/audio/modelltest-a1.mp4" type="audio/mp4" />
-          </audio>
-        </div>
+      {exercise.title.toLowerCase().includes("hören") && (
+        <details className="mb-6 bg-gray-50 rounded-xl" open={currentIndex === 0}>
+          <summary className="p-4 text-sm text-gray-500 cursor-pointer">
+            {currentIndex === 0 ? "Poslušaj audio pa odgovori na pitanja:" : "Poslušaj audio ponovo"}
+          </summary>
+          <div className="px-4 pb-4">
+            <audio controls className="w-full">
+              <source src="/audio/modelltest-a1.mp4" type="audio/mp4" />
+            </audio>
+          </div>
+        </details>
       )}
 
       {/* Streak counter */}

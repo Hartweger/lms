@@ -59,12 +59,18 @@ export default function AdminEseji() {
 
   const publishEssay = async (essayId: string) => {
     setSaving(true);
-    await supabase.from("essay_submissions").update({
+    const { error } = await supabase.from("essay_submissions").update({
       professor_feedback: profFeedback,
       professor_score: profScore,
       status: "published",
       reviewed_at: new Date().toISOString(),
     }).eq("id", essayId);
+
+    if (error) {
+      alert("Greška pri čuvanju: " + error.message);
+      setSaving(false);
+      return;
+    }
 
     setEssays(essays.map(e =>
       e.id === essayId

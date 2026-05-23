@@ -205,7 +205,7 @@ export default function EssayExercise({ task, level, onAnswer, exerciseId, lesso
       />
       <button
         onClick={handleSubmit}
-        disabled={checking || !text.trim()}
+        disabled={checking || submitted || !text.trim()}
         className="mt-4 bg-plava text-white px-6 py-3 rounded-lg hover:bg-plava-dark transition-colors disabled:opacity-50"
       >
         {checking ? "Šaljem..." : "Pošalji esej"}
