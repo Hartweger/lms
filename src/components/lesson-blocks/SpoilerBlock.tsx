@@ -1,29 +1,4 @@
-"use client";
-
-import { useState } from "react";
 import type { SpoilerSection } from "@/lib/section-types";
-
-function SpoilerItem({ question, answer }: { question: string; answer: string }) {
-  const [open, setOpen] = useState(false);
-
-  return (
-    <button
-      type="button"
-      onClick={() => setOpen(!open)}
-      className="w-full text-left bg-gray-100 hover:bg-gray-200 rounded-lg p-3 md:p-4 transition-colors"
-    >
-      <p className="text-sm text-gray-700">{question}</p>
-      {open && (
-        <p className="mt-2 pt-2 border-t border-gray-300 text-green-700 font-bold text-sm">
-          {answer}
-        </p>
-      )}
-      {!open && (
-        <p className="mt-1 text-xs text-gray-400">Klikni za resenje</p>
-      )}
-    </button>
-  );
-}
 
 export default function SpoilerBlock({ title, items }: SpoilerSection) {
   return (
@@ -33,7 +8,18 @@ export default function SpoilerBlock({ title, items }: SpoilerSection) {
       )}
       <div className="space-y-2">
         {items.map((item, i) => (
-          <SpoilerItem key={i} question={item.question} answer={item.answer} />
+          <details
+            key={i}
+            className="bg-gray-100 rounded-lg p-3 md:p-4 cursor-pointer"
+          >
+            <summary className="text-sm text-gray-700 list-none">
+              <p>{item.question}</p>
+              <p className="mt-1 text-xs text-gray-400">Klikni za rešenje</p>
+            </summary>
+            <p className="mt-2 pt-2 border-t border-gray-300 text-green-700 font-bold text-sm">
+              {item.answer}
+            </p>
+          </details>
         ))}
       </div>
     </div>

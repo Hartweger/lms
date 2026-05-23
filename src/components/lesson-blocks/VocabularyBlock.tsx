@@ -9,10 +9,10 @@ export default function VocabularyBlock({ rows }: VocabularySection) {
           <thead>
             <tr>
               <th className="text-left px-3 py-2 text-gray-500 font-medium border-b border-orange-200">
-                Nemacki
+                Nemački
               </th>
               <th className="text-left px-3 py-2 text-gray-500 font-medium border-b border-orange-200">
-                Srpski
+                Prevod
               </th>
             </tr>
           </thead>
