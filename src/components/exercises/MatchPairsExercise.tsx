@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 interface MatchPairsProps {
   pairs: { de: string; sr: string }[];
@@ -15,14 +15,9 @@ export default function MatchPairsExercise({ pairs, onAnswer }: MatchPairsProps)
   const [shuffledSr] = useState(() =>
     [...pairs].sort(() => Math.random() - 0.5).map((p) => p.sr)
   );
+  const [done, setDone] = useState(false);
 
   const allMatched = Object.keys(matched).length === pairs.length;
-
-  useEffect(() => {
-    if (allMatched) {
-      onAnswer(true);
-    }
-  }, [allMatched, onAnswer]);
 
   const handleDeClick = (de: string) => {
     if (matched[de]) return;
@@ -34,8 +29,13 @@ export default function MatchPairsExercise({ pairs, onAnswer }: MatchPairsProps)
     if (!selectedDe || Object.values(matched).includes(sr)) return;
     const pair = pairs.find((p) => p.de === selectedDe);
     if (pair?.sr === sr) {
-      setMatched({ ...matched, [selectedDe]: sr });
+      const newMatched = { ...matched, [selectedDe]: sr };
+      setMatched(newMatched);
       setSelectedDe(null);
+      if (Object.keys(newMatched).length === pairs.length && !done) {
+        setDone(true);
+        onAnswer(true);
+      }
     } else {
       setWrong(sr);
       setTimeout(() => setWrong(null), 800);
