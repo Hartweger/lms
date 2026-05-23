@@ -16,7 +16,7 @@ function normalize(s: string): string {
     .replace(/\s+/g, " ");
 }
 
-function isCorrect(input: string, answer: string): boolean {
+function checkAnswer(input: string, answer: string): boolean {
   // Direct match after normalization
   if (normalize(input) === normalize(answer)) return true;
   // Also try: if answer has Umlauts, accept both ä and ae forms
@@ -32,7 +32,7 @@ export default function TypingExercise({ question, correctAnswer, explanation, o
 
   const handleSubmit = () => {
     if (answered || !input.trim()) return;
-    const correct = isCorrect(input, correctAnswer);
+    const correct = checkAnswer(input, correctAnswer);
     setIsCorrect(correct);
     setAnswered(true);
     onAnswer(correct);
