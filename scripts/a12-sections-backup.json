@@ -1,5 +1,46 @@
 [
   {
+    "id": "fd45eb3c-0ba4-4410-92ee-b5a883c1493c",
+    "title": "Willkommen",
+    "order_index": 0,
+    "sections": [
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Dobrodošli u kurs **Nemački A1.2**! Ovo je nastavak kursa A1 — proširićeš vokabular, naučiti dativ, imperativ, modalne glagole i pripremiti se za ispit A1."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Šta ćeš naučiti u A1.2?\n\n- Zanimanja i kako reći čime se baviš\n- Prošlo vreme sa *hatte* i *war*\n- Imperativ — kako davati uputstva\n- Modalni glagoli — können, müssen, dürfen, sollen, wollen, mögen\n- Delovi tela i kako reći šta te boli\n- Dativ sa predlozima (mit, zu, in, bei, nach)\n- Odeća (Kleidung)\n- Pisanje mejlova i upita\n- ADUSO veznici\n- Priprema za ispit A1"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Reči za ovaj kurs\n\nReči možeš da vežbaš uz Quizlet:"
+      },
+      {
+        "href": "https://quizlet.com/296032176/a12-modul-1-flash-cards/",
+        "type": "link",
+        "label": "Quizlet — Modul 1",
+        "linkType": "quizlet"
+      },
+      {
+        "href": "https://quizlet.com/271156592/a12-modul-2-flash-cards/",
+        "type": "link",
+        "label": "Quizlet — Modul 2",
+        "linkType": "quizlet"
+      },
+      {
+        "href": "https://quizlet.com/790519917/a12-modul-3-flash-cards/",
+        "type": "link",
+        "label": "Quizlet — Modul 3",
+        "linkType": "quizlet"
+      }
+    ],
+    "vimeo_video_id": null
+  },
+  {
     "id": "055bffbf-4abf-4590-afee-0e67b5027375",
     "title": "Berufe",
     "order_index": 1,
@@ -1392,10 +1433,16 @@
     "vimeo_video_id": "811745748"
   },
   {
-    "id": "f7f7f9dc-d896-44bd-832c-0cab56ec9714",
-    "title": "Reči A1.2 Modul 1",
+    "id": "07acaf9e-9358-4ef4-9fea-118b12bf89dd",
+    "title": "Test: Modul 1",
     "order_index": 5,
-    "sections": [],
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 1",
+        "category": "grammatik"
+      }
+    ],
     "vimeo_video_id": null
   },
   {
@@ -2593,10 +2640,16 @@
     "vimeo_video_id": "811721816"
   },
   {
-    "id": "b25b5fa3-a506-4fa8-af68-6532804cd188",
-    "title": "Reči A1.2 Modul 2",
+    "id": "3d0def1e-324e-414f-9510-48ab31d6d953",
+    "title": "Test: Modul 2",
     "order_index": 9,
-    "sections": [],
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 2",
+        "category": "grammatik"
+      }
+    ],
     "vimeo_video_id": null
   },
   {
@@ -3657,17 +3710,240 @@
     "vimeo_video_id": "815857405"
   },
   {
-    "id": "36060023-3431-4328-9fa4-4d6f332f85b7",
-    "title": "Reči A1.2 Modul 3",
+    "id": "4e7547c8-bf29-4258-9985-66b48c47806e",
+    "title": "Test: Modul 3",
     "order_index": 13,
-    "sections": [],
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 3",
+        "category": "grammatik"
+      }
+    ],
     "vimeo_video_id": null
   },
   {
     "id": "302eab1f-db46-454e-b891-375c02fe466c",
     "title": "Wörter",
     "order_index": 14,
-    "sections": [],
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 4",
+        "category": "wortschatz"
+      },
+      {
+        "type": "video",
+        "vimeoId": "817976036"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "U ovoj lekciji ponavljaš i vežbaš **reči iz prethodnih modula** — telo, zdravlje, predlozi, prevoz."
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "glava",
+            "front": "der Kopf"
+          },
+          {
+            "back": "oko",
+            "front": "das Auge, -n"
+          },
+          {
+            "back": "uvo",
+            "front": "das Ohr, -en"
+          },
+          {
+            "back": "nos",
+            "front": "die Nase"
+          },
+          {
+            "back": "ruka",
+            "front": "der Arm, -e"
+          },
+          {
+            "back": "šaka",
+            "front": "die Hand, Hände"
+          },
+          {
+            "back": "noga",
+            "front": "das Bein, -e"
+          },
+          {
+            "back": "stopalo",
+            "front": "der Fuß, Füße"
+          },
+          {
+            "back": "stomak",
+            "front": "der Bauch"
+          },
+          {
+            "back": "koleno",
+            "front": "das Knie"
+          },
+          {
+            "back": "boli",
+            "front": "tut weh"
+          },
+          {
+            "back": "sa",
+            "front": "mit + Dativ"
+          },
+          {
+            "back": "ka, do",
+            "front": "zu + Dativ"
+          },
+          {
+            "back": "u (lokacija)",
+            "front": "in + Dativ"
+          },
+          {
+            "back": "ispred",
+            "front": "vor"
+          },
+          {
+            "back": "iza",
+            "front": "hinter"
+          },
+          {
+            "back": "iznad",
+            "front": "über"
+          },
+          {
+            "back": "ispod",
+            "front": "unter"
+          },
+          {
+            "back": "pored",
+            "front": "neben"
+          },
+          {
+            "back": "između",
+            "front": "zwischen"
+          },
+          {
+            "back": "karta za prevoz",
+            "front": "die Fahrkarte"
+          },
+          {
+            "back": "kolosek",
+            "front": "das Gleis"
+          },
+          {
+            "back": "polazak",
+            "front": "die Abfahrt"
+          },
+          {
+            "back": "u jednom pravcu",
+            "front": "einfach"
+          },
+          {
+            "back": "povratna",
+            "front": "hin und zurück"
+          }
+        ]
+      },
+      {
+        "rows": [
+          [
+            "der Kopf",
+            "glava"
+          ],
+          [
+            "das Auge, -n",
+            "oko"
+          ],
+          [
+            "das Ohr, -en",
+            "uvo"
+          ],
+          [
+            "die Nase",
+            "nos"
+          ],
+          [
+            "der Arm, -e",
+            "ruka"
+          ],
+          [
+            "die Hand, Hände",
+            "šaka"
+          ],
+          [
+            "das Bein, -e",
+            "noga"
+          ],
+          [
+            "der Fuß, Füße",
+            "stopalo"
+          ],
+          [
+            "der Bauch",
+            "stomak"
+          ],
+          [
+            "das Knie",
+            "koleno"
+          ],
+          [
+            "tut weh / tun weh",
+            "boli / bole"
+          ],
+          [
+            "mit + Dativ",
+            "sa"
+          ],
+          [
+            "zu + Dativ",
+            "ka, do"
+          ],
+          [
+            "in + Dativ",
+            "u"
+          ],
+          [
+            "vor",
+            "ispred"
+          ],
+          [
+            "hinter",
+            "iza"
+          ],
+          [
+            "über",
+            "iznad"
+          ],
+          [
+            "unter",
+            "ispod"
+          ],
+          [
+            "neben",
+            "pored"
+          ],
+          [
+            "zwischen",
+            "između"
+          ],
+          [
+            "die Fahrkarte",
+            "karta"
+          ],
+          [
+            "das Gleis",
+            "kolosek"
+          ],
+          [
+            "die Abfahrt",
+            "polazak"
+          ]
+        ],
+        "type": "vocabulary"
+      }
+    ],
     "vimeo_video_id": "817976036"
   },
   {
@@ -4636,9 +4912,22 @@
     "vimeo_video_id": "822544131"
   },
   {
+    "id": "573c28b9-77cc-4a97-8609-e6997562407a",
+    "title": "Test: Modul 4",
+    "order_index": 18,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 4",
+        "category": "grammatik"
+      }
+    ],
+    "vimeo_video_id": null
+  },
+  {
     "id": "6d742051-3224-446c-ab54-c494932bbe96",
     "title": "Kleidung",
-    "order_index": 18,
+    "order_index": 19,
     "sections": [
       {
         "type": "badge",
@@ -5002,7 +5291,7 @@
   {
     "id": "e33fc837-364c-44d8-a60a-e08be652b9d2",
     "title": "Kleidung — Leseverstehen und Schreiben",
-    "order_index": 19,
+    "order_index": 20,
     "sections": [
       {
         "type": "badge",
@@ -5173,7 +5462,7 @@
   {
     "id": "1faeeb6f-2526-4b8c-99f1-f45648c9ae89",
     "title": "Dativ — ličnih zamenica",
-    "order_index": 20,
+    "order_index": 21,
     "sections": [
       {
         "type": "badge",
@@ -5457,16 +5746,22 @@
     "vimeo_video_id": "827060139"
   },
   {
-    "id": "fb802bfc-eb56-4f91-8ed4-9a22f458d488",
-    "title": "Reči za Modul 5 — Kleidung",
-    "order_index": 21,
-    "sections": [],
+    "id": "5f80e8de-3524-4246-9f95-ab45061eb58e",
+    "title": "Test: Modul 5",
+    "order_index": 22,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 5",
+        "category": "grammatik"
+      }
+    ],
     "vimeo_video_id": null
   },
   {
     "id": "f172f25e-669f-4b23-98a3-14a27e349b96",
     "title": "Fragen formulieren",
-    "order_index": 22,
+    "order_index": 23,
     "sections": [
       {
         "type": "badge",
@@ -5681,7 +5976,7 @@
   {
     "id": "53c3c66a-4ab5-4bc2-bc8c-d0225b358dc1",
     "title": "ADUSO und Feste",
-    "order_index": 23,
+    "order_index": 24,
     "sections": [
       {
         "type": "badge",
@@ -5910,7 +6205,7 @@
   {
     "id": "075d9030-0e9b-49c8-95ba-ae1f2adad538",
     "title": "E-Mails schreiben",
-    "order_index": 24,
+    "order_index": 25,
     "sections": [
       {
         "type": "badge",
@@ -6164,31 +6459,271 @@
     "vimeo_video_id": "831251276"
   },
   {
+    "id": "81b96152-c349-424c-89aa-34d43e5e67e0",
+    "title": "Test: Modul 6",
+    "order_index": 26,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 6",
+        "category": "grammatik"
+      }
+    ],
+    "vimeo_video_id": null
+  },
+  {
     "id": "5ae36fcc-316e-4e2b-b25c-d2814de820d8",
     "title": "Sve o ispitu A1",
-    "order_index": 25,
-    "sections": [],
+    "order_index": 27,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Ispit",
+        "category": "lesen"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Ovde ćeš naći sve informacije o **ispitu A1** — kako izgleda, koliko traje i šta treba da znaš."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Struktura ispita Goethe A1"
+      },
+      {
+        "rows": [
+          [
+            "<mark>Lesen</mark>",
+            "25 min",
+            "Čitanje tekstova + odgovaranje na pitanja"
+          ],
+          [
+            "<mark>Hören</mark>",
+            "~20 min",
+            "Slušanje audio snimaka + odgovaranje"
+          ],
+          [
+            "<mark>Schreiben</mark>",
+            "20 min",
+            "Popunjavanje formulara ili pisanje mejla"
+          ],
+          [
+            "<mark>Sprechen</mark>",
+            "~15 min",
+            "Usmeni deo — predstavljanje, pitanja, molbe"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Deo",
+          "Trajanje",
+          "Opis"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Kako se ocenjuje?"
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "Svaki deo nosi **25 bodova** (ukupno 100).\n\nProlazna ocena: **60 od 100 bodova** (60%).\n\nMoraš imati minimum **45%** u svakom delu posebno — ne možeš pasti jedan deo i kompenzovati drugim."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Kada padaš ispit?"
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "Padaš ako:\n- Imaš manje od **60 bodova** ukupno\n- Imaš manje od **45%** u bilo kom delu\n\nAko padneš, možeš ponovo da polažeš — nema ograničenja koliko puta."
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "Čitanje (25 min)",
+            "front": "Lesen"
+          },
+          {
+            "back": "Slušanje (~20 min)",
+            "front": "Hören"
+          },
+          {
+            "back": "Pisanje (20 min)",
+            "front": "Schreiben"
+          },
+          {
+            "back": "Govor (~15 min)",
+            "front": "Sprechen"
+          },
+          {
+            "back": "Prolazna ocena",
+            "front": "60/100"
+          },
+          {
+            "back": "Minimum po delu",
+            "front": "45%"
+          }
+        ]
+      }
+    ],
     "vimeo_video_id": null
   },
   {
     "id": "d6854096-e432-4950-906e-0c39904b1b4e",
     "title": "Gramatika za nivo A1 — BONUS",
-    "order_index": 26,
-    "sections": [],
+    "order_index": 28,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Ispit",
+        "category": "grammatik"
+      },
+      {
+        "type": "video",
+        "vimeoId": "641079521"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Kompletna **gramatika za nivo A1** u jednom videu (102 min). Savršeno za ponavljanje pre ispita."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Šta je pokriveno"
+      },
+      {
+        "rows": [
+          [
+            "Prezent (pravilni i nepravilni glagoli)"
+          ],
+          [
+            "Član (der, die, das)"
+          ],
+          [
+            "Negacija (nicht, kein)"
+          ],
+          [
+            "Akuzativ"
+          ],
+          [
+            "Modalni glagoli"
+          ],
+          [
+            "Perfekt (haben + sein)"
+          ],
+          [
+            "Imperativ"
+          ],
+          [
+            "Dativ + predlozi"
+          ],
+          [
+            "Prisvojne zamenice"
+          ],
+          [
+            "ADUSO veznici"
+          ],
+          [
+            "Wechselpräpositionen"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Tema"
+        ]
+      }
+    ],
     "vimeo_video_id": "918423443"
   },
   {
-    "id": "5c26402b-0112-4d95-9305-1c79e47b2d7b",
+    "id": "8525da96-34f0-4f43-9168-2ecb0a05308d",
     "title": "Reči za ispit A1",
-    "order_index": 27,
-    "sections": [],
+    "order_index": 29,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Ispit",
+        "category": "wortschatz"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Ovde možeš da ponoviš sve **reči za nivo A1** pre ispita."
+      },
+      {
+        "href": "https://quizlet.com/296032176/a12-modul-1-flash-cards/",
+        "type": "link",
+        "label": "Quizlet — Modul 1",
+        "linkType": "quizlet"
+      },
+      {
+        "href": "https://quizlet.com/271156592/a12-modul-2-flash-cards/",
+        "type": "link",
+        "label": "Quizlet — Modul 2",
+        "linkType": "quizlet"
+      },
+      {
+        "href": "https://quizlet.com/790519917/a12-modul-3-flash-cards/",
+        "type": "link",
+        "label": "Quizlet — Modul 3",
+        "linkType": "quizlet"
+      }
+    ],
     "vimeo_video_id": null
   },
   {
     "id": "25412b1e-e150-4b09-921c-fe9804a64bac",
     "title": "Materijal za pripremu ispita A1",
-    "order_index": 28,
-    "sections": [],
+    "order_index": 30,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Ispit",
+        "category": "lesen"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Materijali za pripremu ispita A1 — knjige, primeri ispita i audio."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Preporučeni materijali"
+      },
+      {
+        "rows": [
+          [
+            "Prüfungstraining",
+            "Knjiga sa vežbama, rešenjima i audio zapisima"
+          ],
+          [
+            "Fit fürs Goethe-Zertifikat A1",
+            "Priprema specifično za Goethe ispit"
+          ],
+          [
+            "Primeri ispita (1-4)",
+            "Pravi primeri sa prošlih ispita"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Materijal",
+          "Opis"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "uebung",
+        "content": "**Savet:** Uradi bar **2-3 primera ispita** pre pravog polaganja. Pazi na vreme — vežbaj sa tajmerom!"
+      }
+    ],
     "vimeo_video_id": null
   }
 ]
