@@ -10,7 +10,7 @@ interface TypingProps {
 }
 
 function normalize(s: string): string {
-  return s.trim().toLowerCase()
+  return s.trim().toLowerCase().replace(/[\.!?]+$/g, "")
     .replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss")
     .replace(/\s+/g, " ");
 }
