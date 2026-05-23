@@ -164,7 +164,7 @@ export default async function Dashboard() {
           {/* Primary Course Block */}
           <div className="bg-white rounded-xl p-5 border-2 border-plava shadow-sm mb-4">
             <div className="text-xs font-bold text-plava tracking-wide mb-2">
-              {allCompleted ? "PONOVI KURS" : "NASTAVI GDE SI STAO"}
+              {allCompleted ? "PONOVI KURS" : "NASTAVI SA UČENJEM"}
             </div>
             <h2 className="font-bold text-lg text-gray-900 mb-1">
               {primaryCourse.title}
