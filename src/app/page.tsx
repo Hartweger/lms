@@ -1,32 +1,17 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@/lib/supabase/server";
 import KursKartica from "@/components/KursKartica";
 import type { Course } from "@/lib/types";
 
-export default function Pocetna() {
-  const [courses, setCourses] = useState<Course[]>([]);
-  const [loading, setLoading] = useState(true);
+export const dynamic = "force-dynamic";
 
-  useEffect(() => {
-    const load = async () => {
-      try {
-        const supabase = createClient();
-        const { data } = await supabase
-          .from("courses")
-          .select("*")
-          .eq("is_published", true)
-          .eq("course_type", "video")
-          .order("created_at", { ascending: false });
-        if (data) setCourses(data as Course[]);
-      } catch (e) {
-        console.error("Fetch error:", e);
-      }
-      setLoading(false);
-    };
-    load();
-  }, []);
+export default async function Pocetna() {
+  const supabase = await createClient();
+  const { data: courses } = await supabase
+    .from("courses")
+    .select("*")
+    .eq("is_published", true)
+    .eq("course_type", "video")
+    .order("created_at", { ascending: false });
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-12">
@@ -41,11 +26,9 @@ export default function Pocetna() {
       </div>
 
       {/* Course grid */}
-      {loading ? (
-        <p className="text-center text-gray-400">Učitavanje...</p>
-      ) : courses.length > 0 ? (
+      {courses && courses.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {courses.map((course) => (
+          {(courses as Course[]).map((course) => (
             <KursKartica key={course.id} course={course} />
           ))}
         </div>
