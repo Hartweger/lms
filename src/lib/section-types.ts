@@ -1,4 +1,4 @@
-export type BadgeCategory = "grammatik" | "lesen" | "hoeren" | "schreiben";
+export type BadgeCategory = "grammatik" | "lesen" | "hoeren" | "schreiben" | "wortschatz";
 export type TextStyle = "default" | "beispiele" | "uebung" | "info";
 export type LinkType = "kviz" | "quizlet" | "pdf" | "dw" | "external";
 

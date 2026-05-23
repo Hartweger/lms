@@ -5,6 +5,7 @@ const categoryStyles: Record<BadgeCategory, string> = {
   lesen: "bg-zelena",
   hoeren: "bg-ljubicasta",
   schreiben: "bg-koral",
+  wortschatz: "bg-narandzasta",
 };
 
 const categoryLabels: Record<BadgeCategory, string> = {
@@ -12,6 +13,7 @@ const categoryLabels: Record<BadgeCategory, string> = {
   lesen: "Lesen",
   hoeren: "Horen",
   schreiben: "Schreiben",
+  wortschatz: "Wortschatz",
 };
 
 export default function BadgeBlock({ module, category }: BadgeSection) {
