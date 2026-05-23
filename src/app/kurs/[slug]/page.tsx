@@ -31,6 +31,44 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export const dynamic = "force-dynamic";
 
+// Group lessons into modules based on "Test: Modul X" boundaries
+function groupByModules(lessons: Lesson[]) {
+  const modules: { name: string; lessons: Lesson[] }[] = [];
+  let current: Lesson[] = [];
+  let moduleIndex = 0;
+
+  for (const lesson of lessons) {
+    if (lesson.title.startsWith("Test: Modul")) {
+      moduleIndex++;
+      // Add current lessons + test as a module
+      current.push(lesson);
+      modules.push({ name: `Modul ${moduleIndex}`, lessons: current });
+      current = [];
+    } else if (lesson.title === "00 Willkommen") {
+      modules.push({ name: "Uvod", lessons: [lesson] });
+    } else {
+      current.push(lesson);
+    }
+  }
+  // Remaining lessons without a test
+  if (current.length > 0) {
+    modules.push({ name: `Modul ${moduleIndex + 1}`, lessons: current });
+  }
+
+  return modules;
+}
+
+const moduleColors = [
+  "bg-plava text-white",
+  "bg-koral text-white",
+  "bg-zelena text-white",
+  "bg-narandzasta text-white",
+  "bg-ljubicasta text-white",
+  "bg-plava-dark text-white",
+  "bg-koral-dark text-white",
+  "bg-gray-700 text-white",
+];
+
 export default async function KursStranica({ params }: PageProps) {
   const { slug } = await params;
   const supabase = await createClient();
@@ -46,7 +84,6 @@ export default async function KursStranica({ params }: PageProps) {
 
   const typedCourse = course as Course;
 
-  // Fetch free preview lessons (RLS allows this for anyone)
   const { data: previewLessons } = await supabase
     .from("lessons")
     .select("*")
@@ -54,10 +91,7 @@ export default async function KursStranica({ params }: PageProps) {
     .eq("is_free_preview", true)
     .order("order_index");
 
-  // Fetch all lessons if user has access
   let allLessons: Lesson[] = [];
-
-  // Check if current user has access
   const { data: { user } } = await supabase.auth.getUser();
   let hasAccess = false;
   if (user) {
@@ -78,11 +112,12 @@ export default async function KursStranica({ params }: PageProps) {
     }
   }
 
-  // Get total lesson count
   const { count: lessonCount } = await supabase
     .from("lessons")
     .select("*", { count: "exact", head: true })
     .eq("course_id", typedCourse.id);
+
+  const modules = hasAccess ? groupByModules(allLessons) : [];
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
@@ -118,40 +153,50 @@ export default async function KursStranica({ params }: PageProps) {
         )}
       </div>
 
-      {/* All lessons — for users with access */}
-      {hasAccess && allLessons.length > 0 && (
-        <div className="mb-8">
-          <details open className="group">
-            <summary className="flex items-center justify-between cursor-pointer mb-4">
-              <h2 className="text-xl font-bold text-gray-900">
-                Lekcije ({allLessons.length})
-              </h2>
-              <span className="text-sm text-plava group-open:rotate-180 transition-transform">▼</span>
-            </summary>
-            <div className="space-y-2">
-              {allLessons.map((lesson, i) => (
-                <Link
-                  key={lesson.id}
-                  href={`/lekcija/${lesson.id}`}
-                  className="block bg-white rounded-lg p-3 md:p-4 shadow-sm hover:shadow-md transition-shadow"
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-plava-light text-plava text-xs md:text-sm font-bold flex items-center justify-center shrink-0">
-                      {i + 1}
-                    </span>
-                    <span className="font-medium text-gray-900 text-sm md:text-base">{lesson.title}</span>
-                    {lesson.lesson_type === "video" && (
-                      <span className="text-xs text-gray-400 ml-auto shrink-0">▶</span>
-                    )}
-                  </div>
-                </Link>
-              ))}
+      {/* Lessons grouped by module */}
+      {hasAccess && modules.length > 0 && (
+        <div className="space-y-6">
+          {modules.map((mod, mi) => (
+            <div key={mi}>
+              {/* Module header */}
+              <div className={`inline-block px-4 py-1.5 rounded-full text-sm font-bold mb-3 ${moduleColors[mi % moduleColors.length]}`}>
+                {mod.name}
+              </div>
+              <div className="space-y-2">
+                {mod.lessons.map((lesson) => {
+                  const isTest = lesson.title.startsWith("Test:");
+                  return (
+                    <Link
+                      key={lesson.id}
+                      href={`/lekcija/${lesson.id}`}
+                      className={`block rounded-lg p-3 md:p-4 shadow-sm hover:shadow-md transition-shadow ${
+                        isTest ? "bg-koral-light border-l-4 border-koral" : "bg-white"
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        {isTest ? (
+                          <span className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-koral text-white text-xs font-bold flex items-center justify-center shrink-0">
+                            ✓
+                          </span>
+                        ) : (
+                          <span className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-plava-light text-plava text-xs md:text-sm font-bold flex items-center justify-center shrink-0">
+                            {lesson.order_index}
+                          </span>
+                        )}
+                        <span className={`font-medium text-sm md:text-base ${isTest ? "text-koral-dark" : "text-gray-900"}`}>
+                          {lesson.title}
+                        </span>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
             </div>
-          </details>
+          ))}
         </div>
       )}
 
-      {/* Free preview lessons — for users without access */}
+      {/* Free preview lessons */}
       {!hasAccess && previewLessons && previewLessons.length > 0 && (
         <div className="mb-8">
           <h2 className="text-xl font-bold text-gray-900 mb-4">

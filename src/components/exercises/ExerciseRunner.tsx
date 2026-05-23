@@ -19,9 +19,10 @@ interface ExerciseRunnerProps {
   exercise: Exercise;
   questions: ExerciseQuestion[];
   level?: string;
+  nextLessonId?: string | null;
 }
 
-export default function ExerciseRunner({ exercise, questions, level = "A1" }: ExerciseRunnerProps) {
+export default function ExerciseRunner({ exercise, questions, level = "A1", nextLessonId }: ExerciseRunnerProps) {
   const supabase = createClient();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -203,6 +204,14 @@ export default function ExerciseRunner({ exercise, questions, level = "A1" }: Ex
         >
           Pokušaj ponovo
         </button>
+        {nextLessonId && (
+          <a
+            href={`/lekcija/${nextLessonId}`}
+            className="mt-3 block text-center bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium"
+          >
+            Sledeća lekcija →
+          </a>
+        )}
       </div>
     );
   }

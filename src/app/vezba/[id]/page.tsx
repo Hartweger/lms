@@ -37,6 +37,29 @@ export default async function VezbaStranica({ params }: PageProps) {
     .eq("id", typedExercise.lesson_id)
     .single();
 
+  // Find next lesson
+  let nextLessonId: string | null = null;
+  if (lesson) {
+    const { data: currentLesson } = await supabase
+      .from("lessons")
+      .select("order_index")
+      .eq("id", lesson.id)
+      .single();
+
+    if (currentLesson) {
+      const { data: nextLesson } = await supabase
+        .from("lessons")
+        .select("id")
+        .eq("course_id", lesson.course_id)
+        .gt("order_index", currentLesson.order_index)
+        .order("order_index")
+        .limit(1)
+        .single();
+
+      nextLessonId = nextLesson?.id || null;
+    }
+  }
+
   // Check if current user is admin
   const { data: { user } } = await supabase.auth.getUser();
   let isAdmin = false;
@@ -70,9 +93,14 @@ export default async function VezbaStranica({ params }: PageProps) {
       </div>
 
       {questions && questions.length > 0 ? (
-        <ExerciseRunner exercise={typedExercise} questions={questions as ExerciseQuestion[]} level={courseLevel} />
+        <ExerciseRunner
+          exercise={typedExercise}
+          questions={questions as ExerciseQuestion[]}
+          level={courseLevel}
+          nextLessonId={nextLessonId}
+        />
       ) : (
-        <p className="text-gray-400 text-center py-8">Ova vezba nema pitanja.</p>
+        <p className="text-gray-400 text-center py-8">Ova vežba nema pitanja.</p>
       )}
     </div>
   );
