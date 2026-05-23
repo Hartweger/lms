@@ -93,3 +93,19 @@ export interface ExerciseAttempt {
   total_questions: number;
   completed_at: string;
 }
+
+export interface EssaySubmission {
+  id: string;
+  user_id: string;
+  exercise_id: string;
+  lesson_id: string;
+  text: string;
+  ai_feedback: string | null;
+  ai_corrections: unknown;
+  ai_score: number | null;
+  professor_feedback: string | null;
+  professor_score: number | null;
+  status: "pending" | "reviewed" | "published";
+  submitted_at: string;
+  reviewed_at: string | null;
+}

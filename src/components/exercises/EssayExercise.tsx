@@ -1,11 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { createClient } from "@/lib/supabase/client";
 
 interface EssayProps {
   task: string;
   level: string;
   onAnswer: (correct: boolean) => void;
+  exerciseId?: string;
+  lessonId?: string;
 }
 
 interface Correction {
@@ -14,16 +17,52 @@ interface Correction {
   explanation: string;
 }
 
-interface AIFeedback {
-  feedback: string;
-  corrections: Correction[];
-  score: number | null;
+interface PublishedResult {
+  professor_feedback: string;
+  professor_score: number;
+  ai_feedback: string | null;
+  ai_corrections: Correction[] | null;
 }
 
-export default function EssayExercise({ task, level, onAnswer }: EssayProps) {
+export default function EssayExercise({ task, level, onAnswer, exerciseId, lessonId }: EssayProps) {
+  const supabase = createClient();
   const [text, setText] = useState("");
   const [checking, setChecking] = useState(false);
-  const [result, setResult] = useState<AIFeedback | null>(null);
+  const [submitted, setSubmitted] = useState(false);
+  const [published, setPublished] = useState<PublishedResult | null>(null);
+  const [alreadyPending, setAlreadyPending] = useState(false);
+
+  useEffect(() => {
+    if (!exerciseId) return;
+    const checkExisting = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data } = await supabase
+        .from("essay_submissions")
+        .select("*")
+        .eq("exercise_id", exerciseId)
+        .eq("user_id", user.id)
+        .order("submitted_at", { ascending: false })
+        .limit(1)
+        .single();
+
+      if (data) {
+        if (data.status === "published") {
+          setPublished({
+            professor_feedback: data.professor_feedback,
+            professor_score: data.professor_score,
+            ai_feedback: data.ai_feedback,
+            ai_corrections: data.ai_corrections as Correction[] | null,
+          });
+          onAnswer((data.professor_score || 0) >= 3);
+        } else {
+          setAlreadyPending(true);
+        }
+      }
+    };
+    checkExisting();
+  }, [exerciseId, supabase]);
 
   const handleSubmit = async () => {
     if (!text.trim()) return;
@@ -35,15 +74,41 @@ export default function EssayExercise({ task, level, onAnswer }: EssayProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text, task, level }),
       });
-      const data = await response.json();
-      setResult(data);
-      onAnswer((data.score || 0) >= 3);
+      const aiData = await response.json();
+
+      if (exerciseId && lessonId) {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          await supabase.from("essay_submissions").insert({
+            user_id: user.id,
+            exercise_id: exerciseId,
+            lesson_id: lessonId,
+            text,
+            ai_feedback: aiData.feedback || null,
+            ai_corrections: aiData.corrections || null,
+            ai_score: aiData.score || null,
+            status: "pending",
+          });
+        }
+      }
+
+      setSubmitted(true);
+      onAnswer(true);
     } catch {
-      setResult({
-        feedback: "Greška pri proveri. Pokušaj ponovo.",
-        corrections: [],
-        score: null,
-      });
+      if (exerciseId && lessonId) {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          await supabase.from("essay_submissions").insert({
+            user_id: user.id,
+            exercise_id: exerciseId,
+            lesson_id: lessonId,
+            text,
+            status: "pending",
+          });
+        }
+      }
+      setSubmitted(true);
+      onAnswer(true);
     }
     setChecking(false);
   };
@@ -64,56 +129,34 @@ export default function EssayExercise({ task, level, onAnswer }: EssayProps) {
     5: "text-green-600",
   };
 
-  return (
-    <div>
-      <div className="mb-4">
-        <p className="text-lg font-medium text-gray-900 mb-2">Zadatak:</p>
-        <p className="text-gray-600 bg-gray-50 rounded-lg p-4">{task}</p>
-      </div>
-
-      <textarea
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        disabled={!!result}
-        placeholder="Napiši odgovor na nemačkom..."
-        rows={6}
-        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-plava focus:border-transparent resize-none text-gray-700 disabled:bg-gray-50"
-      />
-
-      {!result && (
-        <button
-          onClick={handleSubmit}
-          disabled={checking || !text.trim()}
-          className="mt-4 bg-plava text-white px-6 py-3 rounded-lg hover:bg-plava-dark transition-colors disabled:opacity-50"
-        >
-          {checking ? "AI proverava..." : "Proveri odgovor"}
-        </button>
-      )}
-
-      {result && (
+  if (published) {
+    return (
+      <div>
+        <div className="mb-4">
+          <p className="text-lg font-medium text-gray-900 mb-2">Zadatak:</p>
+          <p className="text-gray-600 bg-gray-50 rounded-lg p-4">{task}</p>
+        </div>
         <div className="mt-6 space-y-4">
-          {/* Score */}
-          {result.score && (
+          {published.professor_score && (
             <div className="flex items-center gap-3">
-              <span className={`text-3xl font-bold ${scoreColors[result.score]}`}>
-                {result.score}/5
+              <span className={`text-3xl font-bold ${scoreColors[published.professor_score]}`}>
+                {published.professor_score}/5
               </span>
-              <span className={`text-sm font-medium ${scoreColors[result.score]}`}>
-                {scoreLabels[result.score]}
+              <span className={`text-sm font-medium ${scoreColors[published.professor_score]}`}>
+                {scoreLabels[published.professor_score]}
               </span>
             </div>
           )}
-
-          {/* Feedback */}
-          <div className="bg-plava-light rounded-xl p-4">
-            <p className="text-sm text-gray-700">{result.feedback}</p>
-          </div>
-
-          {/* Corrections */}
-          {result.corrections && result.corrections.length > 0 && (
+          {published.professor_feedback && (
+            <div className="bg-plava-light rounded-xl p-4">
+              <p className="text-xs font-semibold text-gray-500 mb-1">Komentar profesora:</p>
+              <p className="text-sm text-gray-700">{published.professor_feedback}</p>
+            </div>
+          )}
+          {published.ai_corrections && published.ai_corrections.length > 0 && (
             <div className="space-y-3">
               <h4 className="text-sm font-semibold text-gray-700">Ispravke:</h4>
-              {result.corrections.map((c, i) => (
+              {published.ai_corrections.map((c, i) => (
                 <div key={i} className="bg-white rounded-lg border border-gray-100 p-3">
                   <div className="flex items-start gap-2 text-sm">
                     <span className="text-koral line-through">{c.original}</span>
@@ -128,7 +171,45 @@ export default function EssayExercise({ task, level, onAnswer }: EssayProps) {
             </div>
           )}
         </div>
-      )}
+      </div>
+    );
+  }
+
+  if (submitted || alreadyPending) {
+    return (
+      <div>
+        <div className="mb-4">
+          <p className="text-lg font-medium text-gray-900 mb-2">Zadatak:</p>
+          <p className="text-gray-600 bg-gray-50 rounded-lg p-4">{task}</p>
+        </div>
+        <div className="mt-6 bg-plava-light rounded-xl p-6 text-center">
+          <p className="text-lg font-medium text-plava mb-2">Tvoj esej je poslat na pregled</p>
+          <p className="text-sm text-gray-500">Profesor će pregledati tvoj rad i dati ti povratnu informaciju. Rezultat ćeš videti ovde kada bude gotovo.</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div className="mb-4">
+        <p className="text-lg font-medium text-gray-900 mb-2">Zadatak:</p>
+        <p className="text-gray-600 bg-gray-50 rounded-lg p-4">{task}</p>
+      </div>
+      <textarea
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        placeholder="Napiši odgovor na nemačkom..."
+        rows={6}
+        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-plava focus:border-transparent resize-none text-gray-700"
+      />
+      <button
+        onClick={handleSubmit}
+        disabled={checking || !text.trim()}
+        className="mt-4 bg-plava text-white px-6 py-3 rounded-lg hover:bg-plava-dark transition-colors disabled:opacity-50"
+      >
+        {checking ? "Šaljem..." : "Pošalji esej"}
+      </button>
     </div>
   );
 }

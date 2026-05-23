@@ -9,6 +9,7 @@ const links = [
   { href: "/admin/studenti", label: "Studenti" },
   { href: "/admin/kupovine", label: "Kupovine" },
   { href: "/admin/test-nivoa", label: "Test nivoa" },
+  { href: "/admin/eseji", label: "Eseji" },
 ];
 
 export default function AdminSidebar() {

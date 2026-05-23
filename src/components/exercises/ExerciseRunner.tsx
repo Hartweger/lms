@@ -296,6 +296,8 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
                 task={question.question}
                 level={level}
                 onAnswer={handleAnswer}
+                exerciseId={exercise.id}
+                lessonId={exercise.lesson_id}
               />
             );
           }
@@ -417,6 +419,8 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
               task={question.question}
               level="A1"
               onAnswer={handleAnswer}
+              exerciseId={exercise.id}
+              lessonId={exercise.lesson_id}
             />
           );
         })()}
