@@ -134,7 +134,7 @@ export default function EssayExercise({ task, level, onAnswer, exerciseId, lesso
       <div>
         <div className="mb-4">
           <p className="text-lg font-medium text-gray-900 mb-2">Zadatak:</p>
-          <p className="text-gray-600 bg-gray-50 rounded-lg p-4">{task}</p>
+          <p className="text-gray-600 bg-gray-50 rounded-lg p-4 whitespace-pre-line">{task}</p>
         </div>
         <div className="mt-6 space-y-4">
           {published.professor_score && (
@@ -180,7 +180,7 @@ export default function EssayExercise({ task, level, onAnswer, exerciseId, lesso
       <div>
         <div className="mb-4">
           <p className="text-lg font-medium text-gray-900 mb-2">Zadatak:</p>
-          <p className="text-gray-600 bg-gray-50 rounded-lg p-4">{task}</p>
+          <p className="text-gray-600 bg-gray-50 rounded-lg p-4 whitespace-pre-line">{task}</p>
         </div>
         <div className="mt-6 bg-plava-light rounded-xl p-6 text-center">
           <p className="text-lg font-medium text-plava mb-2">Tvoj esej je poslat na pregled</p>
@@ -194,7 +194,7 @@ export default function EssayExercise({ task, level, onAnswer, exerciseId, lesso
     <div>
       <div className="mb-4">
         <p className="text-lg font-medium text-gray-900 mb-2">Zadatak:</p>
-        <p className="text-gray-600 bg-gray-50 rounded-lg p-4">{task}</p>
+        <p className="text-gray-600 bg-gray-50 rounded-lg p-4 whitespace-pre-line">{task}</p>
       </div>
       <textarea
         value={text}

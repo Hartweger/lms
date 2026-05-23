@@ -76,11 +76,21 @@ export default function FillBlankExercise({ question, options, correctAnswer, ex
 
   const allFilled = filledBlanks.every((b) => b !== null);
 
-  // Split question into parts around ______
-  const parts = question.split("______");
+  // Split context from fill-in sentence (separated by \n\n)
+  const contextParts = question.split("\n\n");
+  const fillSentence = contextParts.length > 1 ? contextParts[contextParts.length - 1] : question;
+  const contextText = contextParts.length > 1 ? contextParts.slice(0, -1).join("\n\n") : null;
+
+  // Split fill sentence into parts around ______
+  const parts = fillSentence.split("______");
 
   return (
     <div>
+      {contextText && (
+        <div className="bg-gray-50 rounded-lg p-4 mb-4 text-sm text-gray-700 whitespace-pre-line">
+          {contextText}
+        </div>
+      )}
       <p className="text-sm text-gray-500 mb-3">Dopuni rečenicu — izaberi tačnu reč:</p>
       {/* Word bank */}
       <div className="flex gap-2 flex-wrap mb-6">

@@ -256,6 +256,16 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
         />
       </div>
 
+      {/* Audio player for Hören exercises */}
+      {exercise.title.toLowerCase().includes("hören") && currentIndex === 0 && (
+        <div className="mb-6 bg-gray-50 rounded-xl p-4">
+          <p className="text-sm text-gray-500 mb-2">Posušaj audio pa odgovori na pitanja:</p>
+          <audio controls className="w-full">
+            <source src="/audio/modelltest-a1.mp4" type="audio/mp4" />
+          </audio>
+        </div>
+      )}
+
       {/* Streak counter */}
       {streak >= 2 && (
         <div className="text-center mb-4 animate-bounce">
