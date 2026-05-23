@@ -19,13 +19,24 @@ export default function CategorizeExercise({ question, categories, items, onAnsw
 
   const handleItemClick = (text: string) => {
     if (answered) return;
-    setSelectedItem(text);
+    if (selectedItem === text) {
+      setSelectedItem(null);
+    } else {
+      setSelectedItem(text);
+    }
   };
 
   const handleCategoryClick = (catIndex: number) => {
     if (answered || !selectedItem) return;
     setPlacements({ ...placements, [selectedItem]: catIndex });
     setSelectedItem(null);
+  };
+
+  const handleRemoveFromCategory = (text: string) => {
+    if (answered) return;
+    const newPlacements = { ...placements };
+    delete newPlacements[text];
+    setPlacements(newPlacements);
   };
 
   const handleCheck = () => {
@@ -42,54 +53,25 @@ export default function CategorizeExercise({ question, categories, items, onAnsw
 
   return (
     <div>
-      <p className="text-lg font-medium text-gray-900 mb-4">{question}</p>
+      <p className="text-lg font-medium text-gray-900 mb-1">{question}</p>
+      <p className="text-xs text-gray-400 mb-5">
+        {!selectedItem
+          ? "① Klikni na reč ispod → ② Klikni na kategoriju gde pripada"
+          : `Sad klikni na kategoriju gde pripada "${selectedItem}"`}
+      </p>
 
-      {/* Categories */}
-      <div className="grid gap-3" style={{ gridTemplateColumns: `repeat(${categories.length}, 1fr)` }}>
-        {categories.map((cat, ci) => (
-          <div key={ci} className="text-center">
-            <button
-              type="button"
-              onClick={() => handleCategoryClick(ci)}
-              className={`w-full py-2 px-3 rounded-lg text-sm font-bold mb-2 transition-colors ${
-                selectedItem ? "bg-plava text-white cursor-pointer" : "bg-gray-100 text-gray-700"
-              }`}
-              disabled={answered || !selectedItem}
-            >
-              {cat}
-            </button>
-            <div className="space-y-1 min-h-[40px]">
-              {items.filter((item) => placements[item.text] === ci).map((item) => (
-                <div
-                  key={item.text}
-                  className={`text-xs px-2 py-1 rounded ${
-                    answered
-                      ? item.category === ci
-                        ? "bg-green-100 text-green-700"
-                        : "bg-red-100 text-red-600"
-                      : "bg-plava-light text-plava"
-                  }`}
-                >
-                  {item.text}
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Unplaced items */}
+      {/* Unplaced items — show FIRST so user knows what to click */}
       {unplaced.length > 0 && (
-        <div className="mt-4 flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 mb-5">
           {unplaced.map((item) => (
             <button
               key={item.text}
               type="button"
               onClick={() => handleItemClick(item.text)}
-              className={`px-3 py-2 rounded-lg text-sm border-2 transition-colors ${
+              className={`px-4 py-2.5 rounded-xl text-sm font-medium border-2 transition-all ${
                 selectedItem === item.text
-                  ? "border-plava bg-plava-light text-plava font-bold"
-                  : "border-gray-200 text-gray-700 hover:border-plava"
+                  ? "border-plava bg-plava text-white shadow-md scale-105"
+                  : "border-gray-200 text-gray-700 hover:border-plava bg-white"
               }`}
               disabled={answered}
             >
@@ -99,9 +81,49 @@ export default function CategorizeExercise({ question, categories, items, onAnsw
         </div>
       )}
 
-      {/* Check / Reset */}
+      {/* Categories */}
+      <div className="grid gap-3" style={{ gridTemplateColumns: `repeat(${categories.length}, 1fr)` }}>
+        {categories.map((cat, ci) => (
+          <div key={ci}>
+            <button
+              type="button"
+              onClick={() => handleCategoryClick(ci)}
+              className={`w-full py-3 px-3 rounded-xl text-sm font-bold transition-all border-2 ${
+                selectedItem
+                  ? "bg-plava-light border-plava text-plava cursor-pointer hover:bg-plava hover:text-white"
+                  : "bg-gray-50 border-gray-200 text-gray-700"
+              }`}
+              disabled={answered || !selectedItem}
+            >
+              {cat}
+            </button>
+            <div className="space-y-1 mt-2 min-h-[32px]">
+              {items.filter((item) => placements[item.text] === ci).map((item) => (
+                <button
+                  key={item.text}
+                  type="button"
+                  onClick={() => handleRemoveFromCategory(item.text)}
+                  disabled={answered}
+                  className={`w-full text-sm px-3 py-1.5 rounded-lg text-left ${
+                    answered
+                      ? item.category === ci
+                        ? "bg-green-100 text-green-700"
+                        : "bg-red-100 text-red-600"
+                      : "bg-plava-light text-plava hover:bg-koral-light hover:text-koral cursor-pointer"
+                  }`}
+                  title={answered ? undefined : "Klikni da vratiš"}
+                >
+                  {item.text}
+                </button>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Check */}
       {!answered && isComplete && (
-        <button onClick={handleCheck} className="mt-4 bg-plava text-white px-6 py-2 rounded-lg text-sm font-bold hover:bg-plava-dark transition-colors">
+        <button onClick={handleCheck} className="mt-5 bg-plava text-white px-6 py-3 rounded-xl text-sm font-bold hover:bg-plava-dark transition-colors">
           Proveri
         </button>
       )}
@@ -109,10 +131,6 @@ export default function CategorizeExercise({ question, categories, items, onAnsw
         <button onClick={handleReset} className="mt-4 text-sm text-plava hover:underline">
           Pokušaj ponovo
         </button>
-      )}
-
-      {selectedItem && !answered && (
-        <p className="mt-2 text-xs text-gray-400">Klikni na kategoriju gde pripada &quot;{selectedItem}&quot;</p>
       )}
     </div>
   );
