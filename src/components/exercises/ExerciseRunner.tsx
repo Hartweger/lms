@@ -9,6 +9,10 @@ import WordOrderExercise from "./WordOrderExercise";
 import EssayExercise from "./EssayExercise";
 import WordwallExercise from "./WordwallExercise";
 import DialogExercise from "./DialogExercise";
+import TrueFalseExercise from "./TrueFalseExercise";
+import CategorizeExercise from "./CategorizeExercise";
+import TypingExercise from "./TypingExercise";
+import ConversationExercise from "./ConversationExercise";
 import type { Exercise, ExerciseQuestion } from "@/lib/types";
 
 interface ExerciseRunnerProps {
@@ -302,6 +306,54 @@ export default function ExerciseRunner({ exercise, questions, level = "A1" }: Ex
                 words={getItemsAsStringArray(items)}
                 correctAnswer={question.correct_answer}
                 hint={question.question}
+                onAnswer={handleAnswer}
+              />
+            );
+          }
+          if (qType === "true_false") {
+            return (
+              <TrueFalseExercise
+                key={question.id}
+                question={question.question}
+                correctAnswer={question.correct_answer === "true"}
+                explanation={question.explanation}
+                onAnswer={handleAnswer}
+              />
+            );
+          }
+          if (qType === "categorize") {
+            const catData = items as { categories: string[]; items: { text: string; category: number }[] };
+            return (
+              <CategorizeExercise
+                key={question.id}
+                question={question.question}
+                categories={catData.categories}
+                items={catData.items}
+                onAnswer={handleAnswer}
+              />
+            );
+          }
+          if (qType === "typing") {
+            return (
+              <TypingExercise
+                key={question.id}
+                question={question.question}
+                correctAnswer={question.correct_answer}
+                explanation={question.explanation}
+                onAnswer={handleAnswer}
+              />
+            );
+          }
+          if (qType === "conversation") {
+            const convData = items as { messages: { speaker: string; text: string }[]; options: string[] };
+            return (
+              <ConversationExercise
+                key={question.id}
+                messages={convData.messages}
+                question={question.question}
+                options={convData.options}
+                correctAnswer={parseInt(question.correct_answer)}
+                explanation={question.explanation}
                 onAnswer={handleAnswer}
               />
             );
