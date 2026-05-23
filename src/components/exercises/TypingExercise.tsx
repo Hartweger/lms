@@ -10,9 +10,19 @@ interface TypingProps {
 }
 
 function normalize(s: string): string {
-  return s.trim().toLowerCase().replace(/[\.!?]+$/g, "")
+  return s.trim().toLowerCase().replace(/[.!?]+$/g, "")
     .replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss")
+    .replace(/ae/g, "ae").replace(/oe/g, "oe").replace(/ue/g, "ue")
     .replace(/\s+/g, " ");
+}
+
+function isCorrect(input: string, answer: string): boolean {
+  // Direct match after normalization
+  if (normalize(input) === normalize(answer)) return true;
+  // Also try: if answer has Umlauts, accept both ä and ae forms
+  const inputRaw = input.trim().toLowerCase().replace(/[.!?]+$/g, "").replace(/\s+/g, " ");
+  const answerRaw = answer.trim().toLowerCase().replace(/[.!?]+$/g, "").replace(/\s+/g, " ");
+  return inputRaw === answerRaw;
 }
 
 export default function TypingExercise({ question, correctAnswer, explanation, onAnswer }: TypingProps) {
@@ -22,7 +32,7 @@ export default function TypingExercise({ question, correctAnswer, explanation, o
 
   const handleSubmit = () => {
     if (answered || !input.trim()) return;
-    const correct = normalize(input) === normalize(correctAnswer);
+    const correct = isCorrect(input, correctAnswer);
     setIsCorrect(correct);
     setAnswered(true);
     onAnswer(correct);
