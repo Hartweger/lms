@@ -43,9 +43,6 @@ export default function Navigacija() {
 
         {/* Desktop menu */}
         <div className="hidden md:flex items-center gap-6 text-sm">
-          <Link href="/" className="text-gray-600 hover:text-plava">
-            Kursevi
-          </Link>
           <Link href="/test-nivoa" className="text-gray-600 hover:text-plava">
             Test nivoa
           </Link>
@@ -95,9 +92,6 @@ export default function Navigacija() {
       {/* Mobile menu */}
       {menuOpen && (
         <div className="md:hidden border-t border-gray-100 bg-white px-4 py-4 space-y-3 text-sm">
-          <Link href="/" className="block text-gray-600" onClick={() => setMenuOpen(false)}>
-            Kursevi
-          </Link>
           <Link href="/test-nivoa" className="block text-gray-600" onClick={() => setMenuOpen(false)}>
             Test nivoa
           </Link>
