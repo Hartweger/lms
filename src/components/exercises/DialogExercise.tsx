@@ -264,7 +264,7 @@ export default function DialogExercise({ exerciseId, config, previousAttempts, o
               onClick={handleRetry}
               className="bg-plava text-white px-6 py-3 rounded-lg hover:bg-plava-dark transition-colors"
             >
-              Pokusaj ponovo ({MAX_ATTEMPTS - attemptCount} preostalo)
+              Pokušaj ponovo ({MAX_ATTEMPTS - attemptCount} preostalo)
             </button>
           ) : (
             <p className="text-sm text-gray-400">Iskoristio/la si oba pokušaja.</p>

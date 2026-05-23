@@ -44,7 +44,8 @@ export default function MatchPairsExercise({ pairs, onAnswer }: MatchPairsProps)
 
   return (
     <div>
-      <p className="text-lg font-medium text-gray-900 mb-6">Spoji nemacku rec sa prevodom:</p>
+      <p className="text-lg font-medium text-gray-900 mb-2">Spoji nemačku reč sa prevodom:</p>
+      <p className="text-xs text-gray-400 mb-4">Klikni na nemačku reč, pa klikni na njen prevod</p>
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-3">
           {pairs.map((p) => (
@@ -85,7 +86,7 @@ export default function MatchPairsExercise({ pairs, onAnswer }: MatchPairsProps)
       </div>
       {allMatched && (
         <div className="mt-4 bg-green-50 border-l-4 border-green-500 rounded-lg p-4 text-sm text-green-700">
-          Sve tacno! Bravo!
+          Sve tačno! Bravo!
         </div>
       )}
     </div>

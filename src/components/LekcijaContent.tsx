@@ -103,7 +103,7 @@ export default function LekcijaContent({ lesson }: { lesson: Lesson }) {
           {lesson.content ? (
             <RichText content={lesson.content} />
           ) : (
-            <p className="text-gray-400 italic">Sadrzaj ove lekcije ce uskoro biti dostupan.</p>
+            <p className="text-gray-400 italic">Sadržaj ove lekcije će uskoro biti dostupan.</p>
           )}
         </div>
       );
