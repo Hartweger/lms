@@ -37,9 +37,26 @@ export default async function VezbaStranica({ params }: PageProps) {
     .eq("id", typedExercise.lesson_id)
     .single();
 
-  // Find next lesson
+  // Find next exercise on same lesson, or next lesson
+  let nextExerciseId: string | null = null;
   let nextLessonId: string | null = null;
-  if (lesson) {
+
+  // Check for next exercise on same lesson
+  const { data: siblingExercises } = await supabase
+    .from("exercises")
+    .select("id, order_index")
+    .eq("lesson_id", typedExercise.lesson_id)
+    .gt("order_index", typedExercise.order_index)
+    .order("order_index")
+    .limit(1)
+    .single();
+
+  if (siblingExercises) {
+    nextExerciseId = siblingExercises.id;
+  }
+
+  // Find next lesson (used if no more exercises on this lesson)
+  if (!nextExerciseId && lesson) {
     const { data: currentLesson } = await supabase
       .from("lessons")
       .select("order_index")
@@ -97,6 +114,7 @@ export default async function VezbaStranica({ params }: PageProps) {
           exercise={typedExercise}
           questions={questions as ExerciseQuestion[]}
           level={courseLevel}
+          nextExerciseId={nextExerciseId}
           nextLessonId={nextLessonId}
         />
       ) : (
