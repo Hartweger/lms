@@ -73,6 +73,14 @@ export interface LinkSection {
   label?: string;
 }
 
+export interface FlashcardSection {
+  type: "flashcard";
+  items: {
+    front: string;
+    back: string;
+  }[];
+}
+
 export type Section =
   | BadgeSection
   | VideoSection
@@ -84,4 +92,5 @@ export type Section =
   | VocabularySection
   | PdfSection
   | ImageSection
-  | LinkSection;
+  | LinkSection
+  | FlashcardSection;

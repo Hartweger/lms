@@ -10,6 +10,7 @@ import VocabularyBlock from "./VocabularyBlock";
 import PdfBlock from "./PdfBlock";
 import ImageBlock from "./ImageBlock";
 import LinkBlock from "./LinkBlock";
+import FlashcardBlock from "./FlashcardBlock";
 
 function renderBlock(section: Section, index: number) {
   switch (section.type) {
@@ -35,6 +36,8 @@ function renderBlock(section: Section, index: number) {
       return <ImageBlock key={index} {...section} />;
     case "link":
       return <LinkBlock key={index} {...section} />;
+    case "flashcard":
+      return <FlashcardBlock key={index} {...section} />;
     default:
       return null;
   }
