@@ -1,40 +1,39 @@
+import { redirect } from "next/navigation";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import KursKartica from "@/components/KursKartica";
-import type { Course } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
 export default async function Pocetna() {
   const supabase = await createClient();
-  const { data: courses } = await supabase
-    .from("courses")
-    .select("*")
-    .eq("is_published", true)
-    .eq("course_type", "video")
-    .order("created_at", { ascending: false });
+  const { data: { user } } = await supabase.auth.getUser();
 
+  // Logged in → go to dashboard
+  if (user) {
+    redirect("/dashboard");
+  }
+
+  // Not logged in → simple login prompt
   return (
-    <div className="max-w-6xl mx-auto px-4 py-12">
-      {/* Hero */}
-      <div className="text-center mb-16">
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-          Naučite <span className="text-plava">nemački</span> jezik
-        </h1>
-        <p className="text-lg text-gray-500 max-w-2xl mx-auto">
-          Video kursevi, individualna nastava i grupni časovi sa iskusnim profesorima
-        </p>
-      </div>
-
-      {/* Course grid */}
-      {courses && courses.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {(courses as Course[]).map((course) => (
-            <KursKartica key={course.id} course={course} />
-          ))}
-        </div>
-      ) : (
-        <p className="text-center text-gray-400">Kursevi će uskoro biti dostupni.</p>
-      )}
+    <div className="max-w-md mx-auto px-4 py-24 text-center">
+      <h1 className="text-3xl font-bold text-gray-900 mb-3">
+        Hartweger <span className="text-plava">LMS</span>
+      </h1>
+      <p className="text-gray-500 mb-8">
+        Prijavi se da pristupiš svojim kursevima
+      </p>
+      <Link
+        href="/prijava"
+        className="inline-block bg-plava text-white px-8 py-3 rounded-lg font-medium hover:bg-plava-dark transition-colors"
+      >
+        Prijavi se
+      </Link>
+      <p className="text-sm text-gray-400 mt-6">
+        Nemaš nalog? Kurseve možeš kupiti na{" "}
+        <a href="https://hartweger.rs" className="text-plava hover:underline" target="_blank" rel="noopener noreferrer">
+          hartweger.rs
+        </a>
+      </p>
     </div>
   );
 }

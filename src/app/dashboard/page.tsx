@@ -242,12 +242,14 @@ export default async function Dashboard() {
         /* Empty State */
         <div className="text-center py-16">
           <p className="text-gray-400 mb-4">Nemaš upisane kurseve.</p>
-          <Link
-            href="/"
+          <a
+            href="https://hartweger.rs"
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-block bg-plava text-white px-6 py-3 rounded-lg hover:bg-plava-dark transition-colors"
           >
-            Pregledajte kurseve
-          </Link>
+            Kupi kurs na hartweger.rs
+          </a>
         </div>
       )}
     </div>
