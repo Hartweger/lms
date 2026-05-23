@@ -64,7 +64,14 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
 
   // Parse options — handles both old format (string[]) and new format ({ type, items })
   function parseOptions(opts: unknown): { type: string; items: unknown } {
-    if (!opts) return { type: "quiz", items: [] };
+    if (!opts) {
+      // Check if it's a true_false question by looking at correct_answer
+      const ca = question?.correct_answer?.toLowerCase();
+      if (ca === "true" || ca === "false") {
+        return { type: "true_false", items: null };
+      }
+      return { type: "quiz", items: [] };
+    }
 
     // New format: { type: "quiz", items: [...] }
     if (typeof opts === "object" && !Array.isArray(opts) && opts !== null) {
