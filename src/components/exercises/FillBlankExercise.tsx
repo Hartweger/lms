@@ -93,7 +93,7 @@ export default function FillBlankExercise({ question, options, correctAnswer, ex
               disabled={isUsed || answered}
               className={`px-4 py-2 rounded-full border-2 text-sm font-medium transition-colors ${
                 isUsed
-                  ? "border-gray-100 text-gray-300 bg-gray-50"
+                  ? "border-green-200 text-green-400 bg-green-50 line-through"
                   : "border-plava-light text-plava hover:bg-plava-light cursor-pointer"
               }`}
             >
