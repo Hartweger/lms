@@ -27,7 +27,6 @@ export default function WordOrderExercise({ words, correctAnswer, hint, onAnswer
   };
 
   const handleCheck = () => {
-    // Join words, removing space before punctuation
     const result = placed.join(" ").replace(/\s+([.,!?;:])/g, "$1");
     const correct = result === correctAnswer;
     setIsCorrect(correct);
@@ -37,24 +36,31 @@ export default function WordOrderExercise({ words, correctAnswer, hint, onAnswer
 
   return (
     <div>
-      <p className="text-lg font-medium text-gray-900 mb-2">Poredaj reči u pravilnu rečenicu:</p>
-      <p className="text-sm text-gray-400 mb-6">Prevod: {hint}</p>
+      <p className="text-lg font-medium text-gray-900 mb-1">Poredaj reči u pravilnu rečenicu:</p>
+      <p className="text-sm text-plava mb-4">({hint})</p>
 
-      {/* Sentence area */}
-      <div className="min-h-[56px] border-2 border-dashed border-gray-200 rounded-xl p-3 flex gap-2 flex-wrap mb-4">
+      {/* Placed words area */}
+      <div className="min-h-[56px] border-2 border-dashed border-gray-200 rounded-xl p-3 flex gap-2 flex-wrap mb-2">
         {placed.map((word, i) => (
           <button
             key={i}
             onClick={() => handleRemove(i)}
-            className="px-4 py-2 bg-plava text-white rounded-lg text-sm font-medium"
+            className="px-4 py-2 bg-plava text-white rounded-lg text-sm font-medium hover:bg-koral transition-colors"
+            title="Klikni da vratiš"
           >
             {word}
           </button>
         ))}
         {placed.length === 0 && (
-          <span className="text-gray-300 text-sm py-2">Klikni na reči ispod...</span>
+          <span className="text-gray-300 text-sm py-2">Tvoja rečenica...</span>
         )}
       </div>
+      {!answered && placed.length > 0 && (
+        <p className="text-xs text-gray-400 mb-4">Klikni na plavu reč da je vratiš nazad</p>
+      )}
+      {!answered && placed.length === 0 && (
+        <p className="text-xs text-gray-400 mb-4">Klikni na reči ispod redom da sastaviš rečenicu</p>
+      )}
 
       {/* Available words */}
       <div className="flex gap-2 flex-wrap mb-6">
