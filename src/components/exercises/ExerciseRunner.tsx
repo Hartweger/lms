@@ -32,6 +32,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1" }: Ex
   const [showXpAnimation, setShowXpAnimation] = useState(false);
   const [xpGained, setXpGained] = useState(0);
   const [dialogTotal, setDialogTotal] = useState(0);
+  const [results, setResults] = useState<{ question: string; correct: boolean }[]>([]);
   const [dialogAttempts, setDialogAttempts] = useState(0);
 
   // Enter key advances to next question
@@ -90,6 +91,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1" }: Ex
   }
 
   const handleAnswer = (correct: boolean) => {
+    setResults([...results, { question: question.question, correct }]);
     if (correct) {
       const newStreak = streak + 1;
       setStreak(newStreak);
@@ -167,10 +169,26 @@ export default function ExerciseRunner({ exercise, questions, level = "A1" }: Ex
             ? `Ispunjeno ciljeva: ${score} od ${totalForScore}`
             : `Tačnih odgovora: ${score} od ${totalForScore}`}
         </p>
-        <p className="text-plava font-bold mb-1">{xp} XP zaradjeno</p>
+        <p className="text-plava font-bold mb-1">{xp} XP zarađeno</p>
         <p className="text-sm text-gray-400">
           {percent === 100 ? "Savršeno! 🎉" : percent >= 90 ? "Odlično!" : percent >= 70 ? "Vrlo dobro!" : percent >= 50 ? "Dobro, nastavi da vežbaš!" : "Pokušaj ponovo!"}
         </p>
+
+        {/* Pregled odgovora */}
+        {results.length > 0 && exercise.exercise_type !== "dialog" && (
+          <div className="mt-8 text-left max-w-md mx-auto">
+            <h4 className="text-sm font-semibold text-gray-700 mb-3">Pregled odgovora:</h4>
+            <div className="space-y-2">
+              {results.map((r, i) => (
+                <div key={i} className={`flex items-start gap-2 text-sm px-3 py-2 rounded-lg ${r.correct ? "bg-green-50 text-green-700" : "bg-koral-light text-koral-dark"}`}>
+                  <span className="shrink-0">{r.correct ? "✓" : "✗"}</span>
+                  <span>{r.question}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         <button
           onClick={() => {
             setCurrentIndex(0);
@@ -179,6 +197,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1" }: Ex
             setShowNext(false);
             setStreak(0);
             setXp(0);
+            setResults([]);
           }}
           className="mt-6 bg-plava text-white px-6 py-3 rounded-lg hover:bg-plava-dark transition-colors"
         >
