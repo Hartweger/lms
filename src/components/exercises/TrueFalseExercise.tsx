@@ -20,9 +20,20 @@ export default function TrueFalseExercise({ question, correctAnswer, explanation
     onAnswer(value === correctAnswer);
   };
 
+  // Split question into context (text to read) and statement (to evaluate)
+  // If question contains \n\n, last part is the statement
+  const parts = question.split("\n\n");
+  const statement = parts.length > 1 ? parts[parts.length - 1] : question;
+  const context = parts.length > 1 ? parts.slice(0, -1).join("\n\n") : null;
+
   return (
     <div>
-      <p className="text-lg font-medium text-gray-900 mb-6">{question}</p>
+      {context && (
+        <div className="bg-gray-50 rounded-lg p-4 mb-4 text-sm text-gray-700 whitespace-pre-line">
+          {context}
+        </div>
+      )}
+      <p className="text-lg font-medium text-gray-900 mb-6">{statement}</p>
       <div className="flex gap-4">
         {[true, false].map((value) => {
           let cls = "flex-1 text-center py-4 border-2 rounded-xl text-lg font-semibold transition-colors cursor-pointer ";
@@ -37,7 +48,7 @@ export default function TrueFalseExercise({ question, correctAnswer, explanation
           }
           return (
             <button key={String(value)} onClick={() => handleSelect(value)} className={cls} disabled={answered}>
-              {value ? "Tačno" : "Netačno"}
+              {value ? "Richtig" : "Falsch"}
             </button>
           );
         })}
