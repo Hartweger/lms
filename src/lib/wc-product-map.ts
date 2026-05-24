@@ -1,0 +1,33 @@
+// WooCommerce product ID → LMS course slugs
+// Svaki proizvod daje pristup SAMO svom nivou
+// Paketi daju pristup svim nivoima koje sadrže
+
+export const WC_PRODUCT_MAP: Record<number, string[]> = {
+  // === VIDEO kursevi ===
+  35178: ["nemacki-a1-1", "nemacki-a1-2"], // VIDEO kurs A1 → A1.1 + A1.2
+  // 35182: VIDEO kurs A2 → A2.1 + A2.2 (dodati kad LMS bude spreman)
+  // 35186: VIDEO kurs B1 → B1.1 + B1.2 (dodati kad LMS bude spreman)
+
+  // === VIDEO paketi ===
+  46478: ["nemacki-a1-1", "nemacki-a1-2"], // Video Paket A1+A2 → za sad samo A1
+  46480: ["nemacki-a1-1", "nemacki-a1-2"], // Video Paket A1+A2+B1 → za sad samo A1
+
+  // === INDIVIDUALNI A1 ===
+  35766: ["nemacki-a1-1"],                 // IND A1.1 → samo A1.1
+  35767: ["nemacki-a1-2"],                 // IND A1.2 → samo A1.2
+  46494: ["nemacki-a1-1", "nemacki-a1-2"], // IND Paket A1 (standard) → A1.1 + A1.2
+
+  // === GRUPNI A1 ===
+  35841: ["nemacki-a1-1"],                 // GRUPNI A1.1 → samo A1.1
+  36241: ["nemacki-a1-2"],                 // GRUPNI A1.2 → samo A1.2
+
+  // === GRUPNI A2, B1 — čekaju dok LMS kursevi ne budu spremni ===
+  // 35183: GRUPNI A2.1 → nemacki-a2-1
+  // 35851: GRUPNI A2.2 → nemacki-a2-2
+  // 37366: GRUPNI B1.1 → nemacki-b1-1
+  // 36132: GRUPNI B1.2 → nemacki-b1-2
+
+  // === OSTALO ===
+  47440: ["nemacki-a1-1", "nemacki-a1-2"], // VIDEO Gramatika A2-B1
+  36863: ["nemacki-a1-1", "nemacki-a1-2"], // Video B1 ispit priprema
+};
