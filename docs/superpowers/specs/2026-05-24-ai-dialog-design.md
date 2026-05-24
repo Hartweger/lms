@@ -15,7 +15,7 @@ Studenti vežbaju nemački kroz kratke situacione dijaloge sa AI-jem. AI preuzim
 4. AI (u ulozi) kaže svoju prvu repliku na nemačkom
 5. Student bira 1 od 2 ponuđene opcije (obe na nemačkom)
 6. AI reaguje na izbor, nastavlja dijalog — nova replika + 2 nove opcije
-7. Posle 6-8 tura: završna poruka + srpski prevod svakog koraka
+7. Posle 6-8 tura: završna poruka + ceo dijalog prikazan sa srpskim prevodom
 8. Dugmad: "Ponovi" (novi dijalog iste teme) ili "Nazad na lekciju"
 
 ## Tehička arhitektura
@@ -59,7 +59,14 @@ Studenti vežbaju nemački kroz kratke situacione dijaloge sa AI-jem. AI preuzim
   "aiMessage": "Das macht 3,50 Euro. Einen schönen Tag noch!",
   "options": null,
   "finished": true,
-  "summary": "Uspešno si kupila hleb i peciva u pekari!"
+  "summary": "Uspešno si završio/la razgovor u pekari!",
+  "translations": [
+    { "de": "Guten Morgen! Was darf es sein?", "sr": "Dobro jutro! Šta želite?" },
+    { "de": "Ich möchte ein Brot, bitte.", "sr": "Želeo/la bih jedan hleb, molim." },
+    { "de": "Sehr gerne! Sonst noch etwas?", "sr": "Rado! Još nešto?" },
+    { "de": "Ja, zwei Brötchen bitte.", "sr": "Da, dva peciva molim." },
+    { "de": "Das macht 3,50 Euro. Einen schönen Tag noch!", "sr": "To je 3,50 evra. Lep dan vam želim!" }
+  ]
 }
 ```
 
@@ -91,7 +98,8 @@ Pravila:
 
 Format odgovora:
 {"aiMessage": "...", "options": ["...", "..."], "finished": false}
-Za poslednju turu: {"aiMessage": "...", "options": null, "finished": true, "summary": "..."}
+Za poslednju turu: {"aiMessage": "...", "options": null, "finished": true, "summary": "...", "translations": [{"de": "...", "sr": "..."}, ...]}
+translations sadrži SVE replike iz dijaloga (i tvoje i studentove) sa srpskim prevodom.
 Za prvu turu dodaj: "scenario": "..." (opis situacije na srpskom)
 ```
 
@@ -121,13 +129,19 @@ U `/lekcija/[id]/page.tsx` — dodati ispod sadržaja lekcije, pre postojećih v
 
 Stilizacija: sekundarno dugme (outline), puna širina, sa ikonom chat bubble-a.
 
+## AI transparentnost
+
+- Dugme na lekciji ima oznaku da je AI-generisano (npr. mala "AI" labela ili ✨)
+- Na početku vežbe, pre prvog dijaloga, kratka napomena:
+  "Ova vežba koristi veštačku inteligenciju. Odgovori su generisani automatski i mogu povremeno sadržati greške. Ako nešto deluje čudno — pitaj svoju profesorku."
+- Na završnom ekranu: ceo dijalog prikazan sa srpskim prevodom svake replike (i AI i student izbora)
+
 ## Šta NIJE u scope-u
 
 - Čuvanje rezultata u bazu (nema progress tracking za ovu vežbu)
 - Ocenjivanje ili scoring
 - Grammar drill (samo situacioni dijalog sa opcijama)
 - Admin panel za upravljanje scenarijima
-- Prevod opcija na srpski (samo nemački)
 
 ## Fajlovi koji se kreiraju/menjaju
 
