@@ -3,6 +3,7 @@ import { NextResponse, type NextRequest } from "next/server";
 
 const protectedRoutes = ["/dashboard", "/profil"];
 const adminRoutes = ["/admin"];
+const professorRoutes = ["/profesor"];
 
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({ request });
@@ -51,9 +52,39 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  // Check professor access
+  const isProfessorRoute = professorRoutes.some((route) => path.startsWith(route));
+  if (isProfessorRoute) {
+    if (!user) {
+      return NextResponse.redirect(new URL("/prijava", request.url));
+    }
+    const { data: profile } = await supabase
+      .from("user_profiles")
+      .select("role")
+      .eq("id", user.id)
+      .single();
+
+    if (profile?.role !== "professor" && profile?.role !== "admin") {
+      return NextResponse.redirect(new URL("/dashboard", request.url));
+    }
+  }
+
+  // Redirect professors from /dashboard to /profesor
+  if (path.startsWith("/dashboard") && user) {
+    const { data: profile } = await supabase
+      .from("user_profiles")
+      .select("role")
+      .eq("id", user.id)
+      .single();
+
+    if (profile?.role === "professor") {
+      return NextResponse.redirect(new URL("/profesor", request.url));
+    }
+  }
+
   return response;
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/profil/:path*", "/admin/:path*"],
+  matcher: ["/dashboard/:path*", "/profil/:path*", "/admin/:path*", "/profesor/:path*"],
 };
