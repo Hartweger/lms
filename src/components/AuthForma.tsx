@@ -16,6 +16,8 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
   const [uspeh, setUspeh] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [magicLinkMode, setMagicLinkMode] = useState(false);
+  const [magicLinkSent, setMagicLinkSent] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,6 +48,29 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
     });
   };
 
+  const handleMagicLink = async () => {
+    if (!email) {
+      setGreska("Unesite email adresu.");
+      return;
+    }
+    setGreska(null);
+    setUspeh(null);
+    setLoading(true);
+    const supabase = createClient();
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: window.location.origin + "/auth/callback",
+      },
+    });
+    if (error) {
+      setGreska(error.message);
+    } else {
+      setMagicLinkSent(true);
+    }
+    setLoading(false);
+  };
+
   return (
     <div className="space-y-4 w-full max-w-sm">
       {tip !== "reset" && (
@@ -73,6 +98,55 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
         </>
       )}
 
+    {tip === "prijava" && magicLinkMode ? (
+      <div className="space-y-4 w-full max-w-sm">
+        {magicLinkSent ? (
+          <div className="bg-green-50 text-green-800 px-4 py-3 rounded-lg text-sm">
+            Link za prijavu je poslat na <strong>{email}</strong>. Proverite inbox (i spam folder).
+          </div>
+        ) : (
+          <>
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-plava focus:border-transparent"
+                placeholder="vas@email.com"
+              />
+            </div>
+
+            {greska && (
+              <div className="bg-koral-light text-koral-dark px-4 py-3 rounded-lg text-sm">
+                {greska}
+              </div>
+            )}
+
+            <button
+              type="button"
+              onClick={handleMagicLink}
+              disabled={loading}
+              className="w-full bg-plava text-white py-3 rounded-lg font-medium hover:bg-plava-dark transition-colors disabled:opacity-50"
+            >
+              {loading ? "Slanje..." : "Pošalji link"}
+            </button>
+          </>
+        )}
+
+        <button
+          type="button"
+          onClick={() => { setMagicLinkMode(false); setMagicLinkSent(false); setGreska(null); }}
+          className="w-full text-sm text-plava hover:underline"
+        >
+          Nazad na prijavu sa lozinkom
+        </button>
+      </div>
+    ) : (
     <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-sm">
       {tip === "registracija" && (
         <div>
@@ -149,7 +223,18 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
           ? "Registrujte se"
           : "Pošaljite link za reset"}
       </button>
+
+      {tip === "prijava" && (
+        <button
+          type="button"
+          onClick={() => { setMagicLinkMode(true); setGreska(null); setUspeh(null); }}
+          className="w-full text-sm text-plava hover:underline"
+        >
+          Pošalji mi link za prijavu na email
+        </button>
+      )}
     </form>
+    )}
     </div>
   );
 }
