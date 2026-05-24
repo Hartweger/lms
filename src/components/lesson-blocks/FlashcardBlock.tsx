@@ -1,23 +1,106 @@
+"use client";
+
+import { useState, useCallback } from "react";
 import type { FlashcardSection } from "@/lib/section-types";
 
 export default function FlashcardBlock({ items }: FlashcardSection) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [flipped, setFlipped] = useState(false);
+  const [reversed, setReversed] = useState(false); // false = DE→SR, true = SR→DE
+  const [shuffled, setShuffled] = useState(false);
+  const [order, setOrder] = useState<number[]>(items.map((_, i) => i));
+
+  const front = reversed ? items[order[currentIndex]].back : items[order[currentIndex]].front;
+  const back = reversed ? items[order[currentIndex]].front : items[order[currentIndex]].back;
+
+  const next = useCallback(() => {
+    setFlipped(false);
+    setCurrentIndex((i) => (i + 1) % items.length);
+  }, [items.length]);
+
+  const prev = useCallback(() => {
+    setFlipped(false);
+    setCurrentIndex((i) => (i - 1 + items.length) % items.length);
+  }, [items.length]);
+
+  const toggleDirection = () => {
+    setReversed(!reversed);
+    setFlipped(false);
+  };
+
+  const toggleShuffle = () => {
+    if (shuffled) {
+      setOrder(items.map((_, i) => i));
+    } else {
+      const newOrder = items.map((_, i) => i);
+      for (let i = newOrder.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newOrder[i], newOrder[j]] = [newOrder[j], newOrder[i]];
+      }
+      setOrder(newOrder);
+    }
+    setShuffled(!shuffled);
+    setCurrentIndex(0);
+    setFlipped(false);
+  };
+
   return (
     <div className="border-2 border-ljubicasta bg-ljubicasta-light rounded-xl p-5 md:p-6 shadow-md">
-      <h4 className="font-semibold text-gray-900 mb-3">Kartice</h4>
-      <div className="space-y-2">
-        {items.map((item, i) => (
-          <details
-            key={i}
-            className="bg-white rounded-lg p-4 cursor-pointer shadow-sm"
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4">
+        <h4 className="font-semibold text-gray-900">Kartice</h4>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={toggleDirection}
+            className="text-xs px-3 py-1.5 rounded-full bg-white text-gray-600 hover:bg-gray-50 border border-gray-200 transition-colors"
           >
-            <summary className="list-none font-semibold text-gray-900 text-center">
-              {item.front}
-            </summary>
-            <p className="mt-3 pt-3 border-t border-gray-200 text-ljubicasta font-bold text-center">
-              {item.back}
-            </p>
-          </details>
-        ))}
+            {reversed ? "SR → DE" : "DE → SR"}
+          </button>
+          <button
+            onClick={toggleShuffle}
+            className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${
+              shuffled
+                ? "bg-ljubicasta text-white border-ljubicasta"
+                : "bg-white text-gray-600 hover:bg-gray-50 border-gray-200"
+            }`}
+          >
+            Pomešaj
+          </button>
+        </div>
+      </div>
+
+      {/* Card */}
+      <div
+        onClick={() => setFlipped(!flipped)}
+        className="bg-white rounded-xl shadow-sm cursor-pointer select-none min-h-[160px] flex items-center justify-center p-8 transition-all hover:shadow-md"
+      >
+        <div className="text-center">
+          <p className={`text-lg font-bold ${flipped ? "text-ljubicasta" : "text-gray-900"}`}>
+            {flipped ? back : front}
+          </p>
+          {!flipped && (
+            <p className="text-xs text-gray-300 mt-3">klikni da vidiš odgovor</p>
+          )}
+        </div>
+      </div>
+
+      {/* Navigation */}
+      <div className="flex items-center justify-between mt-4">
+        <button
+          onClick={prev}
+          className="w-10 h-10 rounded-full bg-white border border-gray-200 text-gray-500 hover:bg-gray-50 flex items-center justify-center transition-colors"
+        >
+          ←
+        </button>
+        <span className="text-sm text-gray-400">
+          {currentIndex + 1} / {items.length}
+        </span>
+        <button
+          onClick={next}
+          className="w-10 h-10 rounded-full bg-white border border-gray-200 text-gray-500 hover:bg-gray-50 flex items-center justify-center transition-colors"
+        >
+          →
+        </button>
       </div>
     </div>
   );
