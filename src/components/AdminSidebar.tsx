@@ -10,6 +10,7 @@ const links = [
   { href: "/admin/kupovine", label: "Kupovine" },
   { href: "/admin/test-nivoa", label: "Test nivoa" },
   { href: "/admin/eseji", label: "Eseji" },
+  { href: "/admin/profesori", label: "Profesori" },
   { href: "/admin/pristup", label: "Pristup" },
 ];
 
