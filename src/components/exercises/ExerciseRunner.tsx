@@ -111,6 +111,15 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
       .map((l: string) => l.trim())
       .filter((l: string) => l.length > 0)
       .pop() || question.question;
+
+    // Skip scoring for Beispiel questions
+    const isBeispiel = question.question.toLowerCase().includes("beispiel") ||
+      question.explanation?.includes("Beispiel");
+    if (isBeispiel) {
+      setShowNext(true);
+      return;
+    }
+
     setResults([...results, { question: cleanQuestion, correct }]);
     if (correct) {
       const newStreak = streak + 1;
@@ -141,7 +150,9 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
           exercise_id: exercise.id,
           user_id: user.id,
           score,
-          total_questions: questions.length,
+          total_questions: questions.filter(
+            (q) => !q.question.toLowerCase().includes("beispiel") && !q.explanation?.includes("Beispiel")
+          ).length,
         });
 
         // Modelltest: calculate total score across ALL exercises on this lesson
@@ -203,7 +214,10 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
   };
 
   if (finished) {
-    const totalForScore = exercise.exercise_type === "dialog" ? dialogTotal : questions.length;
+    const scoredQuestions = questions.filter(
+      (q) => !q.question.toLowerCase().includes("beispiel") && !q.explanation?.includes("Beispiel")
+    );
+    const totalForScore = exercise.exercise_type === "dialog" ? dialogTotal : scoredQuestions.length;
     const percent = Math.round((score / totalForScore) * 100);
     const stars = percent >= 90 ? 3 : percent >= 50 ? 2 : 1;
     const isPerfect = percent === 100;
