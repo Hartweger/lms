@@ -80,8 +80,8 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
     // New format: { type: "quiz", items: [...] }
     if (typeof opts === "object" && !Array.isArray(opts) && opts !== null) {
       const o = opts as Record<string, unknown>;
-      if (o.type && o.items !== undefined) {
-        return { type: o.type as string, items: o.items };
+      if (o.type) {
+        return { type: o.type as string, items: o.items ?? null };
       }
     }
 
