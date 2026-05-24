@@ -46,7 +46,7 @@ export default function ProfesorEseji() {
         .select("student_id")
         .eq("professor_id", user.id);
 
-      const studentIds = [...new Set(assignments?.map((a) => a.student_id) ?? [])];
+      const studentIds = [...new Set(assignments?.map((a: { student_id: string }) => a.student_id) ?? [])];
 
       if (studentIds.length === 0) {
         setEssays([]);

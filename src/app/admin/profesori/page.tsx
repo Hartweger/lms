@@ -66,7 +66,7 @@ export default function AdminProfesori() {
         countMap.set(a.professor_id, (countMap.get(a.professor_id) ?? 0) + 1);
       }
 
-      const rows: ProfessorRow[] = (profData ?? []).map((p) => ({
+      const rows: ProfessorRow[] = (profData ?? []).map((p: { id: string; full_name: string | null; email: string }) => ({
         id: p.id,
         full_name: p.full_name ?? "",
         email: p.email,
@@ -98,14 +98,14 @@ export default function AdminProfesori() {
         .select("id, title"),
     ]);
 
-    const studentMap = new Map(
-      (studentRes.data ?? []).map((s) => [s.id, s])
+    const studentMap = new Map<string, { id: string; full_name: string | null; email: string }>(
+      (studentRes.data ?? []).map((s: { id: string; full_name: string | null; email: string }) => [s.id, s])
     );
-    const courseMap = new Map(
-      (courseRes.data ?? []).map((c) => [c.id, c])
+    const courseMap = new Map<string, { id: string; title: string }>(
+      (courseRes.data ?? []).map((c: { id: string; title: string }) => [c.id, c])
     );
 
-    const rows: AssignmentRow[] = (assignRes.data ?? []).map((a) => {
+    const rows: AssignmentRow[] = (assignRes.data ?? []).map((a: { id: string; student_id: string; course_id: string; assigned_via: "manual" | "wc_variation" }) => {
       const student = studentMap.get(a.student_id);
       const course = courseMap.get(a.course_id);
       return {
