@@ -39,19 +39,29 @@ export default async function LekcijaStranica({ params }: PageProps) {
 
   const { data: { user } } = await supabase.auth.getUser();
 
-  // Mark PREVIOUS lesson as completed when user navigates to next
-  // This ensures "Nastavi" takes users to where they actually stopped
+  // Mark PREVIOUS lesson as completed when user navigates to next.
+  // Also mark CURRENT lesson if it's the last one in the course.
+  // This ensures "Nastavi" takes users to where they actually stopped.
   if (user && allLessons) {
     const currentIdx = allLessons.findIndex((l) => l.id === typedLesson.id);
+    const isLastLesson = currentIdx === allLessons.length - 1;
+    const lessonsToMark: string[] = [];
+
     if (currentIdx > 0) {
-      const prev = allLessons[currentIdx - 1];
+      lessonsToMark.push(allLessons[currentIdx - 1].id);
+    }
+    if (isLastLesson) {
+      lessonsToMark.push(typedLesson.id);
+    }
+
+    if (lessonsToMark.length > 0) {
       await supabase.from("lesson_progress").upsert(
-        {
+        lessonsToMark.map((lid) => ({
           user_id: user.id,
-          lesson_id: prev.id,
+          lesson_id: lid,
           completed: true,
           completed_at: new Date().toISOString(),
-        },
+        })),
         { onConflict: "user_id,lesson_id" }
       );
     }

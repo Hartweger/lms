@@ -68,7 +68,6 @@ export default function EditLessonSections() {
     if (!confirm("Obrisati ovu sekciju?")) return;
     const newSections = sections.filter((_, i) => i !== index);
     setSections(newSections);
-    save(newSections);
   };
 
   const moveSection = (index: number, direction: "up" | "down") => {
@@ -77,7 +76,6 @@ export default function EditLessonSections() {
     if (target < 0 || target >= newSections.length) return;
     [newSections[index], newSections[target]] = [newSections[target], newSections[index]];
     setSections(newSections);
-    save(newSections);
   };
 
   const addSection = (type: Section["type"]) => {
@@ -125,10 +123,16 @@ export default function EditLessonSections() {
     setJsonText(JSON.stringify(sections[index], null, 2));
   };
 
+  const VALID_TYPES = ["text", "video", "badge", "formula", "table", "mistakes", "spoiler", "vocabulary", "pdf", "image", "link", "flashcard"];
+
   const saveJsonEdit = () => {
     if (jsonMode === null) return;
     try {
       const parsed = JSON.parse(jsonText);
+      if (!parsed.type || !VALID_TYPES.includes(parsed.type)) {
+        alert("Neispravan tip sekcije! Dozvoljeni: " + VALID_TYPES.join(", "));
+        return;
+      }
       updateSection(jsonMode, parsed);
       setJsonMode(null);
     } catch {

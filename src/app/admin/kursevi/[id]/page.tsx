@@ -201,7 +201,7 @@ export default function IzmeniKurs() {
                   href={`/admin/vezbe/${lesson.id}`}
                   className="text-plava hover:underline text-sm shrink-0"
                 >
-                  Vezbe
+                  Vežbe
                 </Link>
                 <button
                   onClick={() => handleDeleteLesson(lesson.id)}
