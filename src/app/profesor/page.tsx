@@ -54,7 +54,36 @@ export default async function ProfesorStudenti() {
 
   const courseMap = new Map(courses?.map((c) => [c.id, c]) ?? []);
 
-  // For each assignment, compute progress
+  // Batch fetch: all lessons for relevant courses
+  const { data: allLessons } = await supabase
+    .from("lessons")
+    .select("id, course_id")
+    .in("course_id", courseIds);
+
+  // Group lessons by course
+  const lessonsByCourse = new Map<string, string[]>();
+  for (const l of allLessons ?? []) {
+    const list = lessonsByCourse.get(l.course_id) ?? [];
+    list.push(l.id);
+    lessonsByCourse.set(l.course_id, list);
+  }
+
+  // Batch fetch: all progress for relevant students
+  const { data: allProgress } = await supabase
+    .from("lesson_progress")
+    .select("user_id, lesson_id, completed_at")
+    .eq("completed", true)
+    .in("user_id", studentIds);
+
+  // Index progress by user+lesson
+  const progressByUser = new Map<string, { lesson_id: string; completed_at: string | null }[]>();
+  for (const p of allProgress ?? []) {
+    const list = progressByUser.get(p.user_id) ?? [];
+    list.push({ lesson_id: p.lesson_id, completed_at: p.completed_at });
+    progressByUser.set(p.user_id, list);
+  }
+
+  // Compute progress per assignment
   const students: StudentWithProgress[] = [];
 
   for (const assignment of assignments) {
@@ -62,37 +91,20 @@ export default async function ProfesorStudenti() {
     const course = courseMap.get(assignment.course_id);
     if (!profile || !course) continue;
 
-    // Get lesson count for this course
-    const { data: lessons } = await supabase
-      .from("lessons")
-      .select("id")
-      .eq("course_id", assignment.course_id);
+    const lessonIds = new Set(lessonsByCourse.get(assignment.course_id) ?? []);
+    const totalLessons = lessonIds.size;
 
-    const lessonIds = lessons?.map((l) => l.id) ?? [];
-    let completedLessons = 0;
-    let lastActivity: string | null = null;
+    const userProgress = (progressByUser.get(assignment.student_id) ?? [])
+      .filter((p) => lessonIds.has(p.lesson_id));
 
-    if (lessonIds.length > 0) {
-      const { data: progress } = await supabase
-        .from("lesson_progress")
-        .select("lesson_id, completed_at")
-        .eq("user_id", assignment.student_id)
-        .eq("completed", true)
-        .in("lesson_id", lessonIds);
+    const completedLessons = userProgress.length;
+    const lastActivity = userProgress.reduce((latest, p) =>
+      p.completed_at && (!latest || p.completed_at > latest)
+        ? p.completed_at
+        : latest,
+      null as string | null
+    );
 
-      completedLessons = progress?.length ?? 0;
-
-      if (progress && progress.length > 0) {
-        lastActivity = progress.reduce((latest, p) =>
-          p.completed_at && (!latest || p.completed_at > latest)
-            ? p.completed_at
-            : latest,
-          null as string | null
-        );
-      }
-    }
-
-    const totalLessons = lessonIds.length;
     const progressPercent = totalLessons > 0
       ? Math.round((completedLessons / totalLessons) * 100)
       : 0;
