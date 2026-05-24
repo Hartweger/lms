@@ -116,6 +116,8 @@ export default async function VezbaStranica({ params }: PageProps) {
           level={courseLevel}
           nextExerciseId={nextExerciseId}
           nextLessonId={nextLessonId}
+          courseId={lesson?.course_id || null}
+          isModelltest={lesson?.title?.includes("Modelltest") && !nextExerciseId}
         />
       ) : (
         <p className="text-gray-400 text-center py-8">Ova vežba nema pitanja.</p>

@@ -21,9 +21,11 @@ interface ExerciseRunnerProps {
   level?: string;
   nextExerciseId?: string | null;
   nextLessonId?: string | null;
+  courseId?: string | null;
+  isModelltest?: boolean;
 }
 
-export default function ExerciseRunner({ exercise, questions, level = "A1", nextExerciseId, nextLessonId }: ExerciseRunnerProps) {
+export default function ExerciseRunner({ exercise, questions, level = "A1", nextExerciseId, nextLessonId, courseId, isModelltest }: ExerciseRunnerProps) {
   const supabase = createClient();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -36,6 +38,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
   const [dialogTotal, setDialogTotal] = useState(0);
   const [results, setResults] = useState<{ question: string; correct: boolean }[]>([]);
   const [dialogAttempts, setDialogAttempts] = useState(0);
+  const [certificateId, setCertificateId] = useState<string | null>(null);
 
   // Enter key advances to next question
   useEffect(() => {
@@ -132,6 +135,31 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
           score,
           total_questions: questions.length,
         });
+
+        // Modelltest: issue certificate if >= 60%
+        if (isModelltest && courseId) {
+          const finalPercent = Math.round((score / questions.length) * 100);
+          if (finalPercent >= 60) {
+            // Check if certificate already exists
+            const { data: existing } = await supabase
+              .from("certificates")
+              .select("id")
+              .eq("user_id", user.id)
+              .eq("course_id", courseId)
+              .single();
+
+            if (existing) {
+              setCertificateId(existing.id);
+            } else {
+              const { data: newCert } = await supabase
+                .from("certificates")
+                .insert({ user_id: user.id, course_id: courseId })
+                .select("id")
+                .single();
+              if (newCert) setCertificateId(newCert.id);
+            }
+          }
+        }
       }
     }
   };
@@ -179,9 +207,31 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
             : `Tačnih odgovora: ${score} od ${totalForScore}`}
         </p>
         <p className="text-plava font-bold mb-1">{xp} XP zarađeno</p>
-        <p className="text-sm text-gray-400">
-          {percent === 100 ? "Savršeno! 🎉" : percent >= 90 ? "Odlično!" : percent >= 70 ? "Vrlo dobro!" : percent >= 50 ? "Dobro, nastavi da vežbaš!" : "Pokušaj ponovo!"}
-        </p>
+        {isModelltest ? (
+          percent >= 60 ? (
+            <div className="mt-2">
+              <p className="text-lg font-bold text-green-600">Položio/la! Čestitamo!</p>
+              <p className="text-sm text-gray-400">Potrebno je minimum 60% za prolaz.</p>
+              {certificateId && (
+                <a
+                  href={`/sertifikat/${certificateId}`}
+                  className="inline-block mt-4 bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium"
+                >
+                  Pogledaj sertifikat
+                </a>
+              )}
+            </div>
+          ) : (
+            <div className="mt-2">
+              <p className="text-lg font-bold text-koral">Nije položeno</p>
+              <p className="text-sm text-gray-400">Potrebno je minimum 60% za prolaz. Pokušaj ponovo!</p>
+            </div>
+          )
+        ) : (
+          <p className="text-sm text-gray-400">
+            {percent === 100 ? "Savršeno! 🎉" : percent >= 90 ? "Odlično!" : percent >= 70 ? "Vrlo dobro!" : percent >= 50 ? "Dobro, nastavi da vežbaš!" : "Pokušaj ponovo!"}
+          </p>
+        )}
 
         {/* Pregled odgovora */}
         {results.length > 0 && exercise.exercise_type !== "dialog" && (
