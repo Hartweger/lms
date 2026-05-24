@@ -184,16 +184,10 @@ export default function AiTranslateExercise({ lessonId, lessonTitle }: AiTransla
           ))}
         </div>
 
-        <div className="flex gap-3">
-          <button
-            onClick={restart}
-            className="flex-1 py-3 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50 transition-colors"
-          >
-            Ponovi
-          </button>
+        <div>
           <Link
             href={`/lekcija/${lessonId}`}
-            className="flex-1 text-center py-3 bg-plava text-white rounded-lg text-sm font-medium hover:bg-plava-dark transition-colors"
+            className="block w-full text-center py-3 bg-plava text-white rounded-lg text-sm font-medium hover:bg-plava-dark transition-colors"
           >
             Nazad na lekciju
           </Link>
