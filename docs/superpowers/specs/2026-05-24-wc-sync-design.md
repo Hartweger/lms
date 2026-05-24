@@ -201,6 +201,34 @@ CREATE TABLE course_access (
 - **Order sa više proizvoda**: svaki product_id zasebno
 - **Refund**: ručno uklanjanje pristupa u Supabase/admin panelu
 
+---
+
+## Faza 2 (posle lansiranja): Profesor dashboard
+
+### Koncept
+
+Profesorke koje vode individualne kurseve dobijaju svoj dashboard sa listom polaznika i njihovim progresom.
+
+### Dodela polaznika
+
+Automatski po WC varijaciji — svaki individualni proizvod ima varijacije koje odgovaraju profesorkama. Webhook prima `line_items[].variation_id` iz čega se zna koja profesorka vodi tog polaznika.
+
+### Potrebne promene
+
+- Nova tabela `teacher_students` (teacher_id, student_id, course_id)
+- Nova uloga `professor` u user_profiles (pored admin i user)
+- Mapiranje `variation_id → teacher email` u wc-product-map.ts
+- Dashboard `/profesor` sa:
+  - Lista polaznika (ime, email, kurs)
+  - Progres svakog polaznika (završene lekcije, kviz rezultati, XP, poslednja aktivnost)
+  - Eseji za pregled — profesorka vidi i ocenjuje eseje svojih polaznika
+
+### Napomena
+
+Ovo se NE implementira za lansiranje. Profesorke nastavljaju da koriste LearnDash za pregled dok se ovo ne napravi.
+
+---
+
 ## Redosled lansiranja
 
 1. Dodati magic link login na login stranicu
