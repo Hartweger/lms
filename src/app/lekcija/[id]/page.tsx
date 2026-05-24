@@ -39,17 +39,22 @@ export default async function LekcijaStranica({ params }: PageProps) {
 
   const { data: { user } } = await supabase.auth.getUser();
 
-  // Mark lesson as completed
-  if (user && !typedLesson.is_free_preview) {
-    await supabase.from("lesson_progress").upsert(
-      {
-        user_id: user.id,
-        lesson_id: typedLesson.id,
-        completed: true,
-        completed_at: new Date().toISOString(),
-      },
-      { onConflict: "user_id,lesson_id" }
-    );
+  // Mark PREVIOUS lesson as completed when user navigates to next
+  // This ensures "Nastavi" takes users to where they actually stopped
+  if (user && allLessons) {
+    const currentIdx = allLessons.findIndex((l) => l.id === typedLesson.id);
+    if (currentIdx > 0) {
+      const prev = allLessons[currentIdx - 1];
+      await supabase.from("lesson_progress").upsert(
+        {
+          user_id: user.id,
+          lesson_id: prev.id,
+          completed: true,
+          completed_at: new Date().toISOString(),
+        },
+        { onConflict: "user_id,lesson_id" }
+      );
+    }
   }
 
   // Get completion status for all lessons
