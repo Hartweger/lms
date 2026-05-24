@@ -109,23 +109,8 @@ export default function IzmeniKurs() {
           rows={3}
           className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-plava"
         />
-        <div className="flex gap-4">
-          <select
-            name="course_type"
-            defaultValue={course.course_type}
-            className="px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-plava"
-          >
-            <option value="video">Video kurs</option>
-            <option value="individual">1:1 Nastava</option>
-            <option value="group">Grupna nastava</option>
-          </select>
-          <input
-            name="price"
-            type="number"
-            defaultValue={course.price}
-            className="w-32 px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-plava"
-          />
-        </div>
+        <input name="course_type" type="hidden" value={course.course_type} />
+        <input name="price" type="hidden" value={course.price} />
         <div className="flex items-center gap-2">
           <input
             name="is_published"
