@@ -116,8 +116,8 @@ export default async function LekcijaStranica({ params }: PageProps) {
       {/* Lesson content */}
       <LekcijaContent lesson={typedLesson} />
 
-      {/* AI Exercises — skip intro lessons */}
-      {typedLesson.order_index > 0 && <div className="mt-8 space-y-2">
+      {/* AI Exercises — skip intro/Willkommen, Modelltest, and test lessons */}
+      {!typedLesson.title.includes("Willkommen") && !typedLesson.title.includes("Modelltest") && !typedLesson.title.startsWith("Test") && <div className="mt-8 space-y-2">
         <Link
           href={`/vezba/ai-prevod/${typedLesson.id}`}
           className="flex items-center justify-between w-full bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow border border-gray-100"
