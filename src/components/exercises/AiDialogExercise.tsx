@@ -117,7 +117,7 @@ export default function AiDialogExercise({ lessonId, lessonTitle }: AiDialogExer
   // Pre-start state
   if (!started) {
     return (
-      <div className="max-w-lg mx-auto text-center py-12">
+      <div className="max-w-lg mx-auto text-center py-12 px-4">
         <div className="text-3xl mb-4">💬</div>
         <h2 className="text-xl font-bold text-gray-900 mb-2">Vežbaj u dijalogu</h2>
         <p className="text-sm text-gray-500 mb-2">{lessonTitle}</p>
@@ -139,7 +139,7 @@ export default function AiDialogExercise({ lessonId, lessonTitle }: AiDialogExer
   // Finished state
   if (finished) {
     return (
-      <div className="max-w-lg mx-auto py-8">
+      <div className="max-w-lg mx-auto py-8 px-4">
         <div className="text-center mb-8">
           <div className="text-3xl mb-2">🎉</div>
           <h2 className="text-xl font-bold text-gray-900 mb-1">Bravo!</h2>
@@ -175,7 +175,7 @@ export default function AiDialogExercise({ lessonId, lessonTitle }: AiDialogExer
 
   // Active dialog state
   return (
-    <div className="max-w-lg mx-auto py-8">
+    <div className="max-w-lg mx-auto py-8 px-4">
       {/* Scenario */}
       {scenario && (
         <div className="bg-plava-light rounded-lg px-4 py-3 mb-6 text-sm text-plava-dark">

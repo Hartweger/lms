@@ -111,7 +111,7 @@ export default function AiTranslateExercise({ lessonId, lessonTitle }: AiTransla
   // Pre-start
   if (!started) {
     return (
-      <div className="max-w-lg mx-auto text-center py-12">
+      <div className="max-w-lg mx-auto text-center py-12 px-4">
         <div className="text-3xl mb-4">✍️</div>
         <h2 className="text-xl font-bold text-gray-900 mb-2">Prevedi rečenice</h2>
         <p className="text-sm text-gray-500 mb-2">{lessonTitle}</p>
@@ -132,7 +132,7 @@ export default function AiTranslateExercise({ lessonId, lessonTitle }: AiTransla
   // Loading sentences
   if (loading) {
     return (
-      <div className="max-w-lg mx-auto text-center py-16">
+      <div className="max-w-lg mx-auto text-center py-16 px-4">
         <p className="text-gray-400">Generišem rečenice...</p>
       </div>
     );
@@ -141,7 +141,7 @@ export default function AiTranslateExercise({ lessonId, lessonTitle }: AiTransla
   // Error
   if (error && sentences.length === 0) {
     return (
-      <div className="max-w-lg mx-auto text-center py-12">
+      <div className="max-w-lg mx-auto text-center py-12 px-4">
         <p className="text-koral mb-4">{error}</p>
         <button onClick={restart} className="text-plava hover:underline text-sm">Pokušaj ponovo</button>
       </div>
@@ -153,7 +153,7 @@ export default function AiTranslateExercise({ lessonId, lessonTitle }: AiTransla
     const correctCount = results.filter((r) => r.result.correct).length;
 
     return (
-      <div className="max-w-lg mx-auto py-8">
+      <div className="max-w-lg mx-auto py-8 px-4">
         <div className="text-center mb-8">
           <div className="text-3xl mb-2">{correctCount === results.length ? "🎉" : correctCount >= results.length / 2 ? "👍" : "💪"}</div>
           <h2 className="text-xl font-bold text-gray-900 mb-1">
@@ -200,7 +200,7 @@ export default function AiTranslateExercise({ lessonId, lessonTitle }: AiTransla
   const current = sentences[currentIndex];
 
   return (
-    <div className="max-w-lg mx-auto py-8">
+    <div className="max-w-lg mx-auto py-8 px-4">
       {/* Progress */}
       <div className="flex items-center justify-between mb-6">
         <span className="text-xs text-gray-400">{currentIndex + 1} / {sentences.length}</span>
