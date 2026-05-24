@@ -42,9 +42,22 @@ export async function POST(request: NextRequest) {
     const firstName = order.billing?.first_name || "";
     const lastName = order.billing?.last_name || "";
     const fullName = `${firstName} ${lastName}`.trim();
-    const productIds = (order.line_items || []).map(
-      (item: { product_id: number }) => item.product_id
-    );
+
+    // Extract product IDs and professor name from variations
+    let professorName = "";
+    const productIds: number[] = [];
+
+    for (const item of order.line_items || []) {
+      productIds.push(item.product_id);
+
+      // Check meta_data for professor variation
+      for (const meta of item.meta_data || []) {
+        const key = (meta.key || "").toLowerCase();
+        if (key.includes("profesor") || key.includes("teacher") || key.includes("nastavnik")) {
+          professorName = meta.value || "";
+        }
+      }
+    }
 
     if (!email) {
       console.log(`[wc-webhook] No email in order ${order.id}`);
@@ -52,10 +65,31 @@ export async function POST(request: NextRequest) {
     }
 
     console.log(
-      `[wc-webhook] Processing order ${order.id}: ${email}, products: ${productIds}`
+      `[wc-webhook] Processing order ${order.id}: ${email}, products: ${productIds}${professorName ? `, professor: ${professorName}` : ""}`
     );
 
     const result = await grantAccess(email, fullName, productIds);
+
+    // Auto-assign professor if variation specified
+    if (professorName && result.userId && result.coursesGranted.length > 0) {
+      const { assignProfessor } = await import("@/lib/wc-sync");
+
+      // Get course IDs for granted slugs
+      const { createAdminClient } = await import("@/lib/supabase/admin");
+      const adminSupabase = createAdminClient();
+      const courseIdsForAssign: string[] = [];
+
+      for (const slug of result.coursesGranted) {
+        const { data: course } = await adminSupabase
+          .from("courses")
+          .select("id")
+          .eq("slug", slug)
+          .single();
+        if (course) courseIdsForAssign.push(course.id);
+      }
+
+      await assignProfessor(result.userId, courseIdsForAssign, professorName);
+    }
 
     console.log(`[wc-webhook] Result for ${email}:`, result);
 

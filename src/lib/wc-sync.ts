@@ -126,3 +126,49 @@ export async function grantAccess(
 
   return { userId, isNewUser, coursesGranted, coursesSkipped };
 }
+
+export async function assignProfessor(
+  userId: string,
+  courseIds: string[],
+  professorName: string
+) {
+  if (!professorName) return;
+
+  const supabase = createAdminClient();
+  const nameLower = professorName.toLowerCase().trim();
+
+  // Find professor by partial name match
+  const { data: professors } = await supabase
+    .from("user_profiles")
+    .select("id, full_name")
+    .eq("role", "professor");
+
+  const professor = professors?.find((p) =>
+    p.full_name?.toLowerCase().includes(nameLower)
+  );
+
+  if (!professor) {
+    console.log(`[wc-sync] Professor not found: "${professorName}"`);
+    return;
+  }
+
+  for (const courseId of courseIds) {
+    const { error } = await supabase
+      .from("professor_students")
+      .upsert(
+        {
+          professor_id: professor.id,
+          student_id: userId,
+          course_id: courseId,
+          assigned_via: "wc_variation",
+        },
+        { onConflict: "professor_id,student_id,course_id" }
+      );
+
+    if (error) {
+      console.log(`[wc-sync] Failed to assign professor: ${error.message}`);
+    } else {
+      console.log(`[wc-sync] Assigned professor ${professor.full_name} for course ${courseId}`);
+    }
+  }
+}
