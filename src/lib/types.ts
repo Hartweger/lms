@@ -109,3 +109,12 @@ export interface EssaySubmission {
   submitted_at: string;
   reviewed_at: string | null;
 }
+
+export interface ProfessorStudent {
+  id: string;
+  professor_id: string;
+  student_id: string;
+  course_id: string;
+  assigned_via: "manual" | "wc_variation";
+  created_at: string;
+}
