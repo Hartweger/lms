@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState, useCallback, useMemo } from "react";
+import { useParams } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import type { Section } from "@/lib/section-types";
@@ -15,8 +15,7 @@ interface LessonData {
 
 export default function EditLessonSections() {
   const params = useParams();
-  const router = useRouter();
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
   const [lesson, setLesson] = useState<LessonData | null>(null);
   const [sections, setSections] = useState<Section[]>([]);
   const [jsonMode, setJsonMode] = useState<number | null>(null);
@@ -41,15 +40,22 @@ export default function EditLessonSections() {
     load();
   }, [params.id, supabase]);
 
+  const [saveError, setSaveError] = useState<string | null>(null);
+
   const save = useCallback(async (newSections: Section[]) => {
     setSaving(true);
-    await supabase
+    setSaveError(null);
+    const { error } = await supabase
       .from("lessons")
       .update({ sections: newSections as unknown as Record<string, unknown>[] })
       .eq("id", params.id);
     setSaving(false);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+    if (error) {
+      setSaveError(error.message);
+    } else {
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    }
   }, [params.id, supabase]);
 
   const updateSection = (index: number, updated: Section) => {
@@ -144,6 +150,7 @@ export default function EditLessonSections() {
           <p className="text-sm text-gray-400">{sections.length} sekcija</p>
         </div>
         <div className="flex items-center gap-3">
+          {saveError && <span className="text-koral text-sm">Greska: {saveError}</span>}
           {saved && <span className="text-green-600 text-sm">Sacuvano!</span>}
           <button
             onClick={() => save(sections)}
