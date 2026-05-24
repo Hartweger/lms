@@ -15,8 +15,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     { url: "https://hartweger.rs", lastModified: new Date() },
-    { url: "https://hartweger.rs/test-nivoa", lastModified: new Date() },
-    { url: "https://hartweger.rs/politika-privatnosti", lastModified: new Date() },
     ...courseUrls,
   ];
 }
