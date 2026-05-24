@@ -27,6 +27,113 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
 }
 
+/* Exam-style content blocks for Modelltest */
+.exam-letter {
+  background: #fafafa;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin: 12px 0;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.exam-letter .sender {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.exam-letter .greeting {
+  margin-bottom: 8px;
+}
+.exam-letter .closing {
+  margin-top: 12px;
+}
+
+.exam-ad {
+  background: white;
+  border: 2px solid #374151;
+  border-radius: 6px;
+  padding: 16px 20px;
+  margin: 12px 0;
+  text-align: center;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+.exam-ad .ad-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 6px;
+}
+.exam-ad .ad-url {
+  display: inline-block;
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding: 2px 12px;
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin-bottom: 8px;
+  font-family: monospace;
+}
+.exam-ad .ad-phone {
+  font-weight: 700;
+  margin-top: 6px;
+}
+
+.exam-notice {
+  background: #fffbeb;
+  border: 2px solid #92400e;
+  border-radius: 4px;
+  padding: 14px 20px;
+  margin: 12px 0;
+  text-align: center;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+.exam-notice .notice-title {
+  font-weight: 800;
+  font-size: 1.15rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.exam-sign {
+  background: white;
+  border: 3px solid #1f2937;
+  border-radius: 4px;
+  padding: 12px 20px;
+  margin: 12px 0;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.exam-ads-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 12px 0;
+}
+@media (max-width: 640px) {
+  .exam-ads-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.exam-context-label {
+  font-size: 0.85rem;
+  color: #6b7280;
+  font-style: italic;
+  margin-bottom: 6px;
+}
+
+.exam-audio {
+  width: 100%;
+  margin: 8px 0 16px;
+  border-radius: 8px;
+}
+
 @keyframes confetti-fall {
   0% {
     transform: translateY(0) rotate(0deg);

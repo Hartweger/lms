@@ -23,7 +23,11 @@ export default function QuizExercise({ question, options, correctAnswer, explana
 
   return (
     <div>
-      <p className="text-lg font-medium text-gray-900 mb-6">{question}</p>
+      {question.includes("<") ? (
+        <div className="text-lg font-medium text-gray-900 mb-6" dangerouslySetInnerHTML={{ __html: question }} />
+      ) : (
+        <p className="text-lg font-medium text-gray-900 mb-6">{question}</p>
+      )}
       <div className="space-y-3">
         {options.map((option, i) => {
           let cls = "w-full text-left px-5 py-4 border-2 rounded-xl transition-colors ";

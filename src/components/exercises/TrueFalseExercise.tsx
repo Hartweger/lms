@@ -29,9 +29,13 @@ export default function TrueFalseExercise({ question, correctAnswer, explanation
   return (
     <div>
       {context && (
-        <div className="bg-gray-50 rounded-lg p-4 mb-4 text-sm text-gray-700 whitespace-pre-line">
-          {context}
-        </div>
+        context.includes("<") ? (
+          <div className="mb-4 text-sm text-gray-700" dangerouslySetInnerHTML={{ __html: context }} />
+        ) : (
+          <div className="bg-gray-50 rounded-lg p-4 mb-4 text-sm text-gray-700 whitespace-pre-line">
+            {context}
+          </div>
+        )
       )}
       <p className="text-lg font-medium text-gray-900 mb-6">{statement}</p>
       <div className="flex gap-4">
