@@ -94,16 +94,33 @@ export default async function Dashboard() {
 
   const { data: profile } = await supabase
     .from("user_profiles")
-    .select("full_name")
+    .select("full_name, role")
     .eq("id", user.id)
     .single();
 
-  const { data: accessList } = await supabase
-    .from("course_access")
-    .select("course_id")
-    .eq("user_id", user.id);
+  const isAdmin = profile?.role === "admin";
 
-  const courseIds = accessList?.map((a) => a.course_id) ?? [];
+  let courseIds: string[] = [];
+
+  if (isAdmin) {
+    // Admins see all courses
+    const { data: allCourses } = await supabase
+      .from("courses")
+      .select("id");
+    courseIds = allCourses?.map((c) => c.id) ?? [];
+  } else {
+    // Students: filter out expired access
+    const { data: accessList } = await supabase
+      .from("course_access")
+      .select("course_id, expires_at")
+      .eq("user_id", user.id);
+
+    const now = new Date().toISOString();
+    courseIds = (accessList ?? [])
+      .filter((a) => !a.expires_at || a.expires_at >= now)
+      .map((a) => a.course_id);
+  }
+
   let courses: CourseWithProgress[] = [];
 
   if (courseIds.length > 0) {

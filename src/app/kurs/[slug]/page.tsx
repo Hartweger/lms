@@ -94,14 +94,35 @@ export default async function KursStranica({ params }: PageProps) {
   let allLessons: Lesson[] = [];
   const { data: { user } } = await supabase.auth.getUser();
   let hasAccess = false;
+  let accessExpired = false;
   if (user) {
-    const { data: access } = await supabase
-      .from("course_access")
-      .select("id")
-      .eq("user_id", user.id)
-      .eq("course_id", typedCourse.id)
+    // Check if user is admin
+    const { data: userProfile } = await supabase
+      .from("user_profiles")
+      .select("role")
+      .eq("id", user.id)
       .single();
-    hasAccess = !!access;
+    const isAdmin = userProfile?.role === "admin";
+
+    if (isAdmin) {
+      hasAccess = true;
+    } else {
+      const { data: access } = await supabase
+        .from("course_access")
+        .select("id, expires_at")
+        .eq("user_id", user.id)
+        .eq("course_id", typedCourse.id)
+        .single();
+      if (access) {
+        const now = new Date().toISOString();
+        if (access.expires_at && access.expires_at < now) {
+          hasAccess = false;
+          accessExpired = true;
+        } else {
+          hasAccess = true;
+        }
+      }
+    }
     if (hasAccess) {
       const { data: lessons } = await supabase
         .from("lessons")
@@ -152,6 +173,16 @@ export default async function KursStranica({ params }: PageProps) {
           </a>
         )}
       </div>
+
+      {/* Expired access message */}
+      {accessExpired && (
+        <div className="bg-koral-light border border-koral rounded-xl p-6 mb-6 text-center">
+          <p className="text-koral-dark font-medium mb-2">Tvoj pristup ovom kursu je istekao.</p>
+          <a href="https://www.hartweger.rs" className="text-plava hover:underline">
+            Obnovi pristup na hartweger.rs →
+          </a>
+        </div>
+      )}
 
       {/* Lessons grouped by module */}
       {hasAccess && modules.length > 0 && (
