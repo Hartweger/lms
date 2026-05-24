@@ -1,5 +1,68 @@
 [
   {
+    "id": "d0416dbc-c032-4b4e-b9f4-3735971d9503",
+    "title": "Kako izgleda fide test i kome je namenjen?",
+    "order_index": 0,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "fe748b12-b00f-4400-870f-9fbb567584c2",
+    "title": "Gramatika A2-B1 – Masterclass",
+    "order_index": 0,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "4a32501a-6bce-4222-aad4-795490aa5325",
+    "title": "100 reči za nivo B1",
+    "order_index": 0,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "5c9c48b2-ca7e-490f-84ab-e95ff541345b",
+    "title": "Adventskranz",
+    "order_index": 0,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "165885e1-baf0-48cb-a5df-150c713eeb62",
+    "title": "Opšte informacije",
+    "order_index": 0,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "2c4a71d4-6972-4db3-82f9-912b213b1b99",
+    "title": "Lekcija",
+    "order_index": 0,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "2d71c423-a86c-44c5-b2b6-eda0bb6bb0d7",
+    "title": "Konjunktiv II der Vergangenheit",
+    "order_index": 0,
+    "sections": [],
+    "vimeo_video_id": "1176569791"
+  },
+  {
+    "id": "c2ac1b90-6101-4742-b71d-186ddc6035f4",
+    "title": "Kako izgleda ispit?",
+    "order_index": 0,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "f14821fb-d431-48e6-a7c5-97d02f11decd",
+    "title": "Persönliche Angaben",
+    "order_index": 0,
+    "sections": [],
+    "vimeo_video_id": "829225792"
+  },
+  {
     "id": "fd45eb3c-0ba4-4410-92ee-b5a883c1493c",
     "title": "Willkommen",
     "order_index": 0,
@@ -38,6 +101,48 @@
         "linkType": "quizlet"
       }
     ],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "4a22c209-19a0-4e77-97b7-824024f10acf",
+    "title": "Trudnoća (die Schwangerschaft)",
+    "order_index": 0,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "c1c30984-dc48-4ddf-9782-974a3cd1c37f",
+    "title": "Masterclass – Schreiben und Sprechen – B1",
+    "order_index": 0,
+    "sections": [],
+    "vimeo_video_id": "1128598236"
+  },
+  {
+    "id": "752f4ecc-9af5-4609-8987-3ef580fe128c",
+    "title": "Deutsch lernen und Familie – Kennenlernen",
+    "order_index": 0,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "b75c45b0-8674-4fde-8b47-93142c209408",
+    "title": "Primeri ispita za deo Leseverstehen",
+    "order_index": 1,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "1ff97f3a-fb10-4bb4-ba55-6f81eb359749",
+    "title": "Familie",
+    "order_index": 1,
+    "sections": [],
+    "vimeo_video_id": "830849014"
+  },
+  {
+    "id": "03587989-5a67-485c-ae43-1333d59bb606",
+    "title": "Sve o ispitu",
+    "order_index": 1,
+    "sections": [],
     "vimeo_video_id": null
   },
   {
@@ -153,59 +258,59 @@
       {
         "rows": [
           [
-            "Eine **Erzieherin**",
+            "Eine <strong>Erzieherin</strong>",
             "arbeitet im Kindergarten"
           ],
           [
-            "Eine **Ärztin**",
+            "Eine <strong>Ärztin</strong>",
             "heilt kranke Menschen"
           ],
           [
-            "Ein **Bankkaufmann**",
+            "Ein <strong>Bankkaufmann</strong>",
             "arbeitet in einer Bank"
           ],
           [
-            "Eine **Bäckerin**",
+            "Eine <strong>Bäckerin</strong>",
             "backt Brot und Brötchen"
           ],
           [
-            "Eine **Floristin**",
+            "Eine <strong>Floristin</strong>",
             "verkauft Blumen"
           ],
           [
-            "Ein **Fotograf**",
+            "Ein <strong>Fotograf</strong>",
             "macht Fotos"
           ],
           [
-            "Eine **Krankenschwester**",
+            "Eine <strong>Krankenschwester</strong>",
             "hilft Patienten im Krankenhaus"
           ],
           [
-            "Ein **Koch**",
+            "Ein <strong>Koch</strong>",
             "kocht Essen"
           ],
           [
-            "Eine **Lehrerin**",
+            "Eine <strong>Lehrerin</strong>",
             "arbeitet in einer Schule"
           ],
           [
-            "Ein **Polizist**",
+            "Ein <strong>Polizist</strong>",
             "arbeitet in der Polizei"
           ],
           [
-            "Ein **Zahnarzt**",
+            "Ein <strong>Zahnarzt</strong>",
             "hilft bei Zahnproblemen"
           ],
           [
-            "Ein **Kellner**",
+            "Ein <strong>Kellner</strong>",
             "bringt im Restaurant das Essen"
           ],
           [
-            "Eine **Hausfrau**",
+            "Eine <strong>Hausfrau</strong>",
             "arbeitet zu Hause, kocht und räumt auf"
           ],
           [
-            "Ein **Student**",
+            "Ein <strong>Student</strong>",
             "lernt an der Uni"
           ]
         ],
@@ -252,31 +357,31 @@
       {
         "rows": [
           [
-            "Ich bin **Lehrerin**.",
+            "Ich bin <strong>Lehrerin</strong>.",
             "Ja sam učiteljica."
           ],
           [
-            "Ich arbeite **als** Lehrerin.",
+            "Ich arbeite <strong>als</strong> Lehrerin.",
             "Radim kao učiteljica."
           ],
           [
-            "Ich habe einen **Job als**…",
+            "Ich habe einen <strong>Job als</strong>…",
             "Imam posao kao…"
           ],
           [
-            "Ich habe eine **Stelle als**…",
+            "Ich habe eine <strong>Stelle als</strong>…",
             "Imam radno mesto kao…"
           ],
           [
-            "Ich bin **angestellt**.",
+            "Ich bin <strong>angestellt</strong>.",
             "Zaposlena sam."
           ],
           [
-            "Ich bin **selbstständig**.",
+            "Ich bin <strong>selbstständig</strong>.",
             "Ja sam preduzetnica."
           ],
           [
-            "Ich bin zurzeit **arbeitslos**.",
+            "Ich bin zurzeit <strong>arbeitslos</strong>.",
             "Trenutno sam nezaposlena."
           ]
         ],
@@ -484,6 +589,408 @@
       }
     ],
     "vimeo_video_id": "809463146"
+  },
+  {
+    "id": "d40bddcb-a386-460e-a269-33795e97d34e",
+    "title": "Kako i odakle da učim?",
+    "order_index": 1,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "ad4db573-6e76-4f8e-bb37-e0e47aba3b98",
+    "title": "Mein typischer Tag",
+    "order_index": 1,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "960e828c-9c81-4081-8de6-c5f174689efc",
+    "title": "Leseverstehen Granfluencer",
+    "order_index": 1,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "fee52024-d5f3-48c8-a559-d8de53b3a00b",
+    "title": "HÖREN C1",
+    "order_index": 1,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "4563183f-3078-4686-8509-c5617c1d9c81",
+    "title": "Ultrazvuk (der Ultraschall)",
+    "order_index": 1,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "98bf30df-5a02-40ef-b8c4-812782b63702",
+    "title": "Rotkäppchen und das Präteritum",
+    "order_index": 1,
+    "sections": [],
+    "vimeo_video_id": "1057518453"
+  },
+  {
+    "id": "9c671eb8-38cd-4022-adde-7335a168fcea",
+    "title": "Često postavljana pitanja",
+    "order_index": 1,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "6708ce46-cbf4-4809-a034-fa7d8d756cc8",
+    "title": "Korisne lekcije",
+    "order_index": 1,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "3b1c846a-7569-4207-bbc5-2435993570f4",
+    "title": "20 glagola za nivo B1",
+    "order_index": 1,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "734aca58-2063-463b-9b19-a458c9ce126f",
+    "title": "Willkommen",
+    "order_index": 1,
+    "sections": [
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Dobrodošli u kurs **Nemački A1.1**! Ovaj kurs je podeljen u 7 modula. Svaka lekcija ima video, objašnjenje, vežbe i kartice za učenje reči.\n\nUz svaku lekciju možete vežbati reči i na Quizlet-u."
+      },
+      {
+        "rows": [
+          [
+            "<mark>Modul 1</mark>",
+            "Pozdravi, pitanja, dijalozi, alfabet",
+            "2–5"
+          ],
+          [
+            "<mark>Modul 2</mark>",
+            "Porodica, kako si, brojevi, prezent",
+            "6–9"
+          ],
+          [
+            "<mark>Modul 3</mark>",
+            "Hrana, cene, restoran",
+            "10–12"
+          ],
+          [
+            "<mark>Modul 4</mark>",
+            "Stan, nameštaj, oglasi",
+            "13–15"
+          ],
+          [
+            "<mark>Modul 5</mark>",
+            "Razdvojni prefiksi, vreme, raspored, dnevni tok",
+            "16–20"
+          ],
+          [
+            "<mark>Modul 6</mark>",
+            "Vreme (meteo), akuzativ, hobiji, ja/nein/doch",
+            "21–25"
+          ],
+          [
+            "<mark>Modul 7</mark>",
+            "Modalni glagoli, perfekat",
+            "26–29"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Modul",
+          "Tema",
+          "Lekcije"
+        ]
+      },
+      {
+        "href": "https://quizlet.com/user/hartweger",
+        "type": "link",
+        "label": "Quizlet kartice za ceo A1.1 kurs",
+        "linkType": "quizlet"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "**Saveti za učenje:**\n\n1. Pogledaj video i ponovi naglas\n2. Pročitaj objašnjenje i primere\n3. Uradi mini vežbu (klikni za rešenje)\n4. Nauči reči uz kartice\n5. Ponavljaj svaki dan po malo!"
+      }
+    ],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "e17855b7-3980-4e46-9245-168c62153e75",
+    "title": "Simptomi (die Symptome)",
+    "order_index": 2,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "22df86a5-6899-4906-9882-227a791d3d07",
+    "title": "Korisni linkovi",
+    "order_index": 2,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "27c08280-e182-47a8-a34e-896a49a1aab6",
+    "title": "Als ob Sätze",
+    "order_index": 2,
+    "sections": [],
+    "vimeo_video_id": "1112584625"
+  },
+  {
+    "id": "939337e3-7d9c-431f-b76b-caa067a50f75",
+    "title": "LESEN C1",
+    "order_index": 2,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "b1f82aea-2ffb-47c9-99ff-73477c5094e0",
+    "title": "Als oder wenn",
+    "order_index": 2,
+    "sections": [],
+    "vimeo_video_id": "1057534991"
+  },
+  {
+    "id": "e183910d-303c-4909-a1f7-fde218e2783b",
+    "title": "Perfekt",
+    "order_index": 2,
+    "sections": [],
+    "vimeo_video_id": "830949139"
+  },
+  {
+    "id": "69f8180c-d2a1-4bba-93bc-87b3fc43eac5",
+    "title": "Delovi testa",
+    "order_index": 2,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "a9f5ad1c-9ea7-4d71-8a1c-5a8f1db1a5eb",
+    "title": "Primeri ispita za deo Hörverstehen",
+    "order_index": 2,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "f6a93fcd-cf29-4427-acbf-a29c4e0c998a",
+    "title": "Pozdravi",
+    "order_index": 2,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 1",
+        "category": "grammatik"
+      },
+      {
+        "type": "video",
+        "vimeoId": "701282409"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "U ovoj lekciji naučićeš kako da **pozdravljaš** i **otpozdravljaš** nekoga na nemačkom — formalno i neformalno."
+      },
+      {
+        "rows": [
+          [
+            "<mark>Guten Morgen</mark>",
+            "Dobro jutro"
+          ],
+          [
+            "<mark>Guten Tag</mark>",
+            "Dobar dan"
+          ],
+          [
+            "<mark>Guten Abend</mark>",
+            "Dobro veče"
+          ],
+          [
+            "<mark>Auf Wiedersehen</mark>",
+            "Doviđenja"
+          ],
+          [
+            "<mark>Gute Nacht</mark>",
+            "Laku noć"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Formalno",
+          "Prevod"
+        ]
+      },
+      {
+        "rows": [
+          [
+            "<mark>Hallo</mark>",
+            "Zdravo / Ćao"
+          ],
+          [
+            "<mark>Tschüs</mark>",
+            "Ćao (pri rastanku)"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Neformalno",
+          "Prevod"
+        ]
+      },
+      {
+        "type": "formula",
+        "content": "Herr = gospodin\nFrau = gospođa"
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "**Ko kaže da ne znaš nemački?!** Mnoge reči su iste ili slične u nemačkom:\n\nRadio, Computer, Gitarre, Kaffee, Tee, Bus, Hotel, Chaos, Post, Termin, Tomate, Minute"
+      },
+      {
+        "type": "formula",
+        "content": "ie → i (Wiedersehen)\ns ispred vokala → z\nh u sredini reči se ne čita\ntsch → č (Tschüs)\nÜü → u/i"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Guten Morgen",
+            "question": "1. Kako ćeš pozdraviti nekoga ujutru?"
+          },
+          {
+            "answer": "Auf Wiedersehen",
+            "question": "2. Kako ćeš se oprostiti formalno?"
+          },
+          {
+            "answer": "Tschüs",
+            "question": "3. Kako ćeš reći Ćao prijatelju?"
+          },
+          {
+            "answer": "Frau",
+            "question": "4. Kako se kaže gospođa?"
+          }
+        ],
+        "title": "Mini vežba — Kako se kaže...?"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "Dobro jutro",
+            "front": "Guten Morgen"
+          },
+          {
+            "back": "Dobar dan",
+            "front": "Guten Tag"
+          },
+          {
+            "back": "Dobro veče",
+            "front": "Guten Abend"
+          },
+          {
+            "back": "Doviđenja",
+            "front": "Auf Wiedersehen"
+          },
+          {
+            "back": "Laku noć",
+            "front": "Gute Nacht"
+          },
+          {
+            "back": "Zdravo",
+            "front": "Hallo"
+          },
+          {
+            "back": "Ćao",
+            "front": "Tschüs"
+          },
+          {
+            "back": "gospodin",
+            "front": "Herr"
+          },
+          {
+            "back": "gospođa",
+            "front": "Frau"
+          },
+          {
+            "back": "Vidimo se kasnije",
+            "front": "Bis später"
+          }
+        ]
+      },
+      {
+        "rows": [
+          [
+            "Guten Morgen",
+            "Dobro jutro"
+          ],
+          [
+            "Guten Tag",
+            "Dobar dan"
+          ],
+          [
+            "Guten Abend",
+            "Dobro veče"
+          ],
+          [
+            "Auf Wiedersehen",
+            "Doviđenja"
+          ],
+          [
+            "Gute Nacht",
+            "Laku noć"
+          ],
+          [
+            "Hallo",
+            "Zdravo"
+          ],
+          [
+            "Tschüs",
+            "Ćao"
+          ],
+          [
+            "Herr",
+            "gospodin"
+          ],
+          [
+            "Frau",
+            "gospođa"
+          ],
+          [
+            "Bis später",
+            "Vidimo se kasnije"
+          ]
+        ],
+        "type": "vocabulary"
+      }
+    ],
+    "vimeo_video_id": "701282409"
+  },
+  {
+    "id": "6f34fe1c-ee07-4167-847d-a8b5bf8d6a5e",
+    "title": "Lakše pamtimo uz pesme…",
+    "order_index": 2,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "161e0870-c0ec-444e-b553-14cf04ead2e9",
+    "title": "Priprema za ispit A2",
+    "order_index": 2,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "ac2b5486-ff48-490f-acbe-7311ce63f177",
+    "title": "Wohnen – Hotel Mama",
+    "order_index": 2,
+    "sections": [],
+    "vimeo_video_id": null
   },
   {
     "id": "e6595db2-c152-4fa0-a860-4aa2be0ba622",
@@ -1231,6 +1738,513 @@
     "vimeo_video_id": "811753205"
   },
   {
+    "id": "e91ec737-ae81-480c-baf2-691c1c6799b4",
+    "title": "Prijem u porodilište (Aufnahme in die Geburtsklinik)",
+    "order_index": 3,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "d8b6ee3b-57ed-4f73-942a-20bc3c9effc4",
+    "title": "Glück",
+    "order_index": 3,
+    "sections": [],
+    "vimeo_video_id": "1057560054"
+  },
+  {
+    "id": "92a1db61-f9da-464e-b800-c7e21448af96",
+    "title": "Koje kriterijume treba da ispunim na ispitu?",
+    "order_index": 3,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "6f013568-20e1-4dfd-b77e-ec27c1a8843d",
+    "title": "SCHREIBEN C1",
+    "order_index": 3,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "f19a924a-fa2b-47a1-83b5-4c15917be67f",
+    "title": "Weil Sätze",
+    "order_index": 3,
+    "sections": [],
+    "vimeo_video_id": "831004087"
+  },
+  {
+    "id": "0abe0c20-e6ee-42e7-9816-8544c18111bb",
+    "title": "Fraze sa platforme",
+    "order_index": 3,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "66f7fc4a-e45c-4256-92f4-6f18d02ab788",
+    "title": "Einkaufen",
+    "order_index": 3,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "63ed24f3-554b-4a57-aced-9dec2d5754f7",
+    "title": "Primer ispita za deo Schreiben",
+    "order_index": 3,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "71713984-448c-4cf1-bd51-ded3176b936c",
+    "title": "Die ersten Fragen",
+    "order_index": 3,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 1",
+        "category": "grammatik"
+      },
+      {
+        "type": "video",
+        "vimeoId": "701332517"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "U ovoj lekciji naučićeš da postaviš **4 osnovna pitanja** na nemačkom i da odgovoriš na njih — neformalno (du) i formalno (Sie)."
+      },
+      {
+        "rows": [
+          [
+            "<mark>Wie heißt du?</mark>",
+            "Ich heiße...",
+            "Kako se zoveš?"
+          ],
+          [
+            "<mark>Wer bist du?</mark>",
+            "Ich bin...",
+            "Ko si ti?"
+          ],
+          [
+            "<mark>Woher kommst du?</mark>",
+            "Ich komme aus...",
+            "Odakle dolaziš?"
+          ],
+          [
+            "<mark>Was sprichst du?</mark>",
+            "Ich spreche...",
+            "Koje jezike govoriš?"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Pitanje",
+          "Odgovor",
+          "Prevod"
+        ]
+      },
+      {
+        "rows": [
+          [
+            "Wie heißt du?",
+            "<mark>Wie heißen Sie?</mark>"
+          ],
+          [
+            "Wer bist du?",
+            "<mark>Wer sind Sie?</mark>"
+          ],
+          [
+            "Woher kommst du?",
+            "<mark>Woher kommen Sie?</mark>"
+          ],
+          [
+            "Was sprichst du?",
+            "<mark>Was sprechen Sie?</mark>"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Neformalno (du)",
+          "Formalno (Sie)"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Prezent\n\nSvi infinitivi se završavaju na **-en**. Prezent se gradi kad oduzmemo -en i dodamo nastavke:"
+      },
+      {
+        "type": "formula",
+        "content": "ich → -e\ndu → -st\nSie → -en"
+      },
+      {
+        "rows": [
+          [
+            "<mark>kommen</mark>",
+            "komme",
+            "kommst",
+            "kommen"
+          ],
+          [
+            "<mark>sprechen</mark>",
+            "spreche",
+            "spr<mark>i</mark>chst",
+            "sprechen"
+          ],
+          [
+            "<mark>heißen</mark>",
+            "heiße",
+            "heißt",
+            "heißen"
+          ],
+          [
+            "<mark>sein</mark>",
+            "bin",
+            "bist",
+            "sind"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Glagol",
+          "ich",
+          "du",
+          "Sie"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "uebung",
+        "content": "**Pazi:** Glagol **sein** (biti) ima potpuno nepravilnu promenu.\n\nGlagol **sprechen** menja **e → i** u 2. licu: du spr**i**chst.\n\nAko se osnova završava na **ß, ss, s** — ne dodaje se s u 2. licu: du hei**ßt** (ne heißst)."
+      },
+      {
+        "type": "formula",
+        "content": "ei → aj (heißen)\nß → s\neu → oj (Deutschland)\nÖö → namesti usta za O, izgovori E\nsp → šp na početku reči (sprechen)"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Wie heißt du?",
+            "question": "1. Kako se zoveš? (neformalno)"
+          },
+          {
+            "answer": "Woher kommen Sie?",
+            "question": "2. Odakle dolazite? (formalno)"
+          },
+          {
+            "answer": "Ich komme aus Serbien.",
+            "question": "3. Ja dolazim iz Srbije."
+          },
+          {
+            "answer": "Ich spreche ein bisschen Deutsch.",
+            "question": "4. Ja govorim malo nemački."
+          },
+          {
+            "answer": "Wer sind Sie?",
+            "question": "5. Ko ste Vi?"
+          }
+        ],
+        "title": "Mini vežba — Prevedi na nemački"
+      },
+      {
+        "rows": [
+          [
+            "Wie heißt du?",
+            "Kako se zoveš?"
+          ],
+          [
+            "Wer bist du?",
+            "Ko si ti?"
+          ],
+          [
+            "Woher kommst du?",
+            "Odakle dolaziš?"
+          ],
+          [
+            "Was sprichst du?",
+            "Koje jezike govoriš?"
+          ],
+          [
+            "Ich komme aus...",
+            "Dolazim iz..."
+          ],
+          [
+            "ein bisschen",
+            "malo"
+          ],
+          [
+            "sprechen",
+            "govoriti"
+          ],
+          [
+            "fragen",
+            "pitati"
+          ],
+          [
+            "schreiben",
+            "pisati"
+          ],
+          [
+            "hören",
+            "slušati"
+          ]
+        ],
+        "type": "vocabulary"
+      }
+    ],
+    "vimeo_video_id": "701332517"
+  },
+  {
+    "id": "b321531d-364b-440e-bba7-51dfb712d73b",
+    "title": "Weihnachten ist…",
+    "order_index": 3,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "efd8ffc1-323d-4f1a-815c-553918463449",
+    "title": "Finalsätze (um+zu vs. damit)",
+    "order_index": 3,
+    "sections": [],
+    "vimeo_video_id": "1100291090"
+  },
+  {
+    "id": "5a3c3be7-6338-4c4f-bd08-4b0b76301658",
+    "title": "Dialoge",
+    "order_index": 4,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 1",
+        "category": "hoeren"
+      },
+      {
+        "type": "video",
+        "vimeoId": "701339447"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "U ovoj lekciji vežbaš **kratke dijaloge** na nemačkom — upoznavanje, predstavljanje i razlikovanje formalnog (Sie) i neformalnog (du) obraćanja."
+      },
+      {
+        "rows": [
+          [
+            "— Hallo, ich heiße Eduardo. Und wie heißt du?",
+            "— Zdravo, ja se zovem Eduardo. A kako se ti zoveš?"
+          ],
+          [
+            "— Ich heiße Maria.",
+            "— Ja se zovem Maria."
+          ],
+          [
+            "— Woher kommst du?",
+            "— Odakle dolaziš?"
+          ],
+          [
+            "— Aus Polen. Und du?",
+            "— Iz Poljske. A ti?"
+          ],
+          [
+            "— Aus Serbien.",
+            "— Iz Srbije."
+          ],
+          [
+            "— Ah, schön! Freut mich.",
+            "— Ah, lepo! Drago mi je."
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Neformalni dijalog",
+          "Prevod"
+        ]
+      },
+      {
+        "rows": [
+          [
+            "— Guten Tag, wie heißen Sie?",
+            "— Dobar dan, kako se Vi zovete?"
+          ],
+          [
+            "— Mein Name ist Petrovic.",
+            "— Moje ime je Petrovic."
+          ],
+          [
+            "— Woher kommen Sie?",
+            "— Odakle dolazite?"
+          ],
+          [
+            "— Aus Serbien.",
+            "— Iz Srbije."
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Formalni dijalog",
+          "Prevod"
+        ]
+      },
+      {
+        "type": "formula",
+        "content": "du → prijatelji, deca, porodica\nSie → nepoznati, stariji, formalno"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "heiße",
+            "question": "1. — Hallo, ich ___ Maria. (zvati se)"
+          },
+          {
+            "answer": "kommst",
+            "question": "2. — Woher ___ du? (dolaziti)"
+          },
+          {
+            "answer": "Freut",
+            "question": "3. — ___ mich! (Drago mi je)"
+          },
+          {
+            "answer": "Sie",
+            "question": "4. — Wie heißen ___? (Vi)"
+          }
+        ],
+        "title": "Mini vežba — Dopuni dijalog"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "takođe",
+            "front": "auch"
+          },
+          {
+            "back": "i",
+            "front": "und"
+          },
+          {
+            "back": "lepo",
+            "front": "schön"
+          },
+          {
+            "back": "samo",
+            "front": "nur"
+          },
+          {
+            "back": "Drago mi je",
+            "front": "Freut mich"
+          },
+          {
+            "back": "Moje ime je...",
+            "front": "Mein Name ist..."
+          },
+          {
+            "back": "Iz Poljske",
+            "front": "Aus Polen"
+          },
+          {
+            "back": "Iz Srbije",
+            "front": "Aus Serbien"
+          }
+        ]
+      },
+      {
+        "rows": [
+          [
+            "auch",
+            "takođe"
+          ],
+          [
+            "und",
+            "i"
+          ],
+          [
+            "schön",
+            "lepo"
+          ],
+          [
+            "nur",
+            "samo"
+          ],
+          [
+            "Freut mich",
+            "Drago mi je"
+          ],
+          [
+            "Mein Name ist...",
+            "Moje ime je..."
+          ],
+          [
+            "Entschuldigung",
+            "Izvinjenje"
+          ],
+          [
+            "Danke",
+            "Hvala"
+          ]
+        ],
+        "type": "vocabulary"
+      }
+    ],
+    "vimeo_video_id": "701339447"
+  },
+  {
+    "id": "bc238abd-3cae-4096-a7ba-b51861d65e9b",
+    "title": "Položi B1",
+    "order_index": 4,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "199a146a-094b-4f31-89aa-aa0553ea955a",
+    "title": "Relativne rečenice",
+    "order_index": 4,
+    "sections": [],
+    "vimeo_video_id": "1176551429"
+  },
+  {
+    "id": "585973da-a551-47c1-82f5-0d5f701d0400",
+    "title": "Alternativen zu Passiv",
+    "order_index": 4,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "1dfa8c8f-be89-441c-bffa-3dc5cf640974",
+    "title": "Essen",
+    "order_index": 4,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "93036277-d0c7-437a-81df-75b7207ab503",
+    "title": "SPRECHEN C1",
+    "order_index": 4,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "46c940e1-5083-41f4-b572-fb871446bfce",
+    "title": "Wie wohnen die Deutschen?",
+    "order_index": 4,
+    "sections": [],
+    "vimeo_video_id": "834447219"
+  },
+  {
+    "id": "b3fc651a-6779-4296-bb7e-ca00fad6a7ea",
+    "title": "Kako i odakle da učim?",
+    "order_index": 4,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "5204ac4b-eeb0-439d-be93-ed67805f54d2",
+    "title": "Anamneza",
+    "order_index": 4,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
     "id": "a304a585-ae1c-4f6c-a24d-24592efc3f12",
     "title": "Leseverstehen",
     "order_index": 4,
@@ -1433,6 +2447,34 @@
     "vimeo_video_id": "811745748"
   },
   {
+    "id": "aad95e88-3199-4132-ae54-144a42983661",
+    "title": "Rečnik na temu porođaj (Wortschatz rund um die Geburt)",
+    "order_index": 4,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "c96bab8c-87f4-4a2b-8229-a4584a8296c1",
+    "title": "Hätte und wäre",
+    "order_index": 4,
+    "sections": [],
+    "vimeo_video_id": "854373871"
+  },
+  {
+    "id": "166b01a1-f3de-4efb-9daf-b1bb372ea988",
+    "title": "Položi B1 TELC",
+    "order_index": 5,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "d027d2e0-3415-4250-8653-e801b59e5803",
+    "title": "Koje kriterijume treba da ispunim i kako se ocenjuje?",
+    "order_index": 5,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
     "id": "07acaf9e-9358-4ef4-9fea-118b12bf89dd",
     "title": "Test: Modul 1",
     "order_index": 5,
@@ -1443,6 +2485,257 @@
         "category": "grammatik"
       }
     ],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "ade136f6-2f09-4753-a830-e7397299e6be",
+    "title": "Müll",
+    "order_index": 5,
+    "sections": [],
+    "vimeo_video_id": "835381111"
+  },
+  {
+    "id": "46b856ce-b2ca-4163-8466-2b0c1f05f770",
+    "title": "Alphabet",
+    "order_index": 5,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 1",
+        "category": "hoeren"
+      },
+      {
+        "type": "video",
+        "vimeoId": "701347415"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "U ovoj lekciji naučićeš **nemački alfabet** i kako da **speloveš** svoje ime i prezime."
+      },
+      {
+        "type": "formula",
+        "content": "A B C D E F G H I J K L M\nN O P Q R S T U V W X Y Z\n+ Ä Ö Ü ß"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "**Specijalna slova:**\n\n**V** = fau · **W** = ve · **J** = jot · **Z** = cet · **ß** = escet\n\n**Ä Ö Ü** — preglasi (Umlaute), posebna nemačka slova"
+      },
+      {
+        "rows": [
+          [
+            "— Firma Siemens, guten Tag!",
+            "— Firma Simens, dobar dan!"
+          ],
+          [
+            "— Mein Name ist Petrovic. Ist Frau Beck da?",
+            "— Moje ime je Petrovic. Da li je gospođa Bek tu?"
+          ],
+          [
+            "— Entschuldigung, wie ist Ihr Name?",
+            "— Izvinjenje, kako je Vaše ime?"
+          ],
+          [
+            "— Petrovic. Ich buchstabiere: P-E-T-R-O-V-I-C.",
+            "— Petrovic. Spelujem: P-E-T-R-O-V-I-C."
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Telefonski dijalog",
+          "Prevod"
+        ]
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "ve",
+            "question": "1. Kako se izgovara slovo W na nemačkom?"
+          },
+          {
+            "answer": "fau",
+            "question": "2. Kako se izgovara slovo V?"
+          },
+          {
+            "answer": "buchstabieren",
+            "question": "3. Kako se kaže \"spelovati\"?"
+          },
+          {
+            "answer": "escet",
+            "question": "4. Kako se zove slovo ß?"
+          }
+        ],
+        "title": "Mini vežba — Spelovati na nemačkom"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "spelovati",
+            "front": "buchstabieren"
+          },
+          {
+            "back": "izvinjenje",
+            "front": "Entschuldigung"
+          },
+          {
+            "back": "žao mi je",
+            "front": "Tut mir leid"
+          },
+          {
+            "back": "mnogo hvala",
+            "front": "vielen Dank"
+          },
+          {
+            "back": "ulica",
+            "front": "die Straße"
+          },
+          {
+            "back": "zemlja",
+            "front": "das Land"
+          },
+          {
+            "back": "grad",
+            "front": "die Stadt"
+          },
+          {
+            "back": "prezime",
+            "front": "der Familienname"
+          }
+        ]
+      },
+      {
+        "rows": [
+          [
+            "buchstabieren",
+            "spelovati"
+          ],
+          [
+            "Entschuldigung",
+            "izvinjenje"
+          ],
+          [
+            "Tut mir leid",
+            "žao mi je"
+          ],
+          [
+            "vielen Dank",
+            "mnogo hvala"
+          ],
+          [
+            "die Straße",
+            "ulica"
+          ],
+          [
+            "das Land",
+            "zemlja"
+          ],
+          [
+            "die Stadt",
+            "grad"
+          ],
+          [
+            "der Familienname",
+            "prezime"
+          ],
+          [
+            "Wie ist Ihr Name?",
+            "Kako je Vaše ime?"
+          ],
+          [
+            "Ist Frau Beck da?",
+            "Da li je gđa Bek tu?"
+          ]
+        ],
+        "type": "vocabulary"
+      }
+    ],
+    "vimeo_video_id": "701347415"
+  },
+  {
+    "id": "fe4a9293-767e-4a15-83ec-760926b6eae2",
+    "title": "Video – Wandern",
+    "order_index": 5,
+    "sections": [],
+    "vimeo_video_id": "1177240519"
+  },
+  {
+    "id": "aeed23cd-dc69-4f6a-8bee-38a13648fae4",
+    "title": "Oporavak nakon porođaja (Erholung nach der Entbindung)",
+    "order_index": 5,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "4d8263be-53d4-4d9f-8457-9b20bf1b9041",
+    "title": "Der Film war toll!",
+    "order_index": 5,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "df4f932b-aa47-4b63-824f-5eae63d3ce52",
+    "title": "Berufliche Kompetenzen",
+    "order_index": 5,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "09158a22-ebe5-4cf4-bf3a-814fd7c1e56d",
+    "title": "Wetter und Kleidung",
+    "order_index": 5,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "b33ca9e8-530d-4cb8-a0e3-8fa22d4edcc2",
+    "title": "Brojevi",
+    "order_index": 5,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "0f0da0b0-037c-4143-8f84-ff09dc44b9c9",
+    "title": "Korisni linkovi",
+    "order_index": 6,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "e8287ae7-dd76-481e-8699-169123bed7f1",
+    "title": "Filme und Serien: Komödie vs. Thriller?",
+    "order_index": 6,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "5dd38cf4-2b79-4ade-b578-897f9e43c2a3",
+    "title": "Delovi tela i organi",
+    "order_index": 6,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "f7c23906-afcc-4cc1-9c9c-1c1007294ef2",
+    "title": "BONUS: RADIONICA Priprema, POSAO, Start",
+    "order_index": 6,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "81b6174f-818c-4232-9fa8-415208c76e25",
+    "title": "Trotzdem",
+    "order_index": 6,
+    "sections": [],
+    "vimeo_video_id": "855114696"
+  },
+  {
+    "id": "7d7c1966-1367-4aef-89ef-6764f313dbad",
+    "title": "Reisen und Wegbeschreibung",
+    "order_index": 6,
+    "sections": [],
     "vimeo_video_id": null
   },
   {
@@ -1472,18 +2765,18 @@
       {
         "rows": [
           [
-            "**du**",
-            "Precrtaj nastavak **-st** i **du**",
+            "<strong>du</strong>",
+            "Precrtaj nastavak <strong>-st</strong> i <strong>du</strong>",
             "Mach! Koch! Lies!"
           ],
           [
-            "**ihr**",
-            "Precrtaj **ihr**",
+            "<strong>ihr</strong>",
+            "Precrtaj <strong>ihr</strong>",
             "Macht! Kocht! Lest!"
           ],
           [
-            "**Sie**",
-            "Sve isto, samo **?** → **!**",
+            "<strong>Sie</strong>",
+            "Sve isto, samo <strong>?</strong> → <strong>!</strong>",
             "Machen Sie! Kochen Sie!"
           ]
         ],
@@ -1502,25 +2795,25 @@
       {
         "rows": [
           [
-            "Mach**st** du Sport?",
+            "Mach<strong>st</strong> du Sport?",
             "<mark>Mach Sport!</mark>",
             "<mark>Macht Sport!</mark>",
             "<mark>Machen Sie Sport!</mark>"
           ],
           [
-            "Koch**st** du jeden Tag?",
+            "Koch<strong>st</strong> du jeden Tag?",
             "<mark>Koch bitte jeden Tag!</mark>",
             "<mark>Kocht bitte jeden Tag!</mark>",
             "<mark>Kochen Sie bitte jeden Tag!</mark>"
           ],
           [
-            "Putz**t** du das Bad?",
+            "Putz<strong>t</strong> du das Bad?",
             "<mark>Putz bitte das Bad!</mark>",
             "<mark>Putzt bitte das Bad!</mark>",
             "<mark>Putzen Sie bitte das Bad!</mark>"
           ],
           [
-            "Arbeite**st** du viel?",
+            "Arbeite<strong>st</strong> du viel?",
             "<mark>Arbeite weniger!</mark>",
             "<mark>Arbeitet weniger!</mark>",
             "<mark>Arbeiten Sie weniger!</mark>"
@@ -1548,13 +2841,13 @@
         "rows": [
           [
             "lesen",
-            "du l**ie**st",
+            "du l<strong>ie</strong>st",
             "<mark>Lies!</mark>",
             "<mark>Lest!</mark>"
           ],
           [
             "schlafen",
-            "du schl**ä**fst",
+            "du schl<strong>ä</strong>fst",
             "<mark>Schlaf!</mark> (bez Umlaut)",
             "<mark>Schlaft!</mark>"
           ]
@@ -1580,21 +2873,21 @@
         "rows": [
           [
             "<mark>einkaufen</mark>",
-            "Kauf bitte **ein**!",
-            "Kauft bitte **ein**!",
-            "Kaufen Sie bitte **ein**!"
+            "Kauf bitte <strong>ein</strong>!",
+            "Kauft bitte <strong>ein</strong>!",
+            "Kaufen Sie bitte <strong>ein</strong>!"
           ],
           [
             "<mark>aufstehen</mark>",
-            "Steh früh **auf**!",
-            "Steht früh **auf**!",
-            "Stehen Sie früh **auf**!"
+            "Steh früh <strong>auf</strong>!",
+            "Steht früh <strong>auf</strong>!",
+            "Stehen Sie früh <strong>auf</strong>!"
           ],
           [
             "<mark>aufräumen</mark>",
-            "Räum die Küche **auf**!",
-            "Räumt die Küche **auf**!",
-            "Räumen Sie die Küche **auf**!"
+            "Räum die Küche <strong>auf</strong>!",
+            "Räumt die Küche <strong>auf</strong>!",
+            "Räumen Sie die Küche <strong>auf</strong>!"
           ]
         ],
         "type": "table",
@@ -1775,6 +3068,101 @@
       }
     ],
     "vimeo_video_id": "811735825"
+  },
+  {
+    "id": "96b6bbbd-4d4f-40aa-a8c2-c987fb570d1a",
+    "title": "Test: Modul 1",
+    "order_index": 6,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 1",
+        "category": "schreiben"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Proveri svoje znanje iz **Modul 1**. Kviz sadrži razne tipove pitanja — quiz, tačno/netačno, upiši odgovor, sortiraj i spoji parove."
+      }
+    ],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "d7e77180-d45d-45a5-90ff-e3a2347bb2c9",
+    "title": "Vremena u nemačkom",
+    "order_index": 6,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "45932a3d-51ba-4722-80be-93776ae203a7",
+    "title": "Wechselpräpositionen",
+    "order_index": 6,
+    "sections": [],
+    "vimeo_video_id": "835432114"
+  },
+  {
+    "id": "078a1e93-7eab-4177-9940-211bec2e43db",
+    "title": "Nakon carskog reza (nach dem Kaiserschnitt)",
+    "order_index": 6,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "c8e78911-7808-47a7-a9e8-04d291f2098f",
+    "title": "Das eigene Profil schärfen",
+    "order_index": 7,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "f6c6d23d-1b15-414e-8f92-f5f25289486c",
+    "title": "Allgemeine Kommunikation",
+    "order_index": 7,
+    "sections": [],
+    "vimeo_video_id": "835549391"
+  },
+  {
+    "id": "e94301e1-ece4-483f-9f7f-ef12418f9874",
+    "title": "Vantelesna oplodnja (künstliche Befruchtung)",
+    "order_index": 7,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "a4e33c1d-5c73-4b57-9547-5c4d6ddd9bed",
+    "title": "Dokumentacija",
+    "order_index": 7,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "f7a166d6-0431-4af5-8c5b-af238d44ef6f",
+    "title": "Lesen/Schreiben A1/A2 (primeri zadataka i vežbanje)",
+    "order_index": 7,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "dfc56235-8269-4e0c-ab87-021cf292d031",
+    "title": "Organisation",
+    "order_index": 7,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "e04ef548-3e4f-4411-84eb-835f5afe76ab",
+    "title": "Obwohl vs. weil",
+    "order_index": 7,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "86d3662c-3cf3-474b-a871-74e8951b3a5c",
+    "title": "Zweiteilige Konnektoren",
+    "order_index": 7,
+    "sections": [],
+    "vimeo_video_id": "1157210482"
   },
   {
     "id": "6eda3f3e-fafd-4985-bdb7-65e1b692a646",
@@ -2267,6 +3655,465 @@
     "vimeo_video_id": "811728457"
   },
   {
+    "id": "34990b6d-690b-4fc9-985b-be31b3ee794b",
+    "title": "Dialoge führen",
+    "order_index": 7,
+    "sections": [],
+    "vimeo_video_id": "855262494"
+  },
+  {
+    "id": "8648a130-b1bd-4e1a-ad5b-68ff4f8c3f39",
+    "title": "Familie",
+    "order_index": 7,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 2",
+        "category": "grammatik"
+      },
+      {
+        "type": "video",
+        "vimeoId": "701357422"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "U ovoj lekciji naučićeš da kažeš ko su članovi tvoje **porodice** i da koristiš prisvojne zamenice **mein/meine** (moj/moja)."
+      },
+      {
+        "rows": [
+          [
+            "<mark>der Vater</mark>",
+            "otac"
+          ],
+          [
+            "<mark>die Mutter</mark>",
+            "majka"
+          ],
+          [
+            "<mark>der Sohn</mark>",
+            "sin"
+          ],
+          [
+            "<mark>die Tochter</mark>",
+            "ćerka"
+          ],
+          [
+            "<mark>der Bruder</mark>",
+            "brat"
+          ],
+          [
+            "<mark>die Schwester</mark>",
+            "sestra"
+          ],
+          [
+            "<mark>der Großvater / Opa</mark>",
+            "deda"
+          ],
+          [
+            "<mark>die Großmutter / Oma</mark>",
+            "baba"
+          ],
+          [
+            "<mark>der Onkel</mark>",
+            "ujak / stric / teča"
+          ],
+          [
+            "<mark>die Tante</mark>",
+            "tetka"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Porodica",
+          "Prevod"
+        ]
+      },
+      {
+        "type": "formula",
+        "content": "mein → muški rod (mein Vater, mein Bruder)\nmeine → ženski rod (meine Mutter, meine Schwester)\nmeine → množina (meine Eltern, meine Kinder)"
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "**Primer:** Sie ist **meine** Schwester. Sie heißt Ivana. Sie kommt aus Serbien."
+      },
+      {
+        "rows": [
+          [
+            "ja",
+            "<mark>mein</mark>",
+            "<mark>meine</mark>"
+          ],
+          [
+            "ti",
+            "dein",
+            "deine"
+          ],
+          [
+            "Vi",
+            "Ihr",
+            "Ihre"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Prisvojne zamenice",
+          "Muški",
+          "Ženski/Množina"
+        ]
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "mein (muški rod)",
+            "question": "1. Das ist ___ Vater."
+          },
+          {
+            "answer": "meine (ženski rod)",
+            "question": "2. Das ist ___ Schwester."
+          },
+          {
+            "answer": "meine (množina)",
+            "question": "3. Das sind ___ Eltern."
+          },
+          {
+            "answer": "Mein (muški rod)",
+            "question": "4. ___ Bruder heißt Marko."
+          }
+        ],
+        "title": "Mini vežba — mein ili meine?"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "otac",
+            "front": "der Vater"
+          },
+          {
+            "back": "majka",
+            "front": "die Mutter"
+          },
+          {
+            "back": "brat",
+            "front": "der Bruder"
+          },
+          {
+            "back": "sestra",
+            "front": "die Schwester"
+          },
+          {
+            "back": "roditelji",
+            "front": "die Eltern"
+          },
+          {
+            "back": "braća i sestre",
+            "front": "die Geschwister"
+          },
+          {
+            "back": "deda",
+            "front": "der Opa"
+          },
+          {
+            "back": "baba",
+            "front": "die Oma"
+          },
+          {
+            "back": "moj (muški rod)",
+            "front": "mein"
+          },
+          {
+            "back": "moja / moji (ženski/množina)",
+            "front": "meine"
+          }
+        ]
+      },
+      {
+        "rows": [
+          [
+            "die Familie",
+            "porodica"
+          ],
+          [
+            "der Vater",
+            "otac"
+          ],
+          [
+            "die Mutter",
+            "majka"
+          ],
+          [
+            "der Sohn",
+            "sin"
+          ],
+          [
+            "die Tochter",
+            "ćerka"
+          ],
+          [
+            "der Bruder",
+            "brat"
+          ],
+          [
+            "die Schwester",
+            "sestra"
+          ],
+          [
+            "die Eltern",
+            "roditelji"
+          ],
+          [
+            "die Kinder",
+            "deca"
+          ],
+          [
+            "die Geschwister",
+            "braća i sestre"
+          ]
+        ],
+        "type": "vocabulary"
+      }
+    ],
+    "vimeo_video_id": "701357422"
+  },
+  {
+    "id": "acdce999-6d11-41e9-beb1-8a3fab05e01d",
+    "title": "Lesen/Schreiben A2/B1 (primeri zadataka i vežbanje)",
+    "order_index": 8,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "7b2ed7d2-312d-41bf-b0bb-e07bfa887177",
+    "title": "Wie gehts?",
+    "order_index": 8,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 2",
+        "category": "grammatik"
+      },
+      {
+        "type": "video",
+        "vimeoId": "701379681"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "U ovoj lekciji naučićeš kako da pitaš nekoga **kako je** i kako da odgovoriš — formalno i neformalno."
+      },
+      {
+        "rows": [
+          [
+            "Wie geht es <mark>dir</mark>?",
+            "Wie geht es <mark>Ihnen</mark>?"
+          ],
+          [
+            "Danke, gut und <mark>dir</mark>?",
+            "Danke, gut und <mark>Ihnen</mark>?"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Neformalno",
+          "Formalno"
+        ]
+      },
+      {
+        "type": "formula",
+        "content": "Wie geht's? = Wie geht es? (skraćeno)"
+      },
+      {
+        "rows": [
+          [
+            "<mark>Sehr gut!</mark>",
+            "Veoma dobro!"
+          ],
+          [
+            "<mark>Gut, danke.</mark>",
+            "Dobro, hvala."
+          ],
+          [
+            "<mark>Na ja, es geht.</mark>",
+            "Onako."
+          ],
+          [
+            "<mark>Nicht so gut.</mark>",
+            "Ne tako dobro."
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Odgovor",
+          "Prevod"
+        ]
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Wie geht es dir? / Wie geht's?",
+            "question": "1. Kako si? (neformalno)"
+          },
+          {
+            "answer": "Wie geht es Ihnen?",
+            "question": "2. Kako ste? (formalno)"
+          },
+          {
+            "answer": "Gut, danke. Und dir?",
+            "question": "3. Dobro, hvala. A ti?"
+          },
+          {
+            "answer": "Nicht so gut.",
+            "question": "4. Ne tako dobro."
+          }
+        ],
+        "title": "Mini vežba — Kako se kaže...?"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "Kako si/ste?",
+            "front": "Wie geht's?"
+          },
+          {
+            "back": "Veoma dobro",
+            "front": "Sehr gut"
+          },
+          {
+            "back": "Dobro, hvala",
+            "front": "Gut, danke"
+          },
+          {
+            "back": "Ne tako dobro",
+            "front": "Nicht so gut"
+          },
+          {
+            "back": "Onako",
+            "front": "Na ja, es geht"
+          },
+          {
+            "back": "tebi",
+            "front": "dir"
+          },
+          {
+            "back": "Vama",
+            "front": "Ihnen"
+          },
+          {
+            "back": "ići",
+            "front": "gehen"
+          }
+        ]
+      },
+      {
+        "rows": [
+          [
+            "Wie geht's?",
+            "Kako si/ste?"
+          ],
+          [
+            "Sehr gut",
+            "Veoma dobro"
+          ],
+          [
+            "Gut, danke",
+            "Dobro, hvala"
+          ],
+          [
+            "Nicht so gut",
+            "Ne tako dobro"
+          ],
+          [
+            "Na ja, es geht",
+            "Onako"
+          ],
+          [
+            "dir",
+            "tebi"
+          ],
+          [
+            "Ihnen",
+            "Vama"
+          ],
+          [
+            "gehen",
+            "ići"
+          ],
+          [
+            "danke",
+            "hvala"
+          ],
+          [
+            "und",
+            "i / a"
+          ]
+        ],
+        "type": "vocabulary"
+      }
+    ],
+    "vimeo_video_id": "701379681"
+  },
+  {
+    "id": "90dac693-4bc7-4355-ad03-76f7f1859064",
+    "title": "Falls Sätze",
+    "order_index": 8,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "741904d1-bbde-4337-b7a6-703c02633a58",
+    "title": "Essgewohnheiten",
+    "order_index": 8,
+    "sections": [],
+    "vimeo_video_id": "838911857"
+  },
+  {
+    "id": "7f15bb9a-896f-45ec-8183-025b2b893cde",
+    "title": "Modalne rečce",
+    "order_index": 8,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "8efaf48d-3f2d-46d6-9637-e1f193893780",
+    "title": "Das Leben neu gestalten – Vielfalt B2.1",
+    "order_index": 8,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "5b9eb45c-0124-4e61-8978-3270dcccb60f",
+    "title": "Sätze formulieren",
+    "order_index": 8,
+    "sections": [],
+    "vimeo_video_id": "857457127"
+  },
+  {
+    "id": "80755601-047c-47b0-b790-360aac4f06f5",
+    "title": "Profis gesucht: Krankenpfleger",
+    "order_index": 8,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "a5da43ac-fe76-49b2-9012-23403d6f9f4c",
+    "title": "Mentalität und Stereotype",
+    "order_index": 8,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "d359a117-b910-4625-90ba-26ed8c57ae4a",
+    "title": "Bebi oprema (Babyausstattung)",
+    "order_index": 8,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
     "id": "5d16dc27-979d-469e-8434-a52b4b8d4bfd",
     "title": "Wien",
     "order_index": 8,
@@ -2640,6 +4487,189 @@
     "vimeo_video_id": "811721816"
   },
   {
+    "id": "950d5cf1-b741-452e-bfdd-679b399ec327",
+    "title": "Zahlen",
+    "order_index": 9,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 2",
+        "category": "grammatik"
+      },
+      {
+        "type": "video",
+        "vimeoId": "918432450"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "U ovoj lekciji naučićeš **brojeve od 1 do 100** na nemačkom i kako da kažeš svoj broj telefona."
+      },
+      {
+        "rows": [
+          [
+            "1-5",
+            "eins, zwei, drei, vier, fünf"
+          ],
+          [
+            "6-10",
+            "sechs, sieben, acht, neun, zehn"
+          ],
+          [
+            "11-12",
+            "elf, zwölf"
+          ],
+          [
+            "13-19",
+            "drei<mark>zehn</mark>, vier<mark>zehn</mark>, fünf<mark>zehn</mark>..."
+          ],
+          [
+            "20, 30, 40...",
+            "zwan<mark>zig</mark>, drei<mark>ßig</mark>, vier<mark>zig</mark>..."
+          ],
+          [
+            "100",
+            "hundert"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Broj",
+          "Nemački"
+        ]
+      },
+      {
+        "type": "formula",
+        "content": "Brojevi 21-99: jedinica + und + desetica\n21 = ein·und·zwanzig\n35 = fünf·und·dreißig\n99 = neun·und·neunzig"
+      },
+      {
+        "type": "text",
+        "style": "uebung",
+        "content": "**Izgovor:** z = c · chs = ks · ig = ih (na kraju reči)\n\n**Pazi:** drei**ßig** (30) ima ß, ostale desetice imaju -zig"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "27",
+            "question": "1. siebenundzwanzig = ?"
+          },
+          {
+            "answer": "53",
+            "question": "2. dreiundfünfzig = ?"
+          },
+          {
+            "answer": "81",
+            "question": "3. einundachtzig = ?"
+          },
+          {
+            "answer": "96",
+            "question": "4. sechsundneunzig = ?"
+          }
+        ],
+        "title": "Mini vežba — Napiši broj"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "20",
+            "front": "zwanzig"
+          },
+          {
+            "back": "30",
+            "front": "dreißig"
+          },
+          {
+            "back": "40",
+            "front": "vierzig"
+          },
+          {
+            "back": "50",
+            "front": "fünfzig"
+          },
+          {
+            "back": "60",
+            "front": "sechzig"
+          },
+          {
+            "back": "70",
+            "front": "siebzig"
+          },
+          {
+            "back": "80",
+            "front": "achtzig"
+          },
+          {
+            "back": "90",
+            "front": "neunzig"
+          },
+          {
+            "back": "100",
+            "front": "hundert"
+          },
+          {
+            "back": "broj telefona",
+            "front": "die Telefonnummer"
+          }
+        ]
+      },
+      {
+        "rows": [
+          [
+            "die Telefonnummer",
+            "broj telefona"
+          ],
+          [
+            "die Hausnummer",
+            "kućni broj"
+          ],
+          [
+            "die Postleitzahl",
+            "poštanski broj"
+          ],
+          [
+            "die Rechnung",
+            "račun"
+          ],
+          [
+            "null",
+            "nula"
+          ],
+          [
+            "zwanzig",
+            "20"
+          ],
+          [
+            "dreißig",
+            "30"
+          ],
+          [
+            "hundert",
+            "100"
+          ],
+          [
+            "Wie ist deine Nummer?",
+            "Koji je tvoj broj?"
+          ],
+          [
+            "Meine Nummer ist...",
+            "Moj broj je..."
+          ]
+        ],
+        "type": "vocabulary"
+      }
+    ],
+    "vimeo_video_id": "701387666"
+  },
+  {
+    "id": "e843b36b-83b1-4153-85ce-9ea9136ea9c0",
+    "title": "Dunkelrestaurant",
+    "order_index": 9,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
     "id": "3d0def1e-324e-414f-9510-48ab31d6d953",
     "title": "Test: Modul 2",
     "order_index": 9,
@@ -2651,6 +4681,308 @@
       }
     ],
     "vimeo_video_id": null
+  },
+  {
+    "id": "87d135c7-fb0c-499c-9fb2-75f2347592c0",
+    "title": "Probleme im Büro",
+    "order_index": 9,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "e5548965-ce30-4cc1-99d4-b4dd9962ae80",
+    "title": "Nivoi testa i koji nivo mi je potreban?",
+    "order_index": 9,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "d73589b5-666f-41a9-8f4f-f4c5edebe3cc",
+    "title": "Erfolg und Scheitern im Beruf",
+    "order_index": 9,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "cff00f70-319f-472c-a52b-9b44e2e7a4b1",
+    "title": "Im Restaurant",
+    "order_index": 9,
+    "sections": [],
+    "vimeo_video_id": "840896492"
+  },
+  {
+    "id": "60c22cd1-88a9-47ec-b1fa-7f86a97a8bfb",
+    "title": "Objašnjavanje pacijentima",
+    "order_index": 9,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "33288653-3439-4286-9a48-d02895358a89",
+    "title": "Freizeit",
+    "order_index": 9,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "97068e81-a959-4fa0-9b59-48c817a21365",
+    "title": "Blutgruppen – wichtige Entdeckung in der Medizin",
+    "order_index": 9,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "9378d0f2-fac7-45ed-a5aa-22f911c191dc",
+    "title": "Bebina rutina (die Babyroutine)",
+    "order_index": 9,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "d4a1f6c2-c4c8-4976-b4e1-ca9f6ec2885a",
+    "title": "Kupovina bebi odeće (Babykleidung kaufen)",
+    "order_index": 10,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "7e1b1e74-bd32-4e73-922f-ed0b569f0187",
+    "title": "Opšte informacije i opis zadataka",
+    "order_index": 10,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "38072062-8f66-4eb3-8f7f-1ee1d7d2b385",
+    "title": "Pasiv prezenta sa modalnim glagolima",
+    "order_index": 10,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "3190eac0-4078-4c6c-8ad3-816b45e09297",
+    "title": "Feste und Bräuche",
+    "order_index": 10,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "a2a7d8ee-c7fa-440a-bb24-6aa2109f64e1",
+    "title": "Auf dem Flohmarkt",
+    "order_index": 10,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "57a9a892-e408-4ea2-90aa-b9255e12ac33",
+    "title": "Je…desto/umso",
+    "order_index": 10,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "0295261d-d411-435d-8de6-c679af296519",
+    "title": "Prezent",
+    "order_index": 10,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 2",
+        "category": "grammatik"
+      },
+      {
+        "type": "video",
+        "vimeoId": "701396244"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "U ovoj lekciji naučićeš kompletnu **konjugaciju u prezentu** za sva lica — ich, du, er/sie/es, wir, ihr, Sie/sie."
+      },
+      {
+        "type": "formula",
+        "content": "Infinitiv - EN + nastavak:\nich → -e\ndu → -st\ner/sie/es → -t\nwir → -en\nihr → -t\nSie/sie → -en"
+      },
+      {
+        "rows": [
+          [
+            "<mark>ich</mark>",
+            "komme",
+            "schreibe",
+            "bin"
+          ],
+          [
+            "<mark>du</mark>",
+            "kommst",
+            "schreibst",
+            "bist"
+          ],
+          [
+            "<mark>er/sie/es</mark>",
+            "kommt",
+            "schreibt",
+            "ist"
+          ],
+          [
+            "<mark>wir</mark>",
+            "kommen",
+            "schreiben",
+            "sind"
+          ],
+          [
+            "<mark>ihr</mark>",
+            "kommt",
+            "schreibt",
+            "seid"
+          ],
+          [
+            "<mark>Sie/sie</mark>",
+            "kommen",
+            "schreiben",
+            "sind"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "",
+          "kommen",
+          "schreiben",
+          "sein"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "uebung",
+        "content": "**Pazi:** Glagol **sein** (biti) je potpuno nepravilan.\n\n**er/sie/es** = on/ona/ono — koristi se za 3. lice jednine.\n**wir** = mi · **ihr** = vi (množina neformalnog du) · **sie** = oni/one"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "kommt",
+            "question": "1. Er ___ aus Italien. (kommen)"
+          },
+          {
+            "answer": "sprechen",
+            "question": "2. Wir ___ Deutsch. (sprechen)"
+          },
+          {
+            "answer": "Seid",
+            "question": "3. ___ ihr aus Serbien? (sein)"
+          },
+          {
+            "answer": "wohnen / wohnt",
+            "question": "4. Sie ___ in Berlin. (wohnen)"
+          }
+        ],
+        "title": "Mini vežba — Konjuguj glagol"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "živeti",
+            "front": "leben"
+          },
+          {
+            "back": "stanovati",
+            "front": "wohnen"
+          },
+          {
+            "back": "raditi",
+            "front": "arbeiten"
+          },
+          {
+            "back": "učiti",
+            "front": "lernen"
+          },
+          {
+            "back": "igrati",
+            "front": "spielen"
+          },
+          {
+            "back": "praviti / raditi",
+            "front": "machen"
+          },
+          {
+            "back": "piti",
+            "front": "trinken"
+          },
+          {
+            "back": "jesti",
+            "front": "essen"
+          },
+          {
+            "back": "čitati",
+            "front": "lesen"
+          },
+          {
+            "back": "spavati",
+            "front": "schlafen"
+          }
+        ]
+      },
+      {
+        "rows": [
+          [
+            "leben",
+            "živeti"
+          ],
+          [
+            "wohnen",
+            "stanovati"
+          ],
+          [
+            "arbeiten",
+            "raditi"
+          ],
+          [
+            "lernen",
+            "učiti"
+          ],
+          [
+            "spielen",
+            "igrati"
+          ],
+          [
+            "machen",
+            "praviti / raditi"
+          ],
+          [
+            "er/sie/es",
+            "on/ona/ono"
+          ],
+          [
+            "wir",
+            "mi"
+          ],
+          [
+            "ihr",
+            "vi"
+          ],
+          [
+            "sie (mn.)",
+            "oni/one"
+          ]
+        ],
+        "type": "vocabulary"
+      }
+    ],
+    "vimeo_video_id": "701396244"
+  },
+  {
+    "id": "01307cd4-b374-44d3-8278-24e2a6ec2141",
+    "title": "Erwartungen in der Familie B2.1",
+    "order_index": 10,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "d40d4718-1d82-4321-b8c2-888bd9ade1a5",
+    "title": "Indefinitpronomen im Nominativ und Akkusativ",
+    "order_index": 10,
+    "sections": [],
+    "vimeo_video_id": "842866288"
   },
   {
     "id": "c7131fca-9a8b-44a0-b6fc-8f7b1f46b892",
@@ -2680,37 +5012,31 @@
         "rows": [
           [
             "<mark>das Haar</mark>",
-            "n",
             "die Haare",
             "kosa"
           ],
           [
             "<mark>das Auge</mark>",
-            "n",
             "die Augen",
             "oko"
           ],
           [
             "<mark>das Ohr</mark>",
-            "n",
             "die Ohren",
             "uvo"
           ],
           [
             "<mark>die Nase</mark>",
-            "f",
             "die Nasen",
             "nos"
           ],
           [
             "<mark>die Lippe</mark>",
-            "f",
             "die Lippen",
             "usna"
           ],
           [
             "<mark>die Schulter</mark>",
-            "f",
             "die Schultern",
             "rame"
           ]
@@ -2718,7 +5044,6 @@
         "type": "table",
         "headers": [
           "Nemački",
-          "Rod",
           "Množina",
           "Prevod"
         ]
@@ -2732,55 +5057,46 @@
         "rows": [
           [
             "<mark>der Arm</mark>",
-            "m",
             "die Arme",
             "ruka (cela)"
           ],
           [
             "<mark>die Hand</mark>",
-            "f",
             "die Hände",
             "šaka"
           ],
           [
             "<mark>die Brust</mark>",
-            "f",
             "die Brüste",
             "grudi"
           ],
           [
             "<mark>der Bauch</mark>",
-            "m",
             "die Bäuche",
             "stomak"
           ],
           [
             "<mark>das Bein</mark>",
-            "n",
             "die Beine",
             "noga"
           ],
           [
             "<mark>das Knie</mark>",
-            "n",
             "die Knie",
             "koleno"
           ],
           [
             "<mark>der Fuß</mark>",
-            "m",
             "die Füße",
             "stopalo"
           ],
           [
             "<mark>der Kopf</mark>",
-            "m",
             "die Köpfe",
             "glava"
           ],
           [
             "<mark>der Körper</mark>",
-            "m",
             "die Körper",
             "telo"
           ]
@@ -2788,7 +5104,6 @@
         "type": "table",
         "headers": [
           "Nemački",
-          "Rod",
           "Množina",
           "Prevod"
         ]
@@ -2805,20 +5120,20 @@
       {
         "rows": [
           [
-            "**Sein** Kopf tut weh.",
-            "**Ihr** Kopf tut weh."
+            "<strong>Sein</strong> Kopf tut weh.",
+            "<strong>Ihr</strong> Kopf tut weh."
           ],
           [
-            "**Seine** Hand tut weh.",
-            "**Ihre** Hand tut weh."
+            "<strong>Seine</strong> Hand tut weh.",
+            "<strong>Ihre</strong> Hand tut weh."
           ],
           [
-            "**Sein** Knie tut weh.",
-            "**Ihr** Knie tut weh."
+            "<strong>Sein</strong> Knie tut weh.",
+            "<strong>Ihr</strong> Knie tut weh."
           ],
           [
-            "**Seine** Augen tun weh.",
-            "**Ihre** Augen tun weh."
+            "<strong>Seine</strong> Augen tun weh.",
+            "<strong>Ihre</strong> Augen tun weh."
           ]
         ],
         "type": "table",
@@ -2935,11 +5250,11 @@
             "front": "der Körper"
           },
           {
-            "back": "boli (jednina)",
+            "back": "boli",
             "front": "tut weh"
           },
           {
-            "back": "bole (množina)",
+            "back": "bole",
             "front": "tun weh"
           },
           {
@@ -3031,6 +5346,13 @@
       }
     ],
     "vimeo_video_id": "814234811"
+  },
+  {
+    "id": "f31c4914-b8f8-4eca-99dc-86eae44c21ae",
+    "title": "Predstavljanje pacijenata – gotove rečenice i vežbe",
+    "order_index": 10,
+    "sections": [],
+    "vimeo_video_id": null
   },
   {
     "id": "e544f2ca-e260-4e40-94ed-f9b7a94c3833",
@@ -3146,14 +5468,14 @@
       {
         "rows": [
           [
-            "**N.**",
+            "<strong>N.</strong>",
             "<mark>unser</mark>",
             "<mark>unsere</mark>",
             "<mark>unser</mark>",
             "<mark>unsere</mark>"
           ],
           [
-            "**A.**",
+            "<strong>A.</strong>",
             "<mark>unseren</mark>",
             "<mark>unsere</mark>",
             "<mark>unser</mark>",
@@ -3182,14 +5504,14 @@
       {
         "rows": [
           [
-            "**N.**",
+            "<strong>N.</strong>",
             "<mark>euer</mark>",
             "<mark>eure</mark>",
             "<mark>euer</mark>",
             "<mark>eure</mark>"
           ],
           [
-            "**A.**",
+            "<strong>A.</strong>",
             "<mark>euren</mark>",
             "<mark>eure</mark>",
             "<mark>euer</mark>",
@@ -3223,16 +5545,16 @@
       {
         "rows": [
           [
-            "Das ist **sein** Schrank.",
-            "Ich sehe **seinen** Schrank."
+            "Das ist <strong>sein</strong> Schrank.",
+            "Ich sehe <strong>seinen</strong> Schrank."
           ],
           [
-            "Das ist **seine** Lampe.",
-            "Ich sehe **seine** Lampe."
+            "Das ist <strong>seine</strong> Lampe.",
+            "Ich sehe <strong>seine</strong> Lampe."
           ],
           [
-            "Das ist **sein** Auto.",
-            "Ich sehe **sein** Auto."
+            "Das ist <strong>sein</strong> Auto.",
+            "Ich sehe <strong>sein</strong> Auto."
           ]
         ],
         "type": "table",
@@ -3300,7 +5622,7 @@
             "front": "Ihr / Ihre"
           },
           {
-            "back": "samo maskulin se menja u akuzativu",
+            "back": "moj → mog (u akuzativu, muški rod)",
             "front": "mein → meinen (A.)"
           },
           {
@@ -3412,6 +5734,325 @@
       }
     ],
     "vimeo_video_id": "814330641"
+  },
+  {
+    "id": "6f5ea33e-263f-48a7-88f5-70a80edac572",
+    "title": "Genitiv",
+    "order_index": 11,
+    "sections": [],
+    "vimeo_video_id": "1014399156"
+  },
+  {
+    "id": "52f4aa71-07e3-4aa3-b047-f6fca97f9b7f",
+    "title": "Silvester und Neujahrsvorsätze",
+    "order_index": 11,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "3add79a6-54e9-4af3-a4da-656964643f6f",
+    "title": "Arbeitsklima",
+    "order_index": 11,
+    "sections": [],
+    "vimeo_video_id": "843926423"
+  },
+  {
+    "id": "380670cf-9ca7-41eb-97c7-9c24103e57c8",
+    "title": "Redosled i teme",
+    "order_index": 11,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "260ad24d-73b8-4218-95aa-db866d8091a0",
+    "title": "Babys erster Arztbesuch",
+    "order_index": 11,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "25da92fc-92cb-42c6-a67c-b379f0e9d725",
+    "title": "Predstavljanje pacijenta",
+    "order_index": 11,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "b7d98f61-b7a6-4064-9a3b-5b9f1e233057",
+    "title": "Test: Modul 2",
+    "order_index": 11,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 2",
+        "category": "schreiben"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Proveri svoje znanje iz **Modul 2**. Kviz sadrži razne tipove pitanja — quiz, tačno/netačno, upiši odgovor, sortiraj i spoji parove."
+      }
+    ],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "e84ac308-8e7c-4cff-9a21-e39df2e72785",
+    "title": "EXTRA Prüfung (Modul 1)",
+    "order_index": 11,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "7b1f052d-c9f3-4e6a-be74-9dcdb943a970",
+    "title": "Relativne rečenice sa predlozima",
+    "order_index": 11,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "3c2cc3c2-8557-4558-9d8b-df01da05386f",
+    "title": "Deklinacija prideva",
+    "order_index": 11,
+    "sections": [],
+    "vimeo_video_id": "858916151"
+  },
+  {
+    "id": "ab96d5da-9217-406c-8af0-04327e03faf8",
+    "title": "Pasiv",
+    "order_index": 12,
+    "sections": [],
+    "vimeo_video_id": "861148151"
+  },
+  {
+    "id": "cad5b649-b15b-44f6-ae0b-fd48f1a49845",
+    "title": "EXTRA Prüfung (Modul 2)",
+    "order_index": 12,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "d8e37403-0718-43dd-b7b2-8f51cb1bcebe",
+    "title": "Essen",
+    "order_index": 12,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 3",
+        "category": "grammatik"
+      },
+      {
+        "type": "video",
+        "vimeoId": "701607901"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "U ovoj lekciji naučićeš nazive za **hranu i piće** na nemačkom i kako funkcionišu **članovi** (der, die, das) i **negacija** (kein/keine)."
+      },
+      {
+        "rows": [
+          [
+            "Kuchen",
+            "<mark>der</mark>",
+            "kolač"
+          ],
+          [
+            "Fisch",
+            "<mark>der</mark>",
+            "riba"
+          ],
+          [
+            "Apfel",
+            "<mark>der</mark>",
+            "jabuka"
+          ],
+          [
+            "Milch",
+            "<mark>die</mark>",
+            "mleko"
+          ],
+          [
+            "Butter",
+            "<mark>die</mark>",
+            "puter"
+          ],
+          [
+            "Banane",
+            "<mark>die</mark>",
+            "banana"
+          ],
+          [
+            "Orange",
+            "<mark>die</mark>",
+            "pomorandža"
+          ],
+          [
+            "Ei",
+            "<mark>das</mark>",
+            "jaje"
+          ],
+          [
+            "Brot",
+            "<mark>das</mark>",
+            "hleb"
+          ],
+          [
+            "Wasser",
+            "<mark>das</mark>",
+            "voda"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Hrana",
+          "Član",
+          "Prevod"
+        ]
+      },
+      {
+        "type": "formula",
+        "content": "der → ein / kein\ndie → eine / keine\ndas → ein / kein\nmnožina → — / keine"
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "**Primer:**\nDas ist **ein** Kuchen. → Das ist **kein** Kuchen. Das ist **ein** Apfel.\nDas ist **eine** Banane. → Das ist **keine** Banane. Das ist **eine** Orange."
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "ein (der Apfel → ein)",
+            "question": "1. Das ist ___ Apfel. (jedan)"
+          },
+          {
+            "answer": "eine (die Banane → eine)",
+            "question": "2. Das ist ___ Banane. (jedna)"
+          },
+          {
+            "answer": "kein (das Ei → kein)",
+            "question": "3. Das ist ___ Ei. (nijedno)"
+          },
+          {
+            "answer": "keine (množina → keine)",
+            "question": "4. Das sind ___ Tomaten. (nijedne)"
+          }
+        ],
+        "title": "Mini vežba — ein, eine ili kein, keine?"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "mleko",
+            "front": "die Milch"
+          },
+          {
+            "back": "šećer",
+            "front": "der Zucker"
+          },
+          {
+            "back": "hleb",
+            "front": "das Brot"
+          },
+          {
+            "back": "sir",
+            "front": "der Käse"
+          },
+          {
+            "back": "jaje",
+            "front": "das Ei"
+          },
+          {
+            "back": "čokolada",
+            "front": "die Schokolade"
+          },
+          {
+            "back": "jabuka",
+            "front": "der Apfel"
+          },
+          {
+            "back": "paradajz",
+            "front": "die Tomate"
+          },
+          {
+            "back": "voda",
+            "front": "das Wasser"
+          },
+          {
+            "back": "kafa",
+            "front": "der Kaffee"
+          }
+        ]
+      },
+      {
+        "rows": [
+          [
+            "die Milch",
+            "mleko"
+          ],
+          [
+            "der Zucker",
+            "šećer"
+          ],
+          [
+            "das Brot",
+            "hleb"
+          ],
+          [
+            "der Käse",
+            "sir"
+          ],
+          [
+            "das Ei",
+            "jaje"
+          ],
+          [
+            "die Schokolade",
+            "čokolada"
+          ],
+          [
+            "der Apfel",
+            "jabuka"
+          ],
+          [
+            "die Tomate",
+            "paradajz"
+          ],
+          [
+            "das Wasser",
+            "voda"
+          ],
+          [
+            "der Kaffee",
+            "kafa"
+          ]
+        ],
+        "type": "vocabulary"
+      }
+    ],
+    "vimeo_video_id": "701607901"
+  },
+  {
+    "id": "24165a28-76f0-48b7-a8f6-1254a607e24e",
+    "title": "Freundschaften im Job – Leseverstehen und Wortschatz",
+    "order_index": 12,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "20bc2ad4-5a26-4361-aba8-3796a4ffb2a1",
+    "title": "Arbeit und Beruf – Elternzeit",
+    "order_index": 12,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "e73812a2-4647-4c51-a335-d5284b41446b",
+    "title": "Lese und Hörverstehen – B1",
+    "order_index": 12,
+    "sections": [],
+    "vimeo_video_id": null
   },
   {
     "id": "92b2f71e-0e7c-4288-ac39-6b1d2da1b39a",
@@ -3710,6 +6351,34 @@
     "vimeo_video_id": "815857405"
   },
   {
+    "id": "c8cbcb15-13e7-4901-8831-8b2ea75a75c4",
+    "title": "Zanimanja",
+    "order_index": 12,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "14410938-6a13-4a45-a925-eca403f88167",
+    "title": "Mali dijalog sa pedijatrom (Kinderarzt)",
+    "order_index": 12,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "6701affe-db0b-4fc1-8af5-042601f63794",
+    "title": "Saveti za kraj",
+    "order_index": 12,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "1ff5ea47-94c6-4910-bb43-ae8df2b7ec01",
+    "title": "Bewerbungen",
+    "order_index": 12,
+    "sections": [],
+    "vimeo_video_id": "845810637"
+  },
+  {
     "id": "4e7547c8-bf29-4258-9985-66b48c47806e",
     "title": "Test: Modul 3",
     "order_index": 13,
@@ -3720,6 +6389,235 @@
         "category": "grammatik"
       }
     ],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "d6190608-9055-473c-920b-b543f0e10675",
+    "title": "Weil, denn, dann",
+    "order_index": 13,
+    "sections": [],
+    "vimeo_video_id": "846973209"
+  },
+  {
+    "id": "ec3d264f-7f41-4968-a75b-61fa5c30f148",
+    "title": "Sprechen A1, Aufgabe 1",
+    "order_index": 13,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "51bc6fbb-2771-4533-9028-869c64ef93d2",
+    "title": "EXTRA Video",
+    "order_index": 13,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "e94dd423-62d5-4444-944b-09c40d9e2dad",
+    "title": "Preise",
+    "order_index": 13,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 3",
+        "category": "grammatik"
+      },
+      {
+        "type": "video",
+        "vimeoId": "919493972"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "U ovoj lekciji naučićeš kako da pitaš za **cenu** i razumeš cene u supermarketu — količine, pakovanja i decimale."
+      },
+      {
+        "type": "formula",
+        "content": "Was kostet...? (jednina)\nWas kosten...? (množina)\n\n2,49€ = zwei Komma neun und vierzig Euro"
+      },
+      {
+        "rows": [
+          [
+            "<mark>der Becher</mark>",
+            "čašica / tegla"
+          ],
+          [
+            "<mark>das Glas</mark>",
+            "staklo / tegla"
+          ],
+          [
+            "<mark>die Dose</mark>",
+            "konzerva"
+          ],
+          [
+            "<mark>die Flasche</mark>",
+            "flaša"
+          ],
+          [
+            "<mark>die Packung</mark>",
+            "pakovanje"
+          ],
+          [
+            "<mark>das Gramm</mark>",
+            "gram"
+          ],
+          [
+            "<mark>das Kilo</mark>",
+            "kilogram"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Pakovanje",
+          "Prevod"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "**Primer:**\nWas kostet ein Kilo Hackfleisch? — Ein Kilo Hackfleisch kostet 6,99€.\nWas kosten 100 Gramm Käse? — 100 Gramm Käse kosten 1,49€."
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "null Komma fünf und siebzig Euro",
+            "question": "1. 0,75€ = ?"
+          },
+          {
+            "answer": "drei Komma neun und vierzig Euro",
+            "question": "2. 3,49€ = ?"
+          },
+          {
+            "answer": "kostet",
+            "question": "3. Was ___ eine Flasche Milch? (koštati)"
+          },
+          {
+            "answer": "kosten",
+            "question": "4. Was ___ 200 Gramm Käse? (koštati)"
+          }
+        ],
+        "title": "Mini vežba — Pročitaj cenu"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "cena",
+            "front": "der Preis"
+          },
+          {
+            "back": "koštati",
+            "front": "kosten"
+          },
+          {
+            "back": "flaša",
+            "front": "die Flasche"
+          },
+          {
+            "back": "konzerva",
+            "front": "die Dose"
+          },
+          {
+            "back": "pakovanje",
+            "front": "die Packung"
+          },
+          {
+            "back": "kilogram",
+            "front": "das Kilo"
+          },
+          {
+            "back": "gram",
+            "front": "das Gramm"
+          },
+          {
+            "back": "Koliko košta...?",
+            "front": "Was kostet...?"
+          },
+          {
+            "back": "evro",
+            "front": "der Euro"
+          },
+          {
+            "back": "jeftino / skupo",
+            "front": "billig / teuer"
+          }
+        ]
+      },
+      {
+        "rows": [
+          [
+            "der Preis",
+            "cena"
+          ],
+          [
+            "kosten",
+            "koštati"
+          ],
+          [
+            "die Flasche",
+            "flaša"
+          ],
+          [
+            "die Dose",
+            "konzerva"
+          ],
+          [
+            "die Packung",
+            "pakovanje"
+          ],
+          [
+            "das Kilo",
+            "kilogram"
+          ],
+          [
+            "Was kostet...?",
+            "Koliko košta...?"
+          ],
+          [
+            "der Euro",
+            "evro"
+          ],
+          [
+            "billig",
+            "jeftino"
+          ],
+          [
+            "teuer",
+            "skupo"
+          ]
+        ],
+        "type": "vocabulary"
+      }
+    ],
+    "vimeo_video_id": "701615343"
+  },
+  {
+    "id": "791c6765-1300-41e6-95e1-c9be6bb4a130",
+    "title": "Deklinacija prideva – Wiederholung",
+    "order_index": 13,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "0da24af8-40b5-4afe-b3b9-0cb64951fccd",
+    "title": "Duzen vs. Siezen – Prüfung B1 – Leseverstehen",
+    "order_index": 13,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "beaa7a46-0631-4fb8-8427-497b25607121",
+    "title": "Schreiben Prüfung B1",
+    "order_index": 13,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "f40d65d5-7bfb-4c99-9062-cc243c9fd065",
+    "title": "Indirektni govor",
+    "order_index": 13,
+    "sections": [],
     "vimeo_video_id": null
   },
   {
@@ -3745,36 +6643,8 @@
         "type": "flashcard",
         "items": [
           {
-            "back": "glava",
-            "front": "der Kopf"
-          },
-          {
-            "back": "oko",
-            "front": "das Auge, -n"
-          },
-          {
-            "back": "uvo",
-            "front": "das Ohr, -en"
-          },
-          {
             "back": "nos",
             "front": "die Nase"
-          },
-          {
-            "back": "ruka",
-            "front": "der Arm, -e"
-          },
-          {
-            "back": "šaka",
-            "front": "die Hand, Hände"
-          },
-          {
-            "back": "noga",
-            "front": "das Bein, -e"
-          },
-          {
-            "back": "stopalo",
-            "front": "der Fuß, Füße"
           },
           {
             "back": "stomak",
@@ -3785,44 +6655,8 @@
             "front": "das Knie"
           },
           {
-            "back": "boli",
-            "front": "tut weh"
-          },
-          {
-            "back": "sa",
-            "front": "mit + Dativ"
-          },
-          {
-            "back": "ka, do",
-            "front": "zu + Dativ"
-          },
-          {
             "back": "u (lokacija)",
             "front": "in + Dativ"
-          },
-          {
-            "back": "ispred",
-            "front": "vor"
-          },
-          {
-            "back": "iza",
-            "front": "hinter"
-          },
-          {
-            "back": "iznad",
-            "front": "über"
-          },
-          {
-            "back": "ispod",
-            "front": "unter"
-          },
-          {
-            "back": "pored",
-            "front": "neben"
-          },
-          {
-            "back": "između",
-            "front": "zwischen"
           },
           {
             "back": "karta za prevoz",
@@ -3839,10 +6673,6 @@
           {
             "back": "u jednom pravcu",
             "front": "einfach"
-          },
-          {
-            "back": "povratna",
-            "front": "hin und zurück"
           }
         ]
       },
@@ -3947,6 +6777,262 @@
     "vimeo_video_id": "817976036"
   },
   {
+    "id": "513f7163-02e7-43fc-8c63-6e0510db5406",
+    "title": "Arbeitszeit, Urlaubs- und Feiertage",
+    "order_index": 14,
+    "sections": [],
+    "vimeo_video_id": "847080377"
+  },
+  {
+    "id": "bd2278c7-8186-4d85-99d3-bde19597f815",
+    "title": "Über das Internet",
+    "order_index": 14,
+    "sections": [],
+    "vimeo_video_id": "1177242845"
+  },
+  {
+    "id": "827d8a7c-b1db-4d18-8c9d-bc245ea0aa4a",
+    "title": "Sprechblockaden? Nur Mut!",
+    "order_index": 14,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "095e51e4-a8e4-4211-8d66-401f0f1b7d6d",
+    "title": "Video Duzen vs. Siezen",
+    "order_index": 14,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "141318f2-9873-48e5-9c8b-b4b28456ba6a",
+    "title": "Extrem unter Kontrolle – Lena auf Expedition",
+    "order_index": 14,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "bcac28e9-e4a0-466d-940c-a78adb3b28b4",
+    "title": "Deklinacija prideva",
+    "order_index": 14,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "ab36e91f-294d-4300-9fa1-6119ed094bee",
+    "title": "Sprechen A1, Aufgabe 2",
+    "order_index": 14,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "c8754f04-2dc3-4ae2-80fa-610706516d62",
+    "title": "Im Restaurant",
+    "order_index": 14,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 3",
+        "category": "hoeren"
+      },
+      {
+        "type": "video",
+        "vimeoId": "701624181"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "U ovoj lekciji naučićeš kako da razgovaraš **u restoranu** — naručiš hranu, kažeš šta voliš da jedeš i pitaš druge o omiljenoj hrani."
+      },
+      {
+        "type": "formula",
+        "content": "Ich esse gern... = Volim da jedem...\nIch trinke gern... = Volim da pijem...\nMein Lieblingsessen ist... = Moja omiljena hrana je..."
+      },
+      {
+        "rows": [
+          [
+            "Was isst du <mark>gern</mark>?",
+            "Šta voliš da jedeš?"
+          ],
+          [
+            "Was trinkst du <mark>gern</mark>?",
+            "Šta voliš da piješ?"
+          ],
+          [
+            "Ich esse gern Fisch.",
+            "Volim da jedem ribu."
+          ],
+          [
+            "Nein, nicht so gern.",
+            "Ne, ne baš."
+          ],
+          [
+            "Das schmeckt sehr gut!",
+            "To je veoma ukusno!"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Nemački",
+          "Prevod"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "uebung",
+        "content": "**Glagol essen** ima promenu u 2. i 3. licu:\nich esse · du **i**sst · er/sie **i**sst · wir essen"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Was isst du gern?",
+            "question": "1. Šta voliš da jedeš? (neformalno)"
+          },
+          {
+            "answer": "Was trinken Sie gern?",
+            "question": "2. Šta volite da pijete? (formalno)"
+          },
+          {
+            "answer": "Mein Lieblingsessen ist Pizza.",
+            "question": "3. Moja omiljena hrana je pica."
+          },
+          {
+            "answer": "Das schmeckt sehr gut!",
+            "question": "4. To je veoma ukusno!"
+          }
+        ],
+        "title": "Mini vežba — U restoranu"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "hrana / jelo",
+            "front": "das Essen"
+          },
+          {
+            "back": "piće",
+            "front": "das Getränk"
+          },
+          {
+            "back": "meso",
+            "front": "das Fleisch"
+          },
+          {
+            "back": "pirinač",
+            "front": "der Reis"
+          },
+          {
+            "back": "krompir",
+            "front": "die Kartoffel"
+          },
+          {
+            "back": "povrće",
+            "front": "das Gemüse"
+          },
+          {
+            "back": "voće",
+            "front": "das Obst"
+          },
+          {
+            "back": "supa",
+            "front": "die Suppe"
+          },
+          {
+            "back": "rado / voleti",
+            "front": "gern"
+          },
+          {
+            "back": "imati ukus",
+            "front": "schmecken"
+          }
+        ]
+      },
+      {
+        "rows": [
+          [
+            "das Essen",
+            "hrana / jelo"
+          ],
+          [
+            "das Getränk",
+            "piće"
+          ],
+          [
+            "das Fleisch",
+            "meso"
+          ],
+          [
+            "der Reis",
+            "pirinač"
+          ],
+          [
+            "die Kartoffel",
+            "krompir"
+          ],
+          [
+            "das Gemüse",
+            "povrće"
+          ],
+          [
+            "das Obst",
+            "voće"
+          ],
+          [
+            "die Suppe",
+            "supa"
+          ],
+          [
+            "gern",
+            "rado / voleti"
+          ],
+          [
+            "Das schmeckt gut!",
+            "To je ukusno!"
+          ]
+        ],
+        "type": "vocabulary"
+      }
+    ],
+    "vimeo_video_id": "701624181"
+  },
+  {
+    "id": "c3e1b5bb-8909-4450-b65a-a8540a335150",
+    "title": "Lese – und Hörverstehen",
+    "order_index": 15,
+    "sections": [],
+    "vimeo_video_id": "1128598236"
+  },
+  {
+    "id": "3d3ca2f9-b776-4689-a3db-72269c1a25c0",
+    "title": "Finalsätze",
+    "order_index": 15,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "41c57357-8851-419d-a39a-868d2627e078",
+    "title": "Sprechen A2, Aufgabe 1",
+    "order_index": 15,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "d2aceb17-4ced-4497-a08a-ee4867a8c058",
+    "title": "Mit freundlichen Grüßen",
+    "order_index": 15,
+    "sections": [],
+    "vimeo_video_id": "1177245126"
+  },
+  {
+    "id": "129a8873-1bc3-40b2-aa27-72647e5478cc",
+    "title": "Spielerisch Sprachen lernen LV",
+    "order_index": 15,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
     "id": "d437739e-4348-4f1e-a1cf-6e1749c58f22",
     "title": "Dativ",
     "order_index": 15,
@@ -3973,14 +7059,14 @@
       {
         "rows": [
           [
-            "**Nominativ**",
+            "<strong>Nominativ</strong>",
             "<mark>der / ein</mark>",
             "<mark>die / eine</mark>",
             "<mark>das / ein</mark>",
             "<mark>die / —</mark>"
           ],
           [
-            "**Akuzativ**",
+            "<strong>Akuzativ</strong>",
             "<mark>den / einen</mark>",
             "<mark>die / eine</mark>",
             "<mark>das / ein</mark>",
@@ -4004,21 +7090,21 @@
       {
         "rows": [
           [
-            "**Nominativ**",
+            "<strong>Nominativ</strong>",
             "der / ein",
             "die / eine",
             "das / ein",
             "die"
           ],
           [
-            "**Akuzativ**",
+            "<strong>Akuzativ</strong>",
             "den / einen",
             "die / eine",
             "das / ein",
             "die"
           ],
           [
-            "**Dativ**",
+            "<strong>Dativ</strong>",
             "<mark>dem / einem</mark>",
             "<mark>der / einer</mark>",
             "<mark>dem / einem</mark>",
@@ -4093,21 +7179,21 @@
       {
         "rows": [
           [
-            "**Nominativ**",
+            "<strong>Nominativ</strong>",
             "mein",
             "meine",
             "mein",
             "meine"
           ],
           [
-            "**Akuzativ**",
+            "<strong>Akuzativ</strong>",
             "meinen",
             "meine",
             "mein",
             "meine"
           ],
           [
-            "**Dativ**",
+            "<strong>Dativ</strong>",
             "<mark>meinem</mark>",
             "<mark>meiner</mark>",
             "<mark>meinem</mark>",
@@ -4207,72 +7293,44 @@
         "type": "flashcard",
         "items": [
           {
-            "back": "the (dativ za der/das)",
-            "front": "dem (m/n Dativ)"
+            "back": "Idem vozom.",
+            "front": "Ich fahre mit dem Zug."
           },
           {
-            "back": "the (dativ za die)",
-            "front": "der (f Dativ)"
+            "back": "On ide kod lekara.",
+            "front": "Er geht zum Arzt."
           },
           {
-            "back": "the (dativ množina)",
-            "front": "den (Pl. Dativ)"
+            "back": "Ona ide na posao.",
+            "front": "Sie fährt zur Arbeit."
           },
           {
-            "back": "sa",
-            "front": "mit + Dativ"
+            "back": "Ja sam u bioskopu.",
+            "front": "Ich bin im Kino."
           },
           {
-            "back": "ka, do",
-            "front": "zu + Dativ"
+            "back": "Posle nastave idem kući.",
+            "front": "Nach dem Unterricht gehe ich nach Hause."
           },
           {
-            "back": "ka (m/n)",
-            "front": "zum (zu + dem)"
+            "back": "Živim kod moje sestre.",
+            "front": "Ich wohne bei meiner Schwester."
           },
           {
-            "back": "ka (f)",
-            "front": "zur (zu + der)"
+            "back": "Godinu dana učim nemački.",
+            "front": "Seit einem Jahr lerne ich Deutsch."
           },
           {
-            "back": "u (m/n)",
-            "front": "im (in + dem)"
+            "back": "Možeš li mi pomoći?",
+            "front": "Kannst du mir helfen?"
           },
           {
-            "back": "posle",
-            "front": "nach + Dativ"
+            "back": "Dajem svom bratu knjigu.",
+            "front": "Ich gebe meinem Bruder ein Buch."
           },
           {
-            "back": "kod",
-            "front": "bei + Dativ"
-          },
-          {
-            "back": "od (vremena)",
-            "front": "seit + Dativ"
-          },
-          {
-            "back": "mom / mojoj (dativ)",
-            "front": "meinem / meiner"
-          },
-          {
-            "back": "avion",
-            "front": "das Flugzeug"
-          },
-          {
-            "back": "voz",
-            "front": "der Zug, Züge"
-          },
-          {
-            "back": "brod",
-            "front": "das Schiff, -e"
-          },
-          {
-            "back": "metro",
-            "front": "die U-Bahn"
-          },
-          {
-            "back": "bicikl",
-            "front": "das Fahrrad, Fahrräder"
+            "back": "Poklon je od moje majke.",
+            "front": "Das Geschenk ist von meiner Mutter."
           }
         ]
       },
@@ -4367,6 +7425,276 @@
       }
     ],
     "vimeo_video_id": "822544131"
+  },
+  {
+    "id": "dd475263-aa49-45c8-b7f5-95895cf0c615",
+    "title": "N-deklinacija",
+    "order_index": 15,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "89db3bea-1e82-4b4b-ab36-67a9a4581470",
+    "title": "Test: Modul 3",
+    "order_index": 15,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 3",
+        "category": "schreiben"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Proveri svoje znanje iz **Modul 3**. Kviz sadrži razne tipove pitanja — quiz, tačno/netačno, upiši odgovor, sortiraj i spoji parove."
+      }
+    ],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "8081efd5-e0fe-4d9e-bea2-e7d52d84b906",
+    "title": "Refleksivni glagoli",
+    "order_index": 15,
+    "sections": [],
+    "vimeo_video_id": "847623975"
+  },
+  {
+    "id": "a37d6f51-530b-4e69-911f-f315103b725e",
+    "title": "Komparacija prideva",
+    "order_index": 16,
+    "sections": [],
+    "vimeo_video_id": "865470597"
+  },
+  {
+    "id": "f13ed243-3fa6-4850-903e-8e7d45858257",
+    "title": "Wohnung",
+    "order_index": 16,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 4",
+        "category": "grammatik"
+      },
+      {
+        "type": "video",
+        "vimeoId": "701632847"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "U ovoj lekciji naučićeš nazive za **prostorije u stanu** i prideve za opisivanje stanova."
+      },
+      {
+        "rows": [
+          [
+            "<mark>das Schlafzimmer</mark>",
+            "spavaća soba"
+          ],
+          [
+            "<mark>die Küche</mark>",
+            "kuhinja"
+          ],
+          [
+            "<mark>das Wohnzimmer</mark>",
+            "dnevna soba"
+          ],
+          [
+            "<mark>das Badezimmer</mark>",
+            "kupatilo"
+          ],
+          [
+            "<mark>der Balkon</mark>",
+            "balkon"
+          ],
+          [
+            "<mark>der Flur</mark>",
+            "hodnik"
+          ],
+          [
+            "<mark>das Kinderzimmer</mark>",
+            "dečija soba"
+          ],
+          [
+            "<mark>das Esszimmer</mark>",
+            "trpezarija"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Prostorija",
+          "Prevod"
+        ]
+      },
+      {
+        "rows": [
+          [
+            "groß",
+            "<mark>klein</mark>",
+            "veliko — malo"
+          ],
+          [
+            "hell",
+            "<mark>dunkel</mark>",
+            "svetlo — tamno"
+          ],
+          [
+            "neu",
+            "<mark>alt</mark>",
+            "novo — staro"
+          ],
+          [
+            "billig",
+            "<mark>teuer</mark>",
+            "jeftino — skupo"
+          ],
+          [
+            "schön",
+            "<mark>hässlich</mark>",
+            "lepo — ružno"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Pridev",
+          "Suprotno",
+          "Prevod"
+        ]
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Im Schlafzimmer.",
+            "question": "1. Gde spavaš?"
+          },
+          {
+            "answer": "In der Küche.",
+            "question": "2. Gde kuvaš?"
+          },
+          {
+            "answer": "Die Wohnung ist schön und groß.",
+            "question": "3. Kako se kaže \"Stan je lep i veliki\"?"
+          },
+          {
+            "answer": "dunkel",
+            "question": "4. Suprotno od \"hell\" je...?"
+          }
+        ],
+        "title": "Mini vežba — Gde je šta?"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "stan",
+            "front": "die Wohnung"
+          },
+          {
+            "back": "kuća",
+            "front": "das Haus"
+          },
+          {
+            "back": "spavaća soba",
+            "front": "das Schlafzimmer"
+          },
+          {
+            "back": "kuhinja",
+            "front": "die Küche"
+          },
+          {
+            "back": "dnevna soba",
+            "front": "das Wohnzimmer"
+          },
+          {
+            "back": "veliko",
+            "front": "groß"
+          },
+          {
+            "back": "malo",
+            "front": "klein"
+          },
+          {
+            "back": "svetlo",
+            "front": "hell"
+          },
+          {
+            "back": "tamno",
+            "front": "dunkel"
+          },
+          {
+            "back": "lepo",
+            "front": "schön"
+          }
+        ]
+      },
+      {
+        "rows": [
+          [
+            "die Wohnung",
+            "stan"
+          ],
+          [
+            "das Haus",
+            "kuća"
+          ],
+          [
+            "das Schlafzimmer",
+            "spavaća soba"
+          ],
+          [
+            "die Küche",
+            "kuhinja"
+          ],
+          [
+            "das Wohnzimmer",
+            "dnevna soba"
+          ],
+          [
+            "der Balkon",
+            "balkon"
+          ],
+          [
+            "groß / klein",
+            "veliko / malo"
+          ],
+          [
+            "hell / dunkel",
+            "svetlo / tamno"
+          ],
+          [
+            "neu / alt",
+            "novo / staro"
+          ],
+          [
+            "Wo ist...?",
+            "Gde je...?"
+          ]
+        ],
+        "type": "vocabulary"
+      }
+    ],
+    "vimeo_video_id": "701632847"
+  },
+  {
+    "id": "09f348de-921f-4f16-8414-233bbb7746c5",
+    "title": "Sprechen A2, Aufgabe 2",
+    "order_index": 16,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "fe1f5889-c4e5-45e2-b0ac-57d3df3d76f9",
+    "title": "Ich interessiere mich für…",
+    "order_index": 16,
+    "sections": [],
+    "vimeo_video_id": "847794872"
+  },
+  {
+    "id": "c10236a5-4fbf-459d-93ca-54fc7870aaa2",
+    "title": "Jobsuche",
+    "order_index": 16,
+    "sections": [],
+    "vimeo_video_id": null
   },
   {
     "id": "e9bd1d9e-df8f-44de-a07c-1764b5432dd6",
@@ -4601,6 +7929,253 @@
     "vimeo_video_id": "817977283"
   },
   {
+    "id": "41a42c28-6370-4935-8a4c-1f444dab9116",
+    "title": "Kausale Verbindungen",
+    "order_index": 16,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "fa3f9c57-3b00-4c7c-ab6a-9ea8fc7dfe5e",
+    "title": "Predlozi sa genitivom",
+    "order_index": 16,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "61835769-fcf5-4ed5-a05f-d2cde9453e1c",
+    "title": "Möbel",
+    "order_index": 17,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 4",
+        "category": "grammatik"
+      },
+      {
+        "type": "video",
+        "vimeoId": "713138090"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "U ovoj lekciji naučićeš nazive za **nameštaj**, **boje** i kako da kažeš da li ti se nešto dopada."
+      },
+      {
+        "rows": [
+          [
+            "<mark>das Bett</mark>",
+            "krevet"
+          ],
+          [
+            "<mark>der Stuhl</mark>",
+            "stolica"
+          ],
+          [
+            "<mark>der Tisch</mark>",
+            "sto"
+          ],
+          [
+            "<mark>der Sessel</mark>",
+            "fotelja"
+          ],
+          [
+            "<mark>das Sofa</mark>",
+            "sofa"
+          ],
+          [
+            "<mark>das Regal</mark>",
+            "polica"
+          ],
+          [
+            "<mark>die Lampe</mark>",
+            "lampa"
+          ],
+          [
+            "<mark>der Kühlschrank</mark>",
+            "frižider"
+          ],
+          [
+            "<mark>der Fernseher</mark>",
+            "televizor"
+          ],
+          [
+            "<mark>die Badewanne</mark>",
+            "kada"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Nameštaj",
+          "Prevod"
+        ]
+      },
+      {
+        "type": "formula",
+        "content": "Wie gefällt dir...? = Kako ti se dopada...?\nSehr gut / Ganz gut / Nicht so gut"
+      },
+      {
+        "rows": [
+          [
+            "schwarz / weiß",
+            "crno / belo"
+          ],
+          [
+            "rot / blau",
+            "crveno / plavo"
+          ],
+          [
+            "gelb / grün",
+            "žuto / zeleno"
+          ],
+          [
+            "braun / grau",
+            "braon / sivo"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Boja",
+          "Prevod"
+        ]
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Sehr gut. Die Farbe ist schön.",
+            "question": "1. Wie gefällt dir der Tisch?"
+          },
+          {
+            "answer": "der Kühlschrank",
+            "question": "2. Kako se kaže \"frižider\" na nemačkom?"
+          },
+          {
+            "answer": "crvena",
+            "question": "3. Koja je boja: rot?"
+          },
+          {
+            "answer": "weiß",
+            "question": "4. Mein Sofa ist ___ (belo)."
+          }
+        ],
+        "title": "Mini vežba — Nameštaj i boje"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "krevet",
+            "front": "das Bett"
+          },
+          {
+            "back": "sto",
+            "front": "der Tisch"
+          },
+          {
+            "back": "stolica",
+            "front": "der Stuhl"
+          },
+          {
+            "back": "frižider",
+            "front": "der Kühlschrank"
+          },
+          {
+            "back": "crno",
+            "front": "schwarz"
+          },
+          {
+            "back": "belo",
+            "front": "weiß"
+          },
+          {
+            "back": "crveno",
+            "front": "rot"
+          },
+          {
+            "back": "plavo",
+            "front": "blau"
+          },
+          {
+            "back": "žuto",
+            "front": "gelb"
+          },
+          {
+            "back": "zeleno",
+            "front": "grün"
+          }
+        ]
+      },
+      {
+        "rows": [
+          [
+            "das Bett",
+            "krevet"
+          ],
+          [
+            "der Tisch",
+            "sto"
+          ],
+          [
+            "der Stuhl",
+            "stolica"
+          ],
+          [
+            "der Kühlschrank",
+            "frižider"
+          ],
+          [
+            "der Fernseher",
+            "televizor"
+          ],
+          [
+            "Wie gefällt dir...?",
+            "Kako ti se dopada...?"
+          ],
+          [
+            "die Farbe",
+            "boja"
+          ],
+          [
+            "schwarz / weiß",
+            "crno / belo"
+          ],
+          [
+            "rot / blau",
+            "crveno / plavo"
+          ],
+          [
+            "gelb / grün",
+            "žuto / zeleno"
+          ]
+        ],
+        "type": "vocabulary"
+      }
+    ],
+    "vimeo_video_id": "713138090"
+  },
+  {
+    "id": "b42e88a4-d3b2-457f-80e9-eed30ff8512c",
+    "title": "Komparation – 4 Minuten Lektion",
+    "order_index": 17,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "076ac3a2-3358-456e-acbd-faba411791b8",
+    "title": "Migration",
+    "order_index": 17,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "d10a12dd-056f-4a1f-a66c-fc67df1dc78c",
+    "title": "Sprechen A2, Aufgabe 3",
+    "order_index": 17,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
     "id": "afa19f3e-b564-4e24-b2ff-c2e927893c25",
     "title": "Predlozi — vor, hinter...",
     "order_index": 17,
@@ -4786,7 +8361,7 @@
             "front": "auf"
           },
           {
-            "back": "u",
+            "back": "u, u(nutra)",
             "front": "in"
           },
           {
@@ -4912,6 +8487,41 @@
     "vimeo_video_id": "822544131"
   },
   {
+    "id": "d0d349db-0a95-43a4-8830-fdd14a325dc3",
+    "title": "Pasiv",
+    "order_index": 17,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "b9f7d594-d76c-4584-8954-ea278dbb309d",
+    "title": "Geschlechtergerechte Sprache auf Deutsch",
+    "order_index": 17,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "d3d058e8-72da-4c9b-aeef-477ca743c01f",
+    "title": "Fußball",
+    "order_index": 17,
+    "sections": [],
+    "vimeo_video_id": "1177269843"
+  },
+  {
+    "id": "c5fb70b6-dc72-4a7c-894c-146494c07ee6",
+    "title": "Buduće vreme",
+    "order_index": 18,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "b4728b3a-a82e-40ca-b354-ce57e4f8817e",
+    "title": "Leseverstehen",
+    "order_index": 18,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
     "id": "573c28b9-77cc-4a97-8609-e6997562407a",
     "title": "Test: Modul 4",
     "order_index": 18,
@@ -4922,6 +8532,237 @@
         "category": "grammatik"
       }
     ],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "a9a734c8-5def-41d7-b51d-811b77f4b5a9",
+    "title": "Sprechen B1, Beispielaufgabe",
+    "order_index": 18,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "ffb93502-fc43-4c0e-ad9a-6c2038a4c661",
+    "title": "Minimalismus",
+    "order_index": 18,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "5f915368-c1ca-4f38-a6ea-74004930cc1a",
+    "title": "Anzeigen",
+    "order_index": 18,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 4",
+        "category": "lesen"
+      },
+      {
+        "type": "video",
+        "vimeoId": "713140227"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "U ovoj lekciji naučićeš **velike brojeve** (do 100.000) i kako da razumeš **oglase za stanove**."
+      },
+      {
+        "type": "formula",
+        "content": "hundert = 100\ntausend = 1.000\nzehntausend = 10.000\nhunderttausend = 100.000"
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "**Oglas za stan:**\n3-Zimmer-Wohnung, 84 m², möbliert, Balkon, Tiefgarage\nMiete: 320€ im Monat + Nebenkosten"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "3 sobe (3-Zimmer-Wohnung)",
+            "question": "1. Koliko soba ima stan iz oglasa?"
+          },
+          {
+            "answer": "möbliert",
+            "question": "2. Kako se kaže \"namešten\"?"
+          },
+          {
+            "answer": "režije / dodatni troškovi",
+            "question": "3. Šta su Nebenkosten?"
+          },
+          {
+            "answer": "5.200",
+            "question": "4. fünftausendzweihundert = ?"
+          }
+        ],
+        "title": "Mini vežba — Razumi oglas"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "100",
+            "front": "hundert"
+          },
+          {
+            "back": "1.000",
+            "front": "tausend"
+          },
+          {
+            "back": "kirija",
+            "front": "die Miete"
+          },
+          {
+            "back": "namešten",
+            "front": "möbliert"
+          },
+          {
+            "back": "režije",
+            "front": "die Nebenkosten"
+          },
+          {
+            "back": "izdavati",
+            "front": "vermieten"
+          },
+          {
+            "back": "mesec",
+            "front": "der Monat"
+          },
+          {
+            "back": "podzemna garaža",
+            "front": "die Tiefgarage"
+          },
+          {
+            "back": "kvadratni metar",
+            "front": "Quadratmeter (m²)"
+          },
+          {
+            "back": "oglas",
+            "front": "die Anzeige"
+          }
+        ]
+      },
+      {
+        "rows": [
+          [
+            "hundert / tausend",
+            "100 / 1.000"
+          ],
+          [
+            "die Miete",
+            "kirija"
+          ],
+          [
+            "möbliert",
+            "namešten"
+          ],
+          [
+            "die Nebenkosten",
+            "režije"
+          ],
+          [
+            "vermieten",
+            "izdavati"
+          ],
+          [
+            "der Monat",
+            "mesec"
+          ],
+          [
+            "die Anzeige",
+            "oglas"
+          ],
+          [
+            "die Tiefgarage",
+            "podzemna garaža"
+          ],
+          [
+            "Quadratmeter",
+            "kvadratni metar"
+          ],
+          [
+            "Was kostet die Wohnung?",
+            "Koliko košta stan?"
+          ]
+        ],
+        "type": "vocabulary"
+      }
+    ],
+    "vimeo_video_id": "713140227"
+  },
+  {
+    "id": "ecd558c3-f9b2-4d64-88ce-95bf820554a7",
+    "title": "Berufswechsel LV",
+    "order_index": 18,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "4db0519c-8049-453e-8aa3-db5275852e88",
+    "title": "Worauf, darauf",
+    "order_index": 18,
+    "sections": [],
+    "vimeo_video_id": "849054086"
+  },
+  {
+    "id": "8aa665e9-41c1-4c9f-a42b-251d4fb42eb3",
+    "title": "Verstehen A1 i A2",
+    "order_index": 19,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "b3f43434-4709-42ca-8a4d-69f198a8b961",
+    "title": "Glagoli sa predlozima",
+    "order_index": 19,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "a4b023c4-dfea-4597-b555-2fc5329c5c4c",
+    "title": "Test: Modul 4",
+    "order_index": 19,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 4",
+        "category": "schreiben"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Proveri svoje znanje iz **Modul 4**. Kviz sadrži razne tipove pitanja — quiz, tačno/netačno, upiši odgovor, sortiraj i spoji parove."
+      }
+    ],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "c2f65ad6-88ec-4326-84e9-d39e841db6e4",
+    "title": "Trennbare Verben – WH zum Thema Rad fahren",
+    "order_index": 19,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "1166aecf-e956-4560-b821-2f139c5fc0c9",
+    "title": "Modalni glagoli u prošlosti",
+    "order_index": 19,
+    "sections": [],
+    "vimeo_video_id": "851281827"
+  },
+  {
+    "id": "5f825985-c37f-4ca2-890d-c9ff0431bfe7",
+    "title": "Modalverben durch die Zeit",
+    "order_index": 19,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "af89a8f7-d4a3-4ef9-9cb7-e191296c9fb1",
+    "title": "Sprechen Prüfung B1",
+    "order_index": 19,
+    "sections": [],
     "vimeo_video_id": null
   },
   {
@@ -5289,6 +9130,198 @@
     "vimeo_video_id": "827036099"
   },
   {
+    "id": "dfc248d2-a0ca-43a9-89a7-805df449c491",
+    "title": "Razdvojni prefiksi",
+    "order_index": 20,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 5",
+        "category": "grammatik"
+      },
+      {
+        "type": "video",
+        "vimeoId": "701794312"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "U ovoj lekciji naučićeš **razdvojne prefikse** — glagole koji se u prezentu dele na dva dela."
+      },
+      {
+        "type": "formula",
+        "content": "auf·stehen → Ich stehe auf.\nein·kaufen → Ich kaufe ein.\nfern·sehen → Ich sehe fern.\nan·rufen → Ich rufe an.\n\nPrefiks ide na KRAJ rečenice!"
+      },
+      {
+        "rows": [
+          [
+            "<mark>auf</mark>stehen",
+            "Ich stehe <mark>auf</mark>",
+            "ustati"
+          ],
+          [
+            "<mark>ein</mark>kaufen",
+            "Ich kaufe <mark>ein</mark>",
+            "kupovati"
+          ],
+          [
+            "<mark>fern</mark>sehen",
+            "Ich sehe <mark>fern</mark>",
+            "gledati TV"
+          ],
+          [
+            "<mark>an</mark>rufen",
+            "Ich rufe <mark>an</mark>",
+            "zvati (telefonom)"
+          ],
+          [
+            "<mark>auf</mark>räumen",
+            "Ich räume <mark>auf</mark>",
+            "spremati"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Glagol",
+          "ich",
+          "Prevod"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "uebung",
+        "content": "**Pazi:** Glagol **sehen** menja e→ie u 2. i 3. licu:\nich sehe · du s**ie**hst · er/sie s**ie**ht"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Ich stehe früh auf.",
+            "question": "1. aufstehen / ich / früh"
+          },
+          {
+            "answer": "Sie kauft im Supermarkt ein.",
+            "question": "2. einkaufen / sie (ona) / im Supermarkt"
+          },
+          {
+            "answer": "Du siehst gern fern.",
+            "question": "3. fernsehen / du / gern"
+          },
+          {
+            "answer": "Ich rufe meine Mutter an.",
+            "question": "4. anrufen / ich / meine Mutter"
+          }
+        ],
+        "title": "Mini vežba — Napravi rečenicu"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "ustati",
+            "front": "aufstehen"
+          },
+          {
+            "back": "kupovati",
+            "front": "einkaufen"
+          },
+          {
+            "back": "gledati TV",
+            "front": "fernsehen"
+          },
+          {
+            "back": "zvati",
+            "front": "anrufen"
+          },
+          {
+            "back": "spremati",
+            "front": "aufräumen"
+          },
+          {
+            "back": "kuvati",
+            "front": "kochen"
+          },
+          {
+            "back": "doručkovati",
+            "front": "frühstücken"
+          },
+          {
+            "back": "raditi",
+            "front": "arbeiten"
+          },
+          {
+            "back": "igrati",
+            "front": "spielen"
+          },
+          {
+            "back": "spavati",
+            "front": "schlafen"
+          }
+        ]
+      },
+      {
+        "rows": [
+          [
+            "aufstehen",
+            "ustati"
+          ],
+          [
+            "einkaufen",
+            "kupovati"
+          ],
+          [
+            "fernsehen",
+            "gledati TV"
+          ],
+          [
+            "anrufen",
+            "zvati"
+          ],
+          [
+            "aufräumen",
+            "spremati"
+          ],
+          [
+            "kochen",
+            "kuvati"
+          ],
+          [
+            "frühstücken",
+            "doručkovati"
+          ],
+          [
+            "arbeiten",
+            "raditi"
+          ],
+          [
+            "früh",
+            "rano"
+          ],
+          [
+            "spät",
+            "kasno"
+          ]
+        ],
+        "type": "vocabulary"
+      }
+    ],
+    "vimeo_video_id": "701794312"
+  },
+  {
+    "id": "8204dc8a-e1a0-4e81-82cf-f4122212c53a",
+    "title": "Pflegekrise LV",
+    "order_index": 20,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "82fef13b-73b6-4006-8f53-fa18a2d2655a",
+    "title": "Drahtesel",
+    "order_index": 20,
+    "sections": [],
+    "vimeo_video_id": "866815467"
+  },
+  {
     "id": "e33fc837-364c-44d8-a60a-e08be652b9d2",
     "title": "Kleidung — Leseverstehen und Schreiben",
     "order_index": 20,
@@ -5458,6 +9491,289 @@
       }
     ],
     "vimeo_video_id": "818171634"
+  },
+  {
+    "id": "a69c3437-b627-4b88-8d74-b190d3d69824",
+    "title": "Verstehen B1",
+    "order_index": 20,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "08c2ae56-f174-4a37-b1ff-c283bd3aca99",
+    "title": "Schule – Deutschlandlabor",
+    "order_index": 20,
+    "sections": [],
+    "vimeo_video_id": "1177272846"
+  },
+  {
+    "id": "2c04bced-907c-4429-8883-e33a10fb4d6a",
+    "title": "Nachbarschaft 2.0",
+    "order_index": 20,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "5c9d5540-d144-4cee-bc11-21284818dcaf",
+    "title": "Delovi tela",
+    "order_index": 20,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "600958a4-e232-4fe6-8940-96157bc86434",
+    "title": "Nomen mit Präpositionen",
+    "order_index": 21,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "9966aa6f-623b-4333-8157-01331626d1ab",
+    "title": "Povrede i nezgode",
+    "order_index": 21,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "be823a07-995f-4682-b794-b2120e470e33",
+    "title": "Verstehen opšte informacije",
+    "order_index": 21,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "52fce755-936d-4107-9945-7a9c7a7aaac5",
+    "title": "Schreiben Prüfung B1 (2)",
+    "order_index": 21,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "54f2746f-5831-4458-bcc7-6a2d685c82da",
+    "title": "Reisen und Verkehr",
+    "order_index": 21,
+    "sections": [],
+    "vimeo_video_id": "897780373"
+  },
+  {
+    "id": "5569821f-2876-4ede-9e75-b036ce728217",
+    "title": "Schulsystem in Deutschland – Leseverstehen",
+    "order_index": 21,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "8437ccff-9dc9-41be-aa04-f12fa5438442",
+    "title": "Uhrzeiten",
+    "order_index": 21,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 5",
+        "category": "grammatik"
+      },
+      {
+        "type": "video",
+        "vimeoId": "765653350"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "U ovoj lekciji naučićeš kako da kažeš i pitaš za **vreme** na nemačkom."
+      },
+      {
+        "type": "formula",
+        "content": "Wie spät ist es? = Koliko je sati?\nWie viel Uhr ist es? = Koliko je sati?\n\nEs ist ... Uhr. = ... je sati."
+      },
+      {
+        "rows": [
+          [
+            "12:00",
+            "Es ist <mark>zwölf Uhr</mark>."
+          ],
+          [
+            "12:15",
+            "Es ist <mark>Viertel nach</mark> zwölf."
+          ],
+          [
+            "12:30",
+            "Es ist <mark>halb eins</mark>. (pola jednog!)"
+          ],
+          [
+            "12:45",
+            "Es ist <mark>Viertel vor</mark> eins."
+          ],
+          [
+            "12:05",
+            "Es ist fünf <mark>nach</mark> zwölf."
+          ],
+          [
+            "11:55",
+            "Es ist fünf <mark>vor</mark> zwölf."
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Vreme",
+          "Nemački"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "uebung",
+        "content": "**Pazi:** Na nemačkom **halb eins** = 12:30 (pola jednog, NE pola dvanaest!)\n\nnach = posle · vor = pre · Viertel = četvrt · halb = pola"
+      },
+      {
+        "rows": [
+          [
+            "ponedeljak",
+            "<mark>Montag</mark>"
+          ],
+          [
+            "utorak",
+            "<mark>Dienstag</mark>"
+          ],
+          [
+            "sreda",
+            "<mark>Mittwoch</mark>"
+          ],
+          [
+            "četvrtak",
+            "<mark>Donnerstag</mark>"
+          ],
+          [
+            "petak",
+            "<mark>Freitag</mark>"
+          ],
+          [
+            "subota",
+            "<mark>Samstag</mark>"
+          ],
+          [
+            "nedelja",
+            "<mark>Sonntag</mark>"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Dan",
+          "Nemački"
+        ]
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Es ist halb neun.",
+            "question": "1. 8:30 = ?"
+          },
+          {
+            "answer": "Es ist Viertel nach neun.",
+            "question": "2. 9:15 = ?"
+          },
+          {
+            "answer": "Es ist Viertel vor sieben.",
+            "question": "3. 6:45 = ?"
+          },
+          {
+            "answer": "u ponedeljak u 7 sati",
+            "question": "4. am Montag um 7 Uhr = ?"
+          }
+        ],
+        "title": "Mini vežba — Koliko je sati?"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "Koliko je sati?",
+            "front": "Wie spät ist es?"
+          },
+          {
+            "back": "pola",
+            "front": "halb"
+          },
+          {
+            "back": "četvrt",
+            "front": "Viertel"
+          },
+          {
+            "back": "posle",
+            "front": "nach"
+          },
+          {
+            "back": "pre",
+            "front": "vor"
+          },
+          {
+            "back": "ponedeljak",
+            "front": "Montag"
+          },
+          {
+            "back": "utorak",
+            "front": "Dienstag"
+          },
+          {
+            "back": "sreda",
+            "front": "Mittwoch"
+          },
+          {
+            "back": "petak",
+            "front": "Freitag"
+          },
+          {
+            "back": "subota",
+            "front": "Samstag"
+          }
+        ]
+      },
+      {
+        "rows": [
+          [
+            "Wie spät ist es?",
+            "Koliko je sati?"
+          ],
+          [
+            "die Uhr",
+            "sat"
+          ],
+          [
+            "halb",
+            "pola"
+          ],
+          [
+            "Viertel",
+            "četvrt"
+          ],
+          [
+            "nach / vor",
+            "posle / pre"
+          ],
+          [
+            "Montag",
+            "ponedeljak"
+          ],
+          [
+            "Dienstag",
+            "utorak"
+          ],
+          [
+            "Mittwoch",
+            "sreda"
+          ],
+          [
+            "Donnerstag",
+            "četvrtak"
+          ],
+          [
+            "Freitag / Samstag / Sonntag",
+            "petak / subota / nedelja"
+          ]
+        ],
+        "type": "vocabulary"
+      }
+    ],
+    "vimeo_video_id": "765653350"
   },
   {
     "id": "1faeeb6f-2526-4b8c-99f1-f45648c9ae89",
@@ -5746,6 +10062,168 @@
     "vimeo_video_id": "827060139"
   },
   {
+    "id": "916f988e-8cb0-4723-9d7b-a130865ba34e",
+    "title": "Terminkalendar",
+    "order_index": 22,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 5",
+        "category": "lesen"
+      },
+      {
+        "type": "video",
+        "vimeoId": "919689999"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "U ovoj lekciji naučićeš kako da opišeš svoj **nedeljni raspored** i koristiš izraze za vreme."
+      },
+      {
+        "type": "formula",
+        "content": "am Montag = u ponedeljak\num 8 Uhr = u 8 sati\nvon 8 bis 15 Uhr = od 8 do 15 sati\nWann? = Kad?"
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "**Primer:** Am Montag hat Sven Deutsch von 8:30 bis 10 Uhr.\nWann kaufst du ein? — Am Samstag."
+      },
+      {
+        "type": "text",
+        "style": "uebung",
+        "content": "**Glagol anfangen** (početi) — razdvojni, menja a→ä:\nich fange an · du f**ä**ngst an · er/sie f**ä**ngt an"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Am Montag um 9 Uhr.",
+            "question": "1. Kad imaš nemački? (ponedeljak, 9h)"
+          },
+          {
+            "answer": "Von ... bis ... Uhr.",
+            "question": "2. Od kad do kad radiš?"
+          },
+          {
+            "answer": "Wann fängt der Kurs an?",
+            "question": "3. Wann ___ der Kurs ___? (anfangen)"
+          },
+          {
+            "answer": "Am Samstag ...",
+            "question": "4. Šta radiš u subotu?"
+          }
+        ],
+        "title": "Mini vežba — Raspored"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "termin / zakazano",
+            "front": "der Termin"
+          },
+          {
+            "back": "nedelja",
+            "front": "die Woche"
+          },
+          {
+            "back": "od...do",
+            "front": "von...bis"
+          },
+          {
+            "back": "početi",
+            "front": "anfangen"
+          },
+          {
+            "back": "šetati",
+            "front": "spazieren"
+          },
+          {
+            "back": "domaći zadatak",
+            "front": "die Hausaufgabe"
+          },
+          {
+            "back": "igrati fudbal",
+            "front": "Fußball spielen"
+          },
+          {
+            "back": "Kad?",
+            "front": "Wann?"
+          },
+          {
+            "back": "u ponedeljak",
+            "front": "am Montag"
+          },
+          {
+            "back": "u 7 sati",
+            "front": "um 7 Uhr"
+          }
+        ]
+      },
+      {
+        "rows": [
+          [
+            "der Termin",
+            "termin"
+          ],
+          [
+            "die Woche",
+            "nedelja"
+          ],
+          [
+            "von...bis",
+            "od...do"
+          ],
+          [
+            "anfangen",
+            "početi"
+          ],
+          [
+            "spazieren",
+            "šetati"
+          ],
+          [
+            "die Hausaufgabe",
+            "domaći"
+          ],
+          [
+            "Wann?",
+            "Kad?"
+          ],
+          [
+            "am Montag",
+            "u ponedeljak"
+          ],
+          [
+            "um 7 Uhr",
+            "u 7 sati"
+          ],
+          [
+            "lange",
+            "dugo"
+          ]
+        ],
+        "type": "vocabulary"
+      }
+    ],
+    "vimeo_video_id": "766207028"
+  },
+  {
+    "id": "6ff6aeb3-b4b1-453a-a174-b933e680a0ef",
+    "title": "TeKaMoLo",
+    "order_index": 22,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "dd94d4fa-2755-443c-83a6-91af79cfab53",
+    "title": "Wohin fährt Tim?",
+    "order_index": 22,
+    "sections": [],
+    "vimeo_video_id": "897826551"
+  },
+  {
     "id": "5f80e8de-3524-4246-9f95-ab45061eb58e",
     "title": "Test: Modul 5",
     "order_index": 22,
@@ -5757,6 +10235,224 @@
       }
     ],
     "vimeo_video_id": null
+  },
+  {
+    "id": "f8ac8810-378e-4972-81eb-ad5c2b8b66cd",
+    "title": "Umzug HV",
+    "order_index": 22,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "246ccadd-3db3-4bb8-b350-1c7ba53f99a5",
+    "title": "Bolovi",
+    "order_index": 22,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "fb1e0c29-b417-4461-9cf6-c620344b9fa3",
+    "title": "Wortschatz und Grammatik",
+    "order_index": 22,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "4c6eb6fa-0243-4911-8859-a4397ddabba0",
+    "title": "Ausbildung in Deutschland",
+    "order_index": 22,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "e0ab6f99-10df-41ee-9ef3-2ec7b259f461",
+    "title": "WIEN",
+    "order_index": 23,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "600b1d56-cc72-4f0b-8981-0fd129493db6",
+    "title": "Tagesablauf",
+    "order_index": 23,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 5",
+        "category": "schreiben"
+      },
+      {
+        "type": "video",
+        "vimeoId": "802393462"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "U ovoj lekciji naučićeš kako da opišeš svoj **dnevni raspored** koristeći izraze za doba dana."
+      },
+      {
+        "rows": [
+          [
+            "<mark>am Morgen</mark>",
+            "ujutru"
+          ],
+          [
+            "<mark>am Vormittag</mark>",
+            "pre podne"
+          ],
+          [
+            "<mark>am Mittag</mark>",
+            "u podne"
+          ],
+          [
+            "<mark>am Nachmittag</mark>",
+            "popodne"
+          ],
+          [
+            "<mark>am Abend</mark>",
+            "uveče"
+          ],
+          [
+            "<mark>in der Nacht</mark>",
+            "noću"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Doba dana",
+          "Prevod"
+        ]
+      },
+      {
+        "type": "formula",
+        "content": "jeden Tag = svaki dan\njeden Morgen = svako jutro\njeden Abend = svako veče\njede Nacht = svaku noć"
+      },
+      {
+        "type": "text",
+        "style": "uebung",
+        "content": "**Red reči:** Kad rečenica počinje vremenom, glagol ostaje na 2. mestu!\n\n**Am Morgen** schlafe ich. ✓\n**Am Morgen** ich schlafe. ✗"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Am Morgen frühstücke ich. / Ich frühstücke am Morgen.",
+            "question": "1. Šta radiš ujutru?"
+          },
+          {
+            "answer": "Am Nachmittag arbeite ich.",
+            "question": "2. Šta radiš popodne?"
+          },
+          {
+            "answer": "Am Abend sehe ich fern.",
+            "question": "3. Am Abend ___ ich ___ (fernsehen)"
+          },
+          {
+            "answer": "Jeden Morgen stehe ich um 7 Uhr auf.",
+            "question": "4. Svako jutro ustajem u 7."
+          }
+        ],
+        "title": "Mini vežba — Opiši dan"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "ujutru",
+            "front": "am Morgen"
+          },
+          {
+            "back": "pre podne",
+            "front": "am Vormittag"
+          },
+          {
+            "back": "u podne",
+            "front": "am Mittag"
+          },
+          {
+            "back": "popodne",
+            "front": "am Nachmittag"
+          },
+          {
+            "back": "uveče",
+            "front": "am Abend"
+          },
+          {
+            "back": "noću",
+            "front": "in der Nacht"
+          },
+          {
+            "back": "svaki dan",
+            "front": "jeden Tag"
+          },
+          {
+            "back": "onda / zatim",
+            "front": "dann"
+          },
+          {
+            "back": "prvo",
+            "front": "zuerst"
+          },
+          {
+            "back": "posle toga",
+            "front": "danach"
+          }
+        ]
+      },
+      {
+        "rows": [
+          [
+            "am Morgen",
+            "ujutru"
+          ],
+          [
+            "am Vormittag",
+            "pre podne"
+          ],
+          [
+            "am Mittag",
+            "u podne"
+          ],
+          [
+            "am Nachmittag",
+            "popodne"
+          ],
+          [
+            "am Abend",
+            "uveče"
+          ],
+          [
+            "in der Nacht",
+            "noću"
+          ],
+          [
+            "jeden Tag",
+            "svaki dan"
+          ],
+          [
+            "zuerst",
+            "prvo"
+          ],
+          [
+            "dann",
+            "onda"
+          ],
+          [
+            "danach",
+            "posle toga"
+          ]
+        ],
+        "type": "vocabulary"
+      }
+    ],
+    "vimeo_video_id": "802393462"
+  },
+  {
+    "id": "25cdddd5-7107-4409-a530-80dd8b7f7061",
+    "title": "Am Geldautomaten",
+    "order_index": 23,
+    "sections": [],
+    "vimeo_video_id": "1177246842"
   },
   {
     "id": "f172f25e-669f-4b23-98a3-14a27e349b96",
@@ -5974,6 +10670,199 @@
     "vimeo_video_id": "828999671"
   },
   {
+    "id": "650459c4-292e-4d9f-8e93-9b0a23b55346",
+    "title": "Dodatne vežbe (fakultativno)",
+    "order_index": 23,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "30b4823e-5720-4fd6-afe0-987262292a29",
+    "title": "Terapija, dijagnostika i simptomi po organima",
+    "order_index": 23,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "46a7817f-7f06-492c-90b4-3963ea0d8872",
+    "title": "Schreiben Prüfung B1 (3)",
+    "order_index": 23,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "2e3e079b-7dd2-4d20-a5a3-c82ddf01bf9e",
+    "title": "Krimi roman za nivo A2 – Leseverstehen",
+    "order_index": 24,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "9673116c-1fa1-4748-8b70-d2847a91e6f8",
+    "title": "Mein Bankkonto",
+    "order_index": 24,
+    "sections": [],
+    "vimeo_video_id": "1177256928"
+  },
+  {
+    "id": "e8e1fa27-8b96-4b46-8188-4e27290b2e78",
+    "title": "Skraćenice",
+    "order_index": 24,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "7427e045-9739-45e0-9df8-3a5e29e1a7d3",
+    "title": "Mini Gespräche — Modul 5",
+    "order_index": 24,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 5",
+        "category": "hoeren"
+      },
+      {
+        "type": "video",
+        "vimeoId": "805048034"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "U ovoj lekciji vežbaš **kratke dijaloge** o dnevnim aktivnostima koristeći **gern** i **nicht gern**."
+      },
+      {
+        "rows": [
+          [
+            "— Kaufst du <mark>gern</mark> ein?",
+            "— Da li voliš da kupuješ?"
+          ],
+          [
+            "— Ja, ich kaufe gern ein.",
+            "— Da, volim da kupujem."
+          ],
+          [
+            "— Kochst du gern?",
+            "— Da li voliš da kuvaš?"
+          ],
+          [
+            "— Nein, ich koche <mark>nicht gern</mark>.",
+            "— Ne, ne volim da kuvam."
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Dijalog",
+          "Prevod"
+        ]
+      },
+      {
+        "type": "formula",
+        "content": "gern = rado / voleti\nnicht gern = ne rado / ne voleti\n\nKaufst du gern ein? → Ja / Nein"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Ja, ich gehe gern spazieren. / Nein, ich gehe nicht gern spazieren.",
+            "question": "1. Gehst du gern spazieren?"
+          },
+          {
+            "answer": "Nein, ich räume nicht gern auf.",
+            "question": "2. Räumst du gern auf?"
+          },
+          {
+            "answer": "Ja, ich sehe gern fern.",
+            "question": "3. Siehst du gern fern?"
+          }
+        ],
+        "title": "Mini vežba — gern ili nicht gern?"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "kupovati",
+            "front": "einkaufen"
+          },
+          {
+            "back": "kuvati",
+            "front": "kochen"
+          },
+          {
+            "back": "šetati",
+            "front": "spazieren gehen"
+          },
+          {
+            "back": "čistiti",
+            "front": "putzen"
+          },
+          {
+            "back": "spremati",
+            "front": "aufräumen"
+          },
+          {
+            "back": "rado",
+            "front": "gern"
+          },
+          {
+            "back": "ne rado",
+            "front": "nicht gern"
+          },
+          {
+            "back": "Voliš li da kupuješ?",
+            "front": "Kaufst du gern ein?"
+          }
+        ]
+      },
+      {
+        "rows": [
+          [
+            "gern",
+            "rado / voleti"
+          ],
+          [
+            "nicht gern",
+            "ne rado"
+          ],
+          [
+            "einkaufen",
+            "kupovati"
+          ],
+          [
+            "kochen",
+            "kuvati"
+          ],
+          [
+            "spazieren gehen",
+            "šetati"
+          ],
+          [
+            "putzen",
+            "čistiti"
+          ],
+          [
+            "aufräumen",
+            "spremati"
+          ],
+          [
+            "fernsehen",
+            "gledati TV"
+          ],
+          [
+            "Kaufst du gern...?",
+            "Da li voliš da...?"
+          ],
+          [
+            "Ja / Nein",
+            "Da / Ne"
+          ]
+        ],
+        "type": "vocabulary"
+      }
+    ],
+    "vimeo_video_id": "805048034"
+  },
+  {
     "id": "53c3c66a-4ab5-4bc2-bc8c-d0225b358dc1",
     "title": "ADUSO und Feste",
     "order_index": 24,
@@ -6089,7 +10978,7 @@
             "front": "denn"
           },
           {
-            "back": "i",
+            "back": "i (veznik)",
             "front": "und"
           },
           {
@@ -6201,6 +11090,52 @@
       }
     ],
     "vimeo_video_id": "829321541"
+  },
+  {
+    "id": "563e48b4-894a-4bd7-af95-87e2a1a30592",
+    "title": "Wortstellung im Mittelfeld",
+    "order_index": 24,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "e5ece504-e655-4a08-872b-ddbe2c688792",
+    "title": "Fachsprache vs. Patientensprache",
+    "order_index": 25,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "e35234fc-61cc-4163-a59a-508022fdc195",
+    "title": "Wortstellung mit Dativ und Akkusativ",
+    "order_index": 25,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "942fd127-ab5e-4eae-a98b-a4013ab00b42",
+    "title": "Test: Modul 5",
+    "order_index": 25,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 5",
+        "category": "schreiben"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Proveri svoje znanje iz **Modul 5**. Kviz sadrži razne tipove pitanja — quiz, tačno/netačno, upiši odgovor, sortiraj i spoji parove."
+      }
+    ],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "5b459d6f-e521-40d6-858d-bc462cc57f3b",
+    "title": "Leseverstehen Bank",
+    "order_index": 25,
+    "sections": [],
+    "vimeo_video_id": null
   },
   {
     "id": "075d9030-0e9b-49c8-95ba-ae1f2adad538",
@@ -6459,6 +11394,216 @@
     "vimeo_video_id": "831251276"
   },
   {
+    "id": "68bc5acf-b69e-4332-b2b3-54b5c3767a0e",
+    "title": "Zweiteilige Konnektoren",
+    "order_index": 26,
+    "sections": [],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "0006cd0d-f0c8-4158-8320-89b4d03eda43",
+    "title": "Wetter",
+    "order_index": 26,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 6",
+        "category": "grammatik"
+      },
+      {
+        "type": "video",
+        "vimeoId": "705506098"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "U ovoj lekciji naučićeš kako da opišeš **vreme** i **godišnja doba** na nemačkom."
+      },
+      {
+        "rows": [
+          [
+            "Es ist <mark>sonnig</mark>.",
+            "Sunčano je."
+          ],
+          [
+            "Es ist <mark>bewölkt</mark>.",
+            "Oblačno je."
+          ],
+          [
+            "Es <mark>regnet</mark>.",
+            "Pada kiša."
+          ],
+          [
+            "Es <mark>schneit</mark>.",
+            "Pada sneg."
+          ],
+          [
+            "Es ist <mark>windig</mark>.",
+            "Vetrovito je."
+          ],
+          [
+            "Es <mark>blitzt und donnert</mark>.",
+            "Seva i grmi."
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Vreme",
+          "Prevod"
+        ]
+      },
+      {
+        "rows": [
+          [
+            "<mark>im Frühling</mark>",
+            "u proleće"
+          ],
+          [
+            "<mark>im Sommer</mark>",
+            "u leto"
+          ],
+          [
+            "<mark>im Herbst</mark>",
+            "u jesen"
+          ],
+          [
+            "<mark>im Winter</mark>",
+            "u zimu"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Godišnje doba",
+          "Prevod"
+        ]
+      },
+      {
+        "type": "formula",
+        "content": "im Norden = na severu\nim Süden = na jugu\nim Osten = na istoku\nim Westen = na zapadu\n\nEs sind 25 Grad. = 25 stepeni je."
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Es regnet.",
+            "question": "1. Pada kiša."
+          },
+          {
+            "answer": "Es ist sonnig und warm.",
+            "question": "2. Sunčano je i toplo."
+          },
+          {
+            "answer": "Im Winter schneit es.",
+            "question": "3. U zimu pada sneg."
+          },
+          {
+            "answer": "Es sind 30 Grad.",
+            "question": "4. Koliko je stepeni? (30)"
+          }
+        ],
+        "title": "Mini vežba — Kakvo je vreme?"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "sunčano",
+            "front": "sonnig"
+          },
+          {
+            "back": "oblačno",
+            "front": "bewölkt"
+          },
+          {
+            "back": "Pada kiša.",
+            "front": "Es regnet."
+          },
+          {
+            "back": "Pada sneg.",
+            "front": "Es schneit."
+          },
+          {
+            "back": "vetrovito",
+            "front": "windig"
+          },
+          {
+            "back": "toplo / hladno",
+            "front": "warm / kalt"
+          },
+          {
+            "back": "u proleće",
+            "front": "im Frühling"
+          },
+          {
+            "back": "u leto",
+            "front": "im Sommer"
+          },
+          {
+            "back": "u jesen",
+            "front": "im Herbst"
+          },
+          {
+            "back": "u zimu",
+            "front": "im Winter"
+          }
+        ]
+      },
+      {
+        "rows": [
+          [
+            "sonnig",
+            "sunčano"
+          ],
+          [
+            "bewölkt",
+            "oblačno"
+          ],
+          [
+            "Es regnet.",
+            "Pada kiša."
+          ],
+          [
+            "Es schneit.",
+            "Pada sneg."
+          ],
+          [
+            "windig",
+            "vetrovito"
+          ],
+          [
+            "warm / kalt",
+            "toplo / hladno"
+          ],
+          [
+            "im Frühling",
+            "u proleće"
+          ],
+          [
+            "im Sommer",
+            "u leto"
+          ],
+          [
+            "im Herbst",
+            "u jesen"
+          ],
+          [
+            "im Winter",
+            "u zimu"
+          ]
+        ],
+        "type": "vocabulary"
+      }
+    ],
+    "vimeo_video_id": "705506098"
+  },
+  {
+    "id": "dc94260c-3a54-47df-8843-50b7bccda78c",
+    "title": "Deklinacija prideva – Masterclass",
+    "order_index": 26,
+    "sections": [],
+    "vimeo_video_id": "937554608"
+  },
+  {
     "id": "81b96152-c349-424c-89aa-34d43e5e67e0",
     "title": "Test: Modul 6",
     "order_index": 26,
@@ -6469,6 +11614,13 @@
         "category": "grammatik"
       }
     ],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "f9cbf2f7-6001-4d66-b617-6b9e61de87dd",
+    "title": "Medikamenti",
+    "order_index": 26,
+    "sections": [],
     "vimeo_video_id": null
   },
   {
@@ -6574,6 +11726,358 @@
     "vimeo_video_id": null
   },
   {
+    "id": "8817b6f7-893e-4e44-9fe6-574d063d8043",
+    "title": "Akuzativ",
+    "order_index": 27,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 6",
+        "category": "grammatik"
+      },
+      {
+        "type": "video",
+        "vimeoId": "705508243"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "U ovoj lekciji naučićeš **akuzativ** — kako se menjaju članovi kad naručuješ hranu ili kažeš šta želiš."
+      },
+      {
+        "type": "formula",
+        "content": "Nominativ → Akuzativ\nder / ein / kein → <mark>den / einen / keinen</mark>\ndie / eine / keine → die / eine / keine (isto!)\ndas / ein / kein → das / ein / kein (isto!)\n\nSamo MUŠKI rod se menja!"
+      },
+      {
+        "rows": [
+          [
+            "Das ist <mark>ein</mark> Kuchen.",
+            "Ich bestelle <mark>einen</mark> Kuchen.",
+            "Naručujem kolač."
+          ],
+          [
+            "Das ist <mark>eine</mark> Cola.",
+            "Ich bestelle <mark>eine</mark> Cola.",
+            "Naručujem kolu."
+          ],
+          [
+            "Das ist <mark>ein</mark> Brötchen.",
+            "Ich nehme <mark>ein</mark> Brötchen.",
+            "Uzimam zemičku."
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Nominativ",
+          "Akuzativ",
+          "Prevod"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "uebung",
+        "content": "**möchten** (želeti) — učtiv oblik:\nich <mark>möchte</mark> · du möchtest · er/sie möchte\n\n**nehmen** (uzeti) — menja e→i:\nich nehme · du <mark>nimmst</mark> · er/sie <mark>nimmt</mark>"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "einen (muški rod → einen)",
+            "question": "1. Ich bestelle ___ Salat. (m)"
+          },
+          {
+            "answer": "eine (ženski rod → isto)",
+            "question": "2. Ich möchte ___ Cola. (f)"
+          },
+          {
+            "answer": "ein (srednji rod → isto)",
+            "question": "3. Ich nehme ___ Schnitzel. (n)"
+          },
+          {
+            "answer": "keinen",
+            "question": "4. Ich habe ___ Kuchen. (m, negacija)"
+          }
+        ],
+        "title": "Mini vežba — ein ili einen?"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "naručiti",
+            "front": "bestellen"
+          },
+          {
+            "back": "želeo/la bih",
+            "front": "möchte"
+          },
+          {
+            "back": "uzeti",
+            "front": "nehmen"
+          },
+          {
+            "back": "jedan (muški rod)",
+            "front": "einen (Akk.)"
+          },
+          {
+            "back": "kolač",
+            "front": "der Kuchen"
+          },
+          {
+            "back": "salata",
+            "front": "der Salat"
+          },
+          {
+            "back": "zemička",
+            "front": "das Brötchen"
+          },
+          {
+            "back": "šnicla",
+            "front": "das Schnitzel"
+          },
+          {
+            "back": "kola",
+            "front": "die Cola"
+          },
+          {
+            "back": "Šta bi želeo/la?",
+            "front": "Was möchtest du?"
+          }
+        ]
+      },
+      {
+        "rows": [
+          [
+            "bestellen",
+            "naručiti"
+          ],
+          [
+            "möchte",
+            "želeo/la bih"
+          ],
+          [
+            "nehmen",
+            "uzeti"
+          ],
+          [
+            "der Kuchen",
+            "kolač"
+          ],
+          [
+            "der Salat",
+            "salata"
+          ],
+          [
+            "das Brötchen",
+            "zemička"
+          ],
+          [
+            "das Schnitzel",
+            "šnicla"
+          ],
+          [
+            "Was möchtest du?",
+            "Šta bi želeo/la?"
+          ],
+          [
+            "einen (Akk. m)",
+            "jedan (akuzativ)"
+          ],
+          [
+            "keinen (Akk. m)",
+            "nijedan (akuzativ)"
+          ]
+        ],
+        "type": "vocabulary"
+      }
+    ],
+    "vimeo_video_id": "705508243"
+  },
+  {
+    "id": "48e47ad2-a031-4dd4-a193-0e08b7b32923",
+    "title": "Freizeit",
+    "order_index": 28,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 6",
+        "category": "grammatik"
+      },
+      {
+        "type": "video",
+        "vimeoId": "705523398"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "U ovoj lekciji naučićeš kako da pričaš o **hobijima i slobodnom vremenu** i glagole sa promenom osnove."
+      },
+      {
+        "rows": [
+          [
+            "<mark>schwimmen</mark>",
+            "plivati"
+          ],
+          [
+            "<mark>tanzen</mark>",
+            "plesati"
+          ],
+          [
+            "<mark>joggen</mark>",
+            "trčati"
+          ],
+          [
+            "<mark>lesen</mark>",
+            "čitati"
+          ],
+          [
+            "<mark>Rad fahren</mark>",
+            "voziti bicikl"
+          ],
+          [
+            "<mark>wandern</mark>",
+            "planinariti"
+          ],
+          [
+            "<mark>grillen</mark>",
+            "roštiljati"
+          ],
+          [
+            "<mark>malen</mark>",
+            "slikati"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Hobi",
+          "Prevod"
+        ]
+      },
+      {
+        "type": "formula",
+        "content": "Promena osnove u du/er formi:\na → ä: fahren → du fährst\ne → ie: lesen → du liest\ne → i: sprechen → du sprichst"
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "**Izražavanje stava:**\nSchwimmen macht **Spaß**! = Plivanje je zabavno!\nWandern **gefällt mir** nicht. = Planinarenje mi se ne dopada.\nIch **finde** Tanzen toll. = Mislim da je ples super."
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "In der Freizeit schwimme/lese/tanze ich.",
+            "question": "1. Šta radiš u slobodno vreme?"
+          },
+          {
+            "answer": "du fährst",
+            "question": "2. du + fahren = ?"
+          },
+          {
+            "answer": "du liest",
+            "question": "3. du + lesen = ?"
+          },
+          {
+            "answer": "Schwimmen macht Spaß!",
+            "question": "4. Plivanje je zabavno!"
+          }
+        ],
+        "title": "Mini vežba — Hobiji"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "slobodno vreme",
+            "front": "die Freizeit"
+          },
+          {
+            "back": "plivati",
+            "front": "schwimmen"
+          },
+          {
+            "back": "plesati",
+            "front": "tanzen"
+          },
+          {
+            "back": "čitati",
+            "front": "lesen"
+          },
+          {
+            "back": "voziti bicikl",
+            "front": "Rad fahren"
+          },
+          {
+            "back": "planinariti",
+            "front": "wandern"
+          },
+          {
+            "back": "slikati",
+            "front": "malen"
+          },
+          {
+            "back": "hobi",
+            "front": "das Hobby"
+          },
+          {
+            "back": "biti zabavno",
+            "front": "Spaß machen"
+          },
+          {
+            "back": "dopadati se",
+            "front": "gefallen"
+          }
+        ]
+      },
+      {
+        "rows": [
+          [
+            "die Freizeit",
+            "slobodno vreme"
+          ],
+          [
+            "schwimmen",
+            "plivati"
+          ],
+          [
+            "tanzen",
+            "plesati"
+          ],
+          [
+            "lesen",
+            "čitati"
+          ],
+          [
+            "Rad fahren",
+            "voziti bicikl"
+          ],
+          [
+            "wandern",
+            "planinariti"
+          ],
+          [
+            "das Hobby",
+            "hobi"
+          ],
+          [
+            "Spaß machen",
+            "biti zabavno"
+          ],
+          [
+            "gefallen",
+            "dopadati se"
+          ],
+          [
+            "Ich finde ... toll.",
+            "Mislim da je ... super."
+          ]
+        ],
+        "type": "vocabulary"
+      }
+    ],
+    "vimeo_video_id": "705523398"
+  },
+  {
     "id": "d6854096-e432-4950-906e-0c39904b1b4e",
     "title": "Gramatika za nivo A1 — BONUS",
     "order_index": 28,
@@ -6642,6 +12146,174 @@
     "vimeo_video_id": "918423443"
   },
   {
+    "id": "cd77028d-01e3-43ac-97c3-f532770af2b7",
+    "title": "Ja, nein, doch",
+    "order_index": 29,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 6",
+        "category": "grammatik"
+      },
+      {
+        "type": "video",
+        "vimeoId": "919687972"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "U ovoj lekciji naučićeš razliku između **ja, nein i doch** — kako da odgovoriš na pozitivna i negativna pitanja."
+      },
+      {
+        "type": "formula",
+        "content": "Pozitivno pitanje:\nKaufst du ein? → Ja / Nein\n\nNegativno pitanje:\nKaufst du NICHT ein? → Doch (ipak da) / Nein"
+      },
+      {
+        "rows": [
+          [
+            "Kaufst du gern ein?",
+            "<mark>Ja</mark>, ich kaufe gern ein."
+          ],
+          [
+            "Kaufst du gern ein?",
+            "<mark>Nein</mark>, ich kaufe nicht gern ein."
+          ],
+          [
+            "Kaufst du <mark>nicht</mark> gern ein?",
+            "<mark>Doch</mark>, ich kaufe gern ein!"
+          ],
+          [
+            "Kaufst du <mark>nicht</mark> gern ein?",
+            "<mark>Nein</mark>, ich kaufe nicht gern ein."
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Pitanje",
+          "Odgovor"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "uebung",
+        "content": "**doch** se koristi SAMO kad odgovaraš pozitivno na negativno pitanje. To je kao \"ipak da!\" ili \"ma da, volim!\"."
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Ja, ich spreche Deutsch.",
+            "question": "1. Sprichst du Deutsch? — Da."
+          },
+          {
+            "answer": "Doch, ich spreche Deutsch!",
+            "question": "2. Sprichst du nicht Deutsch? — Ipak da!"
+          },
+          {
+            "answer": "Nein, ich koche nicht gern.",
+            "question": "3. Kochst du nicht gern? — Ne."
+          },
+          {
+            "answer": "Nein, ich gehe nicht gern spazieren.",
+            "question": "4. Gehst du gern spazieren? — Ne."
+          }
+        ],
+        "title": "Mini vežba — Ja, Nein ili Doch?"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "da",
+            "front": "ja"
+          },
+          {
+            "back": "ne",
+            "front": "nein"
+          },
+          {
+            "back": "ipak da (na negativno pitanje)",
+            "front": "doch"
+          },
+          {
+            "back": "ne",
+            "front": "nicht"
+          },
+          {
+            "back": "pitanje",
+            "front": "die Frage"
+          },
+          {
+            "back": "Kako?",
+            "front": "Wie?"
+          },
+          {
+            "back": "Gde?",
+            "front": "Wo?"
+          },
+          {
+            "back": "Ko?",
+            "front": "Wer?"
+          },
+          {
+            "back": "Šta?",
+            "front": "Was?"
+          },
+          {
+            "back": "Kad?",
+            "front": "Wann?"
+          }
+        ]
+      },
+      {
+        "rows": [
+          [
+            "ja",
+            "da"
+          ],
+          [
+            "nein",
+            "ne"
+          ],
+          [
+            "doch",
+            "ipak da"
+          ],
+          [
+            "nicht",
+            "ne"
+          ],
+          [
+            "die Frage",
+            "pitanje"
+          ],
+          [
+            "Wie?",
+            "Kako?"
+          ],
+          [
+            "Wo?",
+            "Gde?"
+          ],
+          [
+            "Wer?",
+            "Ko?"
+          ],
+          [
+            "Was?",
+            "Šta?"
+          ],
+          [
+            "Wann?",
+            "Kad?"
+          ]
+        ],
+        "type": "vocabulary"
+      }
+    ],
+    "vimeo_video_id": "803537514"
+  },
+  {
     "id": "8525da96-34f0-4f43-9168-2ecb0a05308d",
     "title": "Reči za ispit A1",
     "order_index": 29,
@@ -6676,6 +12348,165 @@
       }
     ],
     "vimeo_video_id": null
+  },
+  {
+    "id": "ea9e8c57-b5eb-44c8-ab60-0848d4414db3",
+    "title": "Mini Gespräche — Modul 6",
+    "order_index": 30,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 6",
+        "category": "hoeren"
+      },
+      {
+        "type": "video",
+        "vimeoId": "805052796"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "U ovoj lekciji vežbaš dijaloge o **stvarima koje imaš sa sobom** koristeći akuzativ i \"dabei\"."
+      },
+      {
+        "rows": [
+          [
+            "— Hast du <mark>einen</mark> Bleistift dabei?",
+            "— Imaš li olovku sa sobom?"
+          ],
+          [
+            "— Ja, ich habe einen Bleistift dabei.",
+            "— Da, imam."
+          ],
+          [
+            "— Hast du <mark>ein</mark> Handy dabei?",
+            "— Imaš li telefon?"
+          ],
+          [
+            "— Nein, ich habe <mark>kein</mark> Handy dabei.",
+            "— Ne, nemam."
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Dijalog",
+          "Prevod"
+        ]
+      },
+      {
+        "type": "formula",
+        "content": "einen (m) / eine (f) / ein (n) → imam\nkeinen (m) / keine (f) / kein (n) → nemam\n\ndabei = sa sobom"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Ja, ich habe einen Schlüssel dabei.",
+            "question": "1. Hast du einen Schlüssel dabei?"
+          },
+          {
+            "answer": "Nein, ich habe keine Kamera dabei.",
+            "question": "2. Hast du eine Kamera dabei?"
+          },
+          {
+            "answer": "Hast du ein Feuerzeug dabei?",
+            "question": "3. Imaš li upaljač?"
+          }
+        ],
+        "title": "Mini vežba — Imaš li...?"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "sa sobom",
+            "front": "dabei"
+          },
+          {
+            "back": "olovka",
+            "front": "der Bleistift"
+          },
+          {
+            "back": "gumica",
+            "front": "der Radiergummi"
+          },
+          {
+            "back": "makaze",
+            "front": "die Schere"
+          },
+          {
+            "back": "upaljač",
+            "front": "das Feuerzeug"
+          },
+          {
+            "back": "mobilni",
+            "front": "das Handy"
+          },
+          {
+            "back": "ključ",
+            "front": "der Schlüssel"
+          },
+          {
+            "back": "kamera",
+            "front": "die Kamera"
+          },
+          {
+            "back": "imati",
+            "front": "haben"
+          },
+          {
+            "back": "Imaš li...sa sobom?",
+            "front": "Hast du...dabei?"
+          }
+        ]
+      },
+      {
+        "rows": [
+          [
+            "dabei",
+            "sa sobom"
+          ],
+          [
+            "der Bleistift",
+            "olovka"
+          ],
+          [
+            "der Radiergummi",
+            "gumica"
+          ],
+          [
+            "die Schere",
+            "makaze"
+          ],
+          [
+            "das Feuerzeug",
+            "upaljač"
+          ],
+          [
+            "das Handy",
+            "mobilni"
+          ],
+          [
+            "der Schlüssel",
+            "ključ"
+          ],
+          [
+            "die Kamera",
+            "kamera"
+          ],
+          [
+            "haben",
+            "imati"
+          ],
+          [
+            "Hast du...dabei?",
+            "Imaš li...sa sobom?"
+          ]
+        ],
+        "type": "vocabulary"
+      }
+    ],
+    "vimeo_video_id": "805052796"
   },
   {
     "id": "25412b1e-e150-4b09-921c-fe9804a64bac",
@@ -6722,6 +12553,675 @@
         "type": "text",
         "style": "uebung",
         "content": "**Savet:** Uradi bar **2-3 primera ispita** pre pravog polaganja. Pazi na vreme — vežbaj sa tajmerom!"
+      }
+    ],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "e74c88e8-a2ae-449a-b903-1ce7cf62ed84",
+    "title": "Završni ispit A1 — Modelltest",
+    "order_index": 31,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Ispit",
+        "category": "lesen"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Ovo je **simulacija Goethe ispita A1** (Start Deutsch 1). Ispit ima tri dela: Lesen, Hören i Schreiben. Uradi sve delove redom."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Kako funkcioniše\n\n1. **Lesen** — Pročitaj tekstove i odgovori na pitanja (25 min)\n2. **Hören** — Posušaj audio ispod, pa odgovori na pitanja (20 min)\n3. **Schreiben** — Popuni formular + napiši mejl (20 min)\n\nNa pravom ispitu treba **60 od 100 poena** za prolaz."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Audio za Hören deo\n\nPosušaj ceo audio pre nego što počneš Hören vežbu:"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "<audio controls style=\"width:100%\"><source src=\"/audio/modelltest-a1.mp4\" type=\"audio/mp4\">Tvoj pretraživač ne podržava audio.</audio>"
+      }
+    ],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "3099c492-ac00-4da7-b20b-00c479fd3a9d",
+    "title": "Test: Modul 6",
+    "order_index": 31,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 6",
+        "category": "schreiben"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Proveri svoje znanje iz **Modul 6**. Kviz sadrži razne tipove pitanja — quiz, tačno/netačno, upiši odgovor, sortiraj i spoji parove."
+      }
+    ],
+    "vimeo_video_id": null
+  },
+  {
+    "id": "d893be9a-df01-4e64-aa21-c4f861ae24ba",
+    "title": "Ich kann, ich will",
+    "order_index": 32,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 7",
+        "category": "grammatik"
+      },
+      {
+        "type": "video",
+        "vimeoId": "805849216"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "U ovoj lekciji naučićeš modalne glagole **können** (moći) i **wollen** (hteti) — kako da kažeš šta umeš i šta želiš."
+      },
+      {
+        "rows": [
+          [
+            "<mark>ich</mark>",
+            "kann",
+            "will"
+          ],
+          [
+            "<mark>du</mark>",
+            "kannst",
+            "willst"
+          ],
+          [
+            "<mark>er/sie/es</mark>",
+            "kann",
+            "will"
+          ],
+          [
+            "<mark>wir</mark>",
+            "können",
+            "wollen"
+          ],
+          [
+            "<mark>ihr</mark>",
+            "könnt",
+            "wollt"
+          ],
+          [
+            "<mark>Sie/sie</mark>",
+            "können",
+            "wollen"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "",
+          "können (moći)",
+          "wollen (hteti)"
+        ]
+      },
+      {
+        "type": "formula",
+        "content": "Modalni glagol + infinitiv na KRAJU:\nIch kann gut schwimmen.\nSie will Deutsch lernen."
+      },
+      {
+        "type": "text",
+        "style": "uebung",
+        "content": "**Pazi:** ich/er forme su ISTE kod modalnih glagola:\nich **kann** = er **kann** · ich **will** = er **will**"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "kann",
+            "question": "1. Sven ___ gut schwimmen. (umeti)"
+          },
+          {
+            "answer": "will",
+            "question": "2. Ich ___ Deutsch lernen. (želeti)"
+          },
+          {
+            "answer": "Kannst",
+            "question": "3. ___ du Gitarre spielen? (umeti)"
+          },
+          {
+            "answer": "wollen",
+            "question": "4. Wir ___ nach Berlin fahren. (želeti)"
+          }
+        ],
+        "title": "Mini vežba — können ili wollen?"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "moći / umeti",
+            "front": "können"
+          },
+          {
+            "back": "hteti",
+            "front": "wollen"
+          },
+          {
+            "back": "ja mogu",
+            "front": "ich kann"
+          },
+          {
+            "back": "ja hoću",
+            "front": "ich will"
+          },
+          {
+            "back": "plivati",
+            "front": "schwimmen"
+          },
+          {
+            "back": "svirati gitaru",
+            "front": "Gitarre spielen"
+          },
+          {
+            "back": "skijati",
+            "front": "Ski fahren"
+          },
+          {
+            "back": "pevati",
+            "front": "singen"
+          },
+          {
+            "back": "slikati",
+            "front": "malen"
+          },
+          {
+            "back": "dobro / ne dobro",
+            "front": "gut / nicht gut"
+          }
+        ]
+      },
+      {
+        "rows": [
+          [
+            "können",
+            "moći / umeti"
+          ],
+          [
+            "wollen",
+            "hteti"
+          ],
+          [
+            "ich kann",
+            "ja mogu"
+          ],
+          [
+            "ich will",
+            "ja hoću"
+          ],
+          [
+            "schwimmen",
+            "plivati"
+          ],
+          [
+            "Gitarre spielen",
+            "svirati gitaru"
+          ],
+          [
+            "Ski fahren",
+            "skijati"
+          ],
+          [
+            "singen",
+            "pevati"
+          ],
+          [
+            "Ich kann gut...",
+            "Ja umem dobro..."
+          ],
+          [
+            "Ich will...lernen.",
+            "Želim da naučim..."
+          ]
+        ],
+        "type": "vocabulary"
+      }
+    ],
+    "vimeo_video_id": "805849216"
+  },
+  {
+    "id": "48181d52-8a42-4004-ad4c-f913434c813c",
+    "title": "Perfekat — pravilni glagoli",
+    "order_index": 33,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 7",
+        "category": "grammatik"
+      },
+      {
+        "type": "video",
+        "vimeoId": "807695114"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "U ovoj lekciji naučićeš **perfekat** (prošlo vreme) za **pravilne glagole** — kako da kažeš šta si radio/la."
+      },
+      {
+        "type": "formula",
+        "content": "ge- + osnova + -t\n\nmachen → ge·mach·t\nkochen → ge·koch·t\nhören → ge·hör·t\nlernen → ge·lern·t\n\nIch habe gekocht. = Ja sam kuvao/la."
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "**Struktura:** haben + ... + ge___t\n\nIch <mark>habe</mark> Musik <mark>gehört</mark>.\nIch <mark>habe</mark> Deutsch <mark>gelernt</mark>.\nEr <mark>hat</mark> Pizza <mark>gemacht</mark>.\nSie <mark>hat</mark> lange <mark>gearbeitet</mark>."
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "habe ... gekocht",
+            "question": "1. Ich ___ gestern ___. (kochen)"
+          },
+          {
+            "answer": "hat ... gespielt",
+            "question": "2. Er ___ Fußball ___. (spielen)"
+          },
+          {
+            "answer": "haben ... gelernt",
+            "question": "3. Wir ___ viel ___. (lernen)"
+          }
+        ],
+        "title": "Mini vežba — Napravi perfekat"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "urađeno",
+            "front": "gemacht"
+          },
+          {
+            "back": "kuvano",
+            "front": "gekocht"
+          },
+          {
+            "back": "slušano",
+            "front": "gehört"
+          },
+          {
+            "back": "naučeno",
+            "front": "gelernt"
+          },
+          {
+            "back": "igrano",
+            "front": "gespielt"
+          },
+          {
+            "back": "rađeno",
+            "front": "gearbeitet"
+          },
+          {
+            "back": "kupljeno",
+            "front": "gekauft"
+          },
+          {
+            "back": "pitano",
+            "front": "gefragt"
+          },
+          {
+            "back": "rečeno",
+            "front": "gesagt"
+          },
+          {
+            "back": "čišćeno",
+            "front": "geputzt"
+          }
+        ]
+      },
+      {
+        "rows": [
+          [
+            "gemacht",
+            "urađeno"
+          ],
+          [
+            "gekocht",
+            "kuvano"
+          ],
+          [
+            "gehört",
+            "slušano"
+          ],
+          [
+            "gelernt",
+            "naučeno"
+          ],
+          [
+            "gespielt",
+            "igrano"
+          ],
+          [
+            "gearbeitet",
+            "rađeno"
+          ],
+          [
+            "gekauft",
+            "kupljeno"
+          ],
+          [
+            "gefragt",
+            "pitano"
+          ],
+          [
+            "gesagt",
+            "rečeno"
+          ],
+          [
+            "geputzt",
+            "čišćeno"
+          ]
+        ],
+        "type": "vocabulary"
+      }
+    ],
+    "vimeo_video_id": "807695114"
+  },
+  {
+    "id": "fed54e49-8362-46ef-a4af-67c33cfbf636",
+    "title": "Perfekat — nepravilni glagoli",
+    "order_index": 34,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 7",
+        "category": "grammatik"
+      },
+      {
+        "type": "video",
+        "vimeoId": "807702823"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Sad učiš perfekat za **nepravilne glagole** — oni menjaju osnovu i završavaju na **-en**."
+      },
+      {
+        "type": "formula",
+        "content": "ge- + promenjena osnova + -en\n\nessen → ge·gess·en\nlesen → ge·les·en\nschreiben → ge·schrieb·en\nsprechen → ge·sproch·en"
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "**Struktura:** haben + ... + ge___en\n\nIch <mark>habe</mark> ein Buch <mark>gelesen</mark>.\nIch <mark>habe</mark> Pizza <mark>gegessen</mark>.\nEr <mark>hat</mark> Deutsch <mark>gesprochen</mark>.\nSie <mark>hat</mark> einen Brief <mark>geschrieben</mark>."
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "habe ... gelesen",
+            "question": "1. Ich ___ ein Buch ___. (lesen)"
+          },
+          {
+            "answer": "hat ... gegessen",
+            "question": "2. Er ___ Pizza ___. (essen)"
+          },
+          {
+            "answer": "hat ... gesprochen",
+            "question": "3. Sie ___ Deutsch ___. (sprechen)"
+          }
+        ],
+        "title": "Mini vežba — Napravi perfekat"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "jedeno",
+            "front": "gegessen"
+          },
+          {
+            "back": "čitano",
+            "front": "gelesen"
+          },
+          {
+            "back": "pisano",
+            "front": "geschrieben"
+          },
+          {
+            "back": "govoreno",
+            "front": "gesprochen"
+          },
+          {
+            "back": "pijeno",
+            "front": "getrunken"
+          },
+          {
+            "back": "uzeto",
+            "front": "genommen"
+          },
+          {
+            "back": "viđeno",
+            "front": "gesehen"
+          },
+          {
+            "back": "nađeno",
+            "front": "gefunden"
+          },
+          {
+            "back": "pomognuto",
+            "front": "geholfen"
+          },
+          {
+            "back": "razumljeno",
+            "front": "verstanden"
+          }
+        ]
+      },
+      {
+        "rows": [
+          [
+            "gegessen",
+            "jedeno"
+          ],
+          [
+            "gelesen",
+            "čitano"
+          ],
+          [
+            "geschrieben",
+            "pisano"
+          ],
+          [
+            "gesprochen",
+            "govoreno"
+          ],
+          [
+            "getrunken",
+            "pijeno"
+          ],
+          [
+            "genommen",
+            "uzeto"
+          ],
+          [
+            "gesehen",
+            "viđeno"
+          ],
+          [
+            "gefunden",
+            "nađeno"
+          ],
+          [
+            "geholfen",
+            "pomognuto"
+          ],
+          [
+            "verstanden",
+            "razumljeno"
+          ]
+        ],
+        "type": "vocabulary"
+      }
+    ],
+    "vimeo_video_id": "807702823"
+  },
+  {
+    "id": "af8eaf1d-f5af-4731-8fb4-9f8d64dd4b3b",
+    "title": "Perfekat sa sein + glagoli sa prefiksima",
+    "order_index": 35,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 7",
+        "category": "grammatik"
+      },
+      {
+        "type": "video",
+        "vimeoId": "807704166"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "U ovoj lekciji učiš da glagoli **kretanja** prave perfekat sa **sein** umesto haben."
+      },
+      {
+        "type": "formula",
+        "content": "Glagoli kretanja → sein:\n\nich <mark>bin</mark> gegangen (otišao)\nich <mark>bin</mark> gefahren (vozio)\nich <mark>bin</mark> geflogen (leteo)\nich <mark>bin</mark> gekommen (došao)\nich <mark>bin</mark> gereist (putovao)"
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "**Struktura:** sein + ... + ge___\n\nIch <mark>bin</mark> nach Spanien <mark>gereist</mark>.\nIch <mark>bin</mark> um 6 Uhr <mark>aufgestanden</mark>.\nEr <mark>ist</mark> nach Berlin <mark>gefahren</mark>.\nSie <mark>ist</mark> spät <mark>gekommen</mark>."
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "bin ... gefahren",
+            "question": "1. Ich ___ nach Wien ___. (fahren)"
+          },
+          {
+            "answer": "ist ... gekommen",
+            "question": "2. Er ___ spät ___. (kommen)"
+          },
+          {
+            "answer": "sind ... aufgestanden",
+            "question": "3. Wir ___ um 7 ___. (aufstehen)"
+          }
+        ],
+        "title": "Mini vežba — Napravi perfekat"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "otišao",
+            "front": "gegangen"
+          },
+          {
+            "back": "vozio",
+            "front": "gefahren"
+          },
+          {
+            "back": "leteo",
+            "front": "geflogen"
+          },
+          {
+            "back": "došao",
+            "front": "gekommen"
+          },
+          {
+            "back": "putovao",
+            "front": "gereist"
+          },
+          {
+            "back": "ustao",
+            "front": "aufgestanden"
+          },
+          {
+            "back": "ostao",
+            "front": "geblieben"
+          },
+          {
+            "back": "trčao",
+            "front": "gelaufen"
+          },
+          {
+            "back": "plivao",
+            "front": "geschwommen"
+          },
+          {
+            "back": "bio",
+            "front": "gewesen"
+          }
+        ]
+      },
+      {
+        "rows": [
+          [
+            "gegangen",
+            "otišao"
+          ],
+          [
+            "gefahren",
+            "vozio"
+          ],
+          [
+            "geflogen",
+            "leteo"
+          ],
+          [
+            "gekommen",
+            "došao"
+          ],
+          [
+            "gereist",
+            "putovao"
+          ],
+          [
+            "aufgestanden",
+            "ustao"
+          ],
+          [
+            "geblieben",
+            "ostao"
+          ],
+          [
+            "gelaufen",
+            "trčao"
+          ],
+          [
+            "geschwommen",
+            "plivao"
+          ],
+          [
+            "gewesen",
+            "bio"
+          ]
+        ],
+        "type": "vocabulary"
+      }
+    ],
+    "vimeo_video_id": "807704166"
+  },
+  {
+    "id": "732db8ac-1d03-43c0-abb9-8c2d543a4fab",
+    "title": "Test: Modul 7",
+    "order_index": 36,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 7",
+        "category": "schreiben"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Proveri svoje znanje iz **Modul 7**. Kviz sadrži razne tipove pitanja — quiz, tačno/netačno, upiši odgovor, sortiraj i spoji parove."
       }
     ],
     "vimeo_video_id": null
