@@ -54,7 +54,7 @@ export async function POST(request: Request) {
   }
 
   // Extract level from course title (e.g. "Nemački A1.1" → "A1")
-  const courseTitle = (lesson.courses as { title: string } | null)?.title ?? "";
+  const courseTitle = (lesson.courses as unknown as { title: string } | null)?.title ?? "";
   const levelMatch = courseTitle.match(/[AB][12]/i);
   const level = levelMatch ? levelMatch[0].toUpperCase() : "A1";
 
