@@ -122,8 +122,9 @@ export default function AiDialogExercise({ lessonId, lessonTitle }: AiDialogExer
         <h2 className="text-xl font-bold text-gray-900 mb-2">Vežbaj u dijalogu</h2>
         <p className="text-sm text-gray-500 mb-2">{lessonTitle}</p>
         <p className="text-xs text-gray-400 mb-6 max-w-sm mx-auto">
-          Ova vežba koristi veštačku inteligenciju. Odgovori su generisani automatski
-          i mogu povremeno sadržati greške. Ako nešto deluje čudno — pitaj svoju profesorku.
+          Vodićeš kratki razgovor na nemačkom u 7 koraka — biraš jedan od dva ponuđena odgovora.
+          Na kraju dobijaš ceo dijalog sa prevodom.
+          Ova vežba koristi veštačku inteligenciju i može povremeno sadržati greške.
         </p>
         <button
           onClick={startDialog}
@@ -160,16 +161,10 @@ export default function AiDialogExercise({ lessonId, lessonTitle }: AiDialogExer
           </div>
         )}
 
-        <div className="flex gap-3">
-          <button
-            onClick={restart}
-            className="flex-1 py-3 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50 transition-colors"
-          >
-            Ponovi
-          </button>
+        <div>
           <Link
             href={`/lekcija/${lessonId}`}
-            className="flex-1 text-center py-3 bg-plava text-white rounded-lg text-sm font-medium hover:bg-plava-dark transition-colors"
+            className="block w-full text-center py-3 bg-plava text-white rounded-lg text-sm font-medium hover:bg-plava-dark transition-colors"
           >
             Nazad na lekciju
           </Link>
