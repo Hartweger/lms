@@ -39,6 +39,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
   const [results, setResults] = useState<{ question: string; correct: boolean }[]>([]);
   const [dialogAttempts, setDialogAttempts] = useState(0);
   const [certificateId, setCertificateId] = useState<string | null>(null);
+  const [modelltestTotal, setModelltestTotal] = useState<{ score: number; total: number } | null>(null);
 
   // Enter key advances to next question
   useEffect(() => {
@@ -136,11 +137,41 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
           total_questions: questions.length,
         });
 
-        // Modelltest: issue certificate if >= 60%
+        // Modelltest: calculate total score across ALL exercises on this lesson
         if (isModelltest && courseId) {
-          const finalPercent = Math.round((score / questions.length) * 100);
-          if (finalPercent >= 60) {
-            // Check if certificate already exists
+          // Get all exercises on the same lesson
+          const { data: siblingExs } = await supabase
+            .from("exercises")
+            .select("id")
+            .eq("lesson_id", exercise.lesson_id);
+
+          const siblingIds = (siblingExs || []).map((e: { id: string }) => e.id);
+
+          // Get best attempt for each sibling exercise (except current — use live score)
+          let totalScore = score;
+          let totalQuestions = questions.length;
+
+          for (const sid of siblingIds) {
+            if (sid === exercise.id) continue;
+            const { data: bestAttempt } = await supabase
+              .from("exercise_attempts")
+              .select("score, total_questions")
+              .eq("exercise_id", sid)
+              .eq("user_id", user.id)
+              .order("score", { ascending: false })
+              .limit(1)
+              .single();
+
+            if (bestAttempt) {
+              totalScore += bestAttempt.score;
+              totalQuestions += bestAttempt.total_questions;
+            }
+          }
+
+          const overallPercent = Math.round((totalScore / totalQuestions) * 100);
+          setModelltestTotal({ score: totalScore, total: totalQuestions });
+
+          if (overallPercent >= 60) {
             const { data: existing } = await supabase
               .from("certificates")
               .select("id")
@@ -207,11 +238,15 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
             : `Tačnih odgovora: ${score} od ${totalForScore}`}
         </p>
         <p className="text-plava font-bold mb-1">{xp} XP zarađeno</p>
-        {isModelltest ? (
-          percent >= 60 ? (
+        {isModelltest && modelltestTotal ? (() => {
+          const overallPercent = Math.round((modelltestTotal.score / modelltestTotal.total) * 100);
+          return overallPercent >= 60 ? (
             <div className="mt-2">
               <p className="text-lg font-bold text-green-600">Položio/la! Čestitamo!</p>
-              <p className="text-sm text-gray-400">Potrebno je minimum 60% za prolaz.</p>
+              <p className="text-sm text-gray-500 mb-1">
+                Ukupan rezultat: {modelltestTotal.score} od {modelltestTotal.total} ({overallPercent}%)
+              </p>
+              <p className="text-sm text-gray-400">Minimum za prolaz: 60%</p>
               {certificateId && (
                 <a
                   href={`/sertifikat/${certificateId}`}
@@ -224,10 +259,13 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
           ) : (
             <div className="mt-2">
               <p className="text-lg font-bold text-koral">Nije položeno</p>
-              <p className="text-sm text-gray-400">Potrebno je minimum 60% za prolaz. Pokušaj ponovo!</p>
+              <p className="text-sm text-gray-500 mb-1">
+                Ukupan rezultat: {modelltestTotal.score} od {modelltestTotal.total} ({overallPercent}%)
+              </p>
+              <p className="text-sm text-gray-400">Minimum za prolaz: 60%. Pokušaj ponovo!</p>
             </div>
-          )
-        ) : (
+          );
+        })() : (
           <p className="text-sm text-gray-400">
             {percent === 100 ? "Savršeno! 🎉" : percent >= 90 ? "Odlično!" : percent >= 70 ? "Vrlo dobro!" : percent >= 50 ? "Dobro, nastavi da vežbaš!" : "Pokušaj ponovo!"}
           </p>
