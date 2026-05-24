@@ -17,12 +17,15 @@ function normalize(s: string): string {
 }
 
 function checkAnswer(input: string, answer: string): boolean {
-  // Direct match after normalization
-  if (normalize(input) === normalize(answer)) return true;
-  // Also try: if answer has Umlauts, accept both ä and ae forms
+  // Support multiple correct answers separated by |
+  const answers = answer.split("|").map((a) => a.trim());
+  const inputNorm = normalize(input);
   const inputRaw = input.trim().toLowerCase().replace(/[.!?]+$/g, "").replace(/\s+/g, " ");
-  const answerRaw = answer.trim().toLowerCase().replace(/[.!?]+$/g, "").replace(/\s+/g, " ");
-  return inputRaw === answerRaw;
+  return answers.some((a) => {
+    if (normalize(a) === inputNorm) return true;
+    const aRaw = a.trim().toLowerCase().replace(/[.!?]+$/g, "").replace(/\s+/g, " ");
+    return inputRaw === aRaw;
+  });
 }
 
 export default function TypingExercise({ question, correctAnswer, explanation, onAnswer }: TypingProps) {

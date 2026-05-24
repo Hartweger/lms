@@ -104,7 +104,14 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
   }
 
   const handleAnswer = (correct: boolean) => {
-    setResults([...results, { question: question.question, correct }]);
+    // Strip HTML for review display, keep only last meaningful line
+    const cleanQuestion = question.question
+      .replace(/<[^>]*>/g, "")
+      .split("\n")
+      .map((l: string) => l.trim())
+      .filter((l: string) => l.length > 0)
+      .pop() || question.question;
+    setResults([...results, { question: cleanQuestion, correct }]);
     if (correct) {
       const newStreak = streak + 1;
       setStreak(newStreak);
