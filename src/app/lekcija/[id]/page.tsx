@@ -116,8 +116,23 @@ export default async function LekcijaStranica({ params }: PageProps) {
       {/* Lesson content */}
       <LekcijaContent lesson={typedLesson} />
 
-      {/* AI Dialog Exercise */}
-      <div className="mt-8">
+      {/* AI Exercises */}
+      <div className="mt-8 space-y-2">
+        <Link
+          href={`/vezba/ai-prevod/${typedLesson.id}`}
+          className="flex items-center justify-between w-full bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow border border-gray-100"
+        >
+          <div className="flex items-center gap-3">
+            <span className="text-xl">✍️</span>
+            <div>
+              <span className="font-medium text-gray-900">Prevedi rečenice</span>
+              <span className="block text-xs text-gray-400">AI generisano</span>
+            </div>
+          </div>
+          <span className="text-xs text-plava bg-plava-light px-3 py-1 rounded-full">
+            AI
+          </span>
+        </Link>
         <Link
           href={`/vezba/ai/${typedLesson.id}`}
           className="flex items-center justify-between w-full bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow border border-gray-100"
