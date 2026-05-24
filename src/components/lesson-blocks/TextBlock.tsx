@@ -9,7 +9,7 @@ const styleClasses: Record<TextStyle, string> = {
 
 function formatContent(text: string): string {
   if (!text) return "";
-  if (text.includes("<p>") || text.includes("<h") || text.includes("<div")) {
+  if (text.includes("<p>") || text.includes("<h") || text.includes("<div") || text.includes("<iframe") || text.includes("<audio")) {
     return text;
   }
   let html = text
