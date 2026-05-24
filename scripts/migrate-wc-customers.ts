@@ -4,7 +4,9 @@
  *
  * NE ŠALJE MEJLOVE — samo kreira naloge u bazi.
  *
- * Usage: export $(grep -v '^#' .env.local | xargs) && npx tsx scripts/migrate-wc-customers.ts
+ * Usage: export $(grep -v '^#' .env.local | xargs) && \
+ *   WC_CONSUMER_KEY=ck_xxx WC_CONSUMER_SECRET=cs_xxx \
+ *   npx tsx scripts/migrate-wc-customers.ts
  */
 
 import { createClient } from "@supabase/supabase-js";
@@ -24,8 +26,8 @@ const WC_PRODUCT_MAP: Record<number, string[]> = {
 };
 
 const WC_URL = "https://www.hartweger.rs/wp-json/wc/v3";
-const WC_KEY = "ck_5fa42d3e78f75b6ddc9b166f70f0efddb3625322";
-const WC_SECRET = "cs_55c370aec2ab635f6e6fe83e76ea2b645d486bc4";
+const WC_KEY = process.env.WC_CONSUMER_KEY!;
+const WC_SECRET = process.env.WC_CONSUMER_SECRET!;
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -81,13 +83,15 @@ async function grantAccessLocal(
   let userId: string;
   let isNewUser = false;
 
-  const { data: existingUsers } = await supabase.auth.admin.listUsers();
-  const existingUser = existingUsers?.users?.find(
-    (u) => u.email?.toLowerCase() === email.toLowerCase()
-  );
+  // Look up by email via user_profiles (avoids listUsers pagination)
+  const { data: existingProfile } = await supabase
+    .from("user_profiles")
+    .select("id")
+    .eq("email", email.toLowerCase())
+    .single();
 
-  if (existingUser) {
-    userId = existingUser.id;
+  if (existingProfile) {
+    userId = existingProfile.id;
   } else {
     const { data: newUser, error } = await supabase.auth.admin.createUser({
       email,

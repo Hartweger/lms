@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
 
     console.log(`[wc-webhook] Result for ${email}:`, result);
 
-    return NextResponse.json({ ok: true, ...result });
+    return NextResponse.json({ ok: true });
   } catch (error) {
     console.error("[wc-webhook] Error:", error);
     return NextResponse.json({ error: "Internal error" }, { status: 500 });

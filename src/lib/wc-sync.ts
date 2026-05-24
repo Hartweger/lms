@@ -37,13 +37,15 @@ export async function grantAccess(
   let userId: string;
   let isNewUser = false;
 
-  const { data: existingUsers } = await supabase.auth.admin.listUsers();
-  const existingUser = existingUsers?.users?.find(
-    (u) => u.email?.toLowerCase() === email.toLowerCase()
-  );
+  // Look up user by email via user_profiles (avoids listUsers pagination bug)
+  const { data: existingProfile } = await supabase
+    .from("user_profiles")
+    .select("id")
+    .eq("email", email.toLowerCase())
+    .single();
 
-  if (existingUser) {
-    userId = existingUser.id;
+  if (existingProfile) {
+    userId = existingProfile.id;
     console.log(`[wc-sync] Existing user: ${email} (${userId})`);
   } else {
     const { data: newUser, error } = await supabase.auth.admin.createUser({
