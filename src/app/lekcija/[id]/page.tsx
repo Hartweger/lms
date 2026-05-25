@@ -81,12 +81,27 @@ export default async function LekcijaStranica({ params }: PageProps) {
     completedLessonIds = new Set(progress?.map((p) => p.lesson_id) ?? []);
   }
 
+  // Fetch sections for all lessons (for module badge info in drawer)
+  const { data: allLessonsWithSections } = await supabase
+    .from("lessons")
+    .select("id, sections")
+    .eq("course_id", typedLesson.course_id);
+
+  const sectionMap = new Map<string, string>();
+  for (const l of allLessonsWithSections ?? []) {
+    if (l.sections) {
+      const badge = (l.sections as { type: string; module?: string }[]).find((s) => s.type === "badge");
+      if (badge?.module) sectionMap.set(l.id, badge.module);
+    }
+  }
+
   // Build lesson list for drawer
   const drawerLessons = (allLessons ?? []).map((l) => ({
     id: l.id,
     title: l.title,
     order_index: l.order_index,
     completed: completedLessonIds.has(l.id),
+    module: sectionMap.get(l.id) || "",
   }));
 
   const completedCount = drawerLessons.filter((l) => l.completed).length;

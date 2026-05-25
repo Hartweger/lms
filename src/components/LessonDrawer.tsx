@@ -8,6 +8,7 @@ interface LessonItem {
   title: string;
   order_index: number;
   completed: boolean;
+  module?: string;
 }
 
 interface LessonDrawerProps {
@@ -78,53 +79,76 @@ export default function LessonDrawer({
           </p>
         </div>
 
-        {/* Lesson List */}
+        {/* Lesson List grouped by module */}
         <div className="overflow-y-auto" style={{ maxHeight: "calc(100vh - 120px)" }}>
-          {lessons.map((lesson, i) => {
-            const isCurrent = lesson.id === currentLessonId;
-            const isCompleted = lesson.completed;
+          {(() => {
+            let lastModule = "";
+            let lessonNum = 0;
+            return lessons.map((lesson) => {
+              const isCurrent = lesson.id === currentLessonId;
+              const isCompleted = lesson.completed;
+              const isTest = lesson.title.startsWith("Test:") || lesson.title.startsWith("Test Modul");
+              const isModelltest = lesson.title.toLowerCase().includes("modelltest");
+              const showModuleHeader = lesson.module && lesson.module !== lastModule;
+              if (lesson.module) lastModule = lesson.module;
+              lessonNum++;
 
-            return (
-              <Link
-                key={lesson.id}
-                href={`/lekcija/${lesson.id}`}
-                onClick={() => setIsOpen(false)}
-                className={`flex items-center gap-3 px-4 py-3 text-sm border-l-4 transition-colors ${
-                  isCurrent
-                    ? "bg-blue-50 border-plava"
-                    : isCompleted
-                    ? "bg-green-50 border-l-transparent"
-                    : "border-l-transparent hover:bg-gray-50"
-                }`}
-              >
-                <span className="shrink-0">
-                  {isCompleted ? (
-                    <span className="text-green-500 font-bold">✓</span>
-                  ) : isCurrent ? (
-                    <span className="text-plava font-bold">▶</span>
-                  ) : (
-                    <span className="text-gray-300">○</span>
+              return (
+                <div key={lesson.id}>
+                  {showModuleHeader && (
+                    <div className="px-4 py-2 bg-gray-50 border-y border-gray-100">
+                      <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">
+                        {lesson.module}
+                      </span>
+                    </div>
                   )}
-                </span>
-                <div className="min-w-0">
-                  <span
-                    className={`block truncate ${
+                  <Link
+                    href={`/lekcija/${lesson.id}`}
+                    onClick={() => setIsOpen(false)}
+                    className={`flex items-center gap-3 px-4 py-3 text-sm border-l-4 transition-colors ${
                       isCurrent
-                        ? "font-bold text-plava"
+                        ? "bg-blue-50 border-plava"
                         : isCompleted
-                        ? "text-gray-700"
-                        : "text-gray-400"
+                        ? "bg-green-50 border-l-transparent"
+                        : isTest || isModelltest
+                        ? "bg-koral-light border-l-transparent"
+                        : "border-l-transparent hover:bg-gray-50"
                     }`}
                   >
-                    {i + 1}. {lesson.title}
-                  </span>
-                  {isCurrent && (
-                    <span className="text-xs text-gray-400">Trenutna lekcija</span>
-                  )}
+                    <span className="shrink-0">
+                      {isCompleted ? (
+                        <span className="text-green-500 font-bold">✓</span>
+                      ) : isCurrent ? (
+                        <span className="text-plava font-bold">▶</span>
+                      ) : isTest || isModelltest ? (
+                        <span className="text-koral font-bold">✎</span>
+                      ) : (
+                        <span className="text-gray-300">○</span>
+                      )}
+                    </span>
+                    <div className="min-w-0">
+                      <span
+                        className={`block truncate ${
+                          isCurrent
+                            ? "font-bold text-plava"
+                            : isCompleted
+                            ? "text-gray-700"
+                            : isTest || isModelltest
+                            ? "font-medium text-koral-dark"
+                            : "text-gray-400"
+                        }`}
+                      >
+                        {lesson.title}
+                      </span>
+                      {isCurrent && (
+                        <span className="text-xs text-gray-400">Trenutna lekcija</span>
+                      )}
+                    </div>
+                  </Link>
                 </div>
-              </Link>
-            );
-          })}
+              );
+            });
+          })()}
         </div>
       </div>
     </>
