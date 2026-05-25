@@ -27,9 +27,9 @@ const COURSE_SLUG = "nemacki-b1-1";
 
 const LESSON_SECTIONS: Record<number, { sections: unknown[] }> = {
   // ────────────────────────────────────────────────────────────────
-  // "Rotkäppchen und das Präteritum" — order_index 1 in DB
+  // "Rotkäppchen und das Präteritum" — order_index 0
   // ────────────────────────────────────────────────────────────────
-  1: {
+  0: {
     sections: [
       {
         type: "badge",
@@ -142,9 +142,9 @@ const LESSON_SECTIONS: Record<number, { sections: unknown[] }> = {
   },
 
   // ────────────────────────────────────────────────────────────────
-  // "Als oder wenn" — order_index 2 in DB
+  // "Als oder wenn" — order_index 1
   // ────────────────────────────────────────────────────────────────
-  2: {
+  1: {
     sections: [
       {
         type: "badge",
@@ -297,9 +297,9 @@ const LESSON_SECTIONS: Record<number, { sections: unknown[] }> = {
   },
 
   // ────────────────────────────────────────────────────────────────
-  // "Glück" — order_index 3 in DB
+  // "Glück" — order_index 2
   // ────────────────────────────────────────────────────────────────
-  3: {
+  2: {
     sections: [
       {
         type: "badge",
@@ -425,9 +425,9 @@ const LESSON_SECTIONS: Record<number, { sections: unknown[] }> = {
   },
 
   // ────────────────────────────────────────────────────────────────
-  // "Schreiben B1 — E-Mail an einen Freund" — order_index 4 in DB
+  // "Schreiben B1 — E-Mail an einen Freund" — order_index 3
   // ────────────────────────────────────────────────────────────────
-  4: {
+  3: {
     sections: [
       {
         type: "badge",
