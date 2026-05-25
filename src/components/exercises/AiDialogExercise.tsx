@@ -122,7 +122,7 @@ export default function AiDialogExercise({ lessonId, lessonTitle }: AiDialogExer
         <h2 className="text-xl font-bold text-gray-900 mb-2">Vežbaj u dijalogu</h2>
         <p className="text-sm text-gray-500 mb-2">{lessonTitle}</p>
         <p className="text-xs text-gray-400 mb-6 max-w-sm mx-auto">
-          Vodićeš kratki razgovor na nemačkom u 7 koraka — biraš jedan od dva ponuđena odgovora.
+          Vodićeš kratki razgovor na nemačkom u 5 koraka — biraš jedan od dva ponuđena odgovora.
           Na kraju dobijaš ceo dijalog sa prevodom.
           Ova vežba koristi veštačku inteligenciju i može povremeno sadržati greške.
         </p>
@@ -235,7 +235,7 @@ export default function AiDialogExercise({ lessonId, lessonTitle }: AiDialogExer
       {/* Turn indicator */}
       <div className="mt-6 flex justify-center">
         <span className="text-xs text-gray-300">
-          {turnNumber - 1} / 7
+          {turnNumber - 1} / 5
         </span>
       </div>
     </div>

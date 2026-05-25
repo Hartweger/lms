@@ -225,12 +225,11 @@ export default function AiTranslateExercise({ lessonId, lessonTitle }: AiTransla
 
       {/* Input */}
       {!result ? (
-        <div>
+        <div onKeyDown={(e) => { if (e.key === "Enter" && answer.trim() && !checking) check(); }}>
           <input
             type="text"
             value={answer}
             onChange={(e) => setAnswer(e.target.value)}
-            onKeyDown={(e) => { if (e.key === "Enter" && answer.trim()) check(); }}
             placeholder="Napiši prevod na nemačkom..."
             className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-sm focus:outline-none focus:border-plava transition-colors"
             autoFocus
@@ -262,6 +261,7 @@ export default function AiTranslateExercise({ lessonId, lessonTitle }: AiTransla
 
           <button
             onClick={next}
+            autoFocus
             className="w-full bg-plava text-white py-3 rounded-xl font-medium hover:bg-plava-dark transition-colors"
           >
             {currentIndex + 1 >= sentences.length ? "Pogledaj rezultate" : "Sledeća →"}

@@ -13,7 +13,7 @@ interface DialogMessage {
   content: string;
 }
 
-const MAX_TURNS = 7;
+const MAX_TURNS = 5;
 
 export async function POST(request: Request) {
   const ip = request.headers.get("x-forwarded-for") || "unknown";
@@ -82,17 +82,18 @@ export async function POST(request: Request) {
   const systemPrompt = `Ti si AI partner za vežbanje nemačkog jezika na nivou ${level}.
 
 ZADATAK:
-- Vodiš kratki svakodnevni dijalog vezan za temu lekcije: "${lesson.title}"
-- Igraš JEDNU KONKRETNU ulogu odgovarajuću situaciji (konobar, prodavac, recepcioner, itd.)
+- Vodiš kratki svakodnevni dijalog na temu: "${lesson.title}"
+- Situacija i tvoja uloga MORAJU biti direktno povezani sa temom lekcije "${lesson.title}". Primeri: ako je tema "Familie" — razgovor o porodici sa kolegom ili komšijom. Ako je tema "Perfekt" — pričanje o tome šta si radio juče. Ako je tema "Bewerbungen" — razgovor za posao.
 - Student bira od 2 ponuđene opcije za svaku svoju repliku
 
 NAJVAŽNIJA PRAVILA:
-- OSTANI U ULOZI i u okviru situacije CELO VREME. Ako si konobar — pričaj samo o hrani, piću, računu. NIKADA ne skreći na druge teme.
-- Kad student izabere BILO KOJU opciju (čak i nelogičnu), ti nastavi dijalog LOGIČNO u okviru situacije. Ako student kaže nešto čudno, ljubazno ga vrati na temu.
-- Dijalog treba da ima PRIRODAN TOK: pozdrav → glavni deo (naručivanje/kupovina/pitanje) → završetak (plaćanje/pozdrav)
+- Situacija MORA koristiti vokabular i gramatiku iz teme "${lesson.title}". NIKADA ne pravi restoran/konobar scenarijo osim ako tema nije hrana ili restoran.
+- OSTANI U ULOZI i u okviru situacije CELO VREME. NIKADA ne skreći na druge teme.
+- Kad student izabere BILO KOJU opciju (čak i nelogičnu), ti nastavi dijalog LOGIČNO u okviru situacije.
+- Dijalog treba da ima PRIRODAN TOK: pozdrav → glavni deo → završetak
 - Tvoje replike su kratke (1-2 rečenice na nemačkom)
 - Za svaku turu daješ studentu TAČNO 2 opcije za odgovor na nemačkom
-- OBE opcije moraju biti SMISLENE u kontekstu situacije — razlika je u tome što jedna nastavlja dijalog idealnim tokom, a druga je manje idealna ali i dalje logična (npr. naruči nešto skupo vs. jeftino, pitaj za račun prerano vs. naruči desert)
+- OBE opcije moraju biti SMISLENE u kontekstu situacije
 - NIKADA ne daj opciju koja je potpuno van konteksta situacije
 - Obe opcije koriste vokabular prigodan za nivo ${level}
 - Dijalog traje tačno ${MAX_TURNS} tura (sada je tura ${turnNumber})
