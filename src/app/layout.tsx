@@ -3,6 +3,12 @@ import "./globals.css";
 import Navigacija from "@/components/Navigacija";
 import Footer from "@/components/Footer";
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+};
+
 export const metadata: Metadata = {
   title: "Hartweger — Škola nemačkog jezika",
   description: "Naučite nemački jezik online — video kursevi, individualna i grupna nastava",
