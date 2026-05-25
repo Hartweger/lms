@@ -81,6 +81,12 @@ export interface FlashcardSection {
   }[];
 }
 
+export interface YoutubeSection {
+  type: "youtube";
+  videoId: string;
+  label?: string;
+}
+
 export type Section =
   | BadgeSection
   | VideoSection
@@ -93,4 +99,5 @@ export type Section =
   | PdfSection
   | ImageSection
   | LinkSection
-  | FlashcardSection;
+  | FlashcardSection
+  | YoutubeSection;

@@ -11,6 +11,7 @@ import PdfBlock from "./PdfBlock";
 import ImageBlock from "./ImageBlock";
 import LinkBlock from "./LinkBlock";
 import FlashcardBlock from "./FlashcardBlock";
+import YoutubeBlock from "./YoutubeBlock";
 
 function renderBlock(section: Section, index: number) {
   switch (section.type) {
@@ -38,6 +39,8 @@ function renderBlock(section: Section, index: number) {
       return <LinkBlock key={index} {...section} />;
     case "flashcard":
       return <FlashcardBlock key={index} {...section} />;
+    case "youtube":
+      return <YoutubeBlock key={index} {...section} />;
     default:
       return null;
   }
