@@ -20,6 +20,7 @@ export interface Course {
   course_type: CourseType;
   price: number;
   thumbnail_url: string | null;
+  handbook_url: string | null;
   is_published: boolean;
   created_at: string;
 }

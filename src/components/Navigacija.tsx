@@ -43,6 +43,9 @@ export default function Navigacija() {
 
         {/* Desktop menu */}
         <div className="hidden md:flex items-center gap-6 text-sm">
+          <Link href="/besplatno-testiranje" className="text-plava font-medium hover:text-plava-dark">
+            Besplatno testiranje
+          </Link>
           {user ? (
             <>
               <Link href="/dashboard" className="text-gray-600 hover:text-plava">
@@ -89,6 +92,9 @@ export default function Navigacija() {
       {/* Mobile menu */}
       {menuOpen && (
         <div className="md:hidden border-t border-gray-100 bg-white px-4 py-4 space-y-3 text-sm">
+          <Link href="/besplatno-testiranje" className="block text-plava font-medium" onClick={() => setMenuOpen(false)}>
+            Besplatno testiranje
+          </Link>
           {user ? (
             <>
               <Link href="/dashboard" className="block text-gray-600" onClick={() => setMenuOpen(false)}>

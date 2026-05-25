@@ -174,6 +174,25 @@ export default async function KursStranica({ params }: PageProps) {
         )}
       </div>
 
+      {/* Handbook link */}
+      {hasAccess && typedCourse.handbook_url && (
+        <div className="bg-plava-light rounded-xl p-5 mb-8 flex items-center gap-4">
+          <span className="text-2xl shrink-0">📖</span>
+          <div className="flex-1">
+            <div className="font-bold text-gray-900">Priručnik za kurs</div>
+            <div className="text-sm text-gray-600">PDF priručnik sa svim lekcijama i vežbama</div>
+          </div>
+          <a
+            href={typedCourse.handbook_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-plava text-white px-5 py-2.5 rounded-lg font-medium hover:bg-plava-dark transition-colors text-sm shrink-0"
+          >
+            Otvori →
+          </a>
+        </div>
+      )}
+
       {/* Expired access message */}
       {accessExpired && (
         <div className="bg-koral-light border border-koral rounded-xl p-6 mb-6 text-center">
