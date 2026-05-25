@@ -11,13 +11,25 @@ export async function GET(
 
   const { data: cert } = await supabase
     .from("certificates")
-    .select(`*, user_profiles:user_id (full_name), courses:course_id (title)`)
+    .select("*")
     .eq("id", id)
     .single();
 
   if (!cert) {
     return NextResponse.json({ error: "Sertifikat nije pronađen" }, { status: 404 });
   }
+
+  const { data: profile } = await supabase
+    .from("user_profiles")
+    .select("full_name")
+    .eq("id", cert.user_id)
+    .single();
+
+  const { data: course } = await supabase
+    .from("courses")
+    .select("title")
+    .eq("id", cert.course_id)
+    .single();
 
   const doc = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4" });
 
@@ -45,7 +57,7 @@ export async function GET(
 
   doc.setFontSize(22);
   doc.setTextColor(10, 179, 215);
-  const studentName = (cert.user_profiles as Record<string, string>)?.full_name || "Student";
+  const studentName = profile?.full_name || "Student";
   doc.text(studentName, 148.5, 100, { align: "center" });
 
   doc.setFontSize(12);
@@ -54,7 +66,7 @@ export async function GET(
 
   doc.setFontSize(18);
   doc.setTextColor(26, 26, 46);
-  const courseTitle = (cert.courses as Record<string, string>)?.title || "Kurs";
+  const courseTitle = course?.title || "Kurs";
   doc.text(courseTitle, 148.5, 130, { align: "center" });
 
   doc.setFontSize(10);

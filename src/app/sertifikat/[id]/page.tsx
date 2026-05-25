@@ -14,14 +14,26 @@ export default async function SertifikatStranica({ params }: PageProps) {
 
   const { data: cert } = await supabase
     .from("certificates")
-    .select(`*, user_profiles:user_id (full_name), courses:course_id (title)`)
+    .select("*")
     .eq("id", id)
     .single();
 
   if (!cert) notFound();
 
-  const studentName = (cert.user_profiles as Record<string, string>)?.full_name || "Student";
-  const courseTitle = (cert.courses as Record<string, string>)?.title || "Kurs";
+  const { data: profile } = await supabase
+    .from("user_profiles")
+    .select("full_name")
+    .eq("id", cert.user_id)
+    .single();
+
+  const { data: course } = await supabase
+    .from("courses")
+    .select("title")
+    .eq("id", cert.course_id)
+    .single();
+
+  const studentName = profile?.full_name || "Student";
+  const courseTitle = course?.title || "Kurs";
   const date = new Date(cert.issued_at).toLocaleDateString("sr-RS", {
     day: "numeric", month: "long", year: "numeric",
   });
