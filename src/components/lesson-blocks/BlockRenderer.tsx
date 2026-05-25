@@ -12,6 +12,7 @@ import ImageBlock from "./ImageBlock";
 import LinkBlock from "./LinkBlock";
 import FlashcardBlock from "./FlashcardBlock";
 import YoutubeBlock from "./YoutubeBlock";
+import AudioBlock from "./AudioBlock";
 
 function renderBlock(section: Section, index: number) {
   switch (section.type) {
@@ -41,6 +42,8 @@ function renderBlock(section: Section, index: number) {
       return <FlashcardBlock key={index} {...section} />;
     case "youtube":
       return <YoutubeBlock key={index} {...section} />;
+    case "audio":
+      return <AudioBlock key={index} {...section} />;
     default:
       return null;
   }

@@ -89,6 +89,12 @@ export interface YoutubeSection {
   label?: string;
 }
 
+export interface AudioSection {
+  type: "audio";
+  url: string;
+  label?: string;
+}
+
 export type Section =
   | BadgeSection
   | VideoSection
@@ -102,4 +108,5 @@ export type Section =
   | ImageSection
   | LinkSection
   | FlashcardSection
-  | YoutubeSection;
+  | YoutubeSection
+  | AudioSection;

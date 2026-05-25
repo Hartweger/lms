@@ -3201,30 +3201,58 @@ const LESSON_SECTIONS: Record<number, { sections: unknown[] }> = {
         type: "text",
         style: "info",
         content:
-          "U ovoj lekciji vežbaš **Hörverstehen** (razumevanje slušanog) na temu selidbe. Slušaj audio i uradi zadatke iz PDF-a.",
-      },
-      {
-        type: "text",
-        style: "uebung",
-        content: "## Hörverstehen — Umzug",
-      },
-      {
-        type: "link",
-        linkType: "external",
-        href: "https://www.hartweger.rs/wp-content/uploads/2024/01/32_041868_Uebungspruefung_8_Hoeren_Teil_4.mp3",
-        label: "Audio: Hörverstehen — Umzug (MP3)",
-      },
-      {
-        type: "link",
-        linkType: "external",
-        href: "https://www.hartweger.rs/wp-content/uploads/2024/01/HV-Umzug.pdf",
-        label: "PDF: Aufgaben zum Hörverstehen — Umzug",
+          "U ovoj lekciji vežbaš **Hörverstehen** (razumevanje slušanog) na temu selidbe. Slušaj diskusiju i odredi ko šta kaže.",
       },
       {
         type: "text",
         style: "default",
         content:
           "## Tipps za Hörverstehen\n\n1. **Prvo pročitaj pitanja** pre slušanja.\n2. Slušaj **dva puta** — prvi put za opšti utisak, drugi put za detalje.\n3. Obrati pažnju na **ključne reči** u pitanjima.\n4. Ako nisi siguran/na, izaberi najlogičniji odgovor.",
+      },
+      {
+        type: "text",
+        style: "uebung",
+        content: "## Hören Teil 4 — Wer sagt was?",
+      },
+      {
+        type: "text",
+        style: "default",
+        content:
+          'Slušaš diskusiju u radio emisiji "heuteÖ". Moderatorka diskutuje sa Lenom i Simonom o temi **Umzug**.\n\nPročitaj tvrdnje 23-30. Slušaj diskusiju **dva puta** i odredi: ko to kaže?\n\n**(a)** Moderatorin — **(b)** Lena — **(c)** Simon',
+      },
+      {
+        type: "audio",
+        url: "https://www.hartweger.rs/wp-content/uploads/2024/01/32_041868_Uebungspruefung_8_Hoeren_Teil_4.mp3",
+        label: "Diskussion: Umzug",
+      },
+      {
+        type: "table",
+        headers: ["#", "Aussage", "(a) Moderatorin", "(b) Lena", "(c) Simon"],
+        rows: [
+          ["0", "Es wird Rücksicht auf die Interessen der Zuhörer genommen.", "✅", "", ""],
+          ["23", "Die Entfernung zwischen den Wohnorten spielt am Anfang eine Rolle.", "", "", ""],
+          ["24", "Der Umzug findet aus beruflichen Gründen statt.", "", "", ""],
+          ["25", "Einen neuen Liebespartner findet man nicht so schnell.", "", "", ""],
+          ["26", "Kommunikationstechnologie bietet keine wahre Chance, eine Beziehung fortzusetzen.", "", "", ""],
+          ["27", "Bei Problemen sollte man sich nicht nur auf die Nachteile einer Situation konzentrieren.", "", "", ""],
+          ["28", "Auf dem Land gibt es nicht viele Unterhaltungsmöglichkeiten.", "", "", ""],
+          ["29", "Im Dorf bleibt nichts geheim.", "", "", ""],
+          ["30", "Man sollte optimistisch in die Zukunft schauen.", "", "", ""],
+        ],
+      },
+      {
+        type: "spoiler",
+        title: "Rešenja",
+        items: [
+          { question: "23", answer: "b (Lena)" },
+          { question: "24", answer: "c (Simon)" },
+          { question: "25", answer: "b (Lena)" },
+          { question: "26", answer: "c (Simon)" },
+          { question: "27", answer: "a (Moderatorin)" },
+          { question: "28", answer: "b (Lena)" },
+          { question: "29", answer: "a (Moderatorin)" },
+          { question: "30", answer: "a (Moderatorin)" },
+        ],
       },
       {
         type: "text",
