@@ -213,55 +213,6 @@ const LESSON_SECTIONS: Record<number, { sections: unknown[] }> = {
         ],
       },
       {
-        type: "text",
-        style: "default",
-        content: "## Plusquamperfekt — radnja pre druge radnje u prošlosti",
-      },
-      {
-        type: "formula",
-        content: "hatte / war + Partizip II\nIch **hatte** schon **gegessen**, als er kam.\nZwar **hatte** ich viel **trainiert**, aber fit **war** ich noch nicht.",
-      },
-      {
-        type: "table",
-        headers: ["Rečenica", "Prevod"],
-        rows: [
-          [
-            "Nachdem ich gefrühstückt **hatte**, ging ich zur Arbeit.",
-            "Pošto sam doručkovao, otišao sam na posao.",
-          ],
-          [
-            "Als er **angekommen war**, rief er mich an.",
-            "Kad je stigao, pozvao me je.",
-          ],
-          [
-            "Ich **hatte** das Buch schon **gelesen**, bevor der Film kam.",
-            "Već sam pročitao knjigu pre nego što je film izašao.",
-          ],
-        ],
-      },
-      {
-        type: "spoiler",
-        title: "Mini vežba — Plusquamperfekt",
-        items: [
-          {
-            question: "Nachdem ich die Hausaufgaben ______ ______ (machen), ging ich raus.",
-            answer: "gemacht hatte",
-          },
-          {
-            question: "Als der Bus ______ ______ (abfahren), kam sie endlich.",
-            answer: "abgefahren war",
-          },
-          {
-            question: "Ich ______ schon ______ (essen), als er mich zum Essen einlud.",
-            answer: "hatte ... gegessen",
-          },
-          {
-            question: "Nachdem sie ______ ______ (ankommen), rief sie ihre Mutter an.",
-            answer: "angekommen war",
-          },
-        ],
-      },
-      {
         type: "flashcard",
         items: [
           { front: "Als ich ein Kind war...", back: "Kad sam bio dete..." },

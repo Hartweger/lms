@@ -147,11 +147,6 @@ export default async function KursStranica({ params }: PageProps) {
     }
   }
 
-  const { count: lessonCount } = await supabase
-    .from("lessons")
-    .select("*", { count: "exact", head: true })
-    .eq("course_id", typedCourse.id);
-
   const modules = hasAccess ? groupByModules(allLessons) : [];
 
   return (
@@ -166,11 +161,7 @@ export default async function KursStranica({ params }: PageProps) {
 
       {/* CTA */}
       <div className="bg-white rounded-xl p-6 shadow-sm mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div>
-          {lessonCount && (
-            <div className="text-sm text-gray-500">{lessonCount} lekcija</div>
-          )}
-        </div>
+        <div></div>
         {hasAccess ? (
           <Link
             href="/dashboard"
