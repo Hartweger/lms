@@ -16,7 +16,7 @@ export default function SpoilerBlock({ title, items }: SpoilerSection) {
               <p>{item.question}</p>
               <p className="mt-1 text-xs text-gray-400">Klikni za rešenje</p>
             </summary>
-            <p className="mt-2 pt-2 border-t border-gray-300 text-green-700 font-bold text-sm">
+            <p className="mt-2 pt-2 border-t border-gray-300 text-green-700 font-bold text-sm whitespace-pre-line">
               {item.answer}
             </p>
           </details>

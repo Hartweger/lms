@@ -103,6 +103,16 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
     return [];
   }
 
+  function getQuizItems(items: unknown): (string | { text?: string; image?: string; alt?: string })[] {
+    if (!Array.isArray(items)) return [];
+    return items.map((item) => {
+      if (typeof item === "object" && item !== null && ("image" in item || "text" in item)) {
+        return item as { text?: string; image?: string; alt?: string };
+      }
+      return String(item);
+    });
+  }
+
   const handleAnswer = (correct: boolean) => {
     // Strip HTML for review display, keep only last meaningful line
     const cleanQuestion = question.question
@@ -446,7 +456,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
               <QuizExercise
                 key={question.id}
                 question={question.question}
-                options={getItemsAsStringArray(items)}
+                options={getQuizItems(items)}
                 correctAnswer={parseInt(question.correct_answer)}
                 explanation={question.explanation}
                 onAnswer={handleAnswer}

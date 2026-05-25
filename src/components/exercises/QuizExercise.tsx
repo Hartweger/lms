@@ -2,12 +2,23 @@
 
 import { useState } from "react";
 
+export interface QuizOption {
+  text?: string;
+  image?: string;
+  alt?: string;
+}
+
 interface QuizProps {
   question: string;
-  options: string[];
+  options: (string | QuizOption)[];
   correctAnswer: number;
   explanation: string | null;
   onAnswer: (correct: boolean) => void;
+}
+
+function normalizeOption(opt: string | QuizOption): QuizOption {
+  if (typeof opt === "string") return { text: opt };
+  return opt;
 }
 
 export default function QuizExercise({ question, options, correctAnswer, explanation, onAnswer }: QuizProps) {
@@ -21,6 +32,8 @@ export default function QuizExercise({ question, options, correctAnswer, explana
     onAnswer(index === correctAnswer);
   };
 
+  const hasImages = options.some((o) => typeof o === "object" && o.image);
+
   return (
     <div>
       {question.includes("<") ? (
@@ -28,9 +41,10 @@ export default function QuizExercise({ question, options, correctAnswer, explana
       ) : (
         <p className="text-lg font-medium text-gray-900 mb-6">{question}</p>
       )}
-      <div className="space-y-3">
-        {options.map((option, i) => {
-          let cls = "w-full text-left px-5 py-4 border-2 rounded-xl transition-colors ";
+      <div className={hasImages ? "grid grid-cols-2 sm:grid-cols-3 gap-3" : "space-y-3"}>
+        {options.map((raw, i) => {
+          const opt = normalizeOption(raw);
+          let cls = "text-left border-2 rounded-xl transition-colors ";
           if (!answered) {
             cls += "border-gray-100 hover:border-plava hover:bg-plava-light text-gray-700 cursor-pointer";
           } else if (i === correctAnswer) {
@@ -40,9 +54,23 @@ export default function QuizExercise({ question, options, correctAnswer, explana
           } else {
             cls += "border-gray-100 text-gray-400";
           }
+
+          if (opt.image) {
+            return (
+              <button key={i} onClick={() => handleSelect(i)} className={`${cls} p-2 flex flex-col items-center gap-2`} disabled={answered}>
+                <img
+                  src={opt.image}
+                  alt={opt.alt || opt.text || `Option ${i + 1}`}
+                  className="w-full max-h-40 object-contain rounded-lg"
+                />
+                {opt.text && <span className="text-sm font-medium text-center">{opt.text}</span>}
+              </button>
+            );
+          }
+
           return (
-            <button key={i} onClick={() => handleSelect(i)} className={cls} disabled={answered}>
-              {option}
+            <button key={i} onClick={() => handleSelect(i)} className={`${cls} w-full px-5 py-4`} disabled={answered}>
+              {opt.text}
             </button>
           );
         })}
