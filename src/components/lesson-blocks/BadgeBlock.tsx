@@ -17,6 +17,13 @@ const categoryLabels: Record<BadgeCategory, string> = {
 };
 
 export default function BadgeBlock({ module, category }: BadgeSection) {
+  if (!category) {
+    return (
+      <span className="inline-block text-white text-xs font-bold px-3 py-1 rounded-full bg-plava">
+        {module}
+      </span>
+    );
+  }
   return (
     <span
       className={`inline-block text-white text-xs font-bold px-3 py-1 rounded-full ${categoryStyles[category]}`}

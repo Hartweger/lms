@@ -5,7 +5,7 @@ export type LinkType = "kviz" | "quizlet" | "pdf" | "dw" | "external";
 export interface BadgeSection {
   type: "badge";
   module: string;
-  category: BadgeCategory;
+  category?: BadgeCategory;
 }
 
 export interface VideoSection {
