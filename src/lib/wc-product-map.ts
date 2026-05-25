@@ -21,10 +21,10 @@ export const WC_PRODUCT_MAP: Record<number, string[]> = {
   35841: ["nemacki-a1-1"],                 // GRUPNI A1.1 → samo A1.1
   36241: ["nemacki-a1-2"],                 // GRUPNI A1.2 → samo A1.2
 
-  // === GRUPNI A2, B1 — čekaju dok LMS kursevi ne budu spremni ===
+  // === GRUPNI A2, B1 ===
   // 35183: GRUPNI A2.1 → nemacki-a2-1
   // 35851: GRUPNI A2.2 → nemacki-a2-2
-  // 37366: GRUPNI B1.1 → nemacki-b1-1
+  37366: ["nemacki-b1-1"],                 // GRUPNI B1.1 → nemacki-b1-1
   // 36132: GRUPNI B1.2 → nemacki-b1-2
 
   // === OSTALO ===
