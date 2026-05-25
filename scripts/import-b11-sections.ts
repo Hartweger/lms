@@ -3221,9 +3221,9 @@ const LESSON_SECTIONS: Record<number, { sections: unknown[] }> = {
           'Slušaš diskusiju u radio emisiji "heuteÖ". Moderatorka diskutuje sa Lenom i Simonom o temi **Umzug**.\n\nPročitaj tvrdnje 23-30. Slušaj diskusiju **dva puta** i odredi: ko to kaže?\n\n**(a)** Moderatorin — **(b)** Lena — **(c)** Simon',
       },
       {
-        type: "audio",
-        url: "https://www.hartweger.rs/wp-content/uploads/2024/01/32_041868_Uebungspruefung_8_Hoeren_Teil_4.mp3",
-        label: "Diskussion: Umzug",
+        type: "text",
+        style: "default",
+        content: '<p><strong>Diskussion: Umzug</strong></p><audio controls style="width:100%" preload="none"><source src="https://www.hartweger.rs/wp-content/uploads/2024/01/32_041868_Uebungspruefung_8_Hoeren_Teil_4.mp3" type="audio/mpeg">Tvoj pregledač ne podržava audio player.</audio>',
       },
       {
         type: "spoiler",
