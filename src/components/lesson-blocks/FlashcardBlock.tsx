@@ -3,10 +3,13 @@
 import { useState, useCallback } from "react";
 import type { FlashcardSection } from "@/lib/section-types";
 
-export default function FlashcardBlock({ items }: FlashcardSection) {
+export default function FlashcardBlock({ items, frontLabel, backLabel }: FlashcardSection) {
+  const fLabel = frontLabel || "DE";
+  const bLabel = backLabel || "SR";
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
-  const [reversed, setReversed] = useState(false); // false = DE→SR, true = SR→DE
+  const [reversed, setReversed] = useState(false);
   const [shuffled, setShuffled] = useState(false);
   const [order, setOrder] = useState<number[]>(items.map((_, i) => i));
 
@@ -54,7 +57,7 @@ export default function FlashcardBlock({ items }: FlashcardSection) {
             onClick={toggleDirection}
             className="text-xs px-3 py-1.5 rounded-full bg-white text-gray-600 hover:bg-gray-50 border border-gray-200 transition-colors"
           >
-            {reversed ? "SR → DE" : "DE → SR"}
+            {reversed ? `${bLabel} → ${fLabel}` : `${fLabel} → ${bLabel}`}
           </button>
           <button
             onClick={toggleShuffle}

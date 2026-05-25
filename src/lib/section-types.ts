@@ -75,6 +75,8 @@ export interface LinkSection {
 
 export interface FlashcardSection {
   type: "flashcard";
+  frontLabel?: string;
+  backLabel?: string;
   items: {
     front: string;
     back: string;
