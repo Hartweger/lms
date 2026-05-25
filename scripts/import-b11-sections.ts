@@ -105,6 +105,8 @@ const LESSON_SECTIONS: Record<number, { sections: unknown[] }> = {
       },
       {
         type: "flashcard",
+        frontLabel: "Infinitiv",
+        backLabel: "Präteritum",
         items: [
           { front: "gehen", back: "ging" },
           { front: "kommen", back: "kam" },
@@ -214,6 +216,8 @@ const LESSON_SECTIONS: Record<number, { sections: unknown[] }> = {
       },
       {
         type: "flashcard",
+        frontLabel: "Deutsch",
+        backLabel: "Srpski",
         items: [
           { front: "Als ich ein Kind war...", back: "Kad sam bio dete..." },
           { front: "Wenn es regnet...", back: "Kad pada kiša..." },
@@ -1744,6 +1748,8 @@ const LESSON_SECTIONS: Record<number, { sections: unknown[] }> = {
       },
       {
         type: "flashcard",
+        frontLabel: "Deutsch",
+        backLabel: "Srpski",
         items: [
           { front: "Könnten Sie das wiederholen?", back: "Da li biste mogli to da ponovite?" },
           { front: "Was bedeutet...?", back: "Šta znači...?" },
@@ -2602,6 +2608,8 @@ const LESSON_SECTIONS: Record<number, { sections: unknown[] }> = {
       },
       {
         type: "flashcard",
+        frontLabel: "Deutsch",
+        backLabel: "Srpski",
         items: [
           { front: "Ich möchte heute über ... sprechen.", back: "Danas bih govorio/la o..." },
           { front: "Mein Thema ist...", back: "Moja tema je..." },
