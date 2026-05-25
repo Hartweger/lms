@@ -31,28 +31,42 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export const dynamic = "force-dynamic";
 
-// Group lessons into modules based on "Test: Modul X" boundaries
+// Group lessons into modules based on badge.module in sections
 function groupByModules(lessons: Lesson[]) {
   const modules: { name: string; lessons: Lesson[] }[] = [];
+  let currentName = "";
   let current: Lesson[] = [];
-  let moduleIndex = 0;
 
   for (const lesson of lessons) {
-    if (lesson.title.startsWith("Test: Modul")) {
-      moduleIndex++;
-      // Add current lessons + test as a module
-      current.push(lesson);
-      modules.push({ name: `Modul ${moduleIndex}`, lessons: current });
-      current = [];
-    } else if (lesson.title === "00 Willkommen") {
-      modules.push({ name: "Uvod", lessons: [lesson] });
+    // Determine module name from badge section, test title, or modelltest
+    let moduleName = "";
+    if (lesson.sections) {
+      const badge = lesson.sections.find((s) => s.type === "badge") as { type: string; module?: string } | undefined;
+      if (badge?.module) moduleName = badge.module;
+    }
+    // Test lessons: "Test Modul X" or "Test: Modul X"
+    if (lesson.title.match(/^Test:?\s+Modul/i)) {
+      moduleName = moduleName || "Test";
+    }
+    // Modelltest
+    if (lesson.title.toLowerCase().includes("modelltest")) {
+      moduleName = "Završni ispit";
+    }
+    // Fallback
+    if (!moduleName) moduleName = currentName || "Lekcije";
+
+    if (moduleName !== currentName) {
+      if (current.length > 0) {
+        modules.push({ name: currentName, lessons: current });
+      }
+      currentName = moduleName;
+      current = [lesson];
     } else {
       current.push(lesson);
     }
   }
-  // Remaining lessons without a test
   if (current.length > 0) {
-    modules.push({ name: `Modul ${moduleIndex + 1}`, lessons: current });
+    modules.push({ name: currentName, lessons: current });
   }
 
   return modules;
@@ -214,7 +228,7 @@ export default async function KursStranica({ params }: PageProps) {
               </div>
               <div className="space-y-2">
                 {mod.lessons.map((lesson) => {
-                  const isTest = lesson.title.startsWith("Test:");
+                  const isTest = lesson.title.startsWith("Test:") || lesson.title.startsWith("Test Modul");
                   return (
                     <Link
                       key={lesson.id}
