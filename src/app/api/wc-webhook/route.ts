@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { grantAccess } from "@/lib/wc-sync";
+import { sendWelcomeEmail } from "@/lib/email";
 
 export async function POST(request: NextRequest) {
   try {
@@ -92,6 +93,24 @@ export async function POST(request: NextRequest) {
     }
 
     console.log(`[wc-webhook] Result for ${email}:`, result);
+
+    // Send welcome email for new users or users who got new courses
+    if (result.coursesGranted.length > 0) {
+      const { createAdminClient } = await import("@/lib/supabase/admin");
+      const adminSupabase = createAdminClient();
+      const courseTitles: string[] = [];
+      for (const slug of result.coursesGranted) {
+        const { data: course } = await adminSupabase
+          .from("courses")
+          .select("title")
+          .eq("slug", slug)
+          .single();
+        if (course) courseTitles.push(course.title);
+      }
+      if (courseTitles.length > 0) {
+        await sendWelcomeEmail(email, fullName, courseTitles);
+      }
+    }
 
     return NextResponse.json({ ok: true });
   } catch (error) {
