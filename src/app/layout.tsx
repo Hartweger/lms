@@ -23,11 +23,18 @@ const montserrat = Montserrat({
 export const viewport = {
   width: "device-width",
   initialScale: 1,
+  themeColor: "#4fb1d3",
 };
 
 export const metadata: Metadata = {
   title: "Hartweger — Škola nemačkog jezika",
   description: "Naučite nemački jezik online — video kursevi, individualna i grupna nastava",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Hartweger",
+  },
   openGraph: {
     title: "Hartweger — Škola nemačkog jezika",
     description: "Naučite nemački jezik online — video kursevi, individualna i grupna nastava",
