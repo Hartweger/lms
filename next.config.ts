@@ -1,6 +1,13 @@
 import type { NextConfig } from "next";
+import { withSentryConfig } from "@sentry/nextjs";
 
 const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      { hostname: "rzmyglynjcygsbicssbt.supabase.co" },
+      { hostname: "*.supabase.co" },
+    ],
+  },
   async headers() {
     return [
       {
@@ -20,4 +27,7 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withSentryConfig(nextConfig, {
+  silent: true,
+  disableLogger: true,
+});
