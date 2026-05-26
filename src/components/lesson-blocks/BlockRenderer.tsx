@@ -50,7 +50,7 @@ function renderBlock(section: Section, index: number) {
       if (s.type === "audio" && typeof s.url === "string") {
         return (
           <div key={index} className="bg-gray-50 rounded-xl p-4 md:p-5">
-            {s.label && <p className="text-sm font-semibold text-gray-700 mb-2">{String(s.label)}</p>}
+            {s.label ? <p className="text-sm font-semibold text-gray-700 mb-2">{String(s.label)}</p> : null}
             <audio controls className="w-full" preload="none">
               <source src={s.url} type="audio/mpeg" />
             </audio>
@@ -67,11 +67,11 @@ export default function BlockRenderer({ sections }: { sections: Section[] }) {
     <div className="space-y-4">
       {sections.map((section, i) => {
         // Handle audio sections that may not be recognized by TypeScript narrowing
-        const s = section as Record<string, unknown>;
+        const s = section as unknown as Record<string, unknown>;
         if (s.type === "audio" && typeof s.url === "string") {
           return (
             <div key={i} className="bg-gray-50 rounded-xl p-4 md:p-5">
-              {s.label && <p className="text-sm font-semibold text-gray-700 mb-2">{String(s.label)}</p>}
+              {s.label ? <p className="text-sm font-semibold text-gray-700 mb-2">{String(s.label)}</p> : null}
               <audio controls className="w-full" preload="none">
                 <source src={s.url} type="audio/mpeg" />
                 Tvoj pregledač ne podržava audio player.

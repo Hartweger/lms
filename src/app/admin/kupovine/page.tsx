@@ -12,8 +12,8 @@ export default async function AdminKupovine() {
   return (
     <div>
       <h1 className="text-2xl font-bold text-gray-900 mb-8">Kupovine</h1>
-      <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="bg-white rounded-xl shadow-sm overflow-x-auto">
+        <table className="w-full text-sm min-w-[700px]">
           <thead className="bg-gray-50 text-gray-500 uppercase text-xs">
             <tr>
               <th className="text-left px-6 py-3">Student</th>

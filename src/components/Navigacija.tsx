@@ -35,7 +35,7 @@ export default function Navigacija() {
   };
 
   return (
-    <nav className="bg-white border-b border-gray-100 sticky top-0 z-50">
+    <nav className="bg-white border-b border-gray-100 sticky top-0 z-50" aria-label="Glavna navigacija">
       <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
         <Link href="/">
           <Image src="/logo.jpg" alt="Hartweger" width={140} height={40} className="h-9 w-auto" />
@@ -78,8 +78,10 @@ export default function Navigacija() {
         <button
           className="md:hidden text-gray-600"
           onClick={() => setMenuOpen(!menuOpen)}
+          aria-label={menuOpen ? "Zatvori meni" : "Otvori meni"}
+          aria-expanded={menuOpen}
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             {menuOpen ? (
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             ) : (

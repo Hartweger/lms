@@ -3,6 +3,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import LekcijaContent from "@/components/LekcijaContent";
 import LessonDrawer from "@/components/LessonDrawer";
+import LessonProgressTracker from "@/components/LessonProgressTracker";
 import type { Lesson, Exercise } from "@/lib/types";
 
 interface PageProps {
@@ -39,31 +40,16 @@ export default async function LekcijaStranica({ params }: PageProps) {
 
   const { data: { user } } = await supabase.auth.getUser();
 
-  // Mark PREVIOUS lesson as completed when user navigates to next.
-  // Also mark CURRENT lesson if it's the last one in the course.
-  // This ensures "Nastavi" takes users to where they actually stopped.
+  // Compute which lessons to mark as completed (done client-side to speed up render)
+  const lessonsToMark: string[] = [];
   if (user && allLessons) {
     const currentIdx = allLessons.findIndex((l) => l.id === typedLesson.id);
     const isLastLesson = currentIdx === allLessons.length - 1;
-    const lessonsToMark: string[] = [];
-
     if (currentIdx > 0) {
       lessonsToMark.push(allLessons[currentIdx - 1].id);
     }
     if (isLastLesson) {
       lessonsToMark.push(typedLesson.id);
-    }
-
-    if (lessonsToMark.length > 0) {
-      await supabase.from("lesson_progress").upsert(
-        lessonsToMark.map((lid) => ({
-          user_id: user.id,
-          lesson_id: lid,
-          completed: true,
-          completed_at: new Date().toISOString(),
-        })),
-        { onConflict: "user_id,lesson_id" }
-      );
     }
   }
 
@@ -125,6 +111,9 @@ export default async function LekcijaStranica({ params }: PageProps) {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-4">
+      {lessonsToMark.length > 0 && (
+        <LessonProgressTracker lessonId={typedLesson.id} lessonsToMark={lessonsToMark} />
+      )}
       {/* Top bar */}
       <div className="flex items-center justify-between mb-4">
         <LessonDrawer

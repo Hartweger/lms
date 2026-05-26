@@ -99,11 +99,12 @@ export default async function Dashboard() {
     .single();
 
   const isAdmin = profile?.role === "admin";
+  const isProfessor = profile?.role === "professor";
 
   let courseIds: string[] = [];
 
-  if (isAdmin) {
-    // Admins see all courses
+  if (isAdmin || isProfessor) {
+    // Admins and professors see all courses
     const { data: allCourses } = await supabase
       .from("courses")
       .select("id");

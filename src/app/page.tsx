@@ -1,23 +1,12 @@
-import { redirect } from "next/navigation";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/server";
 import quotesData from "@/data/quotes.json";
-
-export const dynamic = "force-dynamic";
 
 function getRandomQuote() {
   const quotes = quotesData.quotes;
   return quotes[Math.floor(Math.random() * quotes.length)];
 }
 
-export default async function Pocetna() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-
-  if (user) {
-    redirect("/dashboard");
-  }
-
+export default function Pocetna() {
   const quote = getRandomQuote();
 
   return (

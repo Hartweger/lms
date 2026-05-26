@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 const links = [
   { href: "/admin", label: "Pregled" },
@@ -16,29 +17,58 @@ const links = [
 
 export default function AdminSidebar() {
   const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+
+  const currentLabel = links.find(
+    (l) => pathname === l.href || (l.href !== "/admin" && pathname.startsWith(l.href))
+  )?.label ?? "Admin";
+
+  const navContent = (
+    <nav className="space-y-1">
+      {links.map((link) => {
+        const isActive = pathname === link.href ||
+          (link.href !== "/admin" && pathname.startsWith(link.href));
+        return (
+          <Link
+            key={link.href}
+            href={link.href}
+            onClick={() => setOpen(false)}
+            className={`block px-3 py-2 rounded-lg text-sm ${
+              isActive
+                ? "bg-plava-light text-plava font-medium"
+                : "text-gray-600 hover:bg-gray-50"
+            }`}
+          >
+            {link.label}
+          </Link>
+        );
+      })}
+    </nav>
+  );
 
   return (
-    <aside className="w-56 bg-white border-r border-gray-100 min-h-[calc(100vh-64px)] p-4">
-      <div className="text-xs font-semibold uppercase text-gray-400 mb-3">Admin</div>
-      <nav className="space-y-1">
-        {links.map((link) => {
-          const isActive = pathname === link.href ||
-            (link.href !== "/admin" && pathname.startsWith(link.href));
-          return (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`block px-3 py-2 rounded-lg text-sm ${
-                isActive
-                  ? "bg-plava-light text-plava font-medium"
-                  : "text-gray-600 hover:bg-gray-50"
-              }`}
-            >
-              {link.label}
-            </Link>
-          );
-        })}
-      </nav>
-    </aside>
+    <>
+      {/* Mobile: dropdown toggle */}
+      <div className="md:hidden bg-white border-b border-gray-100 px-4 py-3">
+        <button
+          onClick={() => setOpen(!open)}
+          className="flex items-center justify-between w-full text-sm font-medium text-gray-700"
+          aria-expanded={open}
+          aria-label="Admin navigacija"
+        >
+          <span>Admin — {currentLabel}</span>
+          <svg className={`w-4 h-4 transition-transform ${open ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+        {open && <div className="mt-3">{navContent}</div>}
+      </div>
+
+      {/* Desktop: sidebar */}
+      <aside className="hidden md:block w-56 bg-white border-r border-gray-100 min-h-[calc(100vh-64px)] p-4 fixed top-16">
+        <div className="text-xs font-semibold uppercase text-gray-400 mb-3">Admin</div>
+        {navContent}
+      </aside>
+    </>
   );
 }

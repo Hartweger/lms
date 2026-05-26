@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 const tabs = [
   { href: "/profesor", label: "Studenti", exact: true },
   { href: "/profesor/eseji", label: "Eseji", exact: false },
+  { href: "/dashboard", label: "Kursevi", exact: false },
 ];
 
 export default function ProfesorNav() {

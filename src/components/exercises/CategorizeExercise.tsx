@@ -82,7 +82,7 @@ export default function CategorizeExercise({ question, categories, items, onAnsw
       )}
 
       {/* Categories */}
-      <div className="grid gap-3" style={{ gridTemplateColumns: `repeat(${categories.length}, 1fr)` }}>
+      <div className={`grid gap-3 ${categories.length <= 2 ? "grid-cols-2" : "grid-cols-2 sm:grid-cols-3"}`}>
         {categories.map((cat, ci) => (
           <div key={ci}>
             <button

@@ -23,8 +23,8 @@ export default async function AdminKursevi() {
         </Link>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="bg-white rounded-xl shadow-sm overflow-x-auto">
+        <table className="w-full text-sm min-w-[600px]">
           <thead className="bg-gray-50 text-gray-500 uppercase text-xs">
             <tr>
               <th className="text-left px-6 py-3">Naziv</th>

@@ -29,56 +29,41 @@ export async function middleware(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser();
   const path = request.nextUrl.pathname;
 
+  // Redirect logged-in users from homepage to dashboard
+  if (path === "/" && user) {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
+
   // Redirect to login if accessing protected route without auth
   const isProtected = protectedRoutes.some((route) => path.startsWith(route));
   if (isProtected && !user) {
     return NextResponse.redirect(new URL("/prijava", request.url));
   }
 
-  // Check admin access
-  const isAdmin = adminRoutes.some((route) => path.startsWith(route));
-  if (isAdmin) {
+  // Check admin/professor access (single profile query)
+  const needsRoleCheck = adminRoutes.some((r) => path.startsWith(r))
+    || professorRoutes.some((r) => path.startsWith(r));
+
+  if (needsRoleCheck) {
     if (!user) {
       return NextResponse.redirect(new URL("/prijava", request.url));
     }
+
     const { data: profile } = await supabase
       .from("user_profiles")
       .select("role")
       .eq("id", user.id)
       .single();
 
-    if (profile?.role !== "admin") {
+    const role = profile?.role;
+    const isAdminRoute = adminRoutes.some((r) => path.startsWith(r));
+    const isProfessorRoute = professorRoutes.some((r) => path.startsWith(r));
+
+    if (isAdminRoute && role !== "admin") {
       return NextResponse.redirect(new URL("/dashboard", request.url));
     }
-  }
-
-  // Check professor access
-  const isProfessorRoute = professorRoutes.some((route) => path.startsWith(route));
-  if (isProfessorRoute) {
-    if (!user) {
-      return NextResponse.redirect(new URL("/prijava", request.url));
-    }
-    const { data: profile } = await supabase
-      .from("user_profiles")
-      .select("role")
-      .eq("id", user.id)
-      .single();
-
-    if (profile?.role !== "professor" && profile?.role !== "admin") {
+    if (isProfessorRoute && role !== "professor" && role !== "admin") {
       return NextResponse.redirect(new URL("/dashboard", request.url));
-    }
-  }
-
-  // Redirect professors from /dashboard to /profesor
-  if (path.startsWith("/dashboard") && user) {
-    const { data: profile } = await supabase
-      .from("user_profiles")
-      .select("role")
-      .eq("id", user.id)
-      .single();
-
-    if (profile?.role === "professor") {
-      return NextResponse.redirect(new URL("/profesor", request.url));
     }
   }
 
@@ -86,5 +71,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/profil/:path*", "/admin/:path*", "/profesor/:path*"],
+  matcher: ["/", "/dashboard/:path*", "/profil/:path*", "/admin/:path*", "/profesor/:path*"],
 };

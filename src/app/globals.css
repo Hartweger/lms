@@ -13,8 +13,8 @@
   --color-narandzasta-light: #fff8f0;
   --color-ljubicasta: #7C4DFF;
   --color-ljubicasta-light: #f5f0ff;
-  --font-sans: "Lato", system-ui, sans-serif;
-  --font-heading: "Montserrat", system-ui, sans-serif;
+  --font-sans: var(--font-lato), system-ui, sans-serif;
+  --font-heading: var(--font-montserrat), system-ui, sans-serif;
 }
 
 body {
