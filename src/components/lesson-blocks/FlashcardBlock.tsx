@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react";
 import type { FlashcardSection } from "@/lib/section-types";
+import SpeakButton from "@/components/SpeakButton";
 
 export default function FlashcardBlock({ items, frontLabel, backLabel }: FlashcardSection) {
   const fLabel = frontLabel || "DE";
@@ -78,8 +79,11 @@ export default function FlashcardBlock({ items, frontLabel, backLabel }: Flashca
         className="bg-white rounded-xl shadow-sm cursor-pointer select-none min-h-[160px] flex items-center justify-center p-8 transition-all hover:shadow-md"
       >
         <div className="text-center">
-          <p className={`text-lg font-bold ${flipped ? "text-ljubicasta" : "text-gray-900"}`}>
+          <p className={`text-lg font-bold ${flipped ? "text-ljubicasta" : "text-gray-900"} inline-flex items-center gap-2`}>
             {flipped ? back : front}
+            {(!reversed && !flipped) || (reversed && flipped) ? (
+              <SpeakButton text={!reversed ? front : back} />
+            ) : null}
           </p>
           {!flipped && (
             <p className="text-xs text-gray-300 mt-3">klikni da vidiš odgovor</p>

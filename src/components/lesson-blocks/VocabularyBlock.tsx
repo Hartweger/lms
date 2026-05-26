@@ -1,4 +1,7 @@
+"use client";
+
 import type { VocabularySection } from "@/lib/section-types";
+import SpeakButton from "@/components/SpeakButton";
 
 export default function VocabularyBlock({ rows }: VocabularySection) {
   return (
@@ -20,7 +23,10 @@ export default function VocabularyBlock({ rows }: VocabularySection) {
             {rows.map((row, i) => (
               <tr key={i} className={i % 2 === 1 ? "bg-white/50" : ""}>
                 <td className="px-3 py-2 font-semibold text-gray-900">
-                  {row[0]}
+                  <span className="inline-flex items-center gap-2">
+                    {row[0]}
+                    <SpeakButton text={row[0]} />
+                  </span>
                 </td>
                 <td className="px-3 py-2 text-gray-500 italic">{row[1]}</td>
               </tr>
