@@ -99,46 +99,45 @@ export default function Pocetna() {
 
       {/* VoKuM metoda */}
       <section className="py-16 px-4 bg-white">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="font-montserrat font-bold text-2xl md:text-3xl text-gray-900 text-center mb-4">
-            VoKuM metoda
+        <div className="max-w-6xl mx-auto">
+          <h2 className="font-montserrat font-bold text-2xl md:text-3xl text-gray-900 text-center mb-12">
+            Šta je najvažnije?
           </h2>
-          <p className="text-gray-500 text-center max-w-2xl mx-auto mb-12">
-            Tri stuba na kojima počiva uspešno učenje nemačkog jezika
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* VO */}
-            <div className="bg-plava-light rounded-2xl p-8 text-center">
-              <div className="w-14 h-14 bg-plava text-white rounded-xl flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                VO
+          <div className="flex flex-col md:flex-row gap-10 items-center">
+            {/* Slika levo */}
+            <div className="flex-shrink-0 w-full md:w-[45%]">
+              <div className="relative">
+                <div className="absolute -top-3 -left-3 w-full h-full bg-plava/10 rounded-2xl" />
+                <img
+                  src="/images/natasa-laptop.jpg"
+                  alt="Nataša Hartweger"
+                  className="relative rounded-2xl shadow-lg w-full object-cover"
+                />
               </div>
-              <h3 className="font-montserrat font-bold text-xl text-gray-900 mb-3">Vokabular</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">
-                Sve počinje sa rečima. Dete prvo nauči reči, a zatim od njih sklapa rečenicu. Napamet naučene definicije o gramatičkim pravilima ne pomažu kada treba da kažeš da te boli glava ili želiš povišicu na poslu. Na kursu učiš razne tehnike za lakše pamćenje reči.
-              </p>
             </div>
-            {/* KU */}
-            <div className="bg-plava-light rounded-2xl p-8 text-center">
-              <div className="w-14 h-14 bg-plava text-white rounded-xl flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                KU
+            {/* Kartice desno */}
+            <div className="flex-1 space-y-4">
+              <div className="bg-gray-50 rounded-xl p-5 md:p-6">
+                <h3 className="font-montserrat font-bold text-lg text-gray-900 mb-2">1. VO — Vokabular</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  Sve počinje sa rečima. Dete prvo nauči reči, a zatim od njih sklapa rečenicu. Napamet naučene definicije o gramatičkim pravilima ne pomažu kada treba da kažeš da te boli glava ili želiš povišicu na poslu. Na kursu učiš razne tehnike za lakše pamćenje reči.
+                </p>
               </div>
-              <h3 className="font-montserrat font-bold text-xl text-gray-900 mb-3">Komunikacija</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">
-                Naučene reči postaju vredne kroz praktičnu komunikaciju. Učimo kroz dijaloge u realnim situacijama (restorani, apoteke, banke) i upoznajemo kulturu DACH zemalja. To čini razliku između dobre i loše komunikacije.
-              </p>
-            </div>
-            {/* M */}
-            <div className="bg-plava-light rounded-2xl p-8 text-center">
-              <div className="w-14 h-14 bg-plava text-white rounded-xl flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                M
+              <div className="bg-gray-50 rounded-xl p-5 md:p-6">
+                <h3 className="font-montserrat font-bold text-lg text-gray-900 mb-2">2. KU — Komunikacija</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  Naučene reči postaju vredne kroz praktičnu komunikaciju. Učimo kroz dijaloge u realnim situacijama (restorani, apoteke, banke) i upoznajemo kulturu DACH zemalja. To čini razliku između dobre i loše komunikacije.
+                </p>
               </div>
-              <h3 className="font-montserrat font-bold text-xl text-gray-900 mb-3">Motivacija</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">
-                Svakome je potrebna podrška i motivacija. Naš zajednički cilj je da uspešno progovoriš nemački jezik. Odustajanje nije opcija!
-              </p>
+              <div className="bg-gray-50 rounded-xl p-5 md:p-6">
+                <h3 className="font-montserrat font-bold text-lg text-gray-900 mb-2">3. M — Motivacija</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  Svakome je potrebna podrška i motivacija. Naš zajednički cilj je da uspešno progovoriš nemački jezik. Odustajanje nije opcija!
+                </p>
+              </div>
             </div>
           </div>
-          <div className="text-center mt-8">
+          <div className="text-center mt-10">
             <Link
               href="/metodologija"
               className="text-plava font-semibold hover:underline"
