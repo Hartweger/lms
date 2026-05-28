@@ -43,8 +43,12 @@ const faqBySlug: Record<string, { q: string; a: string }[]> = {
   ],
   "individualni-polozi-fide": [
     { q: "Kako zakazujem časove?", a: "Nakon uplate dobijate link za Google Calendar i zakazujete termine kad vama odgovara." },
-    { q: "Da li moram da kupujem udžbenike?", a: "Ne. Sav materijal za pripremu FIDE ispita dobijate od nas." },
     { q: "Šta ako moram da otkažem zakazani čas?", a: "Otkazivanje je moguće najkasnije 24 sata pre zakazanog časa." },
+    { q: "Kako se plaća?", a: "Plaćanje je moguće karticom (Visa, MasterCard), uplatom na dinarski račun ili putem PayPal-a." },
+  ],
+  "polozi-fide": [
+    { q: "Šta se dešava nakon uplate?", a: "Odmah dobijate pristup svim materijalima na platformi." },
+    { q: "Koliko dugo imam pristup?", a: "Pristup kursu imate godinu dana od dana kupovine." },
     { q: "Kako se plaća?", a: "Plaćanje je moguće karticom (Visa, MasterCard), uplatom na dinarski račun ili putem PayPal-a." },
   ],
 };
