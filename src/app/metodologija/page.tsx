@@ -26,7 +26,7 @@ export default function MetodologijaPage() {
           </div>
           <div className="flex-shrink-0">
             <img
-              src="/images/MIN05436.jpg"
+              src="/images/natasa-laptop.jpg"
               alt="Nataša Hartweger pri radu"
               className="rounded-2xl shadow-lg w-[280px] md:w-[340px] object-cover"
             />
