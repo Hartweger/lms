@@ -80,16 +80,16 @@ export default function Pocetna() {
             Video kursevi, grupni kursevi i individualni časovi — sve
             što vam treba za uspešno učenje nemačkog jezika.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4 sm:px-0">
             <Link
               href="/kursevi"
-              className="inline-block bg-koral text-white px-8 py-3 rounded-xl font-semibold hover:bg-koral-dark transition-colors shadow-lg shadow-koral/20"
+              className="text-center bg-koral text-white px-8 py-3.5 rounded-xl font-semibold hover:bg-koral-dark transition-colors shadow-lg shadow-koral/20"
             >
               Pogledaj kurseve
             </Link>
             <Link
               href="/besplatno-testiranje"
-              className="inline-block border-2 border-plava text-plava px-8 py-3 rounded-xl font-semibold hover:bg-plava hover:text-white transition-colors"
+              className="text-center border-2 border-plava text-plava px-8 py-3.5 rounded-xl font-semibold hover:bg-plava hover:text-white transition-colors"
             >
               Besplatni test nivoa
             </Link>

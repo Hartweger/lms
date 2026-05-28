@@ -40,7 +40,7 @@ export default function RasporedGrupa({
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
       {grupe.map((g, i) => {
         const nivoKey = getNivoKey(g.nivo);
         const colors = nivoColors[nivoKey] ?? { bg: "#f3f4f6", text: "#374151" };
@@ -53,7 +53,7 @@ export default function RasporedGrupa({
         return (
           <div
             key={i}
-            className="border border-gray-200 rounded-2xl p-6 bg-white hover:border-plava hover:shadow-md transition-all"
+            className="border border-gray-200 rounded-2xl p-4 md:p-6 bg-white hover:border-plava hover:shadow-md transition-all"
           >
             {/* Header: nivo badge + status */}
             <div className="flex items-center justify-between mb-4">
