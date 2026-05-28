@@ -208,38 +208,19 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
                 </div>
               )}
 
-              {/* ─── INDIVIDUALNI: Calendar info ─── */}
+              {/* ─── INDIVIDUALNI: Key info ─── */}
               {(category === "individualni" || category === "mesecni") && (
-                <div className="bg-white border border-gray-200 rounded-xl p-5 mb-8 space-y-2.5">
+                <div className="bg-white border border-gray-200 rounded-xl p-5 mb-8 space-y-2.5 text-[15px]">
                   {termini && (
-                    <div className="flex items-center gap-3 text-[15px]">
-                      <span>👩‍🏫</span>
-                      <span className="text-gray-700"><strong>{termini} termina po 60 minuta</strong> — nastava 1:1 sa profesorkom</span>
-                    </div>
+                    <p className="text-gray-700"><strong>{termini} termina po 60 minuta</strong> — nastava 1:1 sa profesorkom</p>
                   )}
                   {!termini && category === "individualni" && (
-                    <div className="flex items-center gap-3 text-[15px]">
-                      <span>👩‍🏫</span>
-                      <span className="text-gray-700"><strong>Nastava 1-na-1</strong> sa profesorkom</span>
-                    </div>
+                    <p className="text-gray-700"><strong>Nastava 1-na-1</strong> sa profesorkom</p>
                   )}
-                  <div className="flex items-center gap-3 text-[15px]">
-                    <span>👩‍🏫</span>
-                    <span className="text-gray-600">Birate profesorku u sledećem koraku</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-[15px]">
-                    <span>📅</span>
-                    <span className="text-gray-600">Vi birate termin — dobijate Google Calendar link i zakazujete</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-[15px]">
-                    <span>🎯</span>
-                    <span className="text-gray-600">Program prilagođen vašim ciljevima i tempu</span>
-                  </div>
+                  <p className="text-gray-600">Birate profesorku u sledećem koraku</p>
+                  <p className="text-gray-600">Vi birate termin — dobijate Google Calendar link i zakazujete</p>
                   {category === "mesecni" && (
-                    <div className="flex items-center gap-3 text-[15px]">
-                      <span>ℹ️</span>
-                      <span className="text-gray-500">Mesečni paket ne uključuje video lekcije ni sertifikat</span>
-                    </div>
+                    <p className="text-gray-500">Mesečni paket ne uključuje video lekcije ni sertifikat</p>
                   )}
                 </div>
               )}
