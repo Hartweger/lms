@@ -147,7 +147,8 @@ export default function IndividualniKurseviPage() {
               </div>
               <div className="mt-4 text-center">
                 <p className="text-lg font-bold text-gray-900">od 23.000 din</p>
-                <p className="text-xs text-gray-500">Cena zavisi od nivoa i profesora</p>
+                <p className="text-xs text-koral font-semibold">~ od {Math.round(23000 / 117)}&euro;</p>
+                <p className="text-xs text-gray-500 mt-1">Cena zavisi od nivoa i profesora</p>
               </div>
             </div>
 
@@ -181,7 +182,8 @@ export default function IndividualniKurseviPage() {
               </div>
               <div className="mt-4 text-center">
                 <p className="text-lg font-bold text-gray-900">od 14.000 din</p>
-                <p className="text-xs text-gray-500">Cena zavisi od broja časova i profesora</p>
+                <p className="text-xs text-koral font-semibold">~ od {Math.round(14000 / 117)}&euro;</p>
+                <p className="text-xs text-gray-500 mt-1">Cena zavisi od broja časova i profesora</p>
               </div>
             </div>
           </div>
