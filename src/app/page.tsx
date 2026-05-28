@@ -313,7 +313,7 @@ export default function Pocetna() {
               Dva lekara, isti FSP. Jedan plati 400 evra i prođe iz prve. Drugi plati 700 evra i padne tri puta — sa istim nivoom nemačkog. Gde položiti FSP nije slučajna...
             </p>
             <Link
-              href="/gde-poloziti-fsp-pokrajine-2026"
+              href="/magazin/gde-poloziti-fsp-pokrajine-2026"
               className="inline-block bg-plava text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-plava-dark transition-colors"
             >
               Prikaži još
