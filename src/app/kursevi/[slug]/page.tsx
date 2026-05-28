@@ -224,6 +224,10 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
                     </div>
                   )}
                   <div className="flex items-center gap-3 text-[15px]">
+                    <span>👩‍🏫</span>
+                    <span className="text-gray-600">Birate profesorku u sledećem koraku</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-[15px]">
                     <span>📅</span>
                     <span className="text-gray-600">Vi birate termin — dobijate Google Calendar link i zakazujete</span>
                   </div>
