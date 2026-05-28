@@ -92,7 +92,7 @@ export default function GoogleRecenzije() {
                   <p className="font-semibold text-gray-900 text-sm">{r.author}</p>
                   <div className="flex items-center gap-2">
                     <Stars count={r.rating} />
-                    <span className="text-xs text-gray-400">{r.time}</span>
+                    <span className="text-xs text-gray-400">{toLatin(r.time)}</span>
                   </div>
                 </div>
               </div>
