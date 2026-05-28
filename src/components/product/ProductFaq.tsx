@@ -46,6 +46,12 @@ const faqBySlug: Record<string, { q: string; a: string }[]> = {
     { q: "Šta ako moram da otkažem zakazani čas?", a: "Otkazivanje je moguće najkasnije 24 sata pre zakazanog časa." },
     { q: "Kako se plaća?", a: "Plaćanje je moguće karticom (Visa, MasterCard), uplatom na dinarski račun ili putem PayPal-a." },
   ],
+  "gramatika-a2-b1": [
+    { q: "Šta se dešava nakon uplate?", a: "Odmah dobijate pristup video predavanju i e-booku na platformi." },
+    { q: "Koliko dugo imam pristup?", a: "Pristup video predavanju imate godinu dana. E-book ostaje vaš zauvek." },
+    { q: "Mogu li da učim sa telefona?", a: "Da! Imamo aplikaciju — šaljemo vam link, instalirate za sekund, bez Google ili Apple prodavnice. Radi i na tabletu i računaru." },
+    { q: "Kako se plaća?", a: "Plaćanje je moguće karticom (Visa, MasterCard), uplatom na dinarski račun ili putem PayPal-a." },
+  ],
   "polozi-fide": [
     { q: "Šta se dešava nakon uplate?", a: "Odmah dobijate pristup svim materijalima na platformi." },
     { q: "Koliko dugo imam pristup?", a: "Pristup kursu imate godinu dana od dana kupovine." },
