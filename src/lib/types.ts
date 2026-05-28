@@ -12,16 +12,24 @@ export interface UserProfile {
   created_at: string;
 }
 
+export type CourseCategory = "video" | "grupni" | "individualni" | "paket" | "usluga" | "mesecni";
+
 export interface Course {
   id: string;
   title: string;
   slug: string;
   description: string;
+  marketing_description: string | null;
+  features: string[] | null;
+  category: CourseCategory | null;
   course_type: CourseType;
   price: number;
   thumbnail_url: string | null;
   handbook_url: string | null;
   is_published: boolean;
+  is_purchasable: boolean;
+  paypal_price_eur: number | null;
+  old_wc_product_id: number | null;
   created_at: string;
 }
 
