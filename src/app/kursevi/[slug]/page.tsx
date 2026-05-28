@@ -93,8 +93,12 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
     "B1.1": 10, "B1.2": 10,
     "B2.1": 10,
   };
+  // Override for specific slugs
+  const slugTermini: Record<string, number> = {
+    "fsp-individualni": 5,
+  };
   const nivo = slugToNivo[slug] || null;
-  const termini = nivo ? brojTermina[nivo] : null;
+  const termini = slugTermini[slug] || (nivo ? brojTermina[nivo] : null);
 
   // Fetch raspored for grupni courses
   let grupa: GrupaRaspored | null = null;
@@ -217,7 +221,9 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
                   {!termini && category === "individualni" && (
                     <p className="text-gray-700"><strong>Nastava 1-na-1</strong> sa profesorkom</p>
                   )}
-                  <p className="text-gray-600">Birate profesorku u sledećem koraku</p>
+                  {slug !== "fsp-individualni" && (
+                    <p className="text-gray-600">Birate profesorku u sledećem koraku</p>
+                  )}
                   <p className="text-gray-600">Vi birate termin — dobijate Google Calendar link i zakazujete</p>
                   {category === "mesecni" && (
                     <p className="text-gray-500">Mesečni paket ne uključuje video lekcije ni sertifikat</p>
@@ -254,7 +260,7 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
               <ProductFeatures features={features} title={featuresTitle} />
 
               {/* FAQ */}
-              <ProductFaq category={category} />
+              <ProductFaq category={category} slug={slug} />
             </div>
 
             {/* Right — Price card */}

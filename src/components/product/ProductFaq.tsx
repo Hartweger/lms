@@ -19,21 +19,38 @@ const faqByCategory: Record<string, { q: string; a: string }[]> = {
   individualni: [
     { q: "Kako zakazujem časove?", a: "Nakon uplate dobijate link za Google Calendar i zakazujete termine kad vama odgovara. Potpuna fleksibilnost — vi birate dan i sat." },
     { q: "Da li moram da kupujem udžbenike?", a: "Ne. Sav materijal dobijate od nas — priručnike, vežbe, testove i materijal za pripremu ispita. Plan i program je rađen po uzoru na Schritte (A1–B1) i Vielfalt (B2–C1), ali je naš program modifikovan i prilagođen sadašnjem trenutku. Ne treba vam ništa drugo." },
-    { q: "Koliko imam vremena da iskoristim časove?", a: "Individualne časove koristite u roku od 3 meseca od kupovine. Pristup video lekcijama i vežbama na platformi imate godinu dana." },
+    { q: "Koliko imam vremena da iskoristim časove?", a: "Individualne časove koristite u roku od 3 meseca od kupovine (6 meseci za paket A1). Pristup video lekcijama i vežbama na platformi imate godinu dana." },
     { q: "Šta ako moram da otkažem zakazani čas?", a: "Otkazivanje je moguće najkasnije 24 sata pre zakazanog časa." },
     { q: "Mogu li da učim sa telefona?", a: "Da! Imamo aplikaciju — šaljemo vam link, instalirate za sekund, bez Google ili Apple prodavnice. Radi i na tabletu i računaru." },
     { q: "Kako se plaća?", a: "Plaćanje je moguće karticom (Visa, MasterCard), uplatom na dinarski račun ili putem PayPal-a." },
   ],
   mesecni: [
     { q: "Kako zakazujem časove?", a: "Nakon uplate dobijate link za Google Calendar i zakazujete termine kad vama odgovara." },
+    { q: "Šta ako ne iskoristim sve časove u toku meseca?", a: "Neiskorišćeni časovi se ne prenose u sledeći mesec. Preporučujemo da zakazujete redovno." },
     { q: "Da li dobijem sertifikat?", a: "Mesečni paketi ne uključuju sertifikat. Ako vam treba sertifikat, preporučujemo individualni kurs po nivou." },
     { q: "Mogu li da otkažem zakazani čas?", a: "Da, otkazivanje je moguće najkasnije 24 sata pre zakazanog časa." },
     { q: "Da li imam pristup video lekcijama?", a: "Mesečni paketi ne uključuju video lekcije. Fokus je na živim časovima sa profesorkom." },
   ],
 };
 
-export default function ProductFaq({ category }: { category: string }) {
-  const faq = faqByCategory[category] || faqByCategory.video;
+/* Slug-specific FAQ overrides */
+const faqBySlug: Record<string, { q: string; a: string }[]> = {
+  "fsp-individualni": [
+    { q: "Kako zakazujem časove?", a: "Nakon uplate dobijate link za Google Calendar i zakazujete termine sa profesorkom Milicom Vučić kad vama odgovara." },
+    { q: "Da li moram da kupujem udžbenike?", a: "Ne. Sav materijal za pripremu FSP ispita dobijate od nas. Milica je autor svih materijala za FSP pripremu." },
+    { q: "Šta ako moram da otkažem zakazani čas?", a: "Otkazivanje je moguće najkasnije 24 sata pre zakazanog časa." },
+    { q: "Kako se plaća?", a: "Plaćanje je moguće karticom (Visa, MasterCard), uplatom na dinarski račun ili putem PayPal-a." },
+  ],
+  "individualni-polozi-fide": [
+    { q: "Kako zakazujem časove?", a: "Nakon uplate dobijate link za Google Calendar i zakazujete termine kad vama odgovara." },
+    { q: "Da li moram da kupujem udžbenike?", a: "Ne. Sav materijal za pripremu FIDE ispita dobijate od nas." },
+    { q: "Šta ako moram da otkažem zakazani čas?", a: "Otkazivanje je moguće najkasnije 24 sata pre zakazanog časa." },
+    { q: "Kako se plaća?", a: "Plaćanje je moguće karticom (Visa, MasterCard), uplatom na dinarski račun ili putem PayPal-a." },
+  ],
+};
+
+export default function ProductFaq({ category, slug }: { category: string; slug?: string }) {
+  const faq = (slug && faqBySlug[slug]) || faqByCategory[category] || faqByCategory.video;
 
   return (
     <div>
