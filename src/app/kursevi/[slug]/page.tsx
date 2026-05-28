@@ -6,6 +6,21 @@ import type { Course } from "@/lib/types";
 import PriceCard from "@/components/product/PriceCard";
 import ProductFeatures from "@/components/product/ProductFeatures";
 import ProductFaq from "@/components/product/ProductFaq";
+import { fetchRaspored, type GrupaRaspored } from "@/lib/raspored";
+
+/* ─── Slug → nivo mapping for grupni ─── */
+const slugToNivo: Record<string, string> = {
+  "grupni-kurs-nemackog-jezika-a1-1": "A1.1",
+  "grupni-kurs-nemackog-jezika-a1-2-2": "A1.2",
+  "grupni-kurs-nemackog-jezika-a2": "A2.1",
+  "grupni-kurs-nemackog-jezika-a2-2": "A2.2",
+  "grupni-kurs-nemackog-jezika-b1-1-2": "B1.1",
+  "grupni-kurs-nemackog-b1-2": "B1.2",
+  "grupni-kurs-b2-1": "B2.1",
+  "grupni-kurs-b2-2": "B2.2",
+  "grupni-kurs-c1-1": "C1.1",
+  "grupni-kurs-c1-2": "C1.2",
+};
 
 function formatPrice(price: number): string {
   return price.toLocaleString("de-DE");
@@ -51,6 +66,16 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
     category === "mesecni" ? "Šta uključuje paket?" :
     category === "paket" ? "Šta dobijaš u paketu?" : "Šta dobijaš upisom?";
 
+  // Fetch raspored for grupni courses
+  let grupa: GrupaRaspored | null = null;
+  if (category === "grupni") {
+    const nivo = slugToNivo[slug];
+    if (nivo) {
+      const raspored = await fetchRaspored();
+      grupa = raspored.find((g) => g.nivo === nivo) || null;
+    }
+  }
+
   // Related products (same category, different slug)
   const { data: related } = await supabase
     .from("courses").select("title, slug, price, paypal_price_eur, category")
@@ -89,24 +114,48 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
                 <span>5.0 — 300+ Google recenzija</span>
               </div>
 
-              {/* ─── GRUPNI: Live info block ─── */}
-              {category === "grupni" && (
+              {/* ─── GRUPNI: Live info block from Google Sheets ─── */}
+              {category === "grupni" && grupa && (
                 <div className="bg-white border border-gray-200 rounded-xl p-5 mb-8 space-y-2.5">
                   <div className="flex items-center gap-3 text-[15px]">
                     <span className="text-green-500">🟢</span>
-                    <span className="text-gray-700"><strong>Sledeći termin:</strong> Pogledajte raspored ispod</span>
+                    <span className="text-gray-700"><strong>Sledeći termin:</strong> {grupa.pocetak}</span>
                   </div>
+                  <div className="flex items-center gap-3 text-[15px]">
+                    <span>👩‍🏫</span>
+                    <span className="text-gray-600"><strong>Profesorka:</strong> {grupa.prof}</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-[15px]">
+                    <span>🕐</span>
+                    <span className="text-gray-600"><strong>Termini:</strong> {grupa.dani}, {grupa.sat}</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-[15px]">
+                    <span>⏱️</span>
+                    <span className="text-gray-600"><strong>Trajanje:</strong> {grupa.trajanje} nedelja</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-[15px]">
+                    <span>👥</span>
+                    <span className="text-gray-600"><strong>Slobodnih mesta:</strong> {parseInt(grupa.maks) - parseInt(grupa.upisanih || "0")}</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-[15px]">
+                    <span>💻</span>
+                    <span className="text-gray-600">Online nastava — Google Meet</span>
+                  </div>
+                </div>
+              )}
+              {category === "grupni" && !grupa && (
+                <div className="bg-white border border-gray-200 rounded-xl p-5 mb-8 space-y-2.5">
                   <div className="flex items-center gap-3 text-[15px]">
                     <span>👥</span>
                     <span className="text-gray-600">Male grupe: 3–6 polaznika</span>
                   </div>
                   <div className="flex items-center gap-3 text-[15px]">
-                    <span>🕐</span>
-                    <span className="text-gray-600">2× nedeljno po 60 minuta</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-[15px]">
                     <span>💻</span>
                     <span className="text-gray-600">Online nastava — Google Meet</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-[15px]">
+                    <span>📩</span>
+                    <span className="text-gray-600">Kontaktirajte nas za sledeći termin</span>
                   </div>
                 </div>
               )}
