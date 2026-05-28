@@ -439,6 +439,20 @@ export default function PaketA1B1Page() {
           </div>
         </div>
       </section>
+      {/* ─── Mobile sticky CTA bar ─── */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-3 flex items-center justify-between gap-3 lg:hidden z-50">
+        <div>
+          <p className="font-bold text-gray-900 text-lg leading-tight">29.133 din</p>
+          <p className="text-[#F78687] text-xs font-bold">≈ 249€</p>
+        </div>
+        <Link
+          href="/kupovina/paket-a1-a2-b1"
+          className="bg-[#F78687] hover:bg-[#e06060] text-white font-bold py-3 px-6 rounded-xl text-[15px] whitespace-nowrap"
+        >
+          Upiši se
+        </Link>
+      </div>
+      <div className="h-20 lg:hidden" />
     </>
   );
 }

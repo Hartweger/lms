@@ -263,8 +263,8 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
               <ProductFaq category={category} slug={slug} />
             </div>
 
-            {/* Right — Price card */}
-            <div className="w-full lg:w-[360px] flex-shrink-0">
+            {/* Right — Price card (hidden on mobile, sticky bar instead) */}
+            <div className="hidden lg:block lg:w-[360px] flex-shrink-0">
               <PriceCard
                 price={course.price}
                 priceEur={course.paypal_price_eur}
@@ -305,7 +305,7 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
         <section className="py-14 px-4 bg-white">
           <div className="max-w-5xl mx-auto">
             <h2 className="font-montserrat font-bold text-xl text-gray-900 mb-8 text-center">
-              Možda će vas zanimati
+              Možda će te zanimati
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
               {(related as Course[]).map((r) => {
@@ -325,6 +325,25 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
           </div>
         </section>
       )}
+      {/* ─── Mobile sticky CTA bar ─── */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-3 flex items-center justify-between gap-3 lg:hidden z-50 safe-bottom">
+        <div>
+          <p className="font-bold text-gray-900 text-lg leading-tight">
+            {isVariable && "od "}{formatPrice(course.price)} din
+          </p>
+          {course.paypal_price_eur && (
+            <p className="text-[#F78687] text-xs font-bold">≈ {course.paypal_price_eur}€</p>
+          )}
+        </div>
+        <Link
+          href={`/kupovina/${course.slug}`}
+          className="bg-[#F78687] hover:bg-[#e06060] text-white font-bold py-3 px-6 rounded-xl text-[15px] whitespace-nowrap"
+        >
+          {ctaLabel}
+        </Link>
+      </div>
+      {/* Spacer for mobile sticky bar */}
+      <div className="h-20 lg:hidden" />
     </>
   );
 }
