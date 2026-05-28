@@ -66,14 +66,7 @@ export default function ProveraForma() {
   }
 
   return (
-    <div className="max-w-lg mx-auto px-4 py-16">
-      <h1 className="text-3xl font-bold text-center mb-2">
-        Provera sertifikata
-      </h1>
-      <p className="text-center text-gray-500 mb-8">
-        Unesite kod sertifikata da proverite njegovu validnost.
-      </p>
-
+    <div className="max-w-lg mx-auto">
       <form onSubmit={handleSubmit} className="flex gap-3 mb-8">
         <input
           type="text"
