@@ -24,8 +24,8 @@ const BENEFITI = [
         <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 9v9.75" />
       </svg>
     ),
-    title: "Zakazivanje preko kalendara",
-    desc: "Nakon uplate dobijaš link za zakazivanje. Biraš dane i sate koji ti odgovaraju. Zakazivanje je 24h pre časa.",
+    title: "Zakazivanje odmah nakon uplate",
+    desc: "Dobijaš link za kalendar i zakazuješ časove kad ti odgovara. Otkazivanje je moguće najkasnije 24h pre časa.",
   },
   {
     icon: (
@@ -42,12 +42,12 @@ const BENEFITI_PO_NIVOU = [
   "Časovi sa profesorkom uživo (1-na-1)",
   "Video lekcije za samostalno učenje",
   "Sertifikat po završetku nivoa",
-  "Zakazivanje preko kalendara (24h pre časa)",
+  "Otkazivanje najkasnije 24h pre časa",
 ];
 
 const BENEFITI_MESECNI = [
   "Časovi sa profesorkom uživo (1-na-1)",
-  "Zakazivanje preko kalendara (24h pre časa)",
+  "Otkazivanje najkasnije 24h pre časa",
   "Fleksibilno — biraš koliko časova mesečno",
   "Idealno za održavanje ili intenzivan rad",
 ];
@@ -134,21 +134,20 @@ export default function IndividualniKurseviPage() {
                 ))}
               </ul>
 
-              <div className="space-y-2.5">
+              {/* Nivoi */}
+              <div className="space-y-2">
                 {KURSEVI_PO_NIVOU.map((k) => (
-                  <div key={k.nivo} className="bg-white border border-gray-200 rounded-xl p-3.5 md:p-4 hover:border-plava transition-colors">
-                    <div className="flex items-center justify-between">
-                      <div className="min-w-0">
-                        <span className="font-bold text-gray-900">{k.nivo}</span>
-                        <p className="text-xs text-gray-500 mt-0.5">{k.opis}</p>
-                      </div>
-                      <div className="text-right flex-shrink-0 ml-3">
-                        <div className="font-bold text-gray-900 text-sm">{k.cena} din</div>
-                        <div className="text-xs text-gray-400">sa Natašom: {k.cenaNatasa}</div>
-                      </div>
+                  <div key={k.nivo} className="bg-white border border-gray-200 rounded-xl p-3 md:p-3.5 flex items-center justify-between hover:border-plava transition-colors">
+                    <div className="min-w-0">
+                      <span className="font-bold text-gray-900">{k.nivo}</span>
+                      <p className="text-xs text-gray-500 mt-0.5">{k.opis}</p>
                     </div>
                   </div>
                 ))}
+              </div>
+              <div className="mt-4 text-center">
+                <p className="text-lg font-bold text-gray-900">od 23.000 din</p>
+                <p className="text-xs text-gray-500">Cena zavisi od nivoa i profesora</p>
               </div>
             </div>
 
@@ -170,17 +169,19 @@ export default function IndividualniKurseviPage() {
                 ))}
               </ul>
 
-              <div className="space-y-2.5">
+              <div className="space-y-2">
                 {MESECNI_PAKETI.map((p) => (
-                  <div key={p.paket} className="bg-white border border-gray-200 rounded-xl p-3.5 md:p-4 hover:border-koral transition-colors">
-                    <div className="flex items-center justify-between mb-1">
+                  <div key={p.paket} className="bg-white border border-gray-200 rounded-xl p-3 md:p-3.5 hover:border-koral transition-colors">
+                    <div className="flex items-center justify-between">
                       <span className="font-bold text-gray-900 text-sm">{p.paket}</span>
-                      <span className="font-bold text-gray-900 text-sm flex-shrink-0 ml-3">{p.cena} din</span>
                     </div>
-                    <p className="text-xs text-gray-500">{p.opis}</p>
-                    <p className="text-xs text-gray-400 mt-1">sa Natašom: {p.cenaNatasa} din</p>
+                    <p className="text-xs text-gray-500 mt-1">{p.opis}</p>
                   </div>
                 ))}
+              </div>
+              <div className="mt-4 text-center">
+                <p className="text-lg font-bold text-gray-900">od 14.000 din</p>
+                <p className="text-xs text-gray-500">Cena zavisi od broja časova i profesora</p>
               </div>
             </div>
           </div>
