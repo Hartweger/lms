@@ -13,48 +13,55 @@ export default function Pocetna() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-gradient-to-b from-plava-light to-white py-16 md:py-24 px-4">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-10 md:gap-16">
-          <div className="flex-1 text-center md:text-left">
-            <p className="text-plava font-semibold text-sm tracking-widest uppercase mb-3">
+      <section className="bg-gradient-to-b from-plava-light/50 to-white overflow-hidden">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center">
+          {/* Text */}
+          <div className="flex-1 text-center md:text-left px-4 py-16 md:py-24">
+            <span className="inline-block bg-plava text-white text-xs font-bold tracking-widest uppercase px-4 py-1.5 rounded-full mb-5">
               Online škola nemačkog jezika
-            </p>
-            <h1 className="font-montserrat font-bold text-4xl md:text-5xl text-gray-900 mb-5 leading-tight">
+            </span>
+            <h1 className="font-montserrat font-bold text-4xl md:text-5xl lg:text-[3.4rem] text-gray-900 mb-5 leading-[1.15]">
               Nauči nemački koji ćeš stvarno koristiti
             </h1>
-            <p className="text-gray-600 text-lg md:text-xl mb-4 max-w-lg">
+            <p className="text-gray-600 text-lg md:text-xl mb-3 max-w-lg">
               Razvila sam VoKuM metodu uz pomoć koje je već više hiljada ljudi progovorilo.
             </p>
-            <p className="text-gray-500 text-base mb-8 max-w-lg">
+            <p className="text-gray-400 text-base mb-8 max-w-lg">
               VoKabular, KomUnikacija i Motivacija — tri stvari koje zaista prave razliku.
             </p>
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center md:justify-start">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center md:justify-start mb-8">
               <Link
                 href="/kursevi"
-                className="text-center bg-koral text-white px-8 py-3.5 rounded-xl font-semibold hover:bg-koral-dark transition-colors shadow-lg shadow-koral/20"
+                className="text-center bg-koral text-white px-8 py-3.5 rounded-full font-semibold hover:bg-koral-dark transition-colors shadow-lg shadow-koral/20"
               >
                 Pogledaj kurseve
               </Link>
               <Link
                 href="/besplatno-testiranje"
-                className="text-center border-2 border-plava text-plava px-8 py-3.5 rounded-xl font-semibold hover:bg-plava hover:text-white transition-colors"
+                className="text-center border-2 border-plava text-plava px-8 py-3.5 rounded-full font-semibold hover:bg-plava hover:text-white transition-colors"
               >
                 Besplatni test nivoa
               </Link>
             </div>
+            {/* Stats */}
+            <ul className="flex flex-wrap gap-x-6 gap-y-2 justify-center md:justify-start text-sm text-gray-500">
+              <li className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 bg-plava rounded-full" />100% prolaznost na ispitima</li>
+              <li className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 bg-plava rounded-full" />3000+ polaznika</li>
+              <li className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 bg-plava rounded-full" />20+ godina iskustva</li>
+            </ul>
           </div>
-          <div className="flex-shrink-0 relative">
-            {/* Decorative elements */}
-            <div className="absolute -top-6 -left-6 w-48 h-48 md:w-64 md:h-64 bg-plava/20 rounded-full -z-10" />
-            <div className="absolute -bottom-4 -right-4 w-32 h-32 md:w-44 md:h-44 bg-koral/20 rounded-full -z-10" />
-            <div className="absolute top-4 -right-3 w-4 h-4 bg-koral rounded-full opacity-60" />
-            <div className="absolute -top-2 left-1/3 w-3 h-3 bg-plava rounded-full opacity-50" />
-            <div className="absolute bottom-8 -left-3 w-2.5 h-2.5 bg-yellow-400 rounded-full opacity-70" />
+          {/* Image */}
+          <div className="relative flex-shrink-0 w-full md:w-[480px] lg:w-[540px]">
             <img
-              src="/images/MIN05169.jpg"
+              src="https://www.hartweger.rs/wp-content/uploads/2025/06/Hartweger_Centar_Natasa_Hartweger.jpg"
               alt="Nataša Hartweger"
-              className="relative rounded-2xl shadow-xl w-[280px] md:w-[360px] object-cover"
+              className="w-full h-auto"
             />
+            {/* Name card */}
+            <div className="absolute bottom-6 left-6 bg-white/90 backdrop-blur-sm rounded-xl px-5 py-3 shadow-lg">
+              <p className="font-montserrat font-bold text-gray-900">Nataša Hartweger</p>
+              <p className="text-gray-500 text-sm">Osnivač Hartweger centra</p>
+            </div>
           </div>
         </div>
       </section>
