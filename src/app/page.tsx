@@ -66,6 +66,38 @@ export default function Pocetna() {
         </div>
       </section>
 
+      {/* Ko je Nataša Hartweger? */}
+      <section className="py-16 px-4 bg-gray-50">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="font-montserrat font-bold text-2xl md:text-3xl text-gray-900 mb-6">
+            Ko je Nataša Hartweger?
+          </h2>
+          <div className="space-y-4 text-gray-600 leading-relaxed">
+            <p>
+              <strong className="text-gray-900">Da se upoznamo:</strong><br />
+              Moje ime je Nataša Hartweger, dipl. profesor nemačkog jezika sa 20 godina iskustva.
+            </p>
+            <p>
+              Licencirani sam ispitivač Geteovih i TELC ispita. Autor sam nekoliko priručnika za nastavnike nemačkog jezika i naučnih radova. Vodila sam mnogobrojne edukacije za nastavnike nemačkog jezika u ovom delu Evrope. Pečat sudskog tumača sam stekla 2008. godine. Pre 10 godina sam osnovala HARTWEGER centar.
+            </p>
+            <p>
+              Licence, diplome i formalno obrazovanje su važni, ali ono što donosi najveće zadovoljstvo jesu polaznici. Njihova uspešnost na ispitima, napredak u karijeri i ostvarivanje ličnih ciljeva su najbolji pokazatelji rada.
+            </p>
+            <p>
+              Takođe, radujem se i ponosna sam na svakodnevne poruke koje dobijam od ljudi na društvenim mrežama. Zahvaljujući objavama na društvenim mrežama, mnogi su pronašli dodatnu podršku i motivaciju za učenje nemačkog jezika.
+            </p>
+          </div>
+          <div className="mt-6">
+            <Link
+              href="/kontakt"
+              className="inline-block bg-plava text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-plava-dark transition-colors"
+            >
+              Piši mi!
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* VoKuM metoda */}
       <section className="py-16 px-4 bg-white">
         <div className="max-w-5xl mx-auto">
