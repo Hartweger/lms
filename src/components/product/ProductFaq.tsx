@@ -1,0 +1,48 @@
+const faqByCategory: Record<string, { q: string; a: string }[]> = {
+  video: [
+    { q: "Šta se dešava nakon uplate?", a: "Odmah dobijate pristup svim materijalima na platformi. Potrebna vam je samo dobra volja i bilo koji uređaj sa internet konekcijom." },
+    { q: "Koliko vremena treba nedeljno?", a: "To zavisi od vas. Preporučujemo 3–4 sata nedeljno za optimalan napredak, ali učite sopstvenim tempom." },
+    { q: "Koliko dugo imam pristup?", a: "Pristup kursu imate godinu dana od dana kupovine. Za to vreme možete gledati lekcije neograničen broj puta." },
+    { q: "Kako se plaća?", a: "Plaćanje je moguće karticom (Visa, MasterCard), uplatom na dinarski račun ili putem PayPal-a." },
+  ],
+  grupni: [
+    { q: "Šta se dešava nakon uplate?", a: "Odmah dobijate pristup svim materijalima na platformi i link za poziv na prvi čas. Potrebna vam je samo dobra volja i bilo koji uređaj sa internet konekcijom." },
+    { q: "Šta ako propustim čas?", a: "Beleške sa svakog časa su vam dostupne, a video lekcije na platformi možete gledati kad god vam odgovara. Čas u grupi je za vežbanje govora — ako jedan propustite, nadoknadićete na sledećem." },
+    { q: "Koliko vremena treba nedeljno?", a: "Oko 3 sata: dva časa po 60 minuta u grupi + oko sat vremena za video lekcije i vežbe na platformi." },
+    { q: "Koliko polaznika je u grupi?", a: "Grupa broji najviše 6 polaznika. Za formiranje grupe potrebno je minimum 3 polaznika. Ukoliko se ne prijavi dovoljan broj, termin se pomera i ostajete na listi." },
+    { q: "Kako se plaća?", a: "Plaćanje je moguće karticom (Visa, MasterCard), uplatom na dinarski račun ili putem PayPal-a. Plaćanje na rate moguće je karticama Banca Intesa." },
+  ],
+  individualni: [
+    { q: "Kako zakazujem časove?", a: "Nakon uplate dobijate link za Google Calendar i zakazujete termine kad vama odgovara. Potpuna fleksibilnost." },
+    { q: "Mogu li da otkažem zakazani čas?", a: "Da, otkazivanje je moguće najkasnije 24 sata pre zakazanog časa." },
+    { q: "Koliko dugo imam pristup?", a: "Pristup video lekcijama i vežbama na platformi imate godinu dana. Časove iskoristite u dogovorenom roku." },
+    { q: "Kako se plaća?", a: "Plaćanje je moguće karticom (Visa, MasterCard), uplatom na dinarski račun ili putem PayPal-a." },
+  ],
+  mesecni: [
+    { q: "Kako zakazujem časove?", a: "Nakon uplate dobijate link za Google Calendar i zakazujete termine kad vama odgovara." },
+    { q: "Da li dobijem sertifikat?", a: "Mesečni paketi ne uključuju sertifikat. Ako vam treba sertifikat, preporučujemo individualni kurs po nivou." },
+    { q: "Mogu li da otkažem zakazani čas?", a: "Da, otkazivanje je moguće najkasnije 24 sata pre zakazanog časa." },
+    { q: "Da li imam pristup video lekcijama?", a: "Mesečni paketi ne uključuju video lekcije. Fokus je na živim časovima sa profesorkom." },
+  ],
+};
+
+export default function ProductFaq({ category }: { category: string }) {
+  const faq = faqByCategory[category] || faqByCategory.video;
+
+  return (
+    <div>
+      <h2 className="font-montserrat font-bold text-xl text-gray-900 mb-5">Česta pitanja</h2>
+      <div className="space-y-5">
+        {faq.map((item, i) => (
+          <div key={i} className="border-b border-gray-100 pb-5 last:border-0 last:pb-0">
+            <h3 className="font-bold text-gray-900 text-[15px] mb-2 flex items-start gap-2.5">
+              <span className="flex-shrink-0 w-6 h-6 bg-plava/10 rounded-md flex items-center justify-center text-plava text-xs font-bold mt-0.5">?</span>
+              {item.q}
+            </h3>
+            <p className="text-gray-500 text-[14px] leading-relaxed pl-[34px]">{item.a}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
