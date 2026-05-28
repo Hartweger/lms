@@ -24,43 +24,48 @@ const BENEFITI = [
         <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 9v9.75" />
       </svg>
     ),
-    title: "Fleksibilan raspored",
-    desc: "Ti biraš dane i sate. Pomeri čas kad god treba — bez penala.",
+    title: "Zakazivanje preko kalendara",
+    desc: "Nakon uplate dobijaš link za zakazivanje. Biraš dane i sate koji ti odgovaraju. Zakazivanje je 24h pre časa.",
   },
   {
     icon: (
       <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.745 3.745 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
       </svg>
     ),
-    title: "Sertifikat po završetku",
-    desc: "Hartweger sertifikat sa verifikacijom — dokaz tvog napretka.",
+    title: "Prilagođen tempo",
+    desc: "Učiš brzinom koja ti odgovara. Nema pritiska — fokus je na tvom napretku.",
   },
-  {
-    icon: (
-      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9A2.25 2.25 0 0 0 13.5 5.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z" />
-      </svg>
-    ),
-    title: "Snimljeni časovi",
-    desc: "Svi časovi se snimaju. Pregledaj kad god želiš za ponavljanje.",
-  },
+];
+
+const BENEFITI_PO_NIVOU = [
+  "Časovi sa profesorkom uživo (1-na-1)",
+  "Video lekcije za samostalno učenje",
+  "Sertifikat po završetku nivoa",
+  "Zakazivanje preko kalendara (24h pre časa)",
+];
+
+const BENEFITI_MESECNI = [
+  "Časovi sa profesorkom uživo (1-na-1)",
+  "Zakazivanje preko kalendara (24h pre časa)",
+  "Fleksibilno — biraš koliko časova mesečno",
+  "Idealno za održavanje ili intenzivan rad",
 ];
 
 const KURSEVI_PO_NIVOU = [
-  { nivo: "A1.1", opis: "Početak — predstavljanje, brojevi, svakodnevne fraze", cena: "23.000" },
-  { nivo: "A1.2", opis: "Prošlo vreme, kupovina, putovanje", cena: "23.000" },
-  { nivo: "A2.1", opis: "Posao, zdravlje, stanovanje", cena: "33.000" },
-  { nivo: "A2.2", opis: "Mediji, kultura, kompleksnije situacije", cena: "33.000" },
-  { nivo: "B1.1", opis: "Argumentacija, pisanje, kompleksnija gramatika", cena: "35.000" },
-  { nivo: "B1.2", opis: "Priprema za B1 ispit, slobodna konverzacija", cena: "35.000" },
-  { nivo: "B2.1", opis: "Napredna gramatika, poslovni nemački", cena: "37.000" },
+  { nivo: "A1.1", opis: "Početak — predstavljanje, brojevi, svakodnevne fraze", cena: "23.000", cenaNatasa: "28.000" },
+  { nivo: "A1.2", opis: "Prošlo vreme, kupovina, putovanje", cena: "23.000", cenaNatasa: "28.000" },
+  { nivo: "A2.1", opis: "Posao, zdravlje, stanovanje", cena: "33.000", cenaNatasa: "38.000" },
+  { nivo: "A2.2", opis: "Mediji, kultura, kompleksnije situacije", cena: "33.000", cenaNatasa: "38.000" },
+  { nivo: "B1.1", opis: "Argumentacija, pisanje, kompleksnija gramatika", cena: "35.000", cenaNatasa: "40.000" },
+  { nivo: "B1.2", opis: "Priprema za B1 ispit, slobodna konverzacija", cena: "35.000", cenaNatasa: "40.000" },
+  { nivo: "B2.1", opis: "Napredna gramatika, poslovni nemački", cena: "37.000", cenaNatasa: "42.000" },
 ];
 
 const MESECNI_PAKETI = [
-  { paket: "4 časa mesečno", opis: "1 čas nedeljno — za održavanje ili spor tempo", cena: "14.000", napomena: "Nataša: 16.100" },
-  { paket: "8 časova mesečno", opis: "2 časa nedeljno — standardni tempo napretka", cena: "27.500", napomena: "Nataša: 32.400" },
-  { paket: "12 časova mesečno", opis: "3 časa nedeljno — intenzivan program", cena: "41.000", napomena: "Nataša: 48.300" },
+  { paket: "4 časa mesečno", opis: "1 čas nedeljno — za održavanje ili spor tempo", cena: "14.000", cenaNatasa: "16.100" },
+  { paket: "8 časova mesečno", opis: "2 časa nedeljno — standardni tempo napretka", cena: "27.500", cenaNatasa: "32.400" },
+  { paket: "12 časova mesečno", opis: "3 časa nedeljno — intenzivan program", cena: "41.000", cenaNatasa: "48.300" },
 ];
 
 const profesori = [
@@ -88,9 +93,9 @@ export default function IndividualniKurseviPage() {
       </section>
 
       {/* Benefiti */}
-      <section className="py-14 px-4">
+      <section className="py-12 px-4">
         <div className="max-w-5xl mx-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {BENEFITI.map((b) => (
               <div key={b.title} className="flex gap-4">
                 <div className="text-plava flex-shrink-0 mt-0.5">{b.icon}</div>
@@ -107,27 +112,40 @@ export default function IndividualniKurseviPage() {
       {/* Izaberi tip kursa */}
       <section className="py-14 px-4 bg-gray-50">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl font-montserrat font-bold text-center mb-3">Izaberi tip kursa</h2>
-          <p className="text-gray-600 text-center mb-10">Dva načina — po nivou ili mesečni paketi. Profesora biraš na checkout-u.</p>
+          <h2 className="text-2xl font-montserrat font-bold text-center mb-3">Prvo odaberi tip kursa</h2>
+          <p className="text-gray-600 text-center mb-10">Profesora biraš u sledećem koraku.</p>
 
           <div className="grid md:grid-cols-2 gap-8">
             {/* Kursevi po nivou */}
             <div>
-              <h3 className="text-lg font-montserrat font-bold mb-4 flex items-center gap-2">
-                <span className="w-8 h-8 bg-plava text-white rounded-full flex items-center justify-center text-sm font-bold">1</span>
+              <h3 className="text-lg font-montserrat font-bold mb-3 flex items-center gap-2">
+                <span className="w-8 h-8 bg-plava text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">1</span>
                 Kurs po nivou
               </h3>
-              <p className="text-sm text-gray-600 mb-4">Kompletan nivo (7-8 nedelja). Savladaj ceo nivo sistematično.</p>
-              <div className="space-y-3">
+              <p className="text-sm text-gray-600 mb-3">Kompletan nivo (7-8 nedelja). Savladaj ceo nivo sistematično.</p>
+
+              {/* Šta uključuje */}
+              <ul className="mb-4 space-y-1.5">
+                {BENEFITI_PO_NIVOU.map((b) => (
+                  <li key={b} className="flex items-start gap-2 text-sm text-gray-700">
+                    <span className="text-plava mt-0.5 flex-shrink-0">&#10003;</span>
+                    {b}
+                  </li>
+                ))}
+              </ul>
+
+              <div className="space-y-2.5">
                 {KURSEVI_PO_NIVOU.map((k) => (
-                  <div key={k.nivo} className="bg-white border border-gray-200 rounded-xl p-4 flex items-center justify-between hover:border-plava transition-colors">
-                    <div>
-                      <span className="font-bold text-gray-900">{k.nivo}</span>
-                      <p className="text-xs text-gray-500 mt-0.5">{k.opis}</p>
-                    </div>
-                    <div className="text-right flex-shrink-0 ml-4">
-                      <div className="font-bold text-gray-900">{k.cena} din</div>
-                      <div className="text-xs text-gray-400">Nataša: +5.000</div>
+                  <div key={k.nivo} className="bg-white border border-gray-200 rounded-xl p-3.5 md:p-4 hover:border-plava transition-colors">
+                    <div className="flex items-center justify-between">
+                      <div className="min-w-0">
+                        <span className="font-bold text-gray-900">{k.nivo}</span>
+                        <p className="text-xs text-gray-500 mt-0.5">{k.opis}</p>
+                      </div>
+                      <div className="text-right flex-shrink-0 ml-3">
+                        <div className="font-bold text-gray-900 text-sm">{k.cena} din</div>
+                        <div className="text-xs text-gray-400">sa Natašom: {k.cenaNatasa}</div>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -136,20 +154,31 @@ export default function IndividualniKurseviPage() {
 
             {/* Mesečni paketi */}
             <div>
-              <h3 className="text-lg font-montserrat font-bold mb-4 flex items-center gap-2">
-                <span className="w-8 h-8 bg-koral text-white rounded-full flex items-center justify-center text-sm font-bold">2</span>
+              <h3 className="text-lg font-montserrat font-bold mb-3 flex items-center gap-2">
+                <span className="w-8 h-8 bg-koral text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">2</span>
                 Mesečni paketi
               </h3>
-              <p className="text-sm text-gray-600 mb-4">Fleksibilno — biraš koliko časova mesečno. Idealno za održavanje ili intenzivan rad.</p>
-              <div className="space-y-3">
+              <p className="text-sm text-gray-600 mb-3">Fleksibilno — biraš koliko časova mesečno.</p>
+
+              {/* Šta uključuje */}
+              <ul className="mb-4 space-y-1.5">
+                {BENEFITI_MESECNI.map((b) => (
+                  <li key={b} className="flex items-start gap-2 text-sm text-gray-700">
+                    <span className="text-koral mt-0.5 flex-shrink-0">&#10003;</span>
+                    {b}
+                  </li>
+                ))}
+              </ul>
+
+              <div className="space-y-2.5">
                 {MESECNI_PAKETI.map((p) => (
-                  <div key={p.paket} className="bg-white border border-gray-200 rounded-xl p-4 hover:border-koral transition-colors">
+                  <div key={p.paket} className="bg-white border border-gray-200 rounded-xl p-3.5 md:p-4 hover:border-koral transition-colors">
                     <div className="flex items-center justify-between mb-1">
-                      <span className="font-bold text-gray-900">{p.paket}</span>
-                      <span className="font-bold text-gray-900">{p.cena} din</span>
+                      <span className="font-bold text-gray-900 text-sm">{p.paket}</span>
+                      <span className="font-bold text-gray-900 text-sm flex-shrink-0 ml-3">{p.cena} din</span>
                     </div>
                     <p className="text-xs text-gray-500">{p.opis}</p>
-                    <p className="text-xs text-gray-400 mt-1">{p.napomena}</p>
+                    <p className="text-xs text-gray-400 mt-1">sa Natašom: {p.cenaNatasa} din</p>
                   </div>
                 ))}
               </div>
@@ -162,7 +191,7 @@ export default function IndividualniKurseviPage() {
       <section className="py-14 px-4">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-2xl font-montserrat font-bold text-center mb-3">Naš tim</h2>
-          <p className="text-gray-600 text-center mb-8">Profesora biraš prilikom kupovine kursa.</p>
+          <p className="text-gray-600 text-center mb-8">Profesora biraš u sledećem koraku nakon odabira kursa.</p>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-6">
             {profesori.map((prof) => (
               <ProfesorKartica key={prof.name} name={prof.name} role={prof.role} bio={prof.bio} />
@@ -173,7 +202,7 @@ export default function IndividualniKurseviPage() {
 
       {/* Test nivoa CTA */}
       <section className="py-14 px-4">
-        <div className="max-w-4xl mx-auto bg-plava-light rounded-2xl p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div className="max-w-4xl mx-auto bg-plava-light rounded-2xl p-6 md:p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div>
             <h2 className="text-xl font-montserrat font-bold text-gray-900">Ne znaš koji nivo?</h2>
             <p className="text-gray-600 mt-1">Uradi besplatni test i saznaj za 10 minuta.</p>
