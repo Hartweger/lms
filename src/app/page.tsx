@@ -3,125 +3,250 @@ import Link from "next/link";
 import NewsletterForma from "@/components/NewsletterForma";
 
 export const metadata: Metadata = {
-  title: "Hartweger — Kursevi nemačkog jezika",
+  title: "Hartweger — Online škola nemačkog jezika",
   description:
-    "Naučite nemački jezik online — video kursevi, grupni kursevi i individualni časovi sa Hartweger metodom.",
+    "Nauči nemački koji ćeš stvarno koristiti. VoKuM metoda — video kursevi, grupni kursevi i individualni časovi sa Natašom Hartweger.",
 };
-
-function HeroIcon() {
-  return (
-    <svg
-      className="w-10 h-10 text-plava"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      strokeWidth={1.5}
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5a17.92 17.92 0 0 1-8.716-2.247m0 0A8.966 8.966 0 0 1 3 12c0-1.97.633-3.793 1.708-5.272"
-      />
-    </svg>
-  );
-}
-
-const categories = [
-  {
-    title: "Video kursevi",
-    href: "/kursevi",
-    description:
-      "Učite sopstvenim tempom uz video lekcije, vežbe, kvizove i AI dijaloge — dostupno 24/7.",
-    icon: (
-      <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9A2.25 2.25 0 0 0 13.5 5.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z" />
-      </svg>
-    ),
-  },
-  {
-    title: "Grupni kursevi",
-    href: "/grupni-kursevi",
-    description:
-      "Male grupe sa nastavnikom uživo — motivacija, konverzacija i gramatika u interakciji.",
-    icon: (
-      <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
-      </svg>
-    ),
-  },
-  {
-    title: "Individualni časovi",
-    href: "/individualni-kursevi",
-    description:
-      "Personalizovana nastava 1-na-1 prilagođena vašim ciljevima i tempu učenja.",
-    icon: (
-      <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a23.838 23.838 0 0 0-1.012 5.434c-.29.149-.576.304-.856.463A24.891 24.891 0 0 0 12 18.203c4.011 0 7.85-.96 11.231-2.76-.28-.158-.567-.313-.856-.462a23.84 23.84 0 0 0-1.012-5.434m-15.482 0A47.578 47.578 0 0 1 12 7.684a47.578 47.578 0 0 1 7.74 2.463M4.26 10.147A60.114 60.114 0 0 1 12 8.206a60.114 60.114 0 0 1 7.74 1.941M12 3v.938m0 0a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Z" />
-      </svg>
-    ),
-  },
-];
 
 export default function Pocetna() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-gradient-to-b from-plava-light to-white py-20 px-4">
-        <div className="max-w-5xl mx-auto text-center">
-          <div className="flex justify-center mb-6">
-            <HeroIcon />
+      <section className="bg-gradient-to-b from-plava-light to-white py-16 md:py-24 px-4">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-10 md:gap-16">
+          <div className="flex-1 text-center md:text-left">
+            <p className="text-plava font-semibold text-sm tracking-widest uppercase mb-3">
+              Online škola nemačkog jezika
+            </p>
+            <h1 className="font-montserrat font-bold text-4xl md:text-5xl text-gray-900 mb-5 leading-tight">
+              Nauči nemački koji ćeš stvarno koristiti
+            </h1>
+            <p className="text-gray-600 text-lg md:text-xl mb-4 max-w-lg">
+              Razvila sam VoKuM metodu uz pomoć koje je već više hiljada ljudi progovorilo.
+            </p>
+            <p className="text-gray-500 text-base mb-8 max-w-lg">
+              VoKabular, KomUnikacija i Motivacija — tri stvari koje zaista prave razliku.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center md:justify-start">
+              <Link
+                href="/kursevi"
+                className="text-center bg-koral text-white px-8 py-3.5 rounded-xl font-semibold hover:bg-koral-dark transition-colors shadow-lg shadow-koral/20"
+              >
+                Pogledaj kurseve
+              </Link>
+              <Link
+                href="/besplatno-testiranje"
+                className="text-center border-2 border-plava text-plava px-8 py-3.5 rounded-xl font-semibold hover:bg-plava hover:text-white transition-colors"
+              >
+                Besplatni test nivoa
+              </Link>
+            </div>
           </div>
-          <h1 className="font-montserrat font-bold text-4xl md:text-5xl text-gray-900 mb-4 leading-tight">
-            Nauči nemački jezik
-            <br />
-            <span className="text-plava">sa Hartweger metodom</span>
-          </h1>
-          <p className="text-gray-600 text-lg md:text-xl max-w-2xl mx-auto mb-10">
-            Video kursevi, grupni kursevi i individualni časovi — sve
-            što vam treba za uspešno učenje nemačkog jezika.
+          <div className="flex-shrink-0">
+            <img
+              src="https://www.hartweger.rs/wp-content/uploads/2025/06/Hartweger_Centar_Natasa_Hartweger.jpg"
+              alt="Nataša Hartweger"
+              className="rounded-2xl shadow-lg max-w-xs md:max-w-md w-full"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* VoKuM metoda */}
+      <section className="py-16 px-4 bg-white">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="font-montserrat font-bold text-2xl md:text-3xl text-gray-900 text-center mb-4">
+            VoKuM metoda
+          </h2>
+          <p className="text-gray-500 text-center max-w-2xl mx-auto mb-12">
+            Tri stuba na kojima počiva uspešno učenje nemačkog jezika
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4 sm:px-0">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* VO */}
+            <div className="bg-plava-light rounded-2xl p-8 text-center">
+              <div className="w-14 h-14 bg-plava text-white rounded-xl flex items-center justify-center text-2xl font-bold mx-auto mb-4">
+                VO
+              </div>
+              <h3 className="font-montserrat font-bold text-xl text-gray-900 mb-3">Vokabular</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                Sve počinje sa rečima. Dete prvo nauči reči, a zatim od njih sklapa rečenicu. Napamet naučene definicije o gramatičkim pravilima ne pomažu kada treba da kažeš da te boli glava ili želiš povišicu na poslu. Na kursu učiš razne tehnike za lakše pamćenje reči.
+              </p>
+            </div>
+            {/* KU */}
+            <div className="bg-plava-light rounded-2xl p-8 text-center">
+              <div className="w-14 h-14 bg-plava text-white rounded-xl flex items-center justify-center text-2xl font-bold mx-auto mb-4">
+                KU
+              </div>
+              <h3 className="font-montserrat font-bold text-xl text-gray-900 mb-3">Komunikacija</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                Naučene reči postaju vredne kroz praktičnu komunikaciju. Učimo kroz dijaloge u realnim situacijama (restorani, apoteke, banke) i upoznajemo kulturu DACH zemalja. To čini razliku između dobre i loše komunikacije.
+              </p>
+            </div>
+            {/* M */}
+            <div className="bg-plava-light rounded-2xl p-8 text-center">
+              <div className="w-14 h-14 bg-plava text-white rounded-xl flex items-center justify-center text-2xl font-bold mx-auto mb-4">
+                M
+              </div>
+              <h3 className="font-montserrat font-bold text-xl text-gray-900 mb-3">Motivacija</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                Svakome je potrebna podrška i motivacija. Naš zajednički cilj je da uspešno progovoriš nemački jezik. Odustajanje nije opcija!
+              </p>
+            </div>
+          </div>
+          <div className="text-center mt-8">
             <Link
-              href="/kursevi"
-              className="text-center bg-koral text-white px-8 py-3.5 rounded-xl font-semibold hover:bg-koral-dark transition-colors shadow-lg shadow-koral/20"
+              href="/metodologija"
+              className="text-plava font-semibold hover:underline"
             >
-              Pogledaj kurseve
-            </Link>
-            <Link
-              href="/besplatno-testiranje"
-              className="text-center border-2 border-plava text-plava px-8 py-3.5 rounded-xl font-semibold hover:bg-plava hover:text-white transition-colors"
-            >
-              Besplatni test nivoa
+              Saznaj više o VoKuM metodi &rarr;
             </Link>
           </div>
         </div>
       </section>
 
       {/* Course categories */}
-      <section className="py-16 px-4">
+      <section className="py-16 px-4 bg-gray-50">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="font-montserrat font-bold text-2xl md:text-3xl text-gray-900 text-center mb-12">
+            Izaberi način učenja
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Grupni */}
+            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+              <h3 className="font-montserrat font-bold text-xl text-gray-900 mb-2">Grupni kursevi</h3>
+              <p className="text-plava font-medium text-sm mb-4">Uči u društvu!</p>
+              <ul className="text-gray-600 text-sm space-y-2 mb-6">
+                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Video lekcije dostupne 24/7</li>
+                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Online časovi u grupi</li>
+                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Redovan raspored i struktura</li>
+                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Vežbanje komunikacije na času</li>
+                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Sertifikat HARTWEGER centra</li>
+              </ul>
+              <Link href="/grupni-kursevi" className="inline-block bg-plava text-white px-6 py-2.5 rounded-xl font-semibold text-sm hover:bg-plava/90 transition-colors">
+                Saznaj više
+              </Link>
+            </div>
+            {/* Video */}
+            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+              <h3 className="font-montserrat font-bold text-xl text-gray-900 mb-2">Video kursevi</h3>
+              <p className="text-plava font-medium text-sm mb-4">Uči svojim tempom!</p>
+              <ul className="text-gray-600 text-sm space-y-2 mb-6">
+                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Video lekcije dostupne 24/7</li>
+                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Testovi i materijali za vežbanje</li>
+                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Saveti za učenje vokabulara</li>
+                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Sertifikat HARTWEGER centra</li>
+                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Podrška u WhatsApp grupi</li>
+              </ul>
+              <Link href="/kursevi" className="inline-block bg-plava text-white px-6 py-2.5 rounded-xl font-semibold text-sm hover:bg-plava/90 transition-colors">
+                Saznaj više
+              </Link>
+            </div>
+            {/* Individualni */}
+            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+              <h3 className="font-montserrat font-bold text-xl text-gray-900 mb-2">Individualni kursevi</h3>
+              <p className="text-plava font-medium text-sm mb-4">Fokus na tvoje ciljeve</p>
+              <ul className="text-gray-600 text-sm space-y-2 mb-6">
+                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Online časovi 1:1 sa profesorom</li>
+                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Program prilagođen tvom cilju</li>
+                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Video lekcije i dodatni materijali</li>
+                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Tempo koji odgovara samo tebi</li>
+                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Sertifikat HARTWEGER centra</li>
+              </ul>
+              <Link href="/individualni-kursevi" className="inline-block bg-plava text-white px-6 py-2.5 rounded-xl font-semibold text-sm hover:bg-plava/90 transition-colors">
+                Saznaj više
+              </Link>
+            </div>
+            {/* Za preduzetnice */}
+            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+              <h3 className="font-montserrat font-bold text-xl text-gray-900 mb-2">Za preduzetnice</h3>
+              <p className="text-plava font-medium text-sm mb-4">Resursi za preduzetnice u edukaciji</p>
+              <ul className="text-gray-600 text-sm space-y-2 mb-6">
+                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Autentičan Instagram nastup</li>
+                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Meta oglašavanje</li>
+                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Kreiranje ponude</li>
+                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Digitalni alati u edukaciji</li>
+                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> AI alati u edukaciji</li>
+                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Brend strategija</li>
+              </ul>
+              <Link href="/za-preduzetnice" className="inline-block bg-plava text-white px-6 py-2.5 rounded-xl font-semibold text-sm hover:bg-plava/90 transition-colors">
+                Saznaj više
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Social proof stats */}
+      <section className="py-16 px-4 bg-plava text-white">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
+          <div>
+            <p className="font-montserrat font-bold text-4xl md:text-5xl mb-2">65.000+</p>
+            <p className="text-plava-light text-sm">pratilaca na Instagramu</p>
+          </div>
+          <div>
+            <p className="font-montserrat font-bold text-4xl md:text-5xl mb-2">529.977+</p>
+            <p className="text-plava-light text-sm">pregleda na YouTube-u</p>
+          </div>
+          <div>
+            <p className="font-montserrat font-bold text-4xl md:text-5xl mb-2">3M+</p>
+            <p className="text-plava-light text-sm">pregleda videa na Instagramu</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="py-16 px-4 bg-gray-50">
         <div className="max-w-5xl mx-auto">
           <h2 className="font-montserrat font-bold text-2xl md:text-3xl text-gray-900 text-center mb-12">
-            Izaberite način učenja
+            Šta kažu naši polaznici
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {categories.map((cat) => (
-              <Link
-                key={cat.href}
-                href={cat.href}
-                className="group border border-gray-200 rounded-2xl p-8 text-center hover:border-plava hover:shadow-md transition-all"
-              >
-                <div className="text-plava mb-4 flex justify-center">
-                  {cat.icon}
-                </div>
-                <h3 className="font-montserrat font-bold text-xl text-gray-900 mb-2 group-hover:text-plava transition-colors">
-                  {cat.title}
-                </h3>
-                <p className="text-gray-500 text-sm leading-relaxed">
-                  {cat.description}
-                </p>
-              </Link>
-            ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+              <p className="text-gray-600 text-sm leading-relaxed italic mb-4">
+                &ldquo;Kao neko ko je krenuo da uči nemački od nule, preporučio bih svakome školu Hartweger. Kursevi su dobro organizovani, lekcije su zabavne, a na raspolaganju ćete dobiti i dovoljno resursa da učite samostalno. Nastavnici su izuzetno ljubazni i pozitivni. Ovde ćete dobiti još veću motivaciju za učenjem.&rdquo;
+              </p>
+              <p className="font-bold text-gray-900 text-sm">Nikola Stanković</p>
+            </div>
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+              <p className="text-gray-600 text-sm leading-relaxed italic mb-4">
+                &ldquo;Sve pohvale za školu Hartweger, a posebno za divnu profesorku Suzanu. Odlično predaje i prijateljski je nastrojena, uvek je tu da ohrabri i pomogne, posebno ako se desi da nekad i &apos;zapne&apos;. Časovi su zanimljivi, mnogo je dobrog materijala. Zahvaljujući mojoj profesorki, časovi mi najčešće budu pravo uživanje.&rdquo;
+              </p>
+              <p className="font-bold text-gray-900 text-sm">Nataša Starčević</p>
+            </div>
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+              <p className="text-gray-600 text-sm leading-relaxed italic mb-4">
+                &ldquo;Položila sam A1 nemački lako zahvaljujući kursu u školi Hartweger. Natašin način objašnjavanja i njena harizma su mi pomogle da se opredelim za ovu školu. Moram pohvaliti profesorku Milicu Vučić koja je izvrsni predavač i koja mi je stalno ulivala samopouzdanje. Teme su usko vezane sa temama na ispitu.&rdquo;
+              </p>
+              <p className="font-bold text-gray-900 text-sm">Milena Radojević</p>
+            </div>
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+              <p className="text-gray-600 text-sm leading-relaxed italic mb-4">
+                &ldquo;Pohađala sam dva nivoa u Hartweger školi jezika — jedan u grupi i jedan individualno — i prezadovoljna sam oba puta! Grupna nastava je bila odlično organizovana, interaktivna i motivišuća, dok su individualni časovi bili potpuno prilagođeni mom tempu i potrebama. Profesori su izuzetno stručni, strpljivi i posvećeni svakom polazniku.&rdquo;
+              </p>
+              <p className="font-bold text-gray-900 text-sm">Kristina Ilić</p>
+            </div>
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+              <p className="text-gray-600 text-sm leading-relaxed italic mb-4">
+                &ldquo;Zahvaljujući profesorici Katarini Todosijević, učenje nemačkog jezika mi više nije samo obaveza, već i pravo uživanje. Njena predavanja su dinamična, interaktivna i prilagođena potrebama svakog polaznika. S nestrpljenjem iščekujem svaki sledeći čas!&rdquo;
+              </p>
+              <p className="font-bold text-gray-900 text-sm">Vanja Brkan</p>
+            </div>
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+              <p className="text-gray-600 text-sm leading-relaxed italic mb-4">
+                &ldquo;Jako sam zadovoljna ovom školom, sve je precizno, jasno i nema nepotrebnih informacija. Učenje jezika je ovde potpuno zanimljivo i zaista je ova škola pravi izbor za one koji žele da uče i da se trude. Nastavnica Nataša je predivna i velika podrška učenicima, sve lepo objasni i sa njom je predivno učiti.&rdquo;
+              </p>
+              <p className="font-bold text-gray-900 text-sm">Nikolina Crnobrnja</p>
+            </div>
           </div>
+        </div>
+      </section>
+
+      {/* Footer tagline */}
+      <section className="py-12 px-4 bg-white">
+        <div className="max-w-3xl mx-auto text-center">
+          <p className="text-gray-400 text-lg md:text-xl italic">
+            Svako može da nauči nemački. Da, baš svako. Osim onih koji nikada nisu ni počeli.
+          </p>
         </div>
       </section>
 
@@ -138,7 +263,7 @@ export default function Pocetna() {
           </div>
           <Link
             href="/besplatno-testiranje"
-            className="inline-block bg-plava text-white px-8 py-3 rounded-xl font-semibold hover:bg-plava-dark transition-colors whitespace-nowrap"
+            className="inline-block bg-plava text-white px-8 py-3 rounded-xl font-semibold hover:bg-plava/90 transition-colors whitespace-nowrap"
           >
             Besplatni test nivoa
           </Link>
