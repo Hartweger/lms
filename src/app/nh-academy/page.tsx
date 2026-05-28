@@ -32,9 +32,9 @@ export default function NhAcademyPage() {
           </div>
           <div className="flex-shrink-0">
             <img
-              src="https://www.hartweger.rs/wp-content/uploads/2026/04/naslova-NH.png"
-              alt="NH Academy"
-              className="rounded-2xl shadow-lg max-w-xs md:max-w-md w-full"
+              src="/images/MIN05603.jpg"
+              alt="Nataša Hartweger — NH Academy"
+              className="rounded-2xl shadow-lg w-[280px] md:w-[360px] object-cover"
             />
           </div>
         </div>

@@ -51,9 +51,9 @@ export default function Pocetna() {
             <div className="absolute -top-2 left-1/3 w-3 h-3 bg-plava rounded-full opacity-50" />
             <div className="absolute bottom-8 -left-3 w-2.5 h-2.5 bg-yellow-400 rounded-full opacity-70" />
             <img
-              src="https://www.hartweger.rs/wp-content/uploads/2025/06/Hartweger_Centar_Natasa_Hartweger.jpg"
+              src="/images/MIN05169.jpg"
               alt="Nataša Hartweger"
-              className="relative rounded-2xl shadow-xl max-w-[280px] md:max-w-[400px] w-full"
+              className="relative rounded-2xl shadow-xl w-[280px] md:w-[360px] object-cover"
             />
           </div>
         </div>

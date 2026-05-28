@@ -12,16 +12,25 @@ export default function MetodologijaPage() {
     <>
       {/* Hero */}
       <section className="bg-gradient-to-b from-plava-light to-white py-16 md:py-24 px-4">
-        <div className="max-w-3xl mx-auto text-center">
-          <h1 className="font-montserrat font-bold text-3xl md:text-5xl text-gray-900 mb-6 leading-tight">
-            VoKuM metoda — da konačno progovoriš nemački
-          </h1>
-          <p className="text-gray-600 text-lg leading-relaxed mb-4">
-            VoKabular, KomUnikacija i Motivacija — tri stvari koje zaista prave razliku u učenju nemačkog jezika.
-          </p>
-          <p className="text-gray-500 text-base leading-relaxed">
-            Razvila sam VoKuM metodu na osnovu višegodišnjeg iskustva u nastavi i rada sa hiljadama polaznika. Umesto tradicionalnog pristupa gde se gramatika uči napamet, mi učimo jezik onako kako ga deca usvajaju — prirodno, kroz reči i komunikaciju.
-          </p>
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-10 md:gap-16">
+          <div className="flex-1 text-center md:text-left">
+            <h1 className="font-montserrat font-bold text-3xl md:text-5xl text-gray-900 mb-6 leading-tight">
+              VoKuM metoda — da konačno progovoriš nemački
+            </h1>
+            <p className="text-gray-600 text-lg leading-relaxed mb-4">
+              VoKabular, KomUnikacija i Motivacija — tri stvari koje zaista prave razliku u učenju nemačkog jezika.
+            </p>
+            <p className="text-gray-500 text-base leading-relaxed">
+              Razvila sam VoKuM metodu na osnovu višegodišnjeg iskustva u nastavi i rada sa hiljadama polaznika. Umesto tradicionalnog pristupa gde se gramatika uči napamet, mi učimo jezik onako kako ga deca usvajaju — prirodno, kroz reči i komunikaciju.
+            </p>
+          </div>
+          <div className="flex-shrink-0">
+            <img
+              src="/images/MIN05436.jpg"
+              alt="Nataša Hartweger pri radu"
+              className="rounded-2xl shadow-lg w-[280px] md:w-[340px] object-cover"
+            />
+          </div>
         </div>
       </section>
 

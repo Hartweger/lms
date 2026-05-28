@@ -15,7 +15,7 @@ export default function ONatasiPage() {
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-10 md:gap-16">
           <div className="flex-shrink-0">
             <img
-              src="https://www.hartweger.rs/wp-content/uploads/elementor/thumbs/natasa-hartweger-o-meni-qf6p45ys3z5yy4z5n1gp2gq3w9g075z9cbxkc1g8rc.jpg"
+              src="/images/IMG_6264.jpg"
               alt="Nataša Hartweger"
               className="rounded-2xl shadow-lg max-w-xs md:max-w-sm w-full"
             />

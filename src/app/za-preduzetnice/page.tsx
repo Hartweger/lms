@@ -28,9 +28,9 @@ export default function ZaPreduzetnicePage() {
           <div className="flex flex-col md:flex-row items-center gap-10 bg-gray-50 rounded-2xl p-8 md:p-12 shadow-sm">
             <div className="flex-shrink-0">
               <img
-                src="https://www.hartweger.rs/wp-content/uploads/2026/04/naslova-NH.png"
+                src="/images/MIN05603.jpg"
                 alt="NH Academy"
-                className="rounded-2xl shadow-lg max-w-xs w-full"
+                className="rounded-2xl shadow-lg w-[260px] object-cover"
               />
             </div>
             <div className="flex-1 text-center md:text-left">
