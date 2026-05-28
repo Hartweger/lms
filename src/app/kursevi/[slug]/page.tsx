@@ -18,8 +18,28 @@ const slugToNivo: Record<string, string> = {
   "grupni-kurs-nemackog-b1-2": "B1.2",
   "grupni-kurs-b2-1": "B2.1",
   "grupni-kurs-b2-2": "B2.2",
+  "individualni-kurs-nemackog-jezika-a11": "A1.1",
+  "individualni-kurs-nemackog-jezika-a1-2": "A1.2",
+  "individualni-kurs-nemackog-jezika-a2": "A2.1",
+  "individualni-kurs-nemackog-jezika-a2-2": "A2.2",
+  "individualni-kurs-nemackog-jezika-b11": "B1.1",
+  "individualni-kurs-nemackog-jezika-b1-2": "B1.2",
+  "individualni-kurs-nemackog-jezika-b2-1": "B2.1",
   "grupni-kurs-c1-1": "C1.1",
   "grupni-kurs-c1-2": "C1.2",
+};
+
+/* ─── Preduslovi po nivou ─── */
+const preduslov: Record<string, string> = {
+  "A1.2": "Završen A1.1 nivo ili ekvivalentno znanje",
+  "A2.1": "Završen A1 nivo ili ekvivalentno znanje",
+  "A2.2": "Završen A2.1 nivo ili ekvivalentno znanje",
+  "B1.1": "Završen A2 nivo ili ekvivalentno znanje",
+  "B1.2": "Završen B1.1 nivo ili ekvivalentno znanje",
+  "B2.1": "Završen B1 nivo ili ekvivalentno znanje",
+  "B2.2": "Završen B2.1 nivo ili ekvivalentno znanje",
+  "C1.1": "Završen B2 nivo ili ekvivalentno znanje",
+  "C1.2": "Završen C1.1 nivo ili ekvivalentno znanje",
 };
 
 function formatPrice(price: number): string {
@@ -113,6 +133,24 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
                 <span className="text-amber-400">★★★★★</span>
                 <span>5.0 — 300+ Google recenzija</span>
               </div>
+
+              {/* ─── Preduslov ─── */}
+              {(() => {
+                const nivo = slugToNivo[slug];
+                const uslov = nivo ? preduslov[nivo] : null;
+                if (!uslov) return null;
+                return (
+                  <div className="flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-xl px-5 py-3.5 mb-6 text-[15px]">
+                    <span className="text-amber-500 mt-0.5">⚠️</span>
+                    <div>
+                      <span className="font-semibold text-gray-800">Preduslov: </span>
+                      <span className="text-gray-600">{uslov}</span>
+                      <span className="text-gray-400"> · </span>
+                      <Link href="/besplatno-testiranje" className="text-plava hover:underline font-medium">Niste sigurni? Uradite besplatno testiranje</Link>
+                    </div>
+                  </div>
+                );
+              })()}
 
               {/* ─── GRUPNI: Live info block from Google Sheets ─── */}
               {category === "grupni" && grupa && (
