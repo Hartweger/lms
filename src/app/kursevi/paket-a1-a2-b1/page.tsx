@@ -405,7 +405,7 @@ export default function PaketA1B1Page() {
               { q: "Šta posle B1?", a: "Posle B1 možeš da nastaviš sa individualnim časovima ili grupnim kursevima. Ovo nije kraj puta — ovo je početak." },
               { q: "Da li dobijem sertifikat?", a: "Da, dobijaš Hartweger sertifikat za svaki nivo — ukupno 3 sertifikata (A1, A2, B1) po završetku testova." },
               { q: "Kako funkcioniše plaćanje na rate?", a: "Plaćanje na rate moguće je isključivo karticama Banca Intesa (do 6 rata). Jednokratno možeš platiti bilo kojom karticom, uplatom na račun ili PayPal-om." },
-              { q: "Mogu li da gledam na telefonu?", a: "Da, platforma radi na svim uređajima — telefon, tablet, računar. Učiš gde god poželiš." },
+              { q: "Mogu li da učim sa telefona?", a: "Da! Imamo aplikaciju — šaljemo ti link, instaliraš za sekund, bez Google ili Apple prodavnice. Radi i na tabletu i računaru." },
             ].map((item, i) => (
               <div key={i} className="border-b border-gray-100 pb-5 last:border-0 last:pb-0">
                 <h3 className="font-bold text-gray-900 text-[16px] mb-2">{item.q}</h3>

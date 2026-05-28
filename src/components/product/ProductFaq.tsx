@@ -3,6 +3,7 @@ const faqByCategory: Record<string, { q: string; a: string }[]> = {
     { q: "Šta se dešava nakon uplate?", a: "Odmah dobijate pristup svim materijalima na platformi. Potrebna vam je samo dobra volja i bilo koji uređaj sa internet konekcijom." },
     { q: "Koliko vremena treba nedeljno?", a: "To zavisi od vas. Preporučujemo 3–4 sata nedeljno za optimalan napredak, ali učite sopstvenim tempom." },
     { q: "Koliko dugo imam pristup?", a: "Pristup kursu imate godinu dana od dana kupovine. Za to vreme možete gledati lekcije neograničen broj puta." },
+    { q: "Mogu li da učim sa telefona?", a: "Da! Imamo aplikaciju — šaljemo vam link, instalirate za sekund, bez Google ili Apple prodavnice. Radi i na tabletu i računaru." },
     { q: "Kako se plaća?", a: "Plaćanje je moguće karticom (Visa, MasterCard), uplatom na dinarski račun ili putem PayPal-a." },
   ],
   grupni: [
