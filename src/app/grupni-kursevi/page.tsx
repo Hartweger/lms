@@ -71,23 +71,12 @@ export default async function GrupniKurseviPage() {
 
   return (
     <div>
-      {/* Hero */}
-      <section className="bg-gradient-to-b from-plava-light to-white py-16 px-4">
-        <div className="max-w-5xl mx-auto text-center">
-          <h1 className="text-3xl md:text-4xl font-montserrat font-bold text-gray-900 mb-4">
+      {/* Hero + Benefiti */}
+      <section className="py-16 px-4">
+        <div className="max-w-5xl mx-auto">
+          <h1 className="text-3xl md:text-4xl font-montserrat font-bold text-gray-900 mb-10 text-center">
             Grupni kursevi nemačkog jezika
           </h1>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Učenje u malim grupama sa profesorkom uživo. Dva časa nedeljno,
-            od A1 do C1 — izaberi nivo i kreni.
-          </p>
-        </div>
-      </section>
-
-      {/* Benefiti */}
-      <section className="py-14 px-4">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl font-montserrat font-bold text-center mb-10">Šta uključuje grupni kurs</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {BENEFITI.map((b) => (
               <div key={b.title} className="flex gap-4">
@@ -105,8 +94,7 @@ export default async function GrupniKurseviPage() {
       {/* Raspored */}
       <section className="py-14 px-4 bg-gray-50">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl font-montserrat font-bold text-center mb-3">Izaberi nivo i prijavi se</h2>
-          <p className="text-gray-600 text-center mb-8">Slobodna mesta se ažuriraju u realnom vremenu.</p>
+          <h2 className="text-2xl font-montserrat font-bold text-center mb-8">Izaberi nivo i prijavi se</h2>
           <RasporedGrupa grupe={grupe} />
         </div>
       </section>
