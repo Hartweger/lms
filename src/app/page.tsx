@@ -162,40 +162,6 @@ export default function Pocetna() {
               </div>
             </div>
           </div>
-          {/* Detaljnije kartice */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-            <div className="border border-gray-200 rounded-2xl p-6">
-              <div className="w-10 h-10 border-2 border-gray-300 rounded-lg flex items-center justify-center text-gray-500 text-sm font-bold mb-4">
-                Aa
-              </div>
-              <h3 className="font-montserrat font-bold text-lg text-gray-900 mb-3">1. VO — Vokabular</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">
-                Poznavanje vokabulara je osnova uspešne komunikacije na nemačkom jeziku. Zato svaka lekcija uključuje listu reči sa prevodom, ilustracijama i primerima u kontekstu, kako bi nove reči odmah dobile svoju praktičnu primenu.
-              </p>
-            </div>
-            <div className="border border-gray-200 rounded-2xl p-6">
-              <div className="w-10 h-10 flex items-center justify-center text-gray-500 mb-4">
-                <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
-                </svg>
-              </div>
-              <h3 className="font-montserrat font-bold text-lg text-gray-900 mb-3">2. KU — Komunikacija</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">
-                Reči dobijaju vrednost tek u komunikaciji. Učimo kroz dijaloge iz svakodnevnog života, kao što su razgovori u restoranu, apoteci ili banci. Na taj način razvijaš sigurnost i samopouzdanje u komunikaciji.
-              </p>
-            </div>
-            <div className="border border-gray-200 rounded-2xl p-6">
-              <div className="w-10 h-10 flex items-center justify-center text-gray-500 mb-4">
-                <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 0 0-2.455 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" />
-                </svg>
-              </div>
-              <h3 className="font-montserrat font-bold text-lg text-gray-900 mb-3">3. MO — Motivacija</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">
-                Učenje je lakše kada imaš podršku. Dobijaš stalnu motivaciju i konstruktivnu povratnu informaciju kako bi nastavio da napreduješ. Jer da progovoriš nemački nije samo tvoj cilj — to je naš zajednički cilj.
-              </p>
-            </div>
-          </div>
           <div className="text-center mt-10">
             <Link
               href="/metodologija"
