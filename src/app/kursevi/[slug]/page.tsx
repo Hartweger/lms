@@ -224,7 +224,7 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
                   {slug !== "fsp-individualni" && (
                     <p className="text-gray-600">Birate profesorku u sledećem koraku</p>
                   )}
-                  <p className="text-gray-600">Vi birate termin — dobijate Google Calendar link i zakazujete</p>
+                  <p className="text-gray-600">Ti biraš termin — dobijaš Google Calendar link i zakazuješ</p>
                   {category === "mesecni" && (
                     <p className="text-gray-500">Mesečni paket ne uključuje video lekcije ni sertifikat</p>
                   )}
@@ -236,7 +236,7 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
                 <div className="flex flex-wrap gap-3 mb-8">
                   <span className="inline-flex items-center gap-2 bg-white border border-gray-200 rounded-full px-4 py-2 text-sm text-gray-600">
                     <svg className="w-4 h-4 text-plava" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>
-                    Vaš tempo
+                    Tvoj tempo
                   </span>
                   <span className="inline-flex items-center gap-2 bg-white border border-gray-200 rounded-full px-4 py-2 text-sm text-gray-600">
                     <svg className="w-4 h-4 text-plava" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>

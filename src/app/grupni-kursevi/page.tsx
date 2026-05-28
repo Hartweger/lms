@@ -44,7 +44,7 @@ const BENEFITI = [
       </svg>
     ),
     title: "Sertifikat po završetku",
-    desc: "Po završetku kursa dobijate Hartweger sertifikat sa verifikacijom.",
+    desc: "Po završetku kursa dobijaš Hartweger sertifikat sa verifikacijom.",
   },
   {
     icon: (
