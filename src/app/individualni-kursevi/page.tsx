@@ -142,13 +142,12 @@ export default function IndividualniKurseviPage() {
                       <span className="font-bold text-gray-900">{k.nivo}</span>
                       <p className="text-xs text-gray-500 mt-0.5">{k.opis}</p>
                     </div>
+                    <div className="text-right flex-shrink-0 ml-3">
+                      <div className="font-bold text-gray-900 text-sm">{k.cena} din</div>
+                      <div className="text-xs text-koral font-semibold">~ {Math.round(parseInt(k.cena.replace('.', '')) / 117)}&euro;</div>
+                    </div>
                   </div>
                 ))}
-              </div>
-              <div className="mt-4 text-center">
-                <p className="text-lg font-bold text-gray-900">od 23.000 din</p>
-                <p className="text-xs text-koral font-semibold">~ od {Math.round(23000 / 117)}&euro;</p>
-                <p className="text-xs text-gray-500 mt-1">Cena zavisi od nivoa i profesora</p>
               </div>
             </div>
 
@@ -174,16 +173,17 @@ export default function IndividualniKurseviPage() {
                 {MESECNI_PAKETI.map((p) => (
                   <div key={p.paket} className="bg-white border border-gray-200 rounded-xl p-3 md:p-3.5 hover:border-koral transition-colors">
                     <div className="flex items-center justify-between">
-                      <span className="font-bold text-gray-900 text-sm">{p.paket}</span>
+                      <div className="min-w-0">
+                        <span className="font-bold text-gray-900 text-sm">{p.paket}</span>
+                        <p className="text-xs text-gray-500 mt-0.5">{p.opis}</p>
+                      </div>
+                      <div className="text-right flex-shrink-0 ml-3">
+                        <div className="font-bold text-gray-900 text-sm">{p.cena} din</div>
+                        <div className="text-xs text-koral font-semibold">~ {Math.round(parseInt(p.cena.replace('.', '')) / 117)}&euro;</div>
+                      </div>
                     </div>
-                    <p className="text-xs text-gray-500 mt-1">{p.opis}</p>
                   </div>
                 ))}
-              </div>
-              <div className="mt-4 text-center">
-                <p className="text-lg font-bold text-gray-900">od 14.000 din</p>
-                <p className="text-xs text-koral font-semibold">~ od {Math.round(14000 / 117)}&euro;</p>
-                <p className="text-xs text-gray-500 mt-1">Cena zavisi od broja časova i profesora</p>
               </div>
             </div>
           </div>
