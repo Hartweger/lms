@@ -86,6 +86,16 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
     category === "mesecni" ? "Šta uključuje paket?" :
     category === "paket" ? "Šta dobijaš u paketu?" : "Šta dobijaš upisom?";
 
+  // Number of individual sessions by level
+  const brojTermina: Record<string, number> = {
+    "A1.1": 7, "A1.2": 7,
+    "A2.1": 10, "A2.2": 10,
+    "B1.1": 10, "B1.2": 10,
+    "B2.1": 10,
+  };
+  const nivo = slugToNivo[slug] || null;
+  const termini = nivo ? brojTermina[nivo] : null;
+
   // Fetch raspored for grupni courses
   let grupa: GrupaRaspored | null = null;
   if (category === "grupni") {
@@ -201,17 +211,25 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
               {/* ─── INDIVIDUALNI: Calendar info ─── */}
               {(category === "individualni" || category === "mesecni") && (
                 <div className="bg-white border border-gray-200 rounded-xl p-5 mb-8 space-y-2.5">
+                  {termini && (
+                    <div className="flex items-center gap-3 text-[15px]">
+                      <span>👩‍🏫</span>
+                      <span className="text-gray-700"><strong>{termini} termina po 60 minuta</strong> — nastava 1:1 sa profesorkom</span>
+                    </div>
+                  )}
+                  {!termini && category === "individualni" && (
+                    <div className="flex items-center gap-3 text-[15px]">
+                      <span>👩‍🏫</span>
+                      <span className="text-gray-700"><strong>Nastava 1-na-1</strong> sa profesorkom</span>
+                    </div>
+                  )}
                   <div className="flex items-center gap-3 text-[15px]">
                     <span>📅</span>
-                    <span className="text-gray-700"><strong>Zakazivanje:</strong> Google Calendar link — vi birate termin</span>
+                    <span className="text-gray-600">Vi birate termin — dobijate Google Calendar link i zakazujete</span>
                   </div>
                   <div className="flex items-center gap-3 text-[15px]">
-                    <span>👩‍🏫</span>
-                    <span className="text-gray-600">Nastava 1-na-1 sa profesorkom</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-[15px]">
-                    <span>⏰</span>
-                    <span className="text-gray-600">Otkazivanje najkasnije 24h pre časa</span>
+                    <span>🎯</span>
+                    <span className="text-gray-600">Program prilagođen vašim ciljevima i tempu</span>
                   </div>
                   {category === "mesecni" && (
                     <div className="flex items-center gap-3 text-[15px]">

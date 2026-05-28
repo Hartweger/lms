@@ -14,9 +14,10 @@ const faqByCategory: Record<string, { q: string; a: string }[]> = {
     { q: "Kako se plaća?", a: "Plaćanje je moguće karticom (Visa, MasterCard), uplatom na dinarski račun ili putem PayPal-a. Plaćanje na rate moguće je karticama Banca Intesa." },
   ],
   individualni: [
-    { q: "Kako zakazujem časove?", a: "Nakon uplate dobijate link za Google Calendar i zakazujete termine kad vama odgovara. Potpuna fleksibilnost." },
-    { q: "Mogu li da otkažem zakazani čas?", a: "Da, otkazivanje je moguće najkasnije 24 sata pre zakazanog časa." },
-    { q: "Koliko dugo imam pristup?", a: "Pristup video lekcijama i vežbama na platformi imate godinu dana. Časove iskoristite u dogovorenom roku." },
+    { q: "Kako zakazujem časove?", a: "Nakon uplate dobijate link za Google Calendar i zakazujete termine kad vama odgovara. Potpuna fleksibilnost — vi birate dan i sat." },
+    { q: "Koliko imam vremena da iskoristim časove?", a: "Individualne časove koristite u roku od 3 meseca od kupovine. Pristup video lekcijama i vežbama na platformi imate godinu dana." },
+    { q: "Šta ako moram da otkažem zakazani čas?", a: "Otkazivanje je moguće najkasnije 24 sata pre zakazanog časa." },
+    { q: "Mogu li da učim sa telefona?", a: "Da! Imamo aplikaciju — šaljemo vam link, instalirate za sekund, bez Google ili Apple prodavnice. Radi i na tabletu i računaru." },
     { q: "Kako se plaća?", a: "Plaćanje je moguće karticom (Visa, MasterCard), uplatom na dinarski račun ili putem PayPal-a." },
   ],
   mesecni: [
