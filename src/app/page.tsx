@@ -156,67 +156,66 @@ export default function Pocetna() {
           <h2 className="font-montserrat font-bold text-2xl md:text-3xl text-gray-900 text-center mb-12">
             Izaberi način učenja
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <p className="text-gray-500 text-center max-w-2xl mx-auto mb-12">
+            U ponudi su kursevi od nivoa A1-C1. Za svaki nivo postoje 3 različite ponude. Pogledaj sadržaj i tako ćeš najbolje odlučiti koja je najbolja za tebe.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Grupni */}
-            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
-              <h3 className="font-montserrat font-bold text-xl text-gray-900 mb-2">Grupni kursevi</h3>
-              <p className="text-plava font-medium text-sm mb-4">Uči u društvu!</p>
-              <ul className="text-gray-600 text-sm space-y-2 mb-6">
-                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Video lekcije dostupne 24/7</li>
-                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Online časovi u grupi</li>
-                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Redovan raspored i struktura</li>
-                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Vežbanje komunikacije na času</li>
-                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Sertifikat HARTWEGER centra</li>
-              </ul>
-              <Link href="/grupni-kursevi" className="inline-block bg-plava text-white px-6 py-2.5 rounded-xl font-semibold text-sm hover:bg-plava/90 transition-colors">
-                Saznaj više
-              </Link>
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+              <div className="h-1.5 bg-plava" />
+              <div className="p-8">
+                <h3 className="font-montserrat font-bold text-xl text-gray-900 mb-1">Grupni kursevi</h3>
+                <p className="text-plava font-medium text-sm mb-5">Uči u društvu!</p>
+                <ul className="text-gray-600 text-sm space-y-2.5 mb-6">
+                  <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Video lekcije dostupne 24/7</li>
+                  <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Online časovi u grupi</li>
+                  <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Redovan raspored i struktura</li>
+                  <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Vežbanje komunikacije na času</li>
+                  <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Sertifikat HARTWEGER centra</li>
+                  <li className="flex items-start gap-2 text-gray-400"><span className="mt-0.5">&#10007;</span> Nema individualnih časova</li>
+                </ul>
+                <Link href="/grupni-kursevi" className="inline-block border-2 border-plava text-plava px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-plava hover:text-white transition-colors">
+                  Počnimo odmah!
+                </Link>
+              </div>
             </div>
             {/* Video */}
-            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
-              <h3 className="font-montserrat font-bold text-xl text-gray-900 mb-2">Video kursevi</h3>
-              <p className="text-plava font-medium text-sm mb-4">Uči svojim tempom!</p>
-              <ul className="text-gray-600 text-sm space-y-2 mb-6">
-                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Video lekcije dostupne 24/7</li>
-                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Testovi i materijali za vežbanje</li>
-                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Saveti za učenje vokabulara</li>
-                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Sertifikat HARTWEGER centra</li>
-                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Podrška u WhatsApp grupi</li>
-              </ul>
-              <Link href="/kursevi" className="inline-block bg-plava text-white px-6 py-2.5 rounded-xl font-semibold text-sm hover:bg-plava/90 transition-colors">
-                Saznaj više
-              </Link>
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+              <div className="h-1.5 bg-plava" />
+              <div className="p-8">
+                <h3 className="font-montserrat font-bold text-xl text-gray-900 mb-1">Video kursevi</h3>
+                <p className="text-plava font-medium text-sm mb-5">Uči svojim tempom!</p>
+                <ul className="text-gray-600 text-sm space-y-2.5 mb-6">
+                  <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Video lekcije dostupne 24/7</li>
+                  <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Testovi i materijali za vežbanje</li>
+                  <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Saveti za učenje vokabulara</li>
+                  <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Sertifikat HARTWEGER centra</li>
+                  <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Podrška u WhatsApp grupi</li>
+                  <li className="flex items-start gap-2 text-gray-400"><span className="mt-0.5">&#10007;</span> Nema časova uživo</li>
+                </ul>
+                <Link href="/kursevi" className="inline-block border-2 border-plava text-plava px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-plava hover:text-white transition-colors">
+                  Počnimo odmah!
+                </Link>
+              </div>
             </div>
             {/* Individualni */}
-            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
-              <h3 className="font-montserrat font-bold text-xl text-gray-900 mb-2">Individualni kursevi</h3>
-              <p className="text-plava font-medium text-sm mb-4">Fokus na tvoje ciljeve</p>
-              <ul className="text-gray-600 text-sm space-y-2 mb-6">
-                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Online časovi 1:1 sa profesorom</li>
-                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Program prilagođen tvom cilju</li>
-                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Video lekcije i dodatni materijali</li>
-                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Tempo koji odgovara samo tebi</li>
-                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Sertifikat HARTWEGER centra</li>
-              </ul>
-              <Link href="/individualni-kursevi" className="inline-block bg-plava text-white px-6 py-2.5 rounded-xl font-semibold text-sm hover:bg-plava/90 transition-colors">
-                Saznaj više
-              </Link>
-            </div>
-            {/* Za preduzetnice */}
-            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
-              <h3 className="font-montserrat font-bold text-xl text-gray-900 mb-2">Za preduzetnice</h3>
-              <p className="text-plava font-medium text-sm mb-4">Resursi za preduzetnice u edukaciji</p>
-              <ul className="text-gray-600 text-sm space-y-2 mb-6">
-                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Autentičan Instagram nastup</li>
-                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Meta oglašavanje</li>
-                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Kreiranje ponude</li>
-                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Digitalni alati u edukaciji</li>
-                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> AI alati u edukaciji</li>
-                <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Brend strategija</li>
-              </ul>
-              <Link href="/za-preduzetnice" className="inline-block bg-plava text-white px-6 py-2.5 rounded-xl font-semibold text-sm hover:bg-plava/90 transition-colors">
-                Saznaj više
-              </Link>
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+              <div className="h-1.5 bg-plava" />
+              <div className="p-8">
+                <h3 className="font-montserrat font-bold text-xl text-gray-900 mb-1">Individualni kursevi</h3>
+                <p className="text-plava font-medium text-sm mb-5">Fokus na tvoje ciljeve</p>
+                <ul className="text-gray-600 text-sm space-y-2.5 mb-6">
+                  <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Online časovi 1:1 sa profesorom</li>
+                  <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Program prilagođen tvom cilju</li>
+                  <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Video lekcije i dodatni materijali</li>
+                  <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Tempo koji odgovara samo tebi</li>
+                  <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Sertifikat HARTWEGER centra</li>
+                  <li className="flex items-start gap-2 text-gray-400"><span className="mt-0.5">&#10007;</span> Nema časova u grupi</li>
+                </ul>
+                <Link href="/individualni-kursevi" className="inline-block border-2 border-plava text-plava px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-plava hover:text-white transition-colors">
+                  Počnimo odmah!
+                </Link>
+              </div>
             </div>
           </div>
         </div>
