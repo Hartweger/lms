@@ -13,14 +13,32 @@ import { createClient } from "@supabase/supabase-js";
 
 // WC product map — copy from src/lib since tsx can't resolve @/ aliases easily
 const WC_PRODUCT_MAP: Record<number, string[]> = {
-  35178: ["nemacki-a1-1", "nemacki-a1-2"],
-  46478: ["nemacki-a1-1", "nemacki-a1-2"],
-  46480: ["nemacki-a1-1", "nemacki-a1-2"],
+  // VIDEO kursevi
+  35178: ["nemacki-a1-1", "nemacki-a1-2"],       // VIDEO A1
+  35182: ["nemacki-a2-1", "nemacki-a2-2"],       // VIDEO A2
+
+  // VIDEO paketi
+  46478: ["nemacki-a1-1", "nemacki-a1-2", "nemacki-a2-1", "nemacki-a2-2"],  // Paket A1+A2
+  46480: ["nemacki-a1-1", "nemacki-a1-2", "nemacki-a2-1", "nemacki-a2-2"],  // Paket A1+A2+B1
+
+  // INDIVIDUALNI A1
   35766: ["nemacki-a1-1"],
   35767: ["nemacki-a1-2"],
   46494: ["nemacki-a1-1", "nemacki-a1-2"],
+
+  // INDIVIDUALNI A2
+  35758: ["nemacki-a2-1"],
+  35761: ["nemacki-a2-2"],
+
+  // GRUPNI A1
   35841: ["nemacki-a1-1"],
   36241: ["nemacki-a1-2"],
+
+  // GRUPNI A2
+  35183: ["nemacki-a2-1"],
+  35851: ["nemacki-a2-2"],
+
+  // OSTALO
   47440: ["nemacki-a1-1", "nemacki-a1-2"],
   36863: ["nemacki-a1-1", "nemacki-a1-2"],
 };

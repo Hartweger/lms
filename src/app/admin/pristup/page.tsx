@@ -1,31 +1,48 @@
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 export const dynamic = "force-dynamic";
 
 interface AccessRow {
   id: string;
+  user_id: string;
+  course_id: string;
   expires_at: string | null;
   granted_at: string;
-  user_profiles: { id: string; full_name: string | null; email: string } | null;
-  courses: { id: string; title: string } | null;
+  userName: string;
+  userEmail: string;
+  courseTitle: string;
 }
 
 export default async function AdminPristup() {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
 
   const { data: accessList } = await supabase
     .from("course_access")
-    .select(`
-      id,
-      expires_at,
-      granted_at,
-      user_profiles:user_id (id, full_name, email),
-      courses:course_id (id, title)
-    `)
+    .select("id, user_id, course_id, expires_at, granted_at")
     .order("granted_at", { ascending: false });
 
+  const { data: profiles } = await supabase
+    .from("user_profiles")
+    .select("id, full_name, email");
+
+  const { data: courses } = await supabase
+    .from("courses")
+    .select("id, title");
+
+  const profileMap = new Map((profiles ?? []).map((p: { id: string; full_name: string | null; email: string }) => [p.id, p]));
+  const courseMap = new Map((courses ?? []).map((c: { id: string; title: string }) => [c.id, c]));
+
   const now = new Date();
-  const rows = (accessList ?? []) as unknown as AccessRow[];
+  const rows: AccessRow[] = (accessList ?? []).map((a: { id: string; user_id: string; course_id: string; expires_at: string | null; granted_at: string }) => {
+    const profile = profileMap.get(a.user_id);
+    const course = courseMap.get(a.course_id);
+    return {
+      ...a,
+      userName: (profile as { full_name: string | null })?.full_name || "—",
+      userEmail: (profile as { email: string })?.email || "—",
+      courseTitle: (course as { title: string })?.title || "—",
+    };
+  });
 
   return (
     <div>
@@ -58,13 +75,13 @@ export default async function AdminPristup() {
                   className={expired ? "bg-red-50/50" : "hover:bg-gray-50"}
                 >
                   <td className="px-6 py-4 font-medium text-gray-900">
-                    {row.user_profiles?.full_name || "—"}
+                    {row.userName}
                   </td>
                   <td className="px-6 py-4 text-gray-500">
-                    {row.user_profiles?.email || "—"}
+                    {row.userEmail}
                   </td>
                   <td className="px-6 py-4 text-gray-500">
-                    {row.courses?.title || "—"}
+                    {row.courseTitle}
                   </td>
                   <td className="px-6 py-4 text-gray-500">
                     {row.expires_at

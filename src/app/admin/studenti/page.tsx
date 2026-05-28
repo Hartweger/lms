@@ -11,9 +11,12 @@ interface StudentRow {
   email: string;
   created_at: string;
   courseAccess: { course_id: string; expires_at: string | null }[];
+  lastActivity: string | null;
+  lastSignIn: string | null;
 }
 
 type AccessFilter = "all" | "active" | "none" | "expired";
+type LoginFilter = "all" | "logged_in" | "never";
 
 export default function AdminStudenti() {
   const supabase = createClient();
@@ -23,44 +26,20 @@ export default function AdminStudenti() {
   const [search, setSearch] = useState("");
   const [accessFilter, setAccessFilter] = useState<AccessFilter>("all");
   const [courseFilter, setCourseFilter] = useState<string>("");
+  const [loginFilter, setLoginFilter] = useState<LoginFilter>("all");
 
   useEffect(() => {
     const load = async () => {
-      const { data: studentData } = await supabase
-        .from("user_profiles")
-        .select("*")
-        .eq("role", "student")
-        .order("created_at", { ascending: false });
-
-      const { data: courseData } = await supabase
-        .from("courses")
-        .select("*");
-
-      const { data: accessData } = await supabase
-        .from("course_access")
-        .select("user_id, course_id, expires_at");
-
-      const accessByUser = new Map<string, { course_id: string; expires_at: string | null }[]>();
-      for (const a of accessData ?? []) {
-        const list = accessByUser.get(a.user_id) ?? [];
-        list.push({ course_id: a.course_id, expires_at: a.expires_at });
-        accessByUser.set(a.user_id, list);
+      const res = await fetch("/api/admin/studenti");
+      if (res.ok) {
+        const data = await res.json();
+        setStudents(data.students);
+        setCourses(data.courses as Course[]);
       }
-
-      const rows: StudentRow[] = (studentData ?? []).map((s: { id: string; full_name: string | null; email: string; created_at: string }) => ({
-        id: s.id,
-        full_name: s.full_name,
-        email: s.email,
-        created_at: s.created_at,
-        courseAccess: accessByUser.get(s.id) ?? [],
-      }));
-
-      setStudents(rows);
-      setCourses((courseData ?? []) as Course[]);
       setLoading(false);
     };
     load();
-  }, [supabase]);
+  }, []);
 
   const now = new Date().toISOString();
 
@@ -92,6 +71,10 @@ export default function AdminStudenti() {
         if (!hasExpired || hasActive) return false;
       }
 
+      // Login filter
+      if (loginFilter === "logged_in" && !s.lastSignIn) return false;
+      if (loginFilter === "never" && s.lastSignIn) return false;
+
       // Course filter
       if (courseFilter) {
         const hasCourse = s.courseAccess.some((a) => a.course_id === courseFilter);
@@ -100,10 +83,10 @@ export default function AdminStudenti() {
 
       return true;
     });
-  }, [students, search, accessFilter, courseFilter, now]);
+  }, [students, search, accessFilter, courseFilter, loginFilter, now]);
 
   function exportCSV() {
-    const headers = ["Ime", "Email", "Kursevi", "Status pristupa", "Datum registracije"];
+    const headers = ["Ime", "Email", "Kursevi", "Status pristupa", "Poslednja aktivnost", "Datum registracije"];
     const rows = filtered.map((s) => {
       const courseNames = s.courseAccess
         .map((a) => {
@@ -124,6 +107,7 @@ export default function AdminStudenti() {
         s.email,
         courseNames,
         status,
+        s.lastActivity ? new Date(s.lastActivity).toLocaleDateString("sr-RS") : "",
         new Date(s.created_at).toLocaleDateString("sr-RS"),
       ];
     });
@@ -175,6 +159,15 @@ export default function AdminStudenti() {
           <option value="expired">Istekao pristup</option>
         </select>
         <select
+          value={loginFilter}
+          onChange={(e) => setLoginFilter(e.target.value as LoginFilter)}
+          className="px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 bg-white"
+        >
+          <option value="all">Sve prijave</option>
+          <option value="logged_in">Prijavljivali se</option>
+          <option value="never">Nikad se nisu prijavili</option>
+        </select>
+        <select
           value={courseFilter}
           onChange={(e) => setCourseFilter(e.target.value)}
           className="px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 bg-white"
@@ -199,7 +192,8 @@ export default function AdminStudenti() {
               <th className="text-left px-6 py-3">Ime</th>
               <th className="text-left px-6 py-3">Email</th>
               <th className="text-left px-6 py-3">Kursevi</th>
-              <th className="text-left px-6 py-3">Registrovan</th>
+              <th className="text-left px-6 py-3">Prijavio se</th>
+              <th className="text-left px-6 py-3">Poslednja aktivnost</th>
               <th className="px-6 py-3"></th>
             </tr>
           </thead>
@@ -215,8 +209,15 @@ export default function AdminStudenti() {
                     ? student.courseAccess.length + " kurs(a)"
                     : "—"}
                 </td>
+                <td className="px-6 py-4">
+                  {student.lastSignIn
+                    ? <span className="text-green-600">{new Date(student.lastSignIn).toLocaleDateString("sr-RS")}</span>
+                    : <span className="text-gray-300">Nikad</span>}
+                </td>
                 <td className="px-6 py-4 text-gray-500">
-                  {new Date(student.created_at).toLocaleDateString("sr-RS")}
+                  {student.lastActivity
+                    ? new Date(student.lastActivity).toLocaleDateString("sr-RS")
+                    : "—"}
                 </td>
                 <td className="px-6 py-4 text-right">
                   <Link
@@ -230,7 +231,7 @@ export default function AdminStudenti() {
             ))}
             {filtered.length === 0 && (
               <tr>
-                <td colSpan={5} className="px-6 py-8 text-center text-gray-400">
+                <td colSpan={6} className="px-6 py-8 text-center text-gray-400">
                   Nema rezultata.
                 </td>
               </tr>

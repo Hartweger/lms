@@ -8,7 +8,7 @@ import Footer from "@/components/Footer";
 
 const lato = Lato({
   subsets: ["latin", "latin-ext"],
-  weight: ["300", "400", "700"],
+  weight: ["400", "700"],
   display: "swap",
   variable: "--font-lato",
 });

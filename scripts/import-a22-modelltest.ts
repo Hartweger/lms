@@ -151,7 +151,7 @@ const LESEN_QUESTIONS = [
   // Teil 1: Joachim Sanders (1-5) — Lösungen: 1b, 2a, 3a, 4a, 5b
   {
     question:
-      '<strong>Lesen Teil 1</strong> — Pročitaj tekst o Joachimu Sandersu gore.\n\n<strong>Beispiel:</strong> Joachim Sanders … <em>(b) mag Arbeiten im Büro</em>\n\n<strong>1.</strong> Nach seiner Ausbildung …',
+      '<strong>Lesen Teil 1</strong>\n\n<strong>Beispiel:</strong> Joachim Sanders … <em>(b) mag Arbeiten im Büro</em>\n\n<strong>1.</strong> Nach seiner Ausbildung …',
     options: {
       type: 'quiz',
       items: [
@@ -217,7 +217,7 @@ const LESEN_QUESTIONS = [
   // Teil 2: Kaufhaus Mitte (6-10) — Lösungen: 6c, 7a, 8b, 9a, 10c
   {
     question:
-      '<strong>Lesen Teil 2</strong> — Pogledaj tabelu Kaufhaus Mitte gore.\n\n<strong>6.</strong> Sie möchten Kaffee trinken und etwas essen.',
+      '<strong>Lesen Teil 2</strong>\n\n<strong>6.</strong> Sie möchten Kaffee trinken und etwas essen.',
     options: {
       type: 'quiz',
       items: ['Erdgeschoss.', '3. Stock.', 'Anderer Stock.'],
@@ -273,7 +273,7 @@ const LESEN_QUESTIONS = [
   // Teil 3: E-Mail von Thomas (11-15) — Lösungen: 11a, 12b, 13a, 14c, 15a
   {
     question:
-      '<strong>Lesen Teil 3</strong> — Pročitaj mejl od Thomasa gore.\n\n<strong>11.</strong> Thomas entschuldigt sich, weil er …',
+      '<strong>Lesen Teil 3</strong>\n\n<strong>11.</strong> Thomas entschuldigt sich, weil er …',
     options: {
       type: 'quiz',
       items: [
@@ -344,7 +344,7 @@ const LESEN_QUESTIONS = [
   // Teil 4: Anzeigen (16-20) — Lösungen: 16e, 17b, 18d, 19x, 20a
   {
     question:
-      '<strong>Lesen Teil 4</strong> — Pročitaj oglase a-f gore.\n\n<strong>16.</strong> Tom möchte Bayern mit dem Rad kennenlernen.',
+      '<strong>Lesen Teil 4</strong>\n\n<strong>16.</strong> Tom möchte Bayern mit dem Rad kennenlernen.',
     options: {
       type: 'quiz',
       items: [
@@ -702,6 +702,67 @@ async function main() {
   }
 
   // ── Exercise 1: Lesen (20 questions) ──
+  // Context blocks embedded in each question's options for reading comprehension
+  const lesenContextMap: Record<string, { title: string; type: string; content?: string; headers?: string[]; rows?: string[][] }> = {
+    teil1: {
+      title: 'Lesen Teil 1 — Zeitungstext',
+      type: 'text',
+      content:
+        '**Joachim Sanders — Ein Mann als Sekretärin**\n\n' +
+        '*"Ich habe einen typischen Frauenberuf — warum auch nicht?"*\n\n' +
+        'In unserer Reihe "Frauenberufe — Jetzt auch für Männer!" möchten wir Ihnen heute Joachim Sanders vorstellen. Joachim Sanders hat immer schon gern Büroarbeit gemacht. Auch das Lernen von Sprachen ist schon seit seiner Schulzeit ein wichtiges Hobby. Nach seiner Ausbildung zum Fremdsprachensekretär fuhr er erst einmal nach England und Frankreich. Dort konnte er seine Sprachkenntnisse noch weiter verbessern. Er hat dort auch in verschiedenen Büros gearbeitet, aber immer nur kurze Zeit.\n\n' +
+        'Als er zurück in Hamburg war, suchte er einen festen Job als Sekretär. Er schrieb viele Bewerbungen, hatte aber kein Glück. Dann sah er im Internet eine Anzeige bei der Firma KantorPartners. Er hatte mit dem Personalchef der Firma ein Gespräch und bekam die Stelle.\n\n' +
+        'Jetzt arbeitet er als Sekretär bei dieser Firma. Er ist der einzige männliche Sekretär. Seine Kolleginnen haben damit kein Problem. Nur einige Kollegen finden das manchmal noch etwas komisch. Immer noch denken viele, dass man als Sekretärin nur schnell tippen können muss, gut aussehen sollte und vor allem in der Büroküche Kaffee kocht. Aber das ist schon lange nicht mehr so.\n\n' +
+        'Joachim Sanders: "Es war schon lustig. Ich habe an einem Wettbewerb für Fremdsprachensekretärinnen teilgenommen und war der einzige Mann. Und ich habe den Wettbewerb gewonnen. Ich wurde die Nummer Eins und bekam den Preis — und das als Mann."',
+    },
+    teil2: {
+      title: 'Lesen Teil 2 — Kaufhaus Mitte',
+      type: 'table',
+      content: 'Ideš u kupovinu u robnu kuću. Na koji sprat ideš?',
+      headers: ['Sprat', 'Odeljenja'],
+      rows: [
+        ['4. Stock', 'Café & Restaurant / Computer / Computerspiele / Software / Ticketshop / Kartenvorverkauf / Bücher / Toiletten / Schlüsseldienst'],
+        ['3. Stock', 'Einrichtung & Möbel / Lampen & Beleuchtung / Sportartikel / Fahrräder / Kinderwelt / Spielzeug / Spiele / Uhren & Schmuck'],
+        ['2. Stock', 'Kindermode / Radio & Fernsehen / CDs & DVDs / Musik / Fotostudio'],
+        ['1. Stock', 'Damenbekleidung / Herrenbekleidung / Damen- und Herrenschuhe'],
+        ['Erdgeschoss', 'Lebensmittel / Getränkemarkt / Büro- und Schreibwaren / Uhren / Haushaltsartikel / Geschenkartikel / Küchengeräte / Elektrogeräte / Geldautomat'],
+      ],
+    },
+    teil3: {
+      title: 'Lesen Teil 3 — E-Mail von Thomas',
+      type: 'text',
+      content:
+        'Liebe Alexa,\n\n' +
+        'erinnerst du dich an den tollen Urlaub am Bodensee? Dort haben wir uns kennengelernt und es war sehr schön. Ich wollte dir schon die ganze Zeit schreiben, hatte aber so wenig Zeit. Tut mir wirklich leid.\n\n' +
+        'Wie geht es dir? Bei mir läuft alles super. Ich bin inzwischen mit dem Studium fertig und hoffe, dass ich bald eine Arbeit finde. Und das Beste: Ich habe endlich eine größere Wohnung gefunden. Dort wohne ich jetzt seit einem Monat.\n\n' +
+        'Das möchte ich feiern. Deshalb schreibe ich dir. Ich möchte gern, dass du zu meiner Party kommst. Hast du Lust zu kommen und mich zu besuchen?\n\n' +
+        'Die Party findet am Samstag, dem 5. September, statt. Essen und Trinken habe ich schon eingekauft. Du brauchst nichts mitzubringen, nur vielleicht Musik aus deinem Land, es gibt doch so schöne griechische Musik! Wir wollen ja auch tanzen! Das wäre super.\n\n' +
+        'Und wenn du schon mal in Berlin bist, kannst du auch etwas länger bleiben. Es gibt in Kreuzberg billige Hotels, aber wenn du willst, kannst du auch gern in meiner Wohnung schlafen, Platz gibt es genug, übernachten ist also kein Problem. Überleg es dir, ich würde mich sehr freuen, dich wiederzusehen.\n\n' +
+        'Meine neue Adresse ist Wrangelstraße 40 in Kreuzberg. Und am Sonntag könnte ich dir Berlin zeigen, die Stadt wird dir bestimmt gefallen, ich habe auch zwei Fahrräder. Und am Abend gibt es hier ein tolles Straßenfest mit Musik und Essen.\n\n' +
+        'Lass bald etwas von dir hören!\n\n' +
+        'Viele Grüße\nThomas',
+    },
+    teil4: {
+      title: 'Lesen Teil 4 — Anzeigen',
+      type: 'text',
+      content:
+        '**a) www.essen-und-trinken-in-deutschland.de** — Ihr Restaurantfinder für Spezialitätenrestaurants mit deutschen Gerichten in ganz Deutschland. Mit der Detailsuche finden Sie die besten Restaurants in jeder Stadt.\n\n' +
+        '**b) www.deutsche-kueche.de** — Was isst und trinkt man in Deutschland? Kleine kulinarische Geschichte Deutschlands, Deutsche Küche und Spezialitäten aus allen Regionen. Links zu unzähligen Rezepten zum Selberkochen.\n\n' +
+        '**c) www.Radsport.de** — Fahrräder, Tourenräder, Mountainbikes, E-Bikes: die neuesten Modelle! Fachabteilung für Fahrradzubehör. Alles zu supergünstigen Preisen.\n\n' +
+        '**d) www.norddeutschland-verkehr.de** — Norddeutschland-Ticket jetzt für nur 33 Euro. Bis zu 5 Personen fahren für 33 Euro einen Tag durch Norddeutschland. Fahrradmitnahme kein Problem.\n\n' +
+        '**e) www.afc.de** — Radreisen: In unserer Online-Datenbank finden Sie zu jedem Reiseziel in Deutschland Informationen und Anbieter. Karten mit den schönsten Radwegen. Organisierte Radreisen.\n\n' +
+        '**f) www.ticketshop.com** — Ticketshop EVENT: Jetzt Karten reservieren für Konzerte in ganz Deutschland! Musicals, Shows, Konzerte.',
+    },
+  };
+
+  // Assign context to question ranges: Teil 1 (0-4), Teil 2 (5-9), Teil 3 (10-14), Teil 4 (15-19)
+  function getLesenContext(index: number) {
+    if (index <= 4) return lesenContextMap.teil1;
+    if (index <= 9) return lesenContextMap.teil2;
+    if (index <= 14) return lesenContextMap.teil3;
+    return lesenContextMap.teil4;
+  }
+
   const { data: lesenEx } = await supabase
     .from('exercises')
     .insert({
@@ -717,7 +778,7 @@ async function main() {
     const qs = LESEN_QUESTIONS.map((q, i) => ({
       exercise_id: lesenEx.id,
       question: q.question,
-      options: q.options,
+      options: { ...q.options, context: getLesenContext(i) },
       correct_answer: q.correct_answer,
       explanation: q.explanation || null,
       order_index: i,

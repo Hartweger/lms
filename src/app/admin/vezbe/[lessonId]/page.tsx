@@ -13,6 +13,7 @@ const typeLabels: Record<string, string> = {
   word_order: "Poredaj reči",
   listen_write: "Slobodan odgovor (AI)",
   dialog: "Dijalog (AI)",
+  speak: "Izgovori (mikrofon)",
 };
 
 export default function AdminVezbe() {
@@ -127,6 +128,10 @@ export default function AdminVezbe() {
       defaultData.question = "Prevod rečenice";
       defaultData.options = ["Ich", "gehe"];
       defaultData.correct_answer = "Ich gehe";
+    } else if (exerciseType === "speak") {
+      defaultData.question = "Izgovori sledeću rečenicu naglas:";
+      defaultData.options = { type: "speak" };
+      defaultData.correct_answer = "";
     }
 
     const { data } = await supabase
@@ -377,6 +382,31 @@ export default function AdminVezbe() {
                           placeholder="Tačan redosled: Ich gehe in die Schule"
                           className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-plava"
                         />
+                      </div>
+                    )}
+
+                    {/* Speak exercise editor */}
+                    {ex.exercise_type === "speak" && (
+                      <div className="space-y-3">
+                        <input
+                          value={q.question}
+                          onChange={(e) => updateQuestion(q.id, ex.id, "question", e.target.value)}
+                          placeholder="Uputstvo (npr: Izgovori sledeću rečenicu naglas)"
+                          className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-plava"
+                        />
+                        <input
+                          value={q.correct_answer}
+                          onChange={(e) => updateQuestion(q.id, ex.id, "correct_answer", e.target.value)}
+                          placeholder="Rečenica na nemačkom (npr: Ich möchte ein Glas Wasser, bitte.)"
+                          className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-plava"
+                        />
+                        <input
+                          value={q.explanation || ""}
+                          onChange={(e) => updateQuestion(q.id, ex.id, "explanation", e.target.value)}
+                          placeholder="Objašnjenje / napomena (opciono)"
+                          className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-plava"
+                        />
+                        <p className="text-xs text-gray-400">Student vidi rečenicu, može čuti izgovor, pa govori u mikrofon. Web Speech API poredi izgovor sa tekstom.</p>
                       </div>
                     )}
 

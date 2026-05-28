@@ -13,6 +13,7 @@ import TrueFalseExercise from "./TrueFalseExercise";
 import CategorizeExercise from "./CategorizeExercise";
 import TypingExercise from "./TypingExercise";
 import ConversationExercise from "./ConversationExercise";
+import SpeakExercise from "./SpeakExercise";
 import type { Exercise, ExerciseQuestion } from "@/lib/types";
 
 interface ExerciseRunnerProps {
@@ -36,19 +37,22 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
   const [showXpAnimation, setShowXpAnimation] = useState(false);
   const [xpGained, setXpGained] = useState(0);
   const [dialogTotal, setDialogTotal] = useState(0);
-  const [results, setResults] = useState<{ question: string; correct: boolean }[]>([]);
+  const [results, setResults] = useState<{ question: string; correct: boolean; correctAnswer?: string }[]>([]);
   const [dialogAttempts, setDialogAttempts] = useState(0);
   const [certificateId, setCertificateId] = useState<string | null>(null);
   const [modelltestTotal, setModelltestTotal] = useState<{ score: number; total: number } | null>(null);
+  const [contextOpen, setContextOpen] = useState(true);
 
-  // Enter key advances to next question
+  // Enter key advances to next question (delayed to avoid consuming the same Enter that submitted the answer)
   useEffect(() => {
     if (!showNext) return;
+    let active = false;
+    const timer = setTimeout(() => { active = true; }, 300);
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Enter") handleNext();
+      if (active && e.key === "Enter") handleNext();
     };
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    return () => { clearTimeout(timer); window.removeEventListener("keydown", handleKeyDown); };
   }, [showNext]);
 
   // Fetch previous dialog attempts count
@@ -130,7 +134,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
       return;
     }
 
-    setResults([...results, { question: cleanQuestion, correct }]);
+    setResults([...results, { question: cleanQuestion, correct, correctAnswer: correct ? undefined : question.correct_answer }]);
     if (correct) {
       const newStreak = streak + 1;
       setStreak(newStreak);
@@ -310,7 +314,12 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
               {results.map((r, i) => (
                 <div key={i} className={`flex items-start gap-2 text-sm px-3 py-2 rounded-lg ${r.correct ? "bg-green-50 text-green-700" : "bg-koral-light text-koral-dark"}`}>
                   <span className="shrink-0">{r.correct ? "✓" : "✗"}</span>
-                  <span>{r.question}</span>
+                  <div>
+                    <span>{r.question}</span>
+                    {r.correctAnswer && (
+                      <span className="block text-xs mt-0.5 font-medium">→ {r.correctAnswer}</span>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
@@ -351,8 +360,77 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
     );
   }
 
+  // Extract context from current question's options (for Lesen in Modelltest)
+  const questionContext = (() => {
+    if (!question?.options || typeof question.options !== "object" || Array.isArray(question.options)) return null;
+    const opts = question.options as Record<string, unknown>;
+    if (!opts.context || typeof opts.context !== "object") return null;
+    return opts.context as { title: string; type: string; content?: string; headers?: string[]; rows?: string[][] };
+  })();
+
   return (
     <div>
+      {/* Context text panel (for Lesen in Modelltest) */}
+      {questionContext && (
+        <div className="mb-6 border border-gray-200 rounded-xl overflow-hidden">
+          <button
+            onClick={() => setContextOpen(!contextOpen)}
+            className="w-full flex items-center justify-between px-5 py-3 bg-gray-50 hover:bg-gray-100 transition-colors text-left"
+          >
+            <span className="text-sm font-semibold text-gray-700">{questionContext.title}</span>
+            <span className="text-gray-400 text-xs">{contextOpen ? "Sakrij ▲" : "Prikaži tekst ▼"}</span>
+          </button>
+          {contextOpen && (
+            <div className="px-5 py-4 max-h-80 overflow-y-auto bg-white border-t border-gray-100">
+              {questionContext.type === "table" && questionContext.headers && questionContext.rows ? (
+                <div>
+                  {questionContext.content && (
+                    <p className="text-sm text-gray-600 mb-3">{questionContext.content}</p>
+                  )}
+                  <div className="overflow-x-auto rounded-lg border border-gray-100">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr>
+                          {questionContext.headers.map((h: string, i: number) => (
+                            <th key={i} className="bg-plava text-white px-4 py-2 text-left font-semibold">{h}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {questionContext.rows.map((row: string[], ri: number) => (
+                          <tr key={ri} className={ri % 2 === 1 ? "bg-gray-50" : "bg-white"}>
+                            {row.map((cell: string, ci: number) => (
+                              <td
+                                key={ci}
+                                className={`px-4 py-2 border-b border-gray-100 ${ci === 0 ? "font-semibold text-gray-900" : "text-gray-600"}`}
+                                dangerouslySetInnerHTML={{ __html: cell }}
+                              />
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              ) : (
+                <div
+                  className="prose prose-sm prose-gray max-w-none text-gray-700 leading-relaxed"
+                  dangerouslySetInnerHTML={{
+                    __html: (questionContext.content || "")
+                      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+                      .replace(/\*(.+?)\*/g, "<em>$1</em>")
+                      .replace(/^### (.+)$/gm, "<h3>$1</h3>")
+                      .replace(/^## (.+)$/gm, "<h2>$1</h2>")
+                      .replace(/\n\n/g, "</p><p>")
+                      .replace(/\n/g, "<br>"),
+                  }}
+                />
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Progress */}
       <div className="flex items-center justify-between mb-4">
         <span className="text-sm font-medium text-plava">{exercise.title}</span>
@@ -429,6 +507,19 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
                     }
                   });
                 }}
+              />
+            );
+          }
+
+          // Speak exercise — handles its own flow
+          if (exercise.exercise_type === "speak") {
+            return (
+              <SpeakExercise
+                key={question.id}
+                question={question.question}
+                correctAnswer={question.correct_answer}
+                explanation={question.explanation}
+                onAnswer={handleAnswer}
               />
             );
           }
@@ -538,6 +629,17 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
                 question={question.question}
                 options={convData.options}
                 correctAnswer={parseInt(question.correct_answer)}
+                explanation={question.explanation}
+                onAnswer={handleAnswer}
+              />
+            );
+          }
+          if (qType === "speak") {
+            return (
+              <SpeakExercise
+                key={question.id}
+                question={question.question}
+                correctAnswer={question.correct_answer}
                 explanation={question.explanation}
                 onAnswer={handleAnswer}
               />

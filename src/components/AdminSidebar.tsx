@@ -8,7 +8,6 @@ const links = [
   { href: "/admin", label: "Pregled" },
   { href: "/admin/kursevi", label: "Kursevi" },
   { href: "/admin/studenti", label: "Studenti" },
-  { href: "/admin/kupovine", label: "Kupovine" },
   { href: "/admin/test-nivoa", label: "Test nivoa" },
   { href: "/admin/eseji", label: "Eseji" },
   { href: "/admin/profesori", label: "Profesori" },

@@ -13,12 +13,21 @@ interface AccessRow {
   expires_at: string | null;
 }
 
+interface LessonProgress {
+  courseTitle: string;
+  courseSlug: string;
+  lessons: { id: string; title: string; completed: boolean }[];
+  completedCount: number;
+  totalCount: number;
+}
+
 export default function AdminStudentDetalji() {
   const params = useParams();
   const supabase = createClient();
   const [student, setStudent] = useState<UserProfile | null>(null);
   const [allCourses, setAllCourses] = useState<Course[]>([]);
   const [accessRows, setAccessRows] = useState<AccessRow[]>([]);
+  const [lessonProgress, setLessonProgress] = useState<LessonProgress[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Add access form
@@ -31,27 +40,17 @@ export default function AdminStudentDetalji() {
 
   useEffect(() => {
     const load = async () => {
-      const { data: studentData } = await supabase
-        .from("user_profiles")
-        .select("*")
-        .eq("id", params.id)
-        .single();
-      if (studentData) setStudent(studentData as UserProfile);
-
-      const { data: courses } = await supabase.from("courses").select("*");
-      if (courses) setAllCourses(courses as Course[]);
-
-      const { data: access } = await supabase
-        .from("course_access")
-        .select("id, course_id, granted_at, expires_at")
-        .eq("user_id", params.id)
-        .order("granted_at", { ascending: false });
-      if (access) setAccessRows(access as AccessRow[]);
-
+      const res = await fetch(`/api/admin/studenti/${params.id}`);
+      if (!res.ok) { setLoading(false); return; }
+      const data = await res.json();
+      setStudent(data.student as UserProfile);
+      setAllCourses(data.courses as Course[]);
+      setAccessRows(data.access as AccessRow[]);
+      setLessonProgress(data.lessonProgress as LessonProgress[]);
       setLoading(false);
     };
     load();
-  }, [params.id, supabase]);
+  }, [params.id]);
 
   const accessCourseIds = accessRows.map((a) => a.course_id);
   const availableCourses = allCourses.filter((c) => !accessCourseIds.includes(c.id));
@@ -135,13 +134,23 @@ export default function AdminStudentDetalji() {
         ← Nazad na listu
       </Link>
 
-      <h1 className="text-2xl font-bold text-gray-900 mb-1">
-        {student.full_name || "Bez imena"}
-      </h1>
-      <p className="text-gray-500 mb-1">{student.email}</p>
-      <p className="text-xs text-gray-400 mb-8">
-        Registrovan: {new Date(student.created_at).toLocaleDateString("sr-RS")}
-      </p>
+      <div className="flex items-start justify-between mb-8">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 mb-1">
+            {student.full_name || "Bez imena"}
+          </h1>
+          <p className="text-gray-500 mb-1">{student.email}</p>
+          <p className="text-xs text-gray-400">
+            Registrovan: {new Date(student.created_at).toLocaleDateString("sr-RS")}
+          </p>
+        </div>
+        <Link
+          href={`/admin/studenti/${params.id}/pregled`}
+          className="text-sm bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors shrink-0"
+        >
+          Pogledaj kao student
+        </Link>
+      </div>
 
       {/* Course Access Section */}
       <div className="flex items-center justify-between mb-4">
@@ -277,6 +286,54 @@ export default function AdminStudentDetalji() {
       ) : (
         <div className="bg-white rounded-xl p-8 text-center text-gray-400 shadow-sm">
           Nema dodeljenih kurseva.
+        </div>
+      )}
+
+      {/* Lesson Progress */}
+      {lessonProgress.length > 0 && (
+        <div className="mt-10">
+          <h2 className="text-lg font-bold text-gray-900 mb-4">Napredak po lekcijama</h2>
+          {lessonProgress.map((cp) => {
+            const percent = cp.totalCount > 0 ? Math.round((cp.completedCount / cp.totalCount) * 100) : 0;
+            return (
+              <div key={cp.courseSlug} className="mb-6">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="font-bold text-sm text-gray-900">{cp.courseTitle}</h3>
+                  <span className="text-xs text-gray-500">
+                    {cp.completedCount} / {cp.totalCount} ({percent}%)
+                  </span>
+                </div>
+                <div className="bg-gray-100 rounded-full h-2 mb-3 overflow-hidden">
+                  <div
+                    className="bg-plava h-full rounded-full transition-all"
+                    style={{ width: `${percent}%` }}
+                  />
+                </div>
+                <div className="space-y-1">
+                  {cp.lessons.map((lesson, i) => (
+                    <div
+                      key={lesson.id}
+                      className={`flex items-center gap-2 text-sm px-3 py-1.5 rounded-lg ${
+                        lesson.completed
+                          ? "bg-green-50 text-green-700"
+                          : "bg-white text-gray-500"
+                      }`}
+                    >
+                      <span className="shrink-0 w-5 text-center">
+                        {lesson.completed ? "✓" : <span className="text-gray-300">{i + 1}</span>}
+                      </span>
+                      <Link
+                        href={`/lekcija/${lesson.id}`}
+                        className="hover:underline"
+                      >
+                        {lesson.title}
+                      </Link>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

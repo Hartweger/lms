@@ -1,10 +1,10 @@
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminPregled() {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
 
   // --- Statistika ---
   const { count: studentCount } = await supabase
@@ -25,6 +25,13 @@ export default async function AdminPregled() {
   const { count: accessCount } = await supabase
     .from("course_access")
     .select("*", { count: "exact", head: true });
+
+  // Week boundaries
+  const now = new Date();
+  const dayOfWeek = now.getDay();
+  const startOfWeek = new Date(now);
+  startOfWeek.setDate(now.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
+  startOfWeek.setHours(0, 0, 0, 0);
 
   // Active students (lesson completed in last 7 days)
   const sevenDaysAgo = new Date();
@@ -49,10 +56,21 @@ export default async function AdminPregled() {
     .from("professor_students")
     .select("*", { count: "exact", head: true });
 
+  // New students this week (from WC webhook or manual)
+  const { count: newThisWeek } = await supabase
+    .from("user_profiles")
+    .select("*", { count: "exact", head: true })
+    .eq("role", "student")
+    .gte("created_at", startOfWeek.toISOString());
+
+  // Students who have logged in at least once
+  const { data: { users: authUsers } } = await supabase.auth.admin.listUsers({ perPage: 1000 });
+  const loggedInCount = authUsers.filter(u => u.last_sign_in_at).length;
+
   const stats = [
     { label: "Studenti", value: studentCount ?? 0, href: "/admin/studenti" },
-    { label: "Profesori", value: professorCount ?? 0, href: "/admin/profesori" },
-    { label: "Kursevi", value: courseCount ?? 0, href: "/admin/kursevi" },
+    { label: "Prijavili se", value: loggedInCount, href: "/admin/studenti" },
+    { label: "Novi ove nedelje", value: newThisWeek ?? 0, href: "/admin/studenti" },
     { label: "Aktivni (7 dana)", value: activeCount, href: "/admin/studenti" },
   ];
 
@@ -72,12 +90,6 @@ export default async function AdminPregled() {
     .limit(10);
 
   // --- Skorašnje aktivnosti (lesson completions this week) ---
-  const now = new Date();
-  const dayOfWeek = now.getDay();
-  const startOfWeek = new Date(now);
-  startOfWeek.setDate(now.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
-  startOfWeek.setHours(0, 0, 0, 0);
-
   const { data: recentProgress } = await supabase
     .from("lesson_progress")
     .select("user_id, lesson_id, completed_at, lessons(title), user_profiles: user_id(full_name, email)")

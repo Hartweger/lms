@@ -1,9 +1,9 @@
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminTestNivoa() {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
   const { data: results } = await supabase
     .from("placement_test_results")
     .select("*")

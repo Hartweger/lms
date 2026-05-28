@@ -50,78 +50,27 @@ export default function AdminProfesori() {
 
   useEffect(() => {
     const load = async () => {
-      const { data: profData } = await supabase
-        .from("user_profiles")
-        .select("id, full_name, email")
-        .eq("role", "professor")
-        .order("full_name");
-
-      const { data: assignData } = await supabase
-        .from("professor_students")
-        .select("professor_id");
-
-      // Count students per professor
-      const countMap = new Map<string, number>();
-      for (const a of assignData ?? []) {
-        countMap.set(a.professor_id, (countMap.get(a.professor_id) ?? 0) + 1);
+      const res = await fetch("/api/admin/profesori");
+      if (res.ok) {
+        const { professors: rows } = await res.json();
+        setProfessors(rows);
       }
-
-      const rows: ProfessorRow[] = (profData ?? []).map((p: { id: string; full_name: string | null; email: string }) => ({
-        id: p.id,
-        full_name: p.full_name ?? "",
-        email: p.email,
-        studentCount: countMap.get(p.id) ?? 0,
-      }));
-
-      setProfessors(rows);
       setLoading(false);
     };
     load();
-  }, [supabase]);
+  }, []);
 
   const openDetail = async (prof: ProfessorRow) => {
     setSelectedProf(prof);
     setLoadingDetail(true);
 
-    const [assignRes, studentRes, courseRes] = await Promise.all([
-      supabase
-        .from("professor_students")
-        .select("id, student_id, course_id, assigned_via")
-        .eq("professor_id", prof.id),
-      supabase
-        .from("user_profiles")
-        .select("id, full_name, email")
-        .eq("role", "student")
-        .order("full_name"),
-      supabase
-        .from("courses")
-        .select("id, title"),
-    ]);
-
-    const studentMap = new Map<string, { id: string; full_name: string | null; email: string }>(
-      (studentRes.data ?? []).map((s: { id: string; full_name: string | null; email: string }) => [s.id, s])
-    );
-    const courseMap = new Map<string, { id: string; title: string }>(
-      (courseRes.data ?? []).map((c: { id: string; title: string }) => [c.id, c])
-    );
-
-    const rows: AssignmentRow[] = (assignRes.data ?? []).map((a: { id: string; student_id: string; course_id: string; assigned_via: "manual" | "wc_variation" }) => {
-      const student = studentMap.get(a.student_id);
-      const course = courseMap.get(a.course_id);
-      return {
-        id: a.id,
-        student_id: a.student_id,
-        course_id: a.course_id,
-        assigned_via: a.assigned_via,
-        student_name: student?.full_name ?? "",
-        student_email: student?.email ?? "",
-        course_title: course?.title ?? "Nepoznat kurs",
-      };
-    });
-
-    setAssignments(rows);
-    setAllStudents((studentRes.data ?? []) as StudentOption[]);
-    setAllCourses((courseRes.data ?? []) as CourseOption[]);
+    const res = await fetch(`/api/admin/profesori/${prof.id}`);
+    if (res.ok) {
+      const data = await res.json();
+      setAssignments(data.assignments);
+      setAllStudents(data.students);
+      setAllCourses(data.courses);
+    }
     setLoadingDetail(false);
   };
 

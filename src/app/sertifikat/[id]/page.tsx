@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 
 export default async function SertifikatStranica({ params }: PageProps) {
   const { id } = await params;
-  const supabase = await createClient();
+  const supabase = createAdminClient();
 
   const { data: cert } = await supabase
     .from("certificates")
@@ -34,7 +34,7 @@ export default async function SertifikatStranica({ params }: PageProps) {
 
   const studentName = profile?.full_name || "Student";
   const courseTitle = course?.title || "Kurs";
-  const date = new Date(cert.issued_at).toLocaleDateString("sr-RS", {
+  const date = new Date(cert.issued_at).toLocaleDateString("sr-Latn-RS", {
     day: "numeric", month: "long", year: "numeric",
   });
 
