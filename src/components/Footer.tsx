@@ -7,7 +7,6 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           {/* Logo + tagline */}
           <div>
-            <img src="/logo-white.svg" alt="Hartweger" className="h-8 mb-4" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
             <p className="text-lg font-montserrat font-bold text-white mb-4">Hartweger</p>
             <div className="border-t border-gray-700 pt-4 space-y-2 text-sm text-gray-400 italic">
               <p>Svako može da nauči nemački.</p>
