@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import NewsletterForma from "@/components/NewsletterForma";
+import GoogleRecenzije from "@/components/GoogleRecenzije";
 
 export const metadata: Metadata = {
   title: "Hartweger — Online škola nemačkog jezika",
@@ -200,52 +201,8 @@ export default function Pocetna() {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="py-16 px-4 bg-gray-50">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="font-montserrat font-bold text-2xl md:text-3xl text-gray-900 text-center mb-12">
-            Šta kažu naši polaznici
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-              <p className="text-gray-600 text-sm leading-relaxed italic mb-4">
-                &ldquo;Kao neko ko je krenuo da uči nemački od nule, preporučio bih svakome školu Hartweger. Kursevi su dobro organizovani, lekcije su zabavne, a na raspolaganju ćete dobiti i dovoljno resursa da učite samostalno. Nastavnici su izuzetno ljubazni i pozitivni. Ovde ćete dobiti još veću motivaciju za učenjem.&rdquo;
-              </p>
-              <p className="font-bold text-gray-900 text-sm">Nikola Stanković</p>
-            </div>
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-              <p className="text-gray-600 text-sm leading-relaxed italic mb-4">
-                &ldquo;Sve pohvale za školu Hartweger, a posebno za divnu profesorku Suzanu. Odlično predaje i prijateljski je nastrojena, uvek je tu da ohrabri i pomogne, posebno ako se desi da nekad i &apos;zapne&apos;. Časovi su zanimljivi, mnogo je dobrog materijala. Zahvaljujući mojoj profesorki, časovi mi najčešće budu pravo uživanje.&rdquo;
-              </p>
-              <p className="font-bold text-gray-900 text-sm">Nataša Starčević</p>
-            </div>
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-              <p className="text-gray-600 text-sm leading-relaxed italic mb-4">
-                &ldquo;Položila sam A1 nemački lako zahvaljujući kursu u školi Hartweger. Natašin način objašnjavanja i njena harizma su mi pomogle da se opredelim za ovu školu. Moram pohvaliti profesorku Milicu Vučić koja je izvrsni predavač i koja mi je stalno ulivala samopouzdanje. Teme su usko vezane sa temama na ispitu.&rdquo;
-              </p>
-              <p className="font-bold text-gray-900 text-sm">Milena Radojević</p>
-            </div>
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-              <p className="text-gray-600 text-sm leading-relaxed italic mb-4">
-                &ldquo;Pohađala sam dva nivoa u Hartweger školi jezika — jedan u grupi i jedan individualno — i prezadovoljna sam oba puta! Grupna nastava je bila odlično organizovana, interaktivna i motivišuća, dok su individualni časovi bili potpuno prilagođeni mom tempu i potrebama. Profesori su izuzetno stručni, strpljivi i posvećeni svakom polazniku.&rdquo;
-              </p>
-              <p className="font-bold text-gray-900 text-sm">Kristina Ilić</p>
-            </div>
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-              <p className="text-gray-600 text-sm leading-relaxed italic mb-4">
-                &ldquo;Zahvaljujući profesorici Katarini Todosijević, učenje nemačkog jezika mi više nije samo obaveza, već i pravo uživanje. Njena predavanja su dinamična, interaktivna i prilagođena potrebama svakog polaznika. S nestrpljenjem iščekujem svaki sledeći čas!&rdquo;
-              </p>
-              <p className="font-bold text-gray-900 text-sm">Vanja Brkan</p>
-            </div>
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-              <p className="text-gray-600 text-sm leading-relaxed italic mb-4">
-                &ldquo;Jako sam zadovoljna ovom školom, sve je precizno, jasno i nema nepotrebnih informacija. Učenje jezika je ovde potpuno zanimljivo i zaista je ova škola pravi izbor za one koji žele da uče i da se trude. Nastavnica Nataša je predivna i velika podrška učenicima, sve lepo objasni i sa njom je predivno učiti.&rdquo;
-              </p>
-              <p className="font-bold text-gray-900 text-sm">Nikolina Crnobrnja</p>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Google recenzije — live sa Google Places API */}
+      <GoogleRecenzije />
 
       {/* Footer tagline */}
       <section className="py-12 px-4 bg-white">
