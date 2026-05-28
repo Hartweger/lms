@@ -282,7 +282,7 @@ export default function Pocetna() {
               Ne znaš koji nivo?
             </h2>
             <p className="text-gray-600 mt-1">
-              Uradi besplatni test i saznaj za 10 minuta.
+              Uradi besplatno testiranje i saznaj za 10 minuta.
             </p>
           </div>
           <Link

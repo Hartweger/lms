@@ -104,7 +104,7 @@ export default async function GrupniKurseviPage() {
         <div className="max-w-4xl mx-auto bg-plava-light rounded-2xl p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div>
             <h2 className="text-xl font-montserrat font-bold text-gray-900">Ne znaš koji nivo?</h2>
-            <p className="text-gray-600 mt-1">Uradi besplatni test i saznaj za 10 minuta.</p>
+            <p className="text-gray-600 mt-1">Uradi besplatno testiranje i saznaj za 10 minuta.</p>
           </div>
           <Link
             href="/besplatno-testiranje"

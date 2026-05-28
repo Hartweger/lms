@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import EinstufungQuiz from "./EinstufungQuiz";
 
 export const metadata: Metadata = {
-  title: "Besplatno testiranje nemačkog jezika — Test nivoa | Hartweger",
+  title: "Besplatno testiranje nemačkog jezika | Hartweger",
   description: "Besplatno testiranje nivoa nemačkog jezika online. Testiraj se odmah i saznaj da li si A1, A2, B1 ili B2. Bez registracije, rezultat odmah + preporuka kursa.",
-  keywords: "besplatno testiranje nemačkog, test nivoa nemačkog, einstufungstest, besplatni test nemački, nivo nemačkog jezika, A1 A2 B1 B2 test",
   openGraph: {
     title: "Besplatno testiranje nemačkog jezika — saznaj svoj nivo",
     description: "Besplatno testiraj svoj nivo nemačkog jezika. Bez registracije, rezultat odmah + preporuka kursa.",

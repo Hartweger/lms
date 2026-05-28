@@ -394,7 +394,7 @@ export default function KurseviKatalog() {
             href="/besplatno-testiranje"
             className="px-6 py-3 rounded-[10px] border-2 border-[#0AB3D7] text-[#0AB3D7] text-sm font-bold hover:bg-[#0AB3D7] hover:text-white transition-all whitespace-nowrap min-h-[46px] flex items-center"
           >
-            Besplatni test nivoa →
+            Besplatno testiranje →
           </Link>
         </div>
       )}
