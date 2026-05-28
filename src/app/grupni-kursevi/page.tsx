@@ -122,7 +122,7 @@ export default async function GrupniKurseviPage() {
             href="/besplatno-testiranje"
             className="bg-plava hover:bg-plava-dark text-white font-bold py-3 px-8 rounded-xl transition-colors whitespace-nowrap"
           >
-            Besplatni test nivoa
+            Besplatno testiranje
           </Link>
         </div>
       </section>

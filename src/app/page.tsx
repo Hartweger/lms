@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import NewsletterForma from "@/components/NewsletterForma";
 import GoogleRecenzije from "@/components/GoogleRecenzije";
 
 export const metadata: Metadata = {
@@ -40,7 +39,7 @@ export default function Pocetna() {
                 href="/besplatno-testiranje"
                 className="text-center border-2 border-plava text-plava px-8 py-3.5 rounded-full font-semibold hover:bg-plava hover:text-white transition-colors"
               >
-                Besplatni test nivoa
+                Besplatno testiranje
               </Link>
             </div>
             {/* Stats */}
@@ -266,22 +265,36 @@ export default function Pocetna() {
             href="/besplatno-testiranje"
             className="inline-block bg-plava text-white px-8 py-3 rounded-xl font-semibold hover:bg-plava/90 transition-colors whitespace-nowrap"
           >
-            Besplatni test nivoa
+            Besplatno testiranje
           </Link>
         </div>
       </section>
 
-      {/* Newsletter */}
-      <section className="py-16 px-4">
-        <div className="max-w-5xl mx-auto text-center">
-          <h2 className="font-montserrat font-bold text-2xl md:text-3xl text-gray-900 mb-3">
-            Ostanite u toku
-          </h2>
-          <p className="text-gray-600 mb-8 max-w-lg mx-auto">
-            Prijavite se na newsletter i dobijajte besplatne savete za
-            učenje nemačkog, nove lekcije i posebne ponude.
-          </p>
-          <NewsletterForma />
+      {/* Blog / Magazin */}
+      <section className="py-16 px-4 bg-gray-50">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-10">
+          <div className="flex-shrink-0">
+            <img
+              src="https://www.hartweger.rs/wp-content/uploads/2026/05/Untitled-1200-x-628-px-1-1024x536.png"
+              alt="Blog"
+              className="rounded-2xl shadow-md w-full md:w-[400px]"
+            />
+          </div>
+          <div>
+            <p className="text-koral font-semibold text-sm mb-2">Blog, Ispiti, Magazin</p>
+            <h2 className="font-montserrat font-bold text-2xl text-gray-900 mb-3">
+              Gde položiti FSP — uporedna analiza svih nemačkih pokrajina (vodič za 2026)
+            </h2>
+            <p className="text-gray-600 mb-6">
+              Dva lekara, isti FSP. Jedan plati 400 evra i prođe iz prve. Drugi plati 700 evra i padne tri puta — sa istim nivoom nemačkog. Gde položiti FSP nije slučajna...
+            </p>
+            <Link
+              href="/gde-poloziti-fsp-pokrajine-2026"
+              className="inline-block bg-plava text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-plava-dark transition-colors"
+            >
+              Prikaži još
+            </Link>
+          </div>
         </div>
       </section>
     </>
