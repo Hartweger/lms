@@ -42,11 +42,17 @@ export default function Pocetna() {
               </Link>
             </div>
           </div>
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0 relative">
+            {/* Decorative elements */}
+            <div className="absolute -top-6 -left-6 w-48 h-48 md:w-64 md:h-64 bg-plava/20 rounded-full -z-10" />
+            <div className="absolute -bottom-4 -right-4 w-32 h-32 md:w-44 md:h-44 bg-koral/20 rounded-full -z-10" />
+            <div className="absolute top-4 -right-3 w-4 h-4 bg-koral rounded-full opacity-60" />
+            <div className="absolute -top-2 left-1/3 w-3 h-3 bg-plava rounded-full opacity-50" />
+            <div className="absolute bottom-8 -left-3 w-2.5 h-2.5 bg-yellow-400 rounded-full opacity-70" />
             <img
               src="https://www.hartweger.rs/wp-content/uploads/2025/06/Hartweger_Centar_Natasa_Hartweger.jpg"
               alt="Nataša Hartweger"
-              className="rounded-2xl shadow-lg max-w-xs md:max-w-md w-full"
+              className="relative rounded-2xl shadow-xl max-w-[280px] md:max-w-[400px] w-full"
             />
           </div>
         </div>
