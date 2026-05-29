@@ -26,6 +26,23 @@ export default async function FaqPage() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: faqItems.map((item) => ({
+              "@type": "Question",
+              name: item.question,
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: item.answer,
+              },
+            })),
+          }),
+        }}
+      />
       <section className="bg-gradient-to-b from-plava-light/60 to-white py-16 px-4">
         <div className="max-w-3xl mx-auto">
           <h1 className="font-montserrat font-bold text-3xl md:text-4xl text-gray-900 mb-4">
