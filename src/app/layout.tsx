@@ -70,6 +70,33 @@ export default function RootLayout({
           />
         </noscript>
         <Navigacija />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "Centar za nemački jezik Hartweger",
+              url: "https://www.hartweger.rs",
+              logo: "https://www.hartweger.rs/logo.jpg",
+              email: "info@hartweger.rs",
+              address: {
+                "@type": "PostalAddress",
+                streetAddress: "Jurija Gagarina 20",
+                addressLocality: "Novi Beograd",
+                postalCode: "11070",
+                addressCountry: "RS",
+              },
+              sameAs: [
+                "https://www.instagram.com/hartweger_centar/",
+                "https://www.youtube.com/channel/UCa_7vX8_EtWNUbjA9SqqMwQ",
+                "https://www.facebook.com/hartwegercentar/",
+                "https://rs.linkedin.com/in/natasahartweger",
+                "https://x.com/nacapaun",
+              ],
+            }),
+          }}
+        />
         <main className="flex-1">{children}</main>
         <Footer />
         <Analytics />
