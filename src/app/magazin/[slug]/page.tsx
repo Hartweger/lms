@@ -221,33 +221,6 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         </div>
       </div>
 
-      {/* CTA */}
-      <section className="py-12 px-4 bg-plava-light">
-        <div className="max-w-3xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div>
-            <h2 className="font-montserrat font-bold text-xl text-gray-900">
-              Hoćeš da naučiš nemački?
-            </h2>
-            <p className="text-gray-600 mt-1">
-              Pogledaj naše kurseve ili uradi besplatno testiranje.
-            </p>
-          </div>
-          <div className="flex gap-3">
-            <Link
-              href="/kursevi"
-              className="bg-[#F78687] text-white px-6 py-3 rounded-xl font-bold text-sm hover:bg-[#e06060] transition-all whitespace-nowrap"
-            >
-              Pogledaj kurseve
-            </Link>
-            <Link
-              href="/besplatno-testiranje"
-              className="border-2 border-plava text-plava px-6 py-3 rounded-xl font-bold text-sm hover:bg-plava hover:text-white transition-all whitespace-nowrap"
-            >
-              Besplatno testiranje
-            </Link>
-          </div>
-        </div>
-      </section>
 
       {/* Related */}
       {related && related.length > 0 && (
