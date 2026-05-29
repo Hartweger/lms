@@ -15,6 +15,9 @@ export async function GET(request: NextRequest) {
   const sevenDaysAgo = new Date();
   sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
+  const fourteenDaysAgo = new Date();
+  fourteenDaysAgo.setDate(fourteenDaysAgo.getDate() - 14);
+
   // Get all students with active access
   const { data: activeAccess } = await supabase
     .from("course_access")
@@ -63,6 +66,16 @@ export async function GET(request: NextRequest) {
 
     if (!profile?.email) continue;
 
+    // Skip if we already sent a reminder in the last 14 days
+    const { data: recentReminder } = await supabase
+      .from("inactivity_reminders")
+      .select("id")
+      .eq("user_id", userId)
+      .gte("sent_at", fourteenDaysAgo.toISOString())
+      .limit(1);
+
+    if (recentReminder && recentReminder.length > 0) continue;
+
     // Find their most recent course and next lesson
     const primaryCourse = courses[0];
     let nextLessonTitle: string | null = null;
@@ -92,6 +105,12 @@ export async function GET(request: NextRequest) {
       primaryCourse.title,
       nextLessonTitle
     );
+
+    // Log the reminder so we don't send again for 14 days
+    await supabase
+      .from("inactivity_reminders")
+      .insert({ user_id: userId });
+
     sent++;
   }
 
