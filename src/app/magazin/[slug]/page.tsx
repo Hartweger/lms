@@ -181,7 +181,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           className="prose prose-gray max-w-none
             prose-headings:font-montserrat prose-headings:text-gray-900
             prose-p:text-base prose-p:leading-[1.8] prose-p:text-gray-600
-            prose-a:text-plava prose-a:no-underline hover:prose-a:underline
+            prose-a:text-plava prose-a:underline prose-a:decoration-plava/40 prose-a:underline-offset-2 hover:prose-a:decoration-plava
             prose-img:rounded-xl prose-img:shadow-md prose-img:mx-auto prose-img:my-8
             prose-li:text-gray-600 prose-li:leading-[1.8]
             prose-blockquote:border-plava prose-blockquote:bg-plava-light/20 prose-blockquote:rounded-r-lg prose-blockquote:py-2 prose-blockquote:px-5
