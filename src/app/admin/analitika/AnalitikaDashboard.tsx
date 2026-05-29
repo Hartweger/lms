@@ -217,8 +217,8 @@ export default function AnalitikaDashboard({ orders }: { orders: WcOrder[] }) {
   // ── Computed metrics ───────────────────────────────────────────────────────
 
   const metrics = useMemo(() => {
-    const completed = filteredOrders.filter((o) => o.status === "completed");
-    const prevCompleted = previousOrders.filter((o) => o.status === "completed");
+    const completed = filteredOrders.filter((o) => o.status === "completed" && Number(o.total) > 0);
+    const prevCompleted = previousOrders.filter((o) => o.status === "completed" && Number(o.total) > 0);
 
     const totalRevenue = completed.reduce((s, o) => s + Number(o.total), 0);
     const prevRevenue = prevCompleted.reduce((s, o) => s + Number(o.total), 0);
