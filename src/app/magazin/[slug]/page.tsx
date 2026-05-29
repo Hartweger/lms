@@ -196,6 +196,31 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         </div>
       </article>
 
+      {/* NaKI + Kursevi banner */}
+      <div className="max-w-3xl mx-auto px-4 mb-8">
+        <div className="bg-gradient-to-r from-gray-50 to-rose-50 rounded-2xl p-5 md:p-6 flex gap-4 items-start border border-gray-100">
+          <div className="flex-shrink-0 w-10 h-10 bg-plava-light rounded-full flex items-center justify-center text-xl">
+            💬
+          </div>
+          <div className="text-sm md:text-base text-gray-700 leading-relaxed">
+            <p>
+              Učiš nemački? Isprobaj{" "}
+              <Link href="/naki" className="text-plava font-semibold hover:underline">
+                NaKI
+              </Link>
+              {" "}— besplatnog AI asistenta za vežbanje gramatike i konverzaciju.
+            </p>
+            <p className="mt-1">
+              A ako želiš učenje sa profesorom, pogledaj našu{" "}
+              <Link href="/kursevi" className="text-[#F78687] font-semibold hover:underline">
+                ponudu kurseva
+              </Link>
+              .
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* CTA */}
       <section className="py-12 px-4 bg-plava-light">
         <div className="max-w-3xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
