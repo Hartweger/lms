@@ -13,6 +13,7 @@ const links = [
   { href: "/admin/profesori", label: "Profesori" },
   { href: "/admin/pristup", label: "Pristup" },
   { href: "/admin/faq", label: "FAQ" },
+  { href: "/admin/analitika", label: "Analitika" },
 ];
 
 export default function AdminSidebar() {
