@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -62,10 +63,14 @@ export default function PaketA1B1Page() {
 
             {/* Photo */}
             <div className="flex-shrink-0 w-full max-w-[380px] lg:w-[400px]">
-              <img
+              <Image
                 src="/images/natasa-laptop.jpg"
                 alt="Nataša Hartweger"
                 className="rounded-2xl shadow-xl w-full"
+                width={600}
+                height={400}
+                priority
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
               <div className="bg-white rounded-xl shadow-md px-5 py-3 -mt-6 mx-6 relative z-10">
                 <p className="font-bold text-gray-900 text-sm">Nataša Hartweger</p>
@@ -350,10 +355,13 @@ export default function PaketA1B1Page() {
 
           <div className="flex flex-col md:flex-row items-center gap-8">
             <div className="flex-shrink-0">
-              <img
+              <Image
                 src="/images/IMG_6264.jpg"
                 alt="Nataša Hartweger"
                 className="w-[180px] h-[220px] object-cover rounded-2xl shadow-lg"
+                width={400}
+                height={500}
+                sizes="(max-width: 768px) 100vw, 400px"
               />
             </div>
             <div className="flex-1">
@@ -443,7 +451,7 @@ export default function PaketA1B1Page() {
         </div>
       </section>
       {/* ─── Mobile sticky CTA bar ─── */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-3 flex items-center justify-between gap-3 lg:hidden z-50">
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-3 flex items-center justify-between gap-3 lg:hidden z-50 safe-bottom">
         <div>
           <p className="font-bold text-gray-900 text-lg leading-tight">29.133 din</p>
           <p className="text-[#F78687] text-xs font-bold">≈ 249€</p>
