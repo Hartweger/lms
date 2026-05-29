@@ -133,6 +133,44 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Course",
+            name: course.title,
+            description: course.description,
+            provider: {
+              "@type": "Organization",
+              name: "Centar za nemački jezik Hartweger",
+              url: "https://www.hartweger.rs",
+            },
+            ...(slugToNivo[slug] && { educationalLevel: slugToNivo[slug] }),
+            inLanguage: "de",
+            offers: {
+              "@type": "Offer",
+              price: course.price,
+              priceCurrency: "RSD",
+              availability: "https://schema.org/InStock",
+            },
+          }),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Početna", item: "https://www.hartweger.rs" },
+              { "@type": "ListItem", position: 2, name: "Kursevi", item: "https://www.hartweger.rs/kursevi" },
+              { "@type": "ListItem", position: 3, name: course.title },
+            ],
+          }),
+        }}
+      />
       {/* ─── Hero ─── */}
       <section className="bg-gradient-to-b from-plava-light/60 to-white">
         <div className="max-w-6xl mx-auto px-4 pt-6 pb-12 md:pb-16">
