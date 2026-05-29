@@ -144,8 +144,20 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         <div
           className="prose prose-gray prose-lg max-w-none
             prose-headings:font-montserrat prose-headings:text-gray-900
+            prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4
+            prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3
+            prose-p:leading-relaxed prose-p:text-gray-600
             prose-a:text-plava prose-a:no-underline hover:prose-a:underline
-            prose-img:rounded-xl"
+            prose-img:rounded-xl prose-img:shadow-md prose-img:mx-auto prose-img:max-h-[500px] prose-img:w-auto
+            prose-li:text-gray-600
+            prose-blockquote:border-plava prose-blockquote:bg-plava-light/20 prose-blockquote:rounded-r-lg prose-blockquote:py-1
+            prose-strong:text-gray-800
+            prose-table:text-sm
+            [&_figure]:my-8 [&_figure]:text-center
+            [&_figcaption]:text-sm [&_figcaption]:text-gray-400 [&_figcaption]:mt-2
+            [&_iframe]:rounded-xl [&_iframe]:shadow-md [&_iframe]:max-w-full
+            [&_.wp-block-image]:my-8 [&_.wp-block-image]:text-center
+            [&_.wp-block-image_img]:mx-auto [&_.wp-block-image_img]:rounded-xl [&_.wp-block-image_img]:shadow-md [&_.wp-block-image_img]:max-h-[500px] [&_.wp-block-image_img]:w-auto"
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
       </article>
