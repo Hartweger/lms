@@ -42,16 +42,16 @@ export async function sendWelcomeEmail(
       </h1>
 
       <p style="font-size: 15px; line-height: 1.6; color: #444; margin: 0 0 16px;">
-        Vaš nalog je kreiran i pristup kursu je aktiviran. Možete odmah početi sa učenjem.
+        Tvoj nalog je kreiran i pristup kursu je aktiviran. Možeš odmah početi sa učenjem.
       </p>
 
       <div style="background: #f8fcfd; border-left: 3px solid #4fb1d3; border-radius: 6px; padding: 14px 16px; margin: 0 0 20px;">
-        <div style="font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Vaši kursevi</div>
+        <div style="font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Tvoji kursevi</div>
         <div style="font-size: 14px; color: #1a1a2e; white-space: pre-line;">${courseList}</div>
       </div>
 
       <p style="font-size: 15px; line-height: 1.6; color: #444; margin: 0 0 20px;">
-        Prijavite se na platformu i započnite prvu lekciju:
+        Prijavi se na platformu i započni prvu lekciju:
       </p>
 
       <div style="text-align: center; margin: 24px 0;">
@@ -61,7 +61,7 @@ export async function sendWelcomeEmail(
       </div>
 
       <p style="font-size: 13px; color: #999; line-height: 1.5; margin: 0 0 8px;">
-        Možete instalirati aplikaciju na telefon za brži pristup:
+        Možeš instalirati aplikaciju na telefon za brži pristup:
         <a href="https://kurs.hartweger.rs/instaliraj" style="color: #4fb1d3; text-decoration: none;">kurs.hartweger.rs/instaliraj</a>
       </p>
 
@@ -123,7 +123,7 @@ export async function sendCourseCompletedEmail(
       </h1>
 
       <p style="font-size: 15px; line-height: 1.6; color: #444; text-align: center; margin: 0 0 20px;">
-        Završili ste sve lekcije kursa <strong>${courseTitle}</strong>. Svaka čast na upornosti!
+        Završio/la si sve lekcije kursa <strong>${courseTitle}</strong>. Svaka čast na upornosti!
       </p>
 
       ${certBlock}
@@ -174,7 +174,7 @@ export async function sendInactivityReminder(
     await resend.emails.send({
       from: FROM,
       to,
-      subject: `${name || "Učeniče"}, nedostajete nam!`,
+      subject: `${name || "Učeniče"}, nedostaješ nam!`,
       html: `
 <!DOCTYPE html>
 <html lang="sr">
@@ -192,7 +192,7 @@ export async function sendInactivityReminder(
       </h1>
 
       <p style="font-size: 15px; line-height: 1.6; color: #444; margin: 0 0 16px;">
-        Primetili smo da niste bili aktivni na kursu <strong>${courseTitle}</strong> već neko vreme. Svaki dan je prilika da naučite nešto novo!
+        Primetili smo da nisi bio/la aktivna na kursu <strong>${courseTitle}</strong> već neko vreme. Svaki dan je prilika da naučiš nešto novo!
       </p>
 
       ${lessonHint ? `
@@ -210,6 +210,12 @@ export async function sendInactivityReminder(
       <p style="font-size: 13px; color: #999; line-height: 1.5; margin: 0; text-align: center;">
         Samo 15 minuta dnevno pravi razliku.
       </p>
+
+      <div style="text-align: center; margin: 16px 0 0;">
+        <a href="https://kurs.hartweger.rs/besplatno-testiranje" style="font-size: 13px; color: #4fb1d3; text-decoration: none;">
+          Nisi sigurna koji nivo ti treba? Testiraj se besplatno →
+        </a>
+      </div>
 
     </div>
 
