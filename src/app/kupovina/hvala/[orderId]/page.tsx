@@ -4,6 +4,7 @@ import Link from "next/link";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { BANK_DETAILS, PAYPAL_ME_URL } from "@/lib/order-utils";
 import type { Order } from "@/lib/types";
+import IpsQrCode from "./IpsQrCode";
 
 export const metadata: Metadata = {
   title: "Hvala na narudžbini — Hartweger",
@@ -48,7 +49,7 @@ export default async function HvalaPage({
     `RO:${order.order_number}`,
   ].join("|");
 
-  const qrUrl = `https://chart.googleapis.com/chart?cht=qr&chs=250x250&chl=${encodeURIComponent(ipsData)}&choe=UTF-8`;
+  const isUplatnica = order.payment_method === "uplatnica";
 
   const paypalEur = order.paypal_note ? parseInt(order.paypal_note) : null;
 
@@ -122,17 +123,7 @@ export default async function HvalaPage({
             </table>
 
             {/* IPS QR code */}
-            <div className="flex flex-col items-center gap-3 pt-4 border-t border-gray-100">
-              <p className="text-sm text-gray-500">IPS QR kod za mobilno bankarstvo</p>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={qrUrl}
-                alt="IPS QR kod za uplatu"
-                width={250}
-                height={250}
-                className="rounded-lg"
-              />
-            </div>
+            <IpsQrCode data={ipsData} />
           </div>
         )}
 
@@ -161,7 +152,7 @@ export default async function HvalaPage({
         {/* Info note */}
         <div className="bg-plava-light/60 rounded-xl px-5 py-4 mb-8 text-sm text-gray-700">
           Poslali smo instrukcije i na <span className="font-medium">{order.email}</span>.
-          Kada primimo uplatu, aktiviraćemo pristup.
+          Kada potvrdimo uplatu, aktiviramo pristup najduže tri radna dana.
         </div>
 
         {/* Back link */}

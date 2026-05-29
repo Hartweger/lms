@@ -310,7 +310,7 @@ export async function sendPaymentInstructionsEmail(
       </h1>
 
       <p style="font-size: 15px; line-height: 1.6; color: #444; margin: 0 0 20px;">
-        Hvala na narudžbini! Naručili ste kurs <strong>${courseTitle}</strong>. Kada primimo uplatu, aktiviraćemo pristup i obavestiti vas mejlom.
+        Hvala na narudžbini! Naručili ste kurs <strong>${courseTitle}</strong>. Kada potvrdimo uplatu, aktiviramo pristup najduže tri radna dana.
       </p>
 
       ${paymentBlock}
