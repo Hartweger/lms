@@ -185,6 +185,22 @@ h1, h2, h3, h4, h5, h6 {
   overflow-x: auto;
 }
 
+/* Blog prose — better visual hierarchy */
+.prose h3 {
+  font-size: 1.4rem;
+  margin-top: 2.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #4fb1d3;
+}
+.prose h4 {
+  font-size: 1.15rem;
+  color: #4fb1d3;
+  margin-top: 2rem;
+}
+.prose p + p {
+  margin-top: 1rem;
+}
+
 /* Elementor buttons → styled as Hartweger CTA */
 .prose .elementor-button {
   display: inline-block;
