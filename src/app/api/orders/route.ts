@@ -5,7 +5,7 @@ import { sendPaymentInstructionsEmail } from "@/lib/email";
 
 export async function POST(request: Request) {
   try {
-    const { fullName, email, country, courseSlug, paymentMethod } =
+    const { fullName, email, country, courseSlug, paymentMethod, couponCode: rawCouponCode } =
       await request.json();
 
     // Validate required fields
@@ -40,6 +40,31 @@ export async function POST(request: Request) {
         { status: 404 }
       );
     }
+
+    // Validate coupon if provided
+    let discountPercent = 0;
+    let validCouponCode: string | null = null;
+
+    if (rawCouponCode) {
+      const { data: coupon } = await supabase
+        .from("coupons")
+        .select("*")
+        .eq("code", String(rawCouponCode).trim().toUpperCase())
+        .eq("is_active", true)
+        .single();
+
+      if (coupon) {
+        const notExpired = !coupon.expires_at || new Date(coupon.expires_at) > new Date();
+        const notMaxed = coupon.max_uses === null || coupon.usage_count < coupon.max_uses;
+        if (notExpired && notMaxed) {
+          discountPercent = Number(coupon.amount);
+          validCouponCode = coupon.code;
+        }
+      }
+    }
+
+    const discount = discountPercent > 0 ? Math.round(course.price * discountPercent / 100) : 0;
+    const finalPrice = course.price - discount;
 
     // Find or create user by email
     let userId: string;
@@ -85,7 +110,7 @@ export async function POST(request: Request) {
     // Calculate PayPal EUR price if needed
     const paypalEur =
       paymentMethod === "paypal"
-        ? calculatePaypalEur(course.price)
+        ? calculatePaypalEur(finalPrice)
         : undefined;
 
     // Build items JSONB
@@ -108,7 +133,9 @@ export async function POST(request: Request) {
         country,
         items,
         subtotal: course.price,
-        total: course.price,
+        discount,
+        total: finalPrice,
+        coupon_code: validCouponCode,
         payment_method: paymentMethod,
         order_number: orderNumber,
         paypal_note:
@@ -131,13 +158,21 @@ export async function POST(request: Request) {
       `[orders] Created order ${order.order_number} for ${email} — ${courseSlug} via ${paymentMethod}`
     );
 
+    // Increment coupon usage count if coupon was applied
+    if (validCouponCode) {
+      const { data: coupon } = await supabase.from("coupons").select("usage_count").eq("code", validCouponCode).single();
+      if (coupon) {
+        await supabase.from("coupons").update({ usage_count: coupon.usage_count + 1 }).eq("code", validCouponCode);
+      }
+    }
+
     // Send payment instructions email
     await sendPaymentInstructionsEmail(
       email,
       fullName,
       course.title,
       order.order_number,
-      course.price,
+      finalPrice,
       paymentMethod,
       paypalEur
     );

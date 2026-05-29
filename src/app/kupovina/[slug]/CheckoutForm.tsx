@@ -39,11 +39,40 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, priceE
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const [showCoupon, setShowCoupon] = useState(false);
+  const [couponCode, setCouponCode] = useState("");
+  const [couponLoading, setCouponLoading] = useState(false);
+  const [appliedCoupon, setAppliedCoupon] = useState<{ code: string; discountPercent: number } | null>(null);
+  const [couponError, setCouponError] = useState<string | null>(null);
+
   const paymentMethod = country === "RS" ? "uplatnica" : "paypal";
 
   const displayEur = priceEur != null
     ? priceEur
     : Math.ceil((priceRsd / EUR_RATE) * (1 + PAYPAL_SURCHARGE));
+
+  const discountedRsd = appliedCoupon ? Math.round(priceRsd * (1 - appliedCoupon.discountPercent / 100)) : priceRsd;
+  const discountedEur = appliedCoupon ? Math.ceil((discountedRsd / EUR_RATE) * (1 + PAYPAL_SURCHARGE)) : displayEur;
+
+  async function validateCoupon() {
+    if (!couponCode.trim()) return;
+    setCouponLoading(true);
+    setCouponError(null);
+    try {
+      const res = await fetch(`/api/coupons/validate?code=${encodeURIComponent(couponCode.trim())}`);
+      const data = await res.json();
+      if (!res.ok) { setCouponError(data.error || "Nepoznata greška."); setAppliedCoupon(null); return; }
+      setAppliedCoupon(data);
+    } catch { setCouponError("Greška pri proveri kupona."); }
+    finally { setCouponLoading(false); }
+  }
+
+  function removeCoupon() {
+    setAppliedCoupon(null);
+    setCouponCode("");
+    setCouponError(null);
+    setShowCoupon(false);
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -60,6 +89,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, priceE
           email,
           country,
           paymentMethod,
+          couponCode: appliedCoupon?.code || null,
         }),
       });
 
@@ -87,15 +117,80 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, priceE
           <p className="font-semibold text-gray-900 text-[15px] leading-snug">{courseTitle}</p>
           <div className="text-right flex-shrink-0">
             {paymentMethod === "uplatnica" ? (
-              <p className="font-bold text-gray-900">{formatPrice(priceRsd)} din</p>
+              appliedCoupon ? (
+                <div>
+                  <p className="text-sm text-gray-400 line-through">{formatPrice(priceRsd)} din</p>
+                  <p className="font-bold text-gray-900">{formatPrice(discountedRsd)} din</p>
+                </div>
+              ) : (
+                <p className="font-bold text-gray-900">{formatPrice(priceRsd)} din</p>
+              )
             ) : (
-              <div>
-                <p className="font-bold text-gray-900">{displayEur} €</p>
-                <p className="text-xs text-gray-400 mt-0.5">+12% PayPal naknada</p>
-              </div>
+              appliedCoupon ? (
+                <div>
+                  <p className="text-sm text-gray-400 line-through">{displayEur} €</p>
+                  <p className="font-bold text-gray-900">{discountedEur} €</p>
+                  <p className="text-xs text-gray-400 mt-0.5">+12% PayPal naknada</p>
+                </div>
+              ) : (
+                <div>
+                  <p className="font-bold text-gray-900">{displayEur} €</p>
+                  <p className="text-xs text-gray-400 mt-0.5">+12% PayPal naknada</p>
+                </div>
+              )
             )}
           </div>
         </div>
+      </div>
+
+      {/* Coupon */}
+      <div className="bg-white border border-gray-200 rounded-xl p-5">
+        {appliedCoupon ? (
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-sm font-medium text-green-600">
+              Kupon {appliedCoupon.code} — {appliedCoupon.discountPercent}% popusta
+            </p>
+            <button
+              type="button"
+              onClick={removeCoupon}
+              className="text-sm text-gray-400 hover:text-gray-600 underline flex-shrink-0"
+            >
+              Ukloni
+            </button>
+          </div>
+        ) : showCoupon ? (
+          <div className="space-y-2">
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={couponCode}
+                onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                placeholder="Unesi kod kupona"
+                className="flex-1 border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0AB3D7] focus:border-transparent transition"
+                onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); validateCoupon(); } }}
+              />
+              <button
+                type="button"
+                onClick={validateCoupon}
+                disabled={couponLoading || !couponCode.trim()}
+                className="bg-[#0AB3D7] hover:bg-[#089bbf] disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-sm px-4 py-2.5 rounded-lg transition-colors flex-shrink-0"
+              >
+                {couponLoading ? "..." : "Primeni"}
+              </button>
+            </div>
+            {couponError && (
+              <p className="text-[#F78687] text-sm">{couponError}</p>
+            )}
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setShowCoupon(true)}
+            className="text-sm text-[#0AB3D7] hover:underline"
+          >
+            Imaš kupon?
+          </button>
+        )}
       </div>
 
       {/* Personal info */}
