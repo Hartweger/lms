@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -18,10 +19,14 @@ export default function ONatasiPage() {
       <section className="bg-gradient-to-b from-plava-light to-white py-16 md:py-24 px-4">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-10 md:gap-16">
           <div className="flex-shrink-0">
-            <img
+            <Image
               src="/images/IMG_6264.jpg"
               alt="Nataša Hartweger"
               className="rounded-2xl shadow-lg max-w-xs md:max-w-sm w-full"
+              width={320}
+              height={400}
+              priority
+              sizes="(max-width: 768px) 256px, 320px"
             />
           </div>
           <div className="flex-1 text-center md:text-left">
@@ -67,10 +72,13 @@ export default function ONatasiPage() {
           <h2 className="font-montserrat font-bold text-2xl md:text-3xl text-gray-900 mb-8">
             Tim Hartweger
           </h2>
-          <img
+          <Image
             src="https://www.hartweger.rs/wp-content/uploads/2021/02/natasa-hartweger-i-tim-hartweger.jpg"
             alt="Nataša Hartweger i tim"
             className="rounded-2xl shadow-lg w-full max-w-2xl mx-auto"
+            width={800}
+            height={500}
+            sizes="(max-width: 768px) 100vw, 800px"
           />
           <p className="text-gray-600 mt-6 max-w-xl mx-auto">
             Hartweger Centar danas čini tim od 20 profesora koji sa istom strašću i posvećenošću pomažu polaznicima da progovore nemački.
