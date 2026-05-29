@@ -108,7 +108,7 @@ export async function POST(request: Request) {
         country,
         items,
         subtotal: course.price,
-        total: paymentMethod === "paypal" ? (paypalEur! * 117) : course.price,
+        total: course.price,
         payment_method: paymentMethod,
         order_number: orderNumber,
         paypal_note:

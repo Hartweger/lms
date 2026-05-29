@@ -169,6 +169,7 @@ export interface Order {
   nestpay_transaction_id: string | null;
   paypal_note: string | null;
   fiscomm_invoice_id: string | null;
+  order_number: string;
   granted: boolean;
   created_at: string;
 }
