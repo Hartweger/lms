@@ -185,6 +185,17 @@ h1, h2, h3, h4, h5, h6 {
   overflow-x: auto;
 }
 
+/* Blog prose — links must be visible */
+.prose a {
+  color: #4fb1d3 !important;
+  text-decoration: underline !important;
+  text-decoration-color: rgba(79, 177, 211, 0.4) !important;
+  text-underline-offset: 3px;
+}
+.prose a:hover {
+  text-decoration-color: #4fb1d3 !important;
+}
+
 /* Blog prose — visual hierarchy */
 .prose h3 {
   font-size: 1.35rem;
