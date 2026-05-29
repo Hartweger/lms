@@ -176,6 +176,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
       {/* Content */}
       <article className="max-w-3xl mx-auto px-4 py-8">
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 md:p-10">
         <div
           className="prose prose-gray max-w-none
             prose-headings:font-montserrat prose-headings:text-gray-900
@@ -192,6 +193,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             [&_.aligncenter]:mx-auto [&_.aligncenter]:block [&_.aligncenter]:my-6"
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
+        </div>
       </article>
 
       {/* CTA */}

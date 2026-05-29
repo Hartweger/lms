@@ -187,18 +187,29 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Blog prose — better visual hierarchy */
 .prose h3 {
-  font-size: 1.4rem;
+  font-size: 1.35rem;
   margin-top: 2.5rem;
   padding-bottom: 0.5rem;
   border-bottom: 2px solid #4fb1d3;
 }
 .prose h4 {
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   color: #4fb1d3;
   margin-top: 2rem;
+  font-weight: 700;
 }
-.prose p + p {
-  margin-top: 1rem;
+
+/* WP aligncenter images */
+.prose .aligncenter,
+.prose .alignnone {
+  display: block;
+  margin: 2rem auto;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+.prose .size-medium {
+  max-width: 100%;
+  height: auto;
 }
 
 /* Elementor buttons → styled as Hartweger CTA */
