@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { Course } from "@/lib/types";
 
 function formatPrice(price: number): string {
@@ -13,10 +14,13 @@ export default function ProizvodKartica({ course }: { course: Course }) {
     <Link href={`/kursevi/${course.slug}`} className="block group">
       <div className="border border-gray-200 rounded-2xl overflow-hidden bg-white hover:border-plava hover:shadow-md transition-all">
         {course.thumbnail_url ? (
-          <img
+          <Image
             src={course.thumbnail_url}
             alt={course.title}
+            width={400}
+            height={192}
             className="w-full h-48 object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
         ) : (
           <div className="w-full h-48 bg-gradient-to-br from-plava to-plava-dark flex items-center justify-center">

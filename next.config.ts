@@ -7,6 +7,8 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { hostname: "rzmyglynjcygsbicssbt.supabase.co" },
       { hostname: "*.supabase.co" },
+      { hostname: "www.hartweger.rs" },
+      { hostname: "vumbnail.com" },
     ],
   },
   async redirects() {
