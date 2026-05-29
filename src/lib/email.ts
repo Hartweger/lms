@@ -211,11 +211,6 @@ export async function sendInactivityReminder(
         Samo 15 minuta dnevno pravi razliku.
       </p>
 
-      <div style="text-align: center; margin: 16px 0 0;">
-        <a href="https://kurs.hartweger.rs/besplatno-testiranje" style="font-size: 13px; color: #4fb1d3; text-decoration: none;">
-          Nisi sigurna koji nivo ti treba? Testiraj se besplatno →
-        </a>
-      </div>
 
     </div>
 
