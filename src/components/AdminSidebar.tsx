@@ -12,28 +12,33 @@ const links = [
   { href: "/admin/eseji", label: "Eseji" },
   { href: "/admin/profesori", label: "Profesori" },
   { href: "/admin/pristup", label: "Pristup" },
-  { href: "/admin/analitika", label: "Analitika" },
+  { href: "/admin/analitika", label: "Analitika", exact: true },
+  { href: "/admin/analitika/kupci", label: "Kupci", indent: true },
 ];
 
 export default function AdminSidebar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
-  const currentLabel = links.find(
-    (l) => pathname === l.href || (l.href !== "/admin" && pathname.startsWith(l.href))
-  )?.label ?? "Admin";
+  function isLinkActive(link: (typeof links)[number]) {
+    if (link.exact) return pathname === link.href;
+    if (link.href === "/admin") return pathname === link.href;
+    return pathname === link.href || pathname.startsWith(link.href + "/");
+  }
+
+  const currentLabel =
+    [...links].reverse().find((l) => isLinkActive(l))?.label ?? "Admin";
 
   const navContent = (
     <nav className="space-y-1">
       {links.map((link) => {
-        const isActive = pathname === link.href ||
-          (link.href !== "/admin" && pathname.startsWith(link.href));
+        const isActive = isLinkActive(link);
         return (
           <Link
             key={link.href}
             href={link.href}
             onClick={() => setOpen(false)}
-            className={`block px-3 py-2 rounded-lg text-sm ${
+            className={`block px-3 py-2 rounded-lg text-sm ${link.indent ? "pl-6" : ""} ${
               isActive
                 ? "bg-plava-light text-plava font-medium"
                 : "text-gray-600 hover:bg-gray-50"
