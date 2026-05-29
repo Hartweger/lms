@@ -57,6 +57,39 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            headline: post.title,
+            datePublished: post.published_at || post.created_at,
+            dateModified: post.updated_at,
+            author: { "@type": "Person", name: "Nataša Hartweger" },
+            publisher: {
+              "@type": "Organization",
+              name: "Centar za nemački jezik Hartweger",
+              url: "https://www.hartweger.rs",
+            },
+            ...(post.thumbnail_url && { image: post.thumbnail_url }),
+          }),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Početna", item: "https://www.hartweger.rs" },
+              { "@type": "ListItem", position: 2, name: "Magazin", item: "https://www.hartweger.rs/magazin" },
+              { "@type": "ListItem", position: 3, name: post.title },
+            ],
+          }),
+        }}
+      />
       {/* Hero */}
       <section className="bg-gradient-to-b from-plava-light/60 to-white py-12 px-4">
         <div className="max-w-3xl mx-auto">
