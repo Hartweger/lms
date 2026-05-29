@@ -5,8 +5,11 @@ import RasporedGrupa from "@/components/RasporedGrupa";
 
 export const metadata: Metadata = {
   title: "Grupni kursevi nemačkog jezika — Hartweger",
-  description:
-    "Pogledajte raspored grupnih kurseva nemačkog jezika i prijavite se online.",
+  description: "Pogledajte raspored grupnih kurseva nemačkog jezika i prijavite se online.",
+  openGraph: {
+    title: "Grupni kursevi nemačkog jezika — Hartweger",
+    description: "Pogledajte raspored grupnih kurseva nemačkog jezika i prijavite se online.",
+  },
 };
 
 const BENEFITI = [

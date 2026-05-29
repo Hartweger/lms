@@ -3,8 +3,11 @@ import KurseviKatalog from "@/components/KurseviKatalog";
 
 export const metadata: Metadata = {
   title: "Kursevi nemačkog jezika — Hartweger",
-  description:
-    "Video kursevi, grupna i individualna nastava nemačkog jezika od A1 do C1. Izaberite tip kursa, filtrirajte po nivou i odmah se prijavite.",
+  description: "Video kursevi, grupna i individualna nastava nemačkog jezika od A1 do C1. Izaberite tip kursa, filtrirajte po nivou i odmah se prijavite.",
+  openGraph: {
+    title: "Kursevi nemačkog jezika — Hartweger",
+    description: "Video kursevi, grupna i individualna nastava nemačkog jezika od A1 do C1.",
+  },
 };
 
 export default function KurseviPage() {

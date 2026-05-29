@@ -3,8 +3,11 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "VoKuM metoda — Hartweger škola nemačkog jezika",
-  description:
-    "VoKuM metoda — Vokabular, Komunikacija i Motivacija. Saznajte kako učimo nemački u Hartweger školi.",
+  description: "VoKuM metoda — Vokabular, Komunikacija i Motivacija. Saznajte kako učimo nemački u Hartweger školi.",
+  openGraph: {
+    title: "VoKuM metoda — Hartweger škola nemačkog jezika",
+    description: "VoKuM metoda — Vokabular, Komunikacija i Motivacija.",
+  },
 };
 
 export default function MetodologijaPage() {

@@ -4,8 +4,11 @@ import GoogleRecenzije from "@/components/GoogleRecenzije";
 
 export const metadata: Metadata = {
   title: "Hartweger — Online škola nemačkog jezika",
-  description:
-    "Nauči nemački koji ćeš stvarno koristiti. VoKuM metoda — video kursevi, grupni kursevi i individualni časovi sa Natašom Hartweger.",
+  description: "Nauči nemački koji ćeš stvarno koristiti. VoKuM metoda — video kursevi, grupni kursevi i individualni časovi sa Natašom Hartweger.",
+  openGraph: {
+    title: "Hartweger — Online škola nemačkog jezika",
+    description: "Nauči nemački koji ćeš stvarno koristiti. VoKuM metoda — video kursevi, grupni kursevi i individualni časovi.",
+  },
 };
 
 export default function Pocetna() {

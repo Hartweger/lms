@@ -4,8 +4,11 @@ import ProfesorKartica from "@/components/ProfesorKartica";
 
 export const metadata: Metadata = {
   title: "Individualni kursevi nemačkog jezika — Hartweger",
-  description:
-    "Individualna nastava nemačkog jezika sa sertifikovanim profesorima. Prilagođen tempo i program.",
+  description: "Individualna nastava nemačkog jezika sa sertifikovanim profesorima. Prilagođen tempo i program.",
+  openGraph: {
+    title: "Individualni kursevi nemačkog jezika — Hartweger",
+    description: "Individualna nastava nemačkog jezika sa sertifikovanim profesorima.",
+  },
 };
 
 const BENEFITI = [

@@ -9,16 +9,25 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const supabase = await createClient();
   const { data: post } = await supabase
     .from("blog_posts")
-    .select("title, meta_description, excerpt")
+    .select("title, meta_description, excerpt, thumbnail_url")
     .eq("slug", slug)
     .eq("is_published", true)
     .single();
 
   if (!post) return { title: "Članak nije pronađen — Hartweger" };
 
+  const description = post.meta_description || post.excerpt || "";
   return {
     title: `${post.title} — Hartweger Magazin`,
-    description: post.meta_description || post.excerpt || "",
+    description,
+    openGraph: {
+      title: `${post.title} — Hartweger Magazin`,
+      description,
+      type: "article",
+      ...(post.thumbnail_url && {
+        images: [{ url: post.thumbnail_url, alt: post.title }],
+      }),
+    },
   };
 }
 

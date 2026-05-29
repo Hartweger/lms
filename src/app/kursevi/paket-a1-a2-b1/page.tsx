@@ -3,8 +3,11 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Video paket A1 + A2 + B1 — Hartweger",
-  description:
-    "Kompletna putanja od nule do B1. 150+ video lekcija, testovi, PDF materijali, WhatsApp podrška i 3 sertifikata — sve u jednom paketu za 249€.",
+  description: "Kompletna putanja od nule do B1. 150+ video lekcija, testovi, PDF materijali, WhatsApp podrška i 3 sertifikata — sve u jednom paketu za 249€.",
+  openGraph: {
+    title: "Video paket A1 + A2 + B1 — Hartweger",
+    description: "Kompletna putanja od nule do B1. 150+ video lekcija, testovi, PDF materijali i 3 sertifikata.",
+  },
 };
 
 export default function PaketA1B1Page() {

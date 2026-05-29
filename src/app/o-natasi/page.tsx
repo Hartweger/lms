@@ -3,8 +3,12 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "O Nataši — Hartweger škola nemačkog jezika",
-  description:
-    "Upoznajte Natašu Hartweger — profesorku nemačkog jezika, osnivačicu Hartweger Centra i autorku VoKuM metode.",
+  description: "Upoznajte Natašu Hartweger — profesorku nemačkog jezika, osnivačicu Hartweger Centra i autorku VoKuM metode.",
+  openGraph: {
+    title: "O Nataši — Hartweger škola nemačkog jezika",
+    description: "Upoznajte Natašu Hartweger — profesorku nemačkog jezika, osnivačicu Hartweger Centra i autorku VoKuM metode.",
+    images: [{ url: "/og/o-natasi.jpg", alt: "Nataša Hartweger" }],
+  },
 };
 
 export default function ONatasiPage() {

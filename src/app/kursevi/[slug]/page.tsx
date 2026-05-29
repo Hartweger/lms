@@ -57,9 +57,24 @@ const categoryConfig: Record<string, { label: string; color: string; bg: string 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const supabase = await createClient();
-  const { data: course } = await supabase.from("courses").select("title, description").eq("slug", slug).eq("is_purchasable", true).single();
+  const { data: course } = await supabase
+    .from("courses")
+    .select("title, description, thumbnail_url, price")
+    .eq("slug", slug)
+    .eq("is_purchasable", true)
+    .single();
   if (!course) return { title: "Kurs nije pronađen — Hartweger" };
-  return { title: `${course.title} — Hartweger`, description: course.description };
+  return {
+    title: `${course.title} — Hartweger`,
+    description: course.description,
+    openGraph: {
+      title: `${course.title} — Hartweger`,
+      description: course.description,
+      ...(course.thumbnail_url && {
+        images: [{ url: course.thumbnail_url, alt: course.title }],
+      }),
+    },
+  };
 }
 
 export default async function KursDetaljiPage({ params }: { params: Promise<{ slug: string }> }) {

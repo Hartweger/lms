@@ -6,6 +6,10 @@ import type { BlogPost } from "@/lib/types";
 export const metadata: Metadata = {
   title: "Magazin — Hartweger škola nemačkog jezika",
   description: "Saveti za učenje nemačkog jezika, gramatika, vokabular, priprema za ispite i život u nemačkom govornom području.",
+  openGraph: {
+    title: "Magazin — Hartweger škola nemačkog jezika",
+    description: "Saveti za učenje nemačkog jezika, gramatika, vokabular i priprema za ispite.",
+  },
 };
 
 export default async function MagazinPage() {

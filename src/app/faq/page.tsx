@@ -7,6 +7,10 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Česta pitanja — Hartweger",
   description: "Odgovori na najčešća pitanja o kursevima nemačkog jezika, plaćanju, pristupu platformi i sertifikatima.",
+  openGraph: {
+    title: "Česta pitanja — Hartweger",
+    description: "Odgovori na najčešća pitanja o kursevima nemačkog jezika, plaćanju, pristupu platformi i sertifikatima.",
+  },
 };
 
 export default async function FaqPage() {

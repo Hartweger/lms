@@ -4,6 +4,10 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Opšti uslovi poslovanja — Hartweger",
   description: "Opšti uslovi korišćenja platforme Hartweger — uslovi kupovine, pristup kursevima i pravila korišćenja.",
+  openGraph: {
+    title: "Opšti uslovi poslovanja — Hartweger",
+    description: "Opšti uslovi korišćenja platforme Hartweger.",
+  },
 };
 
 export default function UsloviPage() {
