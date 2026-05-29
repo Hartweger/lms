@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -28,9 +29,12 @@ export default function MetodologijaPage() {
             </p>
           </div>
           <div className="flex-shrink-0">
-            <img
+            <Image
               src="/images/natasa-laptop.jpg"
               alt="Nataša Hartweger pri radu"
+              width={600}
+              height={400}
+              sizes="(max-width: 768px) 100vw, 50vw"
               className="rounded-2xl shadow-lg w-[280px] md:w-[340px] object-cover"
             />
           </div>

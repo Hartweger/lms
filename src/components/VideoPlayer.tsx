@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 export default function VideoPlayer({ vimeoId }: { vimeoId: string }) {
   const [loaded, setLoaded] = useState(false);
@@ -20,11 +21,12 @@ export default function VideoPlayer({ vimeoId }: { vimeoId: string }) {
         />
       ) : (
         <>
-          <img
+          <Image
             src={`https://vumbnail.com/${vimeoId}.jpg`}
             alt="Video thumbnail"
-            className="absolute top-0 left-0 w-full h-full object-cover"
-            loading="lazy"
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 800px"
           />
           <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors">
             <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
