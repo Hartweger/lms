@@ -28,9 +28,12 @@ export const viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.hartweger.rs"),
   title: "Hartweger — Škola nemačkog jezika",
   description: "Naučite nemački jezik online — video kursevi, individualna i grupna nastava",
   manifest: "/manifest.json",
+  alternates: { canonical: "./" },
+  robots: { index: true, follow: true },
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -41,7 +44,12 @@ export const metadata: Metadata = {
     description: "Naučite nemački jezik online — video kursevi, individualna i grupna nastava",
     locale: "sr_RS",
     type: "website",
-    images: [{ url: "/logo.jpg", width: 400, height: 114, alt: "Hartweger logo" }],
+    images: [{ url: "/og/default.png", width: 1200, height: 630, alt: "Hartweger — Škola nemačkog jezika" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Hartweger — Škola nemačkog jezika",
+    description: "Naučite nemački jezik online — video kursevi, individualna i grupna nastava",
   },
 };
 
