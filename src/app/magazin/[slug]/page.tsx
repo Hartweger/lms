@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
 import type { BlogPost } from "@/lib/types";
 
@@ -126,10 +127,14 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       {/* Thumbnail */}
       {post.thumbnail_url && (
         <div className="max-w-3xl mx-auto px-4 -mt-2 mb-8">
-          <img
+          <Image
             src={post.thumbnail_url}
             alt={post.title}
+            width={800}
+            height={400}
             className="w-full rounded-xl shadow-md"
+            sizes="(max-width: 768px) 100vw, 800px"
+            priority
           />
         </div>
       )}
@@ -188,7 +193,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                   className="group border border-gray-200 rounded-xl overflow-hidden hover:border-plava hover:shadow-md transition-all"
                 >
                   {r.thumbnail_url ? (
-                    <img src={r.thumbnail_url} alt={r.title} className="w-full h-40 object-cover" />
+                    <Image src={r.thumbnail_url} alt={r.title} width={400} height={192} className="w-full h-40 object-cover" sizes="(max-width: 768px) 100vw, 33vw" />
                   ) : (
                     <div className="w-full h-40 bg-gradient-to-br from-plava-light to-white" />
                   )}

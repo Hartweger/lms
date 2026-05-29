@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
 import type { BlogPost } from "@/lib/types";
 
@@ -49,10 +50,13 @@ export default async function MagazinPage() {
                   className="group border border-gray-200 rounded-xl overflow-hidden hover:border-plava hover:shadow-md transition-all"
                 >
                   {post.thumbnail_url ? (
-                    <img
+                    <Image
                       src={post.thumbnail_url}
                       alt={post.title}
+                      width={400}
+                      height={192}
                       className="w-full h-48 object-cover"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     />
                   ) : (
                     <div className="w-full h-48 bg-gradient-to-br from-plava-light to-white flex items-center justify-center">
