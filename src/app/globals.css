@@ -143,18 +143,22 @@ h1, h2, h3, h4, h5, h6 {
   display: none;
 }
 
-/* WordPress content cleanup */
+/* WordPress / Elementor content cleanup */
 .prose img {
   max-height: 500px;
   width: auto;
+  max-width: 100%;
   margin-left: auto;
   margin-right: auto;
+  border-radius: 0.75rem;
 }
-.prose .wp-block-image {
+.prose .wp-block-image,
+.prose .elementor-widget-image {
   margin: 2rem 0;
   text-align: center;
 }
-.prose .wp-block-image img {
+.prose .wp-block-image img,
+.prose .elementor-widget-image img {
   border-radius: 0.75rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   max-height: 500px;
@@ -165,7 +169,8 @@ h1, h2, h3, h4, h5, h6 {
 .prose .wp-block-video {
   margin: 2rem 0;
 }
-.prose .wp-block-embed iframe {
+.prose .wp-block-embed iframe,
+.prose iframe {
   border-radius: 0.75rem;
   max-width: 100%;
 }
@@ -178,6 +183,65 @@ h1, h2, h3, h4, h5, h6 {
 }
 .prose .wp-block-table {
   overflow-x: auto;
+}
+
+/* Elementor buttons → styled as Hartweger CTA */
+.prose .elementor-button {
+  display: inline-block;
+  background: #4fb1d3;
+  color: white !important;
+  padding: 12px 28px;
+  border-radius: 10px;
+  text-decoration: none !important;
+  font-weight: 700;
+  font-size: 15px;
+  transition: background 0.2s;
+}
+.prose .elementor-button:hover {
+  background: #3a8fb0;
+}
+.prose .elementor-button-wrapper {
+  margin: 1.5rem 0;
+  text-align: center;
+}
+.prose .elementor-button-icon {
+  display: none;
+}
+
+/* Elementor testimonials */
+.prose .elementor-testimonial-wrapper {
+  background: #f8fbfc;
+  border-left: 3px solid #4fb1d3;
+  border-radius: 0 0.75rem 0.75rem 0;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+}
+.prose .elementor-testimonial-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+  font-style: normal;
+}
+.prose .elementor-testimonial-image img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.prose .elementor-testimonial-name {
+  font-weight: 700;
+  color: #1a1a2e;
+  font-size: 14px;
+}
+.prose .elementor-testimonial-job {
+  font-size: 12px;
+  color: #999;
+}
+.prose .elementor-testimonial-details {
+  display: flex;
+  flex-direction: column;
 }
 
 /* Safe area for mobile sticky bars (iPhone notch) */

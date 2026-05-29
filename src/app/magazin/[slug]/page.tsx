@@ -5,6 +5,41 @@ import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
 import type { BlogPost } from "@/lib/types";
 
+/** Strip Elementor wrapper divs/sections, keep only content */
+function cleanWpContent(html: string): string {
+  return html
+    // Remove Elementor data attributes
+    .replace(/\s*data-elementor[^=]*="[^"]*"/g, "")
+    .replace(/\s*data-id="[^"]*"/g, "")
+    .replace(/\s*data-element_type="[^"]*"/g, "")
+    .replace(/\s*data-e-type="[^"]*"/g, "")
+    .replace(/\s*data-widget_type="[^"]*"/g, "")
+    .replace(/\s*data-settings='[^']*'/g, "")
+    // Remove Elementor wrapper elements but keep their content
+    .replace(/<section[^>]*class="elementor-section[^"]*"[^>]*>/g, "")
+    .replace(/<\/section>/g, "")
+    .replace(/<div[^>]*class="elementor-container[^"]*"[^>]*>/g, "")
+    .replace(/<div[^>]*class="elementor-column[^"]*"[^>]*>/g, "")
+    .replace(/<div[^>]*class="elementor-widget-wrap[^"]*"[^>]*>/g, "")
+    .replace(/<div[^>]*class="elementor-element[^"]*"[^>]*>/g, "")
+    .replace(/<div[^>]*class="elementor-widget-container"[^>]*>/g, "")
+    .replace(/<div[^>]*class="elementor elementor-[^"]*"[^>]*>/g, "")
+    // Clean up resulting empty closing divs (best effort)
+    .replace(/<\/div>\s*<\/div>\s*<\/div>\s*<\/div>\s*<\/div>/g, "")
+    .replace(/<\/div>\s*<\/div>\s*<\/div>\s*<\/div>/g, "")
+    .replace(/<\/div>\s*<\/div>\s*<\/div>/g, "")
+    // Remove elementor heading class but keep the heading
+    .replace(/class="elementor-heading-title[^"]*"/g, "")
+    .replace(/class="elementor-size-default"/g, "")
+    // Remove duplicate featured image (already shown as thumbnail above)
+    .replace(/<div[^>]*class="[^"]*theme-post-featured-image[^"]*"[^>]*>[\s\S]*?<\/div>\s*<\/div>/g, "")
+    // Remove duplicate post title (already shown in hero)
+    .replace(/<div[^>]*class="[^"]*theme-post-title[^"]*"[^>]*>[\s\S]*?<\/div>\s*<\/div>/g, "")
+    // Clean up excessive whitespace
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const supabase = await createClient();
@@ -158,7 +193,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             [&_iframe]:rounded-xl [&_iframe]:shadow-md [&_iframe]:max-w-full
             [&_.wp-block-image]:my-8 [&_.wp-block-image]:text-center
             [&_.wp-block-image_img]:mx-auto [&_.wp-block-image_img]:rounded-xl [&_.wp-block-image_img]:shadow-md [&_.wp-block-image_img]:max-h-[500px] [&_.wp-block-image_img]:w-auto"
-          dangerouslySetInnerHTML={{ __html: post.content }}
+          dangerouslySetInnerHTML={{ __html: cleanWpContent(post.content) }}
         />
       </article>
 
