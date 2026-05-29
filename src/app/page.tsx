@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import GoogleRecenzije from "@/components/GoogleRecenzije";
 
 export const metadata: Metadata = {
@@ -54,10 +55,11 @@ export default function Pocetna() {
           </div>
           {/* Image */}
           <div className="relative flex-shrink-0 w-full md:w-[480px] lg:w-[540px]">
-            <img
+            <Image
               src="https://www.hartweger.rs/wp-content/uploads/2025/06/Hartweger_Centar_Natasa_Hartweger.jpg"
               alt="Nataša Hartweger"
               className="w-full h-auto"
+              width={540} height={540} priority sizes="(max-width: 768px) 100vw, 540px"
             />
             {/* Name card */}
             <div className="absolute bottom-6 left-6 bg-white/90 backdrop-blur-sm rounded-xl px-5 py-3 shadow-lg">
@@ -111,10 +113,11 @@ export default function Pocetna() {
             <div className="flex-shrink-0 w-full md:w-[45%]">
               <div className="relative">
                 <div className="absolute -top-3 -left-3 w-full h-full bg-plava/10 rounded-2xl" />
-                <img
+                <Image
                   src="/images/natasa-laptop.jpg"
                   alt="Nataša Hartweger"
                   className="relative rounded-2xl shadow-lg w-full object-cover"
+                  width={600} height={400} sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </div>
             </div>
@@ -301,10 +304,11 @@ export default function Pocetna() {
       <section className="py-16 px-4 bg-gray-50">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-10">
           <div className="flex-shrink-0">
-            <img
+            <Image
               src="https://www.hartweger.rs/wp-content/uploads/2026/05/Untitled-1200-x-628-px-1-1024x536.png"
               alt="Blog"
               className="rounded-2xl shadow-md w-full md:w-[400px]"
+              width={1024} height={536} sizes="(max-width: 768px) 100vw, 50vw"
             />
           </div>
           <div>
