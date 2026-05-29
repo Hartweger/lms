@@ -102,9 +102,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             <span className="text-gray-600 truncate">{post.title}</span>
           </nav>
 
-          {post.category && (
+          {(post as any).category && (
             <span className="inline-block text-xs font-bold tracking-wide uppercase text-plava bg-plava-light px-3 py-1 rounded-full mb-4">
-              {post.category}
+              {(post as any).category}
             </span>
           )}
 
@@ -186,7 +186,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               Pročitaj još
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-              {(related as BlogPost[]).map((r) => (
+              {related.map((r: any) => (
                 <Link
                   key={r.slug}
                   href={`/magazin/${r.slug}`}

@@ -65,8 +65,8 @@ export default async function MagazinPage() {
                   )}
                   <div className="p-5">
                     <p className="text-xs text-gray-400 mb-2">
-                      {post.category && (
-                        <span className="uppercase tracking-wide font-semibold text-plava mr-2">{post.category}</span>
+                      {(post as any).category && (
+                        <span className="uppercase tracking-wide font-semibold text-plava mr-2">{(post as any).category}</span>
                       )}
                       {post.published_at && new Date(post.published_at).toLocaleDateString("sr-Latn-RS", {
                         day: "numeric",
