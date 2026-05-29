@@ -5,15 +5,72 @@ import type { Order } from "@/lib/types";
 
 type Filter = "sve" | "na-cekanju" | "potvrdjene";
 
-interface Props {
-  initialOrders: Order[];
+interface CourseOption {
+  id: string;
+  title: string;
+  slug: string;
+  price: number;
 }
 
-export default function NarudzbineClient({ initialOrders }: Props) {
+interface Props {
+  initialOrders: Order[];
+  courses: CourseOption[];
+}
+
+export default function NarudzbineClient({ initialOrders, courses }: Props) {
   const [orders, setOrders] = useState<Order[]>(initialOrders);
   const [filter, setFilter] = useState<Filter>("sve");
   const [confirmId, setConfirmId] = useState<string | null>(null);
   const [loading, setLoading] = useState<string | null>(null);
+
+  const [showNewForm, setShowNewForm] = useState(false);
+  const [newEmail, setNewEmail] = useState("");
+  const [newCourseId, setNewCourseId] = useState("");
+  const [newAmount, setNewAmount] = useState("");
+  const [newPayment, setNewPayment] = useState("uplatnica");
+  const [newMarkPaid, setNewMarkPaid] = useState(false);
+  const [newLoading, setNewLoading] = useState(false);
+  const [newError, setNewError] = useState<string | null>(null);
+
+  function handleCourseChange(courseId: string) {
+    setNewCourseId(courseId);
+    const course = courses.find((c) => c.id === courseId);
+    if (course) setNewAmount(String(course.price));
+  }
+
+  async function createOrder() {
+    setNewLoading(true);
+    setNewError(null);
+    try {
+      const res = await fetch("/api/admin/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: newEmail,
+          courseId: newCourseId,
+          totalAmount: Number(newAmount),
+          paymentMethod: newPayment,
+          markAsPaid: newMarkPaid,
+        }),
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        setNewError(json.error ?? "Greška pri kreiranju narudžbine.");
+        return;
+      }
+      setOrders((prev) => [json.order, ...prev]);
+      setShowNewForm(false);
+      setNewEmail("");
+      setNewCourseId("");
+      setNewAmount("");
+      setNewPayment("uplatnica");
+      setNewMarkPaid(false);
+    } catch {
+      setNewError("Greška na serveru.");
+    } finally {
+      setNewLoading(false);
+    }
+  }
 
   const pendingCount = orders.filter((o) => o.payment_status === "pending").length;
 
@@ -54,8 +111,110 @@ export default function NarudzbineClient({ initialOrders }: Props) {
     <div>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Narudžbine</h1>
-        <span className="text-sm text-gray-500">{orders.length} ukupno</span>
+        <div className="flex items-center gap-3">
+          <span className="text-sm text-gray-500">{orders.length} ukupno</span>
+          <button
+            onClick={() => setShowNewForm((v) => !v)}
+            className="px-4 py-2 rounded-lg text-sm font-medium bg-plava text-white hover:bg-plava-dark transition-colors"
+          >
+            + Nova narudžbina
+          </button>
+        </div>
       </div>
+
+      {/* New order form */}
+      {showNewForm && (
+        <div className="bg-plava-light rounded-xl p-6 mb-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Nova narudžbina</h2>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Email kupca
+              </label>
+              <input
+                type="email"
+                value={newEmail}
+                onChange={(e) => setNewEmail(e.target.value)}
+                placeholder="korisnik@example.com"
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-plava"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Kurs
+              </label>
+              <select
+                value={newCourseId}
+                onChange={(e) => handleCourseChange(e.target.value)}
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-plava"
+              >
+                <option value="">— Izaberi kurs —</option>
+                {courses.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.title} ({c.price.toLocaleString("sr-RS")} RSD)
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Iznos RSD
+              </label>
+              <input
+                type="number"
+                value={newAmount}
+                onChange={(e) => setNewAmount(e.target.value)}
+                placeholder="0"
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-plava"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Način plaćanja
+              </label>
+              <select
+                value={newPayment}
+                onChange={(e) => setNewPayment(e.target.value)}
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-plava"
+              >
+                <option value="uplatnica">Uplatnica</option>
+                <option value="paypal">PayPal</option>
+              </select>
+            </div>
+          </div>
+          <div className="mt-4">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={newMarkPaid}
+                onChange={(e) => setNewMarkPaid(e.target.checked)}
+                className="rounded border-gray-300 text-plava focus:ring-plava"
+              />
+              <span className="text-sm text-gray-700">
+                Označi odmah kao plaćeno (daje pristup kursu)
+              </span>
+            </label>
+          </div>
+          {newError && (
+            <p className="mt-3 text-sm text-koral font-medium">{newError}</p>
+          )}
+          <div className="mt-4 flex gap-3">
+            <button
+              onClick={createOrder}
+              disabled={newLoading}
+              className="px-5 py-2 rounded-lg text-sm font-medium bg-plava text-white hover:bg-plava-dark transition-colors disabled:opacity-50"
+            >
+              {newLoading ? "Kreiranje..." : "Kreiraj narudžbinu"}
+            </button>
+            <button
+              onClick={() => setShowNewForm(false)}
+              className="px-5 py-2 rounded-lg text-sm font-medium bg-white text-gray-600 hover:bg-gray-50 border border-gray-200 transition-colors"
+            >
+              Otkaži
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Filter buttons */}
       <div className="flex gap-2 mb-6">
