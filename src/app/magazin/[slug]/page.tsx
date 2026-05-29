@@ -193,7 +193,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             [&_iframe]:rounded-xl [&_iframe]:shadow-md [&_iframe]:max-w-full
             [&_.wp-block-image]:my-8 [&_.wp-block-image]:text-center
             [&_.wp-block-image_img]:mx-auto [&_.wp-block-image_img]:rounded-xl [&_.wp-block-image_img]:shadow-md [&_.wp-block-image_img]:max-h-[500px] [&_.wp-block-image_img]:w-auto"
-          dangerouslySetInnerHTML={{ __html: cleanWpContent(post.content) }}
+          dangerouslySetInnerHTML={{ __html: post.content }}
         />
       </article>
 
