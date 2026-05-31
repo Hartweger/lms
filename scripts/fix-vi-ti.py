@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-import json, urllib.request
+import json, urllib.request, os
 
 SB_URL = "https://rzmyglynjcygsbicssbt.supabase.co"
-SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6bXlnbHluamN5Z3NiaWNzc2J0Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NjI1NzI1MiwiZXhwIjoyMDkxODMzMjUyfQ.0eOWj0OJwzliA9rYnEd4HkDQS6ngF9fAZZdWy6znT9o"
+SB_KEY = os.environ["SUPABASE_SERVICE_ROLE_KEY"]
 
 HEADERS = {
     "apikey": SB_KEY,

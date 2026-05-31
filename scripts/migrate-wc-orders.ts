@@ -15,8 +15,8 @@ const supabase = createClient(
 );
 
 const WC_API = "https://hartweger.rs/wp-json/wc/v3";
-const WC_KEY = "ck_5fa42d3e78f75b6ddc9b166f70f0efddb3625322";
-const WC_SECRET = "cs_55c370aec2ab635f6e6fe83e76ea2b645d486bc4";
+const WC_KEY = process.env.WC_CONSUMER_KEY!;
+const WC_SECRET = process.env.WC_CONSUMER_SECRET!;
 
 interface WcOrder {
   id: number;

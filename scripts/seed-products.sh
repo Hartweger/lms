@@ -1,7 +1,7 @@
 #!/bin/bash
 # Popunjava Supabase courses tabelu sa marketing podacima za sve proizvode
 SB_URL="https://rzmyglynjcygsbicssbt.supabase.co"
-SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6bXlnbHluamN5Z3NiaWNzc2J0Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NjI1NzI1MiwiZXhwIjoyMDkxODMzMjUyfQ.0eOWj0OJwzliA9rYnEd4HkDQS6ngF9fAZZdWy6znT9o"
+SB_KEY="${SUPABASE_SERVICE_ROLE_KEY:?Set SUPABASE_SERVICE_ROLE_KEY env var}"
 
 H1="apikey: $SB_KEY"
 H2="Authorization: Bearer $SB_KEY"
