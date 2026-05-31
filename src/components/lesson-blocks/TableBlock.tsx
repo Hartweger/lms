@@ -1,4 +1,5 @@
 import type { TableSection } from "@/lib/section-types";
+import { sanitizeHtml } from "@/lib/sanitize";
 
 export default function TableBlock({ headers, rows }: TableSection) {
   return (
@@ -25,7 +26,7 @@ export default function TableBlock({ headers, rows }: TableSection) {
                   className={`px-4 py-2.5 border-b border-gray-100 ${
                     ci === 0 ? "font-semibold text-gray-900" : "text-gray-500 italic"
                   }`}
-                  dangerouslySetInnerHTML={{ __html: cell }}
+                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(cell) }}
                 />
               ))}
             </tr>

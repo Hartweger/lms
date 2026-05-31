@@ -1,4 +1,5 @@
 import type { TextSection, TextStyle } from "@/lib/section-types";
+import { sanitizeHtml } from "@/lib/sanitize";
 
 const styleClasses: Record<TextStyle, string> = {
   default: "border-l-4 border-plava bg-gray-50",
@@ -32,7 +33,7 @@ export default function TextBlock({ content, style = "default" }: TextSection) {
       <div
         className="prose prose-gray max-w-none text-gray-700 leading-relaxed
           prose-headings:text-gray-900 prose-a:text-plava prose-strong:text-gray-900"
-        dangerouslySetInnerHTML={{ __html: formatContent(content) }}
+        dangerouslySetInnerHTML={{ __html: sanitizeHtml(formatContent(content)) }}
       />
     </div>
   );

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { sanitizeHtml } from "@/lib/sanitize";
 import QuizExercise from "./QuizExercise";
 import FillBlankExercise from "./FillBlankExercise";
 import MatchPairsExercise from "./MatchPairsExercise";
@@ -402,7 +403,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
                               <td
                                 key={ci}
                                 className={`px-4 py-2 border-b border-gray-100 ${ci === 0 ? "font-semibold text-gray-900" : "text-gray-600"}`}
-                                dangerouslySetInnerHTML={{ __html: cell }}
+                                dangerouslySetInnerHTML={{ __html: sanitizeHtml(cell) }}
                               />
                             ))}
                           </tr>
@@ -415,13 +416,15 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
                 <div
                   className="prose prose-sm prose-gray max-w-none text-gray-700 leading-relaxed"
                   dangerouslySetInnerHTML={{
-                    __html: (questionContext.content || "")
-                      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
-                      .replace(/\*(.+?)\*/g, "<em>$1</em>")
-                      .replace(/^### (.+)$/gm, "<h3>$1</h3>")
-                      .replace(/^## (.+)$/gm, "<h2>$1</h2>")
-                      .replace(/\n\n/g, "</p><p>")
-                      .replace(/\n/g, "<br>"),
+                    __html: sanitizeHtml(
+                      (questionContext.content || "")
+                        .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+                        .replace(/\*(.+?)\*/g, "<em>$1</em>")
+                        .replace(/^### (.+)$/gm, "<h3>$1</h3>")
+                        .replace(/^## (.+)$/gm, "<h2>$1</h2>")
+                        .replace(/\n\n/g, "</p><p>")
+                        .replace(/\n/g, "<br>")
+                    ),
                   }}
                 />
               )}
