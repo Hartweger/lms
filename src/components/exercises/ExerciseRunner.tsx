@@ -203,23 +203,22 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
           const overallPercent = Math.round((totalScore / totalQuestions) * 100);
           setModelltestTotal({ score: totalScore, total: totalQuestions });
 
+          // Certificates are issued server-side only. The server independently
+          // recomputes the ≥60% threshold from stored attempts, so the client
+          // cannot self-issue or forge a certificate.
           if (overallPercent >= 60) {
-            const { data: existing } = await supabase
-              .from("certificates")
-              .select("id")
-              .eq("user_id", user.id)
-              .eq("course_id", courseId)
-              .single();
-
-            if (existing) {
-              setCertificateId(existing.id);
-            } else {
-              const { data: newCert } = await supabase
-                .from("certificates")
-                .insert({ user_id: user.id, course_id: courseId })
-                .select("id")
-                .single();
-              if (newCert) setCertificateId(newCert.id);
+            try {
+              const res = await fetch("/api/certificate", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ lessonId: exercise.lesson_id, courseId }),
+              });
+              if (res.ok) {
+                const data = await res.json();
+                if (data.certificateId) setCertificateId(data.certificateId);
+              }
+            } catch {
+              // Network error — certificate can be re-issued on next completion.
             }
           }
         }
