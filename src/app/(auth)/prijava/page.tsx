@@ -11,7 +11,8 @@ export default function Prijava() {
 
   const handleLogin = async ({ email, password }: { email: string; password: string }) => {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) return "Pogrešan email ili lozinka.";
+    if (error)
+      return 'Email ili lozinka nisu tačni. Ako si ranije koristio/la Google ili još nemaš lozinku — uđi dugmetom „Nastavite sa Google" iznad, ili klikni „Pošalji mi link za prijavu na email".';
     router.push("/dashboard");
     return null;
   };
