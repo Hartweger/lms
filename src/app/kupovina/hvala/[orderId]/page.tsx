@@ -150,18 +150,33 @@ export default async function HvalaPage({
         )}
 
         {/* Info note */}
-        <div className="bg-plava-light/60 rounded-xl px-5 py-4 mb-8 text-sm text-gray-700">
-          Poslali smo instrukcije i na <span className="font-medium">{order.email}</span>.
-          Kada potvrdimo uplatu, aktiviramo pristup najduže tri radna dana.
+        <div className="bg-plava-light/60 rounded-xl px-5 py-4 mb-8 text-sm text-gray-700 space-y-2">
+          <p>
+            Poslali smo instrukcije i na <span className="font-medium">{order.email}</span>.
+          </p>
+          <p>
+            {order.payment_method === "paypal"
+              ? "Tvoju uplatu potvrđujemo ručno — obično u roku od 24h, najkasnije 3 radna dana. Čim potvrdimo, dobićeš email i pristup kursu se aktivira."
+              : "Čim potvrdimo uplatu — obično u roku od 24h, najkasnije 3 radna dana — dobićeš email i pristup kursu se aktivira."}
+          </p>
+          <p className="text-gray-500">
+            Ako ne dobiješ pristup, piši nam na{" "}
+            <a href="mailto:info@hartweger.rs" className="text-plava hover:underline">info@hartweger.rs</a>.
+          </p>
         </div>
 
-        {/* Back link */}
-        <Link
-          href="/kursevi"
-          className="text-sm text-plava hover:underline"
-        >
-          ← Nazad na kurseve
-        </Link>
+        {/* CTA */}
+        <div className="flex flex-wrap items-center gap-4">
+          <Link
+            href="/prijava"
+            className="inline-block px-6 py-3 rounded-lg font-semibold text-white text-sm bg-plava hover:bg-plava-dark transition-colors"
+          >
+            Prijavi se da vidiš kurs
+          </Link>
+          <Link href="/kursevi" className="text-sm text-plava hover:underline">
+            ← Nazad na kurseve
+          </Link>
+        </div>
       </div>
     </section>
   );

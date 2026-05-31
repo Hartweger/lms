@@ -9,6 +9,9 @@ interface Props {
   courseTitle: string;
   priceRsd: number;
   priceEur: number | null;
+  initialEmail?: string;
+  initialName?: string;
+  isLoggedIn?: boolean;
 }
 
 const COUNTRIES = [
@@ -31,10 +34,11 @@ function formatPrice(price: number): string {
   return price.toLocaleString("de-DE");
 }
 
-export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, priceEur }: Props) {
+export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, priceEur, initialEmail = "", initialName = "", isLoggedIn = false }: Props) {
   const router = useRouter();
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
+  const [fullName, setFullName] = useState(initialName);
+  const [email, setEmail] = useState(initialEmail);
+  const [emailLocked, setEmailLocked] = useState(isLoggedIn);
   const [country, setCountry] = useState("RS");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -222,9 +226,26 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, priceE
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            readOnly={emailLocked}
             placeholder="ana@example.com"
-            className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0AB3D7] focus:border-transparent transition"
+            className={`w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0AB3D7] focus:border-transparent transition ${emailLocked ? "bg-gray-50 text-gray-500 cursor-not-allowed" : ""}`}
           />
+          {isLoggedIn && emailLocked && (
+            <p className="text-xs text-gray-500 mt-1">
+              Kupuješ kao <strong>{email}</strong> — kurs se aktivira na ovom nalogu.{" "}
+              <button type="button" onClick={() => setEmailLocked(false)} className="text-[#0AB3D7] hover:underline">
+                Kupujem za nekog drugog
+              </button>
+            </p>
+          )}
+          {isLoggedIn && !emailLocked && (
+            <p className="text-xs text-[#F78687] mt-1">
+              Pristup ide na nalog sa ovim emailom, ne na tvoj.{" "}
+              <button type="button" onClick={() => { setEmail(initialEmail); setEmailLocked(true); }} className="text-[#0AB3D7] hover:underline">
+                Vrati na moj nalog
+              </button>
+            </p>
+          )}
         </div>
 
         <div>

@@ -39,6 +39,23 @@ export default async function KupovinaPage({
 
   if (!course) notFound();
 
+  // Prepoznaj ulogovanog kupca — prepuni i zaključaj email da se pristup
+  // ne dodeli na pogrešan nalog (rizik pri ručnom unosu drugog emaila).
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  let initialEmail = "";
+  let initialName = "";
+  if (user) {
+    initialEmail = user.email ?? "";
+    const { data: profile } = await supabase
+      .from("user_profiles")
+      .select("full_name")
+      .eq("id", user.id)
+      .single();
+    initialName = profile?.full_name ?? "";
+  }
+
   return (
     <section className="bg-gradient-to-b from-plava-light/40 to-white min-h-screen">
       <div className="max-w-xl mx-auto px-4 py-10 md:py-16">
@@ -54,6 +71,9 @@ export default async function KupovinaPage({
           courseTitle={course.title}
           priceRsd={course.price}
           priceEur={course.paypal_price_eur}
+          initialEmail={initialEmail}
+          initialName={initialName}
+          isLoggedIn={!!user}
         />
       </div>
     </section>
