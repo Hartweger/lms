@@ -49,6 +49,7 @@ const filter = new FilterXSS({
     audio: ["controls", "src", "class"],
     video: ["controls", "src", "width", "height", "class"],
     source: ["src", "type"],
+    img: ["src", "alt", "class", "width", "height"],
     table: ["class"],
     thead: ["class"],
     tbody: ["class"],
