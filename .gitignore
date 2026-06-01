@@ -43,3 +43,6 @@ next-env.d.ts
 # PDF lesson scripts
 A1.1/
 A1.2/
+
+# Sentry Config File
+.env.sentry-build-plugin

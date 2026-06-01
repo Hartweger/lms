@@ -42,12 +42,14 @@ export default function GoogleRecenzije() {
 
   useEffect(() => {
     fetch("/api/reviews")
-      .then((r) => r.json())
-      .then(setData)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => setData(d && Array.isArray(d.reviews) ? d : null))
       .catch(() => {});
   }, []);
 
-  if (!data) return null;
+  // Render nothing if the API failed (e.g. missing key, quota) or has no
+  // reviews — never reach data.reviews.map() with an undefined reviews array.
+  if (!data || !data.reviews?.length) return null;
 
   return (
     <section className="py-16 px-4 bg-gray-50">

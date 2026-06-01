@@ -135,7 +135,7 @@ export default function ProfesorEseji() {
       </div>
 
       {essays.length === 0 && (
-        <p className="text-gray-400 text-center py-12">Nema eseja u ovoj kategoriji.</p>
+        <p className="text-gray-400 text-center py-12">Nema radova u ovoj kategoriji.</p>
       )}
 
       <div className="space-y-4">

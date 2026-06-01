@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import ProfesorKartica from "@/components/ProfesorKartica";
+import IndividualniPonuda from "@/components/IndividualniPonuda";
+import { INDIVIDUALNI_CARDS } from "@/lib/individualni-cards";
 
 export const metadata: Metadata = {
   title: "Individualni kursevi nemačkog jezika — Hartweger",
@@ -28,7 +30,7 @@ const BENEFITI = [
       </svg>
     ),
     title: "Zakazivanje odmah nakon uplate",
-    desc: "Dobijaš link za kalendar i zakazuješ časove kad ti odgovara. Otkazivanje je moguće najkasnije 24h pre časa.",
+    desc: "Nakon kupovine dobijaš link za kalendar i zakazuješ časove kad ti odgovara. Otkazivanje je moguće najkasnije 24h pre časa.",
   },
   {
     icon: (
@@ -37,47 +39,17 @@ const BENEFITI = [
       </svg>
     ),
     title: "Prilagođen tempo",
-    desc: "Učiš brzinom koja ti odgovara. Nema pritiska — fokus je na tvom napretku.",
+    desc: "Učiš brzinom koja ti odgovara. Nema pritiska ni fiksnog trajanja — fokus je na tvom napretku.",
   },
 ];
 
-const BENEFITI_PO_NIVOU = [
-  "Časovi sa profesorkom uživo (1-na-1)",
-  "Video lekcije za samostalno učenje",
-  "Sertifikat po završetku nivoa",
-  "Otkazivanje najkasnije 24h pre časa",
-];
-
-const BENEFITI_MESECNI = [
-  "Časovi sa profesorkom uživo (1-na-1)",
-  "Otkazivanje najkasnije 24h pre časa",
-  "Fleksibilno — biraš koliko časova mesečno",
-  "Idealno za održavanje ili intenzivan rad",
-];
-
-const KURSEVI_PO_NIVOU = [
-  { nivo: "A1.1", opis: "Početak — predstavljanje, brojevi, svakodnevne fraze", cena: "23.000", cenaNatasa: "28.000" },
-  { nivo: "A1.2", opis: "Prošlo vreme, kupovina, putovanje", cena: "23.000", cenaNatasa: "28.000" },
-  { nivo: "A2.1", opis: "Posao, zdravlje, stanovanje", cena: "33.000", cenaNatasa: "38.000" },
-  { nivo: "A2.2", opis: "Mediji, kultura, kompleksnije situacije", cena: "33.000", cenaNatasa: "38.000" },
-  { nivo: "B1.1", opis: "Argumentacija, pisanje, kompleksnija gramatika", cena: "35.000", cenaNatasa: "40.000" },
-  { nivo: "B1.2", opis: "Priprema za B1 ispit, slobodna konverzacija", cena: "35.000", cenaNatasa: "40.000" },
-  { nivo: "B2.1", opis: "Napredna gramatika, poslovni nemački", cena: "37.000", cenaNatasa: "42.000" },
-];
-
-const MESECNI_PAKETI = [
-  { paket: "4 časa mesečno", opis: "1 čas nedeljno — za održavanje ili spor tempo", cena: "14.000", cenaNatasa: "16.100" },
-  { paket: "8 časova mesečno", opis: "2 časa nedeljno — standardni tempo napretka", cena: "27.500", cenaNatasa: "32.400" },
-  { paket: "12 časova mesečno", opis: "3 časa nedeljno — intenzivan program", cena: "41.000", cenaNatasa: "48.300" },
-];
-
 const profesori = [
-  { name: "Nataša Hartweger", role: "Osnivač, A1–B1", bio: "Kreator Hartweger metode. Fokus na vokabularu i komunikaciji." },
-  { name: "Milica Vučić", role: "A1–B1", bio: "Strpljiva i sistematična. Odlična za početnike." },
-  { name: "Katarina Todosijević", role: "B2–C1", bio: "Specijalizovana za napredne nivoe i poslovni nemački." },
-  { name: "Hristina Šarčević", role: "A1–B1", bio: "Kreativna nastava uz praktične primere." },
-  { name: "Suzana Marjanović", role: "A1–A2", bio: "Fokus na konverzaciji i svakodnevnim situacijama." },
-  { name: "Marija Radojković Stanojić", role: "B1–B2", bio: "Priprema za ispite i sertifikate." },
+  { name: "Nataša Hartweger", role: "Osnivač · A1–C1", bio: "Kreator Hartweger metode. Fokus na vokabularu i komunikaciji." },
+  { name: "Milica Vučić", role: "A1–C1 · spec. FSP", bio: "Sve nivoe; specijalnost FSP (medicinski nemački za lekare)." },
+  { name: "Katarina Todosijević", role: "A1–C1 · spec. konverzacija", bio: "Sve nivoe; specijalnost konverzacija na B2/C1." },
+  { name: "Hristina Šarčević", role: "A1–C1 · spec. ispiti", bio: "Sve nivoe; specijalnost priprema za ispite." },
+  { name: "Suzana Marjanović", role: "A1–C1", bio: "Sve nivoe; fokus na konverzaciji i svakodnevnim situacijama." },
+  { name: "Marija Radojković Stanojić", role: "A1–C1 · spec. ispiti", bio: "Sve nivoe; specijalnost priprema ispita i sertifikata." },
 ];
 
 export default function IndividualniKurseviPage() {
@@ -90,7 +62,7 @@ export default function IndividualniKurseviPage() {
             Individualni kursevi nemačkog
           </h1>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Nastava 1-na-1 sa profesorkom. Prilagođen tempo, raspored i program — izaberi tip kursa koji ti odgovara.
+            Nastava 1-na-1 sa profesorkom. Prilagođen tempo, raspored i program — izaberi nivo i kreni.
           </p>
         </div>
       </section>
@@ -112,84 +84,14 @@ export default function IndividualniKurseviPage() {
         </div>
       </section>
 
-      {/* Izaberi tip kursa */}
+      {/* Ponuda — iste kartice kao u katalogu */}
       <section className="py-14 px-4 bg-gray-50">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl font-montserrat font-bold text-center mb-3">Prvo odaberi tip kursa</h2>
-          <p className="text-gray-600 text-center mb-10">Profesora biraš u sledećem koraku.</p>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* Kursevi po nivou */}
-            <div>
-              <h3 className="text-lg font-montserrat font-bold mb-3 flex items-center gap-2">
-                <span className="w-8 h-8 bg-plava text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">1</span>
-                Kurs po nivou
-              </h3>
-              <p className="text-sm text-gray-600 mb-3">Kompletan nivo (7-8 nedelja). Savladaj ceo nivo sistematično.</p>
-
-              {/* Šta uključuje */}
-              <ul className="mb-4 space-y-1.5">
-                {BENEFITI_PO_NIVOU.map((b) => (
-                  <li key={b} className="flex items-start gap-2 text-sm text-gray-700">
-                    <span className="text-plava mt-0.5 flex-shrink-0">&#10003;</span>
-                    {b}
-                  </li>
-                ))}
-              </ul>
-
-              {/* Nivoi */}
-              <div className="space-y-2">
-                {KURSEVI_PO_NIVOU.map((k) => (
-                  <div key={k.nivo} className="bg-white border border-gray-200 rounded-xl p-3 md:p-3.5 flex items-center justify-between hover:border-plava transition-colors">
-                    <div className="min-w-0">
-                      <span className="font-bold text-gray-900">{k.nivo}</span>
-                      <p className="text-xs text-gray-500 mt-0.5">{k.opis}</p>
-                    </div>
-                    <div className="text-right flex-shrink-0 ml-3">
-                      <div className="font-bold text-gray-900 text-sm">{k.cena} din</div>
-                      <div className="text-xs text-koral font-semibold">~ {Math.round(parseInt(k.cena.replace('.', '')) / 117)}&euro;</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Mesečni paketi */}
-            <div>
-              <h3 className="text-lg font-montserrat font-bold mb-3 flex items-center gap-2">
-                <span className="w-8 h-8 bg-koral text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">2</span>
-                Mesečni paketi
-              </h3>
-              <p className="text-sm text-gray-600 mb-3">Fleksibilno — biraš koliko časova mesečno.</p>
-
-              {/* Šta uključuje */}
-              <ul className="mb-4 space-y-1.5">
-                {BENEFITI_MESECNI.map((b) => (
-                  <li key={b} className="flex items-start gap-2 text-sm text-gray-700">
-                    <span className="text-koral mt-0.5 flex-shrink-0">&#10003;</span>
-                    {b}
-                  </li>
-                ))}
-              </ul>
-
-              <div className="space-y-2">
-                {MESECNI_PAKETI.map((p) => (
-                  <div key={p.paket} className="bg-white border border-gray-200 rounded-xl p-3 md:p-3.5 hover:border-koral transition-colors">
-                    <div className="flex items-center justify-between">
-                      <div className="min-w-0">
-                        <span className="font-bold text-gray-900 text-sm">{p.paket}</span>
-                        <p className="text-xs text-gray-500 mt-0.5">{p.opis}</p>
-                      </div>
-                      <div className="text-right flex-shrink-0 ml-3">
-                        <div className="font-bold text-gray-900 text-sm">{p.cena} din</div>
-                        <div className="text-xs text-koral font-semibold">~ {Math.round(parseInt(p.cena.replace('.', '')) / 117)}&euro;</div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-2xl font-montserrat font-bold text-center mb-3">Izaberi kurs</h2>
+          <p className="text-gray-600 text-center mb-8">
+            Po nivou ili mesečni paket. Klikni na kurs, kupi — profesora i termine biraš odmah nakon uplate.
+          </p>
+          <IndividualniPonuda cards={INDIVIDUALNI_CARDS} />
         </div>
       </section>
 
@@ -197,7 +99,7 @@ export default function IndividualniKurseviPage() {
       <section className="py-14 px-4">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-2xl font-montserrat font-bold text-center mb-3">Naš tim</h2>
-          <p className="text-gray-600 text-center mb-8">Profesora biraš u sledećem koraku nakon odabira kursa.</p>
+          <p className="text-gray-600 text-center mb-8">Svi profesori rade nivoe A1–C1. Profesora biraš nakon kupovine kursa.</p>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-6">
             {profesori.map((prof) => (
               <ProfesorKartica key={prof.name} name={prof.name} role={prof.role} bio={prof.bio} />

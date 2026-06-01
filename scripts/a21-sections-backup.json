@@ -1,0 +1,1912 @@
+{
+  "1ff5ea47-94c6-4910-bb43-ae8df2b7ec01": [
+    {
+      "type": "badge",
+      "module": "Modul 4",
+      "category": "schreiben"
+    },
+    {
+      "type": "video",
+      "vimeoId": "845810637"
+    },
+    {
+      "type": "text",
+      "style": "info",
+      "content": "Kako se prijaviti za posao u Nemačkoj — **Bewerbung, Lebenslauf, Anschreiben** i najvažnije fraze za prijavu."
+    },
+    {
+      "type": "text",
+      "style": "default",
+      "content": "## Delovi prijave za posao"
+    },
+    {
+      "rows": [
+        [
+          "<mark>die Bewerbung</mark>",
+          "prijava za posao"
+        ],
+        [
+          "<mark>das Anschreiben</mark>",
+          "motivaciono pismo"
+        ],
+        [
+          "<mark>der Lebenslauf</mark>",
+          "biografija (CV)"
+        ],
+        [
+          "<mark>das Zeugnis, -se</mark>",
+          "diploma / svedočanstvo"
+        ],
+        [
+          "<mark>die Stellenanzeige</mark>",
+          "oglas za posao"
+        ],
+        [
+          "<mark>das Vorstellungsgespräch</mark>",
+          "razgovor za posao"
+        ],
+        [
+          "<mark>die Qualifikation</mark>",
+          "kvalifikacija"
+        ],
+        [
+          "<mark>die Berufserfahrung</mark>",
+          "radno iskustvo"
+        ]
+      ],
+      "type": "table",
+      "headers": [
+        "Nemački",
+        "Prevod"
+      ]
+    },
+    {
+      "type": "text",
+      "style": "default",
+      "content": "## Korisne fraze za Anschreiben"
+    },
+    {
+      "type": "formula",
+      "content": "Sehr geehrte Damen und Herren,\nich bewerbe mich um die Stelle als...\nIch habe eine Ausbildung als... gemacht.\nIch habe ... Jahre Berufserfahrung.\nIch spreche fließend... / Meine Muttersprache ist...\nUber eine Einladung zum Vorstellungsgespräch wurde ich mich sehr freuen.\nMit freundlichen Grussen"
+    },
+    {
+      "type": "spoiler",
+      "items": [
+        {
+          "answer": "Name, Adresse, Telefonnummer, E-Mail, Geburtsdatum, Geburtsort, Familienstand",
+          "question": "Persönliche Daten — šta spada tu?"
+        },
+        {
+          "answer": "Od novijeg ka starijem: npr. 2020-2024 Kellnerin im Restaurant Adler, Frankfürt",
+          "question": "Berufserfahrung — kako se piše?"
+        },
+        {
+          "answer": "Škola, fakultet, kursevi, diplome — sa datumima",
+          "question": "Ausbildung — šta navodiš?"
+        },
+        {
+          "answer": "Npr. Deutsch B1, Englisch B2, Serbisch Muttersprache",
+          "question": "Sprachkenntnisse — kako?"
+        }
+      ],
+      "title": "Vežba — Lebenslauf: šta treba da sadržis?"
+    },
+    {
+      "type": "flashcard",
+      "items": [
+        {
+          "back": "prijava za posao",
+          "front": "die Bewerbung"
+        },
+        {
+          "back": "motivaciono pismo",
+          "front": "das Anschreiben"
+        },
+        {
+          "back": "CV / biografija",
+          "front": "der Lebenslauf"
+        },
+        {
+          "back": "razgovor za posao",
+          "front": "das Vorstellungsgespräch"
+        },
+        {
+          "back": "oglas za posao",
+          "front": "die Stellenanzeige"
+        },
+        {
+          "back": "radno iskustvo",
+          "front": "die Berufserfahrung"
+        },
+        {
+          "back": "diploma / svedočanstvo",
+          "front": "das Zeugnis"
+        },
+        {
+          "back": "prijaviti se za posao",
+          "front": "sich bewerben um"
+        },
+        {
+          "back": "Poštovane dame i gospodo",
+          "front": "Sehr geehrte Damen und Herren"
+        },
+        {
+          "back": "Sa postovanjem",
+          "front": "Mit freundlichen Grussen"
+        }
+      ]
+    },
+    {
+      "rows": [
+        [
+          "die Bewerbung",
+          "prijava za posao"
+        ],
+        [
+          "sich bewerben um + A",
+          "prijaviti se za"
+        ],
+        [
+          "das Anschreiben",
+          "motivaciono pismo"
+        ],
+        [
+          "der Lebenslauf",
+          "CV / biografija"
+        ],
+        [
+          "das Zeugnis",
+          "diploma / svedočanstvo"
+        ],
+        [
+          "die Stellenanzeige",
+          "oglas za posao"
+        ],
+        [
+          "das Vorstellungsgespräch",
+          "razgovor za posao"
+        ],
+        [
+          "die Berufserfahrung",
+          "radno iskustvo"
+        ],
+        [
+          "die Qualifikation",
+          "kvalifikacija"
+        ],
+        [
+          "fließend",
+          "tečno"
+        ],
+        [
+          "die Einladung",
+          "poziv"
+        ],
+        [
+          "die Stelle",
+          "radno mesto"
+        ]
+      ],
+      "type": "vocabulary"
+    }
+  ],
+  "8081efd5-e0fe-4d9e-bea2-e7d52d84b906": [
+    {
+      "type": "badge",
+      "module": "Modul 5",
+      "category": "grammatik"
+    },
+    {
+      "type": "video",
+      "vimeoId": "847623975"
+    },
+    {
+      "type": "text",
+      "style": "info",
+      "content": "**Reflexive Verben** — glagoli sa *sich*. Naučiceš kako se menjaju po licima, vežbaš uz zdravstvene savete i čitaš refleksivne glagole u kontekstu."
+    },
+    {
+      "type": "text",
+      "style": "default",
+      "content": "## Refleksivne zamenice po licima"
+    },
+    {
+      "rows": [
+        [
+          "ich",
+          "<strong>mich</strong>",
+          "ich bewege mich"
+        ],
+        [
+          "du",
+          "<strong>dich</strong>",
+          "du bewegst dich"
+        ],
+        [
+          "er/sie/es",
+          "<strong>sich</strong>",
+          "er bewegt sich"
+        ],
+        [
+          "wir",
+          "<strong>uns</strong>",
+          "wir bewegen uns"
+        ],
+        [
+          "ihr",
+          "<strong>euch</strong>",
+          "ihr bewegt euch"
+        ],
+        [
+          "sie/Sie",
+          "<strong>sich</strong>",
+          "sie bewegen sich"
+        ]
+      ],
+      "type": "table",
+      "headers": [
+        "Lice",
+        "Zamenica",
+        "Primer (sich bewegen)"
+      ]
+    },
+    {
+      "type": "text",
+      "style": "uebung",
+      "content": "**Red reći:** Kada recenica pocinje sa prilogom, sich dolazi posle glagola:\n\n*Er rasiert sich jeden Morgen.* → *Jeden Morgen rasiert er sich.*"
+    },
+    {
+      "type": "text",
+      "style": "default",
+      "content": "## Gesundheitstipps — zdravstveni saveti\n\nKoristi refleksivne glagole da das savete:"
+    },
+    {
+      "type": "formula",
+      "content": "1. Bewegen Sie sich regelmassig! Verabreden Sie sich mit Freunden.\n2. Machen Sie Pausen: Ruhen Sie sich aus und entspannen Sie sich.\n3. Sie sollten sich gesund ernähren. Dann fuhlen Sie sich sofort besser."
+    },
+    {
+      "type": "text",
+      "style": "default",
+      "content": "## Refleksivni glagoli u kontekstu"
+    },
+    {
+      "rows": [
+        [
+          "sich trennen",
+          "Eva hat sich von Jorg getrennt.",
+          "rastati se"
+        ],
+        [
+          "sich verlieben",
+          "Ich habe mich verliebt.",
+          "zaljubiti se"
+        ],
+        [
+          "sich verstehen",
+          "Sie verstehen sich gut.",
+          "razumeti se"
+        ],
+        [
+          "sich andern",
+          "Du hast dich sehr geandert.",
+          "promeniti se"
+        ],
+        [
+          "sich entschuldigen",
+          "Sie entschuldigt sich.",
+          "izviniti se"
+        ],
+        [
+          "sich umarmen",
+          "Sie umarmen sich.",
+          "grliti se"
+        ],
+        [
+          "sich streiten",
+          "Sie streiten sich oft.",
+          "svađati se"
+        ],
+        [
+          "sich treffen",
+          "Morgen treffen wir uns im Cafe.",
+          "sresti se"
+        ],
+        [
+          "sich anziehen",
+          "Wir haben uns schon angezogen.",
+          "obuci se"
+        ],
+        [
+          "sich bewerben",
+          "Sie sollen sich bewerben!",
+          "prijaviti se (za posao)"
+        ],
+        [
+          "sich ernähren",
+          "Ich ernahre mich gesund.",
+          "hraniti se"
+        ],
+        [
+          "sich bewegen",
+          "Bewegen Sie sich regelmasig!",
+          "kretati se"
+        ],
+        [
+          "sich ausruhen",
+          "Ich möchte mich ausruhen.",
+          "odmoriti se"
+        ],
+        [
+          "sich fühlen",
+          "Wie fuhlen Sie sich?",
+          "osećati se"
+        ]
+      ],
+      "type": "table",
+      "headers": [
+        "Glagol",
+        "Primer",
+        "Prevod"
+      ]
+    },
+    {
+      "type": "text",
+      "style": "uebung",
+      "content": "**Pazi:** Neki glagoli su u nemačkom povratni a u srpskom nisu, i obrnuto:\n\n*Sie verspatet sich immer.* — Ona uvek kasni.\n*Ich muss mich beeilen.* — Moram da pozurim."
+    },
+    {
+      "type": "flashcard",
+      "items": [
+        {
+          "back": "kretati se",
+          "front": "sich bewegen"
+        },
+        {
+          "back": "hraniti se",
+          "front": "sich ernähren"
+        },
+        {
+          "back": "osećati se",
+          "front": "sich fühlen"
+        },
+        {
+          "back": "odmoriti se",
+          "front": "sich ausruhen"
+        },
+        {
+          "back": "opustiti se",
+          "front": "sich entspannen"
+        },
+        {
+          "back": "dogovoriti se (za susret)",
+          "front": "sich verabreden"
+        },
+        {
+          "back": "tusirati se",
+          "front": "sich duschen"
+        },
+        {
+          "back": "brijati se",
+          "front": "sich rasieren"
+        },
+        {
+          "back": "zaljubiti se",
+          "front": "sich verlieben"
+        },
+        {
+          "back": "svađati se",
+          "front": "sich streiten"
+        },
+        {
+          "back": "izviniti se",
+          "front": "sich entschuldigen"
+        },
+        {
+          "back": "pozuriti",
+          "front": "sich beeilen"
+        }
+      ]
+    },
+    {
+      "rows": [
+        [
+          "sich bewegen",
+          "kretati se"
+        ],
+        [
+          "sich ernähren",
+          "hraniti se"
+        ],
+        [
+          "sich fühlen",
+          "osećati se"
+        ],
+        [
+          "sich ausruhen",
+          "odmoriti se"
+        ],
+        [
+          "sich entspannen",
+          "opustiti se"
+        ],
+        [
+          "sich verabreden",
+          "dogovoriti se za susret"
+        ],
+        [
+          "sich duschen",
+          "tusirati se"
+        ],
+        [
+          "sich rasieren",
+          "brijati se"
+        ],
+        [
+          "sich verlieben",
+          "zaljubiti se"
+        ],
+        [
+          "sich trennen",
+          "rastati se"
+        ],
+        [
+          "sich streiten",
+          "svađati se"
+        ],
+        [
+          "sich entschuldigen",
+          "izviniti se"
+        ],
+        [
+          "sich beeilen",
+          "pozuriti"
+        ],
+        [
+          "sich andern",
+          "promeniti se"
+        ],
+        [
+          "sich verstehen",
+          "razumeti se"
+        ],
+        [
+          "sich bewerben",
+          "prijaviti se za posao"
+        ]
+      ],
+      "type": "vocabulary"
+    }
+  ],
+  "fe1f5889-c4e5-45e2-b0ac-57d3df3d76f9": [
+    {
+      "type": "badge",
+      "module": "Modul 5",
+      "category": "grammatik"
+    },
+    {
+      "type": "video",
+      "vimeoId": "847794872"
+    },
+    {
+      "type": "text",
+      "style": "info",
+      "content": "Refleksivni glagoli sa **fiksnim predlozima** — sich interessieren **für**, sich freuen **auf/über**, sich ärgern **über**. Predlog odredjuje padez!"
+    },
+    {
+      "type": "text",
+      "style": "default",
+      "content": "## Glagoli sa predlozima + Akkusativ"
+    },
+    {
+      "rows": [
+        [
+          "sich interessieren <strong>für</strong>",
+          "Interessierst du dich für den Tanzsport?",
+          "interesovati se za"
+        ],
+        [
+          "sich beschweren <strong>über</strong>",
+          "Er beschwert sich über die Wettervorhersage.",
+          "žaliti se na"
+        ],
+        [
+          "sich ärgern <strong>über</strong>",
+          "Sie argert sich über die Sportnachrichten.",
+          "ljutiti se na"
+        ],
+        [
+          "sich freuen <strong>auf</strong>",
+          "Er freut sich auf die Fußballweltmeisterschaft.",
+          "radovati se (necemu u budućnosti)"
+        ],
+        [
+          "warten <strong>auf</strong>",
+          "Wir warten auf das Oktoberfest.",
+          "čekati"
+        ]
+      ],
+      "type": "table",
+      "headers": [
+        "Glagol + predlog",
+        "Primer",
+        "Prevod"
+      ]
+    },
+    {
+      "type": "text",
+      "style": "default",
+      "content": "## Glagoli sa predlozima + Dativ"
+    },
+    {
+      "rows": [
+        [
+          "zufrieden sein <strong>mit</strong>",
+          "Sie ist zufrieden mit dem Hotel.",
+          "biti zadovoljan"
+        ],
+        [
+          "erzählen <strong>von</strong>",
+          "Sie erzahlt von der Wettervorhersage.",
+          "pricati o"
+        ],
+        [
+          "sich treffen <strong>mit</strong>",
+          "Sie trifft sich mit ihrer Schwester.",
+          "nalaziti se sa"
+        ]
+      ],
+      "type": "table",
+      "headers": [
+        "Glagol + predlog",
+        "Primer",
+        "Prevod"
+      ]
+    },
+    {
+      "type": "spoiler",
+      "items": [
+        {
+          "answer": "sich, für",
+          "question": "Aber mein Mann interessiert ____ leider überhaupt nicht ____ das Tanzen."
+        },
+        {
+          "answer": "euch, für",
+          "question": "Interessiert ihr ____ nicht ____ deutsche Geschichte?"
+        },
+        {
+          "answer": "mich, für",
+          "question": "Doch, ich interessiere ____ sehr ____ deutsche Geschichte."
+        },
+        {
+          "answer": "sie sich",
+          "question": "Interessiert ____ ____ nicht mehr für Kinofilme?"
+        }
+      ],
+      "title": "Vežba — Popuni praznine (sich + predlog)"
+    },
+    {
+      "type": "text",
+      "style": "default",
+      "content": "## Kako odgovoriti na pitanja o interesovanjima"
+    },
+    {
+      "type": "formula",
+      "content": "++ Ja, sehr.\n+ Ja, eigentlich schon.\n- Nein, eigentlich nicht.\n-- Nein, überhaupt nicht."
+    },
+    {
+      "type": "flashcard",
+      "items": [
+        {
+          "back": "interesovati se za",
+          "front": "sich interessieren für"
+        },
+        {
+          "back": "radovati se (budućnosti)",
+          "front": "sich freuen auf"
+        },
+        {
+          "back": "radovati se (necemu sto se desilo)",
+          "front": "sich freuen über"
+        },
+        {
+          "back": "ljutiti se na",
+          "front": "sich ärgern über"
+        },
+        {
+          "back": "žaliti se na",
+          "front": "sich beschweren über"
+        },
+        {
+          "back": "čekati",
+          "front": "warten auf"
+        },
+        {
+          "back": "biti zadovoljan sa",
+          "front": "zufrieden sein mit"
+        },
+        {
+          "back": "pricati o",
+          "front": "erzählen von"
+        },
+        {
+          "back": "nalaziti se sa",
+          "front": "sich treffen mit"
+        },
+        {
+          "back": "odreći se",
+          "front": "verzichten auf"
+        }
+      ]
+    },
+    {
+      "rows": [
+        [
+          "sich interessieren für",
+          "interesovati se za"
+        ],
+        [
+          "sich freuen auf",
+          "radovati se (budućnosti)"
+        ],
+        [
+          "sich freuen über",
+          "radovati se (necemu sto se desilo)"
+        ],
+        [
+          "sich ärgern über",
+          "ljutiti se na"
+        ],
+        [
+          "sich beschweren über",
+          "žaliti se na"
+        ],
+        [
+          "warten auf",
+          "čekati"
+        ],
+        [
+          "zufrieden sein mit",
+          "biti zadovoljan"
+        ],
+        [
+          "erzählen von",
+          "pricati o"
+        ],
+        [
+          "sich treffen mit",
+          "nalaziti se sa"
+        ],
+        [
+          "verzichten auf",
+          "odreći se"
+        ],
+        [
+          "geniessen, hat genossen",
+          "uzivati"
+        ],
+        [
+          "greifen zu + D",
+          "posegnuti za"
+        ]
+      ],
+      "type": "vocabulary"
+    }
+  ],
+  "d3d058e8-72da-4c9b-aeef-477ca743c01f": [
+    {
+      "type": "badge",
+      "module": "Modul 5",
+      "category": "hoeren"
+    },
+    {
+      "type": "video",
+      "vimeoId": "1177269843"
+    },
+    {
+      "type": "text",
+      "style": "info",
+      "content": "Video lekcija iz serije **Deutschlandlabor** — tema: fudbal u Nemačkoj. Gledaj video i odgovori na pitanja o fudbalskoj kulturi u Nemačkoj."
+    },
+    {
+      "type": "text",
+      "style": "default",
+      "content": "## Fudbal u Nemačkoj — vokabular"
+    },
+    {
+      "rows": [
+        [
+          "<mark>der Fußball</mark>",
+          "fudbal"
+        ],
+        [
+          "<mark>die Mannschaft</mark>",
+          "tim / ekipa"
+        ],
+        [
+          "<mark>der Spieler / die Spielerin</mark>",
+          "igrac / igracica"
+        ],
+        [
+          "<mark>das Spiel</mark>",
+          "utakmica"
+        ],
+        [
+          "<mark>das Tor</mark>",
+          "gol"
+        ],
+        [
+          "<mark>der Schiedsrichter</mark>",
+          "sudija"
+        ],
+        [
+          "<mark>die Bundesliga</mark>",
+          "nemacka fudbalska liga"
+        ],
+        [
+          "<mark>der Fan, -s</mark>",
+          "navijac"
+        ],
+        [
+          "<mark>das Stadion</mark>",
+          "stadion"
+        ],
+        [
+          "<mark>die Weltmeisterschaft (WM)</mark>",
+          "svetsko prvenstvo"
+        ]
+      ],
+      "type": "table",
+      "headers": [
+        "Nemački",
+        "Prevod"
+      ]
+    },
+    {
+      "type": "spoiler",
+      "items": [
+        {
+          "answer": "beliebt (popularan)",
+          "question": "Fußball ist in Deutschland sehr ______."
+        },
+        {
+          "answer": "gewonnen (pobedila)",
+          "question": "Deutschland hat die Weltmeisterschaft schon viermal ______."
+        },
+        {
+          "answer": "Mannschaften (timova)",
+          "question": "In der Bundesliga spielen 18 ______."
+        },
+        {
+          "answer": "Schiedsrichter (sudija)",
+          "question": "Der ______ entscheidet, ob es ein Foul war."
+        },
+        {
+          "answer": "verein (klub)",
+          "question": "Viele Deutsche sind Mitglied in einem Fußball______."
+        }
+      ],
+      "title": "Vežba — Dopuni rečenice"
+    },
+    {
+      "type": "flashcard",
+      "items": [
+        {
+          "back": "tim / ekipa",
+          "front": "die Mannschaft"
+        },
+        {
+          "back": "gol",
+          "front": "das Tor"
+        },
+        {
+          "back": "sudija",
+          "front": "der Schiedsrichter"
+        },
+        {
+          "back": "nemacka liga",
+          "front": "die Bundesliga"
+        },
+        {
+          "back": "stadion",
+          "front": "das Stadion"
+        },
+        {
+          "back": "klub / udruzenje",
+          "front": "der Verein"
+        },
+        {
+          "back": "popularan / omiljen",
+          "front": "beliebt"
+        },
+        {
+          "back": "pobediti",
+          "front": "gewinnen"
+        },
+        {
+          "back": "izgubiti",
+          "front": "verlieren"
+        }
+      ]
+    },
+    {
+      "rows": [
+        [
+          "der Fußball",
+          "fudbal"
+        ],
+        [
+          "die Mannschaft",
+          "tim"
+        ],
+        [
+          "der Spieler",
+          "igrac"
+        ],
+        [
+          "das Tor",
+          "gol"
+        ],
+        [
+          "der Schiedsrichter",
+          "sudija"
+        ],
+        [
+          "der Verein",
+          "klub"
+        ],
+        [
+          "die Bundesliga",
+          "nemacka liga"
+        ],
+        [
+          "die Weltmeisterschaft",
+          "svetsko prvenstvo"
+        ],
+        [
+          "das Stadion",
+          "stadion"
+        ],
+        [
+          "der Fan",
+          "navijac"
+        ],
+        [
+          "beliebt",
+          "popularan"
+        ],
+        [
+          "gewinnen",
+          "pobediti"
+        ],
+        [
+          "verlieren",
+          "izgubiti"
+        ]
+      ],
+      "type": "vocabulary"
+    }
+  ],
+  "4db0519c-8049-453e-8aa3-db5275852e88": [
+    {
+      "type": "badge",
+      "module": "Modul 5",
+      "category": "grammatik"
+    },
+    {
+      "type": "video",
+      "vimeoId": "849054086"
+    },
+    {
+      "type": "text",
+      "style": "info",
+      "content": "**Worauf? Darauf!** — Nastavak lekcije o glagolima sa predlozima. Sada učiš da formiras pitanja i odgovore pomocu **wo(r)+ predlog** i **da(r)+ predlog**."
+    },
+    {
+      "type": "text",
+      "style": "default",
+      "content": "## Tekst: Essgewohnheiten\n\nPročitaj tekst o Mariji i pronadi glagole sa predlozima:"
+    },
+    {
+      "type": "text",
+      "style": "beispiele",
+      "content": "Maria ist eine gesunde Esserin. Sie legt grossen Wert auf frische Zutaten und ausgewogene Mahlzeiten. Jeden Morgen fruhstuckt sie Musli aus Haferflocken, frischem Obst und Joghurt. Zum Mittagessen bereitet sie oft einen bunten Salat mit Huhnchen zu. Ihre Abendessen **bestehen** meist aus einer Portion Gemuse, einer kleinen Menge Fleisch oder Fisch und einer Beilage wie Reis oder Kartoffeln. Zwischendurch **greift** Maria gerne zu Nussen oder einem Stuck dunkler Schokolade. Sie trinkt viel Wasser und **verzichtet** auf Softdrinks."
+    },
+    {
+      "rows": [
+        [
+          "warten <strong>auf</strong>",
+          "Akkusativ",
+          "čekati"
+        ],
+        [
+          "sich beschweren <strong>über</strong>",
+          "Akkusativ",
+          "žaliti se"
+        ],
+        [
+          "sich ärgern <strong>über</strong>",
+          "Akkusativ",
+          "ljutiti se"
+        ],
+        [
+          "sich freuen <strong>auf</strong>",
+          "Akkusativ",
+          "radovati se"
+        ],
+        [
+          "zufrieden sein <strong>mit</strong>",
+          "Dativ",
+          "biti zadovoljan"
+        ],
+        [
+          "erzählen <strong>von</strong>",
+          "Dativ",
+          "pricati o"
+        ],
+        [
+          "sich treffen <strong>mit</strong>",
+          "Dativ",
+          "nalaziti se"
+        ],
+        [
+          "bestehen <strong>aus</strong>",
+          "Dativ",
+          "sastojati se od"
+        ],
+        [
+          "greifen <strong>zu</strong>",
+          "Dativ",
+          "posegnuti za"
+        ],
+        [
+          "verzichten <strong>auf</strong>",
+          "Akkusativ",
+          "odreći se"
+        ]
+      ],
+      "type": "table",
+      "headers": [
+        "Glagol sa predlogom",
+        "Padez",
+        "Prevod"
+      ]
+    },
+    {
+      "type": "flashcard",
+      "items": [
+        {
+          "back": "Šta čekaš? — Darauf! (To!)",
+          "front": "Worauf wartest du?"
+        },
+        {
+          "back": "Na šta se žališ? — Darüber! (Na to!)",
+          "front": "Worüber beschwerst du dich?"
+        },
+        {
+          "back": "Za šta se interesuješ? — Dafür! (Za to!)",
+          "front": "Wofür interessierst du dich?"
+        },
+        {
+          "back": "Čime si zadovoljan? — Damit! (Time!)",
+          "front": "Womit bist du zufrieden?"
+        },
+        {
+          "back": "sastojati se od",
+          "front": "bestehen aus"
+        },
+        {
+          "back": "odreći se (nečega)",
+          "front": "verzichten auf"
+        },
+        {
+          "back": "posegnuti za",
+          "front": "greifen zu"
+        }
+      ]
+    },
+    {
+      "rows": [
+        [
+          "bestehen aus + D",
+          "sastojati se od"
+        ],
+        [
+          "greifen zu + D",
+          "posegnuti za"
+        ],
+        [
+          "verzichten auf + A",
+          "odreći se"
+        ],
+        [
+          "ausgewogen",
+          "uravnotezen"
+        ],
+        [
+          "die Mahlzeit",
+          "obrok"
+        ],
+        [
+          "die Beilage",
+          "prilog (uz jelo)"
+        ],
+        [
+          "zwischendurch",
+          "u medjuvremenu"
+        ],
+        [
+          "Wert legen auf",
+          "pridavati vaznost"
+        ],
+        [
+          "die Zutat",
+          "sastojak"
+        ],
+        [
+          "zübereiten",
+          "pripremiti (jelo)"
+        ]
+      ],
+      "type": "vocabulary"
+    }
+  ],
+  "1166aecf-e956-4560-b821-2f139c5fc0c9": [
+    {
+      "type": "badge",
+      "module": "Modul 5",
+      "category": "grammatik"
+    },
+    {
+      "type": "youtube",
+      "label": "Modalverben auf Deutsch (YouTube)",
+      "videoId": "IkGz6imNPg4"
+    },
+    {
+      "type": "video",
+      "vimeoId": "851281827"
+    },
+    {
+      "type": "text",
+      "style": "info",
+      "content": "Modalni glagoli u **Prateritum** — konnte, musste, wollte, durfte, sollte. U proslom vremenu koristimo Prateritum (ne perfekt!) za modalne glagole."
+    },
+    {
+      "type": "text",
+      "style": "default",
+      "content": "## Modalni glagoli u prezentu — ponavljanje"
+    },
+    {
+      "rows": [
+        [
+          "ich kann",
+          "ich darf",
+          "ich muss",
+          "ich will",
+          "ich soll",
+          "ich mag"
+        ],
+        [
+          "du kannst",
+          "du darfst",
+          "du musst",
+          "du willst",
+          "du sollst",
+          "du magst"
+        ],
+        [
+          "er kann",
+          "er darf",
+          "er muss",
+          "er will",
+          "er soll",
+          "er mag"
+        ],
+        [
+          "wir können",
+          "wir dürfen",
+          "wir müssen",
+          "wir wollen",
+          "wir sollen",
+          "wir mogen"
+        ]
+      ],
+      "type": "table",
+      "headers": [
+        "können",
+        "dürfen",
+        "müssen",
+        "wollen",
+        "sollen",
+        "mogen"
+      ]
+    },
+    {
+      "type": "text",
+      "style": "default",
+      "content": "## Upotreba modalnih glagola"
+    },
+    {
+      "rows": [
+        [
+          "Ich <strong>kann</strong> Deutsch.",
+          "Ja znam nemački."
+        ],
+        [
+          "Ich <strong>kann</strong> Klavier spielen.",
+          "Ja umem da sviram klavir."
+        ],
+        [
+          "Man <strong>darf</strong> hier nicht parken.",
+          "Ovde se ne sme parkirati."
+        ],
+        [
+          "Man <strong>soll</strong> viel Wasser trinken.",
+          "Treba piti puno vode."
+        ],
+        [
+          "Wir <strong>wollen</strong> nach Griechenland reisen.",
+          "Zelimo da putujemo za Grcku."
+        ],
+        [
+          "Ich <strong>muss</strong> zuerst einen Kaffee trinken!",
+          "Moram prvo da popijem kafu!"
+        ]
+      ],
+      "type": "table",
+      "headers": [
+        "Nemački",
+        "Prevod"
+      ]
+    },
+    {
+      "type": "text",
+      "style": "default",
+      "content": "## Modalni glagoli u Prateritum (proslost)"
+    },
+    {
+      "rows": [
+        [
+          "ich <strong>konnte</strong>",
+          "ich <strong>durfte</strong>",
+          "ich <strong>musste</strong>",
+          "ich <strong>wollte</strong>",
+          "ich <strong>wollte</strong>",
+          "ich <strong>sollte</strong>"
+        ],
+        [
+          "du konntest",
+          "du durftest",
+          "du musstest",
+          "du wolltest",
+          "du wolltest",
+          "du solltest"
+        ],
+        [
+          "er konnte",
+          "er durfte",
+          "er musste",
+          "er wollte",
+          "er wollte",
+          "er sollte"
+        ],
+        [
+          "wir konnten",
+          "wir durften",
+          "wir mussten",
+          "wir wollten",
+          "wir wollten",
+          "wir sollten"
+        ]
+      ],
+      "type": "table",
+      "headers": [
+        "können",
+        "dürfen",
+        "müssen",
+        "möchten",
+        "wollen",
+        "sollen"
+      ]
+    },
+    {
+      "type": "spoiler",
+      "items": [
+        {
+          "answer": "wollte",
+          "question": "Als Kind ______ ich noch kein Arzt werden. (wollen)"
+        },
+        {
+          "answer": "wolltest",
+          "question": "Und warum ______ du kein Arzt werden? (wollen)"
+        },
+        {
+          "answer": "durfte",
+          "question": "Aber das ______ ich nicht. (dürfen)"
+        },
+        {
+          "answer": "musste",
+          "question": "Ich ______ jeden Tag viel lernen. (müssen)"
+        },
+        {
+          "answer": "wollten",
+          "question": "Meine Eltern ______, dass ich studiere. (wollen)"
+        },
+        {
+          "answer": "sollte",
+          "question": "Ich ______ auf die Universitat gehen. (sollen)"
+        },
+        {
+          "answer": "wollte",
+          "question": "Ich ______ nicht Agrarwissenschaft studieren. (wollen)"
+        },
+        {
+          "answer": "Musstet",
+          "question": "______ ihr nicht viel lernen? (müssen)"
+        },
+        {
+          "answer": "durften",
+          "question": "Die Praxis-Facher ______ wir selbst auswählen. (dürfen)"
+        },
+        {
+          "answer": "konnte",
+          "question": "In meiner Freizeit ______ ich machen, was ich wollte. (können)"
+        }
+      ],
+      "title": "Vežba — Popuni praznine (dijalog: Papa und Kind)"
+    },
+    {
+      "type": "flashcard",
+      "items": [
+        {
+          "back": "mogao/la sam",
+          "front": "ich konnte"
+        },
+        {
+          "back": "smeo/la sam",
+          "front": "ich durfte"
+        },
+        {
+          "back": "morao/la sam",
+          "front": "ich musste"
+        },
+        {
+          "back": "hteo/la sam",
+          "front": "ich wollte"
+        },
+        {
+          "back": "trebalo je",
+          "front": "ich sollte"
+        },
+        {
+          "back": "Ovde se ne sme fotografisati.",
+          "front": "Hier darf man nicht fotografieren."
+        },
+        {
+          "back": "Ovde se ne sme pusiti.",
+          "front": "Hier darf man nicht rauchen."
+        },
+        {
+          "back": "Ovde može da se natoči gorivo.",
+          "front": "Hier kann man tanken."
+        },
+        {
+          "back": "Ovde može da se parkira.",
+          "front": "Hier kann man parken."
+        }
+      ]
+    },
+    {
+      "rows": [
+        [
+          "können / konnte",
+          "moci / mogao"
+        ],
+        [
+          "dürfen / durfte",
+          "smeti / smeo"
+        ],
+        [
+          "müssen / musste",
+          "morati / morao"
+        ],
+        [
+          "wollen / wollte",
+          "hteti / hteo"
+        ],
+        [
+          "sollen / sollte",
+          "trebati / trebalo"
+        ],
+        [
+          "das Prateritum",
+          "prosto proslo vreme"
+        ],
+        [
+          "der Bauernhof",
+          "seosko domacinstvo"
+        ],
+        [
+          "die Agrarwissenschaft",
+          "agronomija"
+        ],
+        [
+          "auswählen",
+          "izabrati"
+        ],
+        [
+          "tanken",
+          "natočiti gorivo"
+        ],
+        [
+          "parken",
+          "parkirati"
+        ]
+      ],
+      "type": "vocabulary"
+    }
+  ],
+  "08c2ae56-f174-4a37-b1ff-c283bd3aca99": [
+    {
+      "type": "badge",
+      "module": "Modul 6",
+      "category": "hoeren"
+    },
+    {
+      "type": "video",
+      "vimeoId": "1177272846"
+    },
+    {
+      "type": "text",
+      "style": "info",
+      "content": "Video lekcija o **skoli u Nemačkoj** — školski sistem, Schulpflicht, tipovi škola, Schultüte i jos mnogo toga."
+    },
+    {
+      "type": "text",
+      "style": "default",
+      "content": "## Skolski sistem u Nemačkoj"
+    },
+    {
+      "rows": [
+        [
+          "<mark>Grundschule</mark>",
+          "1-4 (ponegde do 6)",
+          "osnovna škola za svu decu"
+        ],
+        [
+          "<mark>Hauptschule</mark>",
+          "5-9",
+          "priprema za zanat"
+        ],
+        [
+          "<mark>Realschule</mark>",
+          "5-10",
+          "srednji nivo"
+        ],
+        [
+          "<mark>Gymnasium</mark>",
+          "5-13",
+          "priprema za fakultet"
+        ],
+        [
+          "<mark>Gesamtschule</mark>",
+          "1-10",
+          "alternativa — sve u jednoj skoli"
+        ]
+      ],
+      "type": "table",
+      "headers": [
+        "Tip škole",
+        "Razredi",
+        "Opis"
+      ]
+    },
+    {
+      "type": "text",
+      "style": "default",
+      "content": "## Posle škole — Ausbildung"
+    },
+    {
+      "rows": [
+        [
+          "Berufsschule und Lehre",
+          "strukovna škola i praksa"
+        ],
+        [
+          "Duale Ausbildung",
+          "dualno obrazovanje (škola + firma)"
+        ],
+        [
+          "Studium",
+          "univerzitetsko obrazovanje"
+        ]
+      ],
+      "type": "table",
+      "headers": [
+        "Put",
+        "Opis"
+      ]
+    },
+    {
+      "type": "text",
+      "style": "default",
+      "content": "## Vrtici i predskolsko"
+    },
+    {
+      "rows": [
+        [
+          "<mark>die Kinderkrippe</mark>",
+          "jasle (do 3 godine)"
+        ],
+        [
+          "<mark>der Kindergarten</mark>",
+          "vrtic (od 3 godine)"
+        ],
+        [
+          "<mark>die Kita (Kindertagesstatte)</mark>",
+          "dnevni boravak za decu (7-17h)"
+        ],
+        [
+          "<mark>die Tagesmutter / der Tagesvater</mark>",
+          "dadilja"
+        ],
+        [
+          "<mark>der Hort</mark>",
+          "produženi boravak (posle škole)"
+        ],
+        [
+          "<mark>die Ganztagsschule</mark>",
+          "celodnevna škola (do 16-17h)"
+        ]
+      ],
+      "type": "table",
+      "headers": [
+        "Nemački",
+        "Prevod"
+      ]
+    },
+    {
+      "type": "text",
+      "style": "uebung",
+      "content": "**Zanimljivosti:**\n\n- **Schulpflicht** = 9 godina obavezne škole. Državne škole su besplatne.\n- **Schultüte** = na prvi školski dan deca dobijaju veliku kesu sa slatkišima i školskim priborom.\n- **Blauer Brief** = pismo roditeljima da dete možda treba da ponovi razred.\n- **Klassenfahrt** = školski izlet (2-3 dana) jednom godisnje.\n- **Elterngespräch** = privatni razgovor sa nastavnikom o napretku deteta."
+    },
+    {
+      "type": "flashcard",
+      "items": [
+        {
+          "back": "osnovna škola",
+          "front": "die Grundschule"
+        },
+        {
+          "back": "gimnazija",
+          "front": "das Gymnasium"
+        },
+        {
+          "back": "obaveza pohađanja škole",
+          "front": "die Schulpflicht"
+        },
+        {
+          "back": "kesa sa poklonima za prvi školski dan",
+          "front": "die Schultüte"
+        },
+        {
+          "back": "produženi boravak",
+          "front": "der Hort"
+        },
+        {
+          "back": "dnevni boravak za decu",
+          "front": "die Kita"
+        },
+        {
+          "back": "jasle",
+          "front": "die Kinderkrippe"
+        },
+        {
+          "back": "školski izlet",
+          "front": "die Klassenfahrt"
+        },
+        {
+          "back": "razgovor sa roditeljima",
+          "front": "das Elterngespräch"
+        },
+        {
+          "back": "pismo o mogucnosti ponavljanja razreda",
+          "front": "der Blauer Brief"
+        },
+        {
+          "back": "strukovno obrazovanje",
+          "front": "die Ausbildung"
+        }
+      ]
+    },
+    {
+      "rows": [
+        [
+          "die Schulpflicht",
+          "obaveza pohađanja škole"
+        ],
+        [
+          "die Grundschule",
+          "osnovna škola"
+        ],
+        [
+          "das Gymnasium",
+          "gimnazija"
+        ],
+        [
+          "die Hauptschule",
+          "škola za zanat"
+        ],
+        [
+          "die Realschule",
+          "srednja škola"
+        ],
+        [
+          "die Gesamtschule",
+          "objedinjena škola"
+        ],
+        [
+          "die Ausbildung",
+          "strukovno obrazovanje"
+        ],
+        [
+          "die Kinderkrippe",
+          "jasle"
+        ],
+        [
+          "der Kindergarten",
+          "vrtic"
+        ],
+        [
+          "die Kita",
+          "dnevni boravak"
+        ],
+        [
+          "der Hort",
+          "produženi boravak"
+        ],
+        [
+          "die Schultüte",
+          "poklon-kesa za 1. dan"
+        ],
+        [
+          "die Klassenfahrt",
+          "školski izlet"
+        ],
+        [
+          "der Förderunterricht",
+          "dodatna nastava"
+        ],
+        [
+          "das Fach, Facher",
+          "predmet/i"
+        ],
+        [
+          "kostenlos",
+          "besplatno"
+        ]
+      ],
+      "type": "vocabulary"
+    }
+  ],
+  "4c6eb6fa-0243-4911-8859-a4397ddabba0": [
+    {
+      "type": "badge",
+      "module": "Modul 6",
+      "category": "lesen"
+    },
+    {
+      "type": "youtube",
+      "label": "Ausbildung in Deutschland (YouTube)",
+      "videoId": "rAsijjz4YBM"
+    },
+    {
+      "type": "text",
+      "style": "info",
+      "content": "Šta je **Ausbildung**? Dualni sistem obrazovanja u Nemačkoj — kako funkcionise, koliko traje i zašto je vazan."
+    },
+    {
+      "type": "text",
+      "style": "default",
+      "content": "## Ausbildung — strukovno obrazovanje"
+    },
+    {
+      "type": "text",
+      "style": "beispiele",
+      "content": "U Nemačkoj postoji **dualni sistem obrazovanja** (duale Ausbildung). To znači da se uci i u skoli (Berufsschule) i u firmi istovremeno. Ausbildung traje obicno 2-3.5 godine. Tokom Ausbildunga učenik (Auszubildender ili skraceno Azubi) dobija platu.\n\nPostoje preko 300 razlicitih zanimanja za koja se može raditi Ausbildung — od pekara do IT-specijaliste."
+    },
+    {
+      "rows": [
+        [
+          "<mark>die Ausbildung</mark>",
+          "strukovno obrazovanje"
+        ],
+        [
+          "<mark>der Auszubildende (Azubi)</mark>",
+          "učenik na praksi"
+        ],
+        [
+          "<mark>die Berufsschule</mark>",
+          "strukovna škola"
+        ],
+        [
+          "<mark>die duale Ausbildung</mark>",
+          "dualno obrazovanje"
+        ],
+        [
+          "<mark>die Lehre</mark>",
+          "zanat / praksa"
+        ],
+        [
+          "<mark>das Studium</mark>",
+          "studije (fakultet)"
+        ],
+        [
+          "<mark>der Betrieb</mark>",
+          "firma / preduzece"
+        ],
+        [
+          "<mark>die Prüfung</mark>",
+          "ispit"
+        ]
+      ],
+      "type": "table",
+      "headers": [
+        "Nemački",
+        "Prevod"
+      ]
+    },
+    {
+      "type": "spoiler",
+      "items": [
+        {
+          "answer": "Učenje istovremeno u skoli i u firmi.",
+          "question": "Šta znači 'duale Ausbildung'?"
+        },
+        {
+          "answer": "Obicno 2 do 3.5 godine.",
+          "question": "Koliko traje Ausbildung?"
+        },
+        {
+          "answer": "Da, tokom Ausbildunga učenik dobija platu.",
+          "question": "Da li Azubi dobija platu?"
+        },
+        {
+          "answer": "Studium (studije na fakultetu).",
+          "question": "Šta je alternativa Ausbildungu?"
+        }
+      ],
+      "title": "Pitanja za razumevanje"
+    },
+    {
+      "type": "flashcard",
+      "items": [
+        {
+          "back": "strukovno obrazovanje",
+          "front": "die Ausbildung"
+        },
+        {
+          "back": "učenik na praksi",
+          "front": "der Azubi"
+        },
+        {
+          "back": "strukovna škola",
+          "front": "die Berufsschule"
+        },
+        {
+          "back": "zanat / praksa",
+          "front": "die Lehre"
+        },
+        {
+          "back": "firma / preduzece",
+          "front": "der Betrieb"
+        },
+        {
+          "back": "studije",
+          "front": "das Studium"
+        }
+      ]
+    },
+    {
+      "rows": [
+        [
+          "die Ausbildung",
+          "strukovno obrazovanje"
+        ],
+        [
+          "der Auszubildende (Azubi)",
+          "učenik na praksi"
+        ],
+        [
+          "die Berufsschule",
+          "strukovna škola"
+        ],
+        [
+          "die duale Ausbildung",
+          "dualno obrazovanje"
+        ],
+        [
+          "die Lehre",
+          "zanat"
+        ],
+        [
+          "der Betrieb",
+          "firma"
+        ],
+        [
+          "das Studium",
+          "studije"
+        ],
+        [
+          "die Prüfung",
+          "ispit"
+        ],
+        [
+          "der Abschluss",
+          "diploma / zavrsetak"
+        ],
+        [
+          "das Gehalt",
+          "plata"
+        ]
+      ],
+      "type": "vocabulary"
+    }
+  ],
+  "650459c4-292e-4d9f-8e93-9b0a23b55346": [
+    {
+      "type": "text",
+      "style": "info",
+      "content": "Dodatne vežbe za nivo A2.1 — ponovi najvažnije teme i proveri svoje znanje."
+    },
+    {
+      "type": "text",
+      "style": "default",
+      "content": "## Ponavljanje — najvažnije teme A2.1\n\nOvde možes da ponovis sve sto si naucio/la u kursu A2.1."
+    },
+    {
+      "type": "spoiler",
+      "items": [
+        {
+          "answer": "ge- + osnova + -t (npr. gemacht, gelernt, gekauft)",
+          "question": "Kako se gradi Perfekt pravilnih glagola?"
+        },
+        {
+          "answer": "Glagoli kretanja (fahren, gehen, fliegen) i promene stanja (aufstehen, einschlafen) + bleiben, passieren",
+          "question": "Koji glagoli grade Perfekt sa sein?"
+        },
+        {
+          "answer": "Oba znace 'jer', ali posle weil glagol ide na kraj, a posle denn normalan red reći.",
+          "question": "Koja je razlika izmedju weil i denn?"
+        },
+        {
+          "answer": "9 predloga: in, an, auf, unter, über, vor, hinter, neben, zwischen. Wo? = Dativ, Wohin? = Akkusativ.",
+          "question": "Šta su Wechselpräpositionen?"
+        },
+        {
+          "answer": "ich-mich, du-dich, er/sie/es-sich, wir-uns, ihr-euch, sie/Sie-sich",
+          "question": "Kako se menjaju refleksivne zamenice?"
+        },
+        {
+          "answer": "Prateritum: konnte, durfte, musste, wollte, sollte",
+          "question": "Kako se grade modalni glagoli u proslosti?"
+        }
+      ],
+      "title": "Gramatika — proveri se"
+    },
+    {
+      "type": "spoiler",
+      "items": [
+        {
+          "answer": "alleinerziehend",
+          "question": "samohrani roditelj"
+        },
+        {
+          "answer": "die Miete",
+          "question": "kirija"
+        },
+        {
+          "answer": "Mull trennen",
+          "question": "sortirati smeće"
+        },
+        {
+          "answer": "bestellen",
+          "question": "naruciiti u restoranu"
+        },
+        {
+          "answer": "die Berufserfahrung",
+          "question": "radno iskustvo"
+        },
+        {
+          "answer": "der Urlaub",
+          "question": "godišnji odmor"
+        },
+        {
+          "answer": "sich bewerben um",
+          "question": "prijaviti se za posao"
+        },
+        {
+          "answer": "das Schulsystem",
+          "question": "školski sistem"
+        }
+      ],
+      "title": "Vokabular — prevedi na nemački"
+    }
+  ],
+  "2e3e079b-7dd2-4d20-a5a3-c82ddf01bf9e": [
+    {
+      "type": "badge",
+      "module": "Bonus",
+      "category": "lesen"
+    },
+    {
+      "type": "text",
+      "style": "info",
+      "content": "Čitaj **krimi pricu** na nivou A2 i odgovaraj na pitanja. Odlican nacin da vežbas razumevanje procitanog teksta!"
+    },
+    {
+      "href": "https://drive.google.com/drive/folders/1XCef5737k8Unx-9GspishosTMGJXbyQA?usp=sharing",
+      "type": "link",
+      "label": "Otvori krimi roman (Google Drive)",
+      "linkType": "pdf"
+    },
+    {
+      "type": "text",
+      "style": "default",
+      "content": "## Preporuka za čitanje\n\nPogledaj video za preporuku krimi romana na nivou A2. Čitanje je jedan od najboljih nacina da poboljsas nemački — cak i kratke price pomazu!"
+    },
+    {
+      "type": "text",
+      "style": "uebung",
+      "content": "**Saveti za čitanje na nemačkom:**\n\n- Biraj knjige za nivo A2 (Leichte Lekture)\n- Ne prevodi svaku rec — pokusaj da razumes kontekst\n- Čitaj naglas — pomaze izgovoru\n- Podvuci nove reći i dodaj ih u svoj recnik"
+    },
+    {
+      "rows": [
+        [
+          "der Krimi",
+          "kriminalisticka prica"
+        ],
+        [
+          "der Roman",
+          "roman"
+        ],
+        [
+          "die Kurzgeschichte",
+          "kratka prica"
+        ],
+        [
+          "lesen",
+          "čitati"
+        ],
+        [
+          "das Kapitel",
+          "poglavlje"
+        ],
+        [
+          "die Handlung",
+          "radnja"
+        ],
+        [
+          "der Tater",
+          "pocinilac"
+        ],
+        [
+          "das Opfer",
+          "zrtva"
+        ],
+        [
+          "der Detektiv",
+          "detektiv"
+        ],
+        [
+          "der Verdachtige",
+          "osumnjiceni"
+        ],
+        [
+          "spannend",
+          "uzbudljivo / napeto"
+        ]
+      ],
+      "type": "vocabulary"
+    }
+  ]
+}

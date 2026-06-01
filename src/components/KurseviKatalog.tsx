@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import KursCard from "@/components/KursCard";
+import { INDIVIDUALNI_CARDS } from "@/lib/individualni-cards";
 
 /* ─── Types ─── */
 type TabId = "grupni" | "video" | "individualni" | "besplatno";
@@ -33,26 +35,6 @@ interface TabConfig {
   cards: KursKartica[];
   info: { items: string[]; color: string };
 }
-
-/* ─── Badge colors ─── */
-const badgeColors: Record<string, string> = {
-  a1: "bg-sky-100 text-sky-700",
-  a2: "bg-sky-50 text-sky-800",
-  b1: "bg-amber-50 text-amber-700",
-  b2: "bg-red-50 text-red-600",
-  c1: "bg-pink-50 text-pink-700",
-  video: "bg-red-50 text-red-600",
-  paket: "bg-gray-900 text-white",
-  spec: "bg-[#F78687] text-white",
-  ind: "bg-blue-50 text-blue-700",
-  master: "bg-gray-900 text-white",
-  gram: "bg-blue-50 text-blue-700",
-  novo: "bg-[#F78687] text-white",
-  sale: "bg-[#F78687] text-white",
-  free: "bg-sky-100 text-[#0AB3D7]",
-  ai: "bg-[#0AB3D7] text-white",
-  fide: "bg-gray-900 text-white",
-};
 
 /* ─── SVG Icons ─── */
 const GroupIcon = (
@@ -141,9 +123,9 @@ const tabs: TabConfig[] = [
       { badges: [{ label: "Video", color: "video" }, { label: "B1", color: "b1" }], title: "VIDEO kurs B1", meta: "Tvoj tempo · Pristup godinu dana", desc: "Srednji nivo u tvom tempu. Priprema za B1 ispit ili rad u nemačkom govornom području.", price: "11.600 din", priceEur: "≈ 99€", href: "/kursevi/video-kurs-b1", cta: "Kupi kurs", level: "b1" },
       { badges: [{ label: "Paket", color: "paket" }, { label: "– 12%", color: "sale" }], title: "Video paket A1 + A2", meta: "2 kursa u paketu", desc: "A1 i A2 video kurs zajedno po specijalnoj ceni. Idealno za početnike koji žele brži napredak.", oldPrice: "23.200 din", salePrice: "20.475 din", salePriceEur: "≈ 175€", saveAmount: "Uštedite 2.725 din", price: "", priceEur: "", href: "/kursevi/paket-a1-i-a2", cta: "Kupi paket", level: "paket" },
       { badges: [{ label: "Paket", color: "paket" }, { label: "Najpopularnije", color: "novo" }, { label: "– 16%", color: "sale" }], title: "Video paket A1 + A2 + B1", meta: "3 kursa · najveća ušteda", desc: "Kompletna putanja od nule do B1. Tri video kursa po najboljoj ceni.", oldPrice: "34.800 din", salePrice: "29.133 din", salePriceEur: "≈ 249€", saveAmount: "Uštedite 5.667 din", price: "", priceEur: "", href: "/kursevi/paket-a1-a2-b1", cta: "Kupi paket", level: "paket" },
-      { badges: [{ label: "Masterclass", color: "master" }, { label: "B1", color: "b1" }], title: "Video + B1 ispit – kompletna priprema", meta: "Svi delovi ispita", desc: "Kompletna priprema za B1 ispit — pisanje, čitanje, slušanje i govor u jednom video kursu.", price: "3.600 din", priceEur: "≈ 31€", href: "https://kurs.hartweger.rs/kurs/polozi-goethe-b1", cta: "Kupi", level: "masterclass" },
+      { badges: [{ label: "Masterclass", color: "master" }, { label: "B1", color: "b1" }], title: "Video + B1 ispit – kompletna priprema", meta: "Svi delovi ispita", desc: "Kompletna priprema za B1 ispit — pisanje, čitanje, slušanje i govor u jednom video kursu.", price: "3.600 din", priceEur: "≈ 31€", href: "/kursevi/polozi-goethe-b1", cta: "Kupi", level: "masterclass" },
       { badges: [{ label: "Masterclass", color: "master" }, { label: "Goethe B2", color: "b2" }], title: "VIDEO: Položi Goethe B2", meta: "Sa Natašom i Ankom", desc: "Ciljana priprema za Goethe B2 ispit. Strategije, tipovi zadataka i vežbanje svih delova testa.", price: "2.880 din", priceEur: "≈ 25€", href: "https://kurs.hartweger.rs/kurs/polozi-goethe-b2", cta: "Kupi", level: "masterclass" },
-      { badges: [{ label: "Masterclass", color: "master" }, { label: "Goethe C1", color: "c1" }], title: "VIDEO: Položi Goethe C1", meta: "Napredni nivo", desc: "Priprema za Goethe C1. Kompleksni tekstovi, esej pisanje, govor i slušanje na naprednom nivou.", price: "3.500 din", priceEur: "≈ 30€", href: "https://kurs.hartweger.rs/kurs/polozi-goethe-c1", cta: "Kupi", level: "masterclass" },
+      { badges: [{ label: "Masterclass", color: "master" }, { label: "Goethe C1", color: "c1" }], title: "VIDEO: Položi Goethe C1", meta: "Napredni nivo", desc: "Priprema za Goethe C1. Kompleksni tekstovi, esej pisanje, govor i slušanje na naprednom nivou.", price: "3.500 din", priceEur: "≈ 30€", href: "/kursevi/polozi-goethe-c1", cta: "Kupi", level: "masterclass" },
       { badges: [{ label: "Gramatika", color: "gram" }, { label: "A2–B1", color: "b1" }], title: "VIDEO + E-book Gramatika A2–B1", meta: "Tvoj tempo · Uključen e-book", desc: "90 minuta predavanja prof. Nataše Hartweger + e-book sa svim objašnjenjima i vežbama na platformi. Kompletna gramatika od A2 do B1.", price: "4.680 din", priceEur: "≈ 40€", href: "/kursevi/gramatika-a2-b1", cta: "Kupi", level: "gramatika" },
       { badges: [{ label: "Specijalni", color: "spec" }, { label: "U pripremi", color: "novo" }], title: "Kurs za mame i trudnice", meta: "Prilagođen mamama", desc: "Kurs nemačkog posebno dizajniran za mame i trudnice koje se pripremaju za život u Nemačkoj ili Austriji.", price: "6.435 din", priceEur: "≈ 55€", href: "/kursevi/kurs-za-mame-i-trudnice", cta: "Saznaj više", level: "specijalni", accent: true },
       { badges: [{ label: "Specijalni", color: "spec" }, { label: "FIDE", color: "fide" }], title: "VIDEO: Položi FIDE", meta: "Boravišna dozvola — Švajcarska", desc: "Priprema za FIDE jezički ispit koji se traži za dobijanje boravišne dozvole u Švajcarskoj.", price: "9.360 din", priceEur: "≈ 80€", href: "/kursevi/polozi-fide", cta: "Kupi", level: "specijalni", accent: true },
@@ -172,19 +154,7 @@ const tabs: TabConfig[] = [
       { id: "spec", label: "Specijalni" },
     ],
     defaultLevel: "a1",
-    cards: [
-      { badges: [{ label: "1 na 1", color: "ind" }, { label: "A1.1", color: "a1" }], title: "Individualni kurs A1.1", meta: "Termin po dogovoru", desc: "Potpuno prilagođen tebi. Tvoj tempo, tvoji ciljevi — idealno za zaposlene bez fiksnog rasporeda.", price: "od 23.000 din", priceEur: "≈ od 197€", href: "/kursevi/individualni-kurs-nemackog-jezika-a11", cta: "Zakaži", level: "a1" },
-      { badges: [{ label: "1 na 1", color: "ind" }, { label: "A1.2", color: "a1" }], title: "Individualni kurs A1.2", meta: "Termin po dogovoru", desc: "Nastavak A1.1 u individualnom formatu. Gramatika i konverzacija prilagođeni tvom napretku.", price: "od 23.000 din", priceEur: "≈ od 197€", href: "/kursevi/individualni-kurs-nemackog-jezika-a1-2", cta: "Zakaži", level: "a1" },
-      { badges: [{ label: "Paket", color: "paket" }, { label: "A1 komplet", color: "a1" }], title: "Paket A1 individualni (A1.1 + A1.2)", meta: "Oba A1 nivoa", desc: "A1.1 i A1.2 individualno u paketu. Kompletno savladajte A1 nivo uz personalnu pažnju predavača.", price: "46.000 din", priceEur: "≈ 393€", href: "/kursevi/paket-nivo-a1-a1-1-a1-2-individualni-standard", cta: "Zakaži", level: "a1" },
-      { badges: [{ label: "1 na 1", color: "ind" }, { label: "A2.1", color: "a2" }], title: "Individualni kurs A2.1", meta: "Termin po dogovoru", desc: "Elementarni nivo jedan na jedan. Brži napredak jer je sve fokusirano samo na vas.", price: "od 33.000 din", priceEur: "≈ od 282€", href: "/kursevi/individualni-kurs-nemackog-jezika-a2", cta: "Zakaži", level: "a2" },
-      { badges: [{ label: "1 na 1", color: "ind" }, { label: "A2.2", color: "a2" }], title: "Individualni kurs A2.2", meta: "Termin po dogovoru", desc: "Nastavak A2.1. Konverzacija, gramatika i vežbanja po tvojim potrebama.", price: "od 33.000 din", priceEur: "≈ od 282€", href: "/kursevi/individualni-kurs-nemackog-jezika-a2-2", cta: "Zakaži", level: "a2" },
-      { badges: [{ label: "1 na 1", color: "ind" }, { label: "B1.1", color: "b1" }], title: "Individualni kurs B1.1", meta: "Termin po dogovoru", desc: "Srednji nivo, potpuno prilagođen. Fokus na govoru i razumevanju autentičnih materijala.", price: "od 35.000 din", priceEur: "≈ od 299€", href: "/kursevi/individualni-kurs-nemackog-jezika-b11", cta: "Zakaži", level: "b1" },
-      { badges: [{ label: "1 na 1", color: "ind" }, { label: "B1.2", color: "b1" }], title: "Individualni kurs B1.2", meta: "Termin po dogovoru", desc: "Nastavak B1.1. Kompleksnija gramatika i priprema za B1 ispit u individualnom formatu.", price: "od 35.000 din", priceEur: "≈ od 299€", href: "/kursevi/individualni-kurs-nemackog-jezika-b1-2", cta: "Zakaži", level: "b1" },
-      { badges: [{ label: "1 na 1", color: "ind" }, { label: "B2.1", color: "b2" }], title: "Individualni kurs B2.1", meta: "Termin po dogovoru", desc: "Više-srednji nivo jedan na jedan. Tečna komunikacija, kompleksne strukture i apstraktne teme.", price: "od 37.000 din", priceEur: "≈ od 316€", href: "/kursevi/individualni-kurs-nemackog-jezika-b2-1", cta: "Zakaži", level: "b2" },
-      { badges: [{ label: "Mesečni paket", color: "paket" }], title: "Individualni mesečni paketi", meta: "Fleksibilno · Nema sertifikata", desc: "Za poseban zahtev mimo nivoa. Plaćate mesečno i prilagođavate tempo i sadržaj prema potrebama.", price: "od 14.000 din", priceEur: "≈ od 120€", href: "/kursevi/individualni-mesecni-paketi", cta: "Zakaži", level: "paket" },
-      { badges: [{ label: "Specijalni", color: "spec" }, { label: "FIDE · 1 na 1", color: "fide" }], title: "Individualni: Položi FIDE", meta: "Boravišna dozvola — Švajcarska", desc: "Individualna priprema za FIDE ispit. Personalizovan program za dobijanje švajcarske boravišne dozvole.", price: "od 23.000 din", priceEur: "≈ od 197€", href: "/kursevi/individualni-polozi-fide", cta: "Zakaži", level: "spec" },
-      { badges: [{ label: "Specijalni", color: "spec" }, { label: "FSP · Lekari", color: "fide" }], title: "FSP individualni – za lekare", meta: "Medicinski nemački · 1 na 1", desc: "Individualna priprema za FSP stručni ispit za lekare koji žele da rade u Nemačkoj.", price: "od 23.000 din", priceEur: "≈ od 197€", href: "/kursevi/fsp-individualni", cta: "Zakaži", level: "spec" },
-    ],
+    cards: INDIVIDUALNI_CARDS,
   },
   {
     id: "besplatno",
@@ -323,64 +293,7 @@ export default function KurseviKatalog() {
       {/* Cards grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[18px]">
         {filteredCards.map((card, i) => (
-          <div
-            key={i}
-            className={`border rounded-2xl p-6 flex flex-col gap-3 transition-all hover:-translate-y-0.5 ${
-              card.accent
-                ? "border-[#F78687] bg-gradient-to-br from-red-50/50 to-white hover:shadow-lg hover:shadow-[#F78687]/10"
-                : "border-gray-200 bg-white hover:border-[#0AB3D7] hover:shadow-lg hover:shadow-[#0AB3D7]/10"
-            }`}
-          >
-            {/* Badges */}
-            <div className="flex gap-1.5 flex-wrap">
-              {card.badges.map((b, j) => (
-                <span
-                  key={j}
-                  className={`text-xs font-bold px-3 py-1 rounded-full tracking-wide ${badgeColors[b.color] || "bg-gray-100 text-gray-600"}`}
-                >
-                  {b.label}
-                </span>
-              ))}
-            </div>
-
-            {/* Title */}
-            <h3 className="text-base font-bold text-gray-900 leading-snug">{card.title}</h3>
-
-            {/* Meta */}
-            <p className="text-[13px] text-gray-400">{card.meta}</p>
-
-            {/* Description */}
-            <p className="text-sm text-gray-500 leading-relaxed flex-1">{card.desc}</p>
-
-            {/* Footer */}
-            <div className="flex justify-between items-center pt-3.5 border-t border-gray-100 mt-auto gap-3">
-              {card.salePrice ? (
-                <div>
-                  <p className="text-[13px] text-gray-300 line-through">{card.oldPrice}</p>
-                  <p className="text-lg font-bold text-[#0AB3D7]">{card.salePrice}</p>
-                  <p className="text-xs font-bold text-[#F78687]">{card.salePriceEur}</p>
-                  <span className="inline-block mt-1 text-[11px] font-bold bg-[#F78687] text-white px-2.5 py-0.5 rounded-lg">
-                    {card.saveAmount}
-                  </span>
-                </div>
-              ) : (
-                <div>
-                  <p className="text-[17px] font-bold text-gray-900">{card.price}</p>
-                  {card.priceEur && <p className="text-xs font-bold text-[#F78687] mt-0.5">{card.priceEur}</p>}
-                </div>
-              )}
-              <Link
-                href={card.href}
-                className={`flex-shrink-0 px-5 py-3 rounded-[10px] text-sm font-bold transition-all hover:-translate-y-px min-h-[46px] flex items-center ${
-                  card.freeCta
-                    ? "bg-[#0AB3D7] text-white hover:bg-[#089ab9]"
-                    : "bg-[#F78687] text-white hover:bg-[#e06060]"
-                }`}
-              >
-                {card.cta}
-              </Link>
-            </div>
-          </div>
+          <KursCard key={i} card={card} />
         ))}
       </div>
 

@@ -42,6 +42,120 @@ const preduslov: Record<string, string> = {
   "C1.2": "Završen C1.1 nivo ili ekvivalentno znanje",
 };
 
+const courseFallbacks: Record<string, { marketing_description: string; features: string[] }> = {
+  "grupni-kurs-nemackog-jezika-a1-1": {
+    marketing_description:
+      "Nikada niste učili nemački — ili ste pokušali, ali niste daleko stigli? Ovaj kurs je napravljen za taj prvi korak. Za 7 nedelja naučićete da se predstavite, postavljate pitanja i vodite prve kratke razgovore na nemačkom.",
+    features: [
+      "Živa online nastava 2× nedeljno u grupi od 3–6 polaznika",
+      "7 modula sa video lekcijama, testovima i završnim ispitom",
+      "Interaktivne vežbe i beleške dostupne 24/7",
+      "Pristup materijalima godinu dana i sertifikat po uspehu",
+    ],
+  },
+  "grupni-kurs-nemackog-jezika-a1-2-2": {
+    marketing_description:
+      "Savladali ste osnove — sad je vreme da ih povežete. Na A1.2 proširujete rečnik, učvršćujete gramatiku i počinjete da se snalazite u svakodnevnim situacijama: u prodavnici, kod lekara, na poslu.",
+    features: [
+      "Živa online nastava 2× nedeljno u grupi od 3–6 polaznika",
+      "7 modula sa video lekcijama, testovima i završnim ispitom",
+      "Pristup beleškama i vežbama u sopstvenom tempu",
+      "Sertifikat po završetku kursa",
+    ],
+  },
+  "grupni-kurs-nemackog-jezika-a2": {
+    marketing_description:
+      "Razumete dosta, ali kad treba da progovorite — zastanete? A2.1 je tu da prekinete tu blokadu. Učite da pričate o sebi, porodici, poslu i svakodnevnim situacijama bez prevođenja u glavi.",
+    features: [
+      "Online nastava 2× nedeljno u maloj grupi",
+      "7 modula sa video lekcijama i interaktivnim vežbama",
+      "Vežbanje govora, slušanja, pisanja i čitanja",
+      "Pristup materijalima godinu dana i sertifikat",
+    ],
+  },
+  "grupni-kurs-nemackog-jezika-a2-2": {
+    marketing_description:
+      "Na A2.2 vaš nemački postaje funkcionalan. Razumete glavne teme razgovora, pišete poruke i mejlove, i sve ređe tražite pomoć na engleskom ili srpskom.",
+    features: [
+      "2 časa nedeljno sa profesorkom u grupi od 3–6 polaznika",
+      "7 modula sa video lekcijama, testovima i završnim ispitom",
+      "Zadatke radite kad vam odgovara i prateći materijale",
+      "Sertifikat po položenom završnom ispitu",
+    ],
+  },
+  "grupni-kurs-nemackog-jezika-b1-1-2": {
+    marketing_description:
+      "B1 je nivo koji traže poslodavci i ambasade. Na B1.1 učite da izražavate mišljenje, argumentujete i razumete složenije tekstove — sve što vam treba za posao ili ispit.",
+    features: [
+      "Online nastava 2× nedeljno u grupi od 3–6 polaznika",
+      "7 modula sa video lekcijama, testovima i završnim ispitom",
+      "Pripremu za B1 situacije na poslu, u školi i u svakodnevnom životu",
+      "Pristup materijalima godinu dana i sertifikat",
+    ],
+  },
+  "grupni-kurs-nemackog-b1-2": {
+    marketing_description:
+      "Poslednji korak do B1 sertifikata. Na B1.2 savladavate kompleksnu gramatiku, vežbate pisanje i govor na ispitnom nivou i pripremate se za Goethe B1 ispit.",
+    features: [
+      "Živa online nastava 2× nedeljno u grupi od 3–6 polaznika",
+      "7 modula sa video lekcijama na platformi",
+      "Test posle svake lekcije i završni ispit",
+      "Interaktivne vežbe umesto klasičnog domaćeg",
+      "Pristup materijalima godinu dana i sertifikat",
+    ],
+  },
+  "individualni-kurs-nemackog-jezika-b1-2": {
+    marketing_description:
+      "Individualni B1.2 kurs za pripremu na ispit: fokus na tvoje slabosti, pisanje, govor i konjunktiv II uz personalizovanu podršku.",
+    features: [
+      "Privatni časovi 1 na 1 sa profesorkom po dogovoru",
+      "Fleksibilan tempo i plan lekcija prilagođen tebi",
+      "Teme: spojene i relativne rečenice, konjunktiv II, pasiv i pisanje eseja",
+      "Simulacija ispita i sertifikat po uspehu",
+    ],
+  },
+  "grupni-kurs-b2-1": {
+    marketing_description:
+      "Na B2.1 prelazite sa „snalaženja“ na tečnu komunikaciju. Diskutujete o apstraktnim temama, razumete autentične tekstove i koristite složene jezičke strukture.",
+    features: [
+      "Online nastava 2× nedeljno u grupi od 3–6 polaznika",
+      "7 modula sa video lekcijama, testovima i završnim ispitom",
+      "Vežbanje napredne gramatike i poslovnog jezika",
+      "Pristup materijalima godinu dana i sertifikat",
+    ],
+  },
+  "grupni-kurs-b2-2": {
+    marketing_description:
+      "Završni korak do B2 nivoa. Usavršavate pisanje eseja, argumentovani govor i razumevanje kompleksnih tekstova — kompletna priprema za Goethe B2 ispit.",
+    features: [
+      "2 časa nedeljno u maloj grupi za intenzivnu konverzaciju",
+      "7 modula sa video lekcijama, testovima i završnim ispitom",
+      "Pripremu za B2 ispit i profesionalnu komunikaciju",
+      "Sertifikat po završetku kursa",
+    ],
+  },
+  "grupni-kurs-c1-1": {
+    marketing_description:
+      "Akademski i poslovni nemački na naprednom nivou. Na C1.1 analizirate kompleksne tekstove, pišete struktuirane eseje i diskutujete sa preciznošću koja se očekuje u profesionalnom okruženju.",
+    features: [
+      "Online nastava 2× nedeljno u grupi od 3–6 polaznika",
+      "7 modula sa video lekcijama, testovima i završnim ispitom",
+      "Analizu složenih tekstova i poslovnu komunikaciju",
+      "Pristup materijalima godinu dana i sertifikat",
+    ],
+  },
+  "grupni-kurs-c1-2": {
+    marketing_description:
+      "Poslednja stepenica. Na C1.2 dovodite nemački do nivoa koji se traži na univerzitetima i u korporacijama — kompletna priprema za Goethe C1 ispit.",
+    features: [
+      "2 časa nedeljno u maloj grupi za naprednu konverzaciju",
+      "7 modula sa video lekcijama, testovima i završnim ispitom",
+      "Pripremu za C1 ispit, akademske eseje i poslovne prezentacije",
+      "Sertifikat po završetku kursa",
+    ],
+  },
+};
+
 function formatPrice(price: number): string {
   return price.toLocaleString("de-DE");
 }
@@ -85,14 +199,16 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
 
   const course = data as Course;
   const category = course.category || "video";
-  const paragraphs = (course.marketing_description || course.description).split("\n").filter((p: string) => p.trim());
-  const features: string[] = course.features ?? [];
+  const courseFallback = courseFallbacks[slug];
+  const marketingDescription = course.marketing_description || courseFallback?.marketing_description || course.description;
+  const paragraphs = marketingDescription.split("\n").filter((p: string) => p.trim());
+  const features: string[] = course.features ?? courseFallback?.features ?? [];
   const cat = categoryConfig[category] || categoryConfig.video;
   const isVariable = category === "individualni" || category === "mesecni";
 
   const ctaLabel =
     category === "grupni" ? "Prijavi se" :
-    category === "individualni" || category === "mesecni" ? "Zakaži" :
+    category === "individualni" || category === "mesecni" ? "Kupi" :
     category === "paket" ? "Kupi paket" : "Kupi kurs";
 
   const featuresTitle =

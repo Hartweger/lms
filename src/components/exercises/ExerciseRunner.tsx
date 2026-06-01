@@ -526,8 +526,8 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
             );
           }
 
-          // For listen_write exercises, always use EssayExercise
-          if (exercise.exercise_type === "listen_write") {
+          // For listen_write and essay (Schreiben) exercises, always use EssayExercise
+          if (exercise.exercise_type === "listen_write" || exercise.exercise_type === "essay") {
             return (
               <EssayExercise
                 key={question.id}

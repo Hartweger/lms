@@ -116,9 +116,10 @@ export default async function KursStranica({ params }: PageProps) {
       .select("role")
       .eq("id", user.id)
       .single();
-    const isAdmin = userProfile?.role === "admin";
+    // Admins and professors see all course content (but not financial/admin area).
+    const isStaff = userProfile?.role === "admin" || userProfile?.role === "professor";
 
-    if (isAdmin) {
+    if (isStaff) {
       hasAccess = true;
     } else {
       const { data: access } = await supabase

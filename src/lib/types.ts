@@ -72,7 +72,7 @@ export interface Purchase {
   created_at: string;
 }
 
-export type ExerciseType = "quiz" | "fill_blank" | "match_pairs" | "word_order" | "listen_write" | "dialog" | "true_false" | "categorize" | "typing" | "conversation" | "speak";
+export type ExerciseType = "quiz" | "fill_blank" | "match_pairs" | "word_order" | "listen_write" | "dialog" | "true_false" | "categorize" | "typing" | "conversation" | "speak" | "essay";
 
 export interface Exercise {
   id: string;

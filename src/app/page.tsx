@@ -17,9 +17,9 @@ export default function Pocetna() {
     <>
       {/* Hero */}
       <section className="bg-gradient-to-b from-plava-light/50 to-white overflow-hidden">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center">
+        <div className="max-w-6xl mx-auto flex flex-col-reverse md:flex-row items-center">
           {/* Text */}
-          <div className="flex-1 text-center md:text-left px-4 py-16 md:py-24">
+          <div className="flex-1 text-center md:text-left px-4 pt-6 pb-12 md:py-24">
             <span className="inline-block bg-plava text-white text-xs font-bold tracking-widest uppercase px-4 py-1.5 rounded-full mb-5">
               Online škola nemačkog jezika
             </span>
@@ -54,17 +54,17 @@ export default function Pocetna() {
             </ul>
           </div>
           {/* Image */}
-          <div className="relative flex-shrink-0 w-full md:w-[480px] lg:w-[540px]">
+          <div className="relative flex-shrink-0 w-full max-w-[280px] mx-auto md:max-w-none md:mx-0 md:w-[480px] lg:w-[540px]">
             <Image
-              src="https://www.hartweger.rs/wp-content/uploads/2025/06/Hartweger_Centar_Natasa_Hartweger.jpg"
+              src="https://rzmyglynjcygsbicssbt.supabase.co/storage/v1/object/public/blog-media/2025/06/Hartweger_Centar_Natasa_Hartweger.jpg"
               alt="Nataša Hartweger"
               className="w-full h-auto"
-              width={540} height={540} priority sizes="(max-width: 768px) 100vw, 540px"
+              width={540} height={540} priority sizes="(max-width: 768px) 280px, 540px"
             />
             {/* Name card */}
-            <div className="absolute bottom-6 left-6 bg-white/90 backdrop-blur-sm rounded-xl px-5 py-3 shadow-lg">
-              <p className="font-montserrat font-bold text-gray-900">Nataša Hartweger</p>
-              <p className="text-gray-500 text-sm">Osnivač Hartweger centra</p>
+            <div className="absolute bottom-3 left-3 md:bottom-6 md:left-6 bg-white/90 backdrop-blur-sm rounded-xl px-3 py-2 md:px-5 md:py-3 shadow-lg">
+              <p className="font-montserrat font-bold text-sm md:text-base text-gray-900">Nataša Hartweger</p>
+              <p className="text-gray-500 text-xs md:text-sm">Osnivač Hartweger centra</p>
             </div>
           </div>
         </div>
@@ -110,14 +110,14 @@ export default function Pocetna() {
           </h2>
           <div className="flex flex-col md:flex-row gap-10 items-center">
             {/* Slika levo */}
-            <div className="flex-shrink-0 w-full md:w-[45%]">
+            <div className="flex-shrink-0 w-full max-w-[320px] mx-auto md:max-w-none md:mx-0 md:w-[45%]">
               <div className="relative">
                 <div className="absolute -top-3 -left-3 w-full h-full bg-plava/10 rounded-2xl" />
                 <Image
                   src="/images/natasa-laptop.jpg"
                   alt="Nataša Hartweger"
                   className="relative rounded-2xl shadow-lg w-full object-cover"
-                  width={600} height={400} sizes="(max-width: 768px) 100vw, 50vw"
+                  width={600} height={400} sizes="(max-width: 768px) 320px, 50vw"
                 />
               </div>
             </div>
@@ -222,7 +222,7 @@ export default function Pocetna() {
                   <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Podrška u WhatsApp grupi</li>
                   <li className="flex items-start gap-2 text-gray-400"><span className="mt-0.5">&#10007;</span> Nema časova uživo</li>
                 </ul>
-                <Link href="/kursevi" className="inline-block border-2 border-plava text-plava px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-plava hover:text-white transition-colors">
+                <Link href="/kursevi#video" className="inline-block border-2 border-plava text-plava px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-plava hover:text-white transition-colors">
                   Počnimo odmah!
                 </Link>
               </div>
@@ -305,7 +305,7 @@ export default function Pocetna() {
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-10">
           <div className="flex-shrink-0">
             <Image
-              src="https://www.hartweger.rs/wp-content/uploads/2026/05/Untitled-1200-x-628-px-1-1024x536.png"
+              src="https://rzmyglynjcygsbicssbt.supabase.co/storage/v1/object/public/blog-media/2026/05/Untitled-1200-x-628-px-1-1024x536.png"
               alt="Blog"
               className="rounded-2xl shadow-md w-full md:w-[400px]"
               width={1024} height={536} sizes="(max-width: 768px) 100vw, 50vw"

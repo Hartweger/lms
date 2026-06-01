@@ -9,7 +9,7 @@ const links = [
   { href: "/admin/kursevi", label: "Kursevi" },
   { href: "/admin/studenti", label: "Studenti" },
   { href: "/admin/test-nivoa", label: "Test nivoa" },
-  { href: "/admin/eseji", label: "Eseji" },
+  { href: "/admin/eseji", label: "Schreiben" },
   { href: "/admin/profesori", label: "Profesori" },
   { href: "/admin/pristup", label: "Pristup" },
   { href: "/admin/narudzbine", label: "Narudžbine" },

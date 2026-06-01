@@ -183,7 +183,7 @@ export default function EssayExercise({ task, level, onAnswer, exerciseId, lesso
           <p className="text-gray-600 bg-gray-50 rounded-lg p-4 whitespace-pre-line">{task}</p>
         </div>
         <div className="mt-6 bg-plava-light rounded-xl p-6 text-center">
-          <p className="text-lg font-medium text-plava mb-2">Tvoj esej je poslat na pregled</p>
+          <p className="text-lg font-medium text-plava mb-2">Tvoj Schreiben je poslat na pregled</p>
           <p className="text-sm text-gray-500">Profesor će pregledati tvoj rad i dati ti povratnu informaciju. Rezultat ćeš videti ovde kada bude gotovo.</p>
         </div>
       </div>
@@ -208,7 +208,7 @@ export default function EssayExercise({ task, level, onAnswer, exerciseId, lesso
         disabled={checking || submitted || !text.trim()}
         className="mt-4 bg-plava text-white px-6 py-3 rounded-lg hover:bg-plava-dark transition-colors disabled:opacity-50"
       >
-        {checking ? "Šaljem..." : "Pošalji esej"}
+        {checking ? "Šaljem..." : "Pošalji Schreiben"}
       </button>
     </div>
   );

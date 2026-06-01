@@ -3,7 +3,8 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import LekcijaContent from "@/components/LekcijaContent";
 import LessonDrawer from "@/components/LessonDrawer";
-import LessonProgressTracker from "@/components/LessonProgressTracker";
+import LessonCompleteButton from "@/components/LessonCompleteButton";
+import { getFixedTranslations } from "@/lib/fixed-translations";
 import type { Lesson, Exercise } from "@/lib/types";
 
 interface PageProps {
@@ -39,19 +40,6 @@ export default async function LekcijaStranica({ params }: PageProps) {
     .order("order_index");
 
   const { data: { user } } = await supabase.auth.getUser();
-
-  // Compute which lessons to mark as completed (done client-side to speed up render)
-  const lessonsToMark: string[] = [];
-  if (user && allLessons) {
-    const currentIdx = allLessons.findIndex((l) => l.id === typedLesson.id);
-    const isLastLesson = currentIdx === allLessons.length - 1;
-    if (currentIdx > 0) {
-      lessonsToMark.push(allLessons[currentIdx - 1].id);
-    }
-    if (isLastLesson) {
-      lessonsToMark.push(typedLesson.id);
-    }
-  }
 
   // Get completion status for all lessons
   let completedLessonIds = new Set<string>();
@@ -109,11 +97,13 @@ export default async function LekcijaStranica({ params }: PageProps) {
   const totalLessons = allLessons?.length ?? 0;
   const lessonNumber = currentIndex + 1;
 
+  // Manuelno označavanje završetka (Nataša: pravo dugme, bez auto-čekiranja na otvaranje)
+  const lessonCompleted = completedLessonIds.has(typedLesson.id);
+  const levelComplete = totalLessons > 0 && completedCount === totalLessons;
+  const willCompleteLevel = !lessonCompleted && completedCount === totalLessons - 1;
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-4">
-      {lessonsToMark.length > 0 && (
-        <LessonProgressTracker lessonId={typedLesson.id} lessonsToMark={lessonsToMark} />
-      )}
       {/* Top bar */}
       <div className="flex items-center justify-between mb-4">
         <LessonDrawer
@@ -149,13 +139,39 @@ export default async function LekcijaStranica({ params }: PageProps) {
                 <div className="flex items-center justify-between">
                   <span className="font-medium text-gray-900">{ex.title}</span>
                   <span className="text-xs text-plava bg-plava-light px-3 py-1 rounded-full">
-                    {ex.exercise_type === "quiz" ? "Kviz" : ex.exercise_type === "fill_blank" ? "Popuni" : ex.exercise_type === "match_pairs" ? "Spoji" : ex.exercise_type === "word_order" ? "Poredaj" : "Slušaj"}
+                    {ex.exercise_type === "quiz" ? "Kviz" : ex.exercise_type === "fill_blank" ? "Popuni" : ex.exercise_type === "match_pairs" ? "Spoji" : ex.exercise_type === "word_order" ? "Poredaj" : ex.exercise_type === "essay" ? "Schreiben" : "Slušaj"}
                   </span>
                 </div>
               </Link>
             ))}
           </div>
         </div>
+      )}
+
+      {/* AI prevod vežba — samo na lekcijama sa fiksnim prevodima */}
+      {getFixedTranslations(typedLesson.title) && (
+        <div className="mt-8">
+          <h3 className="font-semibold text-gray-900 mb-3">AI vežbe</h3>
+          <Link
+            href={`/vezba/ai-prevod/${typedLesson.id}`}
+            className="block bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
+          >
+            <div className="flex items-center justify-between">
+              <span className="font-medium text-gray-900">Prevedi rečenice (AI prevod)</span>
+              <span className="text-xs text-plava bg-plava-light px-3 py-1 rounded-full">AI prevod</span>
+            </div>
+          </Link>
+        </div>
+      )}
+
+      {/* Dugme „Završi lekciju" (ručno) + čestitka na kraju nivoa */}
+      {user && (
+        <LessonCompleteButton
+          lessonId={typedLesson.id}
+          initialCompleted={lessonCompleted}
+          willCompleteLevel={willCompleteLevel}
+          levelComplete={levelComplete}
+        />
       )}
 
       {/* Bottom navigation */}
