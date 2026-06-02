@@ -5,17 +5,14 @@ import { createClient } from "@/lib/supabase/client";
 import type { FaqItem } from "@/lib/types";
 
 const CATEGORIES = [
-  { value: "opsti", label: "Opšti" },
-  { value: "video", label: "Video kursevi" },
-  { value: "grupni", label: "Grupni kursevi" },
-  { value: "individualni", label: "Individualni kursevi" },
-  { value: "placanje", label: "Plaćanje" },
+  { value: "pre-kupovine", label: "Pre kupovine" },
+  { value: "nakon-kupovine", label: "Nakon kupovine" },
 ];
 
 const emptyForm = {
   question: "",
   answer: "",
-  category: "opsti",
+  category: "pre-kupovine",
   order_index: 0,
   is_published: true,
 };
@@ -131,6 +128,9 @@ export default function AdminFaqPage() {
             onChange={(e) => setForm({ ...form, answer: e.target.value })}
             className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-plava/40"
           />
+          <p className="mt-1 text-xs text-gray-400">
+            Link: [tekst](/putanja) za stranicu na sajtu ili [tekst](mailto:adresa) za email.
+          </p>
         </div>
 
         <div className="flex gap-4 flex-wrap">

@@ -1,7 +1,31 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import type { FaqItem } from "@/lib/types";
+
+// Renderuje odgovor sa markdown linkovima [tekst](url):
+// interne putanje (/...) idu kroz next/link, eksterne i mailto kroz <a>.
+function renderAnswer(text: string) {
+  const parts: React.ReactNode[] = [];
+  const regex = /\[([^\]]+)\]\(([^)]+)\)/g;
+  let last = 0;
+  let m: RegExpExecArray | null;
+  let key = 0;
+  while ((m = regex.exec(text)) !== null) {
+    if (m.index > last) parts.push(text.slice(last, m.index));
+    const [, label, href] = m;
+    const cls = "text-plava font-medium hover:underline";
+    if (href.startsWith("/")) {
+      parts.push(<Link key={key++} href={href} className={cls}>{label}</Link>);
+    } else {
+      parts.push(<a key={key++} href={href} className={cls}>{label}</a>);
+    }
+    last = m.index + m[0].length;
+  }
+  if (last < text.length) parts.push(text.slice(last));
+  return parts;
+}
 
 export default function FaqAccordion({ items }: { items: FaqItem[] }) {
   const [openId, setOpenId] = useState<string | null>(null);
@@ -42,7 +66,7 @@ export default function FaqAccordion({ items }: { items: FaqItem[] }) {
             </button>
             {isOpen && (
               <div className="px-5 pb-4 text-gray-600 leading-relaxed">
-                {item.answer}
+                {renderAnswer(item.answer)}
               </div>
             )}
           </div>

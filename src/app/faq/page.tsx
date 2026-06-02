@@ -13,6 +13,17 @@ export const metadata: Metadata = {
   },
 };
 
+// Redosled i nazivi sekcija — prati put kupca (pre → posle kupovine).
+const CATEGORY_ORDER: { value: string; label: string }[] = [
+  { value: "pre-kupovine", label: "Pre kupovine" },
+  { value: "nakon-kupovine", label: "Nakon kupovine" },
+];
+
+// Markdown linkove [tekst](url) sklanja na čist tekst za JSON-LD schema (SEO).
+function stripLinks(text: string): string {
+  return text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, "$1");
+}
+
 export default async function FaqPage() {
   const supabase = await createClient();
 
@@ -23,6 +34,18 @@ export default async function FaqPage() {
     .order("order_index", { ascending: true });
 
   const faqItems = (items ?? []) as FaqItem[];
+
+  // Grupiši po kategoriji, preskoči prazne sekcije.
+  const groups = CATEGORY_ORDER
+    .map((c) => ({ ...c, items: faqItems.filter((i) => i.category === c.value) }))
+    .filter((g) => g.items.length > 0);
+
+  // Pitanja sa nepoznatom kategorijom idu u "Ostalo" da se ništa ne izgubi.
+  const known = new Set(CATEGORY_ORDER.map((c) => c.value));
+  const otherItems = faqItems.filter((i) => !known.has(i.category));
+  if (otherItems.length > 0) {
+    groups.push({ value: "ostalo", label: "Ostalo", items: otherItems });
+  }
 
   return (
     <>
@@ -37,7 +60,7 @@ export default async function FaqPage() {
               name: item.question,
               acceptedAnswer: {
                 "@type": "Answer",
-                text: item.answer,
+                text: stripLinks(item.answer),
               },
             })),
           }),
@@ -51,24 +74,47 @@ export default async function FaqPage() {
           <p className="text-gray-600 text-lg">
             Odgovori na najčešća pitanja o kursevima, plaćanju i platformi.
           </p>
+
+          {groups.length > 1 && (
+            <div className="mt-6 flex flex-wrap gap-2">
+              {groups.map((g) => (
+                <a
+                  key={g.value}
+                  href={`#${g.value}`}
+                  className="rounded-full border border-plava/30 bg-white px-4 py-1.5 text-sm font-medium text-plava hover:bg-plava hover:text-white transition-colors"
+                >
+                  {g.label}
+                </a>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
       <section className="py-12 px-4">
         <div className="max-w-3xl mx-auto">
-          {faqItems.length === 0 ? (
+          {groups.length === 0 ? (
             <p className="text-gray-500">Nema pitanja za prikaz.</p>
           ) : (
-            <FaqAccordion items={faqItems} />
+            <div className="space-y-12">
+              {groups.map((g) => (
+                <div key={g.value} id={g.value} className="scroll-mt-24">
+                  <h2 className="font-montserrat font-bold text-xl md:text-2xl text-gray-900 mb-4">
+                    {g.label}
+                  </h2>
+                  <FaqAccordion items={g.items} />
+                </div>
+              ))}
+            </div>
           )}
 
           <div className="mt-12 bg-gray-50 rounded-xl p-6 text-center">
-            <p className="text-gray-600 mb-4">Niste pronašli odgovor?</p>
+            <p className="text-gray-600 mb-4">Ne vidiš odgovor na svoje pitanje?</p>
             <Link
               href="/kontakt"
               className="inline-block bg-plava text-white px-6 py-2.5 rounded-xl font-semibold text-sm hover:bg-plava-dark transition-colors"
             >
-              Pišite nam
+              Piši nam
             </Link>
           </div>
         </div>
