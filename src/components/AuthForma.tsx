@@ -1,32 +1,65 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 
 interface AuthFormaProps {
-  tip: "prijava" | "registracija" | "reset";
-  onSubmit: (data: { email: string; password: string; fullName?: string }) => Promise<string | null>;
+  tip: "prijava" | "reset";
+  onSubmit: (data: { email: string; password: string }) => Promise<string | null>;
 }
 
 export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [fullName, setFullName] = useState("");
   const [greska, setGreska] = useState<string | null>(null);
   const [uspeh, setUspeh] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
-  const [magicLinkMode, setMagicLinkMode] = useState(false);
+  const [passwordMode, setPasswordMode] = useState(false);
   const [magicLinkSent, setMagicLinkSent] = useState(false);
+  const [noAccount, setNoAccount] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleGoogle = async () => {
+    setGoogleLoading(true);
+    const supabase = createClient();
+    await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: `${window.location.origin}/auth/callback` },
+    });
+  };
+
+  const handleMagicLink = async () => {
+    if (!email) {
+      setGreska("Unesi email adresu.");
+      return;
+    }
+    setGreska(null);
+    setUspeh(null);
+    setNoAccount(false);
+    setLoading(true);
+    const supabase = createClient();
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        shouldCreateUser: false,
+        emailRedirectTo: window.location.origin + "/auth/callback",
+      },
+    });
+    if (error) {
+      setNoAccount(true);
+    } else {
+      setMagicLinkSent(true);
+    }
+    setLoading(false);
+  };
+
+  const handlePasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setGreska(null);
     setUspeh(null);
     setLoading(true);
-
-    const result = await onSubmit({ email, password, fullName });
-
+    const result = await onSubmit({ email, password });
     if (result) {
       if (result.startsWith("OK:")) {
         setUspeh(result.slice(3));
@@ -37,43 +70,28 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
     setLoading(false);
   };
 
-  const handleGoogle = async () => {
-    setGoogleLoading(true);
-    const supabase = createClient();
-    await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
-  };
-
-  const handleMagicLink = async () => {
-    if (!email) {
-      setGreska("Unesite email adresu.");
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (tip === "prijava" && !passwordMode) {
+      handleMagicLink();
       return;
     }
-    setGreska(null);
-    setUspeh(null);
-    setLoading(true);
-    const supabase = createClient();
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: window.location.origin + "/auth/callback",
-      },
-    });
-    if (error) {
-      setGreska(error.message);
-    } else {
-      setMagicLinkSent(true);
-    }
-    setLoading(false);
+    handlePasswordSubmit(e);
   };
+
+  if (magicLinkSent) {
+    return (
+      <div className="w-full max-w-sm">
+        <div className="bg-green-50 text-green-800 px-4 py-3 rounded-lg text-sm">
+          Link za prijavu je poslat na <strong>{email}</strong>. Proveri inbox (i spam folder).
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4 w-full max-w-sm">
-      {tip !== "reset" && (
+      {tip === "prijava" && (
         <>
           <button
             type="button"
@@ -87,7 +105,7 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
               <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
               <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
             </svg>
-            {googleLoading ? "Učitavanje..." : "Nastavite sa Google"}
+            {googleLoading ? "Učitavanje..." : "Nastavi sa Google"}
           </button>
 
           <div className="flex items-center gap-3">
@@ -98,143 +116,98 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
         </>
       )}
 
-    {tip === "prijava" && magicLinkMode ? (
-      <div className="space-y-4 w-full max-w-sm">
-        {magicLinkSent ? (
-          <div className="bg-green-50 text-green-800 px-4 py-3 rounded-lg text-sm">
-            Link za prijavu je poslat na <strong>{email}</strong>. Proverite inbox (i spam folder).
+      <form onSubmit={handleFormSubmit} className="space-y-4 w-full max-w-sm">
+        <div>
+          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+            Email
+          </label>
+          <input
+            id="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-plava focus:border-transparent"
+            placeholder="tvoj@email.com"
+          />
+        </div>
+
+        {tip === "prijava" && passwordMode && (
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+              Lozinka
+            </label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              minLength={6}
+              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-plava focus:border-transparent"
+              placeholder="Tvoja lozinka"
+            />
           </div>
-        ) : (
-          <>
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                Email
-              </label>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-plava focus:border-transparent"
-                placeholder="vas@email.com"
-              />
-            </div>
+        )}
 
-            {greska && (
-              <div className="bg-koral-light text-koral-dark px-4 py-3 rounded-lg text-sm">
-                {greska}
-              </div>
-            )}
+        {greska && (
+          <div className="bg-koral-light text-koral-dark px-4 py-3 rounded-lg text-sm">
+            {greska}
+          </div>
+        )}
 
-            <button
-              type="button"
-              onClick={handleMagicLink}
-              disabled={loading}
-              className="w-full bg-plava text-white py-3 rounded-lg font-medium hover:bg-plava-dark transition-colors disabled:opacity-50"
-            >
-              {loading ? "Slanje..." : "Pošalji link"}
-            </button>
-          </>
+        {uspeh && (
+          <div className="bg-plava-light text-plava-dark px-4 py-3 rounded-lg text-sm">
+            {uspeh}
+          </div>
+        )}
+
+        {noAccount && (
+          <div className="bg-koral-light text-koral-dark px-4 py-3 rounded-lg text-sm">
+            Nemamo nalog sa tim mejlom. Da li si kupio kurs?{" "}
+            <Link href="/kursevi" className="underline font-medium">
+              Pogledaj kurseve
+            </Link>
+          </div>
         )}
 
         <button
-          type="button"
-          onClick={() => { setMagicLinkMode(false); setMagicLinkSent(false); setGreska(null); }}
-          className="w-full text-sm text-plava hover:underline"
+          type="submit"
+          disabled={loading}
+          className="w-full bg-plava text-white py-3 rounded-lg font-medium hover:bg-plava-dark transition-colors disabled:opacity-50"
         >
-          Nazad na prijavu sa lozinkom
+          {loading
+            ? tip === "prijava" && !passwordMode
+              ? "Slanje..."
+              : "Učitavanje..."
+            : tip === "reset"
+            ? "Pošalji link za reset"
+            : passwordMode
+            ? "Prijavi se"
+            : "Pošalji mi link na mejl"}
         </button>
-      </div>
-    ) : (
-    <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-sm">
-      {tip === "registracija" && (
-        <div>
-          <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">
-            Ime i prezime
-          </label>
-          <input
-            id="fullName"
-            type="text"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            required
-            className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-plava focus:border-transparent"
-            placeholder="Ana Petrović"
-          />
-        </div>
-      )}
-
-      <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-          Email
-        </label>
-        <input
-          id="email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-plava focus:border-transparent"
-          placeholder="vas@email.com"
-        />
-      </div>
-
-      {tip !== "reset" && (
-        <div>
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-            Lozinka
-          </label>
-          <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            minLength={6}
-            className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-plava focus:border-transparent"
-            placeholder="Minimum 6 karaktera"
-          />
-        </div>
-      )}
-
-      {greska && (
-        <div className="bg-koral-light text-koral-dark px-4 py-3 rounded-lg text-sm">
-          {greska}
-        </div>
-      )}
-
-      {uspeh && (
-        <div className="bg-plava-light text-plava-dark px-4 py-3 rounded-lg text-sm">
-          {uspeh}
-        </div>
-      )}
-
-      <button
-        type="submit"
-        disabled={loading}
-        className="w-full bg-plava text-white py-3 rounded-lg font-medium hover:bg-plava-dark transition-colors disabled:opacity-50"
-      >
-        {loading
-          ? "Učitavanje..."
-          : tip === "prijava"
-          ? "Prijavite se"
-          : tip === "registracija"
-          ? "Registrujte se"
-          : "Pošaljite link za reset"}
-      </button>
+      </form>
 
       {tip === "prijava" && (
-        <button
-          type="button"
-          onClick={() => { setMagicLinkMode(true); setGreska(null); setUspeh(null); }}
-          className="w-full text-sm text-plava hover:underline"
-        >
-          Pošalji mi link za prijavu na email
-        </button>
+        <div className="space-y-2 text-sm text-center">
+          <button
+            type="button"
+            onClick={() => {
+              setPasswordMode(!passwordMode);
+              setGreska(null);
+              setNoAccount(false);
+            }}
+            className="w-full text-plava hover:underline"
+          >
+            {passwordMode ? "← Uđi linkom na mejl (bez lozinke)" : "Imam lozinku"}
+          </button>
+          {passwordMode && (
+            <Link href="/reset-lozinke" className="block text-plava hover:underline">
+              Zaboravio/la si lozinku? Napravi novu
+            </Link>
+          )}
+        </div>
       )}
-    </form>
-    )}
     </div>
   );
 }
