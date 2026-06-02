@@ -6,6 +6,18 @@ const strip = (h: string) =>
     .replace(/&#8216;|&#8217;|&#8242;/g, "'").replace(/&#8220;|&#8221;|&#8243;/g, '"')
     .replace(/&#8222;/g, "„").replace(/&#8230;/g, "…").replace(/\s+/g, " ").trim();
 
+// Kao strip(), ali ČUVA strukturu (prelomi redova, stavke) — za Schreiben/essay zadatke.
+const ents = (s: string) => s
+  .replace(/&nbsp;/g, " ").replace(/&#8211;/g, "–").replace(/&#8212;/g, "—").replace(/&amp;/g, "&")
+  .replace(/&#8216;|&#8217;|&#8242;/g, "'").replace(/&#8220;|&#8221;|&#8243;/g, '"')
+  .replace(/&#8222;/g, "„").replace(/&#8230;/g, "…");
+const stripStructured = (h: string) =>
+  ents((h || "")
+    .replace(/<li[^>]*>/gi, "\n– ").replace(/<\/li>/gi, "")
+    .replace(/<\/(p|div|h[1-6]|tr)>/gi, "\n").replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<[^>]+>/g, ""))
+    .replace(/[ \t]+/g, " ").replace(/ *\n */g, "\n").replace(/\n{3,}/g, "\n\n").trim();
+
 // Izvuci string iz polja koje može biti string ili {rendered: string}
 function rendered(val: any): string {
   if (!val) return "";
@@ -29,7 +41,9 @@ export function mapQuestion(q: any): { mapped: ExerciseDump["questions"][0]; rev
   }
 
   if (ldType === "essay") {
-    return { mapped: { question: questionText, options: { type: "essay" }, correct_answer: "", question_type: "essay", explanation: explanation || undefined }, reviewType: "essay (proveri prompt)" };
+    // Schreiben zadatak: čuvaj strukturu (prelomi, stavke) umesto zbijenog teksta
+    const essayText = stripStructured(rendered(q.content) || rendered(q.title) || "");
+    return { mapped: { question: essayText, options: { type: "essay" }, correct_answer: "", question_type: "essay", explanation: explanation || undefined }, reviewType: "essay (proveri prompt)" };
   }
 
   // cloze_answer: _answer sadrži više pod-praznina sa {tačno}; teško auto → flag za review
