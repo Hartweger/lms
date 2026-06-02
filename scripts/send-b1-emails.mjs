@@ -6,6 +6,8 @@ const env = {};
 for (const raw of readFileSync(".env.local", "utf8").split("\n")) { const m = raw.replace(/\r$/, "").match(/^\s*([A-Za-z0-9_]+)\s*=\s*(.*)$/); if (m) env[m[1]] = m[2].trim().replace(/^["']|["']$/g, ""); }
 const sb = createClient(env.NEXT_PUBLIC_SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, { auth: { persistSession: false } });
 const TEST = process.argv.includes("--test"), SEND = process.argv.includes("--send");
+const atArg = process.argv.find((a) => a.startsWith("--at="));
+const SCHEDULED = atArg ? atArg.split("=")[1] : null; // ISO npr. 2026-06-03T08:00:00+02:00
 const FROM = "Hartweger <kurs@hartweger.rs>", TEST_TO = "info@hartweger.rs", SLUG = "polozi-goethe-b1";
 const resend = (TEST || SEND) ? new Resend(process.env.RESEND_API_KEY) : null;
 
@@ -75,7 +77,7 @@ if (TEST) {
   else {
     let sent = 0, err = 0;
     for (const r of list) {
-      try { await resend.emails.send({ from: FROM, to: r.email, subject: "Tvoj kurs Položi GOETHE B1 je na novoj platformi! 🎉", html: buildEmail(r.name, r.expires) }); sent++; console.log(`SENT ${r.email}`); if (sent % 10 === 0) await new Promise((x) => setTimeout(x, 1100)); }
+      try { const payload = { from: FROM, to: r.email, subject: "Tvoj kurs Položi GOETHE B1 je na novoj platformi! 🎉", html: buildEmail(r.name, r.expires) }; if (SCHEDULED) payload.scheduledAt = SCHEDULED; await resend.emails.send(payload); sent++; console.log(`${SCHEDULED ? "ZAKAZAN" : "SENT"} ${r.email}`); if (sent % 10 === 0) await new Promise((x) => setTimeout(x, 1100)); }
       catch (e) { err++; console.error(`ERR ${r.email}: ${e.message}`); }
     }
     console.log(`\nPoslato: ${sent}, grešaka: ${err}`);
