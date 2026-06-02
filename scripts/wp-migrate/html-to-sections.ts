@@ -9,6 +9,19 @@ function pdfUrlFrom(src: string): string | null {
   return src.endsWith(".pdf") ? src : null;
 }
 
+// Google Docs/Slides/Sheets/Forms embed → dugme (link), ne ugrađeni iframe.
+function googleEmbedFrom(src: string): { href: string; label: string } | null {
+  if (!/docs\.google\.com|drive\.google\.com/.test(src)) return null;
+  let href = src.replace(/&amp;/g, "&");
+  let label = "Otvori dokument";
+  if (src.includes("/presentation/")) { href = href.replace("/embed", "/pub"); label = "Otvori prezentaciju"; }
+  else if (src.includes("/document/")) { href = href.replace("/embed", "/pub"); label = "Otvori dokument"; }
+  else if (src.includes("/spreadsheets/")) { label = "Otvori tabelu"; }
+  else if (src.includes("/forms/")) { label = "Otvori upitnik"; }
+  else if (src.includes("drive.google.com")) { label = "Otvori fajl"; }
+  return { href, label };
+}
+
 function htmlToMarkdown(el: HTMLElement): string {
   let md = el.innerHTML
     .replace(/<\/(h[1-6])>/gi, "\n\n").replace(/<h2[^>]*>/gi, "## ").replace(/<h3[^>]*>/gi, "### ")
@@ -47,7 +60,10 @@ export function htmlToSections(html: string): Section[] {
     const table = node.tagName === "TABLE" ? node : node.querySelector("table");
     const img = node.tagName === "IMG" ? node : node.querySelector("img");
 
+    const gembed = src ? googleEmbedFrom(src) : null;
+
     if (vimeo) { flush(); sections.push({ type: "video", vimeoId: vimeo }); }
+    else if (gembed) { flush(); sections.push({ type: "link", linkType: "external", href: gembed.href, label: gembed.label }); }
     else if (src && pdfUrlFrom(src)) { flush(); sections.push({ type: "pdf", url: pdfUrlFrom(src)!, label: "PDF" }); }
     else if (table) {
       flush();
