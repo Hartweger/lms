@@ -11,6 +11,7 @@ const sb = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPAB
 
 const slug = process.argv[2];
 const DRY = process.argv.includes("--dry");
+const NO_EX = process.argv.includes("--no-exercises"); // upiši samo sadržaj (sekcije/video), preskoči vežbe
 if (!slug) { console.error("Usage: tsx scripts/apply-wp-course.ts <slug> [--dry]"); process.exit(1); }
 
 const norm = (s: string) => s.toLowerCase().replace(/[^a-zšđčćž0-9]+/gi, " ").trim();
@@ -42,7 +43,8 @@ async function run() {
       .update({ sections: ld.sections, vimeo_video_id: ld.vimeo_video_id }).eq("id", lesson.id);
     if (upErr) throw upErr;
 
-    // idempotentno: obriši stare vežbe ovog lessona pa upiši
+    // idempotentno: obriši stare vežbe ovog lessona pa upiši (preskoči ako --no-exercises)
+    if (NO_EX) { console.log(`✓ ${ld.title} (samo sadržaj)`); continue; }
     await sb.from("exercises").delete().eq("lesson_id", lesson.id);
     let exOrder = 0;
     for (const ex of ld.exercises) {
