@@ -16,6 +16,7 @@ import TypingExercise from "./TypingExercise";
 import ConversationExercise from "./ConversationExercise";
 import SpeakExercise from "./SpeakExercise";
 import SprechenExercise from "./SprechenExercise";
+import GroupedExamExercise from "./GroupedExamExercise";
 import type { Exercise, ExerciseQuestion } from "@/lib/types";
 
 interface ExerciseRunnerProps {
@@ -69,6 +70,17 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
         .then(({ count }: { count: number | null }) => { setDialogAttempts(count || 0); });
     });
   }, [exercise.id, exercise.exercise_type, supabase]);
+
+  // Ispitni (grupni) prikaz: kad sva pitanja dele tekst (Lesen) ili audio (Hören) —
+  // prikaži ceo deo odjednom, provera na kraju dela. Ostale vežbe → standardni prikaz.
+  const isGroupedExam = questions.length > 1 && questions.every((q) => {
+    const o = q.options as Record<string, unknown> | null;
+    const hasCtx = !!(o && typeof o === "object" && !Array.isArray(o) && o.context);
+    return hasCtx || !!q.audio_url;
+  });
+  if (isGroupedExam) {
+    return <GroupedExamExercise exercise={exercise} questions={questions} nextLessonId={nextLessonId} />;
+  }
 
   const question = questions[currentIndex];
 
