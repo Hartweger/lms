@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import * as Sentry from "@sentry/nextjs";
 import { createClient } from "@/lib/supabase/client";
 
 interface AuthFormaProps {
@@ -30,7 +31,8 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
   };
 
   const handleMagicLink = async () => {
-    if (!email) {
+    const cistEmail = email.trim();
+    if (!cistEmail) {
       setGreska("Unesi email adresu.");
       return;
     }
@@ -40,14 +42,24 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
     setLoading(true);
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithOtp({
-      email,
+      email: cistEmail,
       options: {
         shouldCreateUser: false,
         emailRedirectTo: window.location.origin + "/auth/callback",
       },
     });
     if (error) {
-      setNoAccount(true);
+      Sentry.captureException(error);
+      const status = error.status;
+      if (status === 429) {
+        setGreska("Previše pokušaja. Sačekaj minut pa probaj ponovo.");
+      } else if (typeof status === "number" && status >= 400 && status < 500) {
+        // 4xx (npr. 422 "signups not allowed") = nema naloga sa tim mejlom
+        setNoAccount(true);
+      } else {
+        // 5xx / mrežna greška — ne tvrdi da nema nalog
+        setGreska("Trenutno ne možemo da pošaljemo link. Pokušaj ponovo za koji trenutak.");
+      }
     } else {
       setMagicLinkSent(true);
     }
@@ -81,10 +93,17 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
 
   if (magicLinkSent) {
     return (
-      <div className="w-full max-w-sm">
-        <div className="bg-green-50 text-green-800 px-4 py-3 rounded-lg text-sm">
+      <div className="w-full max-w-sm space-y-3">
+        <div role="alert" className="bg-green-50 text-green-800 px-4 py-3 rounded-lg text-sm">
           Link za prijavu je poslat na <strong>{email}</strong>. Proveri inbox (i spam folder).
         </div>
+        <button
+          type="button"
+          onClick={() => setMagicLinkSent(false)}
+          className="w-full text-sm text-plava hover:underline"
+        >
+          Pogrešan mejl? Pošalji ponovo
+        </button>
       </div>
     );
   }
@@ -151,7 +170,7 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
         )}
 
         {greska && (
-          <div className="bg-koral-light text-koral-dark px-4 py-3 rounded-lg text-sm">
+          <div role="alert" className="bg-koral-light text-koral-dark px-4 py-3 rounded-lg text-sm">
             {greska}
           </div>
         )}
@@ -163,8 +182,8 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
         )}
 
         {noAccount && (
-          <div className="bg-koral-light text-koral-dark px-4 py-3 rounded-lg text-sm">
-            Nemamo nalog sa tim mejlom. Da li si kupio kurs?{" "}
+          <div role="alert" className="bg-koral-light text-koral-dark px-4 py-3 rounded-lg text-sm">
+            Nemamo nalog sa tim mejlom. Da li si kupio/la kurs?{" "}
             <Link href="/kursevi" className="underline font-medium">
               Pogledaj kurseve
             </Link>
