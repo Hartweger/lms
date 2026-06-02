@@ -45,19 +45,42 @@ export async function POST(
   const expiresAt = new Date();
   expiresAt.setFullYear(expiresAt.getFullYear() + 1);
 
-  // Grant course access for each item
+  // Resolve each purchased product (a sales shell like grupni/individualni/paket)
+  // to the actual content course(s) it unlocks via course_unlocks.
+  const purchasedIds = items.map((i) => i.course_id);
+  const { data: unlocks } = await admin
+    .from("course_unlocks")
+    .select("purchasable_course_id, content_course_id")
+    .in("purchasable_course_id", purchasedIds);
+
+  const contentCourseIds = new Set<string>();
   for (const item of items) {
+    const mapped = (unlocks ?? []).filter(
+      (u) => u.purchasable_course_id === item.course_id
+    );
+    if (mapped.length > 0) {
+      mapped.forEach((u) => contentCourseIds.add(u.content_course_id));
+    } else {
+      // No unlock mapping — fall back to the purchased course itself so a paid
+      // order never grants nothing. Log it so unmapped products get noticed.
+      console.warn(`[confirm] No course_unlocks for ${item.course_slug} (${item.course_id}) — granting product itself`);
+      contentCourseIds.add(item.course_id);
+    }
+  }
+
+  // Grant course access for each resolved content course
+  for (const courseId of contentCourseIds) {
     const { data: existing } = await admin
       .from("course_access")
       .select("id")
       .eq("user_id", order.user_id)
-      .eq("course_id", item.course_id)
+      .eq("course_id", courseId)
       .single();
 
     if (!existing) {
       await admin.from("course_access").insert({
         user_id: order.user_id,
-        course_id: item.course_id,
+        course_id: courseId,
         expires_at: expiresAt.toISOString(),
       });
     }
