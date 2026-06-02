@@ -61,14 +61,21 @@ async function run() {
     dump.lessons.push(lesson);
   }
 
-  // Kvizovi na nivou kursa → vežbe na poslednjoj lekciji ("Završni test")
-  if (courseQuizIds.length && dump.lessons.length) {
-    const last = dump.lessons[dump.lessons.length - 1];
-    for (const qz of courseQuizIds) {
-      const ex = await quizToExercise(qz, last.title, dump.reviewNotes);
-      if (ex) { ex.title = ex.title === "Vežba" ? "Završni test" : ex.title; last.exercises.push(ex); }
+  // Kvizovi na nivou kursa → vežbe na poslednjoj lekciji; ako kurs nema lekcije, kreiraj "Testovi"
+  if (courseQuizIds.length) {
+    let target = dump.lessons[dump.lessons.length - 1];
+    if (!target) {
+      target = { wpLessonId: 0, title: "Testovi", order_index: 0, vimeo_video_id: null,
+        sections: [{ type: "badge", module: "Testovi" }], exercises: [] };
+      dump.lessons.push(target);
+      dump.reviewNotes.push(`Kurs nema lekcije na WP-u — kreirana lekcija "Testovi" za course-level kvizove (${courseQuizIds.join(", ")}).`);
+    } else {
+      dump.reviewNotes.push(`Course-level kvizovi (${courseQuizIds.join(", ")}) zakačeni na poslednju lekciju "${target.title}".`);
     }
-    dump.reviewNotes.push(`Course-level kvizovi (${courseQuizIds.join(", ")}) zakačeni na poslednju lekciju "${last.title}".`);
+    for (const qz of courseQuizIds) {
+      const ex = await quizToExercise(qz, target.title, dump.reviewNotes);
+      if (ex) { ex.title = ex.title === "Vežba" ? "Završni test" : ex.title; target.exercises.push(ex); }
+    }
   }
 
   const dir = path.resolve(__dirname, "wp-content");

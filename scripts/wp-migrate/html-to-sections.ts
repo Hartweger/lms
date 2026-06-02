@@ -24,6 +24,8 @@ function googleEmbedFrom(src: string): { href: string; label: string } | null {
 
 function htmlToMarkdown(el: HTMLElement): string {
   let md = el.innerHTML
+    // <a href="URL">tekst</a> → [tekst](URL) (TextBlock renderuje markdown link kao klikabilan)
+    .replace(/<a\b[^>]*\bhref="([^"]+)"[^>]*>([\s\S]*?)<\/a>/gi, (_m, href, txt) => `[${txt.replace(/<[^>]+>/g, "").trim()}](${href})`)
     .replace(/<\/(h[1-6])>/gi, "\n\n").replace(/<h2[^>]*>/gi, "## ").replace(/<h3[^>]*>/gi, "### ")
     .replace(/<strong[^>]*>|<b>/gi, "**").replace(/<\/strong>|<\/b>/gi, "**")
     .replace(/<em[^>]*>|<i>/gi, "_").replace(/<\/em>|<\/i>/gi, "_")
