@@ -22,8 +22,9 @@ export default function Footer() {
               <li><Link href="/kursevi" className="hover:text-white transition-colors">Kursevi</Link></li>
               <li><Link href="/grupni-kursevi" className="hover:text-white transition-colors">Grupni kursevi</Link></li>
               <li><Link href="/individualni-kursevi" className="hover:text-white transition-colors">Individualni kursevi</Link></li>
-              <li><Link href="/o-natasi" className="hover:text-white transition-colors">O Nataši</Link></li>
-              <li><Link href="/metodologija" className="hover:text-white transition-colors">Metodologija</Link></li>
+              <li><Link href="/o-natasi" className="hover:text-white transition-colors">O nama</Link></li>
+              <li><Link href="/metodologija" className="hover:text-white transition-colors">O metodi</Link></li>
+              <li><Link href="/magazin" className="hover:text-white transition-colors">Magazin</Link></li>
               <li><Link href="/faq" className="hover:text-white transition-colors">Često postavljena pitanja</Link></li>
               <li><Link href="/besplatno-testiranje" className="hover:text-white transition-colors">Besplatno testiranje</Link></li>
             </ul>

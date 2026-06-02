@@ -57,11 +57,14 @@ export default function NavClient() {
             <Link href="/kursevi" className="text-sm font-medium text-gray-600 hover:text-plava transition-colors">
               Kursevi
             </Link>
-            <Link href="/o-natasi" className="text-sm font-medium text-gray-600 hover:text-plava transition-colors">
-              O Nataši
+            <Link href="/metodologija" className="text-sm font-medium text-gray-600 hover:text-plava transition-colors">
+              O metodi
             </Link>
-            <Link href="/faq" className="text-sm font-medium text-gray-600 hover:text-plava transition-colors">
-              FAQ
+            <Link href="/o-natasi" className="text-sm font-medium text-gray-600 hover:text-plava transition-colors">
+              O nama
+            </Link>
+            <Link href="/magazin" className="text-sm font-medium text-gray-600 hover:text-plava transition-colors">
+              Magazin
             </Link>
             <Link href="/kontakt" className="text-sm font-medium text-gray-600 hover:text-plava transition-colors">
               Kontakt
@@ -117,11 +120,14 @@ export default function NavClient() {
               <Link href="/kursevi" className="block text-sm font-medium text-gray-600 hover:text-plava" onClick={() => setMenuOpen(false)}>
                 Kursevi
               </Link>
-              <Link href="/o-natasi" className="block text-sm font-medium text-gray-600 hover:text-plava" onClick={() => setMenuOpen(false)}>
-                O Nataši
+              <Link href="/metodologija" className="block text-sm font-medium text-gray-600 hover:text-plava" onClick={() => setMenuOpen(false)}>
+                O metodi
               </Link>
-              <Link href="/faq" className="block text-sm font-medium text-gray-600 hover:text-plava" onClick={() => setMenuOpen(false)}>
-                FAQ
+              <Link href="/o-natasi" className="block text-sm font-medium text-gray-600 hover:text-plava" onClick={() => setMenuOpen(false)}>
+                O nama
+              </Link>
+              <Link href="/magazin" className="block text-sm font-medium text-gray-600 hover:text-plava" onClick={() => setMenuOpen(false)}>
+                Magazin
               </Link>
               <Link href="/kontakt" className="block text-sm font-medium text-gray-600 hover:text-plava" onClick={() => setMenuOpen(false)}>
                 Kontakt

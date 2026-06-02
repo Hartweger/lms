@@ -3,10 +3,10 @@ import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "O Nataši i timu — Hartweger škola nemačkog jezika",
+  title: "O nama — Hartweger škola nemačkog jezika",
   description: "Upoznaj Natašu Hartweger — osnivačicu Hartweger Centra i autorku VoKuM metode — i tim profesorki koje te vode kroz učenje nemačkog jezika.",
   openGraph: {
-    title: "O Nataši i timu — Hartweger škola nemačkog jezika",
+    title: "O nama — Hartweger škola nemačkog jezika",
     description: "Upoznaj Natašu Hartweger i tim profesorki Hartweger škole.",
     images: [{ url: "/og/o-natasi.jpg", alt: "Nataša Hartweger" }],
   },
