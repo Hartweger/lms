@@ -1,0 +1,196 @@
+{
+  "slug": "gramatika-a2-b1",
+  "wpCourseId": 47790,
+  "lessons": [
+    {
+      "wpLessonId": 47792,
+      "title": "Gramatika A2-B1 – Masterclass",
+      "order_index": 0,
+      "vimeo_video_id": "1124447925",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Gramatika A2-B1 – Masterclass"
+        },
+        {
+          "type": "video",
+          "vimeoId": "1124447925"
+        },
+        {
+          "type": "text",
+          "content": "E –  book možeš da skineš sa ovog LINKA\n\nLista nepravilnih glagola je ovde\n\nLista glagola A1-A2  sa predlozima je ovde\n\nLista glagola sa predlozima B1 je ovde"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "wpLessonId": 37393,
+      "title": "Deklinacija prideva – Masterclass",
+      "order_index": 1,
+      "vimeo_video_id": "937554608",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Deklinacija prideva – Masterclass"
+        },
+        {
+          "type": "video",
+          "vimeoId": "937554608"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "wpLessonId": 47796,
+      "title": "Korisne lekcije",
+      "order_index": 2,
+      "vimeo_video_id": null,
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Korisne lekcije"
+        },
+        {
+          "type": "text",
+          "content": "Pogledaj više korisnih lekcija na temu gramatike OVDE."
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "wpLessonId": 47811,
+      "title": "Lakše pamtimo uz pesme…",
+      "order_index": 3,
+      "vimeo_video_id": null,
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Lakše pamtimo uz pesme…"
+        },
+        {
+          "type": "text",
+          "content": "Da lakše upamtiš nepravilne glagole:"
+        },
+        {
+          "type": "video",
+          "vimeoId": "1124176782"
+        },
+        {
+          "type": "text",
+          "content": "Da upamtiš predloge&#8230;"
+        },
+        {
+          "type": "video",
+          "vimeoId": "1124597698"
+        }
+      ],
+      "exercises": [
+        {
+          "title": "Gramatika A2-B1",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": "Ergänze:",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "A",
+                  "A",
+                  "aufgestanden",
+                  "besucht",
+                  "studiert",
+                  "Musstest",
+                  "Setzen Sie sich",
+                  "A",
+                  "hatte",
+                  "trug",
+                  "Warst",
+                  "wollte",
+                  "besuchen",
+                  "werden",
+                  "geworden",
+                  "werden",
+                  "geschält",
+                  "werden",
+                  "gebacken",
+                  "wäre",
+                  "hätte",
+                  "C",
+                  "Könnten",
+                  "hätte",
+                  "hätte",
+                  "lasse",
+                  "an",
+                  "von",
+                  "auf",
+                  "über",
+                  "von",
+                  "Worauf",
+                  "An wen",
+                  "darauf",
+                  "zu",
+                  "–",
+                  "weil",
+                  "dass",
+                  "morgen kommst",
+                  "regnet",
+                  "bleibe",
+                  "obwohl",
+                  "damit",
+                  "Wenn",
+                  "Als",
+                  "ob",
+                  "wann",
+                  "B",
+                  "der",
+                  "den",
+                  "dem",
+                  "dessen",
+                  "auf den",
+                  "an den",
+                  "für den",
+                  "älter",
+                  "A",
+                  "oder",
+                  "als auch",
+                  "noch",
+                  "Je",
+                  "sondern auch",
+                  "als auch",
+                  "Je",
+                  "en",
+                  "-",
+                  "n",
+                  "-",
+                  "n",
+                  "en",
+                  "-",
+                  "en",
+                  "en",
+                  "en",
+                  "s",
+                  "es",
+                  "-",
+                  "zu",
+                  "nach",
+                  "bei",
+                  "in",
+                  "in",
+                  "nach",
+                  "von",
+                  "in"
+                ]
+              },
+              "correct_answer": "A, A, aufgestanden, besucht, studiert, Musstest, Setzen Sie sich, A, hatte, trug, Warst, wollte, besuchen, werden, geworden, werden, geschält, werden, gebacken, wäre, hätte, C, Könnten, hätte, hätte, lasse, an, von, auf, über, von, Worauf, An wen, darauf, zu, –, weil, dass, morgen kommst, regnet, bleibe, obwohl, damit, Wenn, Als, ob, wann, B, der, den, dem, dessen, auf den, an den, für den, älter, A, oder, als auch, noch, Je, sondern auch, als auch, Je, en, -, n, -, n, en, -, en, en, en, s, es, -, zu, nach, bei, in, in, nach, von, in",
+              "question_type": "fill_blank"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "reviewNotes": [
+    "[Lakše pamtimo uz pesme…] kviz 47800: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "Course-level kvizovi (47800) zakačeni na poslednju lekciju \"Lakše pamtimo uz pesme…\"."
+  ]
+}
