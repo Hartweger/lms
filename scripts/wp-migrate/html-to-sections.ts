@@ -32,8 +32,9 @@ function htmlToMarkdown(el: HTMLElement): string {
     .replace(/<li[^>]*>/gi, "- ").replace(/<\/li>/gi, "\n")
     .replace(/<\/p>|<br\s*\/?>/gi, "\n\n")
     .replace(/<[^>]+>/g, "")
-    .replace(/&nbsp;/g, " ").replace(/&#8211;/g, "–").replace(/&amp;/g, "&")
-    .replace(/&#8217;/g, "'").replace(/&quot;/g, '"');
+    .replace(/&nbsp;/g, " ").replace(/&#8211;/g, "–").replace(/&#8212;/g, "—").replace(/&amp;/g, "&")
+    .replace(/&#8216;|&#8217;|&#8242;/g, "'").replace(/&#8220;|&#8221;|&#8243;|&quot;/g, '"')
+    .replace(/&#8222;/g, "„").replace(/&#8230;/g, "…");
   return md.replace(/\n{3,}/g, "\n\n").trim();
 }
 

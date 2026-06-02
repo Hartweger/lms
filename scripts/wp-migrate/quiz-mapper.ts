@@ -2,7 +2,9 @@ import type { ExerciseDump } from "./types";
 
 const strip = (h: string) =>
   (h || "").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ")
-    .replace(/&#8211;/g, "–").replace(/&amp;/g, "&").replace(/\s+/g, " ").trim();
+    .replace(/&#8211;/g, "–").replace(/&#8212;/g, "—").replace(/&amp;/g, "&")
+    .replace(/&#8216;|&#8217;|&#8242;/g, "'").replace(/&#8220;|&#8221;|&#8243;/g, '"')
+    .replace(/&#8222;/g, "„").replace(/&#8230;/g, "…").replace(/\s+/g, " ").trim();
 
 // Izvuci string iz polja koje može biti string ili {rendered: string}
 function rendered(val: any): string {
