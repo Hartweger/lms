@@ -83,16 +83,21 @@ export default function GroupedExamExercise({ exercise, questions, nextLessonId,
   if (finished) {
     const sc = totalCorrect();
     const pct = Math.round((sc / questions.length) * 100);
+    const msg = pct >= 80 ? "Odlično! Spreman/na si za ovaj deo ispita." : pct >= 60 ? "Dobar rezultat — još malo vežbe i ide!" : "Nastavi da vežbaš — proći ćeš tekst/audio još jednom i biće bolje.";
+    const restart = () => { setSelected({}); setChecked({}); setPartIdx(0); setCtxOpen(true); setFinished(false); };
     return (
-      <div className="text-center py-6">
-        <div className="text-4xl mb-2">{pct >= 60 ? "🎉" : "💪"}</div>
-        <p className="text-xl font-bold text-gray-900 mb-1">{sc} / {questions.length} tačno ({pct}%)</p>
-        <p className="text-sm text-gray-500 mb-6">Bravo! Završio/la si ceo test.</p>
-        {nextLessonId && (
-          <Link href={`/lekcija/${nextLessonId}`} className="inline-block bg-plava text-white px-6 py-3 rounded-lg font-bold hover:bg-plava-dark transition-colors">
-            Sledeća lekcija →
-          </Link>
-        )}
+      <div className="mt-4 bg-plava-light rounded-2xl p-8 text-center">
+        <div className="text-5xl mb-3">{pct >= 60 ? "🎉" : "💪"}</div>
+        <p className="text-2xl font-bold text-gray-900 mb-1">{sc} / {questions.length} tačno</p>
+        <p className="text-lg font-semibold text-plava mb-2">{pct}%</p>
+        <p className="text-sm text-gray-600 mb-6 max-w-md mx-auto">{msg} Rezultat je sačuvan u tvom napretku.</p>
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          <button onClick={restart} className="px-5 py-2.5 rounded-lg border border-gray-300 text-gray-600 hover:bg-white transition-colors text-sm font-medium">↺ Pokušaj ponovo</button>
+          <Link href={`/lekcija/${exercise.lesson_id}`} className="px-5 py-2.5 rounded-lg border border-plava text-plava hover:bg-white transition-colors text-sm font-semibold">← Nazad na lekciju</Link>
+          {nextLessonId && (
+            <Link href={`/lekcija/${nextLessonId}`} className="px-6 py-2.5 rounded-lg bg-plava text-white font-bold hover:bg-plava-dark transition-colors text-sm">Sledeća lekcija →</Link>
+          )}
+        </div>
       </div>
     );
   }
