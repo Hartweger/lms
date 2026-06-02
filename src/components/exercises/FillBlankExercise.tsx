@@ -14,10 +14,11 @@ export default function FillBlankExercise({ question, options, correctAnswer, ex
   const correctAnswers = correctAnswer.split(",").map((a) => a.trim());
   const blankCount = (question.match(/______/g) || []).length || 1;
 
-  // Shuffle word bank (options + maybe extra distractors)
+  // Shuffle word bank (options + maybe extra distractors).
+  // Bank je niz reči; istu reč može sadržati više puta (npr. "werden" 2x) — zato
+  // iskorišćenost pratimo po INDEKSU u banci, ne po tekstu reči.
   const [wordBank] = useState(() => {
     const words = [...options];
-    // Shuffle
     for (let i = words.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [words[i], words[j]] = [words[j], words[i]];
@@ -25,50 +26,40 @@ export default function FillBlankExercise({ question, options, correctAnswer, ex
     return words;
   });
 
-  const [filledBlanks, setFilledBlanks] = useState<(string | null)[]>(
+  // Svaka praznina čuva INDEKS reči iz banke (ili null).
+  const [filledBlanks, setFilledBlanks] = useState<(number | null)[]>(
     new Array(blankCount).fill(null)
   );
-  const [usedWords, setUsedWords] = useState<Set<string>>(new Set());
   const [answered, setAnswered] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
 
-  const handleWordClick = (word: string) => {
-    if (answered || usedWords.has(word)) return;
+  const wordAt = (bankIdx: number | null) => (bankIdx === null ? null : wordBank[bankIdx]);
+  const isBankWordUsed = (bankIdx: number) => filledBlanks.includes(bankIdx);
 
-    // Find first empty blank
+  const handleWordClick = (bankIdx: number) => {
+    if (answered || isBankWordUsed(bankIdx)) return;
     const emptyIndex = filledBlanks.findIndex((b) => b === null);
     if (emptyIndex === -1) return;
-
     const newBlanks = [...filledBlanks];
-    newBlanks[emptyIndex] = word;
+    newBlanks[emptyIndex] = bankIdx;
     setFilledBlanks(newBlanks);
-    setUsedWords(new Set([...usedWords, word]));
   };
 
   const handleBlankClick = (index: number) => {
-    if (answered) return;
-    const word = filledBlanks[index];
-    if (!word) return;
-
-    // Remove word from blank
+    if (answered || filledBlanks[index] === null) return;
     const newBlanks = [...filledBlanks];
     newBlanks[index] = null;
     setFilledBlanks(newBlanks);
-    const newUsed = new Set(usedWords);
-    newUsed.delete(word);
-    setUsedWords(newUsed);
   };
 
   const handleCheck = () => {
     if (answered) return;
-
     let correct = 0;
     for (let i = 0; i < blankCount; i++) {
-      if (filledBlanks[i]?.toLowerCase() === correctAnswers[i]?.toLowerCase()) {
+      if (wordAt(filledBlanks[i])?.toLowerCase() === correctAnswers[i]?.toLowerCase()) {
         correct++;
       }
     }
-
     setCorrectCount(correct);
     setAnswered(true);
     onAnswer(correct === blankCount);
@@ -95,11 +86,11 @@ export default function FillBlankExercise({ question, options, correctAnswer, ex
       {/* Word bank */}
       <div className="flex gap-2 flex-wrap mb-6">
         {wordBank.map((word, i) => {
-          const isUsed = usedWords.has(word);
+          const isUsed = isBankWordUsed(i);
           return (
             <button
               key={`${word}-${i}`}
-              onClick={() => handleWordClick(word)}
+              onClick={() => handleWordClick(i)}
               disabled={isUsed || answered}
               className={`px-4 py-2 rounded-full border-2 text-sm font-medium transition-colors ${
                 isUsed
@@ -123,15 +114,15 @@ export default function FillBlankExercise({ question, options, correctAnswer, ex
                 onClick={() => handleBlankClick(i)}
                 className={`inline-block min-w-[100px] mx-1 px-3 py-1 border-b-[3px] rounded text-center font-semibold transition-colors ${
                   !answered
-                    ? filledBlanks[i]
+                    ? filledBlanks[i] !== null
                       ? "border-plava bg-plava-light text-plava cursor-pointer"
                       : "border-gray-300 text-gray-400"
-                    : filledBlanks[i]?.toLowerCase() === correctAnswers[i]?.toLowerCase()
+                    : wordAt(filledBlanks[i])?.toLowerCase() === correctAnswers[i]?.toLowerCase()
                     ? "border-green-500 bg-green-50 text-green-700"
                     : "border-koral bg-koral-light text-koral-dark"
                 }`}
               >
-                {filledBlanks[i] || "______"}
+                {wordAt(filledBlanks[i]) || "______"}
               </button>
             )}
           </span>
@@ -146,7 +137,7 @@ export default function FillBlankExercise({ question, options, correctAnswer, ex
             <span key={i}>
               {i > 0 && ", "}
               <span className={
-                filledBlanks[i]?.toLowerCase() === answer.toLowerCase()
+                wordAt(filledBlanks[i])?.toLowerCase() === answer.toLowerCase()
                   ? "text-green-700 font-medium"
                   : "text-koral-dark font-bold"
               }>
