@@ -12,7 +12,7 @@ export default function Prijava() {
   const handleLogin = async ({ email, password }: { email: string; password: string }) => {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error)
-      return 'Email ili lozinka nisu tačni. Ako si ranije koristio/la Google ili još nemaš lozinku — uđi dugmetom „Nastavite sa Google" iznad, ili klikni „Pošalji mi link za prijavu na email".';
+      return 'Email ili lozinka nisu tačni. Ako nemaš lozinku, vrati se i uđi linkom na mejl ili preko Google.';
     router.push("/dashboard");
     return null;
   };
@@ -20,21 +20,18 @@ export default function Prijava() {
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
       <div className="text-center">
-        <h1 className="text-2xl font-bold text-plava mb-2">Prijava</h1>
-        <p className="text-gray-500 mb-8">Unesite vaše podatke za pristup</p>
+        <h1 className="text-2xl font-bold text-plava mb-2">Prijava za polaznike</h1>
+        <p className="text-gray-500 mb-8 max-w-sm mx-auto">
+          Kupio/la si kurs u Hartweger centru? Uđi ovde da pristupiš svojim lekcijama i materijalima.
+        </p>
 
         <AuthForma tip="prijava" onSubmit={handleLogin} />
 
-        <div className="mt-6 space-y-2 text-sm text-gray-500">
+        <div className="mt-6 text-sm text-gray-500">
           <p>
-            Nemate nalog?{" "}
-            <Link href="/registracija" className="text-plava hover:underline">
-              Registrujte se
-            </Link>
-          </p>
-          <p>
-            <Link href="/reset-lozinke" className="text-plava hover:underline">
-              Zaboravili ste lozinku?
+            Nemaš još kurs?{" "}
+            <Link href="/kursevi" className="text-plava hover:underline">
+              → Pogledaj kurseve
             </Link>
           </p>
         </div>
