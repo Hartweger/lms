@@ -55,7 +55,6 @@ function buildEmail(name: string, expiresAt: string): string {
           <li><strong>Video lekcije</strong> — Masterclass, Deklinacija prideva, pesme za lakše pamćenje</li>
           <li><strong>E-book i liste glagola</strong> — za preuzimanje (nepravilni glagoli, glagoli sa predlozima)</li>
           <li><strong>GLAGOLI test</strong> — 73 pitanja za samoproveru</li>
-          <li><strong>NaKI</strong> — AI asistent za nemački</li>
         </ul>
       </div>
       <p style="font-size:14px;line-height:1.6;color:#444;margin:0 0 8px;">Ako imaš pitanja, samo odgovori na ovaj mejl. Srećno učenje! 💪</p>
