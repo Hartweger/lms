@@ -52,3 +52,5 @@ gramatika-kupci.csv
 
 # WooCommerce export izveštaji (sadrže imena kupaca — PII, ne u git)
 wc-orders-report-export-*.csv
+*analytics-orders.csv
+wc-orders-report-*.csv
