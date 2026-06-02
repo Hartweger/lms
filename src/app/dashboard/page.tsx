@@ -105,11 +105,13 @@ export default async function Dashboard() {
   let courseIds: string[] = [];
 
   if (isAdmin || isProfessor) {
-    // Admins and professors see all courses
-    const { data: allCourses } = await supabase
-      .from("courses")
-      .select("id");
-    courseIds = allCourses?.map((c) => c.id) ?? [];
+    // Admins and professors see all courses that actually have lessons —
+    // this hides the sales/marketing shells (grupni/individualni/paket…),
+    // which are purchasable products with no lesson content of their own.
+    const { data: lessonRows } = await supabase
+      .from("lessons")
+      .select("course_id");
+    courseIds = [...new Set((lessonRows ?? []).map((l) => l.course_id))];
   } else {
     // Students: filter out expired access
     const { data: accessList } = await supabase
