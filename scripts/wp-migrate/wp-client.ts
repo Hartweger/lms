@@ -4,6 +4,7 @@ const AUTH = "Basic " + Buffer.from("Nati:cEbg CO8J 1dPP olXw sK4W zDor").toStri
 export const COURSE_MAP: Record<string, number> = {
   "fsp": 40305, "polozi-fide": 45501, "gramatika-a2-b1": 47790,
   "polozi-goethe-b1": 31516, "polozi-goethe-b2": 31515, "polozi-goethe-c1": 47215,
+  "kurs-za-mame-i-trudnice": 50096,
 };
 
 async function wp(path: string): Promise<any> {
