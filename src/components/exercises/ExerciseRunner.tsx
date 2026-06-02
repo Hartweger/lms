@@ -27,9 +27,10 @@ interface ExerciseRunnerProps {
   nextLessonId?: string | null;
   courseId?: string | null;
   isModelltest?: boolean;
+  isTest?: boolean;
 }
 
-export default function ExerciseRunner({ exercise, questions, level = "A1", nextExerciseId, nextLessonId, courseId, isModelltest }: ExerciseRunnerProps) {
+export default function ExerciseRunner({ exercise, questions, level = "A1", nextExerciseId, nextLessonId, courseId, isModelltest, isTest = false }: ExerciseRunnerProps) {
   const supabase = createClient();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -79,7 +80,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
     return hasCtx || !!q.audio_url;
   });
   if (isGroupedExam) {
-    return <GroupedExamExercise exercise={exercise} questions={questions} nextLessonId={nextLessonId} />;
+    return <GroupedExamExercise exercise={exercise} questions={questions} nextLessonId={nextLessonId} isTest={isTest} />;
   }
 
   const question = questions[currentIndex];
@@ -448,7 +449,10 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
 
       {/* Progress */}
       <div className="flex items-center justify-between mb-4">
-        <span className="text-sm font-medium text-plava">{exercise.title}</span>
+        <span className="flex items-center gap-2">
+          <span className={`text-xs px-2 py-0.5 rounded-full ${isTest ? "bg-koral-light text-koral-dark" : "bg-plava-light text-plava"}`}>{isTest ? "🎯 Test" : "✏️ Vežba"}</span>
+          <span className="text-sm font-medium text-plava">{exercise.title}</span>
+        </span>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <span className="text-sm text-plava font-bold">{xp} XP</span>

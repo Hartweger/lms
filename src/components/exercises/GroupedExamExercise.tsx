@@ -10,6 +10,7 @@ interface Props {
   exercise: Exercise;
   questions: ExerciseQuestion[];
   nextLessonId?: string | null;
+  isTest?: boolean;
 }
 
 type Ctx = { title: string; type: string; content?: string; headers?: string[]; rows?: string[][] };
@@ -34,7 +35,7 @@ function fmtMd(md: string): string {
     .replace(/\n/g, "<br>");
 }
 
-export default function GroupedExamExercise({ exercise, questions, nextLessonId }: Props) {
+export default function GroupedExamExercise({ exercise, questions, nextLessonId, isTest = false }: Props) {
   const supabase = createClient();
 
   // Grupiši pitanja u delove po zajedničkom tekstu (context) ili audiju
@@ -98,9 +99,12 @@ export default function GroupedExamExercise({ exercise, questions, nextLessonId 
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-4">
-        <span className="text-sm font-medium text-plava">{exercise.title}</span>
-        <span className="text-sm text-gray-400">Deo {partIdx + 1} / {groups.length}</span>
+      <div className="flex items-center justify-between mb-4 gap-2">
+        <span className="flex items-center gap-2 min-w-0">
+          <span className={`text-xs px-2 py-0.5 rounded-full ${isTest ? "bg-koral-light text-koral-dark" : "bg-plava-light text-plava"}`}>{isTest ? "🎯 Test" : "✏️ Vežba"}</span>
+          <span className="text-sm font-medium text-plava truncate">{exercise.title}</span>
+        </span>
+        <span className="text-sm text-gray-400 whitespace-nowrap">Deo {partIdx + 1} / {groups.length}</span>
       </div>
 
       {/* Tekst / audio dela — jednom za sva pitanja */}

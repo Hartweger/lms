@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import ExerciseRunner from "@/components/exercises/ExerciseRunner";
+import { isTestExercise } from "@/lib/exercise-kind";
 import type { Exercise, ExerciseQuestion } from "@/lib/types";
 
 interface PageProps {
@@ -118,6 +119,7 @@ export default async function VezbaStranica({ params }: PageProps) {
           nextLessonId={nextLessonId}
           courseId={lesson?.course_id || null}
           isModelltest={lesson?.title?.includes("Modelltest") && !nextExerciseId}
+          isTest={isTestExercise(typedExercise.title, courseTitle)}
         />
       ) : (
         <p className="text-gray-400 text-center py-8">Ova vežba nema pitanja.</p>

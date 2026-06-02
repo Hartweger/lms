@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import LekcijaContent from "@/components/LekcijaContent";
 import LessonDrawer from "@/components/LessonDrawer";
 import LessonCompleteButton from "@/components/LessonCompleteButton";
+import { exerciseKindBadge } from "@/lib/exercise-kind";
 import { getFixedTranslations } from "@/lib/fixed-translations";
 import type { Lesson, Exercise } from "@/lib/types";
 
@@ -128,22 +129,25 @@ export default async function LekcijaStranica({ params }: PageProps) {
       {/* Exercises */}
       {exercises && exercises.length > 0 && (
         <div className="mt-8">
-          <h3 className="font-semibold text-gray-900 mb-3">Vežbe</h3>
+          <h3 className="font-semibold text-gray-900 mb-3">Vežbe i testovi</h3>
           <div className="space-y-2">
-            {(exercises as Exercise[]).map((ex) => (
+            {(exercises as Exercise[]).map((ex) => {
+              const kind = exerciseKindBadge(ex.title, course?.title || course?.slug);
+              return (
               <Link
                 key={ex.id}
                 href={`/vezba/${ex.id}`}
                 className="block bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
               >
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-3">
                   <span className="font-medium text-gray-900">{ex.title}</span>
-                  <span className="text-xs text-plava bg-plava-light px-3 py-1 rounded-full">
-                    {ex.exercise_type === "quiz" ? "Kviz" : ex.exercise_type === "fill_blank" ? "Popuni" : ex.exercise_type === "match_pairs" ? "Spoji" : ex.exercise_type === "word_order" ? "Poredaj" : ex.exercise_type === "essay" ? "Schreiben" : "Slušaj"}
+                  <span className={`text-xs px-3 py-1 rounded-full whitespace-nowrap ${kind.test ? "bg-koral-light text-koral-dark" : "bg-plava-light text-plava"}`}>
+                    {kind.label}
                   </span>
                 </div>
               </Link>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}
