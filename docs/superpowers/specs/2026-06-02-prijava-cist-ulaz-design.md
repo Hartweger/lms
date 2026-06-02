@@ -67,6 +67,11 @@ Podrazumevano vidljivo na otvaranju:
   preusmerava na `/prijava` (server redirect) da stari linkovi/bookmarkovi ne puknu. `signUp`
   poziv se više ne koristi.
 
+### Ton obraćanja
+
+Sav tekst na stranici je na **"ti"** (npr. "Kupio si kurs? Uđi ovde", "Prijavi se",
+"Nemaš još kurs?"), dosledno kroz primarni tok i sklopivu sekciju za lozinku.
+
 ### Magic link — bez pravljenja novog naloga
 
 Magic link poziva `signInWithOtp` sa `shouldCreateUser: false`.
