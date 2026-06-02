@@ -164,39 +164,40 @@ export default async function LekcijaStranica({ params }: PageProps) {
         </div>
       )}
 
-      {/* Dugme „Završi lekciju" (ručno) + čestitka na kraju nivoa */}
-      {user && (
+      {/* Završetak lekcije + navigacija (jedno dugme „Završi i nastavi →") */}
+      {user ? (
         <LessonCompleteButton
           lessonId={typedLesson.id}
           initialCompleted={lessonCompleted}
           willCompleteLevel={willCompleteLevel}
           levelComplete={levelComplete}
+          prevLessonId={prevLesson?.id ?? null}
+          nextLessonId={nextLesson?.id ?? null}
         />
+      ) : (
+        <div className="flex gap-3 mt-8 pt-6 border-t border-gray-100">
+          {prevLesson ? (
+            <Link
+              href={`/lekcija/${prevLesson.id}`}
+              className="flex-1 text-center py-3 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50 transition-colors"
+            >
+              ← Prethodna
+            </Link>
+          ) : (
+            <div className="flex-1" />
+          )}
+          {nextLesson ? (
+            <Link
+              href={`/lekcija/${nextLesson.id}`}
+              className="flex-1 text-center py-3 bg-plava text-white rounded-lg text-sm font-bold hover:bg-plava-dark transition-colors"
+            >
+              Sledeća →
+            </Link>
+          ) : (
+            <div className="flex-1" />
+          )}
+        </div>
       )}
-
-      {/* Bottom navigation */}
-      <div className="flex gap-3 mt-8 pt-6 border-t border-gray-100">
-        {prevLesson ? (
-          <Link
-            href={`/lekcija/${prevLesson.id}`}
-            className="flex-1 text-center py-3 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50 transition-colors"
-          >
-            ← Prethodna
-          </Link>
-        ) : (
-          <div className="flex-1" />
-        )}
-        {nextLesson ? (
-          <Link
-            href={`/lekcija/${nextLesson.id}`}
-            className="flex-1 text-center py-3 bg-plava text-white rounded-lg text-sm font-bold hover:bg-plava-dark transition-colors"
-          >
-            Sledeća →
-          </Link>
-        ) : (
-          <div className="flex-1" />
-        )}
-      </div>
     </div>
   );
 }
