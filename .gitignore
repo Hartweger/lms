@@ -49,3 +49,6 @@ A1.2/
 
 # Lični podaci kupaca — ne komitovati
 gramatika-kupci.csv
+
+# WooCommerce export izveštaji (sadrže imena kupaca — PII, ne u git)
+wc-orders-report-export-*.csv
