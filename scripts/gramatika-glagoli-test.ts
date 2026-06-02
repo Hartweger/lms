@@ -51,7 +51,7 @@ const QUESTIONS: Q[] = [
   typing("Kako bi rekla: „Ja bih jednu kafu.“\n\nIch ______ gerne einen Kaffee.", "hätte"),
   quiz("Koja je rečenica ispravna?", ["Ich wäre gerne ans Meer fahren.", "Ich hätte gerne ein Haus kaufen.", "Ich würde gerne eine Pause machen."], 2),
   typing("Kako bismo rekli: „Da li biste mi mogli pomoći?“\n\n______ Sie mir helfen?", "Könnten"),
-  fill("„Da sam imala vremena, učila bih više.“\n\nWenn ich Zeit gehabt ______, ______ ich mehr gelernt.", ["hätte", "hätte"]),
+  typing("„Da sam imala vremena, učila bih više.“ (ista reč ide u obe praznine)\n\nWenn ich Zeit gehabt ______, ______ ich mehr gelernt.", "hätte"),
   typing("„Ostavljam auto na popravku.“\n\nIch ______ das Auto reparieren.", "lasse"),
   fill("Koji glagoli idu sa kojim predlogom? Dopuni predlozima.\n\nIch erinnere mich ______. Ich träume ______. Ich warte ______. Ich ärgere mich ______.", ["an", "von", "auf", "über"]),
   typing("Kako bismo rekli: „Ja sanjam o putovanju oko sveta.“\n\nIch träume ______ einer Weltreise.", "von"),
