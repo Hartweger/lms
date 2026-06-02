@@ -8,7 +8,9 @@ interface EssayRow {
   user_id: string;
   exercise_id: string;
   lesson_id: string;
-  text: string;
+  text: string | null;
+  audio_url?: string | null;
+  submission_type?: string | null;
   ai_feedback: string | null;
   ai_corrections: { original: string; corrected: string; explanation: string }[] | null;
   ai_score: number | null;
@@ -160,8 +162,17 @@ export default function ProfesorEseji() {
             </p>
 
             <div className="bg-gray-50 rounded-lg p-4 mb-4">
-              <p className="text-xs font-semibold text-gray-500 mb-1">Tekst studenta:</p>
-              <p className="text-sm text-gray-700 whitespace-pre-wrap">{essay.text}</p>
+              {essay.audio_url ? (
+                <>
+                  <p className="text-xs font-semibold text-gray-500 mb-2">Snimak studenta (Sprechen):</p>
+                  <audio controls className="w-full" src={essay.audio_url} />
+                </>
+              ) : (
+                <>
+                  <p className="text-xs font-semibold text-gray-500 mb-1">Tekst studenta:</p>
+                  <p className="text-sm text-gray-700 whitespace-pre-wrap">{essay.text}</p>
+                </>
+              )}
             </div>
 
             {essay.ai_feedback && (

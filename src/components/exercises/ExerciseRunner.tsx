@@ -15,6 +15,7 @@ import CategorizeExercise from "./CategorizeExercise";
 import TypingExercise from "./TypingExercise";
 import ConversationExercise from "./ConversationExercise";
 import SpeakExercise from "./SpeakExercise";
+import SprechenExercise from "./SprechenExercise";
 import type { Exercise, ExerciseQuestion } from "@/lib/types";
 
 interface ExerciseRunnerProps {
@@ -521,6 +522,19 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
                 question={question.question}
                 correctAnswer={question.correct_answer}
                 explanation={question.explanation}
+                onAnswer={handleAnswer}
+              />
+            );
+          }
+
+          // Sprechen — snimi usmeni odgovor, profesor pregleda
+          if (exercise.exercise_type === "sprechen") {
+            return (
+              <SprechenExercise
+                key={question.id}
+                task={question.question}
+                exerciseId={exercise.id}
+                lessonId={exercise.lesson_id}
                 onAnswer={handleAnswer}
               />
             );
