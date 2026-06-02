@@ -43,13 +43,21 @@ export default function SprechenExercise({ task, exerciseId, lessonId, onAnswer 
 
   const startRecording = async () => {
     setError(null);
+    if (typeof MediaRecorder === "undefined" || !navigator.mediaDevices?.getUserMedia) {
+      setError("Tvoj browser ne podržava snimanje. Probaj noviji Chrome, Safari ili Firefox.");
+      return;
+    }
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mr = new MediaRecorder(stream);
+      // iOS/Safari ne podržava webm — izaberi prvi podržan tip
+      const cands = ["audio/webm", "audio/mp4", "audio/ogg"];
+      const mime = cands.find((t) => MediaRecorder.isTypeSupported?.(t)) || "";
+      const mr = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream);
       chunksRef.current = [];
       mr.ondataavailable = (e) => { if (e.data.size > 0) chunksRef.current.push(e.data); };
       mr.onstop = () => {
-        const b = new Blob(chunksRef.current, { type: "audio/webm" });
+        const type = mr.mimeType || mime || "audio/webm";
+        const b = new Blob(chunksRef.current, { type });
         setBlob(b);
         setAudioUrl(URL.createObjectURL(b));
         stream.getTracks().forEach((t) => t.stop());
@@ -79,8 +87,9 @@ export default function SprechenExercise({ task, exerciseId, lessonId, onAnswer 
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { setError("Nisi prijavljen/a."); setUploading(false); return; }
-      const path = `${user.id}/${exerciseId}-${Date.now()}.webm`;
-      const { error: upErr } = await supabase.storage.from("sprechen").upload(path, blob, { contentType: "audio/webm", upsert: true });
+      const ext = blob.type.includes("mp4") ? "mp4" : blob.type.includes("ogg") ? "ogg" : "webm";
+      const path = `${user.id}/${exerciseId}-${Date.now()}.${ext}`;
+      const { error: upErr } = await supabase.storage.from("sprechen").upload(path, blob, { contentType: blob.type || "audio/webm", upsert: true });
       if (upErr) { setError("Greška pri otpremanju snimka."); setUploading(false); return; }
       const url = supabase.storage.from("sprechen").getPublicUrl(path).data.publicUrl;
       const { error: insErr } = await supabase.from("essay_submissions").insert({
