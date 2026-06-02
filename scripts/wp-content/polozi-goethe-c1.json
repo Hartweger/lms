@@ -1,0 +1,325 @@
+{
+  "slug": "polozi-goethe-c1",
+  "wpCourseId": 47215,
+  "lessons": [
+    {
+      "wpLessonId": 47368,
+      "title": "Opšte informacije",
+      "order_index": 0,
+      "vimeo_video_id": "1119815561",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Opšte informacije"
+        },
+        {
+          "type": "video",
+          "vimeoId": "1119815561"
+        },
+        {
+          "type": "text",
+          "content": "[Prezentacija: Opšte informacije o ispitu C1](https://www.hartweger.rs/wp-content/uploads/2025/09/Opste-informacije-o-ispitu-Gete-C1.pptx)"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "wpLessonId": 47217,
+      "title": "LESEN C1",
+      "order_index": 1,
+      "vimeo_video_id": "1112911724",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "LESEN C1"
+        },
+        {
+          "type": "video",
+          "vimeoId": "1112911724"
+        },
+        {
+          "type": "text",
+          "content": "[Prezentacija:C1-Lesen](https://www.hartweger.rs/wp-content/uploads/2025/09/Goethe-Prufung-C1-Lesen-.pptx)"
+        }
+      ],
+      "exercises": [
+        {
+          "title": "Leseverstehen C1 Frage 1",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": "Sie lesen in einer Zeitschrift einen Artikel über Schlafstörungen und Schlafmangel. Schrieben Sie in die Lücken A, B, C oder D Gesunder Schlaf Schlafmangel führt zu Schädigung des Gehirns Die moderne Industriegesellschaft mit ihrem 24-Stunden-Rhythmus bringt immer mehr Menschen um ihren Schlaf. Die Folgen von Schlafstörungen und Schlafmangel dürfen Beispiel 0 unterschätzt werden. Sie können langfristig zu schwerwiegenden Beeinträchtigungen der Leistungs- und Konzentrationsfähigkeit führen. Auch psychische Störungen zählen zu den Langzeitfolgen von Schlafstörungen. Die Kriterien für guten oder schlechten Schlaf (1 …) sich an drei einfachen Fragen festmachen: Schlafe ich leicht ein? Habe ich ruhig durchgeschlafen? Wie bewerte ich selbst die Qualität meines Schlafs? Und wie definiert die Wissenschaft Schlafstörungen? Einschlafstörungen sind das meistverbreitete Problem. Dazu gehört auch die Schwierigkeit, die ganze Nacht durchzuschlafen bzw. der erfolglose (2 …) wieder einzuschlafen, wenn man einmal aufgewacht ist. Die Ursachen sind hauptsächlich psychischer Art: unbewältigte Stresssituationen, Gedanken, die ständig im Kopf kreisen und einen nicht zur Ruhe kommen lassen. Ein weiteres Problem ist das Einnicken tagsüber und das Gefühl, ständig schläfrig zu sein, (3 …) man eigentlich glaubt, ausreichend geschlafen zu haben. Schlafwandeln, Albträume oder Zähneknirschen werden ebenso als Schlafstörungen verzeichnet wie chronische Müdigkeit. Dass Schlafverhalten die Leistungsfähigkeit beeinflusst, (4 …) belegen zahlreiche Laborstudien. Im Schlaf festigen sich neue Informationen und neu erlernte motorische Fähigkeiten – vor allem bei Kindern und Heranwachsenden. Im Tiefschlaf wird Wissen reaktiviert, verarbeitet und (5 …) besser gespeichert. Folgende messbare Hirnaktivitäten finden während des Schlafs statt: Das wiederholte Abspielen der Informationen verstärkt die Synapsen (Verbindungen) zwischen den Nervenzellen. Neue Verbindungen bilden sich. Alte Synapsen werden neu geordnet, neu gefestigte Inhalte in vorhandenes Wissen (6 …) . Eine Studie wies nach, dass Schulkinder, die gut geschlafen haben, am nächsten Tag die Aufgaben in der Schule besser bewältigen und zu höherer Leistung (7 …) waren. Eine unruhige Nacht dagegen mit schlechtem Schlaf ließ die Denkleistung am nächsten Tag merklich sinken. Wenn das Gehirn nachts nicht genug Ruhe bekommt, versucht es, am Tag (8 …) zu kommen. Das schädigt das Gehirn dauerhaft. Die Studie kommt zu dem Ergebnis, dass regelmäßige Schlafenszeiten ausgesprochen wichtig sind. Der Schlaf sollte erholsam sein und die Schlafdauer möglichst konstant bleiben.",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "a",
+                  "a",
+                  "c",
+                  "b",
+                  "c",
+                  "d",
+                  "c",
+                  "d"
+                ]
+              },
+              "correct_answer": "a, a, c, b, c, d, c, d",
+              "question_type": "fill_blank"
+            },
+            {
+              "question": "Teil 2 Sie lesen im Internet einen Artikel über den Einsatz von Ratten. Wählen Sie bei jeder Aufgabe die richtige Lösung. Ratte, rette mich: Trainierte Nager sollen Vermisste suchen In Trümmern sind Menschen schwer zu finden. Nach einem Erdbeben beispielsweise setzen Rettungstrupps oft speziell ausgebildete Suchhunde ein, um Vermisste unter den Geröllteilen aufzuspüren. Die Hunde kön nen Gerüche feiner wahrnehmen als Menschen. Sie bellen, wenn sie jemanden finden. Allerdings können selbst Hunde nicht an jede Stelle vordringen. Daher könnten Suchteams künftig um eine tierische Einheit erweitert werden, die dem Sprichwort nach eigentlich als erste das sinkende Schiffe verlässt – ausgerechnet Ratten. Eine Nichtregierungsorganisation mit Sitz in Tansania setzt schon seit Jahren erfolgreich sogenannte Riesen- hamsterratten ein, um in ehemaligen Kriegsgebieten nach versteckten Landminen zu suchen. Anders als Metalldetektoren ignorieren die Ratten jeglichen Metallschrott und erschnüffeln nur den Sprengstoff, wes- halb sie schneller und effizienter arbeiten als Menschen mit ihren maschinellen Detektoren. Die sogenannten HeroRATs haben bereits vielen Gemeinden wieder gesichertes Land für die Entwicklung der Landwirtschaft zurückgegeben. Die Organisation trainiert die Ratten aber auch, um Tuberkulose heraus- zuriechen. Es ist das gleiche Prinzip wie bei Landminen: Die Ratten sind darauf ausgerichtet, den Geruch spezifischer Moleküle zu erkennen, die auf das Vorhandensein des Tuberkulose-Erregers schließen lassen. Verschüttete Menschen aufzuspüren ist nun also das dritte Einsatzgebiet der HeroRATS. Die Ratten haben einen erstaunlichen Geruchssinn. Ihre Riechzellen in der Nasenhöhle erkennen wie bei anderen Lebewesen auch Duftstoffe in der Atemluft und erzeugen elektrische Signale, die das Gehirn zur Geruchswahrnehmung nutzt. Riechzellen verfügen über feine Sinneshärchen mit einem Durchmesser von circa 0,0001 Millimeter. Das menschliche Haar hat im Vergleich dazu einen Durchmesser von etwa 0.04 bis 0.12 Millimetern. Duftstoffe binden sich an die Geruchsrezeptoren der Sinneshärchen. Dadurch wird die Riechzelle aktiviert, was schließlich zu dem elektrischen Signal führt. Menschen haben 380 solcher Duft- stoffrezeptoren, Hunde haben 900. Eine Ratte hat über 1.200. Bei der Suche und Rettung dringen Hunde nicht in die Trümmer ein, sondern schnüffeln nur an der Außen- seite herum. Ratten sind hingegen klein und können selbst dichten Schutt durchdringen. Und sie haben einen weiteren Vorteil: Sie sind genauso trainierbar wie Hunde, aber nicht an die Person, die sie trainiert, gebunden. Für Ratten spielt es keine Rolle, für wen sie tätig sind. Um die Ratten zu trainieren, gehen die Trainerinnen und Trainer schrittweise vor. Als Erstes lernen die Tie- re, an ihren jeweiligen Ausgangspunkt zurückzukehren. Die Trainer lassen die Ratte in einem leeren Raum frei herumlaufen. Sobald die Tiere einen Piepton hören, sollen sie zur Trainerin oder zum Trainer laufen. Dort erhalten sie aus einer Spritze als Belohnung Rattenpellets in Pulverform, gemischt mit Avocado und Banane. Im zweiten Schritt nutzen die Tiere einen Rucksack mit Gummiball. Der Ball ist mit einem Mikro- schalter verbunden, der den Piepton abgibt. Die Idee ist simpel: Die Ratten sollen lernen, an dem Gummiball zu ziehen, sobald sie einen Menschen aufspüren. Das Signal ertönt, und die Ratte kehrt damit zu den Ret- tungskräften zurück. Die wissen nun, dass die Suche erfolgreich war. Im Durchschnitt brauchen die Ratten etwa 30 Trainingseinheiten, um diese Sequenz zu lernen. Nach Angaben der Trainerin der Ratten gehe man davon aus, dass diese im Durchschnitt zwischen 10 und 20 Meter weit laufen können, maximal etwa 30 Meter, sodass ein ziemlich großes Gebiet abgedeckt werden könne. Die Rucksäcke der Ratten würden außerdem mit Mikrofon, Licht und einer Kamera ausgestattet. Um Menschen die Angst vor den heranrückenden Ratten zu nehmen, solle aus dem Rucksack eine Aufnahme kommen, die etwas sagt wie: „Ich bin eine Rettungsratte und komme, um dir zu helfen\". Laut der Traine- rin unterscheiden die einzelnen Ratten sich in ihrer Persönlichkeit und in ihren Fähigkeiten. Einige lernen schneller als andere. Aber aus der Erfahrung mit den Tieren wisse man, dass sie einen immer wieder überra- schen könnten. Diejenigen, denen eine Übungssequenz zuerst nicht so gut gelinge, könnten plötzlich zu den Besten ihrer Klasse gehören. Eine der besten Minen-Suchratten hat für ihre Arbeit bereits eine Auszeichnung erhalten: Die HeroRAT Magawa hat 39 Landminen und 28 nicht explodierte Sprengkörper gefunden. Sie hat innerhalb von vier Jah- ren dazu beigetragen, dass über 141.000 Quadratmeter Land (etwa zwanzig Fußballfelder) geräumt wurden, sodass sich die Menschen vor Ort ohne Angst wieder auf ihrem Land bewegen können. Magawa wurde von einer britischen Tierschutz-Organisation offiziell mit einer rattengroßen Goldmedaille – dem tierischen Pen- dant zum Georgs-Kreuz, das in Großbritannien tapferen Menschen verliehen wird – ausgezeichnet. Es ist die erste Ratte, die eine solche Medaille erhält. Bisherige Preisträger waren mutige Hunde.",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "b",
+                  "c",
+                  "b",
+                  "a",
+                  "b",
+                  "b",
+                  "a"
+                ]
+              },
+              "correct_answer": "b, c, b, a, b, b, a",
+              "question_type": "fill_blank"
+            },
+            {
+              "question": "Teil 3 Sie lesen in einer Tageszeitung einen Kommentar. Welche Sätze passen in die Lücken? Zwei Sätze passen nicht. Wieso Sie noch lange auf Ihre Beförderung warten können Eigentlich sollten Führungskräfte gute Mitarbeitende fördern. Doch da gibt es ein strukturelles Problem. Gerade läuft es richtig gut im Team. Doch dann wechselt eine Kollegin oder ein Kollege in eine andere Abteilung. Und plötzlich weichen eingespielte Prozesse im alten Team großer Überforderung. Beispiel [0] (in Unternehmen) gehört diese Zielkonflikt zum Alltag. Denn interne Beförderungen erfordern oft einen Teamwechsel. Die meisten Unternehmen verlassen sich aber auf Führungskräfte, [16] … Obwohl die Mitarbeitendenentwicklung zu den Hauptaufgaben von Führungskräften gehört, gibt es kaum Anreize, dem nachzukommen. Denn wenn gute Mitarbeitende das Team verlassen, ist es meist Aufgabe der Führungskraft, einen Ersatz zu finden. Diese Neubesetzungen können lange dauern, viel Mühe kosten und das Team strapazieren. Unternehmen profitieren davon, wenn besonders qualifizierte Personen befördert werden. [17] … Wer nicht auf berufslich aufsteigt, ist womöglich dann vielleicht zweimal, ob man die talentierte Mitarbeiterin wirklich gerade jetzt dem Stellenwechsel soll. Wenn Führungskräfte Anreize haben, Mitarbeitende im Team zu halten, reduziert das die internen Bewerbungen um mehr als die Hälfte. Betroffen sind vor allem diejenigen, die besonders qualifiziert sind und in der Vergangenheit eine hohe Performance erzielten. Denn genau das sind Mitarbeitende, die man als zukünftige Führungskräfte am wenigsten verlieren will. [18] … So wird die Karriere im Unternehmen langfristig gehemmt, was sich auch negativ auf die Gehaltsentwicklung auswirkt. Das strategische Halten von Mitarbeitenden nimmt verschiedene Formen an. Zum Beispiel erhalten Mitarbeitende weniger Hilfe bei der Karriereplanung oder werden von ihnen Vorgesetzten nicht explizit ermutigt, sich zu bewerben. [19] … Sie reagieren einfach nur auf die Anreize, die Unternehmen für sie schaffen. Während vielen Unternehmen das Ausmaß dieses Anreizproblems nicht bewusst ist, sind die Auswirkungen massiv. Bestehende Talentpools innerhalb des Unternehmens werden nicht ausgeschöpft. [20] … Anstatt einen Konflikt mit der Führungskraft zu riskieren, entscheiden sich gute Mitarbeitende dann eher für eine Bewerbung bei anderen Unternehmen. Weil Frauen im Durchschnitt mehr Wert auf die Unterstützung der Führungskraft bei der Karrieregestaltung legen, sind die Folgen für sie viel ärger als für Männer. Mehr sind vor allem qualifizierte Frauen entscheidet sich deshalb gegen eine interne Bewerbung, aus Angst, die Führungskraft vor den Kopf zu stoßen. [21] … So vergrößert das Anreizproblem von Führungskräften als ungewollter Nebeneffekt Geschlechterunterschiede in Unternehmen. Das beeinträchtigt das Bestreben vieler Unternehmen, den Frauenanteil in höheren Positionen zu steigern, und macht einen Großteil bestehender Unterschiede im Gehaltsgefälle zwischen Frauen und Männern aus. Trotz der umfangreichen Veränderungen, die das mit sich bringt, lohnt es sich, die Anreize für Führungskräfte besser zu gestalten. [22] … Unternehmen können prüfen, inwieweit die Mitarbeitendenentwicklung in der Bewertung von Führungskräften mehr Gewicht bekommt. Zudem kann Anerkennung für Führungskräfte geschaffen werden, die besonders viele Talente fördern. Um Führungskräfte besser zu motivieren, Mitarbeitende zu entwickeln, müssen Unternehmen nicht nur die Anreize der Führungskräfte berücksichtigen. [23] … Denn oft machen sich Mitarbeitende bei der Entscheidung für interne Bewerbungen Sorgen, ob die eigene Führungskraft davon erfahren könnte. Sie fürchten negative Auswirkungen, falls es mit der internen Bewerbung doch nicht klappen sollte. Solange solche Befürchtungen bestehen, bleibt es schwierig, den internen Stellenmarkt so zu gestalten, dass qualifizierte Mitarbeitende effektiver gefördert werden können. Wenn es jedoch gelingt, qualifizierte Mitarbeitende zu halten, der erhöht nicht nur die Produktivität und Wettbewerbsfähigkeit von Unternehmen, sondern sorgt nebenbei auch für mehr Diversität und eine positive Unternehmenskultur, sowohl für Führungskräfte als auch für Mitarbeitende. Beispiel 0 Was für die Kollegin oder den Kollegen ein wichtiger Karriereschritt sein kann, stellt für das Team oft einen Nachteil dar. a Dabei handeln die meisten Führungskräfte nicht aus böser Absicht. b Damit geben sie Bewerbungen für höhere Positionen auf, die eigentlich sehr gut zu ihnen passen würden. c Das hat zur Folge, dass qualifizierte Mitarbeitende in ihren Positionen stecken bleiben, anstatt befördert zu werden. d Die bisherige Praxis der Mitarbeiterförderung lässt zu wünschen übrig. e Die mangelnden Karriereoptionen wirken demotivierend. f Diese müssen nicht unbedingt finanzieller Art sein. g Sie sollen Mitarbeitende bei der Karriereentwicklung unterstützen und Beförderungsmöglichkeiten aufzeigen. h Doch Führungskräfte erhalten trotz des erhöhten Arbeitsaufwands in der Regel keine Kompensation dafür. i Solche Maßnahmen tragen dazu bei, dass sich qualifizierte Mitarbeitende auf interne Ausschreibungen bewerben. j Zusätzlich muss es gelingen, Mitarbeitenden glaubwürdig zu versichern, dass interne Karriereschritte gern gesehen und unterstützt werden.",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "g",
+                  "h",
+                  "c",
+                  "a",
+                  "e",
+                  "b",
+                  "f",
+                  "j"
+                ]
+              },
+              "correct_answer": "g, h, c, a, e, b, f, j",
+              "question_type": "fill_blank"
+            },
+            {
+              "question": "Teil 4 Sie lesen in einer Fachzeitschrift Beiträge von Wissenschaftlerinnen und Wissenschaftlern. Wählen Sie bei jeder Aussage: Wer äußert das? Zwei Aussagen passen nicht. Wählen Sie in diesem Fall 0.",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "0",
+                  "a",
+                  "b",
+                  "0",
+                  "c",
+                  "c",
+                  "a"
+                ]
+              },
+              "correct_answer": "0, a, b, 0, c, c, a",
+              "question_type": "fill_blank"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "wpLessonId": 47219,
+      "title": "HÖREN C1",
+      "order_index": 2,
+      "vimeo_video_id": "1112911134",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "HÖREN C1"
+        },
+        {
+          "type": "video",
+          "vimeoId": "1112911134"
+        },
+        {
+          "type": "text",
+          "content": "[Prezentacija: C1 Hören](https://www.hartweger.rs/wp-content/uploads/2025/09/Goethe-Prufung-C1-Horen-1.pptx)"
+        }
+      ],
+      "exercises": [
+        {
+          "title": "Hörverstehen C1 Teil 1",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": "Teil 1 Sie hören eine Radiosendung über neue Podcasts. Sie hören den Text einmal. Wählen Sie bei jeder Aufgabe, zu welchem Podcast die Aussage passt. Lesen Sie zuerst die Aufgaben 1 bis 6. Dazu haben Sie 60 Sekunden Zeit. https://www.hartweger.rs/wp-content/uploads/2025/09/01_Pruef_Expr_Goethe_C1_Hoeren_1.mp3",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "c",
+                  "b",
+                  "c",
+                  "a",
+                  "c",
+                  "a"
+                ]
+              },
+              "correct_answer": "c, b, c, a, c, a",
+              "question_type": "fill_blank"
+            },
+            {
+              "question": "Teil 2 Sie hören ein Radiointerview mit einer Persönlichkeit aus der Wissenschaft. Sie hören den Text zweimal . Wählen Sie bei jeder Aufgabe die richtige Lösung. Lesen Sie zuerst die Aufgaben 7 bis 15. Dazu haben Sie 60 Sekunden Zeit. https://www.hartweger.rs/wp-content/uploads/2025/09/02_Pruef_Expr_Goethe_C1_Hoeren_2.mp3",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "a",
+                  "a",
+                  "c",
+                  "b",
+                  "a",
+                  "b",
+                  "a",
+                  "a",
+                  "c"
+                ]
+              },
+              "correct_answer": "a, a, c, b, a, b, a, a, c",
+              "question_type": "fill_blank"
+            },
+            {
+              "question": "Teil 3 Sie hören ein Gespräch mit mehreren Personen über den Fachkräftemangel. Sie hören den Text in vier Abschnitten jeweils einmal . Zu jedem Abschnitt gibt es zwei Aufgaben. Wählen Sie bei jeder Aufgabe die richtige Lösung. Vor dem Hören eines Abschnitts haben Sie 30 Sekunden Zeit, um die zwei Aufgaben zu lesen. https://www.hartweger.rs/wp-content/uploads/2025/09/03_Pruef_Expr_Goethe_C1_Hoeren_3.mp3",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "a",
+                  "b",
+                  "a",
+                  "a",
+                  "a",
+                  "c",
+                  "a",
+                  "a"
+                ]
+              },
+              "correct_answer": "a, b, a, a, a, c, a, a",
+              "question_type": "fill_blank"
+            },
+            {
+              "question": "Teil 4 Sie hören einen Vortrag über die Pockenimpfung. Sie hören den Text zweimal . Wählen Sie bei jeder Aufgabe die richtige Lösung. Lesen Sie zuerst die Aufgaben 24 bis 30. Dazu haben Sie 90 Sekunden Zeit. https://www.hartweger.rs/wp-content/uploads/2025/09/04_Pruef_Expr_Goethe_C1_Hoeren_4.mp3",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "c",
+                  "b",
+                  "a",
+                  "c",
+                  "b",
+                  "c",
+                  "c"
+                ]
+              },
+              "correct_answer": "c, b, a, c, b, c, c",
+              "question_type": "fill_blank"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "wpLessonId": 47221,
+      "title": "SCHREIBEN C1",
+      "order_index": 3,
+      "vimeo_video_id": "1113786886",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "SCHREIBEN C1"
+        },
+        {
+          "type": "video",
+          "vimeoId": "1113786886"
+        },
+        {
+          "type": "text",
+          "content": "[Prezentacija: C1-Schriftlicher-Ausdruck (2)](https://www.hartweger.rs/wp-content/uploads/2025/09/Goethe-Prufung-C1-Schriftlicher-Ausdruck-2.pptx)\n\n[Redemittel C1 – Schreiben Teil 1](https://www.hartweger.rs/wp-content/uploads/2025/09/Redemittel-C1-Schreiben-Teil-1.pdf)\n\n[Redemittel – Schreiben, Teil 2](https://www.hartweger.rs/wp-content/uploads/2025/09/Redemittel-Schreiben-Teil-2.pdf)"
+        }
+      ],
+      "exercises": [
+        {
+          "title": "Schriftlicher Ausdruck C1 Teil 1",
+          "exercise_type": "essay",
+          "questions": [
+            {
+              "question": "Teil 1 vorgeschlagene Arbeitszeit: 50 Minuten Für das Internetforum Politische Bildung verfassen Sie einen Diskussionsbeitrag zu diesem Thema: Politikmüdigkeit – die da oben und wir da unten Haben wir das Interesse an Politik verloren? Erläutern Sie anhand von Beispielen, wie Sie sich politische Mitbestimmung vorstellen. Nennen Sie Gründe, warum sich viele Menschen nicht für Politik interessieren. Argumentieren Sie für oder gegen eine Wahlpflicht. Nennen Sie Maßnahmen, wie man das Interesse an Politik stärken kann. Schreiben Sie circa 230 Wörter .",
+              "options": {
+                "type": "essay"
+              },
+              "correct_answer": "",
+              "question_type": "essay"
+            },
+            {
+              "question": "Teil 2 vorgeschlagene Arbeitszeit: 25 Minuten Sie haben ein Zimmer in einem Studierendenwohnheim in Deutschland. Vom nächsten Semester an soll die monatliche Warmmiete von 400 € auf 600 € erhöht werden. Schreiben Sie eine Beschwerde an den Leiter des Studierendenwerks, Herrn Frank. Eröffnen Sie Ihr Schreiben höflich, indem Sie Verständnis für Sachzwänge zeigen. Nennen Sie Probleme, die durch die Mieterhöhung entstehen könnten. Beschreiben Sie die Wichtigkeit des Studierendenwohnheims für die Studierenden. Machen Sie einen Kompromissvorschlag. Schreiben Sie ca. 120 Wörter.",
+              "options": {
+                "type": "essay"
+              },
+              "correct_answer": "",
+              "question_type": "essay"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "wpLessonId": 47223,
+      "title": "SPRECHEN C1",
+      "order_index": 4,
+      "vimeo_video_id": "1113786093",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "SPRECHEN C1"
+        },
+        {
+          "type": "video",
+          "vimeoId": "1113786093"
+        },
+        {
+          "type": "text",
+          "content": "[Prezentacija: C1 Sprechen](https://www.hartweger.rs/wp-content/uploads/2025/09/Goethe-Prufung-C1-Sprechen.pptx)\n\n[Redemittel – Sprechen 1](https://www.hartweger.rs/wp-content/uploads/2025/09/Redemittel-Sprechen-1.pdf)\n\n[Redemittel – Schreiben 2](https://www.hartweger.rs/wp-content/uploads/2025/09/Redemittel-Schreiben-Teil-2-1.pdf)"
+        }
+      ],
+      "exercises": [
+        {
+          "title": "Mündlicher Ausdruck C1, Teil 1",
+          "exercise_type": "essay",
+          "questions": [
+            {
+              "question": "Teil 1: Vortrag halten Dauer: circa 7 Minuten Wählen Sie ein Thema aus den beiden folgenden Optionen. Sie nehmen an einem Seminar zu aktuellen Fragen teil und halten einen kurzen Vortrag zu dem von Ihnen gewählten Thema. Ihre Gesprächspartner hören zu und stellen Ihnen anschließend Fragen. Thema 1: Soziale Pflichtzeit Sollten Schulabgängerinnen und Schulabgänger vor der Berufsausbildung oder dem Studium eine sogenannte soziale Pflichtzeit absolvieren? Der Wegfall der Wehrpflicht und des Zivildienstes hat dazu geführt, dass vielen Pflegeheimen und anderen sozialen Einrichtungen Personal für die Betreuung von Senioren, Bedürftigen, Kranken und Kindern fehlt. Ihr Vortrag sollte folgende Punkte behandeln: Nennen Sie ein Beispiel für eine Tätigkeit im Rahmen der sozialen Pflichtzeit. Argumentieren Sie für oder gegen eine soziale Pflichtzeit. Erklären Sie, welche Alternativen zur sozialen Pflichtzeit es für junge Leute gibt. Machen Sie einen Vorschlag, was man gegen den Fachkräftemangel im sozialen Bereich tun könnte. Thema 2: Klarnamenpflicht in sozialen Netzwerken Ist eine Klarnamenpflicht in den sozialen Netzwerken angebracht? Einige sind starke Befürworter der Klarnamenpflicht, die Personen dazu verpflichtet, sich in sozialen Netzwerken unter ihrem echten Namen anzumelden. Andere haben Zweifel, ob eine solche Pflicht sinnvoll ist. Ihr Vortrag sollte folgende Punkte behandeln: Geben Sie ein Beispiel für eine Situation, in der man sich unter dem eigenen Namen anmelden muss. Erörtern Sie die Vor- und Nachteile, die die Verwendung des richtigen Namens mit sich bringt. Beschreiben Sie die Situation in Ihrem Heimatland oder einem anderen Land. Schließen Sie mit einem Ausblick für die Zukunft. Allgemeine Anweisungen für den Vortrag: Gehen Sie auf alle vier Punkte des gewählten Themas ein. Achten Sie auf eine klare Strukturierung Ihres Vortrags. Die Vortragszeit beträgt circa 5 Minuten . Im Anschluss beantworten Sie Fragen.",
+              "options": {
+                "type": "essay"
+              },
+              "correct_answer": "",
+              "question_type": "essay"
+            },
+            {
+              "question": "Teil 2 Diskussion führen Dauer für beide Teilnehmende: circa 5 Minuten Sie sind bei einem Treffen mit einer Kollegin / einem Kollegen. Eine gemeinsame Freundin lebt selbst sehr gesund und will nicht länger hohe Beiträge zur Krankenversicherung bezahlen. Gerade haben Sie etwas zum Thema im Internet gelesen und diskutieren nun darüber. Individuelle Gesundheitstarife Sollen Krankenkassen eine gesunde Lebensweise finanziell belohnen? In Deutschland müssen alle Menschen krankenversichert sein. Die gesetzliche Krankenversicherung funktioniert nach dem Solidaritätsprinzip: Die Höhe der Beiträge richtet sich nach dem Einkommen, die medizinischen Leistungen sind für alle gleich. Doch immer mehr Menschen plädieren für individuelle Gesundheitstarife, deren Höhe die persönliche Lebensweise berücksichtigt. Kommentieren Sie: Was halten Sie von individuellen Gesundheitstarifen? Begründen Sie Ihre Haltung zu individuellen Gesundheitstarifen. Gehen Sie auf die Situation in Ihrem Heimatland oder einem anderen Land ein. Einigen Sie sich auf Argumente für ein Gespräch mit Ihrer Freundin. Ihre Gesprächspartnerin sagt Folgendes: https://www.hartweger.rs/wp-content/uploads/2025/09/Susanne.mp3",
+              "options": {
+                "type": "essay"
+              },
+              "correct_answer": "",
+              "question_type": "essay"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "reviewNotes": [
+    "[LESEN C1] kviz 47237: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[LESEN C1] kviz 47237: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[LESEN C1] kviz 47237: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[LESEN C1] kviz 47237: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[HÖREN C1] kviz 47271: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[HÖREN C1] kviz 47271: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[HÖREN C1] kviz 47271: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[HÖREN C1] kviz 47271: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[SCHREIBEN C1] kviz 47293: essay (proveri prompt)",
+    "[SCHREIBEN C1] kviz 47293: essay (proveri prompt)",
+    "[SPRECHEN C1] kviz 47333: essay (proveri prompt)",
+    "[SPRECHEN C1] kviz 47333: essay (proveri prompt)"
+  ]
+}
