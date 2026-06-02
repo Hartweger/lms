@@ -1,5 +1,6 @@
 import type { NextConfig } from "next";
 import { withSentryConfig } from "@sentry/nextjs";
+import { legacyBlogSlugs } from "./src/lib/legacyBlogSlugs";
 
 const nextConfig: NextConfig = {
   trailingSlash: false,
@@ -27,7 +28,57 @@ const nextConfig: NextConfig = {
       { source: "/ispit-a1", destination: "/", permanent: true },
       { source: "/dobraskolajezika", destination: "/magazin/dobraskolajezika", permanent: true },
       { source: "/najbolje-za-sebe", destination: "/magazin/najbolje-za-sebe", permanent: true },
-      { source: "/o-nama", destination: "/o-timu", permanent: true },
+
+      // Stare WP taksonomije (Yoast sitemap audit): blog kategorije/tagovi/autor → magazin, nivo → kursevi
+      { source: "/category/:path*", destination: "/magazin", permanent: true },
+      { source: "/tag/:path*", destination: "/magazin", permanent: true },
+      { source: "/author/:path*", destination: "/magazin", permanent: true },
+      { source: "/nivo/:path*", destination: "/kursevi", permanent: true },
+
+      // Stari WP blog: root-level tekstovi (/<slug>) → /magazin/<slug>
+      // Samo "čisti" slugovi (a-z, 0-9, -); slugovi sa %-encoded znakovima (npr. emoji)
+      // se preskaču jer ruše path-to-regexp pattern.
+      ...legacyBlogSlugs
+        .filter((slug) => /^[a-z0-9-]+$/.test(slug))
+        .map((slug) => ({
+          source: `/${slug}`,
+          destination: `/magazin/${slug}`,
+          permanent: true,
+        })),
+      // Stari emoji URL ovog teksta (slug očišćen u bazi) → nova čista adresa
+      { source: "/zenski-rod-u-nemackom-jeziku-sta-je-sve-die-%f0%9f%8c%b8", destination: "/magazin/zenski-rod-u-nemackom-jeziku-sta-je-sve-die", permanent: true },
+      { source: "/o-nama", destination: "/o-natasi", permanent: true },
+      { source: "/moja-metodologija", destination: "/metodologija", permanent: true },
+      { source: "/o-metodi", destination: "/metodologija", permanent: true },
+      { source: "/kursevi-nemackog", destination: "/kursevi", permanent: true },
+
+      // Stare WP stranice (page-sitemap audit)
+      { source: "/kursevi-nemackog/grupni-kursevi", destination: "/grupni-kursevi", permanent: true },
+      { source: "/kursevi-nemackog/individualni-kursevi", destination: "/individualni-kursevi", permanent: true },
+      { source: "/kursevi-nemackog/video-kursevi", destination: "/kursevi", permanent: true },
+      { source: "/kursevi-nemackog/besplatno", destination: "/besplatno-testiranje", permanent: true },
+      { source: "/kurs-nemackog-jezika-a1", destination: "/kursevi/video-kurs-a1", permanent: true },
+      { source: "/paket-od-a1-do-b1", destination: "/kursevi/paket-a1-a2-b1", permanent: true },
+      { source: "/raspored-grupnih-kurseva", destination: "/grupni-kursevi", permanent: true },
+      { source: "/placanje-platnom-karticom", destination: "/uslovi", permanent: true },
+      { source: "/od-individualne-do-grupne-nastave", destination: "/kursevi", permanent: true },
+      { source: "/kurs-nemackog-jezika-za-firme-vokum-metoda", destination: "/metodologija", permanent: true },
+      { source: "/instructor-dashboard", destination: "/dashboard", permanent: true },
+      // 🏆 "naša zajednica – top polaznici" (leaderboard) — gasi se, na naslovnu
+      { source: "/%f0%9f%8f%86-nasa-zajednica-top-polaznici", destination: "/", permanent: true },
+
+      // Lični brend → natasahartweger.rs (eksterni redirect)
+      { source: "/nh-academy", destination: "https://natasahartweger.rs/academy", permanent: true },
+      { source: "/trening-uzivo-kreiraj-kurs-koji-se-voli", destination: "https://natasahartweger.rs/academy", permanent: true },
+      { source: "/claude-vodic", destination: "https://natasahartweger.rs", permanent: true },
+      { source: "/kursevi-nemackog/za-preduzetnice", destination: "https://natasahartweger.rs", permanent: true },
+      { source: "/kategorija-proizvoda/za-preduzetnice", destination: "https://natasahartweger.rs", permanent: true },
+
+      // Proizvod-kategorije (product_cat) → liste kurseva (za-preduzetnice je gore, pre catch-all)
+      { source: "/kategorija-proizvoda/grupni-kursevi/:path*", destination: "/grupni-kursevi", permanent: true },
+      { source: "/kategorija-proizvoda/individualni-kursevi/:path*", destination: "/individualni-kursevi", permanent: true },
+      { source: "/kategorija-proizvoda/video-kursevi/:path*", destination: "/kursevi", permanent: true },
+      { source: "/kategorija-proizvoda/:path*", destination: "/kursevi", permanent: true },
 
       // WP product URLs → new course URLs
       { source: "/proizvod/kurs-nemackog-jezika-video-kurs-a1", destination: "/kursevi/video-kurs-a1", permanent: true },
