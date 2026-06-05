@@ -29,7 +29,8 @@ export default function WordSetBlock({ title, setKey, items }: WordSetSection) {
     <div className="border-2 border-ljubicasta bg-ljubicasta-light rounded-xl p-5 md:p-6 text-center">
       <div className="text-3xl mb-2">🧠</div>
       <h4 className="font-bold text-gray-900 mb-1">{title}</h4>
-      <p className="text-sm text-gray-600 mb-4">{items.length} reči · uči kroz kviz i kucanje, prati napredak</p>
+      <p className="text-sm text-gray-600 mb-1">{items.length} reči · možeš da ih vežbaš na više načina — izaberi koji ti odgovara.</p>
+      <p className="text-xs text-gray-500 mb-4">💡 Savet: sledeći put kad se vratiš, probaj drugi način — tako bolje zapamtiš.</p>
       {mode ? (
         <p className="text-sm text-gray-500">Učitavam…</p>
       ) : (
@@ -40,7 +41,9 @@ export default function WordSetBlock({ title, setKey, items }: WordSetSection) {
           >
             Uči ovaj set
           </button>
-          <div className="flex flex-wrap justify-center gap-2 mt-1">
+          <p className="text-xs text-gray-400">vođeno: kviz → kucanje, prati napredak</p>
+          <p className="text-xs text-gray-500 mt-2">ili vežbaj na jedan način:</p>
+          <div className="flex flex-wrap justify-center gap-2">
             <button onClick={() => setMode("quiz")} className="text-xs px-3 py-1.5 rounded-full bg-white border border-gray-200 text-gray-600 hover:bg-gray-50">Samo kviz</button>
             <button onClick={() => setMode("typing")} className="text-xs px-3 py-1.5 rounded-full bg-white border border-gray-200 text-gray-600 hover:bg-gray-50">Samo kucanje</button>
             <button onClick={() => setMode("memory")} className="text-xs px-3 py-1.5 rounded-full bg-white border border-gray-200 text-gray-600 hover:bg-gray-50">🧩 Igra memorije</button>

@@ -98,13 +98,11 @@ function Frame({ mastered, learning, total, onExit, children }: { mastered: numb
   const pct = (n: number) => (total ? (n / total) * 100 : 0);
   return (
     <div>
-      <div className="flex items-center gap-3 mb-1">
-        {/* Dvobojna traka: tamno = naučeno, svetlo = u toku */}
-        <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden flex">
-          <div className="h-full bg-emerald-500 transition-all" style={{ width: `${pct(mastered)}%` }} />
-          <div className="h-full bg-emerald-200 transition-all" style={{ width: `${pct(learning)}%` }} />
-        </div>
-        <button onClick={onExit} className="text-xs text-gray-400 shrink-0">✕</button>
+      <button onClick={onExit} className="text-xs px-3 py-1.5 rounded-full bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 mb-3">← Nazad</button>
+      {/* Dvobojna traka: tamno = naučeno, svetlo = u toku */}
+      <div className="h-2 bg-gray-100 rounded-full overflow-hidden flex mb-1">
+        <div className="h-full bg-emerald-500 transition-all" style={{ width: `${pct(mastered)}%` }} />
+        <div className="h-full bg-emerald-200 transition-all" style={{ width: `${pct(learning)}%` }} />
       </div>
       <p className="text-xs text-gray-500 mb-3">
         naučeno <span className="font-semibold text-emerald-600">{mastered}</span> · u toku <span className="font-semibold text-emerald-500">{learning}</span> · od {total}
