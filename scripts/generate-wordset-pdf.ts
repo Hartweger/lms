@@ -44,7 +44,7 @@ console.log(`<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"><style>
   .head .s { font-size: 11px; color: #888; margin-top: 2px; }
   .bar { height: 4px; border-radius: 4px; background: linear-gradient(90deg, ${PLAVA} 0%, ${PLAVA} 50%, ${KORAL} 50%, ${KORAL} 100%); margin-bottom: 16px; }
   .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-  .card { break-inside: avoid; border: 1.5px solid ${PLAVA}; border-radius: 12px; background: ${PLAVA_LIGHT}; padding: 9px 11px; min-height: 58px; display: flex; flex-direction: column; justify-content: center; }
+  .card { break-inside: avoid; border: 1.5px solid ${PLAVA}; border-radius: 12px; background: ${PLAVA_LIGHT}; padding: 12px 12px; min-height: 78px; display: flex; flex-direction: column; justify-content: center; }
   .card .de { font-size: 13px; font-weight: 700; color: ${PLAVA}; line-height: 1.25; }
   .card .sr { font-size: 12.5px; color: #333; margin-top: 5px; padding-top: 5px; border-top: 1px dashed ${KORAL}; }
   .foot { margin-top: 14px; font-size: 9.5px; color: #aaa; text-align: center; }
