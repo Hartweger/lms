@@ -44,8 +44,8 @@ export default function MatchPairsExercise({ pairs, onAnswer }: MatchPairsProps)
 
   return (
     <div>
-      <p className="text-lg font-medium text-gray-900 mb-2">Spoji nemačku reč sa prevodom:</p>
-      <p className="text-xs text-gray-400 mb-4">Klikni na nemačku reč, pa klikni na njen prevod</p>
+      <p className="text-lg font-medium text-gray-900 mb-2">Spoji parove:</p>
+      <p className="text-xs text-gray-400 mb-4">Klikni na pojam levo, pa na ono što mu odgovara desno</p>
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-3">
           {pairs.map((p) => (

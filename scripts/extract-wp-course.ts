@@ -12,8 +12,9 @@ if (!slug || !COURSE_MAP[slug]) {
 }
 
 const decode = (s: string) =>
-  (s || "").replace(/<[^>]+>/g, "").replace(/&#8211;/g, "–").replace(/&amp;/g, "&")
-    .replace(/&#8217;/g, "'").replace(/&#8230;/g, "…").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
+  (s || "").replace(/<[^>]+>/g, "").replace(/&#8211;/g, "–").replace(/&#8212;/g, "—").replace(/&amp;/g, "&")
+    .replace(/&#8216;|&#8217;|&#8242;/g, "'").replace(/&#8220;|&#8221;|&#8243;|&quot;/g, '"')
+    .replace(/&#8222;/g, "„").replace(/&#8230;/g, "…").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
 
 // jedan kviz → jedna ExerciseDump (+ dodaj reviewNotes preko callbacka)
 async function quizToExercise(quizId: number, lessonTitle: string, notes: string[]): Promise<ExerciseDump | null> {

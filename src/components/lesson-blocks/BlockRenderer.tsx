@@ -1,4 +1,6 @@
 import type { Section } from "@/lib/section-types";
+import type { Exercise, ExerciseQuestion } from "@/lib/types";
+import InlineExercise from "./InlineExercise";
 import BadgeBlock from "./BadgeBlock";
 import VideoBlock from "./VideoBlock";
 import TextBlock from "./TextBlock";
@@ -11,6 +13,7 @@ import PdfBlock from "./PdfBlock";
 import ImageBlock from "./ImageBlock";
 import LinkBlock from "./LinkBlock";
 import FlashcardBlock from "./FlashcardBlock";
+import WordSetBlock from "./WordSetBlock";
 import YoutubeBlock from "./YoutubeBlock";
 import AudioBlock from "./AudioBlock";
 
@@ -40,6 +43,8 @@ function renderBlock(section: Section, index: number) {
       return <LinkBlock key={index} {...section} />;
     case "flashcard":
       return <FlashcardBlock key={index} {...section} />;
+    case "wordset":
+      return <WordSetBlock key={index} {...section} />;
     case "youtube":
       return <YoutubeBlock key={index} {...section} />;
     case "audio":
@@ -51,10 +56,26 @@ function renderBlock(section: Section, index: number) {
   }
 }
 
-export default function BlockRenderer({ sections }: { sections: Section[] }) {
+export type InlineExerciseMap = Record<string, { exercise: Exercise; questions: ExerciseQuestion[] }>;
+
+export default function BlockRenderer({
+  sections,
+  inlineExercises,
+  level,
+}: {
+  sections: Section[];
+  inlineExercises?: InlineExerciseMap;
+  level?: string;
+}) {
   return (
     <div className="space-y-4">
       {sections.map((section, i) => {
+        // Inline vežba: renderuj ExerciseRunner ispod sadržaja
+        if (section.type === "exercise") {
+          const found = inlineExercises?.[section.title];
+          if (!found) return null;
+          return <InlineExercise key={i} exercise={found.exercise} questions={found.questions} level={level} />;
+        }
         // Handle audio sections that may not be recognized by TypeScript narrowing
         const s = section as unknown as Record<string, unknown>;
         if (s.type === "audio" && typeof s.url === "string") {

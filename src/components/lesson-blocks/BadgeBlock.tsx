@@ -24,11 +24,12 @@ export default function BadgeBlock({ module, category }: BadgeSection) {
       </span>
     );
   }
+  const label = categoryLabels[category];
   return (
     <span
       className={`inline-block text-white text-xs font-bold px-3 py-1 rounded-full ${categoryStyles[category]}`}
     >
-      {module} · {categoryLabels[category]}
+      {module ? `${module} · ${label}` : label}
     </span>
   );
 }
