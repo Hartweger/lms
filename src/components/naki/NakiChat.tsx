@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { NakiFace } from "./NakiAvatar";
 
 // GA event helper (gtag je globalno učitan u layout.tsx)
 function ga(event: string, params?: Record<string, unknown>) {
@@ -198,9 +199,14 @@ export default function NakiChat() {
 
   return (
     <div className="mx-auto flex h-[70vh] max-h-[640px] w-full max-w-xl flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
-      <div className="flex flex-col gap-0.5 bg-plava px-5 py-4 text-white">
-        <span className="font-heading text-lg font-bold">NaKI</span>
-        <span className="text-xs text-white/85">Natašin AI asistent za nemački</span>
+      <div className="flex items-center gap-3 bg-plava px-5 py-3 text-white">
+        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-white">
+          <NakiFace className="h-9 w-9" />
+        </div>
+        <div className="flex flex-col gap-0.5">
+          <span className="font-heading text-base font-bold">NaKI — Natašin AI asistent</span>
+          <span className="text-xs text-white/85">Online · Nemački A1–C1</span>
+        </div>
       </div>
 
       <div ref={scrollRef} className="flex flex-1 flex-col gap-2.5 overflow-y-auto p-4">
