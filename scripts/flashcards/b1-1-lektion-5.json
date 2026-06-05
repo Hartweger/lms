@@ -1,0 +1,197 @@
+{
+  "type": "wordset",
+  "title": "Lektion 5 — Reči",
+  "setKey": "b1-1-lektion-5",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    {
+      "front": "Auftrag",
+      "back": "nalog|zadatak",
+      "article": "der",
+      "plural": "die Aufträge"
+    },
+    {
+      "front": "Forschung",
+      "back": "istraživanje",
+      "article": "die",
+      "plural": "die Forschungen"
+    },
+    {
+      "front": "betreuen",
+      "back": "brinuti se o|negovati"
+    },
+    {
+      "front": "entwickeln",
+      "back": "razvijati (se)"
+    },
+    {
+      "front": "leiten",
+      "back": "voditi|rukovoditi"
+    },
+    {
+      "front": "vertreten, vertrat, hat vertreten",
+      "back": "zastupati"
+    },
+    {
+      "front": "Annonce",
+      "back": "oglas",
+      "article": "die",
+      "plural": "die Annoncen"
+    },
+    {
+      "front": "Freude",
+      "back": "radost",
+      "article": "die",
+      "plural": "die Freuden"
+    },
+    {
+      "front": "Gelegenheit",
+      "back": "prilika",
+      "article": "die",
+      "plural": "die Gelegenheiten"
+    },
+    {
+      "front": "Hochschule",
+      "back": "visoka škola|fakultet",
+      "article": "die",
+      "plural": "die Hochschulen"
+    },
+    {
+      "front": "Misserfolg",
+      "back": "neuspeh",
+      "article": "der",
+      "plural": "die Misserfolge"
+    },
+    {
+      "front": "sich anstrengen",
+      "back": "truditi se"
+    },
+    {
+      "front": "dienen",
+      "back": "služiti"
+    },
+    {
+      "front": "klagen",
+      "back": "žaliti se|tužiti"
+    },
+    {
+      "front": "verlassen, verließ, hat verlassen",
+      "back": "napustiti"
+    },
+    {
+      "front": "üblich",
+      "back": "uobičajeno"
+    },
+    {
+      "front": "zahlreich",
+      "back": "brojan"
+    },
+    {
+      "front": "sich erinnern an",
+      "back": "sećati se"
+    },
+    {
+      "front": "selbstbewusst",
+      "back": "samouveren"
+    },
+    {
+      "front": "sich zusammensetzen aus",
+      "back": "sastojati se od"
+    },
+    {
+      "front": "gelingen, gelang, ist gelungen",
+      "back": "uspeti|poći za rukom"
+    },
+    {
+      "front": "entlassen, entließ, hat entlassen",
+      "back": "otpustiti (s posla)"
+    },
+    {
+      "front": "überzeugen",
+      "back": "ubediti"
+    },
+    {
+      "front": "zuverlässig",
+      "back": "pouzdan"
+    },
+    {
+      "front": "aufschließen, schloss auf, hat aufgeschlossen",
+      "back": "otključati"
+    },
+    {
+      "front": "bewerten",
+      "back": "ocenjivati"
+    },
+    {
+      "front": "einschätzen",
+      "back": "proceniti"
+    },
+    {
+      "front": "beachten",
+      "back": "obratiti pažnju|pridržavati se"
+    },
+    {
+      "front": "belastbar",
+      "back": "otporan na stres"
+    },
+    {
+      "front": "Rente",
+      "back": "penzija",
+      "article": "die",
+      "plural": "die Renten"
+    },
+    {
+      "front": "Vorsatz",
+      "back": "namera|odluka",
+      "article": "der",
+      "plural": "die Vorsätze"
+    },
+    {
+      "front": "Anlass",
+      "back": "povod",
+      "article": "der",
+      "plural": "die Anlässe"
+    },
+    {
+      "front": "aufgeben",
+      "back": "odustati|predati"
+    },
+    {
+      "front": "ständig",
+      "back": "stalno"
+    },
+    {
+      "front": "schließlich",
+      "back": "na kraju|konačno"
+    },
+    {
+      "front": "Verfasser",
+      "back": "autor|pisac",
+      "article": "der",
+      "plural": "die Verfasser"
+    },
+    {
+      "front": "geizig",
+      "back": "škrt"
+    },
+    {
+      "front": "Geizhals",
+      "back": "tvrdica|škrtac",
+      "article": "der",
+      "plural": "die Geizhälse"
+    },
+    {
+      "front": "sich verstecken",
+      "back": "sakriti se"
+    },
+    {
+      "front": "wegwerfen, warf weg, hat weggeworfen",
+      "back": "baciti"
+    },
+    {
+      "front": "einschalten",
+      "back": "uključiti"
+    }
+  ]
+}
