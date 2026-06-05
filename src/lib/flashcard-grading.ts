@@ -24,8 +24,10 @@ function levenshtein(a: string, b: string): number {
 /** Skup prihvatljivih odgovora za zadati smer. Član i množina su opcioni (dodaju se kao varijante). */
 function acceptedAnswers(card: FlashcardItem, dir: Direction): string[] {
   if (dir === "de-sr") return card.back.split("|").map((s) => s.trim());
-  const out = [card.front];
-  if (card.article) out.push(`${card.article} ${card.front}`);
+  // „front" može da nosi više oblika („üben, hat geübt") — prihvati svaki pojedinačno i ceo niz.
+  const forms = card.front.split(",").map((s) => s.trim()).filter(Boolean);
+  const out = [...forms, card.front];
+  if (card.article) for (const f of forms) out.push(`${card.article} ${f}`);
   if (card.plural) out.push(card.plural);
   return out;
 }
