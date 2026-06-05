@@ -156,9 +156,26 @@ Kartice već postoje, iskurirane na Quizletu. Ne pravimo ih ručno — **uvozimo
 - Oslanja se na postojeće mobilne/PWA optimizacije i Tailwind responsive komponente.
 - **Tvrd zahtev:** testirati na telefonu pre „gotovo" (uklopiti u postojeći `smoke-deploy`).
 
+## Struktura sadržaja — „REČI" lekcija po modulu
+
+Granularnost Learn seta = **modul (Lektion)**, ne pojedinačna lekcija.
+
+```
+Modul „Lektion 1"
+ ├─ Lekcija: Pozdravi   → mali flip blok (reči te lekcije, brzi podsetnik)
+ ├─ Lekcija: Familie    → mali flip blok
+ ├─ ...
+ └─ Lekcija: REČI 🧠    → ceo Learn modul (sve reči modula, mastery)
+```
+
+- **Po lekciji:** ostaju postojeći mali flip blokovi (reči se vrte u kontekstu lekcije).
+- **Po modulu:** zasebna lekcija **„REČI"** nosi ceo Learn (kviz, kucanje, spajanje, memorija, mastery) nad svim rečima modula.
+- **Mapiranje uvoza:** jedan Quizlet export = jedan modul = sadržaj jedne „REČI" lekcije. Bez ručnog cepanja setova.
+
 ## Ulazna tačka
 
-Dugme **„Uči ovaj set"** na postojećem `FlashcardBlock` u lekciji otvara Learn mod nad tim setom. (Kasnije moguć i „uči sve kartice kursa" — van obima sad.)
+- „REČI" lekcija nosi novi tip bloka (npr. `wordset`/`learn`) sa celim setom modula + pokretač Learn moda.
+- Dodatno: dugme **„Uči"** na malom flip bloku u lekciji može da povede na „REČI" set tog modula (opciono).
 
 ## Komponente (skica, za plan)
 
@@ -169,11 +186,19 @@ Dugme **„Uči ovaj set"** na postojećem `FlashcardBlock` u lekciji otvara Lea
 - `LearnModule` (lazy-loaded) — orkestrator rundi + mastery
 - Reuse: `QuizExercise`, `TypingExercise` (sa novim grading-om), `MatchPairsExercise`, `SpeakButton`
 - `MemoryGame` — nova komponenta (v1)
-- `scripts/import-quizlet.ts` — parsiranje exporta → setovi kartica
-- Dugme „Uči ovaj set" u `FlashcardBlock`
+- `scripts/import-quizlet.ts` — parsiranje exporta (tab-razdvojeno) → „REČI" set modula
+- Novi `wordset`/`learn` tip bloka za „REČI" lekciju + `BlockRenderer` podrška
+- Dugme „Uči" u `FlashcardBlock` (opciono → vodi na „REČI" set)
 
-## Otvorena pitanja / radni tok sadržaja
+## Format Quizlet exporta (potvrđeno na uzorku A1.1)
 
-- **Sadržaj iz Quizleta** (export → import skripta), ne ručno. Nataša prvo nalepi jedan export da se odredi format.
+- `nemački[TAB]srpski`, nova linija po kartici.
+- **Prazni prevodi** (npr. „Gute Nacht\t") → import označi za dopunu, ne ubacuje praznu karticu.
+- **Imenice bez člana** („Frau", „Straße") → član/množina se auto-dopunjuju (rečnik/AI), Nataša potvrđuje.
+- **Više prevoda** („Hallo → Zdravo/Ćao", „sagen → reći, kazati") → razdvoji se; u vežbi se priznaje bilo koji tačan.
+
+## Radni tok sadržaja
+
+- Sadržaj iz Quizleta (export → `import-quizlet.ts`), ne ručno. Jedan export = jedan modul = „REČI" lekcija.
 - Rod/množina koji fale dopunjavaju se automatski; Nataša potvrđuje.
 - Redosled posle A1.1: A1.2 → … → B2 (isti motor, isti uvoz).
