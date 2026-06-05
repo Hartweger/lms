@@ -4,6 +4,7 @@ export type Section =
   | { type: "text"; content: string; style?: string }
   | { type: "table"; headers: string[]; rows: string[][] }
   | { type: "pdf"; url: string; label?: string }
+  | { type: "audio"; url: string; label?: string }
   | { type: "image"; url: string; alt: string; caption?: string }
   | { type: "link"; linkType: string; href: string; label?: string };
 

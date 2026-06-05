@@ -1,5 +1,6 @@
 import VideoPlayer from "./VideoPlayer";
 import BlockRenderer from "./lesson-blocks/BlockRenderer";
+import type { InlineExerciseMap } from "./lesson-blocks/BlockRenderer";
 import { sanitizeHtml } from "@/lib/sanitize";
 import type { Lesson } from "@/lib/types";
 import type { Section } from "@/lib/section-types";
@@ -34,7 +35,15 @@ function formatContent(text: string): string {
   return `<p>${html}</p>`;
 }
 
-export default function LekcijaContent({ lesson }: { lesson: Lesson }) {
+export default function LekcijaContent({
+  lesson,
+  inlineExercises,
+  level,
+}: {
+  lesson: Lesson;
+  inlineExercises?: InlineExerciseMap;
+  level?: string;
+}) {
   // New block system — takes precedence when sections exist
   const sections = lesson.sections as Section[] | null;
   if (sections && sections.length > 0) {
@@ -44,13 +53,13 @@ export default function LekcijaContent({ lesson }: { lesson: Lesson }) {
         <>
           <VideoPlayer vimeoId={lesson.vimeo_video_id} />
           <div className="mt-6">
-            <BlockRenderer sections={sections} />
+            <BlockRenderer sections={sections} inlineExercises={inlineExercises} level={level} />
           </div>
         </>
       );
     }
 
-    return <BlockRenderer sections={sections} />;
+    return <BlockRenderer sections={sections} inlineExercises={inlineExercises} level={level} />;
   }
 
   // Legacy rendering — fallback for old lessons

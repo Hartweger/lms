@@ -6,7 +6,7 @@ import LessonDrawer from "@/components/LessonDrawer";
 import LessonCompleteButton from "@/components/LessonCompleteButton";
 import { exerciseKindBadge } from "@/lib/exercise-kind";
 import { getFixedTranslations } from "@/lib/fixed-translations";
-import type { Lesson, Exercise } from "@/lib/types";
+import type { Lesson, Exercise, ExerciseQuestion } from "@/lib/types";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -88,6 +88,37 @@ export default async function LekcijaStranica({ params }: PageProps) {
     .eq("lesson_id", typedLesson.id)
     .order("order_index");
 
+  // Inline vežbe: koje vežbe su referencirane „exercise“ sekcijama u sadržaju
+  const lessonSections = (typedLesson.sections as { type: string; title?: string }[] | null) ?? [];
+  const inlineTitles = new Set(
+    lessonSections.filter((s) => s.type === "exercise" && s.title).map((s) => s.title as string)
+  );
+  // Nivo iz naslova kursa (npr. „Nemački B2.2“ → „B2“)
+  const levelMatch = (course?.title || "").match(/(A1|A2|B1|B2|C1|C2)/i);
+  const courseLevel = levelMatch ? levelMatch[1].toUpperCase() : "A1";
+
+  const inlineExercises: Record<string, { exercise: Exercise; questions: ExerciseQuestion[] }> = {};
+  if (inlineTitles.size > 0 && exercises) {
+    const inlineIds = (exercises as Exercise[]).filter((e) => inlineTitles.has(e.title)).map((e) => e.id);
+    const { data: inlineQuestions } = await supabase
+      .from("exercise_questions")
+      .select("*")
+      .in("exercise_id", inlineIds)
+      .order("order_index");
+    const byExercise = new Map<string, ExerciseQuestion[]>();
+    for (const q of (inlineQuestions as ExerciseQuestion[]) ?? []) {
+      const arr = byExercise.get(q.exercise_id) ?? [];
+      arr.push(q);
+      byExercise.set(q.exercise_id, arr);
+    }
+    for (const e of exercises as Exercise[]) {
+      if (inlineTitles.has(e.title)) inlineExercises[e.title] = { exercise: e, questions: byExercise.get(e.id) ?? [] };
+    }
+  }
+
+  // Donja lista „Vežbe i testovi“ prikazuje samo vežbe koje NISU inline
+  const bottomExercises = (exercises as Exercise[] | null)?.filter((e) => !inlineTitles.has(e.title)) ?? [];
+
   // Find prev/next
   const currentIndex = allLessons?.findIndex((l) => l.id === typedLesson.id) ?? -1;
   const prevLesson = currentIndex > 0 ? allLessons?.[currentIndex - 1] : null;
@@ -124,14 +155,14 @@ export default async function LekcijaStranica({ params }: PageProps) {
       </h1>
 
       {/* Lesson content */}
-      <LekcijaContent lesson={typedLesson} />
+      <LekcijaContent lesson={typedLesson} inlineExercises={inlineExercises} level={courseLevel} />
 
-      {/* Exercises */}
-      {exercises && exercises.length > 0 && (
+      {/* Exercises (samo one koje nisu inline u sadržaju) */}
+      {bottomExercises.length > 0 && (
         <div className="mt-8">
           <h3 className="font-semibold text-gray-900 mb-3">Vežbe i testovi</h3>
           <div className="space-y-2">
-            {(exercises as Exercise[]).map((ex) => {
+            {bottomExercises.map((ex) => {
               const kind = exerciseKindBadge(ex.title, course?.title || course?.slug);
               return (
               <Link

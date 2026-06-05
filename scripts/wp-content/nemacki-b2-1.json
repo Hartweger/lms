@@ -1,0 +1,1246 @@
+{
+  "slug": "nemacki-b2-1",
+  "wpCourseId": 45327,
+  "lessons": [
+    {
+      "wpLessonId": 45867,
+      "title": "Das Leben neu gestalten – Vielfalt B2.1",
+      "order_index": 0,
+      "vimeo_video_id": "1086044456",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Das Leben neu gestalten – Vielfalt B2.1 (Wortschatz und Leseverstehen)"
+        },
+        {
+          "type": "video",
+          "vimeoId": "1086044456"
+        },
+        {
+          "type": "text",
+          "content": "Und jetzt Wörter lernen:"
+        },
+        {
+          "type": "link",
+          "linkType": "quizlet",
+          "href": "https://quizlet.com/1046233166/match",
+          "label": "Vežba reči (Quizlet)"
+        },
+        {
+          "type": "text",
+          "content": "[Der Text ist hier – vor dem Test den Text lesen.](https://drive.google.com/file/d/1jafZSikj0NsnupWQOyRgQtbBeVqWXVmJ/view?usp=sharing)\n\nDen Text anhören:"
+        },
+        {
+          "type": "audio",
+          "url": "https://www.hartweger.rs/wp-content/uploads/2025/05/01_Vielfalt_B21_KB_L1_2b_Lesetext.mp3"
+        }
+      ],
+      "exercises": [
+        {
+          "title": "Das Leben neu gestalten Vielfalt B2",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": "Ergänze.",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "A",
+                  "M",
+                  "J",
+                  "J",
+                  "M",
+                  "J",
+                  "A",
+                  "J",
+                  "M",
+                  "aufgeben",
+                  "gründen",
+                  "heiraten",
+                  "bewerben",
+                  "gewöhnen",
+                  "verabschieden",
+                  "umziehen",
+                  "entdecken",
+                  "Veränderung",
+                  "Pädagogen",
+                  "Anregung",
+                  "Misserfolg",
+                  "Wendepunkt",
+                  "Führungsposition",
+                  "Unternehmensberater"
+                ]
+              },
+              "correct_answer": "A, M, J, J, M, J, A, J, M, aufgeben, gründen, heiraten, bewerben, gewöhnen, verabschieden, umziehen, entdecken, Veränderung, Pädagogen, Anregung, Misserfolg, Wendepunkt, Führungsposition, Unternehmensberater",
+              "question_type": "fill_blank"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "wpLessonId": 45898,
+      "title": "Nomen mit Präpositionen",
+      "order_index": 1,
+      "vimeo_video_id": "1086804622",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Nomen mit Präpositionen (Grammatik)"
+        },
+        {
+          "type": "video",
+          "vimeoId": "1086804622"
+        },
+        {
+          "type": "text",
+          "content": "[LISTE – Verben mit Präpositionen A1 + A2](https://drive.google.com/file/d/1nuxdIr9GB3NFLzyMR307mGDl3BmLhk1y/view?usp=sharing)\n\n[LISTE – Verben mit Präpositionen B1](https://drive.google.com/file/d/1caQDjwHImZj4Il9wyBfIUAgF3X77Piym/view?usp=sharing)\n\n[LISTE – Verben mit Präpositionen B2](https://drive.google.com/file/d/1zHIRO2FAUo97QQu0Kjh8b-eOn5EDB9cF/view?usp=sharing)\n\n[LISTE – Nomen mit Präpositionen](https://docs.google.com/document/d/1f8QDRo3M3JctNlpj7s4Ki8YXS4dprJjrLeDfKZX2l_g/edit?usp=sharing)\n\nWiederholung:\n\n[Worauf ili darauf, wovon ili von wem?](https://www.hartweger.rs/worauf-ili-darauf-wovon-ili-von-wem/)\n\n[Glagoli sa predlozima u nemačkom jeziku – deo dva](https://www.hartweger.rs/glagoli-sa-predlozima-u-nemackom-jeziku/)"
+        }
+      ],
+      "exercises": [
+        {
+          "title": "Ergänze",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": "Ergänze!",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "F",
+                  "R",
+                  "F",
+                  "R",
+                  "F",
+                  "für",
+                  "vor",
+                  "zu",
+                  "für",
+                  "mit",
+                  "Worauf",
+                  "Worüber",
+                  "Wovon",
+                  "Wovor",
+                  "Worüber",
+                  "Angst",
+                  "Grund",
+                  "Kontakt",
+                  "Begeisterung",
+                  "Einstellung",
+                  "um",
+                  "bewerben"
+                ]
+              },
+              "correct_answer": "F, R, F, R, F, für, vor, zu, für, mit, Worauf, Worüber, Wovon, Wovor, Worüber, Angst, Grund, Kontakt, Begeisterung, Einstellung, um, bewerben",
+              "question_type": "fill_blank"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "wpLessonId": 46003,
+      "title": "Wortstellung mit Dativ und Akkusativ",
+      "order_index": 2,
+      "vimeo_video_id": "1088455981",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Wortstellung mit Dativ und Akkusativ (Grammatik)"
+        },
+        {
+          "type": "video",
+          "vimeoId": "1088455981"
+        }
+      ],
+      "exercises": [
+        {
+          "title": "B2.1 Wortstellung mit Dativ und Akkusativ",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": "Ergänze",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "F",
+                  "R",
+                  "F",
+                  "R",
+                  "R",
+                  "meiner Mutter einen Blumenstrauß",
+                  "dem Kind das Spiel",
+                  "es meinem Freund",
+                  "sie ihm",
+                  "ihr die Kisten",
+                  "unserer Mutter die Blumen",
+                  "es ihm",
+                  "B"
+                ]
+              },
+              "correct_answer": "F, R, F, R, R, meiner Mutter einen Blumenstrauß, dem Kind das Spiel, es meinem Freund, sie ihm, ihr die Kisten, unserer Mutter die Blumen, es ihm, B",
+              "question_type": "fill_blank"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "wpLessonId": 46075,
+      "title": "Migration",
+      "order_index": 3,
+      "vimeo_video_id": "1090055388",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Migration (Wortschatz und Hörverstehen)"
+        },
+        {
+          "type": "video",
+          "vimeoId": "1090055388"
+        },
+        {
+          "type": "link",
+          "linkType": "quizlet",
+          "href": "https://quizlet.com/1050876352/match",
+          "label": "Vežba reči (Quizlet)"
+        }
+      ],
+      "exercises": [
+        {
+          "title": "Migration B2.1",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": "https://www.hartweger.rs/wp-content/uploads/2025/06/1_01_Vielfalt_B21_KB_L2_4a_Teil_1.mp3 https://www.hartweger.rs/wp-content/uploads/2025/06/1_02_Vielfalt_B21_KB_L2_4b_Teil_2.mp3 https://www.hartweger.rs/wp-content/uploads/2025/06/1_03_Vielfalt_B21_KB_L2_4c_Teil_3.mp3 Hör zu und dann ergänze!",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "F",
+                  "F",
+                  "R",
+                  "F",
+                  "R",
+                  "R",
+                  "A",
+                  "B",
+                  "C"
+                ]
+              },
+              "correct_answer": "F, F, R, F, R, R, A, B, C",
+              "question_type": "fill_blank",
+              "explanation": "Evo transkripta celog razgovora: Moderator: Heute ist der 18. Dezember, der internationale Tag der Migranten. Deshalb wollen wir in unserer Reihe „Geschichte und Geschichten“ über deutsche Migrationsgeschichten sprechen. Unsere Reporterin Lisa Müller hat zwei Personen getroffen, deren Familien ein Stück der Geschichte der Wanderungsbewegungen nach Deutschland in der Nachkriegszeit miterlebt haben, und zwar eine Tochter türkischer Gastarbeiter und einen ehemaligen Flüchtling aus Bosnien. Sie hat sie einen Tag lang begleiten dürfen und hat viel über sie und ihre Familien erfahren. CD 1, 02 Lektion 2, Aufgabe 4b Reporterin: Mit erhobenen Armen tanzen rund fünfzig Personen in einem großen Festsaal und klatschen im Takt in die Hände. Hunderte andere Gäste sitzen an unzähligen weiß gedeckten Tischen, trinken, essen und unterhalten sich. Man könnte meinen, man wäre auf einer türkischen Hochzeit in Istanbul, doch dieser Festsaal ist in Deutschland, mitten in Köln. Feste wie diese finden hier fast jede Woche statt. Sie gehören zu dieser Stadt wie der Kölner Dom. Rund drei Millionen Menschen türkischer Abstammung leben heute in Deutschland. Die ersten kamen in den 1960er Jahren als sogenannte Gastarbeiter. Damals boomte die deutsche Wirtschaft, und man brauchte ausländische Arbeitskräfte. Sie kamen aus der Türkei, aber auch aus Italien, Portugal und Griechenland, um für eine bestimmte Zeit in Deutschland zu leben und zu arbeiten. So wurde Deutschland nach dem Zweiten Weltkrieg zum Einwanderungsland. Auch die Eltern von Zeliha Yildiz aus Köln haben sich in dieser Zeit als Gastarbeiter hier niedergelassen können. Das Wort Gastarbeiter mag Frau Yildiz allerdings gar nicht, sagt sie. Zeliha: Ein Gast ist in einem neuen Land nicht zu Hause. Genauso war es bei meinen Eltern. Sie haben in der Fabrik arbeiten sollen und es war nicht geplant, ihnen bei der Integration zu helfen. Man dachte, die gehen nach ein paar Jahren wieder nach Hause. Das haben sie aber nicht getan. Auch meine Eltern nicht – obwohl sie immer hin- und hergerissen waren. Einerseits wollten sie hier möglichst viel arbeiten, damit wir ein besseres Leben haben. Andererseits hatten sie Heimweh und wollten so schnell wie möglich in die Türkei zurückkehren. Reporterin: Feste wie diese Hochzeit haben ihren Eltern aber immer geholfen, das Heimweh zu überwinden, sagt Yildiz. Deshalb werden in ihrer Familie bis heute türkische Traditionen gepflegt. Sie selbst ist auch zwischen den Kulturen hin- und hergerissen, erzählt sie. Schon als Kind hat sie sich weder als Türkin noch als Deutsche gefühlt – eine Erfahrung, die sie mit vielen Nachfahren der ehemaligen Gastarbeiter teilt. Zeliha: Wir haben türkische Kinderlieder gesungen, haben aber schon nicht mehr auf Türkisch schreiben gelernt. Bis heute gelte ich als eine Person mit Migrationshintergrund, allein schon wegen meinem Nachnamen. Meinen Töchtern geht es auch noch so, aber schon weniger. Meine Ältere ist Lehrerin an einer Schule, in der die meisten Schüler einen Migrationshintergrund haben. Und dort ist ihr eigener Hintergrund natürlich von Vorteil."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "wpLessonId": 46190,
+      "title": "Modalverben durch die Zeit",
+      "order_index": 4,
+      "vimeo_video_id": "1091281128",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Modalverben durch die Zeit (Grammatik)"
+        },
+        {
+          "type": "video",
+          "vimeoId": "1091281128"
+        }
+      ],
+      "exercises": [
+        {
+          "title": "Modalverben und Sprache im Wandel",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": "Ergänze",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "will",
+                  "musste",
+                  "wollen",
+                  "konnte",
+                  "solltest",
+                  "musste",
+                  "R",
+                  "R",
+                  "F",
+                  "R",
+                  "F",
+                  "b",
+                  "a",
+                  "b",
+                  "a",
+                  "a",
+                  "habe arbeiten müssen",
+                  "habe gehen müssen",
+                  "habe eine Wohnung finden wollen",
+                  "habe meine Familie verlassen müssen",
+                  "habe viel lernen sollen",
+                  "habe nicht arbeiten dürfen",
+                  "haben einen Antrag gestellt",
+                  "hat auf eine Entscheidung gewartet",
+                  "ist aus wirtschaftlichen Gründen ausgewandert",
+                  "haben alle Unterlagen vorbereitet",
+                  "zur Ausländerbehörde gehen",
+                  "für",
+                  "auf",
+                  "von",
+                  "auf",
+                  "mit"
+                ]
+              },
+              "correct_answer": "will, musste, wollen, konnte, solltest, musste, R, R, F, R, F, b, a, b, a, a, habe arbeiten müssen, habe gehen müssen, habe eine Wohnung finden wollen, habe meine Familie verlassen müssen, habe viel lernen sollen, habe nicht arbeiten dürfen, haben einen Antrag gestellt, hat auf eine Entscheidung gewartet, ist aus wirtschaftlichen Gründen ausgewandert, haben alle Unterlagen vorbereitet, zur Ausländerbehörde gehen, für, auf, von, auf, mit",
+              "question_type": "fill_blank"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "wpLessonId": 46265,
+      "title": "WIEN",
+      "order_index": 5,
+      "vimeo_video_id": null,
+      "sections": [
+        {
+          "type": "badge",
+          "module": "WIEN (Wortschatz und Leseverstehen)"
+        },
+        {
+          "type": "text",
+          "content": "📖 **1. Lies zuerst den Text:******\n\nBevor du das Audio hörst, lies den folgenden Text aufmerksam durch. So fällt dir das Verstehen beim Hören später leichter."
+        },
+        {
+          "type": "pdf",
+          "url": "https://www.hartweger.rs/wp-content/uploads/2025/06/In-Wien-zu-Hause.pdf",
+          "label": "PDF"
+        },
+        {
+          "type": "text",
+          "content": "🎧 **2. Höre dann den Audiotext:******\n\nJetzt hörst du, wie jemand von den ersten Tagen in Wien erzählt – mit allen Eindrücken, Herausforderungen und Beobachtungen."
+        },
+        {
+          "type": "audio",
+          "url": "https://www.hartweger.rs/wp-content/uploads/2025/06/02_Vielfalt_B21_KB_L3_2b_Lesetext.mp3"
+        },
+        {
+          "type": "text",
+          "content": "👁️‍🗨️ **3. Kulturelle Tipps – Wien mit Humor erleben:******\n\nDie Kultur einer Stadt lernt man nicht nur in Büchern kennen – auch auf Instagram!\n\nSchau dir den Account [@biancaolivia](https://www.instagram.com/biancaolivia/) an – sie zeigt mit viel Witz und Ironie, wie Wiener:innen ticken.\n\nIhre Kurzvideos spielen mit typischen **Stereotypen aus dem Wiener Alltag** – von der U-Bahn bis zum Kaffeehaus.\n\n📝 **4. Wortschatz-Übungen:******\n\nUnten findest du Übungen, um die wichtigsten Wörter aus dem Text besser zu verstehen und zu wiederholen."
+        },
+        {
+          "type": "link",
+          "linkType": "quizlet",
+          "href": "https://quizlet.com/1053868749/match",
+          "label": "Vežba reči (Quizlet)"
+        },
+        {
+          "type": "text",
+          "content": "✅ **5. Und am Ende… wartet ein kleiner Test auf dich!******\n\nTeste dein Hör- und Leseverstehen sowie deinen Wortschatz – und finde heraus, wie gut du Wien schon verstehst. Viel Erfolg!"
+        }
+      ],
+      "exercises": [
+        {
+          "title": "Wien 1",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": "Ergänze",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "Stadtführungen",
+                  "Nationalpark",
+                  "Geräusche",
+                  "Altstadt",
+                  "Stammlokal",
+                  "en",
+                  "ink",
+                  "rum",
+                  "lsier",
+                  "ertraut",
+                  "kzent",
+                  "zusa",
+                  "en",
+                  "lick",
+                  "etze",
+                  "üdigk",
+                  "inschla",
+                  "e",
+                  "rientie",
+                  "tudieng",
+                  "ichtweis",
+                  "führung",
+                  "Altstadt",
+                  "Bummeln",
+                  "Interesse",
+                  "Sicht",
+                  "Perspektive",
+                  "hetzen",
+                  "d",
+                  "c",
+                  "e",
+                  "f",
+                  "a",
+                  "b"
+                ]
+              },
+              "correct_answer": "Stadtführungen, Nationalpark, Geräusche, Altstadt, Stammlokal, en, ink, rum, lsier, ertraut, kzent, zusa, en, lick, etze, üdigk, inschla, e, rientie, tudieng, ichtweis, führung, Altstadt, Bummeln, Interesse, Sicht, Perspektive, hetzen, d, c, e, f, a, b",
+              "question_type": "fill_blank"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "wpLessonId": 46368,
+      "title": "Kausale Verbindungen",
+      "order_index": 6,
+      "vimeo_video_id": "1095876105",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Kausale Verbindungen (Grammatik)"
+        },
+        {
+          "type": "video",
+          "vimeoId": "1095876105"
+        }
+      ],
+      "exercises": [
+        {
+          "title": "Kausale Verbindungen",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": "Ergänze!",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "dank",
+                  "vor",
+                  "Vor",
+                  "Aufgrund",
+                  "Dank",
+                  "aus",
+                  "vor",
+                  "aus",
+                  "Dank",
+                  "Aus",
+                  "Vor",
+                  "Aufgrund",
+                  "vor",
+                  "Aufgrund",
+                  "aus",
+                  "Dank"
+                ]
+              },
+              "correct_answer": "dank, vor, Vor, Aufgrund, Dank, aus, vor, aus, Dank, Aus, Vor, Aufgrund, vor, Aufgrund, aus, Dank",
+              "question_type": "fill_blank"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "wpLessonId": 46226,
+      "title": "EXTRA Prüfung (Modul 1)",
+      "order_index": 7,
+      "vimeo_video_id": null,
+      "sections": [
+        {
+          "type": "badge",
+          "module": "EXTRA Prüfung (Modul 1)"
+        },
+        {
+          "type": "text",
+          "content": "📘 **Modultraining für die B2-Prüfung******\n\nZu jedem Modul wirst du ein paar Übungen machen, die sich an den offiziellen Prüfungsformaten orientieren.\n\nDiese Aufgaben helfen dir, dich gezielt auf die Prüfung vorzubereiten – besonders im Bereich **Leseverstehen** und **Hörverstehen**.\n\n✅ Nimm dir Zeit, arbeite konzentriert und achte auf Details – genau wie in der echten Prüfung!\n\nUnd denk daran: **Übung macht sicher.******\n\nViel Spaß beim Bearbeiten! 💪"
+        }
+      ],
+      "exercises": [
+        {
+          "title": "Modul 1 Vielfalt B2 – LV und HV",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": "Ergänze",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "an",
+                  "en",
+                  "en",
+                  "en",
+                  "als",
+                  "erung",
+                  "die",
+                  "ung",
+                  "t",
+                  "en",
+                  "tel",
+                  "gen",
+                  "zu",
+                  "der",
+                  "che",
+                  "und",
+                  "er",
+                  "pp",
+                  "ein",
+                  "nd",
+                  "R",
+                  "F",
+                  "F",
+                  "F",
+                  "R"
+                ]
+              },
+              "correct_answer": "an, en, en, en, als, erung, die, ung, t, en, tel, gen, zu, der, che, und, er, pp, ein, nd, R, F, F, F, R",
+              "question_type": "fill_blank"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "wpLessonId": 46215,
+      "title": "EXTRA Video",
+      "order_index": 8,
+      "vimeo_video_id": "1107830042",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "EXTRA Video"
+        },
+        {
+          "type": "text",
+          "content": "In dieser Lektion geht es um **Veränderungen und Migration**. Oft sprechen wir darüber, wie Menschen nach Deutschland einwandern – heute möchten wir dir aber eine **andere Perspektive** zeigen: **Deutsche, die auswandern**, zum Beispiel nach **Dubai**.\n\nDu bekommst hier **kein Arbeitsblatt oder konkrete Aufgabe** – es geht einfach darum, dass du dich **an authentische Videos in deutscher Sprache gewöhnst** und versuchst, so viel wie möglich zu verstehen.\n\n🎥 **Hier ist das Video:**\n\nViel Spaß beim Zuschauen! 😊"
+        },
+        {
+          "type": "video",
+          "vimeoId": "1107830042"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "wpLessonId": 46582,
+      "title": "Erwartungen in der Familie B2.1",
+      "order_index": 9,
+      "vimeo_video_id": "1100056699",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Erwartungen in der Familie B2.1 (Hörverstehen und Grammatik)"
+        },
+        {
+          "type": "video",
+          "vimeoId": "1100056699"
+        }
+      ],
+      "exercises": [
+        {
+          "title": "Erwartungen in der Familie",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": "Ergänze",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "von",
+                  "vor",
+                  "bei",
+                  "mit",
+                  "zu",
+                  "auf",
+                  "auf",
+                  "von",
+                  "für",
+                  "Dafür",
+                  "Abhängigkeit",
+                  "Fürsorge",
+                  "Abstand",
+                  "Vorbild",
+                  "Stolz",
+                  "Zusammenhalt",
+                  "Erwartungen",
+                  "Fürsorge",
+                  "Beitrag",
+                  "Gespräch",
+                  "Macht",
+                  "Respekt",
+                  "Zusammenhalt"
+                ]
+              },
+              "correct_answer": "von, vor, bei, mit, zu, auf, auf, von, für, Dafür, Abhängigkeit, Fürsorge, Abstand, Vorbild, Stolz, Zusammenhalt, Erwartungen, Fürsorge, Beitrag, Gespräch, Macht, Respekt, Zusammenhalt",
+              "question_type": "fill_blank"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "wpLessonId": 46797,
+      "title": "Wortstellung im Mittelfeld",
+      "order_index": 10,
+      "vimeo_video_id": "1105517687",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Wortstellung im Mittelfeld (Grammatik)"
+        },
+        {
+          "type": "video",
+          "vimeoId": "1105517687"
+        }
+      ],
+      "exercises": [
+        {
+          "title": "Wortstellung im Mittelfeld",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": "Ergänze",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "Wie?",
+                  "Wohin?",
+                  "Wie oft?",
+                  "Womit?",
+                  "Wann?",
+                  "Wo?",
+                  "Seit wann?",
+                  "Mit wem?",
+                  "Wie lange?",
+                  "Wofür?",
+                  "Warum?",
+                  "schmeckt seit Kurzem besonders gut den Gästen",
+                  "überraschte ihre Fans vor einem halben Jahr mit einem wöchentlichen Blog",
+                  "hat bald dank der Idee eines Freundes noch mehr Online-Präsenz",
+                  "hilft ihr morgen in der Küche bei der Einrichtung einer Webcam",
+                  "sie ab Sonntag regelmäßig beim Kochen sehen"
+                ]
+              },
+              "correct_answer": "Wie?, Wohin?, Wie oft?, Womit?, Wann?, Wo?, Seit wann?, Mit wem?, Wie lange?, Wofür?, Warum?, schmeckt seit Kurzem besonders gut den Gästen, überraschte ihre Fans vor einem halben Jahr mit einem wöchentlichen Blog, hat bald dank der Idee eines Freundes noch mehr Online-Präsenz, hilft ihr morgen in der Küche bei der Einrichtung einer Webcam, sie ab Sonntag regelmäßig beim Kochen sehen",
+              "question_type": "fill_blank"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "wpLessonId": 46867,
+      "title": "Das eigene Profil schärfen",
+      "order_index": 11,
+      "vimeo_video_id": "1107816917",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Das eigene Profil schärfen (Wortschatz und Leseverstehen)"
+        },
+        {
+          "type": "video",
+          "vimeoId": "1107816917"
+        },
+        {
+          "type": "text",
+          "content": "**Wie im Video versprochen – hier ist der Link zu unserer B2-Gruppe auf WhatsApp:******\n\n[👉 https://chat.whatsapp.com/JmTz97c8Ss6AGyNohg9Znb](https://chat.whatsapp.com/JmTz97c8Ss6AGyNohg9Znb)\n\nIch freue mich auf deine Audios und Aufnahmen in der Gruppe!"
+        }
+      ],
+      "exercises": [
+        {
+          "title": "Das eigene Profil schärfen",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": "Ergänze",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "witzig",
+                  "kreativ",
+                  "konservativ",
+                  "locker",
+                  "alternativ",
+                  "Abonnenten",
+                  "Berater",
+                  "Design",
+                  "Miniaturansicht",
+                  "Hintergrund",
+                  "Schriftart",
+                  "Textabsätze",
+                  "Zwischenüberschriften",
+                  "Präsenz",
+                  "TER",
+                  "E",
+                  "EBS",
+                  "E",
+                  "L",
+                  "G",
+                  "DEO",
+                  "OZI",
+                  "LEN",
+                  "ED",
+                  "EN",
+                  "ETZW",
+                  "K"
+                ]
+              },
+              "correct_answer": "witzig, kreativ, konservativ, locker, alternativ, Abonnenten, Berater, Design, Miniaturansicht, Hintergrund, Schriftart, Textabsätze, Zwischenüberschriften, Präsenz, TER, E, EBS, E, L, G, DEO, OZI, LEN, ED, EN, ETZW, K",
+              "question_type": "fill_blank"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "wpLessonId": 49183,
+      "title": "TeKaMoLo",
+      "order_index": 12,
+      "vimeo_video_id": "1153517417",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "TeKaMoLo"
+        },
+        {
+          "type": "video",
+          "vimeoId": "1153517417"
+        }
+      ],
+      "exercises": [
+        {
+          "title": "TeKaMoLo 1",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": ".",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "vor drei Monaten in Leipzig",
+                  "davor kostenlos",
+                  "zusammen mit einer Freundin im Zentrum von Tübingen",
+                  "wegen der Probleme mit ihrer Webseite dringend",
+                  "seit Neuestem aus Spaß",
+                  "mit seiner Hilfe in der Küche des Restaurants",
+                  "Ich habe am Samstag mit meinen Freunden im Park ein Picknick gemacht.",
+                  "Ich bin gestern wegen des Regens einfach zu Hause geblieben.",
+                  "Wir sind in den Ferien mit dem Zug nach München gefahren.",
+                  "Sie hat sich gestern intensiv in der Bibliothek auf den Test vorbereitet.",
+                  "Ich habe am Abend in Ruhe im Wohnzimmer ein Buch gelesen.",
+                  "Ich trainiere jeden Morgen um fit zu bleiben motiviert im Fitnessstudio.",
+                  "Wir haben heute Nachmittag aus Langeweile zu Hause einen Film geschaut.",
+                  "Meine Schwester hat gestern fleißig in der Bäckerei gearbeitet."
+                ]
+              },
+              "correct_answer": "vor drei Monaten in Leipzig, davor kostenlos, zusammen mit einer Freundin im Zentrum von Tübingen, wegen der Probleme mit ihrer Webseite dringend, seit Neuestem aus Spaß, mit seiner Hilfe in der Küche des Restaurants, Ich habe am Samstag mit meinen Freunden im Park ein Picknick gemacht., Ich bin gestern wegen des Regens einfach zu Hause geblieben., Wir sind in den Ferien mit dem Zug nach München gefahren., Sie hat sich gestern intensiv in der Bibliothek auf den Test vorbereitet., Ich habe am Abend in Ruhe im Wohnzimmer ein Buch gelesen., Ich trainiere jeden Morgen um fit zu bleiben motiviert im Fitnessstudio., Wir haben heute Nachmittag aus Langeweile zu Hause einen Film geschaut., Meine Schwester hat gestern fleißig in der Bäckerei gearbeitet.",
+              "question_type": "fill_blank"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "wpLessonId": 49179,
+      "title": "Berufliche Kompetenzen",
+      "order_index": 13,
+      "vimeo_video_id": "1153517395",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Berufliche Kompetenzen"
+        },
+        {
+          "type": "video",
+          "vimeoId": "1153517395"
+        }
+      ],
+      "exercises": [
+        {
+          "title": "Berufliche Kompetenzen",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": ".",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "die Verantwortung",
+                  "das Verantwortungsbewusstsein",
+                  "die Flexibilität",
+                  "die Zuverlässigkeit",
+                  "die Pünktlichkeit",
+                  "die Belastbarkeit",
+                  "die Empathie",
+                  "die Kritikfähigkeit",
+                  "die Lernbereitschaft",
+                  "die Kommunikationsfähigkeit",
+                  "Interkulturelle Kompetenz",
+                  "Prioritäten setzen",
+                  "Konfliktlösungsfähigkeit",
+                  "Verhandlungsgeschick",
+                  "Einfühlungsvermögen",
+                  "hineinversetzen",
+                  "zuhören",
+                  "Eigenschaften",
+                  "Organisationstalent",
+                  "belastbar",
+                  "Fachkompetenzen",
+                  "Lernbereitschaft",
+                  "verantwortungsbewusst"
+                ]
+              },
+              "correct_answer": "die Verantwortung, das Verantwortungsbewusstsein, die Flexibilität, die Zuverlässigkeit, die Pünktlichkeit, die Belastbarkeit, die Empathie, die Kritikfähigkeit, die Lernbereitschaft, die Kommunikationsfähigkeit, Interkulturelle Kompetenz, Prioritäten setzen, Konfliktlösungsfähigkeit, Verhandlungsgeschick, Einfühlungsvermögen, hineinversetzen, zuhören, Eigenschaften, Organisationstalent, belastbar, Fachkompetenzen, Lernbereitschaft, verantwortungsbewusst",
+              "question_type": "fill_blank"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "wpLessonId": 46887,
+      "title": "BONUS: RADIONICA Priprema, POSAO, Start",
+      "order_index": 14,
+      "vimeo_video_id": "615786882",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "BONUS: RADIONICA Priprema, POSAO, Start"
+        },
+        {
+          "type": "video",
+          "vimeoId": "615786882"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "wpLessonId": 46890,
+      "title": "EXTRA Prüfung (Modul 2)",
+      "order_index": 15,
+      "vimeo_video_id": null,
+      "sections": [
+        {
+          "type": "badge",
+          "module": "EXTRA Prüfung (Modul 2)"
+        },
+        {
+          "type": "text",
+          "content": "📘 **Modultraining für die B2-Prüfung******\n\nZu jedem Modul wirst du ein paar Übungen machen, die sich an den offiziellen Prüfungsformaten orientieren.\n\nDiese Aufgaben helfen dir, dich gezielt auf die Prüfung vorzubereiten – besonders im Bereich **Leseverstehen,** **Hörverstehen und SCHREIBEN**\n\n✅ Nimm dir Zeit, arbeite konzentriert und achte auf Details – genau wie in der echten Prüfung!\n\nUnd denk daran: **Übung macht sicher.******\n\nViel Spaß beim Bearbeiten! 💪"
+        }
+      ],
+      "exercises": [
+        {
+          "title": "B2.1 Modul 2 Pr[fung Schreiben",
+          "exercise_type": "essay",
+          "questions": [
+            {
+              "question": "SCHREIBEN\n\nSchreiben Sie einen Text zum Thema „Soziale Medien und Demokratie“.\n\nBeschreiben Sie und vergleichen Sie, welche digitalen Medien von welchen Altersgruppen besonders viel / besonders wenig genutzt werden und welchen Einfluss soziale Medien auf das Verhalten von Wählerinnen und Wählern haben.\n\nLesen Sie hierzu auch die beiden Meinungstexte unten.\n\n–\nGeben Sie die beiden Aussagen mit eigenen Worten wieder.\n\n–\nNehmen Sie Stellung zu beiden Aussagen und begründen Sie Ihre Meinung.\n\n–\nGehen Sie auch auf die Situation in Ihrem Heimatland ein.\n\nEinfluss sozialer Medien auf die Demokratie\n\nWelchen Einfluss haben soziale Medien auf die Demokratie? Ist man Mitglied eines sozialen Netzwerks und beschäftigt sich intensiv damit, stößt man über kurz oder lang auf diese Frage. Die nächsten Wahlen stehen an und Wahlwerbung wird auch über die sozialen Medien verbreitet. Aber warum bekommt man bestimmte Wahlwerbungen? Aufgrund von Geschlecht oder Herkunft? Die dahinterliegenden Algorithmen sind oft undurchschaubar und als Nutzer muss man sich fragen, ob und inwieweit man in seiner Wahlentscheidung beeinflusst wird.\n\nWas den Einfluss sozialer Medien auf die Demokratie betrifft, so gibt es unterschiedliche Meinungen:\n\nIn den sozialen Medien basiert die Auswahl der dargestellten Informationen auf dem individuellen Nutzerverhalten. Das heißt, der Nutzer wird nicht mehr mit unterschiedlichen Perspektiven konfrontiert, sondern erhält nur noch Informationen, die seinen eigenen Ansichten entsprechen. Dadurch wird die eigene Meinung immer weiter gestärkt. Eine objektive Entscheidung wird dadurch für den Nutzer schwieriger.\n\nSoziale Medien kann man für die Demokratie auch positiv nutzen. Parteien und Politiker sind über das Netzwerk nah an den Wählerinnen und Wählern und können direkt mit diesen diskutieren. Viele Menschen fühlen sich durch diesen persönlichen Austausch in ihren Anliegen ernst genommen.\n\n📌 Hinweis:\n\nDie Aufgabe umfasst die Beschreibung einer Grafik und einen Teil, in dem Sie argumentieren sollen. Achten Sie darauf, einen zusammenhängenden Text zu schreiben, der klar gegliedert ist. Bearbeiten Sie alle Punkte der Aufgabenstellung.",
+              "options": {
+                "type": "essay"
+              },
+              "correct_answer": "",
+              "question_type": "essay"
+            },
+            {
+              "question": "LESEN Sie möchten sich einen Account bei einem sozialen Netzwerk einrichten und lesen die Nutzungsbedingungen. Welche der Überschriften a bis h aus dem Inhaltsverzeichnis passen zu den Paragraphen 1 bis 3? Vier Überschriften werden nicht gebraucht. Bei diesem Prüfungsteil müssen Sie einen schwierigen Text schnell lesen. Gehen Sie systematisch vor: Lesen Sie die Überschriften. Lesen Sie den Text bei § 1 durch. Notieren Sie bei allen Überschriften, die vielleicht passen könnten, die Zahl 1. Arbeiten Sie so auch mit den weiteren Textabschnitten. Streichen Sie alle Überschriften durch, die auf keinen Fall passen. Lesen Sie wieder den Text bei § 1 und notieren Sie den Buchstaben der Lösung, die am besten passt.",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "h",
+                  "b",
+                  "a"
+                ]
+              },
+              "correct_answer": "h, b, a",
+              "question_type": "fill_blank"
+            },
+            {
+              "question": "Ergänze!",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "F",
+                  "R",
+                  "R",
+                  "F",
+                  "F"
+                ]
+              },
+              "correct_answer": "F, R, R, F, F",
+              "question_type": "fill_blank"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "wpLessonId": 49218,
+      "title": "Zweiteilige Konnektoren",
+      "order_index": 16,
+      "vimeo_video_id": "1154266874",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Zweiteilige Konnektoren"
+        },
+        {
+          "type": "video",
+          "vimeoId": "1154266874"
+        }
+      ],
+      "exercises": [
+        {
+          "title": "Zweiteilige Konnektoren 1",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": ".",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "sowohl",
+                  "als auch",
+                  "nicht nur",
+                  "sondern auch",
+                  "weder",
+                  "noch",
+                  "Je",
+                  "desto",
+                  "Entweder",
+                  "oder",
+                  "Zwar",
+                  "aber",
+                  "zwar",
+                  "aber",
+                  "einerseits",
+                  "andererseits"
+                ]
+              },
+              "correct_answer": "sowohl, als auch, nicht nur, sondern auch, weder, noch, Je, desto, Entweder, oder, Zwar, aber, zwar, aber, einerseits, andererseits",
+              "question_type": "fill_blank"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "wpLessonId": 49222,
+      "title": "Extrem unter Kontrolle – Lena auf Expedition",
+      "order_index": 17,
+      "vimeo_video_id": null,
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Extrem unter Kontrolle – Lena auf Expedition"
+        },
+        {
+          "type": "text",
+          "content": "### **Extrem unter Kontrolle – Lena auf Expedition**\n\nLena zieht die Jacke fester zu. Die **Kälte** bei 4000 Metern Höhe ist beißend. Ihr **Herz-Kreislauf-System** arbeitet auf Hochtouren. Jeder Atemzug kostet Kraft. Ohne ihre **Ausdauer** hätte sie diese Etappe schon aufgegeben.\n\nDer Pfad ist steil, die Felsen glitschig. Sie spannt die Arme, testet die **Griffkraft**. Ihre **Rumpfstabilität** schützt den Rücken, während sie einen Sprung wagt. Ein falscher Schritt – und ihre **Koordination** sowie ihr **Gleichgewichtssinn** entscheiden über Sicherheit oder Sturz.\n\nSie denkt an das **Angstmanagement**. Vor wenigen Minuten hatte sie ein mulmiges Gefühl, als ein Windstoß sie fast aus dem Gleichgewicht brachte. Doch sie konzentriert sich, kontrolliert ihre **Willensstärke** und ihre **mentale Stärke**, um weiterzugehen. Jede Bewegung ist geplant, jede Entscheidung bewusst.\n\nDie Trainer hatten immer wieder betont, wie wichtig **Flexibilität** und **Anpassungsfähigkeit** sind. Jetzt merkt Lena, wie ihr Körper automatisch reagiert. Ihre **Beweglichkeit** der Gelenke und die **Feinmotorik** der Hände werden gebraucht, um die Route zu meistern.\n\nAm Morgen hat sie ihre **Ernährung** genau geplant. **Kohlenhydrate** geben Energie für den Aufstieg, **Proteine** helfen den Muskeln bei der **Regeneration**. **Mineralien** und **Elektrolyte** verhindern Krämpfe. Ohne diese Vorbereitung würde jede Anstrengung sinnlos sein.\n\nSie spürt die Erschöpfung. Doch ihre **Disziplin** treibt sie weiter. Sie visualisiert den Gipfel (**Visualisierung**) und plant jeden Schritt. Jede Stufe, jeder Griff – alles sitzt. Erfolg hängt nicht nur von **Kraft** ab, sondern vom Zusammenspiel aller Faktoren: **Zielstrebigkeit**, **Ausdauer**, **Koordination**, **Flexibilität**, **mentale Stärke** und **Ernährung**.\n\nDer letzte Abschnitt vor dem Gipfel ist der härteste. Wind, Kälte, Erschöpfung. **Stressresistenz** gefragt. Jeder Schritt zählt. Lena bleibt ruhig. Die **Regeneration** nach jedem Aufstieg hat ihr Kraft gegeben. Bald erreicht sie den Gipfel. Ein Moment purer Kontrolle, Energie und Fokus. Alles, was sie gelernt hat, zahlt sich aus.\n\n### **Glossar**\n\n- \n**Ausdauer** – Fähigkeit, körperliche Belastung über lange Zeit durchzuhalten\n\n- \n**Anpassungsfähigkeit** – Fähigkeit, sich an extreme Bedingungen wie Höhe, Hitze oder Kälte anzupassen\n\n- \n**Angstmanagement** – Fähigkeit, Angst zu kontrollieren und Panik zu vermeiden\n\n- \n**Beweglichkeit** – Fähigkeit, Gelenke frei und flexibel zu bewegen\n\n- \n**Disziplin** – konsequentes Einhalten von Regeln, Plänen oder Trainingsvorgaben\n\n- \n**Elektrolyte** – Mineralstoffe, die Flüssigkeitshaushalt und Muskelaktivität regulieren\n\n- \n**Feinmotorik** – Fähigkeit, präzise und kontrollierte Bewegungen auszuführen\n\n- \n**Flexibilität** – Beweglichkeit und Gelenkigkeit, um Verletzungen vorzubeugen\n\n- \n**Gleichgewichtssinn** – Fähigkeit, das Gleichgewicht zu halten\n\n- \n**Griffkraft** – Kraft der Hände und Unterarme zum Festhalten\n\n- \n**Herz-Kreislauf-System** – System aus Herz und Blutgefäßen, das den Körper mit Sauerstoff versorgt\n\n- \n**Kohlenhydrate** – Hauptenergiequelle des Körpers\n\n- \n**Kraft** – Fähigkeit, Widerstände zu überwinden oder schwere Lasten zu bewegen\n\n- \n**Kälte** – niedrige Umgebungstemperatur, die den Körper belastet\n\n- \n**Mineralien** – lebenswichtige Nährstoffe wie Kalium, Magnesium oder Calcium\n\n- \n**Mentale Stärke** – Fähigkeit, trotz Stress, Angst oder Müdigkeit fokussiert zu bleiben\n\n- \n**Muskelreparatur** – Wiederherstellung und Heilung der Muskeln nach Belastung\n\n- \n**Regeneration** – Erholung des Körpers nach physischer Anstrengung\n\n- \n**Rumpfstabilität** – Stabilität des Körperzentrums zur Unterstützung von Bewegungen\n\n- \n**Ernährung** – gezielte Auswahl von Nahrungsmitteln zur Unterstützung der Leistung\n\n- \n**Stressresistenz** – Fähigkeit, unter Druck ruhig zu bleiben\n\n- \n**Visualisierung** – Technik, Abläufe oder Erfolg mental vorzustellen\n\n- \n**Willensstärke** – Fähigkeit, trotz Erschöpfung oder Schmerz nicht aufzugeben\n\n- \n**Zielstrebigkeit** – konsequente Ausrichtung auf ein bestimmtes Ziel"
+        }
+      ],
+      "exercises": [
+        {
+          "title": "Sport und Ernährung B2.1",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": ".",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "Kälte",
+                  "Herz-Kreislauf-System",
+                  "Ausdauer",
+                  "Griffkraft",
+                  "Rumpfstabilität",
+                  "Koordination",
+                  "Gleichgewichtssinn",
+                  "mentale Stärke",
+                  "Visualisierung",
+                  "Beweglichkeit",
+                  "Elektrolyte",
+                  "Stressresistenz",
+                  "Ernährung",
+                  "Kohlenhydrate",
+                  "Proteine",
+                  "Regeneration",
+                  "Disziplin",
+                  "Zielstrebigkeit",
+                  "Willensstärke",
+                  "Angstmanagement",
+                  "mentale Stärke",
+                  "Visualisierung"
+                ]
+              },
+              "correct_answer": "Kälte, Herz-Kreislauf-System, Ausdauer, Griffkraft, Rumpfstabilität, Koordination, Gleichgewichtssinn, mentale Stärke, Visualisierung, Beweglichkeit, Elektrolyte, Stressresistenz, Ernährung, Kohlenhydrate, Proteine, Regeneration, Disziplin, Zielstrebigkeit, Willensstärke, Angstmanagement, mentale Stärke, Visualisierung",
+              "question_type": "fill_blank"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "wpLessonId": 49278,
+      "title": "Erfolg und Scheitern im Beruf",
+      "order_index": 18,
+      "vimeo_video_id": null,
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Erfolg und Scheitern im Beruf"
+        },
+        {
+          "type": "text",
+          "content": "### „ERFOLG UND SCHEITERN SIND ZWEI SEITEN DERSELBEN MEDAILLE“\n\nErfahren Sie, wie meine Arbeit in der aktuellen Medienlandschaft besprochen wird. Interview mit Daniel Braun in Karriere heute vom 28. Mai_\n\nAn Niederlagen wächst man¹. Trotzdem gilt es immer noch als Misserfolg zu scheitern. Darüber zu sprechen, ist ein Tabu. Nicht für Milo Hansen. Als freiberuflicher Coach hilft er seinen Kunden, berufliches Scheitern zu verarbeiten und neue Wege zu gehen.\n\nHerr Hansen, Sie sind 55 Jahre alt, ein erfolgreicher Coach und leiten das Institut für erfolgreiches Scheitern_. Sind Sie auch schon gescheitert?** Ja, natürlich. Ich habe 25 Jahre lang in Personalabteilungen gearbeitet, ehe ich Coach wurde. Zuerst war ich bei einem mittelständischen Unternehmen in Bielefeld angestellt. Danach bin ich zu einem internationalen Unternehmen nach Stuttgart gewechselt und habe dort die Leitung der Personalabteilung übernommen. Doch als das Unternehmen mit einer anderen Firma zusammengelegt wurde, ging es abwärts. Zuerst musste ich viele meiner Mitarbeiter entlassen, und dann wurde auch mir gekündigt. Mit 53 Jahren wurde ich arbeitslos. Davor hatte ich mir nie Gedanken über so etwas gemacht. Deshalb bin ich nach der Kündigung in ein tiefes Loch gefallen.\n\nIch stelle es mir sehr schwierig vor, mit Anfang fünfzig Arbeitssuchender zu sein. Wie war das bei Ihnen?** Es war schrecklich. Ich war etwas über ein Jahr arbeitslos. Währenddessen habe ich fast einhundert Bewerbungen geschrieben und nur Ablehnungen bekommen. Mit 53 Jahren ist man für die meisten Firmen einfach zu alt für eine neue Anstellung.\n\nSeit einem Jahr betreiben Sie nun das Institut für erfolgreiches Scheitern_. Wie kam es dazu?** Irgendwann habe ich verstanden, dass ich als Angestellter keine Chance mehr hatte und beruflich gescheitert war. Sobald ich diese Niederlage akzeptiert hatte, war ich bereit für etwas Neues. Ich hatte über 25 Jahre Erfahrung in der Personalentwicklung und wusste außerdem, wie es ist, wenn man beruflich alles verliert. Ich wollte etwas Neues machen und gleichzeitig auf meinen früheren Erfahrungen aufbauen. Außerdem hatte ich den Wunsch, anderen mein Wissen zur Verfügung zu stellen. Also habe ich den Entschluss gefasst, mich als Coach selbstständig zu machen und das Institut für erfolgreiches Scheitern_ zu gründen. Und ich habe es nicht bereut. Ich würde es genauso wieder machen.\n\nEigentlich möchten doch alle Karriere machen. Wieso helfen Sie nicht dabei, erfolgreich zu sein, sondern dabei, erfolgreich zu scheitern?** Solange jemand erfolgreich ist, geht er nicht zu einem Coach. Aber Erfolg und Scheitern sind zwei Seiten derselben Medaille. Eigentlich sollte jeder über das Scheitern nachdenken, noch ehe er in Schwierigkeiten gerät. Wenn man scheitert, kann einen das schon in Angst versetzen. Es ist aber nicht das Ende. Es ist wichtig, mit anderen darüber zu sprechen. Man kann einiges daraus lernen und dieses Wissen als Sprungbrett² für eine neue Karriere nutzen. Dabei leiste ich Hilfe.\n\nSie meinen also, dass das Scheitern gleichzeitig die Basis für einen Neuanfang sein kann?** Ganz richtig. Ich empfehle jedem, sich durch ein gescheitertes Projekt nicht entmutigen zu lassen³.\n\nVielen Dank für das Gespräch, Herr Hansen.**\n\nWorterklärungen am Textende:**\n\n- \nan Niederlagen wachsen:** aus Niederlagen lernen\n\n- \netwas als Sprungbrett nutzen:** etwas als Start / Ausgangsposition nutzen\n\n- \nsich nicht entmutigen lassen:** sich nicht den Mut nehmen lassen; nicht aufgeben"
+        }
+      ],
+      "exercises": [
+        {
+          "title": "Erfolg und Scheitern 1",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": "ERFOLG UND SCHEITERN SIND ZWEI SEITEN DERSELBEN MEDAILLE“ Erfahren Sie, wie meine Arbeit in der aktuellen Medienlandschaft besprochen wird. Interview mit Daniel Braun in Karriere heute vom 28. Mai An Niederlagen wächst man¹. Trotzdem gilt es immer noch als Misserfolg zu scheitern. Darüber zu sprechen, ist ein Tabu. Nicht für Milo Hansen. Als freiberuflicher Coach hilft er seinen Kunden, berufliches Scheitern zu verarbeiten und neue Wege zu gehen. Herr Hansen, Sie sind 55 Jahre alt, ein erfolgreicher Coach und leiten das Institut für erfolgreiches Scheitern . Sind Sie auch schon gescheitert? Ja, natürlich. Ich habe 25 Jahre lang in Personalabteilungen gearbeitet, ehe ich Coach wurde. Zuerst war ich bei einem mittelständischen Unternehmen in Bielefeld angestellt. Danach bin ich zu einem internationalen Unternehmen nach Stuttgart gewechselt und habe dort die Leitung der Personalabteilung übernommen. Doch als das Unternehmen mit einer anderen Firma zusammengelegt wurde, ging es abwärts. Zuerst musste ich viele meiner Mitarbeiter entlassen, und dann wurde auch mir gekündigt. Mit 53 Jahren wurde ich arbeitslos. Davor hatte ich mir nie Gedanken über so etwas gemacht. Deshalb bin ich nach der Kündigung in ein tiefes Loch gefallen. Ich stelle es mir sehr schwierig vor, mit Anfang fünfzig Arbeitssuchender zu sein. Wie war das bei Ihnen? Es war schrecklich. Ich war etwas über ein Jahr arbeitslos. Währenddessen habe ich fast einhundert Bewerbungen geschrieben und nur Ablehnungen bekommen. Mit 53 Jahren ist man für die meisten Firmen einfach zu alt für eine neue Anstellung. Seit einem Jahr betreiben Sie nun das Institut für erfolgreiches Scheitern . Wie kam es dazu? Irgendwann habe ich verstanden, dass ich als Angestellter keine Chance mehr hatte und beruflich gescheitert war. Sobald ich diese Niederlage akzeptiert hatte, war ich bereit für etwas Neues. Ich hatte über 25 Jahre Erfahrung in der Personalentwicklung und wusste außerdem, wie es ist, wenn man beruflich alles verliert. Ich wollte etwas Neues machen und gleichzeitig auf meinen früheren Erfahrungen aufbauen. Außerdem hatte ich den Wunsch, anderen mein Wissen zur Verfügung zu stellen. Also habe ich den Entschluss gefasst, mich als Coach selbstständig zu machen und das Institut für erfolgreiches Scheitern zu gründen. Und ich habe es nicht bereut. Ich würde es genauso wieder machen. Eigentlich möchten doch alle Karriere machen. Wieso helfen Sie nicht dabei, erfolgreich zu sein, sondern dabei, erfolgreich zu scheitern? Solange jemand erfolgreich ist, geht er nicht zu einem Coach. Aber Erfolg und Scheitern sind zwei Seiten derselben Medaille. Eigentlich sollte jeder über das Scheitern nachdenken, noch ehe er in Schwierigkeiten gerät. Wenn man scheitert, kann einen das schon in Angst versetzen. Es ist aber nicht das Ende. Es ist wichtig, mit anderen darüber zu sprechen. Man kann einiges daraus lernen und dieses Wissen als Sprungbrett² für eine neue Karriere nutzen. Dabei leiste ich Hilfe. Sie meinen also, dass das Scheitern gleichzeitig die Basis für einen Neuanfang sein kann? Ganz richtig. Ich empfehle jedem, sich durch ein gescheitertes Projekt nicht entmutigen zu lassen³. Vielen Dank für das Gespräch, Herr Hansen. Worterklärungen am Textende: an Niederlagen wachsen: aus Niederlagen lernen etwas als Sprungbrett nutzen: etwas als Start / Ausgangsposition nutzen sich nicht entmutigen lassen: sich nicht den Mut nehmen lassen; nicht aufgeben",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "b</span><span class=\"description-red\">",
+                  "b</span><span class=\"description-red\">",
+                  "a</span><span class=\"description-red\">",
+                  "b</span><span class=\"description-red\">"
+                ]
+              },
+              "correct_answer": "b</span><span class=\"description-red\">, b</span><span class=\"description-red\">, a</span><span class=\"description-red\">, b</span><span class=\"description-red\">",
+              "question_type": "fill_blank"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "wpLessonId": 49292,
+      "title": "Finalsätze",
+      "order_index": 19,
+      "vimeo_video_id": "1153517395",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Finalsätze"
+        },
+        {
+          "type": "video",
+          "vimeoId": "1153517395"
+        }
+      ],
+      "exercises": [
+        {
+          "title": "Finalsätze",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": "Ergänze",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "damit",
+                  "damit",
+                  "F",
+                  "R",
+                  "B",
+                  "B",
+                  "A",
+                  "C",
+                  "A",
+                  "um Milch zu kaufen",
+                  "C",
+                  "D",
+                  "A",
+                  "B"
+                ]
+              },
+              "correct_answer": "damit, damit, F, R, B, B, A, C, A, um Milch zu kaufen, C, D, A, B",
+              "question_type": "fill_blank"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "wpLessonId": 49312,
+      "title": "Minimalismus",
+      "order_index": 20,
+      "vimeo_video_id": null,
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Minimalismus"
+        },
+        {
+          "type": "text",
+          "content": "**Weniger ist mehr**\n\n_Haben Sie manchmal das Gefühl, dass Ihre Wohnung zu voll ist und Sie zu viele Dinge besitzen?So ging es auch Sabrina Krause. Sie trennte sich deshalb von vielen Sachen und lebt heute minimalistisch._\n\nEine Matratze als Bett, die tagsüber zum Sofa wird, in der Mitte ein quadratischer Holztisch, der Ess- und Schreibtisch ist, darauf ein Laptop, an der Wand ein niedriges Regal, daneben ein schmaler Kleiderschrank: Das ist das Wohn-, Schlaf- und Arbeitszimmer der 22-jährigen Bloggerin und Online-Marketing-Expertin Sabrina Krause.\n\nBegonnen hat alles vor zwei Jahren. Krause ist aus dem Haus ihrer Eltern in Erfurt, wo sie eine ganze Etage für sich hatte, in eine kleine Wohnung in Leipzig gezogen. „Da habe ich gemerkt, wie viel Krempel¹ und Krimskrams² sich über die Jahre angesammelt hatten“, sagt sie. „Das meiste davon hatte ich lange nicht genutzt. Da wusste ich: Jetzt muss ich mal entrümpeln.“ Erst war es schwierig, sich von Sachen zu trennen, erzählt sie, doch es wurde mit der Zeit immer leichter. „Und schließlich habe ich mich richtig wohlgefühlt, irgendwie freier.“ Über diese und ähnliche Erfahrungen berichtet sie regelmäßig in ihrem Podcast _so einfach_ und in Artikeln für verschiedene Magazine und Blogs.\n\n¹ der Krempel (ugs.): Dinge, die nicht viel wert (und oft alt) sind² der Krimskrams (ugs.): verschiedene kleine Dinge, die wenig Wert haben\n\nWas für viele ziemlich verrückt klingt, ist für eine wachsende Zahl an Menschen normaler Alltag. Weniger zu besitzen und stattdessen mehr Zeit und Geld zu haben, das ist für Menschen wie Sabrina Krause wichtig. Minimalisten nennen sie sich. Sie reduzieren ihren Besitz radikal, kaufen so wenig wie möglich neu und leihen sich vieles. Viel zu besitzen, belastet sie. Es wird geschätzt, dass ein Europäer durchschnittlich 10 000 Gegenstände besitzt. „Das meiste davon braucht man gar nicht“, sagt Krause. Der einfache Wunsch nach mehr Platz in der Wohnung ist für die meisten Menschen der Anfang. Sie denken gründlich über ihr Konsumverhalten nach und möchten es ändern. Wer einmal mit dem Aussortieren¹ begonnen hat, bleibt dem Minimalismus oft treu. Denn er hat noch andere Vorteile: Minimalisten müssen nur selten neue Dinge kaufen, sparen sie Geld. Hinzu kommt: Wer weniger hat, muss sich weniger um den Besitz kümmern und spart außerdem Zeit. „Wenn man einmal versucht hat, mit wenig auszukommen², erkennt man schnell, wie wenig man eigentlich braucht“, sagt Sabrina Krause. Sie ist einen Schritt weiter gegangen und lebt jetzt auch möglichst umweltfreundlich und energiesparend. Überhaupt findet sie: Das minimalistische Leben hat sie als Person verändert. „Ich bin jetzt viel ruhiger“, sagt sie. „Und meine Gedanken sind klarer und geordneter als früher.“\n\n¹ das Aussortieren: das Heraussuchen und Weggeben von Sachen, die man nicht mehr braucht² mit wenig auskommen: nicht viel brauchen"
+        }
+      ],
+      "exercises": [
+        {
+          "title": "Minimalismus, Hörverstehen B2.1",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": "Lesen Sie die Sätze 1–5 und hören Sie den Podcast noch einmal. Was ist richtig a , b oder c ? Markieren Sie. https://www.hartweger.rs/wp-content/uploads/2026/01/1_22_Vielfalt_B21_KB_L11_5b_c.mp3",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "b",
+                  "a",
+                  "c",
+                  "c",
+                  "a"
+                ]
+              },
+              "correct_answer": "b, a, c, c, a",
+              "question_type": "fill_blank"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "wpLessonId": 49348,
+      "title": "Nachbarschaft 2.0",
+      "order_index": 21,
+      "vimeo_video_id": null,
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Nachbarschaft 2.0 – Apps verbinden die Menschen im Viertel"
+        },
+        {
+          "type": "text",
+          "content": "Man sucht sie sich nicht selbst aus. Sie sind einfach da und sehr nah: die Nachbarn. Sie können nerven, wenn man sie als soziale Kontrolle wahrnimmt. Aber die Menschen von nebenan können auch sehr wertvoll sein, wenn sie sich gegenseitig unterstützen und aufeinander aufpassen.\n\nLaut einer Studie wünschen sich zwischen 15 und 30 Prozent der Menschen in Deutschland mehr Kontakt zu den Nachbarn. Gerade in den Großstädten ist das Verhältnis noch ausbaufähig. Hier kennen knapp 40 Prozent keinen einzigen Nachbarn persönlich. Doch das könnte bald ganz anders aussehen, denn immer mehr Menschen vernetzen sich über Online-Plattformen mit der Nachbarschaft.\n\n„Ich habe mich nach einer Gemeinschaft gesehnt.“** – S. Radloff\n\nSimone Radloff hat sich in einem Nachbarschaftsnetzwerk angemeldet, nachdem sie in ein neues Viertel gezogen ist. „Nach dem Umzug brauchte ich immer wieder einmal Hilfe – und habe sie über die App schnell und einfach bekommen. Natürlich hätte ich auch bei meinen Nachbarn klingeln und nach einer Bohrmaschine fragen können. Aber das ist mir irgendwie unangenehm.“ Das gefiel auch Peter Kowski: „Ich habe im Netzwerk nach einer Familie gesucht, die einen Leih-opa braucht. Das fand ich diskreter als einen Aushang im Supermarkt.“\n\nÜber die Nachbarschafts-App lassen sich leicht Gruppen mit gemeinsamen Interessen gründen: Man kümmert sich zusammen um einen Garten oder trifft sich zum Spieleabend. Auch Projekte für mehr Lebensqualität im Viertel sind so realisierbar. „Wir haben uns gestern getroffen, um den Spielplatz aufzuräumen. Da lagen Glas und anderer Müll. Jetzt ist der Spielplatz wieder ohne Gefahr benutzbar“, erzählt der junge Familienvater Omar Arifi begeistert.\n\nDie Nachbarschaftsnetzwerke scheinen eine Antwort auf Herausforderungen der modernen Gesellschaft zu sein: auf den Trend zur Kleinfamilie, auf wenig sozialen Austausch und auf Vereinsamung im Alter. „Ich bin in einem Dorf aufgewachsen, wo jeder jeden kennt und man sich beobachtet fühlt“, erklärt Simone Radloff. „Als ich für meine Ausbildung nach Frankfurt gezogen bin, fühlte ich mich endlich frei.“\n\nDer 25-Jährigen gefiel die Anonymität in der Stadt. „Doch nach einiger Zeit habe ich mich nach mehr Kontakten gesehnt – nach einer Gemeinschaft. Ich denke, das ist verständlich. In einer Welt, in der es oft nur um Karriere, Konkurrenz und Geld geht, tut es gut, wenn man sich einfach so hilft.“\n\n„So sparen wir Ressourcen.“** – O. Arifi\n\nOmar Arifi ist der Aspekt der Nachhaltigkeit besonders wichtig. „Ich hoffe, dass unser Viertel da noch lernfähig ist. Aber vieles klappt schon gut. Über die App teilen wir Werkzeug und Haushaltsgeräte. Und wer Essen übrig hat oder alte Möbel nicht mehr braucht, postet das einfach. So sparen wir Ressourcen und bleiben in Kontakt.“\n\n„Ganz anders als in vielen anderen sozialen Netzwerken kommunizieren wir in unserer Gruppe wirklich nett miteinander“, lobt Peter Kowski. „Vielleicht auch deshalb, weil man seinen echten Namen nennen muss.“\n\n„Es geht nicht um Selbstinszenierung!“** – P. Kowski\n\nBei der Anmeldung ist nachzuweisen, dass man im Viertel wohnt. Man kann sich also jederzeit im wirklichen Leben begegnen. „Hier will sich niemand darstellen“, ergänzt der 69-Jährige. „Es geht nicht um Selbstinszenierung, sondern um das Wir!“ Und der erste Schritt zum Wir_ fällt vielen Menschen heute digital leichter als analog."
+        }
+      ],
+      "exercises": [
+        {
+          "title": "Nachbarnschaft B2.1",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": ".",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "hintergrund",
+                  "verlust",
+                  "position",
+                  "traum",
+                  "beweis",
+                  "begrenzung",
+                  "Migrationshintergrund",
+                  "Führungsposition",
+                  "Kindheitstraum",
+                  "Geschwindigkeitsbegrenzung",
+                  "Freundschaftsbeweis",
+                  "Realitätsverlust"
+                ]
+              },
+              "correct_answer": "hintergrund, verlust, position, traum, beweis, begrenzung, Migrationshintergrund, Führungsposition, Kindheitstraum, Geschwindigkeitsbegrenzung, Freundschaftsbeweis, Realitätsverlust",
+              "question_type": "fill_blank"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "wpLessonId": 49361,
+      "title": "Alternativen zu Passiv",
+      "order_index": 22,
+      "vimeo_video_id": "1157705554",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Alternativen zu Passiv"
+        },
+        {
+          "type": "video",
+          "vimeoId": "1157705554"
+        }
+      ],
+      "exercises": [
+        {
+          "title": "B2.1 Vielfalt",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": "Schreib in die Lücken A, B, C oder D",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "C",
+                  "D",
+                  "B",
+                  "A",
+                  "C",
+                  "B",
+                  "B",
+                  "D",
+                  "C",
+                  "C",
+                  "B",
+                  "D",
+                  "A",
+                  "A",
+                  "D",
+                  "B",
+                  "A",
+                  "C",
+                  "B",
+                  "B",
+                  "A",
+                  "C",
+                  "B",
+                  "C",
+                  "B"
+                ]
+              },
+              "correct_answer": "C, D, B, A, C, B, B, D, C, C, B, D, A, A, D, B, A, C, B, B, A, C, B, C, B",
+              "question_type": "fill_blank"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "reviewNotes": [
+    "[Das Leben neu gestalten – Vielfalt B2.1 (Wortschatz und Leseverstehen)] kviz 45871: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Nomen mit Präpositionen (Grammatik)] kviz 45938: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Wortstellung mit Dativ und Akkusativ (Grammatik)] kviz 46007: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Migration (Wortschatz und Hörverstehen)] kviz 46077: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Modalverben durch die Zeit (Grammatik)] kviz 46192: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[WIEN (Wortschatz und Leseverstehen)] kviz 46279: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Kausale Verbindungen (Grammatik)] kviz 46412: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[EXTRA Prüfung (Modul 1)] kviz 46218: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Erwartungen in der Familie B2.1 (Hörverstehen und Grammatik)] kviz 46605: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Wortstellung im Mittelfeld (Grammatik)] kviz 46807: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Das eigene Profil schärfen (Wortschatz und Leseverstehen)] kviz 46881: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[TeKaMoLo] kviz 49187: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Berufliche Kompetenzen] kviz 49191: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[EXTRA Prüfung (Modul 2)] kviz 46903: essay (proveri prompt)",
+    "[EXTRA Prüfung (Modul 2)] kviz 46903: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[EXTRA Prüfung (Modul 2)] kviz 46903: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Zweiteilige Konnektoren] kviz 49256: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Extrem unter Kontrolle – Lena auf Expedition] kviz 49226: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Erfolg und Scheitern im Beruf] kviz 49283: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Finalsätze] kviz 46516: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Minimalismus] kviz 49315: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Nachbarschaft 2.0 – Apps verbinden die Menschen im Viertel] kviz 49351: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "Course-level kvizovi (45319) zakačeni na poslednju lekciju \"Alternativen zu Passiv\".",
+    "[Alternativen zu Passiv] kviz 45319: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)"
+  ]
+}

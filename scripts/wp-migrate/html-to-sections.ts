@@ -63,9 +63,21 @@ export function htmlToSections(html: string): Section[] {
     const table = node.tagName === "TABLE" ? node : node.querySelector("table");
     const img = node.tagName === "IMG" ? node : node.querySelector("img");
 
+    // WP [audio mp3="…"] → <audio class="wp-audio-shortcode"><source src="…mp3"> (fallback: zaostali shortcode)
+    const audioEl = node.tagName === "AUDIO" ? node : node.querySelector("audio");
+    const audioSrc = (
+      audioEl?.querySelector("source")?.getAttribute("src")
+      || (node.innerHTML.match(/\[audio[^\]]*?mp3="([^"]+)"/) || [])[1]
+      || ""
+    ).replace(/\?.*$/, "");
+    // Quizlet match embed → dugme (link tipa quizlet), bez ugrađenog iframe-a
+    const quizletId = (src.match(/quizlet\.com\/(\d+)/) || [])[1];
+
     const gembed = src ? googleEmbedFrom(src) : null;
 
     if (vimeo) { flush(); sections.push({ type: "video", vimeoId: vimeo }); }
+    else if (audioSrc) { flush(); sections.push({ type: "audio", url: audioSrc } as Section); }
+    else if (quizletId) { flush(); sections.push({ type: "link", linkType: "quizlet", href: `https://quizlet.com/${quizletId}/match`, label: "Vežba reči (Quizlet)" }); }
     else if (gembed) { flush(); sections.push({ type: "link", linkType: "external", href: gembed.href, label: gembed.label }); }
     else if (src && pdfUrlFrom(src)) { flush(); sections.push({ type: "pdf", url: pdfUrlFrom(src)!, label: "PDF" }); }
     else if (table) {

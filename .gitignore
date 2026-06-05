@@ -54,3 +54,5 @@ gramatika-kupci.csv
 wc-orders-report-export-*.csv
 *analytics-orders.csv
 wc-orders-report-*.csv
+
+.superpowers/

@@ -95,6 +95,12 @@ export interface AudioSection {
   label?: string;
 }
 
+export interface ExerciseSection {
+  type: "exercise";
+  /** Tačan naslov vežbe iz `exercises` tabele iste lekcije — renderuje se inline ispod sadržaja. */
+  title: string;
+}
+
 export type Section =
   | BadgeSection
   | VideoSection
@@ -109,4 +115,5 @@ export type Section =
   | LinkSection
   | FlashcardSection
   | YoutubeSection
-  | AudioSection;
+  | AudioSection
+  | ExerciseSection;
