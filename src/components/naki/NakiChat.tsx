@@ -1,7 +1,35 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { NakiFace } from "./NakiAvatar";
+
+// NaKI šalje markdown (**bold**, *kurziv*, [tekst](url)). Pretvori u React čvorove
+// (kao stari WP widget) — inače se vide gole zvezdice. Novi red čuva whitespace-pre-wrap.
+function renderRich(text: string): ReactNode[] {
+  const withBullets = text.replace(/^- /gm, "• ");
+  const re = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)|\*\*([^*]+)\*\*|\*([^*]+)\*/g;
+  const nodes: ReactNode[] = [];
+  let last = 0;
+  let key = 0;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(withBullets)) !== null) {
+    if (m.index > last) nodes.push(withBullets.slice(last, m.index));
+    if (m[1]) {
+      nodes.push(
+        <a key={key++} href={m[2]} target="_blank" rel="noopener noreferrer" className="text-plava underline">
+          {m[1]}
+        </a>
+      );
+    } else if (m[3]) {
+      nodes.push(<strong key={key++}>{m[3]}</strong>);
+    } else if (m[4]) {
+      nodes.push(<em key={key++}>{m[4]}</em>);
+    }
+    last = re.lastIndex;
+  }
+  if (last < withBullets.length) nodes.push(withBullets.slice(last));
+  return nodes;
+}
 
 // GA event helper (gtag je globalno učitan u layout.tsx)
 function ga(event: string, params?: Record<string, unknown>) {
@@ -219,7 +247,7 @@ export default function NakiChat() {
                 : "max-w-[85%] self-start whitespace-pre-wrap rounded-2xl rounded-bl-sm bg-gray-100 px-3.5 py-2.5 text-sm leading-relaxed text-gray-900"
             }
           >
-            {m.content}
+            {m.role === "assistant" ? renderRich(m.content) : m.content}
           </div>
         ))}
 
