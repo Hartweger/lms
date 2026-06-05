@@ -192,6 +192,6 @@ export function blogLinkAddon(lastUserMessage: string): string {
 
 export const NAKI_MODEL = "claude-sonnet-4-6";
 export const NAKI_MAX_TOKENS = 800;
-export const NAKI_MAX_REQUESTS_PER_DAY = 300;
+export const NAKI_MAX_REQUESTS_PER_DAY = 2000;
 // MailerLite grupa "NaKI korisnici" — portovano iz starog PHP-a (addToMailerLite)
 export const NAKI_MAILERLITE_GROUP = "187790079933024121";
