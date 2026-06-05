@@ -7,9 +7,9 @@ import { NakiFace } from "./NakiAvatar";
 // (kao stari WP widget) — inače se vide gole zvezdice. Novi red čuva whitespace-pre-wrap.
 function renderRich(text: string): ReactNode[] {
   const withBullets = text.replace(/^- /gm, "• ");
-  // markdown link | bold | kurziv | goli URL (www. ili https://) | mejl
+  // markdown link | bold | kurziv | goli URL (www. ili https://) | mejl | goli domen (hartweger.rs / youtube — NaKI često izostavi https://)
   const re =
-    /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)|\*\*([^*]+)\*\*|\*([^*]+)\*|((?:https?:\/\/|www\.)[^\s)]+)|([^\s@]+@[^\s@]+\.[A-Za-z]{2,})/g;
+    /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)|\*\*([^*]+)\*\*|\*([^*]+)\*|((?:https?:\/\/|www\.)[^\s)]+)|([^\s@]+@[^\s@]+\.[A-Za-z]{2,})|((?:[a-z0-9-]+\.)*(?:hartweger\.rs|youtube\.com|youtu\.be)(?:\/[^\s)]*)?)/gi;
   const nodes: ReactNode[] = [];
   let last = 0;
   let key = 0;
@@ -26,16 +26,16 @@ function renderRich(text: string): ReactNode[] {
       nodes.push(<strong key={key++}>{m[3]}</strong>);
     } else if (m[4]) {
       nodes.push(<em key={key++}>{m[4]}</em>);
-    } else if (m[5]) {
+    } else if (m[5] || m[7]) {
       // odvoji rep interpunkcije (tačka/zarez na kraju rečenice nije deo URL-a)
-      let url = m[5];
+      let url = (m[5] || m[7]) as string;
       let trail = "";
       const tm = url.match(/[.,;:!?]+$/);
       if (tm) {
         trail = tm[0];
         url = url.slice(0, url.length - trail.length);
       }
-      const href = url.startsWith("www.") ? `https://${url}` : url;
+      const href = /^https?:\/\//i.test(url) ? url : `https://${url}`;
       nodes.push(
         <a key={key++} href={href} target="_blank" rel="noopener noreferrer" className="text-plava underline">
           {url}
