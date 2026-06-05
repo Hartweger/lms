@@ -15,9 +15,10 @@ export default function LearnTyping({
   const [input, setInput] = useState("");
   const [done, setDone] = useState<null | { status: string; fullForm: string }>(null);
 
-  // Korak 1: proveri i POKAŽI rezultat (ne prelazi odmah)
+  // Korak 1: proveri i POKAŽI rezultat (ne prelazi odmah).
+  // Prazan unos → otkrij tačan odgovor (gradeTyping("") vraća wrong + pun oblik), pa dugme uvek reaguje.
   const check = () => {
-    if (done || !input.trim()) return;
+    if (done) return;
     setDone(gradeTyping(input, card, direction));
   };
   // Korak 2: pređi na sledeću karticu (tek na „Dalje")
