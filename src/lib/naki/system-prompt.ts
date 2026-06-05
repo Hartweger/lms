@@ -108,39 +108,84 @@ VAN NEMAČKOG:
 - Ako korisnik pita nešto van nemačkog jezika (npr. "gde da kupim fen"), pretvori u vežbu: "Ajde da to kažeš na nemačkom! Wo kann ich einen Föhn kaufen? Vidiš? Već vežbaš!"
 - Ne daj linkove ka drugim sajtovima (Anki, Quizlet, itd). Samo hartweger.rs i YouTube @NatasaHartweger.
 
-Sajt: www.hartweger.rs | Kursevi: www.hartweger.rs/kursevi-nemackog/ | Kontakt: info@hartweger.rs`;
+Sajt: www.hartweger.rs | Kursevi: www.hartweger.rs/kursevi-nemackog/ | Magazin (blog tekstovi): kurs.hartweger.rs/magazin | YouTube (video lekcije): youtube.com/@NatasaHartweger | Kontakt: info@hartweger.rs`;
 
-// ── Blog mapa: tema (regex) → URL sa UTM. PHP detektuje temu i ubaci 1 link u system prompt. ──
-export const NAKI_BLOG_LINKS: { pattern: RegExp; url: string }[] = [
-  { pattern: /pade[zž]|pade[zž]i|padeze|akkusativ|dativ|nominativ|genitiv/i, url: "https://www.hartweger.rs/padezi-u-nemackom-jeziku-kako-prepoznati-padeze-u-nemackom-jeziku/?utm_source=naki&utm_medium=chat" },
-  { pattern: /predlog|pr[äa]position|wechselpr[äa]position/i, url: "https://www.hartweger.rs/predlozi-i-padezi-u-nemackom-jeziku/?utm_source=naki&utm_medium=chat" },
-  { pattern: /rod imenice|der die das|rodov|mu[šs]ki rod|[zž]enski rod|srednji rod/i, url: "https://www.hartweger.rs/rodovi-u-nemackom/?utm_source=naki&utm_medium=chat" },
-  { pattern: /modalni glagol|k[öo]nnen|m[üu]ssen|sollen|d[üu]rfen|wollen|m[öo]chten/i, url: "https://www.hartweger.rs/modalni-glagoli-u-nemackom-jeziku-kroz-najkorisnije-primere/?utm_source=naki&utm_medium=chat" },
-  { pattern: /nepraviln\w+ glagol|unregelm[äa][ßs]ig/i, url: "https://www.hartweger.rs/nepravilni-glagoli-u-nemackom-jeziku-u-prezentu/?utm_source=naki&utm_medium=chat" },
-  { pattern: /weil|zavisn\w+ re[čc]enic|nebensatz/i, url: "https://www.hartweger.rs/weil-recenice/?utm_source=naki&utm_medium=chat" },
-  { pattern: /relativn\w+ re[čc]enic|relativsatz/i, url: "https://www.hartweger.rs/relativne-recenice-u-nemackom-15-korisnih-primera-sa-prevodom/?utm_source=naki&utm_medium=chat" },
-  { pattern: /negacij|nicht ili kein/i, url: "https://www.hartweger.rs/negacija-u-nemackom-jeziku-nicht-ili-kein/?utm_source=naki&utm_medium=chat" },
-  { pattern: /imperativ|zapovedn/i, url: "https://www.hartweger.rs/imperativunemackom/?utm_source=naki&utm_medium=chat" },
-  { pattern: /preterit|pr[äa]teritum|pro[šs]lo vreme/i, url: "https://www.hartweger.rs/preterit-u-nemackom-jeziku/?utm_source=naki&utm_medium=chat" },
-  { pattern: /vremen\w+ u nema[čc]kom|perfekt|pr[äa]sens|futur/i, url: "https://www.hartweger.rs/vremena-u-nemackom-jeziku-kako-i-kada-se-koriste-video-lekcija-pdf/?utm_source=naki&utm_medium=chat" },
-  { pattern: /mno[žz]in|plural/i, url: "https://www.hartweger.rs/mnozina-imenica-u-nemackom-jeziku/?utm_source=naki&utm_medium=chat" },
-  { pattern: /naj[čc]e[šs][ćc]\w+ gre[šs]k|h[äa]ufig\w+ fehler/i, url: "https://www.hartweger.rs/najcesce-greske-u-nemackom-jeziku/?utm_source=naki&utm_medium=chat" },
-  { pattern: /glagol\w+ sa predlog|verb\w+ mit pr[äa]position/i, url: "https://www.hartweger.rs/glagoli-sa-predlozima-u-nemackom-jeziku/?utm_source=naki&utm_medium=chat" },
-  { pattern: /worauf|darauf|wovon|davon/i, url: "https://www.hartweger.rs/worauf-ili-darauf-wovon-ili-von-wem/?utm_source=naki&utm_medium=chat" },
-  { pattern: /fraz\w+ na nema[čc]kom|svakodnevn\w+ fraz|alltagsphrasen/i, url: "https://www.hartweger.rs/fraze-na-nemackom/?utm_source=naki&utm_medium=chat" },
-  { pattern: /serij\w+ na nema[čc]kom|film\w+ na nema[čc]kom|netflix/i, url: "https://www.hartweger.rs/serije-i-filmovi-na-nemackom-jeziku/?utm_source=naki&utm_medium=chat" },
-  { pattern: /aplikacij\w+ za u[čc]enje|app za nema[čc]ki/i, url: "https://www.hartweger.rs/aplikacije-za-ucenje-nemackog-jezika/?utm_source=naki&utm_medium=chat" },
-  { pattern: /ispit B1|pr[üu]fung B1|test B1/i, url: "https://www.hartweger.rs/testovi-za-ispit-b1-iz-nemackog-jezika/?utm_source=naki&utm_medium=chat" },
-  { pattern: /sertifikat|zertifikat|goethe|telc/i, url: "https://www.hartweger.rs/zvanicni-sertifikati-nemackog-jezika/?utm_source=naki&utm_medium=chat" },
+// ── Magazin baza: tema (regex) → slug članka na kurs.hartweger.rs/magazin. ──
+// Detektuje temu iz poslednje poruke i ubaci max 1 referencu u system prompt. Specifičnije ide gore.
+const MAGAZIN = "https://kurs.hartweger.rs/magazin/";
+const UTM = "?utm_source=naki&utm_medium=chat";
+export const NAKI_YOUTUBE = "https://www.youtube.com/@NatasaHartweger";
+
+const NAKI_ARTICLES: [RegExp, string][] = [
+  // Padeži i predlozi
+  [/predlo\w* za vreme|vremensk\w* predlo|\bseit\b|w[äa]hrend/i, "predlozi-za-vreme-u-nemackom-jeziku"],
+  [/predlog|predlo[zž]i|pr[äa]position|wechselpr[äa]position/i, "predlozi-i-padezi-u-nemackom-jeziku"],
+  [/pade[zž]|padeze|akkusativ|dativ|nominativ|genitiv/i, "padezi-u-nemackom-jeziku-kako-prepoznati-padeze-u-nemackom-jeziku"],
+  // Rod imenice
+  [/[zž]enski rod|sve je die|\bdie\b imenic/i, "zenski-rod-u-nemackom-jeziku-sta-je-sve-die"],
+  [/rod imenice|der die das|rodov|mu[šs]ki rod|srednji rod|koji je rod/i, "odredjivanje-roda-imenice-u-nemackom-jeziku"],
+  // Glagoli
+  [/modaln\w* glagol|k[öo]nnen|m[üu]ssen|sollen|d[üu]rfen|wollen|m[öo]chten/i, "modalni-glagoli-u-nemackom-jeziku-kroz-najkorisnije-primere"],
+  [/nepraviln\w+ glagol|unregelm[äa][ßs]ig/i, "nepravilni-glagoli-u-nemackom-jeziku-u-prezentu"],
+  [/glagol\w* sa predlog|verb\w* mit pr[äa]position/i, "glagoli-sa-predlozima-u-nemackom-jeziku"],
+  [/arbeiten|prefiks|trennbar|odvojiv\w* glagol/i, "zasto-arbeiten-nije-samo-raditi-vodic-kroz-prefikse-koji-zbunjuju"],
+  // Vremena
+  [/perfekt|haben ili sein|gesessen|partizip/i, "ich-bin-gesessen-oder-ich-habe-gesessen-sta-je-tacno-u-nemackom-perfektu"],
+  [/preterit|pr[äa]teritum/i, "preterit-u-nemackom-jeziku"],
+  [/prezent|pr[äa]sens|sada[šs]nj\w* vreme/i, "prezent-u-nemackom-jeziku"],
+  [/vremen\w* u nema[čc]kom|\bfutur\b|koje vreme/i, "vremena-u-nemackom-jeziku-kako-i-kada-se-koriste-video-lekcija-pdf"],
+  // Rečenice / veznici
+  [/\bdass\b/i, "dass-recenice-u-nemackom-jeziku"],
+  [/\bweil\b|zavisn\w* re[čc]enic|nebensatz|zato [šs]to/i, "weil-recenice"],
+  [/\bals\b|\bwenn\b|als ili wenn/i, "als-i-wenn"],
+  [/relativn\w* re[čc]enic|relativsatz/i, "relativne-recenice-u-nemackom-15-korisnih-primera-sa-prevodom"],
+  [/worauf|darauf|wovon|wof[üu]r|daf[üu]r/i, "worauf-ili-darauf-wovon-ili-von-wem"],
+  [/red re[čc]i|wortstellung/i, "red-reci-u-nemackom-jeziku"],
+  [/negacij|nicht ili kein|\bkein\b/i, "negacija-u-nemackom-jeziku-nicht-ili-kein"],
+  [/imperativ|zapovedn/i, "imperativunemackom"],
+  [/mno[žz]in|plural/i, "mnozina-imenica-u-nemackom-jeziku"],
+  [/postav\w* pitanj|w-pitanj|fragew[öo]rter|kako da pitam/i, "kako-da-postavis-pitanja-na-nemackom-jeziku"],
+  [/spelovanje|buchstabieren|kako se pi[šs]e ime/i, "spelovanje-na-nemackom-jeziku"],
+  [/naj[čc]e[šs][ćc]\w* gre[šs]k|h[äa]ufig\w* fehler/i, "najcesce-greske-u-nemackom-jeziku"],
+  [/la[žz]n\w* prijatelj|false friend/i, "lazni-prijatelji-u-jeziku"],
+  [/re[čc]ce|partikl|\bdoch\b/i, "10-kratkih-recca-koje-prave-veliku-razliku-u-komunikaciji-na-nemackom"],
+  // Vokabular / svakodnevni
+  [/svakodnevn\w* fraz|fraz\w* na nema[čc]kom|alltagsphrasen/i, "fraze-na-nemackom"],
+  [/pozdrav|begr[üu][ßs]/i, "pozdravi-na-nemackom"],
+  [/re[čc]nik|w[öo]rterbuch|vokabular/i, "nemacki-recnik"],
+  // Ispiti i sertifikati
+  [/b2.*schreiben|schreiben.*b2|pismeni b2/i, "kako-se-spremati-za-ispit-b2-deo-schreiben"],
+  [/fraz\w* za b2/i, "koristi-fraze-za-b2"],
+  [/b2.*goethe|goethe.*b2|\bb2\b ispit|ispit b2/i, "b2-ispit-na-goethe-institutu-tvoj-kompletan-vodic-za-uspesnu-prijavu-i-polaganje-bez-panike"],
+  [/ispit b1|pr[üu]fung b1|test b1|\bb1\b ispit/i, "testovi-za-ispit-b1-iz-nemackog-jezika"],
+  [/re[čc]enic\w* za a1|a1 ispit|a1 re[čc]enic/i, "30-konkretnih-recenica-za-ispit-a1-sa-prevodima"],
+  [/sertifikat|zertifikat|\btelc\b|goethe|[öo]sd/i, "zvanicni-sertifikati-nemackog-jezika"],
+  // Medicinari / posao
+  [/fsp.*pokrajin|gde polo[žz]iti fsp/i, "gde-poloziti-fsp-pokrajine-2026"],
+  [/\bfamed\b|\bfsp\b|licenc\w* lekar/i, "famed-vs-fsp-ispit-lekari-nemacka"],
+  [/lekar.*broj|broj\w* i mer|mere.*lekar/i, "kako-govori-lekar-u-nemackoj-jednostavni-trikovi-za-tacne-brojeve-i-mere"],
+  [/medicinar|\blekar|krankenschwester|krankenpfleger|zdravstv/i, "nemacki-za-medicinare-osnovne-fraze"],
+  [/\bcv\b|lebenslauf|bewerbung|radn\w* biografij/i, "8-saveta-kako-napisati-cv-na-nemackom"],
+  [/programer|developer|it na nema/i, "nemacki-za-programere"],
+  // Mediji
+  [/serij\w* na nema[čc]kom|film\w* na nema[čc]kom|netflix/i, "serije-i-filmovi-na-nemackom-jeziku"],
+  [/aplikacij\w* za u[čc]enje|app za nema[čc]ki/i, "aplikacije-za-ucenje-nemackog-jezika"],
+  [/za decu|deca.*nema[čc]ki|nema[čc]ki za decu/i, "nemacki-za-decu"],
 ];
 
-// Detektuj temu iz poslednje poruke i vrati dodatak za system prompt (max 1 link).
+// Video lekcije / slušanje / izgovor → YouTube kanal.
+const NAKI_YT_RE = /video lekcij|video.*nema[čc]ki|youtube|slu[šs]anje|h[öo]ren|izgovor|aussprache|akcen/i;
+
+// Detektuj temu iz poslednje poruke i vrati dodatak za system prompt (max 1 referenca).
 export function blogLinkAddon(lastUserMessage: string): string {
   const text = lastUserMessage.toLowerCase();
-  for (const { pattern, url } of NAKI_BLOG_LINKS) {
+  for (const [pattern, slug] of NAKI_ARTICLES) {
     if (pattern.test(text)) {
-      return `\n\nAko je relevantno za ovu temu, možeš pomenuti da detaljno objašnjenje sa primerima i video lekcijom postoji na blogu: ${url} — ali samo ako se uklapa prirodno u odgovor. Nemoj forsirati link. Maksimum jednom po razgovoru.`;
+      return `\n\nAko se prirodno uklapa u odgovor, možeš pomenuti da detaljno objašnjenje sa primerima postoji u Hartweger magazinu: ${MAGAZIN}${slug}${UTM} — nemoj forsirati link, maksimum jednom po razgovoru.`;
     }
+  }
+  if (NAKI_YT_RE.test(text)) {
+    return `\n\nAko se prirodno uklapa, možeš preporučiti video lekcije na Natašinom YouTube kanalu: ${NAKI_YOUTUBE} — bez forsiranja, maksimum jednom po razgovoru.`;
   }
   return "";
 }
