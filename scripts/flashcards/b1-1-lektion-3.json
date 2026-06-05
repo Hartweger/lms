@@ -1,0 +1,424 @@
+{
+  "type": "wordset",
+  "title": "Lektion 3 — Reči",
+  "setKey": "b1-1-lektion-3",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    {
+      "front": "Geschäftsführer",
+      "back": "direktor|poslovođa",
+      "article": "der",
+      "plural": "die Geschäftsführer"
+    },
+    {
+      "front": "Pflegeteam",
+      "back": "tim za negu",
+      "article": "das",
+      "plural": "die Pflegeteams"
+    },
+    {
+      "front": "Ausbildungsjahr",
+      "back": "godina obuke",
+      "article": "das",
+      "plural": "die Ausbildungsjahre"
+    },
+    {
+      "front": "Altenpflegerin",
+      "back": "gerijatrijska sestra",
+      "article": "die",
+      "plural": "die Altenpflegerinnen"
+    },
+    {
+      "front": "ambulant",
+      "back": "ambulantni"
+    },
+    {
+      "front": "Pflegedienst",
+      "back": "služba za negu",
+      "article": "der",
+      "plural": "die Pflegedienste"
+    },
+    {
+      "front": "unterwegs",
+      "back": "na putu"
+    },
+    {
+      "front": "versorgen, versorgte, hat versorgt",
+      "back": "zbrinuti|negovati"
+    },
+    {
+      "front": "vor Ort",
+      "back": "na licu mesta|lokalno"
+    },
+    {
+      "front": "Pflege",
+      "back": "nega",
+      "article": "die"
+    },
+    {
+      "front": "Grundpflege",
+      "back": "osnovna nega",
+      "article": "die"
+    },
+    {
+      "front": "pflegen",
+      "back": "negovati"
+    },
+    {
+      "front": "Blutzucker",
+      "back": "šećer u krvi",
+      "article": "der"
+    },
+    {
+      "front": "messen, maß, hat gemessen",
+      "back": "meriti"
+    },
+    {
+      "front": "Verband",
+      "back": "zavoj",
+      "article": "der",
+      "plural": "die Verbände"
+    },
+    {
+      "front": "Tätigkeit",
+      "back": "aktivnost|delatnost",
+      "article": "die",
+      "plural": "die Tätigkeiten"
+    },
+    {
+      "front": "Angehörige",
+      "back": "rodbina|članovi porodice",
+      "article": "die"
+    },
+    {
+      "front": "Blutgruppe",
+      "back": "krvna grupa",
+      "article": "die",
+      "plural": "die Blutgruppen"
+    },
+    {
+      "front": "überlebenswichtig",
+      "back": "vitalnog značaja"
+    },
+    {
+      "front": "Transfusion",
+      "back": "transfuzija",
+      "article": "die",
+      "plural": "die Transfusionen"
+    },
+    {
+      "front": "tödlich",
+      "back": "smrtonosan"
+    },
+    {
+      "front": "Rettungshelfer",
+      "back": "spasilac",
+      "article": "der",
+      "plural": "die Rettungshelfer"
+    },
+    {
+      "front": "geeignet",
+      "back": "pogodan|odgovarajući"
+    },
+    {
+      "front": "vertragen, vertrug, hat vertragen",
+      "back": "podnositi"
+    },
+    {
+      "front": "Spenderblut",
+      "back": "donatorska krv",
+      "article": "das"
+    },
+    {
+      "front": "beurteilen",
+      "back": "proceniti"
+    },
+    {
+      "front": "sogenannt",
+      "back": "takozvani"
+    },
+    {
+      "front": "unterscheiden, unterschied, hat unterschieden",
+      "back": "razlikovati"
+    },
+    {
+      "front": "vererben",
+      "back": "naslediti|preneti nasleđem"
+    },
+    {
+      "front": "Blutkörperchen",
+      "back": "krvno zrnce",
+      "article": "das",
+      "plural": "die Blutkörperchen"
+    },
+    {
+      "front": "vorhanden",
+      "back": "prisutan|postojeći"
+    },
+    {
+      "front": "spenden",
+      "back": "donirati"
+    },
+    {
+      "front": "begehrt",
+      "back": "tražen|priželjkivan"
+    },
+    {
+      "front": "selten",
+      "back": "redak"
+    },
+    {
+      "front": "vorkommen, kam vor, ist vorgekommen",
+      "back": "pojaviti se|dešavati se"
+    },
+    {
+      "front": "Bevölkerung",
+      "back": "stanovništvo",
+      "article": "die"
+    },
+    {
+      "front": "Zufall",
+      "back": "slučajnost",
+      "article": "der",
+      "plural": "die Zufälle"
+    },
+    {
+      "front": "Jahrhundert",
+      "back": "vek",
+      "article": "das",
+      "plural": "die Jahrhunderte"
+    },
+    {
+      "front": "Wissenschaftler",
+      "back": "naučnik",
+      "article": "der",
+      "plural": "die Wissenschaftler"
+    },
+    {
+      "front": "Entdeckung",
+      "back": "otkriće",
+      "article": "die",
+      "plural": "die Entdeckungen"
+    },
+    {
+      "front": "Fortschritt",
+      "back": "napredak",
+      "article": "der",
+      "plural": "die Fortschritte"
+    },
+    {
+      "front": "Arztpraxis",
+      "back": "lekarska ordinacija",
+      "article": "die",
+      "plural": "die Arztpraxen"
+    },
+    {
+      "front": "Erkältung",
+      "back": "prehlada",
+      "article": "die",
+      "plural": "die Erkältungen"
+    },
+    {
+      "front": "Krankenwagen",
+      "back": "vozilo hitne pomoći",
+      "article": "der",
+      "plural": "die Krankenwagen"
+    },
+    {
+      "front": "Tropfen",
+      "back": "kapi (lek)",
+      "article": "der",
+      "plural": "die Tropfen"
+    },
+    {
+      "front": "Übung",
+      "back": "vežba",
+      "article": "die",
+      "plural": "die Übungen"
+    },
+    {
+      "front": "abnehmen, nahm ab, hat abgenommen",
+      "back": "smršati|skinuti kile"
+    },
+    {
+      "front": "atmen",
+      "back": "disati"
+    },
+    {
+      "front": "behandeln",
+      "back": "lečiti|tretirati"
+    },
+    {
+      "front": "sich erkälten",
+      "back": "prehladiti se"
+    },
+    {
+      "front": "operieren",
+      "back": "operisati"
+    },
+    {
+      "front": "zunehmen, nahm zu, hat zugenommen",
+      "back": "ugojiti se|dobiti kile"
+    },
+    {
+      "front": "blass",
+      "back": "bled"
+    },
+    {
+      "front": "Blut",
+      "back": "krv",
+      "article": "das"
+    },
+    {
+      "front": "Knie",
+      "back": "koleno",
+      "article": "das",
+      "plural": "die Knie"
+    },
+    {
+      "front": "Essig",
+      "back": "sirće",
+      "article": "der"
+    },
+    {
+      "front": "Quark",
+      "back": "svež (krem) sir",
+      "article": "der"
+    },
+    {
+      "front": "Schnitzel",
+      "back": "šnicla",
+      "article": "das",
+      "plural": "die Schnitzel"
+    },
+    {
+      "front": "Anleitung",
+      "back": "uputstvo",
+      "article": "die",
+      "plural": "die Anleitungen"
+    },
+    {
+      "front": "Ausnahme",
+      "back": "izuzetak",
+      "article": "die",
+      "plural": "die Ausnahmen"
+    },
+    {
+      "front": "Gefühl",
+      "back": "osećaj|emocija",
+      "article": "das",
+      "plural": "die Gefühle"
+    },
+    {
+      "front": "Leistung",
+      "back": "učinak|postignuće",
+      "article": "die",
+      "plural": "die Leistungen"
+    },
+    {
+      "front": "heben, hob, hat gehoben",
+      "back": "podići"
+    },
+    {
+      "front": "schwitzen",
+      "back": "znojiti se"
+    },
+    {
+      "front": "wachsen, wuchs, ist gewachsen",
+      "back": "rasti"
+    },
+    {
+      "front": "ausgezeichnet",
+      "back": "odličan|izvrstan"
+    },
+    {
+      "front": "mager",
+      "back": "nemastan|mršav"
+    },
+    {
+      "front": "innen",
+      "back": "unutra"
+    },
+    {
+      "front": "Spritze",
+      "back": "injekcija|špric",
+      "article": "die",
+      "plural": "die Spritzen"
+    },
+    {
+      "front": "sich etwas brechen",
+      "back": "polomiti (sebi) nešto"
+    },
+    {
+      "front": "nähen",
+      "back": "šiti"
+    },
+    {
+      "front": "Wunde",
+      "back": "rana",
+      "article": "die",
+      "plural": "die Wunden"
+    },
+    {
+      "front": "Narbe",
+      "back": "ožiljak",
+      "article": "die",
+      "plural": "die Narben"
+    },
+    {
+      "front": "Entspannung",
+      "back": "opuštanje",
+      "article": "die",
+      "plural": "die Entspannungen"
+    },
+    {
+      "front": "Ellbogen",
+      "back": "lakat",
+      "article": "der",
+      "plural": "die Ellbogen"
+    },
+    {
+      "front": "Oberschenkel",
+      "back": "butina",
+      "article": "der",
+      "plural": "die Oberschenkel"
+    },
+    {
+      "front": "Unterschenkel",
+      "back": "potkolenica",
+      "article": "der",
+      "plural": "die Unterschenkel"
+    },
+    {
+      "front": "Oberkörper",
+      "back": "gornji deo tela",
+      "article": "der",
+      "plural": "die Oberkörper"
+    },
+    {
+      "front": "Schulter",
+      "back": "rame",
+      "article": "die",
+      "plural": "die Schultern"
+    },
+    {
+      "front": "Po",
+      "back": "zadnjica",
+      "article": "der",
+      "plural": "die Pos"
+    },
+    {
+      "front": "Knochen",
+      "back": "kost",
+      "article": "der",
+      "plural": "die Knochen"
+    },
+    {
+      "front": "Muskel",
+      "back": "mišić",
+      "article": "der",
+      "plural": "die Muskeln"
+    }
+  ]
+}
