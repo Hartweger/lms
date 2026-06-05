@@ -32,7 +32,7 @@ export default function LearnTyping({
       <input
         value={input} onChange={(e) => setInput(e.target.value)}
         onKeyDown={(e) => { if (e.key === "Enter") { if (done) next(); else check(); } }}
-        disabled={!!done} autoFocus
+        readOnly={!!done} autoFocus
         className="w-full border-2 border-sky-300 rounded-xl p-3 text-lg focus:outline-none focus:border-sky-500"
         placeholder="…"
       />

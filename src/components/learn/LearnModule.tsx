@@ -53,7 +53,10 @@ export default function LearnModule({
   const p = prog.get(id);
   // Izbor vežbe po režimu: guided = prvo kviz (prepoznavanje), pa kucanje (prisećanje).
   const wantTyping = mode === "typing" ? true : mode === "quiz" ? false : (p?.correct_count ?? 0) >= 1;
-  const quiz = wantTyping ? null : buildQuizOptions(card, items, direction);
+  // Mešani smer u kvizu: pola kartica „nemački=?", pola „srpski=?" (deterministički po kartici).
+  const flip: Direction = direction === "de-sr" ? "sr-de" : "de-sr";
+  const quizDir: Direction = (card.front.charCodeAt(0) + card.front.length) % 2 === 0 ? direction : flip;
+  const quiz = wantTyping ? null : buildQuizOptions(card, items, quizDir);
   const doTyping = wantTyping || !quiz; // ako set ima < 4 kartice, kviz nije moguć → kucanje
   // Spajanje parova kao pauza — samo u vođenom režimu, na svakih 8 odgovora, koristi tekuću grupu (varira).
   const showMatch = mode === "guided" && seen > 0 && seen % 8 === 0 && queue.length >= 4;
@@ -88,11 +91,11 @@ export default function LearnModule({
       {!doTyping && quiz ? (
         <QuizExercise
           key={id + seen}
-          question={direction === "de-sr" ? card.front : card.back.replace(/\|/g, " / ")}
+          question={quizDir === "de-sr" ? card.front : card.back.replace(/\|/g, " / ")}
           options={quiz.options}
           correctAnswer={quiz.correctIndex}
           explanation={null}
-          onAnswer={(correct) => { window.setTimeout(() => advance(correct), 1200); }}
+          onAnswer={(correct) => { window.setTimeout(() => advance(correct), 700); }}
         />
       ) : (
         <LearnTyping key={id + seen} card={card} direction={direction === "de-sr" ? "sr-de" : "de-sr"} onResult={(correct) => advance(correct)} />
