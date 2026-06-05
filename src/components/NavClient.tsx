@@ -37,6 +37,9 @@ export default function NavClient() {
     <>
       {/* Desktop auth */}
       <div className="hidden md:flex items-center gap-6 text-sm">
+        <Link href="/naki" className="text-gray-700 font-medium hover:text-plava">
+          NaKI
+        </Link>
         <Link href="/besplatno-testiranje" className="text-plava font-medium hover:text-plava-dark">
           Besplatno testiranje
         </Link>
@@ -84,6 +87,9 @@ export default function NavClient() {
       {/* Mobile menu */}
       {menuOpen && (
         <div className="md:hidden absolute top-16 left-0 right-0 border-t border-gray-100 bg-white px-4 py-4 space-y-3 text-sm z-50">
+          <Link href="/naki" className="block text-gray-700 font-medium" onClick={() => setMenuOpen(false)}>
+            NaKI
+          </Link>
           <Link href="/besplatno-testiranje" className="block text-plava font-medium" onClick={() => setMenuOpen(false)}>
             Besplatno testiranje
           </Link>
