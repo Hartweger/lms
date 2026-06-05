@@ -1,0 +1,212 @@
+{
+  "type": "wordset",
+  "title": "Lektion 4 — Reči",
+  "setKey": "b1-1-lektion-4",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    {
+      "front": "Eile",
+      "back": "žurba",
+      "article": "die"
+    },
+    {
+      "front": "ansprechen, hat angesprochen",
+      "back": "obratiti se|osloviti"
+    },
+    {
+      "front": "lächeln",
+      "back": "smešiti se"
+    },
+    {
+      "front": "Hitze",
+      "back": "vrućina|toplota",
+      "article": "die"
+    },
+    {
+      "front": "vorhaben, hat vorgehabt",
+      "back": "planirati|nameravati"
+    },
+    {
+      "front": "Wahrheit",
+      "back": "istina",
+      "article": "die",
+      "plural": "die Wahrheiten"
+    },
+    {
+      "front": "Portemonnaie",
+      "back": "novčanik",
+      "article": "das",
+      "plural": "die Portemonnaies"
+    },
+    {
+      "front": "fließend",
+      "back": "tečno (govoriti)"
+    },
+    {
+      "front": "abschaffen",
+      "back": "ukinuti"
+    },
+    {
+      "front": "Ausdruck",
+      "back": "izraz",
+      "article": "der",
+      "plural": "die Ausdrücke"
+    },
+    {
+      "front": "gegenseitig",
+      "back": "uzajamno|jedni drugima"
+    },
+    {
+      "front": "Seele",
+      "back": "duša",
+      "article": "die",
+      "plural": "die Seelen"
+    },
+    {
+      "front": "ausschließlich",
+      "back": "isključivo"
+    },
+    {
+      "front": "erziehen, erzog, hat erzogen",
+      "back": "vaspitavati"
+    },
+    {
+      "front": "stammen aus",
+      "back": "poticati (iz)"
+    },
+    {
+      "front": "Zweifel",
+      "back": "sumnja",
+      "article": "der",
+      "plural": "die Zweifel"
+    },
+    {
+      "front": "sich trauen",
+      "back": "usuditi se"
+    },
+    {
+      "front": "beherrschen",
+      "back": "vladati (jezikom)|savladati"
+    },
+    {
+      "front": "Stamm",
+      "back": "stablo|deblo|loza",
+      "article": "der",
+      "plural": "die Stämme"
+    },
+    {
+      "front": "Grund",
+      "back": "razlog",
+      "article": "der",
+      "plural": "die Gründe"
+    },
+    {
+      "front": "Büroangestellte",
+      "back": "službenik u kancelariji",
+      "article": "der"
+    },
+    {
+      "front": "Magenbeschwerden",
+      "back": "problemi sa stomakom",
+      "article": "die"
+    },
+    {
+      "front": "gestresst",
+      "back": "pod stresom"
+    },
+    {
+      "front": "erledigen",
+      "back": "obaviti|izvršiti"
+    },
+    {
+      "front": "Ursache",
+      "back": "uzrok",
+      "article": "die",
+      "plural": "die Ursachen"
+    },
+    {
+      "front": "vermuten",
+      "back": "pretpostaviti"
+    },
+    {
+      "front": "Langeweile",
+      "back": "dosada",
+      "article": "die"
+    },
+    {
+      "front": "überrascht",
+      "back": "iznenađen"
+    },
+    {
+      "front": "Auszeit",
+      "back": "predah|pauza",
+      "article": "die"
+    },
+    {
+      "front": "Schaf",
+      "back": "ovca",
+      "article": "das",
+      "plural": "die Schafe"
+    },
+    {
+      "front": "körperlich",
+      "back": "fizički|telesni"
+    },
+    {
+      "front": "belegt",
+      "back": "zauzet"
+    },
+    {
+      "front": "Einschreibung",
+      "back": "upis",
+      "article": "die",
+      "plural": "die Einschreibungen"
+    },
+    {
+      "front": "Sprechzeiten",
+      "back": "radno vreme|konsultacije",
+      "article": "die"
+    },
+    {
+      "front": "Empfang",
+      "back": "prijem|recepcija",
+      "article": "der",
+      "plural": "die Empfänge"
+    },
+    {
+      "front": "persönlich",
+      "back": "lično"
+    },
+    {
+      "front": "beraten, beriet, hat beraten",
+      "back": "savetovati"
+    },
+    {
+      "front": "akut",
+      "back": "akutan|hitan"
+    },
+    {
+      "front": "verbunden",
+      "back": "povezan"
+    },
+    {
+      "front": "impfen",
+      "back": "vakcinisati"
+    },
+    {
+      "front": "Hauptgebäude",
+      "back": "glavna zgrada",
+      "article": "das",
+      "plural": "die Hauptgebäude"
+    },
+    {
+      "front": "erforderlich",
+      "back": "potreban|neophodan"
+    },
+    {
+      "front": "hinterlassen, hinterließ, hat hinterlassen",
+      "back": "ostaviti (poruku)"
+    }
+  ]
+}
