@@ -172,6 +172,11 @@ Modul „Lektion 1"
 - **Po modulu:** zasebna lekcija **„REČI"** nosi ceo Learn (kviz, kucanje, spajanje, memorija, mastery) nad svim rečima modula.
 - **Mapiranje uvoza:** jedan Quizlet export = jedan modul = sadržaj jedne „REČI" lekcije. Bez ručnog cepanja setova.
 
+### PDF priručnik reči (za preuzimanje)
+- Svaka „REČI" lekcija ima i **PDF priručnik** reči za skidanje/štampu.
+- **Generiše se iz istih `wordset` podataka** (DE · SR · rod/množina) — jedan izvor istine, uvek usklađen sa karticama. Bez dvostrukog rada.
+- Hosting: **Supabase Storage** (bucket `blog-media`); ubacuje se u lekciju preko postojećeg `PdfSection` bloka.
+
 ## Ulazna tačka
 
 - „REČI" lekcija nosi novi tip bloka (npr. `wordset`/`learn`) sa celim setom modula + pokretač Learn moda.

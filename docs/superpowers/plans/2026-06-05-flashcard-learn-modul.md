@@ -1033,18 +1033,83 @@ git commit -m "feat: import-quizlet CLI (export → wordset JSON)"
 
 ---
 
+### Task 13: PDF priručnik reči (iz wordset podataka)
+
+**Files:**
+- Create: `scripts/generate-wordset-pdf.ts`
+
+Cilj: iz `wordset` JSON-a napravi lep PDF (tabela DE · SR · rod/množina), za upload na Supabase Storage (`blog-media`) i linkovanje u „REČI" lekciji preko `PdfSection`. Za HTML→PDF konverziju koristi skill `html-to-pdf-ebook` (postojeća navika za A1 e-book / A2 priručnik).
+
+- [ ] **Step 1: Generiši HTML iz wordset JSON-a**
+
+`scripts/generate-wordset-pdf.ts`:
+```ts
+/**
+ * wordset JSON (iz import-quizlet) → samostalan HTML za PDF.
+ *   npx tsx scripts/generate-wordset-pdf.ts <wordset.json> > prirucnik.html
+ * HTML→PDF: koristi skill html-to-pdf-ebook (Chrome page.pdf sa pravim page-break pravilima).
+ */
+import * as fs from "fs";
+import type { WordSetSection } from "../src/lib/flashcard-types";
+
+const ws: WordSetSection = JSON.parse(fs.readFileSync(process.argv[2], "utf-8"));
+const rows = ws.items.map((c) => {
+  const de = `${c.article ? c.article + " " : ""}${c.front}${c.plural ? ", " + c.plural : ""}`;
+  const sr = c.back.replace(/\|/g, " / ");
+  return `<tr><td>${de}</td><td>${sr}</td></tr>`;
+}).join("\n");
+
+console.log(`<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"><style>
+  @page { size: A4; margin: 18mm; }
+  body { font-family: 'Helvetica Neue', Arial, sans-serif; color: #1a1a2e; }
+  h1 { font-size: 22px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid #eee; }
+  th { background: #faf9f6; }
+  tr { break-inside: avoid; }
+</style></head><body>
+  <h1>${ws.title}</h1>
+  <p style="color:#888;font-size:12px">Hartweger — Škola nemačkog jezika · kurs.hartweger.rs</p>
+  <table><thead><tr><th>Nemački</th><th>Srpski</th></tr></thead><tbody>
+  ${rows}
+  </tbody></table>
+</body></html>`);
+```
+
+- [ ] **Step 2: Generiši HTML pa PDF**
+
+Run:
+```bash
+npx tsx scripts/generate-wordset-pdf.ts /tmp/out.json > /tmp/prirucnik.html
+```
+Zatim konvertuj u PDF preko skilla `html-to-pdf-ebook`. Expected: `prirucnik.pdf` sa čistom tabelom, bez presecaња redova preko strana.
+
+- [ ] **Step 3: Upload na Supabase Storage**
+
+Upload `prirucnik.pdf` u bucket `blog-media` (npr. `prirucnici/a1-1-lektion-1.pdf`) preko Supabase Dashboard ili Storage API (service-role iz `.env.local`). Zabeleži javni URL.
+
+- [ ] **Step 4: Commit skripte**
+
+```bash
+git add scripts/generate-wordset-pdf.ts
+git commit -m "feat: generator PDF priručnika iz wordset podataka"
+```
+
+(PDF i link u lekciju se dodaju u Task 14 — sa pravim sadržajem.)
+
 ## Phase 6 — Sadržaj A1.1 (sa Natašom)
 
-### Task 13: Auto-dopuna roda/množine + uvoz Lektion 1
+### Task 14: Auto-dopuna roda/množine + uvoz Lektion 1
 
 **Files:** (nema koda — sadržajni korak; koristi gornje alate)
 
 - [ ] **Step 1:** Nataša exportuje Quizlet set za A1.1 Lektion 1, sačuvaj u `/tmp`.
 - [ ] **Step 2:** `import-quizlet.ts` → `wordset` JSON. Dopuni prazne prevode koje stderr prijavi.
 - [ ] **Step 3:** Za imenice bez člana, AI-dopuni `article`+`plural` (pojedinačno, pa Natašina potvrda). Ažuriraj JSON.
-- [ ] **Step 4:** Kreiraj „REČI" lekciju u modulu (preko admin editora ili direktno u `lessons.sections`) sa tim `wordset` blokom.
-- [ ] **Step 5:** Smoke test na telefonu: „Uči" → cela sesija radi, napredak se čuva.
-- [ ] **Step 6:** `vercel --prod` deploy + `smoke-deploy` (postojeća navika). Verifikuj keš (cache-buster) po memoriji.
+- [ ] **Step 4:** Generiši PDF priručnik (Task 13) iz tog JSON-a, upload na Supabase Storage (`blog-media/prirucnici/a1-1-lektion-1.pdf`), zapamti URL.
+- [ ] **Step 5:** Kreiraj „REČI" lekciju u modulu (preko admin editora ili direktno u `lessons.sections`) sa: `wordset` blokom + `PdfSection` blokom (`url` = PDF sa Supabase, `label` = „Priručnik reči (PDF)").
+- [ ] **Step 6:** Smoke test na telefonu: „Uči" → cela sesija radi, napredak se čuva, PDF se preuzima.
+- [ ] **Step 7:** `vercel --prod` deploy + `smoke-deploy` (postojeća navika). Verifikuj keš (cache-buster) po memoriji.
 
 ---
 
