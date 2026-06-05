@@ -28,6 +28,7 @@ export default function LearnModule({
   const [queue, setQueue] = useState<FlashcardItem[]>(() => nonMastered().slice(0, BATCH)); // tekuća grupa
   const [pool, setPool] = useState<FlashcardItem[]>(() => nonMastered().slice(BATCH));      // čeka na red
   const [seen, setSeen] = useState(0);
+  const [pending, setPending] = useState<boolean | null>(null); // odgovoreno, čeka „Dalje" (null = još nije)
 
   const total = items.length;
   // Jeftino — računa se svaki render (nema potrebe za memoizacijom).
@@ -58,7 +59,11 @@ export default function LearnModule({
   // Spajanje parova kao pauza — samo u vođenom režimu, na svakih 8 odgovora, koristi tekuću grupu (varira).
   const showMatch = mode === "guided" && seen > 0 && seen % 8 === 0 && queue.length >= 4;
 
-  const advance = async (correct: boolean) => {
+  // „Dalje" — tek sad se beleži i prelazi na sledeću (da se rezultat vidi).
+  const commit = async () => {
+    if (pending === null) return;
+    const correct = pending;
+    setPending(null);
     const updated = await recordAttempt(setKey, card, correct, p);
     const np = new Map(prog); np.set(id, updated); setProg(np);
     setSeen((s) => s + 1);
@@ -92,10 +97,13 @@ export default function LearnModule({
           options={quiz.options}
           correctAnswer={quiz.correctIndex}
           explanation={null}
-          onAnswer={(correct) => advance(correct)}
+          onAnswer={(correct) => setPending(correct)}
         />
       ) : (
-        <LearnTyping key={id + seen} card={card} direction={direction === "de-sr" ? "sr-de" : "de-sr"} onResult={(correct) => advance(correct)} />
+        <LearnTyping key={id + seen} card={card} direction={direction === "de-sr" ? "sr-de" : "de-sr"} onResult={(correct) => setPending(correct)} />
+      )}
+      {pending !== null && (
+        <button onClick={commit} className="mt-3 w-full bg-gray-900 text-white rounded-xl py-3 font-bold">Dalje →</button>
       )}
     </Frame>
   );

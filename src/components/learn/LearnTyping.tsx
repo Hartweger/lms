@@ -15,15 +15,13 @@ export default function LearnTyping({
   const [input, setInput] = useState("");
   const [done, setDone] = useState<null | { status: string; fullForm: string }>(null);
 
-  // Korak 1: proveri i POKAŽI rezultat (ne prelazi odmah).
+  // „Proveri" — pokaže rezultat i javi roditelju (LearnModule prikazuje „Dalje").
   // Prazan unos → otkrij tačan odgovor (gradeTyping("") vraća wrong + pun oblik), pa dugme uvek reaguje.
   const check = () => {
     if (done) return;
-    setDone(gradeTyping(input, card, direction));
-  };
-  // Korak 2: pređi na sledeću karticu (tek na „Dalje")
-  const next = () => {
-    if (done) onResult(done.status !== "wrong");
+    const r = gradeTyping(input, card, direction);
+    setDone(r);
+    onResult(r.status !== "wrong");
   };
 
   return (
@@ -32,7 +30,7 @@ export default function LearnTyping({
       <p className="text-2xl font-bold text-gray-900 mb-4">{prompt}</p>
       <input
         value={input} onChange={(e) => setInput(e.target.value)}
-        onKeyDown={(e) => { if (e.key === "Enter") { done ? next() : check(); } }}
+        onKeyDown={(e) => { if (e.key === "Enter") check(); }}
         disabled={!!done} autoFocus
         className="w-full border-2 border-sky-300 rounded-xl p-3 text-lg focus:outline-none focus:border-sky-500"
         placeholder="…"
@@ -41,14 +39,11 @@ export default function LearnTyping({
         <button onClick={check} className="mt-3 w-full bg-rose-500 text-white rounded-xl py-3 font-bold">Proveri</button>
       )}
       {done && (
-        <>
-          <div className={`mt-3 rounded-xl p-3 text-sm ${done.status === "wrong" ? "bg-rose-50 text-rose-700" : done.status === "almost" ? "bg-amber-50 text-amber-800" : "bg-emerald-50 text-emerald-700"}`}>
-            {done.status === "correct" && <>✓ Tačno! <b>{done.fullForm}</b></>}
-            {done.status === "almost" && <>Skoro! Tačno je <b>{done.fullForm}</b>. Priznato ✓</>}
-            {done.status === "wrong" && <>Tačno je <b>{done.fullForm}</b>.</>}
-          </div>
-          <button onClick={next} className="mt-3 w-full bg-gray-900 text-white rounded-xl py-3 font-bold" autoFocus>Dalje →</button>
-        </>
+        <div className={`mt-3 rounded-xl p-3 text-sm ${done.status === "wrong" ? "bg-rose-50 text-rose-700" : done.status === "almost" ? "bg-amber-50 text-amber-800" : "bg-emerald-50 text-emerald-700"}`}>
+          {done.status === "correct" && <>✓ Tačno! <b>{done.fullForm}</b></>}
+          {done.status === "almost" && <>Skoro! Tačno je <b>{done.fullForm}</b>. Priznato ✓</>}
+          {done.status === "wrong" && <>Tačno je <b>{done.fullForm}</b>.</>}
+        </div>
       )}
     </div>
   );
