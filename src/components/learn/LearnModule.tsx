@@ -30,6 +30,7 @@ export default function LearnModule({
   const total = items.length;
   // Jeftino — računa se svaki render (nema potrebe za memoizacijom).
   const masteredCount = items.filter((c) => prog.get(idOf(c))?.status === "mastered").length;
+  const learningCount = items.filter((c) => prog.get(idOf(c))?.status === "learning").length;
 
   // Posle svih hook-ova (Rules of Hooks): zaseban režim igre memorije.
   if (mode === "memory") return <MemoryGame items={items} onExit={onExit} />;
@@ -68,7 +69,7 @@ export default function LearnModule({
   if (showMatch) {
     const pairs = items.slice(0, 6).map((c) => ({ de: c.front, sr: c.back.split("|")[0].trim() }));
     return (
-      <Frame mastered={masteredCount} total={total} onExit={onExit}>
+      <Frame mastered={masteredCount} learning={learningCount} total={total} onExit={onExit}>
         <p className="text-sm text-gray-500 mb-2">Pauza — spoji parove 🧩</p>
         <MatchPairsExercise pairs={pairs} onAnswer={() => setSeen((s) => s + 1)} />
       </Frame>
@@ -93,16 +94,21 @@ export default function LearnModule({
   );
 }
 
-function Frame({ mastered, total, onExit, children }: { mastered: number; total: number; onExit: () => void; children: React.ReactNode }) {
+function Frame({ mastered, learning, total, onExit, children }: { mastered: number; learning: number; total: number; onExit: () => void; children: React.ReactNode }) {
+  const pct = (n: number) => (total ? (n / total) * 100 : 0);
   return (
     <div>
-      <div className="flex items-center justify-between mb-2">
-        <div className="flex-1 mr-3 h-2 bg-gray-100 rounded-full overflow-hidden">
-          <div className="h-full bg-emerald-500 rounded-full transition-all" style={{ width: `${total ? (mastered / total) * 100 : 0}%` }} />
+      <div className="flex items-center gap-3 mb-1">
+        {/* Dvobojna traka: tamno = naučeno, svetlo = u toku */}
+        <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden flex">
+          <div className="h-full bg-emerald-500 transition-all" style={{ width: `${pct(mastered)}%` }} />
+          <div className="h-full bg-emerald-200 transition-all" style={{ width: `${pct(learning)}%` }} />
         </div>
-        <span className="text-xs text-gray-500 whitespace-nowrap">Naučeno {mastered}/{total}</span>
-        <button onClick={onExit} className="ml-3 text-xs text-gray-400">✕</button>
+        <button onClick={onExit} className="text-xs text-gray-400 shrink-0">✕</button>
       </div>
+      <p className="text-xs text-gray-500 mb-3">
+        naučeno <span className="font-semibold text-emerald-600">{mastered}</span> · u toku <span className="font-semibold text-emerald-500">{learning}</span> · od {total}
+      </p>
       {children}
     </div>
   );
