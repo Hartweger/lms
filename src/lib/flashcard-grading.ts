@@ -43,7 +43,8 @@ export function gradeTyping(input: string, card: FlashcardItem, dir: Direction):
   const accepted = acceptedAnswers(card, dir).map(normalize);
   const ff = fullForm(card, dir);
   if (accepted.some((a) => a === inN)) return { status: "correct", fullForm: ff };
-  if (accepted.some((a) => levenshtein(a, inN) <= 1)) return { status: "almost", fullForm: ff };
+  // „skoro" samo za reči od bar 4 slova — na kraćima je 1 greška preveliki udeo (npr. "da" vs "ja").
+  if (accepted.some((a) => a.length >= 4 && levenshtein(a, inN) <= 1)) return { status: "almost", fullForm: ff };
   return { status: "wrong", fullForm: ff };
 }
 

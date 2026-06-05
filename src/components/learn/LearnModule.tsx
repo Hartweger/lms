@@ -9,7 +9,7 @@ import MatchPairsExercise from "@/components/exercises/MatchPairsExercise";
 import LearnTyping from "./LearnTyping";
 import MemoryGame from "./MemoryGame";
 
-type Mode = "guided" | "quiz" | "typing" | "match" | "memory";
+type Mode = "guided" | "quiz" | "typing" | "memory";
 
 export default function LearnModule({
   setKey, items, direction = "de-sr", initialProgress, mode = "guided", onExit,
@@ -23,13 +23,12 @@ export default function LearnModule({
 }) {
   const idOf = (c: FlashcardItem) => cardId(setKey, c.front, c.back);
   const [prog, setProg] = useState<Map<string, CardProgress>>(() => new Map(initialProgress));
-  const [typedOk, setTypedOk] = useState<Set<string>>(new Set());
   const [queue, setQueue] = useState<FlashcardItem[]>(() =>
     items.filter((c) => (prog.get(idOf(c))?.status ?? "new") !== "mastered"));
   const [seen, setSeen] = useState(0);
 
   const total = items.length;
-  // React Compiler (Next 16) memoizuje automatski — bez ručnog useMemo.
+  // Jeftino — računa se svaki render (nema potrebe za memoizacijom).
   const masteredCount = items.filter((c) => prog.get(idOf(c))?.status === "mastered").length;
 
   // Posle svih hook-ova (Rules of Hooks): zaseban režim igre memorije.
@@ -49,22 +48,20 @@ export default function LearnModule({
   const card = queue[0];
   const id = idOf(card);
   const p = prog.get(id);
-  const useTyping = (p?.correct_count ?? 0) >= 1;
-  const quiz = useTyping ? null : buildQuizOptions(card, items, direction);
-  const showMatch = seen > 0 && seen % 8 === 0 && items.length >= 4;
+  // Izbor vežbe po režimu: guided = prvo kviz (prepoznavanje), pa kucanje (prisećanje).
+  const wantTyping = mode === "typing" ? true : mode === "quiz" ? false : (p?.correct_count ?? 0) >= 1;
+  const quiz = wantTyping ? null : buildQuizOptions(card, items, direction);
+  const doTyping = wantTyping || !quiz; // ako set ima < 4 kartice, kviz nije moguć → kucanje
+  // Spajanje parova kao pauza — samo u vođenom režimu, na svakih 8 kartica.
+  const showMatch = mode === "guided" && seen > 0 && seen % 8 === 0 && items.length >= 4;
 
-  const advance = async (correct: boolean, viaTyping: boolean) => {
-    const newTyped = new Set(typedOk);
-    if (correct && viaTyping) newTyped.add(id);
-    setTypedOk(newTyped);
-    const updated = await recordAttempt(setKey, card, correct, viaTyping, p);
-    if (updated.status === "mastered" && !newTyped.has(id)) updated.status = "learning";
+  const advance = async (correct: boolean) => {
+    const updated = await recordAttempt(setKey, card, correct, p);
     const np = new Map(prog); np.set(id, updated); setProg(np);
     setSeen((s) => s + 1);
     setQueue((q) => {
       const rest = q.slice(1);
-      if (updated.status === "mastered") return rest;
-      return [...rest, card];
+      return updated.status === "mastered" ? rest : [...rest, card];
     });
   };
 
@@ -80,17 +77,17 @@ export default function LearnModule({
 
   return (
     <Frame mastered={masteredCount} total={total} onExit={onExit}>
-      {quiz ? (
+      {!doTyping && quiz ? (
         <QuizExercise
           key={id + seen}
           question={direction === "de-sr" ? card.front : card.back.replace(/\|/g, " / ")}
           options={quiz.options}
           correctAnswer={quiz.correctIndex}
           explanation={null}
-          onAnswer={(correct) => advance(correct, false)}
+          onAnswer={(correct) => advance(correct)}
         />
       ) : (
-        <LearnTyping key={id + seen} card={card} direction={direction === "de-sr" ? "sr-de" : "de-sr"} onResult={(correct) => advance(correct, true)} />
+        <LearnTyping key={id + seen} card={card} direction={direction === "de-sr" ? "sr-de" : "de-sr"} onResult={(correct) => advance(correct)} />
       )}
     </Frame>
   );

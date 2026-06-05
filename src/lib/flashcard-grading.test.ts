@@ -22,6 +22,10 @@ describe("gradeTyping — smer SR→DE (ukucaj nemački)", () => {
   it("potpuno pogrešno → wrong", () => {
     expect(gradeTyping("Hund", vater, "sr-de").status).toBe("wrong");
   });
+  it("kratke reči (<4 slova) ne prolaze kao 'almost'", () => {
+    const da: FlashcardItem = { front: "da", back: "da" };
+    expect(gradeTyping("ja", da, "sr-de").status).toBe("wrong");
+  });
   it("ß/umlaut tolerancija", () => {
     const strasse: FlashcardItem = { front: "Straße", back: "ulica" };
     expect(gradeTyping("strasse", strasse, "sr-de").status).toBe("correct");
