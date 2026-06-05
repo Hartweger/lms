@@ -33,6 +33,20 @@
     { "front": "auspacken", "back": "raspakovati" },
     { "front": "renovieren", "back": "renovirati" },
     { "front": "schmutzig", "back": "prljavo" },
-    { "front": "sauber", "back": "čisto" }
+    { "front": "sauber", "back": "čisto" },
+    { "front": "nass", "back": "mokar" },
+    { "front": "trocken", "back": "suv" },
+    { "front": "kühl", "back": "prohladno|sveže" },
+    { "front": "Landschaft", "back": "pejzaž", "article": "die", "plural": "die Landschaften" },
+    { "front": "Strand", "back": "plaža", "article": "der", "plural": "die Strände" },
+    { "front": "Fluss", "back": "reka", "article": "der", "plural": "die Flüsse" },
+    { "front": "Rose", "back": "ruža", "article": "die", "plural": "die Rosen" },
+    { "front": "Baum", "back": "drvo", "article": "der", "plural": "die Bäume" },
+    { "front": "Tier", "back": "životinja", "article": "das", "plural": "die Tiere" },
+    { "front": "Katze", "back": "mačka", "article": "die", "plural": "die Katzen" },
+    { "front": "Vogel", "back": "ptica", "article": "der", "plural": "die Vögel" },
+    { "front": "Schwein", "back": "svinja", "article": "das", "plural": "die Schweine" },
+    { "front": "Rind", "back": "goveče", "article": "das", "plural": "die Rinder" },
+    { "front": "giftig", "back": "otrovan" }
   ]
 }
