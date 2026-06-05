@@ -17,6 +17,7 @@ const links = [
   { href: "/admin/faq", label: "FAQ" },
   { href: "/admin/analitika", label: "Analitika", exact: true },
   { href: "/admin/analitika/kupci", label: "Kupci", indent: true },
+  { href: "/admin/naki", label: "NaKI logovi" },
 ];
 
 export default function AdminSidebar() {
