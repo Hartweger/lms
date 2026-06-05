@@ -1,0 +1,24 @@
+{
+  "type": "wordset",
+  "title": "Lektion 3 — Reči",
+  "setKey": "a2-1-lektion-3",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    { "front": "Mittagessen", "back": "ručak", "article": "das", "plural": "die Mittagessen" },
+    { "front": "Guten Appetit!", "back": "prijatno! (Mahlzeit!)" },
+    { "front": "Gurke", "back": "krastavac", "article": "die", "plural": "die Gurken" },
+    { "front": "Bohne", "back": "pasulj|boranija", "article": "die", "plural": "die Bohnen" },
+    { "front": "Nudeln", "back": "nudle|testenina", "article": "die" },
+    { "front": "Zitrone", "back": "limun", "article": "die", "plural": "die Zitronen" },
+    { "front": "Eis", "back": "sladoled|led", "article": "das" },
+    { "front": "Tasse", "back": "šoljica", "article": "die", "plural": "die Tassen" },
+    { "front": "Kanne", "back": "čajnik|bokal", "article": "die", "plural": "die Kannen" },
+    { "front": "Topf", "back": "lonac|šerpa", "article": "der", "plural": "die Töpfe" },
+    { "front": "Kneipe", "back": "kafana", "article": "die", "plural": "die Kneipen" },
+    { "front": "Trinkgeld", "back": "bakšiš", "article": "das", "plural": "die Trinkgelder" },
+    { "front": "sauer", "back": "kiseo" },
+    { "front": "süß", "back": "sladak" },
+    { "front": "scharf", "back": "ljut (začinjeno)" }
+  ]
+}
