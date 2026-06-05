@@ -77,7 +77,7 @@ export default function LearnModule({
   }
 
   return (
-    <Frame mastered={masteredCount} total={total} onExit={onExit}>
+    <Frame mastered={masteredCount} learning={learningCount} total={total} onExit={onExit}>
       {!doTyping && quiz ? (
         <QuizExercise
           key={id + seen}
