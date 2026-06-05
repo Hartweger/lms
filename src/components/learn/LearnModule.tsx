@@ -28,6 +28,7 @@ export default function LearnModule({
   const [queue, setQueue] = useState<FlashcardItem[]>(() => nonMastered().slice(0, BATCH)); // tekuća grupa
   const [pool, setPool] = useState<FlashcardItem[]>(() => nonMastered().slice(BATCH));      // čeka na red
   const [seen, setSeen] = useState(0);
+  const [checkpoint, setCheckpoint] = useState<number | null>(null); // „Bravo, X naučeno" pauza (null = ne prikazuj)
 
   const total = items.length;
   // Jeftino — računa se svaki render (nema potrebe za memoizacijom).
@@ -36,6 +37,21 @@ export default function LearnModule({
 
   // Posle svih hook-ova (Rules of Hooks): zaseban režim igre memorije.
   if (mode === "memory") return <MemoryGame items={items} onExit={onExit} />;
+
+  // Check-point: posle svakih ~10 naučenih, kratka pauza-ohrabrenje (za velike setove).
+  if (checkpoint !== null) {
+    return (
+      <div className="text-center py-10">
+        <div className="text-4xl mb-2">🎉</div>
+        <p className="text-lg font-bold mb-1">Bravo! Naučila si {checkpoint} reči!</p>
+        <p className="text-sm text-gray-500 mb-5">Možeš da nastaviš ili napraviš pauzu — napredak je sačuvan.</p>
+        <div className="flex justify-center gap-2">
+          <button onClick={() => setCheckpoint(null)} className="bg-ljubicasta text-white rounded-xl px-6 py-3 font-bold">Nastavi</button>
+          <button onClick={onExit} className="bg-white border border-gray-200 text-gray-600 rounded-xl px-6 py-3 font-bold">Pauza</button>
+        </div>
+      </div>
+    );
+  }
 
   if (queue.length === 0) {
     return (
@@ -70,9 +86,19 @@ export default function LearnModule({
       const next = pool[0];
       setQueue((q) => (next ? [...q.slice(1), next] : q.slice(1)));
       if (next) setPool((pl) => pl.slice(1));
-    } else {
-      // još nije savladana → na kraj tekuće grupe (brzo se vrati)
+      // check-point na svakih 10 naučenih (osim na samom kraju seta)
+      const newMastered = masteredCount + 1;
+      if (newMastered % 10 === 0 && newMastered < total) setCheckpoint(newMastered);
+    } else if (correct) {
+      // tačno ali još ne savladano → na kraj grupe (normalan razmak za 2. ponavljanje)
       setQueue((q) => [...q.slice(1), card]);
+    } else {
+      // pogrešno → vrati ranije (par mesta unapred), da se brže ponovi
+      setQueue((q) => {
+        const rest = q.slice(1);
+        const pos = Math.min(2, rest.length);
+        return [...rest.slice(0, pos), card, ...rest.slice(pos)];
+      });
     }
   };
 
