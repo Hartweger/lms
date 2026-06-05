@@ -43,9 +43,10 @@ describe("buildQuizOptions", () => {
   ];
   it("vraća 4 opcije sa tačnim odgovorom unutra (smer DE→SR)", () => {
     const r = buildQuizOptions(pool[0], pool, "de-sr");
-    expect(r.options).toHaveLength(4);
-    expect(r.options[r.correctIndex]).toBe("otac");
-    expect(new Set(r.options).size).toBe(4); // bez duplikata
+    expect(r).not.toBeNull();
+    expect(r!.options).toHaveLength(4);
+    expect(r!.options[r!.correctIndex]).toBe("otac");
+    expect(new Set(r!.options).size).toBe(4); // bez duplikata
   });
   it("ako nema dovoljno kartica (<4) → null", () => {
     expect(buildQuizOptions(pool[0], pool.slice(0, 2), "de-sr")).toBeNull();
