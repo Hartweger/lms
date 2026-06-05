@@ -1,0 +1,26 @@
+{
+  "type": "wordset",
+  "title": "Lektion 1 — Reči",
+  "setKey": "a2-1-lektion-1",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    { "front": "Nachname", "back": "prezime", "article": "der", "plural": "die Nachnamen" },
+    { "front": "Hausnummer", "back": "kućni broj", "article": "die", "plural": "die Hausnummern" },
+    { "front": "Dorf", "back": "naselje|selo", "article": "das", "plural": "die Dörfer" },
+    { "front": "Telefon", "back": "telefon", "article": "das", "plural": "die Telefone" },
+    { "front": "Telefonnummer", "back": "broj telefona", "article": "die", "plural": "die Telefonnummern" },
+    { "front": "erreichen", "back": "dobiti (telefonom)|dosegnuti" },
+    { "front": "E-Mail-Adresse", "back": "mejl adresa", "article": "die", "plural": "die E-Mail-Adressen" },
+    { "front": "per E-Mail", "back": "mejlom|putem mejla" },
+    { "front": "Geburtsdatum", "back": "datum rođenja", "article": "das", "plural": "die Geburtsdaten" },
+    { "front": "getrennt leben", "back": "živeti odvojeno" },
+    { "front": "Bekannte", "back": "poznanik|poznanica", "article": "der", "plural": "die Bekannten" },
+    { "front": "Reisepass", "back": "pasoš", "article": "der", "plural": "die Reisepässe" },
+    { "front": "Papiere", "back": "papiri|dokumenta", "article": "die" },
+    { "front": "Formular", "back": "formular", "article": "das", "plural": "die Formulare" },
+    { "front": "ein Formular ausfüllen", "back": "popuniti formular" },
+    { "front": "Staatsangehörigkeit", "back": "državljanstvo|nacionalnost", "article": "die", "plural": "die Staatsangehörigkeiten" },
+    { "front": "Führerschein", "back": "vozačka dozvola", "article": "der", "plural": "die Führerscheine" }
+  ]
+}
