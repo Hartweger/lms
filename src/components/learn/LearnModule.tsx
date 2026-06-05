@@ -7,6 +7,7 @@ import { recordAttempt, type CardProgress } from "@/lib/flashcard-progress";
 import QuizExercise from "@/components/exercises/QuizExercise";
 import MatchPairsExercise from "@/components/exercises/MatchPairsExercise";
 import LearnTyping from "./LearnTyping";
+import MemoryGame from "./MemoryGame";
 
 type Mode = "guided" | "quiz" | "typing" | "match" | "memory";
 
@@ -20,6 +21,8 @@ export default function LearnModule({
   mode?: Mode;
   onExit: () => void;
 }) {
+  if (mode === "memory") return <MemoryGame items={items} onExit={onExit} />;
+
   const idOf = (c: FlashcardItem) => cardId(setKey, c.front, c.back);
   const [prog, setProg] = useState<Map<string, CardProgress>>(() => new Map(initialProgress));
   const [typedOk, setTypedOk] = useState<Set<string>>(new Set());
