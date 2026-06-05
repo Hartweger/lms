@@ -18,14 +18,17 @@ Polaznik nad postojećim setom kartica (`{front, back}`) može da uči kroz **vi
 - Prošireni model kartice (sva opciona polja)
 - Tabela za praćenje napretka po kartici (mastery)
 - Motor: kviz, kucanje, flip, spajanje parova
-- Igra memorije
-- Podrška za prikaz slika (lazy-load)
+- **Igra memorije** (ostaje u v1 — izričit zahtev)
 - Izbor načina vežbanja (vođeno + pojedinačni drilovi)
+- Uvoz kartica iz Quizlet exporta (vidi „Sadržaj")
+- `image` polje u modelu (samo definicija — bez UI; štedi migraciju)
+
+### Sledeći korak (v2) — ne sad
+- **Slike:** prikaz na kartici + sadržaj (Quizlet export ih ne nosi; rade se posebno)
 
 ### Po prirodi postupno (NIJE prepravka, samo punjenje)
-- Kuriranje kartica A1.1 (lekciju po lekciju, sa Natašom) — kreće prvo
-- Dodavanje slika konkretnim imenicama (reč po reč)
-- Širenje na A1.2 → B2 nakon A1.1
+- Kuriranje/uvoz kartica A1.1 — kreće prvo (iz Quizleta)
+- Širenje na A1.2 → B2 nakon A1.1 (isti motor, isti uvoz)
 
 ### Van obima (YAGNI)
 - Spaced repetition kroz dane (tabela ostavlja vrata otvorena, ali ne sad)
@@ -123,17 +126,27 @@ Polaznik može da bira (ne mora vođeno):
 - Množina: prihvata se osnovni oblik; pun oblik („die Väter") se pokaže radi učenja. Ne obara odgovor.
 - Kartice tipa „Ich komme aus…" (sa „…") se ne kucaju — idu na kviz.
 
-## Slike
+## Sadržaj — uvoz iz Quizleta (glavni izvor)
 
-- `image` polje (URL). Skladište: Supabase Storage, bucket `blog-media` (već u upotrebi).
-- Prikaz: lazy-load, prava veličina, sa CDN-a. Samo konkretne imenice (Apfel, Haus, Katze); apstraktne reči nemaju sliku.
-- Izvor: besplatne biblioteke (Unsplash/Pexels) ili AI-generisane ilustracije; dodaje se postupno.
+Kartice već postoje, iskurirane na Quizletu. Ne pravimo ih ručno — **uvozimo exportom.**
+- Quizlet: set → ⋯ → **Export** → tekst „pojam[razdvajač]definicija[razdvajač kartica]".
+- **Import skripta** parsira export → `front`/`back` setovi (bulk, svi nivoi).
+- Ako pojam sadrži član („der Vater") → auto izvuče `article: der`, `front: Vater`. Format „der Vater, die Väter" → i `plural`.
+- Rod/množina koji fale: auto-dopuna (rečnik/AI), Nataša samo potvrđuje.
+- **Quizlet export NE nosi slike** → slike su v2, ne blokiraju.
+- **TODO pre plana:** Nataša nalepi jedan stvarni export da se import prilagodi tačnom formatu.
+
+## Slike (v2 — ne sad)
+
+- `image` polje (URL) ostaje definisano u modelu (bez UI sad — štedi migraciju).
+- Prikaz i sadržaj slika su zaseban, kasniji korak. Skladište: Supabase Storage, bucket `blog-media`.
+- Samo konkretne imenice; izvor: besplatne biblioteke ili AI-generisane ilustracije.
 
 ## Performanse
 
 - **Lazy-load modula:** dinamički import — Learn kod se učita tek kad polaznik otvori „Uči". Ostale stranice (početna, blog, checkout) ga ne povlače → 0 uticaja na njihovo učitavanje.
 - Podaci seta sitni (par KB). Mastery: lagani upiti.
-- Jedina težina su slike — lazy-load rešava. **Tvrd zahtev:** modul ne usporava sajt.
+- **Tvrd zahtev:** modul ne usporava sajt.
 
 ## Mobilni (mobile-first — uslov)
 
@@ -155,10 +168,12 @@ Dugme **„Uči ovaj set"** na postojećem `FlashcardBlock` u lekciji otvara Lea
 - `src/lib/flashcard-card-id.ts` — stabilan `card_id`
 - `LearnModule` (lazy-loaded) — orkestrator rundi + mastery
 - Reuse: `QuizExercise`, `TypingExercise` (sa novim grading-om), `MatchPairsExercise`, `SpeakButton`
-- `MemoryGame` — nova komponenta
+- `MemoryGame` — nova komponenta (v1)
+- `scripts/import-quizlet.ts` — parsiranje exporta → setovi kartica
 - Dugme „Uči ovaj set" u `FlashcardBlock`
 
 ## Otvorena pitanja / radni tok sadržaja
 
-- Kuriranje A1.1 kartica radi se zajedno (Nataša daje reči/nijanse, ja strukturiram + dodajem rod/množinu/slike gde ima smisla). Kreće od lekcije „Pozdravi".
-- Redosled posle A1.1: A1.2 → … → B2 (isti motor).
+- **Sadržaj iz Quizleta** (export → import skripta), ne ručno. Nataša prvo nalepi jedan export da se odredi format.
+- Rod/množina koji fale dopunjavaju se automatski; Nataša potvrđuje.
+- Redosled posle A1.1: A1.2 → … → B2 (isti motor, isti uvoz).
