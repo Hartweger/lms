@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import type { FlashcardItem } from "@/lib/flashcard-types";
 import { buildQuizOptions, type Direction } from "@/lib/flashcard-grading";
 import { cardId } from "@/lib/flashcard-card-id";
@@ -21,8 +21,6 @@ export default function LearnModule({
   mode?: Mode;
   onExit: () => void;
 }) {
-  if (mode === "memory") return <MemoryGame items={items} onExit={onExit} />;
-
   const idOf = (c: FlashcardItem) => cardId(setKey, c.front, c.back);
   const [prog, setProg] = useState<Map<string, CardProgress>>(() => new Map(initialProgress));
   const [typedOk, setTypedOk] = useState<Set<string>>(new Set());
@@ -31,9 +29,11 @@ export default function LearnModule({
   const [seen, setSeen] = useState(0);
 
   const total = items.length;
-  const masteredCount = useMemo(
-    () => items.filter((c) => prog.get(idOf(c))?.status === "mastered").length,
-    [prog, items]);
+  // React Compiler (Next 16) memoizuje automatski — bez ručnog useMemo.
+  const masteredCount = items.filter((c) => prog.get(idOf(c))?.status === "mastered").length;
+
+  // Posle svih hook-ova (Rules of Hooks): zaseban režim igre memorije.
+  if (mode === "memory") return <MemoryGame items={items} onExit={onExit} />;
 
   if (queue.length === 0) {
     return (
