@@ -3,6 +3,11 @@ import { createClient } from "@/lib/supabase/server";
 import ProgressBar from "@/components/ProgressBar";
 import quotesData from "@/data/quotes.json";
 import type { Course } from "@/lib/types";
+import { HeartsWidget } from "@/components/hearts/HeartsWidget";
+import { DailyCheckIn } from "@/components/hearts/DailyCheckIn";
+import { progressToNext } from "@/lib/hearts/levels";
+import { getMascotState } from "@/lib/hearts/mascot";
+import { DAILY_GOAL_HEARTS } from "@/lib/hearts/config";
 
 export const dynamic = "force-dynamic";
 
@@ -162,6 +167,28 @@ export default async function Dashboard() {
   const getCertificateId = (courseId: string) =>
     certificates?.find((c) => c.course_id === courseId)?.id ?? null;
 
+  const { data: progressRow } = await supabase
+    .from("user_progress")
+    .select("total_hearts, level, current_streak, last_active_date, hearts_today")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  const totalHearts = progressRow?.total_hearts ?? 0;
+  const prog = progressToNext(totalHearts);
+  const today = new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Belgrade" }).format(new Date());
+  const mascotState = getMascotState(
+    {
+      lastActiveDate: progressRow?.last_active_date ?? null,
+      currentStreak: progressRow?.current_streak ?? 0,
+      dailyGoalMet: (progressRow?.hearts_today ?? 0) >= DAILY_GOAL_HEARTS,
+    },
+    today
+  );
+  const awayMessage =
+    mascotState === "sad" ? "Nedostajao si mi! Tvoje srce te čeka 🐻"
+    : mascotState === "sleepy" ? "Hajde da skupimo srca danas 💛"
+    : null;
+
   return (
     <div className="max-w-lg mx-auto px-4 py-8">
       {/* Greeting + Quote */}
@@ -175,6 +202,20 @@ export default async function Dashboard() {
             <span className="text-gray-400"> — {quote.text_sr}</span>
           )}
         </p>
+      </div>
+
+      <DailyCheckIn />
+      <div className="mb-6">
+        <HeartsWidget
+          totalHearts={totalHearts}
+          level={prog.level}
+          toNext={prog.toNext}
+          percent={prog.percent}
+          nextLevel={prog.nextLevel}
+          streak={progressRow?.current_streak ?? 0}
+          mascotState={mascotState}
+          awayMessage={awayMessage}
+        />
       </div>
 
       {primaryCourse ? (
