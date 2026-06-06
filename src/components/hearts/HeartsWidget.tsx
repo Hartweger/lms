@@ -2,6 +2,7 @@
 import { MascotBear, type MascotState } from "@/components/mascot/MascotBear";
 import { HeartVessel } from "./HeartVessel";
 import { HeartsInfoPopover } from "./HeartsInfoPopover";
+import { titleForLevel } from "@/lib/hearts/levels";
 
 type Props = {
   totalHearts: number;
@@ -20,8 +21,9 @@ export function HeartsWidget({ totalHearts, level, toNext, percent, nextLevel, s
       <MascotBear state={mascotState} size="full" className="w-20 h-24 shrink-0" />
       <HeartVessel fillPercent={percent} className="w-14 h-14 shrink-0" />
       <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <span className="text-xl font-bold">Nivo {level}</span>
+          <span className="text-sm font-semibold text-plava-dark">· {titleForLevel(level)}</span>
           <HeartsInfoPopover />
         </div>
         <div className="text-sm font-semibold text-gray-700 mt-1">

@@ -1,6 +1,6 @@
 // src/lib/hearts/levels.test.ts
 import { describe, it, expect } from "vitest";
-import { levelFromHearts, progressToNext } from "./levels";
+import { levelFromHearts, progressToNext, titleForLevel } from "./levels";
 
 describe("levelFromHearts", () => {
   it("nivo 1 za 0 srca", () => expect(levelFromHearts(0)).toBe(1));
@@ -21,4 +21,12 @@ describe("progressToNext", () => {
   it("procenat se zaokružuje na dole (ne pre vremena 100%)", () => {
     expect(progressToNext(1349).percent).toBe(99);
   });
+});
+
+describe("titleForLevel", () => {
+  it("nivo 1 → Početnik", () => expect(titleForLevel(1)).toBe("Početnik"));
+  it("nivo 5 → Istrajni", () => expect(titleForLevel(5)).toBe("Istrajni"));
+  it("nivo 10 → Legenda", () => expect(titleForLevel(10)).toBe("Legenda"));
+  it("iznad liste → poslednja titula", () => expect(titleForLevel(15)).toBe("Legenda"));
+  it("guard za 0/negativno → Početnik", () => expect(titleForLevel(0)).toBe("Početnik"));
 });

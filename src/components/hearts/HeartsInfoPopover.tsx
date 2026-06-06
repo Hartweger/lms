@@ -13,7 +13,7 @@ export function HeartsInfoPopover() {
         className="w-5 h-5 rounded-full bg-plava-light text-plava-dark font-bold text-xs inline-flex items-center justify-center"
       >?</button>
       {open && (
-        <div className="absolute z-20 mt-2 right-0 w-72 bg-white border border-gray-200 rounded-2xl p-4 shadow-lg text-sm text-gray-700 text-left">
+        <div className="absolute z-20 mt-2 right-0 w-80 bg-white border border-gray-200 rounded-2xl p-4 shadow-lg text-sm text-gray-700 text-left">
           <h4 className="font-bold mb-2">❤️ Šta su srca?</h4>
           <p className="leading-relaxed">
             Srca su poeni koje skupljaš dok učiš nemački. Svaki tačan odgovor, lekcija i test pune tvoje srce.
@@ -26,6 +26,15 @@ export function HeartsInfoPopover() {
             <li>Položen test: <b>+50 ❤️</b> (+25 za ≥90%)</li>
             <li>Dolazak svaki dan: <b>+10 ❤️</b></li>
           </ul>
+          <h4 className="font-bold mt-4 mb-2">🏅 Šta su nivoi?</h4>
+          <p className="leading-relaxed">
+            Što više srca skupiš, prelaziš na viši <b>Nivo</b>. Nivo nije jezički nivo (A1, A2…) —
+            to je tvoj nivo truda i redovnosti, i svaki nosi novu titulu:
+          </p>
+          <p className="mt-2 text-xs text-gray-600 leading-relaxed">
+            Početnik → Radoznali → Marljivi → Vredni → Istrajni → Napredni → Majstor → Šampion → Heroj → Legenda
+          </p>
+          <p className="mt-2 leading-relaxed">Kad pređeš na viši Nivo, tvoj meda te slavi! 🎉</p>
         </div>
       )}
     </span>
