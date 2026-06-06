@@ -10,7 +10,7 @@
 .mascot--thinking{ animation: mascot-sway 5s ease-in-out infinite; }
 .mascot--celebrate { animation: mascot-bounce 1.2s ease-in-out infinite; }
 .mascot--sleepy  { animation: mascot-nod 3s ease-in-out infinite; }
-.mascot--sad     { animation: none; }
+.mascot--sad     { animation: none; transform: rotate(-3deg); }
 
 @media (prefers-reduced-motion: reduce) {
   .mascot { animation: none !important; }

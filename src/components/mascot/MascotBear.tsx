@@ -2,12 +2,12 @@
 import "./MascotBear.css";
 
 export type MascotState =
-  | "happy"      // maše
-  | "celebrate"  // ruke uvis, poskok
-  | "proud"      // palac gore, namiguje
-  | "thinking"   // ruka na bradi
-  | "sleepy"     // klonuo, Zzz
-  | "sad";       // briše suzu
+  | "happy"      // osmeh, lagano ljuljanje
+  | "celebrate"  // poskok + zvezdice + srca
+  | "proud"      // namiguje + zvezdica
+  | "thinking"   // oblačić misli
+  | "sleepy"     // Zzz, klimanje
+  | "sad";       // suza, naginjanje
 
 type Props = {
   state?: MascotState;
@@ -16,7 +16,7 @@ type Props = {
   className?: string;
 };
 
-// Zajedničke partije (uši, glava, njuška, nos) — bez ruku/lica jer variraju
+// Uši, glava, njuška, nos
 function BaseHead() {
   return (
     <>
@@ -27,6 +27,17 @@ function BaseHead() {
       <circle cx="87" cy="62" r="46" fill="#D69A5A" />
       <ellipse cx="87" cy="74" rx="23" ry="18" fill="#F2D7AE" />
       <ellipse cx="87" cy="64" rx="8" ry="6" fill="#5a3a1c" />
+    </>
+  );
+}
+
+// Mirne kratke šapice sa strane (iste u svim stanjima) — crtaju se IZA tela,
+// pa proviruju sa strane kao prirodne ruke.
+function CalmArms() {
+  return (
+    <>
+      <ellipse cx="40" cy="135" rx="12" ry="20" fill="#C98A4B" transform="rotate(10 40 135)" />
+      <ellipse cx="134" cy="135" rx="12" ry="20" fill="#C98A4B" transform="rotate(-10 134 135)" />
     </>
   );
 }
@@ -118,50 +129,26 @@ const FACES: Record<MascotState, React.ReactNode> = {
   ),
 };
 
-// Ruke po stanju (poze) — limb = nadlaktica (linija) + šapa (krug)
-const ARMS: Record<MascotState, React.ReactNode> = {
-  happy: (
-    <>
-      <path d="M54 118 L42 150" stroke="#C98A4B" strokeWidth="15" strokeLinecap="round" fill="none" />
-      <path d="M120 118 L156 72" stroke="#C98A4B" strokeWidth="15" strokeLinecap="round" fill="none" />
-      <circle cx="156" cy="72" r="10" fill="#C98A4B" />
-    </>
-  ),
+// Mali efekti preko svega (zvezdice, srca, oblačić misli)
+const EFFECTS: Partial<Record<MascotState, React.ReactNode>> = {
   celebrate: (
     <>
-      <path d="M54 118 L28 40" stroke="#C98A4B" strokeWidth="15" strokeLinecap="round" fill="none" />
-      <circle cx="28" cy="40" r="10" fill="#C98A4B" />
-      <path d="M120 118 L148 40" stroke="#C98A4B" strokeWidth="15" strokeLinecap="round" fill="none" />
-      <circle cx="148" cy="40" r="10" fill="#C98A4B" />
+      <text x="16" y="46" fontSize="20" fill="#FFC83D">✦</text>
+      <text x="150" y="36" fontSize="15" fill="#FFC83D">✦</text>
+      <text x="38" y="152" fontSize="14" fill="#FFC83D">✦</text>
+      <path d="M150 118 q3 -6 8 -2 q5 -4 8 2 q1 5 -8 12 q-10 -7 -8 -12 Z" fill="#F2546E" />
+      <path d="M20 112 q2 -5 6 -1 q4 -3 6 1 q1 4 -6 9 q-8 -5 -6 -9 Z" fill="#FF8FA3" />
     </>
   ),
   proud: (
-    <>
-      <path d="M54 118 L42 150" stroke="#C98A4B" strokeWidth="15" strokeLinecap="round" fill="none" />
-      <path d="M120 118 L142 96" stroke="#C98A4B" strokeWidth="15" strokeLinecap="round" fill="none" />
-      <circle cx="142" cy="94" r="11" fill="#C98A4B" />
-      <ellipse cx="142" cy="80" rx="4.5" ry="8" fill="#C98A4B" />
-    </>
+    <path d="M150 44 L153 55 L164 58 L153 61 L150 72 L147 61 L136 58 L147 55 Z" fill="#FFC83D" />
   ),
   thinking: (
-    <>
-      <path d="M54 118 L42 150" stroke="#C98A4B" strokeWidth="15" strokeLinecap="round" fill="none" />
-      <path d="M120 120 L99 98" stroke="#C98A4B" strokeWidth="15" strokeLinecap="round" fill="none" />
-      <circle cx="99" cy="97" r="9" fill="#C98A4B" />
-    </>
-  ),
-  sleepy: (
-    <>
-      <path d="M54 120 L40 158" stroke="#C98A4B" strokeWidth="15" strokeLinecap="round" fill="none" />
-      <path d="M120 120 L134 158" stroke="#C98A4B" strokeWidth="15" strokeLinecap="round" fill="none" />
-    </>
-  ),
-  sad: (
-    <>
-      <path d="M120 120 L132 156" stroke="#C98A4B" strokeWidth="15" strokeLinecap="round" fill="none" />
-      <path d="M54 120 L70 82" stroke="#C98A4B" strokeWidth="15" strokeLinecap="round" fill="none" />
-      <circle cx="70" cy="82" r="9" fill="#C98A4B" />
-    </>
+    <g fill="#9ca3af">
+      <circle cx="140" cy="44" r="2.5" />
+      <circle cx="150" cy="34" r="3.5" />
+      <circle cx="162" cy="22" r="5" />
+    </g>
   ),
 };
 
@@ -176,11 +163,12 @@ export function MascotBear({ state = "happy", size = "full", animated = true, cl
       aria-label="Meda maskota"
       className={[animClass, className].filter(Boolean).join(" ")}
     >
+      {size === "full" && <CalmArms />}
       {size === "full" && <BodyAndLegs />}
       <BaseHead />
       {FACES[state]}
       {size === "full" && state !== "sleepy" && state !== "sad" && <BowTie />}
-      {size === "full" && <g className="mascot__arms">{ARMS[state]}</g>}
+      {size === "full" && EFFECTS[state]}
     </svg>
   );
 }
