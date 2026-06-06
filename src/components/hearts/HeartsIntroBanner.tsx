@@ -45,11 +45,10 @@ export function HeartsIntroBanner() {
       >
         ×
       </button>
-      <h3 className="font-bold text-base mb-1">🐻 Upoznaj svog medu!</h3>
+      <h3 className="font-bold text-base mb-1">🐻 Upoznaj svog medu — pomoćnika!</h3>
       <p className="leading-relaxed">
         Dok učiš nemački, skupljaš <b>srca ❤️</b>. Svaki tačan odgovor, lekcija i test
-        pune tvoje srce — penješ se kroz <b>nivoe</b> i osvajaš <b>titule</b> (ovo nije isto
-        što i jezički nivo A1, A2…).
+        pune tvoje srce — penješ se kroz <b>nivoe</b> i osvajaš <b>titule</b>.
       </p>
       <div className="flex flex-wrap gap-1 mt-2 text-xs">
         {LEVEL_TITLES.map((t, i) => (
@@ -58,10 +57,6 @@ export function HeartsIntroBanner() {
           </span>
         ))}
       </div>
-      <p className="mt-2 leading-relaxed text-gray-600">
-        +10 tačan odgovor · +20 lekcija · +50 test · +10 dnevni dolazak. Što redovnije
-        vežbaš, brže stižeš do sledeće titule — meda navija za tebe! 🎉
-      </p>
     </div>
   );
 }
