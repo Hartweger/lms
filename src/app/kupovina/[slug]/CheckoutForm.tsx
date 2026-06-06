@@ -49,7 +49,9 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, priceE
   const [appliedCoupon, setAppliedCoupon] = useState<{ code: string; discountPercent: number } | null>(null);
   const [couponError, setCouponError] = useState<string | null>(null);
 
-  const paymentMethod = country === "RS" ? "uplatnica" : "paypal";
+  const [rsMethod, setRsMethod] = useState<"kartica" | "kartica_rate" | "uplatnica">("kartica");
+  const paymentMethod = country === "RS" ? rsMethod : "paypal";
+  const isCard = paymentMethod === "kartica" || paymentMethod === "kartica_rate";
 
   const displayEur = priceEur != null
     ? priceEur
@@ -104,7 +106,11 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, priceE
         return;
       }
 
-      router.push(`/kupovina/hvala/${data.orderId}`);
+      if (isCard) {
+        window.location.href = `/kupovina/kartica/${data.orderId}`;
+      } else {
+        router.push(`/kupovina/hvala/${data.orderId}`);
+      }
     } catch {
       setError("Došlo je do greške. Proveri internet konekciju i pokušaj ponovo.");
     } finally {
@@ -270,19 +276,31 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, priceE
       {/* Payment method info */}
       <div className="bg-white border border-gray-200 rounded-xl p-5">
         <p className="text-xs font-bold uppercase tracking-wide text-gray-400 mb-3">Način plaćanja</p>
-        {paymentMethod === "uplatnica" ? (
-          <div className="flex items-start gap-3">
-            <div className="flex-shrink-0 w-9 h-9 bg-[#E8F7FC] rounded-full flex items-center justify-center">
-              <svg className="w-5 h-5 text-[#0AB3D7]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-              </svg>
-            </div>
-            <div>
-              <p className="font-semibold text-gray-900 text-sm">Uplatnica / internet bankarstvo</p>
-              <p className="text-gray-500 text-sm mt-0.5">
-                Poslaćemo ti podatke za uplatu na email. Pristup kursu dobijaš čim potvrdimo uplatu.
-              </p>
-            </div>
+        {country === "RS" ? (
+          <div className="space-y-2">
+            {[
+              { v: "kartica", label: "Platnom karticom", desc: "Visa, Mastercard, Maestro — sigurno plaćanje preko Banca Intesa." },
+              { v: "kartica_rate", label: "Karticom na rate", desc: "Na rate za podobne kartice — banka prikazuje opcije rata." },
+              { v: "uplatnica", label: "Uplatnica / internet bankarstvo", desc: "Podaci za uplatu stižu na email; pristup po potvrdi uplate." },
+            ].map((m) => (
+              <label
+                key={m.v}
+                className={`flex items-start gap-3 border rounded-lg p-3 cursor-pointer transition-colors ${rsMethod === m.v ? "border-[#0AB3D7] bg-[#E8F7FC]" : "border-gray-200 hover:border-gray-300"}`}
+              >
+                <input
+                  type="radio"
+                  name="rsMethod"
+                  value={m.v}
+                  checked={rsMethod === m.v}
+                  onChange={() => setRsMethod(m.v as typeof rsMethod)}
+                  className="mt-1"
+                />
+                <span>
+                  <span className="block font-semibold text-gray-900 text-sm">{m.label}</span>
+                  <span className="block text-gray-500 text-xs mt-0.5">{m.desc}</span>
+                </span>
+              </label>
+            ))}
           </div>
         ) : (
           <div className="flex items-start gap-3">
