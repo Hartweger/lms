@@ -46,3 +46,6 @@ A1.2/
 
 # Visual brainstorm artifacts
 .superpowers/
+
+# data exports (WooCommerce/analytics — sadrže lične podatke, ne u repo)
+*.csv
