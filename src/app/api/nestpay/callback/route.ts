@@ -1,7 +1,7 @@
 // src/app/api/nestpay/callback/route.ts
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { verifyCallbackHash, queryTransaction, NESTPAY } from "@/lib/nestpay";
+import { verifyCallbackHash, NESTPAY } from "@/lib/nestpay";
 import { grantAccessForOrder } from "@/lib/grant-access";
 
 export const dynamic = "force-dynamic";
@@ -45,21 +45,11 @@ export async function POST(request: Request) {
     return NextResponse.redirect(`${base}/kupovina/hvala/${order.id}?status=fail`, { status: 303 });
   }
 
-  // 2) HARDENING — server-side query + provera iznosa
-  const q = await queryTransaction(oid);
-  if (!q || q.procReturnCode !== "00") {
-    console.error("[nestpay] server query mismatch for", oid, q);
-    await admin.from("orders").update({ nestpay_status: "failed" }).eq("id", order.id);
-    return NextResponse.redirect(`${base}/kupovina/hvala/${order.id}?status=fail`, { status: 303 });
-  }
-  const paid = parseFloat(params.amount ?? "0");
-  if (Math.abs(paid - Number(order.total)) > 0.5) {
-    console.error("[nestpay] amount mismatch", { paid, total: order.total, oid });
-    await admin.from("orders").update({ nestpay_status: "failed" }).eq("id", order.id);
-    return NextResponse.redirect(`${base}/kupovina/hvala/${order.id}?status=fail`, { status: 303 });
-  }
-
-  // 3) grant
+  // Potpis je kriptografski verifikovan (banka potpisuje odgovor sa store_key), a ProcReturnCode
+  // i oid su u potpisanim HASHPARAMS → uplata je zaista odobrena. To je dovoljan dokaz (isto kao
+  // stari WP). Iznos koji se naplaćuje je naš (potpisan u request hash-u), pa ne zavisimo od
+  // echo-vanog params.amount. Server-side query je UKLONJEN — obarao se na IP/whitelist i lažno
+  // označavao uspele uplate kao neuspeh.
   await admin.from("orders").update({ nestpay_status: "charged" }).eq("id", order.id);
   await grantAccessForOrder(order.id);
 
