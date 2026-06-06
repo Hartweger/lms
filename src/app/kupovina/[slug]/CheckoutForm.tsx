@@ -49,9 +49,9 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, priceE
   const [appliedCoupon, setAppliedCoupon] = useState<{ code: string; discountPercent: number } | null>(null);
   const [couponError, setCouponError] = useState<string | null>(null);
 
-  const [rsMethod, setRsMethod] = useState<"kartica" | "kartica_rate" | "uplatnica">("kartica");
+  const [rsMethod, setRsMethod] = useState<"kartica" | "uplatnica">("kartica");
   const paymentMethod = country === "RS" ? rsMethod : "paypal";
-  const isCard = paymentMethod === "kartica" || paymentMethod === "kartica_rate";
+  const isCard = paymentMethod === "kartica";
 
   const displayEur = priceEur != null
     ? priceEur
@@ -126,7 +126,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, priceE
         <div className="flex items-start justify-between gap-4">
           <p className="font-semibold text-gray-900 text-[15px] leading-snug">{courseTitle}</p>
           <div className="text-right flex-shrink-0">
-            {paymentMethod === "uplatnica" ? (
+            {country === "RS" ? (
               appliedCoupon ? (
                 <div>
                   <p className="text-sm text-gray-400 line-through">{formatPrice(priceRsd)} din</p>
@@ -140,13 +140,9 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, priceE
                 <div>
                   <p className="text-sm text-gray-400 line-through">{displayEur} €</p>
                   <p className="font-bold text-gray-900">{discountedEur} €</p>
-                  <p className="text-xs text-gray-400 mt-0.5">+12% PayPal naknada</p>
                 </div>
               ) : (
-                <div>
-                  <p className="font-bold text-gray-900">{displayEur} €</p>
-                  <p className="text-xs text-gray-400 mt-0.5">+12% PayPal naknada</p>
-                </div>
+                <p className="font-bold text-gray-900">{displayEur} €</p>
               )
             )}
           </div>
@@ -279,8 +275,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, priceE
         {country === "RS" ? (
           <div className="space-y-2">
             {[
-              { v: "kartica", label: "Platnom karticom", desc: "Visa, Mastercard, Maestro — sigurno plaćanje preko Banca Intesa." },
-              { v: "kartica_rate", label: "Karticom na rate", desc: "Na rate za podobne kartice — banka prikazuje opcije rata." },
+              { v: "kartica", label: "Platnom karticom", desc: "Visa, Mastercard, Maestro — sigurno preko Banca Intesa. Vlasnici Banca Intesa kartica mogu na rate — broj rata biraš u sledećem koraku (na strani banke)." },
               { v: "uplatnica", label: "Uplatnica / internet bankarstvo", desc: "Podaci za uplatu stižu na email; pristup po potvrdi uplate." },
             ].map((m) => (
               <label
