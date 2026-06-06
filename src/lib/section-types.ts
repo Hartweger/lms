@@ -1,3 +1,6 @@
+import type { FlashcardItem, WordSetSection } from "./flashcard-types";
+export type { FlashcardItem, WordSetSection };
+
 export type BadgeCategory = "grammatik" | "lesen" | "hoeren" | "schreiben" | "wortschatz";
 export type TextStyle = "default" | "beispiele" | "uebung" | "info";
 export type LinkType = "kviz" | "quizlet" | "pdf" | "dw" | "external";
@@ -77,10 +80,7 @@ export interface FlashcardSection {
   type: "flashcard";
   frontLabel?: string;
   backLabel?: string;
-  items: {
-    front: string;
-    back: string;
-  }[];
+  items: FlashcardItem[];
 }
 
 export interface YoutubeSection {
@@ -116,4 +116,5 @@ export type Section =
   | FlashcardSection
   | YoutubeSection
   | AudioSection
-  | ExerciseSection;
+  | ExerciseSection
+  | WordSetSection;
