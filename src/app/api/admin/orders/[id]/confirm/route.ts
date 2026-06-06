@@ -38,10 +38,9 @@ export async function POST(
   const result = await grantAccessForOrder(id);
   if (!result.ok) return NextResponse.json({ error: result.error }, { status: 400 });
 
-  // Fiskalizuj samo PayPal (kartica se fiskalizuje u nestpay callback-u; uplatnica se NE fiskalizuje)
-  if (order.payment_method === "paypal") {
-    await fiscalizeOrder(id);
-  }
+  // Fiskalizuj uplatnicu i PayPal (kartica se fiskalizuje u nestpay callback-u).
+  // fiscalizeOrder je idempotentan (preskače ako je već fiskalizovano) — bezbedno i ako je kartica.
+  await fiscalizeOrder(id);
 
   return NextResponse.json({ ok: true });
 }
