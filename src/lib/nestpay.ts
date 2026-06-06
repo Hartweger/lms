@@ -41,7 +41,7 @@ export function verifyCallbackHash(params: Record<string, string>, storeKey: str
 
 export function buildPaymentFields(o: {
   orderNumber: string; amountRsd: number; okUrl: string; failUrl: string;
-  email?: string; fullName?: string;
+  email?: string; fullName?: string; country?: string; shopUrl?: string;
 }): Record<string, string> {
   const amount = o.amountRsd.toFixed(2); // 2 decimale, tačka
   const rnd = crypto.randomBytes(16).toString("hex");
@@ -56,6 +56,7 @@ export function buildPaymentFields(o: {
     amount,
     okUrl: o.okUrl,
     failUrl: o.failUrl,
+    shopurl: o.shopUrl ?? "",
     trantype: transactionType,
     currency: NESTPAY.currency,
     rnd,
@@ -65,7 +66,10 @@ export function buildPaymentFields(o: {
     oid: o.orderNumber,
     encoding: "UTF-8",
     hash,
+    // Billing polja (kao stari WP) — pomažu bankin anti-fraud; ne ulaze u hash
     BillToName: o.fullName ?? "",
+    BillToCompany: "",
+    BillToCountry: o.country ?? "",
     email: o.email ?? "",
   };
 }
