@@ -39,6 +39,7 @@ export default async function HvalaPage({
 
   const items = order.items as OrderItem[];
   const courseTitle = items?.[0]?.title ?? "";
+  const courseSlug = items?.[0]?.course_slug ?? "";
 
   const ipsData = [
     "K:PR",
@@ -82,7 +83,15 @@ export default async function HvalaPage({
         {isCard && status === "fail" && (
           <div className="bg-[#FFF3F3] border border-[#F78687]/40 rounded-xl px-5 py-4 mb-6 text-sm text-gray-700">
             <p className="font-semibold text-[#E06566]">Plaćanje nije uspelo</p>
-            <p className="mt-1">Tvoja kartica nije naplaćena. Pokušaj ponovo ili izaberi uplatnicu pri kupovini.</p>
+            <p className="mt-1 mb-4">Tvoja kartica nije naplaćena. Pokušaj ponovo ili izaberi uplatnicu pri kupovini.</p>
+            {courseSlug && (
+              <Link
+                href={`/kupovina/${courseSlug}`}
+                className="inline-block px-5 py-2.5 rounded-lg font-semibold text-white text-sm bg-[#F78687] hover:bg-[#E06566] transition-colors"
+              >
+                Pokušaj ponovo
+              </Link>
+            )}
           </div>
         )}
         {isCard && !status && (
