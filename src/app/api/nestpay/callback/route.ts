@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { verifyCallbackHash, NESTPAY } from "@/lib/nestpay";
 import { grantAccessForOrder } from "@/lib/grant-access";
+import { fiscalizeOrder } from "@/lib/fiscomm";
 
 export const dynamic = "force-dynamic";
 
@@ -52,6 +53,7 @@ export async function POST(request: Request) {
   // označavao uspele uplate kao neuspeh.
   await admin.from("orders").update({ nestpay_status: "charged" }).eq("id", order.id);
   await grantAccessForOrder(order.id);
+  await fiscalizeOrder(order.id); // fiskalni račun (kartica) — ne blokira pristup ako padne
 
   return NextResponse.redirect(`${base}/kupovina/hvala/${order.id}?status=ok`, { status: 303 });
 }
