@@ -64,6 +64,18 @@ function BowTie() {
   );
 }
 
+function BellyHeart() {
+  return (
+    <>
+      <path
+        d="M87 151 C80 144, 73 139, 76 134 C78 130, 84 131, 87 136 C90 131, 96 130, 98 134 C101 139, 94 144, 87 151 Z"
+        fill="#F2546E"
+      />
+      <ellipse cx="82" cy="138" rx="2.5" ry="3.5" fill="#fff" opacity="0.5" />
+    </>
+  );
+}
+
 // Lica po stanju
 const FACES: Record<MascotState, React.ReactNode> = {
   happy: (
@@ -165,6 +177,7 @@ export function MascotBear({ state = "happy", size = "full", animated = true, cl
     >
       {size === "full" && <CalmArms />}
       {size === "full" && <BodyAndLegs />}
+      {size === "full" && <BellyHeart />}
       <BaseHead />
       {FACES[state]}
       {size === "full" && state !== "sleepy" && state !== "sad" && <BowTie />}
