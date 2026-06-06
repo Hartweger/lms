@@ -6,6 +6,7 @@ import quotesData from "@/data/quotes.json";
 import type { Course } from "@/lib/types";
 import { HeartsWidget } from "@/components/hearts/HeartsWidget";
 import { DailyCheckIn } from "@/components/hearts/DailyCheckIn";
+import { HeartsIntroBanner } from "@/components/hearts/HeartsIntroBanner";
 import { progressToNext } from "@/lib/hearts/levels";
 import { getMascotState } from "@/lib/hearts/mascot";
 import { DAILY_GOAL_HEARTS } from "@/lib/hearts/config";
@@ -207,6 +208,7 @@ export default async function Dashboard() {
         </p>
       </div>
 
+      <HeartsIntroBanner />
       <DailyCheckIn />
       <div className="mb-6">
         <HeartsWidget

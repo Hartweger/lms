@@ -2556,7 +2556,7 @@ const LESSON_SECTIONS: Record<number, { sections: unknown[] }> = {
       {
         type: "text",
         style: "default",
-        content: "## Ponavljanje — najvaznije teme A2.1\n\nOvde mozes da ponovis sve sto si naucio/la u kursu A2.1.",
+        content: "## Ponavljanje — najvaznije teme A2.1\n\nOvde mozes da ponovis sve gradivo iz kursa A2.1.",
       },
       {
         type: "spoiler",

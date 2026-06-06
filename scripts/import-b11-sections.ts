@@ -3207,7 +3207,7 @@ const LESSON_SECTIONS: Record<number, { sections: unknown[] }> = {
         type: "text",
         style: "default",
         content:
-          "## Tipps za Hörverstehen\n\n1. **Prvo pročitaj pitanja** pre slušanja.\n2. Slušaj **dva puta** — prvi put za opšti utisak, drugi put za detalje.\n3. Obrati pažnju na **ključne reči** u pitanjima.\n4. Ako nisi siguran/na, izaberi najlogičniji odgovor.",
+          "## Tipps za Hörverstehen\n\n1. **Prvo pročitaj pitanja** pre slušanja.\n2. Slušaj **dva puta** — prvi put za opšti utisak, drugi put za detalje.\n3. Obrati pažnju na **ključne reči** u pitanjima.\n4. Ako se dvoumiš, izaberi najlogičniji odgovor.",
       },
       {
         type: "text",
