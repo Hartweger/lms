@@ -65,20 +65,30 @@ Kumulativni pragovi (podesivi):
 
 Nivo se računa iz ukupnog broja srca. Na prelasku nivoa → maskota "oduševljena" + proslava (konfete već postoje u kodu, `ExerciseRunner.tsx`).
 
-## Maskota — stanja i okidači
+## Maskota — stanja, poze i okidači
 
-Jedan SVG lik sa 6 izraza (oči/usta/obrve se menjaju nad istim telom).
+Pošto je izabran **ceo lik**, svako stanje je **cela poza tela** (ruke, držanje, dodaci), ne samo zamena izraza lica. Govor tela nosi emociju jače od lica — to je suština Duolingo principa.
 
-| Stanje | Okidač |
-|---|---|
-| 😊 Srećan | podrazumevano, normalna aktivnost |
-| 🤩 Oduševljen | odmah posle odličnog testa (≥90%) ili prelaska nivoa (prelazno/animacija) |
-| 😉 Ponosan | niz ≥3 dana ili ispunjen dnevni cilj |
-| 🤔 Zamišljen | poziv na akciju / nova lekcija čeka |
-| 😴 Pospan | 3–6 dana neaktivan → "nedostaje mi…" |
-| 😢 Tužan | 7+ dana neaktivan → "vrati se, čeka te srce" |
+| Stanje | Poza (govor tela) | Okidač |
+|---|---|---|
+| 😊 Srećan | uspravan, blagi osmeh, maše rukom | podrazumevano, normalna aktivnost |
+| 🤩 Oduševljen | **ruke raširene/dignute uvis, poskok**, sjajne oči | odmah posle odličnog testa (≥90%) ili prelaska nivoa |
+| 😉 Ponosan | **palac gore / ruke na bokovima**, namiguje | niz ≥3 dana ili ispunjen dnevni cilj |
+| 🤔 Zamišljen | **ruka na bradi**, neutralan | poziv na akciju / nova lekcija čeka |
+| 😴 Pospan | **klonuo, glava pada**, Zzz | 3–6 dana neaktivan → "nedostaje mi…" |
+| 😢 Tužan | **pogrbljen, briše suzu / plače**, obešene ruke | 7+ dana neaktivan → "vrati se, čeka te srce" |
 
 Stanje se izvodi iz statistike (`daysSinceActive` iz poslednjeg aktivnog dana, niz, skorašnji događaj kao položen test/prelazak nivoa).
+
+### Animacija (lagana, u v1)
+
+Pošto su poze mali SVG-ovi, dodaju se jeftine CSS animacije koje "ožive" lik:
+- **idle:** lagano ljuljanje/disanje (transform sway) dok miruje
+- **slavi (oduševljen):** poskok (bounce) + srca koja izleću
+- **pospan:** blago "klaćenje" glave + Zzz koji pluta
+- **tužan:** suza koja klizi
+
+Animacije poštuju `prefers-reduced-motion` (ko isključi animacije — vidi statičnu pozu).
 
 ## Objašnjenje koje korisnik vidi
 
@@ -149,7 +159,7 @@ RLS: korisnik **čita** samo svoj red. **Pisanje** ide isključivo kroz server a
 - ❌ Gubljenje srca
 - ❌ Razdvajanje srca po kupljenim kursevima
 - ❌ `hearts_events` log istorije (kasnije, ako zatreba)
-- ❌ Animirani prelazi između izraza (v1: statične varijante; animacija kasnije)
+- ❌ Složeni prelazi/morfovanje između poza (v1: 6 zasebnih poza + lagane CSS animacije po pozi)
 
 ## Otvorena pitanja za fazu plana
 
