@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { grantAccessForOrder } from "@/lib/grant-access";
+import { fiscalizeOrder } from "@/lib/fiscomm";
 
 export async function POST(
   _request: Request,
@@ -36,6 +37,11 @@ export async function POST(
 
   const result = await grantAccessForOrder(id);
   if (!result.ok) return NextResponse.json({ error: result.error }, { status: 400 });
+
+  // Fiskalizuj samo PayPal (kartica se fiskalizuje u nestpay callback-u; uplatnica se NE fiskalizuje)
+  if (order.payment_method === "paypal") {
+    await fiscalizeOrder(id);
+  }
 
   return NextResponse.json({ ok: true });
 }
