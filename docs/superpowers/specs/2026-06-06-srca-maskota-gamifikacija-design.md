@@ -105,6 +105,14 @@ Ispod: mala lista "kako se skuplja" (vrednosti iz tabele mehanike).
 2. **Brojač u vežbi / header:** kompaktno (glava mede + broj srca) + "?".
 3. **Posle pauze (povratak):** maskota u stanju pospan/tužan sa porukom ("Nedostajao si mi! Tvoje srce te čeka…").
 
+## Kompatibilnost (zahtev)
+
+Sve mora raditi na svim modernim pregledačima i na mobilnom:
+- desktop: Chrome, Safari, Firefox, Edge
+- mobilni: iOS Safari, Android Chrome (velik deo polaznika je na telefonu)
+
+Koriste se samo univerzalno podržane tehnologije: inline SVG, CSS `transform`/`@keyframes` animacije, SVG `clipPath` (za punjenje srce-posude), `prefers-reduced-motion`. Bez spoljnih animacionih biblioteka. Obavezna provera prikaza i ponašanja na mobilnom (responsive widget).
+
 ## Tehnička arhitektura
 
 > Napomena: ovaj projekat koristi modifikovan Next.js. Pre pisanja koda obavezno pročitati relevantan vodič u `node_modules/next/dist/docs/` (videti `AGENTS.md`).
