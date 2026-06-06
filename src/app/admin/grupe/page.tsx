@@ -14,6 +14,7 @@ interface Group {
   min_seats: number;
   max_seats: number;
   price: number | null;
+  manual_enrolled: number | null;
   professor_id: string | null;
   content_course_id: string | null;
   enrolled: number;
@@ -324,6 +325,24 @@ export default function AdminGrupePage() {
                 }
                 className={inputCls}
               />
+            </div>
+            <div>
+              <label className={labelCls}>Prikazano zauzeto (za sajt)</label>
+              <input
+                type="number"
+                value={form.manual_enrolled ?? ""}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    manual_enrolled: e.target.value ? Number(e.target.value) : null,
+                  })
+                }
+                placeholder="auto"
+                className={inputCls}
+              />
+              <p className="mt-1 text-xs text-gray-400">
+                Prazno = računa se iz stvarnih polaznika. Broj = toliko mesta prikaži zauzeto na sajtu.
+              </p>
             </div>
           </div>
 

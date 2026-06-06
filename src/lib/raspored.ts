@@ -20,7 +20,7 @@ export async function fetchRaspored(): Promise<GrupaRaspored[]> {
   const { data: groups } = await admin
     .from("groups")
     .select(
-      "id, level, status, start_date, duration_weeks, days, session_time, max_seats, professor:professor_id(full_name)",
+      "id, level, status, start_date, duration_weeks, days, session_time, max_seats, manual_enrolled, professor:professor_id(full_name)",
     )
     .in("status", ["otvoren", "uskoro"]);
   if (!groups?.length) return [];
@@ -38,7 +38,9 @@ export async function fetchRaspored(): Promise<GrupaRaspored[]> {
 
   const rows = groups.map((g) => {
     const prof = Array.isArray(g.professor) ? g.professor[0] : g.professor;
-    return mapGroupToRaspored(g, prof?.full_name || "", counts[g.id] || 0);
+    // Ručni broj (manual_enrolled) ima prednost; inače stvarni broj upisanih.
+    const enrolled = g.manual_enrolled != null ? g.manual_enrolled : counts[g.id] || 0;
+    return mapGroupToRaspored(g, prof?.full_name || "", enrolled);
   });
   // Otvoren prvo, pa po nivou (kao stari RasporedAPI)
   rows.sort((a, b) => {

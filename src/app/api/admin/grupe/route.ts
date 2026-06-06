@@ -44,6 +44,7 @@ export async function POST(req: NextRequest) {
     max_seats: body.max_seats ?? 6,
     price: body.price ?? null,
     notes: body.notes || null,
+    manual_enrolled: body.manual_enrolled ?? null,
     source: "rucni-unos-2026-06",
   }).select("id").single();
   if (error) return NextResponse.json({ error: error.message }, { status: 400 });
