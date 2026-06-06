@@ -118,45 +118,49 @@ const FACES: Record<MascotState, React.ReactNode> = {
   ),
 };
 
-// Ruke po stanju (poze)
+// Ruke po stanju (poze) — limb = nadlaktica (linija) + šapa (krug)
 const ARMS: Record<MascotState, React.ReactNode> = {
   happy: (
     <>
-      <ellipse cx="34" cy="120" rx="16" ry="26" fill="#C98A4B" transform="rotate(20 34 120)" />
-      <ellipse cx="150" cy="74" rx="14" ry="24" fill="#C98A4B" transform="rotate(-40 150 74)" />
+      <path d="M54 118 L42 150" stroke="#C98A4B" strokeWidth="15" strokeLinecap="round" fill="none" />
+      <path d="M120 118 L156 72" stroke="#C98A4B" strokeWidth="15" strokeLinecap="round" fill="none" />
+      <circle cx="156" cy="72" r="10" fill="#C98A4B" />
     </>
   ),
   celebrate: (
     <>
-      <ellipse cx="30" cy="74" rx="14" ry="24" fill="#C98A4B" transform="rotate(40 30 74)" />
-      <ellipse cx="150" cy="74" rx="14" ry="24" fill="#C98A4B" transform="rotate(-40 150 74)" />
+      <path d="M54 118 L28 40" stroke="#C98A4B" strokeWidth="15" strokeLinecap="round" fill="none" />
+      <circle cx="28" cy="40" r="10" fill="#C98A4B" />
+      <path d="M120 118 L148 40" stroke="#C98A4B" strokeWidth="15" strokeLinecap="round" fill="none" />
+      <circle cx="148" cy="40" r="10" fill="#C98A4B" />
     </>
   ),
   proud: (
     <>
-      <ellipse cx="34" cy="120" rx="16" ry="26" fill="#C98A4B" transform="rotate(20 34 120)" />
-      <ellipse cx="138" cy="116" rx="14" ry="22" fill="#C98A4B" transform="rotate(-35 138 116)" />
-      <circle cx="150" cy="98" r="7" fill="#E6C089" />
+      <path d="M54 118 L42 150" stroke="#C98A4B" strokeWidth="15" strokeLinecap="round" fill="none" />
+      <path d="M120 118 L142 96" stroke="#C98A4B" strokeWidth="15" strokeLinecap="round" fill="none" />
+      <circle cx="142" cy="94" r="11" fill="#C98A4B" />
+      <ellipse cx="142" cy="80" rx="4.5" ry="8" fill="#C98A4B" />
     </>
   ),
   thinking: (
     <>
-      <ellipse cx="34" cy="120" rx="16" ry="26" fill="#C98A4B" transform="rotate(20 34 120)" />
-      <ellipse cx="120" cy="104" rx="13" ry="20" fill="#C98A4B" transform="rotate(-55 120 104)" />
-      <circle cx="104" cy="88" r="7" fill="#E6C089" />
+      <path d="M54 118 L42 150" stroke="#C98A4B" strokeWidth="15" strokeLinecap="round" fill="none" />
+      <path d="M120 120 L99 98" stroke="#C98A4B" strokeWidth="15" strokeLinecap="round" fill="none" />
+      <circle cx="99" cy="97" r="9" fill="#C98A4B" />
     </>
   ),
   sleepy: (
     <>
-      <ellipse cx="40" cy="128" rx="15" ry="24" fill="#C98A4B" transform="rotate(8 40 128)" />
-      <ellipse cx="135" cy="128" rx="15" ry="24" fill="#C98A4B" transform="rotate(-8 135 128)" />
+      <path d="M54 120 L40 158" stroke="#C98A4B" strokeWidth="15" strokeLinecap="round" fill="none" />
+      <path d="M120 120 L134 158" stroke="#C98A4B" strokeWidth="15" strokeLinecap="round" fill="none" />
     </>
   ),
   sad: (
     <>
-      <ellipse cx="38" cy="128" rx="15" ry="24" fill="#C98A4B" transform="rotate(6 38 128)" />
-      <ellipse cx="118" cy="96" rx="13" ry="20" fill="#C98A4B" transform="rotate(-50 118 96)" />
-      <circle cx="100" cy="80" r="7" fill="#E6C089" />
+      <path d="M120 120 L132 156" stroke="#C98A4B" strokeWidth="15" strokeLinecap="round" fill="none" />
+      <path d="M54 120 L70 82" stroke="#C98A4B" strokeWidth="15" strokeLinecap="round" fill="none" />
+      <circle cx="70" cy="82" r="9" fill="#C98A4B" />
     </>
   ),
 };
@@ -172,11 +176,11 @@ export function MascotBear({ state = "happy", size = "full", animated = true, cl
       aria-label="Meda maskota"
       className={[animClass, className].filter(Boolean).join(" ")}
     >
-      {size === "full" && <g className="mascot__arms">{ARMS[state]}</g>}
       {size === "full" && <BodyAndLegs />}
       <BaseHead />
       {FACES[state]}
       {size === "full" && state !== "sleepy" && state !== "sad" && <BowTie />}
+      {size === "full" && <g className="mascot__arms">{ARMS[state]}</g>}
     </svg>
   );
 }
