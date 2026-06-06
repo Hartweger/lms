@@ -33,6 +33,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
   const [finished, setFinished] = useState(false);
   const [showNext, setShowNext] = useState(false);
   const [streak, setStreak] = useState(0);
+  const [maxStreak, setMaxStreak] = useState(0);
   const [xp, setXp] = useState(0);
   const [showXpAnimation, setShowXpAnimation] = useState(false);
   const [xpGained, setXpGained] = useState(0);
@@ -138,6 +139,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
     if (correct) {
       const newStreak = streak + 1;
       setStreak(newStreak);
+      setMaxStreak((m) => Math.max(m, newStreak));
       const bonus = newStreak >= 3 ? 5 : 0;
       const gained = 10 + bonus;
       setXp(xp + gained);
@@ -168,6 +170,17 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
             (q) => !q.question.toLowerCase().includes("beispiel") && !q.explanation?.includes("Beispiel")
           ).length,
         });
+
+        // dodela srca za vežbu (server računa iznos)
+        try {
+          await fetch("/api/hearts/award", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ reason: "exercise", correct: score, hadStreak: maxStreak >= 3 }),
+          });
+        } catch {
+          /* tiho — srca su sekundarna */
+        }
 
         // Modelltest: calculate total score across ALL exercises on this lesson
         if (isModelltest && courseId) {
@@ -204,6 +217,17 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
           setModelltestTotal({ score: totalScore, total: totalQuestions });
 
           if (overallPercent >= 60) {
+            // bonus srca za položen test
+            try {
+              await fetch("/api/hearts/award", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ reason: "test_pass", percent: overallPercent }),
+              });
+            } catch {
+              /* tiho */
+            }
+
             const { data: existing } = await supabase
               .from("certificates")
               .select("id")
@@ -272,7 +296,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
             ? `Ispunjeno ciljeva: ${score} od ${totalForScore}`
             : `Tačnih odgovora: ${score} od ${totalForScore}`}
         </p>
-        <p className="text-plava font-bold mb-1">{xp} XP zarađeno</p>
+        <p className="text-plava font-bold mb-1">{xp} ❤️ srca zarađeno</p>
         {isModelltest && modelltestTotal ? (() => {
           const overallPercent = Math.round((modelltestTotal.score / modelltestTotal.total) * 100);
           return overallPercent >= 60 ? (
@@ -436,7 +460,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
         <span className="text-sm font-medium text-plava">{exercise.title}</span>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <span className="text-sm text-plava font-bold">{xp} XP</span>
+            <span className="text-sm text-plava font-bold">{xp} ❤️ srca</span>
             {showXpAnimation && (
               <span className="text-xs text-green-500 font-bold animate-bounce">
                 +{xpGained}
