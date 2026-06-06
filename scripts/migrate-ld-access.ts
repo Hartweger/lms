@@ -137,31 +137,36 @@ async function run() {
   const missing = [...wantSlugs].filter((s) => !slugToId.has(s));
   if (missing.length) { console.error("✗ Nedostaju kursevi u bazi:", missing); process.exit(1); }
 
-  let neu = 0, grants = 0;
+  let neu = 0, grants = 0, failed = 0;
+  const failedEmails: string[] = [];
   for (const [email, v] of plan) {
     // find-or-create user
     const { data: prof } = await sb.from("user_profiles").select("id").eq("email", email).maybeSingle();
     let uid = prof?.id as string | undefined;
     if (!uid) {
       const { data: nu, error } = await sb.auth.admin.createUser({ email, email_confirm: true });
-      if (error || !nu?.user) { console.error(`  ✗ ${email}: ${error?.message}`); continue; }
+      if (error || !nu?.user) { console.error(`  ✗ createUser ${email}: ${error?.message}`); failed++; failedEmails.push(email); continue; }
       uid = nu.user.id; neu++;
-      await sb.from("user_profiles").upsert({ id: uid, email, full_name: v.name, role: "student" });
+      const { error: pErr } = await sb.from("user_profiles").upsert({ id: uid, email, full_name: v.name, role: "student" });
+      if (pErr) { console.error(`  ✗ profile ${email}: ${pErr.message}`); failed++; failedEmails.push(email); continue; }
     }
     for (const [slug, exp] of v.perCourse) {
       const courseId = slugToId.get(slug)!;
       // pravilo "nikad ne skraćuj": uzmi MAX(postojeći, novi)
-      const { data: cur } = await sb.from("course_access")
+      const { data: cur, error: rErr } = await sb.from("course_access")
         .select("expires_at").eq("user_id", uid).eq("course_id", courseId).maybeSingle();
+      if (rErr) { console.error(`  ✗ read ${email}/${slug}: ${rErr.message}`); failed++; failedEmails.push(`${email}/${slug}`); continue; }
       const curMs = cur?.expires_at ? new Date(cur.expires_at).getTime() : null;
       const finalExp = new Date(mergeExpiry(curMs, exp)).toISOString();
-      await sb.from("course_access").upsert(
+      const { error: wErr } = await sb.from("course_access").upsert(
         { user_id: uid, course_id: courseId, expires_at: finalExp, source: SOURCE },
         { onConflict: "user_id,course_id" },
       );
+      if (wErr) { console.error(`  ✗ write ${email}/${slug}: ${wErr.message}`); failed++; failedEmails.push(`${email}/${slug}`); continue; }
       grants++;
     }
   }
-  console.log(`\n✓ Upisano: ${grants} dodela, ${neu} novih naloga. BEZ mejlova. source='${SOURCE}'.`);
+  console.log(`\n✓ Upisano: ${grants} dodela, ${neu} novih naloga, ${failed} NEUSPEHA. BEZ mejlova. source='${SOURCE}'.`);
+  if (failed) { console.error("NEUSPELI (ponovi --write da ih pokupi):", failedEmails); process.exit(1); }
 }
 run().catch((e) => { console.error(e); process.exit(1); });
