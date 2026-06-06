@@ -27,9 +27,19 @@ const wcAuth = "Basic " + Buffer.from(`${process.env.WC_CONSUMER_KEY}:${process.
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 async function wcGet(pathQs: string) {
-  const r = await fetch(`${WC}${pathQs}`, { headers: { Authorization: wcAuth } });
-  if (!r.ok) throw new Error(`WC ${r.status} ${pathQs}`);
-  return r.json();
+  // retry na prolazni pad (502/timeout) — bitno za --write da jedan blip ne sruši ceo upis
+  let lastErr: unknown;
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      const r = await fetch(`${WC}${pathQs}`, { headers: { Authorization: wcAuth } });
+      if (!r.ok) throw new Error(`WC ${r.status} ${pathQs}`);
+      return r.json();
+    } catch (e) {
+      lastErr = e;
+      if (attempt < 3) { console.warn(`  ⚠ WC pokušaj ${attempt} pao (${e}), retry...`); await sleep(3000 * attempt); }
+    }
+  }
+  throw lastErr;
 }
 
 // product_id → [slug] preko _related_course
@@ -45,7 +55,7 @@ async function buildRelatedMap(): Promise<{ map: Record<number, string[]>; name:
       map[p.id] = Array.isArray(rel) ? relatedIdsToSlugs(rel.map(Number)) : [];
     }
     page++; await sleep(2500);
-    if (page > 8) break;
+    if (page > 8) { console.warn("⚠ WC products limit stranica dostignut — povećaj ceiling ako ima više proizvoda"); break; }
   }
   return { map, name };
 }
@@ -80,7 +90,7 @@ async function buildPlan(related: Record<number, string[]>, pname: Record<number
         }
       }
       page++; await sleep(2500);
-      if (page > 60) break;
+      if (page > 60) { console.warn(`⚠ WC orders limit stranica dostignut (${status}) — povećaj ceiling, moguće odsecanje!`); break; }
     }
   }
   return { plan, unmapped, bad, expired, orders };
