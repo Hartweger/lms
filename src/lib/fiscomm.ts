@@ -2,7 +2,8 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 
 const FISCOMM = {
-  apiUrl: process.env.FISCOMM_API_URL ?? "https://api.fiscomm.rs",
+  // v0.1.0 API (Google Cloud Functions) — isti koji stari WP plugin koristi; ključ je važeći ovde
+  apiUrl: process.env.FISCOMM_API_URL ?? "https://us-central1-fiscal-38558.cloudfunctions.net/api",
   apiKey: process.env.FISCOMM_API_KEY ?? "",
   // Poreske labele iz Fiscomm naloga — domaći 20% vs inostranstvo (izvoz/0%).
   // PURS standard: "Ђ" = 20% opšta, "А" = 0%/oslobođeno. Potvrditi preko /receipt/tax-rates.
@@ -12,11 +13,10 @@ const FISCOMM = {
 
 interface OrderItem { title: string; }
 
-/** PURS tip plaćanja za naš payment_method. */
+/** PURS tip plaćanja (PascalCase, iz /system/payment-methods). */
 function pursPaymentType(method: string): string {
-  if (method === "kartica" || method === "kartica_rate") return "card";
-  if (method === "paypal") return "card"; // PayPal je kartično-bazirano
-  return "wireTransfer"; // uplatnica (ne fiskalizujemo je, ali za svaki slučaj)
+  if (method === "uplatnica") return "WireTransfer";
+  return "Card"; // kartica, kartica_rate, paypal (kartično-bazirano)
 }
 
 /**
@@ -41,15 +41,17 @@ export async function fiscalizeOrder(orderId: string): Promise<{ ok: boolean; er
   const items = (order.items ?? []) as OrderItem[];
   const name = items[0]?.title ?? "Kurs";
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kurs.hartweger.rs";
+  // IAdditionalData šema (v0.1.0): payment[], items[], invoicePdfUrl (obavezno)
   const payload = {
-    payments: [{ amount: total, type: pursPaymentType(order.payment_method) }],
-    orderNumber: String(order.order_number),
-    options: { OmitQRCodeGen: "1", OmitTextualRepresentation: "1" },
+    payment: [{ amount: total, paymentType: pursPaymentType(order.payment_method) }],
+    invoiceNumber: String(order.order_number),
+    invoicePdfUrl: `${siteUrl}/kupovina/hvala/${orderId}`,
     items: [{ name, quantity: 1, unitPrice: total, labels: [label], totalAmount: total }],
   };
 
   try {
-    const res = await fetch(`${FISCOMM.apiUrl}/receipt/normal/sale`, {
+    const res = await fetch(`${FISCOMM.apiUrl}/invoices/normal/sale`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${FISCOMM.apiKey}`,
