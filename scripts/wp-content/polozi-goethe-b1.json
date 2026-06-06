@@ -1,0 +1,183 @@
+{
+  "slug": "polozi-goethe-b1",
+  "wpCourseId": 31516,
+  "lessons": [
+    {
+      "wpLessonId": 48071,
+      "title": "Sve o ispitu",
+      "order_index": 0,
+      "vimeo_video_id": "597827829",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Sve o ispitu"
+        },
+        {
+          "type": "text",
+          "content": "Sve o ispitu pogledaj ovde:"
+        },
+        {
+          "type": "video",
+          "vimeoId": "597827829"
+        },
+        {
+          "type": "text",
+          "content": "[Materijal je ovde](https://drive.google.com/drive/folders/1HWdbDctU03p-gV9ueoMFWZElWgVOXwQK?usp=sharing)"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "wpLessonId": 48068,
+      "title": "Masterclass – Schreiben und Sprechen – B1",
+      "order_index": 1,
+      "vimeo_video_id": "1128598236",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Masterclass – Schreiben und Sprechen – B1"
+        },
+        {
+          "type": "video",
+          "vimeoId": "1128598236"
+        },
+        {
+          "type": "text",
+          "content": "Prezentacija je [ovde](https://docs.google.com/presentation/d/1mQ8hQK2iR7jCr_ycpFxvzuuvR5yeVDqujXB6mqmWloo/edit?usp=sharing)\n\nLista sa rečima je [ovde](https://docs.google.com/document/d/1d_E_xWzuCMjgRgDoSnABYqZsDCQmnxkQkSCLd-v1Fb0/edit?usp=sharing)"
+        }
+      ],
+      "exercises": [
+        {
+          "title": "Leseverstehen",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": "Teil 1. Upiši R za richtig ili F za falsch 11 {R}; 12 {R}; 13 {F}; 14 {R}; 15 {R}; 16 {F}. Teil 2 Upiši a, b ili c 7 {b}; 8 {b}; 9 {c}; 10 {c}; 11 {c}; 12 {a}. Teil 3 Upiši slova od A do J, jednoj situaciji ne odgovara nijedan oglas, tu upiši X 13 {D}; 14 {J}; 15 {A}; 16 {G}; 17 {X}; 18 {I}; 19 {B};",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "R",
+                  "R",
+                  "F",
+                  "R",
+                  "R",
+                  "F",
+                  "b",
+                  "b",
+                  "c",
+                  "c",
+                  "c",
+                  "a",
+                  "D",
+                  "J",
+                  "A",
+                  "G",
+                  "X",
+                  "I",
+                  "B",
+                  "N",
+                  "J",
+                  "N",
+                  "J",
+                  "J",
+                  "N",
+                  "J",
+                  "c",
+                  "c",
+                  "b",
+                  "a"
+                ]
+              },
+              "correct_answer": "R, R, F, R, R, F, b, b, c, c, c, a, D, J, A, G, X, I, B, N, J, N, J, J, N, J, c, c, b, a",
+              "question_type": "fill_blank"
+            }
+          ]
+        },
+        {
+          "title": "B1 Hörverstehen",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": "https://www.hartweger.rs/wp-content/uploads/2024/04/2_02_Fit_fuer_Zertifikat_B1_Erwachsene_Simulation_Hoeren_1.mp3 https://www.hartweger.rs/wp-content/uploads/2024/04/2_03_Fit_fuer_Zertifikat_B1_Erwachsene_Simulation_Hoeren_2.mp3 https://www.hartweger.rs/wp-content/uploads/2024/04/2_04_Fit_fuer_Zertifikat_B1_Erwachsene_Simulation_Hoeren_3.mp3 https://www.hartweger.rs/wp-content/uploads/2024/04/2_05_Fit_fuer_Zertifikat_B1_Erwachsene_Simulation_Hoeren_4.mp3",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "R",
+                  "c",
+                  "F",
+                  "b",
+                  "F",
+                  "b",
+                  "F",
+                  "c",
+                  "R",
+                  "b",
+                  "c",
+                  "b",
+                  "a",
+                  "b",
+                  "c",
+                  "R",
+                  "R",
+                  "F",
+                  "R",
+                  "F",
+                  "F",
+                  "R",
+                  "c",
+                  "c",
+                  "b",
+                  "c",
+                  "a",
+                  "c",
+                  "b",
+                  "c"
+                ]
+              },
+              "correct_answer": "R, c, F, b, F, b, F, c, R, b, c, b, a, b, c, R, R, F, R, F, F, R, c, c, b, c, a, c, b, c",
+              "question_type": "fill_blank"
+            }
+          ]
+        },
+        {
+          "title": "Aufgabe 1",
+          "exercise_type": "essay",
+          "questions": [
+            {
+              "question": "Aufgabe 1\n\nArbeitszeit: 20 Minuten\n\nIhr Cousin, der in einer anderen Stadt wohnt, hat gerade das Abitur mit einer sehr guten Note bestanden und möchte das mit einer großen Party feiern.\n\n– Bedanken Sie sich für die Einladung und sagen Sie zu.\n\n– Machen Sie Vorschläge, wie Sie bei den Partyvorbereitungen helfen könnten.\n\n– Schreiben Sie, wann Sie kommen und wie lange Sie bleiben werden.\n\nSchreiben Sie eine E-Mail (circa 80 Wörter).\n\nSchreiben Sie etwas zu allen drei Punkten.\n\nAchten Sie auf den Textaufbau (Anrede, Einleitung, Reihenfolge der Inhaltspunkte, Schluss).",
+              "options": {
+                "type": "essay"
+              },
+              "correct_answer": "",
+              "question_type": "essay"
+            },
+            {
+              "question": "Aufgabe 2 Arbeitszeit: 25 Minuten\nSie haben mi Fernsehen eine Diskussionssendung zum Thema „Freundschaft\" gesehen. Im Online- Gästebuch der Sendung finden Sie folgende Meinung:\n\nIch habe mich oft gefragt, ob es überhaupt wahre Freundschaft gibt. Leider haben mich \"meine besten Freundinnen\" mehrmals enttäuscht. Anfangs war ich immer traurig, jetzt weiß ich dass ein Leben ohne Freunde auch möglich ist – dank Internet.\n\nSchreiben Sie nun Ihre Meinung (circa 80 Wörter).",
+              "options": {
+                "type": "essay"
+              },
+              "correct_answer": "",
+              "question_type": "essay"
+            },
+            {
+              "question": "Aufgabe 3\nArbeitszeit: 15 Minuten\n\nIn Ihrem Deutschkurs wurde gestern ein Test geschrieben, aber Sie waren nicht da.\nSchreiben Sie an Ihren Kursleiter, Herrn Zeidler. Entschuldigen Sie sich höflich für Ihr Fehlen und bitten Sie um einen Termin, an dem Sie den Test nachschreiben können.\n\nSchreiben Sie eine E-Mail (circa 40 Wörter).\nVergessen Sie nicht die Anrede und den Gruß am Schluss",
+              "options": {
+                "type": "essay"
+              },
+              "correct_answer": "",
+              "question_type": "essay"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "reviewNotes": [
+    "Course-level kvizovi (37377, 37445, 37456) zakačeni na poslednju lekciju \"Masterclass – Schreiben und Sprechen – B1\".",
+    "[Masterclass – Schreiben und Sprechen – B1] kviz 37377: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Masterclass – Schreiben und Sprechen – B1] kviz 37445: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Masterclass – Schreiben und Sprechen – B1] kviz 37456: essay (proveri prompt)",
+    "[Masterclass – Schreiben und Sprechen – B1] kviz 37456: essay (proveri prompt)",
+    "[Masterclass – Schreiben und Sprechen – B1] kviz 37456: essay (proveri prompt)"
+  ]
+}

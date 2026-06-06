@@ -35,36 +35,53 @@ export default function NavClient() {
 
   return (
     <>
-      {/* Desktop auth */}
+      {/* Desktop nav */}
       <div className="hidden md:flex items-center gap-6 text-sm">
-        <Link href="/naki" className="text-gray-700 font-medium hover:text-plava">
+        <Link href="/naki" className="text-gray-700 font-medium hover:text-plava transition-colors">
           NaKI
-        </Link>
-        <Link href="/besplatno-testiranje" className="text-plava font-medium hover:text-plava-dark">
-          Besplatno testiranje
         </Link>
         {user ? (
           <>
-            <Link href="/dashboard" className="text-gray-600 hover:text-plava">
+            <Link href="/dashboard" className="text-gray-600 hover:text-plava transition-colors">
               Moji kursevi
             </Link>
             {user.role === "admin" && (
-              <Link href="/admin" className="text-gray-600 hover:text-plava">
+              <Link href="/admin" className="text-gray-600 hover:text-plava transition-colors">
                 Admin
               </Link>
             )}
-            <button onClick={handleLogout} className="text-koral hover:text-koral-dark">
+            <button onClick={handleLogout} className="text-koral hover:text-koral-dark transition-colors">
               Odjava
             </button>
             <span className="text-plava font-medium">{user.full_name}</span>
           </>
         ) : (
-          <Link
-            href="/prijava"
-            className="bg-plava text-white px-4 py-2 rounded-lg hover:bg-plava-dark transition-colors"
-          >
-            Prijava
-          </Link>
+          <>
+            <Link href="/kursevi" className="text-sm font-medium text-gray-600 hover:text-plava transition-colors">
+              Kursevi
+            </Link>
+            <Link href="/metodologija" className="text-sm font-medium text-gray-600 hover:text-plava transition-colors">
+              O metodi
+            </Link>
+            <Link href="/o-natasi" className="text-sm font-medium text-gray-600 hover:text-plava transition-colors">
+              O nama
+            </Link>
+            <Link href="/magazin" className="text-sm font-medium text-gray-600 hover:text-plava transition-colors">
+              Magazin
+            </Link>
+            <Link href="/kontakt" className="text-sm font-medium text-gray-600 hover:text-plava transition-colors">
+              Kontakt
+            </Link>
+            <Link href="/besplatno-testiranje" className="text-plava font-medium hover:text-plava-dark transition-colors">
+              Besplatni test
+            </Link>
+            <Link
+              href="/prijava"
+              className="bg-koral text-white px-5 py-2 rounded-lg font-semibold hover:bg-koral-dark transition-colors"
+            >
+              Prijavi se
+            </Link>
+          </>
         )}
       </div>
 
@@ -90,9 +107,6 @@ export default function NavClient() {
           <Link href="/naki" className="block text-gray-700 font-medium" onClick={() => setMenuOpen(false)}>
             NaKI
           </Link>
-          <Link href="/besplatno-testiranje" className="block text-plava font-medium" onClick={() => setMenuOpen(false)}>
-            Besplatno testiranje
-          </Link>
           {user ? (
             <>
               <Link href="/dashboard" className="block text-gray-600" onClick={() => setMenuOpen(false)}>
@@ -108,9 +122,33 @@ export default function NavClient() {
               </button>
             </>
           ) : (
-            <Link href="/prijava" className="block text-plava font-medium" onClick={() => setMenuOpen(false)}>
-              Prijava
-            </Link>
+            <>
+              <Link href="/kursevi" className="block text-sm font-medium text-gray-600 hover:text-plava" onClick={() => setMenuOpen(false)}>
+                Kursevi
+              </Link>
+              <Link href="/metodologija" className="block text-sm font-medium text-gray-600 hover:text-plava" onClick={() => setMenuOpen(false)}>
+                O metodi
+              </Link>
+              <Link href="/o-natasi" className="block text-sm font-medium text-gray-600 hover:text-plava" onClick={() => setMenuOpen(false)}>
+                O nama
+              </Link>
+              <Link href="/magazin" className="block text-sm font-medium text-gray-600 hover:text-plava" onClick={() => setMenuOpen(false)}>
+                Magazin
+              </Link>
+              <Link href="/kontakt" className="block text-sm font-medium text-gray-600 hover:text-plava" onClick={() => setMenuOpen(false)}>
+                Kontakt
+              </Link>
+              <Link href="/besplatno-testiranje" className="block text-plava font-medium" onClick={() => setMenuOpen(false)}>
+                Besplatni test
+              </Link>
+              <Link
+                href="/prijava"
+                className="block bg-koral text-white px-5 py-2 rounded-lg font-semibold text-center hover:bg-koral-dark transition-colors"
+                onClick={() => setMenuOpen(false)}
+              >
+                Prijavi se
+              </Link>
+            </>
           )}
         </div>
       )}

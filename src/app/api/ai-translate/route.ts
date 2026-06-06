@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import { createClient } from "@/lib/supabase/server";
 import { rateLimit } from "@/lib/rate-limit";
+import { getFixedTranslations } from "@/lib/fixed-translations";
 import type { Section } from "@/lib/section-types";
 
 const anthropic = new Anthropic({
@@ -58,7 +59,12 @@ export async function POST(request: Request) {
     .join(", ");
 
   if (action === "generate") {
-    // Generate sentences to translate
+    // Fiksni prevodi imaju prioritet (pravilo: prevod = fiksne rečenice, ne AI)
+    const fixed = getFixedTranslations(lesson.title);
+    if (fixed && fixed.length > 0) {
+      return NextResponse.json({ sentences: fixed });
+    }
+    // Inače: AI-generisanje (rezerva)
     try {
       const message = await anthropic.messages.create({
         model: "claude-haiku-4-5-20251001",

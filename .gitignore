@@ -44,6 +44,17 @@ next-env.d.ts
 A1.1/
 A1.2/
 
+# Sentry Config File
+.env.sentry-build-plugin
+
+# Lični podaci kupaca — ne komitovati
+gramatika-kupci.csv
+
+# WooCommerce export izveštaji (sadrže imena kupaca — PII, ne u git)
+wc-orders-report-export-*.csv
+*analytics-orders.csv
+wc-orders-report-*.csv
+
 # Visual brainstorm artifacts
 .superpowers/
 

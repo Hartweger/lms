@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { sanitizeHtml } from "@/lib/sanitize";
 import QuizExercise from "./QuizExercise";
 import FillBlankExercise from "./FillBlankExercise";
 import MatchPairsExercise from "./MatchPairsExercise";
@@ -14,6 +15,8 @@ import CategorizeExercise from "./CategorizeExercise";
 import TypingExercise from "./TypingExercise";
 import ConversationExercise from "./ConversationExercise";
 import SpeakExercise from "./SpeakExercise";
+import SprechenExercise from "./SprechenExercise";
+import GroupedExamExercise from "./GroupedExamExercise";
 import type { Exercise, ExerciseQuestion } from "@/lib/types";
 
 interface ExerciseRunnerProps {
@@ -24,9 +27,10 @@ interface ExerciseRunnerProps {
   nextLessonId?: string | null;
   courseId?: string | null;
   isModelltest?: boolean;
+  isTest?: boolean;
 }
 
-export default function ExerciseRunner({ exercise, questions, level = "A1", nextExerciseId, nextLessonId, courseId, isModelltest }: ExerciseRunnerProps) {
+export default function ExerciseRunner({ exercise, questions, level = "A1", nextExerciseId, nextLessonId, courseId, isModelltest, isTest = false }: ExerciseRunnerProps) {
   const supabase = createClient();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -68,6 +72,17 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
         .then(({ count }: { count: number | null }) => { setDialogAttempts(count || 0); });
     });
   }, [exercise.id, exercise.exercise_type, supabase]);
+
+  // Ispitni (grupni) prikaz: kad sva pitanja dele tekst (Lesen) ili audio (Hören) —
+  // prikaži ceo deo odjednom, provera na kraju dela. Ostale vežbe → standardni prikaz.
+  const isGroupedExam = questions.length > 1 && questions.every((q) => {
+    const o = q.options as Record<string, unknown> | null;
+    const hasCtx = !!(o && typeof o === "object" && !Array.isArray(o) && o.context);
+    return hasCtx || !!q.audio_url;
+  });
+  if (isGroupedExam) {
+    return <GroupedExamExercise exercise={exercise} questions={questions} nextLessonId={nextLessonId} isTest={isTest} />;
+  }
 
   const question = questions[currentIndex];
 
@@ -216,6 +231,9 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
           const overallPercent = Math.round((totalScore / totalQuestions) * 100);
           setModelltestTotal({ score: totalScore, total: totalQuestions });
 
+          // Certificates are issued server-side only. The server independently
+          // recomputes the ≥60% threshold from stored attempts, so the client
+          // cannot self-issue or forge a certificate.
           if (overallPercent >= 60) {
             // bonus srca za položen test
             try {
@@ -228,22 +246,18 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
               /* tiho */
             }
 
-            const { data: existing } = await supabase
-              .from("certificates")
-              .select("id")
-              .eq("user_id", user.id)
-              .eq("course_id", courseId)
-              .single();
-
-            if (existing) {
-              setCertificateId(existing.id);
-            } else {
-              const { data: newCert } = await supabase
-                .from("certificates")
-                .insert({ user_id: user.id, course_id: courseId })
-                .select("id")
-                .single();
-              if (newCert) setCertificateId(newCert.id);
+            try {
+              const res = await fetch("/api/certificate", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ lessonId: exercise.lesson_id, courseId }),
+              });
+              if (res.ok) {
+                const data = await res.json();
+                if (data.certificateId) setCertificateId(data.certificateId);
+              }
+            } catch {
+              // Network error — certificate can be re-issued on next completion.
             }
           }
         }
@@ -428,7 +442,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
                               <td
                                 key={ci}
                                 className={`px-4 py-2 border-b border-gray-100 ${ci === 0 ? "font-semibold text-gray-900" : "text-gray-600"}`}
-                                dangerouslySetInnerHTML={{ __html: cell }}
+                                dangerouslySetInnerHTML={{ __html: sanitizeHtml(cell) }}
                               />
                             ))}
                           </tr>
@@ -441,13 +455,15 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
                 <div
                   className="prose prose-sm prose-gray max-w-none text-gray-700 leading-relaxed"
                   dangerouslySetInnerHTML={{
-                    __html: (questionContext.content || "")
-                      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
-                      .replace(/\*(.+?)\*/g, "<em>$1</em>")
-                      .replace(/^### (.+)$/gm, "<h3>$1</h3>")
-                      .replace(/^## (.+)$/gm, "<h2>$1</h2>")
-                      .replace(/\n\n/g, "</p><p>")
-                      .replace(/\n/g, "<br>"),
+                    __html: sanitizeHtml(
+                      (questionContext.content || "")
+                        .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+                        .replace(/\*(.+?)\*/g, "<em>$1</em>")
+                        .replace(/^### (.+)$/gm, "<h3>$1</h3>")
+                        .replace(/^## (.+)$/gm, "<h2>$1</h2>")
+                        .replace(/\n\n/g, "</p><p>")
+                        .replace(/\n/g, "<br>")
+                    ),
                   }}
                 />
               )}
@@ -458,7 +474,10 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
 
       {/* Progress */}
       <div className="flex items-center justify-between mb-4">
-        <span className="text-sm font-medium text-plava">{exercise.title}</span>
+        <span className="flex items-center gap-2">
+          <span className={`text-xs px-2 py-0.5 rounded-full ${isTest ? "bg-koral-light text-koral-dark" : "bg-plava-light text-plava"}`}>{isTest ? "🎯 Test" : "✏️ Vežba"}</span>
+          <span className="text-sm font-medium text-plava">{exercise.title}</span>
+        </span>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <span className="text-sm text-plava font-bold">{xp} ❤️ srca</span>
@@ -553,8 +572,21 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
             );
           }
 
-          // For listen_write exercises, always use EssayExercise
-          if (exercise.exercise_type === "listen_write") {
+          // Sprechen — snimi usmeni odgovor, profesor pregleda
+          if (exercise.exercise_type === "sprechen") {
+            return (
+              <SprechenExercise
+                key={question.id}
+                task={question.question}
+                exerciseId={exercise.id}
+                lessonId={exercise.lesson_id}
+                onAnswer={handleAnswer}
+              />
+            );
+          }
+
+          // For listen_write and essay (Schreiben) exercises, always use EssayExercise
+          if (exercise.exercise_type === "listen_write" || exercise.exercise_type === "essay") {
             return (
               <EssayExercise
                 key={question.id}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { sanitizeHtml } from "@/lib/sanitize";
 
 interface TrueFalseProps {
   question: string;
@@ -30,7 +31,7 @@ export default function TrueFalseExercise({ question, correctAnswer, explanation
     <div>
       {context && (
         context.includes("<") ? (
-          <div className="mb-4 text-sm text-gray-700" dangerouslySetInnerHTML={{ __html: context }} />
+          <div className="mb-4 text-sm text-gray-700" dangerouslySetInnerHTML={{ __html: sanitizeHtml(context) }} />
         ) : (
           <div className="bg-gray-50 rounded-lg p-4 mb-4 text-sm text-gray-700 whitespace-pre-line">
             {context}

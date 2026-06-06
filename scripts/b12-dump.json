@@ -1,0 +1,4530 @@
+[
+  {
+    "id": "a5d1e212-a3be-4661-b453-a15a6461f4d7",
+    "order_index": 0,
+    "title": "Willkommen",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Uvod"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Dobrodošla u kurs **Nemački B1.2**! Ovaj kurs prati udžbenik Schritte International Neu 6 i vodi te do **ispita B1** (Goethe ili TELC). Nastavak je na B1.1 – zajedno pokrivaju ceo nivo B1."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Šta ćeš naučiti u B1.2?\n\n- **Als ob** – Konjunktiv II za nestvarne situacije\n- **Wenn / Falls** – razlika i upotreba u mejlovima\n- **Relativsätze sa predlozima** – *der Kollege, von dem…*\n- **Futur I** – werden + Infinitiv za planove i predviđanja\n- **Temporalsätze** – während / bevor / nachdem\n- **Finalsätze** – um…zu / damit\n- **Partizip Präsens** – kao pridev i kao prilog\n- **Zweiteilige Konnektoren** – sowohl…als auch, weder…noch\n- **Lesen & Schreiben** – reklamacije, mejlovi, argumentovanje\n- **Priprema za ispit B1** – Lesen, Hören, Schreiben, Sprechen + Modelltest"
+      },
+      {
+        "type": "text",
+        "style": "uebung",
+        "content": "## Kako da učiš?\n\n1. **Pogledaj video** – gramatičke lekcije imaju video objašnjenje\n2. **Pročitaj sadržaj** – tabele, formule i primeri ispod videa\n3. **Uradi vežbe** – spoileri, flashcards i kvizovi\n4. **AI vežbe** – prevod i dijalog na kraju svake lekcije\n5. **Test po modulu** – proveri znanje posle svake celine\n6. **Modelltest** – na kraju kursa uradiš završni ispit"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "Počni sa prvom lekcijom kada budeš spremna. **Viel Erfolg!** 🎉"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "💡 **Savet:** Ako ti treba podsetnik gramatike sa nižih nivoa, koristi naš **Masterclass A2-B1** kurs."
+      }
+    ]
+  },
+  {
+    "id": "365d73ee-c05a-438e-b8e6-f982e62c766c",
+    "order_index": 1,
+    "title": "Höfliche Bitten – Konjunktiv II",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 1 · Unter Kollegen",
+        "category": "grammatik"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Kako da nešto zamoliš **učtivo** na nemačkom? Koristiš Konjunktiv II – isto kao naše „Da li biste mogli…“ umesto „Možeš li…“. To zvuči ljubaznije, posebno na poslu i sa nepoznatim ljudima."
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "## Kako nastaje Konjunktiv II\n\nKonjunktiv II = **Präteritum + Umlaut** (kod nepravilnih glagola):\n\n- *war → wäre*\n- *hatte → hätte*\n- *konnte → könnte*\n- *durfte → dürfte*\n- *wurde → würde*\n\nU praksi za većinu glagola koristiš *würde + Infinitiv*."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Direktno vs. učtivo\n\nUporedi – ista molba, drugačiji ton:"
+      },
+      {
+        "rows": [
+          [
+            "Kannst du mir helfen?",
+            "Könntest du mir helfen?"
+          ],
+          [
+            "Können Sie das wiederholen?",
+            "Könnten Sie das bitte wiederholen?"
+          ],
+          [
+            "Hilfst du mir?",
+            "Würdest du mir helfen?"
+          ],
+          [
+            "Gibst du mir das?",
+            "Würdest du mir das geben?"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Direktno",
+          "Učtivo (Konjunktiv II)"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Dva načina za učtivu molbu\n\n1. **könnten / würden** + Infinitiv (na kraju)\n2. Dodaj **bitte** – još učtivije."
+      },
+      {
+        "type": "formula",
+        "content": "Könnten Sie + … + Infinitiv?\nWürden Sie + … + Infinitiv?\n+ bitte = još učtivije"
+      },
+      {
+        "rows": [
+          [
+            "Könnten Sie mir bitte den Bericht schicken?",
+            "Da li biste mi poslali izveštaj, molim Vas?"
+          ],
+          [
+            "Würdest du bitte das Fenster schließen?",
+            "Da li bi zatvorio prozor, molim te?"
+          ],
+          [
+            "Dürfte ich Sie etwas fragen?",
+            "Smem li nešto da Vas pitam?"
+          ],
+          [
+            "Hätten Sie kurz Zeit für mich?",
+            "Da li biste imali trenutak za mene?"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Nemački",
+          "Prevod"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "## U kancelariji\n\n- *Könnten Sie mir beim Projekt helfen?*\n- *Würden Sie mir die Datei bis morgen schicken?*\n- *Dürfte ich heute früher gehen?*\n- *Wäre es möglich, den Termin zu verschieben?*"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Könntest du mir helfen?",
+            "question": "Kannst du mir helfen? →"
+          },
+          {
+            "answer": "Könnten Sie das (bitte) wiederholen?",
+            "question": "Können Sie das wiederholen? →"
+          },
+          {
+            "answer": "Würdest du mir das Buch geben?",
+            "question": "Gibst du mir das Buch? →"
+          },
+          {
+            "answer": "Würdest du mir kurz helfen?",
+            "question": "Hilfst du mir kurz? →"
+          }
+        ],
+        "title": "Mini vežba – pretvori u učtivu molbu"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "könntest du",
+            "front": "kannst du"
+          },
+          {
+            "back": "könnten Sie",
+            "front": "können Sie"
+          },
+          {
+            "back": "dürfte ich",
+            "front": "darf ich"
+          },
+          {
+            "back": "hättest du Zeit",
+            "front": "hast du Zeit"
+          },
+          {
+            "back": "würdest du mir geben",
+            "front": "gibst du mir"
+          }
+        ],
+        "backLabel": "Učtivo",
+        "frontLabel": "Direktno"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "📌 **Zapamti:** *könnten* i *würden* su Konjunktiv II oblici. Uz *bitte* zvučiš najljubaznije. Ovo ti treba i u Schreiben i u Sprechen delu ispita."
+      }
+    ]
+  },
+  {
+    "id": "7b1f052d-c9f3-4e6a-be74-9dcdb943a970",
+    "order_index": 2,
+    "title": "Relativsätze mit Präpositionen",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 1 · Unter Kollegen",
+        "category": "grammatik"
+      },
+      {
+        "type": "video",
+        "vimeoId": "1194014794"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Relativne rečenice sa predlozima zvuče komplikovano, ali imaju jasno pravilo: **predlog uvek ide ISPRED relativne zamenice – nikad na kraj rečenice.** Npr. *Das Projekt, an dem wir arbeiten…*"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Obnavljanje: relativne zamenice\n\nZamenica se poklapa sa rodom imenice na koju se odnosi (ne sa smislom!) i menja se po padežu predloga."
+      },
+      {
+        "rows": [
+          [
+            "Nominativ",
+            "der",
+            "die",
+            "das",
+            "die"
+          ],
+          [
+            "Akkusativ",
+            "den",
+            "die",
+            "das",
+            "die"
+          ],
+          [
+            "Dativ",
+            "dem",
+            "der",
+            "dem",
+            "denen"
+          ],
+          [
+            "Genitiv",
+            "dessen",
+            "deren",
+            "dessen",
+            "deren"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Padež",
+          "Maskulin",
+          "Feminin",
+          "Neutrum",
+          "Plural"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "Poklapaju se sa određenim članom – **osim u Dativu množine (denen)** i u Genitivu (dessen/deren)."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Predlog + relativna zamenica\n\nMnogi glagoli na poslu traže predlog (*arbeiten an*, *sich bewerben um*, *sich wenden an*, *erzählen von*, *sich kümmern um*). Taj predlog stavljamo ISPRED zamenice."
+      },
+      {
+        "rows": [
+          [
+            "von",
+            "von dem",
+            "von der",
+            "von dem",
+            "von denen"
+          ],
+          [
+            "mit",
+            "mit dem",
+            "mit der",
+            "mit dem",
+            "mit denen"
+          ],
+          [
+            "bei",
+            "bei dem",
+            "bei der",
+            "bei dem",
+            "bei denen"
+          ],
+          [
+            "für",
+            "für den",
+            "für die",
+            "für das",
+            "für die"
+          ],
+          [
+            "um",
+            "um den",
+            "um die",
+            "um das",
+            "um die"
+          ],
+          [
+            "an",
+            "an dem",
+            "an der",
+            "an dem",
+            "an denen"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Predlog",
+          "Maskulin",
+          "Feminin",
+          "Neutrum",
+          "Plural"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "## Primeri iz kancelarije\n\n- *Das ist der Kollege, **von dem** ich dir erzählt habe.* – To je kolega o kome sam ti pričao/la.\n- *Die Firma, **bei der** ich mich beworben habe, ist international.* – Firma kod koje sam se prijavio/la je internacionalna.\n- *Die Kollegen, **mit denen** die Zusammenarbeit so gut funktioniert, sind im dritten Stock.* – Kolege sa kojima saradnja odlično funkcioniše su na trećem spratu.\n- *Der Arbeitsplatz, **auf den** ich so lange gewartet habe, ist perfekt.* – Radno mesto koje sam tako dugo čekao/la je savršeno."
+      },
+      {
+        "type": "mistakes",
+        "items": [
+          {
+            "wrong": "Der Kollege, von der ich erzählt habe…",
+            "correct": "Der Kollege, von dem ich erzählt habe…",
+            "explanation": "„Kollege\" se završava na -e, ali je MUŠKOG roda!"
+          },
+          {
+            "wrong": "Die Stelle, ich habe mich beworben für…",
+            "correct": "Die Stelle, für die ich mich beworben habe…",
+            "explanation": "Predlog uvek ISPRED zamenice – nikad na kraj."
+          },
+          {
+            "wrong": "Die Kollegen, mit den ich zusammenarbeite…",
+            "correct": "Die Kollegen, mit denen ich zusammenarbeite…",
+            "explanation": "Plural u Dativu je uvek DENEN – obavezno sa -n!"
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## 5 koraka za gradnju\n\n1. Nađi glagol i njegov predlog (npr. *arbeiten an*).\n2. Predlog stavi ISPRED zamenice.\n3. Odredi rod imenice (der/die/das).\n4. Dekliniraj zamenicu po padežu predloga.\n5. Glagol ide na kraj relativne rečenice."
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "an die",
+            "question": "Das ist die Chefin, ______ sich alle wenden können. (sich wenden an + Akk.)"
+          },
+          {
+            "answer": "mit dem",
+            "question": "Der Kollege, ______ ich oft spreche, ist nett. (sprechen mit + Dat.)"
+          },
+          {
+            "answer": "von denen",
+            "question": "Die Kolleginnen, ______ der Einfluss groß ist, arbeiten hier seit 10 Jahren. (von + Dat.)"
+          },
+          {
+            "answer": "um die",
+            "question": "Die Stelle, ______ ich mich beworben habe, war schon vergeben. (sich bewerben um + Akk.)"
+          }
+        ],
+        "title": "Mini vežba – dopuni predlog + zamenicu"
+      },
+      {
+        "rows": [
+          [
+            "der Auftrag, ¨e",
+            "nalog, zadatak"
+          ],
+          [
+            "die Zusammenarbeit (nur Sg.)",
+            "saradnja"
+          ],
+          [
+            "der Einfluss, ¨e",
+            "uticaj"
+          ],
+          [
+            "der Arbeitsplatz, ¨e",
+            "radno mesto"
+          ],
+          [
+            "sich bewerben um + Akk",
+            "prijaviti se za"
+          ],
+          [
+            "sich wenden an + Akk",
+            "obratiti se"
+          ]
+        ],
+        "type": "vocabulary"
+      }
+    ]
+  },
+  {
+    "id": "90dac693-4bc7-4355-ad03-76f7f1859064",
+    "order_index": 3,
+    "title": "Wenn oder Falls – Konditionalsätze",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 1 · Unter Kollegen",
+        "category": "grammatik"
+      },
+      {
+        "type": "video",
+        "vimeoId": "1194021785"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "**Wenn** i **falls** oba znače „ako\", ali ton je potpuno drugačiji. Kad znaš razliku, zvučiš profesionalnije – naročito u mejlovima."
+      },
+      {
+        "rows": [
+          [
+            "wenn",
+            "sigurno, ponavljano, očekivano – rutina i pravila",
+            "ako / kada"
+          ],
+          [
+            "falls",
+            "neizvesno, hipotetičko, formalno – mejlovi, neočekivano",
+            "ukoliko / u slučaju da"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Veznik",
+          "Kada se koristi",
+          "Prevod"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "## WENN – rutina i pravila na poslu\n\n- *Wenn ich morgens ins Büro komme, mache ich mir einen Kaffee.* (svakodnevna rutina)\n- *Wenn die Atmosphäre im Team gut ist, wirkt sich das positiv aus.* (opšte pravilo)\n- *Wenn ein Kollege krank ist, muss er sich krankmelden.* (čvrsto pravilo)"
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "## FALLS – neizvesnost i formalne situacije\n\n- *Falls Sie Fragen zum Auftrag haben, wenden Sie sich bitte an mich.* (ponuda pomoći)\n- *Falls der Kollege seinen Bericht nicht abgibt, gibt es Konsequenzen.* (neizvesno)\n- *Falls jemand plötzlich krank wird, meldet euch bitte bis 8 Uhr.* (mejl timu)"
+      },
+      {
+        "type": "mistakes",
+        "items": [
+          {
+            "wrong": "Falls ich jeden Tag ins Büro komme, trinke ich Kaffee.",
+            "correct": "Wenn ich jeden Tag ins Büro komme, trinke ich Kaffee.",
+            "explanation": "„jeden Tag\" = ponavljano → WENN."
+          },
+          {
+            "wrong": "Wenn ein Feuer ausbricht, verlassen Sie das Gebäude.",
+            "correct": "Falls ein Feuer ausbricht, verlassen Sie das Gebäude.",
+            "explanation": "Požar je neizvestan, hipotetičan → FALLS."
+          }
+        ]
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Falls",
+            "question": "______ du Hilfe beim Auftrag brauchst, wende dich an mich. (formalna ponuda)"
+          },
+          {
+            "answer": "Wenn",
+            "question": "______ ich nach Hause komme, koche ich Abendessen. (svaki dan)"
+          },
+          {
+            "answer": "Falls",
+            "question": "______ Sie noch Änderungen haben, geben Sie mir bitte Bescheid. (mejl)"
+          },
+          {
+            "answer": "Wenn",
+            "question": "______ das Wetter schön ist, gehen wir spazieren. (uvek tako)"
+          }
+        ],
+        "title": "Mini vežba – wenn ili falls?"
+      },
+      {
+        "rows": [
+          [
+            "der Auftrag, ¨e",
+            "nalog, zadatak"
+          ],
+          [
+            "die Konsequenz, -en",
+            "posledica"
+          ],
+          [
+            "sich wenden an + Akk",
+            "obratiti se"
+          ],
+          [
+            "sich krankmelden",
+            "javiti se da si bolestan"
+          ],
+          [
+            "plötzlich",
+            "iznenada"
+          ],
+          [
+            "eventuell",
+            "eventualno"
+          ]
+        ],
+        "type": "vocabulary"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "**Zapamti:** ponavljanje = *wenn*; neizvesnost i formalni mejl = *falls*. U svakodnevnom govoru ljudi često koriste *wenn* i tamo gde bi moglo *falls* – ali na ispitu znaj razliku!"
+      }
+    ]
+  },
+  {
+    "id": "24165a28-76f0-48b7-a8f6-1254a607e24e",
+    "order_index": 4,
+    "title": "Freundschaften im Job – Leseverstehen und Wortschatz",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 1 · Unter Kollegen",
+        "category": "lesen"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Originalni tekst za čitanje sa ispita – intervju sa karijernom ekspertkinjom o prijateljstvima na poslu. Prvo pročitaj tekst, pa odgovori na pitanja. Obrati pažnju na konstrukciju **je … desto** koja se ovde pojavljuje više puta."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## B2 · Freundschaften im Job\n\n*Lesen Sie den Text. Was ist richtig?*\n\nFreundschaften im Job haben positiven Einfluss auf das Betriebsklima. Trotzdem warnt die Karriereexpertin **Tanja Pieper** vor zu engen Freundschaften am Arbeitsplatz."
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "**– Frau Pieper, Studien zeigen, dass Freundschaften am Arbeitsplatz das Betriebsklima verbessern. Je angenehmer die Arbeitsatmosphäre ist, desto weniger Stress haben die Mitarbeiter und desto besser arbeiten sie. Warum warnen Sie trotzdem vor Freundschaften im Job?**\n\nNun ja, Freundschaften im Job können auch zu Problemen führen. So kann zum Beispiel die Freundin plötzlich zur Chefin werden.\n\n**– Privat- und Berufsleben sollten also getrennt werden?**\n\nNein, ein gutes Betriebsklima ist schon wichtig. Je kälter das Betriebsklima ist, desto schneller wechseln die Mitarbeiter den Betrieb und desto häufiger sind sie krank.\n\n**– Ist es nicht schwierig, immer auf Distanz zu bleiben?**\n\nEinen freundschaftlichen Umgang kann man nicht vermeiden. Aber der Kontakt muss trotzdem professionell bleiben.\n\n**– Und wie schafft man das?**\n\nZunächst sollte man gute Zusammenarbeit nicht mit Freundschaft verwechseln. Außerdem gibt es am Arbeitsplatz natürlich Tabuthemen, beispielsweise Beziehungsprobleme und Geldsorgen."
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Falsch – dobra atmosfera znači manje stresa i bolji rad (je angenehmer … desto besser).",
+            "question": "1. Freundschaften im Job beeinflussen die Arbeitsleistung negativ."
+          },
+          {
+            "answer": "Richtig – „können auch zu Problemen führen“.",
+            "question": "2. Frau Pieper meint, dass Freundschaften im Job auch problematisch sein können."
+          },
+          {
+            "answer": "Falsch – obrnuto: hladna atmosfera = češće bolovanje.",
+            "question": "3. Angestellte, die sich am Arbeitsplatz wohlfühlen, melden sich häufiger krank."
+          },
+          {
+            "answer": "Falsch – postoje Tabuthemen (Beziehungsprobleme, Geldsorgen).",
+            "question": "4. Auch sehr private Gesprächsthemen sind am Arbeitsplatz sinnvoll."
+          }
+        ],
+        "title": "Pitanja uz tekst – Was ist richtig? (Richtig / Falsch)"
+      },
+      {
+        "rows": [
+          [
+            "das Betriebsklima (nur Sg.)",
+            "atmosfera na poslu"
+          ],
+          [
+            "der Einfluss, ¨e",
+            "uticaj"
+          ],
+          [
+            "die Karriereexpertin, -nen",
+            "stručnjakinja za karijeru"
+          ],
+          [
+            "der Umgang (nur Sg.)",
+            "ophođenje, odnos"
+          ],
+          [
+            "vermeiden",
+            "izbeći"
+          ],
+          [
+            "verwechseln (mit + Dat)",
+            "pobrkati, zameniti"
+          ],
+          [
+            "das Tabuthema, -themen",
+            "tabu tema"
+          ],
+          [
+            "die Geldsorgen (Pl.)",
+            "novčane brige"
+          ],
+          [
+            "trennen (von + Dat)",
+            "razdvojiti"
+          ],
+          [
+            "professionell",
+            "profesionalan"
+          ]
+        ],
+        "type": "vocabulary"
+      },
+      {
+        "type": "text",
+        "style": "uebung",
+        "content": "## B3 · Kollegen oder Freunde? – Diskussion\n\nNapravi beleške i razgovaraj/piši:\n\n1. *Sind Freundschaften im Job in Ordnung?*\n2. *Welche Gesprächsthemen sind im Job okay / tabu?*\n3. *Welche Regeln im Umgang mit Kollegen finden Sie wichtig?*"
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "**Redemittel za odgovor:**\n\n- *Ich finde, dass Freundschaften im Job sinnvoll sind. Denn je besser man sich mit den Kollegen versteht, desto besser arbeitet man.*\n- *Ja, das denke ich auch. Ich habe meine beste Freundin auf der Arbeit kennengelernt.*\n- *Ich bin anderer Meinung, denn private Probleme sollten nicht ins Büro kommen.*"
+      }
+    ]
+  },
+  {
+    "id": "87d135c7-fb0c-499c-9fb2-75f2347592c0",
+    "order_index": 5,
+    "title": "Probleme im Büro",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 1 · Unter Kollegen",
+        "category": "lesen"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Problemi na poslu – rokovi, pritužbe, nesporazumi. Učiš vokabular i fraze da opišeš problem i predložiš rešenje, učtivo ali jasno. Korisno za Lesen, Schreiben i Sprechen."
+      },
+      {
+        "rows": [
+          [
+            "die Beschwerde, -n",
+            "pritužba"
+          ],
+          [
+            "das Problem, -e",
+            "problem"
+          ],
+          [
+            "die Frist, -en",
+            "rok"
+          ],
+          [
+            "die Mahnung, -en",
+            "opomena"
+          ],
+          [
+            "der Fehler, -",
+            "greška"
+          ],
+          [
+            "das Missverständnis, -se",
+            "nesporazum"
+          ],
+          [
+            "die Lösung, -en",
+            "rešenje"
+          ],
+          [
+            "der Termin, -e",
+            "termin, rok sastanka"
+          ],
+          [
+            "der Vorgesetzte, -n",
+            "nadređeni"
+          ],
+          [
+            "die Verspätung, -en",
+            "kašnjenje"
+          ]
+        ],
+        "type": "vocabulary"
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "## Kako opisati problem (učtivo ali jasno)\n\n- *Es gibt ein Problem mit dem Projekt.* (Postoji problem sa projektom.)\n- *Leider können wir die Frist nicht einhalten.* (Nažalost ne možemo da ispoštujemo rok.)\n- *Ich glaube, da liegt ein Missverständnis vor.* (Mislim da je u pitanju nesporazum.)\n- *Könnten wir einen neuen Termin vereinbaren?* (Možemo li da dogovorimo novi termin?)"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Predloži rešenje\n\n- *Ich schlage vor, dass wir…* (Predlažem da…)\n- *Wie wäre es, wenn…?* (Šta kažeš da…?)\n- *Vielleicht könnten wir…* (Možda bismo mogli…)"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Richtig – wenn im Text steht, dass es Verspätung gab.",
+            "question": "Die Frist konnte nicht eingehalten werden."
+          },
+          {
+            "answer": "Falsch – höflich klären, nicht aggressiv reagieren.",
+            "question": "Bei einem Missverständnis sollte man sofort den Vorgesetzten anschreien."
+          }
+        ],
+        "title": "Richtig oder Falsch?"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Frist",
+            "question": "Wir können die ___ leider nicht einhalten. (rok)"
+          },
+          {
+            "answer": "Missverständnis",
+            "question": "Ich glaube, das ist nur ein ___. (nesporazum)"
+          },
+          {
+            "answer": "schlage",
+            "question": "Ich ___ vor, dass wir einen neuen Termin machen. (predlažem)"
+          }
+        ],
+        "title": "Mini vežba – vokabular"
+      }
+    ]
+  },
+  {
+    "id": "27c08280-e182-47a8-a34e-896a49a1aab6",
+    "order_index": 6,
+    "title": "Als ob – Konjunktiv II",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 2 · Bildung & Gefühle",
+        "category": "grammatik"
+      },
+      {
+        "type": "video",
+        "vimeoId": "1112584625"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "U ovoj lekciji učiš **als ob** rečenice – kako da opišeš nešto što *izgleda* tako, ali nije stvarno. Npr. *Sie tut so, als ob sie müde wäre* = „Pravi se kao da je umorna.\" Ključno pravilo: **als ob** uvek ide sa **Konjunktivom II**."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Prvo: Konjunktiv II (obnavljanje)\n\nAls ob ne radi bez Konjunktiva II. On izražava želje, mogućnosti i nestvarne situacije. Tri stuba koja moraš da znaš:"
+      },
+      {
+        "type": "formula",
+        "content": "sein  →  wäre\nhaben →  hätte\nostali glagoli →  würde + Infinitiv"
+      },
+      {
+        "rows": [
+          [
+            "ich",
+            "wäre",
+            "hätte",
+            "würde"
+          ],
+          [
+            "du",
+            "wärest",
+            "hättest",
+            "würdest"
+          ],
+          [
+            "er/sie/es",
+            "wäre",
+            "hätte",
+            "würde"
+          ],
+          [
+            "wir",
+            "wären",
+            "hätten",
+            "würden"
+          ],
+          [
+            "ihr",
+            "wärt",
+            "hättet",
+            "würdet"
+          ],
+          [
+            "sie/Sie",
+            "wären",
+            "hätten",
+            "würden"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Lice",
+          "sein → wäre",
+          "haben → hätte",
+          "würde"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "Modalni glagoli imaju svoj Konjunktiv II: **können → könnte**, **müssen → müsste**, **dürfen → dürfte**, **sollen → sollte**."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Kako se gradi „als ob\"\n\nAls ob je veznik (kao *weil*, *dass*) – zato **glagol ide na kraj** rečenice, a ispred „als ob\" dolazi **zarez**."
+      },
+      {
+        "rows": [
+          [
+            "Er spricht so, als ob er der Chef wäre.",
+            "On govori kao da je šef."
+          ],
+          [
+            "Sie tun so, als ob sie Geld hätten.",
+            "Prave se da imaju novca."
+          ],
+          [
+            "Du tust so, als ob du arbeiten würdest.",
+            "Praviš se kao da radiš."
+          ],
+          [
+            "Es sieht aus, als ob es gleich regnen würde.",
+            "Izgleda kao da će uskoro pasti kiša."
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Nemački",
+          "Prevod"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "## Redemittel – gotove fraze za utisak i osećaj\n\n**Utisak / izgled:** Er sieht so aus, als ob… · Sie wirkt so, als ob… · Es scheint so, als ob…\n\n**Osećaj / misli:** Es fühlt sich an, als ob… · Ich habe das Gefühl, als ob… · Mir kommt es so vor, als ob…"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "wäre",
+            "question": "Er tut so, als ob er krank ______. (sein)"
+          },
+          {
+            "answer": "hättest",
+            "question": "Du siehst aus, als ob du keine Sorgen ______. (haben)"
+          },
+          {
+            "answer": "hätte",
+            "question": "Sie redet, als ob sie mehr Zeit ______. (haben)"
+          },
+          {
+            "answer": "wärt",
+            "question": "Ihr spielt, als ob ihr Profis ______. (sein)"
+          },
+          {
+            "answer": "würdest",
+            "question": "Du tust so, als ob du nicht zur Party gehen ______. (gehen)"
+          }
+        ],
+        "title": "Mini vežba – dopuni Konjunktiv II"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "wäre",
+            "front": "sein"
+          },
+          {
+            "back": "hätte",
+            "front": "haben"
+          },
+          {
+            "back": "könnte",
+            "front": "können"
+          },
+          {
+            "back": "müsste",
+            "front": "müssen"
+          },
+          {
+            "back": "dürfte",
+            "front": "dürfen"
+          },
+          {
+            "back": "sollte",
+            "front": "sollen"
+          }
+        ],
+        "backLabel": "Konjunktiv II",
+        "frontLabel": "Infinitiv"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Als ob vs. realnost 😄\n\nNajlakše se pamti kroz primere – utisak nasuprot stvarnosti:\n\n- *Er lebt, als ob er Millionär wäre.* → Realnost: kredit za telefon i auto još 5 godina.\n- *Er gibt Trinkgeld, als ob er ein Scheich wäre.* → Realnost: na kraju pita može li da se podeli račun.\n- *Sie kocht, als ob eine Hochzeit wäre.* → Realnost: dolaze samo dvoje prijatelja na večeru."
+      }
+    ]
+  },
+  {
+    "id": "07d96c4f-cd55-43cf-ac7a-5e93f78cac91",
+    "order_index": 7,
+    "title": "Reflexive Verben mit Präpositionen",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 2 · Bildung & Gefühle",
+        "category": "grammatik"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Mnogi povratni glagoli idu sa fiksnim predlogom: *sich freuen **auf**, sich interessieren **für**, sich ärgern **über**.* Predlog se mora naučiti zajedno sa glagolom – i određuje padež. Plus: učiš **Pronominaladverbien** (*worüber → darüber*)."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Najvažniji povratni glagoli sa predlogom"
+      },
+      {
+        "rows": [
+          [
+            "sich freuen auf",
+            "Akkusativ",
+            "radovati se (unapred)"
+          ],
+          [
+            "sich freuen über",
+            "Akkusativ",
+            "radovati se (nečemu)"
+          ],
+          [
+            "sich interessieren für",
+            "Akkusativ",
+            "interesovati se za"
+          ],
+          [
+            "sich ärgern über",
+            "Akkusativ",
+            "ljutiti se na"
+          ],
+          [
+            "sich kümmern um",
+            "Akkusativ",
+            "brinuti se o"
+          ],
+          [
+            "sich erinnern an",
+            "Akkusativ",
+            "sećati se"
+          ],
+          [
+            "sich treffen mit",
+            "Dativ",
+            "sastati se sa"
+          ],
+          [
+            "sich beschäftigen mit",
+            "Dativ",
+            "baviti se"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Glagol + predlog",
+          "Padež",
+          "Prevod"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "## Primeri\n\n- *Ich **freue mich auf** das Wochenende.* (Radujem se vikendu.)\n- *Sie **interessiert sich für** Kunst.* (Zanima je umetnost.)\n- *Er **ärgert sich über** den Stau.* (Ljuti se zbog gužve.)\n- *Wir **treffen uns mit** Freunden.* (Nalazimo se s prijateljima.)"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Pronominaladverbien – da ne ponavljaš stvar\n\nKad se predlog odnosi na **stvar** (ne na osobu), spajaš ga u jednu reč:\n\n- pitanje: **wo(r) + predlog** → *worüber? worauf? wofür?*\n- odgovor: **da(r) + predlog** → *darüber, darauf, dafür*\n\n*r* se ubacuje kad predlog počinje samoglasnikom (*wor**über**, dar**auf***)."
+      },
+      {
+        "rows": [
+          [
+            "über",
+            "Worüber sprichst du?",
+            "Ich spreche darüber."
+          ],
+          [
+            "auf",
+            "Worauf wartest du?",
+            "Ich warte darauf."
+          ],
+          [
+            "für",
+            "Wofür interessierst du dich?",
+            "Ich interessiere mich dafür."
+          ],
+          [
+            "an",
+            "Woran denkst du?",
+            "Ich denke daran."
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Predlog",
+          "Pitanje (stvar)",
+          "Odgovor (stvar)"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "📌 **Važno:** za **osobe** NE koristiš da-/wo- oblik, nego predlog + zamenicu: *Auf **wen** wartest du? – Ich warte **auf ihn**.* (Worauf = stvar, Auf wen = osoba.)"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "auf",
+            "question": "Ich freue mich ___ das Wochenende. (radujem se unapred)"
+          },
+          {
+            "answer": "für",
+            "question": "Sie interessiert sich ___ Musik."
+          },
+          {
+            "answer": "über",
+            "question": "Er ärgert sich ___ das Wetter."
+          },
+          {
+            "answer": "um",
+            "question": "Wir kümmern uns ___ die Kinder."
+          }
+        ],
+        "title": "Mini vežba – dopuni predlog"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Worauf",
+            "question": "___ wartest du? (na šta?)"
+          },
+          {
+            "answer": "daran",
+            "question": "Ich denke oft ___. (na to)"
+          },
+          {
+            "answer": "Wofür",
+            "question": "___ interessierst du dich? (za šta?)"
+          }
+        ],
+        "title": "Vežba – worüber/darüber?"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "auf / über (Akk.)",
+            "front": "sich freuen …"
+          },
+          {
+            "back": "für (Akk.)",
+            "front": "sich interessieren …"
+          },
+          {
+            "back": "über (Akk.)",
+            "front": "sich ärgern …"
+          },
+          {
+            "back": "um (Akk.)",
+            "front": "sich kümmern …"
+          },
+          {
+            "back": "mit (Dat.)",
+            "front": "sich treffen …"
+          },
+          {
+            "back": "an (Akk.)",
+            "front": "sich erinnern …"
+          }
+        ],
+        "backLabel": "Predlog (+ padež)",
+        "frontLabel": "Glagol"
+      }
+    ]
+  },
+  {
+    "id": "cd0ad37e-1178-44b4-8c4c-7ae85411b7b2",
+    "order_index": 8,
+    "title": "Passiv und Ratschläge",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 3 · Gesundheit",
+        "category": "grammatik"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Dve teme iz oblasti zdravlja: **Passiv** (kad je važna radnja, a ne ko je vrši – *Das Medikament **wird** zweimal täglich **genommen***) i davanje **saveta** (*An deiner Stelle würde ich…*). Obe su standardne na B1."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Pasiv – fokus na radnju\n\nAktiv: *Der Arzt untersucht den Patienten.* (Ko? bitno)\nPasiv: *Der Patient **wird** untersucht.* (Šta se radi? bitno)\n\nGradi se: **werden** (lično) + **Partizip II** (na kraju)."
+      },
+      {
+        "type": "formula",
+        "content": "Präsens Passiv: werden + Partizip II\nDas Rezept wird ausgestellt.\nDie Tabletten werden eingenommen."
+      },
+      {
+        "rows": [
+          [
+            "Man nimmt die Tablette mit Wasser.",
+            "Die Tablette wird mit Wasser genommen."
+          ],
+          [
+            "Der Arzt schreibt ein Rezept.",
+            "Ein Rezept wird geschrieben."
+          ],
+          [
+            "Man operiert den Patienten.",
+            "Der Patient wird operiert."
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Aktiv",
+          "Passiv"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Pasiv sa modalnim glagolom\n\n**Modalverb + Partizip II + werden** (Infinitiv na kraju):\n\n- *Die Tablette **muss** vor dem Essen **genommen werden**.* (mora se uzeti pre jela)\n- *Das Formular **kann** online **ausgefüllt werden**.* (može se popuniti onlajn)"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Davanje saveta (Ratschläge)\n\nViše načina, od mekšeg ka jačem:\n\n- *Du **solltest** mehr schlafen.* (Trebalo bi da…)\n- *An deiner Stelle **würde ich** einen Arzt fragen.* (Da sam na tvom mestu…)\n- *Es **wäre** besser, wenn du dich ausruhst.* (Bilo bi bolje da…)"
+      },
+      {
+        "rows": [
+          [
+            "Du solltest weniger Kaffee trinken.",
+            "Trebalo bi da piješ manje kafe."
+          ],
+          [
+            "An deiner Stelle würde ich zum Arzt gehen.",
+            "Da sam na tvom mestu, otišao bih kod lekara."
+          ],
+          [
+            "Es wäre gut, wenn du mehr Wasser trinkst.",
+            "Bilo bi dobro da piješ više vode."
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Nemački",
+          "Prevod"
+        ]
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Die Tablette wird dreimal täglich genommen.",
+            "question": "Man nimmt die Tablette dreimal täglich. →"
+          },
+          {
+            "answer": "Ein Rezept wird (vom Arzt) geschrieben.",
+            "question": "Der Arzt schreibt ein Rezept. →"
+          },
+          {
+            "answer": "Das Formular muss ausgefüllt werden.",
+            "question": "Man muss das Formular ausfüllen. →"
+          }
+        ],
+        "title": "Mini vežba – pretvori u pasiv"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Du solltest mehr schlafen / dich ausruhen.",
+            "question": "Tvoj prijatelj je umoran. (sollen)"
+          },
+          {
+            "answer": "An deiner Stelle würde ich einen Arzt fragen.",
+            "question": "Boli ga glava. (an deiner Stelle)"
+          },
+          {
+            "answer": "Es wäre besser, wenn du eine Pause machst.",
+            "question": "Stalno je pod stresom. (es wäre besser)"
+          }
+        ],
+        "title": "Vežba – daj savet"
+      },
+      {
+        "rows": [
+          [
+            "die Tablette, -n",
+            "tableta"
+          ],
+          [
+            "das Rezept, -e",
+            "recept"
+          ],
+          [
+            "einnehmen",
+            "uzimati (lek)"
+          ],
+          [
+            "untersuchen",
+            "pregledati"
+          ],
+          [
+            "sich ausruhen",
+            "odmoriti se"
+          ],
+          [
+            "der Ratschlag, ¨e",
+            "savet"
+          ]
+        ],
+        "type": "vocabulary"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "📌 **Pasiv ukratko:** *werden + Partizip II*. Sa modalom: *muss/kann … Partizip II + werden*. **Saveti:** *solltest*, *an deiner Stelle würde ich*, *es wäre besser, wenn*."
+      }
+    ]
+  },
+  {
+    "id": "67867da5-4ee9-4bef-8426-1cf7198eb55d",
+    "order_index": 9,
+    "title": "Das Paket ist nicht angekommen",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 4 · Auf dem Amt",
+        "category": "lesen"
+      },
+      {
+        "type": "video",
+        "vimeoId": "1193593583"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Paket ne stiže, stigne pogrešna veličina, hrana je hladna, uređaj se pokvari… U ovoj lekciji učiš da se **žališ na nemačkom** – i usmeno i pismeno. Ovo ti treba u stvarnom životu i na B1 ispitu (Schreiben)."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Vokabular – reklamacije"
+      },
+      {
+        "rows": [
+          [
+            "die Reklamation, -en",
+            "reklamacija (formalna pritužba)"
+          ],
+          [
+            "die Beschwerde, -n",
+            "žalba"
+          ],
+          [
+            "die Lieferung, -en",
+            "dostava"
+          ],
+          [
+            "der Defekt, -e",
+            "kvar"
+          ],
+          [
+            "die Rückerstattung, -en",
+            "povrat novca"
+          ],
+          [
+            "der Umtausch (nur Sg.)",
+            "zamena"
+          ],
+          [
+            "die Garantie, -n",
+            "garancija"
+          ],
+          [
+            "der Kundenservice (nur Sg.)",
+            "korisnička podrška"
+          ],
+          [
+            "die Bestellnummer, -n",
+            "broj narudžbine"
+          ],
+          [
+            "beschädigt",
+            "oštećen"
+          ]
+        ],
+        "type": "vocabulary"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Razdvojivi glagoli za reklamacije\n\nPazi – prefiks ide na kraj u prezentu: *Er **schickt** das Paket **zurück**.* / *Er **tauscht** das T-Shirt **um**.*"
+      },
+      {
+        "rows": [
+          [
+            "reklamieren",
+            "reklamirati (hat reklamiert)"
+          ],
+          [
+            "sich beschweren (über + Akk)",
+            "žaliti se (hat sich beschwert)"
+          ],
+          [
+            "zurückschicken",
+            "poslati nazad (schickt zurück)"
+          ],
+          [
+            "umtauschen",
+            "zameniti (tauscht um)"
+          ],
+          [
+            "erstatten",
+            "nadoknaditi, vratiti novac"
+          ],
+          [
+            "liefern",
+            "isporučiti"
+          ]
+        ],
+        "type": "vocabulary"
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "## Primer mejla – Janin reklamacija\n\n*Betreff: Reklamation zu Bestellung Nr. 47823*\n\n*Sehr geehrte Damen und Herren,*\n*ich habe am 1. April eine Jacke bestellt (Bestellnummer: 47823). Laut Ihrer Website sollte die Lieferung innerhalb von 3–5 Werktagen erfolgen. Leider ist das Paket bis heute nicht angekommen.*\n*Könnten Sie bitte den Status meiner Bestellung prüfen? Falls das Paket verloren gegangen ist, bitte ich um eine Rückerstattung.*\n*Mit freundlichen Grüßen, Jana Kovač*"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Struktura mejla za žalbu – nauči je za ispit!\n\n1. **Betreff i obraćanje** – *Betreff: Reklamation zu Bestellung Nr. ___* · *Sehr geehrte Damen und Herren,*\n2. **Šta sam naručio?** – *Ich habe am ___ ___ bestellt (Bestellnummer: ___).*\n3. **U čemu je problem?** – *Leider muss ich Ihnen mitteilen, dass ___.*\n4. **Šta očekujem?** – *Ich bitte Sie daher um ___. Bitte antworten Sie bis zum ___.*\n5. **Pozdrav** – *Mit freundlichen Grüßen, [Ime]*"
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "## Korisne fraze – höflich aber bestimmt (učtivo ali odlučno)\n\n**Problem:** *Das Produkt ist beschädigt / falsch / defekt angekommen.* · *Die Lieferung war ___ Stunden zu spät.*\n\n**Rešenje:** *Ich bitte um Rückerstattung.* · *Ich möchte das Produkt umtauschen.* · *Ich erwarte eine Entschädigung.*"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Richtig",
+            "question": "Jana hat eine Woche auf das Paket gewartet und nichts bekommen."
+          },
+          {
+            "answer": "Falsch – Bestellnummer immer angeben, das beschleunigt alles.",
+            "question": "Man muss die Bestellnummer NICHT angeben."
+          },
+          {
+            "answer": "Richtig",
+            "question": "Bei einem defekten Gerät unter Garantie kann man reklamieren."
+          }
+        ],
+        "title": "Pitanja za čitanje – Richtig oder Falsch?"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "schickt … zurück",
+            "question": "Er ___ das Paket ___. (zurückschicken)"
+          },
+          {
+            "answer": "umtauschen",
+            "question": "Ich möchte das T-Shirt ___. (umtauschen)"
+          },
+          {
+            "answer": "beschwere … mich",
+            "question": "Ich ___ mich über die späte Lieferung ___. (sich beschweren)"
+          }
+        ],
+        "title": "Mini vežba – dopuni razdvojivi glagol"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "🎯 Sad umeš da reklamiraš na nemačkom – pismeno i usmeno. Ton: učtivo ali jasno, ni agresivno ni previše stidljivo."
+      }
+    ]
+  },
+  {
+    "id": "0da24af8-40b5-4afe-b3b9-0cb64951fccd",
+    "order_index": 10,
+    "title": "Duzen vs. Siezen – Prüfung B1 – Leseverstehen",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 4 · Auf dem Amt",
+        "category": "lesen"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Originalna čitalačka pisma (Leserbriefe) na temu **nepersiranja i persiranja** – tip zadatka koji se pojavljuje na B1 ispitu. Svako pismo iznosi mišljenje. Tvoj zadatak je da uhvatiš **stav** svakog autora: da li je za brzo „du“ ili protiv."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Leserbriefe – pisma čitalaca\n\nPročitaj svako pismo i odredi: da li je osoba **za** ili **protiv** brzog nepersiranja?"
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "**Sibylle, 45, Freiburg:** Ich finde es unmöglich, wie oft ich heute von fremden Menschen einfach so geduzt werde. Vor allem unter Verkäufern scheint das Mode zu sein… Was ist so schlimm am Sie?\n\n**Kathrin, 23, Berlin:** Mich hat neulich ein Mitstudent gesiezt. Zuerst dachte ich, für wie alt hält der mich? Aber eigentlich hatte er Recht… Plötzlich fand ich es schön. Das hat doch was!\n\n**Sigi, 45, Bad Bergzabern:** Mal ehrlich, wer braucht denn heute noch das Sie? Außer vielleicht gegenüber dem Chef! Wer höflich ist, ist es auch per Du.\n\n**Olga, 62, Radevormwald:** Kinder lernen das höfliche Siezen gar nicht mehr… Die Kinder meiner Nachbarin sagen alle „Du“ zu mir, obwohl ich das nicht will."
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "**Ellen, 56, Leipzig:** Unter jungen Leuten ist das Du heute fast normal, z. B. in der Kneipe. Eigentlich eine schöne Entwicklung – am Abend sind wir ja alle gleich, oder?\n\n**Theo, 19, Münster:** Gleich am ersten Arbeitstag bot mir meine Chefin das „Du“ an. Keine Woche später war klar: ständig Überstunden – ohne Bezahlung! Ob ich da per Du meine Rechte durchsetzen kann?\n\n**Anton, 78, Moers:** Zu meiner Zeit war es undenkbar, Fremde zu duzen! Aber ich finde es prima, dass man sich heute schneller duzt. Vieles lässt sich per Du leichter sagen.\n\n**Lothar, 37, Gelsenkirchen:** Das schnelle Duzen zeigt nur eins: Die Leute benehmen sich schlecht. Man kann sehr negativ auffallen, wenn man Leute zu schnell duzt."
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Protiv – smeta joj što je stranci duzaju.",
+            "question": "Sibylle (Freiburg) – za ili protiv brzog „du“?"
+          },
+          {
+            "answer": "Za „Sie“ – otkrila je da persiranje ima draž.",
+            "question": "Kathrin (Berlin)?"
+          },
+          {
+            "answer": "Za „du“ – smatra „Sie“ nepotrebnim.",
+            "question": "Sigi (Bad Bergzabern)?"
+          },
+          {
+            "answer": "Za „du“ – drago mu je da se danas brže prelazi na „du“.",
+            "question": "Anton (Moers)?"
+          },
+          {
+            "answer": "Protiv – brzo nepersiranje smatra lošim ponašanjem.",
+            "question": "Lothar (Gelsenkirchen)?"
+          }
+        ],
+        "title": "Pitanja – Wer ist dafür, wer dagegen?"
+      },
+      {
+        "rows": [
+          [
+            "duzen",
+            "obraćati se sa „du“ (ti)"
+          ],
+          [
+            "siezen",
+            "obraćati se sa „Sie“ (Vi)"
+          ],
+          [
+            "unmöglich",
+            "nemoguće, neprihvatljivo"
+          ],
+          [
+            "die Distanz, -en",
+            "distanca"
+          ],
+          [
+            "die Entwicklung, -en",
+            "razvoj, tok"
+          ],
+          [
+            "die Überstunden (Pl.)",
+            "prekovremeni sati"
+          ],
+          [
+            "seine Rechte durchsetzen",
+            "izboriti svoja prava"
+          ],
+          [
+            "negativ auffallen",
+            "ostaviti loš utisak"
+          ]
+        ],
+        "type": "vocabulary"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "💡 **Strategija za ovaj tip zadatka:** ne moraš razumeti svaku reč. Traži ključne signale stava – *unmöglich*, *schlimm*, *schlecht benehmen* (protiv) naspram *schön*, *prima*, *leichter* (za)."
+      }
+    ]
+  },
+  {
+    "id": "b19b28c3-869a-4ace-8c4b-720ca1e44bfb",
+    "order_index": 11,
+    "title": "Futur I – Ich sehe deine Zukunft",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 5 · Zukunft & Reisen",
+        "category": "grammatik"
+      },
+      {
+        "type": "video",
+        "vimeoId": "1193593540"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "🔮 Dobro došao/la kod Madame Zukunft – proročice koja proriče samo na nemačkom! U ovoj lekciji učiš **Futur I**: *werden + Infinitiv*. „Du **wirst** sehr gut Deutsch **sprechen**!\""
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Kada se koristi Futur I?\n\n- 🗓 **Planovi:** Ich werde nächsten Monat nach Berlin ziehen.\n- 🔮 **Predviđanja i pretpostavke:** Es wird morgen regnen.\n- 💪 **Obećanja:** Ich werde nie wieder zu spät kommen!\n- 📣 **Snažni zahtevi:** Du wirst jetzt sofort dein Zimmer aufräumen!"
+      },
+      {
+        "type": "formula",
+        "content": "Subjekt + werden (lično) + … + Infinitiv (na kraju!)"
+      },
+      {
+        "rows": [
+          [
+            "ich",
+            "werde",
+            "Ich werde Deutsch lernen."
+          ],
+          [
+            "du",
+            "wirst",
+            "Du wirst es schaffen!"
+          ],
+          [
+            "er/sie/es",
+            "wird",
+            "Es wird klappen."
+          ],
+          [
+            "wir",
+            "werden",
+            "Wir werden feiern!"
+          ],
+          [
+            "ihr",
+            "werdet",
+            "Ihr werdet staunen."
+          ],
+          [
+            "sie/Sie",
+            "werden",
+            "Sie werden zufrieden sein."
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Lice",
+          "werden",
+          "Primer"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "📌 **Merke:** *werden* se menja, Infinitiv ide na kraj. Kod razdvojivih glagola Infinitiv ostaje cео: *Ich werde früh aufstehen.* ✅ (ne: aufstehen werde)\n\n💡 U svakodnevnom govoru za planove se često koristi **Präsens + vremenska odrednica**: *Ich gehe morgen ins Kino* = *Ich werde morgen ins Kino gehen.* Oba su tačna!"
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "## Bonus: veznik „da\" (= weil, ali na početku)\n\n*da* objašnjava razlog kao *weil*, ali najčešće stoji **na početku** rečenice; glagol ide na kraj zavisne rečenice.\n\n- *Da ich morgen früh aufstehen muss, gehe ich jetzt schlafen.*\n- *Da du so fleißig lernst, wirst du die Prüfung bestehen.*"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "werde",
+            "question": "Ich ___ nächstes Jahr nach München ziehen."
+          },
+          {
+            "answer": "wirst",
+            "question": "Du ___ das nicht glauben!"
+          },
+          {
+            "answer": "wird",
+            "question": "Er ___ heute Abend nicht kommen."
+          },
+          {
+            "answer": "werdet",
+            "question": "Ihr ___ staunen, wie schnell ihr Fortschritte macht."
+          },
+          {
+            "answer": "wirst",
+            "question": "Da du so fleißig lernst, ___ du die Prüfung bestehen."
+          }
+        ],
+        "title": "Mini vežba – dopuni werden"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Du wirst bald fließend Deutsch sprechen.",
+            "question": "du / bald / fließend Deutsch / sprechen"
+          },
+          {
+            "answer": "Wir werden nächstes Jahr eine Reise machen.",
+            "question": "wir / nächstes Jahr / eine Reise / machen"
+          },
+          {
+            "answer": "Ich werde nie wieder zu spät kommen.",
+            "question": "ich / nie wieder / zu spät / kommen"
+          }
+        ],
+        "title": "Vežba – napravi Futur I rečenicu"
+      },
+      {
+        "rows": [
+          [
+            "die Umstellung, -en",
+            "promena, prilagođavanje"
+          ],
+          [
+            "sich gewöhnen an + Akk",
+            "naviknuti se na"
+          ],
+          [
+            "sich einleben",
+            "udomaćiti se"
+          ],
+          [
+            "das Herkunftsland, ¨er",
+            "zemlja porekla"
+          ],
+          [
+            "pünktlich",
+            "tačan"
+          ],
+          [
+            "Heimweh haben",
+            "čeznuti za domom"
+          ],
+          [
+            "ankommen",
+            "snaći se, biti prihvaćen"
+          ]
+        ],
+        "type": "vocabulary"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "🔮 „Du wirst Deutsch meistern – da bin ich mir ganz sicher!\" – Madame Zukunft 🌟"
+      }
+    ]
+  },
+  {
+    "id": "5066fc5d-4ef2-4061-9df6-6426213a6822",
+    "order_index": 12,
+    "title": "Temporalsätze: während · bevor · nachdem",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 5 · Zukunft & Reisen",
+        "category": "grammatik"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Tri veznika koja objašnjavaju **KADA** se nešto dešava: **während** (istovremeno), **bevor** (pre), **nachdem** (posle – radnja je završena). Kod sva tri glagol ide na kraj zavisne rečenice."
+      },
+      {
+        "rows": [
+          [
+            "während",
+            "istovremeno",
+            "dok",
+            "isto vreme"
+          ],
+          [
+            "bevor",
+            "prvo druga radnja",
+            "pre nego što",
+            "isto vreme"
+          ],
+          [
+            "nachdem",
+            "prvo ova radnja, pa glavna",
+            "nakon što",
+            "jedan korak unazad!"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Veznik",
+          "Značenje",
+          "Prevod",
+          "Vreme"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "## WÄHREND – dve stvari u isto vreme\n\n- *Ich höre Musik, während ich die Dateien kopiere.*\n- *Während das Update läuft, trinke ich einen Kaffee.*\n\n## BEVOR – prvo se desi drugo\n\n- *Bevor du den Computer ausschaltest, speichere die Datei!*\n- *Ich mache immer ein Backup, bevor ich das System aktualisiere.*"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## NACHDEM – radnja je ZAVRŠENA, pa dolazi glavna\n\nKlju­č je **slaganje vremena – nachdem je uvek jedan korak unazad:**"
+      },
+      {
+        "rows": [
+          [
+            "Perfekt",
+            "Präsens",
+            "sadašnjost / budućnost"
+          ],
+          [
+            "Plusquamperfekt",
+            "Präteritum",
+            "prošlost"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "nachdem-rečenica",
+          "Glavna rečenica",
+          "Situacija"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "- *Nachdem sie die Datei **gespeichert hat**, **schickt** sie die E-Mail.* (Perfekt → Präsens)\n- *Nachdem er den Ordner **gelöscht hatte**, **bemerkte** er den Fehler.* (Plusquamperfekt → Präteritum)"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "## Zapamti\n\n- **bevor**: radnja **glavne** rečenice dešava se PRE *bevor*-radnje → *Bevor ich den Ordner lösche, mache ich eine Sicherungskopie.* (prvo kopija, pa brisanje)\n- **nachdem**: radnja je već ZAVRŠENA pre glavne, zato vreme ide jedan korak unazad (Perfekt → Präsens, Plusquamperfekt → Präteritum).\n- **während**: obe radnje teku istovremeno."
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Bevor",
+            "question": "______ du auf den Link klickst, lies den Text! (prvo čitaj)"
+          },
+          {
+            "answer": "Während",
+            "question": "______ das Video lädt, schau dir die Kommentare an. (istovremeno)"
+          },
+          {
+            "answer": "Nachdem",
+            "question": "______ ich das Foto hochgeladen habe, teile ich den Link. (posle)"
+          },
+          {
+            "answer": "während",
+            "question": "Ich höre Podcast, ______ ich die E-Mails beantworte. (istovremeno)"
+          }
+        ],
+        "title": "Mini vežba – während, bevor ili nachdem?"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "installiert hat",
+            "question": "Nachdem er das Programm ______ (installieren), funktioniert alles besser. (glavna: Präsens)"
+          },
+          {
+            "answer": "angeklickt hatte",
+            "question": "Nachdem sie den Link ______ (anklicken), öffnete sich ein Virus. (glavna: Präteritum)"
+          }
+        ],
+        "title": "Vežba – nachdem: koji oblik glagola?"
+      },
+      {
+        "rows": [
+          [
+            "herunterladen",
+            "preuzeti (Perf. heruntergeladen)"
+          ],
+          [
+            "speichern",
+            "sačuvati"
+          ],
+          [
+            "ausschalten",
+            "isključiti"
+          ],
+          [
+            "hochladen",
+            "otpremiti, uploadovati"
+          ],
+          [
+            "löschen",
+            "obrisati"
+          ],
+          [
+            "installieren",
+            "instalirati"
+          ]
+        ],
+        "type": "vocabulary"
+      }
+    ]
+  },
+  {
+    "id": "0b9b24f0-d4eb-4eb0-ba0c-960cdcf8c27a",
+    "order_index": 13,
+    "title": "Seitdem ich hier lebe",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 5 · Zukunft & Reisen",
+        "category": "lesen"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Kad se preseliš u novu zemlju, sve se menja – posao, jezik, pravila, hrana, ljudi. U ovoj lekciji čitaš priče troje ljudi i učiš gramatiku **seit / seitdem** (otkad)."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Dva oblika – jedno značenje"
+      },
+      {
+        "rows": [
+          [
+            "seit + imenica/vreme",
+            "predlog",
+            "Ich lebe seit fünf Jahren in Berlin."
+          ],
+          [
+            "seitdem + cela rečenica",
+            "veznik",
+            "Seitdem ich hier lebe, spreche ich besser Deutsch."
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Oblik",
+          "Vrsta",
+          "Primer"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "📌 **seit** + vremenska odrednica → nema glagola posle (*seit drei Jahren*, *seit Januar*).\n📌 **seitdem** + zavisna rečenica → glagol ide na kraj (*Seitdem ich hier lebe, …*).\n\n💡 U govoru mnogi koriste i *seit* umesto *seitdem* ispred rečenice – i to je tačno. Ali na ispitu znaj razliku!"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Vremena – ovo je važno!\n\nSa *seit/seitdem* koristiš **Präsens** ili **Perfekt** – nikad prošlo vreme (Präteritum). Jer opisuješ nešto što je počelo u prošlosti i **još traje**."
+      },
+      {
+        "type": "mistakes",
+        "items": [
+          {
+            "wrong": "Seitdem ich hier lebte, …",
+            "correct": "Seitdem ich hier lebe, …",
+            "explanation": "Situacija još traje → Präsens, ne Präteritum."
+          }
+        ]
+      },
+      {
+        "rows": [
+          [
+            "radnja još traje",
+            "Präsens",
+            "Seitdem ich in Berlin wohne, fahre ich Fahrrad."
+          ],
+          [
+            "završeno, ali deluje sad",
+            "Perfekt",
+            "Seitdem ich Deutsch gelernt habe, verstehe ich mehr."
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Situacija",
+          "Vreme",
+          "Primer"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "## Priče – Sally, Mohd i María\n\n- **Sally (Teksas, Berlin):** *Seitdem ich hier bin, staune ich jeden Tag. Die Deutschen sind sehr direkt – seitdem ich das weiß, missverstehe ich sie seltener.*\n- **Mohd (Mumbaj, Beč):** *Seit ich hier arbeite, bemühe ich mich jeden Tag pünktlich zu sein. Seitdem ich verstehe, dass Pünktlichkeit Respekt bedeutet, fällt es mir leichter.*\n- **María (Bogota, Cirih):** *Seitdem ich hier bin, plane ich alles im Voraus.*"
+      },
+      {
+        "rows": [
+          [
+            "sich gewöhnen an + Akk",
+            "naviknuti se na"
+          ],
+          [
+            "die Umstellung, -en",
+            "promena, prilagođavanje"
+          ],
+          [
+            "sich einleben",
+            "udomaćiti se"
+          ],
+          [
+            "fremd",
+            "stran, nepoznat"
+          ],
+          [
+            "vermissen",
+            "nedostajati, čeznuti"
+          ],
+          [
+            "ankommen",
+            "snaći se, biti prihvaćen"
+          ]
+        ],
+        "type": "vocabulary"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Seit (vremenska odrednica)",
+            "question": "___ drei Jahren lebe ich in Deutschland."
+          },
+          {
+            "answer": "Seitdem (cela rečenica, glagol na kraju)",
+            "question": "___ ich hier lebe, spreche ich besser Deutsch."
+          },
+          {
+            "answer": "Seit (imenica)",
+            "question": "___ meiner Ankunft habe ich viel gelernt."
+          },
+          {
+            "answer": "Seitdem (rečenica)",
+            "question": "___ sie den Job hat, ist sie glücklicher."
+          }
+        ],
+        "title": "Mini vežba – seit ili seitdem?"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "lebe (još traje → Präsens)",
+            "question": "Seitdem ich in Deutschland ___ (leben), fahre ich Fahrrad."
+          },
+          {
+            "answer": "gelernt habe (završeno, deluje sad → Perfekt)",
+            "question": "Seit ich Deutsch ___ (lernen), kann ich mich besser ausdrücken."
+          },
+          {
+            "answer": "wohnt (još traje → Präsens)",
+            "question": "Seit er in München ___ (wohnen), vermisst er das Meer."
+          }
+        ],
+        "title": "Vežba – Präsens ili Perfekt?"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "💬 **Tvoj zadatak (Schreiben):** Napiši 5–6 rečenica o nekoj promeni u svom životu. Koristi *seit* i *seitdem* – bar po jednom. Npr.: *Seitdem ich Deutsch lerne, schaue ich Serien auf Deutsch…*"
+      }
+    ]
+  },
+  {
+    "id": "efd8ffc1-323d-4f1a-815c-553918463449",
+    "order_index": 14,
+    "title": "Finalsätze: um … zu / damit",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 6 · Umwelt & Konsum",
+        "category": "grammatik"
+      },
+      {
+        "type": "video",
+        "vimeoId": "1100291090"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Finalsatz pokazuje **cilj ili svrhu** radnje. Odgovara na pitanja **Wozu?** i **Warum?** Imamo dve konstrukcije: **um … zu** i **damit**. Cela poenta je u tome ko je subjekat."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## „um … zu\" – kada je subjekat ISTI\n\nKad je subjekat u glavnoj i u zavisnoj rečenici **isti**, koristimo *um … zu + Infinitiv*. U zavisnoj rečenici nema subjekta, glagol (Infinitiv) ide na kraj."
+      },
+      {
+        "type": "formula",
+        "content": "Hauptsatz + um + … + zu + Infinitiv\n(isti subjekat u obe rečenice)"
+      },
+      {
+        "rows": [
+          [
+            "Ich lerne Deutsch, um in Deutschland zu arbeiten.",
+            "Učim nemački da bih radio/la u Nemačkoj."
+          ],
+          [
+            "Wir sparen Geld, um eine Reise zu machen.",
+            "Štedimo novac da bismo otputovali."
+          ],
+          [
+            "Sie trainiert jeden Tag, um gesund zu bleiben.",
+            "Vežba svaki dan da bi ostala zdrava."
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Nemački",
+          "Prevod"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "📌 Kod **razdvojivih glagola** „zu\" ide IZMEĐU prefiksa i glagola: *um pünktlich **anzukommen***, *um einen Termin **auszumachen***."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## „damit\" – kada su subjekti RAZLIČITI\n\nKad subjekat glavne rečenice **nije isti** kao subjekat zavisne, koristimo *damit + subjekat + … + glagol (na kraju)*."
+      },
+      {
+        "type": "formula",
+        "content": "Hauptsatz + damit + Subjekt + … + Verb (Ende)\n(različiti subjekti)"
+      },
+      {
+        "rows": [
+          [
+            "Ich erkläre es ihm, damit er es versteht.",
+            "Objašnjavam mu da bi (on) razumeo."
+          ],
+          [
+            "Sie spricht langsam, damit alle sie verstehen.",
+            "Govori sporo da bi je svi razumeli."
+          ],
+          [
+            "Ich gebe meinem Sohn Geld, damit er ein Buch kaufen kann.",
+            "Dajem sinu novac da bi mogao da kupi knjigu."
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Nemački",
+          "Prevod"
+        ]
+      },
+      {
+        "type": "mistakes",
+        "items": [
+          {
+            "wrong": "Ich lerne Deutsch, um in Deutschland arbeiten zu wollen.",
+            "correct": "Ich lerne Deutsch, um in Deutschland zu arbeiten.",
+            "explanation": "„um … zu\" već znači nameru – ne kombinuje se sa „wollen\"."
+          }
+        ]
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "um … zu",
+            "question": "Ich gehe ins Bett, ______ früh aufzustehen. (isti subjekat)"
+          },
+          {
+            "answer": "damit",
+            "question": "Ich wecke ihn, ______ er pünktlich aufsteht. (različiti subjekti)"
+          },
+          {
+            "answer": "um … zu",
+            "question": "Er kauft ein Wörterbuch, ______ neue Wörter zu lernen. (isti)"
+          },
+          {
+            "answer": "damit",
+            "question": "Sie erklärt es noch einmal, ______ alle es verstehen. (različiti)"
+          }
+        ],
+        "title": "Mini vežba – um … zu ili damit?"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Zapamti\n\n1. **Cilj/svrha?** → Finalsatz (Wozu? Warum?)\n2. **Isti subjekat?** → da: *um … zu* · ne: *damit*\n3. Kod razdvojivih glagola: *zu* između prefiksa i glagola. Izbegavaj *wollen*."
+      }
+    ]
+  },
+  {
+    "id": "092e0803-0608-4b36-92cc-46ea00a93503",
+    "order_index": 15,
+    "title": "Partizip Präsens",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 6 · Umwelt & Konsum",
+        "category": "grammatik"
+      },
+      {
+        "type": "video",
+        "vimeoId": "1193669237"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Vidiš ga svaki dan, a možda nisi primetila: *ein **wohltuender** Tee*, *eine **wachsende** Community*, *die **steigende** Inflation*, *eine **motivierende** Trainerin*. Sve te podebljane reči dolaze od glagola, a ponašaju se kao pridev – to je **Partizip Präsens**."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Kako se gradi – najlakše pravilo ikad\n\n**Infinitiv + d.** Bez izuzetaka, bez promene vokala."
+      },
+      {
+        "type": "formula",
+        "content": "Infinitiv + d = Partizip Präsens\nlächeln + d → lächelnd\nwachsen + d → wachsend\nsteigen + d → steigend\nmotivieren + d → motivierend"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Dve funkcije – to je ceo trik\n\nPartizip Präsens može da bude **prilog** (kako?) ili **pridev** (kakav?). Razlika je samo u nastavku."
+      },
+      {
+        "rows": [
+          [
+            "Prilog (Adverb)",
+            "Wie? (kako?)",
+            "Das Kind kommt lächelnd rein.",
+            "❌ nema"
+          ],
+          [
+            "Pridev (Adjektiv)",
+            "Was für ein…? (kakav?)",
+            "Ein lächelndes Kind.",
+            "✅ ima"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Funkcija",
+          "Pitanje",
+          "Primer",
+          "Nastavak"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "## Kao prilog – bez nastavka (opisuje radnju)\n\n- *Sie kommt **lächelnd** ins Zimmer.* – Kako dolazi? – nasmejano\n- *Er sitzt **schweigend** am Tisch.* – Kako sedi? – ćutke\n- *Das Kind läuft **weinend** zur Mutter.* – Kako trči? – plačući"
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "## Kao pridev – sa nastavkom (ispred imenice)\n\nPrvo napraviš particip, pa dodaš nastavak kao kod svakog prideva:\n\n- *ein **lächelndes** Kind* (Neutrum, -es)\n- *ein **wachsender** Markt* (Maskulin, -er)\n- *eine **motivierende** Trainerin* (Feminin, -e)"
+      },
+      {
+        "rows": [
+          [
+            "Nominativ",
+            "ein wachsender Markt",
+            "eine steigende Inflation",
+            "ein lächelndes Kind"
+          ],
+          [
+            "Akkusativ",
+            "einen wachsenden Markt",
+            "eine steigende Inflation",
+            "ein lächelndes Kind"
+          ],
+          [
+            "Dativ",
+            "einem wachsenden Markt",
+            "einer steigenden Inflation",
+            "einem lächelnden Kind"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Padež",
+          "Maskulin",
+          "Feminin",
+          "Neutrum"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "💡 **Trik za prepoznavanje:** Ima li imenica odmah iza? → pridev, sa nastavkom. Nema imenice iza? → prilog, bez nastavka.\n\n📌 Dativ jednine je uvek **-en** (sva tri roda)."
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "überzeugendes (pridev – ima imenicu iza)",
+            "question": "Das ist ein ___ Produkt. (überzeugen)"
+          },
+          {
+            "answer": "strahlend (prilog – nema imenicu iza)",
+            "question": "Sie betrat den Raum ___. (strahlen)"
+          },
+          {
+            "answer": "inspirierende (pridev)",
+            "question": "Wir suchen eine ___ Persönlichkeit. (inspirieren)"
+          },
+          {
+            "answer": "nickend (prilog)",
+            "question": "Er hörte ___ zu. (nicken)"
+          },
+          {
+            "answer": "beunruhigende (pridev)",
+            "question": "Das ist eine ___ Entwicklung. (beunruhigen)"
+          }
+        ],
+        "title": "Mini vežba – prilog ili pridev?"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "wachsendes (Neutrum Nom.)",
+            "question": "Das ist ein ___ Unternehmen. (wachsen)"
+          },
+          {
+            "answer": "wachsenden (Maskulin Akk.)",
+            "question": "Wir beobachten einen ___ Markt. (wachsen)"
+          },
+          {
+            "answer": "motivierenden (Dativ → -en)",
+            "question": "Mit einem ___ Team ist alles möglich. (motivieren)"
+          }
+        ],
+        "title": "Vežba – dopuni nastavak (neodređeni član)"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "lächelnd",
+            "front": "lächeln"
+          },
+          {
+            "back": "wachsend",
+            "front": "wachsen"
+          },
+          {
+            "back": "steigend",
+            "front": "steigen"
+          },
+          {
+            "back": "motivierend",
+            "front": "motivieren"
+          },
+          {
+            "back": "zunehmend",
+            "front": "zunehmen"
+          },
+          {
+            "back": "beunruhigend",
+            "front": "beunruhigen"
+          }
+        ],
+        "backLabel": "Partizip Präsens",
+        "frontLabel": "Infinitiv"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "🎯 Sad ga prepoznaješ svuda – u reklamama, na LinkedIn-u, u novinama. I umeš sam da ga napraviš, kao prilog I kao pridev."
+      }
+    ]
+  },
+  {
+    "id": "ab7b5090-84bc-49dc-85c8-5f3f0ae431ec",
+    "order_index": 16,
+    "title": "Sind KI-Tools besser als wir?",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 6 · Umwelt & Konsum",
+        "category": "lesen"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Veštačka inteligencija u svakodnevici – prilike i rizici. Čitaš kolumnu novinarke Ele i učiš da **izraziš svoje mišljenje na nemačkom** i koristiš digitalni vokabular. Idealna priprema za B1 Lesen i Sprechen."
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "## Ellas Kolumne (Stadt-Kurier)\n\nMein Kollege Sami hat aus Versehen einen wichtigen Ordner gelöscht – ohne Backup. Zwei Stunden Arbeit waren weg. Wir haben ein KI-Tool heruntergeladen, das gelöschte Dateien wiederherstellt. Es hat funktioniert. Ich war beeindruckt: Die KI hat in drei Minuten geschafft, was wir in zwei Stunden nicht konnten.\n\nAber am nächsten Tag habe ich mit einem KI-Assistenten einen Artikel über das Klima geschrieben. Der Text war technisch perfekt – aber er war so… leer. Keine Meinung, keine Überraschung, kein Gefühl. Meine Frage: Ist das wirklich besser? Oder nur schneller?"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Digitalni vokabular – glagoli iz teksta\n\nPazi na razdvojive prefikse: u prezentu na kraj, u perfektu spojeni sa *ge-*."
+      },
+      {
+        "rows": [
+          [
+            "herunterladen",
+            "er lädt … herunter",
+            "er hat … heruntergeladen"
+          ],
+          [
+            "löschen",
+            "sie löscht",
+            "sie hat … gelöscht"
+          ],
+          [
+            "hochladen",
+            "er lädt … hoch",
+            "er hat … hochgeladen"
+          ],
+          [
+            "wiederherstellen",
+            "sie stellt … wieder her",
+            "sie hat … wiederhergestellt"
+          ],
+          [
+            "vorschlagen",
+            "sie schlägt … vor",
+            "sie hat … vorgeschlagen"
+          ],
+          [
+            "übernehmen",
+            "KI übernimmt",
+            "KI hat … übernommen"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Infinitiv",
+          "Präsens",
+          "Perfekt"
+        ]
+      },
+      {
+        "rows": [
+          [
+            "löschen",
+            "obrisati"
+          ],
+          [
+            "herunterladen",
+            "preuzeti"
+          ],
+          [
+            "wiederherstellen",
+            "povratiti, vratiti"
+          ],
+          [
+            "vorschlagen",
+            "predložiti"
+          ],
+          [
+            "beeindruckt",
+            "impresioniran"
+          ],
+          [
+            "die eigene Stimme, -n",
+            "vlastiti glas"
+          ],
+          [
+            "zusammenarbeiten",
+            "sarađivati"
+          ]
+        ],
+        "type": "vocabulary"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Studija (Bitkom 2025)\n\n- **78%** zaposlenih u Nemačkoj koristi AI alate na poslu\n- **61%** kaže da im AI štedi vreme svaki dan\n- **43%** strahuje da će AI preuzeti njihov posao\n- **29%** smatra da AI tekstovi zvuče bezlično"
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "## Redemittel – kako da izraziš mišljenje\n\n*Ich finde, dass…* · *Ella hat recht, weil…* · *Ich bin anderer Meinung, denn…* · *Einerseits… andererseits…*\n\nKomentari čitalaca:\n- 👍 *KI ist mein Werkzeug, nicht mein Chef.* (Max, programer)\n- 👎 *Meine Schüler laden KI-Texte hoch und nennen es ihre Arbeit. Was lernen sie dabei?* (Tanja, nastavnica)"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Richtig",
+            "question": "Die KI hat den Ordner in drei Minuten wiederhergestellt."
+          },
+          {
+            "answer": "Falsch – er war technisch korrekt, aber leer (ohne Meinung und Gefühl).",
+            "question": "Ella findet den KI-Text kreativ und überraschend."
+          },
+          {
+            "answer": "Richtig",
+            "question": "Laut Studie haben 43% Angst, dass KI ihren Job übernimmt."
+          }
+        ],
+        "title": "Pitanja za čitanje – Richtig oder Falsch?"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "gelöscht",
+            "question": "Ich habe aus Versehen die falsche Datei ___. (löschen)"
+          },
+          {
+            "answer": "wiederhergestellt",
+            "question": "Der IT-Kollege hat das System ___. (wiederherstellen)"
+          },
+          {
+            "answer": "vorgeschlagen",
+            "question": "Die KI hat mir drei Texte ___. (vorschlagen)"
+          },
+          {
+            "answer": "übernimmt",
+            "question": "Glaubst du, dass KI unsere Jobs ___? (übernehmen)"
+          }
+        ],
+        "title": "Vežba – dopuni glagol u pravoj formi"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "💬 **Tvoj zadatak (Sprechen/Schreiben):** Napiši 4–5 rečenica: Koristiš li AI alate i za šta? Šta AI radi bolje od ljudi, a šta ljudi bolje od AI? Koristi bar 4 glagola iz lekcije."
+      }
+    ]
+  },
+  {
+    "id": "86d3662c-3cf3-474b-a871-74e8951b3a5c",
+    "order_index": 17,
+    "title": "Zweiteilige Konnektoren",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 7 · Konnektoren",
+        "category": "grammatik"
+      },
+      {
+        "type": "video",
+        "vimeoId": "1157210482"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Dvodelni konektori povezuju dve ideje pomoću **dve reči** koje idu u paru. Oni ti čine govor i pisanje bogatijim – i često se traže na B1 ispitu. Ima ih sedam glavnih."
+      },
+      {
+        "rows": [
+          [
+            "entweder … oder",
+            "ili … ili",
+            "Entweder rufe ich an oder ich schreibe."
+          ],
+          [
+            "nicht nur … sondern auch",
+            "ne samo … nego i",
+            "Das Essen ist nicht nur lecker, sondern auch gesund."
+          ],
+          [
+            "sowohl … als auch",
+            "i … i",
+            "Sowohl meine Mutter als auch mein Vater sprechen Deutsch."
+          ],
+          [
+            "weder … noch",
+            "ni … ni",
+            "Ich mag weder Fisch noch Fleisch."
+          ],
+          [
+            "einerseits … andererseits",
+            "s jedne … s druge strane",
+            "Einerseits will ich sparen, andererseits will ich reisen."
+          ],
+          [
+            "je … desto / umso",
+            "što … to",
+            "Je mehr du lernst, desto besser wirst du."
+          ],
+          [
+            "zwar … aber",
+            "doduše … ali",
+            "Zwar ist es schön, aber kalt."
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Konektor",
+          "Prevod",
+          "Primer"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "## Na šta da paziš kod svakog\n\n- **entweder … oder** – nema zareza, red reči fleksibilan\n- **nicht nur … sondern auch** – IMA zarez ispred *sondern*\n- **weder … noch** – već sadrži negaciju, NE dodaješ još *nicht*\n- **je … desto** – *je* + komparativ + glagol na kraju; *desto* + komparativ odmah; *desto* i *umso* su zamenljivi"
+      },
+      {
+        "type": "mistakes",
+        "items": [
+          {
+            "wrong": "Ich mag nicht weder Fisch noch Fleisch.",
+            "correct": "Ich mag weder Fisch noch Fleisch.",
+            "explanation": "„weder … noch\" već znači negaciju – ne treba dodatno „nicht\"."
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "## Dijalozi iz svakodnevnog života\n\n- A: *Was möchtest du trinken?* B: *Entweder Wasser oder einen Tee.*\n- A: *Lernst du nur Grammatik?* B: *Nein, nicht nur Grammatik, sondern auch Wortschatz.*\n- A: *Warum lernst du jeden Tag?* B: *Je mehr ich übe, desto sicherer spreche ich.*\n- A: *Ist die Wohnung gut?* B: *Zwar ist sie klein, aber sehr gemütlich.*"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "entweder … oder",
+            "question": "Ich möchte ___ nach Berlin ___ nach München reisen. (ili…ili)"
+          },
+          {
+            "answer": "sowohl … als auch",
+            "question": "Sie ist ___ intelligent ___ fleißig. (i…i)"
+          },
+          {
+            "answer": "weder … noch",
+            "question": "Er trinkt ___ Kaffee ___ Tee – nur Wasser. (ni…ni)"
+          },
+          {
+            "answer": "Zwar … aber",
+            "question": "___ ist Deutsch schwer, ___ es ist sehr logisch. (doduše…ali)"
+          },
+          {
+            "answer": "Je … desto",
+            "question": "___ mehr ich übe, ___ besser spreche ich. (što…to)"
+          }
+        ],
+        "title": "Mini vežba – dopuni konektor"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "ili … ili",
+            "front": "entweder … oder"
+          },
+          {
+            "back": "ne samo … nego i",
+            "front": "nicht nur … sondern auch"
+          },
+          {
+            "back": "i … i",
+            "front": "sowohl … als auch"
+          },
+          {
+            "back": "ni … ni",
+            "front": "weder … noch"
+          },
+          {
+            "back": "s jedne … s druge strane",
+            "front": "einerseits … andererseits"
+          },
+          {
+            "back": "što … to",
+            "front": "je … desto"
+          },
+          {
+            "back": "doduše … ali",
+            "front": "zwar … aber"
+          }
+        ],
+        "backLabel": "Prevod",
+        "frontLabel": "Nemački"
+      }
+    ]
+  },
+  {
+    "id": "57a9a892-e408-4ea2-90aa-b9255e12ac33",
+    "order_index": 18,
+    "title": "Je…desto/umso",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 7 · Konnektoren",
+        "category": "grammatik"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "**Je … desto / umso** pokazuje srazmeru – kad jedno raste, raste (ili opada) i drugo. Na srpskom: **što … to**. Npr. *Je mehr du lernst, desto besser wirst du* = „Što više učiš, to bolji postaješ.\""
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Kako se gradi\n\nDva dela, oba sa **komparativom**:\n\n1. **Je** + komparativ + … + **glagol na kraju** (zavisna rečenica)\n2. **desto / umso** + komparativ + **glagol odmah** (glavna rečenica)\n\n*desto* i *umso* su potpuno zamenljivi – koristi šta ti je lakše."
+      },
+      {
+        "type": "formula",
+        "content": "Je + komparativ + Subjekt + … + Verb,\ndesto/umso + komparativ + Verb + Subjekt …"
+      },
+      {
+        "rows": [
+          [
+            "Je mehr du lernst, desto besser wirst du.",
+            "Što više učiš, to bolji postaješ."
+          ],
+          [
+            "Je älter ich werde, desto weiser fühle ich mich.",
+            "Što sam stariji, to se osećam mudrije."
+          ],
+          [
+            "Je schneller wir arbeiten, umso früher sind wir fertig.",
+            "Što brže radimo, to ranije završavamo."
+          ],
+          [
+            "Je kälter es wird, umso lieber bleibe ich zu Hause.",
+            "Što je hladnije, to radije ostajem kod kuće."
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Nemački",
+          "Prevod"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "## Dijalog iz svakodnevnog života\n\nA: *Warum lernst du jeden Tag Deutsch?*\nB: *Je mehr ich übe, desto sicherer spreche ich.*\n\n(A: Zašto učiš nemački svaki dan? B: Što više vežbam, to sigurnije govorim.)"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Je … desto",
+            "question": "___ mehr Geld man hat, ___ mehr Probleme hat man manchmal."
+          },
+          {
+            "answer": "desto / umso",
+            "question": "Je früher wir anfangen, ___ schneller sind wir fertig."
+          },
+          {
+            "answer": "lerne (na kraju!)",
+            "question": "Dopuni glagol: Je mehr ich ___ (lernen), desto besser verstehe ich."
+          }
+        ],
+        "title": "Mini vežba – dopuni je … desto"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "📌 **Zapamti:** oba dela MORAJU imati komparativ (mehr, besser, schneller, früher…). U *je*-delu glagol ide na kraj, u *desto*-delu odmah posle komparativa."
+      }
+    ]
+  },
+  {
+    "id": "4a32501a-6bce-4222-aad4-795490aa5325",
+    "order_index": 19,
+    "title": "100 reči za nivo B1",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 8 · Wortschatz",
+        "category": "wortschatz"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Ovo su ključne reči koje se stalno pojavljuju na B1 ispitu – u čitanju, slušanju i pisanju. Grupisane su po temama da ih lakše zapamtiš. **Savet:** uči ih u kontekstu, ne kao golu listu – uz svaku napravi jednu rečenicu."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## 1. Posao i kancelarija"
+      },
+      {
+        "rows": [
+          [
+            "die Bewerbung, -en",
+            "prijava (za posao)"
+          ],
+          [
+            "der Vertrag, ¨e",
+            "ugovor"
+          ],
+          [
+            "der Vertragspartner, -",
+            "ugovorni partner"
+          ],
+          [
+            "die Zusammenarbeit (nur Sg.)",
+            "saradnja"
+          ],
+          [
+            "der Auftrag, ¨e",
+            "nalog, zadatak"
+          ],
+          [
+            "die Frist, -en",
+            "rok"
+          ],
+          [
+            "die Besprechung, -en",
+            "sastanak"
+          ],
+          [
+            "der Fortschritt, -e",
+            "napredak"
+          ],
+          [
+            "die Erfahrung, -en",
+            "iskustvo"
+          ],
+          [
+            "die Teilnahme (an + Dat)",
+            "učešće"
+          ]
+        ],
+        "type": "vocabulary"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## 2. Kupovina, novac, usluge"
+      },
+      {
+        "rows": [
+          [
+            "die Rechnung, -en",
+            "račun"
+          ],
+          [
+            "die Überweisung, -en",
+            "uplata, doznaka"
+          ],
+          [
+            "die Lieferung, -en",
+            "isporuka, dostava"
+          ],
+          [
+            "die Bestellung, -en",
+            "narudžbina"
+          ],
+          [
+            "die Rückerstattung, -en",
+            "povrat novca"
+          ],
+          [
+            "der Umtausch (nur Sg.)",
+            "zamena"
+          ],
+          [
+            "die Garantie, -n",
+            "garancija"
+          ],
+          [
+            "die Versicherung, -en",
+            "osiguranje"
+          ],
+          [
+            "der Kunde, -n",
+            "kupac, klijent"
+          ],
+          [
+            "der Kundenservice (nur Sg.)",
+            "korisnička podrška"
+          ]
+        ],
+        "type": "vocabulary"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## 3. Mišljenje, argumentovanje (za Sprechen i Schreiben)"
+      },
+      {
+        "rows": [
+          [
+            "die Meinung, -en",
+            "mišljenje"
+          ],
+          [
+            "der Vorteil, -e",
+            "prednost"
+          ],
+          [
+            "der Nachteil, -e",
+            "mana, nedostatak"
+          ],
+          [
+            "die Möglichkeit, -en",
+            "mogućnost"
+          ],
+          [
+            "die Ursache, -n",
+            "uzrok"
+          ],
+          [
+            "der Grund, ¨e",
+            "razlog"
+          ],
+          [
+            "die Lösung, -en",
+            "rešenje"
+          ],
+          [
+            "die Absicht, -en",
+            "namera"
+          ],
+          [
+            "der Hinweis, -e",
+            "napomena, savet"
+          ],
+          [
+            "die Empfehlung, -en",
+            "preporuka"
+          ]
+        ],
+        "type": "vocabulary"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## 4. Svakodnevni život i odnosi"
+      },
+      {
+        "rows": [
+          [
+            "das Ereignis, -se",
+            "događaj"
+          ],
+          [
+            "die Verbindung, -en",
+            "veza"
+          ],
+          [
+            "das Vertrauen (nur Sg.)",
+            "poverenje"
+          ],
+          [
+            "die Gewohnheit, -en",
+            "navika"
+          ],
+          [
+            "die Umstellung, -en",
+            "promena, prilagođavanje"
+          ],
+          [
+            "die Entscheidung, -en",
+            "odluka"
+          ],
+          [
+            "die Verantwortung, -en",
+            "odgovornost"
+          ],
+          [
+            "die Unterstützung (nur Sg.)",
+            "podrška"
+          ],
+          [
+            "der Eindruck, ¨e",
+            "utisak"
+          ],
+          [
+            "die Stimmung, -en",
+            "raspoloženje"
+          ]
+        ],
+        "type": "vocabulary"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## 5. Ispit i učenje"
+      },
+      {
+        "rows": [
+          [
+            "die Prüfung, -en",
+            "ispit"
+          ],
+          [
+            "die Aufgabe, -n",
+            "zadatak"
+          ],
+          [
+            "die Strategie, -n",
+            "strategija"
+          ],
+          [
+            "das Schlüsselwort, ¨er",
+            "ključna reč"
+          ],
+          [
+            "die Aussage, -n",
+            "izjava, tvrdnja"
+          ],
+          [
+            "der Textabschnitt, -e",
+            "deo teksta, pasus"
+          ],
+          [
+            "die Zusammenfassung, -en",
+            "sažetak"
+          ],
+          [
+            "der Zusammenhang, ¨e",
+            "kontekst, veza"
+          ],
+          [
+            "das Beispiel, -e",
+            "primer"
+          ],
+          [
+            "der Vergleich, -e",
+            "poređenje"
+          ]
+        ],
+        "type": "vocabulary"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "prijava za posao",
+            "front": "die Bewerbung"
+          },
+          {
+            "back": "uplata",
+            "front": "die Überweisung"
+          },
+          {
+            "back": "povrat novca",
+            "front": "die Rückerstattung"
+          },
+          {
+            "back": "uzrok",
+            "front": "die Ursache"
+          },
+          {
+            "back": "prednost / mana",
+            "front": "der Vorteil / der Nachteil"
+          },
+          {
+            "back": "poverenje",
+            "front": "das Vertrauen"
+          },
+          {
+            "back": "odluka",
+            "front": "die Entscheidung"
+          },
+          {
+            "back": "ključna reč",
+            "front": "das Schlüsselwort"
+          }
+        ],
+        "backLabel": "Prevod",
+        "frontLabel": "Nemački"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Bewerbung",
+            "question": "Ich habe meine ___ für den Job gestern abgeschickt. (prijava)"
+          },
+          {
+            "answer": "Lieferung",
+            "question": "Die ___ ist noch nicht angekommen – ich warte seit einer Woche. (isporuka)"
+          },
+          {
+            "answer": "Meinung",
+            "question": "Meiner ___ nach ist das die beste Lösung. (mišljenje)"
+          },
+          {
+            "answer": "Schlüsselwörter",
+            "question": "Lies zuerst die Fragen und unterstreiche die ___. (ključne reči)"
+          }
+        ],
+        "title": "Mini vežba – koja reč nedostaje?"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "💡 **Kako da učiš:** uzmi 10 reči dnevno, napiši po jednu rečenicu sa svakom i pročitaj naglas. Posle nedelju dana ponovi sve flashcards."
+      }
+    ]
+  },
+  {
+    "id": "3b1c846a-7569-4207-bbc5-2435993570f4",
+    "order_index": 20,
+    "title": "20 glagola za nivo B1",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 8 · Wortschatz",
+        "category": "wortschatz"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Dvadeset glagola koje moraš da znaš za B1 – pojavljuju se u mejlovima, razgovorima i tekstovima. Uz svaki je dat i primer upotrebe. Posebno pazi na **razdvojive glagole** i glagole sa predlozima."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Komunikacija i dogovor"
+      },
+      {
+        "rows": [
+          [
+            "sich melden",
+            "javiti se"
+          ],
+          [
+            "zurückschreiben",
+            "odgovoriti pismeno"
+          ],
+          [
+            "bestätigen",
+            "potvrditi"
+          ],
+          [
+            "zustimmen",
+            "složiti se"
+          ],
+          [
+            "ablehnen",
+            "odbiti"
+          ],
+          [
+            "empfehlen",
+            "preporučiti"
+          ],
+          [
+            "verhandeln",
+            "pregovarati"
+          ],
+          [
+            "zugeben",
+            "priznati"
+          ]
+        ],
+        "type": "vocabulary"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Odluke i radnje"
+      },
+      {
+        "rows": [
+          [
+            "sich entscheiden",
+            "odlučiti se"
+          ],
+          [
+            "überlegen",
+            "razmisliti"
+          ],
+          [
+            "vermeiden",
+            "izbeći"
+          ],
+          [
+            "erreichen",
+            "postići, dostići"
+          ],
+          [
+            "beantragen",
+            "podneti zahtev"
+          ],
+          [
+            "sich kümmern (um + Akk)",
+            "brinuti se (o)"
+          ],
+          [
+            "erinnern (an + Akk)",
+            "podsetiti (na)"
+          ],
+          [
+            "sich erinnern (an + Akk)",
+            "setiti se"
+          ]
+        ],
+        "type": "vocabulary"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Objašnjavanje i provera"
+      },
+      {
+        "rows": [
+          [
+            "erklären",
+            "objasniti"
+          ],
+          [
+            "versichern",
+            "uveriti, osigurati"
+          ],
+          [
+            "nachschauen",
+            "proveriti, pogledati"
+          ],
+          [
+            "vorbeugen",
+            "sprečiti, preduprediti"
+          ]
+        ],
+        "type": "vocabulary"
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "## Primeri u rečenici\n\n- *Ich **melde mich**, sobald ich die Information habe.*\n- *Die Manager **verhandeln** einen neuen Vertrag.*\n- *Bitte **bestätigen** Sie den Termin per E-Mail.*\n- *Ich **kümmere mich** um die Reklamation.*\n- *Wir müssen Missverständnisse **vermeiden**.*"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "javiti se",
+            "front": "sich melden"
+          },
+          {
+            "back": "odgovoriti pismeno",
+            "front": "zurückschreiben"
+          },
+          {
+            "back": "potvrditi",
+            "front": "bestätigen"
+          },
+          {
+            "back": "složiti se",
+            "front": "zustimmen"
+          },
+          {
+            "back": "odbiti",
+            "front": "ablehnen"
+          },
+          {
+            "back": "preporučiti",
+            "front": "empfehlen"
+          },
+          {
+            "back": "pregovarati",
+            "front": "verhandeln"
+          },
+          {
+            "back": "priznati",
+            "front": "zugeben"
+          },
+          {
+            "back": "odlučiti se",
+            "front": "sich entscheiden"
+          },
+          {
+            "back": "razmisliti",
+            "front": "überlegen"
+          },
+          {
+            "back": "izbeći",
+            "front": "vermeiden"
+          },
+          {
+            "back": "postići, dostići",
+            "front": "erreichen"
+          },
+          {
+            "back": "podneti zahtev",
+            "front": "beantragen"
+          },
+          {
+            "back": "brinuti se o",
+            "front": "sich kümmern um"
+          },
+          {
+            "back": "podsetiti na",
+            "front": "erinnern an"
+          },
+          {
+            "back": "setiti se",
+            "front": "sich erinnern an"
+          },
+          {
+            "back": "objasniti",
+            "front": "erklären"
+          },
+          {
+            "back": "uveriti, osigurati",
+            "front": "versichern"
+          },
+          {
+            "back": "proveriti, pogledati",
+            "front": "nachschauen"
+          },
+          {
+            "back": "sprečiti, preduprediti",
+            "front": "vorbeugen"
+          }
+        ],
+        "backLabel": "Prevod",
+        "frontLabel": "Glagol"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "melde",
+            "question": "Ich ___ mich noch heute beim Kundenservice. (sich melden)"
+          },
+          {
+            "answer": "bestätigen",
+            "question": "Könnten Sie bitte den Termin ___? (bestätigen)"
+          },
+          {
+            "answer": "abgelehnt",
+            "question": "Sie hat das Angebot ___, weil es zu teuer war. (ablehnen)"
+          },
+          {
+            "answer": "überlegen",
+            "question": "Ich muss noch ___, ob ich das mache. (überlegen)"
+          }
+        ],
+        "title": "Mini vežba – koji glagol?"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "📌 **Pazi:** *sich melden*, *sich entscheiden*, *sich kümmern* su povratni (sa *sich*). *zurückschreiben*, *nachschauen*, *vorbeugen* su razdvojivi – prefiks ide na kraj: *Ich **schaue** kurz **nach**.*"
+      }
+    ]
+  },
+  {
+    "id": "d7e77180-d45d-45a5-90ff-e3a2347bb2c9",
+    "order_index": 21,
+    "title": "Vremena u nemačkom",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 8 · Wortschatz",
+        "category": "grammatik"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Na B1 nivou treba da znaš da prepoznaš i koristiš pet vremena. Ova lekcija je pregled – kada se koje koristi i kako se gradi. Posebno su važni **Perfekt** i **Präteritum**. *Plusquamperfekt* na B1 uglavnom samo prepoznaješ."
+      },
+      {
+        "rows": [
+          [
+            "Präsens",
+            "Ich arbeite heute.",
+            "Radim danas."
+          ],
+          [
+            "Perfekt",
+            "Ich habe gestern gearbeitet.",
+            "Radio/la sam juče."
+          ],
+          [
+            "Präteritum",
+            "Damals arbeitete ich in Berlin.",
+            "Tada sam radio/la u Berlinu."
+          ],
+          [
+            "Plusquamperfekt",
+            "Bevor ich kam, hatte er schon gegessen.",
+            "Pre nego što sam došao, on je već jeo."
+          ],
+          [
+            "Futur I",
+            "Ich werde morgen arbeiten.",
+            "Radiću sutra."
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Vreme",
+          "Primer",
+          "Prevod"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Präsens – sadašnjost (i bliska budućnost)\n\nKoristi se za sadašnje radnje, opšte istine i – uz vremensku odrednicu – za budućnost: *Morgen **fahre** ich nach Wien.*"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Perfekt – prošlost u razgovoru\n\nNajčešće prošlo vreme u **govoru**. Gradi se: **haben/sein + Partizip II**.\n\n- *Ich **habe** einen Brief **geschrieben**.*\n- *Sie **ist** nach Hause **gegangen**.* (kretanje/promena stanja → sein)"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Präteritum – prošlost u pisanju i pripovedanju\n\nKoristi se u pričama, vestima i pisanom jeziku. U govoru se skoro uvek koristi za *sein*, *haben* i modalne glagole:\n\n- *Ich **war** müde.* · *Er **hatte** keine Zeit.* · *Wir **mussten** warten.*"
+      },
+      {
+        "rows": [
+          [
+            "sein",
+            "ist gewesen",
+            "war"
+          ],
+          [
+            "haben",
+            "hat gehabt",
+            "hatte"
+          ],
+          [
+            "gehen",
+            "ist gegangen",
+            "ging"
+          ],
+          [
+            "kommen",
+            "ist gekommen",
+            "kam"
+          ],
+          [
+            "müssen",
+            "hat gemusst",
+            "musste"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Infinitiv",
+          "Perfekt",
+          "Präteritum"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Plusquamperfekt – „pre prošlosti\"\n\nZa radnju koja se desila **pre** druge prošle radnje. Gradi se: **hatte/war + Partizip II**. Često ide uz *nachdem*:\n\n- *Nachdem ich **gegessen hatte**, ging ich spazieren.*"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Futur I – budućnost\n\n**werden + Infinitiv** – za planove, obećanja i predviđanja: *Ich **werde** dich morgen **anrufen**.* (Detaljno u lekciji Futur I.)"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Perfekt",
+            "question": "Ich habe das Buch schon gelesen."
+          },
+          {
+            "answer": "Präteritum",
+            "question": "Als Kind wohnte ich in Novi Sad."
+          },
+          {
+            "answer": "Plusquamperfekt (+ Präteritum)",
+            "question": "Nachdem er gegangen war, wurde es still."
+          },
+          {
+            "answer": "Futur I",
+            "question": "Nächstes Jahr werde ich umziehen."
+          }
+        ],
+        "title": "Mini vežba – koje vreme je u rečenici?"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "habe … geschrieben",
+            "question": "Ich schreibe einen Brief. → Ich ___ einen Brief ___."
+          },
+          {
+            "answer": "ist … gegangen",
+            "question": "Sie geht nach Hause. → Sie ___ nach Hause ___."
+          },
+          {
+            "answer": "haben … gegessen",
+            "question": "Wir essen im Restaurant. → Wir ___ im Restaurant ___."
+          }
+        ],
+        "title": "Vežba – stavi u Perfekt"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "📌 **Pravilo za razgovor:** prošlost = Perfekt, ALI *sein/haben/modalni* = Präteritum (*war*, *hatte*, *konnte*). Tako zvučiš prirodno."
+      }
+    ]
+  },
+  {
+    "id": "3b5fbf26-c7ea-45aa-b828-ad78c86e4516",
+    "order_index": 22,
+    "title": "Schreiben Teil 1 – Informelle E-Mail",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 9 · Schreiben",
+        "category": "schreiben"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Prvi deo pismenog ispita je **neformalni mejl prijatelju** (du-forma). Pišeš oko **80 reči**, obrađuješ **tri tačke** (Leitpunkte): nešto opišeš (*beschreiben*), obrazložiš (*begründen*) i daš predlog (*einen Vorschlag machen*). Imaš ~20 minuta, nosi do 40 poena."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Struktura mejla\n\n1. **Anrede** (oslovljavanje imenom)\n2. **Einleitung** (kratak uvod)\n3. **Hauptteil** – tri tačke redom, po 2-3 rečenice\n4. **Schluss** (zaključna rečenica)\n5. **Grußformel** + tvoje ime"
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "## Redemittel – gotove fraze (nemački · prevod)\n\n**Anrede:** *Liebe/Lieber [ime],* – Draga/Dragi… · *Hallo [ime],* – Zdravo…\n\n**Einleitung:** *wie geht es dir?* – kako si? · *ich möchte dir etwas erzählen* – htela bih nešto da ti ispričam · *es gibt etwas Neues* – ima nešto novo"
+      },
+      {
+        "rows": [
+          [
+            "beschreiben",
+            "Gestern war ich … / Es geht gut / nicht so gut.",
+            "Juče sam bio/la… / Dobro je / nije baš dobro."
+          ],
+          [
+            "begründen",
+            "…, weil / denn / deshalb … / Ich würde mich freuen, wenn …",
+            "…, jer / zato … / Bilo bi mi drago kad bi…"
+          ],
+          [
+            "Vorschlag",
+            "Ich schlage vor, dass … / Wollen wir …? / Sollen wir …?",
+            "Predlažem da… / Hoćemo li…? / Da li da…?"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Funkcija",
+          "Redemittel (DE)",
+          "Prevod"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "**Schluss:** *Sag bitte Bescheid, ob …* – javi mi da li… · *Bitte antworte mir bald.* – odgovori mi uskoro · *Ruf mich an.* – pozovi me\n\n**Grußformel:** *Bis bald* · *Viele Grüße* · *Liebe Grüße* · *Herzliche Grüße* – zatim *dein/deine [ime]*"
+      },
+      {
+        "type": "text",
+        "style": "uebung",
+        "content": "## Zadatak (Cornelsen primer)\n\n*Ihr Freund Carsten liegt im Krankenhaus, weil er sich bei einem Unfall das rechte Bein gebrochen hat. Sie haben ihn gestern besucht und schreiben einem Freund / einer Freundin, der/die Carsten auch kennt.*\n\n- **Beschreiben Sie:** Wie geht es Carsten?\n- **Begründen Sie:** Was braucht er in seiner Situation?\n- **Machen Sie einen Vorschlag** für einen gemeinsamen Besuch.\n\n*Schreiben Sie eine E-Mail (ca. 80 Wörter). Schreiben Sie etwas zu allen drei Punkten. Achten Sie auf den Textaufbau (Anrede, Einleitung, Reihenfolge der Inhaltspunkte, Schluss).*"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Beleške za ovaj zadatak (Stichpunkte)\n\n- Carsten Unfall – im Krankenhaus besucht – geht gut – Krankenhaus o.k., aber langweilig\n- braucht etwas Unterhaltung: Buch, Zeitschrift oder MP3-Player\n- Vorschlag: zusammen besuchen – etwas mitbringen – Sonntag? – sag Bescheid"
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "## Musterlösung – uzorni mejl (Cornelsen)\n\nOvako izgleda dobar odgovor na sličan zadatak (prijatelj Manuel pao na ispitu):\n\n*Lieber Thomas,*\n*hast du schon gehört, dass Manuel seine Prüfung nicht bestanden hat? Ich habe ihn gestern getroffen, es geht ihm wirklich nicht gut. Er ist traurig, dass er die Prüfung wiederholen muss. Ich weiß, er hat viel gelernt, aber das war nicht genug. Vielleicht braucht er Hilfe. Ich habe nun eine Idee: Können wir ihm nicht bei der Vorbereitung helfen? Zum Beispiel könnten wir uns am Montagabend bei mir treffen und gemeinsam lernen. Was meinst du?*\n*Ciao*\n*Anna*"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "## Zapamti – pre nego što predaš\n\n- **Anrede + potpis** su obavezni: oslovi osobu imenom i potpiši se. Bez toga gubiš poene na koherentnosti.\n- Obradi **sve tri tačke** (beschreiben, begründen, Vorschlag) – svaka nosi poene.\n- Obraćaš se sa **du** i imenom (neformalno)."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "📌 **Savet:** ne počinji svaku rečenicu istom rečju (npr. stalno „Ich…“). Variraj – *Gestern… / Außerdem… / Vielleicht…* To diže ocenu za koherentnost."
+      }
+    ]
+  },
+  {
+    "id": "e491be4c-a8fa-46de-b61a-cb76565d647c",
+    "order_index": 23,
+    "title": "Schreiben Teil 2 – Meinung im Forum",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 9 · Schreiben",
+        "category": "schreiben"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Drugi deo je **komentar u forumu / gostinjskoj knjizi** gde iznosiš svoje **mišljenje** o zadatoj temi. Oko **80 reči**, ~25 minuta, do 40 poena. Dat ti je tuđi komentar – na njega *ne moraš* da se osvrneš, ali možeš."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Šta treba da uradiš\n\nIzraziš mišljenje i potkrepiš ga: *beschreiben, begründen, erläutern* (objasniti), *vergleichen* (uporediti), *rechtfertigen* (opravdati). Cilj: jasan stav + argumenti."
+      },
+      {
+        "rows": [
+          [
+            "uvod / osvrt",
+            "Das Thema … finde ich sehr wichtig.",
+            "Temu… smatram veoma važnom."
+          ],
+          [
+            "osvrt na komentar",
+            "Ich möchte etwas zum Kommentar von … schreiben.",
+            "Htela bih da napišem nešto na komentar od…"
+          ],
+          [
+            "suprotno mišljenje",
+            "Im Gegensatz zu … bin ich der Meinung, dass …",
+            "Za razliku od… ja smatram da…"
+          ],
+          [
+            "obrazloženje",
+            "Ich bin dafür / dagegen, dass … / Es stört mich, dass …",
+            "Za sam / protiv sam toga da… / Smeta mi što…"
+          ],
+          [
+            "objašnjenje",
+            "Einerseits …, andererseits … / Die Folgen sind …",
+            "S jedne strane…, s druge… / Posledice su…"
+          ],
+          [
+            "zaključak",
+            "Meiner Meinung nach sollte man … / Eine Lösung wäre …",
+            "Po mom mišljenju trebalo bi… / Rešenje bi bilo…"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Funkcija",
+          "Redemittel (DE)",
+          "Prevod"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "uebung",
+        "content": "## Zadatak\n\nU onlajn forumu jednog časopisa pročitaš komentar na temu **mobilni telefoni u školi**:\n\n> **Markus:** „Handys gehören nicht in die Schule! Die Schüler sind nur abgelenkt und lernen nichts mehr. Ein Verbot wäre die beste Lösung.“\n\nNapiši svoje mišljenje (oko **80 reči**): da li se slažeš sa Markusom? Obrazloži stav sa bar dva argumenta i predloži rešenje."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Beleške za ovaj zadatak (Stichpunkte)\n\n- Handys nützlich: schnell Informationen suchen, Wörterbuch-Apps, Kontakt mit den Eltern\n- aber: Ablenkung im Unterricht, weniger Konzentration\n- Lösung: kein komplettes Verbot – nur in den Pausen oder mit Erlaubnis des Lehrers"
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "## Primer rešenja\n\n*Das Thema „Handys in der Schule\" finde ich sehr wichtig. Einerseits hat Markus recht: Im Unterricht lenken Handys oft ab und die Schüler konzentrieren sich weniger. Andererseits bin ich gegen ein komplettes Verbot. Ein Handy kann auch nützlich sein – man kann schnell Informationen suchen oder eine Wörterbuch-App benutzen. Meiner Meinung nach sollte man Handys nur in den Pausen oder mit Erlaubnis des Lehrers erlauben. So sind die Schüler nicht abgelenkt, können das Handy aber trotzdem sinnvoll nutzen.*\n\n💡 Struktura: **uvod (tema) → stav → argument → druga strana → zaključak/rešenje.**"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "## Zapamti\n\n- Imaj **jasan stav** (za ili protiv) – mišljenje mora biti prepoznatljivo, ne neodlučno.\n- Daj **bar dva argumenta** (weil/denn/deshalb, Einerseits… andererseits…).\n- Drži se **~80 reči** – prekratko gubi poene za ispunjenje zadatka."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "📌 **Savet:** struktura mišljenja koja uvek radi: **uvod (tema) → moj stav → 2 argumenta → zaključak/rešenje.** Iskoristi *Einerseits… andererseits…* da pokažeš da vidiš obe strane."
+      }
+    ]
+  },
+  {
+    "id": "bd973105-0e39-4453-86ca-fe06a676b7d7",
+    "order_index": 24,
+    "title": "Schreiben Teil 3 – Formelle E-Mail",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 9 · Schreiben",
+        "category": "schreiben"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Treći deo je **kratak poluformalni mejl** osobi kojoj se obraćaš sa **Sie** (prezime). Oko **40 reči**, ~15 minuta, do 20 poena. Obično: zahvališ se, izviniš se i objasniš zašto ne možeš (npr. otkazivanje termina/poziva)."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Obavezno\n\n- **Anrede** (Sehr geehrte/r…) – ne zaboravi!\n- **Gruß am Schluss** (Mit freundlichen Grüßen) – ne zaboravi!\n- **Učtiv ton**, bez kolokvijalizama (ne *Mist, Quatsch*…)"
+      },
+      {
+        "rows": [
+          [
+            "Anrede",
+            "Sehr geehrter Herr … / Sehr geehrte Frau …",
+            "Poštovani gospodine… / Poštovana gospođo…"
+          ],
+          [
+            "zahvalnost",
+            "Vielen Dank für Ihre E-Mail / Einladung.",
+            "Hvala Vam na mejlu / pozivu."
+          ],
+          [
+            "izvinjenje",
+            "Leider muss ich mich entschuldigen, da ich … / Es tut mir leid, aber leider …",
+            "Nažalost moram da se izvinim, jer… / Žao mi je, ali nažalost…"
+          ],
+          [
+            "obrazloženje",
+            "An diesem Termin bin ich verreist / muss ich arbeiten.",
+            "Tog termina sam na putu / moram da radim."
+          ],
+          [
+            "pozdrav",
+            "Mit freundlichen Grüßen / Freundliche Grüße",
+            "S poštovanjem / Srdačan pozdrav"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Funkcija",
+          "Redemittel (DE)",
+          "Prevod"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "uebung",
+        "content": "## Zadatak (Cornelsen primer)\n\n*Ihr Lehrer, Herr Möller, hat Sie zu einem internationalen Theatertreffen eingeladen. Zu dem Termin im August können Sie aber nicht kommen.*\n\n*Schreiben Sie an Herrn Möller. Bedanken Sie sich, entschuldigen Sie sich höflich und berichten Sie, warum Sie nicht teilnehmen können.*\n\n*Schreiben Sie eine E-Mail (ca. 40 Wörter). Vergessen Sie nicht die Anrede und den Gruß am Schluss.*"
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "## Musterlösungen – uzorni mejlovi (Cornelsen)\n\n**Otkazivanje termina za posao (bolest):**\n*Sehr geehrter Herr Leitner,*\n*ich muss Ihnen leider mitteilen, dass ich zu unserem Termin morgen nicht kommen kann, weil ich eine Grippe habe. Es tut mir sehr leid und ich hoffe, dass wir einen neuen Termin finden. Ich würde mich freuen, wenn ich nächste Woche zum Vorstellungsgespräch kommen könnte.*\n*Mit freundlichen Grüßen*\n*Jurij Sladek*\n\n**Prijava za učešće na manifestaciji:**\n*Sehr geehrter Herr Röder,*\n*ich habe gelesen, dass für die Veranstaltung „Kulturen der Welt“ Personen gesucht werden, die etwas über ihre Heimat berichten. Ich würde gerne teilnehmen. Ich komme aus Indonesien und könnte einen Vortrag über die Geschichte Indonesiens vorbereiten. Ich freue mich auf Ihre Antwort.*\n*Mit freundlichen Grüßen*\n*Susanna Sumaram*"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "## Zapamti\n\n- Obraćaš se sa **Sie** (poluformalno, sa prezimenom) – nikad du/euch.\n- **Anrede i pozdrav** na kraju su obavezni – bez njih gubiš poene.\n- Obradi **sve tri stvari**: zahvalnost + izvinjenje + razlog."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "📌 **Savet:** 40 reči je malo – budi konkretan. Jedna rečenica po funkciji (zahvalnost / izvinjenje / razlog) + Anrede + pozdrav je dovoljno."
+      }
+    ]
+  },
+  {
+    "id": "4e5ccd81-6dfb-4ca7-bdd1-7efb5e2b441f",
+    "order_index": 25,
+    "title": "Familie, Generationen und Lebensformen",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Schritte teme · L8–14",
+        "category": "wortschatz"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Tema porodice, generacija i različitih oblika života. Učiš vokabular i fraze da pričaš o porodici, vaspitanju i zajedničkom životu. (Schritte 6, Lektion 8)"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Vokabular"
+      },
+      {
+        "rows": [
+          [
+            "die Wohngemeinschaft (WG), -en",
+            "stambena zajednica"
+          ],
+          [
+            "die Kindererziehung (nur Sg.)",
+            "vaspitanje dece"
+          ],
+          [
+            "die Hausarbeit, -en",
+            "kućni posao"
+          ],
+          [
+            "die Lebensform, -en",
+            "oblik života"
+          ],
+          [
+            "alleinerziehend",
+            "koji sam podiže dete"
+          ],
+          [
+            "die Generation, -en",
+            "generacija"
+          ],
+          [
+            "zusammenleben",
+            "živeti zajedno"
+          ],
+          [
+            "respektieren",
+            "poštovati"
+          ]
+        ],
+        "type": "vocabulary"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "stambena zajednica",
+            "front": "die Wohngemeinschaft (WG)"
+          },
+          {
+            "back": "vaspitanje dece",
+            "front": "die Kindererziehung"
+          },
+          {
+            "back": "kućni posao",
+            "front": "die Hausarbeit"
+          },
+          {
+            "back": "oblik života",
+            "front": "die Lebensform"
+          },
+          {
+            "back": "koji sam podiže dete",
+            "front": "alleinerziehend"
+          },
+          {
+            "back": "generacija",
+            "front": "die Generation"
+          },
+          {
+            "back": "živeti zajedno",
+            "front": "zusammenleben"
+          },
+          {
+            "back": "poštovati",
+            "front": "respektieren"
+          }
+        ],
+        "backLabel": "Prevod",
+        "frontLabel": "Nemački"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "💬 **Uvežbaj prevod:** otvori vežbu **AI prevod** (ispod lekcije) i prevedi rečenice na ovu temu sa srpskog na nemački."
+      }
+    ]
+  },
+  {
+    "id": "44d69531-db52-418f-9c5d-ae4d730f2fe4",
+    "order_index": 26,
+    "title": "Glück, Erfolg und Lebensziele",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Schritte teme · L8–14",
+        "category": "wortschatz"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Tema sreće, uspeha i životnih ciljeva. Učiš da pričaš o tome šta te čini srećnim, o planovima i odlukama. (Schritte 6, Lektion 11)"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Vokabular"
+      },
+      {
+        "rows": [
+          [
+            "das Glück (nur Sg.)",
+            "sreća"
+          ],
+          [
+            "der Erfolg, -e",
+            "uspeh"
+          ],
+          [
+            "das Lebensziel, -e",
+            "životni cilj"
+          ],
+          [
+            "die Entscheidung, -en",
+            "odluka"
+          ],
+          [
+            "zufrieden",
+            "zadovoljan"
+          ],
+          [
+            "träumen von + Dat",
+            "sanjati o"
+          ],
+          [
+            "erreichen",
+            "postići"
+          ],
+          [
+            "abhängen von + Dat",
+            "zavisiti od"
+          ]
+        ],
+        "type": "vocabulary"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "sreća",
+            "front": "das Glück"
+          },
+          {
+            "back": "uspeh",
+            "front": "der Erfolg"
+          },
+          {
+            "back": "životni cilj",
+            "front": "das Lebensziel"
+          },
+          {
+            "back": "odluka",
+            "front": "die Entscheidung"
+          },
+          {
+            "back": "zadovoljan",
+            "front": "zufrieden"
+          },
+          {
+            "back": "sanjati o",
+            "front": "träumen von"
+          },
+          {
+            "back": "postići",
+            "front": "erreichen"
+          },
+          {
+            "back": "zavisiti od",
+            "front": "abhängen von"
+          }
+        ],
+        "backLabel": "Prevod",
+        "frontLabel": "Nemački"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "💬 **Uvežbaj prevod:** otvori vežbu **AI prevod** (ispod lekcije) i prevedi rečenice na ovu temu sa srpskog na nemački."
+      }
+    ]
+  },
+  {
+    "id": "aa2936d2-bc75-4cac-b977-f6a638968ee3",
+    "order_index": 27,
+    "title": "Ehrenamt und gesellschaftliches Engagement",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Schritte teme · L8–14",
+        "category": "wortschatz"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Tema volontiranja i angažovanja u društvu. Učiš da pričaš o dobrovoljnom radu, projektima i zaštiti životne sredine. (Schritte 6, Lektion 12)"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Vokabular"
+      },
+      {
+        "rows": [
+          [
+            "das Ehrenamt, ¨er",
+            "volonterski rad"
+          ],
+          [
+            "ehrenamtlich",
+            "volonterski"
+          ],
+          [
+            "sich engagieren für + Akk",
+            "angažovati se za"
+          ],
+          [
+            "der Umweltschutz (nur Sg.)",
+            "zaštita životne sredine"
+          ],
+          [
+            "die Gesellschaft, -en",
+            "društvo"
+          ],
+          [
+            "freiwillig",
+            "dobrovoljno"
+          ],
+          [
+            "teilnehmen an + Dat",
+            "učestvovati u"
+          ],
+          [
+            "die Spende, -n",
+            "donacija"
+          ]
+        ],
+        "type": "vocabulary"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "volonterski rad",
+            "front": "das Ehrenamt"
+          },
+          {
+            "back": "volonterski",
+            "front": "ehrenamtlich"
+          },
+          {
+            "back": "angažovati se za",
+            "front": "sich engagieren für"
+          },
+          {
+            "back": "zaštita životne sredine",
+            "front": "der Umweltschutz"
+          },
+          {
+            "back": "društvo",
+            "front": "die Gesellschaft"
+          },
+          {
+            "back": "dobrovoljno",
+            "front": "freiwillig"
+          },
+          {
+            "back": "učestvovati u",
+            "front": "teilnehmen an"
+          },
+          {
+            "back": "donacija",
+            "front": "die Spende"
+          }
+        ],
+        "backLabel": "Prevod",
+        "frontLabel": "Nemački"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "💬 **Uvežbaj prevod:** otvori vežbu **AI prevod** (ispod lekcije) i prevedi rečenice na ovu temu sa srpskog na nemački."
+      }
+    ]
+  },
+  {
+    "id": "56eac139-e1a4-4334-b544-2622b93cf70b",
+    "order_index": 28,
+    "title": "Politik, Rechte und Pflichten",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Schritte teme · L8–14",
+        "category": "wortschatz"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Tema politike, prava i obaveza. Učiš vokabular o izborima, zakonima i pravima građana. (Schritte 6, Lektion 13)"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Vokabular"
+      },
+      {
+        "rows": [
+          [
+            "das Recht, -e",
+            "pravo"
+          ],
+          [
+            "die Pflicht, -en",
+            "obaveza"
+          ],
+          [
+            "die Wahlen (Pl.)",
+            "izbori"
+          ],
+          [
+            "der Bürger, -",
+            "građanin"
+          ],
+          [
+            "das Gesetz, -e",
+            "zakon"
+          ],
+          [
+            "wählen",
+            "glasati, birati"
+          ],
+          [
+            "die Regierung, -en",
+            "vlada"
+          ],
+          [
+            "einhalten",
+            "poštovati (zakon)"
+          ]
+        ],
+        "type": "vocabulary"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "pravo",
+            "front": "das Recht"
+          },
+          {
+            "back": "obaveza",
+            "front": "die Pflicht"
+          },
+          {
+            "back": "izbori",
+            "front": "die Wahlen"
+          },
+          {
+            "back": "građanin",
+            "front": "der Bürger"
+          },
+          {
+            "back": "zakon",
+            "front": "das Gesetz"
+          },
+          {
+            "back": "glasati, birati",
+            "front": "wählen"
+          },
+          {
+            "back": "vlada",
+            "front": "die Regierung"
+          },
+          {
+            "back": "poštovati (zakon)",
+            "front": "einhalten"
+          }
+        ],
+        "backLabel": "Prevod",
+        "frontLabel": "Nemački"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "💬 **Uvežbaj prevod:** otvori vežbu **AI prevod** (ispod lekcije) i prevedi rečenice na ovu temu sa srpskog na nemački."
+      }
+    ]
+  },
+  {
+    "id": "bc238abd-3cae-4096-a7ba-b51861d65e9b",
+    "order_index": 29,
+    "title": "Položi B1",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 10 · Prüfungstraining",
+        "category": "lesen"
+      },
+      {
+        "type": "video",
+        "vimeoId": "597827829"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "B1 ispit (Goethe-Zertifikat B1 ili ÖSD) ima **četiri modula**: Lesen, Hören, Schreiben i Sprechen. Svaki se polaže i ocenjuje zasebno – za prolaz ti treba **60%** u svakom. U ovoj lekciji dobijaš strategiju za svaki deo."
+      },
+      {
+        "rows": [
+          [
+            "Lesen",
+            "65 min",
+            "5 delova – članci, oglasi, mišljenja, uputstva"
+          ],
+          [
+            "Hören",
+            "40 min",
+            "4 dela – najave, razgovori, intervjui, diskusija"
+          ],
+          [
+            "Schreiben",
+            "60 min",
+            "3 dela – mejl prijatelju, forum-komentar, formalni mejl"
+          ],
+          [
+            "Sprechen",
+            "15 min",
+            "3 dela – planiranje, prezentacija, razgovor"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Modul",
+          "Trajanje",
+          "Šta se traži"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "uebung",
+        "content": "## Lesen – strategija\n\n1. **Prvo pročitaj pitanja**, pa tek onda tekst – znaš šta tražiš.\n2. **Podvuci ključne reči** u pitanju i traži ih (ili sinonime!) u tekstu.\n3. Ne moraš da razumeš svaku reč – traži samo odgovor.\n4. Pazi na **Richtig/Falsch** zamke – često je tačno suprotno od onoga što očekuješ."
+      },
+      {
+        "type": "text",
+        "style": "uebung",
+        "content": "## Hören – strategija\n\n1. Iskoristi pauzu pre slušanja da pročitaš pitanja.\n2. Fokus na **brojeve, imena, datume, vremena** – tu su najčešće odgovori.\n3. Prvi deo se sluša **jednom**, ostali **dvaput** – ne paniči ako promašiš prvi put.\n4. Uvek upiši nešto – prazan odgovor je siguran 0."
+      },
+      {
+        "type": "text",
+        "style": "uebung",
+        "content": "## Schreiben – strategija\n\n1. Isplaniraj vreme: ~20 min po zadatku.\n2. Koristi jasnu strukturu: **uvod → razrada → zaključak/pozdrav**.\n3. Obavezno odgovori na **sve tačke** iz zadatka (Leitpunkte) – svaka nosi poene.\n4. Pazi na **register**: prijatelju = *du*, formalno = *Sie* + *Mit freundlichen Grüßen*."
+      },
+      {
+        "type": "text",
+        "style": "uebung",
+        "content": "## Sprechen – strategija\n\n1. **Teil 1:** zajedničko planiranje – predlaži, slušaj partnera, dogovori se (*Wollen wir…? Ich schlage vor… Einverstanden!*).\n2. **Teil 2:** prezentacija teme – koristi strukturu uvod-iskustvo-prednosti/mane-mišljenje.\n3. **Teil 3:** pitanja o prezentaciji – odgovaraj punim rečenicama.\n4. Govori – pauze i greške su ok, ćutanje nije."
+      },
+      {
+        "rows": [
+          [
+            "die Prüfung, -en",
+            "ispit"
+          ],
+          [
+            "bestehen",
+            "položiti"
+          ],
+          [
+            "die Aufgabe, -n",
+            "zadatak"
+          ],
+          [
+            "der Leitpunkt, -e",
+            "tačka koju moraš obraditi"
+          ],
+          [
+            "die Strategie, -n",
+            "strategija"
+          ],
+          [
+            "die Note, -n",
+            "ocena"
+          ]
+        ],
+        "type": "vocabulary"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Netačno – prvo pitanja, pa tekst.",
+            "question": "Prvo treba pročitati ceo tekst, pa onda pitanja."
+          },
+          {
+            "answer": "Tačno",
+            "question": "Za prolaz treba 60% u svakom modulu posebno."
+          },
+          {
+            "answer": "Netačno – uvek upiši nešto.",
+            "question": "Ako ne znaš odgovor u Hören, bolje ostaviti prazno."
+          },
+          {
+            "answer": "Tačno – svaka nosi poene.",
+            "question": "U Schreiben moraš obraditi sve tačke iz zadatka."
+          }
+        ],
+        "title": "Ključni saveti – tačno ili netačno?"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "🎯 **Najvažnije:** vežbaj sa pravim model-testovima pod vremenom. Brzina i sigurnost dolaze samo kroz ponavljanje."
+      }
+    ]
+  },
+  {
+    "id": "166b01a1-f3de-4efb-9daf-b1bb372ea988",
+    "order_index": 30,
+    "title": "Položi B1 TELC",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 10 · Prüfungstraining",
+        "category": "lesen"
+      },
+      {
+        "type": "video",
+        "vimeoId": "653236416"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "**telc Deutsch B1** je alternativa Goethe ispitu – priznat za posao i boravak. Struktura je slična, ali ima svoje specifičnosti. Ako biraš između Goethe i telc, ova lekcija ti pomaže da se pripremiš baš za telc format."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## telc B1 – struktura\n\ntelc spaja pismeni deo u jednu celinu (**Schriftliche Prüfung**) i ima zaseban usmeni deo (**Mündliche Prüfung**)."
+      },
+      {
+        "rows": [
+          [
+            "Leseverstehen",
+            "3 dela + jezički delovi (Sprachbausteine)"
+          ],
+          [
+            "Sprachbausteine",
+            "gramatika i vokabular u kontekstu (popunjavanje)"
+          ],
+          [
+            "Hörverstehen",
+            "3 dela"
+          ],
+          [
+            "Schriftlicher Ausdruck",
+            "1 pismo (formalno ili poluformalno)"
+          ],
+          [
+            "Mündlicher Ausdruck",
+            "Kontaktaufnahme, razgovor o temi, rešavanje zadatka"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Deo",
+          "Sadržaj"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Glavna razlika u odnosu na Goethe\n\n- telc ima **Sprachbausteine** – poseban deo samo za gramatiku/vokabular (Goethe to nema kao zaseban deo).\n- U pismenom delu telc obično traži **jedno pismo** (Goethe ima tri kraća zadatka).\n- telc usmeni se često polaže **u paru**."
+      },
+      {
+        "type": "text",
+        "style": "uebung",
+        "content": "## Sprachbausteine – saveti\n\nOvo je deo gde dobijaš poene ako znaš gramatiku iz ovog kursa!\n\n- **Teil 1:** popunjavaš prazna mesta (predlozi, veznici, padeži) – biraš od ponuđenih.\n- **Teil 2:** biraš pravu reč za rupu u tekstu.\n- Ponovi: predlozi sa padežima, veznici (*weil, dass, obwohl, damit*), zamenice."
+      },
+      {
+        "type": "text",
+        "style": "uebung",
+        "content": "## Pismo (Schriftlicher Ausdruck) – struktura\n\n1. **Anrede:** *Sehr geehrte… / Liebe…* (zavisi od registra)\n2. **Uvod:** zašto pišeš\n3. **Razrada:** obradi sve date tačke\n4. **Zaključak + pozdrav:** *Mit freundlichen Grüßen / Viele Grüße*\n\nKoristi veznike i izraze za mišljenje iz lekcija (Konnektoren, Redemittel)."
+      },
+      {
+        "rows": [
+          [
+            "die Sprachbausteine (Pl.)",
+            "jezički elementi (telc deo)"
+          ],
+          [
+            "der Ausdruck, ¨e",
+            "izražavanje"
+          ],
+          [
+            "die Kontaktaufnahme (nur Sg.)",
+            "uspostavljanje kontakta (usmeni deo)"
+          ],
+          [
+            "schriftlich",
+            "pismeno"
+          ],
+          [
+            "mündlich",
+            "usmeno"
+          ],
+          [
+            "die Lücke, -n",
+            "praznina, rupa (za popunjavanje)"
+          ]
+        ],
+        "type": "vocabulary"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Tačno – to su Sprachbausteine.",
+            "question": "telc ima poseban deo samo za gramatiku i vokabular."
+          },
+          {
+            "answer": "Netačno – obično jedno pismo.",
+            "question": "U telc pismenom delu obično pišeš tri kratka zadatka."
+          },
+          {
+            "answer": "Tačno",
+            "question": "Usmeni telc deo se često polaže u paru."
+          }
+        ],
+        "title": "Provera – telc B1"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "💡 **Savet:** ako ti gramatika dobro ide, telc ti može biti lakši zbog Sprachbausteine bodova. Ako si jači u slobodnom pisanju/govoru, razmisli o Goethe. Oba sertifikata su jednako priznata."
+      }
+    ]
+  },
+  {
+    "id": "c3e1b5bb-8909-4450-b65a-a8540a335150",
+    "order_index": 31,
+    "title": "Lese – und Hörverstehen",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 10 · Prüfungstraining",
+        "category": "lesen"
+      },
+      {
+        "type": "video",
+        "vimeoId": "1128598236"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Lesen i Hören su moduli gde se najlakše skupljaju poeni – ako znaš tehniku. Ista strategija (prvo pitanja, pa tekst/audio, pa potvrda) radi za oba. Ispod je i pravi ispitni zadatak za vežbu."
+      },
+      {
+        "type": "text",
+        "style": "uebung",
+        "content": "## Lesen – korak po korak\n\n1. Pročitaj **naslov i pitanja** pre teksta.\n2. **Podvuci ključne reči** u svakom pitanju.\n3. Pređi tekst i traži ta mesta – odgovor je obično parafraza (sinonim), ne ista reč.\n4. Za **Richtig/Falsch**: nađi rečenicu u tekstu koja to dokazuje. Nema dokaza → verovatno Falsch."
+      },
+      {
+        "type": "text",
+        "style": "uebung",
+        "content": "## Hören – korak po korak\n\n1. U pauzi pre slušanja **pročitaj pitanja** i predvidi temu.\n2. Slušaj **glavnu informaciju**, ne svaku reč.\n3. Hvataj **imenice, brojeve, datume**.\n4. Drugi put slušaj samo da **proveriš** ono u šta nisi siguran."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Pravi zadatak za vežbu (Lesen)\n\nKoji tekst (A–G) odgovara kojoj situaciji? Svaki opis je kratko uputstvo – poveži ga sa temom. Ovo je tipičan B1 Lesen zadatak „uparivanja“."
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "**A** – Stecken Sie das Ladegerät in eine Steckdose… Während Ihr Telefon lädt, sehen Sie das Symbol für **Akku laden**. → *punjenje telefona*\n\n**B** – Wenn Sie einen neuen Kontakt erstellen möchten, wählen Sie **Kontakte**… tippen Sie auf **Speichern**. → *novi kontakt*\n\n**C** – Stecken Sie ein LAN-Kabel in den LAN-Anschluss… **Netzwerk einstellen** → **Starten**. → *TV na internet*\n\n**D** – Wenn Ihr Gerät nicht mehr reagiert, schließen Sie die App… schalten Sie das Gerät aus und wieder ein. → *uređaj se zamrznuo*\n\n**E** – Wählen Sie **Kontakte**, dann Ihren Namen und das Bleistift-Symbol… Kontaktdaten versenden/freigeben. → *deljenje svojih podataka*\n\n**F** – Tippen Sie auf das **Wecker-Symbol**… Uhrzeit und Tage auswählen → **Speichern**. → *podešavanje alarma*\n\n**G** – Öffnen Sie den Shop, tippen Sie bei **Suche** den Namen der App ein… **Installieren**. → *instaliranje aplikacije*"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "F (Wecker)",
+            "question": "Želiš da podesiš da te telefon budi ujutru."
+          },
+          {
+            "answer": "D (Gerät reagiert nicht)",
+            "question": "Aplikacija se zaledila i ne reaguje."
+          },
+          {
+            "answer": "G (Shop → installieren)",
+            "question": "Hoćeš novu aplikaciju."
+          },
+          {
+            "answer": "A (Ladegerät)",
+            "question": "Telefon je prazan, treba da ga napuniš."
+          },
+          {
+            "answer": "C (LAN-Kabel)",
+            "question": "Hoćeš da povežeš TV na internet."
+          }
+        ],
+        "title": "Vežba – poveži situaciju sa tekstom (A–G)"
+      },
+      {
+        "rows": [
+          [
+            "das Schlüsselwort, ¨er",
+            "ključna reč"
+          ],
+          [
+            "die Aussage, -n",
+            "tvrdnja, izjava"
+          ],
+          [
+            "paraphrasieren",
+            "reći drugim rečima"
+          ],
+          [
+            "das Ladegerät, -e",
+            "punjač"
+          ],
+          [
+            "der Anschluss, ¨e",
+            "priključak"
+          ],
+          [
+            "einstellen",
+            "podesiti"
+          ]
+        ],
+        "type": "vocabulary"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "🎧 **Vežbaj redovno:** Deutsche Welle „Langsam gesprochene Nachrichten“ za slušanje + kratki članci za čitanje. 15 minuta dnevno diže razumevanje brže od svega."
+      }
+    ]
+  },
+  {
+    "id": "095e51e4-a8e4-4211-8d66-401f0f1b7d6d",
+    "order_index": 32,
+    "title": "Video Duzen vs. Siezen",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Bonus",
+        "category": "hoeren"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Video lekcija o razlici između **du** i **Sie** – fokus na ton i stil komunikacije. Dok gledaš, obrati pažnju na to kako se menja obraćanje u formalnim i neformalnim situacijama."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Šta da pratiš u videu\n\n- Kada govornici koriste **du**, a kada **Sie**\n- Kako zvuči **formalan** ton naspram **opuštenog**\n- Fraze za prelazak na *du* (*Wollen wir uns duzen?*)"
+      },
+      {
+        "rows": [
+          [
+            "die Höflichkeit (nur Sg.)",
+            "uljudnost"
+          ],
+          [
+            "die Distanz, -en",
+            "distanca"
+          ],
+          [
+            "die Vertrautheit (nur Sg.)",
+            "bliskost"
+          ],
+          [
+            "die Anrede, -n",
+            "obraćanje"
+          ],
+          [
+            "der Ton, ¨e",
+            "ton"
+          ]
+        ],
+        "type": "vocabulary"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "💡 Posle videa ponovi lekciju **Duzen vs. Siezen – Prüfung B1** da uvežbaš pravila kroz primere i vežbe."
+      }
+    ]
+  },
+  {
+    "id": "715a79bc-6ead-49f5-91b7-699f8977d961",
+    "order_index": 33,
+    "title": "Lakše pamtimo uz pesme (2)",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Bonus",
+        "category": "hoeren"
+      },
+      {
+        "type": "video",
+        "vimeoId": "1124597698"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Pesme su odličan način da zapamtiš vokabular, ritam i melodiju jezika. Mozak pamti reči uz muziku mnogo lakše nego iz liste. U ovoj lekciji učiš kako da slušaš pesme za učenje."
+      },
+      {
+        "type": "text",
+        "style": "uebung",
+        "content": "## Kako da učiš uz pesmu\n\n1. **Prvo slušaj** bez teksta – uhvati melodiju i raspoloženje.\n2. **Pročitaj tekst** i podvuci nove reči.\n3. **Slušaj ponovo** prateći tekst.\n4. **Pevaj** – izgovor i ritam ti se urezuju.\n5. Izaberi 5 novih reči i napravi rečenice."
+      },
+      {
+        "rows": [
+          [
+            "der Refrain, -s",
+            "refren"
+          ],
+          [
+            "die Melodie, -n",
+            "melodija"
+          ],
+          [
+            "der Text / der Liedtext, -e",
+            "tekst (pesme)"
+          ],
+          [
+            "singen",
+            "pevati"
+          ],
+          [
+            "der Rhythmus, Rhythmen",
+            "ritam"
+          ],
+          [
+            "die Strophe, -n",
+            "strofa"
+          ]
+        ],
+        "type": "vocabulary"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "der Refrain (refren)",
+            "question": "Deo pesme koji se ponavlja zove se…"
+          },
+          {
+            "answer": "Da – uz melodiju i ritam reči se pamte lakše.",
+            "question": "Da li pesme pomažu u pamćenju novih izraza?"
+          }
+        ],
+        "title": "Mini vežba"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "🎵 **Savet:** biraj pesme koje voliš i koje nisu prebrze. Sporije balade su idealne za početak."
+      }
+    ]
+  }
+]

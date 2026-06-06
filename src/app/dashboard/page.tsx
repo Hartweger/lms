@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Play, RotateCcw, ArrowRight, Award, GraduationCap, BookOpen } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import ProgressBar from "@/components/ProgressBar";
 import quotesData from "@/data/quotes.json";
@@ -110,11 +111,13 @@ export default async function Dashboard() {
   let courseIds: string[] = [];
 
   if (isAdmin || isProfessor) {
-    // Admins and professors see all courses
-    const { data: allCourses } = await supabase
-      .from("courses")
-      .select("id");
-    courseIds = allCourses?.map((c) => c.id) ?? [];
+    // Admins and professors see all courses that actually have lessons —
+    // this hides the sales/marketing shells (grupni/individualni/paket…),
+    // which are purchasable products with no lesson content of their own.
+    const { data: lessonRows } = await supabase
+      .from("lessons")
+      .select("course_id");
+    courseIds = [...new Set((lessonRows ?? []).map((l) => l.course_id))];
   } else {
     // Students: filter out expired access
     const { data: accessList } = await supabase
@@ -191,14 +194,14 @@ export default async function Dashboard() {
     : null;
 
   return (
-    <div className="max-w-lg mx-auto px-4 py-8">
+    <div className="max-w-5xl mx-auto px-4 py-8">
       {/* Greeting + Quote */}
-      <div className="mb-6">
-        <h1 className="text-xl font-bold text-gray-900">
-          Zdravo, {profile?.full_name || "učeniče"}! 👋
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-gray-900">
+          Zdravo, {profile?.full_name || "učeniče"}!
         </h1>
         <p className="text-sm text-gray-500 italic mt-1">
-          „{quote.text_de}"
+          „{quote.text_de}“
           {quote.show_translation && (
             <span className="text-gray-400"> — {quote.text_sr}</span>
           )}
@@ -223,77 +226,89 @@ export default async function Dashboard() {
       {primaryCourse ? (
         <>
           {/* Primary Course Block */}
-          <div className="bg-white rounded-xl p-5 border-2 border-plava shadow-sm mb-4">
-            <div className="text-xs font-bold text-plava tracking-wide mb-2">
-              {allCompleted ? "PONOVI KURS" : "NASTAVI SA UČENJEM"}
-            </div>
-            <h2 className="font-bold text-lg text-gray-900 mb-1">
-              {primaryCourse.title}
-            </h2>
-            {primaryCourse.currentLessonTitle && (
-              <p className="text-sm text-gray-500 mb-3">
-                {primaryCourse.currentLessonTitle}
-              </p>
-            )}
-            <ProgressBar progress={primaryCourse.progress} className="mb-1" />
-            <p className="text-xs text-gray-400 mb-4">
-              {primaryCourse.completedLessons} od {primaryCourse.totalLessons} lekcija
-            </p>
-            {/* Certificate status */}
-            {allCompleted && certifiedCourseIds.has(primaryCourse.id) && (
-              <Link
-                href={`/sertifikat/${getCertificateId(primaryCourse.id)}`}
-                className="block w-full text-center bg-green-50 text-green-700 border border-green-200 py-3 rounded-lg font-bold text-sm mb-2 hover:bg-green-100 transition-colors"
-              >
-                Preuzmi sertifikat
-              </Link>
-            )}
-            {allCompleted && !certifiedCourseIds.has(primaryCourse.id) && (
-              <div className="bg-plava-light text-plava-dark text-sm rounded-lg p-3 mb-2 text-center">
-                Sve lekcije završene! Položi završni ispit za sertifikat.
+          <div className="bg-white rounded-2xl p-6 border border-plava/30 shadow-md mb-8 sm:flex sm:items-center sm:gap-6">
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-koral tracking-wide mb-2">
+                <BookOpen className="w-3.5 h-3.5" strokeWidth={2.5} />
+                {allCompleted ? "PONOVI KURS" : "NASTAVI SA UČENJEM"}
               </div>
-            )}
+              <h2 className="font-bold text-xl text-gray-900 mb-1">
+                {primaryCourse.title}
+              </h2>
+              {primaryCourse.currentLessonTitle && (
+                <p className="text-sm text-gray-500 mb-3">
+                  {primaryCourse.currentLessonTitle}
+                </p>
+              )}
+              <ProgressBar progress={primaryCourse.progress} className="mb-1" />
+              <p className="text-xs text-gray-400">
+                {primaryCourse.completedLessons} od {primaryCourse.totalLessons} lekcija
+              </p>
+            </div>
 
-            <Link
-              href={primaryCourse.currentLessonId ? `/lekcija/${primaryCourse.currentLessonId}` : `/kurs/${primaryCourse.slug}`}
-              className="block w-full text-center bg-plava text-white py-3 rounded-lg font-bold text-sm hover:bg-plava-dark transition-colors"
-            >
-              ▶ {allCompleted ? "Ponovi" : "Nastavi"}
-            </Link>
+            <div className="mt-5 sm:mt-0 sm:w-56 shrink-0 space-y-2">
+              {/* Certificate status */}
+              {allCompleted && certifiedCourseIds.has(primaryCourse.id) && (
+                <Link
+                  href={`/sertifikat/${getCertificateId(primaryCourse.id)}`}
+                  className="flex items-center justify-center gap-2 w-full bg-green-50 text-green-700 border border-green-200 py-3 rounded-xl font-bold text-sm hover:bg-green-100 transition-colors"
+                >
+                  <Award className="w-4 h-4" strokeWidth={2.5} />
+                  Preuzmi sertifikat
+                </Link>
+              )}
+              {allCompleted && !certifiedCourseIds.has(primaryCourse.id) && (
+                <div className="bg-plava-light text-plava-dark text-sm rounded-xl p-3 text-center">
+                  Sve lekcije završene! Položi završni ispit za sertifikat.
+                </div>
+              )}
+
+              <Link
+                href={primaryCourse.currentLessonId ? `/lekcija/${primaryCourse.currentLessonId}` : `/kurs/${primaryCourse.slug}`}
+                className="flex items-center justify-center gap-2 w-full bg-plava text-white py-3 rounded-xl font-bold text-sm hover:bg-plava-dark transition-colors"
+              >
+                {allCompleted ? (
+                  <RotateCcw className="w-4 h-4" strokeWidth={2.5} />
+                ) : (
+                  <Play className="w-4 h-4 fill-current" strokeWidth={2.5} />
+                )}
+                {allCompleted ? "Ponovi" : "Nastavi"}
+              </Link>
+            </div>
           </div>
 
           {/* Secondary Courses */}
           {secondaryCourses.length > 0 && (
             <div>
-              <p className="text-xs font-semibold text-gray-400 tracking-wide mb-2">
+              <p className="text-xs font-semibold text-gray-400 tracking-wide mb-3">
                 OSTALI KURSEVI
               </p>
-              <div className="space-y-2">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {secondaryCourses.map((course) => (
-                  <div key={course.id} className="bg-white rounded-xl p-4 border border-gray-100">
-                    <Link
-                      href={course.currentLessonId ? `/lekcija/${course.currentLessonId}` : `/kurs/${course.slug}`}
-                      className="flex items-center justify-between hover:opacity-80 transition-opacity"
-                    >
-                      <div>
-                        <h3 className="font-bold text-sm text-gray-900">
-                          {course.title}
-                        </h3>
-                        <p className="text-xs text-gray-400 mt-0.5">
-                          {course.completedLessons} od {course.totalLessons} lekcija
-                        </p>
-                      </div>
-                      {course.progress === 100 && certifiedCourseIds.has(course.id) ? (
-                        <span className="text-xs font-semibold text-green-700 bg-green-50 px-3 py-1.5 rounded-lg">
-                          Sertifikat
-                        </span>
-                      ) : (
-                        <span className="text-xs font-semibold text-plava bg-plava-light px-3 py-1.5 rounded-lg">
-                          Nastavi →
-                        </span>
-                      )}
-                    </Link>
-                  </div>
+                  <Link
+                    key={course.id}
+                    href={course.currentLessonId ? `/lekcija/${course.currentLessonId}` : `/kurs/${course.slug}`}
+                    className="flex flex-col bg-white rounded-2xl p-4 border border-gray-100 hover:shadow-md hover:border-plava/30 transition-all"
+                  >
+                    <h3 className="font-bold text-sm text-gray-900">
+                      {course.title}
+                    </h3>
+                    <p className="text-xs text-gray-400 mt-0.5 mb-3">
+                      {course.completedLessons} od {course.totalLessons} lekcija
+                    </p>
+                    <ProgressBar progress={course.progress} className="mb-3" />
+                    {course.progress === 100 && certifiedCourseIds.has(course.id) ? (
+                      <span className="mt-auto inline-flex items-center gap-1 self-start text-xs font-semibold text-green-700 bg-green-50 px-3 py-1.5 rounded-lg">
+                        <Award className="w-3.5 h-3.5" strokeWidth={2.5} />
+                        Sertifikat
+                      </span>
+                    ) : (
+                      <span className="mt-auto inline-flex items-center gap-1 self-start text-xs font-semibold text-plava bg-plava-light px-3 py-1.5 rounded-lg">
+                        Nastavi
+                        <ArrowRight className="w-3.5 h-3.5" strokeWidth={2.5} />
+                      </span>
+                    )}
+                  </Link>
                 ))}
               </div>
             </div>
@@ -302,14 +317,16 @@ export default async function Dashboard() {
       ) : (
         /* Empty State */
         <div className="text-center py-16">
+          <GraduationCap className="w-12 h-12 text-gray-300 mx-auto mb-3" strokeWidth={1.5} />
           <p className="text-gray-400 mb-4">Nemaš upisane kurseve.</p>
           <a
             href="https://hartweger.rs"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block bg-plava text-white px-6 py-3 rounded-lg hover:bg-plava-dark transition-colors"
+            className="inline-flex items-center gap-2 bg-plava text-white px-6 py-3 rounded-xl font-bold hover:bg-plava-dark transition-colors"
           >
             Kupi kurs na hartweger.rs
+            <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
           </a>
         </div>
       )}

@@ -134,6 +134,252 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 8px;
 }
 
+/* Hide scrollbar for tab bars on mobile */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* WordPress / Elementor content cleanup */
+.prose img {
+  max-height: 500px;
+  width: auto;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 0.75rem;
+}
+.prose .wp-block-image,
+.prose .elementor-widget-image {
+  margin: 2rem 0;
+  text-align: center;
+}
+.prose .wp-block-image img,
+.prose .elementor-widget-image img {
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  max-height: 500px;
+  width: auto;
+  margin: 0 auto;
+}
+.prose .wp-block-embed,
+.prose .wp-block-video {
+  margin: 2rem 0;
+}
+.prose .wp-block-embed iframe,
+.prose iframe {
+  border-radius: 0.75rem;
+  max-width: 100%;
+}
+.prose .has-text-align-center {
+  text-align: center;
+}
+.prose .wp-block-separator {
+  border-color: #e5e7eb;
+  margin: 2rem 0;
+}
+.prose .wp-block-table {
+  overflow-x: auto;
+}
+
+/* Blog prose — links must be visible */
+.prose a {
+  color: #4fb1d3 !important;
+  text-decoration: underline !important;
+  text-decoration-color: rgba(79, 177, 211, 0.4) !important;
+  text-underline-offset: 3px;
+}
+.prose a:hover {
+  text-decoration-color: #4fb1d3 !important;
+}
+
+/* Blog prose — visual hierarchy */
+.prose h3 {
+  font-size: 1.35rem;
+  margin-top: 2.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 3px solid #4fb1d3;
+}
+.prose h4 {
+  font-size: 1.1rem;
+  color: #4fb1d3;
+  margin-top: 2rem;
+  font-weight: 700;
+}
+
+/* Blog component: grammar rule box */
+.blog-rule {
+  background: #f0f9fc;
+  border-left: 4px solid #4fb1d3;
+  border-radius: 0 12px 12px 0;
+  padding: 16px 20px;
+  margin: 1.5rem 0;
+}
+.blog-rule p { margin: 0; }
+.blog-rule p + p { margin-top: 6px; }
+
+/* Blog component: example sentences */
+.blog-example {
+  background: #fafafa;
+  border-radius: 12px;
+  padding: 16px 20px;
+  border: 1px solid #eee;
+  margin: 1.5rem 0;
+}
+.blog-example p { margin: 0; }
+.blog-example p + p { margin-top: 4px; }
+.blog-example .translation {
+  font-size: 0.85em;
+  color: #888;
+  font-style: italic;
+  margin-top: 8px;
+}
+
+/* Blog component: key terms / pills */
+.blog-terms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 1.5rem 0;
+}
+.blog-terms span {
+  background: #eef7fa;
+  color: #2b7a9b;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Blog component: tip/note box */
+.blog-note {
+  background: #fffbeb;
+  border-left: 4px solid #f59e0b;
+  border-radius: 0 12px 12px 0;
+  padding: 14px 18px;
+  margin: 1.5rem 0;
+  font-size: 0.9em;
+  line-height: 1.7;
+}
+.blog-note p { margin: 0; }
+
+/* Blog component: CTA block */
+.blog-cta {
+  background: linear-gradient(135deg, #f0f9fc 0%, #e8f4f8 100%);
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  border: 1px solid #d4eef5;
+  margin: 2rem 0;
+}
+.blog-cta p { margin: 0 0 12px; }
+.blog-cta a {
+  display: inline-block;
+  background: #4fb1d3;
+  color: white !important;
+  padding: 12px 28px;
+  border-radius: 10px;
+  text-decoration: none !important;
+  font-weight: 700;
+  font-size: 15px;
+}
+.blog-cta a:hover { background: #3a8fb0; }
+
+/* Blog component: exercise link */
+.blog-exercise {
+  background: #f8fafb;
+  border: 1px solid #e0e7eb;
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin: 1.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.blog-exercise .icon { font-size: 24px; }
+.blog-exercise .label { font-weight: 600; color: #1a1a2e; font-size: 14px; }
+.blog-exercise .desc { font-size: 13px; color: #888; }
+
+/* Blog images */
+.prose .aligncenter,
+.prose .alignnone {
+  display: block;
+  margin: 2rem auto;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+.prose .size-medium {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Elementor buttons → styled as Hartweger CTA */
+.prose .elementor-button {
+  display: inline-block;
+  background: #4fb1d3;
+  color: white !important;
+  padding: 12px 28px;
+  border-radius: 10px;
+  text-decoration: none !important;
+  font-weight: 700;
+  font-size: 15px;
+  transition: background 0.2s;
+}
+.prose .elementor-button:hover {
+  background: #3a8fb0;
+}
+.prose .elementor-button-wrapper {
+  margin: 1.5rem 0;
+  text-align: center;
+}
+.prose .elementor-button-icon {
+  display: none;
+}
+
+/* Elementor testimonials */
+.prose .elementor-testimonial-wrapper {
+  background: #f8fbfc;
+  border-left: 3px solid #4fb1d3;
+  border-radius: 0 0.75rem 0.75rem 0;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+}
+.prose .elementor-testimonial-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+  font-style: normal;
+}
+.prose .elementor-testimonial-image img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.prose .elementor-testimonial-name {
+  font-weight: 700;
+  color: #1a1a2e;
+  font-size: 14px;
+}
+.prose .elementor-testimonial-job {
+  font-size: 12px;
+  color: #999;
+}
+.prose .elementor-testimonial-details {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Safe area for mobile sticky bars (iPhone notch) */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }

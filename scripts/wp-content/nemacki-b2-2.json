@@ -1,0 +1,703 @@
+{
+  "slug": "nemacki-b2-2",
+  "wpCourseId": 40821,
+  "lessons": [
+    {
+      "wpLessonId": 52500,
+      "title": "Was verbinden sie mit \"Stadt\"?",
+      "order_index": 0,
+      "vimeo_video_id": null,
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Was verbinden sie mit \"Stadt\"?"
+        },
+        {
+          "type": "video",
+          "vimeoId": "1193940443"
+        },
+        {
+          "type": "video",
+          "vimeoId": "1193940548"
+        },
+        {
+          "type": "video",
+          "vimeoId": "1193940558"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "wpLessonId": 52502,
+      "title": "Die neue Liebe zum Fahrrad",
+      "order_index": 1,
+      "vimeo_video_id": "1193940567",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Die neue Liebe zum Fahrrad"
+        },
+        {
+          "type": "video",
+          "vimeoId": "1193940567"
+        }
+      ],
+      "exercises": [
+        {
+          "title": "1. ein Geschäft …",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": "ein Geschäft ___ (zwei Antworten sind richtig)",
+              "options": {
+                "type": "fill_blank",
+                "items": []
+              },
+              "correct_answer": "",
+              "question_type": "fill_blank"
+            },
+            {
+              "question": "eine Firma ___ (zwei Antworten sind richtig)",
+              "options": {
+                "type": "fill_blank",
+                "items": []
+              },
+              "correct_answer": "",
+              "question_type": "fill_blank"
+            },
+            {
+              "question": "ein Produkt ___(zwei Antworten sind richtig)",
+              "options": {
+                "type": "fill_blank",
+                "items": []
+              },
+              "correct_answer": "",
+              "question_type": "fill_blank"
+            },
+            {
+              "question": "ein Modell ___(zwei Antworten sind richtig)",
+              "options": {
+                "type": "fill_blank",
+                "items": []
+              },
+              "correct_answer": "",
+              "question_type": "fill_blank"
+            },
+            {
+              "question": "Unternehmerin ___(zwei Antworten sind richtig)",
+              "options": {
+                "type": "fill_blank",
+                "items": []
+              },
+              "correct_answer": "",
+              "question_type": "fill_blank"
+            },
+            {
+              "question": "Kunden ___(zwei Antworten sind richtig)",
+              "options": {
+                "type": "fill_blank",
+                "items": []
+              },
+              "correct_answer": "",
+              "question_type": "fill_blank"
+            },
+            {
+              "question": "Schulden ___(zwei Antworten sind richtig)",
+              "options": {
+                "type": "fill_blank",
+                "items": []
+              },
+              "correct_answer": "",
+              "question_type": "fill_blank"
+            },
+            {
+              "question": "Waren ___(zwei Antworten sind richtig)",
+              "options": {
+                "type": "fill_blank",
+                "items": []
+              },
+              "correct_answer": "",
+              "question_type": "fill_blank"
+            },
+            {
+              "question": "Geld ___(zwei Antworten sind richtig)",
+              "options": {
+                "type": "fill_blank",
+                "items": []
+              },
+              "correct_answer": "",
+              "question_type": "fill_blank"
+            },
+            {
+              "question": "Ergänze",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "b",
+                  "e",
+                  "a",
+                  "d",
+                  "g",
+                  "a",
+                  "b",
+                  "a",
+                  "b",
+                  "a",
+                  "b",
+                  "b",
+                  "b",
+                  "Wen",
+                  "den",
+                  "Wer",
+                  "der",
+                  "Wer",
+                  "dem",
+                  "Wer",
+                  "den",
+                  "Wem",
+                  "der",
+                  "a",
+                  "b",
+                  "c",
+                  "d",
+                  "e"
+                ]
+              },
+              "correct_answer": "b, e, a, d, g, a, b, a, b, a, b, b, b, Wen, den, Wer, der, Wer, dem, Wer, den, Wem, der, a, b, c, d, e",
+              "question_type": "fill_blank"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "wpLessonId": 40823,
+      "title": "Primeri ispita za deo Leseverstehen",
+      "order_index": 2,
+      "vimeo_video_id": null,
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Primeri ispita za deo Leseverstehen"
+        },
+        {
+          "type": "text",
+          "content": "Ovde ćeš naći 3 primera ispita B2 dela Leseverstehen)."
+        }
+      ],
+      "exercises": [
+        {
+          "title": "B2 Leseverstehen Modeltest 1",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": "Teil 1: Upiši slova a -d {b}, 2. {d}, 3. {b}, 4. {c}, 5. {a}, 6. {d}, 7. {b}, 8. {c}, 9. {d} Teil 2: Upiši slova a - h 10. {d}, 11. {c}, 12. {f}, 13. {h} 14.{e}, 15. {b} Teil 3: Upiši slova a, b ili c 16. {c}, 17. {c}, 18. {b}, 19.{c}, 20.{a}, 21.{c} Teil 4: Upiši slova a - h 22. {g}, 23. {c}, 24. {",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "b",
+                  "d",
+                  "b",
+                  "c",
+                  "a",
+                  "d",
+                  "b",
+                  "c",
+                  "d",
+                  "d",
+                  "c",
+                  "f",
+                  "h",
+                  "e",
+                  "b",
+                  "c",
+                  "c",
+                  "b",
+                  "c",
+                  "a",
+                  "c",
+                  "g",
+                  "c",
+                  "f",
+                  "e",
+                  "b",
+                  "h",
+                  "g",
+                  "h",
+                  "b"
+                ]
+              },
+              "correct_answer": "b, d, b, c, a, d, b, c, d, d, c, f, h, e, b, c, c, b, c, a, c, g, c, f, e, b, h, g, h, b",
+              "question_type": "fill_blank"
+            }
+          ]
+        },
+        {
+          "title": "B2 Leseverstehen Modeltest 3",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": "Teil 1: Upiši slova a -d 1.{d}, 2.{c}, 3.{a}, 4.{c}, 5.{b}, 6.{d}, 7.{b}, 8.{a}, 9.{c}, Teil 2: Upiši slova a - h 10.{g}, 11.{d}, 12.{h}, 13.{f}, 14.{¢}, 15.{a}, Teil 3: Upiši slova a, b ili c 16.{a}, 17.{¢}, 18.{a}, 19.{b}, 20.{a}, 21.{a}, Teil 4: Upiši slova a - h 22.{f}, 23.{c}, 24.{q}, 25.{h}, 2",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "d",
+                  "c",
+                  "a",
+                  "c",
+                  "b",
+                  "d",
+                  "b",
+                  "a",
+                  "c",
+                  "g",
+                  "d",
+                  "h",
+                  "f",
+                  "¢",
+                  "a",
+                  "a",
+                  "¢",
+                  "a",
+                  "b",
+                  "a",
+                  "a",
+                  "f",
+                  "c",
+                  "q",
+                  "h",
+                  "d",
+                  "b",
+                  "f",
+                  "g",
+                  "d"
+                ]
+              },
+              "correct_answer": "d, c, a, c, b, d, b, a, c, g, d, h, f, ¢, a, a, ¢, a, b, a, a, f, c, q, h, d, b, f, g, d",
+              "question_type": "fill_blank"
+            }
+          ]
+        },
+        {
+          "title": "B2 Leseverstehen Modeltest 2",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": "Teil 1: Upiši slova a -d {c}, 2. {d}, 3. {a}, 4. {d}, 5. {b}, 6. {c}, 7. {b}, 8. {d}, 9. {b} Teil 2: Upiši slova a - h 10. {a}, 11. {b}, 12. {f}, 13. {d} 14.{h}, 15. {g} Teil 3: Upiši slova a, b ili c 16. {a}, 17. {c}, 18. {a}, 19.{b}, 20.{c}, 21.{a} Teil 4: Upiši slova a - h 22. {b}, 23. {h}, 24. {",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "c",
+                  "d",
+                  "a",
+                  "d",
+                  "b",
+                  "c",
+                  "b",
+                  "d",
+                  "b",
+                  "a",
+                  "b",
+                  "f",
+                  "d",
+                  "h",
+                  "g",
+                  "a",
+                  "c",
+                  "a",
+                  "b",
+                  "c",
+                  "a",
+                  "b",
+                  "h",
+                  "c",
+                  "g",
+                  "d",
+                  "e",
+                  "e",
+                  "g",
+                  "a"
+                ]
+              },
+              "correct_answer": "c, d, a, d, b, c, b, d, b, a, b, f, d, h, g, a, c, a, b, c, a, b, h, c, g, d, e, e, g, a",
+              "question_type": "fill_blank"
+            }
+          ]
+        },
+        {
+          "title": "B2.1 Vielfalt",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": "Schreib in die Lücken A, B, C oder D",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "C",
+                  "D",
+                  "B",
+                  "A",
+                  "C",
+                  "B",
+                  "B",
+                  "D",
+                  "C",
+                  "C",
+                  "B",
+                  "D",
+                  "A",
+                  "A",
+                  "D",
+                  "B",
+                  "A",
+                  "C",
+                  "B",
+                  "B",
+                  "A",
+                  "C",
+                  "B",
+                  "C",
+                  "B"
+                ]
+              },
+              "correct_answer": "C, D, B, A, C, B, B, D, C, C, B, D, A, A, D, B, A, C, B, B, A, C, B, C, B",
+              "question_type": "fill_blank"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "wpLessonId": 40825,
+      "title": "Primeri ispita za deo Hörverstehen",
+      "order_index": 3,
+      "vimeo_video_id": null,
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Primeri ispita za deo Hörverstehen"
+        }
+      ],
+      "exercises": [
+        {
+          "title": "B2 HV Modeltest 1",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": "https://www.hartweger.rs/wp-content/uploads/2024/10/9783061217754_Goethe-Zertifikat_B2_02.mp3 https://www.hartweger.rs/wp-content/uploads/2024/10/9783061217754_Goethe-Zertifikat_B2_03.mp3 https://www.hartweger.rs/wp-content/uploads/2024/10/9783061217754_Goethe-Zertifikat_B2_04.mp3 https://www.hartweger.rs/wp-content/uploads/2024/10/9783061217754_Goethe-Zertifikat_B2_05.mp3",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "R",
+                  "c",
+                  "R",
+                  "a",
+                  "R",
+                  "c",
+                  "R",
+                  "b",
+                  "F",
+                  "c",
+                  "c",
+                  "a",
+                  "b",
+                  "a",
+                  "b",
+                  "c",
+                  "b",
+                  "a",
+                  "c",
+                  "c",
+                  "a",
+                  "c",
+                  "a",
+                  "b",
+                  "b",
+                  "c",
+                  "a",
+                  "c",
+                  "a",
+                  "c"
+                ]
+              },
+              "correct_answer": "R, c, R, a, R, c, R, b, F, c, c, a, b, a, b, c, b, a, c, c, a, c, a, b, b, c, a, c, a, c",
+              "question_type": "fill_blank"
+            }
+          ]
+        },
+        {
+          "title": "B2 HV Modeltest 2",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": "https://www.hartweger.rs/wp-content/uploads/2024/10/9783061217754_Goethe-Zertifikat_B2_06.mp3 https://www.hartweger.rs/wp-content/uploads/2024/10/9783061217754_Goethe-Zertifikat_B2_07.mp3 https://www.hartweger.rs/wp-content/uploads/2024/10/9783061217754_Goethe-Zertifikat_B2_08.mp3 https://www.hartweger.rs/wp-content/uploads/2024/10/9783061217754_Goethe-Zertifikat_B2_09.mp3",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "falsch",
+                  "c",
+                  "Richtig",
+                  "a",
+                  "Richtig",
+                  "a",
+                  "falsch",
+                  "c",
+                  "Richtig",
+                  "b",
+                  "a",
+                  "c",
+                  "b",
+                  "b",
+                  "c",
+                  "c",
+                  "b",
+                  "c",
+                  "c",
+                  "b",
+                  "b",
+                  "a",
+                  "c",
+                  "c",
+                  "b",
+                  "b",
+                  "a",
+                  "a",
+                  "b",
+                  "b"
+                ]
+              },
+              "correct_answer": "falsch, c, Richtig, a, Richtig, a, falsch, c, Richtig, b, a, c, b, b, c, c, b, c, c, b, b, a, c, c, b, b, a, a, b, b",
+              "question_type": "fill_blank"
+            }
+          ]
+        },
+        {
+          "title": "B2 HV Modeltest 3",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": "https://www.hartweger.rs/wp-content/uploads/2024/10/9783061217754_Goethe-Zertifikat_B2_10.mp3 https://www.hartweger.rs/wp-content/uploads/2024/10/9783061217754_Goethe-Zertifikat_B2_11.mp3 https://www.hartweger.rs/wp-content/uploads/2024/10/9783061217754_Goethe-Zertifikat_B2_12.mp3 https://www.hartweger.rs/wp-content/uploads/2024/10/9783061217754_Goethe-Zertifikat_B2_13.mp3",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "R",
+                  "b",
+                  "F",
+                  "c",
+                  "R",
+                  "b",
+                  "F",
+                  "c",
+                  "F",
+                  "a",
+                  "c",
+                  "a",
+                  "b",
+                  "c",
+                  "a",
+                  "b",
+                  "b",
+                  "c",
+                  "a",
+                  "b",
+                  "b",
+                  "c",
+                  "a",
+                  "b",
+                  "b",
+                  "b",
+                  "c",
+                  "a",
+                  "a",
+                  "b"
+                ]
+              },
+              "correct_answer": "R, b, F, c, R, b, F, c, F, a, c, a, b, c, a, b, b, c, a, b, b, c, a, b, b, b, c, a, a, b",
+              "question_type": "fill_blank"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "wpLessonId": 40827,
+      "title": "Primer ispita za deo Schreiben",
+      "order_index": 4,
+      "vimeo_video_id": null,
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Primer ispita za deo Schreiben"
+        },
+        {
+          "type": "text",
+          "content": "Pre nego što kreneš sa pisanjem pročitaj savete za deo SCHREIBEN\n\n[Kako se spremati za ispit B2 deo Schreiben Teil 1?](https://www.hartweger.rs/kako-se-spremati-za-ispit-b2-deo-schreiben/)\n\nOvde se nalazi primer ispita B2 za deo Schreiben.\n\nNastavnik će pregledati rad i oceniti."
+        }
+      ],
+      "exercises": [
+        {
+          "title": "Schreiben B2 Teil 1",
+          "exercise_type": "essay",
+          "questions": [
+            {
+              "question": "Sie schreiben einen Forumsbeitrag zum Thema fleischreiche Ernährung.\n\nÄußern Sie Ihre Meinung zu fleischreicher Ernährung im Alltag.\n\n– Nennen Sie Gründe, warum eine Ernährung mit Fleisch so verbreitet ist.\n\n– Nennen Sie andere Möglichkeiten, sich zu ernähren.\n\n– Nennen Sie Vorteile anderer Ernährung.Denken Sie an eine Einleitung und einen Schluss. Bei der Bewertung wird darauf geachtet, wie genau\n\ndie Inhaltspunkte bearbeitet sind, wie korrekt der Text ist und wie gut die Sätze und Abschnitte\n\nsprachlich miteinander verknüpft sind.\n\nSchreiben Sie mindestens 150 Wörter.",
+              "options": {
+                "type": "essay"
+              },
+              "correct_answer": "",
+              "question_type": "essay"
+            },
+            {
+              "question": "Montagmorgen im Büro. Wegen starker Arbeitsüberlastung haben Sie es letzte Woche versäumt, eine wichtige Bestellung aufzugeben.\n\nSchreiben Sie eine Nachricht an Ihren Vorgesetzten, Herrn Schumann.\n\nEntschuldigen Sie sich für Ihren Fehler.\n\n2 Erklären Sie, weshalb das passieren konnte .\n\n3 Bitten Sie um Verständnis für Ihre Situation.\n\n4 Machen Sie einen Vorschlag zur Lösung des Problems.\n\nÜberlegen Sie sich eine passende Reihenfolge für die Inhaltspunkte.\n\nBei der Bewertung wird darauf geachtet, wie genau die Inhaltspunkte bearbeitet sind, wie korrekt der Text ist und wie gut die Sätze und Abschnitte sprachlich miteinander verknüpft sind.\n\nVergessen Sie nicht Anrede und Gruß.\n\nSchreiben Sie mindestens 100 Wörter.",
+              "options": {
+                "type": "essay"
+              },
+              "correct_answer": "",
+              "question_type": "essay"
+            }
+          ]
+        },
+        {
+          "title": "B2 Leseverstehen Modeltest 4",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": "Teil 1: Upiši slova a -d 1.{c}, 2.{d}, 3.{b}, 4.{c}, 5.{d}, 6.{b}, 7.{a}, 8.{d}, 9.{c} Teil 2: Upiši slova a - h 10.{c}, 11.{a}, 12.{h}, 13.{b}, 14.{d}, 15.{g} Teil 3: Upiši slova a, b ili c 16.{a}, 17.{c}, 18.{c}, 19.{b}, 20.{b}, 21.{c} Teil 4: Upiši slova a - h 22.{d}, 23.{h}, 24.{e}, 25.{g}, 26.{",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "c",
+                  "d",
+                  "b",
+                  "c",
+                  "d",
+                  "b",
+                  "a",
+                  "d",
+                  "c",
+                  "c",
+                  "a",
+                  "h",
+                  "b",
+                  "d",
+                  "g",
+                  "a",
+                  "c",
+                  "c",
+                  "b",
+                  "b",
+                  "c",
+                  "d",
+                  "h",
+                  "e",
+                  "g",
+                  "f",
+                  "c",
+                  "e",
+                  "g",
+                  "b"
+                ]
+              },
+              "correct_answer": "c, d, b, c, d, b, a, d, c, c, a, h, b, d, g, a, c, c, b, b, c, d, h, e, g, f, c, e, g, b",
+              "question_type": "fill_blank"
+            }
+          ]
+        },
+        {
+          "title": "B2 HV Modeltest 4",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": "https://www.hartweger.rs/wp-content/uploads/2024/10/9783061217754_Goethe-Zertifikat_B2_14.mp3 https://www.hartweger.rs/wp-content/uploads/2024/10/9783061217754_Goethe-Zertifikat_B2_15.mp3 https://www.hartweger.rs/wp-content/uploads/2024/10/9783061217754_Goethe-Zertifikat_B2_16.mp3 https://www.hartweger.rs/wp-content/uploads/2024/10/9783061217754_Goethe-Zertifikat_B2_17.mp3",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "F",
+                  "a",
+                  "R",
+                  "c",
+                  "R",
+                  "b",
+                  "R",
+                  "c",
+                  "R",
+                  "a",
+                  "a",
+                  "b",
+                  "c",
+                  "b",
+                  "c",
+                  "c",
+                  "c",
+                  "b",
+                  "c",
+                  "c",
+                  "a",
+                  "b",
+                  "b",
+                  "b",
+                  "b",
+                  "c",
+                  "a",
+                  "c",
+                  "c",
+                  "a"
+                ]
+              },
+              "correct_answer": "F, a, R, c, R, b, R, c, R, a, a, b, c, b, c, c, c, b, c, c, a, b, b, b, b, c, a, c, c, a",
+              "question_type": "fill_blank"
+            }
+          ]
+        },
+        {
+          "title": "Schreiben B2 Teil 1",
+          "exercise_type": "essay",
+          "questions": [
+            {
+              "question": "Sie schreiben einen Forumsbeitrag zum Thema„Autofreie Innenstadt\".\n\n• Äußern Sie Ihre Meinung zur Verkehrssituation in den Innenstädten.\n\n• Nennen Sie Gründe, warum der Verkehr in den Innenstädten verringert werden sollte.\n\n• Nennen Sie andere Möglichkeiten, etwas gegen zu große Verkehrsbelastung zu unternehmen.\n\n• Nennen Sie Vorteile anderer, Möglichkeiten, den Autoverkehr zu verringern.\n\nDenken Sie an eine Einleitung und einen Schluss. Bei der Bewertung wird darauf geachtet, wie genau die Inhaltspunkte bearbeitet sind, wie korrekt der Text ist und wie gut die Sätze und Abschnitte sprachlich miteinander verknüpft sind.\n\nSchreiben Sie mindestens 150 Wörter.",
+              "options": {
+                "type": "essay"
+              },
+              "correct_answer": "",
+              "question_type": "essay"
+            },
+            {
+              "question": "Sie machen ein Praktikum bei einer deutschen Firma. Ohne nachzudenken waren Sie während der\n\nArbeitszeit immer wieder privat im Internet und haben private Mails geschrieben. Deswegen haben\n\nSie eine Mahnung bekommen. Schreiben Sie eine Nachricht an Ihre Vorgesetzte, Frau Lennart.\n\n1 Entschuldigen Sie sich  für Ihren Fehler.\n\n2 Geben Sie Gründe für Ihr Verhalten an und bitten Sie um Entschuldigung.\n\n3 Zeigen Sie Verständnis für die Kritik Ihrer Vorgesetzten.\n\n4 Machen Sie einen Vorschlag, damit solche Fehler in Zukunft vermieden werden können.\n\nÜberlegen Sie sich eine passende Reihenfolge für die Inhaltspunkte.\n\nBei der Bewertung wird darauf geachtet, wie genau die Inhaltspunkte bearbeitet sind, wie korrekt der Text ist und wie gut die Sätze und Abschnitte sprachlich miteinander verknüpft sind. Vergessen Sie\n\nnicht Anrede und Gruß.\n\nSchreiben Sie mindestens 100 Wörter.",
+              "options": {
+                "type": "essay"
+              },
+              "correct_answer": "",
+              "question_type": "essay"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "reviewNotes": [
+    "[Die neue Liebe zum Fahrrad] kviz 52467: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Die neue Liebe zum Fahrrad] kviz 52467: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Die neue Liebe zum Fahrrad] kviz 52467: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Die neue Liebe zum Fahrrad] kviz 52467: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Die neue Liebe zum Fahrrad] kviz 52467: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Die neue Liebe zum Fahrrad] kviz 52467: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Die neue Liebe zum Fahrrad] kviz 52467: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Die neue Liebe zum Fahrrad] kviz 52467: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Die neue Liebe zum Fahrrad] kviz 52467: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Die neue Liebe zum Fahrrad] kviz 52467: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Primeri ispita za deo Leseverstehen] kviz 40829: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Primeri ispita za deo Leseverstehen] kviz 40841: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Primeri ispita za deo Leseverstehen] kviz 40854: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Primeri ispita za deo Leseverstehen] kviz 45319: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Primeri ispita za deo Hörverstehen] kviz 40871: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Primeri ispita za deo Hörverstehen] kviz 40880: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Primeri ispita za deo Hörverstehen] kviz 40883: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Primer ispita za deo Schreiben] kviz 40928: essay (proveri prompt)",
+    "[Primer ispita za deo Schreiben] kviz 40928: essay (proveri prompt)",
+    "Course-level kvizovi (42161, 42163, 42165) zakačeni na poslednju lekciju \"Primer ispita za deo Schreiben\".",
+    "[Primer ispita za deo Schreiben] kviz 42161: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Primer ispita za deo Schreiben] kviz 42163: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Primer ispita za deo Schreiben] kviz 42165: essay (proveri prompt)",
+    "[Primer ispita za deo Schreiben] kviz 42165: essay (proveri prompt)"
+  ]
+}

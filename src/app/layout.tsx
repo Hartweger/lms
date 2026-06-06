@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Lato, Montserrat } from "next/font/google";
+import Script from "next/script";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
@@ -27,9 +28,12 @@ export const viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.hartweger.rs"),
   title: "Hartweger — Škola nemačkog jezika",
   description: "Naučite nemački jezik online — video kursevi, individualna i grupna nastava",
   manifest: "/manifest.json",
+  alternates: { canonical: "./" },
+  robots: { index: true, follow: true },
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -40,7 +44,12 @@ export const metadata: Metadata = {
     description: "Naučite nemački jezik online — video kursevi, individualna i grupna nastava",
     locale: "sr_RS",
     type: "website",
-    images: [{ url: "/logo.jpg", width: 400, height: 114, alt: "Hartweger logo" }],
+    images: [{ url: "/og/default.png", width: 1200, height: 630, alt: "Hartweger — Škola nemačkog jezika" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Hartweger — Škola nemačkog jezika",
+    description: "Naučite nemački jezik online — video kursevi, individualna i grupna nastava",
   },
 };
 
@@ -52,11 +61,72 @@ export default function RootLayout({
   return (
     <html lang="sr" className={`${lato.variable} ${montserrat.variable}`}>
       <body className="min-h-screen flex flex-col">
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-KNP5DKDR"
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          />
+        </noscript>
         <Navigacija />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "Centar za nemački jezik Hartweger",
+              url: "https://www.hartweger.rs",
+              logo: "https://www.hartweger.rs/logo.jpg",
+              email: "info@hartweger.rs",
+              address: {
+                "@type": "PostalAddress",
+                streetAddress: "Jurija Gagarina 20",
+                addressLocality: "Novi Beograd",
+                postalCode: "11070",
+                addressCountry: "RS",
+              },
+              sameAs: [
+                "https://www.instagram.com/hartweger_centar/",
+                "https://www.youtube.com/channel/UCa_7vX8_EtWNUbjA9SqqMwQ",
+                "https://www.facebook.com/hartwegercentar/",
+                "https://rs.linkedin.com/in/natasahartweger",
+                "https://x.com/nacapaun",
+              ],
+            }),
+          }}
+        />
         <main className="flex-1">{children}</main>
         <Footer />
         <Analytics />
         <SpeedInsights />
+        <Script
+          id="gtm-script"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-KNP5DKDR');`,
+          }}
+        />
+        <Script
+          id="ga4-gtag"
+          strategy="afterInteractive"
+          src="https://www.googletagmanager.com/gtag/js?id=G-MB9DRXVVF6"
+        />
+        <Script
+          id="ga4-config"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-MB9DRXVVF6');`,
+          }}
+        />
       </body>
     </html>
   );

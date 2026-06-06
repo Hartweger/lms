@@ -97,8 +97,8 @@ export default function AdminEseji() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold text-gray-900 mb-2">Eseji</h1>
-      <p className="text-gray-500 mb-6">Pregled i ocenjivanje studentskih eseja</p>
+      <h1 className="text-2xl font-bold text-gray-900 mb-2">Schreiben</h1>
+      <p className="text-gray-500 mb-6">Pregled i ocenjivanje studentskih Schreiben radova</p>
 
       <div className="flex gap-2 mb-6">
         {(["pending", "reviewed", "published", "all"] as const).map((f) => (
@@ -117,7 +117,7 @@ export default function AdminEseji() {
       </div>
 
       {essays.length === 0 && (
-        <p className="text-gray-400 text-center py-12">Nema eseja u ovoj kategoriji.</p>
+        <p className="text-gray-400 text-center py-12">Nema radova u ovoj kategoriji.</p>
       )}
 
       <div className="space-y-4">

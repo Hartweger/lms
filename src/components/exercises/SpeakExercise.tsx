@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import SpeakButton from "@/components/SpeakButton";
+import { sanitizeHtml } from "@/lib/sanitize";
 
 interface SpeakExerciseProps {
   question: string;
@@ -190,7 +191,7 @@ export default function SpeakExercise({ question, correctAnswer, explanation, on
     <div>
       {/* Instruction */}
       {question.includes("<") ? (
-        <div className="text-lg font-medium text-gray-900 mb-2" dangerouslySetInnerHTML={{ __html: question }} />
+        <div className="text-lg font-medium text-gray-900 mb-2" dangerouslySetInnerHTML={{ __html: sanitizeHtml(question) }} />
       ) : (
         <p className="text-lg font-medium text-gray-900 mb-2">{question}</p>
       )}

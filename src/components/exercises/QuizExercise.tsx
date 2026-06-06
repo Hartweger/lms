@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { sanitizeHtml } from "@/lib/sanitize";
 
 export interface QuizOption {
   text?: string;
@@ -37,7 +38,7 @@ export default function QuizExercise({ question, options, correctAnswer, explana
   return (
     <div>
       {question.includes("<") ? (
-        <div className="text-lg font-medium text-gray-900 mb-6" dangerouslySetInnerHTML={{ __html: question }} />
+        <div className="text-lg font-medium text-gray-900 mb-6" dangerouslySetInnerHTML={{ __html: sanitizeHtml(question) }} />
       ) : (
         <p className="text-lg font-medium text-gray-900 mb-6">{question}</p>
       )}

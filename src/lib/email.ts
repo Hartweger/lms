@@ -227,3 +227,111 @@ export async function sendInactivityReminder(
     console.error(`[email] Failed to send inactivity reminder to ${to}:`, error);
   }
 }
+
+export async function sendPaymentInstructionsEmail(
+  to: string,
+  name: string,
+  courseTitle: string,
+  orderNumber: string,
+  totalRsd: number,
+  paymentMethod: "uplatnica" | "paypal",
+  paypalEur?: number
+) {
+  const paymentBlock =
+    paymentMethod === "uplatnica"
+      ? `
+      <div style="background: #f8fcfd; border-left: 3px solid #4fb1d3; border-radius: 6px; padding: 14px 16px; margin: 0 0 20px;">
+        <div style="font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;">Podaci za uplatu</div>
+        <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+          <tr>
+            <td style="padding: 6px 0; color: #888; width: 45%;">Primalac</td>
+            <td style="padding: 6px 0; color: #1a1a2e; font-weight: 600;">Hartweger, Beograd, 11070 Beograd</td>
+          </tr>
+          <tr>
+            <td style="padding: 6px 0; color: #888;">Broj računa</td>
+            <td style="padding: 6px 0; color: #1a1a2e; font-weight: 600;">170-10559767000-18</td>
+          </tr>
+          <tr>
+            <td style="padding: 6px 0; color: #888;">Iznos</td>
+            <td style="padding: 6px 0; color: #1a1a2e; font-weight: 600;">${totalRsd} RSD</td>
+          </tr>
+          <tr>
+            <td style="padding: 6px 0; color: #888;">Poziv na broj</td>
+            <td style="padding: 6px 0; color: #1a1a2e; font-weight: 600;">${orderNumber}</td>
+          </tr>
+          <tr>
+            <td style="padding: 6px 0; color: #888;">Svrha</td>
+            <td style="padding: 6px 0; color: #1a1a2e; font-weight: 600;">Placanje porudzbine #${orderNumber}</td>
+          </tr>
+          <tr>
+            <td style="padding: 6px 0; color: #888;">Šifra plaćanja</td>
+            <td style="padding: 6px 0; color: #1a1a2e; font-weight: 600;">189</td>
+          </tr>
+        </table>
+      </div>`
+      : `
+      <div style="background: #f8fcfd; border-left: 3px solid #4fb1d3; border-radius: 6px; padding: 14px 16px; margin: 0 0 20px;">
+        <div style="font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;">PayPal uplata</div>
+        <p style="font-size: 14px; color: #1a1a2e; margin: 0 0 8px;">
+          Iznos: <strong>${paypalEur} EUR</strong>
+        </p>
+        <p style="font-size: 12px; color: #888; margin: 0 0 16px;">
+          Napomena: na PayPal uplate primenjuje se dodatak od 12% zbog troškova transakcije.
+        </p>
+        <div style="text-align: center;">
+          <a href="https://www.paypal.com/paypalme/natasahartweger1/${paypalEur}EUR" style="display: inline-block; background: #003087; color: white; padding: 12px 28px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 14px;">
+            Plati putem PayPal-a
+          </a>
+        </div>
+      </div>`;
+
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    await resend.emails.send({
+      from: FROM,
+      to,
+      subject: `Narudžbina #${orderNumber} — instrukcije za uplatu`,
+      html: `
+<!DOCTYPE html>
+<html lang="sr">
+<head><meta charset="utf-8"></head>
+<body style="font-family: 'Helvetica Neue', Arial, sans-serif; color: #1a1a2e; background: #f8f9fa; margin: 0; padding: 0;">
+  <div style="max-width: 520px; margin: 0 auto; padding: 40px 20px;">
+    <div style="background: white; border-radius: 12px; padding: 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.08);">
+
+      <div style="text-align: center; margin-bottom: 24px;">
+        <div style="font-size: 24px; font-weight: 700; color: #4fb1d3;">Hartweger</div>
+        <div style="font-size: 13px; color: #999; margin-top: 4px;">Škola nemačkog jezika</div>
+      </div>
+
+      <h1 style="font-size: 20px; color: #1a1a2e; margin: 0 0 16px;">
+        Zdravo, ${name || "učeniče"}!
+      </h1>
+
+      <p style="font-size: 15px; line-height: 1.6; color: #444; margin: 0 0 20px;">
+        Hvala na narudžbini! Naručili ste kurs <strong>${courseTitle}</strong>. Kada potvrdimo uplatu, aktiviramo pristup najduže tri radna dana.
+      </p>
+
+      ${paymentBlock}
+
+      <p style="font-size: 13px; color: #999; line-height: 1.5; margin: 0; text-align: center;">
+        Ako imate pitanja, pišite nam na <a href="mailto:info@hartweger.rs" style="color: #4fb1d3; text-decoration: none;">info@hartweger.rs</a>
+      </p>
+
+    </div>
+
+    <div style="text-align: center; padding: 20px; font-size: 12px; color: #bbb;">
+      <p style="margin: 0;">Hartweger — Škola nemačkog jezika</p>
+      <p style="margin: 4px 0 0;"><a href="mailto:info@hartweger.rs" style="color: #bbb; text-decoration: none;">info@hartweger.rs</a></p>
+    </div>
+  </div>
+</body>
+</html>
+      `.trim(),
+    });
+    console.log(`[email] Payment instructions email sent to ${to}`);
+  } catch (error) {
+    console.error(`[email] Failed to send payment instructions email to ${to}:`, error);
+  }
+}

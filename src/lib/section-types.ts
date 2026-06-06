@@ -1,3 +1,6 @@
+import type { FlashcardItem, WordSetSection } from "./flashcard-types";
+export type { FlashcardItem, WordSetSection };
+
 export type BadgeCategory = "grammatik" | "lesen" | "hoeren" | "schreiben" | "wortschatz";
 export type TextStyle = "default" | "beispiele" | "uebung" | "info";
 export type LinkType = "kviz" | "quizlet" | "pdf" | "dw" | "external";
@@ -77,10 +80,7 @@ export interface FlashcardSection {
   type: "flashcard";
   frontLabel?: string;
   backLabel?: string;
-  items: {
-    front: string;
-    back: string;
-  }[];
+  items: FlashcardItem[];
 }
 
 export interface YoutubeSection {
@@ -93,6 +93,12 @@ export interface AudioSection {
   type: "audio";
   url: string;
   label?: string;
+}
+
+export interface ExerciseSection {
+  type: "exercise";
+  /** Tačan naslov vežbe iz `exercises` tabele iste lekcije — renderuje se inline ispod sadržaja. */
+  title: string;
 }
 
 export type Section =
@@ -109,4 +115,6 @@ export type Section =
   | LinkSection
   | FlashcardSection
   | YoutubeSection
-  | AudioSection;
+  | AudioSection
+  | ExerciseSection
+  | WordSetSection;

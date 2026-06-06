@@ -1,5 +1,7 @@
 import VideoPlayer from "./VideoPlayer";
 import BlockRenderer from "./lesson-blocks/BlockRenderer";
+import type { InlineExerciseMap } from "./lesson-blocks/BlockRenderer";
+import { sanitizeHtml } from "@/lib/sanitize";
 import type { Lesson } from "@/lib/types";
 import type { Section } from "@/lib/section-types";
 
@@ -9,7 +11,7 @@ function RichText({ content }: { content: string }) {
       className="prose prose-gray max-w-none text-gray-700 leading-relaxed
         prose-headings:text-gray-900 prose-a:text-plava prose-a:no-underline hover:prose-a:underline
         prose-strong:text-gray-900 prose-img:rounded-xl"
-      dangerouslySetInnerHTML={{ __html: formatContent(content) }}
+      dangerouslySetInnerHTML={{ __html: sanitizeHtml(formatContent(content)) }}
     />
   );
 }
@@ -33,11 +35,31 @@ function formatContent(text: string): string {
   return `<p>${html}</p>`;
 }
 
-export default function LekcijaContent({ lesson }: { lesson: Lesson }) {
+export default function LekcijaContent({
+  lesson,
+  inlineExercises,
+  level,
+}: {
+  lesson: Lesson;
+  inlineExercises?: InlineExerciseMap;
+  level?: string;
+}) {
   // New block system — takes precedence when sections exist
   const sections = lesson.sections as Section[] | null;
   if (sections && sections.length > 0) {
-    return <BlockRenderer sections={sections} />;
+    const hasVideoSection = sections.some((section) => section.type === "video");
+    if (lesson.vimeo_video_id && !hasVideoSection) {
+      return (
+        <>
+          <VideoPlayer vimeoId={lesson.vimeo_video_id} />
+          <div className="mt-6">
+            <BlockRenderer sections={sections} inlineExercises={inlineExercises} level={level} />
+          </div>
+        </>
+      );
+    }
+
+    return <BlockRenderer sections={sections} inlineExercises={inlineExercises} level={level} />;
   }
 
   // Legacy rendering — fallback for old lessons

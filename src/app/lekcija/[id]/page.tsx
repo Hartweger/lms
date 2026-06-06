@@ -3,8 +3,10 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import LekcijaContent from "@/components/LekcijaContent";
 import LessonDrawer from "@/components/LessonDrawer";
-import LessonProgressTracker from "@/components/LessonProgressTracker";
-import type { Lesson, Exercise } from "@/lib/types";
+import LessonCompleteButton from "@/components/LessonCompleteButton";
+import { exerciseKindBadge } from "@/lib/exercise-kind";
+import { getFixedTranslations } from "@/lib/fixed-translations";
+import type { Lesson, Exercise, ExerciseQuestion } from "@/lib/types";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -39,19 +41,6 @@ export default async function LekcijaStranica({ params }: PageProps) {
     .order("order_index");
 
   const { data: { user } } = await supabase.auth.getUser();
-
-  // Compute which lessons to mark as completed (done client-side to speed up render)
-  const lessonsToMark: string[] = [];
-  if (user && allLessons) {
-    const currentIdx = allLessons.findIndex((l) => l.id === typedLesson.id);
-    const isLastLesson = currentIdx === allLessons.length - 1;
-    if (currentIdx > 0) {
-      lessonsToMark.push(allLessons[currentIdx - 1].id);
-    }
-    if (isLastLesson) {
-      lessonsToMark.push(typedLesson.id);
-    }
-  }
 
   // Get completion status for all lessons
   let completedLessonIds = new Set<string>();
@@ -99,6 +88,37 @@ export default async function LekcijaStranica({ params }: PageProps) {
     .eq("lesson_id", typedLesson.id)
     .order("order_index");
 
+  // Inline vežbe: koje vežbe su referencirane „exercise“ sekcijama u sadržaju
+  const lessonSections = (typedLesson.sections as { type: string; title?: string }[] | null) ?? [];
+  const inlineTitles = new Set(
+    lessonSections.filter((s) => s.type === "exercise" && s.title).map((s) => s.title as string)
+  );
+  // Nivo iz naslova kursa (npr. „Nemački B2.2“ → „B2“)
+  const levelMatch = (course?.title || "").match(/(A1|A2|B1|B2|C1|C2)/i);
+  const courseLevel = levelMatch ? levelMatch[1].toUpperCase() : "A1";
+
+  const inlineExercises: Record<string, { exercise: Exercise; questions: ExerciseQuestion[] }> = {};
+  if (inlineTitles.size > 0 && exercises) {
+    const inlineIds = (exercises as Exercise[]).filter((e) => inlineTitles.has(e.title)).map((e) => e.id);
+    const { data: inlineQuestions } = await supabase
+      .from("exercise_questions")
+      .select("*")
+      .in("exercise_id", inlineIds)
+      .order("order_index");
+    const byExercise = new Map<string, ExerciseQuestion[]>();
+    for (const q of (inlineQuestions as ExerciseQuestion[]) ?? []) {
+      const arr = byExercise.get(q.exercise_id) ?? [];
+      arr.push(q);
+      byExercise.set(q.exercise_id, arr);
+    }
+    for (const e of exercises as Exercise[]) {
+      if (inlineTitles.has(e.title)) inlineExercises[e.title] = { exercise: e, questions: byExercise.get(e.id) ?? [] };
+    }
+  }
+
+  // Donja lista „Vežbe i testovi“ prikazuje samo vežbe koje NISU inline
+  const bottomExercises = (exercises as Exercise[] | null)?.filter((e) => !inlineTitles.has(e.title)) ?? [];
+
   // Find prev/next
   const currentIndex = allLessons?.findIndex((l) => l.id === typedLesson.id) ?? -1;
   const prevLesson = currentIndex > 0 ? allLessons?.[currentIndex - 1] : null;
@@ -109,11 +129,13 @@ export default async function LekcijaStranica({ params }: PageProps) {
   const totalLessons = allLessons?.length ?? 0;
   const lessonNumber = currentIndex + 1;
 
+  // Manuelno označavanje završetka (Nataša: pravo dugme, bez auto-čekiranja na otvaranje)
+  const lessonCompleted = completedLessonIds.has(typedLesson.id);
+  const levelComplete = totalLessons > 0 && completedCount === totalLessons;
+  const willCompleteLevel = !lessonCompleted && completedCount === totalLessons - 1;
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-4">
-      {lessonsToMark.length > 0 && (
-        <LessonProgressTracker lessonId={typedLesson.id} lessonsToMark={lessonsToMark} />
-      )}
       {/* Top bar */}
       <div className="flex items-center justify-between mb-4">
         <LessonDrawer
@@ -133,54 +155,84 @@ export default async function LekcijaStranica({ params }: PageProps) {
       </h1>
 
       {/* Lesson content */}
-      <LekcijaContent lesson={typedLesson} />
+      <LekcijaContent lesson={typedLesson} inlineExercises={inlineExercises} level={courseLevel} />
 
-      {/* Exercises */}
-      {exercises && exercises.length > 0 && (
+      {/* Exercises (samo one koje nisu inline u sadržaju) */}
+      {bottomExercises.length > 0 && (
         <div className="mt-8">
-          <h3 className="font-semibold text-gray-900 mb-3">Vežbe</h3>
+          <h3 className="font-semibold text-gray-900 mb-3">Vežbe i testovi</h3>
           <div className="space-y-2">
-            {(exercises as Exercise[]).map((ex) => (
+            {bottomExercises.map((ex) => {
+              const kind = exerciseKindBadge(ex.title, course?.title || course?.slug);
+              return (
               <Link
                 key={ex.id}
                 href={`/vezba/${ex.id}`}
                 className="block bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
               >
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-3">
                   <span className="font-medium text-gray-900">{ex.title}</span>
-                  <span className="text-xs text-plava bg-plava-light px-3 py-1 rounded-full">
-                    {ex.exercise_type === "quiz" ? "Kviz" : ex.exercise_type === "fill_blank" ? "Popuni" : ex.exercise_type === "match_pairs" ? "Spoji" : ex.exercise_type === "word_order" ? "Poredaj" : "Slušaj"}
+                  <span className={`text-xs px-3 py-1 rounded-full whitespace-nowrap ${kind.test ? "bg-koral-light text-koral-dark" : "bg-plava-light text-plava"}`}>
+                    {kind.label}
                   </span>
                 </div>
               </Link>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}
 
-      {/* Bottom navigation */}
-      <div className="flex gap-3 mt-8 pt-6 border-t border-gray-100">
-        {prevLesson ? (
+      {/* AI prevod vežba — samo na lekcijama sa fiksnim prevodima */}
+      {getFixedTranslations(typedLesson.title) && (
+        <div className="mt-8">
+          <h3 className="font-semibold text-gray-900 mb-3">AI vežbe</h3>
           <Link
-            href={`/lekcija/${prevLesson.id}`}
-            className="flex-1 text-center py-3 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50 transition-colors"
+            href={`/vezba/ai-prevod/${typedLesson.id}`}
+            className="block bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
           >
-            ← Prethodna
+            <div className="flex items-center justify-between">
+              <span className="font-medium text-gray-900">Prevedi rečenice (AI prevod)</span>
+              <span className="text-xs text-plava bg-plava-light px-3 py-1 rounded-full">AI prevod</span>
+            </div>
           </Link>
-        ) : (
-          <div className="flex-1" />
-        )}
-        {nextLesson ? (
-          <Link
-            href={`/lekcija/${nextLesson.id}`}
-            className="flex-1 text-center py-3 bg-plava text-white rounded-lg text-sm font-bold hover:bg-plava-dark transition-colors"
-          >
-            Sledeća →
-          </Link>
-        ) : (
-          <div className="flex-1" />
-        )}
-      </div>
+        </div>
+      )}
+
+      {/* Završetak lekcije + navigacija (jedno dugme „Završi i nastavi →") */}
+      {user ? (
+        <LessonCompleteButton
+          lessonId={typedLesson.id}
+          initialCompleted={lessonCompleted}
+          willCompleteLevel={willCompleteLevel}
+          levelComplete={levelComplete}
+          prevLessonId={prevLesson?.id ?? null}
+          nextLessonId={nextLesson?.id ?? null}
+        />
+      ) : (
+        <div className="flex gap-3 mt-8 pt-6 border-t border-gray-100">
+          {prevLesson ? (
+            <Link
+              href={`/lekcija/${prevLesson.id}`}
+              className="flex-1 text-center py-3 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50 transition-colors"
+            >
+              ← Prethodna
+            </Link>
+          ) : (
+            <div className="flex-1" />
+          )}
+          {nextLesson ? (
+            <Link
+              href={`/lekcija/${nextLesson.id}`}
+              className="flex-1 text-center py-3 bg-plava text-white rounded-lg text-sm font-bold hover:bg-plava-dark transition-colors"
+            >
+              Sledeća →
+            </Link>
+          ) : (
+            <div className="flex-1" />
+          )}
+        </div>
+      )}
     </div>
   );
 }

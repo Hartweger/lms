@@ -1,0 +1,164 @@
+{
+  "slug": "polozi-goethe-b2",
+  "wpCourseId": 31515,
+  "lessons": [
+    {
+      "wpLessonId": 0,
+      "title": "Testovi",
+      "order_index": 0,
+      "vimeo_video_id": null,
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Testovi"
+        }
+      ],
+      "exercises": [
+        {
+          "title": "B2 Leseverstehen Modeltest 1",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": "Teil 1: Upiši slova a -d {b}, 2. {d}, 3. {b}, 4. {c}, 5. {a}, 6. {d}, 7. {b}, 8. {c}, 9. {d} Teil 2: Upiši slova a - h 10. {d}, 11. {c}, 12. {f}, 13. {h} 14.{e}, 15. {b} Teil 3: Upiši slova a, b ili c 16. {c}, 17. {c}, 18. {b}, 19.{c}, 20.{a}, 21.{c} Teil 4: Upiši slova a - h 22. {g}, 23. {c}, 24. {",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "b",
+                  "d",
+                  "b",
+                  "c",
+                  "a",
+                  "d",
+                  "b",
+                  "c",
+                  "d",
+                  "d",
+                  "c",
+                  "f",
+                  "h",
+                  "e",
+                  "b",
+                  "c",
+                  "c",
+                  "b",
+                  "c",
+                  "a",
+                  "c",
+                  "g",
+                  "c",
+                  "f",
+                  "e",
+                  "b",
+                  "h",
+                  "g",
+                  "h",
+                  "b"
+                ]
+              },
+              "correct_answer": "b, d, b, c, a, d, b, c, d, d, c, f, h, e, b, c, c, b, c, a, c, g, c, f, e, b, h, g, h, b",
+              "question_type": "fill_blank"
+            }
+          ]
+        },
+        {
+          "title": "B2 Leseverstehen Modeltest 3",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": "Teil 1: Upiši slova a -d 1.{d}, 2.{c}, 3.{a}, 4.{c}, 5.{b}, 6.{d}, 7.{b}, 8.{a}, 9.{c}, Teil 2: Upiši slova a - h 10.{g}, 11.{d}, 12.{h}, 13.{f}, 14.{¢}, 15.{a}, Teil 3: Upiši slova a, b ili c 16.{a}, 17.{¢}, 18.{a}, 19.{b}, 20.{a}, 21.{a}, Teil 4: Upiši slova a - h 22.{f}, 23.{c}, 24.{q}, 25.{h}, 2",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "d",
+                  "c",
+                  "a",
+                  "c",
+                  "b",
+                  "d",
+                  "b",
+                  "a",
+                  "c",
+                  "g",
+                  "d",
+                  "h",
+                  "f",
+                  "¢",
+                  "a",
+                  "a",
+                  "¢",
+                  "a",
+                  "b",
+                  "a",
+                  "a",
+                  "f",
+                  "c",
+                  "q",
+                  "h",
+                  "d",
+                  "b",
+                  "f",
+                  "g",
+                  "d"
+                ]
+              },
+              "correct_answer": "d, c, a, c, b, d, b, a, c, g, d, h, f, ¢, a, a, ¢, a, b, a, a, f, c, q, h, d, b, f, g, d",
+              "question_type": "fill_blank"
+            }
+          ]
+        },
+        {
+          "title": "B2 Leseverstehen Modeltest 2",
+          "exercise_type": "fill_blank",
+          "questions": [
+            {
+              "question": "Teil 1: Upiši slova a -d {c}, 2. {d}, 3. {a}, 4. {d}, 5. {b}, 6. {c}, 7. {b}, 8. {d}, 9. {b} Teil 2: Upiši slova a - h 10. {a}, 11. {b}, 12. {f}, 13. {d} 14.{h}, 15. {g} Teil 3: Upiši slova a, b ili c 16. {a}, 17. {c}, 18. {a}, 19.{b}, 20.{c}, 21.{a} Teil 4: Upiši slova a - h 22. {b}, 23. {h}, 24. {",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "c",
+                  "d",
+                  "a",
+                  "d",
+                  "b",
+                  "c",
+                  "b",
+                  "d",
+                  "b",
+                  "a",
+                  "b",
+                  "f",
+                  "d",
+                  "h",
+                  "g",
+                  "a",
+                  "c",
+                  "a",
+                  "b",
+                  "c",
+                  "a",
+                  "b",
+                  "h",
+                  "c",
+                  "g",
+                  "d",
+                  "e",
+                  "e",
+                  "g",
+                  "a"
+                ]
+              },
+              "correct_answer": "c, d, a, d, b, c, b, d, b, a, b, f, d, h, g, a, c, a, b, c, a, b, h, c, g, d, e, e, g, a",
+              "question_type": "fill_blank"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "reviewNotes": [
+    "Kurs nema lekcije na WP-u — kreirana lekcija \"Testovi\" za course-level kvizove (40829, 40841, 40854).",
+    "[Testovi] kviz 40829: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Testovi] kviz 40841: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)",
+    "[Testovi] kviz 40854: cloze_answer (multi-gap — proveri pitanje/opcije/tačan odgovor)"
+  ]
+}
