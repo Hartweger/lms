@@ -16,7 +16,8 @@ export async function POST(request: Request) {
       );
     }
 
-    if (paymentMethod !== "uplatnica" && paymentMethod !== "paypal") {
+    const ALLOWED = ["uplatnica", "paypal", "kartica", "kartica_rate"];
+    if (!ALLOWED.includes(paymentMethod)) {
       return NextResponse.json(
         { error: "Neispravna metoda plaćanja." },
         { status: 400 }
@@ -166,20 +167,25 @@ export async function POST(request: Request) {
       }
     }
 
-    // Send payment instructions email
-    await sendPaymentInstructionsEmail(
-      email,
-      fullName,
-      course.title,
-      order.order_number,
-      finalPrice,
-      paymentMethod,
-      paypalEur
-    );
+    // Kartice se naplaćaju instant na bankovnoj strani — bez mejla sa instrukcijama;
+    // narudžbina ostaje 'pending' dok NestPay callback ne potvrdi.
+    const isCard = paymentMethod === "kartica" || paymentMethod === "kartica_rate";
+    if (!isCard) {
+      await sendPaymentInstructionsEmail(
+        email,
+        fullName,
+        course.title,
+        order.order_number,
+        finalPrice,
+        paymentMethod,
+        paypalEur
+      );
+    }
 
     return NextResponse.json({
       orderId: order.id,
       orderNumber: order.order_number,
+      paymentMethod,
     });
   } catch (error) {
     console.error("[orders] Error:", error);
