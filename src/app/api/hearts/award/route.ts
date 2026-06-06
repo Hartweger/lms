@@ -4,6 +4,8 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { applyAward, type Progress, type AwardInput } from "@/lib/hearts/award";
 
+export const runtime = "nodejs";
+
 function todayISO(): string {
   // Lokalni dan u Beogradu (stabilno preko DST-a).
   return new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Belgrade" }).format(new Date());
@@ -53,8 +55,14 @@ export async function POST(request: Request) {
   if (!input) return NextResponse.json({ error: "Bad request" }, { status: 400 });
 
   const admin = createAdminClient();
-  const { data: row } = await admin
-    .from("user_progress").select("*").eq("user_id", user.id).single();
+  // NAPOMENA (v1): read-then-upsert nije atomičan; dve istovremene dodele mogu
+  // izgubiti jednu. Prihvatljivo za v1 (gubi se par srca). TODO: RPC/optimistic lock.
+  const { data: row, error: readErr } = await admin
+    .from("user_progress").select("*").eq("user_id", user.id).maybeSingle();
+  if (readErr) {
+    console.error("user_progress read failed", readErr);
+    return NextResponse.json({ error: "Greška pri čitanju napretka" }, { status: 500 });
+  }
 
   const prev: Progress = row
     ? {
@@ -71,7 +79,10 @@ export async function POST(request: Request) {
     ...result.next,
     updated_at: new Date().toISOString(),
   });
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) {
+    console.error("user_progress upsert failed", error);
+    return NextResponse.json({ error: "Greška pri čuvanju napretka" }, { status: 500 });
+  }
 
   return NextResponse.json({
     awarded: result.awarded,
