@@ -637,7 +637,7 @@ const LESSON_SECTIONS: Record<number, { sections: unknown[] }> = {
       {
         type: "text",
         style: "default",
-        content: "## Du bist nicht sicher — nisi sigurna",
+        content: "## Du bist nicht sicher — kad se dvoumiš",
       },
       {
         type: "table",
