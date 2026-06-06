@@ -21,6 +21,6 @@ export function progressToNext(total: number) {
   const span = next - base;
   const into = total - base;
   const toNext = next - total;
-  const percent = Math.round((into / span) * 100);
+  const percent = Math.floor((into / span) * 100);
   return { level, into, span, toNext, percent, nextLevel: level + 1 };
 }

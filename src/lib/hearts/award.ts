@@ -72,7 +72,7 @@ export function applyAward(prev: Progress, input: AwardInput, today: string): Aw
   return {
     next,
     awarded,
-    leveledUp: level > prev.level,
+    leveledUp: level > levelFromHearts(prev.total_hearts),
     dailyGoalMet: heartsToday >= DAILY_GOAL_HEARTS,
   };
 }

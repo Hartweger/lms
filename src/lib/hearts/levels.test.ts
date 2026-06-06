@@ -15,4 +15,10 @@ describe("progressToNext", () => {
   it("na 150 srca: nivo 2, treba još 100 do nivoa 3", () => {
     expect(progressToNext(150)).toEqual({ level: 2, into: 50, span: 150, toNext: 100, percent: 33, nextLevel: 3 });
   });
+  it("na 0 srca: nivo 1, 0%", () => {
+    expect(progressToNext(0)).toEqual({ level: 1, into: 0, span: 100, toNext: 100, percent: 0, nextLevel: 2 });
+  });
+  it("procenat se zaokružuje na dole (ne pre vremena 100%)", () => {
+    expect(progressToNext(1349).percent).toBe(99);
+  });
 });

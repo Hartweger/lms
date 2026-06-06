@@ -1,9 +1,6 @@
 // src/lib/hearts/mascot.ts
 import type { MascotState } from "@/components/mascot/MascotBear";
-
-function daysBetween(a: string, b: string): number {
-  return Math.round((Date.parse(b + "T00:00:00Z") - Date.parse(a + "T00:00:00Z")) / 86400000);
-}
+import { daysBetween } from "./dates";
 
 type Stats = { lastActiveDate: string | null; currentStreak: number; dailyGoalMet: boolean };
 type Context = { justLeveledUp?: boolean; justAcedTest?: boolean };

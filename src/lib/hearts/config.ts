@@ -12,5 +12,5 @@ export const HEART_REWARDS = {
 export const DAILY_GOAL_HEARTS = 50;
 
 // Kumulativni pragovi: indeks = nivo-1. Posle tabele: +350 po nivou.
-export const LEVEL_THRESHOLDS = [0, 100, 250, 450, 700, 1000];
+export const LEVEL_THRESHOLDS = [0, 100, 250, 450, 700, 1000] as const;
 export const LEVEL_STEP_AFTER = 350;

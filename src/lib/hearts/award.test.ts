@@ -48,4 +48,20 @@ describe("applyAward", () => {
     expect(r.dailyGoalMet).toBe(true);
     expect(r.awarded).toBe(50 + 20); // test_pass + daily_goal bonus
   });
+
+  it("nov dan resetuje hearts_today pre dodele", () => {
+    const yesterday: Progress = {
+      ...fresh, total_hearts: 60, hearts_today: 60, last_active_date: "2026-06-05", current_streak: 1,
+    };
+    const r = applyAward(yesterday, { reason: "exercise", correct: 1, hadStreak: false }, "2026-06-06");
+    expect(r.next.hearts_today).toBe(10); // reset na 0, pa +10
+    expect(r.dailyGoalMet).toBe(false);
+    expect(r.next.current_streak).toBe(2); // juče → +1
+  });
+
+  it("vežba bez tačnih odgovora ne nosi srca", () => {
+    const r = applyAward(fresh, { reason: "exercise", correct: 0, hadStreak: false }, "2026-06-06");
+    expect(r.awarded).toBe(0);
+    expect(r.next.total_hearts).toBe(0);
+  });
 });
