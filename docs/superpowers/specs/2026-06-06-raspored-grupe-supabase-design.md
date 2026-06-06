@@ -11,7 +11,7 @@ Blok D (grupni/individualni kursevi) je dekomponovan na 6 pod-projekata; ovo je 
 - Grupe sele u **Supabase** (izvor istine), ne ostaju u Sheet-u.
 - **Opcija „pun zamenik odmah":** model + admin + zamena `fetchRaspored()` da čita iz baze.
 - **Bez importera** — grupa je malo (≤10 aktivnih), Nataša ručno unese aktivne grupe u admin.
-- **Bez `group_enrollments` tabele u temelju** — upis kroz kupovinu je #2. Broj upisanih je ručno polje `enrolled_count` (kao kolona „Upisanih" u Sheet-u danas).
+- **Minimalni `group_enrollments` JESTE u temelju** (odluka 2026-06-06): polaznike grupe unosiš ručno po mejlu da bi DOBILI pristup sadržaju; broj upisanih je izveden iz te tabele. Kupovni tok koji to radi automatski ostaje #2.
 - **Status:** ručno menjaš sve osim auto-`zavrsena` kad prođe `end_date`. Početak je uvek tvoja odluka (minimum 3 je samo orijentir — puštaš i sa 2 kad je upis slab). Sistem nikad ne blokira.
 - `days` strukturisano (radi #5 kalendara).
 
@@ -34,7 +34,6 @@ CREATE TABLE public.groups (
   session_time TEXT,                -- "18:00" (ime nije `time` zbog Postgres tipa)
   min_seats INT NOT NULL DEFAULT 3, -- ORIJENTIR, ne tvrdo pravilo
   max_seats INT NOT NULL DEFAULT 6,
-  enrolled_count INT NOT NULL DEFAULT 0, -- ručno (do #2)
   price NUMERIC(10,2),
   calendar_id TEXT,                 -- nullable, koristi #5
   notes TEXT,
@@ -45,9 +44,22 @@ CREATE TABLE public.groups (
 );
 ```
 
-- **Slobodna mesta** (izvedeno, ne kolona): `max_seats − enrolled_count`.
 - **RLS:** javno čitanje grupa sa statusom `otvoren`/`uskoro` (za prikaz); pun pristup samo admin/professor (kao postojeći obrazac, npr. migracija 028).
 - Indeks na `status` i `professor_id`.
+
+**`group_enrollments`** (ko je u grupi — minimalno, da polaznici dobiju pristup):
+```sql
+CREATE TABLE public.group_enrollments (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  group_id UUID NOT NULL REFERENCES public.groups(id) ON DELETE CASCADE,
+  user_id  UUID NOT NULL REFERENCES public.user_profiles(id) ON DELETE CASCADE,
+  status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active','cancelled')),
+  enrolled_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE(group_id, user_id)
+);
+```
+- **Broj upisanih** = `COUNT(group_enrollments WHERE status='active')` (izvedeno, ne ručno polje). **Slobodna mesta** = `max_seats − upisanih`.
+- Razlog: pošto polaznike unosiš da bi dobili PRISTUP, čuvamo ko su (mejl→user), pa je broj automatski tačan.
 
 ## Statusi i automatika
 
@@ -57,16 +69,17 @@ CREATE TABLE public.groups (
 
 ## Admin CRUD — `/admin/grupe`
 
-- **Lista** svih grupa, filter po statusu, prikaz `enrolled_count/max_seats` + slobodna, dani-do-početka, profesor.
-- **Forma kreiranje/izmena:** sva polja (content_course preko slug-padajuće liste, level, professor padajuća lista iz role=professor, status, datumi, duration_weeks, days kao čekboksovi pon–ned, time, min/max, enrolled_count, price, notes). 
+- **Lista** svih grupa, filter po statusu, prikaz `upisanih/max_seats` + slobodna, dani-do-početka, profesor.
+- **Forma kreiranje/izmena:** sva polja (content_course preko slug-padajuće liste, level, professor padajuća lista iz role=professor, status, datumi, duration_weeks, days kao čekboksovi pon–ned, session_time, min/max, price, notes).
+- **Polaznici grupe (ključno):** u formi grupe sekcija „Polaznici" — dodaj polaznika po **mejlu** → nađi-ili-kreiraj nalog (admin API, bez mejla, kao u migraciji) → `group_enrollments` red → **dodeli `course_access` na `content_course_id`** (idempotentno, pravilo „nikad ne skraćuj", `expires_at = max(postojeći, danas+365)`, `source='grupa-rucni-unos'`). Ukloni polaznika → `status='cancelled'` (pristup se NE oduzima automatski). Tako unos grupe i pristup polaznicima idu zajedno — ne zaboravlja se.
 - **Akcije:** sačuvaj, otkaži (status→otkazana), ručna promena statusa.
-- Prati postojeći admin obrazac (server actions / API rute kao `admin/kursevi`, `admin/profesori`).
+- Prati postojeći admin obrazac (server actions / API rute kao `admin/kursevi`, `admin/profesori`); nađi-ili-kreiraj + grant logika je ista kao `scripts/migrate-ld-access.ts`.
 
 ## Prikaz na sajtu — zamena `fetchRaspored()`
 
 - Reimplementirati `src/lib/raspored.ts::fetchRaspored()` da čita iz Supabase i vraća **isti `GrupaRaspored` oblik** (`nivo, prof, status, pocetak, trajanje, dani, sat, maks, upisanih, slobodnih`), filtrirano na `otvoren`/`uskoro`, sortirano otvoren-prvo (kao sadašnji RasporedAPI).
 - Tako `grupni-kursevi/page.tsx` i `kursevi/[slug]/page.tsx` rade bez izmene (čitaju isti tip).
-- `days SMALLINT[]` → string „pon, sre" i `session_time` → `sat` se formatiraju u `fetchRaspored`.
+- `days SMALLINT[]` → string „pon, sre" i `session_time` → `sat`; `upisanih`/`slobodnih` iz `COUNT(group_enrollments)`. Formatira se u `fetchRaspored`.
 - Posle ovoga RasporedAPI Apps Script više nije u upotrebi (može da se ugasi kasnije, uz Sheet).
 
 ## Popunjavanje podataka (umesto migracije)
@@ -75,7 +88,7 @@ Nema importera. Nataša ručno unese trenutno aktivne/otvorene grupe kroz `/admi
 
 ## Van opsega (kasniji pod-projekti)
 
-- `group_enrollments` + upis kroz kupovinu + dekrement slobodnih → **#2 (grupni checkout)**.
+- **Upis kroz KUPOVINU** (checkout koji sam pravi `group_enrollments` + grant, plaćanje, potvrda) → **#2**. (Tabela `group_enrollments` i ručni upis+grant SU u temelju; #2 samo dodaje kupovni tok koji radi isto automatski.)
 - Generisanje datuma termina, „Neradni dani", Google Calendar/Meet, Google Docs beleške → **#5**.
 - Honorari profesora + mejl-upozorenja (uklj. „blizu početka, ispod minimuma") → **#6**.
 - Individualni kursevi/varijante/paketi → **#3**.
@@ -91,4 +104,4 @@ Nema importera. Nataša ručno unese trenutno aktivne/otvorene grupe kroz `/admi
 
 ## Otvorena pitanja
 
-Nema — odluke donete (Supabase, full-replace, manual status + auto-end, advisory min, ručni enrolled_count, bez importera/enrollments, strukturisani days).
+Nema — odluke donete (Supabase, full-replace, manual status + auto-end, advisory min, bez importera, minimalni `group_enrollments` sa ručnim unosom+grant pristupa, izveden broj upisanih, strukturisani days).
