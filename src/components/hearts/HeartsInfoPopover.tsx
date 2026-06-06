@@ -1,0 +1,33 @@
+// src/components/hearts/HeartsInfoPopover.tsx
+"use client";
+import { useState } from "react";
+
+export function HeartsInfoPopover() {
+  const [open, setOpen] = useState(false);
+  return (
+    <span className="relative inline-block">
+      <button
+        type="button"
+        aria-label="Šta su srca?"
+        onClick={() => setOpen((v) => !v)}
+        className="w-5 h-5 rounded-full bg-plava-light text-plava-dark font-bold text-xs inline-flex items-center justify-center"
+      >?</button>
+      {open && (
+        <div className="absolute z-20 mt-2 right-0 w-72 bg-white border border-gray-200 rounded-2xl p-4 shadow-lg text-sm text-gray-700 text-left">
+          <h4 className="font-bold mb-2">❤️ Šta su srca?</h4>
+          <p className="leading-relaxed">
+            Srca su poeni koje skupljaš dok učiš nemački. Svaki tačan odgovor, lekcija i test pune tvoje srce.
+            Što redovnije vežbaš — više srca i viši nivo.{" "}
+            <em>I ne brini — srca se samo skupljaju, nikad ih ne gubiš!</em> Tvoj meda se raduje svakom srcu 🐻
+          </p>
+          <ul className="mt-3 space-y-1 list-disc pl-5">
+            <li>Tačan odgovor: <b>+10 ❤️</b> (+5 za niz)</li>
+            <li>Završena lekcija: <b>+20 ❤️</b></li>
+            <li>Položen test: <b>+50 ❤️</b> (+25 za ≥90%)</li>
+            <li>Dolazak svaki dan: <b>+10 ❤️</b></li>
+          </ul>
+        </div>
+      )}
+    </span>
+  );
+}
