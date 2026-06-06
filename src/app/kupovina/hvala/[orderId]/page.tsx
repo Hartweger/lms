@@ -20,10 +20,13 @@ interface OrderItem {
 
 export default async function HvalaPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ orderId: string }>;
+  searchParams: Promise<{ status?: string }>;
 }) {
   const { orderId } = await params;
+  const { status } = await searchParams;
   const supabase = createAdminClient();
 
   const { data: order } = await supabase
@@ -36,6 +39,7 @@ export default async function HvalaPage({
 
   const items = order.items as OrderItem[];
   const courseTitle = items?.[0]?.title ?? "";
+  const courseSlug = items?.[0]?.course_slug ?? "";
 
   const ipsData = [
     "K:PR",
@@ -49,9 +53,8 @@ export default async function HvalaPage({
     `RO:${order.order_number}`,
   ].join("|");
 
-  const isUplatnica = order.payment_method === "uplatnica";
-
   const paypalEur = order.paypal_note ? parseInt(order.paypal_note) : null;
+  const isCard = order.payment_method === "kartica" || order.payment_method === "kartica_rate";
 
   return (
     <section className="bg-gradient-to-b from-plava-light/40 to-white min-h-screen">
@@ -68,6 +71,33 @@ export default async function HvalaPage({
         </p>
         {courseTitle && (
           <p className="text-gray-700 font-medium mb-8">{courseTitle}</p>
+        )}
+
+        {/* Kartica status */}
+        {isCard && status === "ok" && (
+          <div className="bg-green-50 border border-green-200 rounded-xl px-5 py-4 mb-6 text-sm text-green-800">
+            <p className="font-semibold">Plaćanje uspešno! 🎉</p>
+            <p className="mt-1">Pristup kursu je aktiviran. Poslali smo ti email — prijavi se i počni.</p>
+          </div>
+        )}
+        {isCard && status === "fail" && (
+          <div className="bg-[#FFF3F3] border border-[#F78687]/40 rounded-xl px-5 py-4 mb-6 text-sm text-gray-700">
+            <p className="font-semibold text-[#E06566]">Plaćanje nije uspelo</p>
+            <p className="mt-1 mb-4">Tvoja kartica nije naplaćena. Pokušaj ponovo ili izaberi uplatnicu pri kupovini.</p>
+            {courseSlug && (
+              <Link
+                href={`/kupovina/${courseSlug}`}
+                className="inline-block px-5 py-2.5 rounded-lg font-semibold text-white text-sm bg-[#F78687] hover:bg-[#E06566] transition-colors"
+              >
+                Pokušaj ponovo
+              </Link>
+            )}
+          </div>
+        )}
+        {isCard && !status && (
+          <div className="bg-plava-light/60 rounded-xl px-5 py-4 mb-6 text-sm text-gray-700">
+            <p>Obrađujemo tvoje plaćanje… Ako si upravo platio/la, pristup se aktivira automatski.</p>
+          </div>
         )}
 
         {/* Uplatnica section */}
@@ -149,7 +179,8 @@ export default async function HvalaPage({
           </div>
         )}
 
-        {/* Info note */}
+        {/* Info note (samo za uplatnicu/PayPal — kartica je instant) */}
+        {!isCard && (
         <div className="bg-plava-light/60 rounded-xl px-5 py-4 mb-8 text-sm text-gray-700 space-y-2">
           <p>
             Poslali smo instrukcije i na <span className="font-medium">{order.email}</span>.
@@ -164,6 +195,7 @@ export default async function HvalaPage({
             <a href="mailto:info@hartweger.rs" className="text-plava hover:underline">info@hartweger.rs</a>.
           </p>
         </div>
+        )}
 
         {/* CTA */}
         <div className="flex flex-wrap items-center gap-4">
