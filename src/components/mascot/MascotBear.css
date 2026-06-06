@@ -1,0 +1,17 @@
+/* src/components/mascot/MascotBear.css */
+.mascot { transform-origin: center bottom; }
+
+@keyframes mascot-sway { 0%,100% { transform: rotate(-1.5deg); } 50% { transform: rotate(1.5deg); } }
+@keyframes mascot-bounce { 0%,100% { transform: translateY(0); } 30% { transform: translateY(-10px); } 50% { transform: translateY(0); } }
+@keyframes mascot-nod { 0%,100% { transform: rotate(0); } 50% { transform: rotate(4deg); } }
+
+.mascot--happy   { animation: mascot-sway 4s ease-in-out infinite; }
+.mascot--proud   { animation: mascot-sway 4s ease-in-out infinite; }
+.mascot--thinking{ animation: mascot-sway 5s ease-in-out infinite; }
+.mascot--celebrate { animation: mascot-bounce 1.2s ease-in-out infinite; }
+.mascot--sleepy  { animation: mascot-nod 3s ease-in-out infinite; }
+.mascot--sad     { animation: none; transform: rotate(-3deg); }
+
+@media (prefers-reduced-motion: reduce) {
+  .mascot { animation: none !important; }
+}

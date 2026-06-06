@@ -55,4 +55,8 @@ wc-orders-report-export-*.csv
 *analytics-orders.csv
 wc-orders-report-*.csv
 
+# Visual brainstorm artifacts
 .superpowers/
+
+# data exports (WooCommerce/analytics — sadrže lične podatke, ne u repo)
+*.csv

@@ -7,6 +7,7 @@ import { useState } from "react";
 const links = [
   { href: "/admin", label: "Pregled" },
   { href: "/admin/kursevi", label: "Kursevi" },
+  { href: "/admin/grupe", label: "Grupe" },
   { href: "/admin/studenti", label: "Studenti" },
   { href: "/admin/test-nivoa", label: "Test nivoa" },
   { href: "/admin/eseji", label: "Schreiben" },
@@ -17,6 +18,7 @@ const links = [
   { href: "/admin/faq", label: "FAQ" },
   { href: "/admin/analitika", label: "Analitika", exact: true },
   { href: "/admin/analitika/kupci", label: "Kupci", indent: true },
+  { href: "/admin/naki", label: "NaKI logovi" },
 ];
 
 export default function AdminSidebar() {

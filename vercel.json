@@ -3,6 +3,14 @@
     {
       "path": "/api/cron/inactivity",
       "schedule": "0 9 * * *"
+    },
+    {
+      "path": "/api/cron/nestpay-reconcile",
+      "schedule": "0 5 * * *"
+    },
+    {
+      "path": "/api/cron/close-groups",
+      "schedule": "0 1 * * *"
     }
   ]
 }

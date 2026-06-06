@@ -37,6 +37,9 @@ export default function NavClient() {
     <>
       {/* Desktop nav */}
       <div className="hidden md:flex items-center gap-6 text-sm">
+        <Link href="/naki" className="text-gray-700 font-medium hover:text-plava transition-colors">
+          NaKI
+        </Link>
         {user ? (
           <>
             <Link href="/dashboard" className="text-gray-600 hover:text-plava transition-colors">
@@ -101,6 +104,9 @@ export default function NavClient() {
       {/* Mobile menu */}
       {menuOpen && (
         <div className="md:hidden absolute top-16 left-0 right-0 border-t border-gray-100 bg-white px-4 py-4 space-y-3 text-sm z-50">
+          <Link href="/naki" className="block text-gray-700 font-medium" onClick={() => setMenuOpen(false)}>
+            NaKI
+          </Link>
           {user ? (
             <>
               <Link href="/dashboard" className="block text-gray-600" onClick={() => setMenuOpen(false)}>

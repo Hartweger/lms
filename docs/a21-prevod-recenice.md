@@ -82,7 +82,7 @@ Za svaku lekciju 5-6 rečenica. Pregledaj i javi šta treba promeniti.
 3. Imaš li još jednu šolju? → Hast du noch eine Tasse?
 4. Tanjir je prazan, ali salveta je prljava. → Der Teller ist leer, aber die Serviette ist schmutzig.
 5. Koje sastojke treba da kupim? → Welche Zutaten soll ich kaufen?
-6. Ova tiganj je u ponudi. → Diese Pfanne ist im Angebot.
+6. Ovaj tiganj je u ponudi. → Diese Pfanne ist im Angebot.
 
 ### Lekcija 12: Arbeitsklima
 1. Kolega mi se obratio sa "ti". → Mein Kollege hat mich geduzt.
@@ -104,7 +104,7 @@ Za svaku lekciju 5-6 rečenica. Pregledaj i javi šta treba promeniti.
 1. Zaposleni u Nemačkoj imaju u proseku 30 dana odmora. → Arbeitnehmer in Deutschland haben durchschnittlich 30 Urlaubstage.
 2. Zakonsko radno vreme iznosi 40 sati nedeljno. → Die gesetzliche Arbeitszeit beträgt 40 Stunden pro Woche.
 3. Koliko prekovremenih sati imaš ovog meseca? → Wie viele Überstunden hast du diesen Monat?
-4. Prosek je oko 10 državnih praznika godišnje. → Der Durchschnitt liegt bei etwa 10 Feiertagen pro Jahr.
+4. Prosek je oko 10 državnih praznika godišnje. → In Deutschland gibt es im Durchschnitt etwa 10 Feiertage pro Jahr.
 5. Moj poslodavac kaže da ne smem da radim prekovremeno. → Mein Arbeitgeber sagt, dass ich keine Überstunden machen darf.
 
 ### Lekcija 16: Refleksivni glagoli
@@ -160,4 +160,4 @@ Za svaku lekciju 5-6 rečenica. Pregledaj i javi šta treba promeniti.
 2. On je učenik u jednoj firmi i ide u stručnu školu. → Er ist Azubi in einem Betrieb und geht in die Berufsschule.
 3. Posle studija želim da radim u Nemačkoj. → Nach dem Studium möchte ich in Deutschland arbeiten.
 4. Obuka je kombinacija prakse u firmi i škole. → Die Ausbildung ist eine Kombination aus Praxis im Betrieb und Schule.
-5. Mnogi mladi u Nemačkoj biraju obuku umesto studija. → Viele junge Leute in Deutschland wählen eine Ausbildung statt eines Studiums.
+5. Mnogi mladi u Nemačkoj biraju obuku umesto studija. → Viele junge Leute in Deutschland machen eine Ausbildung und kein Studium.

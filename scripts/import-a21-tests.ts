@@ -107,7 +107,7 @@ const MODULE_TESTS: Record<number, { title: string; questions: Question[] }> = {
         question_type: "quiz",
       },
       {
-        question: "Zasto ucis nemacki?",
+        question: "Poređaj reči u rečenicu (Zašto učiš nemački?):",
         options: { type: "word_order", items: ["Ich", "lerne", "Deutsch,", "weil", "ich", "in", "Deutschland", "arbeiten", "mochte."] },
         correct_answer: "Ich lerne Deutsch, weil ich in Deutschland arbeiten mochte.",
         question_type: "word_order",
