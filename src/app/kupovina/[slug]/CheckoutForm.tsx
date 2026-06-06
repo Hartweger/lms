@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { EUR_RATE, PAYPAL_SURCHARGE } from "@/lib/order-utils";
+import { EUR_RATE } from "@/lib/order-utils";
 
 interface Props {
   courseSlug: string;
@@ -34,7 +34,7 @@ function formatPrice(price: number): string {
   return price.toLocaleString("de-DE");
 }
 
-export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, priceEur, initialEmail = "", initialName = "", isLoggedIn = false }: Props) {
+export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, initialEmail = "", initialName = "", isLoggedIn = false }: Props) {
   const router = useRouter();
   const [fullName, setFullName] = useState(initialName);
   const [email, setEmail] = useState(initialEmail);
@@ -49,14 +49,13 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, priceE
   const [appliedCoupon, setAppliedCoupon] = useState<{ code: string; discountPercent: number } | null>(null);
   const [couponError, setCouponError] = useState<string | null>(null);
 
-  const paymentMethod = country === "RS" ? "uplatnica" : "paypal";
-
-  const displayEur = priceEur != null
-    ? priceEur
-    : Math.ceil((priceRsd / EUR_RATE) * (1 + PAYPAL_SURCHARGE));
+  const isRS = country === "RS";
+  const [method, setMethod] = useState<"kartica" | "uplatnica" | "paypal">("kartica");
+  const paymentMethod = method;
+  const isCard = method === "kartica";
 
   const discountedRsd = appliedCoupon ? Math.round(priceRsd * (1 - appliedCoupon.discountPercent / 100)) : priceRsd;
-  const discountedEur = appliedCoupon ? Math.ceil((discountedRsd / EUR_RATE) * (1 + PAYPAL_SURCHARGE)) : displayEur;
+  const eurApprox = Math.round(discountedRsd / EUR_RATE);
 
   async function validateCoupon() {
     if (!couponCode.trim()) return;
@@ -104,7 +103,11 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, priceE
         return;
       }
 
-      router.push(`/kupovina/hvala/${data.orderId}`);
+      if (isCard) {
+        window.location.href = `/kupovina/kartica/${data.orderId}`;
+      } else {
+        router.push(`/kupovina/hvala/${data.orderId}`);
+      }
     } catch {
       setError("Došlo je do greške. Proveri internet konekciju i pokušaj ponovo.");
     } finally {
@@ -120,28 +123,17 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, priceE
         <div className="flex items-start justify-between gap-4">
           <p className="font-semibold text-gray-900 text-[15px] leading-snug">{courseTitle}</p>
           <div className="text-right flex-shrink-0">
-            {paymentMethod === "uplatnica" ? (
-              appliedCoupon ? (
-                <div>
-                  <p className="text-sm text-gray-400 line-through">{formatPrice(priceRsd)} din</p>
-                  <p className="font-bold text-gray-900">{formatPrice(discountedRsd)} din</p>
-                </div>
-              ) : (
-                <p className="font-bold text-gray-900">{formatPrice(priceRsd)} din</p>
-              )
+            {appliedCoupon ? (
+              <div>
+                <p className="text-sm text-gray-400 line-through">{formatPrice(priceRsd)} din</p>
+                <p className="font-bold text-gray-900">{formatPrice(discountedRsd)} din</p>
+                <p className="text-xs text-gray-400 mt-0.5">≈ {eurApprox} €</p>
+              </div>
             ) : (
-              appliedCoupon ? (
-                <div>
-                  <p className="text-sm text-gray-400 line-through">{displayEur} €</p>
-                  <p className="font-bold text-gray-900">{discountedEur} €</p>
-                  <p className="text-xs text-gray-400 mt-0.5">+12% PayPal naknada</p>
-                </div>
-              ) : (
-                <div>
-                  <p className="font-bold text-gray-900">{displayEur} €</p>
-                  <p className="text-xs text-gray-400 mt-0.5">+12% PayPal naknada</p>
-                </div>
-              )
+              <div>
+                <p className="font-bold text-gray-900">{formatPrice(priceRsd)} din</p>
+                <p className="text-xs text-gray-400 mt-0.5">≈ {eurApprox} €</p>
+              </div>
             )}
           </div>
         </div>
@@ -255,7 +247,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, priceE
           <select
             id="country"
             value={country}
-            onChange={(e) => setCountry(e.target.value)}
+            onChange={(e) => { setCountry(e.target.value); setMethod("kartica"); }}
             className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#0AB3D7] focus:border-transparent transition bg-white"
           >
             {COUNTRIES.map((c) => (
@@ -270,35 +262,36 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, priceE
       {/* Payment method info */}
       <div className="bg-white border border-gray-200 rounded-xl p-5">
         <p className="text-xs font-bold uppercase tracking-wide text-gray-400 mb-3">Način plaćanja</p>
-        {paymentMethod === "uplatnica" ? (
-          <div className="flex items-start gap-3">
-            <div className="flex-shrink-0 w-9 h-9 bg-[#E8F7FC] rounded-full flex items-center justify-center">
-              <svg className="w-5 h-5 text-[#0AB3D7]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-              </svg>
-            </div>
-            <div>
-              <p className="font-semibold text-gray-900 text-sm">Uplatnica / internet bankarstvo</p>
-              <p className="text-gray-500 text-sm mt-0.5">
-                Poslaćemo ti podatke za uplatu na email. Pristup kursu dobijaš čim potvrdimo uplatu.
-              </p>
-            </div>
-          </div>
-        ) : (
-          <div className="flex items-start gap-3">
-            <div className="flex-shrink-0 w-9 h-9 bg-[#FFF3F3] rounded-full flex items-center justify-center">
-              <svg className="w-5 h-5 text-[#F78687]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-              </svg>
-            </div>
-            <div>
-              <p className="font-semibold text-gray-900 text-sm">PayPal</p>
-              <p className="text-gray-500 text-sm mt-0.5">
-                Poslaćemo ti PayPal link za plaćanje na email. Cena je u evrima i uključuje 12% PayPal naknadu.
-              </p>
-            </div>
-          </div>
-        )}
+        <div className="space-y-2">
+          {(isRS
+            ? [
+                { v: "kartica", label: "Platnom karticom", desc: "Visa, Mastercard, Maestro — sigurno preko Banca Intesa. Vlasnici Banca Intesa kartica mogu na rate — broj rata biraš u sledećem koraku (na strani banke)." },
+                { v: "uplatnica", label: "Uplatnica / internet bankarstvo", desc: "Podaci za uplatu stižu na email; pristup po potvrdi uplate." },
+              ]
+            : [
+                { v: "kartica", label: "Platnom karticom", desc: "Visa, Mastercard, Maestro — sigurno preko Banca Intesa. Naplata u dinarima (tvoja banka konvertuje u tvoju valutu)." },
+                { v: "paypal", label: "PayPal", desc: "PayPal link stiže na email. Naplata u evrima, uključuje 12% PayPal naknadu." },
+              ]
+          ).map((m) => (
+            <label
+              key={m.v}
+              className={`flex items-start gap-3 border rounded-lg p-3 cursor-pointer transition-colors ${method === m.v ? "border-[#0AB3D7] bg-[#E8F7FC]" : "border-gray-200 hover:border-gray-300"}`}
+            >
+              <input
+                type="radio"
+                name="method"
+                value={m.v}
+                checked={method === m.v}
+                onChange={() => setMethod(m.v as typeof method)}
+                className="mt-1"
+              />
+              <span>
+                <span className="block font-semibold text-gray-900 text-sm">{m.label}</span>
+                <span className="block text-gray-500 text-xs mt-0.5">{m.desc}</span>
+              </span>
+            </label>
+          ))}
+        </div>
       </div>
 
       {/* Error */}
