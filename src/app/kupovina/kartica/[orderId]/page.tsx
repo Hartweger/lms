@@ -9,7 +9,7 @@ export default async function KarticaPage({ params }: { params: Promise<{ orderI
   const { orderId } = await params;
   const admin = createAdminClient();
   const { data: order } = await admin
-    .from("orders").select("id, order_number, total, email, full_name, payment_method, payment_status")
+    .from("orders").select("id, order_number, total, email, full_name, country, payment_method, payment_status")
     .eq("id", orderId).single();
 
   if (!order || (order.payment_method !== "kartica" && order.payment_method !== "kartica_rate")) notFound();
@@ -23,6 +23,8 @@ export default async function KarticaPage({ params }: { params: Promise<{ orderI
     failUrl: callbackUrl,
     email: order.email,
     fullName: order.full_name,
+    country: order.country,
+    shopUrl: base,
   });
 
   return (
