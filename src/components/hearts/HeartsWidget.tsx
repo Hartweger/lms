@@ -29,7 +29,7 @@ export function HeartsWidget({ totalHearts, level, toNext, percent, nextLevel, s
         <div className="text-sm font-semibold text-gray-700 mt-1">
           {totalHearts.toLocaleString("sr-RS")} ❤️
         </div>
-        <div className="h-3 bg-plava-light rounded-full overflow-hidden mt-2">
+        <div className="h-3 bg-gray-200 rounded-full overflow-hidden mt-2">
           <div className="h-full bg-koral rounded-full" style={{ width: `${percent}%` }} />
         </div>
         <div className="text-xs text-gray-500 mt-1">

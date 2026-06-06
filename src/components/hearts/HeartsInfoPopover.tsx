@@ -10,7 +10,7 @@ export function HeartsInfoPopover() {
         type="button"
         aria-label="Šta su srca?"
         onClick={() => setOpen((v) => !v)}
-        className="w-5 h-5 rounded-full bg-plava-light text-plava-dark font-bold text-xs inline-flex items-center justify-center"
+        className="w-5 h-5 ml-1 rounded-full bg-plava text-white font-bold text-xs inline-flex items-center justify-center shadow-sm hover:bg-plava-dark"
       >?</button>
       {open && (
         <div className="absolute z-20 mt-2 right-0 w-80 bg-white border border-gray-200 rounded-2xl p-4 shadow-lg text-sm text-gray-700 text-left">
