@@ -89,6 +89,7 @@ Nema importera. Nataša ručno unese trenutno aktivne/otvorene grupe kroz `/admi
 ## Van opsega (kasniji pod-projekti)
 
 - **Upis kroz KUPOVINU** (checkout koji sam pravi `group_enrollments` + grant, plaćanje, potvrda) → **#2**. (Tabela `group_enrollments` i ručni upis+grant SU u temelju; #2 samo dodaje kupovni tok koji radi isto automatski.)
+  - **#2 MORA:** budući kupac grupnog kursa automatski dobije pristup platformi **+ potvrdni mejl o kupovini** (kalendar link dolazi sa #5). Ručni unos u temelju je TIH (stari polaznici su mejlove već dobili kroz Woo+Apps Script). Masovno obaveštavanje SVIH o novoj platformi je zaseban mejl-korak na KRAJU migracije domena — ne ovde.
 - Generisanje datuma termina, „Neradni dani", Google Calendar/Meet, Google Docs beleške → **#5**.
 - Honorari profesora + mejl-upozorenja (uklj. „blizu početka, ispod minimuma") → **#6**.
 - Individualni kursevi/varijante/paketi → **#3**.
