@@ -477,7 +477,11 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
         {(() => {
           // Dialog exercise — handles its own flow, including summary
           if (exercise.exercise_type === "dialog") {
-            const dialogConfig = question.options as {
+            // options may be stored as a JSON string (double-encoded) — parse before use
+            const rawOptions = question.options;
+            const dialogConfig = (typeof rawOptions === "string"
+              ? JSON.parse(rawOptions)
+              : rawOptions) as {
               scenario: string;
               ai_role: string;
               level: string;
