@@ -55,4 +55,5 @@ wc-orders-report-export-*.csv
 *analytics-orders.csv
 wc-orders-report-*.csv
 
+# Visual brainstorm artifacts
 .superpowers/

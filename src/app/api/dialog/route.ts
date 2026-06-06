@@ -66,7 +66,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Exercise not found" }, { status: 404 });
   }
 
-  const config = question.options as DialogConfig;
+  // options may be stored as a JSON string (double-encoded) — parse before use
+  const config = (typeof question.options === "string"
+    ? JSON.parse(question.options)
+    : question.options) as DialogConfig;
   const { scenario, ai_role: aiRole, level, dialog_mode: dialogMode, max_turns: maxTurns, goals, system_prompt_extra: systemPromptExtra } = config;
 
   if (!process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_API_KEY === "placeholder_key") {
