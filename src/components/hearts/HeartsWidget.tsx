@@ -33,7 +33,7 @@ export function HeartsWidget({ totalHearts, level, toNext, percent, nextLevel, s
           <div className="h-full bg-koral rounded-full" style={{ width: `${percent}%` }} />
         </div>
         <div className="text-xs text-gray-500 mt-1">
-          {awayMessage ?? `još ${toNext} ❤️ do Nivoa ${nextLevel}`}
+          {awayMessage ?? `još ${toNext} ❤️ do titule: ${titleForLevel(nextLevel)} 🏅`}
         </div>
         {streak > 0 && (
           <span className="inline-block mt-2 bg-orange-50 text-orange-600 font-bold text-xs px-3 py-1 rounded-full">
