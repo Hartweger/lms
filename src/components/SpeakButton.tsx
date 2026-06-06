@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export default function SpeakButton({
   text,
@@ -12,6 +12,16 @@ export default function SpeakButton({
   className?: string;
 }) {
   const [speaking, setSpeaking] = useState(false);
+  const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
+
+  // Voices load asynchronously — populate them on mount and when they change.
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.speechSynthesis) return;
+    const load = () => setVoices(window.speechSynthesis.getVoices());
+    load();
+    window.speechSynthesis.addEventListener("voiceschanged", load);
+    return () => window.speechSynthesis.removeEventListener("voiceschanged", load);
+  }, []);
 
   const speak = useCallback(
     (e: React.MouseEvent) => {
@@ -21,13 +31,23 @@ export default function SpeakButton({
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = lang;
+
+      // Explicitly pick a German voice — otherwise the browser falls back to the
+      // default (often English) voice and reads German text with English phonemes.
+      const langPrefix = lang.split("-")[0].toLowerCase();
+      const available = voices.length ? voices : window.speechSynthesis.getVoices();
+      const deVoice =
+        available.find((v) => v.lang.toLowerCase() === lang.toLowerCase()) ||
+        available.find((v) => v.lang.toLowerCase().startsWith(langPrefix));
+      if (deVoice) utterance.voice = deVoice;
+
       utterance.rate = 0.9;
       utterance.onstart = () => setSpeaking(true);
       utterance.onend = () => setSpeaking(false);
       utterance.onerror = () => setSpeaking(false);
       window.speechSynthesis.speak(utterance);
     },
-    [text, lang]
+    [text, lang, voices]
   );
 
   return (
