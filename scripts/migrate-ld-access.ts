@@ -129,6 +129,39 @@ async function run() {
   const existing = await loadExisting();
   report(plan, unmapped, existing, { bad, expired, orders });
   if (!WRITE) { console.log("\n[DRY] --write za upis."); return; }
-  // upis: Task 4
+  // resolve slug → course.id (cache)
+  const wantSlugs = new Set<string>();
+  for (const v of plan.values()) for (const s of v.perCourse.keys()) wantSlugs.add(s);
+  const { data: courses } = await sb.from("courses").select("id,slug").in("slug", [...wantSlugs]);
+  const slugToId = new Map((courses || []).map((c) => [c.slug, c.id]));
+  const missing = [...wantSlugs].filter((s) => !slugToId.has(s));
+  if (missing.length) { console.error("✗ Nedostaju kursevi u bazi:", missing); process.exit(1); }
+
+  let neu = 0, grants = 0;
+  for (const [email, v] of plan) {
+    // find-or-create user
+    const { data: prof } = await sb.from("user_profiles").select("id").eq("email", email).maybeSingle();
+    let uid = prof?.id as string | undefined;
+    if (!uid) {
+      const { data: nu, error } = await sb.auth.admin.createUser({ email, email_confirm: true });
+      if (error || !nu?.user) { console.error(`  ✗ ${email}: ${error?.message}`); continue; }
+      uid = nu.user.id; neu++;
+      await sb.from("user_profiles").upsert({ id: uid, email, full_name: v.name, role: "student" });
+    }
+    for (const [slug, exp] of v.perCourse) {
+      const courseId = slugToId.get(slug)!;
+      // pravilo "nikad ne skraćuj": uzmi MAX(postojeći, novi)
+      const { data: cur } = await sb.from("course_access")
+        .select("expires_at").eq("user_id", uid).eq("course_id", courseId).maybeSingle();
+      const curMs = cur?.expires_at ? new Date(cur.expires_at).getTime() : null;
+      const finalExp = new Date(mergeExpiry(curMs, exp)).toISOString();
+      await sb.from("course_access").upsert(
+        { user_id: uid, course_id: courseId, expires_at: finalExp, source: SOURCE },
+        { onConflict: "user_id,course_id" },
+      );
+      grants++;
+    }
+  }
+  console.log(`\n✓ Upisano: ${grants} dodela, ${neu} novih naloga. BEZ mejlova. source='${SOURCE}'.`);
 }
 run().catch((e) => { console.error(e); process.exit(1); });
