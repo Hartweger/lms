@@ -30,13 +30,13 @@ export default function LessonProgressTracker({
         .then(({ error }: { error: unknown }) => {
           if (error) return;
           // dodela srca za svaku završenu lekciju
-          for (let i = 0; i < lessonsToMark.length; i++) {
+          lessonsToMark.forEach(() => {
             fetch("/api/hearts/award", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ reason: "lesson_complete" }),
             }).catch(() => {});
-          }
+          });
         });
     });
   }, [lessonId, lessonsToMark]);

@@ -357,6 +357,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
             setFinished(false);
             setShowNext(false);
             setStreak(0);
+            setMaxStreak(0);
             setXp(0);
             setResults([]);
           }}
