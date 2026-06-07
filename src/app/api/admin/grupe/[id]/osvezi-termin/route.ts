@@ -13,7 +13,7 @@ async function requireAdmin() {
   return profile?.role === "admin" ? admin : null;
 }
 
-// POST: otvori novi termin za grupu — napravi Google event+Meet+beleške, resetuj brojač.
+// POST: napravi termin (ako ga nema) ILI pomeri postojeći na nove datume — ISTI Meet, BEZ reseta prijava.
 export async function POST(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const admin = await requireAdmin();
   if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
@@ -21,7 +21,7 @@ export async function POST(_req: NextRequest, { params }: { params: Promise<{ id
 
   const { data: g } = await admin
     .from("groups")
-    .select("id, level, days, session_time, duration_weeks, start_date, professor:professor_id(full_name)")
+    .select("id, level, days, session_time, duration_weeks, start_date, gcal_event_id, professor:professor_id(full_name)")
     .eq("id", id)
     .single();
   if (!g) return NextResponse.json({ error: "Grupa ne postoji" }, { status: 404 });
@@ -33,34 +33,28 @@ export async function POST(_req: NextRequest, { params }: { params: Promise<{ id
     return NextResponse.json({ error: "Grupi fale dani/sat/trajanje/datum početka" }, { status: 400 });
   }
 
+  const payload = { nivo: g.level, prof: profIme, days: g.days, time: g.session_time, weeks: g.duration_weeks, startDate: g.start_date };
   let gas;
   try {
-    gas = await callGas("openTerm", {
-      nivo: g.level,
-      prof: profIme,
-      days: g.days,
-      time: g.session_time,
-      weeks: g.duration_weeks,
-      startDate: g.start_date,
-    });
+    gas = g.gcal_event_id
+      ? await callGas("moveTerm", { ...payload, eventId: g.gcal_event_id })
+      : await callGas("openTerm", payload);
   } catch (e) {
     return NextResponse.json({ error: "Google greška: " + (e instanceof Error ? e.message : String(e)) }, { status: 502 });
   }
 
-  const endDate = computeEndDate(g.start_date, g.days, g.duration_weeks);
-
-  const { error } = await admin.from("groups").update({
-    gcal_event_id: gas.eventId ?? null,
+  const update: Record<string, unknown> = {
+    gcal_event_id: gas.eventId ?? g.gcal_event_id ?? null,
     meet_link: gas.meetLink ?? null,
-    notes_url: gas.notesUrl ?? null,
-    notes_doc_id: gas.notesDocId ?? null,
-    end_date: endDate,
-    term_opened_at: new Date().toISOString(),
-    manual_enrolled: 0,
+    end_date: computeEndDate(g.start_date, g.days, g.duration_weeks),
     status: "otvoren",
     updated_at: new Date().toISOString(),
-  }).eq("id", id);
+  };
+  // Beleške postoje samo kad je openTerm napravio nov dokument; kod moveTerm zadržavamo stari.
+  if (gas.notesUrl) { update.notes_url = gas.notesUrl; update.notes_doc_id = gas.notesDocId ?? null; }
+
+  const { error } = await admin.from("groups").update(update).eq("id", id);
   if (error) return NextResponse.json({ error: error.message }, { status: 400 });
 
-  return NextResponse.json({ ok: true, meetLink: gas.meetLink, notesUrl: gas.notesUrl });
+  return NextResponse.json({ ok: true, meetLink: gas.meetLink ?? null, notesUrl: gas.notesUrl ?? null });
 }

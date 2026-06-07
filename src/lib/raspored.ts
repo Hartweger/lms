@@ -21,26 +21,20 @@ export async function fetchRaspored(): Promise<GrupaRaspored[]> {
   const { data: groups } = await admin
     .from("groups")
     .select(
-      "id, level, status, start_date, duration_weeks, days, session_time, max_seats, manual_enrolled, term_opened_at, professor:professor_id(full_name)",
+      "id, level, status, start_date, duration_weeks, days, session_time, max_seats, manual_enrolled, professor:professor_id(full_name)",
     )
     .in("status", ["otvoren", "uskoro"]);
   if (!groups?.length) return [];
 
   const ids = groups.map((g) => g.id);
-  const termOpen: Record<string, string | null> = {};
-  groups.forEach((g) => { termOpen[g.id] = g.term_opened_at ?? null; });
   const { data: enr } = await admin
     .from("group_enrollments")
-    .select("group_id, enrolled_at")
+    .select("group_id")
     .in("group_id", ids)
     .eq("status", "active");
   const counts: Record<string, number> = {};
   (enr || []).forEach((e) => {
-    const t = termOpen[e.group_id];
-    // Broji upis samo ako je u tekućem terminu (od term_opened_at), ili ako granica nije postavljena.
-    if (!t || (e.enrolled_at && e.enrolled_at >= t)) {
-      counts[e.group_id] = (counts[e.group_id] || 0) + 1;
-    }
+    counts[e.group_id] = (counts[e.group_id] || 0) + 1;
   });
 
   const ordered = [...groups].sort((a, b) => {

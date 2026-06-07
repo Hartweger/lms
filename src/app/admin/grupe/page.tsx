@@ -129,15 +129,30 @@ export default function AdminGrupePage() {
     fetchGroups();
   }
 
-  async function otvoriTermin() {
+  // Napravi termin (ako ga nema) ili pomeri postojeći na nove datume — ISTI Meet, BEZ reseta prijava.
+  async function osveziTermin() {
     if (!form?.id) return;
-    if (!confirm("Otvoriti NOVI termin?\n\nPravi Google kalendar event + Meet link + dokument beleški, i RESETUJE broj upisanih na 0. Postojeći polaznici NE gube pristup.")) return;
+    if (!confirm("Napravi/osveži termin?\n\nNapravi Google event+Meet (ako ne postoji) ili pomeri postojeći na nove datume — ISTI Meet link. Prijave OSTAJU. Sačuvaj izmene pre ovoga ako si menjala datum.")) return;
     setSaving(true);
-    const r = await fetch(`/api/admin/grupe/${form.id}/otvori-termin`, { method: "POST" });
+    const r = await fetch(`/api/admin/grupe/${form.id}/osvezi-termin`, { method: "POST" });
     const j = await r.json();
     setSaving(false);
     if (!r.ok) { alert("Greška: " + j.error); return; }
-    alert("Termin otvoren! ✅\n\nMeet: " + (j.meetLink || "—") + "\nBeleške: " + (j.notesUrl || "—"));
+    alert("Termin osvežen! ✅\n\nMeet: " + (j.meetLink || "—") + "\nBeleške: " + (j.notesUrl || "(zadržane postojeće)"));
+    cancelEdit();
+    fetchGroups();
+  }
+
+  // Nova generacija — isprazni prijave (0/6) + NOV Meet/beleške.
+  async function novaGeneracija() {
+    if (!form?.id) return;
+    if (!confirm("NOVA generacija?\n\nPRAZNI broj upisanih na 0 i pravi NOV Meet + nove beleške (novi ciklus). Pristup sadržaju prethodnim polaznicima OSTAJE. Koristi kad prethodna grupa završi/popuni.")) return;
+    setSaving(true);
+    const r = await fetch(`/api/admin/grupe/${form.id}/nova-generacija`, { method: "POST" });
+    const j = await r.json();
+    setSaving(false);
+    if (!r.ok) { alert("Greška: " + j.error); return; }
+    alert("Nova generacija otvorena! ✅ (0/6)\n\nMeet: " + (j.meetLink || "—") + "\nBeleške: " + (j.notesUrl || "—"));
     cancelEdit();
     fetchGroups();
   }
@@ -382,15 +397,26 @@ export default function AdminGrupePage() {
               Otkaži
             </button>
             {form.id && (
-              <button
-                type="button"
-                onClick={otvoriTermin}
-                disabled={saving}
-                className="ml-auto bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 disabled:opacity-50"
-                title="Napravi Google event + Meet + beleške i resetuj brojač"
-              >
-                Otvori novi termin
-              </button>
+              <>
+                <button
+                  type="button"
+                  onClick={osveziTermin}
+                  disabled={saving}
+                  className="ml-auto bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 disabled:opacity-50"
+                  title="Napravi event+Meet ili pomeri postojeći na nove datume (isti Meet). Prijave ostaju."
+                >
+                  Napravi / osveži termin
+                </button>
+                <button
+                  type="button"
+                  onClick={novaGeneracija}
+                  disabled={saving}
+                  className="bg-amber-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 disabled:opacity-50"
+                  title="Isprazni prijave (0/6) + nov Meet/beleške (novi ciklus)"
+                >
+                  Nova generacija
+                </button>
+              </>
             )}
           </div>
 

@@ -50,15 +50,13 @@ export async function POST(request: Request) {
       if (nivo) {
         // Status filter radi pickOpenGroupForNivo (jedinstveno mesto definicije "otvoren"), isto kao grant-access.
         const { data: groupsForNivo } = await supabase
-          .from("groups").select("id, level, status, start_date, max_seats, manual_enrolled, term_opened_at")
+          .from("groups").select("id, level, status, start_date, max_seats, manual_enrolled")
           .eq("level", nivo);
         const group = pickOpenGroupForNivo(groupsForNivo ?? [], nivo);
         if (group) {
-          let countQ = supabase
+          const { count } = await supabase
             .from("group_enrollments").select("*", { count: "exact", head: true })
             .eq("group_id", group.id).eq("status", "active");
-          if (group.term_opened_at) countQ = countQ.gte("enrolled_at", group.term_opened_at);
-          const { count } = await countQ;
           const seats = computeSeats({
             maxSeats: group.max_seats, manualEnrolled: group.manual_enrolled ?? null,
             activeEnrollments: count ?? 0,

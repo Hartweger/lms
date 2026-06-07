@@ -52,16 +52,13 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
       // Status filter radi pickOpenGroupForNivo (jedinstveno mesto definicije "otvoren").
       const { data: groupsForNivo } = await admin
         .from("groups")
-        .select("id, level, status, start_date, max_seats, manual_enrolled, term_opened_at, gcal_event_id, meet_link, notes_url, professor:professor_id(full_name, email)")
+        .select("id, level, status, start_date, max_seats, manual_enrolled, gcal_event_id, meet_link, notes_url, professor:professor_id(full_name, email)")
         .eq("level", nivo);
       const group = pickOpenGroupForNivo(groupsForNivo ?? [], nivo);
       if (!group) { console.warn(`[grant] Nema otvorene grupe za nivo ${nivo} (order ${orderId})`); continue; }
 
-      // Brojanje upisa tekućeg termina (od term_opened_at, ako postoji).
-      let countQ = admin.from("group_enrollments").select("*", { count: "exact", head: true })
+      const { count } = await admin.from("group_enrollments").select("*", { count: "exact", head: true })
         .eq("group_id", group.id).eq("status", "active");
-      if (group.term_opened_at) countQ = countQ.gte("enrolled_at", group.term_opened_at);
-      const { count } = await countQ;
 
       const seats = computeSeats({ maxSeats: group.max_seats, manualEnrolled: group.manual_enrolled, activeEnrollments: count ?? 0 });
       if (seats.full) {
