@@ -1,6 +1,6 @@
 // src/lib/grant-access.ts
 import { createAdminClient } from "@/lib/supabase/admin";
-import { sendWelcomeEmail, sendGrupniWelcomeEmail, sendProfNewStudentEmail } from "@/lib/email";
+import { sendWelcomeEmail, sendGrupniWelcomeEmail, sendProfNewStudentEmail, sendIndividualWelcomeEmail, sendProfNewIndividualStudentEmail } from "@/lib/email";
 import { nivoForSlug } from "@/lib/course-nivo";
 import { computeSeats, pickOpenGroupForNivo } from "@/lib/groups";
 import { callGas } from "@/lib/gas";
@@ -104,8 +104,61 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
     }
   }
 
+  // Individualni proizvodi: enrollment + beleške (GAS) + mejlovi. Best-effort.
+  let individualWelcomeSent = false;
+  for (const item of items) {
+    const profId = (item as { professor_id?: string | null }).professor_id;
+    const pkgLessons = (item as { package_lessons?: number | null }).package_lessons;
+    if (profId === undefined && pkgLessons === undefined) continue; // nije individualna stavka
+    const nivo = nivoForSlug(item.course_slug) ?? "";
+    try {
+      let profIme = "", profEmail = "", calendarUrl: string | null = null;
+      if (profId) {
+        const { data: prof } = await admin.from("user_profiles")
+          .select("full_name, email, calendar_url").eq("id", profId).single();
+        profIme = prof?.full_name ?? ""; profEmail = prof?.email ?? ""; calendarUrl = prof?.calendar_url ?? null;
+      }
+
+      // GAS: beleške doc (bez kalendar eventa).
+      let notesUrl: string | null = null;
+      try {
+        const r = await callGas("enrollIndividual", {
+          nivo, prof: profIme, studentName: order.full_name, studentEmail: order.email,
+        });
+        notesUrl = (r.notesUrl as string) || null;
+      } catch (ge) {
+        console.error(`[grant][ind] GAS enrollIndividual pao za ${order.email} (${nivo}):`, ge);
+      }
+
+      // Enrollment (rok = uplata + 3 meseca).
+      const expEnroll = new Date(); expEnroll.setMonth(expEnroll.getMonth() + 3);
+      await admin.from("individual_enrollments").insert({
+        user_id: order.user_id, course_id: item.course_id, professor_id: profId ?? null,
+        order_id: orderId, package_lessons: pkgLessons ?? 0, status: "active",
+        notes_doc_url: notesUrl, expires_at: expEnroll.toISOString(),
+      });
+
+      // hasPlatform: ima li course_unlocks za ovaj proizvod (po nivou/FIDE/FSP da, mesečni ne).
+      const { count: unlockCount } = await admin.from("course_unlocks")
+        .select("*", { count: "exact", head: true }).eq("purchasable_course_id", item.course_id);
+
+      await sendIndividualWelcomeEmail(order.email, order.full_name, {
+        nivo, profIme, calendarUrl, notesUrl, hasPlatform: (unlockCount ?? 0) > 0,
+      });
+      individualWelcomeSent = true;
+
+      if (profEmail) {
+        await sendProfNewIndividualStudentEmail(profEmail, profIme, {
+          nivo, lessons: pkgLessons ?? 0, studentName: order.full_name, studentEmail: order.email, notesUrl,
+        });
+      }
+    } catch (e) {
+      console.error(`[grant][ind] Individualni tok pao za ${item.course_slug} (order ${orderId}):`, e);
+    }
+  }
+
   await admin.from("orders").update({ payment_status: "completed", granted: true }).eq("id", orderId);
-  // Generički welcome šaljemo samo ako nismo već poslali grupni (da polaznik dobije jedan mejl).
-  if (!grupniWelcomeSent) await sendWelcomeEmail(order.email, order.full_name, items.map((i) => i.title));
+  // Generički welcome šaljemo samo ako nismo već poslali grupni/individualni (da polaznik dobije jedan mejl).
+  if (!grupniWelcomeSent && !individualWelcomeSent) await sendWelcomeEmail(order.email, order.full_name, items.map((i) => i.title));
   return { ok: true };
 }

@@ -459,6 +459,74 @@ export async function sendProfNewStudentEmail(
   }
 }
 
+export async function sendIndividualWelcomeEmail(
+  to: string,
+  name: string,
+  opts: { nivo: string; profIme?: string; calendarUrl?: string | null; notesUrl?: string | null; hasPlatform: boolean },
+) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    const ime = name ? name.split(" ")[0] : "";
+    const calBtn = opts.calendarUrl
+      ? `<p style="margin:24px 0"><a href="${esc(opts.calendarUrl)}" style="background:#0AB3D7;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:bold;display:inline-block">Zakaži termin</a></p>
+<p style="font-size:13px;color:#666">Termine biraš direktno u kalendaru profesorke.</p>`
+      : `<p style="font-size:14px;color:#666">Link za zakazivanje termina stiže ti uskoro.</p>`;
+    const notesRow = opts.notesUrl ? `<p>📝 <a href="${esc(opts.notesUrl)}">Beleške sa časova</a></p>` : "";
+    const profRow = opts.profIme ? `<p><strong>Profesorka:</strong> ${esc(opts.profIme)}</p>` : "";
+    const platformRow = opts.hasPlatform
+      ? `<p>📚 Video lekcije i materijali su ti na platformi: <a href="https://kurs.hartweger.rs/prijava">prijavi se ovde</a> (istim mejlom).</p>`
+      : "";
+    await resend.emails.send({
+      from: FROM,
+      to,
+      subject: `Dobrodošli na individualni kurs nemačkog ${opts.nivo}!`,
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:sans-serif;line-height:1.6;color:#222">
+<h2>Dobrodošli${ime ? ", " + esc(ime) : ""}! 💚</h2>
+<p>Kupovina <strong>individualnog kursa nemačkog ${esc(opts.nivo)}</strong> je potvrđena.</p>
+${profRow}
+${calBtn}
+${notesRow}
+${platformRow}
+<p style="margin-top:24px">Vidimo se na času!<br>Hartweger tim</p>
+</body></html>`,
+    });
+  } catch (e) {
+    console.error("[email] sendIndividualWelcomeEmail pao:", e);
+  }
+}
+
+export async function sendProfNewIndividualStudentEmail(
+  profEmail: string,
+  profIme: string,
+  opts: { nivo: string; lessons: number; studentName?: string; studentEmail: string; notesUrl?: string | null },
+) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    const ime = profIme ? profIme.split(" ")[0] : "";
+    const notesRow = opts.notesUrl ? `<p>📝 <a href="${esc(opts.notesUrl)}">Beleške</a></p>` : "";
+    await resend.emails.send({
+      from: FROM,
+      to: profEmail,
+      subject: `Novi individualni polaznik — ${opts.nivo}`,
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:sans-serif;line-height:1.6;color:#222">
+<p>Zdravo${ime ? ", " + esc(ime) : ""}!</p>
+<p>Imaš novog individualnog polaznika (<strong>${esc(opts.nivo)}</strong>, paket ${opts.lessons} časova):</p>
+<p><strong>Ime:</strong> ${esc(opts.studentName || "—")}<br>
+<strong>Mejl:</strong> ${esc(opts.studentEmail)}</p>
+${notesRow}
+<p>Polaznik zakazuje termine preko tvog kalendara. Održane časove upisuješ na platformi.</p>
+<p style="margin-top:20px">Hartweger tim</p>
+</body></html>`,
+    });
+  } catch (e) {
+    console.error("[email] sendProfNewIndividualStudentEmail pao:", e);
+  }
+}
+
 export async function sendInteresNotification(nivo: string, email: string, ime: string) {
   try {
     const resend = getResend();

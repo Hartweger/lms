@@ -32,12 +32,25 @@ export default async function KupovinaPage({
   const supabase = await createClient();
   const { data: course } = await supabase
     .from("courses")
-    .select("id, title, slug, price, paypal_price_eur, description, category")
+    .select("id, title, slug, price, paypal_price_eur, description, category, course_type, included_lessons")
     .eq("slug", slug)
     .eq("is_purchasable", true)
     .single();
 
   if (!course) notFound();
+
+  // Individualni: učitaj varijacije (cene po profesorki/paketu) za izbor u formi.
+  const isIndividual = course.course_type === "individual" ||
+    ["individualni", "paket", "mesecni"].includes(course.category ?? "");
+  let variants: Array<{ id: string; professor_id: string | null; package_type: string | null; price: number; paypal_price_eur: number | null; professor: { id: string; full_name: string } | null }> = [];
+  if (isIndividual) {
+    const { data } = await supabase
+      .from("product_variants")
+      .select("id, professor_id, package_type, price, paypal_price_eur, professor:professor_id(id, full_name)")
+      .eq("course_id", course.id)
+      .eq("is_active", true);
+    variants = (data ?? []).map((v) => ({ ...v, professor: Array.isArray(v.professor) ? v.professor[0] ?? null : v.professor }));
+  }
 
   // Prepoznaj ulogovanog kupca — prepuni i zaključaj email da se pristup
   // ne dodeli na pogrešan nalog (rizik pri ručnom unosu drugog emaila).
@@ -71,6 +84,8 @@ export default async function KupovinaPage({
           courseTitle={course.title}
           priceRsd={course.price}
           priceEur={course.paypal_price_eur}
+          variants={variants}
+          includedLessons={course.included_lessons}
           initialEmail={initialEmail}
           initialName={initialName}
           isLoggedIn={!!user}

@@ -7,7 +7,7 @@ import { computeSeats, pickOpenGroupForNivo } from "@/lib/groups";
 
 export async function POST(request: Request) {
   try {
-    const { fullName, email, country, courseSlug, paymentMethod, couponCode: rawCouponCode } =
+    const { fullName, email, country, courseSlug, paymentMethod, couponCode: rawCouponCode, professorId, packageType } =
       await request.json();
 
     // Validate required fields
@@ -31,7 +31,7 @@ export async function POST(request: Request) {
     // Load course by slug where is_purchasable = true
     const { data: course, error: courseError } = await supabase
       .from("courses")
-      .select("id, slug, title, price, category")
+      .select("id, slug, title, price, category, course_type, included_lessons")
       .eq("slug", courseSlug)
       .eq("is_purchasable", true)
       .single();
@@ -72,6 +72,32 @@ export async function POST(request: Request) {
       }
     }
 
+    // Individualni: cena i broj časova dolaze iz product_variants (server-side, ne veruj klijentu).
+    const isIndividual = course.course_type === "individual" ||
+      ["individualni", "paket", "mesecni"].includes(course.category ?? "");
+    let unitPrice = course.price;
+    let chosenProfessorId: string | null = null;
+    let packageLessons: number | null = course.included_lessons ?? null;
+
+    if (isIndividual) {
+      let q = supabase
+        .from("product_variants")
+        .select("id, professor_id, package_type, price")
+        .eq("course_id", course.id)
+        .eq("is_active", true);
+      q = professorId ? q.eq("professor_id", professorId) : q.is("professor_id", null);
+      q = packageType ? q.eq("package_type", packageType) : q.is("package_type", null);
+      const { data: variant } = await q.maybeSingle();
+      if (!variant) {
+        return NextResponse.json({ error: "Izabrana kombinacija nije dostupna. Osveži stranicu i pokušaj ponovo." }, { status: 400 });
+      }
+      unitPrice = variant.price;
+      chosenProfessorId = variant.professor_id;
+      packageLessons = variant.package_type
+        ? parseInt(variant.package_type.replace(/\D/g, ""), 10)
+        : (course.included_lessons ?? null);
+    }
+
     // Validate coupon if provided
     let discountPercent = 0;
     let validCouponCode: string | null = null;
@@ -94,8 +120,8 @@ export async function POST(request: Request) {
       }
     }
 
-    const discount = discountPercent > 0 ? Math.round(course.price * discountPercent / 100) : 0;
-    const finalPrice = course.price - discount;
+    const discount = discountPercent > 0 ? Math.round(unitPrice * discountPercent / 100) : 0;
+    const finalPrice = unitPrice - discount;
 
     // Find or create user by email
     let userId: string;
@@ -150,7 +176,8 @@ export async function POST(request: Request) {
         course_id: course.id,
         course_slug: course.slug,
         title: course.title,
-        price: course.price,
+        price: unitPrice,
+        ...(isIndividual ? { professor_id: chosenProfessorId, package_lessons: packageLessons } : {}),
       },
     ];
 
@@ -163,7 +190,7 @@ export async function POST(request: Request) {
         full_name: fullName,
         country,
         items,
-        subtotal: course.price,
+        subtotal: unitPrice,
         discount,
         total: finalPrice,
         coupon_code: validCouponCode,

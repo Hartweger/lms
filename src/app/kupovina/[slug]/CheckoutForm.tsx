@@ -3,12 +3,15 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { EUR_RATE } from "@/lib/order-utils";
+import { professorsFromVariants, packageTypesFromVariants, resolveVariant, type Variant } from "@/lib/individual-pricing";
 
 interface Props {
   courseSlug: string;
   courseTitle: string;
   priceRsd: number;
   priceEur: number | null;
+  variants?: Variant[];
+  includedLessons?: number | null;
   initialEmail?: string;
   initialName?: string;
   isLoggedIn?: boolean;
@@ -34,8 +37,16 @@ function formatPrice(price: number): string {
   return price.toLocaleString("de-DE");
 }
 
-export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, initialEmail = "", initialName = "", isLoggedIn = false }: Props) {
+export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, variants = [], includedLessons = null, initialEmail = "", initialName = "", isLoggedIn = false }: Props) {
   const router = useRouter();
+  void includedLessons;
+
+  const isIndividual = variants.length > 0;
+  const professors = professorsFromVariants(variants);
+  const packageTypes = packageTypesFromVariants(variants);
+  const PAKET_LABEL: Record<string, string> = { paket4: "4 termina", paket8: "8 termina", paket12: "12 termina" };
+  const [professorId, setProfessorId] = useState<string | null>(professors[0]?.id ?? null);
+  const [packageType, setPackageType] = useState<string | null>(packageTypes[0] ?? null);
   const [fullName, setFullName] = useState(initialName);
   const [email, setEmail] = useState(initialEmail);
   const [emailLocked, setEmailLocked] = useState(isLoggedIn);
@@ -54,7 +65,10 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, initia
   const paymentMethod = method;
   const isCard = method === "kartica";
 
-  const discountedRsd = appliedCoupon ? Math.round(priceRsd * (1 - appliedCoupon.discountPercent / 100)) : priceRsd;
+  const selectedVariant = isIndividual ? resolveVariant(variants, { professorId, packageType }) : null;
+  // Za individualne cena dolazi iz varijacije; inače prop priceRsd.
+  const basePrice = isIndividual ? (selectedVariant?.price ?? 0) : priceRsd;
+  const discountedRsd = appliedCoupon ? Math.round(basePrice * (1 - appliedCoupon.discountPercent / 100)) : basePrice;
   const eurApprox = Math.round(discountedRsd / EUR_RATE);
 
   async function validateCoupon() {
@@ -93,6 +107,8 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, initia
           country,
           paymentMethod,
           couponCode: appliedCoupon?.code || null,
+          professorId: isIndividual ? professorId : null,
+          packageType: isIndividual ? packageType : null,
         }),
       });
 
@@ -125,19 +141,50 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, initia
           <div className="text-right flex-shrink-0">
             {appliedCoupon ? (
               <div>
-                <p className="text-sm text-gray-400 line-through">{formatPrice(priceRsd)} din</p>
+                <p className="text-sm text-gray-400 line-through">{formatPrice(basePrice)} din</p>
                 <p className="font-bold text-gray-900">{formatPrice(discountedRsd)} din</p>
                 <p className="text-xs text-gray-400 mt-0.5">≈ {eurApprox} €</p>
               </div>
             ) : (
               <div>
-                <p className="font-bold text-gray-900">{formatPrice(priceRsd)} din</p>
+                <p className="font-bold text-gray-900">{formatPrice(basePrice)} din</p>
                 <p className="text-xs text-gray-400 mt-0.5">≈ {eurApprox} €</p>
               </div>
             )}
           </div>
         </div>
       </div>
+
+      {/* Individualni: izbor profesorke / paketa + napomena */}
+      {isIndividual && (
+        <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-4">
+          <p className="text-xs font-bold uppercase tracking-wide text-gray-400">Izaberi</p>
+
+          {packageTypes.length > 0 && (
+            <div>
+              <label htmlFor="paket" className="block text-sm font-medium text-gray-700 mb-1">Broj termina</label>
+              <select id="paket" value={packageType ?? ""} onChange={(e) => setPackageType(e.target.value)}
+                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#0AB3D7]">
+                {packageTypes.map((p) => (<option key={p} value={p}>{PAKET_LABEL[p] ?? p}</option>))}
+              </select>
+            </div>
+          )}
+
+          <div>
+            <label htmlFor="prof" className="block text-sm font-medium text-gray-700 mb-1">Profesorka</label>
+            <select id="prof" value={professorId ?? ""} onChange={(e) => setProfessorId(e.target.value)}
+              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#0AB3D7]">
+              {professors.map((p) => (<option key={p.id} value={p.id}>{p.full_name}</option>))}
+            </select>
+          </div>
+
+          <div className="bg-[#FFF7E6] border border-[#F0D9A0] rounded-lg p-3">
+            <p className="text-xs text-[#8A6D3B] leading-relaxed">
+              Pre uplate proveri mejlom na <a href="mailto:info@hartweger.rs" className="underline">info@hartweger.rs</a> da li je izabrana profesorka trenutno na raspolaganju za nove termine.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Coupon */}
       <div className="bg-white border border-gray-200 rounded-xl p-5">
