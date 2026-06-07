@@ -1,6 +1,6 @@
 // src/lib/grant-access.ts
 import { createAdminClient } from "@/lib/supabase/admin";
-import { sendWelcomeEmail, sendGrupniWelcomeEmail } from "@/lib/email";
+import { sendWelcomeEmail, sendGrupniWelcomeEmail, sendProfNewStudentEmail } from "@/lib/email";
 import { nivoForSlug } from "@/lib/course-nivo";
 import { computeSeats, pickOpenGroupForNivo } from "@/lib/groups";
 import { callGas } from "@/lib/gas";
@@ -52,7 +52,7 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
       // Status filter radi pickOpenGroupForNivo (jedinstveno mesto definicije "otvoren").
       const { data: groupsForNivo } = await admin
         .from("groups")
-        .select("id, level, status, start_date, max_seats, manual_enrolled, term_opened_at, gcal_event_id, meet_link, notes_url, professor:professor_id(full_name)")
+        .select("id, level, status, start_date, max_seats, manual_enrolled, term_opened_at, gcal_event_id, meet_link, notes_url, professor:professor_id(full_name, email)")
         .eq("level", nivo);
       const group = pickOpenGroupForNivo(groupsForNivo ?? [], nivo);
       if (!group) { console.warn(`[grant] Nema otvorene grupe za nivo ${nivo} (order ${orderId})`); continue; }
@@ -94,6 +94,14 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
         nivo, profIme, meetLink: group.meet_link, notesUrl: group.notes_url,
       });
       grupniWelcomeSent = true;
+
+      // Mejl profesorki: novi polaznik.
+      const profEmail: string = prof?.email || "";
+      if (profEmail) {
+        await sendProfNewStudentEmail(profEmail, profIme, {
+          nivo, studentName: order.full_name, studentEmail: order.email,
+        });
+      }
     } catch (e) {
       console.error(`[grant] Grupni tok pao za nivo ${nivo} (order ${orderId}):`, e);
     }

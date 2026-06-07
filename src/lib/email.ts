@@ -378,6 +378,34 @@ ${notesRow}
   }
 }
 
+export async function sendProfNewStudentEmail(
+  profEmail: string,
+  profIme: string,
+  opts: { nivo: string; studentName?: string; studentEmail: string },
+) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    const ime = profIme ? profIme.split(" ")[0] : "";
+    await resend.emails.send({
+      from: FROM,
+      to: profEmail,
+      subject: `Novi polaznik — grupni ${opts.nivo}`,
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:sans-serif;line-height:1.6;color:#222">
+<p>Zdravo${ime ? ", " + esc(ime) : ""}!</p>
+<p>Upisao/la se novi polaznik u tvoju grupu <strong>${esc(opts.nivo)}</strong>:</p>
+<p><strong>Ime:</strong> ${esc(opts.studentName || "—")}<br>
+<strong>Mejl:</strong> ${esc(opts.studentEmail)}</p>
+<p>Dodat/a je na termin u tvom Google kalendaru i u tvoj spisak (GRP tab).</p>
+<p style="margin-top:20px">Hartweger tim</p>
+</body></html>`,
+    });
+  } catch (e) {
+    console.error("[email] sendProfNewStudentEmail pao:", e);
+  }
+}
+
 export async function sendInteresNotification(nivo: string, email: string, ime: string) {
   try {
     const resend = getResend();
