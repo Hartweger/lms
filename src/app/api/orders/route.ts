@@ -48,6 +48,7 @@ export async function POST(request: Request) {
     if (course.category === "grupni") {
       const nivo = nivoForSlug(course.slug);
       if (nivo) {
+        // Status filter radi pickOpenGroupForNivo (jedinstveno mesto definicije "otvoren"), isto kao grant-access.
         const { data: groupsForNivo } = await supabase
           .from("groups").select("id, level, status, start_date, max_seats, manual_enrolled")
           .eq("level", nivo);
@@ -61,6 +62,7 @@ export async function POST(request: Request) {
             activeEnrollments: count ?? 0,
           });
           if (seats.full) {
+            console.log(`[orders] Grupna blokada (409): ${course.slug} / ${nivo} — grupa ${group.id} popunjena`);
             return NextResponse.json(
               { error: "Grupa je trenutno popunjena. Ostavi mejl da te obavestimo za sledeći termin." },
               { status: 409 },
