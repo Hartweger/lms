@@ -21,11 +21,13 @@ Kad neko plati grupni kurs, sve se odvija automatski: zauzme se mesto, polaznik 
 1. **Brojanje mesta:** automatski po plaćanju. Ručni upis ostaje kao rezerva (npr. plaćanje van sajta).
 2. **Kad je puno (6/6):** stranica kursa prikazuje „Popunjeno", a umesto „Prijavi se" nudi „Obavesti me za sledeći termin". Checkout odbija kupovinu te grupe.
 3. **„Obavesti me za sledeći termin":** šalje običan mejl administratoru (`kurs@hartweger.rs`), bez liste čekanja.
-4. **Otvaranje novog termina:** admin promeni početni datum grupe → brojač se resetuje na 0/6, grupa se ponovo otvori, naprave se novi kalendar-event i nov dokument sa beleškama. Stari polaznici ne gube pristup.
+4. **Otvaranje novog termina:** posebno dugme **„Otvori novi termin"** u adminu (sa potvrdom) — NE pokreće se promenom datuma. Tek to dugme resetuje brojač, otvori grupu i napravi novi kalendar-event + nov dokument sa beleškama. Obična izmena datuma ne pokreće ništa. Stari polaznici ne gube pristup.
 5. **Profesorski nalozi:** Google Workspace pod kontrolom vlasnice → centralno pravljenje termina preko service account-a (domain-wide delegation).
 6. **Profesorov Google Sheet:** zadržava se — sajt dopisuje novog polaznika.
 7. **Beleške:** jedan Google dokument **po grupi/terminu**, napravljen iz šablona, koji profesor popunjava posle svakog časa (datum, gradivo, vokabular, greške, napomene, linkovi). Polaznik dobija link na taj dokument.
-8. **Mejl polazniku:** **jedan** brendiran Resend mejl sa svim: prijava na platformu + Google Meet link + „Dodaj u kalendar" + link na beleške. Polaznik se „tiho" dodaje kao gost na kalendar-event (bez zasebnog Google poziva), da bi profesor video učesnike, ali polaznik dobija samo naš mejl.
+8. **Mejl polazniku:** **jedan** brendiran Resend mejl sa svim: prijava na platformu + Google Meet link + link na beleške. Polaznik se „tiho" dodaje kao gost na kalendar-event (bez zasebnog Google poziva) — time mu se termin automatski pojavi u ličnom kalendaru, pa nema zasebnog „Dodaj u kalendar" dugmeta (da se ne duplira). Profesor vidi učesnike na eventu, a polaznik dobija samo naš mejl.
+9. **Postojeće grupe (trenutni termin):** nova Google automatika (kalendar/Meet/beleške/mejl sa Meet linkom) važi **tek od sledećeg otvaranja termina**. Trenutni termini ostaju kako jesu (Meet su polaznici dobili ručno). **Ali** brojanje mesta i „popunjeno"/blokada kupovine (Posao A) važe **odmah za sve grupe**, da se zaustavi preprodaja.
+10. **Ručni brojevi su stvarni polaznici:** trenutni `manual_enrolled` (A1.1=3, B1.2=4, …) su realni upisani i ostaju kao **polazna osnova** tekućeg termina; nove uplate se dodaju na njih. Reset na 0 tek pri „Otvori novi termin".
 
 ## Arhitektura
 
@@ -50,8 +52,9 @@ Kad neko plati grupni kurs, sve se odvija automatski: zauzme se mesto, polaznik 
 
 ### Brojanje mesta (`src/lib/groups.ts`, `src/lib/raspored.ts`)
 
-- `enrolled = (manual_enrolled ?? 0) + broj(active upisa gde enrolled_at >= term_opened_at)`
-  - `manual_enrolled` ostaje kao opcioni „početni" broj za tekući termin (npr. plaćeno van sajta); resetuje se (na `null`) pri otvaranju novog termina.
+- `enrolled = (manual_enrolled ?? 0) + broj(active upisa gde term_opened_at IS NULL ili enrolled_at >= term_opened_at)`
+  - `manual_enrolled` je **polazna osnova** tekućeg termina (trenutno realni polaznici); nove uplate se dodaju na to. Resetuje se (na `null`) tek pri „Otvori novi termin".
+  - `term_opened_at IS NULL` (postojeće grupe koje nisu prešle na novi sistem) → broje se svi aktivni upisi (trenutno 0), pa važi samo `manual_enrolled` osnova + nove uplate.
 - `full = enrolled >= max_seats`
 - `slobodnih = max(0, max_seats - enrolled)`
 - `GrupaRaspored` dobija novo polje `full: boolean`.
@@ -82,14 +85,16 @@ Svi Google pozivi su **best-effort**: greška se loguje (Sentry) i ne ruši pla�
 
 ### Tokovi
 
-#### Tok 1 — Otvaranje termina (admin promeni `start_date`)
+#### Tok 1 — Otvaranje termina (dugme „Otvori novi termin")
 
-`PATCH /api/admin/grupe/[id]` detektuje promenu `start_date` i pokreće „otvori termin":
+Posebna admin akcija (dugme + potvrda), npr. `POST /api/admin/grupe/[id]/otvori-termin`. **Ne** pokreće se promenom `start_date`. Koraci:
 
-1. `term_opened_at = now()`, `status = 'otvoren'`, `manual_enrolled = null`
+1. `term_opened_at = now()`, `status = 'otvoren'`, `manual_enrolled = null` (reset osnove)
 2. `createGroupEvent()` → upiše `calendar_event_id`, `meet_link`
 3. `createNotesDoc()` → upiše `notes_doc_id`, `notes_doc_url`
 4. Stari event/dokument prethodnog termina ostaju u Google-u (istorija); polja na grupi se prepisuju novim. Postojeći polaznici zadržavaju `course_access`.
+
+Napomena: prosto menjanje datuma/sata/profesora kroz običan `PATCH` ostaje moguće (ispravke) i ne dira termin/automatiku.
 
 #### Tok 2 — Polaznik plati grupni kurs
 
@@ -97,12 +102,13 @@ Proširenje `grantAccessForOrder()` (`src/lib/grant-access.ts`), poziva se iz Ne
 
 1. Mapiraj `slug → nivo` (postojeći `slugToNivo`) → nađi otvorenu grupu za nivo.
 2. Ako je grupa puna → preskoči automatiku, loguj + obavesti admina (zaštita; primarno se blokira na checkout-u).
-3. `upsert group_enrollment` (status `active`) — `UNIQUE(group_id, user_id)` daje idempotentnost.
-4. `addAttendeeSilently()` — polaznik kao gost na kalendar-eventu (bez Google mejla).
-5. `appendEnrollee()` u profesorov `roster_sheet_id`.
-6. Pošalji **jedan** Resend mejl polazniku: prijava na platformu + Meet link + „Dodaj u kalendar" + link na beleške.
+3. `upsert group_enrollment` (status `active`) — `UNIQUE(group_id, user_id)` daje idempotentnost. (Ovo važi za **sve** grupe → mesto se zauzima.)
+4. Dodeli `course_access` na video lekcije (kao sada).
+5. **Google koraci samo ako grupa ima `calendar_event_id`/`meet_link`** (tj. termin otvoren novim sistemom):
+   - `addAttendeeSilently()` — polaznik kao gost na kalendar-eventu (bez Google mejla).
+   - `appendEnrollee()` u profesorov `roster_sheet_id`.
+6. Pošalji **jedan** Resend mejl polazniku: prijava na platformu + (ako postoje) Meet link + link na beleške. Ako grupa nema Meet (stari termin), mejl to izostavlja uz napomenu da će link stići od profesora.
 7. Pošalji Resend mejl profesoru: „novi polaznik — ime, mejl, nivo".
-8. Dodeli `course_access` na video lekcije (kao sada).
 
 Idempotentnost: `grantAccessForOrder` već rano izlazi ako je order `completed`; dodatno, koraci 3–7 proveravaju postojanje upisa pre slanja/dopisivanja da se izbegnu duplikati pri ponovnom pozivu (cron reconcile).
 
