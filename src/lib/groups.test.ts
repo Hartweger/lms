@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { computeSeats, formatDays, formatPocetak, mapGroupToRaspored, nextExpiry } from "./groups";
+import { computeSeats, formatDays, formatPocetak, mapGroupToRaspored, nextExpiry, pickOpenGroupForNivo } from "./groups";
 
 describe("formatDays", () => {
   it("mapira brojeve dana u srpske skraćenice", () => {
@@ -36,6 +36,19 @@ describe("mapGroupToRaspored", () => {
       maks: "6", upisanih: "2", slobodnih: "4", full: false,
     });
   });
+});
+
+describe("pickOpenGroupForNivo", () => {
+  const groups = [
+    { id: "a", level: "A1.1", status: "otvoren", start_date: "2026-07-01" },
+    { id: "b", level: "A1.1", status: "otvoren", start_date: "2026-06-01" },
+    { id: "c", level: "A1.1", status: "uskoro", start_date: "2026-05-01" },
+    { id: "d", level: "B1.1", status: "otvoren", start_date: "2026-06-01" },
+  ];
+  it("bira otvorenu grupu za nivo sa najranijim datumom", () =>
+    expect(pickOpenGroupForNivo(groups, "A1.1")?.id).toBe("b"));
+  it("ignoriše ne-otvorene i druge nivoe", () =>
+    expect(pickOpenGroupForNivo(groups, "C1.1")).toBeNull());
 });
 
 describe("computeSeats (osnova + nove uplate)", () => {

@@ -47,6 +47,15 @@ export interface GroupRowForDisplay {
   manual_enrolled: number | null;
 }
 
+export interface OpenGroupRow { id: string; level: string; status: string; start_date: string | null; }
+
+/** Otvorena grupa za nivo, sa najranijim start_date. null ako ne postoji. */
+export function pickOpenGroupForNivo<T extends OpenGroupRow>(groups: T[], nivo: string): T | null {
+  const open = groups.filter((g) => g.level === nivo && g.status === "otvoren");
+  if (!open.length) return null;
+  return open.sort((a, b) => (a.start_date ?? "").localeCompare(b.start_date ?? ""))[0];
+}
+
 export function mapGroupToRaspored(g: GroupRowForDisplay, profName: string, activeEnrollments: number): GrupaRaspored {
   const seats = computeSeats({ maxSeats: g.max_seats, manualEnrolled: g.manual_enrolled, activeEnrollments });
   return {

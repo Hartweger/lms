@@ -1,6 +1,8 @@
 // src/lib/grant-access.ts
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendWelcomeEmail } from "@/lib/email";
+import { nivoForSlug } from "@/lib/course-nivo";
+import { pickOpenGroupForNivo } from "@/lib/groups";
 
 interface OrderItem { course_id: string; course_slug: string; title: string; price: number; }
 
@@ -36,6 +38,27 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
       await admin.from("course_access").insert({
         user_id: order.user_id, course_id: courseId, expires_at: expiresAt.toISOString(),
       });
+    }
+  }
+
+  // Grupni proizvodi: auto-upis u otvorenu grupu (best-effort; ne ruši dodelu pristupa).
+  for (const item of items) {
+    if (!item.course_slug.startsWith("grupni-")) continue;
+    const nivo = nivoForSlug(item.course_slug);
+    if (!nivo) continue;
+    try {
+      const { data: openGroups } = await admin
+        .from("groups").select("id, level, status, start_date")
+        .eq("level", nivo).eq("status", "otvoren");
+      const group = pickOpenGroupForNivo(openGroups ?? [], nivo);
+      if (!group) { console.warn(`[grant] Nema otvorene grupe za nivo ${nivo} (order ${orderId})`); continue; }
+      await admin.from("group_enrollments").upsert(
+        { group_id: group.id, user_id: order.user_id, status: "active" },
+        { onConflict: "group_id,user_id" },
+      );
+      console.log(`[grant] Auto-upis u grupu ${group.id} (${nivo}) za order ${orderId}`);
+    } catch (e) {
+      console.error(`[grant] Auto-upis pao za nivo ${nivo} (order ${orderId}):`, e);
     }
   }
 
