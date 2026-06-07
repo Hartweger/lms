@@ -69,7 +69,7 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
         continue;
       }
       await admin.from("group_enrollments").upsert(
-        { group_id: group.id, user_id: order.user_id, status: "active" },
+        { group_id: group.id, user_id: order.user_id, status: "active", enrolled_at: new Date().toISOString() },
         { onConflict: "group_id,user_id" },
       );
       console.log(`[grant] Auto-upis u grupu ${group.id} (${nivo}) za order ${orderId}`);

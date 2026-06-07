@@ -13,6 +13,7 @@ export async function callGas(action: string, payload: Record<string, unknown>):
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ action, secret, ...payload }),
     redirect: "follow",
+    signal: AbortSignal.timeout(30000),
   });
   const text = await res.text();
   let json: GasResult;

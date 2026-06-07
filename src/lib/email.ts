@@ -351,11 +351,11 @@ export async function sendGrupniWelcomeEmail(
     if (!resend) return;
     const ime = name ? name.split(" ")[0] : "";
     const meetBtn = opts.meetLink
-      ? `<p style="margin:24px 0"><a href="${opts.meetLink}" style="background:#0AB3D7;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:bold;display:inline-block">Uđi u učionicu (Google Meet)</a></p>
+      ? `<p style="margin:24px 0"><a href="${esc(opts.meetLink)}" style="background:#0AB3D7;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:bold;display:inline-block">Uđi u učionicu (Google Meet)</a></p>
 <p style="font-size:13px;color:#666">Isti Meet link važi za sve časove. Termin ti stiže i u Google kalendar.</p>`
       : `<p style="font-size:14px;color:#666">Link za Google Meet i raspored stižu ti uskoro.</p>`;
     const notesRow = opts.notesUrl
-      ? `<p>📝 <a href="${opts.notesUrl}">Beleške sa časova</a> — profesor/ka ih popunjava posle svakog časa.</p>`
+      ? `<p>📝 <a href="${esc(opts.notesUrl)}">Beleške sa časova</a> — profesor/ka ih popunjava posle svakog časa.</p>`
       : "";
     const profRow = opts.profIme ? `<p><strong>Profesor/ka:</strong> ${esc(opts.profIme)}</p>` : "";
     await resend.emails.send({
