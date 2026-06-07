@@ -8,6 +8,7 @@ import ProductFeatures from "@/components/product/ProductFeatures";
 import ProductFaq from "@/components/product/ProductFaq";
 import { fetchRaspored, type GrupaRaspored } from "@/lib/raspored";
 import { SLUG_TO_NIVO as slugToNivo } from "@/lib/course-nivo";
+import InteresForm from "./InteresForm";
 
 /* ─── Preduslovi po nivou ─── */
 const preduslov: Record<string, string> = {
@@ -336,7 +337,11 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
                   </div>
                   <div className="flex items-center gap-3 text-[15px]">
                     <span>👥</span>
-                    <span className="text-gray-600"><strong>Slobodnih mesta:</strong> {parseInt(grupa.maks) - parseInt(grupa.upisanih || "0")}</span>
+                    {grupa.full ? (
+                      <span className="text-red-600 font-bold">Popunjeno — nema slobodnih mesta</span>
+                    ) : (
+                      <span className="text-gray-600"><strong>Slobodnih mesta:</strong> {grupa.slobodnih}</span>
+                    )}
                   </div>
                   <div className="flex items-center gap-3 text-[15px]">
                     <span>💻</span>
@@ -436,12 +441,16 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
             Pridruži se grupi od 3000+ polaznika koji su već krenuli sa učenjem.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link
-              href={`/kupovina/${course.slug}`}
-              className="bg-[#F78687] hover:bg-[#e06060] text-white font-bold text-lg py-4 px-10 rounded-xl transition-all hover:-translate-y-0.5 shadow-lg shadow-[#F78687]/20"
-            >
-              {ctaLabel} — {isVariable ? "od " : ""}{formatPrice(course.price)} din
-            </Link>
+            {category === "grupni" && grupa?.full ? (
+              <InteresForm nivo={grupa.nivo} />
+            ) : (
+              <Link
+                href={`/kupovina/${course.slug}`}
+                className="bg-[#F78687] hover:bg-[#e06060] text-white font-bold text-lg py-4 px-10 rounded-xl transition-all hover:-translate-y-0.5 shadow-lg shadow-[#F78687]/20"
+              >
+                {ctaLabel} — {isVariable ? "od " : ""}{formatPrice(course.price)} din
+              </Link>
+            )}
             <Link href="/besplatno-testiranje" className="text-plava font-semibold hover:underline text-[15px]">
               Ili uradi besplatno testiranje →
             </Link>
