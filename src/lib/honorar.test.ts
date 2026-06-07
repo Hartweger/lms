@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { computeHonorar, previousMonth, monthDateRange } from "./honorar";
+import { computeHonorar, previousMonth, monthDateRange, aggregateMonthly } from "./honorar";
 import { computeSessionDates } from "./groups";
 
 describe("computeHonorar", () => {
@@ -29,6 +29,20 @@ describe("monthDateRange", () => {
   });
   it("decembar → januar sledeće", () => {
     expect(monthDateRange(2025, 12)).toEqual({ from: "2025-12-01", toExclusive: "2026-01-01" });
+  });
+});
+
+describe("aggregateMonthly", () => {
+  it("grupiše po mesecima i sabira godinu, ignoriše druge godine", () => {
+    const r = aggregateMonthly(
+      2026,
+      ["2026-06-05", "2026-06-12", "2026-07-01", "2025-06-01"], // 2 u junu, 1 u julu, 1 lani (ignoriše)
+      ["2026-06-03"], // 1 grp u junu
+      1400, 1600,
+    );
+    expect(r.months[5]).toEqual({ month: 6, ind: 2, grp: 1, indTotal: 2800, grpTotal: 1600, total: 4400 }); // jun
+    expect(r.months[6].total).toBe(1400); // jul: 1 ind
+    expect(r.yearTotal).toBe(5800); // 4400 + 1400
   });
 });
 

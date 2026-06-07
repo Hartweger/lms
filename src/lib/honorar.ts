@@ -12,7 +12,29 @@ export function computeHonorar(ind: number, grp: number, rateInd: number, rateGr
   return { ind, grp, indTotal, grpTotal, total: indTotal + grpTotal };
 }
 
-const MESECI = ["januar","februar","mart","april","maj","jun","jul","avgust","septembar","oktobar","novembar","decembar"];
+export const MESECI = ["januar","februar","mart","april","maj","jun","jul","avgust","septembar","oktobar","novembar","decembar"];
+
+export interface MonthHonorar { month: number; ind: number; grp: number; indTotal: number; grpTotal: number; total: number }
+
+/** Agregacija honorara po mesecima za godinu, iz lista datuma časova/sesija (yyyy-mm-dd). */
+export function aggregateMonthly(year: number, indDates: string[], grpDates: string[], rateInd: number, rateGrp: number): { months: MonthHonorar[]; yearTotal: number } {
+  const months: MonthHonorar[] = Array.from({ length: 12 }, (_, i) => ({ month: i + 1, ind: 0, grp: 0, indTotal: 0, grpTotal: 0, total: 0 }));
+  const bump = (dates: string[], key: "ind" | "grp") => {
+    for (const d of dates) {
+      const [y, m] = String(d).split("-").map(Number);
+      if (y === year && m >= 1 && m <= 12) months[m - 1][key]++;
+    }
+  };
+  bump(indDates, "ind");
+  bump(grpDates, "grp");
+  let yearTotal = 0;
+  for (const mo of months) {
+    const h = computeHonorar(mo.ind, mo.grp, rateInd, rateGrp);
+    mo.indTotal = h.indTotal; mo.grpTotal = h.grpTotal; mo.total = h.total;
+    yearTotal += h.total;
+  }
+  return { months, yearTotal };
+}
 
 /** Prethodni mesec u odnosu na dati datum → { year, month(1-12), label }. */
 export function previousMonth(now: Date): { year: number; month: number; label: string } {
