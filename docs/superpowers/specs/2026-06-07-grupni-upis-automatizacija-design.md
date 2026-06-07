@@ -69,6 +69,8 @@ Napomena: tekuća logika u `raspored.ts` broji **sve** aktivne upise i daje pred
     - **kalendar** = profesorov (`user_profiles.calendar_id` ili Workspace mejl)
     - **naziv eventa** uključuje nivo i ime profesora, npr. „Nemački A1.1 — Suzana Marjanović"
     - Sve vrednosti dolaze iz onoga što admin unese kod grupe (dani, sat, broj nedelja, profesor).
+    - **Jedan Meet za ceo kurs:** ponavljajući event ima **jedan zajednički Google Meet link** za sve časove tog termina (ne pravi se nov link po času). Link se čuva u `groups.meet_link` i isti se šalje svim polaznicima.
+    - **Kreira se odmah:** event + Meet nastaju u trenutku otvaranja termina (Tok 1), a ne tek pri prvom upisu. Polaznici se kasnije samo dodaju kao gosti na već postojeći event.
   - `addAttendeeSilently(calendarId, eventId, email)` → doda gosta sa `sendUpdates='none'`
   - `buildAddToCalendarUrl(group)` → Google Calendar „render" URL za polaznikov lični kalendar
 - `docs.ts` / `drive.ts`
