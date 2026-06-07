@@ -209,6 +209,31 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: 2rem;
   font-weight: 700;
 }
+.prose h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-top: 2.5rem;
+  margin-bottom: 0.75rem;
+}
+.prose p {
+  margin: 1rem 0;
+  line-height: 1.7;
+}
+.prose ul,
+.prose ol {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+.prose ul {
+  list-style: disc;
+}
+.prose ol {
+  list-style: decimal;
+}
+.prose li {
+  margin: 0.4rem 0;
+  line-height: 1.6;
+}
 
 /* Blog component: grammar rule box */
 .blog-rule {

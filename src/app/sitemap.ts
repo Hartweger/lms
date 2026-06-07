@@ -24,6 +24,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: "https://www.hartweger.rs/kontakt", lastModified: now, changeFrequency: "monthly", priority: 0.5 },
     { url: "https://www.hartweger.rs/faq", lastModified: now, changeFrequency: "monthly", priority: 0.5 },
     { url: "https://www.hartweger.rs/uslovi", lastModified: now, changeFrequency: "yearly", priority: 0.3 },
+    { url: "https://www.hartweger.rs/politika-privatnosti", lastModified: now, changeFrequency: "yearly", priority: 0.3 },
     { url: "https://www.hartweger.rs/provera-sertifikata", lastModified: now, changeFrequency: "yearly", priority: 0.3 },
     { url: "https://www.hartweger.rs/instaliraj", lastModified: now, changeFrequency: "yearly", priority: 0.2 },
   ];

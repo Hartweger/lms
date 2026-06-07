@@ -71,6 +71,15 @@ export default function PolitikaPrivatnosti() {
             <li>
               <strong>Resend</strong> — slanje transakcionih i informativnih e-mail poruka.
             </li>
+            <li>
+              <strong>Banca Intesa (NestPay)</strong> — obrada plaćanja platnim karticama i na rate.
+            </li>
+            <li>
+              <strong>PayPal</strong> — obrada plaćanja za korisnike iz inostranstva.
+            </li>
+            <li>
+              <strong>Fiscomm</strong> — izdavanje fiskalnih računa u skladu sa zakonom.
+            </li>
           </ul>
 
           <h2>Koliko čuvamo podatke</h2>
