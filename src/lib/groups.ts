@@ -27,6 +27,15 @@ const STATUS_LABEL: Record<string, string> = {
   zavrsena: "Završena", planiran: "Planiran", otkazana: "Otkazana",
 };
 
+export interface SeatInput { maxSeats: number; manualEnrolled: number | null; activeEnrollments: number; }
+export interface SeatResult { enrolled: number; slobodnih: number; full: boolean; }
+
+/** enrolled = osnova (manual_enrolled) + nove uplate (aktivni upisi). */
+export function computeSeats({ maxSeats, manualEnrolled, activeEnrollments }: SeatInput): SeatResult {
+  const enrolled = (manualEnrolled ?? 0) + activeEnrollments;
+  return { enrolled, slobodnih: Math.max(0, maxSeats - enrolled), full: enrolled >= maxSeats };
+}
+
 export interface GroupRowForDisplay {
   level: string;
   status: string;
@@ -35,9 +44,11 @@ export interface GroupRowForDisplay {
   days: number[] | null;
   session_time: string | null;
   max_seats: number;
+  manual_enrolled: number | null;
 }
 
-export function mapGroupToRaspored(g: GroupRowForDisplay, profName: string, enrolled: number): GrupaRaspored {
+export function mapGroupToRaspored(g: GroupRowForDisplay, profName: string, activeEnrollments: number): GrupaRaspored {
+  const seats = computeSeats({ maxSeats: g.max_seats, manualEnrolled: g.manual_enrolled ?? null, activeEnrollments });
   return {
     nivo: g.level,
     prof: profName,
@@ -47,7 +58,8 @@ export function mapGroupToRaspored(g: GroupRowForDisplay, profName: string, enro
     dani: formatDays(g.days),
     sat: g.session_time ?? "",
     maks: String(g.max_seats),
-    upisanih: String(enrolled),
-    slobodnih: String(Math.max(0, g.max_seats - enrolled)),
+    upisanih: String(seats.enrolled),
+    slobodnih: String(seats.slobodnih),
+    full: seats.full,
   };
 }

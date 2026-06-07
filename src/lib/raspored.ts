@@ -12,6 +12,7 @@ export interface GrupaRaspored {
   maks: string;
   upisanih: string;
   slobodnih: string;
+  full: boolean;
 }
 
 // Server-only: čita grupe iz Supabase (zamena za Google Sheet RasporedAPI).
@@ -38,9 +39,8 @@ export async function fetchRaspored(): Promise<GrupaRaspored[]> {
 
   const rows = groups.map((g) => {
     const prof = Array.isArray(g.professor) ? g.professor[0] : g.professor;
-    // Ručni broj (manual_enrolled) ima prednost; inače stvarni broj upisanih.
-    const enrolled = g.manual_enrolled != null ? g.manual_enrolled : counts[g.id] || 0;
-    return mapGroupToRaspored(g, prof?.full_name || "", enrolled);
+    const activeEnrollments = counts[g.id] || 0;
+    return mapGroupToRaspored(g, prof?.full_name || "", activeEnrollments);
   });
   // Otvoren prvo, pa po nivou (kao stari RasporedAPI)
   rows.sort((a, b) => {
