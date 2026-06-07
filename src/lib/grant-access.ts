@@ -47,10 +47,11 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
     const nivo = nivoForSlug(item.course_slug);
     if (!nivo) continue;
     try {
-      const { data: openGroups } = await admin
+      // Status filter radi pickOpenGroupForNivo (jedinstveno mesto definicije "otvoren").
+      const { data: groupsForNivo } = await admin
         .from("groups").select("id, level, status, start_date")
-        .eq("level", nivo).eq("status", "otvoren");
-      const group = pickOpenGroupForNivo(openGroups ?? [], nivo);
+        .eq("level", nivo);
+      const group = pickOpenGroupForNivo(groupsForNivo ?? [], nivo);
       if (!group) { console.warn(`[grant] Nema otvorene grupe za nivo ${nivo} (order ${orderId})`); continue; }
       await admin.from("group_enrollments").upsert(
         { group_id: group.id, user_id: order.user_id, status: "active" },

@@ -49,6 +49,11 @@ describe("pickOpenGroupForNivo", () => {
     expect(pickOpenGroupForNivo(groups, "A1.1")?.id).toBe("b"));
   it("ignoriše ne-otvorene i druge nivoe", () =>
     expect(pickOpenGroupForNivo(groups, "C1.1")).toBeNull());
+  it("grupa bez datuma ne pobeđuje datiranu", () =>
+    expect(pickOpenGroupForNivo([
+      { id: "x", level: "A1.1", status: "otvoren", start_date: null },
+      { id: "y", level: "A1.1", status: "otvoren", start_date: "2026-06-01" },
+    ], "A1.1")?.id).toBe("y"));
 });
 
 describe("computeSeats (osnova + nove uplate)", () => {

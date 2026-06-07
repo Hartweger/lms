@@ -53,7 +53,8 @@ export interface OpenGroupRow { id: string; level: string; status: string; start
 export function pickOpenGroupForNivo<T extends OpenGroupRow>(groups: T[], nivo: string): T | null {
   const open = groups.filter((g) => g.level === nivo && g.status === "otvoren");
   if (!open.length) return null;
-  return open.sort((a, b) => (a.start_date ?? "").localeCompare(b.start_date ?? ""))[0];
+  // Grupa bez datuma ne pobeđuje datiranu (sentinel u daleku budućnost). slice() da ne mutiramo ulaz.
+  return open.slice().sort((a, b) => (a.start_date ?? "9999-12-31").localeCompare(b.start_date ?? "9999-12-31"))[0];
 }
 
 export function mapGroupToRaspored(g: GroupRowForDisplay, profName: string, activeEnrollments: number): GrupaRaspored {
