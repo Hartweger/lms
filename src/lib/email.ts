@@ -10,6 +10,11 @@ function getResend() {
   return new Resend(process.env.RESEND_API_KEY);
 }
 
+/** Minimalni HTML-escape za korisnički unos u mejl telu. */
+function esc(s: string) {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
 export async function sendWelcomeEmail(
   to: string,
   name: string,
@@ -348,9 +353,9 @@ export async function sendInteresNotification(nivo: string, email: string, ime: 
       html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
 <body style="font-family:sans-serif;line-height:1.6">
 <h2>Novi interes za grupni termin</h2>
-<p><strong>Nivo:</strong> ${nivo}</p>
-<p><strong>Ime:</strong> ${ime || "—"}</p>
-<p><strong>Mejl:</strong> ${email}</p>
+<p><strong>Nivo:</strong> ${esc(nivo)}</p>
+<p><strong>Ime:</strong> ${esc(ime || "—")}</p>
+<p><strong>Mejl:</strong> ${esc(email)}</p>
 <p>Grupa za ovaj nivo je trenutno popunjena. Kontaktiraj polaznika kad otvoriš novi termin.</p>
 </body></html>`,
     });
