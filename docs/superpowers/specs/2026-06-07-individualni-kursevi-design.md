@@ -18,29 +18,35 @@ Zamenjuje stari tok: `apps-script-2/WooSync.js` (kupovina, beleške, prof Sheet)
 1. **Izvor istine = Supabase.** Individualni upisi, održani časovi i honorari žive u
    bazi/app-u. Stari prof Google Sheet-ovi i `Finansije.js` se **gase** na cutover-u.
    Beleške (collaborative doc) ostaju u Google-u preko GAS-a — to je radni dokument.
-2. **Cena je po varijaciji (kurs × profesorka × paket).** Potvrđeno iz WooCommerce-a:
-   nije čisto dvotarifno — npr. u mesečnom paketu i Marija odstupa (28.000/42.000 vs
-   27.500/41.000), ne samo Nataša (16.100/32.400/48.300). Zato cene žive u
-   **`product_variants`** (jedan red = jedna varijacija), seed-ovano iz WC API-ja.
-   Spisak profesorki je **po kursu** (postoji varijacija = nudi se); Danice nema u
-   individualnim (samo grupna). FIDE i FSP su *simple* — bez izbora profesorke.
-3. **Dve vrste individualnih:**
+2. **Cena je po varijaciji (kurs × profesorka × paket).** Cene žive u **`product_variants`**
+   (jedan red = jedna varijacija), seed-ovano iz WC API-ja. Praktično je dvotarifno: svi
+   standard, **Nataša svoje** (npr. A1.1 23.000 / Nataša 28.000; mesečni 14.000/27.500/41.000
+   vs Nataša 16.100/32.400/48.300). `product_variants` (ne dvotarifne kolone) jer se **spisak
+   profesorki razlikuje po kursu**. Napomena: Marijine više cene u WP-u (28.000/42.000) su
+   **greška** → seed koristi standard.
+3. **Profesorke po kursu + fiksne za FIDE/FSP.** Nuđenje = postojanje varijacije.
+   **FIDE → samo Katarina**, **FSP → samo Milica** (fiksno, jedan red u `product_variants`).
+   **Danica** je na porodiljskom — ubacuje se u profesorke (kalendar+honorar), ali **bez
+   varijacija za sad** → ne pojavljuje se u checkout-u dok admin ne doda njene cene.
+4. **Dve vrste individualnih:**
    - **„Po nivou"** (A1.1, A1.2, A2.1, …, B2.1, FIDE, FSP, paket A1): uključuje pristup
-     tom polunivou na platformi + fiksan broj časova po nivou (staro: A1=7, A2/B=10, FSP=5).
+     tom kursu na platformi (ako postoji) + fiksan broj časova po nivou (A1=7, A2/B=10, FSP=5).
    - **Mesečni paketi:** **bez pristupa platformi**; kupac bira **broj termina (4 / 8 / 12)**,
      cena po broju časova.
-4. **Zakazivanje = kalendar link profesorke** (`calendar.app.google/…`) u welcome mejlu.
+5. **Zakazivanje = kalendar link profesorke** (`calendar.app.google/…`) u welcome mejlu.
    Student zakazuje direktno. Bez nativnog booking-a, bez Meet-a (to je grupni). Dokazan model.
-5. **Honorari u app-u.** Profesorka unosi održane časove (individualne **i** grupne) u
+   **Pre uplate** na individualnim stoji napomena: „proveri mejlom koja profesorka je na
+   raspolaganju" (kalendar nije real-time, profesorka može biti popunjena).
+6. **Honorari u app-u.** Profesorka unosi održane časove (individualne **i** grupne) u
    platformu; mesečni cron računa honorar i šalje mejlove. Stari `Finansije.js` se gasi.
-6. **GAS sloj** = prošireni postojeći `grupni-webapp` (Apps Script web-app koji radi kao
+7. **GAS sloj** = prošireni postojeći `grupni-webapp` (Apps Script web-app koji radi kao
    `info@hartweger.rs`). Dodaje se akcija `enrollIndividual` (samo pravi beleške doc).
 
 ## Odbačene alternative
 
-- **Ad-hoc cene na `courses`** (`price_natasa`, `package_options` jsonb): prvobitno
-  predloženo dok smo mislili da je dvotarifno. WC pokazuje pravu po-varijaciji matricu
-  (i Marija odstupa), pa se umesto toga **oživljava `product_variants`** (postojeća tabela).
+- **Ad-hoc cene na `courses`** (`price_natasa`, `package_options` jsonb): nedovoljno jer se
+  spisak profesorki razlikuje po kursu (i FIDE/FSP imaju fiksnu profesorku). Umesto toga se
+  **oživljava `product_variants`** (postojeća tabela) koja prirodno hvata prof-po-kursu + cenu.
 - **Nativno zakazivanje u app-u** (dostupnost profesorki, booking UI): ogroman build,
   menja naviku profesorki, kalendar linkovi rade.
 
@@ -49,11 +55,13 @@ Zamenjuje stari tok: `apps-script-2/WooSync.js` (kupovina, beleške, prof Sheet)
 ### Izmene postojećih tabela
 
 **`user_profiles`** (kolone za profesorke, sve nullable):
-- `calendar_url text` — `calendar.app.google/…` link (iz starog `Config.js`, svih 7).
+- `calendar_url text` — `calendar.app.google/…` link (iz starog `Config.js`, **svih 7
+  uključujući Danicu**).
 - `honorar_ind int` — honorar po individualnom času (default 1400).
 - `honorar_grp int` — honorar po grupnoj sesiji (default 1600). Katarina: 1600/1800.
 
-(Bez `offers_individual` — nuđenje se izvodi iz postojanja varijacije za taj kurs.)
+(Bez `offers_individual` — nuđenje se izvodi iz postojanja varijacije za taj kurs. Danica ima
+profil/kalendar ali bez varijacija → ne nudi se dok admin ne doda cene kad počne.)
 
 **`courses`** (kolone za individualne, sve nullable):
 - `included_lessons int` — broj časova za „po nivou" (npr. 7, 10, 5). Za mesečni paket
@@ -66,13 +74,15 @@ is_active bool`. Jedan red = jedna kupovna varijacija:
 - „Po nivou": redovi po profesorki (`package_type` NULL). Npr. A1.1 × {Marija,Suzana,
   Hristina,Milica} = 23.000; A1.1 × Nataša = 28.000.
 - Mesečni paket: redovi po (profesorka × `package_type` ∈ {paket4,paket8,paket12}).
-- FIDE/FSP (*simple*): jedan red, `professor_id` NULL (profesor se dodeljuje kasnije, vidi Tok 2).
+  **Marijine cene → standard** (28.000/42.000 u WP-u su greška).
+- **FIDE → 1 red, Katarina; FSP → 1 red, Milica** (fiksna profesorka, ne NULL).
 - `paypal_price_eur` NULL → izvodi se postojećom logikom sajta (RSD→EUR/PayPal).
 
 **Seed:** skripta `scripts/seed-individual-variants.mjs` povlači WC varijacije (kategorija
 357 + mesečni 370), mapira: WC `slug` → naš `courses.slug`; ime profesorke → `user_profiles`
-preko **normalizacije prvog imena** (WP ima tipfelere: „Radojkvić"/„Radojković"). Ispisuje
-izveštaj mapiranja za ručnu potvrdu pre upisa.
+preko **normalizacije prvog imena** (WP ima tipfelere: „Radojkvić"/„Radojković"). Ručne
+ispravke u seed-u: Marija standard cene; FIDE→Katarina, FSP→Milica (WC ih nema kao varijacije).
+Ispisuje izveštaj mapiranja za potvrdu pre upisa.
 
 ### Nove tabele (migracija 040)
 
@@ -109,14 +119,16 @@ RLS: profesorka vidi/piše samo svoje (`professor_id = auth uid`), admin/profess
 1. Detekcija individualnog kursa (`course_type='individual'` ili
    `category in ('individualni','paket','mesecni')`).
 2. Učitaju se `product_variants` za taj kurs. **Izbor profesorke** = dropdown distinct
-   profesorki iz varijacija (ako ih ima; FIDE/FSP nemaju → bez dropdowna).
+   profesorki iz varijacija. FIDE/FSP imaju samo jednu (Katarina/Milica) → bez dropdowna,
+   profesorka je fiksna.
 3. Ako varijacije imaju `package_type` (mesečni) → **izbor broja termina (4/8/12)**.
 4. **Cena (server-side u `/api/orders`, ne veruje klijentu):** odabere se varijacija po
    (`course_id`, `professor_id`, `package_type`) → `price` (+ EUR iz `paypal_price_eur` ili
    izvedeno). `package_lessons` = iz `package_type` (paket4→4) ili `course.included_lessons`
-   (po nivou). FIDE/FSP: jedina varijacija, `professor_id` NULL.
+   (po nivou).
 5. **Prikaz (po pravilima [[feedback_ind_kursevi_sadrzaj]]):** „sa Natašom: X din", RSD +
-   EUR ispod, bez reči „checkout" („u sledećem koraku"), bez „Nataša +5000".
+   EUR ispod, bez reči „checkout" („u sledećem koraku"), bez „Nataša +5000". **Napomena pre
+   uplate:** „Pre uplate proveri mejlom da li je izabrana profesorka na raspolaganju."
 6. Order stavka nosi `professor_id` + `package_lessons` + izabranu cenu. Plaćanje isto kao
    sad (uplatnica / kartica+rate / PayPal).
 
@@ -124,20 +136,18 @@ RLS: profesorka vidi/piše samo svoje (`professor_id = auth uid`), admin/profess
 
 Dopuna `src/lib/grant-access.ts` (uz postojeću grupnu granu):
 
-1. **Pristup sadržaju (1 god):** „po nivou" → `course_unlocks` otključava polunivo
-   (verifikovati/dodati redove). **Mesečni paket → bez sadržaja** (nema unlock).
-2. Kreira **`individual_enrollment`** (prof iz order stavke, `package_lessons`, `status='active'`,
-   `expires_at` = uplata + **3 meseca** — važenje paketa časova).
-3. **Profesor za FIDE/FSP (bez varijacije):** `professor_id` na enrollmentu ostaje NULL →
-   enrollment se pojavi u admin redu „za dodelu"; admin dodeli profesorku, što tada okida
-   korake 4–6 (beleške + mejlovi). Po nivou/mesečni: profesorka je već poznata iz checkout-a.
-4. **GAS `enrollIndividual`** → pravi individualne beleške iz šablona
+1. **Pristup sadržaju (1 god):** „po nivou", FIDE i FSP → `course_unlocks` otključava taj
+   kurs na platformi (verifikovati/dodati redove, uklj. FIDE/FSP sadržaj). **Mesečni paket →
+   bez sadržaja** (nema unlock).
+2. Kreira **`individual_enrollment`** (prof iz order stavke; za FIDE/FSP fiksno Katarina/Milica;
+   `package_lessons`, `status='active'`, `expires_at` = uplata + **3 meseca**).
+3. **GAS `enrollIndividual`** → pravi individualne beleške iz šablona
    `1e2aP8rWHgS3XtOOblivZua6F8GEmX25R9ZTABH1Bg2g` u folderu profesorke, vraća `notesUrl`
    (upiše se u enrollment). **Bez kalendar eventa** (individualni koristi kalendar link prof).
-5. **Jedan welcome mejl đaku:** pristup platformi (ako po nivou) + link beleški + **kalendar
-   link profesorke** (tu zakazuje) + kratko uputstvo.
-6. **Mejl profesorki:** novi individualni đak (ime, mejl, nivo, broj časova, beleške).
-7. **Ne piše se u Google Sheet** (app je izvor). Idempotentno kao postojeći `grantAccessForOrder`.
+4. **Jedan welcome mejl đaku:** pristup platformi (ako po nivou/FIDE/FSP) + link beleški +
+   **kalendar link profesorke** (tu zakazuje) + kratko uputstvo.
+5. **Mejl profesorki:** novi individualni đak (ime, mejl, nivo, broj časova, beleške).
+6. **Ne piše se u Google Sheet** (app je izvor). Idempotentno kao postojeći `grantAccessForOrder`.
 
 ## Tok 3 — Profesorski ekran (unos časova)
 
@@ -176,16 +186,17 @@ Nataša da brojeve) → julski cron izračuna pun jun.
 | Individualni beleške šablon ID | ✅ `1e2aP8rWHgS3XtOOblivZua6F8GEmX25R9ZTABH1Bg2g` |
 | Honorar rate (1400/1600; Katarina 1600/1800) | ✅ iz starog `Finansije.js` |
 | Broj časova po nivou (A1=7, A2/B=10, FSP=5) | ✅ staro `PAKET_PO_NIVOU` (potvrditi FIDE) |
-| **Sve cene varijacija (prof×kurs×paket, RSD)** | ✅ iz WC API-ja (seed skripta) |
+| **Sve cene varijacija (prof×kurs×paket, RSD)** | ✅ iz WC API-ja (seed; Marija→standard) |
 | EUR/PayPal cene | ✅ izvode se postojećom logikom sajta |
-| **Profesor za FIDE/FSP (ko predaje)** | ⬜ jedino što treba od Nataše |
-| `course_unlocks` za individualne po-nivou kurseve | ⬜ verifikovati u bazi, dodati ako fale |
+| Profesor za FIDE/FSP | ✅ FIDE→Katarina, FSP→Milica |
+| Danica (kalendar+honorar config, bez varijacija) | ✅ porodiljsko, profil da, cene kasnije |
+| `course_unlocks` za po-nivou + FIDE/FSP kurseve | ⬜ verifikovati u bazi, dodati ako fale |
 
 ## Testiranje
 
-- Vitest: izbor varijacije i cene (po nivou, mesečni paket4/8/12, Nataša/Marija odstupanja),
-  `package_lessons` izbor, honorar obračun (ind/grp, Katarina premium), auto-izvođenje grupnih
-  sesija iz rasporeda, idempotentnost grant-access individualne grane.
+- Vitest: izbor varijacije i cene (po nivou, mesečni paket4/8/12, Natašine cene, FIDE→Katarina/
+  FSP→Milica), `package_lessons` izbor, honorar obračun (ind/grp, Katarina premium),
+  auto-izvođenje grupnih sesija iz rasporeda, idempotentnost grant-access individualne grane.
 - Smoke (po [[feedback_deploy_smoke_test]]): kupovina individualnog (po nivou + mesečni paket),
   potvrda uplate → enrollment + beleške + mejlovi; profesorski unos časa → brojač; cron honorar
   ručno okinut na test podacima.
