@@ -389,7 +389,7 @@ export async function sendNatasaNextTermReminder(
       : `Ovo je poslednji nivo u nizu.`;
     await resend.emails.send({
       from: FROM,
-      to: "info@hartweger.rs",
+      to: ["info@hartweger.rs", "natasa@hartweger.rs"],
       subject: `Podsetnik: grupa ${opts.nivo} se bliži kraju`,
       html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
 <body style="font-family:sans-serif;line-height:1.6;color:#222">
@@ -465,7 +465,7 @@ export async function sendInteresNotification(nivo: string, email: string, ime: 
     if (!resend) return;
     await resend.emails.send({
       from: FROM,
-      to: "info@hartweger.rs",
+      to: ["info@hartweger.rs", "natasa@hartweger.rs"],
       replyTo: email,
       subject: `Interes za sledeći termin — ${nivo}`,
       html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
