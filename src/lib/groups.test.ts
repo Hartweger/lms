@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { computeSeats, formatDays, formatPocetak, mapGroupToRaspored, nextExpiry, pickOpenGroupForNivo } from "./groups";
+import { computeSeats, computeEndDate, formatDays, formatPocetak, mapGroupToRaspored, nextExpiry, pickOpenGroupForNivo } from "./groups";
 
 describe("formatDays", () => {
   it("mapira brojeve dana u srpske skraćenice", () => {
@@ -35,6 +35,20 @@ describe("mapGroupToRaspored", () => {
       pocetak: "15.06.2026", trajanje: "8", dani: "pon, sre", sat: "18:00",
       maks: "6", upisanih: "2", slobodnih: "4", full: false,
     });
+  });
+});
+
+describe("computeEndDate", () => {
+  it("svi dani, 1 nedelja = 7 časova → kraj = start + 6 dana", () =>
+    expect(computeEndDate("2026-09-01", [1, 2, 3, 4, 5, 6, 7], 1)).toBe("2026-09-07"));
+  it("svi dani, 2 nedelje = 14 časova → start + 13 dana", () =>
+    expect(computeEndDate("2026-09-01", [1, 2, 3, 4, 5, 6, 7], 2)).toBe("2026-09-14"));
+  it("uto+čet, 7 nedelja → poslednji čas (14. termin)", () =>
+    expect(computeEndDate("2026-09-01", [2, 4], 7)).toBe("2026-10-15"));
+  it("fali podatak → null", () => {
+    expect(computeEndDate(null, [1], 7)).toBeNull();
+    expect(computeEndDate("2026-09-01", [], 7)).toBeNull();
+    expect(computeEndDate("2026-09-01", [1], null)).toBeNull();
   });
 });
 

@@ -57,6 +57,27 @@ export function pickOpenGroupForNivo<T extends OpenGroupRow>(groups: T[], nivo: 
   return open.slice().sort((a, b) => (a.start_date ?? "9999-12-31").localeCompare(b.start_date ?? "9999-12-31"))[0];
 }
 
+/**
+ * Datum poslednjeg časa: od start_date, na zadate dane (1=pon..7=ned), ukupno weeks×dani časova.
+ * Vraća "yyyy-mm-dd" ili null ako nema dovoljno podataka.
+ */
+export function computeEndDate(startDate: string | null, days: number[] | null, weeks: number | null): string | null {
+  if (!startDate || !days?.length || !weeks) return null;
+  const total = weeks * days.length;
+  const jsDays = new Set(days.map((d) => (d === 7 ? 0 : d))); // 0=ned..6=sub
+  const d = new Date(startDate + "T00:00:00Z");
+  if (isNaN(d.getTime())) return null;
+  let found = 0;
+  let last: Date | null = null;
+  let guard = 0;
+  while (found < total && guard < 1000) {
+    if (jsDays.has(d.getUTCDay())) { found++; last = new Date(d); }
+    d.setUTCDate(d.getUTCDate() + 1);
+    guard++;
+  }
+  return last ? last.toISOString().slice(0, 10) : null;
+}
+
 export function mapGroupToRaspored(g: GroupRowForDisplay, profName: string, activeEnrollments: number): GrupaRaspored {
   const seats = computeSeats({ maxSeats: g.max_seats, manualEnrolled: g.manual_enrolled, activeEnrollments });
   return {

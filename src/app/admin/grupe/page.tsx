@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import { computeEndDate } from "@/lib/groups";
 
 interface Group {
   id: string;
@@ -267,14 +268,13 @@ export default function AdminGrupePage() {
               />
             </div>
             <div>
-              <label className={labelCls}>Kraj</label>
+              <label className={labelCls}>Kraj (računa se)</label>
               <input
-                type="date"
-                value={form.end_date || ""}
-                onChange={(e) =>
-                  setForm({ ...form, end_date: e.target.value || null })
-                }
-                className={inputCls}
+                type="text"
+                readOnly
+                value={computeEndDate(form.start_date ?? null, form.days ?? null, form.duration_weeks ?? null) ?? "—"}
+                title="Računa se iz početka + broja nedelja; upisuje se kad otvoriš termin."
+                className={inputCls + " bg-gray-50 text-gray-500"}
               />
             </div>
             <div>
@@ -303,20 +303,7 @@ export default function AdminGrupePage() {
                 className={inputCls}
               />
             </div>
-            <div>
-              <label className={labelCls}>Cena (RSD)</label>
-              <input
-                type="number"
-                value={form.price ?? ""}
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    price: e.target.value ? Number(e.target.value) : null,
-                  })
-                }
-                className={inputCls}
-              />
-            </div>
+            {/* Cena se ne unosi ovde — naplata ide po ceni kursa (courses tabela). */}
             <div>
               <label className={labelCls}>Min mesta</label>
               <input

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { callGas } from "@/lib/gas";
+import { computeEndDate } from "@/lib/groups";
 
 async function requireAdmin() {
   const supabase = await createClient();
@@ -46,11 +47,14 @@ export async function POST(_req: NextRequest, { params }: { params: Promise<{ id
     return NextResponse.json({ error: "Google greška: " + (e instanceof Error ? e.message : String(e)) }, { status: 502 });
   }
 
+  const endDate = computeEndDate(g.start_date, g.days, g.duration_weeks);
+
   const { error } = await admin.from("groups").update({
     gcal_event_id: gas.eventId ?? null,
     meet_link: gas.meetLink ?? null,
     notes_url: gas.notesUrl ?? null,
     notes_doc_id: gas.notesDocId ?? null,
+    end_date: endDate,
     term_opened_at: new Date().toISOString(),
     manual_enrolled: 0,
     status: "otvoren",
