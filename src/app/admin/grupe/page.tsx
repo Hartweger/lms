@@ -61,6 +61,7 @@ export default function AdminGrupePage() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [form, setForm] = useState<Partial<Group> | null>(null);
   const [saving, setSaving] = useState(false);
+  const [savedAt, setSavedAt] = useState(0);
   const [enrollEmail, setEnrollEmail] = useState("");
   const [members, setMembers] = useState<
     { user_id: string; email: string; full_name: string | null }[]
@@ -92,15 +93,18 @@ export default function AdminGrupePage() {
   function startNew() {
     setForm({ ...emptyForm });
     setMembers([]);
+    setSavedAt(0);
   }
   function startEdit(g: Group) {
     setForm({ ...g });
     setMembers([]);
+    setSavedAt(0);
   }
   function cancelEdit() {
     setForm(null);
     setMembers([]);
     setEnrollEmail("");
+    setSavedAt(0);
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -114,12 +118,15 @@ export default function AdminGrupePage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
     });
+    const j = await r.json().catch(() => ({}));
     setSaving(false);
     if (!r.ok) {
-      alert("Greška: " + (await r.json()).error);
+      alert("Greška: " + (j.error || "nešto nije u redu"));
       return;
     }
-    cancelEdit();
+    // Ostani u formi posle čuvanja (da možeš da nastaviš — npr. „Napravi/osveži termin").
+    if (!form.id && j.id) setForm({ ...form, id: j.id }); // nova grupa → pređi u režim izmene
+    setSavedAt(Date.now());
     fetchGroups();
   }
 
@@ -389,6 +396,9 @@ export default function AdminGrupePage() {
             >
               {form.id ? "Sačuvaj izmene" : "Dodaj grupu"}
             </button>
+            {savedAt > 0 && (
+              <span className="text-green-600 text-sm font-medium self-center">Sačuvano ✓</span>
+            )}
             <button
               type="button"
               onClick={cancelEdit}
