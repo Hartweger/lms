@@ -1,6 +1,8 @@
 // src/lib/grant-access.ts
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendWelcomeEmail } from "@/lib/email";
+import { nivoForSlug } from "@/lib/course-nivo";
+import { computeSeats, pickOpenGroupForNivo } from "@/lib/groups";
 
 interface OrderItem { course_id: string; course_slug: string; title: string; price: number; }
 
@@ -36,6 +38,36 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
       await admin.from("course_access").insert({
         user_id: order.user_id, course_id: courseId, expires_at: expiresAt.toISOString(),
       });
+    }
+  }
+
+  // Grupni proizvodi: auto-upis u otvorenu grupu (best-effort; ne ruši dodelu pristupa).
+  for (const item of items) {
+    if (!item.course_slug.startsWith("grupni-")) continue;
+    const nivo = nivoForSlug(item.course_slug);
+    if (!nivo) continue;
+    try {
+      // Status filter radi pickOpenGroupForNivo (jedinstveno mesto definicije "otvoren").
+      const { data: groupsForNivo } = await admin
+        .from("groups").select("id, level, status, start_date, max_seats, manual_enrolled")
+        .eq("level", nivo);
+      const group = pickOpenGroupForNivo(groupsForNivo ?? [], nivo);
+      if (!group) { console.warn(`[grant] Nema otvorene grupe za nivo ${nivo} (order ${orderId})`); continue; }
+      const { count } = await admin
+        .from("group_enrollments").select("*", { count: "exact", head: true })
+        .eq("group_id", group.id).eq("status", "active");
+      const seats = computeSeats({ maxSeats: group.max_seats, manualEnrolled: group.manual_enrolled, activeEnrollments: count ?? 0 });
+      if (seats.full) {
+        console.error(`[grant][oversell] Grupa ${group.id} (${nivo}) je puna — preskačem auto-upis za order ${orderId} (user ${order.user_id}). Rešiti ručno.`);
+        continue;
+      }
+      await admin.from("group_enrollments").upsert(
+        { group_id: group.id, user_id: order.user_id, status: "active" },
+        { onConflict: "group_id,user_id" },
+      );
+      console.log(`[grant] Auto-upis u grupu ${group.id} (${nivo}) za order ${orderId}`);
+    } catch (e) {
+      console.error(`[grant] Auto-upis pao za nivo ${nivo} (order ${orderId}):`, e);
     }
   }
 

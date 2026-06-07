@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { generateOrderNumber, calculatePaypalEur } from "@/lib/order-utils";
 import { sendPaymentInstructionsEmail } from "@/lib/email";
+import { nivoForSlug } from "@/lib/course-nivo";
+import { computeSeats, pickOpenGroupForNivo } from "@/lib/groups";
 
 export async function POST(request: Request) {
   try {
@@ -29,7 +31,7 @@ export async function POST(request: Request) {
     // Load course by slug where is_purchasable = true
     const { data: course, error: courseError } = await supabase
       .from("courses")
-      .select("id, slug, title, price")
+      .select("id, slug, title, price, category")
       .eq("slug", courseSlug)
       .eq("is_purchasable", true)
       .single();
@@ -40,6 +42,34 @@ export async function POST(request: Request) {
         { error: "Kurs nije dostupan za kupovinu." },
         { status: 404 }
       );
+    }
+
+    // Grupni kurs: ne dozvoli kupovinu ako je grupa popunjena.
+    if (course.category === "grupni") {
+      const nivo = nivoForSlug(course.slug);
+      if (nivo) {
+        // Status filter radi pickOpenGroupForNivo (jedinstveno mesto definicije "otvoren"), isto kao grant-access.
+        const { data: groupsForNivo } = await supabase
+          .from("groups").select("id, level, status, start_date, max_seats, manual_enrolled")
+          .eq("level", nivo);
+        const group = pickOpenGroupForNivo(groupsForNivo ?? [], nivo);
+        if (group) {
+          const { count } = await supabase
+            .from("group_enrollments").select("*", { count: "exact", head: true })
+            .eq("group_id", group.id).eq("status", "active");
+          const seats = computeSeats({
+            maxSeats: group.max_seats, manualEnrolled: group.manual_enrolled ?? null,
+            activeEnrollments: count ?? 0,
+          });
+          if (seats.full) {
+            console.log(`[orders] Grupna blokada (409): ${course.slug} / ${nivo} — grupa ${group.id} popunjena`);
+            return NextResponse.json(
+              { error: "Grupa je trenutno popunjena. Ostavi mejl da te obavestimo za sledeći termin." },
+              { status: 409 },
+            );
+          }
+        }
+      }
     }
 
     // Validate coupon if provided

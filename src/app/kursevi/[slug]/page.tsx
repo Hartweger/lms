@@ -7,27 +7,8 @@ import PriceCard from "@/components/product/PriceCard";
 import ProductFeatures from "@/components/product/ProductFeatures";
 import ProductFaq from "@/components/product/ProductFaq";
 import { fetchRaspored, type GrupaRaspored } from "@/lib/raspored";
-
-/* ─── Slug → nivo mapping for grupni ─── */
-const slugToNivo: Record<string, string> = {
-  "grupni-kurs-nemackog-jezika-a1-1": "A1.1",
-  "grupni-kurs-nemackog-jezika-a1-2-2": "A1.2",
-  "grupni-kurs-nemackog-jezika-a2": "A2.1",
-  "grupni-kurs-nemackog-jezika-a2-2": "A2.2",
-  "grupni-kurs-nemackog-jezika-b1-1-2": "B1.1",
-  "grupni-kurs-nemackog-b1-2": "B1.2",
-  "grupni-kurs-b2-1": "B2.1",
-  "grupni-kurs-b2-2": "B2.2",
-  "individualni-kurs-nemackog-jezika-a11": "A1.1",
-  "individualni-kurs-nemackog-jezika-a1-2": "A1.2",
-  "individualni-kurs-nemackog-jezika-a2": "A2.1",
-  "individualni-kurs-nemackog-jezika-a2-2": "A2.2",
-  "individualni-kurs-nemackog-jezika-b11": "B1.1",
-  "individualni-kurs-nemackog-jezika-b1-2": "B1.2",
-  "individualni-kurs-nemackog-jezika-b2-1": "B2.1",
-  "grupni-kurs-c1-1": "C1.1",
-  "grupni-kurs-c1-2": "C1.2",
-};
+import { SLUG_TO_NIVO as slugToNivo } from "@/lib/course-nivo";
+import InteresForm from "./InteresForm";
 
 /* ─── Preduslovi po nivou ─── */
 const preduslov: Record<string, string> = {
@@ -356,7 +337,11 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
                   </div>
                   <div className="flex items-center gap-3 text-[15px]">
                     <span>👥</span>
-                    <span className="text-gray-600"><strong>Slobodnih mesta:</strong> {parseInt(grupa.maks) - parseInt(grupa.upisanih || "0")}</span>
+                    {grupa.full ? (
+                      <span className="text-red-600 font-bold">Popunjeno — nema slobodnih mesta</span>
+                    ) : (
+                      <span className="text-gray-600"><strong>Slobodnih mesta:</strong> {grupa.slobodnih}</span>
+                    )}
                   </div>
                   <div className="flex items-center gap-3 text-[15px]">
                     <span>💻</span>
@@ -434,13 +419,23 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
 
             {/* Right — Price card (hidden on mobile, sticky bar instead) */}
             <div className="hidden lg:block lg:w-[360px] flex-shrink-0">
-              <PriceCard
-                price={course.price}
-                priceEur={course.paypal_price_eur}
-                slug={course.slug}
-                ctaLabel={ctaLabel}
-                isVariable={isVariable}
-              />
+              {category === "grupni" && grupa?.full ? (
+                <div className="border border-gray-200 rounded-xl p-6 text-center space-y-4">
+                  <p className="text-red-600 font-bold text-lg">Popunjeno</p>
+                  <p className="text-gray-600 text-sm">Nema slobodnih mesta u trenutnom terminu. Ostavi mejl pa te obaveštavamo čim otvorimo sledeći.</p>
+                  <div className="flex justify-center">
+                    <InteresForm nivo={grupa.nivo} />
+                  </div>
+                </div>
+              ) : (
+                <PriceCard
+                  price={course.price}
+                  priceEur={course.paypal_price_eur}
+                  slug={course.slug}
+                  ctaLabel={ctaLabel}
+                  isVariable={isVariable}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -456,12 +451,16 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
             Pridruži se grupi od 3000+ polaznika koji su već krenuli sa učenjem.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link
-              href={`/kupovina/${course.slug}`}
-              className="bg-[#F78687] hover:bg-[#e06060] text-white font-bold text-lg py-4 px-10 rounded-xl transition-all hover:-translate-y-0.5 shadow-lg shadow-[#F78687]/20"
-            >
-              {ctaLabel} — {isVariable ? "od " : ""}{formatPrice(course.price)} din
-            </Link>
+            {category === "grupni" && grupa?.full ? (
+              <InteresForm nivo={grupa.nivo} />
+            ) : (
+              <Link
+                href={`/kupovina/${course.slug}`}
+                className="bg-[#F78687] hover:bg-[#e06060] text-white font-bold text-lg py-4 px-10 rounded-xl transition-all hover:-translate-y-0.5 shadow-lg shadow-[#F78687]/20"
+              >
+                {ctaLabel} — {isVariable ? "od " : ""}{formatPrice(course.price)} din
+              </Link>
+            )}
             <Link href="/besplatno-testiranje" className="text-plava font-semibold hover:underline text-[15px]">
               Ili uradi besplatno testiranje →
             </Link>
@@ -496,20 +495,29 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
       )}
       {/* ─── Mobile sticky CTA bar ─── */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-3 flex items-center justify-between gap-3 lg:hidden z-50 safe-bottom">
-        <div>
-          <p className="font-bold text-gray-900 text-lg leading-tight">
-            {isVariable && "od "}{formatPrice(course.price)} din
-          </p>
-          {course.paypal_price_eur && (
-            <p className="text-[#F78687] text-xs font-bold">≈ {course.paypal_price_eur}€</p>
-          )}
-        </div>
-        <Link
-          href={`/kupovina/${course.slug}`}
-          className="bg-[#F78687] hover:bg-[#e06060] text-white font-bold py-3 px-6 rounded-xl text-[15px] whitespace-nowrap"
-        >
-          {ctaLabel}
-        </Link>
+        {category === "grupni" && grupa?.full ? (
+          <div className="flex items-center justify-between gap-3 w-full">
+            <p className="text-red-600 font-bold text-[15px]">Popunjeno</p>
+            <InteresForm nivo={grupa.nivo} />
+          </div>
+        ) : (
+          <>
+            <div>
+              <p className="font-bold text-gray-900 text-lg leading-tight">
+                {isVariable && "od "}{formatPrice(course.price)} din
+              </p>
+              {course.paypal_price_eur && (
+                <p className="text-[#F78687] text-xs font-bold">≈ {course.paypal_price_eur}€</p>
+              )}
+            </div>
+            <Link
+              href={`/kupovina/${course.slug}`}
+              className="bg-[#F78687] hover:bg-[#e06060] text-white font-bold py-3 px-6 rounded-xl text-[15px] whitespace-nowrap"
+            >
+              {ctaLabel}
+            </Link>
+          </>
+        )}
       </div>
       {/* Spacer for mobile sticky bar */}
       <div className="h-20 lg:hidden" />

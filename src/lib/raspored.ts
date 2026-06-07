@@ -12,6 +12,7 @@ export interface GrupaRaspored {
   maks: string;
   upisanih: string;
   slobodnih: string;
+  full: boolean;
 }
 
 // Server-only: čita grupe iz Supabase (zamena za Google Sheet RasporedAPI).
@@ -36,17 +37,17 @@ export async function fetchRaspored(): Promise<GrupaRaspored[]> {
     counts[e.group_id] = (counts[e.group_id] || 0) + 1;
   });
 
-  const rows = groups.map((g) => {
-    const prof = Array.isArray(g.professor) ? g.professor[0] : g.professor;
-    // Ručni broj (manual_enrolled) ima prednost; inače stvarni broj upisanih.
-    const enrolled = g.manual_enrolled != null ? g.manual_enrolled : counts[g.id] || 0;
-    return mapGroupToRaspored(g, prof?.full_name || "", enrolled);
+  const ordered = [...groups].sort((a, b) => {
+    const ao = a.status === "otvoren" ? 0 : 1;
+    const bo = b.status === "otvoren" ? 0 : 1;
+    if (ao !== bo) return ao - bo;
+    if (a.level !== b.level) return a.level.localeCompare(b.level);
+    return (a.start_date ?? "9999-12-31").localeCompare(b.start_date ?? "9999-12-31");
   });
-  // Otvoren prvo, pa po nivou (kao stari RasporedAPI)
-  rows.sort((a, b) => {
-    const ao = a.status.toLowerCase().includes("otvoren") ? 0 : 1;
-    const bo = b.status.toLowerCase().includes("otvoren") ? 0 : 1;
-    return ao !== bo ? ao - bo : a.nivo.localeCompare(b.nivo);
+  const rows = ordered.map((g) => {
+    const prof = Array.isArray(g.professor) ? g.professor[0] : g.professor;
+    const activeEnrollments = counts[g.id] || 0;
+    return mapGroupToRaspored(g, prof?.full_name || "", activeEnrollments);
   });
   return rows;
 }
