@@ -7,27 +7,7 @@ import PriceCard from "@/components/product/PriceCard";
 import ProductFeatures from "@/components/product/ProductFeatures";
 import ProductFaq from "@/components/product/ProductFaq";
 import { fetchRaspored, type GrupaRaspored } from "@/lib/raspored";
-
-/* ─── Slug → nivo mapping for grupni ─── */
-const slugToNivo: Record<string, string> = {
-  "grupni-kurs-nemackog-jezika-a1-1": "A1.1",
-  "grupni-kurs-nemackog-jezika-a1-2-2": "A1.2",
-  "grupni-kurs-nemackog-jezika-a2": "A2.1",
-  "grupni-kurs-nemackog-jezika-a2-2": "A2.2",
-  "grupni-kurs-nemackog-jezika-b1-1-2": "B1.1",
-  "grupni-kurs-nemackog-b1-2": "B1.2",
-  "grupni-kurs-b2-1": "B2.1",
-  "grupni-kurs-b2-2": "B2.2",
-  "individualni-kurs-nemackog-jezika-a11": "A1.1",
-  "individualni-kurs-nemackog-jezika-a1-2": "A1.2",
-  "individualni-kurs-nemackog-jezika-a2": "A2.1",
-  "individualni-kurs-nemackog-jezika-a2-2": "A2.2",
-  "individualni-kurs-nemackog-jezika-b11": "B1.1",
-  "individualni-kurs-nemackog-jezika-b1-2": "B1.2",
-  "individualni-kurs-nemackog-jezika-b2-1": "B2.1",
-  "grupni-kurs-c1-1": "C1.1",
-  "grupni-kurs-c1-2": "C1.2",
-};
+import { SLUG_TO_NIVO as slugToNivo } from "@/lib/course-nivo";
 
 /* ─── Preduslovi po nivou ─── */
 const preduslov: Record<string, string> = {
