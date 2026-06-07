@@ -335,3 +335,26 @@ export async function sendPaymentInstructionsEmail(
     console.error(`[email] Failed to send payment instructions email to ${to}:`, error);
   }
 }
+
+export async function sendInteresNotification(nivo: string, email: string, ime: string) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    await resend.emails.send({
+      from: FROM,
+      to: "kurs@hartweger.rs",
+      replyTo: email,
+      subject: `Interes za sledeći termin — ${nivo}`,
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:sans-serif;line-height:1.6">
+<h2>Novi interes za grupni termin</h2>
+<p><strong>Nivo:</strong> ${nivo}</p>
+<p><strong>Ime:</strong> ${ime || "—"}</p>
+<p><strong>Mejl:</strong> ${email}</p>
+<p>Grupa za ovaj nivo je trenutno popunjena. Kontaktiraj polaznika kad otvoriš novi termin.</p>
+</body></html>`,
+    });
+  } catch (e) {
+    console.error("[email] sendInteresNotification pao:", e);
+  }
+}
