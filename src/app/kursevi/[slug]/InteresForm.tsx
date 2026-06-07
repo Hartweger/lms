@@ -39,11 +39,15 @@ export default function InteresForm({ nivo }: { nivo: string }) {
 
   return (
     <form onSubmit={submit} className="flex flex-col gap-3 w-full max-w-sm">
+      <label htmlFor="interes-ime" className="sr-only">Ime</label>
       <input
+        id="interes-ime"
         type="text" placeholder="Ime" value={ime} onChange={(e) => setIme(e.target.value)}
         className="border border-gray-300 rounded-lg px-4 py-3"
       />
+      <label htmlFor="interes-email" className="sr-only">Mejl adresa</label>
       <input
+        id="interes-email"
         type="email" required placeholder="Tvoj mejl" value={email} onChange={(e) => setEmail(e.target.value)}
         className="border border-gray-300 rounded-lg px-4 py-3"
       />
