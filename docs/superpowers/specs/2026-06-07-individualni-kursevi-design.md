@@ -184,6 +184,20 @@ Nataša da brojeve) → julski cron izračuna pun jun.
 > **Svi novi mejlovi** (welcome đaku, profesorki o novom đaku, „još 1 čas" preporuka, honorar) —
 > **tekst se prvo potvrđuje sa Natašom, pa se piše template.** Zaseban korak u planu pre svakog mejla.
 
+## Etape isporuke (sekvencijalno, sa checkpointima)
+
+Jedan plan, ali isporuka u bezbednim etapama — kupovina (bloker za flip) ide prva i živa je,
+ostalo se dograđuje na nju. Bez paralelnih sesija (dele šemu i centralne fajlove).
+
+- **Etapa 0 — Temelj:** migracija 040 (tabele) + oživljavanje `product_variants` + seed iz WC
+  + prof config kolone (`calendar_url`, `honorar_*`). Sve ostalo zavisi → ide prvo, samo.
+- **Etapa 1 — Kupovina (BLOKER ZA FLIP):** checkout (izbor prof/paket + cena) + `grant-access`
+  individualna grana + GAS `enrollIndividual` + welcome/prof mejlovi → **deploy + smoke**.
+  Posle ove etape kupac može da kupi 1:1 i sve radi → domen sme da se flipuje.
+- **Etapa 2 — Profesorski ekran:** unos individualnih časova + auto grupne sesije + ručna korekcija.
+- **Etapa 3 — Honorari cron + „još 1 čas" preporuka mejl.**
+- **Etapa 4 — Cutover** (vidi dole).
+
 ## Cutover (ručni koraci, u plan kao checklist)
 
 - **2026-06-10:** novi tok live na produkciji.
