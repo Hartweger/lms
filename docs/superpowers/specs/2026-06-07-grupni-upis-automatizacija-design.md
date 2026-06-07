@@ -29,6 +29,8 @@ Kad neko plati grupni kurs, sve se odvija automatski: zauzme se mesto, polaznik 
 9. **Postojeće grupe (trenutni termin):** nova Google automatika (kalendar/Meet/beleške/mejl sa Meet linkom) važi **tek od sledećeg otvaranja termina**. Trenutni termini ostaju kako jesu (Meet su polaznici dobili ručno). **Ali** brojanje mesta i „popunjeno"/blokada kupovine (Posao A) važe **odmah za sve grupe**, da se zaustavi preprodaja.
 10. **Ručni brojevi su stvarni polaznici:** trenutni `manual_enrolled` (A1.1=3, B1.2=4, …) su realni upisani i ostaju kao **polazna osnova** tekućeg termina; nove uplate se dodaju na njih. Reset na 0 tek pri „Otvori novi termin".
 
+11. **Pravac za Posao B: native integracija u sajtu** (ne popravka starog Apps Script-a). Sve preko sajta (Calendar/Docs/Drive/Sheets API + service account), zarad jedinstvenog mesta i lakšeg održavanja. Vreme nije ograničenje. Posao A se i dalje pušta prvi (gasi preprodaju), pa Posao B.
+
 ## Arhitektura
 
 ### Izmene baze (Supabase migracija)
