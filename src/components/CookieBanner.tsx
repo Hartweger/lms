@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { CONSENT_KEY, type ConsentValue, consentParams, parseConsent } from "@/lib/consent";
+import { CONSENT_EVENT, CONSENT_KEY, type ConsentValue, consentParams, parseConsent } from "@/lib/consent";
 
 declare global {
   interface Window {
@@ -23,10 +23,13 @@ export default function CookieBanner() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    function init() {
-      setVisible(shouldShowBanner());
+    setVisible(shouldShowBanner());
+    // Footer "Podešavanja kolačića" ponovo otvara banner
+    function reopen() {
+      setVisible(true);
     }
-    init();
+    window.addEventListener(CONSENT_EVENT, reopen);
+    return () => window.removeEventListener(CONSENT_EVENT, reopen);
   }, []);
 
   function choose(value: ConsentValue) {
@@ -35,9 +38,8 @@ export default function CookieBanner() {
     } catch {
       // ignoriši ako pisanje nije moguće
     }
-    if (value === "granted") {
-      window.gtag?.("consent", "update", consentParams("granted"));
-    }
+    // Šaljemo update za obe opcije: "denied" je bitan kod povlačenja ranije date saglasnosti
+    window.gtag?.("consent", "update", consentParams(value));
     setVisible(false);
   }
 

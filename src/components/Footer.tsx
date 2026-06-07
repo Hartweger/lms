@@ -1,4 +1,5 @@
 import Link from "next/link";
+import CookieSettingsLink from "@/components/CookieSettingsLink";
 
 export default function Footer() {
   return (
@@ -36,6 +37,7 @@ export default function Footer() {
             <ul className="space-y-2.5 text-sm mb-6">
               <li><Link href="/uslovi" className="hover:text-white transition-colors">Uslovi korišćenja</Link></li>
               <li><Link href="/politika-privatnosti" className="hover:text-white transition-colors">Politika privatnosti</Link></li>
+              <li><CookieSettingsLink className="hover:text-white transition-colors" /></li>
               <li><Link href="/kontakt" className="hover:text-white transition-colors">Kontakt</Link></li>
             </ul>
 

@@ -3,6 +3,9 @@
 
 export const CONSENT_KEY = "cookie-consent";
 
+/** Window event koji ponovo otvara cookie banner (npr. iz footera). */
+export const CONSENT_EVENT = "hw:open-cookie-consent";
+
 export type ConsentValue = "granted" | "denied";
 
 const GOOGLE_CONSENT_KEYS = [
