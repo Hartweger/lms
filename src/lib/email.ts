@@ -341,6 +341,43 @@ export async function sendPaymentInstructionsEmail(
   }
 }
 
+export async function sendGrupniWelcomeEmail(
+  to: string,
+  name: string,
+  opts: { nivo: string; profIme?: string; meetLink?: string; notesUrl?: string },
+) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    const ime = name ? name.split(" ")[0] : "";
+    const meetBtn = opts.meetLink
+      ? `<p style="margin:24px 0"><a href="${opts.meetLink}" style="background:#0AB3D7;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:bold;display:inline-block">Uđi u učionicu (Google Meet)</a></p>
+<p style="font-size:13px;color:#666">Isti Meet link važi za sve časove. Termin ti stiže i u Google kalendar.</p>`
+      : `<p style="font-size:14px;color:#666">Link za Google Meet i raspored stižu ti uskoro.</p>`;
+    const notesRow = opts.notesUrl
+      ? `<p>📝 <a href="${opts.notesUrl}">Beleške sa časova</a> — profesor/ka ih popunjava posle svakog časa.</p>`
+      : "";
+    const profRow = opts.profIme ? `<p><strong>Profesor/ka:</strong> ${esc(opts.profIme)}</p>` : "";
+    await resend.emails.send({
+      from: FROM,
+      to,
+      subject: `Dobrodošli na grupni kurs nemačkog ${opts.nivo}!`,
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:sans-serif;line-height:1.6;color:#222">
+<h2>Dobrodošli${ime ? ", " + esc(ime) : ""}! 💚</h2>
+<p>Prijava za <strong>grupni kurs nemačkog ${esc(opts.nivo)}</strong> je potvrđena.</p>
+${profRow}
+${meetBtn}
+${notesRow}
+<p>📚 Video lekcije i materijali su ti na platformi: <a href="https://kurs.hartweger.rs/prijava">prijavi se ovde</a> (istim mejlom).</p>
+<p style="margin-top:24px">Vidimo se na času!<br>Hartweger tim</p>
+</body></html>`,
+    });
+  } catch (e) {
+    console.error("[email] sendGrupniWelcomeEmail pao:", e);
+  }
+}
+
 export async function sendInteresNotification(nivo: string, email: string, ime: string) {
   try {
     const resend = getResend();

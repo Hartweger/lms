@@ -128,6 +128,19 @@ export default function AdminGrupePage() {
     fetchGroups();
   }
 
+  async function otvoriTermin() {
+    if (!form?.id) return;
+    if (!confirm("Otvoriti NOVI termin?\n\nPravi Google kalendar event + Meet link + dokument beleški, i RESETUJE broj upisanih na 0. Postojeći polaznici NE gube pristup.")) return;
+    setSaving(true);
+    const r = await fetch(`/api/admin/grupe/${form.id}/otvori-termin`, { method: "POST" });
+    const j = await r.json();
+    setSaving(false);
+    if (!r.ok) { alert("Greška: " + j.error); return; }
+    alert("Termin otvoren! ✅\n\nMeet: " + (j.meetLink || "—") + "\nBeleške: " + (j.notesUrl || "—"));
+    cancelEdit();
+    fetchGroups();
+  }
+
   async function addMember() {
     if (!form?.id) return;
     const r = await fetch(`/api/admin/grupe/${form.id}/enroll`, {
@@ -381,6 +394,17 @@ export default function AdminGrupePage() {
             >
               Otkaži
             </button>
+            {form.id && (
+              <button
+                type="button"
+                onClick={otvoriTermin}
+                disabled={saving}
+                className="ml-auto bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 disabled:opacity-50"
+                title="Napravi Google event + Meet + beleške i resetuj brojač"
+              >
+                Otvori novi termin
+              </button>
+            )}
           </div>
 
           {/* Polaznici — samo za postojeću grupu */}
