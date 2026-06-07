@@ -23,6 +23,11 @@ export default function SesijeClient({ rows, showProfessor }: { rows: GroupSessi
   const [dateById, setDateById] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [showArchived, setShowArchived] = useState(false);
+
+  const activeRows = rows.filter((g) => g.status === "otvoren" || g.status === "u_toku");
+  const archivedCount = rows.length - activeRows.length;
+  const visibleRows = showArchived ? rows : activeRows;
 
   async function addSession(groupId: string) {
     const sessionDate = dateById[groupId] || todayISO();
@@ -56,7 +61,13 @@ export default function SesijeClient({ rows, showProfessor }: { rows: GroupSessi
   return (
     <div className="space-y-4">
       {error && <p className="text-koral text-sm">{error}</p>}
-      {rows.map((g) => (
+      {archivedCount > 0 && (
+        <button type="button" onClick={() => setShowArchived(!showArchived)} className="text-sm text-plava hover:underline">
+          {showArchived ? "Sakrij završene" : `Prikaži i završene (${archivedCount})`}
+        </button>
+      )}
+      {visibleRows.length === 0 && <p className="text-gray-400 text-sm py-8 text-center">Nema aktivnih grupa.</p>}
+      {visibleRows.map((g) => (
         <div key={g.id} className="bg-white rounded-xl shadow-sm p-5">
           <div className="flex items-center justify-between mb-3">
             <div>

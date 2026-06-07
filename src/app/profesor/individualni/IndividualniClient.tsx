@@ -31,6 +31,11 @@ export default function IndividualniClient({ rows, showProfessor }: { rows: Enro
   const [busy, setBusy] = useState<string | null>(null);
   const [openHistory, setOpenHistory] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [showArchived, setShowArchived] = useState(false);
+
+  const activeRows = rows.filter((r) => r.status === "active");
+  const archivedCount = rows.length - activeRows.length;
+  const visibleRows = showArchived ? rows : activeRows;
 
   async function addLesson(enrollmentId: string) {
     const lessonDate = dateById[enrollmentId] || todayISO();
@@ -64,6 +69,14 @@ export default function IndividualniClient({ rows, showProfessor }: { rows: Enro
   return (
     <div>
       {error && <p className="text-koral text-sm mb-3">{error}</p>}
+      {archivedCount > 0 && (
+        <button type="button" onClick={() => setShowArchived(!showArchived)} className="text-sm text-plava hover:underline mb-3">
+          {showArchived ? "Sakrij završene" : `Prikaži i završene (${archivedCount})`}
+        </button>
+      )}
+      {visibleRows.length === 0 ? (
+        <p className="text-gray-400 text-sm py-8 text-center">Nema aktivnih individualnih polaznika.</p>
+      ) : (
       <div className="bg-white rounded-xl shadow-sm overflow-hidden">
         <table className="w-full text-sm">
           <thead className="bg-gray-50 text-gray-500 uppercase text-xs">
@@ -76,7 +89,7 @@ export default function IndividualniClient({ rows, showProfessor }: { rows: Enro
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-50">
-            {rows.map((r) => {
+            {visibleRows.map((r) => {
               const remaining = remainingLessons(r.lessonsUsed, r.packageLessons);
               const done = r.status === "completed";
               return (
@@ -136,6 +149,7 @@ export default function IndividualniClient({ rows, showProfessor }: { rows: Enro
           </tbody>
         </table>
       </div>
+      )}
     </div>
   );
 }
