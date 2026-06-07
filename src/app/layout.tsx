@@ -6,6 +6,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import Navigacija from "@/components/Navigacija";
 import Footer from "@/components/Footer";
+import CookieBanner from "@/components/CookieBanner";
 
 const lato = Lato({
   subsets: ["latin", "latin-ext"],
@@ -61,6 +62,31 @@ export default function RootLayout({
   return (
     <html lang="sr" className={`${lato.variable} ${montserrat.variable}`}>
       <body className="min-h-screen flex flex-col">
+        <Script
+          id="consent-default"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('consent', 'default', {
+  ad_storage: 'denied',
+  analytics_storage: 'denied',
+  ad_user_data: 'denied',
+  ad_personalization: 'denied',
+  wait_for_update: 500
+});
+try {
+  if (localStorage.getItem('cookie-consent') === 'granted') {
+    gtag('consent', 'update', {
+      ad_storage: 'granted',
+      analytics_storage: 'granted',
+      ad_user_data: 'granted',
+      ad_personalization: 'granted'
+    });
+  }
+} catch (e) {}`,
+          }}
+        />
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-KNP5DKDR"
@@ -99,6 +125,7 @@ export default function RootLayout({
         />
         <main className="flex-1">{children}</main>
         <Footer />
+        <CookieBanner />
         <Analytics />
         <SpeedInsights />
         <Script
