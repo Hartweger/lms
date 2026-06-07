@@ -10,7 +10,7 @@ declare global {
   }
 }
 
-function readConsent(): boolean {
+function shouldShowBanner(): boolean {
   try {
     return parseConsent(localStorage.getItem(CONSENT_KEY)) === null;
   } catch {
@@ -24,7 +24,7 @@ export default function CookieBanner() {
 
   useEffect(() => {
     function init() {
-      setVisible(readConsent());
+      setVisible(shouldShowBanner());
     }
     init();
   }, []);
@@ -45,7 +45,7 @@ export default function CookieBanner() {
 
   return (
     <div
-      role="dialog"
+      role="region"
       aria-label="Saglasnost za kolačiće"
       className="fixed inset-x-0 bottom-0 z-50 bg-[#1a2332] text-gray-200 shadow-2xl"
     >
