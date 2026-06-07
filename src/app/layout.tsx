@@ -62,6 +62,8 @@ export default function RootLayout({
   return (
     <html lang="sr" className={`${lato.variable} ${montserrat.variable}`}>
       <body className="min-h-screen flex flex-col">
+        {/* Google Consent Mode v2 — mora pre GTM-a. Inline skript ne može da importuje TS,
+            pa je ključ 'cookie-consent' hardkodiran: mora ostati u sinhronizaciji sa CONSENT_KEY iz src/lib/consent.ts */}
         <Script
           id="consent-default"
           strategy="beforeInteractive"
