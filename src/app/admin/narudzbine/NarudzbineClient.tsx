@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { Order } from "@/lib/types";
+import { orderTotals, orderFiscalStatus, canDeleteOrder } from "@/lib/order-utils";
 
 type Filter = "sve" | "na-cekanju" | "potvrdjene";
 
@@ -22,6 +23,8 @@ export default function NarudzbineClient({ initialOrders, courses }: Props) {
   const [filter, setFilter] = useState<Filter>("sve");
   const [confirmId, setConfirmId] = useState<string | null>(null);
   const [loading, setLoading] = useState<string | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState<string | null>(null);
 
   const [showNewForm, setShowNewForm] = useState(false);
   const [newEmail, setNewEmail] = useState("");
@@ -73,6 +76,20 @@ export default function NarudzbineClient({ initialOrders, courses }: Props) {
   }
 
   const pendingCount = orders.filter((o) => o.payment_status === "pending").length;
+  const totals = orderTotals(orders);
+
+  async function deleteOrder(orderId: string) {
+    setDeleting(orderId);
+    try {
+      const res = await fetch(`/api/admin/orders/${orderId}`, { method: "DELETE" });
+      if (res.ok) {
+        setOrders((prev) => prev.filter((o) => o.id !== orderId));
+      }
+    } finally {
+      setDeleting(null);
+      setDeleteId(null);
+    }
+  }
 
   const filtered = orders.filter((o) => {
     if (filter === "na-cekanju") return o.payment_status === "pending";
@@ -110,9 +127,19 @@ export default function NarudzbineClient({ initialOrders, courses }: Props) {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Narudžbine</h1>
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Narudžbine</h1>
+          <div className="mt-1 flex items-center gap-4 text-sm">
+            <span className="text-gray-500">{orders.length} ukupno</span>
+            <span className="text-green-600 font-medium">
+              Potvrđeno: {totals.confirmed.toLocaleString("sr-RS")} RSD
+            </span>
+            <span className="text-yellow-600 font-medium">
+              Na čekanju: {totals.pending.toLocaleString("sr-RS")} RSD
+            </span>
+          </div>
+        </div>
         <div className="flex items-center gap-3">
-          <span className="text-sm text-gray-500">{orders.length} ukupno</span>
           <button
             onClick={() => setShowNewForm((v) => !v)}
             className="px-4 py-2 rounded-lg text-sm font-medium bg-plava text-white hover:bg-plava-dark transition-colors"
@@ -284,6 +311,9 @@ export default function NarudzbineClient({ initialOrders, courses }: Props) {
                 const isConfirming = confirmId === order.id;
                 const isLoading = loading === order.id;
                 const isPending = order.payment_status === "pending";
+                const isDeleting = deleteId === order.id;
+                const isBeingDeleted = deleting === order.id;
+                const fiscalState = orderFiscalStatus(order);
 
                 return (
                   <tr key={order.id} className="hover:bg-gray-50">
@@ -316,16 +346,23 @@ export default function NarudzbineClient({ initialOrders, courses }: Props) {
                           Na čekanju
                         </span>
                       ) : (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-600">
-                          Potvrđena
-                        </span>
+                        <div className="flex flex-col gap-1">
+                          <span className="inline-flex w-fit items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-600">
+                            Potvrđena
+                          </span>
+                          <span
+                            className={`text-xs ${order.granted ? "text-green-600" : "text-koral font-medium"}`}
+                          >
+                            {order.granted ? "pristup ✓" : "pristup ✗"}
+                          </span>
+                        </div>
                       )}
                     </td>
                     <td className="px-6 py-4 text-gray-500 text-xs whitespace-nowrap">
                       {new Date(order.created_at).toLocaleDateString("sr-RS")}
                     </td>
                     <td className="px-6 py-4 text-right">
-                      {isPending && (
+                      {isPending ? (
                         isConfirming ? (
                           <span className="flex items-center justify-end gap-1">
                             <span className="text-xs text-gray-500">Sigurno?</span>
@@ -343,14 +380,57 @@ export default function NarudzbineClient({ initialOrders, courses }: Props) {
                               Ne
                             </button>
                           </span>
+                        ) : isDeleting ? (
+                          <span className="flex items-center justify-end gap-1">
+                            <span className="text-xs text-gray-500">Obrisati?</span>
+                            <button
+                              onClick={() => deleteOrder(order.id)}
+                              disabled={isBeingDeleted}
+                              className="text-xs text-koral font-medium hover:underline disabled:opacity-50"
+                            >
+                              {isBeingDeleted ? "..." : "Da"}
+                            </button>
+                            <button
+                              onClick={() => setDeleteId(null)}
+                              className="text-xs text-gray-400 hover:underline"
+                            >
+                              Ne
+                            </button>
+                          </span>
                         ) : (
-                          <button
-                            onClick={() => setConfirmId(order.id)}
-                            className="text-xs px-3 py-1.5 rounded-lg bg-green-50 text-green-600 font-medium hover:bg-green-100 transition-colors"
-                          >
-                            Potvrdi uplatu
-                          </button>
+                          <span className="flex items-center justify-end gap-2">
+                            <button
+                              onClick={() => setConfirmId(order.id)}
+                              className="text-xs px-3 py-1.5 rounded-lg bg-green-50 text-green-600 font-medium hover:bg-green-100 transition-colors"
+                            >
+                              Potvrdi uplatu
+                            </button>
+                            <button
+                              onClick={() => setDeleteId(order.id)}
+                              className="text-xs text-gray-400 hover:text-koral hover:underline transition-colors"
+                            >
+                              Obriši
+                            </button>
+                          </span>
                         )
+                      ) : (
+                        fiscalState === "ok" && order.fiscal_pdf_url ? (
+                          <a
+                            href={order.fiscal_pdf_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs px-3 py-1.5 rounded-lg bg-plava-light text-plava font-medium hover:bg-plava hover:text-white transition-colors"
+                          >
+                            Račun
+                          </a>
+                        ) : fiscalState === "missing" ? (
+                          <span
+                            className="text-xs text-koral font-medium"
+                            title="Narudžbina je potvrđena ali fiskalni račun nije izdat"
+                          >
+                            ⚠ nije fiskalizovano
+                          </span>
+                        ) : null
                       )}
                     </td>
                   </tr>

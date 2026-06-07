@@ -45,3 +45,32 @@ export async function generateOrderNumber(): Promise<string> {
 export function calculatePaypalEur(priceRsd: number): number {
   return Math.ceil((priceRsd / EUR_RATE) * (1 + PAYPAL_SURCHARGE));
 }
+
+// Narudžbina se sme obrisati samo ako još ništa nije "krenulo": nije potvrđena
+// i nije dodeljen pristup. Potvrđene narudžbine se stornitaju (Fiscomm), ne brišu.
+export function canDeleteOrder(order: { payment_status: string; granted: boolean }): boolean {
+  return order.payment_status === "pending" && order.granted === false;
+}
+
+// Zbir iznosa po statusu — za finansijski pregled na vrhu liste.
+export function orderTotals(
+  orders: { payment_status: string; total: number }[]
+): { confirmed: number; pending: number } {
+  return orders.reduce(
+    (acc, o) => {
+      if (o.payment_status === "completed") acc.confirmed += o.total;
+      else if (o.payment_status === "pending") acc.pending += o.total;
+      return acc;
+    },
+    { confirmed: 0, pending: 0 }
+  );
+}
+
+// "na" = nema računa (pending), "ok" = fiskalizovano, "missing" = potvrđeno ali račun nije izdat.
+export function orderFiscalStatus(order: {
+  payment_status: string;
+  fiscalized_at: string | null;
+}): "na" | "ok" | "missing" {
+  if (order.payment_status !== "completed") return "na";
+  return order.fiscalized_at ? "ok" : "missing";
+}
