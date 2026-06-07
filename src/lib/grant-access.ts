@@ -2,7 +2,7 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendWelcomeEmail } from "@/lib/email";
 import { nivoForSlug } from "@/lib/course-nivo";
-import { pickOpenGroupForNivo } from "@/lib/groups";
+import { computeSeats, pickOpenGroupForNivo } from "@/lib/groups";
 
 interface OrderItem { course_id: string; course_slug: string; title: string; price: number; }
 
@@ -49,10 +49,18 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
     try {
       // Status filter radi pickOpenGroupForNivo (jedinstveno mesto definicije "otvoren").
       const { data: groupsForNivo } = await admin
-        .from("groups").select("id, level, status, start_date")
+        .from("groups").select("id, level, status, start_date, max_seats, manual_enrolled")
         .eq("level", nivo);
       const group = pickOpenGroupForNivo(groupsForNivo ?? [], nivo);
       if (!group) { console.warn(`[grant] Nema otvorene grupe za nivo ${nivo} (order ${orderId})`); continue; }
+      const { count } = await admin
+        .from("group_enrollments").select("*", { count: "exact", head: true })
+        .eq("group_id", group.id).eq("status", "active");
+      const seats = computeSeats({ maxSeats: group.max_seats, manualEnrolled: group.manual_enrolled, activeEnrollments: count ?? 0 });
+      if (seats.full) {
+        console.error(`[grant][oversell] Grupa ${group.id} (${nivo}) je puna — preskačem auto-upis za order ${orderId} (user ${order.user_id}). Rešiti ručno.`);
+        continue;
+      }
       await admin.from("group_enrollments").upsert(
         { group_id: group.id, user_id: order.user_id, status: "active" },
         { onConflict: "group_id,user_id" },
