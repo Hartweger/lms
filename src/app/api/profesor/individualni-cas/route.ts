@@ -20,7 +20,7 @@ async function requireStaff() {
 async function loadOwnedEnrollment(admin: ReturnType<typeof createAdminClient>, enrollmentId: string, userId: string, isAdmin: boolean) {
   const { data: enr } = await admin
     .from("individual_enrollments")
-    .select("id, professor_id, package_lessons, user_id, course_id")
+    .select("id, professor_id, package_lessons, user_id, course_id, one_left_email_sent_at")
     .eq("id", enrollmentId)
     .single();
   if (!enr) return { error: "Upis nije pronađen", status: 404 as const };
@@ -58,8 +58,8 @@ export async function POST(request: Request) {
 
   const used = await recountLessons(staff.admin, enrollmentId, owned.enr.package_lessons);
 
-  // Kad preostane tačno 1 čas → mejl polazniku „još 1 čas" + preporuka sledećeg nivoa. Best-effort.
-  if (used === owned.enr.package_lessons - 1) {
+  // Kad preostane tačno 1 čas → mejl polazniku „još 1 čas" (TAČNO JEDNOM po upisu). Best-effort.
+  if (used === owned.enr.package_lessons - 1 && !owned.enr.one_left_email_sent_at) {
     try {
       const [{ data: student }, { data: course }] = await Promise.all([
         staff.admin.from("user_profiles").select("email, full_name").eq("id", owned.enr.user_id).single(),
@@ -74,6 +74,8 @@ export async function POST(request: Request) {
           courseUrl: nextSlug ? `https://kurs.hartweger.rs/kursevi/${nextSlug}` : null,
         });
       }
+      // Označi poslato (i ako mejl tiho padne — ne spamuj na svaki re-count).
+      await staff.admin.from("individual_enrollments").update({ one_left_email_sent_at: new Date().toISOString() }).eq("id", enrollmentId);
     } catch (e) {
       console.error("[individualni-cas] 'još 1 čas' mejl pao:", e);
     }

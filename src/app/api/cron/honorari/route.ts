@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
       admin.from("individual_lessons").select("*", { count: "exact", head: true })
         .eq("professor_id", p.id).gte("lesson_date", from).lt("lesson_date", toExclusive),
       admin.from("group_sessions").select("*", { count: "exact", head: true })
-        .eq("professor_id", p.id).gte("session_date", from).lt("session_date", toExclusive),
+        .eq("professor_id", p.id).eq("cancelled", false).gte("session_date", from).lt("session_date", toExclusive),
     ]);
     const ind = indCount ?? 0, grp = grpCount ?? 0;
     const h = computeHonorar(ind, grp, p.honorar_ind ?? 1400, p.honorar_grp ?? 1600);

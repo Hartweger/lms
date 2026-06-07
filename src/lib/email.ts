@@ -480,11 +480,11 @@ export async function sendIndividualWelcomeEmail(
     await resend.emails.send({
       from: FROM,
       to,
-      subject: `Dobrodošli na individualni kurs nemačkog ${opts.nivo}!`,
+      subject: `Dobrodošli na individualni kurs nemačkog${opts.nivo ? " " + opts.nivo : ""}!`,
       html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
 <body style="font-family:sans-serif;line-height:1.6;color:#222">
 <h2>Dobrodošli${ime ? ", " + esc(ime) : ""}! 💚</h2>
-<p>Kupovina <strong>individualnog kursa nemačkog ${esc(opts.nivo)}</strong> je potvrđena.</p>
+<p>Kupovina <strong>individualnog kursa nemačkog${opts.nivo ? " " + esc(opts.nivo) : ""}</strong> je potvrđena.</p>
 ${profRow}
 ${calBtn}
 ${notesRow}
@@ -510,11 +510,11 @@ export async function sendProfNewIndividualStudentEmail(
     await resend.emails.send({
       from: FROM,
       to: profEmail,
-      subject: `Novi individualni polaznik — ${opts.nivo}`,
+      subject: `Novi individualni polaznik${opts.nivo ? " — " + opts.nivo : ""}`,
       html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
 <body style="font-family:sans-serif;line-height:1.6;color:#222">
 <p>Zdravo${ime ? ", " + esc(ime) : ""}!</p>
-<p>Imaš novog individualnog polaznika (<strong>${esc(opts.nivo)}</strong>, paket ${opts.lessons} časova):</p>
+<p>Imaš novog individualnog polaznika (${opts.nivo ? `<strong>${esc(opts.nivo)}</strong>, ` : ""}paket ${opts.lessons} časova):</p>
 <p><strong>Ime:</strong> ${esc(opts.studentName || "—")}<br>
 <strong>Mejl:</strong> ${esc(opts.studentEmail)}</p>
 ${notesRow}
@@ -610,7 +610,7 @@ export async function sendOneLessonLeftEmail(
       html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
 <body style="font-family:sans-serif;line-height:1.6;color:#222">
 <h2>Bravo${ime ? ", " + esc(ime) : ""}! 🎉</h2>
-<p>Skoro si na kraju paketa — ostao ti je <strong>još jedan</strong> individualni čas (${esc(opts.nivo)}).</p>
+<p>Skoro si na kraju paketa — ostao ti je <strong>još jedan</strong> individualni čas${opts.nivo ? ` (${esc(opts.nivo)})` : ""}.</p>
 <p>${nastavak}</p>
 ${cta}
 <p style="margin-top:20px">Vidimo se i dalje!<br>Hartweger tim</p>

@@ -44,11 +44,16 @@ export async function DELETE(request: Request) {
   const { sessionId } = await request.json();
   if (!sessionId) return NextResponse.json({ error: "sessionId je obavezan" }, { status: 400 });
 
-  const { data: s } = await staff.admin.from("group_sessions").select("id, group_id").eq("id", sessionId).single();
+  const { data: s } = await staff.admin.from("group_sessions").select("id, group_id, source").eq("id", sessionId).single();
   if (!s) return NextResponse.json({ error: "Sesija nije pronađena" }, { status: 404 });
   const g = await ownedGroup(staff.admin, s.group_id, staff.userId, staff.isAdmin);
   if (!g) return NextResponse.json({ error: "Nije tvoja grupa" }, { status: 403 });
 
-  await staff.admin.from("group_sessions").delete().eq("id", sessionId);
+  // 'auto' (iz rasporeda) → označi otkazan da se NE vrati pri osvežavanju termina; 'manual' → obriši.
+  if (s.source === "auto") {
+    await staff.admin.from("group_sessions").update({ cancelled: true }).eq("id", sessionId);
+  } else {
+    await staff.admin.from("group_sessions").delete().eq("id", sessionId);
+  }
   return NextResponse.json({ ok: true });
 }

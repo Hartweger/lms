@@ -33,6 +33,7 @@ export default async function ProfesorSesije() {
     .from("group_sessions")
     .select("id, group_id, session_date, source")
     .in("group_id", groupIds)
+    .eq("cancelled", false)
     .order("session_date", { ascending: true });
 
   const byGroup = new Map<string, { id: string; date: string; source: string }[]>();

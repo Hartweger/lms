@@ -112,6 +112,12 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
     if (profId === undefined && pkgLessons === undefined) continue; // nije individualna stavka
     const nivo = nivoForSlug(item.course_slug) ?? "";
     try {
+      // Idempotentnost: ako upis za ovaj (order, kurs) već postoji (retry grant-a), ne pravi duplikat.
+      const { data: existingEnr } = await admin
+        .from("individual_enrollments").select("id")
+        .eq("order_id", orderId).eq("course_id", item.course_id).maybeSingle();
+      if (existingEnr) { individualWelcomeSent = true; continue; }
+
       let profIme = "", profEmail = "", calendarUrl: string | null = null;
       if (profId) {
         const { data: prof } = await admin.from("user_profiles")
