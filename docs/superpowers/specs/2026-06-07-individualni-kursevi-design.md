@@ -131,6 +131,9 @@ RLS: profesorka vidi/piše samo svoje (`professor_id = auth uid`), admin/profess
    uplate:** „Pre uplate proveri mejlom da li je izabrana profesorka na raspolaganju."
 6. Order stavka nosi `professor_id` + `package_lessons` + izabranu cenu. Plaćanje isto kao
    sad (uplatnica / kartica+rate / PayPal).
+7. **Zauzeta profesorka (ivica):** ako se posle uplate ispostavi da je izabrana profesorka
+   zauzeta — admin ručno prebaci upis na drugu (`professor_id` na enrollmentu) ili vrati pare.
+   Nema automatike (kao stari WC).
 
 ## Tok 2 — grant-access (po uplati), individualna grana
 
@@ -157,6 +160,13 @@ Dopuna profesorskog dashboarda (admin može isto, za sve):
   datum) → insert `individual_lessons`, uveća `lessons_used`, prikaže preostalo.
 - **„Grupne sesije":** za njene grupe vidi auto-generisane sesije iz rasporeda; može da
   **obriše otkazanu** i da **doda vanrednu/nadoknadu** (`source='manual'`).
+
+**Ponašanje pri unosu individualnog časa:**
+- Kad preostane **1 čas** (`lessons_used == package_lessons - 1`) → automatski mejl studentu:
+  „imaš još jedan čas, možeš da dokupiš" + **preporuka**: sledeći individualni nivo (mapiranje
+  `NEXT_NIVO` iz `course-nivo.ts`), a ako je upis bio KTZ/paket → ponovo KTZ/paket. **Bez video
+  alternative** (po [[feedback_prodaja_1na1_bez_videa]]).
+- Kad preostane **0** → `status='completed'` (prestaje da se prikazuje kao aktivan).
 
 Pošto datum može biti u prošlosti, **jun pre 10.6.** se dopunjava ovde (prof/admin unese, ili
 Nataša da brojeve) → julski cron izračuna pun jun.
@@ -196,7 +206,8 @@ Nataša da brojeve) → julski cron izračuna pun jun.
 
 - Vitest: izbor varijacije i cene (po nivou, mesečni paket4/8/12, Natašine cene, FIDE→Katarina/
   FSP→Milica), `package_lessons` izbor, honorar obračun (ind/grp, Katarina premium),
-  auto-izvođenje grupnih sesija iz rasporeda, idempotentnost grant-access individualne grane.
+  auto-izvođenje grupnih sesija iz rasporeda, „još 1 čas" upsell mejl na pretposlednjem času
+  (preporuka sledeći nivo / KTZ), idempotentnost grant-access individualne grane.
 - Smoke (po [[feedback_deploy_smoke_test]]): kupovina individualnog (po nivou + mesečni paket),
   potvrda uplate → enrollment + beleške + mejlovi; profesorski unos časa → brojač; cron honorar
   ručno okinut na test podacima.
