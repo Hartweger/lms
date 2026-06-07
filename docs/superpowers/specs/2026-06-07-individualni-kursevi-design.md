@@ -163,9 +163,11 @@ Dopuna profesorskog dashboarda (admin može isto, za sve):
 
 **Ponašanje pri unosu individualnog časa:**
 - Kad preostane **1 čas** (`lessons_used == package_lessons - 1`) → automatski mejl studentu:
-  „imaš još jedan čas, možeš da dokupiš" + **preporuka**: sledeći individualni nivo (mapiranje
+  ostao ti je još jedan čas + **preporuka za nastavak**: sledeći individualni nivo (mapiranje
   `NEXT_NIVO` iz `course-nivo.ts`), a ako je upis bio KTZ/paket → ponovo KTZ/paket. **Bez video
   alternative** (po [[feedback_prodaja_1na1_bez_videa]]).
+  - **Ton/reči:** NE „dokupi" — radi se o nastavku učenja (sledeći nivo), ne dokupljivanju.
+  - **Tekst mejla se potvrđuje sa Natašom PRE pisanja template-a** (zaseban korak u planu).
 - Kad preostane **0** → `status='completed'` (prestaje da se prikazuje kao aktivan).
 
 Pošto datum može biti u prošlosti, **jun pre 10.6.** se dopunjava ovde (prof/admin unese, ili
@@ -178,6 +180,9 @@ Nataša da brojeve) → julski cron izračuna pun jun.
   `total = ind*honorar_ind + grp*honorar_grp`.
 - Mejl svakoj profesorki (njen obračun) + **zbirni mejl Nataši/`info@`** (sve profesorke + ukupno).
 - Resend (kao postojeći cronovi). `CRON_SECRET` zaštita. Vercel cron raspored.
+
+> **Svi novi mejlovi** (welcome đaku, profesorki o novom đaku, „još 1 čas" preporuka, honorar) —
+> **tekst se prvo potvrđuje sa Natašom, pa se piše template.** Zaseban korak u planu pre svakog mejla.
 
 ## Cutover (ručni koraci, u plan kao checklist)
 
