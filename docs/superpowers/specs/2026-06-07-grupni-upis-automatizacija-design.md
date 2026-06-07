@@ -62,7 +62,13 @@ Napomena: tekuća logika u `raspored.ts` broji **sve** aktivne upise i daje pred
 
 - `auth.ts` — JWT service account sa domain-wide delegation; impersonacija profesora po potrebi. Skopovi: Calendar, Docs, Drive, Sheets.
 - `calendar.ts`
-  - `createGroupEvent(group, professor)` → ponavljajući event (po `days`, `session_time`, `duration_weeks`) sa uključenim Meet-om (`conferenceData`) → `{ eventId, meetLink }`
+  - `createGroupEvent(group, professor)` → **ponavljajući** event sa uključenim Meet-om (`conferenceData`) → `{ eventId, meetLink }`. Pravilo ponavljanja se gradi iz polja grupe:
+    - **dani u nedelji** = `days` (npr. `[2,4]` → uto, čet) → `RRULE:FREQ=WEEKLY;BYDAY=TU,TH`
+    - **broj termina/trajanje** = `duration_weeks` (npr. 7 nedelja) → `COUNT` = `duration_weeks × broj_dana_nedeljno` (npr. uto+čet × 7 = 14 časova), ili `UNTIL` = `start_date + duration_weeks` nedelja
+    - **vreme** = `session_time` (npr. 17:00–18:00), počev od `start_date`
+    - **kalendar** = profesorov (`user_profiles.calendar_id` ili Workspace mejl)
+    - **naziv eventa** uključuje nivo i ime profesora, npr. „Nemački A1.1 — Suzana Marjanović"
+    - Sve vrednosti dolaze iz onoga što admin unese kod grupe (dani, sat, broj nedelja, profesor).
   - `addAttendeeSilently(calendarId, eventId, email)` → doda gosta sa `sendUpdates='none'`
   - `buildAddToCalendarUrl(group)` → Google Calendar „render" URL za polaznikov lični kalendar
 - `docs.ts` / `drive.ts`
