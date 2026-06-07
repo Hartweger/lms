@@ -35,6 +35,7 @@ export default function Footer() {
             <h3 className="text-white font-bold mb-4">Dokumenti</h3>
             <ul className="space-y-2.5 text-sm mb-6">
               <li><Link href="/uslovi" className="hover:text-white transition-colors">Uslovi korišćenja</Link></li>
+              <li><Link href="/politika-privatnosti" className="hover:text-white transition-colors">Politika privatnosti</Link></li>
               <li><Link href="/kontakt" className="hover:text-white transition-colors">Kontakt</Link></li>
             </ul>
 
