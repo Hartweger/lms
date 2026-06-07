@@ -6,7 +6,7 @@ const adminRoutes = ["/admin"];
 const professorRoutes = ["/profesor"];
 
 export async function middleware(request: NextRequest) {
-  let response = NextResponse.next({ request });
+  const response = NextResponse.next({ request });
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -28,11 +28,6 @@ export async function middleware(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser();
   const path = request.nextUrl.pathname;
-
-  // Redirect logged-in users from homepage to dashboard
-  if (path === "/" && user) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
-  }
 
   // Redirect to login if accessing protected route without auth
   const isProtected = protectedRoutes.some((route) => path.startsWith(route));
