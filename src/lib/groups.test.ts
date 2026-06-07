@@ -1,6 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { formatDays, formatPocetak, mapGroupToRaspored, nextExpiry } from "./groups";
-import { computeSeats } from "./groups";
+import { computeSeats, formatDays, formatPocetak, mapGroupToRaspored, nextExpiry } from "./groups";
 
 describe("formatDays", () => {
   it("mapira brojeve dana u srpske skraćenice", () => {

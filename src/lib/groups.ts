@@ -48,7 +48,7 @@ export interface GroupRowForDisplay {
 }
 
 export function mapGroupToRaspored(g: GroupRowForDisplay, profName: string, activeEnrollments: number): GrupaRaspored {
-  const seats = computeSeats({ maxSeats: g.max_seats, manualEnrolled: g.manual_enrolled ?? null, activeEnrollments });
+  const seats = computeSeats({ maxSeats: g.max_seats, manualEnrolled: g.manual_enrolled, activeEnrollments });
   return {
     nivo: g.level,
     prof: profName,
