@@ -378,6 +378,59 @@ ${notesRow}
   }
 }
 
+export async function sendNatasaNextTermReminder(
+  opts: { nivo: string; nextNivo: string | null; endDate: string; profIme?: string },
+) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    const sledeci = opts.nextNivo
+      ? `Vreme je da otvoriš sledeći nivo <strong>${esc(opts.nextNivo)}</strong> (dugme „Otvori novi termin" u /admin/grupe).`
+      : `Ovo je poslednji nivo u nizu.`;
+    await resend.emails.send({
+      from: FROM,
+      to: "info@hartweger.rs",
+      subject: `Podsetnik: grupa ${opts.nivo} se bliži kraju`,
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:sans-serif;line-height:1.6;color:#222">
+<h2>Grupa ${esc(opts.nivo)} se završava ${esc(opts.endDate)}</h2>
+${opts.profIme ? `<p><strong>Profesor/ka:</strong> ${esc(opts.profIme)}</p>` : ""}
+<p>${sledeci}</p>
+<p>Polaznici će automatski dobiti ponudu za sledeći nivo 7 dana pre kraja.</p>
+</body></html>`,
+    });
+  } catch (e) {
+    console.error("[email] sendNatasaNextTermReminder pao:", e);
+  }
+}
+
+export async function sendNextLevelOffer(
+  to: string,
+  name: string,
+  opts: { currentNivo: string; nextNivo: string; courseUrl: string },
+) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    const ime = name ? name.split(" ")[0] : "";
+    await resend.emails.send({
+      from: FROM,
+      to,
+      subject: `Nastavi nemački — upiši ${opts.nextNivo}`,
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:sans-serif;line-height:1.6;color:#222">
+<h2>Bravo${ime ? ", " + esc(ime) : ""}! 🎉</h2>
+<p>Tvoj grupni kurs <strong>${esc(opts.currentNivo)}</strong> se bliži kraju. Da ne praviš pauzu, upiši se na sledeći nivo i nastavi sa istim ritmom.</p>
+<p style="margin:24px 0"><a href="${esc(opts.courseUrl)}" style="background:#F78687;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:bold;display:inline-block">Upiši ${esc(opts.nextNivo)}</a></p>
+<p style="font-size:13px;color:#666">Mesta su ograničena (grupe do 6 polaznika), pa preporučujemo da rezervišeš na vreme.</p>
+<p style="margin-top:20px">Vidimo se i dalje!<br>Hartweger tim</p>
+</body></html>`,
+    });
+  } catch (e) {
+    console.error("[email] sendNextLevelOffer pao:", e);
+  }
+}
+
 export async function sendProfNewStudentEmail(
   profEmail: string,
   profIme: string,

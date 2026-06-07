@@ -22,3 +22,21 @@ export const SLUG_TO_NIVO: Record<string, string> = {
 export function nivoForSlug(slug: string): string | null {
   return SLUG_TO_NIVO[slug] ?? null;
 }
+
+// Sledeći nivo u nizu (za ponudu/podsetnik). C1.2 nema sledeći.
+export const NEXT_NIVO: Record<string, string> = {
+  "A1.1": "A1.2", "A1.2": "A2.1", "A2.1": "A2.2", "A2.2": "B1.1",
+  "B1.1": "B1.2", "B1.2": "B2.1", "B2.1": "B2.2", "B2.2": "C1.1", "C1.1": "C1.2",
+};
+
+export function nextNivoFor(nivo: string): string | null {
+  return NEXT_NIVO[nivo] ?? null;
+}
+
+// Grupni slug za nivo (obrnuto od SLUG_TO_NIVO, samo "grupni-" slugovi).
+export function grupniSlugForNivo(nivo: string): string | null {
+  for (const [slug, n] of Object.entries(SLUG_TO_NIVO)) {
+    if (n === nivo && slug.startsWith("grupni-")) return slug;
+  }
+  return null;
+}
