@@ -214,7 +214,7 @@ ostalo se dograđuje na nju. Bez paralelnih sesija (dele šemu i centralne fajlo
 | Kalendar linkovi (7 profesorki) | ✅ imam (stari `Config.js`) |
 | Individualni beleške šablon ID | ✅ `1e2aP8rWHgS3XtOOblivZua6F8GEmX25R9ZTABH1Bg2g` |
 | Honorar rate (1400/1600; Katarina 1600/1800) | ✅ iz starog `Finansije.js` |
-| Broj časova po nivou (A1=7, A2/B=10, FSP=5) | ✅ staro `PAKET_PO_NIVOU` (potvrditi FIDE) |
+| Broj časova po nivou (A1=7, A2/B=10, FIDE/FSP=5, paket A1=14) | ✅ potvrđeno |
 | **Sve cene varijacija (prof×kurs×paket, RSD)** | ✅ iz WC API-ja (seed; Marija→standard) |
 | EUR/PayPal cene | ✅ izvode se postojećom logikom sajta |
 | Profesor za FIDE/FSP | ✅ FIDE→Katarina, FSP→Milica |

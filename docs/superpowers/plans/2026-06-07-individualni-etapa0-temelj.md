@@ -187,7 +187,7 @@ update public.courses set included_lessons=10 where slug='individualni-kurs-nema
 update public.courses set included_lessons=10 where slug='individualni-kurs-nemackog-jezika-b1-2';
 update public.courses set included_lessons=10 where slug='individualni-kurs-nemackog-jezika-b2-1';
 update public.courses set included_lessons=5  where slug='fsp-individualni';
-update public.courses set included_lessons=10 where slug='individualni-polozi-fide'; -- POTVRDITI sa Natašom (default 10)
+update public.courses set included_lessons=5  where slug='individualni-polozi-fide';
 ```
 
 - [ ] **Step 2: Primeni 041 i proveri**
