@@ -15,6 +15,10 @@
     {
       "path": "/api/cron/grupe-podsetnik",
       "schedule": "30 8 * * *"
+    },
+    {
+      "path": "/api/cron/honorari",
+      "schedule": "0 8 1 * *"
     }
   ]
 }

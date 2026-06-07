@@ -1,0 +1,44 @@
+import { describe, it, expect } from "vitest";
+import { computeHonorar, previousMonth, monthDateRange } from "./honorar";
+import { computeSessionDates } from "./groups";
+
+describe("computeHonorar", () => {
+  it("standardna rata 1400/1600", () => {
+    expect(computeHonorar(10, 3, 1400, 1600)).toEqual({ ind: 10, grp: 3, indTotal: 14000, grpTotal: 4800, total: 18800 });
+  });
+  it("Katarina premium 1600/1800", () => {
+    expect(computeHonorar(5, 2, 1600, 1800)).toEqual({ ind: 5, grp: 2, indTotal: 8000, grpTotal: 3600, total: 11600 });
+  });
+  it("nula časova", () => {
+    expect(computeHonorar(0, 0, 1400, 1600).total).toBe(0);
+  });
+});
+
+describe("previousMonth", () => {
+  it("jul → jun iste godine", () => {
+    expect(previousMonth(new Date("2026-07-15T00:00:00Z"))).toEqual({ year: 2026, month: 6, label: "jun 2026." });
+  });
+  it("januar → decembar prethodne", () => {
+    expect(previousMonth(new Date("2026-01-03T00:00:00Z"))).toEqual({ year: 2025, month: 12, label: "decembar 2025." });
+  });
+});
+
+describe("monthDateRange", () => {
+  it("jun 2026", () => {
+    expect(monthDateRange(2026, 6)).toEqual({ from: "2026-06-01", toExclusive: "2026-07-01" });
+  });
+  it("decembar → januar sledeće", () => {
+    expect(monthDateRange(2025, 12)).toEqual({ from: "2025-12-01", toExclusive: "2026-01-01" });
+  });
+});
+
+describe("computeSessionDates", () => {
+  it("2 dana × 2 nedelje = 4 datuma od ponedeljka", () => {
+    // 2026-06-01 je ponedeljak. dani [1=pon, 3=sre], 2 nedelje.
+    expect(computeSessionDates("2026-06-01", [1, 3], 2)).toEqual(["2026-06-01", "2026-06-03", "2026-06-08", "2026-06-10"]);
+  });
+  it("prazno bez podataka", () => {
+    expect(computeSessionDates(null, [1], 2)).toEqual([]);
+    expect(computeSessionDates("2026-06-01", [], 2)).toEqual([]);
+  });
+});

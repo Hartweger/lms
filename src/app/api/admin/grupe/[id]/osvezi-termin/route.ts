@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { callGas } from "@/lib/gas";
 import { computeEndDate } from "@/lib/groups";
+import { syncGroupSessions } from "@/lib/group-sessions";
 
 async function requireAdmin() {
   const supabase = await createClient();
@@ -21,7 +22,7 @@ export async function POST(_req: NextRequest, { params }: { params: Promise<{ id
 
   const { data: g } = await admin
     .from("groups")
-    .select("id, level, days, session_time, duration_weeks, start_date, gcal_event_id, professor:professor_id(full_name)")
+    .select("id, level, days, session_time, duration_weeks, start_date, gcal_event_id, professor_id, professor:professor_id(full_name)")
     .eq("id", id)
     .single();
   if (!g) return NextResponse.json({ error: "Grupa ne postoji" }, { status: 404 });
@@ -55,6 +56,9 @@ export async function POST(_req: NextRequest, { params }: { params: Promise<{ id
 
   const { error } = await admin.from("groups").update(update).eq("id", id);
   if (error) return NextResponse.json({ error: error.message }, { status: 400 });
+
+  // Auto-izvedi grupne sesije iz rasporeda (za honorar). Best-effort.
+  await syncGroupSessions(admin, { id: g.id, professor_id: g.professor_id, start_date: g.start_date, days: g.days, duration_weeks: g.duration_weeks });
 
   return NextResponse.json({ ok: true, meetLink: gas.meetLink ?? null, notesUrl: gas.notesUrl ?? null });
 }

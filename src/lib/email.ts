@@ -527,6 +527,100 @@ ${notesRow}
   }
 }
 
+export async function sendHonorarProfEmail(
+  profEmail: string,
+  profIme: string,
+  opts: { label: string; ind: number; grp: number; rateInd: number; rateGrp: number; indTotal: number; grpTotal: number; total: number },
+) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    const ime = profIme ? profIme.split(" ")[0] : "";
+    const fmt = (n: number) => n.toLocaleString("de-DE");
+    await resend.emails.send({
+      from: FROM,
+      to: profEmail,
+      subject: `Honorar za ${opts.label}`,
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:sans-serif;line-height:1.6;color:#222">
+<p>Zdravo${ime ? ", " + esc(ime) : ""}!</p>
+<p>Tvoj obračun za <strong>${esc(opts.label)}</strong>:</p>
+<ul>
+<li>Individualni časovi: ${opts.ind} × ${fmt(opts.rateInd)} din = <strong>${fmt(opts.indTotal)} din</strong></li>
+<li>Grupne sesije: ${opts.grp} × ${fmt(opts.rateGrp)} din = <strong>${fmt(opts.grpTotal)} din</strong></li>
+</ul>
+<p style="font-size:18px"><strong>Ukupno: ${fmt(opts.total)} din</strong></p>
+<p style="font-size:13px;color:#666">Ako nešto ne štima, javi nam na info@hartweger.rs.</p>
+<p style="margin-top:20px">Hartweger tim</p>
+</body></html>`,
+    });
+  } catch (e) {
+    console.error("[email] sendHonorarProfEmail pao:", e);
+  }
+}
+
+export async function sendHonorarSummaryEmail(
+  label: string,
+  rows: { name: string; ind: number; grp: number; total: number }[],
+  grandTotal: number,
+) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    const fmt = (n: number) => n.toLocaleString("de-DE");
+    const trs = rows.map((r) => `<tr><td style="padding:4px 10px">${esc(r.name)}</td><td style="padding:4px 10px">${r.ind}</td><td style="padding:4px 10px">${r.grp}</td><td style="padding:4px 10px;text-align:right"><strong>${fmt(r.total)}</strong></td></tr>`).join("");
+    await resend.emails.send({
+      from: FROM,
+      to: ["info@hartweger.rs", "natasa@hartweger.rs"],
+      subject: `Honorari ${label} — ukupno ${fmt(grandTotal)} din`,
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:sans-serif;line-height:1.6;color:#222">
+<h2>Honorari — ${esc(label)}</h2>
+<table style="border-collapse:collapse;font-size:14px">
+<thead><tr style="background:#f5f5f5"><th style="padding:4px 10px;text-align:left">Profesorka</th><th style="padding:4px 10px">ind</th><th style="padding:4px 10px">grp</th><th style="padding:4px 10px;text-align:right">din</th></tr></thead>
+<tbody>${trs}</tbody>
+</table>
+<p style="font-size:18px;margin-top:16px"><strong>UKUPNO: ${fmt(grandTotal)} din</strong></p>
+</body></html>`,
+    });
+  } catch (e) {
+    console.error("[email] sendHonorarSummaryEmail pao:", e);
+  }
+}
+
+export async function sendOneLessonLeftEmail(
+  to: string,
+  name: string,
+  opts: { nivo: string; nextLevelLabel: string | null; courseUrl: string | null },
+) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    const ime = name ? name.split(" ")[0] : "";
+    const cta = opts.courseUrl
+      ? `<p style="margin:24px 0"><a href="${esc(opts.courseUrl)}" style="background:#F78687;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:bold;display:inline-block">Pogledaj sledeći nivo</a></p>`
+      : "";
+    const nastavak = opts.nextLevelLabel
+      ? `Da ne praviš pauzu, nastavi na <strong>sledeći nivo (${esc(opts.nextLevelLabel)})</strong> — ili obnovi paket sa svojom profesorkom.`
+      : `Možeš da obnoviš paket sa svojom profesorkom i nastaviš dalje.`;
+    await resend.emails.send({
+      from: FROM,
+      to,
+      subject: "Ostao ti je još jedan čas — nastavi nemački",
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:sans-serif;line-height:1.6;color:#222">
+<h2>Bravo${ime ? ", " + esc(ime) : ""}! 🎉</h2>
+<p>Skoro si na kraju paketa — ostao ti je <strong>još jedan</strong> individualni čas (${esc(opts.nivo)}).</p>
+<p>${nastavak}</p>
+${cta}
+<p style="margin-top:20px">Vidimo se i dalje!<br>Hartweger tim</p>
+</body></html>`,
+    });
+  } catch (e) {
+    console.error("[email] sendOneLessonLeftEmail pao:", e);
+  }
+}
+
 export async function sendInteresNotification(nivo: string, email: string, ime: string) {
   try {
     const resend = getResend();

@@ -58,24 +58,31 @@ export function pickOpenGroupForNivo<T extends OpenGroupRow>(groups: T[], nivo: 
 }
 
 /**
- * Datum poslednjeg časa: od start_date, na zadate dane (1=pon..7=ned), ukupno weeks×dani časova.
- * Vraća "yyyy-mm-dd" ili null ako nema dovoljno podataka.
+ * Svi datumi časova: od start_date, na zadate dane (1=pon..7=ned), ukupno weeks×dani časova.
+ * Vraća niz "yyyy-mm-dd" (prazan ako nema dovoljno podataka).
  */
-export function computeEndDate(startDate: string | null, days: number[] | null, weeks: number | null): string | null {
-  if (!startDate || !days?.length || !weeks) return null;
+export function computeSessionDates(startDate: string | null, days: number[] | null, weeks: number | null): string[] {
+  if (!startDate || !days?.length || !weeks) return [];
   const total = weeks * days.length;
   const jsDays = new Set(days.map((d) => (d === 7 ? 0 : d))); // 0=ned..6=sub
   const d = new Date(startDate + "T00:00:00Z");
-  if (isNaN(d.getTime())) return null;
-  let found = 0;
-  let last: Date | null = null;
+  if (isNaN(d.getTime())) return [];
+  const out: string[] = [];
   let guard = 0;
-  while (found < total && guard < 1000) {
-    if (jsDays.has(d.getUTCDay())) { found++; last = new Date(d); }
+  while (out.length < total && guard < 1000) {
+    if (jsDays.has(d.getUTCDay())) out.push(d.toISOString().slice(0, 10));
     d.setUTCDate(d.getUTCDate() + 1);
     guard++;
   }
-  return last ? last.toISOString().slice(0, 10) : null;
+  return out;
+}
+
+/**
+ * Datum poslednjeg časa (yyyy-mm-dd) ili null. Izveden iz computeSessionDates.
+ */
+export function computeEndDate(startDate: string | null, days: number[] | null, weeks: number | null): string | null {
+  const dates = computeSessionDates(startDate, days, weeks);
+  return dates.length ? dates[dates.length - 1] : null;
 }
 
 export function mapGroupToRaspored(g: GroupRowForDisplay, profName: string, activeEnrollments: number): GrupaRaspored {

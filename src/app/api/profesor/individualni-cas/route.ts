@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { computeLessonStatus } from "@/lib/individual-lessons";
+import { nivoForSlug, nextNivoFor, individualniSlugForNivo } from "@/lib/course-nivo";
+import { sendOneLessonLeftEmail } from "@/lib/email";
 
 // Profesor (svoje) ili admin (sve). Vraća { admin, userId, isAdmin } ili null.
 async function requireStaff() {
@@ -18,7 +20,7 @@ async function requireStaff() {
 async function loadOwnedEnrollment(admin: ReturnType<typeof createAdminClient>, enrollmentId: string, userId: string, isAdmin: boolean) {
   const { data: enr } = await admin
     .from("individual_enrollments")
-    .select("id, professor_id, package_lessons")
+    .select("id, professor_id, package_lessons, user_id, course_id")
     .eq("id", enrollmentId)
     .single();
   if (!enr) return { error: "Upis nije pronađen", status: 404 as const };
@@ -55,7 +57,28 @@ export async function POST(request: Request) {
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
   const used = await recountLessons(staff.admin, enrollmentId, owned.enr.package_lessons);
-  // TODO (Etapa 3): kad preostane tačno 1 čas → mejl polazniku „još 1 čas" + preporuka sledeći nivo.
+
+  // Kad preostane tačno 1 čas → mejl polazniku „još 1 čas" + preporuka sledećeg nivoa. Best-effort.
+  if (used === owned.enr.package_lessons - 1) {
+    try {
+      const [{ data: student }, { data: course }] = await Promise.all([
+        staff.admin.from("user_profiles").select("email, full_name").eq("id", owned.enr.user_id).single(),
+        staff.admin.from("courses").select("slug").eq("id", owned.enr.course_id).single(),
+      ]);
+      const nivo = course?.slug ? (nivoForSlug(course.slug) ?? "") : "";
+      const nextNivo = nivo ? nextNivoFor(nivo) : null;
+      const nextSlug = nextNivo ? individualniSlugForNivo(nextNivo) : null;
+      if (student?.email) {
+        await sendOneLessonLeftEmail(student.email, student.full_name || "", {
+          nivo, nextLevelLabel: nextNivo,
+          courseUrl: nextSlug ? `https://kurs.hartweger.rs/kursevi/${nextSlug}` : null,
+        });
+      }
+    } catch (e) {
+      console.error("[individualni-cas] 'još 1 čas' mejl pao:", e);
+    }
+  }
+
   return NextResponse.json({ ok: true, lessonsUsed: used });
 }
 

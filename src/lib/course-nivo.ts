@@ -40,3 +40,11 @@ export function grupniSlugForNivo(nivo: string): string | null {
   }
   return null;
 }
+
+// Individualni slug za nivo (samo "individualni-" slugovi). Za „još 1 čas" preporuku sledećeg nivoa.
+export function individualniSlugForNivo(nivo: string): string | null {
+  for (const [slug, n] of Object.entries(SLUG_TO_NIVO)) {
+    if (n === nivo && slug.startsWith("individualni-")) return slug;
+  }
+  return null;
+}
