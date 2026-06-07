@@ -347,7 +347,7 @@ export async function sendInteresNotification(nivo: string, email: string, ime: 
     if (!resend) return;
     await resend.emails.send({
       from: FROM,
-      to: "kurs@hartweger.rs",
+      to: "info@hartweger.rs",
       replyTo: email,
       subject: `Interes za sledeći termin — ${nivo}`,
       html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
