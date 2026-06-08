@@ -20,7 +20,22 @@ type WcOrder = {
   items: Array<{ name: string; quantity: number; total: string; product_id: number }>;
   date_created: string;
   date_completed: string | null;
+  utm_source?: string | null;
 };
+
+// Normalizuje sirovi utm_source (instagram/ig/l.instagram.com…) u čist kanal.
+function channelOf(src: string | null | undefined): string {
+  const s = (src ?? "").toLowerCase();
+  if (!s || s === "(none)") return "Nepoznato";
+  if (s.includes("instagram") || s === "ig") return "Instagram";
+  if (s.includes("facebook") || s === "fb" || s === "m.facebook.com" || s.includes("fb.")) return "Facebook";
+  if (s.includes("google") || s.includes("bing") || s.includes("yahoo") || s === "search") return "Google/pretraga";
+  if (s.includes("youtube") || s === "yt") return "YouTube";
+  if (s.includes("newsletter") || s.includes("mailerlite") || s.includes("email") || s.includes("mail") || s.includes("gm")) return "Newsletter/email";
+  if (s.includes("tiktok")) return "TikTok";
+  if (s === "(direct)" || s === "direct" || s === "typein") return "Direktno";
+  return "Ostalo";
+}
 
 type Period =
   | "ovaj-mesec"
@@ -284,6 +299,16 @@ export default function AnalitikaDashboard({ orders }: { orders: WcOrder[] }) {
     const countryData =
       ostaloValue > 0 ? [...top5, { name: "Ostalo", value: ostaloValue }] : top5;
 
+    // Izvori / kanali (normalizovan utm_source) — prihod po kanalu
+    const sourceMap: Record<string, number> = {};
+    for (const order of completed) {
+      const ch = channelOf(order.utm_source);
+      sourceMap[ch] = (sourceMap[ch] ?? 0) + Number(order.total);
+    }
+    const sourceData = Object.entries(sourceMap)
+      .map(([name, value]) => ({ name, value }))
+      .sort((a, b) => b.value - a.value);
+
     // Payment methods — from all filtered orders (not just completed)
     const paymentMap: Record<string, number> = {};
     for (const order of filteredOrders) {
@@ -330,6 +355,7 @@ export default function AnalitikaDashboard({ orders }: { orders: WcOrder[] }) {
       revenueByMonth,
       categoryData,
       countryData,
+      sourceData,
       paymentBreakdown,
       totalOrderCount,
       refundedCount,
@@ -504,6 +530,16 @@ export default function AnalitikaDashboard({ orders }: { orders: WcOrder[] }) {
             Prihod po zemlji
           </h2>
           <CountryChart data={metrics.countryData} />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="bg-white rounded-xl shadow-sm p-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-2">
+            Prihod po izvoru (kanalu)
+          </h2>
+          <p className="text-xs text-gray-400 mb-2">Instagram, Google, Newsletter, Direktno… (iz WooCommerce atribucije; nove narudžbine = „Nepoznato" dok se ne uvede hvatanje)</p>
+          <CountryChart data={metrics.sourceData} />
         </div>
       </div>
 

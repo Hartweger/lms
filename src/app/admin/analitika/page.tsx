@@ -39,6 +39,7 @@ export default async function AdminAnalitika() {
       customer_email: o.email,
       country: o.country ?? null,
       items: Array.isArray(o.items) ? o.items : [],
+      utm_source: null, // nove narudžbine još ne hvataju izvor (Atribucija B)
     });
   }
 
