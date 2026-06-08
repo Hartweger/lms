@@ -2,7 +2,8 @@
 // blokove na kraj sekcija lekcije. vimeo → preskače (ručna provera). pdf → re-host sa starog WP
 // (ako je dostupan; inače odloži). Dry-run default; --apply.
 // Upotreba: node scripts/apply-wp-link-backfill.mjs --course="B1.1" [--apply]
-import { readFileSync } from "node:fs";
+import { readFileSync, unlinkSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import { client, getCourse } from "./lib/exam-packer.mjs";
 
 const APPLY = process.argv.includes("--apply");
@@ -60,10 +61,16 @@ for (const e of entries) {
       if (!APPLY) { block = { type: "pdf", url: `<re-host:${fn}>`, label: prettyFn(fn) }; }
       else {
         try {
-          const r = await fetch(it.source, { headers: { Authorization: WP_PDF_AUTH }, signal: AbortSignal.timeout(25000) });
-          if (!r.ok) throw new Error("HTTP " + r.status);
-          const { error } = await sb.storage.from("blog-media").upload(dest, Buffer.from(await r.arrayBuffer()), { contentType: "application/pdf", upsert: true });
+          // node fetch blokiran WAF-om (TLS otisak) → skidamo curl-om u temp pa upload
+          const tmp = `/tmp/wpbf_${fn}`;
+          // /wp-content/ fajlovi su sad na old.hartweger.rs (www je novi app → 403)
+          const src = it.source.replace(/:\/\/(www\.)?hartweger\.rs\//i, "://old.hartweger.rs/");
+          execFileSync("curl", ["-fsSL", "--max-time", "40", "-o", tmp, src]);
+          const buf = readFileSync(tmp);
+          if (buf.length < 1000 || buf.slice(0, 4).toString() !== "%PDF") throw new Error("nije validan PDF");
+          const { error } = await sb.storage.from("blog-media").upload(dest, buf, { contentType: "application/pdf", upsert: true });
           if (error) throw error;
+          try { unlinkSync(tmp); } catch {}
           block = { type: "pdf", url: sb.storage.from("blog-media").getPublicUrl(dest).data.publicUrl, label: prettyFn(fn) };
         } catch (err) { deferred.push(`${e.lesson} → ${fn} (${err.message})`); continue; }
       }
