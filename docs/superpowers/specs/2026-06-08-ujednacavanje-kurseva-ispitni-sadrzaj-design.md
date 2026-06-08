@@ -57,11 +57,17 @@ Grupni i individualni kursevi dele isti sadržaj sa video kursevima, pa su autom
 
 | Goethe modul | `exercise_type` | Napomena |
 |---|---|---|
-| Schreiben | `essay` | AI feedback + profesorski pregled |
-| Hören | `listen_write` | audio (`audio_url`) + razumevanje |
-| Lesen | `quiz` | + `text` sekcija u lekciji sa tekstom za čitanje |
-| Sprechen | `speak` / `sprechen` | preko Web Speech API |
+| Schreiben | `essay` | AI feedback + profesorski pregled (tok dokazan uživo) |
+| Hören | `quiz` + `audio_url` | a/b/c · richtig/falsch UZ audio; plejer iz `audio_url` po pitanju, grupisan po Teil-u. **NE `listen_write`** — to je polje za diktat. |
+| Lesen | `quiz` | tekst za čitanje u `options.context` (title+content); `GroupedExamExercise` ga prikaže jednom po Teil-u |
+| Sprechen | `sprechen` / `speak` | `SprechenExercise` (Web Speech API) |
 | Dijalog | `dialog` | nemački + srpski prevod (fiksni) |
+| Diktat (pravi) | `listen_write` | samo kratke „slušaj pa napiši" vežbe (npr. A1/A2), NE Goethe Hören |
+
+**Dokazani tokovi (proverено u kodu):**
+- Audio: `blog-media` bucket → `getPublicUrl` → `exercise_questions.audio_url`; renderuje `<audio>` u `ExerciseRunner` i `GroupedExamExercise`. (Treba potvrditi limit veličine bucketa za mp3 ~15 MB.)
+- Esej: `EssayExercise` → `/api/check-essay` → `essay_submissions` (pending) → `/profesor/eseji` (professor_feedback/score, published) → polaznik vidi.
+- Grupisanje ispita: aktivira se kad sva pitanja vežbe dele `context` (Lesen) ili `audio_url` (Hören).
 
 ### Ujednačeni nazivi
 
