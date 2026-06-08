@@ -126,6 +126,9 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
             </svg>
             {googleLoading ? "Učitavanje..." : "Nastavi sa Google"}
           </button>
+          <p className="text-xs text-gray-400 text-center -mt-1">
+            Imaš @gmail nalog? Ovo je najbrže — bez čekanja mejla.
+          </p>
 
           <div className="flex items-center gap-3">
             <div className="flex-1 h-px bg-gray-200" />

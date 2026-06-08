@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import CheckoutForm from "./CheckoutForm";
 
 export async function generateMetadata({
@@ -44,7 +45,12 @@ export default async function KupovinaPage({
     ["individualni", "paket", "mesecni"].includes(course.category ?? "");
   let variants: Array<{ id: string; professor_id: string | null; package_type: string | null; price: number; paypal_price_eur: number | null; professor: { id: string; full_name: string } | null }> = [];
   if (isIndividual) {
-    const { data } = await supabase
+    // Service-role: imena profesorki su u user_profiles (RLS dozvoljava samo
+    // sopstveni profil/admin), pa anon/student join vraća professor=null →
+    // prazan izbor i cena 0. Čitamo na serveru; u browser idu samo id+ime+cena
+    // (NE honorar/email).
+    const admin = createAdminClient();
+    const { data } = await admin
       .from("product_variants")
       .select("id, professor_id, package_type, price, paypal_price_eur, professor:professor_id(id, full_name)")
       .eq("course_id", course.id)
