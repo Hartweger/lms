@@ -13,10 +13,11 @@ const LESSON = "Prüfungstraining B2 — Modelltest 1";
 const sb = client();
 const course = await getCourse(sb, SLUG);
 
-const lesenQ = LESEN.reduce((n, t) => n + t.questions.length, 0);
-const hoerenQ = HOEREN.reduce((n, t) => n + t.questions.length, 0);
+const scoredCount = (teile) => teile.reduce((n, t) => n + t.questions.filter((q) => !/^Beispiel/i.test(q.q)).length, 0);
+const lesenQ = scoredCount(LESEN);
+const hoerenQ = scoredCount(HOEREN);
 console.log(`Kurs ${course.title} (${course.id})`);
-console.log(`Plan: Lesen ${LESEN.length} Teil/${lesenQ} pit, Hören ${HOEREN.length} Teil/${hoerenQ} pit, Schreiben ${SCHREIBEN.length}, Sprechen ${SPRECHEN.length}`);
+console.log(`Plan (bodovano, bez Beispiel-a): Lesen ${LESEN.length} Teil/${lesenQ} pit, Hören ${HOEREN.length} Teil/${hoerenQ} pit, Schreiben ${SCHREIBEN.length}, Sprechen ${SPRECHEN.length}`);
 if (!APPLY) { console.log("[DRY] dodaj --apply za upis."); process.exit(0); }
 
 // 1) audio upload
@@ -33,12 +34,22 @@ const lesson = await upsertLesson(sb, course.id, LESSON, [
   { type: "text", style: "info", content: "Kompletan Goethe-Zertifikat B2 Modelltest 1: Lesen, Hören, Schreiben i Sprechen. Reši deo po deo." },
 ], { force: true });
 
-// helper: pravi pitanja iz Teil-ova; context (title+content) grupiše prikaz po Teil-u
+// helper: pravi pitanja iz Teil-ova; context (title+content) grupiše prikaz po Teil-u.
+// Anweisung (info) ide *kurzivom*, tekst pod **Text:**; Beispiel(i) u kontekst kao rešen primer (NE u bodovanje).
+const isBeispiel = (q) => /^Beispiel/i.test(q.q);
 const buildQuestions = (teile, label, withAudio = false) => {
   const out = [];
   for (const t of teile) {
-    const context = { type: "text", title: `${label} — Teil ${t.teil}`, content: withAudio ? t.info : `${t.info}\n\n${t.text ?? ""}`.trim() };
-    for (const q of t.questions) {
+    const beispiele = t.questions.filter(isBeispiel);
+    const scored = t.questions.filter((q) => !isBeispiel(q));
+    let content = `*${t.info}*`;
+    if (!withAudio && t.text) content += `\n\n**📖 Text:**\n\n${t.text}`;
+    if (beispiele.length) {
+      content += `\n\n**Beispiel:**`;
+      for (const b of beispiele) content += `\n${b.q.replace(/^Beispiel[:\s\d]*/i, "").trim()} → *${b.items[b.correct]}*`;
+    }
+    const context = { type: "text", title: `${label} — Teil ${t.teil}`, content: content.trim() };
+    for (const q of scored) {
       out.push({
         question: `<strong>${label} · Teil ${t.teil}</strong><br>${q.q}`,
         options: { type: "quiz", items: q.items, context },
