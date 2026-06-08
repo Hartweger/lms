@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { sendWelcomeEmail } from "@/lib/email";
+import { grantAccessForOrder } from "@/lib/grant-access";
+import { fiscalizeOrder } from "@/lib/fiscomm";
 
 export async function GET() {
   const supabase = await createClient();
@@ -116,7 +117,7 @@ export async function POST(request: Request) {
       },
     ];
 
-    // Create order
+    // Create order as pending; grantAccessForOrder ga prebacuje u completed.
     const { data: order, error: orderError } = await admin
       .from("orders")
       .insert({
@@ -128,8 +129,8 @@ export async function POST(request: Request) {
         total: totalAmount,
         payment_method: paymentMethod,
         order_number: orderNumber,
-        payment_status: markAsPaid ? "completed" : "pending",
-        granted: markAsPaid ? true : false,
+        payment_status: "pending",
+        granted: false,
       })
       .select("*")
       .single();
@@ -144,27 +145,19 @@ export async function POST(request: Request) {
 
     console.log(`[admin/orders] Created order ${order.order_number} for ${email}`);
 
-    // If markAsPaid: grant course access + send welcome email
+    // markAsPaid → isti tok kao "Potvrdi uplatu": course_unlocks → pristup (svi vezani kursevi),
+    // welcome mejl, pa fiskalizacija. Bez ovoga je ručna narudžbina davala pristup samo "ljušturi"
+    // proizvoda i nikad se nije fiskalizovala.
     if (markAsPaid) {
-      const expiresAt = new Date();
-      expiresAt.setFullYear(expiresAt.getFullYear() + 1);
-
-      const { data: existing } = await admin
-        .from("course_access")
-        .select("id")
-        .eq("user_id", userId)
-        .eq("course_id", course.id)
-        .single();
-
-      if (!existing) {
-        await admin.from("course_access").insert({
-          user_id: userId,
-          course_id: course.id,
-          expires_at: expiresAt.toISOString(),
-        });
+      const result = await grantAccessForOrder(order.id);
+      if (!result.ok) {
+        console.error(`[admin/orders] grantAccessForOrder failed for ${order.order_number}: ${result.error}`);
+        return NextResponse.json(
+          { error: result.error ?? "Greška pri dodeli pristupa." },
+          { status: 500 }
+        );
       }
-
-      await sendWelcomeEmail(email, userName, [course.title]);
+      await fiscalizeOrder(order.id); // idempotentno; ne blokira pristup ako padne
     }
 
     return NextResponse.json({ order });

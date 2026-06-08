@@ -116,6 +116,36 @@ export default function NarudzbineClient({ initialOrders, courses }: Props) {
     }
   }
 
+  async function reFiscalize(orderId: string) {
+    setLoading(orderId);
+    try {
+      const res = await fetch(`/api/admin/orders/${orderId}/fiscalize`, {
+        method: "POST",
+      });
+      if (res.ok) {
+        const { order: updated } = await res.json().catch(() => ({ order: null }));
+        setOrders((prev) =>
+          prev.map((o) =>
+            o.id === orderId
+              ? {
+                  ...o,
+                  fiscalized_at: updated?.fiscalized_at ?? o.fiscalized_at,
+                  fiscal_pdf_url: updated?.fiscal_pdf_url ?? o.fiscal_pdf_url,
+                  fiscal_referent_number:
+                    updated?.fiscal_referent_number ?? o.fiscal_referent_number,
+                }
+              : o
+          )
+        );
+      } else {
+        const { error } = await res.json().catch(() => ({ error: String(res.status) }));
+        alert(`Fiskalizacija nije uspela: ${error}`);
+      }
+    } finally {
+      setLoading(null);
+    }
+  }
+
   function formatPaymentMethod(method: string) {
     if (method === "paypal") return "PayPal";
     if (method === "swift") return "SWIFT";
@@ -424,12 +454,14 @@ export default function NarudzbineClient({ initialOrders, courses }: Props) {
                             Račun
                           </a>
                         ) : fiscalState === "missing" ? (
-                          <span
-                            className="text-xs text-koral font-medium"
-                            title="Narudžbina je potvrđena ali fiskalni račun nije izdat"
+                          <button
+                            onClick={() => reFiscalize(order.id)}
+                            disabled={loading === order.id}
+                            className="text-xs text-koral font-medium hover:underline disabled:opacity-50"
+                            title="Narudžbina je potvrđena ali fiskalni račun nije izdat — klikni da fiskalizuješ"
                           >
-                            ⚠ nije fiskalizovano
-                          </span>
+                            {loading === order.id ? "Fiskalizujem…" : "⚠ Fiskalizuj"}
+                          </button>
                         ) : null
                       )}
                     </td>
