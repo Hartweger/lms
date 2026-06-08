@@ -4,11 +4,11 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Politika privatnosti — Hartweger",
   description:
-    "Kako prikupljamo, koristimo i štitimo tvoje podatke na kurs.hartweger.rs, koje kolačiće koristimo i koja su tvoja prava.",
+    "Kako prikupljamo, koristimo i štitimo tvoje podatke na hartweger.rs, koje kolačiće koristimo i koja su tvoja prava.",
   alternates: { canonical: "/politika-privatnosti" },
   openGraph: {
     title: "Politika privatnosti — Hartweger",
-    description: "Kako prikupljamo, koristimo i štitimo tvoje podatke na kurs.hartweger.rs.",
+    description: "Kako prikupljamo, koristimo i štitimo tvoje podatke na hartweger.rs.",
   },
 };
 
@@ -28,7 +28,7 @@ export default function PolitikaPrivatnosti() {
         <div className="max-w-3xl mx-auto prose prose-gray max-w-none">
           <p>
             Tvoja privatnost nam je važna. Ova politika objašnjava koje podatke prikupljamo kada
-            koristiš sajt kurs.hartweger.rs, zašto ih prikupljamo, sa kim ih delimo i koja su tvoja
+            koristiš sajt hartweger.rs, zašto ih prikupljamo, sa kim ih delimo i koja su tvoja
             prava. Rukovalac podataka je Centar za nemački jezik Hartweger.
           </p>
 

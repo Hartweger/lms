@@ -17,7 +17,7 @@
  */
 import { readFileSync } from "node:fs";
 
-const BASE = (process.argv[2] || "https://kurs.hartweger.rs").replace(/\/$/, "");
+const BASE = (process.argv[2] || "https://www.hartweger.rs").replace(/\/$/, "");
 const ERROR_MARKERS = ["server error occurred", "server-side exception", "Application error"];
 const FALLBACK_LESSON_IDS = [
   "af4fefa8-55ed-4e30-9e21-a421b7f00a46", // Willkommen (free preview)
@@ -59,6 +59,11 @@ async function check(path, { expect = 200 } = {}) {
   const url = `${BASE}${path}`;
   try {
     const r = await fetch(url, { redirect: "manual" });
+    // Vercel auto-mitigacija (DDoS challenge): sajt JE gore, samo firewall izaziva
+    // botove JS-challenge-om koji node-fetch ne može da reši. Ne tretiraj kao pad.
+    if (r.headers.get("x-vercel-mitigated") === "challenge") {
+      return { path, status: r.status, ok: true, note: "vercel challenge (gore, zaštićeno)" };
+    }
     const body = r.status === expect ? await r.text() : "";
     const marker = ERROR_MARKERS.find((m) => body.includes(m));
     const ok = r.status === expect && !marker;

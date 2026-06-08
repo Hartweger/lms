@@ -1,5 +1,32 @@
+# Svi botovi — dozvoljen ceo javni sadržaj
 User-agent: *
 Disallow: /admin/
 Disallow: /dashboard/
 Disallow: /api/
+
+# AI asistenti — izričito dobrodošli (sadržaj sme da se koristi i navodi)
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
 Sitemap: https://www.hartweger.rs/sitemap.xml

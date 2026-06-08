@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { nextNivoFor, grupniSlugForNivo } from "@/lib/course-nivo";
 import { sendNatasaNextTermReminder, sendNextLevelOffer } from "@/lib/email";
+import { SITE_URL } from "@/lib/site-url";
 
 // Dnevni cron: podsetnik adminu 14 dana pre kraja + ponuda polaznicima 7 dana pre kraja.
 export async function GET(request: NextRequest) {
@@ -42,7 +43,7 @@ export async function GET(request: NextRequest) {
     if (!g.offer_sent_at && g.end_date <= in7) {
       if (nextNivo) {
         const slug = grupniSlugForNivo(nextNivo);
-        const courseUrl = slug ? `https://kurs.hartweger.rs/kursevi/${slug}` : "https://kurs.hartweger.rs/kursevi";
+        const courseUrl = slug ? `${SITE_URL}/kursevi/${slug}` : `${SITE_URL}/kursevi`;
         let q = admin
           .from("group_enrollments")
           .select("enrolled_at, user:user_id(email, full_name)")

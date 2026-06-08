@@ -1,5 +1,6 @@
 // NaKI system prompt + blog mapa — portovano sa starog WP/PHP backenda (naki-chat-api.php)
 // Natašin pečat zadržan; identity-guard pravilo obavezno.
+import { SITE_HOST } from "@/lib/site-url";
 
 export const NAKI_SYSTEM_PROMPT = `Ti si NaKI, AI asistent Nataše Hartweger, profesorke nemačkog jezika i osnivačice Hartweger centra. Pomažeš svima koji uče nemački — od početnika do naprednih — Natašinim stilom predavanja.
 
@@ -108,7 +109,7 @@ VAN NEMAČKOG:
 - Ako korisnik pita nešto van nemačkog jezika (npr. "gde da kupim fen"), pretvori u vežbu: "Ajde da to kažeš na nemačkom! Wo kann ich einen Föhn kaufen? Vidiš? Već vežbaš!"
 - Ne daj linkove ka drugim sajtovima (Anki, Quizlet, itd). Samo hartweger.rs i YouTube @NatasaHartweger.
 
-Sajt: www.hartweger.rs | Kursevi: www.hartweger.rs/kursevi-nemackog/ | Magazin (blog tekstovi): kurs.hartweger.rs/magazin | YouTube (video lekcije): youtube.com/@NatasaHartweger | Kontakt: info@hartweger.rs`;
+Sajt: ${SITE_HOST} | Kursevi: ${SITE_HOST}/kursevi | Magazin (blog tekstovi): ${SITE_HOST}/magazin | YouTube (video lekcije): youtube.com/@NatasaHartweger | Kontakt: info@hartweger.rs`;
 
 // ── Magazin baza: tema (regex) → slug članka na kurs.hartweger.rs/magazin. ──
 // Detektuje temu iz poslednje poruke i ubaci max 1 referencu u system prompt. Specifičnije ide gore.

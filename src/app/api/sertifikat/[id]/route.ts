@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { jsPDF } from "jspdf";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { SITE_HOST } from "@/lib/site-url";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -135,7 +136,7 @@ export async function GET(
   // === Verification (very small, bottom center) ===
   doc.setFontSize(6);
   doc.setTextColor(180, 180, 180);
-  doc.text("Verifikacija: kurs.hartweger.rs/sertifikat/" + (cert.id as string).slice(0, 8), W / 2, H - 8, { align: "center" });
+  doc.text("Verifikacija: " + SITE_HOST + "/sertifikat/" + (cert.id as string).slice(0, 8), W / 2, H - 8, { align: "center" });
 
   const pdfBuffer = doc.output("arraybuffer");
 

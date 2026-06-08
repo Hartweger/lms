@@ -16,11 +16,15 @@ Hartweger je online škola nemačkog jezika koju je osnovala Nataša Hartweger. 
 - [Grupni kursevi — raspored](https://www.hartweger.rs/grupni-kursevi)
 - [Individualni kursevi](https://www.hartweger.rs/individualni-kursevi)
 - [Besplatno testiranje nivoa](https://www.hartweger.rs/besplatno-testiranje)
+- [NaKI — AI asistent za nemački](https://www.hartweger.rs/naki)
 - [Blog / Magazin](https://www.hartweger.rs/magazin)
 - [O Nataši](https://www.hartweger.rs/o-natasi)
 - [VoKuM metodologija](https://www.hartweger.rs/metodologija)
 - [Kontakt](https://www.hartweger.rs/kontakt)
 - [Česta pitanja](https://www.hartweger.rs/faq)
+
+## Detaljnije
+- [Pun katalog kurseva i svi članci](https://www.hartweger.rs/llms-full.txt) — kompletan sadržaj za AI asistente
 
 ## Kontakt
 - Email: info@hartweger.rs

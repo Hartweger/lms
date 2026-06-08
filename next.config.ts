@@ -35,6 +35,8 @@ const nextConfig: NextConfig = {
       { source: "/tag/:path*", destination: "/magazin", permanent: true },
       { source: "/author/:path*", destination: "/magazin", permanent: true },
       { source: "/nivo/:path*", destination: "/kursevi", permanent: true },
+      // pa_tip-kursa taksonomija (nova u sitemap-u, /tip-kursa/grupni...) → kursevi
+      { source: "/tip-kursa/:path*", destination: "/kursevi", permanent: true },
 
       // Stari WP blog: root-level tekstovi (/<slug>) → /magazin/<slug>
       // Samo "čisti" slugovi (a-z, 0-9, -); slugovi sa %-encoded znakovima (npr. emoji)
@@ -119,6 +121,29 @@ const nextConfig: NextConfig = {
       { source: "/proizvod/individualni-polozi-fide", destination: "/kursevi/individualni-polozi-fide", permanent: true },
       { source: "/proizvod/fsp-individualni", destination: "/kursevi/fsp-individualni", permanent: true },
       { source: "/proizvod/individualni-mesecni-paketi", destination: "/kursevi/individualni-mesecni-paketi", permanent: true },
+
+      // Živi WP product slugovi (sitemap audit 2026-06-08) koji su se razlikovali
+      // od gornjih eksplicitnih → padali na catch-all /kursevi umesto na svoju stranicu
+      { source: "/proizvod/fsp", destination: "/kursevi/fsp", permanent: true },
+      { source: "/proizvod/fsp-individualni-pripremni-kurs-nemackog-za-lekare", destination: "/kursevi/fsp-individualni", permanent: true },
+      { source: "/proizvod/gramatika-nemackog-jezika-a2-b1", destination: "/kursevi/gramatika-a2-b1", permanent: true },
+      { source: "/proizvod/individualni-kurs-nemackog-jezika-a2-1", destination: "/kursevi/individualni-kurs-nemackog-jezika-a2", permanent: true },
+      { source: "/proizvod/individualni-mesecni-paketi-izaberi-profesora-paket-i-kreni", destination: "/kursevi/individualni-mesecni-paketi", permanent: true },
+      { source: "/proizvod/kurs-nemackog-za-mame-i-trudnice", destination: "/kursevi/kurs-za-mame-i-trudnice", permanent: true },
+      { source: "/proizvod/paket-a1-a2-i-b1", destination: "/kursevi/paket-a1-a2-b1", permanent: true },
+      { source: "/proizvod/paket-a1-i-a2", destination: "/kursevi/paket-a1-i-a2", permanent: true },
+      { source: "/proizvod/polozi-fide-ispit", destination: "/kursevi/polozi-fide", permanent: true },
+      { source: "/proizvod/polozi-goethe-b1-sa-natasom-i-katarinom", destination: "/kursevi/polozi-goethe-b1", permanent: true },
+      { source: "/proizvod/polozi-goethe-c1", destination: "/kursevi/polozi-goethe-c1", permanent: true },
+      { source: "/proizvod/video-polozi-goethe-b2-sa-natasom-i-ankom", destination: "/kursevi/polozi-goethe-b2", permanent: true },
+      { source: "/proizvod/grupni-kurs-konverzacije-na-nemackom-jeziku-2", destination: "/grupni-kursevi", permanent: true },
+      { source: "/proizvod/kako-da-naucis-reci-na-stranom-jeziku", destination: "/kurs/kako-uciti-reci", permanent: true },
+
+      // Lični brend proizvodi (NH Academy / za preduzetnice) → natasahartweger.rs
+      { source: "/proizvod/kreiraj-kurs-koji-se-voli", destination: "https://natasahartweger.rs/academy", permanent: true },
+      { source: "/proizvod/nh-academy-generacija-i-maj-2026", destination: "https://natasahartweger.rs/academy", permanent: true },
+      { source: "/proizvod/od-individualne-do-grupne-nastave-skaliraj-svoj-biznis", destination: "https://natasahartweger.rs", permanent: true },
+      { source: "/proizvod/kreiranje-ponude", destination: "https://natasahartweger.rs", permanent: true },
 
       // Catch-all: any remaining /proizvod/ URLs → /kursevi
       { source: "/proizvod/:slug", destination: "/kursevi", permanent: true },

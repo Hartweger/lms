@@ -4,6 +4,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { computeLessonStatus } from "@/lib/individual-lessons";
 import { nivoForSlug, nextNivoFor, individualniSlugForNivo } from "@/lib/course-nivo";
 import { sendOneLessonLeftEmail } from "@/lib/email";
+import { SITE_URL } from "@/lib/site-url";
 
 // Profesor (svoje) ili admin (sve). Vraća { admin, userId, isAdmin } ili null.
 async function requireStaff() {
@@ -71,7 +72,7 @@ export async function POST(request: Request) {
       if (student?.email) {
         await sendOneLessonLeftEmail(student.email, student.full_name || "", {
           nivo, nextLevelLabel: nextNivo,
-          courseUrl: nextSlug ? `https://kurs.hartweger.rs/kursevi/${nextSlug}` : null,
+          courseUrl: nextSlug ? `${SITE_URL}/kursevi/${nextSlug}` : null,
         });
       }
       // Označi poslato (i ako mejl tiho padne — ne spamuj na svaki re-count).

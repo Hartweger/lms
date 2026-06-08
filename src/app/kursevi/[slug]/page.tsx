@@ -238,8 +238,11 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
             "@type": "Course",
             name: course.title,
             description: course.description,
+            url: `https://www.hartweger.rs/kursevi/${slug}`,
+            ...(course.thumbnail_url && { image: course.thumbnail_url }),
+            teaches: "Nemački jezik",
             provider: {
-              "@type": "Organization",
+              "@type": "EducationalOrganization",
               name: "Centar za nemački jezik Hartweger",
               url: "https://www.hartweger.rs",
             },
@@ -250,6 +253,15 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
               price: course.price,
               priceCurrency: "RSD",
               availability: "https://schema.org/InStock",
+              url: `https://www.hartweger.rs/kursevi/${slug}`,
+              category: "Paid",
+            },
+            hasCourseInstance: {
+              "@type": "CourseInstance",
+              courseMode: "online",
+              inLanguage: "de",
+              courseWorkload: category === "grupni" || category === "individualni" ? "PT1H30M" : "PT10H",
+              ...(termini && { courseSchedule: { "@type": "Schedule", repeatCount: termini } }),
             },
           }),
         }}

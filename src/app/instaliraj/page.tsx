@@ -77,7 +77,7 @@ export default function Instaliraj() {
               <li className="flex gap-3">
                 <span className="shrink-0 w-7 h-7 bg-plava text-white rounded-full flex items-center justify-center text-xs font-bold">1</span>
                 <span>
-                  Otvorite <strong>kurs.hartweger.rs</strong> u Safari browseru
+                  Otvorite <strong>hartweger.rs</strong> u Safari browseru
                   <span className="block text-xs text-gray-400 mt-0.5">(mora biti Safari, ne Chrome)</span>
                 </span>
               </li>
@@ -110,7 +110,7 @@ export default function Instaliraj() {
               <li className="flex gap-3">
                 <span className="shrink-0 w-7 h-7 bg-plava text-white rounded-full flex items-center justify-center text-xs font-bold">1</span>
                 <span>
-                  Otvorite <strong>kurs.hartweger.rs</strong> u Chrome browseru
+                  Otvorite <strong>hartweger.rs</strong> u Chrome browseru
                 </span>
               </li>
               <li className="flex gap-3">
@@ -137,7 +137,7 @@ export default function Instaliraj() {
               <li className="flex gap-3">
                 <span className="shrink-0 w-7 h-7 bg-plava text-white rounded-full flex items-center justify-center text-xs font-bold">1</span>
                 <span>
-                  Otvorite <strong>kurs.hartweger.rs</strong> u Chrome browseru
+                  Otvorite <strong>hartweger.rs</strong> u Chrome browseru
                 </span>
               </li>
               <li className="flex gap-3">
