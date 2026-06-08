@@ -69,6 +69,20 @@ Grupni i individualni kursevi dele isti sadržaj sa video kursevima, pa su autom
 - `Test — Modul N` (modulski testovi)
 - `Dijalog — [tema]`
 
+### Formatiranje i prikaz (eksplicitan zadatak)
+
+Nije dovoljno da sadržaj „uđe" — svaki Teil mora da izgleda **čisto, jasno i uredno**:
+- `badge` sekcija (modul + kategorija) na vrhu.
+- `text` (style `info`) sa uputstvom i `Arbeitszeit` (vremenom) — tačno kao u ispitu.
+- Lesen/Hören tekst u **čitljivim blokovima** (osobe/odlomci razdvojeni), ne zid teksta.
+- Pitanja numerisana (Beispiel + 1..N), opcije jasno označene (a/b/c/d, richtig/falsch…).
+- Hören: audio plejer iznad pitanja.
+- **Doslovna ekstrakcija:** tekst iz PDF-a se prenosi identično; OCR-ukrasne napomene
+  („Sehen Sie sich den Test kurz an…") i artefakti se čiste jer nisu deo ispita.
+- Tačni odgovori isključivo iz `Lösungen` ključa — ništa se ne pogađa.
+
+Odobreni uzorak formata: `LMS/ispit-materijali/UZORAK-FORMAT-b2-modelltest1.json`.
+
 ## Pravila za sadržaj
 
 - **Ispitni sadržaj (Lesen/Hören/Schreiben/Sprechen):** ČEKA autentične materijale od Nataše. Ništa se ne izmišlja AI-jem. Goethe-format tekstovi i audio dolaze iz njenih PDF-ova/snimaka.
