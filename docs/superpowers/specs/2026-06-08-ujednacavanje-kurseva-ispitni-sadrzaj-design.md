@@ -36,14 +36,15 @@ Grupni i individualni kursevi dele isti sadržaj sa video kursevima, pa su autom
 ### Struktura kursa
 
 **`.1` kursevi (A1.1, A2.1, B1.1, B2.1)** — polovina nivoa:
-- Ostaju kakvi jesu: gramatički / modulski testovi koji prate udžbenik su OK.
+- Zadržavaju postojeće gramatičke / modulske testove koji prate udžbenik.
 - **NOVO:** dijalog (de + sr prevod) u svakom modulu.
-- Gde već postoji Schreiben (A2.1, B1.1) — samo se **normalizuje tip**, sadržaj se ne dira.
-- Bez forsiranja punog Modelltesta.
+- **NOVO:** ispitne mini-vežbe **razbacane po modulima** (Teil-ovi iz Modelltesta), rotacija Lesen → Hören → Schreiben → Sprechen, težina raste kroz kurs.
+- Gde već postoji Schreiben (A2.1, B1.1) — normalizuje se tip, sadržaj se ne dira.
 
 **`.2` kursevi (A1.2, A2.2, B1.2, B2.2)** — završetak nivoa:
 - **NOVO:** dijalog (de + sr prevod) u svakom modulu.
-- **Završni modul „Prüfungstraining / Ispitni trening"** = pun Modelltest, svi Teil-ovi nivoa:
+- **NOVO:** ispitne mini-vežbe razbacane po modulima (kao kod `.1`).
+- **Završni modul „Prüfungstraining / Ispitni trening"** = JEDAN kompletan Modelltest netaknut (prava simulacija), svi Teil-ovi nivoa:
 
 | Nivo (.2) | Lesen | Hören | Schreiben | Sprechen |
 |------|:---:|:---:|:---:|:---:|
@@ -73,6 +74,18 @@ Grupni i individualni kursevi dele isti sadržaj sa video kursevima, pa su autom
 - **Ispitni sadržaj (Lesen/Hören/Schreiben/Sprechen):** ČEKA autentične materijale od Nataše. Ništa se ne izmišlja AI-jem. Goethe-format tekstovi i audio dolaze iz njenih PDF-ova/snimaka.
 - **Dijalozi:** po ustaljenom pravilu — dijalog je **AI-generisan**, a **prevod su fiksne rečenice u bazi** (vidi `src/lib/fixed-translations.ts`, `src/lib/types.ts` `dialog` tip). Dijalozi NE čekaju materijale.
 - Prevodi/dijalozi na svim nivoima A1→B2 (i na B2 dijalog ima srpski prevod na klik kao pomoć).
+
+### Izvori materijala (po nivou: 2+ kompletna Modelltesta)
+
+Princip: **jedan kompletan Modelltest ostaje netaknut kao finale**, ostali se iseckaju i razbacaju po modulima.
+
+| Nivo | Materijali (Google Drive) | Status |
+|---|---|---|
+| B1 | Modelltest 4 (PDF + 4× Hören mp3 + Lösungen) → razbacati po modulima; Modelltest 5 (PDF + 4× Hören mp3 + Lösungen) → finale | ✅ dobijeno |
+| B2 | Isti princip (Modelltest PDF + Hören mp3 + ključ) | ⏳ čeka |
+| A1, A2 | A1.2/A2.2 već imaju Lesen/Hören/Schreiben; dopuna po istom principu | delimično |
+
+Audio (mp3) se kači na Supabase Storage; `audio_url` u `exercise_questions`. Lesen tekst i ključ iz PDF/`Lösungen.docx`.
 
 ## Pristup implementacije (izabrano: A)
 
