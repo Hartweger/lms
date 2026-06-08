@@ -8,6 +8,7 @@ interface ProfessorRow {
   full_name: string;
   email: string;
   studentCount: number;
+  groupCount?: number;
 }
 
 interface AssignmentRow {
@@ -287,7 +288,14 @@ export default function AdminProfesori() {
                 <tr key={prof.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 font-medium text-gray-900">{prof.full_name || "—"}</td>
                   <td className="px-6 py-4 text-gray-500">{prof.email}</td>
-                  <td className="px-6 py-4 text-gray-500">{prof.studentCount}</td>
+                  <td className="px-6 py-4 text-gray-500">
+                    {prof.studentCount + (prof.groupCount ?? 0)}
+                    {(prof.studentCount > 0 || (prof.groupCount ?? 0) > 0) && (
+                      <span className="text-xs text-gray-400 ml-1">
+                        ({prof.studentCount} 1:1{(prof.groupCount ?? 0) > 0 ? ` · ${prof.groupCount} grupni` : ""})
+                      </span>
+                    )}
+                  </td>
                   <td className="px-6 py-4 text-right">
                     <button
                       onClick={() => openDetail(prof)}

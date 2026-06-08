@@ -1,4 +1,6 @@
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 export const dynamic = "force-dynamic";
 
@@ -26,10 +28,21 @@ export default async function ProfesorStudenti() {
     .eq("professor_id", user.id);
 
   if (!assignments || assignments.length === 0) {
+    // Možda nema individualnih, ali ima grupe — uputi na „Moje grupe".
+    const admin = createAdminClient();
+    const { count: groupCount } = await admin
+      .from("groups").select("id", { count: "exact", head: true }).eq("professor_id", user.id);
     return (
       <div className="text-center py-16">
-        <p className="text-gray-400">Nemaš dodeljene studente.</p>
-        <p className="text-sm text-gray-300 mt-2">Admin će ti dodeliti studente.</p>
+        <p className="text-gray-400">Nemaš dodeljenih individualnih (1:1) studenata.</p>
+        {groupCount && groupCount > 0 ? (
+          <p className="text-sm text-gray-500 mt-2">
+            Imaš {groupCount} {groupCount === 1 ? "grupu" : "grupe"} — polaznike vidiš u{" "}
+            <Link href="/profesor/grupe" className="text-plava underline font-medium">Moje grupe</Link>.
+          </p>
+        ) : (
+          <p className="text-sm text-gray-300 mt-2">Admin će ti dodeliti studente.</p>
+        )}
       </div>
     );
   }
