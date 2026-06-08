@@ -158,6 +158,15 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
         notes_doc_url: notesUrl, expires_at: expEnroll.toISOString(),
       });
 
+      // Profesorska veza: da student vidljiv u profesorskom dašbordu i admin pregledu
+      // (oba čitaju professor_students). Idempotentno. Bez ovoga 1:1 student je „nevidljiv".
+      if (profId) {
+        await admin.from("professor_students").upsert(
+          { professor_id: profId, student_id: order.user_id, course_id: item.course_id, assigned_via: "individual" },
+          { onConflict: "professor_id,student_id,course_id", ignoreDuplicates: true },
+        );
+      }
+
       await sendIndividualWelcomeEmail(order.email, order.full_name, {
         nivo, profIme, calendarUrl, notesUrl, hasPlatform,
       });

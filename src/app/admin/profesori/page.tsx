@@ -14,7 +14,7 @@ interface AssignmentRow {
   id: string;
   student_id: string;
   course_id: string;
-  assigned_via: "manual" | "wc_variation";
+  assigned_via: "manual" | "wc_variation" | "individual" | "group";
   student_name: string;
   student_email: string;
   course_title: string;
@@ -217,11 +217,13 @@ export default function AdminProfesori() {
                     <td className="px-6 py-4 text-gray-600">{a.course_title}</td>
                     <td className="px-6 py-4">
                       <span className={`text-xs px-2 py-1 rounded-full ${
-                        a.assigned_via === "wc_variation"
+                        a.assigned_via === "individual"
+                          ? "bg-green-50 text-green-600"
+                          : a.assigned_via === "wc_variation"
                           ? "bg-blue-50 text-blue-600"
                           : "bg-gray-100 text-gray-500"
                       }`}>
-                        {a.assigned_via === "wc_variation" ? "WC automatski" : "Ručno"}
+                        {a.assigned_via === "individual" ? "Individualni (kupovina)" : a.assigned_via === "wc_variation" ? "WC automatski" : a.assigned_via === "group" ? "Grupni" : "Ručno"}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-right">
