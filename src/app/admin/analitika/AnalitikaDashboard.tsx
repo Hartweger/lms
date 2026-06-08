@@ -148,6 +148,19 @@ function getPreviousPeriodRange(
   }
 }
 
+// Isti period prošle godine (YoY) — pomeri tekući opseg za godinu unazad.
+function getYearAgoRange(
+  period: Period,
+  customFrom: string,
+  customTo: string
+): { start: Date; end: Date } | null {
+  if (period === "sve-vreme") return null;
+  const { start, end } = getPeriodRange(period, customFrom, customTo);
+  const s = new Date(start); s.setFullYear(s.getFullYear() - 1);
+  const e = new Date(end); e.setFullYear(e.getFullYear() - 1);
+  return { start: s, end: e };
+}
+
 const PERIOD_LABELS: { value: Period; label: string }[] = [
   { value: "ovaj-mesec", label: "Ovaj mesec" },
   { value: "prosli-mesec", label: "Prošli mesec" },
@@ -332,6 +345,22 @@ export default function AnalitikaDashboard({ orders }: { orders: WcOrder[] }) {
   const pctCount = pct(metrics.count, metrics.prevCount);
   const hasPrev = previousRange !== null;
 
+  // YoY — isti period prošle godine
+  const yearAgoRange = useMemo(
+    () => getYearAgoRange(period, customFrom, customTo),
+    [period, customFrom, customTo]
+  );
+  const yoy = useMemo(() => {
+    if (!yearAgoRange) return null;
+    const completed = orders.filter((o) => {
+      const d = new Date(o.date_created);
+      return d >= yearAgoRange.start && d < yearAgoRange.end && o.status === "completed" && Number(o.total) > 0;
+    });
+    return { revenue: completed.reduce((s, o) => s + Number(o.total), 0), count: completed.length };
+  }, [orders, yearAgoRange]);
+  const pctRevenueYoY = yoy && yoy.revenue > 0 ? pct(metrics.totalRevenue, yoy.revenue) : null;
+  const pctCountYoY = yoy && yoy.count > 0 ? pct(metrics.count, yoy.count) : null;
+
   return (
     <div className="space-y-8">
       <h1 className="text-2xl font-bold text-gray-900">Analitika prihoda</h1>
@@ -407,10 +436,15 @@ export default function AnalitikaDashboard({ orders }: { orders: WcOrder[] }) {
         <div className="bg-white rounded-xl p-6 shadow-sm">
           <div className="text-sm text-gray-500 mb-1">Prihod (period)</div>
           <div className="text-2xl font-bold text-plava">{fmt(metrics.totalRevenue)}</div>
-          <div className="flex flex-wrap gap-2 mt-1">
+          <div className="flex flex-col gap-0.5 mt-1">
             {hasPrev && pctRevenue !== null && (
               <span className="text-xs text-gray-400 flex items-center gap-1">
                 vs prethodni: <PctBadge value={pctRevenue} />
+              </span>
+            )}
+            {pctRevenueYoY !== null && (
+              <span className="text-xs text-gray-400 flex items-center gap-1">
+                vs prošla god.: <PctBadge value={pctRevenueYoY} />
               </span>
             )}
           </div>
@@ -420,12 +454,16 @@ export default function AnalitikaDashboard({ orders }: { orders: WcOrder[] }) {
         <div className="bg-white rounded-xl p-6 shadow-sm">
           <div className="text-sm text-gray-500 mb-1">Završene narudžbine</div>
           <div className="text-2xl font-bold text-plava">{metrics.count}</div>
-          <div className="flex items-center gap-1 mt-1">
+          <div className="flex flex-col gap-0.5 mt-1">
             {hasPrev && pctCount !== null && (
-              <>
-                <span className="text-xs text-gray-400">vs prethodni:</span>
-                <PctBadge value={pctCount} />
-              </>
+              <span className="text-xs text-gray-400 flex items-center gap-1">
+                vs prethodni: <PctBadge value={pctCount} />
+              </span>
+            )}
+            {pctCountYoY !== null && (
+              <span className="text-xs text-gray-400 flex items-center gap-1">
+                vs prošla god.: <PctBadge value={pctCountYoY} />
+              </span>
             )}
           </div>
         </div>
