@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { createClient } from "@/lib/supabase/client";
 
 interface CertResult {
   valid: boolean;
@@ -23,46 +22,17 @@ export default function ProveraForma() {
     setLoading(true);
     setResult(null);
 
-    const supabase = createClient();
-
-    const { data: cert } = await supabase
-      .from("certificates")
-      .select("user_id, course_id, issued_at")
-      .eq("id", trimmed)
-      .single();
-
-    if (!cert) {
+    try {
+      const res = await fetch(
+        `/api/provera-sertifikata?id=${encodeURIComponent(trimmed)}`
+      );
+      const data = (await res.json()) as CertResult;
+      setResult(data?.valid ? data : { valid: false });
+    } catch {
       setResult({ valid: false });
+    } finally {
       setLoading(false);
-      return;
     }
-
-    const [{ data: profile }, { data: course }] = await Promise.all([
-      supabase
-        .from("user_profiles")
-        .select("full_name")
-        .eq("id", cert.user_id)
-        .single(),
-      supabase
-        .from("courses")
-        .select("title")
-        .eq("id", cert.course_id)
-        .single(),
-    ]);
-
-    const date = new Date(cert.issued_at).toLocaleDateString("sr-Latn-RS", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
-
-    setResult({
-      valid: true,
-      name: profile?.full_name || "Student",
-      course: course?.title || "Kurs",
-      date,
-    });
-    setLoading(false);
   }
 
   return (
