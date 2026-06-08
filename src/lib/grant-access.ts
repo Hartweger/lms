@@ -125,31 +125,41 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
         profIme = prof?.full_name ?? ""; profEmail = prof?.email ?? ""; calendarUrl = prof?.calendar_url ?? null;
       }
 
+      // hasPlatform: ima li course_unlocks (regularni nivoi/FIDE/FSP da, KTZ mesečni ne).
+      const { count: unlockCount } = await admin.from("course_unlocks")
+        .select("*", { count: "exact", head: true }).eq("purchasable_course_id", item.course_id);
+      const hasPlatform = (unlockCount ?? 0) > 0;
+
+      // Rok = uplata + 3 meseca; format dd.MM.yyyy.
+      const expEnroll = new Date(); expEnroll.setMonth(expEnroll.getMonth() + 3);
+      const rok = `${String(expEnroll.getDate()).padStart(2, "0")}.${String(expEnroll.getMonth() + 1).padStart(2, "0")}.${expEnroll.getFullYear()}.`;
+
+      // Materijali: regularni nivoi → jedan folder; FIDE/FSP (naziv) i KTZ (bez platforme) → bez linka.
+      const isFideFsp = /fide|fsp/i.test(nivo) || /fide|fsp/i.test(item.course_slug ?? "");
+      const materijaliUrl = (isFideFsp || !hasPlatform)
+        ? ""
+        : "https://drive.google.com/drive/folders/1uyIxitTor_n_oxDZ3IZ48WBJ0Jv5mpQF";
+
       // GAS: beleške doc (bez kalendar eventa).
       let notesUrl: string | null = null;
       try {
         const r = await callGas("enrollIndividual", {
           nivo, prof: profIme, studentName: order.full_name, studentEmail: order.email,
+          casova: pkgLessons ?? 0, rok, calendarUrl: calendarUrl ?? "", profEmail: profEmail ?? "",
+          materijaliUrl,
         });
         notesUrl = (r.notesUrl as string) || null;
       } catch (ge) {
         console.error(`[grant][ind] GAS enrollIndividual pao za ${order.email} (${nivo}):`, ge);
       }
-
-      // Enrollment (rok = uplata + 3 meseca).
-      const expEnroll = new Date(); expEnroll.setMonth(expEnroll.getMonth() + 3);
       await admin.from("individual_enrollments").insert({
         user_id: order.user_id, course_id: item.course_id, professor_id: profId ?? null,
         order_id: orderId, package_lessons: pkgLessons ?? 0, status: "active",
         notes_doc_url: notesUrl, expires_at: expEnroll.toISOString(),
       });
 
-      // hasPlatform: ima li course_unlocks za ovaj proizvod (po nivou/FIDE/FSP da, mesečni ne).
-      const { count: unlockCount } = await admin.from("course_unlocks")
-        .select("*", { count: "exact", head: true }).eq("purchasable_course_id", item.course_id);
-
       await sendIndividualWelcomeEmail(order.email, order.full_name, {
-        nivo, profIme, calendarUrl, notesUrl, hasPlatform: (unlockCount ?? 0) > 0,
+        nivo, profIme, calendarUrl, notesUrl, hasPlatform,
       });
       individualWelcomeSent = true;
 
