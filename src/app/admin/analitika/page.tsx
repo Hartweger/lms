@@ -24,5 +24,23 @@ export default async function AdminAnalitika() {
     offset += PAGE_SIZE;
   }
 
+  // Nove uplate (post-flip) žive u `orders` tabeli (wc_orders je zamrznut na ~28.05.2026,
+  // WooCommerce prodaja zatvorena posle flipa). Mapiraj na wc_orders oblik i spoji —
+  // disjunktni skupovi (wc istorija vs nove uplate), bez dupliranja.
+  const { data: newOrders } = await supabase
+    .from("orders")
+    .select("created_at, payment_status, total, full_name, email, country, items");
+  for (const o of newOrders ?? []) {
+    allOrders.push({
+      date_created: o.created_at,
+      status: o.payment_status,
+      total: o.total,
+      customer_name: o.full_name,
+      customer_email: o.email,
+      country: o.country ?? null,
+      items: Array.isArray(o.items) ? o.items : [],
+    });
+  }
+
   return <AnalitikaDashboard orders={allOrders} />;
 }
