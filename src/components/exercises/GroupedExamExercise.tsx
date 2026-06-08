@@ -90,7 +90,14 @@ export default function GroupedExamExercise({ exercise, questions, nextLessonId,
         <div className="text-5xl mb-3">{pct >= 60 ? "🎉" : "💪"}</div>
         <p className="text-2xl font-bold text-gray-900 mb-1">{sc} / {questions.length} tačno</p>
         <p className="text-lg font-semibold text-plava mb-2">{pct}%</p>
-        <p className="text-sm text-gray-600 mb-6 max-w-md mx-auto">{msg} Rezultat je sačuvan u tvom napretku.</p>
+        <p className="text-sm text-gray-600 mb-3 max-w-md mx-auto">{msg} Rezultat je sačuvan u tvom napretku.</p>
+        {isTest && (
+          <p className="text-sm mb-6 max-w-md mx-auto">
+            <span className={`inline-block px-3 py-1.5 rounded-lg font-medium ${pct >= 60 ? "bg-green-50 text-green-700" : "bg-amber-50 text-amber-700"}`}>
+              ℹ️ Na Goethe ispitu treba <strong>60%</strong> za prolaz{pct >= 60 ? " — ti si iznad praga! ✅" : "."}
+            </span>
+          </p>
+        )}
         <div className="flex flex-wrap items-center justify-center gap-3">
           <button onClick={restart} className="px-5 py-2.5 rounded-lg border border-gray-300 text-gray-600 hover:bg-white transition-colors text-sm font-medium">↺ Pokušaj ponovo</button>
           <Link href={`/lekcija/${exercise.lesson_id}`} className="px-5 py-2.5 rounded-lg border border-plava text-plava hover:bg-white transition-colors text-sm font-semibold">← Nazad na lekciju</Link>
