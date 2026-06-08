@@ -720,12 +720,26 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
               />
             );
           }
+          // Schreiben pitanje unutar quiz-testa (npr. SMS / E-Mail u modularnom testu):
+          // options.type "essay"/"listen_write" → polje za pisanje + dugme "Završi".
+          if (qType === "essay" || qType === "listen_write") {
+            return (
+              <EssayExercise
+                key={question.id}
+                task={question.question}
+                level={level}
+                onAnswer={handleAnswer}
+                exerciseId={exercise.id}
+                lessonId={exercise.lesson_id}
+              />
+            );
+          }
           // Fallback: essay
           return (
             <EssayExercise
               key={question.id}
               task={question.question}
-              level="A1"
+              level={level}
               onAnswer={handleAnswer}
               exerciseId={exercise.id}
               lessonId={exercise.lesson_id}

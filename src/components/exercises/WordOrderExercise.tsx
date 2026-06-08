@@ -67,7 +67,7 @@ export default function WordOrderExercise({ words, correctAnswer, hint, onAnswer
 
   return (
     <div>
-      <p className="text-lg font-medium text-gray-900 mb-1">Poredaj reči u pravilnu rečenicu:</p>
+      <p className="text-lg font-medium text-gray-900 mb-1">Poređaj reči u pravilnu rečenicu:</p>
       <p className="text-sm text-plava mb-4">({hint})</p>
 
       {/* Placed words area */}
