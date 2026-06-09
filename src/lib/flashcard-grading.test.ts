@@ -30,6 +30,15 @@ describe("gradeTyping — smer SR→DE (ukucaj nemački)", () => {
     const strasse: FlashcardItem = { front: "Straße", back: "ulica" };
     expect(gradeTyping("strasse", strasse, "sr-de").status).toBe("correct");
   });
+  it("pun rečnički oblik (jednina + množina) se prihvata", () => {
+    expect(gradeTyping("der Vater, Väter", vater, "sr-de").status).toBe("correct");
+    expect(gradeTyping("Vater, Väter", vater, "sr-de").status).toBe("correct");
+  });
+  it("ono što se prikazuje kao tačan odgovor mora i da se prihvata", () => {
+    const schueler: FlashcardItem = { front: "Schüler", back: "učenik", article: "der", plural: "die Schüler" };
+    const ff = gradeTyping("", schueler, "sr-de").fullForm; // "der Schüler, die Schüler"
+    expect(gradeTyping(ff, schueler, "sr-de").status).toBe("correct");
+  });
 });
 
 describe("gradeTyping — smer DE→SR (ukucaj srpski) sa više prevoda", () => {

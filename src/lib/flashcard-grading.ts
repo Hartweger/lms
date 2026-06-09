@@ -28,7 +28,15 @@ function acceptedAnswers(card: FlashcardItem, dir: Direction): string[] {
   const forms = card.front.split(",").map((s) => s.trim()).filter(Boolean);
   const out = [...forms, card.front];
   if (card.article) for (const f of forms) out.push(`${card.article} ${f}`);
-  if (card.plural) out.push(card.plural);
+  if (card.plural) {
+    out.push(card.plural);
+    // Pun rečnički oblik (jednina + množina) — baš ono što prikazujemo kao „Tačan odgovor".
+    // normalize() svejedno skida zarez, pa pokriva i unos sa i bez zareza.
+    for (const f of forms) {
+      out.push(`${f}, ${card.plural}`);
+      if (card.article) out.push(`${card.article} ${f}, ${card.plural}`);
+    }
+  }
   return out;
 }
 
