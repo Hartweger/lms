@@ -248,13 +248,18 @@ export default function AnalitikaDashboard({ orders }: { orders: WcOrder[] }) {
     });
   }, [orders, start, end, search]);
 
+  // Poređenje "do istog dana": ako je period u toku (npr. ovaj mesec/godina), poredi se
+  // ISTI proteklim broj dana iz prethodnog/prošlogodišnjeg perioda (month-to-date), ne ceo.
   const previousOrders = useMemo(() => {
     if (!previousRange) return [];
+    const elapsed = Math.min(end.getTime(), Date.now()) - start.getTime();
+    const pStart = previousRange.start.getTime();
+    const pEnd = pStart + elapsed;
     return orders.filter((o) => {
-      const d = new Date(o.date_created);
-      return d >= previousRange.start && d < previousRange.end;
+      const t = new Date(o.date_created).getTime();
+      return t >= pStart && t < pEnd;
     });
-  }, [orders, previousRange]);
+  }, [orders, previousRange, start, end]);
 
   // ── Computed metrics ───────────────────────────────────────────────────────
 
@@ -392,18 +397,22 @@ export default function AnalitikaDashboard({ orders }: { orders: WcOrder[] }) {
   );
   const yoy = useMemo(() => {
     if (!yearAgoRange) return null;
+    const elapsed = Math.min(end.getTime(), Date.now()) - start.getTime();
+    const yStart = yearAgoRange.start.getTime();
+    const yEnd = yStart + elapsed;
     const completed = orders.filter((o) => {
-      const d = new Date(o.date_created);
-      return d >= yearAgoRange.start && d < yearAgoRange.end && o.status === "completed" && Number(o.total) > 0;
+      const t = new Date(o.date_created).getTime();
+      return t >= yStart && t < yEnd && o.status === "completed" && Number(o.total) > 0;
     });
     return { revenue: completed.reduce((s, o) => s + Number(o.total), 0), count: completed.length };
-  }, [orders, yearAgoRange]);
+  }, [orders, yearAgoRange, start, end]);
   const pctRevenueYoY = yoy && yoy.revenue > 0 ? pct(metrics.totalRevenue, yoy.revenue) : null;
   const pctCountYoY = yoy && yoy.count > 0 ? pct(metrics.count, yoy.count) : null;
 
-  // Eksplicitne oznake perioda poređenja + sakrij YoY kad je isti kao "prethodni" (godišnji periodi)
-  const prevLabel = previousRange ? rangeLabel(previousRange.start, previousRange.end) : null;
-  const yoyLabel = yearAgoRange ? rangeLabel(yearAgoRange.start, yearAgoRange.end) : null;
+  // Eksplicitne oznake perioda poređenja (do istog dana) + sakrij YoY kad je isti kao "prethodni".
+  const elapsedMs = Math.min(end.getTime(), Date.now()) - start.getTime();
+  const prevLabel = previousRange ? rangeLabel(previousRange.start, new Date(previousRange.start.getTime() + elapsedMs)) : null;
+  const yoyLabel = yearAgoRange ? rangeLabel(yearAgoRange.start, new Date(yearAgoRange.start.getTime() + elapsedMs)) : null;
   const showYoY = !!yearAgoRange && (!previousRange || yearAgoRange.start.getTime() !== previousRange.start.getTime());
 
   return (
