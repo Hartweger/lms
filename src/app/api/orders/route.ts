@@ -74,8 +74,12 @@ export async function POST(request: Request) {
     }
 
     // Individualni: cena i broj časova dolaze iz product_variants (server-side, ne veruj klijentu).
+    // Samo stvarno individualni proizvodi idu kroz product_variants (cena/prof/paket).
+    // Video paketi (category="paket", course_type="video") imaju fiksnu cenu na kursu
+    // i NE smeju da se tretiraju kao individualni — inače traže variant koji ne postoji
+    // i kupovina pada sa "Izabrana kombinacija nije dostupna".
     const isIndividual = course.course_type === "individual" ||
-      ["individualni", "paket", "mesecni"].includes(course.category ?? "");
+      ["individualni", "mesecni"].includes(course.category ?? "");
     let unitPrice = course.price;
     let chosenProfessorId: string | null = null;
     let packageLessons: number | null = course.included_lessons ?? null;
