@@ -7,8 +7,9 @@ import { computeSeats, pickOpenGroupForNivo } from "@/lib/groups";
 
 export async function POST(request: Request) {
   try {
-    const { fullName, email, country, courseSlug, paymentMethod, couponCode: rawCouponCode, professorId, packageType } =
+    const { fullName, email, country, courseSlug, paymentMethod, couponCode: rawCouponCode, professorId, packageType, attribution } =
       await request.json();
+    const attr = (attribution && typeof attribution === "object") ? attribution as Record<string, string> : {};
 
     // Validate required fields
     if (!fullName || !email || !country || !courseSlug || !paymentMethod) {
@@ -196,6 +197,10 @@ export async function POST(request: Request) {
         coupon_code: validCouponCode,
         payment_method: paymentMethod,
         order_number: orderNumber,
+        utm_source: attr.utm_source ?? null,
+        utm_medium: attr.utm_medium ?? null,
+        utm_campaign: attr.utm_campaign ?? null,
+        source_type: attr.source_type ?? null,
         paypal_note:
           paymentMethod === "paypal"
             ? `${paypalEur} EUR — paypal.me/natasahartweger1`

@@ -29,7 +29,7 @@ export default async function AdminAnalitika() {
   // disjunktni skupovi (wc istorija vs nove uplate), bez dupliranja.
   const { data: newOrders } = await supabase
     .from("orders")
-    .select("created_at, payment_status, total, full_name, email, country, items");
+    .select("created_at, payment_status, total, full_name, email, country, items, utm_source");
   for (const o of newOrders ?? []) {
     allOrders.push({
       date_created: o.created_at,
@@ -39,7 +39,7 @@ export default async function AdminAnalitika() {
       customer_email: o.email,
       country: o.country ?? null,
       items: Array.isArray(o.items) ? o.items : [],
-      utm_source: null, // nove narudžbine još ne hvataju izvor (Atribucija B)
+      utm_source: o.utm_source ?? null,
     });
   }
 

@@ -8,6 +8,7 @@ import Navigacija from "@/components/Navigacija";
 import Footer from "@/components/Footer";
 import CookieBanner from "@/components/CookieBanner";
 import MigracijaBanner from "@/components/MigracijaBanner";
+import AttributionTracker from "@/components/AttributionTracker";
 
 const lato = Lato({
   subsets: ["latin", "latin-ext"],
@@ -159,6 +160,7 @@ try {
         <main className="flex-1">{children}</main>
         <Footer />
         <CookieBanner />
+        <AttributionTracker />
         <Analytics />
         <SpeedInsights />
         <Script

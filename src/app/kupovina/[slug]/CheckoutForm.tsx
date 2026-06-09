@@ -96,6 +96,13 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
     setLoading(true);
     setError(null);
 
+    // Atribucija (last-touch) iz first-party cookie-ja `hw_attr`
+    let attribution: Record<string, string> | null = null;
+    try {
+      const c = document.cookie.split("; ").find((x) => x.startsWith("hw_attr="));
+      if (c) attribution = JSON.parse(decodeURIComponent(c.split("=").slice(1).join("=")));
+    } catch { /* ignore */ }
+
     try {
       const res = await fetch("/api/orders", {
         method: "POST",
@@ -109,6 +116,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
           couponCode: appliedCoupon?.code || null,
           professorId: isIndividual ? professorId : null,
           packageType: isIndividual ? packageType : null,
+          attribution,
         }),
       });
 
