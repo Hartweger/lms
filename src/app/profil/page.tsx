@@ -11,6 +11,11 @@ export default function Profil() {
   const [email, setEmail] = useState("");
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [pwSaving, setPwSaving] = useState(false);
+  const [pwMessage, setPwMessage] = useState("");
+  const [pwError, setPwError] = useState("");
 
   useEffect(() => {
     const load = async () => {
@@ -31,6 +36,30 @@ export default function Profil() {
     setMessage("Sačuvano!");
     setSaving(false);
     setTimeout(() => setMessage(""), 2000);
+  };
+
+  const handleSetPassword = async () => {
+    setPwError("");
+    setPwMessage("");
+    if (newPassword.length < 6) {
+      setPwError("Lozinka mora imati bar 6 karaktera.");
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setPwError("Lozinke se ne poklapaju.");
+      return;
+    }
+    setPwSaving(true);
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+    setPwSaving(false);
+    if (error) {
+      setPwError("Greška pri čuvanju lozinke. Pokušaj ponovo.");
+      return;
+    }
+    setNewPassword("");
+    setConfirmPassword("");
+    setPwMessage("Lozinka je sačuvana! Ubuduće možeš da se prijaviš sa email + lozinka.");
+    setTimeout(() => setPwMessage(""), 5000);
   };
 
   const handleDeleteAccount = async () => {
@@ -56,6 +85,25 @@ export default function Profil() {
         <button onClick={handleSave} disabled={saving} className="w-full bg-plava text-white py-3 rounded-lg hover:bg-plava-dark transition-colors disabled:opacity-50">
           {saving ? "Čuvam..." : "Sačuvaj izmene"}
         </button>
+      </div>
+      <div className="mt-12 pt-8 border-t border-gray-100">
+        <h2 className="text-base font-semibold text-gray-900 mb-1">Lozinka</h2>
+        <p className="text-xs text-gray-500 mb-4">Postavi lozinku da se ubuduće prijaviš brzo, sa email i lozinkom (bez čekanja linka na mejl).</p>
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Nova lozinka</label>
+            <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} minLength={6} placeholder="Bar 6 karaktera" className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-plava" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Ponovi lozinku</label>
+            <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} minLength={6} placeholder="Ista lozinka još jednom" className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-plava" />
+          </div>
+          {pwError && <div role="alert" className="bg-koral-light text-koral-dark px-4 py-3 rounded-lg text-sm">{pwError}</div>}
+          {pwMessage && <div className="bg-plava-light text-plava-dark px-4 py-3 rounded-lg text-sm">{pwMessage}</div>}
+          <button onClick={handleSetPassword} disabled={pwSaving} className="w-full bg-plava text-white py-3 rounded-lg hover:bg-plava-dark transition-colors disabled:opacity-50">
+            {pwSaving ? "Čuvam..." : "Sačuvaj lozinku"}
+          </button>
+        </div>
       </div>
       <div className="mt-12 pt-8 border-t border-gray-100">
         <h2 className="text-sm font-medium text-gray-700 mb-2">Brisanje naloga</h2>
