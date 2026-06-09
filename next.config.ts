@@ -24,6 +24,7 @@ const nextConfig: NextConfig = {
       { source: "/opsti-uslovi-poslovanja", destination: "/uslovi", permanent: true },
       { source: "/nalog", destination: "/dashboard", permanent: true },
       { source: "/naki-ai-asistent-nemacki", destination: "/naki", permanent: true },
+      { source: "/kurs/kako-uciti-reci", destination: "/masterclass-reci", permanent: true },
 
       // WP landing pages
       { source: "/ispit-a1", destination: "/", permanent: true },

@@ -171,7 +171,7 @@ const tabs: TabConfig[] = [
     defaultLevel: "sve",
     cards: [
       { badges: [{ label: "Besplatno", color: "free" }], title: "Besplatno testiranje nivoa", meta: "Rezultat odmah", desc: "Ne znate koji nivo da upišete? Uradite kratak test i saznajte odmah gde stojite.", price: "Besplatno", priceEur: "", href: "/besplatno-testiranje", cta: "Uradi test", level: "sve", freeCta: true },
-      { badges: [{ label: "Besplatno", color: "free" }, { label: "Masterclass", color: "video" }], title: "Kako da naučiš reči na stranom jeziku", meta: "90 minuta", desc: "Besplatan masterclass Nataše Hartweger sa smernicama kako se lakše i efikasnije uče reči na stranom jeziku.", price: "Besplatno", priceEur: "", href: "/kurs/kako-uciti-reci", cta: "Gledaj besplatno", level: "sve", freeCta: true },
+      { badges: [{ label: "Besplatno", color: "free" }, { label: "Masterclass", color: "video" }], title: "Kako da naučiš reči na stranom jeziku", meta: "90 minuta", desc: "Besplatan masterclass Nataše Hartweger sa smernicama kako se lakše i efikasnije uče reči na stranom jeziku.", price: "Besplatno", priceEur: "", href: "/masterclass-reci", cta: "Gledaj besplatno", level: "sve", freeCta: true },
       { badges: [{ label: "Besplatno", color: "free" }, { label: "AI", color: "ai" }], title: "NaKI – AI asistent za nemački", meta: "Vežbajte uvek i svuda", desc: "Hartwegerov AI asistent za učenje nemačkog. Vežbajte gramatiku i dobijajte objašnjenja na srpskom.", price: "Besplatno", priceEur: "", href: "https://www.hartweger.rs/naki-ai-asistent-nemacki/", cta: "Isprobaj", level: "sve", freeCta: true },
     ],
   },
