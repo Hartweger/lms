@@ -10,7 +10,7 @@ export default function YoutubeBlock({ videoId, label }: YoutubeSection) {
         <iframe
           src={`https://www.youtube.com/embed/${videoId}`}
           className="absolute inset-0 w-full h-full"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
           allowFullScreen
         />
       </div>
