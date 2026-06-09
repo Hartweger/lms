@@ -191,6 +191,20 @@ const monthNames = [
   "Jul", "Avg", "Sep", "Okt", "Nov", "Dec",
 ];
 
+// Ljudski naziv opsega: cela godina → "2025"; pun mesec → "Jun 2026"; inače "dd.mm–dd.mm.yyyy".
+function rangeLabel(start: Date, end: Date): string {
+  const fullYear =
+    start.getMonth() === 0 && start.getDate() === 1 &&
+    end.getMonth() === 0 && end.getDate() === 1 && end.getFullYear() === start.getFullYear() + 1;
+  if (fullYear) return String(start.getFullYear());
+  const months = (end.getFullYear() * 12 + end.getMonth()) - (start.getFullYear() * 12 + start.getMonth());
+  if (start.getDate() === 1 && end.getDate() === 1 && months === 1) {
+    return `${monthNames[start.getMonth()]} ${start.getFullYear()}`;
+  }
+  const d = (x: Date) => `${String(x.getDate()).padStart(2, "0")}.${String(x.getMonth() + 1).padStart(2, "0")}.${x.getFullYear()}`;
+  return `${d(start)}–${d(new Date(end.getTime() - 1))}`;
+}
+
 // ── Main component ───────────────────────────────────────────────────────────
 
 export default function AnalitikaDashboard({ orders }: { orders: WcOrder[] }) {
@@ -387,6 +401,11 @@ export default function AnalitikaDashboard({ orders }: { orders: WcOrder[] }) {
   const pctRevenueYoY = yoy && yoy.revenue > 0 ? pct(metrics.totalRevenue, yoy.revenue) : null;
   const pctCountYoY = yoy && yoy.count > 0 ? pct(metrics.count, yoy.count) : null;
 
+  // Eksplicitne oznake perioda poređenja + sakrij YoY kad je isti kao "prethodni" (godišnji periodi)
+  const prevLabel = previousRange ? rangeLabel(previousRange.start, previousRange.end) : null;
+  const yoyLabel = yearAgoRange ? rangeLabel(yearAgoRange.start, yearAgoRange.end) : null;
+  const showYoY = !!yearAgoRange && (!previousRange || yearAgoRange.start.getTime() !== previousRange.start.getTime());
+
   return (
     <div className="space-y-8">
       <h1 className="text-2xl font-bold text-gray-900">Analitika prihoda</h1>
@@ -465,12 +484,12 @@ export default function AnalitikaDashboard({ orders }: { orders: WcOrder[] }) {
           <div className="flex flex-col gap-0.5 mt-1">
             {hasPrev && pctRevenue !== null && (
               <span className="text-xs text-gray-400 flex items-center gap-1">
-                vs prethodni: <PctBadge value={pctRevenue} />
+                vs {prevLabel}: <PctBadge value={pctRevenue} />
               </span>
             )}
-            {pctRevenueYoY !== null && (
+            {showYoY && pctRevenueYoY !== null && (
               <span className="text-xs text-gray-400 flex items-center gap-1">
-                vs prošla god.: <PctBadge value={pctRevenueYoY} />
+                vs {yoyLabel}: <PctBadge value={pctRevenueYoY} />
               </span>
             )}
           </div>
@@ -483,12 +502,12 @@ export default function AnalitikaDashboard({ orders }: { orders: WcOrder[] }) {
           <div className="flex flex-col gap-0.5 mt-1">
             {hasPrev && pctCount !== null && (
               <span className="text-xs text-gray-400 flex items-center gap-1">
-                vs prethodni: <PctBadge value={pctCount} />
+                vs {prevLabel}: <PctBadge value={pctCount} />
               </span>
             )}
-            {pctCountYoY !== null && (
+            {showYoY && pctCountYoY !== null && (
               <span className="text-xs text-gray-400 flex items-center gap-1">
-                vs prošla god.: <PctBadge value={pctCountYoY} />
+                vs {yoyLabel}: <PctBadge value={pctCountYoY} />
               </span>
             )}
           </div>
