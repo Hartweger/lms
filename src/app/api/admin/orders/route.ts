@@ -52,6 +52,12 @@ export async function POST(request: Request) {
       );
     }
 
+    // Iznos mora biti ceo broj dinara (total/subtotal su integer kolone — decimala obara upis).
+    const amount = Math.round(Number(totalAmount));
+    if (!Number.isFinite(amount) || amount <= 0) {
+      return NextResponse.json({ error: "Iznos mora biti broj veći od 0." }, { status: 400 });
+    }
+
     // Load course by ID
     const { data: course, error: courseError } = await admin
       .from("courses")
@@ -113,7 +119,7 @@ export async function POST(request: Request) {
         course_id: course.id,
         course_slug: course.slug,
         title: course.title,
-        price: totalAmount,
+        price: amount,
       },
     ];
 
@@ -125,8 +131,8 @@ export async function POST(request: Request) {
         email,
         full_name: userName,
         items,
-        subtotal: totalAmount,
-        total: totalAmount,
+        subtotal: amount,
+        total: amount,
         payment_method: paymentMethod,
         order_number: orderNumber,
         payment_status: "pending",
@@ -163,13 +169,13 @@ export async function POST(request: Request) {
       try {
         const { sendPaymentInstructionsEmail } = await import("@/lib/email");
         const { calculatePaypalEur } = await import("@/lib/order-utils");
-        const paypalEur = paymentMethod === "paypal" ? calculatePaypalEur(totalAmount) : undefined;
+        const paypalEur = paymentMethod === "paypal" ? calculatePaypalEur(amount) : undefined;
         let ipsQrUrl: string | null = null;
         if (paymentMethod === "uplatnica") {
           const { generateIpsQrUrl } = await import("@/lib/ips-qr");
           ipsQrUrl = await generateIpsQrUrl(admin, order);
         }
-        await sendPaymentInstructionsEmail(email, userName, course.title, order.order_number, totalAmount, paymentMethod, paypalEur, order.id, ipsQrUrl ?? undefined);
+        await sendPaymentInstructionsEmail(email, userName, course.title, order.order_number, amount, paymentMethod, paypalEur, order.id, ipsQrUrl ?? undefined);
       } catch (e) {
         console.error(`[admin/orders] payment email failed for ${order.order_number}:`, e);
       }
