@@ -32,8 +32,11 @@ export default function NarudzbineClient({ initialOrders, courses }: Props) {
   const [newAmount, setNewAmount] = useState("");
   const [newPayment, setNewPayment] = useState("uplatnica");
   const [newMarkPaid, setNewMarkPaid] = useState(false);
+  const [newSendEmail, setNewSendEmail] = useState(true);
   const [newLoading, setNewLoading] = useState(false);
   const [newError, setNewError] = useState<string | null>(null);
+  const [sendingPay, setSendingPay] = useState<string | null>(null);
+  const [sentPay, setSentPay] = useState<string | null>(null);
 
   function handleCourseChange(courseId: string) {
     setNewCourseId(courseId);
@@ -54,6 +57,7 @@ export default function NarudzbineClient({ initialOrders, courses }: Props) {
           totalAmount: Number(newAmount),
           paymentMethod: newPayment,
           markAsPaid: newMarkPaid,
+          sendPaymentEmail: newSendEmail && !newMarkPaid,
         }),
       });
       const json = await res.json();
@@ -72,6 +76,16 @@ export default function NarudzbineClient({ initialOrders, courses }: Props) {
       setNewError("Greška na serveru.");
     } finally {
       setNewLoading(false);
+    }
+  }
+
+  async function sendPayment(orderId: string) {
+    setSendingPay(orderId);
+    try {
+      const res = await fetch(`/api/admin/orders/${orderId}/send-payment`, { method: "POST" });
+      if (res.ok) { setSentPay(orderId); setTimeout(() => setSentPay((p) => (p === orderId ? null : p)), 3000); }
+    } finally {
+      setSendingPay(null);
     }
   }
 
@@ -236,10 +250,11 @@ export default function NarudzbineClient({ initialOrders, courses }: Props) {
               >
                 <option value="uplatnica">Uplatnica</option>
                 <option value="paypal">PayPal</option>
+                <option value="kartica">Kartica</option>
               </select>
             </div>
           </div>
-          <div className="mt-4">
+          <div className="mt-4 space-y-2">
             <label className="flex items-center gap-2 cursor-pointer">
               <input
                 type="checkbox"
@@ -249,6 +264,18 @@ export default function NarudzbineClient({ initialOrders, courses }: Props) {
               />
               <span className="text-sm text-gray-700">
                 Označi odmah kao plaćeno (daje pristup kursu)
+              </span>
+            </label>
+            <label className={`flex items-center gap-2 ${newMarkPaid ? "opacity-40 cursor-not-allowed" : "cursor-pointer"}`}>
+              <input
+                type="checkbox"
+                checked={newSendEmail && !newMarkPaid}
+                disabled={newMarkPaid}
+                onChange={(e) => setNewSendEmail(e.target.checked)}
+                className="rounded border-gray-300 text-plava focus:ring-plava"
+              />
+              <span className="text-sm text-gray-700">
+                Pošalji kupcu podatke za uplatu (mejl sa {newPayment === "kartica" ? "linkom za karticu" : newPayment === "paypal" ? "PayPal-om" : "uplatnicom i pozivom na broj"})
               </span>
             </label>
           </div>
@@ -356,7 +383,12 @@ export default function NarudzbineClient({ initialOrders, courses }: Props) {
                       </div>
                       <div className="text-gray-400 text-xs">{order.email}</div>
                     </td>
-                    <td className="px-6 py-4 text-gray-700">{courseTitle}</td>
+                    <td className="px-6 py-4 text-gray-700">
+                      {courseTitle}
+                      {order.professor_name && (
+                        <div className="text-gray-400 text-xs mt-0.5">👩‍🏫 {order.professor_name}</div>
+                      )}
+                    </td>
                     <td className="px-6 py-4">
                       <div className="font-medium text-gray-900">
                         {order.total.toLocaleString("sr-RS")} RSD
@@ -429,6 +461,14 @@ export default function NarudzbineClient({ initialOrders, courses }: Props) {
                           </span>
                         ) : (
                           <span className="flex items-center justify-end gap-2">
+                            <button
+                              onClick={() => sendPayment(order.id)}
+                              disabled={sendingPay === order.id}
+                              title="Pošalji kupcu mejl sa podacima za uplatu"
+                              className="text-xs px-3 py-1.5 rounded-lg bg-plava-light text-plava font-medium hover:bg-plava hover:text-white transition-colors disabled:opacity-50"
+                            >
+                              {sendingPay === order.id ? "..." : sentPay === order.id ? "✓ Poslato" : "Pošalji uplatu"}
+                            </button>
                             <button
                               onClick={() => setConfirmId(order.id)}
                               className="text-xs px-3 py-1.5 rounded-lg bg-green-50 text-green-600 font-medium hover:bg-green-100 transition-colors"

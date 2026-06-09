@@ -168,6 +168,8 @@ export interface Order {
   payment_status: string;
   nestpay_transaction_id: string | null;
   paypal_note: string | null;
+  /** Popunjava admin/narudzbine page (individualni: preko individual_enrollments). Nije DB kolona. */
+  professor_name?: string | null;
   fiscomm_invoice_id: string | null;
   fiscal_referent_number: string | null;
   fiscal_verification_url: string | null;

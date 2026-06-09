@@ -1,4 +1,5 @@
 import { Resend } from "resend";
+import { SITE_URL } from "@/lib/site-url";
 
 const FROM = "Hartweger <kurs@hartweger.rs>";
 
@@ -239,11 +240,25 @@ export async function sendPaymentInstructionsEmail(
   courseTitle: string,
   orderNumber: string,
   totalRsd: number,
-  paymentMethod: "uplatnica" | "paypal",
-  paypalEur?: number
+  paymentMethod: "uplatnica" | "paypal" | "kartica",
+  paypalEur?: number,
+  orderId?: string
 ) {
+  const karticaBlock = `
+      <div style="background: #f8fcfd; border-left: 3px solid #4fb1d3; border-radius: 6px; padding: 14px 16px; margin: 0 0 20px;">
+        <div style="font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;">Plaćanje karticom</div>
+        <p style="font-size: 14px; color: #1a1a2e; margin: 0 0 8px;">Iznos: <strong>${totalRsd} RSD</strong></p>
+        <p style="font-size: 13px; color: #888; margin: 0 0 16px;">Klikni na dugme i plati karticom (Visa/Mastercard) sigurno preko banke.</p>
+        <div style="text-align: center;">
+          <a href="${SITE_URL}/kupovina/kartica/${orderId ?? ""}" style="display: inline-block; background: #4fb1d3; color: white; padding: 12px 28px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 14px;">
+            Plati karticom
+          </a>
+        </div>
+      </div>`;
   const paymentBlock =
-    paymentMethod === "uplatnica"
+    paymentMethod === "kartica"
+      ? karticaBlock
+      : paymentMethod === "uplatnica"
       ? `
       <div style="background: #f8fcfd; border-left: 3px solid #4fb1d3; border-radius: 6px; padding: 14px 16px; margin: 0 0 20px;">
         <div style="font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;">Podaci za uplatu</div>
@@ -641,5 +656,73 @@ export async function sendInteresNotification(nivo: string, email: string, ime: 
     });
   } catch (e) {
     console.error("[email] sendInteresNotification pao:", e);
+  }
+}
+
+// Jutarnji pregled adminu (Nataši) — dnevni snapshot stanja iz Supabase.
+export type DailyBrief = {
+  datum: string;
+  noveNarudzbine: { broj: number; iznos: number };
+  neaktivnostPoslato: number;
+  neplacene: { orderNumber: string; ime: string; total: number; metod: string; danaStaro: number }[];
+  isticePristup: { ime: string; kurs: string; datum: string }[];
+  indOstao1: { ime: string; profesorka: string; kurs: string }[];
+  grupeKraj: { nivo: string; profesorka: string; endDate: string; brojPolaznika: number }[];
+};
+
+export async function sendDailyAdminBrief(d: DailyBrief) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    const fmt = (n: number) => n.toLocaleString("de-DE");
+
+    const sekcija = (naslov: string, telo: string, prazno: string) =>
+      `<h3 style="margin:22px 0 8px;font-size:15px;color:#1a1a2e">${naslov}</h3>` +
+      (telo || `<p style="margin:0;color:#999;font-size:13px">${prazno}</p>`);
+
+    const neplaceneHtml = d.neplacene.length
+      ? `<table style="border-collapse:collapse;font-size:13px;width:100%">
+<thead><tr style="background:#f5f5f5"><th style="padding:4px 8px;text-align:left">Narudžbina</th><th style="padding:4px 8px;text-align:left">Polaznik</th><th style="padding:4px 8px;text-align:right">din</th><th style="padding:4px 8px;text-align:left">Način</th><th style="padding:4px 8px;text-align:right">dana</th></tr></thead>
+<tbody>${d.neplacene.map((r) => `<tr><td style="padding:4px 8px">${esc(r.orderNumber)}</td><td style="padding:4px 8px">${esc(r.ime)}</td><td style="padding:4px 8px;text-align:right">${fmt(r.total)}</td><td style="padding:4px 8px">${esc(r.metod)}</td><td style="padding:4px 8px;text-align:right">${r.danaStaro}</td></tr>`).join("")}</tbody></table>`
+      : "";
+
+    const isteknHtml = d.isticePristup.length
+      ? `<table style="border-collapse:collapse;font-size:13px;width:100%">
+<thead><tr style="background:#f5f5f5"><th style="padding:4px 8px;text-align:left">Polaznik</th><th style="padding:4px 8px;text-align:left">Kurs</th><th style="padding:4px 8px;text-align:right">Ističe</th></tr></thead>
+<tbody>${d.isticePristup.map((r) => `<tr><td style="padding:4px 8px">${esc(r.ime)}</td><td style="padding:4px 8px">${esc(r.kurs)}</td><td style="padding:4px 8px;text-align:right">${esc(r.datum)}</td></tr>`).join("")}</tbody></table>`
+      : "";
+
+    const indHtml = d.indOstao1.length
+      ? `<table style="border-collapse:collapse;font-size:13px;width:100%">
+<thead><tr style="background:#f5f5f5"><th style="padding:4px 8px;text-align:left">Polaznik</th><th style="padding:4px 8px;text-align:left">Profesorka</th><th style="padding:4px 8px;text-align:left">Kurs</th></tr></thead>
+<tbody>${d.indOstao1.map((r) => `<tr><td style="padding:4px 8px">${esc(r.ime)}</td><td style="padding:4px 8px">${esc(r.profesorka)}</td><td style="padding:4px 8px">${esc(r.kurs)}</td></tr>`).join("")}</tbody></table>`
+      : "";
+
+    const grupeHtml = d.grupeKraj.length
+      ? `<table style="border-collapse:collapse;font-size:13px;width:100%">
+<thead><tr style="background:#f5f5f5"><th style="padding:4px 8px;text-align:left">Nivo</th><th style="padding:4px 8px;text-align:left">Profesorka</th><th style="padding:4px 8px;text-align:right">Kraj</th><th style="padding:4px 8px;text-align:right">Polaznika</th></tr></thead>
+<tbody>${d.grupeKraj.map((r) => `<tr><td style="padding:4px 8px">${esc(r.nivo)}</td><td style="padding:4px 8px">${esc(r.profesorka)}</td><td style="padding:4px 8px;text-align:right">${esc(r.endDate)}</td><td style="padding:4px 8px;text-align:right">${r.brojPolaznika}</td></tr>`).join("")}</tbody></table>`
+      : "";
+
+    await resend.emails.send({
+      from: FROM,
+      to: ["info@hartweger.rs", "natasa@hartweger.rs"],
+      subject: `Jutarnji pregled — ${d.datum}`,
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:sans-serif;line-height:1.6;color:#222;max-width:640px;margin:0 auto;padding:16px">
+<h2 style="margin:0 0 4px">Dobro jutro ☀️</h2>
+<p style="margin:0 0 4px;color:#666;font-size:13px">Pregled za ${esc(d.datum)}</p>
+<div style="background:#f8fcfd;border-radius:8px;padding:12px 16px;margin:14px 0;font-size:14px">
+  <strong>Juče:</strong> ${d.noveNarudzbine.broj} ${d.noveNarudzbine.broj === 1 ? "nova narudžbina" : "novih narudžbina"} (${fmt(d.noveNarudzbine.iznos)} din naplaćeno) · ${d.neaktivnostPoslato} podsetnika za neaktivnost
+</div>
+${sekcija(`Neplaćene narudžbine (${d.neplacene.length})`, neplaceneHtml, "Nema neplaćenih narudžbina.")}
+${sekcija(`Ističe pristup — narednih 7 dana (${d.isticePristup.length})`, isteknHtml, "Niko ne ističe ove nedelje.")}
+${sekcija(`Individualni — ostao 1 čas (${d.indOstao1.length})`, indHtml, "Nema paketa pri kraju.")}
+${sekcija(`Grupe se završavaju — narednih 14 dana (${d.grupeKraj.length})`, grupeHtml, "Nijedna grupa se ne završava uskoro.")}
+<p style="margin-top:24px;font-size:12px;color:#aaa">Automatski izveštaj iz LMS-a. Detalji na <a href="https://www.hartweger.rs/admin" style="color:#4fb1d3;text-decoration:none">/admin</a>.</p>
+</body></html>`,
+    });
+  } catch (e) {
+    console.error("[email] sendDailyAdminBrief pao:", e);
   }
 }

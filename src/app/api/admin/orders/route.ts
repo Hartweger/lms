@@ -42,7 +42,7 @@ export async function POST(request: Request) {
   if (profile?.role !== "admin") return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
 
   try {
-    const { email, courseId, totalAmount, paymentMethod, markAsPaid } = await request.json();
+    const { email, courseId, totalAmount, paymentMethod, markAsPaid, sendPaymentEmail } = await request.json();
 
     // Validate required fields
     if (!email || !courseId || !totalAmount || !paymentMethod) {
@@ -158,6 +158,16 @@ export async function POST(request: Request) {
         );
       }
       await fiscalizeOrder(order.id); // idempotentno; ne blokira pristup ako padne
+    } else if (sendPaymentEmail) {
+      // Pošalji kupcu podatke za uplatu (uplatnica/PayPal/kartica). Best-effort.
+      try {
+        const { sendPaymentInstructionsEmail } = await import("@/lib/email");
+        const { calculatePaypalEur } = await import("@/lib/order-utils");
+        const paypalEur = paymentMethod === "paypal" ? calculatePaypalEur(totalAmount) : undefined;
+        await sendPaymentInstructionsEmail(email, userName, course.title, order.order_number, totalAmount, paymentMethod, paypalEur, order.id);
+      } catch (e) {
+        console.error(`[admin/orders] payment email failed for ${order.order_number}:`, e);
+      }
     }
 
     return NextResponse.json({ order });
