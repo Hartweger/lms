@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendPaymentInstructionsEmail } from "@/lib/email";
 import { calculatePaypalEur } from "@/lib/order-utils";
+import { generateIpsQrUrl } from "@/lib/ips-qr";
 
 // (Ponovno) slanje kupcu podataka za uplatu — za metodu te narudžbine.
 export async function POST(
@@ -28,11 +29,12 @@ export async function POST(
     pm === "paypal" ? "paypal" : pm.startsWith("kartica") ? "kartica" : "uplatnica";
   const courseTitle = Array.isArray(order.items) && order.items[0]?.title ? order.items[0].title : "kurs";
   const paypalEur = method === "paypal" ? calculatePaypalEur(Number(order.total)) : undefined;
+  const ipsQrUrl = method === "uplatnica" ? await generateIpsQrUrl(admin, { total: Number(order.total), order_number: order.order_number }) : null;
 
   try {
     await sendPaymentInstructionsEmail(
       order.email, order.full_name ?? "", courseTitle, order.order_number,
-      Number(order.total), method, paypalEur, order.id
+      Number(order.total), method, paypalEur, order.id, ipsQrUrl ?? undefined
     );
   } catch (e) {
     console.error(`[admin/orders/send-payment] failed for ${order.order_number}:`, e);

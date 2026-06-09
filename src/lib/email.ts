@@ -242,7 +242,8 @@ export async function sendPaymentInstructionsEmail(
   totalRsd: number,
   paymentMethod: "uplatnica" | "paypal" | "kartica",
   paypalEur?: number,
-  orderId?: string
+  orderId?: string,
+  ipsQrUrl?: string
 ) {
   const karticaBlock = `
       <div style="background: #f8fcfd; border-left: 3px solid #4fb1d3; border-radius: 6px; padding: 14px 16px; margin: 0 0 20px;">
@@ -288,6 +289,10 @@ export async function sendPaymentInstructionsEmail(
             <td style="padding: 6px 0; color: #1a1a2e; font-weight: 600;">189</td>
           </tr>
         </table>
+        ${ipsQrUrl ? `<div style="text-align: center; margin-top: 16px; padding-top: 14px; border-top: 1px solid #e8f4f8;">
+          <img src="${ipsQrUrl}" alt="IPS QR kod" width="180" height="180" style="border-radius: 8px;" />
+          <div style="font-size: 12px; color: #888; margin-top: 6px;">📱 Skeniraj IPS QR kod u aplikaciji za mobilno bankarstvo</div>
+        </div>` : ""}
       </div>`
       : `
       <div style="background: #f8fcfd; border-left: 3px solid #4fb1d3; border-radius: 6px; padding: 14px 16px; margin: 0 0 20px;">

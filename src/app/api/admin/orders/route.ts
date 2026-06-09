@@ -164,7 +164,12 @@ export async function POST(request: Request) {
         const { sendPaymentInstructionsEmail } = await import("@/lib/email");
         const { calculatePaypalEur } = await import("@/lib/order-utils");
         const paypalEur = paymentMethod === "paypal" ? calculatePaypalEur(totalAmount) : undefined;
-        await sendPaymentInstructionsEmail(email, userName, course.title, order.order_number, totalAmount, paymentMethod, paypalEur, order.id);
+        let ipsQrUrl: string | null = null;
+        if (paymentMethod === "uplatnica") {
+          const { generateIpsQrUrl } = await import("@/lib/ips-qr");
+          ipsQrUrl = await generateIpsQrUrl(admin, order);
+        }
+        await sendPaymentInstructionsEmail(email, userName, course.title, order.order_number, totalAmount, paymentMethod, paypalEur, order.id, ipsQrUrl ?? undefined);
       } catch (e) {
         console.error(`[admin/orders] payment email failed for ${order.order_number}:`, e);
       }

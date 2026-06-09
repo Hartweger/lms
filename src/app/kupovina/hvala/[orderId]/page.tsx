@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { BANK_DETAILS, PAYPAL_ME_URL } from "@/lib/order-utils";
+import { BANK_DETAILS, PAYPAL_ME_URL, buildIpsString } from "@/lib/order-utils";
 import type { Order } from "@/lib/types";
 import IpsQrCode from "./IpsQrCode";
 
@@ -41,17 +41,7 @@ export default async function HvalaPage({
   const courseTitle = items?.[0]?.title ?? "";
   const courseSlug = items?.[0]?.course_slug ?? "";
 
-  const ipsData = [
-    "K:PR",
-    "V:01",
-    "C:1",
-    `R:${BANK_DETAILS.racun}`,
-    `N:${BANK_DETAILS.primalac}`,
-    `I:RSD${order.total.toFixed(2)}`,
-    `P:Placanje porudzbine #${order.order_number}`,
-    `SF:${BANK_DETAILS.sifraPalcanja}`,
-    `RO:${order.order_number}`,
-  ].join("|");
+  const ipsData = buildIpsString({ total: order.total, order_number: order.order_number });
 
   const paypalEur = order.paypal_note ? parseInt(order.paypal_note) : null;
   const isCard = order.payment_method === "kartica" || order.payment_method === "kartica_rate";

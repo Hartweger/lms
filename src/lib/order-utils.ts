@@ -10,6 +10,19 @@ export const BANK_DETAILS = {
 
 export const PAYPAL_ME_URL = "https://www.paypal.com/paypalme/natasahartweger1";
 
+// IPS QR string (NBS standard) za uplatnicu — isti format kao na hvala stranici. Pure string.
+export function buildIpsString(o: { total: number; order_number: string }): string {
+  return [
+    "K:PR", "V:01", "C:1",
+    `R:${BANK_DETAILS.racun}`,
+    `N:${BANK_DETAILS.primalac}`,
+    `I:RSD${Number(o.total).toFixed(2)}`,
+    `P:Placanje porudzbine #${o.order_number}`,
+    `SF:${BANK_DETAILS.sifraPalcanja}`,
+    `RO:${o.order_number}`,
+  ].join("|");
+}
+
 export async function generateOrderNumber(): Promise<string> {
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const supabase = createAdminClient();

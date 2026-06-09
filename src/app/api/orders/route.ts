@@ -233,6 +233,11 @@ export async function POST(request: Request) {
     // narudžbina ostaje 'pending' dok NestPay callback ne potvrdi.
     const isCard = paymentMethod === "kartica" || paymentMethod === "kartica_rate";
     if (!isCard) {
+      let ipsQrUrl: string | null = null;
+      if (paymentMethod === "uplatnica") {
+        const { generateIpsQrUrl } = await import("@/lib/ips-qr");
+        ipsQrUrl = await generateIpsQrUrl(supabase, { total: finalPrice, order_number: order.order_number });
+      }
       await sendPaymentInstructionsEmail(
         email,
         fullName,
@@ -240,7 +245,9 @@ export async function POST(request: Request) {
         order.order_number,
         finalPrice,
         paymentMethod,
-        paypalEur
+        paypalEur,
+        undefined,
+        ipsQrUrl ?? undefined
       );
     }
 
