@@ -515,7 +515,8 @@ export default function AdminGrupePage() {
         const daysUntil = (d: string | null) => d ? Math.round((new Date(d + "T00:00:00").getTime() - t0.getTime()) / 86400000) : null;
         const hasSchedule = (g: Group) => !!(g.start_date && g.days?.length && g.session_time && g.duration_weeks);
         const hasTermin = (g: Group) => !!(g.gcal_event_id || g.meet_link);
-        const needsTermin = (g: Group) => AKTIVNI_STATUSI.includes(g.status) && hasSchedule(g) && !hasTermin(g);
+        // Samo grupe koje TEK treba da krenu (ne u_toku — te već imaju Meet, da se ne dupliraju).
+        const needsTermin = (g: Group) => ["planiran", "uskoro", "otvoren"].includes(g.status) && hasSchedule(g) && !hasTermin(g);
         const lowEnroll = (g: Group) => { const d = daysUntil(g.start_date); return AKTIVNI_STATUSI.includes(g.status) && d !== null && d >= 0 && d <= 7 && g.enrolled < g.min_seats; };
 
         const byStart = (a: Group, b: Group) => (a.start_date || "9999").localeCompare(b.start_date || "9999");
