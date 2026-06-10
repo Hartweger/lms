@@ -103,3 +103,21 @@ export async function DELETE(request: Request) {
   const used = await recountLessons(staff.admin, lesson.enrollment_id, owned.enr.package_lessons);
   return NextResponse.json({ ok: true, lessonsUsed: used });
 }
+
+// PATCH — snimi/izmeni link beleški (Google Doc) za individualni upis.
+export async function PATCH(request: Request) {
+  const staff = await requireStaff();
+  if (!staff) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+
+  const { enrollmentId, notesUrl } = await request.json();
+  if (!enrollmentId) return NextResponse.json({ error: "enrollmentId je obavezan" }, { status: 400 });
+
+  const owned = await loadOwnedEnrollment(staff.admin, enrollmentId, staff.userId, staff.isAdmin);
+  if ("error" in owned) return NextResponse.json({ error: owned.error }, { status: owned.status });
+
+  const url = String(notesUrl ?? "").trim() || null;
+  const { error } = await staff.admin
+    .from("individual_enrollments").update({ notes_doc_url: url }).eq("id", enrollmentId);
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  return NextResponse.json({ ok: true, notesUrl: url });
+}

@@ -66,6 +66,22 @@ export default function IndividualniClient({ rows, showProfessor }: { rows: Enro
     finally { setBusy(null); }
   }
 
+  async function saveNotes(enrollmentId: string, current: string | null) {
+    const url = window.prompt("Zalepi link beleški (Google Doc) za ovog polaznika:", current ?? "");
+    if (url === null) return; // otkazano
+    setBusy(enrollmentId); setError(null);
+    try {
+      const res = await fetch("/api/profesor/individualni-cas", {
+        method: "PATCH", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ enrollmentId, notesUrl: url }),
+      });
+      const j = await res.json();
+      if (!res.ok) { setError(j.error || "Greška."); return; }
+      router.refresh();
+    } catch { setError("Greška u mreži."); }
+    finally { setBusy(null); }
+  }
+
   return (
     <div>
       {error && <p className="text-koral text-sm mb-3">{error}</p>}
@@ -97,8 +113,13 @@ export default function IndividualniClient({ rows, showProfessor }: { rows: Enro
                   <td className="px-6 py-4">
                     <div className="font-medium text-gray-900">{r.studentName || "—"}</div>
                     <div className="text-xs text-gray-400">{r.studentEmail}</div>
-                    {r.notesUrl && (
-                      <a href={r.notesUrl} target="_blank" rel="noreferrer" className="text-xs text-plava hover:underline">📝 Beleške</a>
+                    {r.notesUrl ? (
+                      <div className="flex items-center gap-2">
+                        <a href={r.notesUrl} target="_blank" rel="noreferrer" className="text-xs text-plava hover:underline">📝 Beleške</a>
+                        <button type="button" onClick={() => saveNotes(r.id, r.notesUrl)} disabled={busy === r.id} className="text-xs text-gray-400 hover:underline">izmeni</button>
+                      </div>
+                    ) : (
+                      <button type="button" onClick={() => saveNotes(r.id, null)} disabled={busy === r.id} className="text-xs text-gray-400 hover:underline">➕ Dodaj beleške</button>
                     )}
                   </td>
                   {showProfessor && <td className="px-6 py-4 text-gray-600">{r.professorName || "—"}</td>}
