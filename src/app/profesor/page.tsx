@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { resolveProfessorView } from "@/lib/professor-view";
 
 export const dynamic = "force-dynamic";
 
@@ -16,22 +16,23 @@ interface StudentWithProgress {
   last_activity: string | null;
 }
 
-export default async function ProfesorStudenti() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return null;
+export default async function ProfesorStudenti({ searchParams }: { searchParams: Promise<{ prof?: string }> }) {
+  const { prof } = await searchParams;
+  const ctx = await resolveProfessorView(prof);
+  if (!ctx) return null;
+  const admin = createAdminClient();
+  const profId = ctx.profId;
 
   // Get all students assigned to this professor
-  const { data: assignments } = await supabase
+  const { data: assignments } = await admin
     .from("professor_students")
     .select("student_id, course_id")
-    .eq("professor_id", user.id);
+    .eq("professor_id", profId);
 
   if (!assignments || assignments.length === 0) {
     // Možda nema individualnih, ali ima grupe — uputi na „Moje grupe".
-    const admin = createAdminClient();
     const { count: groupCount } = await admin
-      .from("groups").select("id", { count: "exact", head: true }).eq("professor_id", user.id);
+      .from("groups").select("id", { count: "exact", head: true }).eq("professor_id", profId);
     return (
       <div className="text-center py-16">
         <p className="text-gray-400">Nemaš dodeljenih individualnih (1:1) studenata.</p>
@@ -52,7 +53,7 @@ export default async function ProfesorStudenti() {
   const courseIds = [...new Set(assignments.map((a) => a.course_id))];
 
   // Fetch student profiles
-  const { data: profiles } = await supabase
+  const { data: profiles } = await admin
     .from("user_profiles")
     .select("id, full_name, email")
     .in("id", studentIds);
@@ -60,7 +61,7 @@ export default async function ProfesorStudenti() {
   const profileMap = new Map(profiles?.map((p) => [p.id, p]) ?? []);
 
   // Fetch course info
-  const { data: courses } = await supabase
+  const { data: courses } = await admin
     .from("courses")
     .select("id, title")
     .in("id", courseIds);
@@ -68,7 +69,7 @@ export default async function ProfesorStudenti() {
   const courseMap = new Map(courses?.map((c) => [c.id, c]) ?? []);
 
   // Batch fetch: all lessons for relevant courses
-  const { data: allLessons } = await supabase
+  const { data: allLessons } = await admin
     .from("lessons")
     .select("id, course_id")
     .in("course_id", courseIds);
@@ -82,7 +83,7 @@ export default async function ProfesorStudenti() {
   }
 
   // Batch fetch: all progress for relevant students
-  const { data: allProgress } = await supabase
+  const { data: allProgress } = await admin
     .from("lesson_progress")
     .select("user_id, lesson_id, completed_at")
     .eq("completed", true)

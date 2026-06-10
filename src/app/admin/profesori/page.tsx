@@ -296,7 +296,13 @@ export default function AdminProfesori() {
                       </span>
                     )}
                   </td>
-                  <td className="px-6 py-4 text-right">
+                  <td className="px-6 py-4 text-right whitespace-nowrap">
+                    <a
+                      href={`/profesor?prof=${prof.id}`}
+                      className="text-gray-500 hover:underline text-sm mr-4"
+                    >
+                      Uđi kao
+                    </a>
                     <button
                       onClick={() => openDetail(prof)}
                       className="text-plava hover:underline text-sm"

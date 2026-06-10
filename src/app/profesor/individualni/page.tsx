@@ -1,24 +1,22 @@
-import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { nivoForSlug } from "@/lib/course-nivo";
+import { resolveProfessorView } from "@/lib/professor-view";
 import IndividualniClient, { type EnrollmentRow } from "./IndividualniClient";
 
 export const dynamic = "force-dynamic";
 
-export default async function ProfesorIndividualni() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return null;
-
+export default async function ProfesorIndividualni({ searchParams }: { searchParams: Promise<{ prof?: string }> }) {
+  const { prof } = await searchParams;
+  const ctx = await resolveProfessorView(prof);
+  if (!ctx) return null;
   const admin = createAdminClient();
-  const { data: me } = await admin.from("user_profiles").select("role").eq("id", user.id).single();
-  const isAdmin = me?.role === "admin";
+  const isAdmin = ctx.isAdmin;
 
-  // Profesor vidi svoje upise; admin sve.
+  // Profesor vidi svoje upise; admin sve — osim kad „uđe kao" profesor (?prof) → samo tog profesora.
   let q = admin.from("individual_enrollments")
     .select("id, user_id, course_id, professor_id, package_lessons, lessons_used, status, expires_at, notes_doc_url, created_at")
     .order("created_at", { ascending: false });
-  if (!isAdmin) q = q.eq("professor_id", user.id);
+  if (!isAdmin || prof) q = q.eq("professor_id", ctx.profId);
   const { data: enrollments } = await q;
 
   if (!enrollments || enrollments.length === 0) {

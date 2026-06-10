@@ -1,5 +1,5 @@
-import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { resolveProfessorView } from "@/lib/professor-view";
 
 export const dynamic = "force-dynamic";
 
@@ -15,17 +15,17 @@ interface GrupniPolaznik {
   last_activity: string | null;
 }
 
-export default async function ProfesorGrupe() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return null;
+export default async function ProfesorGrupe({ searchParams }: { searchParams: Promise<{ prof?: string }> }) {
+  const { prof } = await searchParams;
+  const ctx = await resolveProfessorView(prof);
+  if (!ctx) return null;
 
-  // Admin klijent, ali striktno filtrirano na grupe ove profesorke (professor_id = ja).
+  // Admin klijent, striktno filtrirano na grupe ovog profesora (ili onog koga admin „gleda kao").
   const admin = createAdminClient();
   const { data: groups } = await admin
     .from("groups")
     .select("id, level, content_course_id")
-    .eq("professor_id", user.id);
+    .eq("professor_id", ctx.profId);
 
   const myGroups = groups ?? [];
   if (myGroups.length === 0) {

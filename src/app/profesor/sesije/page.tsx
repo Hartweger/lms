@@ -1,23 +1,21 @@
-import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { resolveProfessorView } from "@/lib/professor-view";
 import SesijeClient, { type GroupSessions } from "./SesijeClient";
 
 export const dynamic = "force-dynamic";
 
-export default async function ProfesorSesije() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return null;
-
+export default async function ProfesorSesije({ searchParams }: { searchParams: Promise<{ prof?: string }> }) {
+  const { prof } = await searchParams;
+  const ctx = await resolveProfessorView(prof);
+  if (!ctx) return null;
   const admin = createAdminClient();
-  const { data: me } = await admin.from("user_profiles").select("role").eq("id", user.id).single();
-  const isAdmin = me?.role === "admin";
+  const isAdmin = ctx.isAdmin;
 
   let gq = admin.from("groups")
     .select("id, level, status, start_date, end_date, professor_id, professor:professor_id(full_name)")
     .in("status", ["otvoren", "u_toku", "zavrsena"])
     .order("start_date", { ascending: false });
-  if (!isAdmin) gq = gq.eq("professor_id", user.id);
+  if (!isAdmin || prof) gq = gq.eq("professor_id", ctx.profId);
   const { data: groups } = await gq;
 
   if (!groups || groups.length === 0) {

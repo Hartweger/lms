@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import ProfesorNav from "@/components/ProfesorNav";
@@ -28,7 +29,9 @@ export default async function ProfesorLayout({ children }: { children: React.Rea
         </h1>
         <p className="text-sm text-gray-400">Profesor panel</p>
       </div>
-      <ProfesorNav />
+      <Suspense fallback={<div className="h-12" />}>
+        <ProfesorNav />
+      </Suspense>
       {children}
     </div>
   );

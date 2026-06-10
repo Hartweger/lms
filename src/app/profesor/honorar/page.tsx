@@ -1,21 +1,18 @@
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { aggregateMonthly, computeHonorar, MESECI } from "@/lib/honorar";
+import { resolveProfessorView } from "@/lib/professor-view";
 
 export const dynamic = "force-dynamic";
 
 const fmt = (n: number) => n.toLocaleString("de-DE");
 
-export default async function ProfesorHonorar({ searchParams }: { searchParams: Promise<{ god?: string }> }) {
-  const { god } = await searchParams;
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return null;
-
+export default async function ProfesorHonorar({ searchParams }: { searchParams: Promise<{ god?: string; prof?: string }> }) {
+  const { god, prof } = await searchParams;
+  const ctx = await resolveProfessorView(prof);
+  if (!ctx) return null;
   const admin = createAdminClient();
-  const { data: me } = await admin.from("user_profiles").select("role, honorar_ind, honorar_grp").eq("id", user.id).single();
-  const isAdmin = me?.role === "admin";
+  const isAdmin = ctx.isAdmin;
 
   const nowYear = new Date().getFullYear();
   const year = god && /^\d{4}$/.test(god) ? parseInt(god, 10) : nowYear;
@@ -25,7 +22,7 @@ export default async function ProfesorHonorar({ searchParams }: { searchParams: 
   const YearTabs = (
     <div className="flex gap-2 mb-5">
       {[nowYear, nowYear - 1].map((y) => (
-        <Link key={y} href={`/profesor/honorar?god=${y}`}
+        <Link key={y} href={`/profesor/honorar?god=${y}${prof ? `&prof=${prof}` : ""}`}
           className={`px-3 py-1.5 rounded-lg text-sm ${y === year ? "bg-plava-light text-plava font-medium" : "text-gray-600 hover:bg-gray-50"}`}>
           {y}.
         </Link>
@@ -33,17 +30,17 @@ export default async function ProfesorHonorar({ searchParams }: { searchParams: 
     </div>
   );
 
-  // ───────── Profesorka: mesečni pregled svojih ─────────
-  if (!isAdmin) {
+  // ───────── Profesorka: mesečni pregled svojih (i kad admin „gleda kao" profesora) ─────────
+  if (!isAdmin || prof) {
     const [{ data: il }, { data: gs }] = await Promise.all([
-      admin.from("individual_lessons").select("lesson_date").eq("professor_id", user.id).gte("lesson_date", from).lt("lesson_date", toExcl),
-      admin.from("group_sessions").select("session_date").eq("professor_id", user.id).eq("cancelled", false).gte("session_date", from).lt("session_date", toExcl),
+      admin.from("individual_lessons").select("lesson_date").eq("professor_id", ctx.profId).gte("lesson_date", from).lt("lesson_date", toExcl),
+      admin.from("group_sessions").select("session_date").eq("professor_id", ctx.profId).eq("cancelled", false).gte("session_date", from).lt("session_date", toExcl),
     ]);
     const { months, yearTotal } = aggregateMonthly(
       year,
       (il ?? []).map((x) => x.lesson_date),
       (gs ?? []).map((x) => x.session_date),
-      me?.honorar_ind ?? 1400, me?.honorar_grp ?? 1600,
+      ctx.honorarInd, ctx.honorarGrp,
     );
     return (
       <div>
