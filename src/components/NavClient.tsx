@@ -111,6 +111,15 @@ export default function NavClient() {
                     Admin
                   </Link>
                 )}
+                {user.role === "professor" && (
+                  <Link
+                    href="/profesor"
+                    onClick={() => setAccountOpen(false)}
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                  >
+                    Profesor panel
+                  </Link>
+                )}
                 <button
                   onClick={handleLogout}
                   className="block w-full text-left px-4 py-2 text-sm text-koral hover:bg-gray-50"
@@ -173,6 +182,11 @@ export default function NavClient() {
               {user.role === "admin" && (
                 <Link href="/admin" className="block text-gray-700" onClick={() => setMenuOpen(false)}>
                   Admin
+                </Link>
+              )}
+              {user.role === "professor" && (
+                <Link href="/profesor" className="block text-gray-700" onClick={() => setMenuOpen(false)}>
+                  Profesor panel
                 </Link>
               )}
               <button onClick={handleLogout} className="block text-koral">
