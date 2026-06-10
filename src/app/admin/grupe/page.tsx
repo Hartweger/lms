@@ -33,6 +33,15 @@ interface Course {
 }
 
 const STATUSI = ["planiran", "uskoro", "otvoren", "u_toku", "zavrsena", "otkazana"];
+const AKTIVNI_STATUSI = ["planiran", "uskoro", "otvoren", "u_toku"];
+const STATUS_BOJA: Record<string, string> = {
+  planiran: "bg-gray-100 text-gray-600",
+  uskoro: "bg-amber-100 text-amber-700",
+  otvoren: "bg-green-100 text-green-700",
+  u_toku: "bg-sky-100 text-sky-700",
+  zavrsena: "bg-gray-100 text-gray-400",
+  otkazana: "bg-red-50 text-red-500",
+};
 const DANI: [number, string][] = [
   [1, "pon"],
   [2, "uto"],
@@ -57,6 +66,7 @@ const labelCls = "block text-sm font-medium text-gray-700 mb-1";
 
 export default function AdminGrupePage() {
   const [groups, setGroups] = useState<Group[]>([]);
+  const [showArhiva, setShowArhiva] = useState(false);
   const [profs, setProfs] = useState<Prof[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
   const [form, setForm] = useState<Partial<Group> | null>(null);
@@ -472,67 +482,77 @@ export default function AdminGrupePage() {
         </form>
       )}
 
-      {/* Lista grupa */}
-      <div className="overflow-x-auto bg-white border border-gray-200 rounded-xl">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="text-left text-gray-500 border-b border-gray-100">
-              <th className="px-4 py-3 font-medium">Nivo</th>
-              <th className="px-4 py-3 font-medium">Profesor</th>
-              <th className="px-4 py-3 font-medium">Status</th>
-              <th className="px-4 py-3 font-medium">Početak</th>
-              <th className="px-4 py-3 font-medium">Upisani / Max</th>
-              <th className="px-4 py-3 font-medium"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {groups.map((g) => (
-              <tr key={g.id} className="border-b border-gray-50">
-                <td className="px-4 py-3 font-medium text-gray-900">{g.level}</td>
-                <td className="px-4 py-3 text-gray-600">
-                  {g.professor?.full_name || "—"}
-                </td>
-                <td className="px-4 py-3 text-gray-600">{g.status}</td>
-                <td className="px-4 py-3 text-gray-600">{g.start_date || "—"}</td>
-                <td
-                  className={`px-4 py-3 ${
-                    g.enrolled < g.min_seats ? "text-red-500" : "text-gray-600"
-                  }`}
-                >
-                  {g.enrolled}/{g.max_seats}
-                </td>
-                <td className="px-4 py-3">
-                  <div className="flex gap-3">
-                    <button
-                      type="button"
-                      onClick={() => startEdit(g)}
-                      className="text-plava hover:underline"
-                    >
-                      Izmeni
-                    </button>
-                    {g.status !== "otkazana" && (
-                      <button
-                        type="button"
-                        onClick={() => cancelGroup(g.id)}
-                        className="text-red-500 hover:underline"
-                      >
-                        Otkaži
-                      </button>
-                    )}
-                  </div>
-                </td>
-              </tr>
-            ))}
-            {groups.length === 0 && (
-              <tr>
-                <td colSpan={6} className="px-4 py-6 text-center text-gray-400">
-                  Nema grupa. Klikni „+ Nova grupa” da dodaš prvu.
-                </td>
-              </tr>
+      {/* Lista grupa — aktivne gore (po datumu), arhiva sakrivena */}
+      {(() => {
+        const byStart = (a: Group, b: Group) =>
+          (a.start_date || "9999").localeCompare(b.start_date || "9999");
+        const aktivne = groups.filter((g) => AKTIVNI_STATUSI.includes(g.status)).sort(byStart);
+        const arhiva = groups
+          .filter((g) => !AKTIVNI_STATUSI.includes(g.status))
+          .sort((a, b) => (b.start_date || "0").localeCompare(a.start_date || "0"));
+        const visible = showArhiva ? [...aktivne, ...arhiva] : aktivne;
+        return (
+          <>
+            <p className="text-xs text-gray-400 mb-2">
+              {aktivne.length} aktivnih/nadolazećih · {arhiva.length} u arhivi (završene/otkazane)
+            </p>
+            <div className="overflow-x-auto bg-white border border-gray-200 rounded-xl">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="text-left text-gray-500 border-b border-gray-100">
+                    <th className="px-4 py-3 font-medium">Nivo</th>
+                    <th className="px-4 py-3 font-medium">Profesor</th>
+                    <th className="px-4 py-3 font-medium">Status</th>
+                    <th className="px-4 py-3 font-medium">Početak</th>
+                    <th className="px-4 py-3 font-medium">Upisani / Max</th>
+                    <th className="px-4 py-3 font-medium"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {visible.map((g) => {
+                    const aktivna = AKTIVNI_STATUSI.includes(g.status);
+                    return (
+                      <tr key={g.id} className="border-b border-gray-50">
+                        <td className="px-4 py-3 font-medium text-gray-900">{g.level}</td>
+                        <td className="px-4 py-3 text-gray-600">{g.professor?.full_name || "—"}</td>
+                        <td className="px-4 py-3">
+                          <span className={`text-xs px-2 py-0.5 rounded-full ${STATUS_BOJA[g.status] || "bg-gray-100 text-gray-600"}`}>
+                            {g.status}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 text-gray-600">{g.start_date || "—"}</td>
+                        <td className={`px-4 py-3 ${aktivna && g.enrolled < g.min_seats ? "text-red-500" : "text-gray-600"}`}>
+                          {g.enrolled}/{g.max_seats}
+                        </td>
+                        <td className="px-4 py-3">
+                          <div className="flex gap-3">
+                            <button type="button" onClick={() => startEdit(g)} className="text-plava hover:underline">Izmeni</button>
+                            {g.status !== "otkazana" && g.status !== "zavrsena" && (
+                              <button type="button" onClick={() => cancelGroup(g.id)} className="text-red-500 hover:underline">Otkaži</button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                  {visible.length === 0 && (
+                    <tr>
+                      <td colSpan={6} className="px-4 py-6 text-center text-gray-400">
+                        {groups.length === 0 ? "Nema grupa. Klikni „+ Nova grupa” da dodaš prvu." : "Nema aktivnih grupa."}
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+            {arhiva.length > 0 && (
+              <button type="button" onClick={() => setShowArhiva(!showArhiva)} className="text-sm text-plava hover:underline mt-3">
+                {showArhiva ? "Sakrij arhivu" : `Prikaži arhivu (${arhiva.length} završenih/otkazanih)`}
+              </button>
             )}
-          </tbody>
-        </table>
-      </div>
+          </>
+        );
+      })()}
     </div>
   );
 }
