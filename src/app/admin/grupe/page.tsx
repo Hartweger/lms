@@ -18,6 +18,9 @@ interface Group {
   manual_enrolled: number | null;
   professor_id: string | null;
   content_course_id: string | null;
+  gcal_event_id: string | null;
+  meet_link: string | null;
+  notes_url: string | null;
   enrolled: number;
   professor?: { full_name: string } | null;
   content_course?: { slug: string; title: string } | null;
@@ -158,6 +161,30 @@ export default function AdminGrupePage() {
     alert("Termin osvežen! ✅\n\nMeet: " + (j.meetLink || "—") + "\nBeleške: " + (j.notesUrl || "(zadržane postojeće)"));
     cancelEdit();
     fetchGroups();
+  }
+
+  // Napravi/osveži termin direktno iz reda (bez ulaska u Izmeni).
+  async function napraviTerminRow(g: Group) {
+    if (!confirm(`Napravi termin za grupu ${g.level}?\n\nPravi Google Meet + beleške + sve termine iz rasporeda. Prijave ostaju.`)) return;
+    setSaving(true);
+    const r = await fetch(`/api/admin/grupe/${g.id}/osvezi-termin`, { method: "POST" });
+    const j = await r.json().catch(() => ({}));
+    setSaving(false);
+    if (!r.ok) { alert("Greška: " + (j.error || "nešto nije u redu")); return; }
+    alert("Termin napravljen! ✅\n\nMeet: " + (j.meetLink || "—") + "\nBeleške: " + (j.notesUrl || "(zadržane)"));
+    fetchGroups();
+  }
+
+  // Dupliraj grupu → otvori formu sa istim nivoom/profesorom/rasporedom, prazan datum, status planiran.
+  function dupliraj(g: Group) {
+    setForm({
+      level: g.level, status: "planiran", professor_id: g.professor_id,
+      content_course_id: g.content_course_id, days: g.days ? [...g.days] : [],
+      session_time: g.session_time, duration_weeks: g.duration_weeks,
+      min_seats: g.min_seats, max_seats: g.max_seats, start_date: null,
+    });
+    setMembers([]); setSavedAt(0);
+    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   // Nova generacija — isprazni prijave (0/6) + NOV Meet/beleške.
@@ -482,20 +509,33 @@ export default function AdminGrupePage() {
         </form>
       )}
 
-      {/* Lista grupa — aktivne gore (po datumu), arhiva sakrivena */}
+      {/* Lista grupa — aktivne gore (po datumu), arhiva sakrivena, sa upozorenjima */}
       {(() => {
-        const byStart = (a: Group, b: Group) =>
-          (a.start_date || "9999").localeCompare(b.start_date || "9999");
+        const t0 = new Date(); t0.setHours(0, 0, 0, 0);
+        const daysUntil = (d: string | null) => d ? Math.round((new Date(d + "T00:00:00").getTime() - t0.getTime()) / 86400000) : null;
+        const hasSchedule = (g: Group) => !!(g.start_date && g.days?.length && g.session_time && g.duration_weeks);
+        const hasTermin = (g: Group) => !!(g.gcal_event_id || g.meet_link);
+        const needsTermin = (g: Group) => AKTIVNI_STATUSI.includes(g.status) && hasSchedule(g) && !hasTermin(g);
+        const lowEnroll = (g: Group) => { const d = daysUntil(g.start_date); return AKTIVNI_STATUSI.includes(g.status) && d !== null && d >= 0 && d <= 7 && g.enrolled < g.min_seats; };
+
+        const byStart = (a: Group, b: Group) => (a.start_date || "9999").localeCompare(b.start_date || "9999");
         const aktivne = groups.filter((g) => AKTIVNI_STATUSI.includes(g.status)).sort(byStart);
-        const arhiva = groups
-          .filter((g) => !AKTIVNI_STATUSI.includes(g.status))
-          .sort((a, b) => (b.start_date || "0").localeCompare(a.start_date || "0"));
+        const arhiva = groups.filter((g) => !AKTIVNI_STATUSI.includes(g.status)).sort((a, b) => (b.start_date || "0").localeCompare(a.start_date || "0"));
         const visible = showArhiva ? [...aktivne, ...arhiva] : aktivne;
+
+        const kreceNedelja = aktivne.filter((g) => { const d = daysUntil(g.start_date); return d !== null && d >= 0 && d <= 7; }).length;
+        const bezTermina = aktivne.filter(needsTermin).length;
+        const ispodMin = aktivne.filter(lowEnroll).length;
+
         return (
           <>
-            <p className="text-xs text-gray-400 mb-2">
-              {aktivne.length} aktivnih/nadolazećih · {arhiva.length} u arhivi (završene/otkazane)
-            </p>
+            {/* Mini-pregled */}
+            <div className="flex flex-wrap gap-2 mb-3 text-sm">
+              <span className="px-3 py-1 rounded-full bg-gray-100 text-gray-600">{aktivne.length} aktivnih</span>
+              <span className="px-3 py-1 rounded-full bg-sky-100 text-sky-700">{kreceNedelja} kreće (≤7 dana)</span>
+              {bezTermina > 0 && <span className="px-3 py-1 rounded-full bg-red-100 text-red-600">🔴 {bezTermina} bez termina</span>}
+              {ispodMin > 0 && <span className="px-3 py-1 rounded-full bg-amber-100 text-amber-700">🟡 {ispodMin} ispod min</span>}
+            </div>
             <div className="overflow-x-auto bg-white border border-gray-200 rounded-xl">
               <table className="w-full text-sm">
                 <thead>
@@ -505,6 +545,7 @@ export default function AdminGrupePage() {
                     <th className="px-4 py-3 font-medium">Status</th>
                     <th className="px-4 py-3 font-medium">Početak</th>
                     <th className="px-4 py-3 font-medium">Upisani / Max</th>
+                    <th className="px-4 py-3 font-medium">Termin</th>
                     <th className="px-4 py-3 font-medium"></th>
                   </tr>
                 </thead>
@@ -513,20 +554,35 @@ export default function AdminGrupePage() {
                     const aktivna = AKTIVNI_STATUSI.includes(g.status);
                     return (
                       <tr key={g.id} className="border-b border-gray-50">
-                        <td className="px-4 py-3 font-medium text-gray-900">{g.level}</td>
+                        <td className="px-4 py-3 font-medium text-gray-900">
+                          {g.level}
+                          <div className="flex flex-col gap-0.5 mt-0.5">
+                            {needsTermin(g) && <span className="text-[11px] text-red-500">🔴 Treba termin</span>}
+                            {lowEnroll(g) && <span className="text-[11px] text-amber-600">🟡 Malo upisa</span>}
+                          </div>
+                        </td>
                         <td className="px-4 py-3 text-gray-600">{g.professor?.full_name || "—"}</td>
                         <td className="px-4 py-3">
-                          <span className={`text-xs px-2 py-0.5 rounded-full ${STATUS_BOJA[g.status] || "bg-gray-100 text-gray-600"}`}>
-                            {g.status}
-                          </span>
+                          <span className={`text-xs px-2 py-0.5 rounded-full ${STATUS_BOJA[g.status] || "bg-gray-100 text-gray-600"}`}>{g.status}</span>
                         </td>
                         <td className="px-4 py-3 text-gray-600">{g.start_date || "—"}</td>
-                        <td className={`px-4 py-3 ${aktivna && g.enrolled < g.min_seats ? "text-red-500" : "text-gray-600"}`}>
-                          {g.enrolled}/{g.max_seats}
+                        <td className={`px-4 py-3 ${aktivna && g.enrolled < g.min_seats ? "text-red-500" : "text-gray-600"}`}>{g.enrolled}/{g.max_seats}</td>
+                        <td className="px-4 py-3">
+                          {hasTermin(g) ? (
+                            <div className="flex gap-2 text-xs">
+                              {g.meet_link && <a href={g.meet_link} target="_blank" rel="noreferrer" className="text-plava hover:underline" title="Meet">🎥 Meet</a>}
+                              {g.notes_url && <a href={g.notes_url} target="_blank" rel="noreferrer" className="text-plava hover:underline" title="Beleške">📝</a>}
+                            </div>
+                          ) : needsTermin(g) ? (
+                            <button type="button" onClick={() => napraviTerminRow(g)} disabled={saving} className="text-xs bg-plava text-white px-2 py-1 rounded-lg hover:bg-plava-dark disabled:opacity-50">Napravi termin</button>
+                          ) : (
+                            <span className="text-gray-300">—</span>
+                          )}
                         </td>
                         <td className="px-4 py-3">
-                          <div className="flex gap-3">
+                          <div className="flex gap-3 whitespace-nowrap">
                             <button type="button" onClick={() => startEdit(g)} className="text-plava hover:underline">Izmeni</button>
+                            <button type="button" onClick={() => dupliraj(g)} className="text-gray-500 hover:underline">Dupliraj</button>
                             {g.status !== "otkazana" && g.status !== "zavrsena" && (
                               <button type="button" onClick={() => cancelGroup(g.id)} className="text-red-500 hover:underline">Otkaži</button>
                             )}
@@ -537,7 +593,7 @@ export default function AdminGrupePage() {
                   })}
                   {visible.length === 0 && (
                     <tr>
-                      <td colSpan={6} className="px-4 py-6 text-center text-gray-400">
+                      <td colSpan={7} className="px-4 py-6 text-center text-gray-400">
                         {groups.length === 0 ? "Nema grupa. Klikni „+ Nova grupa” da dodaš prvu." : "Nema aktivnih grupa."}
                       </td>
                     </tr>
