@@ -10,6 +10,7 @@ export interface GroupSessions {
   startDate: string | null;
   endDate: string | null;
   professorName: string;
+  notesUrl: string | null;
   sessions: { id: string; date: string; source: string }[];
 }
 
@@ -36,6 +37,22 @@ export default function SesijeClient({ rows, showProfessor }: { rows: GroupSessi
       const res = await fetch("/api/profesor/grupna-sesija", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ groupId, sessionDate }),
+      });
+      const j = await res.json();
+      if (!res.ok) { setError(j.error || "Greška."); return; }
+      router.refresh();
+    } catch { setError("Greška u mreži."); }
+    finally { setBusy(null); }
+  }
+
+  async function saveNotes(groupId: string, current: string | null) {
+    const url = window.prompt("Zalepi link beleški (Google Doc) za ovu grupu:", current ?? "");
+    if (url === null) return;
+    setBusy(groupId); setError(null);
+    try {
+      const res = await fetch("/api/profesor/grupna-sesija", {
+        method: "PATCH", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ groupId, notesUrl: url }),
       });
       const j = await res.json();
       if (!res.ok) { setError(j.error || "Greška."); return; }
@@ -74,6 +91,14 @@ export default function SesijeClient({ rows, showProfessor }: { rows: GroupSessi
               <span className="font-semibold text-gray-900">Grupa {g.level}</span>
               {showProfessor && g.professorName && <span className="text-sm text-gray-500"> · {g.professorName}</span>}
               <span className="text-xs text-gray-400 ml-2">{g.sessions.length} sesija</span>
+              {g.notesUrl ? (
+                <span className="ml-2 inline-flex items-center gap-2">
+                  <a href={g.notesUrl} target="_blank" rel="noreferrer" className="text-xs text-plava hover:underline">📝 Beleške</a>
+                  <button type="button" onClick={() => saveNotes(g.id, g.notesUrl)} disabled={busy === g.id} className="text-xs text-gray-400 hover:underline">izmeni</button>
+                </span>
+              ) : (
+                <button type="button" onClick={() => saveNotes(g.id, null)} disabled={busy === g.id} className="text-xs text-gray-400 hover:underline ml-2">➕ Dodaj beleške</button>
+              )}
             </div>
             <div className="flex items-center gap-2">
               <input

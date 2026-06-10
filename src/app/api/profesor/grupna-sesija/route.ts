@@ -57,3 +57,20 @@ export async function DELETE(request: Request) {
   }
   return NextResponse.json({ ok: true });
 }
+
+// PATCH — snimi/izmeni link beleški (Google Doc) za grupu.
+export async function PATCH(request: Request) {
+  const staff = await requireStaff();
+  if (!staff) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+
+  const { groupId, notesUrl } = await request.json();
+  if (!groupId) return NextResponse.json({ error: "groupId je obavezan" }, { status: 400 });
+
+  const g = await ownedGroup(staff.admin, groupId, staff.userId, staff.isAdmin);
+  if (!g) return NextResponse.json({ error: "Nije tvoja grupa" }, { status: 403 });
+
+  const url = String(notesUrl ?? "").trim() || null;
+  const { error } = await staff.admin.from("groups").update({ notes_url: url }).eq("id", groupId);
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  return NextResponse.json({ ok: true, notesUrl: url });
+}
