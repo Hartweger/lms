@@ -76,7 +76,10 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
     setCouponLoading(true);
     setCouponError(null);
     try {
-      const res = await fetch(`/api/coupons/validate?code=${encodeURIComponent(couponCode.trim())}`);
+      const res = await fetch(
+        `/api/coupons/validate?code=${encodeURIComponent(couponCode.trim())}` +
+        `&courseSlug=${encodeURIComponent(courseSlug)}&email=${encodeURIComponent(email.trim())}`
+      );
       const data = await res.json();
       if (!res.ok) { setCouponError(data.error || "Nepoznata greška."); setAppliedCoupon(null); return; }
       setAppliedCoupon(data);

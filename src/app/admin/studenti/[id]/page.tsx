@@ -21,6 +21,24 @@ interface LessonProgress {
   totalCount: number;
 }
 
+interface OrderRow {
+  order_number: string;
+  items: { title?: string }[] | null;
+  total: number;
+  payment_status: string;
+  payment_method: string;
+  created_at: string;
+  fiscal_referent_number: string | null;
+  coupon_code: string | null;
+}
+interface IndEnroll {
+  id: string; courseTitle: string; professorId: string | null; professor: string; packageLessons: number | null; lessonsUsed: number | null; expiresAt: string | null; status: string;
+}
+interface ProfOption { id: string; full_name: string }
+interface GroupEnroll {
+  level: string; type: string; groupStatus: string; endDate: string | null; status: string; enrolledAt: string;
+}
+
 export default function AdminStudentDetalji() {
   const params = useParams();
   const supabase = createClient();
@@ -28,6 +46,12 @@ export default function AdminStudentDetalji() {
   const [allCourses, setAllCourses] = useState<Course[]>([]);
   const [accessRows, setAccessRows] = useState<AccessRow[]>([]);
   const [lessonProgress, setLessonProgress] = useState<LessonProgress[]>([]);
+  const [orders, setOrders] = useState<OrderRow[]>([]);
+  const [indEnroll, setIndEnroll] = useState<IndEnroll[]>([]);
+  const [groupEnroll, setGroupEnroll] = useState<GroupEnroll[]>([]);
+  const [professors, setProfessors] = useState<ProfOption[]>([]);
+  const [savingProf, setSavingProf] = useState<string | null>(null);
+  const [lastSignIn, setLastSignIn] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   // Add access form
@@ -47,6 +71,11 @@ export default function AdminStudentDetalji() {
       setAllCourses(data.courses as Course[]);
       setAccessRows(data.access as AccessRow[]);
       setLessonProgress(data.lessonProgress as LessonProgress[]);
+      setOrders((data.orders ?? []) as OrderRow[]);
+      setIndEnroll((data.individualEnrollments ?? []) as IndEnroll[]);
+      setGroupEnroll((data.groupEnrollments ?? []) as GroupEnroll[]);
+      setProfessors((data.professors ?? []) as ProfOption[]);
+      setLastSignIn((data.lastSignIn ?? null) as string | null);
       setLoading(false);
     };
     load();
@@ -108,6 +137,25 @@ export default function AdminStudentDetalji() {
     }
   }
 
+  async function changeProfessor(enrollmentId: string, professorId: string) {
+    if (!professorId) return;
+    setSavingProf(enrollmentId);
+    try {
+      const res = await fetch("/api/admin/individualni-profesor", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ enrollmentId, professorId }),
+      });
+      if (res.ok) {
+        setIndEnroll(indEnroll.map((e) => e.id === enrollmentId
+          ? { ...e, professorId, professor: professors.find((p) => p.id === professorId)?.full_name ?? e.professor }
+          : e));
+      }
+    } finally {
+      setSavingProf(null);
+    }
+  }
+
   function getStatus(expires_at: string | null): { label: string; color: string } {
     if (!expires_at) return { label: "Neograničen", color: "text-green-600" };
     if (expires_at > now) {
@@ -142,6 +190,8 @@ export default function AdminStudentDetalji() {
           <p className="text-gray-500 mb-1">{student.email}</p>
           <p className="text-xs text-gray-400">
             Registrovan: {new Date(student.created_at).toLocaleDateString("sr-RS")}
+            {" · "}
+            Poslednja prijava: {lastSignIn ? new Date(lastSignIn).toLocaleDateString("sr-RS") : "nikad"}
           </p>
         </div>
         <Link
@@ -151,6 +201,102 @@ export default function AdminStudentDetalji() {
           Pogledaj kao student
         </Link>
       </div>
+
+      {/* Uplate */}
+      <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
+        <h2 className="text-lg font-bold text-gray-900 mb-4">Uplate ({orders.length})</h2>
+        {orders.length === 0 ? (
+          <p className="text-sm text-gray-400">Nema uplata.</p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="text-left text-gray-500 border-b">
+                  <th className="pb-2 pr-4">Datum</th>
+                  <th className="pb-2 pr-4">Kurs</th>
+                  <th className="pb-2 pr-4 text-right">Iznos</th>
+                  <th className="pb-2 pr-4">Način</th>
+                  <th className="pb-2 pr-4">Status</th>
+                  <th className="pb-2">Račun</th>
+                </tr>
+              </thead>
+              <tbody>
+                {orders.map((o) => {
+                  const st = o.payment_status === "completed"
+                    ? { l: "Plaćeno", c: "text-green-600" }
+                    : o.payment_status === "cancelled"
+                    ? { l: "Otkazano", c: "text-gray-400" }
+                    : { l: "Na čekanju", c: "text-yellow-600" };
+                  return (
+                    <tr key={o.order_number} className="border-b last:border-0">
+                      <td className="py-2 pr-4 text-gray-500">{new Date(o.created_at).toLocaleDateString("sr-RS")}</td>
+                      <td className="py-2 pr-4">{o.items?.[0]?.title ?? "—"}{o.coupon_code && <span className="text-xs text-gray-400"> · {o.coupon_code}</span>}</td>
+                      <td className="py-2 pr-4 text-right">{Number(o.total).toLocaleString("sr-RS")} din</td>
+                      <td className="py-2 pr-4 text-gray-500">{o.payment_method}</td>
+                      <td className={`py-2 pr-4 font-medium ${st.c}`}>{st.l}</td>
+                      <td className="py-2">{o.fiscal_referent_number ? "✓ fiskalizovan" : <span className="text-gray-300">—</span>}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+      {/* Individualni / grupni upisi */}
+      {(indEnroll.length > 0 || groupEnroll.length > 0) && (
+        <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
+          <h2 className="text-lg font-bold text-gray-900 mb-4">Individualni i grupni upisi</h2>
+          {indEnroll.length > 0 && (
+            <div className="mb-4">
+              <div className="text-sm font-medium text-gray-700 mb-2">Individualni (1:1)</div>
+              <div className="space-y-2">
+                {indEnroll.map((e) => (
+                  <div key={e.id} className="flex flex-wrap items-center justify-between text-sm gap-3 border-b last:border-0 pb-2 last:pb-0">
+                    <div className="min-w-0 flex items-center gap-2">
+                      <span className="font-medium text-gray-900">{e.courseTitle}</span>
+                      <span className="text-gray-400">·</span>
+                      <span className="text-gray-400">👩‍🏫</span>
+                      <select
+                        value={e.professorId ?? ""}
+                        disabled={savingProf === e.id}
+                        onChange={(ev) => changeProfessor(e.id, ev.target.value)}
+                        className="border border-gray-200 rounded-md px-2 py-1 text-xs text-gray-700 bg-white disabled:opacity-50"
+                        title="Zameni profesora"
+                      >
+                        {!e.professorId && <option value="">— izaberi —</option>}
+                        {professors.map((p) => (
+                          <option key={p.id} value={p.id}>{p.full_name}</option>
+                        ))}
+                      </select>
+                      {savingProf === e.id && <span className="text-xs text-gray-400">čuvam…</span>}
+                    </div>
+                    <div className="flex items-center gap-3 whitespace-nowrap text-gray-500 text-xs">
+                      <span>{e.lessonsUsed ?? 0}/{e.packageLessons ?? "?"} časova</span>
+                      {e.expiresAt && <span>ističe {new Date(e.expiresAt).toLocaleDateString("sr-RS")}</span>}
+                      <span className={e.status === "active" ? "text-green-600" : "text-gray-400"}>{e.status}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          {groupEnroll.length > 0 && (
+            <div>
+              <div className="text-sm font-medium text-gray-700 mb-2">Grupni</div>
+              <div className="space-y-2">
+                {groupEnroll.map((e, i) => (
+                  <div key={i} className="flex items-center justify-between text-sm gap-3">
+                    <div><span className="font-medium text-gray-900">Grupa {e.level}</span>{e.endDate && <span className="text-gray-400"> · do {new Date(e.endDate).toLocaleDateString("sr-RS")}</span>}</div>
+                    <span className={`text-xs ${e.status === "active" ? "text-green-600" : "text-gray-400"}`}>{e.status} · grupa {e.groupStatus}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Course Access Section */}
       <div className="flex items-center justify-between mb-4">

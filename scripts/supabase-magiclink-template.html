@@ -1,24 +1,25 @@
 <!-- Supabase Auth → Magic Link template (Authentication → Email Templates → Magic Link).
-     Go-template promenljive: {{ .ConfirmationURL }} je link za prijavu. -->
+     Link ide na NAŠ domen: {{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=magiclink → ruta src/app/auth/confirm/route.ts. -->
+<!-- 09.06.2026: prebačeno sa {{ .ConfirmationURL }} (supabase.co) na token_hash flow preko hartweger.rs. -->
 <!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
 <body style="font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a2e;background:#f8f9fa;margin:0;padding:0;">
   <div style="max-width:520px;margin:0 auto;padding:40px 20px;">
     <div style="background:white;border-radius:12px;padding:32px;box-shadow:0 1px 3px rgba(0,0,0,0.08);">
-      <div style="text-align:center;margin-bottom:24px;"><img src="https://kurs.hartweger.rs/logo.jpg" alt="Hartweger" style="width:120px;height:auto;"/></div>
-      <h1 style="font-size:20px;margin:0 0 16px;">Tvoja prijava na kurs 🔑</h1>
+      <div style="text-align:center;margin-bottom:24px;"><img src="https://hartweger.rs/logo.jpg" alt="Hartweger" style="width:120px;height:auto;"/></div>
+      <h1 style="font-size:20px;margin:0 0 16px;">Tvoja prijava na platformu 🔑</h1>
       <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 20px;">
-        Zatražio/la si prijavu na <strong>kurs.hartweger.rs</strong>. Klikni na dugme ispod i odmah si unutra — bez lozinke.
+        Zatražio/la si prijavu na <strong>hartweger.rs</strong>. Klikni na dugme ispod i odmah si unutra — bez lozinke.
       </p>
       <div style="text-align:center;margin:24px 0;">
-        <a href="{{ .ConfirmationURL }}" style="display:inline-block;background:#4fb1d3;color:white;padding:14px 36px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;">Prijavi se</a>
+        <a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=magiclink&next=/dashboard" style="display:inline-block;background:#4fb1d3;color:white;padding:14px 36px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;">Prijavi se</a>
       </div>
       <p style="font-size:13px;line-height:1.6;color:#888;margin:0 0 4px;">
-        Link vredi 1 sat i može da se iskoristi samo jednom. Ako dugme ne radi, kopiraj ovaj link u browser:
+        Link vredi 1 sat i može da se iskoristi samo jednom. Ovo je naš bezbedni sistem za prijavu. Ako dugme ne radi, kopiraj ovaj link u browser:
       </p>
-      <p style="font-size:12px;line-height:1.5;color:#4fb1d3;word-break:break-all;margin:0 0 20px;">{{ .ConfirmationURL }}</p>
+      <p style="font-size:12px;line-height:1.5;color:#4fb1d3;word-break:break-all;margin:0 0 20px;">{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=magiclink&next=/dashboard</p>
       <p style="font-size:14px;line-height:1.6;color:#444;margin:0 0 8px;">Ako nisi ti tražio/la prijavu, slobodno zanemari ovaj mejl — niko ne može da uđe bez ovog linka.</p>
       <p style="font-size:14px;color:#444;margin:0;">— Hartweger tim</p>
     </div>
-    <div style="text-align:center;padding:20px;font-size:12px;color:#bbb;"><p style="margin:0;">Hartweger — Škola nemačkog jezika · kurs.hartweger.rs</p></div>
+    <div style="text-align:center;padding:20px;font-size:12px;color:#bbb;"><p style="margin:0;">Hartweger — Škola nemačkog jezika · hartweger.rs</p></div>
   </div>
 </body></html>

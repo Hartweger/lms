@@ -664,6 +664,322 @@ export async function sendInteresNotification(nivo: string, email: string, ime: 
   }
 }
 
+// Trenutna notifikacija adminu (Nataši) čim stigne nova narudžbina — bez obzira na način plaćanja.
+export async function sendNewOrderAdminEmail(o: {
+  orderNumber: string;
+  fullName: string;
+  email: string;
+  courseTitle: string;
+  total: number;
+  paymentMethod: string;
+  country: string;
+}) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    const metodLabel: Record<string, string> = {
+      uplatnica: "Uplatnica (čeka uplatu)",
+      paypal: "PayPal (čeka potvrdu)",
+      kartica: "Kartica (instant)",
+      kartica_rate: "Kartica na rate (instant)",
+    };
+    const fmt = (n: number) => n.toLocaleString("de-DE");
+    await resend.emails.send({
+      from: FROM,
+      to: ["info@hartweger.rs", "natasa@hartweger.rs"],
+      replyTo: o.email,
+      subject: `Nova narudžbina — ${o.fullName} · ${fmt(o.total)} din`,
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:sans-serif;line-height:1.6;color:#222;max-width:560px;margin:0 auto;padding:16px">
+<h2 style="margin:0 0 12px">🛒 Nova narudžbina</h2>
+<table style="border-collapse:collapse;font-size:14px;width:100%">
+<tbody>
+<tr><td style="padding:6px 8px;color:#888">Narudžbina</td><td style="padding:6px 8px;font-weight:600">${esc(o.orderNumber)}</td></tr>
+<tr><td style="padding:6px 8px;color:#888">Polaznik</td><td style="padding:6px 8px">${esc(o.fullName)}</td></tr>
+<tr><td style="padding:6px 8px;color:#888">Mejl</td><td style="padding:6px 8px">${esc(o.email)}</td></tr>
+<tr><td style="padding:6px 8px;color:#888">Kurs</td><td style="padding:6px 8px">${esc(o.courseTitle)}</td></tr>
+<tr><td style="padding:6px 8px;color:#888">Iznos</td><td style="padding:6px 8px;font-weight:600">${fmt(o.total)} din</td></tr>
+<tr><td style="padding:6px 8px;color:#888">Plaćanje</td><td style="padding:6px 8px">${esc(metodLabel[o.paymentMethod] ?? o.paymentMethod)}</td></tr>
+<tr><td style="padding:6px 8px;color:#888">Zemlja</td><td style="padding:6px 8px">${esc(o.country)}</td></tr>
+</tbody>
+</table>
+<p style="margin:18px 0 0">
+  <a href="${SITE_URL}/admin/narudzbine" style="display:inline-block;background:#4fb1d3;color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px">Otvori narudžbine</a>
+</p>
+</body></html>`,
+    });
+    console.log(`[email] Admin obavešten o narudžbini ${o.orderNumber}`);
+  } catch (e) {
+    console.error("[email] sendNewOrderAdminEmail pao:", e);
+  }
+}
+
+// Polazniku čija kartična kupovina nije prošla (odbijena ili nezavršena) — ponuda da pokuša ponovo.
+export async function sendCardRetryEmail(o: {
+  email: string;
+  fullName: string;
+  courseTitle: string;
+  courseSlug: string;
+  orderNumber: string;
+}) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    const retryUrl = `${SITE_URL}/kupovina/${o.courseSlug}`;
+    await resend.emails.send({
+      from: FROM,
+      to: o.email,
+      replyTo: "info@hartweger.rs",
+      subject: "Kupovina nije prošla — pokušaj ponovo 🙂",
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a2e;background:#f8f9fa;margin:0;padding:0;">
+  <div style="max-width:520px;margin:0 auto;padding:40px 20px;">
+    <div style="background:white;border-radius:12px;padding:32px;box-shadow:0 1px 3px rgba(0,0,0,0.08);">
+      <div style="text-align:center;margin-bottom:24px;"><img src="https://hartweger.rs/logo.jpg" alt="Hartweger" style="width:120px;height:auto;"/></div>
+      <h1 style="font-size:20px;margin:0 0 16px;">Zdravo, ${esc(o.fullName || "")}!</h1>
+      <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 16px;">
+        Primetili smo da tvoja kupovina kursa <strong>${esc(o.courseTitle)}</strong> nije prošla — plaćanje karticom nije uspelo da se završi.
+      </p>
+      <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 20px;">
+        To se ponekad desi (banka traži dodatnu potvrdu, istekla sesija…). Nije ti ništa naplaćeno. Možeš da pokušaš ponovo jednim klikom:
+      </p>
+      <div style="text-align:center;margin:24px 0;">
+        <a href="${retryUrl}" style="display:inline-block;background:#4fb1d3;color:white;padding:14px 32px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;">Završi kupovinu</a>
+      </div>
+      <p style="font-size:14px;line-height:1.6;color:#444;margin:0 0 8px;">
+        Ako je bilo problema sa karticom ili želiš da platiš na drugi način (uplatnica), samo nam odgovori na ovaj mejl — rado pomažemo.
+      </p>
+      <p style="font-size:14px;color:#444;margin:0;">— Hartweger tim</p>
+    </div>
+    <div style="text-align:center;padding:20px;font-size:12px;color:#bbb;">
+      <p style="margin:0;">Hartweger — Škola nemačkog jezika · hartweger.rs</p>
+    </div>
+  </div>
+</body></html>`,
+    });
+    console.log(`[email] Card-retry mejl poslat za ${o.orderNumber} → ${o.email}`);
+  } catch (e) {
+    console.error(`[email] sendCardRetryEmail pao za ${o.orderNumber}:`, e);
+  }
+}
+
+// Drugi podsetnik (3 dana posle) ako kupovina i dalje nije završena.
+export async function sendCardReminder2Email(o: {
+  email: string; fullName: string; courseTitle: string; courseSlug: string; orderNumber: string;
+}) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    const retryUrl = `${SITE_URL}/kupovina/${o.courseSlug}`;
+    await resend.emails.send({
+      from: FROM, to: o.email, replyTo: "info@hartweger.rs",
+      subject: "Tvoje mesto na kursu te još čeka 💙",
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a2e;background:#f8f9fa;margin:0;padding:0;">
+  <div style="max-width:520px;margin:0 auto;padding:40px 20px;">
+    <div style="background:white;border-radius:12px;padding:32px;box-shadow:0 1px 3px rgba(0,0,0,0.08);">
+      <div style="text-align:center;margin-bottom:24px;"><img src="https://hartweger.rs/logo.jpg" alt="Hartweger" style="width:120px;height:auto;"/></div>
+      <h1 style="font-size:20px;margin:0 0 16px;">Zdravo, ${esc(o.fullName || "")}!</h1>
+      <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 16px;">
+        Pre par dana si krenuo/la sa upisom na <strong>${esc(o.courseTitle)}</strong>, ali kupovina nije završena. Mesto te i dalje čeka 🙂
+      </p>
+      <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 20px;">
+        Ako želiš da nastaviš, treba ti samo minut:
+      </p>
+      <div style="text-align:center;margin:24px 0;">
+        <a href="${retryUrl}" style="display:inline-block;background:#4fb1d3;color:white;padding:14px 32px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;">Završi upis</a>
+      </div>
+      <p style="font-size:14px;line-height:1.6;color:#444;margin:0 0 8px;">
+        Imaš pitanje ili želiš da platiš uplatnicom? Samo odgovori na ovaj mejl — tu smo.
+      </p>
+      <p style="font-size:14px;color:#444;margin:0;">— Hartweger tim</p>
+    </div>
+    <div style="text-align:center;padding:20px;font-size:12px;color:#bbb;"><p style="margin:0;">Hartweger — Škola nemačkog jezika · hartweger.rs</p></div>
+  </div>
+</body></html>`,
+    });
+    console.log(`[email] 2. podsetnik poslat za ${o.orderNumber} → ${o.email}`);
+  } catch (e) {
+    console.error(`[email] sendCardReminder2Email pao za ${o.orderNumber}:`, e);
+  }
+}
+
+// Obaveštenje da je neplaćena porudžbina otkazana (7 dana posle, ako ništa nije plaćeno).
+export async function sendOrderCancelledEmail(o: {
+  email: string; fullName: string; courseTitle: string; courseSlug: string; orderNumber: string;
+}) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    const retryUrl = `${SITE_URL}/kupovina/${o.courseSlug}`;
+    await resend.emails.send({
+      from: FROM, to: o.email, replyTo: "info@hartweger.rs",
+      subject: "Porudžbina je otkazana — ali možeš ponovo kad god želiš",
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a2e;background:#f8f9fa;margin:0;padding:0;">
+  <div style="max-width:520px;margin:0 auto;padding:40px 20px;">
+    <div style="background:white;border-radius:12px;padding:32px;box-shadow:0 1px 3px rgba(0,0,0,0.08);">
+      <div style="text-align:center;margin-bottom:24px;"><img src="https://hartweger.rs/logo.jpg" alt="Hartweger" style="width:120px;height:auto;"/></div>
+      <h1 style="font-size:20px;margin:0 0 16px;">Zdravo, ${esc(o.fullName || "")}!</h1>
+      <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 16px;">
+        Tvoja porudžbina za <strong>${esc(o.courseTitle)}</strong> nije plaćena, pa smo je zatvorili. Ništa ti nije naplaćeno.
+      </p>
+      <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 20px;">
+        Ako se predomisliš, uvek možeš da se upišeš ponovo — bićemo tu:
+      </p>
+      <div style="text-align:center;margin:24px 0;">
+        <a href="${retryUrl}" style="display:inline-block;background:#4fb1d3;color:white;padding:14px 32px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;">Pogledaj kurs</a>
+      </div>
+      <p style="font-size:14px;color:#444;margin:0;">— Hartweger tim</p>
+    </div>
+    <div style="text-align:center;padding:20px;font-size:12px;color:#bbb;"><p style="margin:0;">Hartweger — Škola nemačkog jezika · hartweger.rs</p></div>
+  </div>
+</body></html>`,
+    });
+    console.log(`[email] Otkazivanje poslato za ${o.orderNumber} → ${o.email}`);
+  } catch (e) {
+    console.error(`[email] sendOrderCancelledEmail pao za ${o.orderNumber}:`, e);
+  }
+}
+
+// Aktivacioni nudge: polaznik ima pristup ali nije otvorio nijednu lekciju — poziv da započne.
+export async function sendActivationNudge(o: {
+  email: string; name: string; courseTitle: string; lessonId: string | null; lessonTitle: string | null;
+}) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    const startUrl = o.lessonId ? `${SITE_URL}/lekcija/${o.lessonId}` : `${SITE_URL}/dashboard`;
+    await resend.emails.send({
+      from: FROM, to: o.email, replyTo: "info@hartweger.rs",
+      subject: "Spreman/na da kreneš sa nemačkim? 🇩🇪",
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a2e;background:#f8f9fa;margin:0;padding:0;">
+  <div style="max-width:520px;margin:0 auto;padding:40px 20px;">
+    <div style="background:white;border-radius:12px;padding:32px;box-shadow:0 1px 3px rgba(0,0,0,0.08);">
+      <div style="text-align:center;margin-bottom:24px;"><img src="https://hartweger.rs/logo.jpg" alt="Hartweger" style="width:120px;height:auto;"/></div>
+      <h1 style="font-size:20px;margin:0 0 16px;">Zdravo, ${esc(o.name || "")}!</h1>
+      <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 16px;">
+        Tvoj pristup kursu <strong>${esc(o.courseTitle)}</strong> je aktivan, ali primetili smo da još nisi započeo/la. Najteži korak je prvi — a traje samo par minuta 🙂
+      </p>
+      ${o.lessonTitle ? `<div style="background:#f8fcfd;border-left:3px solid #4fb1d3;border-radius:6px;padding:14px 16px;margin:0 0 20px;"><div style="font-size:12px;color:#999;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">Prva lekcija</div><div style="font-size:14px;color:#1a1a2e;">${esc(o.lessonTitle)}</div></div>` : ""}
+      <div style="text-align:center;margin:24px 0;">
+        <a href="${startUrl}" style="display:inline-block;background:#4fb1d3;color:white;padding:14px 32px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;">Započni prvu lekciju</a>
+      </div>
+      <p style="font-size:14px;line-height:1.6;color:#444;margin:0 0 8px;">
+        Ako ti nešto nije jasno ili ti treba pomoć oko prvog koraka, samo odgovori na ovaj mejl — tu smo.
+      </p>
+      <p style="font-size:14px;color:#444;margin:0;">— Hartweger tim</p>
+    </div>
+    <div style="text-align:center;padding:20px;font-size:12px;color:#bbb;"><p style="margin:0;">Hartweger — Škola nemačkog jezika · hartweger.rs</p></div>
+  </div>
+</body></html>`,
+    });
+    console.log(`[email] Aktivacioni nudge → ${o.email}`);
+  } catch (e) {
+    console.error(`[email] sendActivationNudge pao za ${o.email}:`, e);
+  }
+}
+
+// Podsetnik 15 dana pre isteka pristupa + poziv na obnovu (kupon OBNOVI50).
+export async function sendExpiryReminder(o: {
+  email: string; name: string; courseTitle: string; courseSlug: string; expiresAt: string;
+  /** true (default) = video kupci, mejl SA kuponom OBNOVI50. false = ind/grupni, samo info bez kupona. */
+  withCoupon?: boolean;
+}) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    const withCoupon = o.withCoupon !== false;
+    const renewUrl = `${SITE_URL}/kupovina/${o.courseSlug}`;
+    const datum = new Date(o.expiresAt).toLocaleDateString("sr-Latn-RS", { day: "numeric", month: "long", year: "numeric" });
+    const daysLeft = Math.max(1, Math.round((new Date(o.expiresAt).getTime() - Date.now()) / 86400000));
+
+    const couponBlock = `
+      <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 16px;">
+        Ako želiš da nastaviš, možeš da <strong>obnoviš pristup na još godinu dana</strong> — i to uz <strong>50% popusta</strong> sa kodom:
+      </p>
+      <div style="text-align:center;margin:0 0 20px;">
+        <span style="display:inline-block;background:#fff7ed;border:1px dashed #f59e0b;color:#b45309;font-weight:700;font-size:18px;letter-spacing:1px;padding:10px 20px;border-radius:8px;">OBNOVI50</span>
+      </div>
+      <div style="text-align:center;margin:24px 0;">
+        <a href="${renewUrl}" style="display:inline-block;background:#4fb1d3;color:white;padding:14px 32px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;">Obnovi pristup</a>
+      </div>
+      <p style="font-size:13px;line-height:1.6;color:#888;margin:0 0 8px;">
+        Kod uneseš u polju za kupon prilikom kupovine. Ako ti treba pomoć, samo odgovori na ovaj mejl.
+      </p>`;
+
+    const noCouponBlock = `
+      <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 16px;">
+        Ako želiš da nastaviš ili pređeš na sledeći nivo, javi nam se — dogovorićemo najbolji sledeći korak za tebe.
+      </p>
+      <div style="text-align:center;margin:24px 0;">
+        <a href="mailto:info@hartweger.rs" style="display:inline-block;background:#4fb1d3;color:white;padding:14px 32px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;">Javi nam se</a>
+      </div>`;
+
+    await resend.emails.send({
+      from: FROM, to: o.email, replyTo: "info@hartweger.rs",
+      subject: withCoupon
+        ? `Tvoj pristup kursu ističe ${datum} — obnovi sa 50% popusta`
+        : `Tvoj pristup materijalima ističe ${datum}`,
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a2e;background:#f8f9fa;margin:0;padding:0;">
+  <div style="max-width:520px;margin:0 auto;padding:40px 20px;">
+    <div style="background:white;border-radius:12px;padding:32px;box-shadow:0 1px 3px rgba(0,0,0,0.08);">
+      <div style="text-align:center;margin-bottom:24px;"><img src="https://hartweger.rs/logo.jpg" alt="Hartweger" style="width:120px;height:auto;"/></div>
+      <h1 style="font-size:20px;margin:0 0 16px;">Zdravo, ${esc(o.name || "")}!</h1>
+      <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 16px;">
+        Tvoj pristup materijalima na platformi za <strong>${esc(o.courseTitle)}</strong> ističe <strong>${datum}</strong> (za ${daysLeft} ${daysLeft === 1 ? "dan" : "dana"}). Posle toga lekcije više neće biti dostupne.
+      </p>
+      ${withCoupon ? couponBlock : noCouponBlock}
+      <p style="font-size:14px;color:#444;margin:0;">— Hartweger tim</p>
+    </div>
+    <div style="text-align:center;padding:20px;font-size:12px;color:#bbb;"><p style="margin:0;">Hartweger — Škola nemačkog jezika · hartweger.rs</p></div>
+  </div>
+</body></html>`,
+    });
+    console.log(`[email] Podsetnik isteka (${withCoupon ? "kupon" : "bez kupona"}) → ${o.email} (${o.courseTitle})`);
+  } catch (e) {
+    console.error(`[email] sendExpiryReminder pao za ${o.email}:`, e);
+  }
+}
+
+// Zamolnica aktivnom polazniku da podeli utisak (Google forma) — radi na zadržavanju + društvenom dokazu.
+const REVIEW_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdkhFGw1YN0A6fQp2xvcqrqpSGbUEmcpUHtfLRCi3PagI0Ksw/viewform";
+export async function sendReviewRequest(o: { email: string; name: string }) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    await resend.emails.send({
+      from: FROM, to: o.email, replyTo: "info@hartweger.rs",
+      subject: "Kako ti ide sa nemačkim? Podeli utisak 💬",
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a2e;background:#f8f9fa;margin:0;padding:0;">
+  <div style="max-width:520px;margin:0 auto;padding:40px 20px;">
+    <div style="background:white;border-radius:12px;padding:32px;box-shadow:0 1px 3px rgba(0,0,0,0.08);">
+      <div style="text-align:center;margin-bottom:24px;"><img src="https://hartweger.rs/logo.jpg" alt="Hartweger" style="width:120px;height:auto;"/></div>
+      <h1 style="font-size:20px;margin:0 0 16px;">Zdravo, ${esc(o.name || "")}!</h1>
+      <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 16px;">
+        Vidimo da redovno učiš i napreduješ — bravo! 🎉 Ako ti se kurs dopada, znači nam mnogo da čujemo tvoj utisak.
+      </p>
+      <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 20px;">
+        Treba ti samo minut — popuni kratku formu (i pomozi nekom ko se još dvoumi da krene):
+      </p>
+      <div style="text-align:center;margin:24px 0;">
+        <a href="${REVIEW_FORM_URL}" style="display:inline-block;background:#4fb1d3;color:white;padding:14px 32px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;">Podeli utisak</a>
+      </div>
+      <p style="font-size:14px;color:#444;margin:0;">Hvala ti puno! — Hartweger tim</p>
+    </div>
+    <div style="text-align:center;padding:20px;font-size:12px;color:#bbb;"><p style="margin:0;">Hartweger — Škola nemačkog jezika · hartweger.rs</p></div>
+  </div>
+</body></html>`,
+    });
+    console.log(`[email] Zamolnica za utisak → ${o.email}`);
+  } catch (e) {
+    console.error(`[email] sendReviewRequest pao za ${o.email}:`, e);
+  }
+}
+
 // Jutarnji pregled adminu (Nataši) — dnevni snapshot stanja iz Supabase.
 export type DailyBrief = {
   datum: string;

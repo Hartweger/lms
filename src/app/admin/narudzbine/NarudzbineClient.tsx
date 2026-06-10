@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { Order } from "@/lib/types";
-import { orderTotals, orderFiscalStatus, canDeleteOrder } from "@/lib/order-utils";
+import { orderTotals, orderFiscalStatus, canDeleteOrder, pendingPaymentState } from "@/lib/order-utils";
 
 type Filter = "sve" | "na-cekanju" | "potvrdjene";
 
@@ -368,6 +368,7 @@ export default function NarudzbineClient({ initialOrders, courses }: Props) {
                 const isConfirming = confirmId === order.id;
                 const isLoading = loading === order.id;
                 const isPending = order.payment_status === "pending";
+                const cardState = isPending ? pendingPaymentState(order, Date.now()) : null;
                 const isDeleting = deleteId === order.id;
                 const isBeingDeleted = deleting === order.id;
                 const fiscalState = orderFiscalStatus(order);
@@ -403,10 +404,24 @@ export default function NarudzbineClient({ initialOrders, courses }: Props) {
                       {formatPaymentMethod(order.payment_method)}
                     </td>
                     <td className="px-6 py-4">
-                      {isPending ? (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-50 text-yellow-600">
-                          Na čekanju
+                      {order.payment_status === "cancelled" ? (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-500" title="Neplaćena porudžbina — automatski otkazana posle 7 dana">
+                          Otkazano
                         </span>
+                      ) : isPending ? (
+                        cardState === "declined" ? (
+                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-600" title="Banka je odbila karticu — kupovina nije prošla">
+                            Kartica odbijena
+                          </span>
+                        ) : cardState === "incomplete" ? (
+                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-orange-50 text-orange-600" title="Kartica započeta ali nije završena — nije naplaćeno">
+                            Nije završeno
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-50 text-yellow-600">
+                            Na čekanju
+                          </span>
+                        )
                       ) : (
                         <div className="flex flex-col gap-1">
                           <span className="inline-flex w-fit items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-600">

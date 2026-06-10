@@ -67,6 +67,35 @@ export default async function AdminPregled() {
   const { data: { users: authUsers } } = await supabase.auth.admin.listUsers({ perPage: 1000 });
   const loggedInCount = authUsers.filter(u => u.last_sign_in_at).length;
 
+  // --- DANAS (akcioni pregled) ---
+  const startOfToday = new Date();
+  startOfToday.setHours(0, 0, 0, 0);
+
+  const { data: ordersToday } = await supabase
+    .from("orders")
+    .select("total, payment_status")
+    .gte("created_at", startOfToday.toISOString());
+  const revenueToday = (ordersToday ?? [])
+    .filter((o) => o.payment_status === "completed")
+    .reduce((s, o) => s + Number(o.total), 0);
+  const completedToday = (ordersToday ?? []).filter((o) => o.payment_status === "completed").length;
+
+  const { count: newToday } = await supabase
+    .from("user_profiles")
+    .select("*", { count: "exact", head: true })
+    .gte("created_at", startOfToday.toISOString());
+
+  // Uplatnice/PayPal koje čekaju tvoju ručnu potvrdu (to-do lista)
+  const { data: pendingConfirm } = await supabase
+    .from("orders")
+    .select("id, order_number, full_name, email, total, payment_method, items, created_at")
+    .eq("payment_status", "pending")
+    .in("payment_method", ["uplatnica", "paypal"])
+    .order("created_at", { ascending: true })
+    .limit(12);
+
+  const paymentLabel = (m: string) => (m === "uplatnica" ? "Uplatnica" : m === "paypal" ? "PayPal" : m);
+
   const stats = [
     { label: "Studenti", value: studentCount ?? 0, href: "/admin/studenti" },
     { label: "Prijavili se", value: loggedInCount, href: "/admin/studenti" },
@@ -148,6 +177,56 @@ export default async function AdminPregled() {
   return (
     <div className="space-y-8">
       <h1 className="text-2xl font-bold text-gray-900">Admin panel</h1>
+
+      {/* Danas */}
+      <div className="bg-white rounded-xl shadow-sm p-6">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">Danas</h2>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div>
+            <div className="text-2xl font-bold text-plava">
+              {revenueToday.toLocaleString("sr-RS")} <span className="text-base font-medium text-gray-400">RSD</span>
+            </div>
+            <div className="text-sm text-gray-500 mt-1">
+              Prihod danas{completedToday > 0 ? ` · ${completedToday} ${completedToday === 1 ? "uplata" : "uplate"}` : ""}
+            </div>
+          </div>
+          <div>
+            <div className="text-2xl font-bold text-plava">{newToday ?? 0}</div>
+            <div className="text-sm text-gray-500 mt-1">Nove prijave danas</div>
+          </div>
+          <Link href="/admin/narudzbine" className="block hover:opacity-80 transition-opacity">
+            <div className={`text-2xl font-bold ${(pendingConfirm?.length ?? 0) > 0 ? "text-koral" : "text-green-600"}`}>
+              {pendingConfirm?.length ?? 0}
+            </div>
+            <div className="text-sm text-gray-500 mt-1">Čeka tvoju potvrdu →</div>
+          </Link>
+        </div>
+
+        {pendingConfirm && pendingConfirm.length > 0 && (
+          <div className="mt-5 border-t pt-4">
+            <div className="text-sm font-medium text-gray-700 mb-3">Uplate za potvrdu</div>
+            <div className="space-y-2.5">
+              {pendingConfirm.map((o) => {
+                const title = (o.items as { title?: string }[] | null)?.[0]?.title ?? "—";
+                return (
+                  <div key={o.id} className="flex items-center justify-between gap-3 text-sm">
+                    <div className="min-w-0 flex-1">
+                      <span className="font-medium text-gray-900">{o.full_name || o.email}</span>
+                      <span className="text-gray-400"> — {title}</span>
+                    </div>
+                    <div className="flex items-center gap-3 whitespace-nowrap">
+                      <span className="text-gray-500">{Number(o.total).toLocaleString("sr-RS")} RSD</span>
+                      <span className="hidden sm:inline text-xs text-gray-400">{paymentLabel(o.payment_method)}</span>
+                      <span className="text-xs text-gray-400">{formatDate(o.created_at)}</span>
+                      <Link href="/admin/narudzbine" className="text-plava hover:underline text-xs font-medium">Potvrdi →</Link>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* Statistika */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

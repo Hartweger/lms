@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { grantAccessForOrder } from "@/lib/grant-access";
-import { fiscalizeOrder } from "@/lib/fiscomm";
 
 export async function POST(
   _request: Request,
@@ -38,9 +37,9 @@ export async function POST(
   const result = await grantAccessForOrder(id);
   if (!result.ok) return NextResponse.json({ error: result.error }, { status: 400 });
 
-  // Fiskalizuj uplatnicu i PayPal (kartica se fiskalizuje u nestpay callback-u).
-  // fiscalizeOrder je idempotentan (preskače ako je već fiskalizovano) — bezbedno i ako je kartica.
-  await fiscalizeOrder(id);
+  // NAPOMENA: potvrda uplatnice/PayPal samo daje pristup — fiskalizacija je RUČNA (dugme
+  // „Fiskalizuj" u adminu), po odluci 09.06.2026. Kartice se i dalje fiskalizuju automatski
+  // u nestpay callback-u (nema ručne potvrde za njih).
 
   return NextResponse.json({ ok: true });
 }

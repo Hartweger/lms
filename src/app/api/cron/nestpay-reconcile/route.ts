@@ -3,12 +3,24 @@ import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { queryTransaction } from "@/lib/nestpay";
 import { grantAccessForOrder } from "@/lib/grant-access";
+import { sendCardRetryEmail, sendCardReminder2Email, sendOrderCancelledEmail } from "@/lib/email";
+import { recoveryAction } from "@/lib/order-utils";
+
+function slugOf(items: unknown): string {
+  return (Array.isArray(items) ? (items[0] as { course_slug?: string })?.course_slug : "") ?? "";
+}
+function titleOf(items: unknown): string {
+  return (Array.isArray(items) ? (items[0] as { title?: string })?.title : "") || "kurs";
+}
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
   const admin = createAdminClient();
-  const cutoff = new Date(Date.now() - 15 * 60 * 1000).toISOString(); // starije od 15 min
+  const now = Date.now();
+
+  // 1) Oporavak izgubljenog callback-a: kartica pending >15 min → pitaj banku, ako je naplaćeno dodeli pristup.
+  const cutoff = new Date(now - 15 * 60 * 1000).toISOString();
   const { data: pending } = await admin
     .from("orders").select("id, order_number, total")
     .in("payment_method", ["kartica", "kartica_rate"])
@@ -25,5 +37,60 @@ export async function GET() {
       reconciled++;
     }
   }
-  return NextResponse.json({ checked: pending?.length ?? 0, reconciled });
+
+  // 2) Sekvenca povraćaja (abandoned cart) — mašina stanja po recovery_stage:
+  //    mejl1 (1h) → mejl2 (3 dana) → otkazivanje + mejl (7 dana). Ako je polaznik prešao na drugi
+  //    način plaćanja / platio isti kurs, mejlovi se preskaču, a mrtva porudžbina se tiho otkaže posle 7 dana.
+  const { data: candidates } = await admin
+    .from("orders")
+    .select("id, order_number, email, full_name, items, created_at, recovery_stage")
+    .in("payment_method", ["kartica", "kartica_rate"])
+    .eq("payment_status", "pending")
+    .lt("recovery_stage", 3)
+    .limit(100);
+
+  const counts = { mejl1: 0, mejl2: 0, cancel: 0, cancelSilent: 0 };
+  for (const o of candidates ?? []) {
+    const courseSlug = slugOf(o.items);
+    const courseTitle = titleOf(o.items);
+    if (!courseSlug || !o.email) continue; // bez slug-a/mejla nema korisnog linka
+
+    const { data: others } = await admin
+      .from("orders")
+      .select("order_number, created_at, payment_status, items")
+      .eq("email", o.email);
+    const otherOrders = (others ?? []).map((x) => ({
+      order_number: x.order_number,
+      created_at: x.created_at,
+      payment_status: x.payment_status,
+      courseSlug: slugOf(x.items),
+    }));
+
+    const action = recoveryAction(
+      { order_number: o.order_number, created_at: o.created_at, recovery_stage: o.recovery_stage ?? 0, courseSlug },
+      otherOrders,
+      now
+    );
+    const mail = { email: o.email, fullName: o.full_name ?? "", courseTitle, courseSlug, orderNumber: o.order_number };
+
+    if (action === "mejl1") {
+      await sendCardRetryEmail(mail);
+      await admin.from("orders").update({ recovery_stage: 1, recovery_email_sent_at: new Date().toISOString() }).eq("id", o.id);
+      counts.mejl1++;
+    } else if (action === "mejl2") {
+      await sendCardReminder2Email(mail);
+      await admin.from("orders").update({ recovery_stage: 2 }).eq("id", o.id);
+      counts.mejl2++;
+    } else if (action === "cancel") {
+      await sendOrderCancelledEmail(mail);
+      await admin.from("orders").update({ recovery_stage: 3, payment_status: "cancelled" }).eq("id", o.id);
+      counts.cancel++;
+    } else if (action === "cancel-silent") {
+      // Polaznik je platio/prešao na drugi način — samo zatvori mrtvu porudžbinu, bez mejla.
+      await admin.from("orders").update({ recovery_stage: 3, payment_status: "cancelled" }).eq("id", o.id);
+      counts.cancelSilent++;
+    }
+  }
+
+  return NextResponse.json({ checked: pending?.length ?? 0, reconciled, ...counts });
 }

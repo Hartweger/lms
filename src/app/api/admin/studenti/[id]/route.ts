@@ -73,5 +73,66 @@ export async function GET(
     });
   }
 
-  return NextResponse.json({ student, courses, access, lessonProgress: progressList });
+  // Uplate (narudžbine) ovog polaznika
+  const { data: orders } = await admin
+    .from("orders")
+    .select("order_number, items, total, payment_status, payment_method, created_at, fiscal_referent_number, coupon_code")
+    .eq("user_id", id)
+    .order("created_at", { ascending: false });
+
+  // Individualni upisi (+ ime profesora i naziv kursa)
+  const { data: indRaw } = await admin
+    .from("individual_enrollments")
+    .select("id, course_id, professor_id, package_lessons, lessons_used, expires_at, status, created_at")
+    .eq("user_id", id)
+    .order("created_at", { ascending: false });
+  const profIds = [...new Set((indRaw ?? []).map((e) => e.professor_id).filter(Boolean))];
+  const { data: profs } = profIds.length
+    ? await admin.from("user_profiles").select("id, full_name").in("id", profIds)
+    : { data: [] };
+  const profName = new Map((profs ?? []).map((p) => [p.id, p.full_name as string]));
+  const courseTitle = new Map((courses ?? []).map((c: { id: string; title: string }) => [c.id, c.title]));
+  const individualEnrollments = (indRaw ?? []).map((e) => ({
+    id: e.id,
+    courseTitle: courseTitle.get(e.course_id) ?? "—",
+    professorId: e.professor_id,
+    professor: e.professor_id ? (profName.get(e.professor_id) ?? "—") : "—",
+    packageLessons: e.package_lessons,
+    lessonsUsed: e.lessons_used,
+    expiresAt: e.expires_at,
+    status: e.status,
+  }));
+
+  // Lista profesora (za admin zamenu profesora na 1:1 upisu)
+  const { data: allProfs } = await admin
+    .from("user_profiles").select("id, full_name").eq("role", "professor").order("full_name");
+
+  // Grupni upisi (+ nivo grupe)
+  const { data: geRaw } = await admin
+    .from("group_enrollments")
+    .select("group_id, status, enrolled_at")
+    .eq("user_id", id)
+    .order("enrolled_at", { ascending: false });
+  const groupIds = [...new Set((geRaw ?? []).map((e) => e.group_id))];
+  const { data: groups } = groupIds.length
+    ? await admin.from("groups").select("id, level, type, status, end_date").in("id", groupIds)
+    : { data: [] };
+  const groupMap = new Map((groups ?? []).map((g) => [g.id, g]));
+  const groupEnrollments = (geRaw ?? []).map((e) => {
+    const g = groupMap.get(e.group_id);
+    return { level: g?.level ?? "—", type: g?.type ?? "", groupStatus: g?.status ?? "", endDate: g?.end_date ?? null, status: e.status, enrolledAt: e.enrolled_at };
+  });
+
+  // Poslednja prijava (iz auth-a)
+  let lastSignIn: string | null = null;
+  try {
+    const { data: authUser } = await admin.auth.admin.getUserById(id);
+    lastSignIn = authUser?.user?.last_sign_in_at ?? null;
+  } catch { /* ignore */ }
+
+  return NextResponse.json({
+    student, courses, access, lessonProgress: progressList,
+    orders: orders ?? [], individualEnrollments, groupEnrollments, lastSignIn,
+    professors: allProfs ?? [],
+  });
 }

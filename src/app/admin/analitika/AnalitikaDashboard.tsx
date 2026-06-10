@@ -273,7 +273,12 @@ export default function AnalitikaDashboard({ orders }: { orders: WcOrder[] }) {
     const count = completed.length;
     const prevCount = prevCompleted.length;
 
-    // Revenue by month — last 12 from today
+    // Revenue by month — last 12 from today.
+    // NB: gradi se iz SVIH narudžbina (`orders`), ne iz `completed` koji je filtriran po
+    // izabranom periodu — da grafik trenda uvek pokazuje svih 12 meseci bez obzira na filter gore.
+    const allCompleted = orders.filter(
+      (o) => o.status === "completed" && Number(o.total) > 0
+    );
     const now = new Date();
     const y = now.getFullYear();
     const mo = now.getMonth();
@@ -282,7 +287,7 @@ export default function AnalitikaDashboard({ orders }: { orders: WcOrder[] }) {
       const d = new Date(y, mo - i, 1);
       const yr = d.getFullYear();
       const mn = d.getMonth();
-      const monthRevenue = completed
+      const monthRevenue = allCompleted
         .filter((o) => {
           const od = new Date(o.date_created);
           return od.getFullYear() === yr && od.getMonth() === mn;
@@ -381,7 +386,7 @@ export default function AnalitikaDashboard({ orders }: { orders: WcOrder[] }) {
       refundRate,
       top10,
     };
-  }, [filteredOrders, previousOrders]);
+  }, [orders, filteredOrders, previousOrders]);
 
   // Last 20 from filtered set (for the table at bottom)
   const last20 = filteredOrders.slice(0, 20);
@@ -540,7 +545,7 @@ export default function AnalitikaDashboard({ orders }: { orders: WcOrder[] }) {
       {/* ── Revenue chart ─────────────────────────────────────────────────── */}
       <div className="bg-white rounded-xl shadow-sm p-6">
         <h2 className="text-lg font-semibold text-gray-900 mb-4">
-          Prihod po mesecima (poslednjih 12 u periodu)
+          Prihod po mesecima (poslednjih 12 meseci — ne zavisi od filtera)
         </h2>
         <RevenueChart data={metrics.revenueByMonth} />
       </div>

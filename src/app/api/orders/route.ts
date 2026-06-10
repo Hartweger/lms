@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { generateOrderNumber, calculatePaypalEur } from "@/lib/order-utils";
-import { sendPaymentInstructionsEmail } from "@/lib/email";
+import { sendPaymentInstructionsEmail, sendNewOrderAdminEmail } from "@/lib/email";
 import { nivoForSlug } from "@/lib/course-nivo";
+import { emailOwnsCourse } from "@/lib/coupon-ownership";
 import { computeSeats, pickOpenGroupForNivo } from "@/lib/groups";
 
 export async function POST(request: Request) {
@@ -118,7 +119,15 @@ export async function POST(request: Request) {
       if (coupon) {
         const notExpired = !coupon.expires_at || new Date(coupon.expires_at) > new Date();
         const notMaxed = coupon.max_uses === null || coupon.usage_count < coupon.max_uses;
-        if (notExpired && notMaxed) {
+        // renewal_only kupon (npr. OBNOVI50): važi SAMO za obnovu kursa koji ovaj mejl već poseduje
+        const renewalOk = !coupon.renewal_only || (await emailOwnsCourse(supabase, email, course.id));
+        if (coupon.renewal_only && !renewalOk) {
+          return NextResponse.json(
+            { error: "Ovaj kod važi samo za obnovu kursa koji već imaš (na isti mejl)." },
+            { status: 400 }
+          );
+        }
+        if (notExpired && notMaxed && renewalOk) {
           discountPercent = Number(coupon.amount);
           validCouponCode = coupon.code;
         }
@@ -224,6 +233,17 @@ export async function POST(request: Request) {
     console.log(
       `[orders] Created order ${order.order_number} for ${email} — ${courseSlug} via ${paymentMethod}`
     );
+
+    // Trenutna notifikacija adminu o svakoj novoj narudžbini (ne blokira odgovor ako mejl padne)
+    await sendNewOrderAdminEmail({
+      orderNumber: order.order_number,
+      fullName,
+      email,
+      courseTitle: course.title,
+      total: finalPrice,
+      paymentMethod,
+      country,
+    });
 
     // Increment coupon usage count if coupon was applied
     if (validCouponCode) {

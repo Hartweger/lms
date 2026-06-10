@@ -167,6 +167,10 @@ export interface Order {
   payment_method: string;
   payment_status: string;
   nestpay_transaction_id: string | null;
+  /** "charged" (uspeh), "failed" (banka odbila), ili null (kartica započeta a nije završena). */
+  nestpay_status: string | null;
+  /** Kad je poslat mejl za povraćaj neuspele kartične kupovine (da se ne šalje dvaput). */
+  recovery_email_sent_at: string | null;
   paypal_note: string | null;
   /** Popunjava admin/narudzbine page (individualni: preko individual_enrollments). Nije DB kolona. */
   professor_name?: string | null;

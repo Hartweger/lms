@@ -76,33 +76,48 @@ export async function GET(request: NextRequest) {
 
     if (recentReminder && recentReminder.length > 0) continue;
 
-    // Find their most recent course and next lesson
-    const primaryCourse = courses[0];
+    // Gornja granica: najviše 3 podsetnika ukupno po osobi (da ne dosađujemo zauvek)
+    const { count: timesReminded } = await supabase
+      .from("inactivity_reminders")
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", userId);
+    if ((timesReminded ?? 0) >= 3) continue;
+
+    // Nađi kurs sa NEZAVRŠENOM lekcijom (kroz sve kurseve korisnika).
+    // Ako je sve završio (ili kurs nema lekcija) → NE šalji. Ranije je slao i onima koji su završili.
+    let targetCourseTitle: string | null = null;
     let nextLessonTitle: string | null = null;
 
-    const { data: lessons } = await supabase
-      .from("lessons")
-      .select("id, title, order_index")
-      .eq("course_id", primaryCourse.courseId)
-      .order("order_index");
+    for (const c of courses) {
+      const { data: lessons } = await supabase
+        .from("lessons")
+        .select("id, title, order_index")
+        .eq("course_id", c.courseId)
+        .order("order_index");
+      if (!lessons || lessons.length === 0) continue;
 
-    if (lessons && lessons.length > 0) {
       const { data: completed } = await supabase
         .from("lesson_progress")
         .select("lesson_id")
         .eq("user_id", userId)
         .eq("completed", true)
         .in("lesson_id", lessons.map((l) => l.id));
-
-      const completedIds = new Set(completed?.map((c) => c.lesson_id) ?? []);
+      const completedIds = new Set(completed?.map((x) => x.lesson_id) ?? []);
       const nextLesson = lessons.find((l) => !completedIds.has(l.id));
-      nextLessonTitle = nextLesson?.title ?? null;
+      if (nextLesson) {
+        targetCourseTitle = c.title;
+        nextLessonTitle = nextLesson.title;
+        break;
+      }
     }
+
+    // Završio sve lekcije (ili nema lekcija) → preskoči, nema šta da nastavi
+    if (!targetCourseTitle) continue;
 
     await sendInactivityReminder(
       profile.email,
       profile.full_name ?? "",
-      primaryCourse.title,
+      targetCourseTitle,
       nextLessonTitle
     );
 
