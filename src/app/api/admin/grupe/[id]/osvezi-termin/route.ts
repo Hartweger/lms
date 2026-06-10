@@ -34,7 +34,16 @@ export async function POST(_req: NextRequest, { params }: { params: Promise<{ id
     return NextResponse.json({ error: "Grupi fale dani/sat/trajanje/datum početka" }, { status: 400 });
   }
 
-  const payload = { nivo: g.level, prof: profIme, days: g.days, time: g.session_time, weeks: g.duration_weeks, startDate: g.start_date };
+  // Lista polaznika (aktivni upisi) → u beleške grupe (ime + mejl).
+  let polaznici: { ime: string; mejl: string }[] = [];
+  const { data: enr } = await admin.from("group_enrollments").select("user_id").eq("group_id", id).eq("status", "active");
+  const uids = (enr ?? []).map((e) => e.user_id);
+  if (uids.length) {
+    const { data: profs } = await admin.from("user_profiles").select("full_name, email").in("id", uids);
+    polaznici = (profs ?? []).map((pf) => ({ ime: pf.full_name || "", mejl: pf.email || "" }));
+  }
+
+  const payload = { nivo: g.level, prof: profIme, days: g.days, time: g.session_time, weeks: g.duration_weeks, startDate: g.start_date, polaznici };
   let gas;
   try {
     gas = g.gcal_event_id
