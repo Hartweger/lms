@@ -1,20 +1,15 @@
-import Link from "next/link";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { resolveProfessorView } from "@/lib/professor-view";
 
 export const dynamic = "force-dynamic";
 
-interface StudentWithProgress {
-  id: string;
-  full_name: string;
+type Row = {
+  name: string;
   email: string;
-  course_title: string;
-  course_id: string;
-  total_lessons: number;
-  completed_lessons: number;
-  progress: number;
-  last_activity: string | null;
-}
+  type: "1:1" | "grupa";
+  label: string;      // naziv kursa (1:1) ili "Grupa <nivo>"
+  detail: string;     // "X/Y časova" za 1:1, prazno za grupu
+};
 
 export default async function ProfesorStudenti({ searchParams }: { searchParams: Promise<{ prof?: string }> }) {
   const { prof } = await searchParams;
@@ -23,167 +18,98 @@ export default async function ProfesorStudenti({ searchParams }: { searchParams:
   const admin = createAdminClient();
   const profId = ctx.profId;
 
-  // Get all students assigned to this professor
-  const { data: assignments } = await admin
-    .from("professor_students")
-    .select("student_id, course_id")
-    .eq("professor_id", profId);
+  // 1:1 (aktivni individualni upisi)
+  const { data: indEnr } = await admin
+    .from("individual_enrollments")
+    .select("user_id, course_id, package_lessons, lessons_used, status")
+    .eq("professor_id", profId)
+    .eq("status", "active");
 
-  if (!assignments || assignments.length === 0) {
-    // Možda nema individualnih, ali ima grupe — uputi na „Moje grupe".
-    const { count: groupCount } = await admin
-      .from("groups").select("id", { count: "exact", head: true }).eq("professor_id", profId);
-    return (
-      <div className="text-center py-16">
-        <p className="text-gray-400">Nemaš dodeljenih individualnih (1:1) studenata.</p>
-        {groupCount && groupCount > 0 ? (
-          <p className="text-sm text-gray-500 mt-2">
-            Imaš {groupCount} {groupCount === 1 ? "grupu" : "grupe"} — polaznike vidiš u{" "}
-            <Link href="/profesor/grupe" className="text-plava underline font-medium">Moje grupe</Link>.
-          </p>
-        ) : (
-          <p className="text-sm text-gray-300 mt-2">Admin će ti dodeliti studente.</p>
-        )}
-      </div>
-    );
-  }
+  // Grupe (otvorene/u toku) + njihovi aktivni polaznici
+  const { data: grps } = await admin
+    .from("groups")
+    .select("id, level, status")
+    .eq("professor_id", profId)
+    .in("status", ["otvoren", "u_toku"]);
+  const groupLevel = new Map((grps ?? []).map((g) => [g.id, g.level as string]));
+  const groupIds = (grps ?? []).map((g) => g.id);
 
-  // Get unique student IDs and course IDs
-  const studentIds = [...new Set(assignments.map((a) => a.student_id))];
-  const courseIds = [...new Set(assignments.map((a) => a.course_id))];
+  const { data: ge } = groupIds.length
+    ? await admin.from("group_enrollments").select("user_id, group_id").eq("status", "active").in("group_id", groupIds)
+    : { data: [] };
 
-  // Fetch student profiles
-  const { data: profiles } = await admin
-    .from("user_profiles")
-    .select("id, full_name, email")
-    .in("id", studentIds);
+  // Profili + kursevi
+  const userIds = [...new Set([...(indEnr ?? []).map((e) => e.user_id), ...(ge ?? []).map((e) => e.user_id)])];
+  const { data: profiles } = userIds.length
+    ? await admin.from("user_profiles").select("id, full_name, email").in("id", userIds)
+    : { data: [] };
+  const pMap = new Map((profiles ?? []).map((p) => [p.id, p]));
+  const courseIds = [...new Set((indEnr ?? []).map((e) => e.course_id))];
+  const { data: courses } = courseIds.length
+    ? await admin.from("courses").select("id, title").in("id", courseIds)
+    : { data: [] };
+  const cMap = new Map((courses ?? []).map((c) => [c.id, c.title as string]));
 
-  const profileMap = new Map(profiles?.map((p) => [p.id, p]) ?? []);
-
-  // Fetch course info
-  const { data: courses } = await admin
-    .from("courses")
-    .select("id, title")
-    .in("id", courseIds);
-
-  const courseMap = new Map(courses?.map((c) => [c.id, c]) ?? []);
-
-  // Batch fetch: all lessons for relevant courses
-  const { data: allLessons } = await admin
-    .from("lessons")
-    .select("id, course_id")
-    .in("course_id", courseIds);
-
-  // Group lessons by course
-  const lessonsByCourse = new Map<string, string[]>();
-  for (const l of allLessons ?? []) {
-    const list = lessonsByCourse.get(l.course_id) ?? [];
-    list.push(l.id);
-    lessonsByCourse.set(l.course_id, list);
-  }
-
-  // Batch fetch: all progress for relevant students
-  const { data: allProgress } = await admin
-    .from("lesson_progress")
-    .select("user_id, lesson_id, completed_at")
-    .eq("completed", true)
-    .in("user_id", studentIds);
-
-  // Index progress by user+lesson
-  const progressByUser = new Map<string, { lesson_id: string; completed_at: string | null }[]>();
-  for (const p of allProgress ?? []) {
-    const list = progressByUser.get(p.user_id) ?? [];
-    list.push({ lesson_id: p.lesson_id, completed_at: p.completed_at });
-    progressByUser.set(p.user_id, list);
-  }
-
-  // Compute progress per assignment
-  const students: StudentWithProgress[] = [];
-
-  for (const assignment of assignments) {
-    const profile = profileMap.get(assignment.student_id);
-    const course = courseMap.get(assignment.course_id);
-    if (!profile || !course) continue;
-
-    const lessonIds = new Set(lessonsByCourse.get(assignment.course_id) ?? []);
-    const totalLessons = lessonIds.size;
-
-    const userProgress = (progressByUser.get(assignment.student_id) ?? [])
-      .filter((p) => lessonIds.has(p.lesson_id));
-
-    const completedLessons = userProgress.length;
-    const lastActivity = userProgress.reduce((latest, p) =>
-      p.completed_at && (!latest || p.completed_at > latest)
-        ? p.completed_at
-        : latest,
-      null as string | null
-    );
-
-    const progressPercent = totalLessons > 0
-      ? Math.round((completedLessons / totalLessons) * 100)
-      : 0;
-
-    students.push({
-      id: assignment.student_id,
-      full_name: profile.full_name ?? "",
-      email: profile.email,
-      course_title: course.title,
-      course_id: assignment.course_id,
-      total_lessons: totalLessons,
-      completed_lessons: completedLessons,
-      progress: progressPercent,
-      last_activity: lastActivity,
+  const rows: Row[] = [];
+  for (const e of indEnr ?? []) {
+    const p = pMap.get(e.user_id);
+    rows.push({
+      name: p?.full_name || "—",
+      email: p?.email || "",
+      type: "1:1",
+      label: cMap.get(e.course_id) ?? "—",
+      detail: `${e.lessons_used ?? 0}/${e.package_lessons ?? "?"} časova`,
     });
   }
+  for (const e of ge ?? []) {
+    const p = pMap.get(e.user_id);
+    rows.push({
+      name: p?.full_name || "—",
+      email: p?.email || "",
+      type: "grupa",
+      label: `Grupa ${groupLevel.get(e.group_id) ?? ""}`.trim(),
+      detail: "",
+    });
+  }
+  rows.sort((a, b) => a.name.localeCompare(b.name, "sr-Latn"));
 
-  // Sort: most recent activity first
-  students.sort((a, b) => {
-    if (!a.last_activity && !b.last_activity) return 0;
-    if (!a.last_activity) return 1;
-    if (!b.last_activity) return -1;
-    return b.last_activity.localeCompare(a.last_activity);
-  });
+  if (rows.length === 0) {
+    return <p className="text-gray-400 text-sm py-12 text-center">Nemaš aktivnih polaznika.</p>;
+  }
 
   return (
     <div>
-      <p className="text-xs text-gray-400 mb-4">{students.length} studenata</p>
-
+      <p className="text-xs text-gray-400 mb-4">{rows.length} aktivnih polaznika (1:1 i grupni)</p>
       <div className="bg-white rounded-xl shadow-sm overflow-hidden">
         <table className="w-full text-sm">
           <thead className="bg-gray-50 text-gray-500 uppercase text-xs">
             <tr>
-              <th className="text-left px-6 py-3">Ime</th>
-              <th className="text-left px-6 py-3">Kurs</th>
-              <th className="text-left px-6 py-3">Progres</th>
-              <th className="text-left px-6 py-3">Poslednja aktivnost</th>
+              <th className="text-left px-6 py-3">Polaznik</th>
+              <th className="text-left px-6 py-3">Tip / kurs</th>
+              <th className="text-left px-6 py-3">Napredak</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-50">
-            {students.map((s, i) => (
-              <tr key={`${s.id}-${s.course_id}-${i}`} className="hover:bg-gray-50">
+            {rows.map((r, i) => (
+              <tr key={`${r.email}-${i}`} className="hover:bg-gray-50">
                 <td className="px-6 py-4">
-                  <div className="font-medium text-gray-900">{s.full_name || "—"}</div>
-                  <div className="text-xs text-gray-400">{s.email}</div>
+                  <div className="font-medium text-gray-900">{r.name}</div>
+                  <div className="text-xs text-gray-400">{r.email}</div>
                 </td>
-                <td className="px-6 py-4 text-gray-600">{s.course_title}</td>
                 <td className="px-6 py-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-24 bg-gray-100 rounded-full h-2">
-                      <div
-                        className="bg-plava h-2 rounded-full transition-all"
-                        style={{ width: `${s.progress}%` }}
-                      />
-                    </div>
-                    <span className="text-xs text-gray-500">
-                      {s.completed_lessons}/{s.total_lessons}
+                  {r.type === "1:1" ? (
+                    <span className="inline-flex items-center gap-1.5">
+                      <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-plava-light text-plava">1:1</span>
+                      <span className="text-gray-700">{r.label}</span>
                     </span>
-                  </div>
+                  ) : (
+                    <span className="inline-flex items-center gap-1.5">
+                      <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-amber-100 text-amber-700">Grupa</span>
+                      <span className="text-gray-700">{r.label.replace(/^Grupa\s*/, "")}</span>
+                    </span>
+                  )}
                 </td>
-                <td className="px-6 py-4 text-gray-400 text-sm">
-                  {s.last_activity
-                    ? new Date(s.last_activity).toLocaleDateString("sr-Latn")
-                    : "Nema aktivnosti"}
-                </td>
+                <td className="px-6 py-4 text-gray-500">{r.detail || "—"}</td>
               </tr>
             ))}
           </tbody>

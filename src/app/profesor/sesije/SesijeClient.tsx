@@ -11,6 +11,7 @@ export interface GroupSessions {
   endDate: string | null;
   professorName: string;
   notesUrl: string | null;
+  students: string[];
   sessions: { id: string; date: string; source: string }[];
 }
 
@@ -117,6 +118,11 @@ export default function SesijeClient({ rows, showProfessor }: { rows: GroupSessi
               </button>
             </div>
           </div>
+          {g.students.length > 0 && (
+            <div className="mb-3 text-xs text-gray-500">
+              <span className="text-gray-400">Polaznici ({g.students.length}):</span> {g.students.join(", ")}
+            </div>
+          )}
           {g.sessions.length === 0 ? (
             <p className="text-sm text-gray-400">Nema evidentiranih sesija.</p>
           ) : (

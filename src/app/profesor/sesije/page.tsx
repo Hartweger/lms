@@ -41,6 +41,21 @@ export default async function ProfesorSesije({ searchParams }: { searchParams: P
     byGroup.set(s.group_id, list);
   }
 
+  // Polaznici po grupi (aktivni upisi)
+  const { data: enrolls } = await admin
+    .from("group_enrollments").select("group_id, user_id").eq("status", "active").in("group_id", groupIds);
+  const enrUserIds = [...new Set((enrolls ?? []).map((e) => e.user_id))];
+  const { data: enrProfiles } = enrUserIds.length
+    ? await admin.from("user_profiles").select("id, full_name").in("id", enrUserIds)
+    : { data: [] };
+  const nameMap = new Map((enrProfiles ?? []).map((p) => [p.id, p.full_name as string]));
+  const studentsByGroup = new Map<string, string[]>();
+  for (const e of enrolls ?? []) {
+    const list = studentsByGroup.get(e.group_id) ?? [];
+    list.push(nameMap.get(e.user_id) || "—");
+    studentsByGroup.set(e.group_id, list);
+  }
+
   const rows: GroupSessions[] = groups.map((g) => {
     const prof = Array.isArray(g.professor) ? g.professor[0] : g.professor;
     return {
@@ -51,6 +66,7 @@ export default async function ProfesorSesije({ searchParams }: { searchParams: P
       endDate: g.end_date,
       professorName: prof?.full_name || "",
       notesUrl: g.notes_url ?? null,
+      students: studentsByGroup.get(g.id) ?? [],
       sessions: byGroup.get(g.id) ?? [],
     };
   });
