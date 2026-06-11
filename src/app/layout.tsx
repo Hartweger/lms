@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     description: "Naučite nemački jezik online — video kursevi, individualna i grupna nastava",
     locale: "sr_RS",
     type: "website",
-    images: [{ url: "/og/default.png", width: 1200, height: 630, alt: "Hartweger — Škola nemačkog jezika" }],
+    images: [{ url: "/og/share.png", width: 1200, height: 630, alt: "Hartweger — Škola nemačkog jezika" }],
   },
   twitter: {
     card: "summary_large_image",
@@ -116,7 +116,7 @@ try {
                   "Online škola nemačkog jezika sa sertifikovanim profesorima. Video kursevi, grupna i individualna nastava od A1 do C1 nivoa po VoKuM metodi.",
                 url: "https://www.hartweger.rs",
                 logo: "https://www.hartweger.rs/logo.jpg",
-                image: "https://www.hartweger.rs/og/default.png",
+                image: "https://www.hartweger.rs/og/share.png",
                 email: "info@hartweger.rs",
                 knowsLanguage: ["de", "sr"],
                 areaServed: ["RS", "BA", "ME", "HR", "DE", "AT", "CH"],

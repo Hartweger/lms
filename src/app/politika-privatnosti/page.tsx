@@ -7,7 +7,7 @@ export const metadata: Metadata = {
     "Kako prikupljamo, koristimo i štitimo tvoje podatke na hartweger.rs, koje kolačiće koristimo i koja su tvoja prava.",
   alternates: { canonical: "/politika-privatnosti" },
   openGraph: {
-    images: [{ url: "/og/default.png", width: 1200, height: 630, alt: "Hartweger — Škola nemačkog jezika" }],
+    images: [{ url: "/og/share.png", width: 1200, height: 630, alt: "Hartweger — Škola nemačkog jezika" }],
     title: "Politika privatnosti — Hartweger",
     description: "Kako prikupljamo, koristimo i štitimo tvoje podatke na hartweger.rs.",
   },

@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: "Individualni kursevi nemačkog jezika — Hartweger",
   description: "Individualna nastava nemačkog jezika sa sertifikovanim profesorima. Prilagođen tempo i program.",
   openGraph: {
-    images: [{ url: "/og/default.png", width: 1200, height: 630, alt: "Hartweger — Škola nemačkog jezika" }],
+    images: [{ url: "/og/share.png", width: 1200, height: 630, alt: "Hartweger — Škola nemačkog jezika" }],
     title: "Individualni kursevi nemačkog jezika — Hartweger",
     description: "Individualna nastava nemačkog jezika sa sertifikovanim profesorima.",
   },

@@ -165,7 +165,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   // inače mreže pri deljenju zgrabe logo i iseku ga ružno.
   const ogImage = course.thumbnail_url
     ? { url: course.thumbnail_url, alt: course.title }
-    : { url: "/og/default.png", width: 1200, height: 630, alt: "Hartweger — Škola nemačkog jezika" };
+    : { url: "/og/share.png", width: 1200, height: 630, alt: "Hartweger — Škola nemačkog jezika" };
   return {
     title: `${course.title} — Hartweger`,
     description: course.description,
