@@ -448,22 +448,22 @@ describe("buildFinansije — P&L po mesecima", () => {
   it("honorari po profesorki: časovi × stopa", () => {
     const jun = buildFinansije(fixture()).months[5];
     expect(jun.honorari["p-hristina"]).toBe(2 * 1400);
-    expect(jun.honorari["p-katarina"]).toBe(2 * 1600);
-    expect(jun.honorariUkupno).toBe(2800 + 3200);
+    expect(jun.honorari["p-katarina"]).toBe(2 * 1800); // Katarina grp stopa je 1800 (premium)
+    expect(jun.honorariUkupno).toBe(2800 + 3600);
   });
   it("troškovi po kategoriji i neto", () => {
     const jun = buildFinansije(fixture()).months[5];
     expect(jun.troskovi.marketing).toBe(5000);
     expect(jun.troskovi.materijali).toBe(3000);
-    expect(jun.neto).toBe(29000 - 6000 - 8000);
+    expect(jun.neto).toBe(29000 - 6400 - 8000);
   });
   it("totals za celu godinu", () => {
     const d = buildFinansije(fixture());
     expect(d.totals.prihod).toBe(43000);
-    expect(d.totals.honorari).toBe(6000);
+    expect(d.totals.honorari).toBe(6400);
     expect(d.totals.troskovi).toBe(8000);
-    expect(d.totals.neto).toBe(43000 - 14000);
-    expect(d.totals.marzaPct).toBe(Math.round(((43000 - 14000) / 43000) * 100));
+    expect(d.totals.neto).toBe(43000 - 14400);
+    expect(d.totals.marzaPct).toBe(Math.round(((43000 - 14400) / 43000) * 100));
   });
   it("porudžbine van godine ne ulaze u months", () => {
     const f = fixture();
@@ -654,9 +654,9 @@ describe("buildFinansije — grupe", () => {
     expect(g.clanovi).toBe(1);
     expect(g.maxSeats).toBe(6);
     expect(g.prihod).toBe(6000);          // Majina porudžbina
-    expect(g.honorar).toBe(2 * 1600);     // 2 sesije × Katarina grp stopa
-    expect(g.zarada).toBe(6000 - 3200);
-    expect(g.zaradaPoClanu).toBe(2800);
+    expect(g.honorar).toBe(2 * 1800);     // 2 sesije × Katarina grp stopa (1800)
+    expect(g.zarada).toBe(6000 - 3600);
+    expect(g.zaradaPoClanu).toBe(2400);
     expect(g.profesorka).toBe("Katarina");
   });
   it("grupa ispod break-even ima negativnu zaradu", () => {
@@ -664,7 +664,7 @@ describe("buildFinansije — grupe", () => {
     f.orders = f.orders.filter((o) => o.id !== "o2"); // bez Majine uplate
     const g = buildFinansije(f).grupe.find((x) => x.group_id === "g1")!;
     expect(g.prihod).toBe(0);
-    expect(g.zarada).toBe(-3200);
+    expect(g.zarada).toBe(-3600);
   });
 });
 
@@ -672,11 +672,11 @@ describe("buildFinansije — profesorke", () => {
   it("prihod profesorke: individualni preko order→enrollment, grupni preko njenih grupa", () => {
     const d = buildFinansije(fixture());
     const hristina = d.profesorke.find((p) => p.professor_id === "p-hristina")!;
-    expect(hristina.prihod).toBe(14000);  // junska Ivanova obnova (majska ispada iz... pažnja: mesec=null → cela 2026 → obe = 28000)
+    expect(hristina.prihod).toBe(28000);  // obe Ivanove porudžbine 2026 (maj + jun)
     const katarina = d.profesorke.find((p) => p.professor_id === "p-katarina")!;
     expect(katarina.prihod).toBe(6000);   // Majina grupna uplata
-    expect(katarina.honorar).toBe(3200);
-    expect(katarina.neto).toBe(2800);
+    expect(katarina.honorar).toBe(3600);
+    expect(katarina.neto).toBe(2400);
   });
   it("sortirane po neto doprinosu", () => {
     const neto = buildFinansije(fixture()).profesorke.map((p) => p.neto);
@@ -696,8 +696,6 @@ describe("buildFinansije — profesorke", () => {
   });
 });
 ```
-
-**Pažnja na prvi test:** Hristinin prihod sa `mesec: null` je **28000** (obe Ivanove porudžbine u 2026) — ispravi expect na `28000` pri pisanju, komentar iznad je podsetnik.
 
 - [ ] **Step 2: Pokreni — novi testovi padaju**
 
@@ -786,7 +784,7 @@ Expected: FAIL — `d.grupe.find(...)` je undefined (grupe su prazan niz)
   return { months, totals, kursevi, opstiTroskovi, grupe, profesorke };
 ```
 
-- [ ] **Step 4: Pokreni — prolazi (ispravi expect 14000→28000 ako test pao na tome)**
+- [ ] **Step 4: Pokreni — prolazi**
 
 Run: `npx vitest run src/lib/finansije.test.ts`
 Expected: PASS
