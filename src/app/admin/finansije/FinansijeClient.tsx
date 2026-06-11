@@ -125,17 +125,17 @@ export default function FinansijeClient({ data, year, mesec, pendingTotal, profN
           </thead>
           <tbody>
             {KATEGORIJE.filter((k) => data.months.some((m) => m.prihod[k])).map((k) => (
-              <Row key={k} label={KATEGORIJA_LABELS[k]} cells={aktivniMeseci.map((m) => m.prihod[k])} indent />
+              <Row key={k} label={KATEGORIJA_LABELS[k]} cells={aktivniMeseci.map((m) => m.prihod[k])} indent pctOf={data.totals.prihod} />
             ))}
             <Row label="Prihod" cells={aktivniMeseci.map((m) => m.prihodUkupno)} bold />
             {honorarProfIds.map((pid) => (
-              <Row key={pid} label={profName[pid] ?? pid} cells={aktivniMeseci.map((m) => -(m.honorari[pid] ?? 0))} indent negative />
+              <Row key={pid} label={profName[pid] ?? pid} cells={aktivniMeseci.map((m) => -(m.honorari[pid] ?? 0))} indent negative pctOf={data.totals.prihod} />
             ))}
-            <Row label="Honorari" cells={aktivniMeseci.map((m) => -m.honorariUkupno)} bold negative />
+            <Row label="Honorari" cells={aktivniMeseci.map((m) => -m.honorariUkupno)} bold negative pctOf={data.totals.prihod} />
             {trosakKategorije.map((cat) => (
-              <Row key={cat} label={EXPENSE_CATEGORY_LABELS[cat as ExpenseCategory] ?? cat} cells={aktivniMeseci.map((m) => -(m.troskovi[cat] ?? 0))} indent negative />
+              <Row key={cat} label={EXPENSE_CATEGORY_LABELS[cat as ExpenseCategory] ?? cat} cells={aktivniMeseci.map((m) => -(m.troskovi[cat] ?? 0))} indent negative pctOf={data.totals.prihod} />
             ))}
-            <Row label="Troškovi" cells={aktivniMeseci.map((m) => -m.troskoviUkupno)} bold negative />
+            <Row label="Troškovi" cells={aktivniMeseci.map((m) => -m.troskoviUkupno)} bold negative pctOf={data.totals.prihod} />
             <tr className="border-t-2 border-gray-200">
               <td className="py-2 pr-3 font-bold">Neto zarada</td>
               {aktivniMeseci.map((m) => {
@@ -371,14 +371,18 @@ export default function FinansijeClient({ data, year, mesec, pendingTotal, profN
   );
 }
 
-function Row({ label, cells, bold, indent, negative }: { label: string; cells: number[]; bold?: boolean; indent?: boolean; negative?: boolean }) {
+function Row({ label, cells, bold, indent, negative, pctOf }: { label: string; cells: number[]; bold?: boolean; indent?: boolean; negative?: boolean; pctOf?: number }) {
   const total = cells.reduce((a, b) => a + b, 0);
   const cls = (n: number) => `py-1 px-2 text-right ${bold ? "font-semibold" : ""} ${negative && n !== 0 ? "text-red-600/80" : ""}`;
+  const pct = pctOf && pctOf > 0 && total !== 0 ? Math.round(Math.abs(total) / pctOf * 100) : null;
   return (
     <tr className={bold ? "border-t border-gray-100" : ""}>
       <td className={`py-1 pr-3 ${indent ? "pl-4 text-gray-500" : ""} ${bold ? "font-semibold" : ""}`}>{label}</td>
       {cells.map((c, i) => <td key={i} className={cls(c)}>{c !== 0 ? din(c) : "—"}</td>)}
-      <td className={`py-1 pl-3 text-right ${bold ? "font-semibold" : "text-gray-500"}`}>{total !== 0 ? din(total) : "—"}</td>
+      <td className={`py-1 pl-3 text-right ${bold ? "font-semibold" : "text-gray-500"}`}>
+        {total !== 0 ? din(total) : "—"}
+        {pct !== null && <span className="block text-xs text-gray-400 font-normal">({pct}%)</span>}
+      </td>
     </tr>
   );
 }
