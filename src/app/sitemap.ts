@@ -44,5 +44,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
-  return [...staticPages, ...coursePages, ...blogPages];
+  // Dedup (npr. paket-a1-a2-b1 je i u statičkim i u courses) — prva pojava (viši prioritet) ostaje
+  const seen = new Set<string>();
+  return [...staticPages, ...coursePages, ...blogPages].filter((p) => {
+    if (seen.has(p.url)) return false;
+    seen.add(p.url);
+    return true;
+  });
 }
