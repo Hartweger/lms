@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   title: "Besplatno testiranje nemačkog jezika | Hartweger",
   description: "Besplatno testiranje nivoa nemačkog jezika online. Testiraj se odmah i saznaj da li si A1, A2, B1 ili B2. Bez registracije, rezultat odmah + preporuka kursa.",
   openGraph: {
+    images: [{ url: "/og/default.png", width: 1200, height: 630, alt: "Hartweger — Škola nemačkog jezika" }],
     title: "Besplatno testiranje nemačkog jezika — saznaj svoj nivo",
     description: "Besplatno testiraj svoj nivo nemačkog jezika. Bez registracije, rezultat odmah + preporuka kursa.",
     url: "https://www.hartweger.rs/besplatno-testiranje",

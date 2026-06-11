@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: "Magazin — Hartweger škola nemačkog jezika",
   description: "Saveti za učenje nemačkog jezika, gramatika, vokabular, priprema za ispite i život u nemačkom govornom području.",
   openGraph: {
+    images: [{ url: "/og/default.png", width: 1200, height: 630, alt: "Hartweger — Škola nemačkog jezika" }],
     title: "Magazin — Hartweger škola nemačkog jezika",
     description: "Saveti za učenje nemačkog jezika, gramatika, vokabular i priprema za ispite.",
   },

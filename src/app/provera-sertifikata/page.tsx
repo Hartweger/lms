@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   title: "Provera sertifikata — Hartweger",
   description: "Proverite validnost sertifikata iz Hartweger škole nemačkog jezika.",
   openGraph: {
+    images: [{ url: "/og/default.png", width: 1200, height: 630, alt: "Hartweger — Škola nemačkog jezika" }],
     title: "Provera sertifikata — Hartweger",
     description: "Proverite validnost sertifikata iz Hartweger škole nemačkog jezika.",
   },

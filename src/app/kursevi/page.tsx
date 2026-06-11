@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   title: "Kursevi nemačkog jezika — Hartweger",
   description: "Video kursevi, grupna i individualna nastava nemačkog jezika od A1 do C1. Izaberite tip kursa, filtrirajte po nivou i odmah se prijavite.",
   openGraph: {
+    images: [{ url: "/og/default.png", width: 1200, height: 630, alt: "Hartweger — Škola nemačkog jezika" }],
     title: "Kursevi nemačkog jezika — Hartweger",
     description: "Video kursevi, grupna i individualna nastava nemačkog jezika od A1 do C1.",
   },

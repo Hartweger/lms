@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   title: "Opšti uslovi poslovanja — Hartweger",
   description: "Opšti uslovi korišćenja platforme Hartweger — uslovi kupovine, pristup kursevima i pravila korišćenja.",
   openGraph: {
+    images: [{ url: "/og/default.png", width: 1200, height: 630, alt: "Hartweger — Škola nemačkog jezika" }],
     title: "Opšti uslovi poslovanja — Hartweger",
     description: "Opšti uslovi korišćenja platforme Hartweger.",
   },

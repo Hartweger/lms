@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "Grupni kursevi nemačkog jezika — Hartweger",
   description: "Pogledajte raspored grupnih kurseva nemačkog jezika i prijavite se online.",
   openGraph: {
+    images: [{ url: "/og/default.png", width: 1200, height: 630, alt: "Hartweger — Škola nemačkog jezika" }],
     title: "Grupni kursevi nemačkog jezika — Hartweger",
     description: "Pogledajte raspored grupnih kurseva nemačkog jezika i prijavite se online.",
   },

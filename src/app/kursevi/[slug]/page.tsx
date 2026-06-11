@@ -161,15 +161,24 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     .eq("is_purchasable", true)
     .single();
   if (!course) return { title: "Kurs nije pronađen — Hartweger" };
+  // Kursevi (za sada) nemaju svoje slike → fallback na brend og sliku,
+  // inače mreže pri deljenju zgrabe logo i iseku ga ružno.
+  const ogImage = course.thumbnail_url
+    ? { url: course.thumbnail_url, alt: course.title }
+    : { url: "/og/default.png", width: 1200, height: 630, alt: "Hartweger — Škola nemačkog jezika" };
   return {
     title: `${course.title} — Hartweger`,
     description: course.description,
     openGraph: {
       title: `${course.title} — Hartweger`,
       description: course.description,
-      ...(course.thumbnail_url && {
-        images: [{ url: course.thumbnail_url, alt: course.title }],
-      }),
+      images: [ogImage],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${course.title} — Hartweger`,
+      description: course.description,
+      images: [ogImage.url],
     },
   };
 }

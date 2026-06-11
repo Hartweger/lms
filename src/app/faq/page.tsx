@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: "Česta pitanja — Hartweger",
   description: "Odgovori na najčešća pitanja o kursevima nemačkog jezika, plaćanju, pristupu platformi i sertifikatima.",
   openGraph: {
+    images: [{ url: "/og/default.png", width: 1200, height: 630, alt: "Hartweger — Škola nemačkog jezika" }],
     title: "Česta pitanja — Hartweger",
     description: "Odgovori na najčešća pitanja o kursevima nemačkog jezika, plaćanju, pristupu platformi i sertifikatima.",
   },
