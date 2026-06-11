@@ -71,6 +71,21 @@ const nextConfig: NextConfig = {
       // 🏆 "naša zajednica – top polaznici" (leaderboard) — gasi se, na naslovnu
       { source: "/%f0%9f%8f%86-nasa-zajednica-top-polaznici", destination: "/", permanent: true },
 
+      // Stari LearnDash kurs URL-ovi (GA audit 2026-06-11): /kursevi/<stari-slug>
+      // padali na novi /kursevi/[slug] route kao 404. Slugovi NE postoje kao novi proizvodi.
+      { source: "/kursevi/testiranje/:path*", destination: "/besplatno-testiranje", permanent: true },
+      { source: "/kursevi/a1-1-online-kurs/:path*", destination: "/kursevi/video-kurs-a1", permanent: true },
+      { source: "/kursevi/a1-2/:path*", destination: "/kursevi/video-kurs-a1", permanent: true },
+      { source: "/kursevi/a2-1/:path*", destination: "/kursevi/video-kurs-a2", permanent: true },
+      { source: "/kursevi/a2-2/:path*", destination: "/kursevi/video-kurs-a2", permanent: true },
+      { source: "/kursevi/b1-1/:path*", destination: "/kursevi/video-kurs-b1", permanent: true },
+      { source: "/kursevi/b1-2/:path*", destination: "/kursevi/video-kurs-b1", permanent: true },
+      { source: "/kursevi/polozi-fsp/:path*", destination: "/kursevi/fsp", permanent: true },
+      { source: "/kursevi/kako-da-ucis-reci/:path*", destination: "/masterclass-reci", permanent: true },
+      // Stare samostalne LearnDash lekcije/testovi (root-level)
+      { source: "/lekcije/:path*", destination: "/kursevi/video-kurs-a1", permanent: true },
+      { source: "/testovi/:path*", destination: "/besplatno-testiranje", permanent: true },
+
       // Lični brend → natasahartweger.rs (eksterni redirect)
       { source: "/nh-academy", destination: "https://natasahartweger.rs/academy", permanent: true },
       { source: "/trening-uzivo-kreiraj-kurs-koji-se-voli", destination: "https://natasahartweger.rs/academy", permanent: true },
