@@ -254,7 +254,7 @@ export default function FinansijeClient({ data, year, mesec, pendingTotal, profN
       {/* Po profesorkama */}
       <section className="bg-white rounded-xl border border-gray-100 p-4 overflow-x-auto">
         <h2 className="font-semibold mb-1">Po profesorkama — {periodLabel}</h2>
-        <p className="text-xs text-gray-400 mb-3">Retencija = prosečan broj meseci u kojima polaznik plaća (cela istorija, ne samo izabrani period).</p>
+        <p className="text-xs text-gray-400 mb-3">Retencija = prosečan broj meseci u kojima polaznik plaća (cela istorija, ne samo izabrani period). Prihod uključuje i autorski procenat video kurseva (FSP/FIDE); retencija se odnosi samo na polaznike časova.</p>
         <table className="text-sm w-full min-w-[700px]">
           <thead>
             <tr className="text-left text-gray-400">

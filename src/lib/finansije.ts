@@ -82,6 +82,8 @@ export interface GroupInfo {
 }
 export interface GroupMember { group_id: string; user_id: string; status: string }
 
+export interface RoyaltyRow { course_id: string; professor_id: string; percent: number }
+
 export interface FinansijeInput {
   year: number;
   mesec: number | null;       // null = cela godina (filter za sekcije, P&L je uvek cela godina)
@@ -96,6 +98,7 @@ export interface FinansijeInput {
   indEnrollments: { professor_id: string | null; user_id: string; status: string }[];
   groups: GroupInfo[];
   groupMembers: GroupMember[]; // SVI (i cancelled — atribucija prihoda istorijskih članova)
+  royalties: RoyaltyRow[];    // autorski procenti: course_id → professor_id + percent (od plaćenog iznosa)
 }
 
 export interface MonthRow {
@@ -175,6 +178,11 @@ export function buildFinansije(input: FinansijeInput): FinansijeData {
   // Napomena: promena stope u user_profiles retroaktivno preračunava istoriju (svesna odluka iz spec-a).
   const rateInd = (pid: string) => profById.get(pid)?.honorar_ind ?? 0;
   const rateGrp = (pid: string | null) => (pid ? profById.get(pid)?.honorar_grp ?? 0 : 0);
+  // Autorski procenat: course_id → [{professor_id, percent}]
+  const royaltiesByCourse = new Map<string, { professor_id: string; percent: number }[]>();
+  for (const r of (input.royalties ?? [])) {
+    royaltiesByCourse.set(r.course_id, [...(royaltiesByCourse.get(r.course_id) ?? []), { professor_id: r.professor_id, percent: r.percent }]);
+  }
 
   // ---------- P&L po mesecima (uvek cela godina) ----------
   const months: MonthRow[] = Array.from({ length: 12 }, (_, i) => ({
@@ -193,6 +201,12 @@ export function buildFinansije(input: FinansijeInput): FinansijeData {
       const cat = kategorijaForItem(a.course_slug, courseById.get(a.course_id)?.course_type);
       mo.prihod[cat] += a.amount;
       mo.prihodUkupno += a.amount;
+      // Autorski procenat: od plaćenog iznosa alokacije
+      for (const { professor_id, percent } of (royaltiesByCourse.get(a.course_id) ?? [])) {
+        const iznos = Math.round(a.amount * percent / 100);
+        mo.honorari[professor_id] = (mo.honorari[professor_id] ?? 0) + iznos;
+        mo.honorariUkupno += iznos;
+      }
     }
   }
   for (const l of input.lessons) {
@@ -235,9 +249,23 @@ export function buildFinansije(input: FinansijeInput): FinansijeData {
     row[field] += amt;
     courseAgg.set(id, row);
   };
+  // Per-profesorka royalty prihod i honorar za period — za "Po profesorkama" sekciju
+  const royaltyPrihodByProf = new Map<string, number>();
+  const royaltyHonorarByProf = new Map<string, number>();
+
   for (const o of input.orders) {
     if (!inSel(o.created_at)) continue;
-    for (const a of allocateOrderTotal(o)) bump(a.course_id, "prihod", a.amount);
+    for (const a of allocateOrderTotal(o)) {
+      bump(a.course_id, "prihod", a.amount);
+      // Autorski procenat: kurs.honorar += iznos
+      for (const { professor_id, percent } of (royaltiesByCourse.get(a.course_id) ?? [])) {
+        const iznos = Math.round(a.amount * percent / 100);
+        bump(a.course_id, "honorar", iznos);
+        // Akumuliraj za profesorke sekciju
+        royaltyPrihodByProf.set(professor_id, (royaltyPrihodByProf.get(professor_id) ?? 0) + a.amount);
+        royaltyHonorarByProf.set(professor_id, (royaltyHonorarByProf.get(professor_id) ?? 0) + iznos);
+      }
+    }
   }
   for (const l of input.lessons) {
     if (!inSel(l.lesson_date) || !l.course_id) continue;
@@ -332,10 +360,13 @@ export function buildFinansije(input: FinansijeInput): FinansijeData {
 
   // ---------- Profesorke ----------
   const profesorke: ProfRow[] = input.professors.map((p) => {
-    const prihod = selPayments.filter((x) => x.professor_id === p.id).reduce((s, x) => s + x.amount, 0);
-    const honorar =
+    // Video kupci NISU njeni polaznici — royalty prihod/honorar se računa odvojeno od časova.
+    const prihodCasovi = selPayments.filter((x) => x.professor_id === p.id).reduce((s, x) => s + x.amount, 0);
+    const prihod = prihodCasovi + (royaltyPrihodByProf.get(p.id) ?? 0);
+    const honorarCasovi =
       input.lessons.filter((l) => l.professor_id === p.id && inSel(l.lesson_date)).length * (p.honorar_ind ?? 0) +
       input.sessions.filter((s) => s.professor_id === p.id && inSel(s.session_date)).length * (p.honorar_grp ?? 0);
+    const honorar = honorarCasovi + (royaltyHonorarByProf.get(p.id) ?? 0);
     const aktivniInd = new Set(input.indEnrollments.filter((e) => e.professor_id === p.id && e.status === "active").map((e) => e.user_id));
     const njeneGrupe = new Set(input.groups.filter((g) => g.professor_id === p.id).map((g) => g.id));
     const aktivniGrp = new Set(input.groupMembers.filter((m) => njeneGrupe.has(m.group_id) && m.status === "active").map((m) => m.user_id));

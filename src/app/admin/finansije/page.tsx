@@ -18,7 +18,7 @@ export default async function AdminFinansijePage({
   const admin = createAdminClient();
   // PostgREST default limit je 1000 redova — eksplicitni limiti + godišnji filter za lekcije/sesije;
   // orders cela istorija zbog retencije.
-  const [ordersRes, coursesRes, profsRes, lessonsRes, sessionsRes, expensesRes, indEnrRes, groupsRes, membersRes] =
+  const [ordersRes, coursesRes, profsRes, lessonsRes, sessionsRes, expensesRes, indEnrRes, groupsRes, membersRes, royaltiesRes] =
     await Promise.all([
       admin.from("orders").select("id, user_id, created_at, total, items, payment_status").limit(10000),
       admin.from("courses").select("id, title, slug, course_type"),
@@ -35,12 +35,14 @@ export default async function AdminFinansijePage({
       admin.from("individual_enrollments").select("id, user_id, professor_id, order_id, course_id, status").limit(10000),
       admin.from("groups").select("id, level, status, max_seats, professor_id, purchasable_course_id, session_time"),
       admin.from("group_enrollments").select("group_id, user_id, status").limit(10000),
+      admin.from("course_royalties").select("course_id, professor_id, percent"),
     ]);
 
   for (const [res, name] of [
     [ordersRes, "orders"], [coursesRes, "courses"], [profsRes, "user_profiles"],
     [lessonsRes, "individual_lessons"], [sessionsRes, "group_sessions"], [expensesRes, "expenses"],
     [indEnrRes, "individual_enrollments"], [groupsRes, "groups"], [membersRes, "group_enrollments"],
+    [royaltiesRes, "course_royalties"],
   ] as const) {
     if (res.error) throw new Error(`Finansije: upit nije uspeo — ${res.error.message} (tabela: ${name})`);
   }
@@ -90,6 +92,7 @@ export default async function AdminFinansijePage({
     indEnrollments: enrollments.map((e) => ({ professor_id: e.professor_id, user_id: e.user_id, status: e.status })),
     groups,
     groupMembers: membersRes.data ?? [],
+    royalties: (royaltiesRes.data ?? []).map((r) => ({ ...r, percent: Number(r.percent) })),
   });
 
   const profName: Record<string, string> = Object.fromEntries(

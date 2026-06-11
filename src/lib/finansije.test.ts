@@ -122,6 +122,7 @@ function fixture(overrides: Partial<FinansijeInput> = {}): FinansijeInput {
     groups: [{ id: "g1", level: "A1.1", status: "u_toku", max_seats: 6, professor_id: "p-katarina",
       purchasable_course_id: "c-grupni", session_time: "ut/čet 18h" }],
     groupMembers: [{ group_id: "g1", user_id: "maja", status: "active" }],
+    royalties: [],
     ...overrides,
   };
 }
@@ -330,5 +331,72 @@ describe("fillGroupCourseIds", () => {
     ];
     const result = fillGroupCourseIds(groups, onlyVideoAndNonGrupni);
     expect(result[0].purchasable_course_id).toBeNull();
+  });
+});
+
+describe("buildFinansije — autorski procenti", () => {
+  // Fixture sa video FSP kursom i Milicom kao autoricom (50%)
+  function royaltyFixture(orderOverrides: Partial<FinansijeInput> = {}): FinansijeInput {
+    return fixture({
+      courses: [
+        ...fixture().courses,
+        { id: "c-fsp", title: "VIDEO FSP", slug: "fsp", course_type: "video" },
+      ],
+      professors: [
+        ...fixture().professors,
+        { id: "p-milica", full_name: "Milica", honorar_ind: 1400, honorar_grp: 1600 },
+      ],
+      orders: [
+        ...fixture().orders,
+        // jun: doc1 kupuje VIDEO FSP 24000
+        { id: "o-fsp", user_id: "doc1", created_at: "2026-06-15T10:00:00Z", total: 24000,
+          items: [{ course_id: "c-fsp", course_slug: "fsp", title: "VIDEO FSP", price: 24000 }] },
+      ],
+      royalties: [{ course_id: "c-fsp", professor_id: "p-milica", percent: 50 }],
+      ...orderOverrides,
+    });
+  }
+
+  it("jun P&L: honorari[p-milica] === 12000 (50% od 24000)", () => {
+    const d = buildFinansije(royaltyFixture());
+    const jun = d.months[5];
+    expect(jun.honorari["p-milica"]).toBe(12000);
+    expect(jun.honorariUkupno).toBe(2800 + 3600 + 12000); // hristina + katarina + milica royalty
+  });
+
+  it("kurs c-fsp: prihod 24000, honorar 12000, marza 12000", () => {
+    const d = buildFinansije(royaltyFixture());
+    const fsp = d.kursevi.find((k) => k.course_id === "c-fsp")!;
+    expect(fsp.prihod).toBe(24000);
+    expect(fsp.honorar).toBe(12000);
+    expect(fsp.marza).toBe(12000);
+  });
+
+  it("profesorka Milica: prihod 24000, honorar 12000, neto 12000, retencijaMeseci null, aktivniPolaznici 0", () => {
+    const d = buildFinansije(royaltyFixture());
+    const milica = d.profesorke.find((p) => p.professor_id === "p-milica")!;
+    expect(milica).toBeDefined();
+    expect(milica.prihod).toBe(24000);
+    expect(milica.honorar).toBe(12000);
+    expect(milica.neto).toBe(12000);
+    // Video kupci NISU njeni polaznici — retencija i aktivni ne računaju se za autorski prihod
+    expect(milica.retencijaMeseci).toBeNull();
+    expect(milica.aktivniPolaznici).toBe(0);
+  });
+
+  it("popust slučaj: total 18000 uz price 24000 → royalty 9000 (od plaćenog iznosa)", () => {
+    const d = buildFinansije(royaltyFixture({
+      orders: [
+        ...fixture().orders,
+        // doc1 kupuje FSP sa popustom — total 18000, ali price u items 24000
+        { id: "o-fsp-popust", user_id: "doc1", created_at: "2026-06-15T10:00:00Z", total: 18000,
+          items: [{ course_id: "c-fsp", course_slug: "fsp", title: "VIDEO FSP", price: 24000 }] },
+      ],
+    }));
+    const jun = d.months[5];
+    expect(jun.honorari["p-milica"]).toBe(9000); // 50% od 18000 (plaćeni iznos, ne puna cena)
+    const fsp = d.kursevi.find((k) => k.course_id === "c-fsp")!;
+    expect(fsp.prihod).toBe(18000);
+    expect(fsp.honorar).toBe(9000);
   });
 });
