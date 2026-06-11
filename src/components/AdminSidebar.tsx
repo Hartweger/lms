@@ -19,6 +19,7 @@ const links = [
   { href: "/admin/analitika", label: "Analitika", exact: true },
   { href: "/admin/analitika/kupci", label: "Kupci", indent: true },
   { href: "/admin/napredak", label: "Napredak", indent: true },
+  { href: "/admin/finansije", label: "Finansije" },
   { href: "/admin/naki", label: "NaKI logovi" },
 ];
 
