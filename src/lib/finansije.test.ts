@@ -252,4 +252,25 @@ describe("buildFinansije — profesorke", () => {
     expect(d.profesorke.find((p) => p.professor_id === "p-hristina")!.aktivniPolaznici).toBe(1);
     expect(d.profesorke.find((p) => p.professor_id === "p-katarina")!.aktivniPolaznici).toBe(1);
   });
+  it("1:1 paket (slug počinje sa 'paket') atribuira prihod profesorki ako ima individual_enrollment", () => {
+    // Realni slugovi 1:1 paketa počinju sa "paket-nivo-..." → kategorijaForItem vrati "paket",
+    // ali order ima individual_enrollment sa professor_id → mora se atribuirati Hristini.
+    const f = fixture({
+      orders: [
+        ...fixture().orders,
+        // o5: jun, Lena kupuje 1:1 paket (slug počinje "paket-"), ali enrollment postoji za Hristinu
+        { id: "o5", user_id: "lena", created_at: "2026-06-15T10:00:00Z", total: 14000,
+          items: [{ course_id: "c-ind-paket", course_slug: "paket-nivo-a1-individualni-standard", title: "1:1 paket A1", price: 14000 }] },
+      ],
+      courses: [
+        ...fixture().courses,
+        { id: "c-ind-paket", title: "1:1 paket A1", slug: "paket-nivo-a1-individualni-standard", course_type: "individual" },
+      ],
+      indProfByOrderId: { ...fixture().indProfByOrderId, o5: "p-hristina" },
+    });
+    const d = buildFinansije(f);
+    const hristina = d.profesorke.find((p) => p.professor_id === "p-hristina")!;
+    // Hristina je imala 28000 (o3+o4), sad + 14000 (o5) = 42000
+    expect(hristina.prihod).toBe(42000);
+  });
 });

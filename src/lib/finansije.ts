@@ -266,7 +266,11 @@ export function buildFinansije(input: FinansijeInput): FinansijeData {
     const indProf = input.indProfByOrderId[o.id];
     for (const a of allocateOrderTotal(o)) {
       const cat = kategorijaForItem(a.course_slug, courseById.get(a.course_id)?.course_type);
-      if (cat === "individualni" && indProf) {
+      // indProf se proverava PRVO: mapa sadrži samo ordere sa stvarnim individual_enrollment-om —
+      // to je jači signal od slug kategorije. Realni 1:1 paketi imaju slug "paket-nivo-..." pa bi
+      // cat="paket" nikad ne okino granu "individualni". "Po profesorkama" i P&L kategorije se
+      // namerno ne poklapaju za 1:1 pakete (u P&L ostaju "Paketi" po spec-u).
+      if (indProf) {
         allPayments.push({ professor_id: indProf, user_id: o.user_id, amount: a.amount, month: monthKey(o.created_at), group_id: null });
       } else if (cat === "grupni") {
         // Polaznik može proći kroz više generacija iste grupe (isti purchasable_course_id) —
