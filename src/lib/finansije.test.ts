@@ -191,3 +191,52 @@ describe("buildFinansije — marže po kursevima", () => {
     expect(d.months[5].prihodUkupno).toBe(29000); // P&L i dalje cela godina
   });
 });
+
+describe("buildFinansije — grupe", () => {
+  it("zarada grupe = prihod članova − sesije × stopa", () => {
+    const d = buildFinansije(fixture());
+    const g = d.grupe.find((x) => x.group_id === "g1")!;
+    expect(g.clanovi).toBe(1);
+    expect(g.maxSeats).toBe(6);
+    expect(g.prihod).toBe(6000);          // Majina porudžbina
+    expect(g.honorar).toBe(2 * 1800);     // 2 sesije × Katarina grp stopa (1800)
+    expect(g.zarada).toBe(6000 - 3600);
+    expect(g.zaradaPoClanu).toBe(2400);
+    expect(g.profesorka).toBe("Katarina");
+  });
+  it("grupa ispod break-even ima negativnu zaradu", () => {
+    const f = fixture();
+    f.orders = f.orders.filter((o) => o.id !== "o2"); // bez Majine uplate
+    const g = buildFinansije(f).grupe.find((x) => x.group_id === "g1")!;
+    expect(g.prihod).toBe(0);
+    expect(g.zarada).toBe(-3600);
+  });
+});
+
+describe("buildFinansije — profesorke", () => {
+  it("prihod profesorke: individualni preko order→enrollment, grupni preko njenih grupa", () => {
+    const d = buildFinansije(fixture());
+    const hristina = d.profesorke.find((p) => p.professor_id === "p-hristina")!;
+    expect(hristina.prihod).toBe(28000);  // obe Ivanove porudžbine 2026 (maj + jun)
+    const katarina = d.profesorke.find((p) => p.professor_id === "p-katarina")!;
+    expect(katarina.prihod).toBe(6000);   // Majina grupna uplata
+    expect(katarina.honorar).toBe(3600);
+    expect(katarina.neto).toBe(2400);
+  });
+  it("sortirane po neto doprinosu", () => {
+    const neto = buildFinansije(fixture()).profesorke.map((p) => p.neto);
+    expect([...neto].sort((a, b) => b - a)).toEqual(neto);
+  });
+  it("retencija = prosek različitih meseci plaćanja po polazniku (cela istorija)", () => {
+    const d = buildFinansije(fixture());
+    const hristina = d.profesorke.find((p) => p.professor_id === "p-hristina")!;
+    expect(hristina.retencijaMeseci).toBe(2);  // Ivan: maj + jun
+    const katarina = d.profesorke.find((p) => p.professor_id === "p-katarina")!;
+    expect(katarina.retencijaMeseci).toBe(1);  // Maja: samo jun
+  });
+  it("aktivni polaznici: ind enrollment active + grupni active članovi", () => {
+    const d = buildFinansije(fixture());
+    expect(d.profesorke.find((p) => p.professor_id === "p-hristina")!.aktivniPolaznici).toBe(1);
+    expect(d.profesorke.find((p) => p.professor_id === "p-katarina")!.aktivniPolaznici).toBe(1);
+  });
+});

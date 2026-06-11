@@ -247,5 +247,81 @@ export function buildFinansije(input: FinansijeInput): FinansijeData {
     };
   }).sort((a, b) => b.marza - a.marza);
 
-  return { months, totals, kursevi, opstiTroskovi, grupe: [], profesorke: [] };
+  // ---------- Atribucija uplata profesorkama (i grupama) ----------
+  // Individualne: order_id → professor_id (individual_enrollments).
+  // Grupne: stavka grupnog kursa → grupa u kojoj je kupac član → profesorka grupe.
+  const memberGroups = new Map<string, string[]>(); // user_id → group_id[]
+  for (const gm of input.groupMembers) {
+    memberGroups.set(gm.user_id, [...(memberGroups.get(gm.user_id) ?? []), gm.group_id]);
+  }
+  const groupById = new Map(input.groups.map((g) => [g.id, g]));
+
+  interface ProfPayment { professor_id: string; user_id: string; amount: number; month: string; group_id: string | null }
+  const allPayments: ProfPayment[] = []; // cela istorija — za retenciju
+  for (const o of input.orders) {
+    if (!o.user_id) continue;
+    const indProf = input.indProfByOrderId[o.id];
+    for (const a of allocateOrderTotal(o)) {
+      const cat = kategorijaForItem(a.course_slug, courseById.get(a.course_id)?.course_type);
+      if (cat === "individualni" && indProf) {
+        allPayments.push({ professor_id: indProf, user_id: o.user_id, amount: a.amount, month: monthKey(o.created_at), group_id: null });
+      } else if (cat === "grupni") {
+        const gid = (memberGroups.get(o.user_id) ?? []).find((g) => groupById.get(g)?.purchasable_course_id === a.course_id);
+        const prof = gid ? groupById.get(gid)?.professor_id : null;
+        if (gid && prof) {
+          allPayments.push({ professor_id: prof, user_id: o.user_id, amount: a.amount, month: monthKey(o.created_at), group_id: gid });
+        }
+      }
+    }
+  }
+  const selPayments = allPayments.filter((p) => {
+    if (!p.month.startsWith(`${input.year}-`)) return false;
+    return input.mesec === null || Number(p.month.slice(5)) === input.mesec;
+  });
+
+  // ---------- Grupe ----------
+  const grupe: GroupRow[] = input.groups.map((g) => {
+    const clanovi = input.groupMembers.filter((m) => m.group_id === g.id && m.status === "active").length;
+    const prihod = selPayments.filter((p) => p.group_id === g.id).reduce((s, p) => s + p.amount, 0);
+    const honorar = input.sessions
+      .filter((s) => s.group_id === g.id && inSel(s.session_date))
+      .reduce((s2, s) => s2 + rateGrp(s.professor_id), 0);
+    const zarada = prihod - honorar;
+    return {
+      group_id: g.id,
+      naziv: g.session_time ? `${g.level} · ${g.session_time}` : g.level,
+      profesorka: (g.professor_id && profById.get(g.professor_id)?.full_name) || "—",
+      status: g.status, clanovi, maxSeats: g.max_seats, prihod, honorar,
+      zarada, zaradaPoClanu: clanovi > 0 ? Math.round(zarada / clanovi) : zarada,
+    };
+  }).filter((g) => g.prihod !== 0 || g.honorar !== 0 || g.status === "u_toku" || g.status === "otvoren")
+    .sort((a, b) => a.zarada - b.zarada); // najgore prve — to admin treba da vidi
+
+  // ---------- Profesorke ----------
+  const profesorke: ProfRow[] = input.professors.map((p) => {
+    const prihod = selPayments.filter((x) => x.professor_id === p.id).reduce((s, x) => s + x.amount, 0);
+    const honorar =
+      input.lessons.filter((l) => l.professor_id === p.id && inSel(l.lesson_date)).length * (p.honorar_ind ?? 0) +
+      input.sessions.filter((s) => s.professor_id === p.id && inSel(s.session_date)).length * (p.honorar_grp ?? 0);
+    const aktivniInd = new Set(input.indEnrollments.filter((e) => e.professor_id === p.id && e.status === "active").map((e) => e.user_id));
+    const njeneGrupe = new Set(input.groups.filter((g) => g.professor_id === p.id).map((g) => g.id));
+    const aktivniGrp = new Set(input.groupMembers.filter((m) => njeneGrupe.has(m.group_id) && m.status === "active").map((m) => m.user_id));
+    const aktivni = new Set([...aktivniInd, ...aktivniGrp]).size;
+
+    // Retencija: po polazniku broj RAZLIČITIH meseci sa uplatom (cela istorija), pa prosek.
+    const mesecePoPolazniku = new Map<string, Set<string>>();
+    for (const pay of allPayments) {
+      if (pay.professor_id !== p.id) continue;
+      mesecePoPolazniku.set(pay.user_id, (mesecePoPolazniku.get(pay.user_id) ?? new Set()).add(pay.month));
+    }
+    const brojevi = [...mesecePoPolazniku.values()].map((s) => s.size);
+    const retencija = brojevi.length > 0
+      ? Math.round((brojevi.reduce((a, b) => a + b, 0) / brojevi.length) * 10) / 10
+      : null;
+
+    return { professor_id: p.id, ime: p.full_name ?? "—", prihod, honorar, neto: prihod - honorar, aktivniPolaznici: aktivni, retencijaMeseci: retencija };
+  }).filter((p) => p.prihod !== 0 || p.honorar !== 0 || p.aktivniPolaznici > 0)
+    .sort((a, b) => b.neto - a.neto);
+
+  return { months, totals, kursevi, opstiTroskovi, grupe, profesorke };
 }
