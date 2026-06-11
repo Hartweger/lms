@@ -211,6 +211,16 @@ describe("buildFinansije — grupe", () => {
     expect(g.prihod).toBe(0);
     expect(g.zarada).toBe(-3600);
   });
+  it("uplata ide aktivnoj grupi kad je polaznik bio u više grupa istog kursa", () => {
+    const f = fixture();
+    f.groups.push({ id: "g0", level: "A1.1", status: "zavrsena", max_seats: 6, professor_id: "p-katarina",
+      purchasable_course_id: "c-grupni", session_time: "pon/sre 18h" });
+    // g0 namerno PRE g1 u groupMembers — bez fixa bi find() pokupio g0
+    f.groupMembers = [{ group_id: "g0", user_id: "maja", status: "cancelled" }, ...f.groupMembers];
+    const d = buildFinansije(f);
+    expect(d.grupe.find((x) => x.group_id === "g1")!.prihod).toBe(6000);
+    expect(d.grupe.find((x) => x.group_id === "g0")?.prihod ?? 0).toBe(0);
+  });
 });
 
 describe("buildFinansije — profesorke", () => {

@@ -151,6 +151,7 @@ function inPeriod(dateStr: string, year: number, mesec: number | null): boolean 
 export function buildFinansije(input: FinansijeInput): FinansijeData {
   const courseById = new Map(input.courses.map((c) => [c.id, c]));
   const profById = new Map(input.professors.map((p) => [p.id, p]));
+  // Napomena: promena stope u user_profiles retroaktivno preračunava istoriju (svesna odluka iz spec-a).
   const rateInd = (pid: string) => profById.get(pid)?.honorar_ind ?? 0;
   const rateGrp = (pid: string | null) => (pid ? profById.get(pid)?.honorar_grp ?? 0 : 0);
 
@@ -250,15 +251,16 @@ export function buildFinansije(input: FinansijeInput): FinansijeData {
   // ---------- Atribucija uplata profesorkama (i grupama) ----------
   // Individualne: order_id → professor_id (individual_enrollments).
   // Grupne: stavka grupnog kursa → grupa u kojoj je kupac član → profesorka grupe.
-  const memberGroups = new Map<string, string[]>(); // user_id → group_id[]
+  const memberGroups = new Map<string, { group_id: string; active: boolean }[]>(); // user_id → [{group_id, active}]
   for (const gm of input.groupMembers) {
-    memberGroups.set(gm.user_id, [...(memberGroups.get(gm.user_id) ?? []), gm.group_id]);
+    memberGroups.set(gm.user_id, [...(memberGroups.get(gm.user_id) ?? []), { group_id: gm.group_id, active: gm.status === "active" }]);
   }
   const groupById = new Map(input.groups.map((g) => [g.id, g]));
 
   interface ProfPayment { professor_id: string; user_id: string; amount: number; month: string; group_id: string | null }
   const allPayments: ProfPayment[] = []; // cela istorija — za retenciju
   for (const o of input.orders) {
+    // Porudžbine uvek imaju user_id (checkout/admin kreiraju korisnika); guard je defanzivan — bez user_id nema atribucije, P&L je svejedno broji.
     if (!o.user_id) continue;
     const indProf = input.indProfByOrderId[o.id];
     for (const a of allocateOrderTotal(o)) {
@@ -266,7 +268,12 @@ export function buildFinansije(input: FinansijeInput): FinansijeData {
       if (cat === "individualni" && indProf) {
         allPayments.push({ professor_id: indProf, user_id: o.user_id, amount: a.amount, month: monthKey(o.created_at), group_id: null });
       } else if (cat === "grupni") {
-        const gid = (memberGroups.get(o.user_id) ?? []).find((g) => groupById.get(g)?.purchasable_course_id === a.course_id);
+        // Polaznik može proći kroz više generacija iste grupe (isti purchasable_course_id) —
+        // preferiramo aktivno članstvo; ako nema aktivnog, uzimamo prvo istorijsko.
+        // Ovo je svesna aproksimacija za slučaj višestrukih generacija.
+        const candidates = (memberGroups.get(o.user_id) ?? []).filter((m) => groupById.get(m.group_id)?.purchasable_course_id === a.course_id);
+        const best = candidates.find((m) => m.active) ?? candidates[0];
+        const gid = best?.group_id;
         const prof = gid ? groupById.get(gid)?.professor_id : null;
         if (gid && prof) {
           allPayments.push({ professor_id: prof, user_id: o.user_id, amount: a.amount, month: monthKey(o.created_at), group_id: gid });
