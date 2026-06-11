@@ -37,6 +37,9 @@ export async function POST(request: Request) {
   if (!Number.isFinite(iznos) || iznos <= 0) {
     return NextResponse.json({ error: "Iznos mora biti broj veći od 0." }, { status: 400 });
   }
+  if (ended_at && expense_date && ended_at < expense_date) {
+    return NextResponse.json({ error: "Datum kraja ne može biti pre datuma početka." }, { status: 400 });
+  }
 
   const { data, error } = await admin.from("expenses").insert({
     name, category, amount: iznos,

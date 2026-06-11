@@ -33,9 +33,9 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     await admin.from("user_profiles").upsert({ id: uid, email, role: "student" });
   }
 
-  // enrollment (idempotentno)
+  // enrollment (idempotentno); cancelled_at: null resetuje stari datum ispisa pri ponovnom upisu
   await admin.from("group_enrollments").upsert(
-    { group_id: groupId, user_id: uid, status: "active" }, { onConflict: "group_id,user_id" },
+    { group_id: groupId, user_id: uid, status: "active", cancelled_at: null }, { onConflict: "group_id,user_id" },
   );
 
   // grant pristupa na sadržajni kurs (nikad ne skraćuj)
