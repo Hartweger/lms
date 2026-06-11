@@ -1,5 +1,5 @@
 import { createAdminClient } from "@/lib/supabase/admin";
-import { buildFinansije, monthKey, type ExpenseRow, type FinOrder } from "@/lib/finansije";
+import { buildFinansije, fillGroupCourseIds, monthKey, type ExpenseRow, type FinOrder } from "@/lib/finansije";
 import FinansijeClient from "./FinansijeClient";
 
 export const dynamic = "force-dynamic";
@@ -61,7 +61,7 @@ export default async function AdminFinansijePage({
   // Spajanja za čistu funkciju: lekcija → kurs (preko enrollmenta), sesija → kupovni kurs (preko grupe)
   const enrollments = indEnrRes.data ?? [];
   const enrById = new Map(enrollments.map((e) => [e.id, e]));
-  const groups = groupsRes.data ?? [];
+  const groups = fillGroupCourseIds(groupsRes.data ?? [], coursesRes.data ?? []);
   const groupById = new Map(groups.map((g) => [g.id, g]));
 
   const lessons = (lessonsRes.data ?? []).map((l) => ({

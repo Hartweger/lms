@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { monthKey, kategorijaForItem, allocateOrderTotal, type FinOrder, expenseMonthsInYear, type ExpenseRow, buildFinansije, type FinansijeInput } from "./finansije";
+import { monthKey, kategorijaForItem, allocateOrderTotal, type FinOrder, expenseMonthsInYear, type ExpenseRow, buildFinansije, type FinansijeInput, fillGroupCourseIds, type CourseInfo, type GroupInfo } from "./finansije";
 
 describe("monthKey", () => {
   it("vraća yyyy-mm iz ISO datuma", () => {
@@ -272,5 +272,63 @@ describe("buildFinansije — profesorke", () => {
     const hristina = d.profesorke.find((p) => p.professor_id === "p-hristina")!;
     // Hristina je imala 28000 (o3+o4), sad + 14000 (o5) = 42000
     expect(hristina.prihod).toBe(42000);
+  });
+});
+
+describe("fillGroupCourseIds", () => {
+  const courses: CourseInfo[] = [
+    { id: "c-grupni-b12", title: "Grupni B1.2", slug: "grupni-kurs-nemackog-b1-2", course_type: "group" },
+    { id: "c-video-a1", title: "Video A1", slug: "osnove-gramatike", course_type: "video" },
+    { id: "c-grupni-a11", title: "Grupni A1.1", slug: "grupni-kurs-nemackog-jezika-a1-1", course_type: "group" },
+  ];
+
+  it("grupa sa null purchasable_course_id dobija course_id prema nivou", () => {
+    const groups: GroupInfo[] = [
+      { id: "g1", level: "B1.2", status: "u_toku", max_seats: 6, professor_id: "p1",
+        purchasable_course_id: null, session_time: null },
+    ];
+    const result = fillGroupCourseIds(groups, courses);
+    expect(result[0].purchasable_course_id).toBe("c-grupni-b12");
+  });
+
+  it("grupa koja već ima purchasable_course_id se NE dira", () => {
+    const groups: GroupInfo[] = [
+      { id: "g2", level: "B1.2", status: "u_toku", max_seats: 6, professor_id: "p1",
+        purchasable_course_id: "existing-id", session_time: null },
+    ];
+    const result = fillGroupCourseIds(groups, courses);
+    expect(result[0].purchasable_course_id).toBe("existing-id");
+  });
+
+  it("nivo bez grupnog kursa ostaje null", () => {
+    const groups: GroupInfo[] = [
+      { id: "g3", level: "C2.1", status: "u_toku", max_seats: 6, professor_id: "p1",
+        purchasable_course_id: null, session_time: null },
+    ];
+    const result = fillGroupCourseIds(groups, courses);
+    expect(result[0].purchasable_course_id).toBeNull();
+  });
+
+  it("ne menja originalne objekte (immutability)", () => {
+    const groups: GroupInfo[] = [
+      { id: "g4", level: "A1.1", status: "u_toku", max_seats: 6, professor_id: "p1",
+        purchasable_course_id: null, session_time: null },
+    ];
+    const result = fillGroupCourseIds(groups, courses);
+    expect(groups[0].purchasable_course_id).toBeNull(); // original nepromenjen
+    expect(result[0].purchasable_course_id).toBe("c-grupni-a11");
+  });
+
+  it("video i ne-grupni kursevi se ignorišu pri mapiranju", () => {
+    const onlyVideoAndNonGrupni: CourseInfo[] = [
+      { id: "c-video", title: "Video", slug: "osnove-gramatike", course_type: "video" },
+      { id: "c-ind", title: "Ind", slug: "individualni-kurs-nemackog-jezika-b1-2", course_type: "individual" },
+    ];
+    const groups: GroupInfo[] = [
+      { id: "g5", level: "B1.2", status: "u_toku", max_seats: 6, professor_id: "p1",
+        purchasable_course_id: null, session_time: null },
+    ];
+    const result = fillGroupCourseIds(groups, onlyVideoAndNonGrupni);
+    expect(result[0].purchasable_course_id).toBeNull();
   });
 });

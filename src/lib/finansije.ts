@@ -1,4 +1,5 @@
 // src/lib/finansije.ts — čiste funkcije za admin Finansije (P&L, marže, grupe, profesorke). Bez I/O.
+import { nivoForSlug } from "@/lib/course-nivo";
 
 export type Kategorija = "video" | "grupni" | "individualni" | "paket" | "ostalo";
 
@@ -121,6 +122,22 @@ export interface FinansijeData {
   opstiTroskovi: number;
   grupe: GroupRow[];
   profesorke: ProfRow[];
+}
+
+/**
+ * Popuni purchasable_course_id grupama koje ga nemaju (grupe iz Sheet migracije su bez njega):
+ * veza ide preko nivoa — kurs čiji slug mapira na isti nivo kao group.level (samo "grupni-" slugovi).
+ */
+export function fillGroupCourseIds(groups: GroupInfo[], courses: CourseInfo[]): GroupInfo[] {
+  const levelToCourse = new Map<string, string>();
+  for (const c of courses) {
+    if (!c.slug.startsWith("grupni-")) continue;
+    const nivo = nivoForSlug(c.slug);
+    if (nivo && !levelToCourse.has(nivo)) levelToCourse.set(nivo, c.id);
+  }
+  return groups.map((g) =>
+    g.purchasable_course_id ? g : { ...g, purchasable_course_id: levelToCourse.get(g.level) ?? null }
+  );
 }
 
 /** Meseci (1-12) date godine u kojima trošak važi. nowKey ("yyyy-mm") seče mesečne bez kraja. */
