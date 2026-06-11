@@ -82,6 +82,17 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
   const post = data as BlogPost;
 
+  // FAQ schema: parovi <h4>pitanje</h4> + prvi <p> odgovora iz sadržaja.
+  // Renderuje se samo ako post ima bar 2 para (sekcija "Česta pitanja").
+  const faqPairs = Array.from(
+    post.content.matchAll(/<h4[^>]*>([\s\S]*?)<\/h4>\s*<p[^>]*>([\s\S]*?)<\/p>/g)
+  )
+    .map((m) => ({
+      q: m[1].replace(/<[^>]+>/g, "").trim(),
+      a: m[2].replace(/<[^>]+>/g, "").trim(),
+    }))
+    .filter((p) => p.q && p.a);
+
   // Related posts (same category, different slug)
   const { data: related } = await supabase
     .from("blog_posts")
@@ -126,6 +137,22 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           }),
         }}
       />
+      {faqPairs.length >= 2 && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: faqPairs.map((p) => ({
+                "@type": "Question",
+                name: p.q,
+                acceptedAnswer: { "@type": "Answer", text: p.a },
+              })),
+            }),
+          }}
+        />
+      )}
       {/* Hero */}
       <section className="bg-gradient-to-b from-plava-light/60 to-white py-12 px-4">
         <div className="max-w-3xl mx-auto">
