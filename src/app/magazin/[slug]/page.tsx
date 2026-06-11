@@ -61,8 +61,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       description,
       type: "article",
       ...(post.thumbnail_url && {
-        images: [{ url: post.thumbnail_url, alt: post.title }],
+        // width/height su bitni: bez njih WhatsApp/Viber/LinkedIn prikazuju mali isečen kvadrat
+        images: [{ url: post.thumbnail_url, alt: post.title, width: 1200, height: 630 }],
       }),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${post.title} — Hartweger Magazin`,
+      description,
+      ...(post.thumbnail_url && { images: [post.thumbnail_url] }),
     },
   };
 }
