@@ -1533,7 +1533,7 @@ Expected: deploy prolazi; PostToolUse hook automatski pokreće smoke test
 
 - [ ] **Step 3: Verifikuj na produkciji sa cache-busterom**
 
-Run: `curl -s "https://kurs.hartweger.rs/admin/finansije?cb=$(date +%s)" -o /dev/null -w "%{http_code}"`
+Run: `curl -s "https://hartweger.rs/admin/finansije?cb=$(date +%s)" -o /dev/null -w "%{http_code}"` (kurs.hartweger.rs više ne postoji)
 Expected: `307` ili `200` (307 = redirect na login za neulogovanog — OK; bitno da nije 500)
 
 ---
