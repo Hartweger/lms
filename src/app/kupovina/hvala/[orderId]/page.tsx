@@ -61,6 +61,11 @@ export default async function HvalaPage({
           value={order.total}
           contentId={courseSlug || undefined}
           contentName={courseTitle || undefined}
+          items={(items ?? []).map((it) => ({
+            id: it.course_slug || it.course_id,
+            name: it.title,
+            price: it.price,
+          }))}
         />
       )}
       <div className="max-w-xl mx-auto px-4 py-10 md:py-16">
