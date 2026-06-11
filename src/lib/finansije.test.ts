@@ -112,7 +112,7 @@ function fixture(overrides: Partial<FinansijeInput> = {}): FinansijeInput {
       { session_date: "2026-06-11", professor_id: "p-katarina", group_id: "g1", course_id: "c-grupni" },
     ],
     expenses: [
-      { id: "e1", name: "Meta oglasi", category: "marketing", amount: 5000, course_id: null,
+      { id: "e1", name: "Meta oglasi", category: "oglasi", amount: 5000, course_id: null,
         expense_date: "2026-06-01", recurring: false, ended_at: null, note: null },
       { id: "e2", name: "Snimanje videa", category: "materijali", amount: 3000, course_id: "c-video",
         expense_date: "2026-06-01", recurring: false, ended_at: null, note: null },
@@ -145,7 +145,7 @@ describe("buildFinansije — P&L po mesecima", () => {
   });
   it("troškovi po kategoriji i neto", () => {
     const jun = buildFinansije(fixture()).months[5];
-    expect(jun.troskovi.marketing).toBe(5000);
+    expect(jun.troskovi.oglasi).toBe(5000);
     expect(jun.troskovi.materijali).toBe(3000);
     expect(jun.neto).toBe(29000 - 6400 - 8000);
   });
