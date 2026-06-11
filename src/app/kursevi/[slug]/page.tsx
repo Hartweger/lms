@@ -9,6 +9,8 @@ import ProductFaq from "@/components/product/ProductFaq";
 import { fetchRaspored, type GrupaRaspored } from "@/lib/raspored";
 import { SLUG_TO_NIVO as slugToNivo } from "@/lib/course-nivo";
 import InteresForm from "./InteresForm";
+import BuyButton from "@/components/BuyButton";
+import PixelViewContent from "@/components/PixelViewContent";
 
 /* ─── Preduslovi po nivou ─── */
 const preduslov: Record<string, string> = {
@@ -230,6 +232,8 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
 
   return (
     <>
+      {/* Meta Pixel — ViewContent na stranici proizvoda */}
+      <PixelViewContent contentId={course.slug} contentName={course.title} value={course.price} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -446,6 +450,7 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
                   slug={course.slug}
                   ctaLabel={ctaLabel}
                   isVariable={isVariable}
+                  title={course.title}
                 />
               )}
             </div>
@@ -466,12 +471,15 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
             {category === "grupni" && grupa?.full ? (
               <InteresForm nivo={grupa.nivo} />
             ) : (
-              <Link
-                href={`/kupovina/${course.slug}`}
+              <BuyButton
+                slug={course.slug}
+                contentId={course.slug}
+                contentName={course.title}
+                value={course.price}
                 className="bg-[#F78687] hover:bg-[#e06060] text-white font-bold text-lg py-4 px-10 rounded-xl transition-all hover:-translate-y-0.5 shadow-lg shadow-[#F78687]/20"
               >
                 {ctaLabel} — {isVariable ? "od " : ""}{formatPrice(course.price)} din
-              </Link>
+              </BuyButton>
             )}
             <Link href="/besplatno-testiranje" className="text-plava font-semibold hover:underline text-[15px]">
               Ili uradi besplatno testiranje →
@@ -522,12 +530,15 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
                 <p className="text-[#F78687] text-xs font-bold">≈ {course.paypal_price_eur}€</p>
               )}
             </div>
-            <Link
-              href={`/kupovina/${course.slug}`}
+            <BuyButton
+              slug={course.slug}
+              contentId={course.slug}
+              contentName={course.title}
+              value={course.price}
               className="bg-[#F78687] hover:bg-[#e06060] text-white font-bold py-3 px-6 rounded-xl text-[15px] whitespace-nowrap"
             >
               {ctaLabel}
-            </Link>
+            </BuyButton>
           </>
         )}
       </div>

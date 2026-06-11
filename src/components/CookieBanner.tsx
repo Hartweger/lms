@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { CONSENT_EVENT, CONSENT_KEY, type ConsentValue, consentParams, parseConsent } from "@/lib/consent";
+import { setPixelConsent } from "@/lib/fbq";
 
 declare global {
   interface Window {
@@ -40,6 +41,8 @@ export default function CookieBanner() {
     }
     // Šaljemo update za obe opcije: "denied" je bitan kod povlačenja ranije date saglasnosti
     window.gtag?.("consent", "update", consentParams(value));
+    // Isto i za Meta Pixel — grant odmršava queue (PageView i sl.), revoke ga zaustavlja
+    setPixelConsent(value === "granted");
     setVisible(false);
   }
 

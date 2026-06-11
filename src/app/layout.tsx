@@ -9,6 +9,7 @@ import Footer from "@/components/Footer";
 import CookieBanner from "@/components/CookieBanner";
 import MigracijaBanner from "@/components/MigracijaBanner";
 import AttributionTracker from "@/components/AttributionTracker";
+import MetaPixel from "@/components/MetaPixel";
 
 const lato = Lato({
   subsets: ["latin", "latin-ext"],
@@ -161,6 +162,7 @@ try {
         <Footer />
         <CookieBanner />
         <AttributionTracker />
+        <MetaPixel />
         <Analytics />
         <SpeedInsights />
         <Script

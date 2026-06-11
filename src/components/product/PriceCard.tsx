@@ -1,4 +1,5 @@
 import Link from "next/link";
+import BuyButton from "@/components/BuyButton";
 
 interface Props {
   price: number;
@@ -6,13 +7,14 @@ interface Props {
   slug: string;
   ctaLabel: string;
   isVariable?: boolean;
+  title: string;
 }
 
 function formatPrice(price: number): string {
   return price.toLocaleString("de-DE");
 }
 
-export default function PriceCard({ price, priceEur, slug, ctaLabel, isVariable }: Props) {
+export default function PriceCard({ price, priceEur, slug, ctaLabel, isVariable, title }: Props) {
   return (
     <div className="bg-white border border-gray-200 rounded-2xl shadow-xl shadow-gray-200/60 overflow-hidden lg:sticky lg:top-24">
       {/* Price */}
@@ -27,12 +29,15 @@ export default function PriceCard({ price, priceEur, slug, ctaLabel, isVariable 
       </div>
 
       <div className="p-7">
-        <Link
-          href={`/kupovina/${slug}`}
+        <BuyButton
+          slug={slug}
+          contentId={slug}
+          contentName={title}
+          value={price}
           className="block w-full text-center bg-[#F78687] hover:bg-[#e06060] text-white font-bold text-lg py-4 rounded-xl transition-all hover:-translate-y-0.5 shadow-lg shadow-[#F78687]/25"
         >
           {ctaLabel}
-        </Link>
+        </BuyButton>
 
         <div className="mt-6 space-y-3.5">
           {["Pristup odmah nakon uplate", "Kartica, uplatnica ili PayPal", "3000+ zadovoljnih polaznika"].map((text, i) => (

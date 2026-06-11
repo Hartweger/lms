@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { trackInitiateCheckout } from "@/lib/fbq";
 import { EUR_RATE } from "@/lib/order-utils";
 import { professorsFromVariants, packageTypesFromVariants, resolveVariant, type Variant } from "@/lib/individual-pricing";
 
@@ -70,6 +71,12 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
   const basePrice = isIndividual ? (selectedVariant?.price ?? 0) : priceRsd;
   const discountedRsd = appliedCoupon ? Math.round(basePrice * (1 - appliedCoupon.discountPercent / 100)) : basePrice;
   const eurApprox = Math.round(discountedRsd / EUR_RATE);
+
+  // Meta Pixel — InitiateCheckout kad korisnik dođe na korak kupovine (jednom).
+  useEffect(() => {
+    trackInitiateCheckout({ contentId: courseSlug, contentName: courseTitle, value: basePrice, currency: "RSD" });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function validateCoupon() {
     if (!couponCode.trim()) return;

@@ -5,6 +5,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { BANK_DETAILS, PAYPAL_ME_URL, buildIpsString } from "@/lib/order-utils";
 import type { Order } from "@/lib/types";
 import IpsQrCode from "./IpsQrCode";
+import PixelPurchase from "@/components/PixelPurchase";
 
 export const metadata: Metadata = {
   title: "Hvala na narudžbini — Hartweger",
@@ -46,8 +47,22 @@ export default async function HvalaPage({
   const paypalEur = order.paypal_note ? parseInt(order.paypal_note) : null;
   const isCard = order.payment_method === "kartica" || order.payment_method === "kartica_rate";
 
+  // Browser pixel Purchase šaljemo SAMO za potvrđenu karticu (status=ok) — tu je naplata
+  // gotova i poklapa se sa server-side CAPI događajem iz nestpay callback-a (dedup po event_id).
+  // Za uplatnicu/PayPal Purchase ide isključivo server-side (CAPI) tek kad admin potvrdi uplatu,
+  // pa se ovde ništa ne šalje (porudžbina je kreirana ali još nije plaćena).
+  const shouldTrackPurchase = isCard && status === "ok";
+
   return (
     <section className="bg-gradient-to-b from-plava-light/40 to-white min-h-screen">
+      {shouldTrackPurchase && (
+        <PixelPurchase
+          orderId={order.order_number}
+          value={order.total}
+          contentId={courseSlug || undefined}
+          contentName={courseTitle || undefined}
+        />
+      )}
       <div className="max-w-xl mx-auto px-4 py-10 md:py-16">
         {/* Success header */}
         <div className="flex items-center gap-3 mb-2">
