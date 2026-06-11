@@ -59,7 +59,7 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
   const { id: groupId } = await params;
   const userId = (await req.json()).user_id as string;
   const { error } = await admin.from("group_enrollments")
-    .update({ status: "cancelled" }).eq("group_id", groupId).eq("user_id", userId);
+    .update({ status: "cancelled", cancelled_at: new Date().toISOString() }).eq("group_id", groupId).eq("user_id", userId);
   if (error) return NextResponse.json({ error: error.message }, { status: 400 });
   return NextResponse.json({ ok: true });
 }

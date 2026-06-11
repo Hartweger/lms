@@ -44,7 +44,7 @@ export async function POST(_req: NextRequest, { params }: { params: Promise<{ id
   }
 
   // Isprazni prethodnu generaciju (pristup na sadržaj im OSTAJE — dira se samo članstvo u grupi).
-  await admin.from("group_enrollments").update({ status: "cancelled" }).eq("group_id", id).eq("status", "active");
+  await admin.from("group_enrollments").update({ status: "cancelled", cancelled_at: new Date().toISOString() }).eq("group_id", id).eq("status", "active");
 
   const { error } = await admin.from("groups").update({
     gcal_event_id: gas.eventId ?? null,
