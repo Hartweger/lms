@@ -11,7 +11,7 @@ export const KATEGORIJA_LABELS: Record<Kategorija, string> = {
   ostalo: "Ostalo",
 };
 
-export const EXPENSE_CATEGORIES = ["marketing", "alati-hosting", "provizije", "materijali", "ostalo"] as const;
+export const EXPENSE_CATEGORIES = ["marketing", "alati-hosting", "provizije", "usluge", "plate-tim", "porezi-doprinosi", "materijali", "ostalo"] as const;
 export const MESECI_KRATKO = ["jan", "feb", "mar", "apr", "maj", "jun", "jul", "avg", "sep", "okt", "nov", "dec"];
 export type ExpenseCategory = (typeof EXPENSE_CATEGORIES)[number];
 
@@ -19,6 +19,9 @@ export const EXPENSE_CATEGORY_LABELS: Record<ExpenseCategory, string> = {
   marketing: "Marketing",
   "alati-hosting": "Alati i hosting",
   provizije: "Provizije",
+  usluge: "Usluge",
+  "plate-tim": "Plate i tim",
+  "porezi-doprinosi": "Porezi i doprinosi",
   materijali: "Materijali",
   ostalo: "Ostalo",
 };
