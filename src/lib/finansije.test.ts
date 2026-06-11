@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { monthKey, kategorijaForItem, allocateOrderTotal, type FinOrder } from "./finansije";
+import { monthKey, kategorijaForItem, allocateOrderTotal, type FinOrder, expenseMonthsInYear, type ExpenseRow } from "./finansije";
 
 describe("monthKey", () => {
   it("vraća yyyy-mm iz ISO datuma", () => {
@@ -50,5 +50,29 @@ describe("allocateOrderTotal", () => {
   it("bez stavki → prazno; cene 0 → sve na prvu stavku", () => {
     expect(allocateOrderTotal(order(5000, []))).toEqual([]);
     expect(allocateOrderTotal(order(5000, [0, 0]))[0].amount).toBe(5000);
+  });
+});
+
+describe("expenseMonthsInYear", () => {
+  const base: ExpenseRow = {
+    id: "e1", name: "Vercel", category: "alati-hosting", amount: 2500,
+    course_id: null, expense_date: "2026-03-15", recurring: false, ended_at: null, note: null,
+  };
+
+  it("jednokratni pada samo u svoj mesec", () => {
+    expect(expenseMonthsInYear(base, 2026, "2026-06")).toEqual([3]);
+    expect(expenseMonthsInYear(base, 2025, "2026-06")).toEqual([]);
+  });
+  it("mesečni bez kraja važi od početka do tekućeg meseca", () => {
+    const e = { ...base, recurring: true };
+    expect(expenseMonthsInYear(e, 2026, "2026-06")).toEqual([3, 4, 5, 6]);
+  });
+  it("mesečni sa krajem staje u mesecu ended_at", () => {
+    const e = { ...base, recurring: true, ended_at: "2026-05-01" };
+    expect(expenseMonthsInYear(e, 2026, "2026-12")).toEqual([3, 4, 5]);
+  });
+  it("mesečni pokriva celu narednu godinu do tekućeg meseca", () => {
+    const e = { ...base, expense_date: "2025-11-01", recurring: true };
+    expect(expenseMonthsInYear(e, 2026, "2026-02")).toEqual([1, 2]);
   });
 });

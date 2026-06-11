@@ -24,6 +24,11 @@ export const EXPENSE_CATEGORY_LABELS: Record<ExpenseCategory, string> = {
 export interface FinOrderItem { course_id: string; course_slug: string; title: string; price: number }
 export interface FinOrder { id: string; user_id: string | null; created_at: string; total: number; items: FinOrderItem[] }
 export interface Allocation { course_id: string; course_slug: string; amount: number }
+export interface ExpenseRow {
+  id: string; name: string; category: string; amount: number;
+  course_id: string | null; expense_date: string; recurring: boolean;
+  ended_at: string | null; note: string | null;
+}
 
 /** "2026-06-11..." → "2026-06" */
 export function monthKey(dateStr: string): string {
@@ -60,4 +65,19 @@ export function allocateOrderTotal(order: FinOrder): Allocation[] {
     out.push({ course_id: items[i].course_id, course_slug: items[i].course_slug, amount });
   }
   return out;
+}
+
+/** Meseci (1-12) date godine u kojima trošak važi. nowKey ("yyyy-mm") seče mesečne bez kraja. */
+export function expenseMonthsInYear(e: ExpenseRow, year: number, nowKey: string): number[] {
+  const startKey = monthKey(e.expense_date);
+  if (!e.recurring) {
+    return startKey.startsWith(`${year}-`) ? [Number(startKey.slice(5))] : [];
+  }
+  const endKey = e.ended_at ? monthKey(e.ended_at) : nowKey;
+  const months: number[] = [];
+  for (let m = 1; m <= 12; m++) {
+    const key = `${year}-${String(m).padStart(2, "0")}`;
+    if (key >= startKey && key <= endKey) months.push(m); // string poređenje radi za yyyy-mm
+  }
+  return months;
 }
