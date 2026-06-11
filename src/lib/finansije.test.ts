@@ -198,6 +198,7 @@ describe("buildFinansije — grupe", () => {
     const g = d.grupe.find((x) => x.group_id === "g1")!;
     expect(g.clanovi).toBe(1);
     expect(g.maxSeats).toBe(6);
+    expect(g.level).toBe("A1.1");          // Fix 1: level se prenosi iz GroupInfo
     expect(g.prihod).toBe(6000);          // Majina porudžbina
     expect(g.honorar).toBe(2 * 1800);     // 2 sesije × Katarina grp stopa (1800)
     expect(g.zarada).toBe(6000 - 3600);
@@ -240,9 +241,11 @@ describe("buildFinansije — profesorke", () => {
   it("retencija = prosek različitih meseci plaćanja po polazniku (cela istorija)", () => {
     const d = buildFinansije(fixture());
     const hristina = d.profesorke.find((p) => p.professor_id === "p-hristina")!;
+    // Ivan ima uplatu u maju (pre nowKey="2026-06") → ostaje, 2 meseca plaćanja
     expect(hristina.retencijaMeseci).toBe(2);  // Ivan: maj + jun
     const katarina = d.profesorke.find((p) => p.professor_id === "p-katarina")!;
-    expect(katarina.retencijaMeseci).toBe(1);  // Maja: samo jun
+    // Maja je tek počela u junu (== nowKey) → isključena iz proseka → null (nema starijih polaznika)
+    expect(katarina.retencijaMeseci).toBeNull();  // Maja: najraniji jun == nowKey → isključena
   });
   it("aktivni polaznici: ind enrollment active + grupni active članovi", () => {
     const d = buildFinansije(fixture());

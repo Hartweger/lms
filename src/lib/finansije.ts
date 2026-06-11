@@ -106,7 +106,7 @@ export interface CourseRow {
   prihod: number; honorar: number; direktniTroskovi: number; marza: number; marzaPct: number | null;
 }
 export interface GroupRow {
-  group_id: string; naziv: string; profesorka: string; status: string;
+  group_id: string; naziv: string; level: string; profesorka: string; status: string;
   clanovi: number; maxSeats: number; prihod: number; honorar: number;
   zarada: number; zaradaPoClanu: number;
 }
@@ -298,6 +298,7 @@ export function buildFinansije(input: FinansijeInput): FinansijeData {
     return {
       group_id: g.id,
       naziv: g.session_time ? `${g.level} · ${g.session_time}` : g.level,
+      level: g.level,
       profesorka: (g.professor_id && profById.get(g.professor_id)?.full_name) || "—",
       status: g.status, clanovi, maxSeats: g.max_seats, prihod, honorar,
       zarada, zaradaPoClanu: clanovi > 0 ? Math.round(zarada / clanovi) : zarada,
@@ -317,14 +318,22 @@ export function buildFinansije(input: FinansijeInput): FinansijeData {
     const aktivni = new Set([...aktivniInd, ...aktivniGrp]).size;
 
     // Retencija: po polazniku broj RAZLIČITIH meseci sa uplatom (cela istorija), pa prosek.
+    // Isključujemo polaznike čiji je NAJRANIJI mesec uplate == nowKey — oni su tek počeli
+    // u tekućem mesecu i uvek bi imali vrednost 1, što bi obaralo prosek (po spec-u).
     const mesecePoPolazniku = new Map<string, Set<string>>();
     for (const pay of allPayments) {
       if (pay.professor_id !== p.id) continue;
       mesecePoPolazniku.set(pay.user_id, (mesecePoPolazniku.get(pay.user_id) ?? new Set()).add(pay.month));
     }
-    const brojevi = [...mesecePoPolazniku.values()].map((s) => s.size);
-    const retencija = brojevi.length > 0
-      ? Math.round((brojevi.reduce((a, b) => a + b, 0) / brojevi.length) * 10) / 10
+    const starijiBrojevi = [...mesecePoPolazniku.entries()]
+      .filter(([, meseci]) => {
+        // Polaznik je "stariji" ako mu je barem jedan mesec uplate pre tekućeg meseca
+        const najraniji = [...meseci].sort()[0];
+        return najraniji < input.nowKey;
+      })
+      .map(([, meseci]) => meseci.size);
+    const retencija = starijiBrojevi.length > 0
+      ? Math.round((starijiBrojevi.reduce((a, b) => a + b, 0) / starijiBrojevi.length) * 10) / 10
       : null;
 
     return { professor_id: p.id, ime: p.full_name ?? "—", prihod, honorar, neto: prihod - honorar, aktivniPolaznici: aktivni, retencijaMeseci: retencija };

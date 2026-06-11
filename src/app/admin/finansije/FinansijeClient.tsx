@@ -132,10 +132,19 @@ export default function FinansijeClient({ data, year, mesec, pendingTotal, profN
             <Row label="Troškovi" cells={aktivniMeseci.map((m) => -m.troskoviUkupno)} bold negative />
             <tr className="border-t-2 border-gray-200">
               <td className="py-2 pr-3 font-bold">Neto zarada</td>
-              {aktivniMeseci.map((m) => (
-                <td key={m.month} className={`py-2 px-2 text-right font-bold ${m.neto < 0 ? "text-red-600" : "text-green-700"}`}>{din(m.neto)}</td>
-              ))}
-              <td className={`py-2 pl-3 text-right font-bold ${data.totals.neto < 0 ? "text-red-600" : "text-green-700"}`}>{din(data.totals.neto)}</td>
+              {aktivniMeseci.map((m) => {
+                const pct = m.prihodUkupno > 0 ? Math.round((m.neto / m.prihodUkupno) * 100) : null;
+                return (
+                  <td key={m.month} className={`py-2 px-2 text-right font-bold ${m.neto < 0 ? "text-red-600" : "text-green-700"}`}>
+                    {din(m.neto)}
+                    {pct !== null && <span className="block text-xs text-gray-400 font-normal">({pct}%)</span>}
+                  </td>
+                );
+              })}
+              <td className={`py-2 pl-3 text-right font-bold ${data.totals.neto < 0 ? "text-red-600" : "text-green-700"}`}>
+                {din(data.totals.neto)}
+                {data.totals.marzaPct !== null && <span className="block text-xs text-gray-400 font-normal">({data.totals.marzaPct}%)</span>}
+              </td>
             </tr>
           </tbody>
         </table>
@@ -169,6 +178,16 @@ export default function FinansijeClient({ data, year, mesec, pendingTotal, profN
               <td className="py-2 pr-3 text-gray-500" colSpan={5}>Opšti troškovi (nealocirani)</td>
               <td className="py-2 px-2 text-right text-red-600">−{din(data.opstiTroskovi)}</td><td />
             </tr>
+            {(() => {
+              const netoKursevi = data.kursevi.reduce((s, k) => s + k.marza, 0) - data.opstiTroskovi;
+              return (
+                <tr className="border-t-2 border-gray-200">
+                  <td className="py-2 pr-3 font-bold" colSpan={5}>Neto zarada</td>
+                  <td className={`py-2 px-2 text-right font-bold ${netoKursevi < 0 ? "text-red-600" : "text-green-700"}`}>{din(netoKursevi)}</td>
+                  <td />
+                </tr>
+              );
+            })()}
           </tbody>
         </table>
       </section>
@@ -201,6 +220,29 @@ export default function FinansijeClient({ data, year, mesec, pendingTotal, profN
             ))}
           </tbody>
         </table>
+        {(() => {
+          // Prosečna popunjenost po nivou — samo aktivne/otvorene grupe
+          const aktivneGrupe = data.grupe.filter((g) => g.status === "u_toku" || g.status === "otvoren");
+          if (aktivneGrupe.length === 0) return null;
+          const byLevel = new Map<string, { ukupnoClanovi: number; ukupnoSeats: number }>();
+          for (const g of aktivneGrupe) {
+            const agg = byLevel.get(g.level) ?? { ukupnoClanovi: 0, ukupnoSeats: 0 };
+            agg.ukupnoClanovi += g.clanovi;
+            agg.ukupnoSeats += g.maxSeats;
+            byLevel.set(g.level, agg);
+          }
+          const delovi = [...byLevel.entries()]
+            .sort(([a], [b]) => a.localeCompare(b))
+            .map(([nivo, { ukupnoClanovi, ukupnoSeats }]) => {
+              const pct = ukupnoSeats > 0 ? Math.round((ukupnoClanovi / ukupnoSeats) * 100) : 0;
+              return `${nivo}: ${pct}%`;
+            });
+          return (
+            <p className="mt-2 text-xs text-gray-400">
+              Prosečna popunjenost po nivou: {delovi.join(" · ")}
+            </p>
+          );
+        })()}
       </section>
 
       {/* Po profesorkama */}
@@ -277,7 +319,7 @@ export default function FinansijeClient({ data, year, mesec, pendingTotal, profN
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4" onClick={() => setModalOpen(false)}>
           <div className="bg-white rounded-xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <h3 className="font-semibold mb-4">{editing ? "Izmeni trošak" : "Novi trošak"}</h3>
-            <form action={saveExpense} className="space-y-3 text-sm">
+            <form onSubmit={(e) => { e.preventDefault(); saveExpense(new FormData(e.currentTarget)); }} className="space-y-3 text-sm">
               <label className="block">Naziv
                 <input name="name" required defaultValue={editing?.name ?? ""} className="mt-1 w-full border border-gray-200 rounded-lg px-3 py-2" />
               </label>
