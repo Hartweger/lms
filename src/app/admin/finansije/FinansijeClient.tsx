@@ -51,15 +51,21 @@ export default function FinansijeClient({ data, year, mesec, pendingTotal, profN
       ended_at: form.get("ended_at") || null,
       note: form.get("note") || null,
     };
-    const res = await fetch(editing ? `/api/admin/expenses/${editing.id}` : "/api/admin/expenses", {
-      method: editing ? "PATCH" : "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
-    setSaving(false);
-    if (!res.ok) { setErr((await res.json()).error ?? "Greška pri čuvanju."); return; }
-    setModalOpen(false); setEditing(null);
-    router.refresh();
+    try {
+      const res = await fetch(editing ? `/api/admin/expenses/${editing.id}` : "/api/admin/expenses", {
+        method: editing ? "PATCH" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) { setErr((data as { error?: string }).error ?? "Greška pri čuvanju."); return; }
+      setModalOpen(false); setEditing(null);
+      router.refresh();
+    } catch {
+      setErr("Greška na mreži — pokušaj ponovo.");
+    } finally {
+      setSaving(false);
+    }
   }
 
   async function deleteExpense(id: string) {

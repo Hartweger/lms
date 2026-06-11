@@ -12,28 +12,46 @@ export default async function AdminFinansijePage({
   const sp = await searchParams;
   const now = new Date();
   const year = Number(sp.godina) || now.getFullYear();
-  const mesec = sp.mesec ? Number(sp.mesec) || null : null;
+  const rawMesec = sp.mesec ? Number(sp.mesec) || null : null;
+  const mesec = rawMesec !== null && rawMesec >= 1 && rawMesec <= 12 ? rawMesec : null;
 
   const admin = createAdminClient();
+  // PostgREST default limit je 1000 redova — eksplicitni limiti + godišnji filter za lekcije/sesije;
+  // orders cela istorija zbog retencije.
   const [ordersRes, coursesRes, profsRes, lessonsRes, sessionsRes, expensesRes, indEnrRes, groupsRes, membersRes] =
     await Promise.all([
-      admin.from("orders").select("id, user_id, created_at, total, items, payment_status"),
+      admin.from("orders").select("id, user_id, created_at, total, items, payment_status").limit(10000),
       admin.from("courses").select("id, title, slug, course_type"),
       admin.from("user_profiles").select("id, full_name, honorar_ind, honorar_grp").eq("role", "professor"),
-      admin.from("individual_lessons").select("lesson_date, professor_id, enrollment_id"),
-      admin.from("group_sessions").select("session_date, professor_id, group_id"),
+      admin.from("individual_lessons").select("lesson_date, professor_id, enrollment_id")
+        .gte("lesson_date", `${year}-01-01`).lt("lesson_date", `${year + 1}-01-01`).limit(10000),
+      admin.from("group_sessions").select("session_date, professor_id, group_id")
+        .gte("session_date", `${year}-01-01`).lt("session_date", `${year + 1}-01-01`).limit(10000),
       admin.from("expenses").select("*").order("expense_date", { ascending: false }),
-      admin.from("individual_enrollments").select("id, user_id, professor_id, order_id, course_id, status"),
+      admin.from("individual_enrollments").select("id, user_id, professor_id, order_id, course_id, status").limit(10000),
       admin.from("groups").select("id, level, status, max_seats, professor_id, purchasable_course_id, session_time"),
-      admin.from("group_enrollments").select("group_id, user_id, status"),
+      admin.from("group_enrollments").select("group_id, user_id, status").limit(10000),
     ]);
+
+  for (const [res, name] of [
+    [ordersRes, "orders"], [coursesRes, "courses"], [profsRes, "user_profiles"],
+    [lessonsRes, "individual_lessons"], [sessionsRes, "group_sessions"], [expensesRes, "expenses"],
+    [indEnrRes, "individual_enrollments"], [groupsRes, "groups"], [membersRes, "group_enrollments"],
+  ] as const) {
+    if (res.error) throw new Error(`Finansije: upit nije uspeo — ${res.error.message} (tabela: ${name})`);
+  }
 
   const allOrders = ordersRes.data ?? [];
   const completed: FinOrder[] = allOrders
     .filter((o) => o.payment_status === "completed")
     .map((o) => ({ id: o.id, user_id: o.user_id, created_at: o.created_at, total: Number(o.total) || 0, items: o.items ?? [] }));
+  const pendingPeriodKey = mesec ? `${year}-${String(mesec).padStart(2, "0")}` : null;
   const pendingTotal = allOrders
-    .filter((o) => o.payment_status === "pending" && monthKey(o.created_at).startsWith(`${year}-`))
+    .filter((o) => {
+      if (o.payment_status !== "pending") return false;
+      const key = monthKey(o.created_at);
+      return pendingPeriodKey ? key === pendingPeriodKey : key.startsWith(`${year}-`);
+    })
     .reduce((s, o) => s + (Number(o.total) || 0), 0);
 
   // Spajanja za čistu funkciju: lekcija → kurs (preko enrollmenta), sesija → kupovni kurs (preko grupe)
