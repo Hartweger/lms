@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: "Video paket A1 + A2 + B1 — Hartweger",
   description: "Kompletna putanja od nule do B1. 150+ video lekcija, testovi, PDF materijali, WhatsApp podrška i 3 sertifikata — sve u jednom paketu za 249€.",
   openGraph: {
+    images: [{ url: "/og/share.png", width: 1200, height: 630, alt: "Hartweger — Škola nemačkog jezika" }],
     title: "Video paket A1 + A2 + B1 — Hartweger",
     description: "Kompletna putanja od nule do B1. 150+ video lekcija, testovi, PDF materijali i 3 sertifikata.",
   },

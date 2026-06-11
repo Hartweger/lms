@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "Hartweger — Online škola nemačkog jezika",
   description: "Nauči nemački koji ćeš stvarno koristiti. VoKuM metoda — video kursevi, grupni kursevi i individualni časovi sa Natašom Hartweger.",
   openGraph: {
+    images: [{ url: "/og/share.png", width: 1200, height: 630, alt: "Hartweger — Škola nemačkog jezika" }],
     title: "Hartweger — Online škola nemačkog jezika",
     description: "Nauči nemački koji ćeš stvarno koristiti. VoKuM metoda — video kursevi, grupni kursevi i individualni časovi.",
   },
