@@ -1,5 +1,6 @@
 import { Resend } from "resend";
 import { SITE_URL } from "@/lib/site-url";
+import { odjavaUrl } from "@/lib/optout";
 
 const FROM = "Hartweger <kurs@hartweger.rs>";
 
@@ -1093,7 +1094,72 @@ ${sekcija(`Grupe se završavaju — narednih 14 dana (${d.grupeKraj.length})`, g
   }
 }
 
-// Testiranje-funnel: follow-up mejlovi #2-#4 posle testa znanja (mejl #1 "rezultat" šalje MailerLite).
+// Mejl #1 testiranje-funnela: rezultat testa znanja, šalje se ODMAH po testu iz LMS-a
+// (zamena za MailerLite automaciju "Einstufungstest - rezultat" — nju ugasiti u MailerLite-u).
+export async function sendTestResultEmail(
+  to: string,
+  opts: {
+    nivo: string;
+    score: string;
+    grupniUrl: string | null;
+    individualniUrl: string | null;
+    kurseviUrl: string;
+  },
+) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    const nivo = esc(opts.nivo);
+
+    const linkovi =
+      `<div style="background:#f8fcfd;border-left:3px solid #4fb1d3;border-radius:6px;padding:14px 16px;margin:20px 0;font-size:14px;">` +
+      (opts.grupniUrl ? `<p style="margin:0 0 6px;">👥 <a href="${esc(opts.grupniUrl)}" style="color:#4fb1d3;">Grupni kurs ${nivo}</a> — grupe do 6 polaznika, uživo preko Google Meet-a</p>` : "") +
+      (opts.individualniUrl ? `<p style="margin:0 0 6px;">🎯 <a href="${esc(opts.individualniUrl)}" style="color:#4fb1d3;">Individualni kurs ${nivo}</a> — 1-na-1 sa profesorkom</p>` : "") +
+      `<p style="margin:0;">🎬 <a href="${esc(opts.kurseviUrl)}" style="color:#4fb1d3;">Video kursevi</a> — uči svojim tempom</p>` +
+      `</div>`;
+
+    await resend.emails.send({
+      from: FROM,
+      to,
+      replyTo: "info@hartweger.rs",
+      subject: `Tvoj rezultat testa znanja — nivo ${opts.nivo}`,
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a2e;background:#f8f9fa;margin:0;padding:0;">
+  <div style="max-width:520px;margin:0 auto;padding:40px 20px;">
+    <div style="background:white;border-radius:12px;padding:32px;box-shadow:0 1px 3px rgba(0,0,0,0.08);">
+      <div style="text-align:center;margin-bottom:24px;">
+        <div style="font-size:24px;font-weight:700;color:#4fb1d3;">Hartweger</div>
+        <div style="font-size:13px;color:#999;margin-top:4px;">Škola nemačkog jezika</div>
+      </div>
+      <h1 style="font-size:20px;margin:0 0 16px;">Bravo, test je iza tebe! 🎉</h1>
+      <div style="background:#f8fcfd;border-radius:8px;padding:18px;text-align:center;margin:0 0 20px;">
+        <div style="font-size:13px;color:#999;text-transform:uppercase;letter-spacing:0.5px;">Tvoj rezultat</div>
+        <div style="font-size:15px;color:#444;margin-top:6px;">Tačnih odgovora: <strong>${esc(opts.score)}</strong></div>
+        <div style="font-size:22px;font-weight:700;color:#4fb1d3;margin-top:8px;">Preporučeni nivo: ${nivo}</div>
+      </div>
+      <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 8px;">
+        Na osnovu testa, ovo su kursevi koji ti najviše odgovaraju:
+      </p>
+      ${linkovi}
+      <p style="font-size:14px;line-height:1.6;color:#444;margin:0 0 8px;">
+        Ako nisi siguran/na šta ti najviše odgovara, samo odgovori na ovaj mejl — rado pomažemo da izabereš.
+      </p>
+      <p style="font-size:14px;color:#444;margin:16px 0 0;">Srdačan pozdrav,<br>Nataša Hartweger</p>
+    </div>
+    <div style="text-align:center;padding:20px;font-size:12px;color:#bbb;">
+      <p style="margin:0;">Hartweger — Škola nemačkog jezika · hartweger.rs</p>
+      <p style="margin:4px 0 0;">Dobijaš ovaj mejl jer si uradio/la test znanja na hartweger.rs. <a href="${odjavaUrl(to)}" style="color:#bbb;">Odjavi se od ponuda</a></p>
+    </div>
+  </div>
+</body></html>`,
+    });
+    console.log(`[email] Rezultat testa (${opts.nivo}) → ${to}`);
+  } catch (e) {
+    console.error("[email] sendTestResultEmail pao:", e);
+  }
+}
+
+// Testiranje-funnel: follow-up mejlovi #2-#4 posle testa znanja (mejl #1 "rezultat" šalje sendTestResultEmail odmah po testu).
 // Zamena za Apps Script generisiTestiranjeMejl/skenirajTestiranje.
 export async function sendTestFunnelEmail(
   to: string,
@@ -1156,7 +1222,7 @@ ${telo}
 ${linkovi}
 <p>Ako imaš bilo kakvih pitanja pre upisa, samo odgovori na ovaj mejl.</p>
 <p style="margin-top:20px">Srdačan pozdrav,<br>Nataša Hartweger</p>
-<p style="margin-top:24px;font-size:12px;color:#aaa">Dobijaš ovaj mejl jer si uradio/la test znanja na hartweger.rs. Ako ne želiš više ponuda, odgovori sa „odjava".</p>
+<p style="margin-top:24px;font-size:12px;color:#aaa">Dobijaš ovaj mejl jer si uradio/la test znanja na hartweger.rs. <a href="${odjavaUrl(to)}" style="color:#aaa">Odjavi se od ovih ponuda</a>.</p>
 </body></html>`,
     });
   } catch (e) {

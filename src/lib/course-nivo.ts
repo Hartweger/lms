@@ -1,3 +1,5 @@
+import { SITE_URL } from "@/lib/site-url";
+
 // Jedna mapa slug → nivo (CEFR), izvor istine za grupne/individualne kurseve.
 export const SLUG_TO_NIVO: Record<string, string> = {
   "grupni-kurs-nemackog-jezika-a1-1": "A1.1",
@@ -47,4 +49,16 @@ export function individualniSlugForNivo(nivo: string): string | null {
     if (n === nivo && slug.startsWith("individualni-")) return slug;
   }
   return null;
+}
+
+// Linkovi ka kursevima za dati nivo — koristi ih testiranje-funnel (#1 rezultat i #2-#4 podsetnici).
+export function funnelUrlsForNivo(rawNivo: string) {
+  const nivo = rawNivo === "C1+" ? "C1.1" : rawNivo;
+  const grupniSlug = grupniSlugForNivo(nivo);
+  const indSlug = individualniSlugForNivo(nivo);
+  return {
+    grupniUrl: grupniSlug ? `${SITE_URL}/kursevi/${grupniSlug}` : null,
+    individualniUrl: indSlug ? `${SITE_URL}/kursevi/${indSlug}` : null,
+    kurseviUrl: `${SITE_URL}/kursevi`,
+  };
 }

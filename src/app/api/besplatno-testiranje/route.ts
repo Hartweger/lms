@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { rateLimit } from "@/lib/rate-limit";
+import { sendTestResultEmail } from "@/lib/email";
+import { funnelUrlsForNivo } from "@/lib/course-nivo";
 
 export async function POST(request: Request) {
   const ip = request.headers.get("x-forwarded-for") || "unknown";
@@ -49,6 +51,14 @@ export async function POST(request: Request) {
   if (dbError) {
     console.error("Supabase error:", dbError);
   }
+
+  // Mejl #1 (rezultat) — odmah iz LMS-a preko Resend-a. MailerLite automacija "rezultat" je ugašena;
+  // u MailerLite i dalje upisujemo osobu (lista za newsletter), samo ne šalje ona ovaj mejl.
+  await sendTestResultEmail(trimmedEmail, {
+    nivo: recommendedLevel,
+    score: `${totalCorrect ?? "?"}/${totalQuestions ?? "?"}`,
+    ...funnelUrlsForNivo(recommendedLevel),
+  });
 
   const mlApiKey = process.env.MAILERLITE_API_KEY;
   if (mlApiKey) {

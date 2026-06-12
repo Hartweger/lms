@@ -1,13 +1,13 @@
 // src/app/api/cron/test-funnel/route.ts
 // Testiranje-funnel: follow-up ponude posle testa znanja (zamena za Apps Script skenirajTestiranje).
-// Mejl #1 (rezultat) šalje MailerLite automacija "Einstufungstest - rezultat" odmah po testu —
+// Mejl #1 (rezultat) šalje LMS odmah po testu (sendTestResultEmail u /api/besplatno-testiranje) —
 // ovde idu samo #2 (15 dana), #3 (30 dana) i #4 (45 dana posle testa).
-// Stop: čim osoba kupi bilo šta (orders completed, WC istorija u poslednjih godinu dana, ili ima pristup kursu).
+// Stop: čim osoba kupi bilo šta (orders completed, WC istorija u poslednjih godinu dana, ima pristup
+// kursu) ili se odjavi preko linka u mejlu (email_optouts).
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendTestFunnelEmail } from "@/lib/email";
-import { grupniSlugForNivo, individualniSlugForNivo } from "@/lib/course-nivo";
-import { SITE_URL } from "@/lib/site-url";
+import { funnelUrlsForNivo } from "@/lib/course-nivo";
 
 export const dynamic = "force-dynamic";
 
@@ -16,17 +16,6 @@ const FUNNEL_START = "2026-05-25"; // od kada MailerLite šalje rezultat (mejl #
 const MAX_TEST_AGE_DAYS = 75; // test stariji od ovoga je hladan lead — ne šaljemo
 const INTERVAL_DANA = 15; // #2 na +15d, #3 na +30d, #4 na +45d od testa
 const MIN_GAP_DANA = 10; // minimalan razmak između dva funnel mejla istoj osobi
-
-function urlsForNivo(rawNivo: string) {
-  const nivo = rawNivo === "C1+" ? "C1.1" : rawNivo;
-  const grupniSlug = grupniSlugForNivo(nivo);
-  const indSlug = individualniSlugForNivo(nivo);
-  return {
-    grupniUrl: grupniSlug ? `${SITE_URL}/kursevi/${grupniSlug}` : null,
-    individualniUrl: indSlug ? `${SITE_URL}/kursevi/${indSlug}` : null,
-    kurseviUrl: `${SITE_URL}/kursevi`,
-  };
-}
 
 export async function GET(request: NextRequest) {
   const authHeader = request.headers.get("authorization");
@@ -43,7 +32,7 @@ export async function GET(request: NextRequest) {
       name: "Test",
       nivo: "A2.1",
       emailNumber: 2,
-      ...urlsForNivo("A2.1"),
+      ...funnelUrlsForNivo("A2.1"),
     });
     return NextResponse.json({ test: testEmail, sent: 1 });
   }
@@ -69,6 +58,13 @@ export async function GET(request: NextRequest) {
   if (latest.size === 0) return NextResponse.json({ candidates: 0, sent: 0 });
 
   const emails = [...latest.keys()];
+
+  // Odjavljeni preko linka u mejlu — ne dobijaju ništa.
+  const { data: optouts } = await admin
+    .from("email_optouts")
+    .select("email")
+    .in("email", emails);
+  const odjavljeni = new Set((optouts ?? []).map((o) => String(o.email).toLowerCase()));
 
   // Već poslati funnel mejlovi.
   const { data: sentRows } = await admin
@@ -121,6 +117,7 @@ export async function GET(request: NextRequest) {
   const candidates: Kandidat[] = [];
   for (const [em, info] of latest) {
     if (kupili.has(em)) continue;
+    if (odjavljeni.has(em)) continue;
     const sent = sentByEmail.get(em) ?? { maxNumber: 1, lastSentAt: 0 };
     const nextNumber = sent.maxNumber + 1;
     if (nextNumber > 4) continue;
@@ -146,7 +143,7 @@ export async function GET(request: NextRequest) {
       name: prof?.full_name ?? "",
       nivo: c.nivo,
       emailNumber: c.emailNumber,
-      ...urlsForNivo(c.nivo),
+      ...funnelUrlsForNivo(c.nivo),
     });
     await admin
       .from("test_funnel_emails")
