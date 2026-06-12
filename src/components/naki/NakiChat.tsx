@@ -158,12 +158,12 @@ export default function NakiChat() {
       setMessages(nextHistory);
       setInput("");
 
-      // Email gate trigger (kao stari frontend: 8. i 15. poruka)
-      if (messageCount.current === 8 && !emailGiven.current && !emailFinal.current) {
+      // Email gate trigger — 6. i 13. poruka (KPI checkpoint 1: capture <10% → gate ranije)
+      if (messageCount.current === 6 && !emailGiven.current && !emailFinal.current) {
         setShowGate(true);
         ga("naki_email_gate_shown", { session_id: sessionId.current });
       } else if (
-        messageCount.current === 15 &&
+        messageCount.current === 13 &&
         emailDeclined.current &&
         !emailGiven.current &&
         !emailFinal.current

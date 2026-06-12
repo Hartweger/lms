@@ -5,6 +5,7 @@ import ProgressBar from "@/components/ProgressBar";
 import quotesData from "@/data/quotes.json";
 import type { Course } from "@/lib/types";
 import { HeartsWidget } from "@/components/hearts/HeartsWidget";
+import { NakiFace } from "@/components/naki/NakiAvatar";
 import { DailyCheckIn } from "@/components/hearts/DailyCheckIn";
 import { HeartsIntroBanner } from "@/components/hearts/HeartsIntroBanner";
 import { progressToNext } from "@/lib/hearts/levels";
@@ -222,6 +223,24 @@ export default async function Dashboard() {
           awayMessage={awayMessage}
         />
       </div>
+
+      {/* NaKI — AI asistent za vežbanje */}
+      <Link
+        href="/naki"
+        className="flex items-center gap-4 bg-white rounded-2xl p-4 border border-gray-100 hover:shadow-md hover:border-plava/30 transition-all mb-8"
+      >
+        <NakiFace className="w-12 h-12 shrink-0" />
+        <div className="flex-1 min-w-0">
+          <h3 className="font-bold text-sm text-gray-900">Vežbaj sa NaKI-jem</h3>
+          <p className="text-xs text-gray-400 mt-0.5">
+            Postavi pitanje, vežbaj konverzaciju ili proveri rečenicu — NaKI odgovara odmah.
+          </p>
+        </div>
+        <span className="inline-flex items-center gap-1 shrink-0 text-xs font-semibold text-plava bg-plava-light px-3 py-1.5 rounded-lg">
+          Pričaj
+          <ArrowRight className="w-3.5 h-3.5" strokeWidth={2.5} />
+        </span>
+      </Link>
 
       {primaryCourse ? (
         <>

@@ -74,14 +74,31 @@ export async function POST(request: Request) {
   await sendNakiWelcomeEmail(email, name, level, plan);
   await addToMailerLite(email, name, level);
 
-  // Upiši/azuriraj profil (bez čuvanja istorije; email je ključ)
+  // Upiši/azuriraj profil (bez čuvanja istorije; email je ključ).
+  // Brojači se uvećavaju pri svakom capture-u: +1 sesija, + user poruke te sesije.
   const admin = createAdminClient();
+  const { data: existing } = await admin
+    .from("naki_profiles")
+    .select("total_sessions, total_messages")
+    .eq("email", email)
+    .maybeSingle();
+  let sessionMsgCount = 0;
+  if (sessionId) {
+    const { count } = await admin
+      .from("naki_messages")
+      .select("id", { count: "exact", head: true })
+      .eq("session_id", sessionId)
+      .eq("role", "user");
+    sessionMsgCount = count ?? 0;
+  }
   await admin.from("naki_profiles").upsert(
     {
       email,
       name,
       level: level || null,
       last_session: new Date().toISOString(),
+      total_sessions: (existing?.total_sessions ?? 0) + 1,
+      total_messages: (existing?.total_messages ?? 0) + sessionMsgCount,
     },
     { onConflict: "email" }
   );

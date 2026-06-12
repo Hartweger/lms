@@ -103,8 +103,13 @@ export async function POST(request: Request) {
   const history = messages.slice(-12);
 
   // ── Blog link detekcija ──
-  const systemWithLink =
-    NAKI_SYSTEM_PROMPT + (last.role === "user" ? blogLinkAddon(last.content) : "");
+  // Statični prompt se kešira (prompt caching); promenljivi blog-addon ide
+  // kao odvojen blok da ne kvari keš.
+  const linkAddon = last.role === "user" ? blogLinkAddon(last.content) : "";
+  const system: Anthropic.TextBlockParam[] = [
+    { type: "text", text: NAKI_SYSTEM_PROMPT, cache_control: { type: "ephemeral" } },
+    ...(linkAddon ? [{ type: "text" as const, text: linkAddon }] : []),
+  ];
 
   // ── Poziv Claude API ──
   let reply: string;
@@ -112,7 +117,7 @@ export async function POST(request: Request) {
     const completion = await anthropic.messages.create({
       model: NAKI_MODEL,
       max_tokens: NAKI_MAX_TOKENS,
-      system: systemWithLink,
+      system,
       messages: history,
     });
     const block = completion.content[0];
