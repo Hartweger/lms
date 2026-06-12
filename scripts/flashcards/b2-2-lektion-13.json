@@ -6,7 +6,7 @@
   "backLabel": "SR",
   "items": [
     {
-      "front": "die Luftverschmutzung (nur Sg.)",
+      "front": "die Luftverschmutzung, -en",
       "back": "zagađenje vazduha"
     },
     {
@@ -14,108 +14,124 @@
       "back": "teretni bicikl"
     },
     {
+      "front": "außerhalb (Präp. lokal) + Gen.",
+      "back": "izvan, van"
+    },
+    {
       "front": "der Radschnellweg, -e",
       "back": "brza biciklistička staza"
+    },
+    {
+      "front": "das Design-Objekt, -e",
+      "back": "dizajnerski predmet"
+    },
+    {
+      "front": "der Rahmen, –",
+      "back": "okvir, ram"
+    },
+    {
+      "front": "der Bambus, -se",
+      "back": "bambus"
     },
     {
       "front": "das Dienstrad, ¨er",
       "back": "službeni bicikl"
     },
     {
-      "front": "der Rahmen, –",
-      "back": "okvir (bicikla)"
+      "front": "gekleidet",
+      "back": "obučen"
     },
     {
-      "front": "der Gehweg, -e",
-      "back": "pešačka staza"
+      "front": "der Dienstwagen, –",
+      "back": "službeni automobil"
     },
     {
-      "front": "der Stau, -s",
-      "back": "zastoj, gužva u saobraćaju"
+      "front": "erscheinen (erscheint, erschien, ist erschienen)",
+      "back": "pojaviti se; činiti se"
     },
     {
-      "front": "die Abgase (Pl.)",
-      "back": "izduvni gasovi"
+      "front": "logisch",
+      "back": "logičan"
     },
     {
-      "front": "die Ware, -n",
-      "back": "roba"
-    },
-    {
-      "front": "nachhaltig",
-      "back": "održiv"
-    },
-    {
-      "front": "auffallen",
-      "back": "pasti u oči, isticati se (fällt auf)"
-    },
-    {
-      "front": "herstellen",
-      "back": "proizvoditi (stellt her)"
-    },
-    {
-      "front": "das Unikat, -e",
-      "back": "unikat"
-    },
-    {
-      "front": "die Messe, -n",
-      "back": "sajam"
-    },
-    {
-      "front": "das Unternehmen, –",
-      "back": "preduzeće, firma"
+      "front": "undenkbar",
+      "back": "nezamisliv"
     },
     {
       "front": "das Start-up, -s",
       "back": "start-up, mlada firma"
     },
     {
+      "front": "rund um + Akk.",
+      "back": "oko, u vezi sa"
+    },
+    {
+      "front": "innovativ",
+      "back": "inovativan"
+    },
+    {
       "front": "die Geschäftsidee, -n",
       "back": "poslovna ideja"
     },
     {
-      "front": "der Gründer, – / die Gründerin, -nen",
-      "back": "osnivač / osnivačica"
+      "front": "die Ingenieurwissenschaft, -en",
+      "back": "inženjerska nauka"
     },
     {
-      "front": "sich selbstständig machen",
-      "back": "pokrenuti sopstveni posao"
+      "front": "daraufhin",
+      "back": "nakon toga, usled toga"
     },
     {
-      "front": "der Finanzplan, ¨e",
-      "back": "finansijski plan"
+      "front": "die Unabhängigkeit, -en",
+      "back": "nezavisnost"
+    },
+    {
+      "front": "das Geschäftsmodell, -e",
+      "back": "poslovni model"
+    },
+    {
+      "front": "die Verkaufsleiterin, -nen",
+      "back": "šefica prodaje"
+    },
+    {
+      "front": "die Last, -en",
+      "back": "teret"
+    },
+    {
+      "front": "etw. vermarkten",
+      "back": "plasirati (nešto) na tržište"
     },
     {
       "front": "die Konkurrenzanalyse, -n",
       "back": "analiza konkurencije"
     },
     {
-      "front": "etw. vermarkten",
-      "back": "plasirati na tržište"
+      "front": "der Finanzplan, ¨e",
+      "back": "finansijski plan"
     },
     {
-      "front": "sich abheben von + Dat.",
+      "front": "sich ab|heben von + Dat. (hebt ab, hob ab, hat abgehoben)",
       "back": "isticati se, razlikovati se od"
     },
     {
-      "front": "die Zusammenarbeit (nur Sg.)",
-      "back": "saradnja"
+      "front": "die Werbung, -en",
+      "back": "reklama"
     },
     {
-      "front": "das Sortiment erweitern",
-      "back": "proširiti asortiman"
+      "front": "unterscheiden von + Dat. (unterscheidet, unterschied, hat unterschieden)",
+      "back": "razlikovati od"
     },
     {
-      "front": "der Mengenrabatt, -e",
-      "back": "popust na količinu"
-    },
-    {
-      "front": "verwandt mit + Dat.",
-      "back": "srodan sa"
+      "front": "nach|wachsen (wächst nach, wuchs nach, ist nachgewachsen)",
+      "back": "ponovo izrasti, obnavljati se"
     },
     {
       "front": "unempfindlich gegen + Akk.",
       "back": "neosetljiv na"
+    },
+    {
+      "front": "der Rost (nur Sg.)",
+      "back": "rđa"
     },
     {
       "front": "interessiert an + Dat.",
@@ -126,40 +142,68 @@
       "back": "poznat po"
     },
     {
-      "front": "offen für + Akk.",
-      "back": "otvoren za"
+      "front": "das Rennrad, ¨er",
+      "back": "trkački bicikl"
     },
     {
-      "front": "begeistert von + Dat.",
-      "back": "oduševljen (nečim)"
+      "front": "begeistern für + Akk.",
+      "back": "oduševiti (nekoga) za"
     },
     {
-      "front": "geeignet für + Akk.",
-      "back": "pogodan za"
+      "front": "die Übersicht, -en",
+      "back": "pregled"
     },
     {
-      "front": "gewöhnt an + Akk.",
-      "back": "naviknut na"
+      "front": "sich entscheiden zwischen + Dat. (entscheidet, entschied, hat entschieden)",
+      "back": "odlučiti se između"
     },
     {
-      "front": "vorbereitet auf + Akk.",
-      "back": "pripremljen za"
+      "front": "der Helm, -e",
+      "back": "kaciga"
     },
     {
-      "front": "stolz auf + Akk.",
-      "back": "ponosan na"
+      "front": "die Bürgerversammlung, -en",
+      "back": "zbor građana"
     },
     {
-      "front": "die Unabhängigkeit (nur Sg.)",
-      "back": "nezavisnost"
+      "front": "bestehend",
+      "back": "postojeći"
     },
     {
-      "front": "das Unwetter, –",
-      "back": "nevreme"
+      "front": "der Radweg, -e",
+      "back": "biciklistička staza"
     },
     {
-      "front": "die Unsumme, -n",
-      "back": "ogromna suma novca"
+      "front": "weg|fallen (fällt weg, fiel weg, ist weggefallen)",
+      "back": "otpasti, biti ukinut"
+    },
+    {
+      "front": "befürchten",
+      "back": "strahovati, pribojavati se"
+    },
+    {
+      "front": "der Anwohner, – / die Anwohnerin, -nen",
+      "back": "stanar, žitelj (ulice/kraja)"
+    },
+    {
+      "front": "der Abstand, ¨e zu + Dat.",
+      "back": "rastojanje od"
+    },
+    {
+      "front": "um|bauen",
+      "back": "pregraditi, preurediti"
+    },
+    {
+      "front": "der Gehweg, -e",
+      "back": "pešačka staza"
+    },
+    {
+      "front": "aus|weichen (weicht aus, wich aus, ist ausgewichen)",
+      "back": "skloniti se, zaobići"
+    },
+    {
+      "front": "an|merken",
+      "back": "primetiti, napomenuti"
     }
   ]
 }

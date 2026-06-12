@@ -1,0 +1,273 @@
+{
+  "type": "wordset",
+  "title": "Lektion 15 — Reči",
+  "setKey": "b2-2-lektion-15",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    {
+      "front": "die Stille (nur Sg.)",
+      "back": "tišina"
+    },
+    {
+      "front": "erleichtert",
+      "back": "sa olakšanjem"
+    },
+    {
+      "front": "irritiert",
+      "back": "zbunjen, iziritiran"
+    },
+    {
+      "front": "angespannt",
+      "back": "napet"
+    },
+    {
+      "front": "isoliert",
+      "back": "izolovan"
+    },
+    {
+      "front": "die Harmonie (nur Sg.)",
+      "back": "harmonija"
+    },
+    {
+      "front": "die Unruhe (nur Sg.)",
+      "back": "nemir"
+    },
+    {
+      "front": "die Panik, -en",
+      "back": "panika"
+    },
+    {
+      "front": "die Nervosität (nur Sg.)",
+      "back": "nervoza"
+    },
+    {
+      "front": "das Wesen, –",
+      "back": "biće; suština"
+    },
+    {
+      "front": "beängstigend",
+      "back": "zastrašujuć"
+    },
+    {
+      "front": "lebendig",
+      "back": "živ, živahan"
+    },
+    {
+      "front": "dröhnen",
+      "back": "tutnjati, brujati"
+    },
+    {
+      "front": "zwitschern",
+      "back": "cvrkutati"
+    },
+    {
+      "front": "quietschen",
+      "back": "škripati"
+    },
+    {
+      "front": "die Glocke, -n",
+      "back": "zvono"
+    },
+    {
+      "front": "läuten",
+      "back": "zvoniti"
+    },
+    {
+      "front": "das Gehör (nur Sg.)",
+      "back": "sluh"
+    },
+    {
+      "front": "ab|schalten",
+      "back": "isključiti (se), opustiti se"
+    },
+    {
+      "front": "die Wirkung, -en",
+      "back": "dejstvo, učinak"
+    },
+    {
+      "front": "forschen",
+      "back": "istraživati"
+    },
+    {
+      "front": "aus|halten (hält aus, hielt aus, hat ausgehalten)",
+      "back": "izdržati"
+    },
+    {
+      "front": "bedrohlich",
+      "back": "preteći"
+    },
+    {
+      "front": "der Klang, ¨e",
+      "back": "zvuk"
+    },
+    {
+      "front": "rauschen",
+      "back": "šumeti"
+    },
+    {
+      "front": "die Identität, -en",
+      "back": "identitet"
+    },
+    {
+      "front": "auch wenn (Nebensatz-Konnektor, konzessiv)",
+      "back": "iako, čak i kad"
+    },
+    {
+      "front": "das Lichtsignal, -e (CH)",
+      "back": "svetlosni signal (švajc.)"
+    },
+    {
+      "front": "prägen",
+      "back": "oblikovati, obeležiti"
+    },
+    {
+      "front": "dennoch (Hauptsatz-Konnektor, konzessiv)",
+      "back": "ipak"
+    },
+    {
+      "front": "die Stadtplanung, -en",
+      "back": "urbanističko planiranje"
+    },
+    {
+      "front": "berücksichtigen",
+      "back": "uzeti u obzir"
+    },
+    {
+      "front": "die Chance verschenken",
+      "back": "protraćiti priliku"
+    },
+    {
+      "front": "die Auswirkung, -en",
+      "back": "posledica, uticaj"
+    },
+    {
+      "front": "verstärken",
+      "back": "pojačati"
+    },
+    {
+      "front": "das Gezwitscher (nur Sg.)",
+      "back": "cvrkut"
+    },
+    {
+      "front": "selbst wenn (Nebensatz-Konnektor, konzessiv)",
+      "back": "čak i ako"
+    },
+    {
+      "front": "um jeden Preis",
+      "back": "po svaku cenu"
+    },
+    {
+      "front": "empfinden (empfindet, empfand, hat empfunden)",
+      "back": "osećati, doživljavati"
+    },
+    {
+      "front": "wissenschaftlich",
+      "back": "naučni, naučno"
+    },
+    {
+      "front": "belegen",
+      "back": "dokazati, potkrepiti"
+    },
+    {
+      "front": "subjektiv",
+      "back": "subjektivan"
+    },
+    {
+      "front": "gross werden (CH) (wird gross, wurde gross, ist gross geworden)",
+      "back": "odrasti (švajc. pravopis)"
+    },
+    {
+      "front": "die Prägung, -en",
+      "back": "obeležje, formiranje (ličnosti)"
+    },
+    {
+      "front": "der Charakter, -e",
+      "back": "karakter"
+    },
+    {
+      "front": "monoton",
+      "back": "monoton"
+    },
+    {
+      "front": "der Rauchmelder, –",
+      "back": "detektor dima"
+    },
+    {
+      "front": "ausschlaggebend",
+      "back": "presudan"
+    },
+    {
+      "front": "das Geschrei (nur Sg.)",
+      "back": "vika, dreka"
+    },
+    {
+      "front": "an|halten (hält an, hielt an, hat angehalten)",
+      "back": "trajati; zaustaviti (se)"
+    },
+    {
+      "front": "ertragen",
+      "back": "podneti"
+    },
+    {
+      "front": "keineswegs",
+      "back": "nikako, ni u kom slučaju"
+    },
+    {
+      "front": "selbst bei + Dat. (konzessiv)",
+      "back": "čak i kod/pri"
+    },
+    {
+      "front": "die Lautstärke, -n",
+      "back": "jačina zvuka"
+    },
+    {
+      "front": "die Wahrnehmung, -en",
+      "back": "opažanje, percepcija"
+    },
+    {
+      "front": "die Toleranz (nur Sg.)",
+      "back": "tolerancija"
+    },
+    {
+      "front": "die Subjektivität (nur Sg.)",
+      "back": "subjektivnost"
+    },
+    {
+      "front": "auch bei + Dat. (konzessiv)",
+      "back": "i kod, čak i pri"
+    },
+    {
+      "front": "die Vielfalt (nur Sg.)",
+      "back": "raznolikost"
+    },
+    {
+      "front": "lebenswert",
+      "back": "vredan življenja"
+    },
+    {
+      "front": "beruhigend",
+      "back": "umirujuć"
+    },
+    {
+      "front": "unerträglich",
+      "back": "nepodnošljiv"
+    },
+    {
+      "front": "kreischen",
+      "back": "vrištati, kreštati"
+    },
+    {
+      "front": "schrill",
+      "back": "prodoran, kreštav"
+    },
+    {
+      "front": "anschließend",
+      "back": "potom, nakon toga"
+    },
+    {
+      "front": "zu guter Letzt",
+      "back": "na samom kraju, naposletku"
+    }
+  ]
+}

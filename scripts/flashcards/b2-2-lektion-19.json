@@ -1,0 +1,233 @@
+{
+  "type": "wordset",
+  "title": "Lektion 19 — Reči",
+  "setKey": "b2-2-lektion-19",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    {
+      "front": "beschreiten",
+      "back": "krenuti (putem), stupiti na"
+    },
+    {
+      "front": "meiden (meidet, mied, hat gemieden)",
+      "back": "izbegavati"
+    },
+    {
+      "front": "auf|poppen (ugs.)",
+      "back": "iskočiti (na ekranu, žarg.)"
+    },
+    {
+      "front": "das Highlight, -s",
+      "back": "vrhunac, hajlajt"
+    },
+    {
+      "front": "bergauf gehen (geht bergauf, ging bergauf, ist bergauf gegangen)",
+      "back": "ići uzbrdo; ići nabolje"
+    },
+    {
+      "front": "geil (ugs.)",
+      "back": "super, ekstra (žarg.)"
+    },
+    {
+      "front": "bahnbrechend",
+      "back": "revolucionaran, koji krči put"
+    },
+    {
+      "front": "daneben|gehen (geht daneben, ging daneben, ist danebengegangen)",
+      "back": "ne uspeti, omanuti"
+    },
+    {
+      "front": "farblos",
+      "back": "bezbojan, bled"
+    },
+    {
+      "front": "verunsichern",
+      "back": "pokolebati, učiniti nesigurnim"
+    },
+    {
+      "front": "irritieren",
+      "back": "zbunjivati, iritirati"
+    },
+    {
+      "front": "verwirrend",
+      "back": "zbunjujuć"
+    },
+    {
+      "front": "irritierend",
+      "back": "iritantan"
+    },
+    {
+      "front": "vergleichen mit + Dat.",
+      "back": "porediti sa"
+    },
+    {
+      "front": "die Weile (nur Sg.)",
+      "back": "neko vreme, časak"
+    },
+    {
+      "front": "die Begabung, -en für + Akk.",
+      "back": "dar, talenat za"
+    },
+    {
+      "front": "irgendwas",
+      "back": "bilo šta, nešto"
+    },
+    {
+      "front": "sich an|fühlen wie",
+      "back": "delovati (na dodir/doživljaj) kao"
+    },
+    {
+      "front": "dazu|gehören",
+      "back": "pripadati, biti deo"
+    },
+    {
+      "front": "der Vergleich mit + Dat.",
+      "back": "poređenje sa"
+    },
+    {
+      "front": "attraktiv",
+      "back": "atraktivan"
+    },
+    {
+      "front": "sich vor|kommen",
+      "back": "osećati se (nekako)"
+    },
+    {
+      "front": "irgendwie",
+      "back": "nekako"
+    },
+    {
+      "front": "benachteiligt",
+      "back": "zapostavljen, u nepovoljnijem položaju"
+    },
+    {
+      "front": "der Backpacker, – / die Backpackerin, -nen",
+      "back": "bekpeker / bekpekerka"
+    },
+    {
+      "front": "die Felsenwand, ¨e",
+      "back": "stena, litica"
+    },
+    {
+      "front": "neidisch sein auf + Akk.",
+      "back": "zavideti (nekome)"
+    },
+    {
+      "front": "beneiden",
+      "back": "zavideti"
+    },
+    {
+      "front": "der Post, -s",
+      "back": "objava (na mreži)"
+    },
+    {
+      "front": "bügeln",
+      "back": "peglati"
+    },
+    {
+      "front": "das Klopapier, -e (ugs.)",
+      "back": "toalet-papir (žarg.)"
+    },
+    {
+      "front": "nicht aus dem Kopf gehen",
+      "back": "ne izlaziti iz glave"
+    },
+    {
+      "front": "bis dahin",
+      "back": "do tada"
+    },
+    {
+      "front": "von etw. / jdm. die Nase voll haben",
+      "back": "biti sit (nečega/nekoga)"
+    },
+    {
+      "front": "scheinbar",
+      "back": "naizgled"
+    },
+    {
+      "front": "sich etw. ein|gestehen (gesteht ein, gestand ein, hat eingestanden)",
+      "back": "priznati sebi (nešto)"
+    },
+    {
+      "front": "stehen zu + Dat.",
+      "back": "stajati iza (svoje odluke/reči)"
+    },
+    {
+      "front": "entspannt",
+      "back": "opušten"
+    },
+    {
+      "front": "genervt",
+      "back": "iznerviran"
+    },
+    {
+      "front": "lustlos",
+      "back": "bezvoljan"
+    },
+    {
+      "front": "zuversichtlich",
+      "back": "pun pouzdanja, optimističan"
+    },
+    {
+      "front": "skeptisch",
+      "back": "skeptičan"
+    },
+    {
+      "front": "am Herzen liegen (liegt, lag, hat gelegen)",
+      "back": "biti (nekome) prirastao srcu, biti važan"
+    },
+    {
+      "front": "sich hinein|versetzen",
+      "back": "uživeti se (u nečiju situaciju)"
+    },
+    {
+      "front": "von etw. genug haben",
+      "back": "imati dosta (nečega)"
+    },
+    {
+      "front": "die Verhandlung, -en",
+      "back": "pregovor"
+    },
+    {
+      "front": "der Sessellift, -e",
+      "back": "žičara (sa sedištima)"
+    },
+    {
+      "front": "das Date, -s",
+      "back": "sastanak, dejt"
+    },
+    {
+      "front": "der Neid auf + Akk.",
+      "back": "zavist prema"
+    },
+    {
+      "front": "nach|empfinden (empfindet nach, empfand nach, hat nachempfunden)",
+      "back": "saosećati, razumeti (kako se neko oseća)"
+    },
+    {
+      "front": "definitiv",
+      "back": "definitivno"
+    },
+    {
+      "front": "selbstbewusst",
+      "back": "samouveren"
+    },
+    {
+      "front": "der Account, -s",
+      "back": "nalog"
+    },
+    {
+      "front": "das Album, Alben",
+      "back": "album"
+    },
+    {
+      "front": "die Melodie, -n",
+      "back": "melodija"
+    },
+    {
+      "front": "wecken",
+      "back": "probuditi"
+    }
+  ]
+}

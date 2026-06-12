@@ -1,0 +1,225 @@
+{
+  "type": "wordset",
+  "title": "Lektion 20 — Reči",
+  "setKey": "b2-2-lektion-20",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    {
+      "front": "der Notarzt, ¨e / die Notärztin, -nen",
+      "back": "lekar / lekarka hitne pomoći"
+    },
+    {
+      "front": "der Einsatz, ¨e",
+      "back": "intervencija, akcija; zalaganje"
+    },
+    {
+      "front": "der Schiedsrichter, – / die Schiedsrichterin, -nen",
+      "back": "sudija / sutkinja (u sportu)"
+    },
+    {
+      "front": "das Spielfeld, -er",
+      "back": "teren, igralište"
+    },
+    {
+      "front": "der Pilot, -en / die Pilotin, -nen",
+      "back": "pilot / pilotkinja"
+    },
+    {
+      "front": "das Cockpit, -s",
+      "back": "kokpit, pilotska kabina"
+    },
+    {
+      "front": "der Prozess, -e",
+      "back": "proces; suđenje"
+    },
+    {
+      "front": "der Wahlkampf, ¨e",
+      "back": "izborna kampanja"
+    },
+    {
+      "front": "der Makler, – / die Maklerin, -nen",
+      "back": "posrednik, broker / posrednica"
+    },
+    {
+      "front": "die Börse, -n",
+      "back": "berza"
+    },
+    {
+      "front": "das Ansehen (nur Sg.)",
+      "back": "ugled"
+    },
+    {
+      "front": "die Einschätzung, -en",
+      "back": "procena"
+    },
+    {
+      "front": "ein|schätzen",
+      "back": "proceniti"
+    },
+    {
+      "front": "der Zeitdruck (nur Sg.)",
+      "back": "vremenski pritisak"
+    },
+    {
+      "front": "die Gesprächsrunde, -n",
+      "back": "panel, krug razgovora"
+    },
+    {
+      "front": "die Emotion, -en",
+      "back": "emocija"
+    },
+    {
+      "front": "je nachdem",
+      "back": "zavisno od toga, kako kad"
+    },
+    {
+      "front": "der Retter, – / die Retterin, -nen",
+      "back": "spasilac / spasiteljka"
+    },
+    {
+      "front": "bedrohen",
+      "back": "pretiti, ugrožavati"
+    },
+    {
+      "front": "zu Gast sein bei",
+      "back": "biti gost kod"
+    },
+    {
+      "front": "die Bundesliga",
+      "back": "Bundesliga"
+    },
+    {
+      "front": "tätig sein",
+      "back": "raditi, biti aktivan (u struci)"
+    },
+    {
+      "front": "weiter|empfehlen (empfiehlt weiter, empfahl weiter, hat weiterempfohlen)",
+      "back": "preporučiti dalje"
+    },
+    {
+      "front": "erhalten (erhält, erhielt, hat erhalten)",
+      "back": "dobiti; očuvati"
+    },
+    {
+      "front": "komplex",
+      "back": "kompleksan"
+    },
+    {
+      "front": "das Kriterium / die Kriterien",
+      "back": "kriterijum"
+    },
+    {
+      "front": "die Handlungsempfehlung, -en",
+      "back": "preporuka za postupanje"
+    },
+    {
+      "front": "aus|blenden",
+      "back": "isključiti, potisnuti (iz misli)"
+    },
+    {
+      "front": "der Begriff, -e",
+      "back": "pojam"
+    },
+    {
+      "front": "mit jdm. / etw. nicht viel / nichts an|fangen können",
+      "back": "ne znati šta bi s (nekim/nečim)"
+    },
+    {
+      "front": "die Dankbarkeit (nur Sg.)",
+      "back": "zahvalnost"
+    },
+    {
+      "front": "mental",
+      "back": "mentalno, psihički"
+    },
+    {
+      "front": "die Strategie, -n",
+      "back": "strategija"
+    },
+    {
+      "front": "der Assistent, -en / die Assistentin, -nen",
+      "back": "asistent / asistentkinja"
+    },
+    {
+      "front": "die Schlagzeile, -n",
+      "back": "novinski naslov"
+    },
+    {
+      "front": "die Beleidigung, -en",
+      "back": "uvreda"
+    },
+    {
+      "front": "die Drohung, -en",
+      "back": "pretnja"
+    },
+    {
+      "front": "der Fokus, -se",
+      "back": "fokus"
+    },
+    {
+      "front": "betonen",
+      "back": "naglasiti"
+    },
+    {
+      "front": "unterstreichen (unterstreicht, unterstrich, hat unterstrichen)",
+      "back": "podvući, naglasiti"
+    },
+    {
+      "front": "zusammen|halten (hält zusammen, hielt zusammen, hat zusammengehalten)",
+      "back": "držati se zajedno"
+    },
+    {
+      "front": "an|halten (hält an, hielt an, hat angehalten)",
+      "back": "trajati; zaustaviti"
+    },
+    {
+      "front": "bewahren",
+      "back": "sačuvati"
+    },
+    {
+      "front": "sich zurück|halten (hält sich zurück, hielt sich zurück, hat sich zurückgehalten)",
+      "back": "uzdržati se"
+    },
+    {
+      "front": "auseinander|halten (hält auseinander, hielt auseinander, hat auseinandergehalten)",
+      "back": "razlikovati (jedno od drugog)"
+    },
+    {
+      "front": "der Hass (nur Sg.)",
+      "back": "mržnja"
+    },
+    {
+      "front": "die Intelligenz, -en",
+      "back": "inteligencija"
+    },
+    {
+      "front": "die Diagnose, -n",
+      "back": "dijagnoza"
+    },
+    {
+      "front": "die Urteilsfindung, -en",
+      "back": "donošenje presude/odluke"
+    },
+    {
+      "front": "der / die Befragte, -n",
+      "back": "ispitanik / ispitanica"
+    },
+    {
+      "front": "befürworten",
+      "back": "podržavati, zalagati se za"
+    },
+    {
+      "front": "auffällig",
+      "back": "upadljiv"
+    },
+    {
+      "front": "bemerkenswert",
+      "back": "vredan pažnje"
+    },
+    {
+      "front": "vielmehr",
+      "back": "naprotiv; štaviše"
+    }
+  ]
+}

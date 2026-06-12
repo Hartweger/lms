@@ -1,0 +1,185 @@
+{
+  "type": "wordset",
+  "title": "Lektion 23 — Reči",
+  "setKey": "b2-2-lektion-23",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    {
+      "front": "die Agentur, -en",
+      "back": "agencija"
+    },
+    {
+      "front": "akademisch",
+      "back": "akademski"
+    },
+    {
+      "front": "die Hausarbeit, -en",
+      "back": "seminarski rad"
+    },
+    {
+      "front": "die Bachelorarbeit, -en",
+      "back": "završni (bachelor) rad"
+    },
+    {
+      "front": "die Masterarbeit, -en",
+      "back": "master rad"
+    },
+    {
+      "front": "die Doktorarbeit, -en",
+      "back": "doktorska disertacija"
+    },
+    {
+      "front": "die Erstellung, -en",
+      "back": "izrada"
+    },
+    {
+      "front": "hartnäckig",
+      "back": "uporan, tvrdoglav"
+    },
+    {
+      "front": "die Antike (nur Sg.)",
+      "back": "antika"
+    },
+    {
+      "front": "legal",
+      "back": "legalan"
+    },
+    {
+      "front": "die Dienstleistung, -en",
+      "back": "usluga"
+    },
+    {
+      "front": "die Grauzone, -n",
+      "back": "siva zona"
+    },
+    {
+      "front": "umstritten",
+      "back": "sporan"
+    },
+    {
+      "front": "die Abschlussarbeit, -en",
+      "back": "završni rad"
+    },
+    {
+      "front": "die Germanistik (nur Sg.)",
+      "back": "germanistika"
+    },
+    {
+      "front": "recherchieren",
+      "back": "istraživati (izvore)"
+    },
+    {
+      "front": "der Gefallen",
+      "back": "usluga (učiniti nekome)"
+    },
+    {
+      "front": "geisteswissenschaftlich",
+      "back": "humanistički (o naukama)"
+    },
+    {
+      "front": "herrschen",
+      "back": "vladati"
+    },
+    {
+      "front": "die Unklarheit, -en über + Akk.",
+      "back": "nejasnoća oko"
+    },
+    {
+      "front": "die Beihilfe, -n zu + Dat.",
+      "back": "pomaganje u (pravno), saučesništvo"
+    },
+    {
+      "front": "der Betrug (CH Pl.: Betrüge)",
+      "back": "prevara"
+    },
+    {
+      "front": "heikel",
+      "back": "škakljiv, delikatan"
+    },
+    {
+      "front": "die Angelegenheit, -en",
+      "back": "stvar, pitanje"
+    },
+    {
+      "front": "ausdrücklich",
+      "back": "izričito"
+    },
+    {
+      "front": "wörtlich",
+      "back": "doslovno"
+    },
+    {
+      "front": "keinerlei",
+      "back": "nikakav"
+    },
+    {
+      "front": "verstoßen gegen + Akk. (verstößt, verstieß, hat verstoßen)",
+      "back": "prekršiti (nešto)"
+    },
+    {
+      "front": "juristisch",
+      "back": "pravno, pravnički"
+    },
+    {
+      "front": "moralisch",
+      "back": "moralno"
+    },
+    {
+      "front": "geltend",
+      "back": "važeći"
+    },
+    {
+      "front": "begehen (begeht, beging, hat begangen)",
+      "back": "počiniti"
+    },
+    {
+      "front": "die Straftat, -en",
+      "back": "krivično delo"
+    },
+    {
+      "front": "verklagen",
+      "back": "tužiti"
+    },
+    {
+      "front": "überlassen (überlässt, überließ, hat überlassen)",
+      "back": "prepustiti"
+    },
+    {
+      "front": "erwischen",
+      "back": "uhvatiti (na delu)"
+    },
+    {
+      "front": "bestreiten (bestreitet, bestritt, hat bestritten)",
+      "back": "osporavati, poricati"
+    },
+    {
+      "front": "die Notsituation, -en",
+      "back": "nužda, vanredna situacija"
+    },
+    {
+      "front": "verzweifelt",
+      "back": "očajan"
+    },
+    {
+      "front": "der Ruf, -e",
+      "back": "ugled, reputacija; poziv"
+    },
+    {
+      "front": "ausnutzen",
+      "back": "iskoristiti (nekoga/nešto)"
+    },
+    {
+      "front": "kontrovers",
+      "back": "kontroverzno"
+    },
+    {
+      "front": "der Befürworter, – / die Befürworterin, -nen",
+      "back": "zagovornik / zagovornica"
+    },
+    {
+      "front": "fest|halten (hält fest, hielt fest, hat festgehalten)",
+      "back": "zabeležiti; držati se (nečega)"
+    }
+  ]
+}

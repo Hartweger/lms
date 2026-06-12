@@ -1,0 +1,237 @@
+{
+  "type": "wordset",
+  "title": "Lektion 18 — Reči",
+  "setKey": "b2-2-lektion-18",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    {
+      "front": "mitleidig",
+      "back": "sažaljiv"
+    },
+    {
+      "front": "der Islam (nur Sg.)",
+      "back": "islam"
+    },
+    {
+      "front": "sich wundern über + Akk.",
+      "back": "čuditi se (nečemu)"
+    },
+    {
+      "front": "erstaunt sein über + Akk.",
+      "back": "biti začuđen (nečim)"
+    },
+    {
+      "front": "das Vorurteil, -e gegen + Akk.",
+      "back": "predrasuda prema"
+    },
+    {
+      "front": "die Behinderung, -en",
+      "back": "invaliditet"
+    },
+    {
+      "front": "die Hautfarbe, -n",
+      "back": "boja kože"
+    },
+    {
+      "front": "der Lebensstil, -e",
+      "back": "životni stil"
+    },
+    {
+      "front": "die Partnerschaft, -en",
+      "back": "partnerstvo"
+    },
+    {
+      "front": "religiös",
+      "back": "religiozan"
+    },
+    {
+      "front": "die Orientierung, -en",
+      "back": "orijentacija"
+    },
+    {
+      "front": "an|sprechen auf + Akk. (spricht an, sprach an, hat angesprochen)",
+      "back": "obratiti se (nekome) povodom, pitati o"
+    },
+    {
+      "front": "sich verbergen hinter + Dat.",
+      "back": "kriti se iza"
+    },
+    {
+      "front": "die Annahme, -n",
+      "back": "pretpostavka"
+    },
+    {
+      "front": "jdn. in eine Schublade stecken",
+      "back": "strpati nekoga u fioku (etiketirati)"
+    },
+    {
+      "front": "verletzend",
+      "back": "uvredljiv, povređujuć"
+    },
+    {
+      "front": "diskriminierend",
+      "back": "diskriminišući"
+    },
+    {
+      "front": "die Suche nach + Dat.",
+      "back": "potraga za"
+    },
+    {
+      "front": "der Diversitätsmanager, – / die Diversitätsmanagerin, -nen",
+      "back": "menadžer/ka za diverzitet"
+    },
+    {
+      "front": "das Diversitätsmanagement, -s",
+      "back": "upravljanje diverzitetom"
+    },
+    {
+      "front": "das Informationsmaterial, -ien",
+      "back": "informativni materijal"
+    },
+    {
+      "front": "erarbeiten",
+      "back": "izraditi, razraditi"
+    },
+    {
+      "front": "die Schulung, -en",
+      "back": "obuka"
+    },
+    {
+      "front": "das Bedürfnis, -se",
+      "back": "potreba"
+    },
+    {
+      "front": "der / die Beschäftigte, -n",
+      "back": "zaposleni / zaposlena"
+    },
+    {
+      "front": "die Maßnahme, -n",
+      "back": "mera"
+    },
+    {
+      "front": "der Elternurlaub, -e",
+      "back": "roditeljsko odsustvo"
+    },
+    {
+      "front": "das Homeoffice, -s",
+      "back": "rad od kuće"
+    },
+    {
+      "front": "der Türöffner, –",
+      "back": "„otvarač vrata“, ono što otvara mogućnosti"
+    },
+    {
+      "front": "die Barrierefreiheit, -en",
+      "back": "pristupačnost (bez barijera)"
+    },
+    {
+      "front": "die Führungskraft, ¨e",
+      "back": "rukovodilac"
+    },
+    {
+      "front": "die Fremdenfeindlichkeit, -en",
+      "back": "ksenofobija"
+    },
+    {
+      "front": "bewusst machen",
+      "back": "osvestiti"
+    },
+    {
+      "front": "der Rassismus (nur Sg.)",
+      "back": "rasizam"
+    },
+    {
+      "front": "hinterfragen",
+      "back": "preispitivati"
+    },
+    {
+      "front": "belastbar",
+      "back": "izdržljiv, otporan na pritisak"
+    },
+    {
+      "front": "anonymisiert",
+      "back": "anonimizovan"
+    },
+    {
+      "front": "die Bewerbungsunterlagen (nur Pl.)",
+      "back": "konkursna dokumentacija"
+    },
+    {
+      "front": "die Chancengleichheit (nur Sg.)",
+      "back": "jednakost šansi"
+    },
+    {
+      "front": "die Diversität (nur Sg.)",
+      "back": "raznolikost, diverzitet"
+    },
+    {
+      "front": "das Potenzial, -e",
+      "back": "potencijal"
+    },
+    {
+      "front": "die Arbeitskraft, ¨e",
+      "back": "radna snaga"
+    },
+    {
+      "front": "erschließen (erschließt, erschloss, hat erschlossen)",
+      "back": "otvoriti, učiniti dostupnim"
+    },
+    {
+      "front": "thematisieren",
+      "back": "pokrenuti temu, tematizovati"
+    },
+    {
+      "front": "das Engagement für + Akk.",
+      "back": "zalaganje za"
+    },
+    {
+      "front": "kompetent",
+      "back": "kompetentan"
+    },
+    {
+      "front": "die Diskriminierung, -en",
+      "back": "diskriminacija"
+    },
+    {
+      "front": "das Feedback zu + Dat.",
+      "back": "povratna informacija o"
+    },
+    {
+      "front": "fahrlässig",
+      "back": "nemaran, nesmotren"
+    },
+    {
+      "front": "vorschnell",
+      "back": "ishitren"
+    },
+    {
+      "front": "urteilen über + Akk.",
+      "back": "suditi o"
+    },
+    {
+      "front": "die Maßnahme gegen + Akk.",
+      "back": "mera protiv"
+    },
+    {
+      "front": "sich befassen mit + Dat.",
+      "back": "baviti se (nečim)"
+    },
+    {
+      "front": "ein|wenden gegen + Akk.",
+      "back": "prigovoriti (nečemu)"
+    },
+    {
+      "front": "ein|leuchten",
+      "back": "biti jasno/logično (nekome)"
+    },
+    {
+      "front": "bezweifeln",
+      "back": "sumnjati u"
+    },
+    {
+      "front": "das Bedenken (meist im Pl.)",
+      "back": "sumnja, rezerva"
+    }
+  ]
+}

@@ -52,12 +52,17 @@ Postojećih 7 dvodelnih konektora iz lekcije. Dodati pojedinačni B1 veznici:
 | falls | ako, u slučaju da |
 | sondern | nego, već |
 
-## B2.2 · Lektion 13 — Reči — 39 reči
+## B2.2 · Lektion 13–24 — Reči — 616 reči (zvanični Hueber glosar + moji prevodi)
 
-Sastavljeno iz tabela lekcije „Wortschatz + Wortbildung" (mobilnost, start-up, pridevi sa
-predlozima) + ključne reči iz tekstova (der Stau, die Abgase, nachhaltig, herstellen,
-sich selbstständig machen, das Sortiment erweitern, der Mengenrabatt, Un- imenice…).
-Prevodi i oblici (član, množina, rekcija) su moji — vredi preleteti ceo set.
+Nemačka strana je 1:1 iz **Vielfalt B2.2 Lernwortschatz** (Glossar blanko PDF, po lekcijama) —
+nju ne treba proveravati. **Srpske prevode sam dodao ja** (glosar je blanko), pa vredi
+preleteti prevode, naročito idiome (dasselbe in Grün, jdn. in eine Schublade stecken,
+etw. in Kauf nehmen, die Nase voll haben…).
+
+Po lekciji: L13 (50), L14 (51), L15 (66), L16 (34), L17 (48), L18 (57), L19 (56),
+L20 (54), L21 (43), L22 (61), L23 (44), L24 (52). Na platformi svaka lekcija ima svoju
+„Lektion N — Reči" stranicu sa karticama + PDF. Napomena: u glosaru piše
+„Stellung nehmen zu + Akk." — ispravio sam na „zu + Dat." (štamparska greška u glosaru).
 
 ## Napomene
 
