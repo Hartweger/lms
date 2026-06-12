@@ -1,5 +1,5 @@
 // src/app/api/cron/review-request/route.ts
-// Zamolnica za utisak (Google forma) aktivnim polaznicima — SVIMA (i ind/grupni, jer ljudi zaborave
+// Zamolnica za utisak (Google forma) aktivnim polaznicima - SVIMA (i ind/grupni, jer ljudi zaborave
 // iako im je link u beleškama). Cilj: ≥5 završenih lekcija, aktivan u 14 dana, nalog ≥21 dan,
 // nije već zamoljen. Jednom po čoveku. (Na kraju forme je i Google review link za one koji žele.)
 import { NextResponse } from "next/server";
@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 const MAX_PER_RUN = 30;
 const MIN_LESSONS = 5;
 const ACTIVE_DAYS = 14;
-// Ne šaljemo pre ovog datuma — platforma se još sleže, čekamo da se stabilizuje (odluka 10.06.2026).
+// Ne šaljemo pre ovog datuma - platforma se još sleže, čekamo da se stabilizuje (odluka 10.06.2026).
 const START_DATE = "2026-06-25T00:00:00Z";
 
 type Row = Record<string, unknown>;
@@ -59,11 +59,11 @@ export async function GET(request: Request) {
     .filter(([, s]) => s.count >= MIN_LESSONS && s.last >= activeCutoff)
     .map(([uid]) => uid);
 
-  // Isključi samo već zamoljene (ne znamo ko je popunio formu — pratimo koga smo zvali)
+  // Isključi samo već zamoljene (ne znamo ko je popunio formu - pratimo koga smo zvali)
   const asked = await fetchAll(() => admin.from("review_requests").select("user_id")) as { user_id: string }[];
   const askedSet = new Set(asked.map((a) => a.user_id));
 
-  // ≥5 završenih lekcija + aktivan u 14 dana već znači „radi neko vreme" — starost naloga ne tražimo
+  // ≥5 završenih lekcija + aktivan u 14 dana već znači „radi neko vreme" - starost naloga ne tražimo
   // (platforma je nova, skoro svi nalozi su mlađi od par nedelja, pa bi to isključilo sve).
   const candidateIds = engaged.filter((uid) => !askedSet.has(uid));
   if (candidateIds.length === 0) return NextResponse.json({ candidates: 0, sent: 0 });
@@ -78,7 +78,7 @@ export async function GET(request: Request) {
   const started = now >= new Date(START_DATE).getTime();
   if (dryRun) return NextResponse.json({ dry: true, totalEligible: eligible.length, wouldSend: Math.min(eligible.length, MAX_PER_RUN), startsOn: START_DATE, started });
 
-  // Dok se platforma ne stabilizuje — cron radi ali ne šalje do START_DATE
+  // Dok se platforma ne stabilizuje - cron radi ali ne šalje do START_DATE
   if (!started) return NextResponse.json({ pending: true, startsOn: START_DATE });
 
   let sent = 0;

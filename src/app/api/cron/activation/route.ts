@@ -1,13 +1,13 @@
 // src/app/api/cron/activation/route.ts
 // Aktivacioni nudge: polaznik dobio pristup ali nije otvorio nijednu lekciju → mejl da započne.
-// Cilja NATIVE (ne-migrirane), pristup star 3–30 dana, bez ijedne završene lekcije, jednom po čoveku.
+// Cilja NATIVE (ne-migrirane), pristup star 3-30 dana, bez ijedne završene lekcije, jednom po čoveku.
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendActivationNudge } from "@/lib/email";
 
 export const dynamic = "force-dynamic";
 
-const MAX_PER_RUN = 40; // Resend free kvota (100/dan) — ostavi prostora drugim mejlovima
+const MAX_PER_RUN = 40; // Resend free kvota (100/dan) - ostavi prostora drugim mejlovima
 
 type Row = Record<string, unknown>;
 async function fetchAll(build: () => { range: (a: number, b: number) => PromiseLike<{ data: Row[] | null }> }): Promise<Row[]> {
@@ -73,7 +73,7 @@ export async function GET(request: Request) {
   const started = await fetchAll(() => admin.from("lesson_progress").select("user_id").eq("completed", true));
   const startedSet = new Set((started as { user_id: string }[]).map((s) => s.user_id));
 
-  // Native aktivan pristup, granted 3–30 dana
+  // Native aktivan pristup, granted 3-30 dana
   const access = await fetchAll(() =>
     admin
       .from("course_access")
@@ -88,7 +88,7 @@ export async function GET(request: Request) {
   for (const a of access as { user_id: string; course_id: string; source: string | null }[]) {
     if (String(a.source ?? "").startsWith("wp-migration")) continue; // samo native
     if (nudgedSet.has(a.user_id) || startedSet.has(a.user_id)) continue;
-    if (!firstLesson.has(a.course_id)) continue; // kurs bez lekcija (paket/1:1) — preskoči
+    if (!firstLesson.has(a.course_id)) continue; // kurs bez lekcija (paket/1:1) - preskoči
     if (!userCourse.has(a.user_id)) userCourse.set(a.user_id, a.course_id);
   }
 

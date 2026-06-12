@@ -38,9 +38,9 @@ export default async function AdminPristup() {
     const course = courseMap.get(a.course_id);
     return {
       ...a,
-      userName: (profile as { full_name: string | null })?.full_name || "—",
-      userEmail: (profile as { email: string })?.email || "—",
-      courseTitle: (course as { title: string })?.title || "—",
+      userName: (profile as { full_name: string | null })?.full_name || "-",
+      userEmail: (profile as { email: string })?.email || "-",
+      courseTitle: (course as { title: string })?.title || "-",
     };
   });
 

@@ -201,13 +201,13 @@ export default function AdminStudenti() {
             {filtered.map((student) => (
               <tr key={student.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 font-medium text-gray-900">
-                  {student.full_name || "—"}
+                  {student.full_name || "-"}
                 </td>
                 <td className="px-6 py-4 text-gray-500">{student.email}</td>
                 <td className="px-6 py-4 text-gray-500">
                   {student.courseAccess.length > 0
                     ? student.courseAccess.length + " kurs(a)"
-                    : "—"}
+                    : "-"}
                 </td>
                 <td className="px-6 py-4">
                   {student.lastSignIn
@@ -217,7 +217,7 @@ export default function AdminStudenti() {
                 <td className="px-6 py-4 text-gray-500">
                   {student.lastActivity
                     ? new Date(student.lastActivity).toLocaleDateString("sr-RS")
-                    : "—"}
+                    : "-"}
                 </td>
                 <td className="px-6 py-4 text-right">
                   <Link

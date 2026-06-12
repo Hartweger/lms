@@ -1,4 +1,4 @@
-// Resend webhook — bounce i spam prijave u email_bounces (prikazuje ih jutarnji pregled).
+// Resend webhook - bounce i spam prijave u email_bounces (prikazuje ih jutarnji pregled).
 // Potpis se verifikuje preko RESEND_WEBHOOK_SECRET (svix), bez toga se zahtev odbija.
 import { NextResponse } from "next/server";
 import { Resend } from "resend";

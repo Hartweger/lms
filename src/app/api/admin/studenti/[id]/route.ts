@@ -94,9 +94,9 @@ export async function GET(
   const courseTitle = new Map((courses ?? []).map((c: { id: string; title: string }) => [c.id, c.title]));
   const individualEnrollments = (indRaw ?? []).map((e) => ({
     id: e.id,
-    courseTitle: courseTitle.get(e.course_id) ?? "—",
+    courseTitle: courseTitle.get(e.course_id) ?? "-",
     professorId: e.professor_id,
-    professor: e.professor_id ? (profName.get(e.professor_id) ?? "—") : "—",
+    professor: e.professor_id ? (profName.get(e.professor_id) ?? "-") : "-",
     packageLessons: e.package_lessons,
     lessonsUsed: e.lessons_used,
     expiresAt: e.expires_at,
@@ -120,7 +120,7 @@ export async function GET(
   const groupMap = new Map((groups ?? []).map((g) => [g.id, g]));
   const groupEnrollments = (geRaw ?? []).map((e) => {
     const g = groupMap.get(e.group_id);
-    return { level: g?.level ?? "—", type: g?.type ?? "", groupStatus: g?.status ?? "", endDate: g?.end_date ?? null, status: e.status, enrolledAt: e.enrolled_at };
+    return { level: g?.level ?? "-", type: g?.type ?? "", groupStatus: g?.status ?? "", endDate: g?.end_date ?? null, status: e.status, enrolledAt: e.enrolled_at };
   });
 
   // Poslednja prijava (iz auth-a)

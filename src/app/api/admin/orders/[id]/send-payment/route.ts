@@ -5,7 +5,7 @@ import { sendPaymentInstructionsEmail } from "@/lib/email";
 import { calculatePaypalEur } from "@/lib/order-utils";
 import { generateIpsQrUrl } from "@/lib/ips-qr";
 
-// (Ponovno) slanje kupcu podataka za uplatu — za metodu te narudžbine.
+// (Ponovno) slanje kupcu podataka za uplatu - za metodu te narudžbine.
 export async function POST(
   _request: Request,
   { params }: { params: Promise<{ id: string }> }

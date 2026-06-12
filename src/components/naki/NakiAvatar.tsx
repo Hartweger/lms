@@ -1,4 +1,4 @@
-// NaKI ilustracija (lik) — portovano 1:1 sa originalne WP/HTML stranice (naki-elementor-widget.html).
+// NaKI ilustracija (lik) - portovano 1:1 sa originalne WP/HTML stranice (naki-elementor-widget.html).
 // "full" = ceo lik za hero (sa rukom koja maše); "face" = samo glava za zaglavlje chata.
 
 export function NakiAvatar({ className }: { className?: string }) {

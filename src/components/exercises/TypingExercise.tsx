@@ -28,7 +28,7 @@ function normalize(s: string): string {
     .replace(/\s+/g, " ").trim();
 }
 
-// Najblaže poređenje: samo slova/brojevi — interpunkcija i crtice se ignorišu.
+// Najblaže poređenje: samo slova/brojevi - interpunkcija i crtice se ignorišu.
 function lettersOnly(s: string): string {
   return normalize(s).replace(/[^a-z0-9äöüß ]/gi, "").replace(/\s+/g, " ").trim();
 }

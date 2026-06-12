@@ -1,4 +1,4 @@
-// src/lib/finansije.ts — čiste funkcije za admin Finansije (P&L, marže, grupe, profesorke). Bez I/O.
+// src/lib/finansije.ts - čiste funkcije za admin Finansije (P&L, marže, grupe, profesorke). Bez I/O.
 import { nivoForSlug } from "@/lib/course-nivo";
 
 export type Kategorija = "video" | "grupni" | "individualni" | "paket" | "ostalo";
@@ -89,7 +89,7 @@ export interface FinansijeInput {
   year: number;
   mesec: number | null;       // null = cela godina (filter za sekcije, P&L je uvek cela godina)
   nowKey: string;             // tekući "yyyy-mm", za mesečne troškove bez kraja
-  orders: FinOrder[];         // SVE completed porudžbine (cela istorija — retencija)
+  orders: FinOrder[];         // SVE completed porudžbine (cela istorija - retencija)
   courses: CourseInfo[];
   professors: ProfInfo[];
   lessons: LessonRow[];       // course_id = individual_enrollments.course_id (spojeno na strani servera)
@@ -98,7 +98,7 @@ export interface FinansijeInput {
   indProfByOrderId: Record<string, string>;  // order_id → professor_id (iz individual_enrollments)
   indEnrollments: { professor_id: string | null; user_id: string; status: string }[];
   groups: GroupInfo[];
-  groupMembers: GroupMember[]; // SVI (i cancelled — atribucija prihoda istorijskih članova)
+  groupMembers: GroupMember[]; // SVI (i cancelled - atribucija prihoda istorijskih članova)
   royalties: RoyaltyRow[];    // autorski procenti: course_id → professor_id + percent (od plaćenog iznosa)
 }
 
@@ -133,7 +133,7 @@ export interface FinansijeData {
 
 /**
  * Popuni purchasable_course_id grupama koje ga nemaju (grupe iz Sheet migracije su bez njega):
- * veza ide preko nivoa — kurs čiji slug mapira na isti nivo kao group.level (samo "grupni-" slugovi).
+ * veza ide preko nivoa - kurs čiji slug mapira na isti nivo kao group.level (samo "grupni-" slugovi).
  */
 export function fillGroupCourseIds(groups: GroupInfo[], courses: CourseInfo[]): GroupInfo[] {
   const levelToCourse = new Map<string, string>();
@@ -250,7 +250,7 @@ export function buildFinansije(input: FinansijeInput): FinansijeData {
     row[field] += amt;
     courseAgg.set(id, row);
   };
-  // Per-profesorka royalty prihod i honorar za period — za "Po profesorkama" sekciju
+  // Per-profesorka royalty prihod i honorar za period - za "Po profesorkama" sekciju
   const royaltyPrihodByProf = new Map<string, number>();
   const royaltyHonorarByProf = new Map<string, number>();
 
@@ -308,21 +308,21 @@ export function buildFinansije(input: FinansijeInput): FinansijeData {
   const groupById = new Map(input.groups.map((g) => [g.id, g]));
 
   interface ProfPayment { professor_id: string; user_id: string; amount: number; month: string; group_id: string | null }
-  const allPayments: ProfPayment[] = []; // cela istorija — za retenciju
+  const allPayments: ProfPayment[] = []; // cela istorija - za retenciju
   for (const o of input.orders) {
-    // Porudžbine uvek imaju user_id (checkout/admin kreiraju korisnika); guard je defanzivan — bez user_id nema atribucije, P&L je svejedno broji.
+    // Porudžbine uvek imaju user_id (checkout/admin kreiraju korisnika); guard je defanzivan - bez user_id nema atribucije, P&L je svejedno broji.
     if (!o.user_id) continue;
     const indProf = input.indProfByOrderId[o.id];
     for (const a of allocateOrderTotal(o)) {
       const cat = kategorijaForItem(a.course_slug, courseById.get(a.course_id)?.course_type);
-      // indProf se proverava PRVO: mapa sadrži samo ordere sa stvarnim individual_enrollment-om —
+      // indProf se proverava PRVO: mapa sadrži samo ordere sa stvarnim individual_enrollment-om -
       // to je jači signal od slug kategorije. Realni 1:1 paketi imaju slug "paket-nivo-..." pa bi
       // cat="paket" nikad ne okino granu "individualni". "Po profesorkama" i P&L kategorije se
       // namerno ne poklapaju za 1:1 pakete (u P&L ostaju "Paketi" po spec-u).
       if (indProf) {
         allPayments.push({ professor_id: indProf, user_id: o.user_id, amount: a.amount, month: monthKey(o.created_at), group_id: null });
       } else if (cat === "grupni") {
-        // Polaznik može proći kroz više generacija iste grupe (isti purchasable_course_id) —
+        // Polaznik može proći kroz više generacija iste grupe (isti purchasable_course_id) -
         // preferiramo aktivno članstvo; ako nema aktivnog, uzimamo prvo istorijsko.
         // Ovo je svesna aproksimacija za slučaj višestrukih generacija.
         const candidates = (memberGroups.get(o.user_id) ?? []).filter((m) => groupById.get(m.group_id)?.purchasable_course_id === a.course_id);
@@ -352,16 +352,16 @@ export function buildFinansije(input: FinansijeInput): FinansijeData {
       group_id: g.id,
       naziv: g.session_time ? `${g.level} · ${g.session_time}` : g.level,
       level: g.level,
-      profesorka: (g.professor_id && profById.get(g.professor_id)?.full_name) || "—",
+      profesorka: (g.professor_id && profById.get(g.professor_id)?.full_name) || "-",
       status: g.status, clanovi, maxSeats: g.max_seats, prihod, honorar,
       zarada, zaradaPoClanu: clanovi > 0 ? Math.round(zarada / clanovi) : zarada,
     };
   }).filter((g) => g.prihod !== 0 || g.honorar !== 0 || g.status === "u_toku" || g.status === "otvoren")
-    .sort((a, b) => a.zarada - b.zarada); // najgore prve — to admin treba da vidi
+    .sort((a, b) => a.zarada - b.zarada); // najgore prve - to admin treba da vidi
 
   // ---------- Profesorke ----------
   const profesorke: ProfRow[] = input.professors.map((p) => {
-    // Video kupci NISU njeni polaznici — royalty prihod/honorar se računa odvojeno od časova.
+    // Video kupci NISU njeni polaznici - royalty prihod/honorar se računa odvojeno od časova.
     const prihodCasovi = selPayments.filter((x) => x.professor_id === p.id).reduce((s, x) => s + x.amount, 0);
     const prihod = prihodCasovi + (royaltyPrihodByProf.get(p.id) ?? 0);
     const honorarCasovi =
@@ -374,7 +374,7 @@ export function buildFinansije(input: FinansijeInput): FinansijeData {
     const aktivni = new Set([...aktivniInd, ...aktivniGrp]).size;
 
     // Retencija: po polazniku broj RAZLIČITIH meseci sa uplatom (cela istorija), pa prosek.
-    // Isključujemo polaznike čiji je NAJRANIJI mesec uplate == nowKey — oni su tek počeli
+    // Isključujemo polaznike čiji je NAJRANIJI mesec uplate == nowKey - oni su tek počeli
     // u tekućem mesecu i uvek bi imali vrednost 1, što bi obaralo prosek (po spec-u).
     const mesecePoPolazniku = new Map<string, Set<string>>();
     for (const pay of allPayments) {
@@ -392,7 +392,7 @@ export function buildFinansije(input: FinansijeInput): FinansijeData {
       ? Math.round((starijiBrojevi.reduce((a, b) => a + b, 0) / starijiBrojevi.length) * 10) / 10
       : null;
 
-    return { professor_id: p.id, ime: p.full_name ?? "—", prihod, honorar, neto: prihod - honorar, aktivniPolaznici: aktivni, retencijaMeseci: retencija };
+    return { professor_id: p.id, ime: p.full_name ?? "-", prihod, honorar, neto: prihod - honorar, aktivniPolaznici: aktivni, retencijaMeseci: retencija };
   }).filter((p) => p.prihod !== 0 || p.honorar !== 0 || p.aktivniPolaznici > 0)
     .sort((a, b) => b.neto - a.neto);
 

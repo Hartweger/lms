@@ -19,7 +19,7 @@ interface Props {
 }
 
 /**
- * Šalje Purchase na stranici potvrde — Meta Pixel + GA4 — sa value, currency i order_id.
+ * Šalje Purchase na stranici potvrde - Meta Pixel + GA4 - sa value, currency i order_id.
  * GA4 dobija i items (prihod po proizvodu u e-commerce izveštajima).
  * Dedup: jedan Purchase po porudžbini po sesiji (refresh stranice ne sme da
  * dupli konverziju).
@@ -31,7 +31,7 @@ export default function PixelPurchase({ orderId, value, currency = "RSD", conten
       if (sessionStorage.getItem(key)) return;
       sessionStorage.setItem(key, "1");
     } catch {
-      /* sessionStorage nedostupan — svejedno pošalji */
+      /* sessionStorage nedostupan - svejedno pošalji */
     }
     trackPurchase({ orderId, value, currency, contentId, contentName, eventId: purchaseEventId(orderId) });
     window.gtag?.("event", "purchase", {

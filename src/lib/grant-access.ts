@@ -28,7 +28,7 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
   for (const item of items) {
     const mapped = (unlocks ?? []).filter((u) => u.purchasable_course_id === item.course_id);
     if (mapped.length > 0) mapped.forEach((u) => contentCourseIds.add(u.content_course_id));
-    else { console.warn(`[grant] No course_unlocks for ${item.course_slug} (${item.course_id}) — granting product itself`); contentCourseIds.add(item.course_id); }
+    else { console.warn(`[grant] No course_unlocks for ${item.course_slug} (${item.course_id}) - granting product itself`); contentCourseIds.add(item.course_id); }
   }
 
   for (const courseId of contentCourseIds) {
@@ -62,7 +62,7 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
 
       const seats = computeSeats({ maxSeats: group.max_seats, manualEnrolled: group.manual_enrolled, activeEnrollments: count ?? 0 });
       if (seats.full) {
-        console.error(`[grant][oversell] Grupa ${group.id} (${nivo}) je puna — preskačem auto-upis za order ${orderId} (user ${order.user_id}). Rešiti ručno.`);
+        console.error(`[grant][oversell] Grupa ${group.id} (${nivo}) je puna - preskačem auto-upis za order ${orderId} (user ${order.user_id}). Rešiti ručno.`);
         continue;
       }
       await admin.from("group_enrollments").upsert(

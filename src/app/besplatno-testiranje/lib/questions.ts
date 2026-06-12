@@ -16,7 +16,7 @@ export const HALF_LEVELS: HalfLevel[] = [
 ];
 
 export const questions: Question[] = [
-  // ===== A1.1 (10 questions) — target correctIndex: 0,1,2,3,0,1,2,3,0,2 =====
+  // ===== A1.1 (10 questions) - target correctIndex: 0,1,2,3,0,1,2,3,0,2 =====
   {
     id: "a11-v1",
     level: "A1.1",
@@ -57,7 +57,7 @@ export const questions: Question[] = [
     id: "a11-g5",
     level: "A1.1",
     type: "grammar",
-    question: "___ kommen Sie, Herr Erol? — Aus der Türkei.",
+    question: "___ kommen Sie, Herr Erol? - Aus der Türkei.",
     // original correct: "Woher" (was index 1) → move to index 0
     options: ["Woher", "Wo", "Was", "Wer"],
     correctIndex: 0,
@@ -110,7 +110,7 @@ export const questions: Question[] = [
     correctIndex: 2,
   },
 
-  // ===== A1.2 (10 questions) — target correctIndex: 1,2,3,0,1,2,3,0,1,2 =====
+  // ===== A1.2 (10 questions) - target correctIndex: 1,2,3,0,1,2,3,0,1,2 =====
   {
     id: "a12-v1",
     level: "A1.2",
@@ -209,7 +209,7 @@ export const questions: Question[] = [
     correctIndex: 2,
   },
 
-  // ===== A2.1 (10 questions) — target correctIndex: 2,3,0,1,2,3,0,1,2,3 =====
+  // ===== A2.1 (10 questions) - target correctIndex: 2,3,0,1,2,3,0,1,2,3 =====
   {
     id: "a21-v1",
     level: "A2.1",
@@ -241,7 +241,7 @@ export const questions: Question[] = [
     id: "a21-g4",
     level: "A2.1",
     type: "grammar",
-    question: "Warum lernst du Deutsch? — ___ ich in Deutschland arbeiten möchte.",
+    question: "Warum lernst du Deutsch? - ___ ich in Deutschland arbeiten möchte.",
     // original correct: "Weil" (was index 2) → move to index 1
     options: ["Denn", "Weil", "Dann", "Aber"],
     correctIndex: 1,
@@ -308,7 +308,7 @@ export const questions: Question[] = [
     correctIndex: 3,
   },
 
-  // ===== A2.2 (10 questions) — target correctIndex: 3,0,1,2,3,0,1,2,3,0 =====
+  // ===== A2.2 (10 questions) - target correctIndex: 3,0,1,2,3,0,1,2,3,0 =====
   {
     id: "a22-v1",
     level: "A2.2",
@@ -340,7 +340,7 @@ export const questions: Question[] = [
     id: "a22-g4",
     level: "A2.2",
     type: "grammar",
-    question: "Hast du dir schon ___ Computer gekauft? — Nein, ich habe zu wenig Geld.",
+    question: "Hast du dir schon ___ Computer gekauft? - Nein, ich habe zu wenig Geld.",
     // original correct: "einen neuen" (was index 2) → move to index 2 (keep)
     options: ["ein neuer", "ein neue", "einen neuen", "einem neuen"],
     correctIndex: 2,
@@ -407,7 +407,7 @@ export const questions: Question[] = [
     correctIndex: 0,
   },
 
-  // ===== B1.1 (10 questions) — target correctIndex: 0,1,2,3,0,1,2,3,0,1 =====
+  // ===== B1.1 (10 questions) - target correctIndex: 0,1,2,3,0,1,2,3,0,1 =====
   {
     id: "b11-v1",
     level: "B1.1",
@@ -439,7 +439,7 @@ export const questions: Question[] = [
     id: "b11-g4",
     level: "B1.1",
     type: "grammar",
-    question: "Lisa hat sich getrennt. — Was?! ___ sie sich erst letztes Jahr verlobt haben!",
+    question: "Lisa hat sich getrennt. - Was?! ___ sie sich erst letztes Jahr verlobt haben!",
     // original correct: "Obwohl" (was index 1) → move to index 3
     options: ["Weil", "Damit", "Falls", "Obwohl"],
     correctIndex: 3,
@@ -516,7 +516,7 @@ export const questions: Question[] = [
     correctIndex: 1,
   },
 
-  // ===== B1.2 (10 questions) — target correctIndex: 1,2,3,0,1,2,3,0,1,2 =====
+  // ===== B1.2 (10 questions) - target correctIndex: 1,2,3,0,1,2,3,0,1,2 =====
   {
     id: "b12-v1",
     level: "B1.2",
@@ -585,7 +585,7 @@ export const questions: Question[] = [
     id: "b12-l8",
     level: "B1.2",
     type: "reading",
-    context: "Ab dem 1. Juni gelten neue Regeln für das Homeoffice. Sie dürfen maximal zwei Tage pro Woche von zu Hause arbeiten. An den restlichen Tagen ist Ihre Anwesenheit im Büro erforderlich. Besprechen Sie die genauen Tage mit Ihrem Teamleiter. — Die Geschäftsführung",
+    context: "Ab dem 1. Juni gelten neue Regeln für das Homeoffice. Sie dürfen maximal zwei Tage pro Woche von zu Hause arbeiten. An den restlichen Tagen ist Ihre Anwesenheit im Büro erforderlich. Besprechen Sie die genauen Tage mit Ihrem Teamleiter. - Die Geschäftsführung",
     question: "Wie oft darf man von zu Hause arbeiten?",
     // original correct: "Höchstens zwei Tage pro Woche" (was index 1) → move to index 0
     options: ["Höchstens zwei Tage pro Woche", "Jeden Tag", "Nur am Freitag", "Gar nicht mehr"],
@@ -620,7 +620,7 @@ export const questions: Question[] = [
     correctIndex: 2,
   },
 
-  // ===== B2.1 (10 questions) — target correctIndex: 2,3,0,1,2,3,0,1,2,3 =====
+  // ===== B2.1 (10 questions) - target correctIndex: 2,3,0,1,2,3,0,1,2,3 =====
   {
     id: "b21-v1",
     level: "B2.1",
@@ -734,7 +734,7 @@ export const questions: Question[] = [
     correctIndex: 3,
   },
 
-  // ===== B2.2 (10 questions) — target correctIndex: 3,0,1,2,3,0,1,2,3,0 =====
+  // ===== B2.2 (10 questions) - target correctIndex: 3,0,1,2,3,0,1,2,3,0 =====
   {
     id: "b22-v1",
     level: "B2.2",

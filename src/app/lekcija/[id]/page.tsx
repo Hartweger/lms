@@ -183,7 +183,7 @@ export default async function LekcijaStranica({ params }: PageProps) {
         </div>
       )}
 
-      {/* AI prevod vežba — samo na lekcijama sa fiksnim prevodima */}
+      {/* AI prevod vežba - samo na lekcijama sa fiksnim prevodima */}
       {getFixedTranslations(typedLesson.title) && (
         <div className="mt-8">
           <h3 className="font-semibold text-gray-900 mb-3">AI vežbe</h3>

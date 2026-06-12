@@ -230,11 +230,11 @@ export default function AdminStudentDetalji() {
                   return (
                     <tr key={o.order_number} className="border-b last:border-0">
                       <td className="py-2 pr-4 text-gray-500">{new Date(o.created_at).toLocaleDateString("sr-RS")}</td>
-                      <td className="py-2 pr-4">{o.items?.[0]?.title ?? "—"}{o.coupon_code && <span className="text-xs text-gray-400"> · {o.coupon_code}</span>}</td>
+                      <td className="py-2 pr-4">{o.items?.[0]?.title ?? "-"}{o.coupon_code && <span className="text-xs text-gray-400"> · {o.coupon_code}</span>}</td>
                       <td className="py-2 pr-4 text-right">{Number(o.total).toLocaleString("sr-RS")} din</td>
                       <td className="py-2 pr-4 text-gray-500">{o.payment_method}</td>
                       <td className={`py-2 pr-4 font-medium ${st.c}`}>{st.l}</td>
-                      <td className="py-2">{o.fiscal_referent_number ? "✓ fiskalizovan" : <span className="text-gray-300">—</span>}</td>
+                      <td className="py-2">{o.fiscal_referent_number ? "✓ fiskalizovan" : <span className="text-gray-300">-</span>}</td>
                     </tr>
                   );
                 })}
@@ -265,7 +265,7 @@ export default function AdminStudentDetalji() {
                         className="border border-gray-200 rounded-md px-2 py-1 text-xs text-gray-700 bg-white disabled:opacity-50"
                         title="Zameni profesora"
                       >
-                        {!e.professorId && <option value="">— izaberi —</option>}
+                        {!e.professorId && <option value="">- izaberi -</option>}
                         {professors.map((p) => (
                           <option key={p.id} value={p.id}>{p.full_name}</option>
                         ))}
@@ -384,7 +384,7 @@ export default function AdminStudentDetalji() {
                     <td className="px-6 py-4 text-gray-500">
                       {access.expires_at
                         ? new Date(access.expires_at).toLocaleDateString("sr-RS")
-                        : "—"}
+                        : "-"}
                     </td>
                     <td className={`px-6 py-4 text-xs font-medium ${status.color}`}>
                       {status.label}

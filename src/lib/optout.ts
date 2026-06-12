@@ -1,5 +1,5 @@
 // Potpisani link za odjavu od funnel/ponudbenih mejlova (bez prijave na platformu).
-// Token = HMAC(mejl, CRON_SECRET) — bez tajne niko ne može da generiše odjavu za tuđ mejl.
+// Token = HMAC(mejl, CRON_SECRET) - bez tajne niko ne može da generiše odjavu za tuđ mejl.
 import { createHmac } from "crypto";
 import { SITE_URL } from "@/lib/site-url";
 

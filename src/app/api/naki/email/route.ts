@@ -63,7 +63,7 @@ export async function POST(request: Request) {
   const sessionId = typeof body.session_id === "string" ? body.session_id.slice(0, 36) : "";
 
   if (!name || name.length > 100) {
-    return NextResponse.json({ error: "Neispravan unos — ime." }, { status: 400 });
+    return NextResponse.json({ error: "Neispravan unos - ime." }, { status: 400 });
   }
   if (!EMAIL_RE.test(email)) {
     return NextResponse.json({ error: "Neispravan email." }, { status: 400 });

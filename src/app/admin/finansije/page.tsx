@@ -16,7 +16,7 @@ export default async function AdminFinansijePage({
   const mesec = rawMesec !== null && rawMesec >= 1 && rawMesec <= 12 ? rawMesec : null;
 
   const admin = createAdminClient();
-  // PostgREST default limit je 1000 redova — eksplicitni limiti + godišnji filter za lekcije/sesije;
+  // PostgREST default limit je 1000 redova - eksplicitni limiti + godišnji filter za lekcije/sesije;
   // orders cela istorija zbog retencije.
   const [ordersRes, coursesRes, profsRes, lessonsRes, sessionsRes, expensesRes, indEnrRes, groupsRes, membersRes, royaltiesRes] =
     await Promise.all([
@@ -25,9 +25,9 @@ export default async function AdminFinansijePage({
       admin.from("user_profiles").select("id, full_name, honorar_ind, honorar_grp").eq("role", "professor"),
       admin.from("individual_lessons").select("lesson_date, professor_id, enrollment_id")
         .gte("lesson_date", `${year}-01-01`).lt("lesson_date", `${year + 1}-01-01`)
-        .lte("lesson_date", now.toISOString().slice(0, 10)) // samo održani — budući upisi ne ulaze u zaradu
+        .lte("lesson_date", now.toISOString().slice(0, 10)) // samo održani - budući upisi ne ulaze u zaradu
         .limit(10000),
-      // samo održane sesije — raspored je unapred generisan; semantika je 'zarada do danas'
+      // samo održane sesije - raspored je unapred generisan; semantika je 'zarada do danas'
       admin.from("group_sessions").select("session_date, professor_id, group_id")
         .gte("session_date", `${year}-01-01`).lt("session_date", `${year + 1}-01-01`)
         .eq("cancelled", false)
@@ -46,7 +46,7 @@ export default async function AdminFinansijePage({
     [indEnrRes, "individual_enrollments"], [groupsRes, "groups"], [membersRes, "group_enrollments"],
     [royaltiesRes, "course_royalties"],
   ] as const) {
-    if (res.error) throw new Error(`Finansije: upit nije uspeo — ${res.error.message} (tabela: ${name})`);
+    if (res.error) throw new Error(`Finansije: upit nije uspeo - ${res.error.message} (tabela: ${name})`);
   }
 
   const allOrders = ordersRes.data ?? [];
@@ -98,7 +98,7 @@ export default async function AdminFinansijePage({
   });
 
   const profName: Record<string, string> = Object.fromEntries(
-    (profsRes.data ?? []).map((p) => [p.id, p.full_name ?? "—"])
+    (profsRes.data ?? []).map((p) => [p.id, p.full_name ?? "-"])
   );
   const courseOptions = (coursesRes.data ?? [])
     .map((c) => ({ id: c.id, title: c.title }))

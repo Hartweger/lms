@@ -56,9 +56,9 @@ export default async function ProfesorHonorar({ searchParams }: { searchParams: 
               {months.map((m) => (
                 <tr key={m.month} className={m.total === 0 ? "text-gray-300" : "hover:bg-gray-50"}>
                   <td className="px-6 py-3 capitalize">{MESECI[m.month - 1]}</td>
-                  <td className="px-6 py-3 text-right">{m.ind || "—"}</td>
-                  <td className="px-6 py-3 text-right">{m.grp || "—"}</td>
-                  <td className="px-6 py-3 text-right font-medium text-gray-900">{m.total ? fmt(m.total) + " din" : "—"}</td>
+                  <td className="px-6 py-3 text-right">{m.ind || "-"}</td>
+                  <td className="px-6 py-3 text-right">{m.grp || "-"}</td>
+                  <td className="px-6 py-3 text-right font-medium text-gray-900">{m.total ? fmt(m.total) + " din" : "-"}</td>
                 </tr>
               ))}
             </tbody>
@@ -90,7 +90,7 @@ export default async function ProfesorHonorar({ searchParams }: { searchParams: 
     const ind = indByProf.get(p.id) ?? 0;
     const grp = grpByProf.get(p.id) ?? 0;
     const h = computeHonorar(ind, grp, p.honorar_ind ?? 1400, p.honorar_grp ?? 1600);
-    return { name: p.full_name || "—", ind, grp, total: h.total };
+    return { name: p.full_name || "-", ind, grp, total: h.total };
   }).sort((a, b) => b.total - a.total);
   const grand = rows.reduce((s, r) => s + r.total, 0);
 
@@ -107,9 +107,9 @@ export default async function ProfesorHonorar({ searchParams }: { searchParams: 
             {rows.map((r) => (
               <tr key={r.name} className={r.total === 0 ? "text-gray-300" : "hover:bg-gray-50"}>
                 <td className="px-6 py-3 text-gray-900">{r.name}</td>
-                <td className="px-6 py-3 text-right">{r.ind || "—"}</td>
-                <td className="px-6 py-3 text-right">{r.grp || "—"}</td>
-                <td className="px-6 py-3 text-right font-medium text-gray-900">{r.total ? fmt(r.total) + " din" : "—"}</td>
+                <td className="px-6 py-3 text-right">{r.ind || "-"}</td>
+                <td className="px-6 py-3 text-right">{r.grp || "-"}</td>
+                <td className="px-6 py-3 text-right font-medium text-gray-900">{r.total ? fmt(r.total) + " din" : "-"}</td>
               </tr>
             ))}
           </tbody>

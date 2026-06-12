@@ -50,14 +50,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     .eq("is_published", true)
     .single();
 
-  if (!post) return { title: "Članak nije pronađen — Hartweger" };
+  if (!post) return { title: "Članak nije pronađen - Hartweger" };
 
   const description = post.meta_description || post.excerpt || "";
   return {
-    title: `${post.title} — Hartweger Magazin`,
+    title: `${post.title} - Hartweger Magazin`,
     description,
     openGraph: {
-      title: `${post.title} — Hartweger Magazin`,
+      title: `${post.title} - Hartweger Magazin`,
       description,
       type: "article",
       ...(post.thumbnail_url && {
@@ -67,7 +67,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     },
     twitter: {
       card: "summary_large_image",
-      title: `${post.title} — Hartweger Magazin`,
+      title: `${post.title} - Hartweger Magazin`,
       description,
       ...(post.thumbnail_url && { images: [post.thumbnail_url] }),
     },
@@ -242,7 +242,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               <Link href="/naki" className="text-plava font-semibold hover:underline">
                 NaKI
               </Link>
-              {" "}— besplatnog AI asistenta za vežbanje gramatike i konverzaciju.
+              {" "}- besplatnog AI asistenta za vežbanje gramatike i konverzaciju.
             </p>
             <p className="mt-1">
               A ako želiš učenje sa profesorom, pogledaj našu{" "}

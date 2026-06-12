@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
     // Skip if active within last 7 days
     if (lastActivity && new Date(lastActivity) > sevenDaysAgo) continue;
 
-    // Skip if never had activity (brand new user — they'll get welcome email)
+    // Skip if never had activity (brand new user - they'll get welcome email)
     if (!lastActivity && !lastProgress?.length) continue;
 
     // Get user info

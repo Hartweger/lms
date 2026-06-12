@@ -48,7 +48,7 @@ export default function GoogleRecenzije() {
   }, []);
 
   // Render nothing if the API failed (e.g. missing key, quota) or has no
-  // reviews — never reach data.reviews.map() with an undefined reviews array.
+  // reviews - never reach data.reviews.map() with an undefined reviews array.
   if (!data || !data.reviews?.length) return null;
 
   return (

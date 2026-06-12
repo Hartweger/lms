@@ -60,7 +60,7 @@ export default function Footer() {
       {/* Copyright */}
       <div className="border-t border-gray-700">
         <div className="max-w-6xl mx-auto px-4 py-4 text-center text-xs text-gray-500">
-          © {new Date().getFullYear()} Hartweger — Centar za nemački jezik
+          © {new Date().getFullYear()} Hartweger - Centar za nemački jezik
         </div>
       </div>
     </footer>

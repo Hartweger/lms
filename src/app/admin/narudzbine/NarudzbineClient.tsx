@@ -222,7 +222,7 @@ export default function NarudzbineClient({ initialOrders, courses }: Props) {
                 onChange={(e) => handleCourseChange(e.target.value)}
                 className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-plava"
               >
-                <option value="">— Izaberi kurs —</option>
+                <option value="">- Izaberi kurs -</option>
                 {courses.map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.title} ({c.price.toLocaleString("sr-RS")} RSD)
@@ -380,7 +380,7 @@ export default function NarudzbineClient({ initialOrders, courses }: Props) {
             <tbody className="divide-y divide-gray-50">
               {filtered.map((order) => {
                 const courseTitle =
-                  (order.items as { title: string }[])[0]?.title ?? "—";
+                  (order.items as { title: string }[])[0]?.title ?? "-";
                 const isConfirming = confirmId === order.id;
                 const isLoading = loading === order.id;
                 const isPending = order.payment_status === "pending";
@@ -396,7 +396,7 @@ export default function NarudzbineClient({ initialOrders, courses }: Props) {
                     </td>
                     <td className="px-6 py-4">
                       <div className="font-medium text-gray-900">
-                        {order.full_name || "—"}
+                        {order.full_name || "-"}
                       </div>
                       <div className="text-gray-400 text-xs">{order.email}</div>
                     </td>
@@ -421,16 +421,16 @@ export default function NarudzbineClient({ initialOrders, courses }: Props) {
                     </td>
                     <td className="px-6 py-4">
                       {order.payment_status === "cancelled" ? (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-500" title="Neplaćena porudžbina — automatski otkazana posle 7 dana">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-500" title="Neplaćena porudžbina - automatski otkazana posle 7 dana">
                           Otkazano
                         </span>
                       ) : isPending ? (
                         cardState === "declined" ? (
-                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-600" title="Banka je odbila karticu — kupovina nije prošla">
+                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-600" title="Banka je odbila karticu - kupovina nije prošla">
                             Kartica odbijena
                           </span>
                         ) : cardState === "incomplete" ? (
-                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-orange-50 text-orange-600" title="Kartica započeta ali nije završena — nije naplaćeno">
+                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-orange-50 text-orange-600" title="Kartica započeta ali nije završena - nije naplaćeno">
                             Nije završeno
                           </span>
                         ) : (
@@ -529,7 +529,7 @@ export default function NarudzbineClient({ initialOrders, courses }: Props) {
                             onClick={() => reFiscalize(order.id)}
                             disabled={loading === order.id}
                             className="text-xs text-koral font-medium hover:underline disabled:opacity-50"
-                            title="Narudžbina je potvrđena ali fiskalni račun nije izdat — klikni da fiskalizuješ"
+                            title="Narudžbina je potvrđena ali fiskalni račun nije izdat - klikni da fiskalizuješ"
                           >
                             {loading === order.id ? "Fiskalizujem…" : "⚠ Fiskalizuj"}
                           </button>

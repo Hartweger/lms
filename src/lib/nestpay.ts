@@ -1,4 +1,4 @@
-// src/lib/nestpay.ts — NestPay 3D_PAY_HOSTING (Banca Intesa), ver2 hash
+// src/lib/nestpay.ts - NestPay 3D_PAY_HOSTING (Banca Intesa), ver2 hash
 import crypto from "node:crypto";
 
 export const NESTPAY = {
@@ -66,7 +66,7 @@ export function buildPaymentFields(o: {
     oid: o.orderNumber,
     encoding: "UTF-8",
     hash,
-    // Billing polja (kao stari WP) — pomažu bankin anti-fraud; ne ulaze u hash
+    // Billing polja (kao stari WP) - pomažu bankin anti-fraud; ne ulaze u hash
     BillToName: o.fullName ?? "",
     BillToCompany: "",
     BillToCountry: o.country ?? "",

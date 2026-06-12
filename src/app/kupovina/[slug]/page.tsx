@@ -17,9 +17,9 @@ export async function generateMetadata({
     .eq("slug", slug)
     .eq("is_purchasable", true)
     .single();
-  if (!course) return { title: "Kupovina — Hartweger" };
+  if (!course) return { title: "Kupovina - Hartweger" };
   return {
-    title: `Kupovina: ${course.title} — Hartweger`,
+    title: `Kupovina: ${course.title} - Hartweger`,
     robots: { index: false },
   };
 }
@@ -58,7 +58,7 @@ export default async function KupovinaPage({
     variants = (data ?? []).map((v) => ({ ...v, professor: Array.isArray(v.professor) ? v.professor[0] ?? null : v.professor }));
   }
 
-  // Prepoznaj ulogovanog kupca — prepuni i zaključaj email da se pristup
+  // Prepoznaj ulogovanog kupca - prepuni i zaključaj email da se pristup
   // ne dodeli na pogrešan nalog (rizik pri ručnom unosu drugog emaila).
   const {
     data: { user },

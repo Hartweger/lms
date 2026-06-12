@@ -22,7 +22,7 @@ export default function ProfesorNav() {
     <>
       {prof && (
         <div className="mb-4 flex items-center justify-between gap-3 rounded-lg bg-amber-50 border border-amber-200 px-4 py-2 text-sm text-amber-800">
-          <span>👁️ Admin pregled — gledaš panel izabranog profesora.</span>
+          <span>👁️ Admin pregled - gledaš panel izabranog profesora.</span>
           <Link href="/admin/profesori" className="font-medium underline whitespace-nowrap">Izađi</Link>
         </div>
       )}

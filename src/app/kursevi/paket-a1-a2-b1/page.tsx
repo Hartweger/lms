@@ -3,11 +3,11 @@ import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Video paket A1 + A2 + B1 — Hartweger",
-  description: "Kompletna putanja od nule do B1. 150+ video lekcija, testovi, PDF materijali, WhatsApp podrška i 3 sertifikata — sve u jednom paketu za 249€.",
+  title: "Video paket A1 + A2 + B1 - Hartweger",
+  description: "Kompletna putanja od nule do B1. 150+ video lekcija, testovi, PDF materijali, WhatsApp podrška i 3 sertifikata - sve u jednom paketu za 249€.",
   openGraph: {
-    images: [{ url: "/og/share.png", width: 1200, height: 630, alt: "Hartweger — Škola nemačkog jezika" }],
-    title: "Video paket A1 + A2 + B1 — Hartweger",
+    images: [{ url: "/og/share.png", width: 1200, height: 630, alt: "Hartweger - Škola nemačkog jezika" }],
+    title: "Video paket A1 + A2 + B1 - Hartweger",
     description: "Kompletna putanja od nule do B1. 150+ video lekcija, testovi, PDF materijali i 3 sertifikata.",
   },
 };
@@ -25,7 +25,7 @@ export default function PaketA1B1Page() {
                 Najpopularniji paket
               </span>
               <h1 className="font-montserrat font-bold text-4xl md:text-5xl lg:text-[3.2rem] text-gray-900 leading-[1.12] mb-5">
-                Od početnika do B1 nivoa —{" "}
+                Od početnika do B1 nivoa -{" "}
                 <span className="text-[#0AB3D7]">kompletna transformacija</span>
               </h1>
               <p className="text-gray-500 text-lg md:text-xl mb-4 max-w-xl mx-auto lg:mx-0">
@@ -36,7 +36,7 @@ export default function PaketA1B1Page() {
                   href="/kupovina/paket-a1-a2-b1"
                   className="inline-block bg-[#F78687] hover:bg-[#e06060] text-white font-bold text-lg py-4 px-10 rounded-xl transition-all hover:-translate-y-0.5 shadow-lg shadow-[#F78687]/25"
                 >
-                  Upiši se — 29.133 din
+                  Upiši se - 29.133 din
                 </Link>
                 <p className="text-sm text-gray-400 mt-2">≈ 249€ · plaćanje na rate dostupno</p>
               </div>
@@ -75,7 +75,7 @@ export default function PaketA1B1Page() {
               />
               <div className="bg-white rounded-xl shadow-md px-5 py-3 -mt-6 mx-6 relative z-10">
                 <p className="font-bold text-gray-900 text-sm">Nataša Hartweger</p>
-                <p className="text-gray-400 text-xs italic">&ldquo;Iza svakog kursa stojim ja lično — svojim imenom, firmom i podrškom.&rdquo;</p>
+                <p className="text-gray-400 text-xs italic">&ldquo;Iza svakog kursa stojim ja lično - svojim imenom, firmom i podrškom.&rdquo;</p>
               </div>
             </div>
           </div>
@@ -108,10 +108,10 @@ export default function PaketA1B1Page() {
             {/* Solutions */}
             <div className="space-y-4">
               {[
-                { title: "Jasan plan od prvog dana", desc: "Tačno znaš šta radiš svaki dan. Nema lutanja — pratim te od A1 do B1." },
+                { title: "Jasan plan od prvog dana", desc: "Tačno znaš šta radiš svaki dan. Nema lutanja - pratim te od A1 do B1." },
                 { title: "Jezik koji se stvarno koristi", desc: "Ne učiš iz udžbenika iz 2005. Učiš jezik koji ćeš čuti na poslu, u prodavnici, kod lekara." },
-                { title: "Nisi sam/sama", desc: "WhatsApp grupa, AI asistent, direktna podrška — ovo nije aplikacija, ovo je škola." },
-                { title: "Završićeš jer je sistem napravljen za to", desc: "Kratke lekcije, 11 tipova vežbi, speak vežbe, flashcards — napredak koji vidiš." },
+                { title: "Nisi sam/sama", desc: "WhatsApp grupa, AI asistent, direktna podrška - ovo nije aplikacija, ovo je škola." },
+                { title: "Završićeš jer je sistem napravljen za to", desc: "Kratke lekcije, 11 tipova vežbi, speak vežbe, flashcards - napredak koji vidiš." },
               ].map((s, i) => (
                 <div key={i} className="flex items-start gap-3 bg-green-50/60 rounded-xl p-4">
                   <span className="text-green-500 font-bold text-lg mt-0.5">✓</span>
@@ -163,13 +163,13 @@ export default function PaketA1B1Page() {
           {/* 8 Benefits */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {[
-              { icon: "🎬", title: "150+ video lekcija", desc: "Predavanja sa prof. Natašom — gramatika, izgovor i vokabular" },
-              { icon: "🃏", title: "Flashcard kartice", desc: "Interaktivne kartice za učenje reči — okreni, pomešaj, vežbaj u oba smera" },
+              { icon: "🎬", title: "150+ video lekcija", desc: "Predavanja sa prof. Natašom - gramatika, izgovor i vokabular" },
+              { icon: "🃏", title: "Flashcard kartice", desc: "Interaktivne kartice za učenje reči - okreni, pomešaj, vežbaj u oba smera" },
               { icon: "🎤", title: "Speak vežbe", desc: "Govori na nemačkom i dobij ocenu izgovora u realnom vremenu" },
-              { icon: "💬", title: "Dijalozi sa AI asistentom", desc: "Vežbaj razgovor u realnim situacijama — restoran, lekar, posao" },
+              { icon: "💬", title: "Dijalozi sa AI asistentom", desc: "Vežbaj razgovor u realnim situacijama - restoran, lekar, posao" },
               { icon: "📝", title: "11 tipova vežbi", desc: "Kvizovi, dopuni, spoji parove, složi rečenicu, diktat, kategorije i više" },
               { icon: "📖", title: "Priručnici za svaki nivo", desc: "Kompletni priručnici sa vokabularom, dijalozima i vežbama" },
-              { icon: "🔊", title: "Slušaj i uči", desc: "Svaka reč i rečenica ima audio — klikni i čuj pravi izgovor" },
+              { icon: "🔊", title: "Slušaj i uči", desc: "Svaka reč i rečenica ima audio - klikni i čuj pravi izgovor" },
               { icon: "🏆", title: "3 sertifikata", desc: "Hartweger sertifikat za svaki nivo po završetku testova" },
             ].map((b, i) => (
               <div key={i} className="bg-white rounded-xl border border-gray-100 p-5 flex flex-col gap-2">
@@ -186,21 +186,21 @@ export default function PaketA1B1Page() {
               <span className="text-2xl flex-shrink-0">💬</span>
               <div>
                 <h3 className="font-bold text-gray-900 text-[15px] mb-1">WhatsApp grupa + podrška</h3>
-                <p className="text-gray-500 text-sm">Pitaj kad zapneš — Nataša i tim odgovaraju</p>
+                <p className="text-gray-500 text-sm">Pitaj kad zapneš - Nataša i tim odgovaraju</p>
               </div>
             </div>
             <div className="bg-white rounded-xl border border-gray-100 p-5 flex items-start gap-4">
               <span className="text-2xl flex-shrink-0">📅</span>
               <div>
                 <h3 className="font-bold text-gray-900 text-[15px] mb-1">12 meseci pristupa</h3>
-                <p className="text-gray-500 text-sm">Učiš svojim tempom — vrati se na lekciju kad god zatreba</p>
+                <p className="text-gray-500 text-sm">Učiš svojim tempom - vrati se na lekciju kad god zatreba</p>
               </div>
             </div>
             <div className="bg-white rounded-xl border border-gray-100 p-5 flex items-start gap-4">
               <span className="text-2xl flex-shrink-0">🤖</span>
               <div>
                 <h3 className="font-bold text-gray-900 text-[15px] mb-1">AI alati za učenje</h3>
-                <p className="text-gray-500 text-sm">AI prevod, AI dijalog i NaKI asistent — uvek u koraku sa vremenom</p>
+                <p className="text-gray-500 text-sm">AI prevod, AI dijalog i NaKI asistent - uvek u koraku sa vremenom</p>
               </div>
             </div>
           </div>
@@ -232,7 +232,7 @@ export default function PaketA1B1Page() {
               <ul className="space-y-3 text-gray-600 text-[15px]">
                 <li className="flex items-start gap-2"><span className="text-green-500 mt-1">✓</span> Jezik iz svakodnevnog života</li>
                 <li className="flex items-start gap-2"><span className="text-green-500 mt-1">✓</span> Gramatika kroz praktične primere</li>
-                <li className="flex items-start gap-2"><span className="text-green-500 mt-1">✓</span> Podrška — pitaj kad zapneš</li>
+                <li className="flex items-start gap-2"><span className="text-green-500 mt-1">✓</span> Podrška - pitaj kad zapneš</li>
                 <li className="flex items-start gap-2"><span className="text-green-500 mt-1">✓</span> Tvoj tempo, tvoj raspored</li>
                 <li className="flex items-start gap-2"><span className="text-green-500 mt-1">✓</span> AI dijalog, speak vežbe, flashcards</li>
               </ul>
@@ -285,8 +285,8 @@ export default function PaketA1B1Page() {
           {/* Price comparison */}
           <div className="space-y-3 mb-10">
             {[
-              { label: "1:1 časovi (A1–B1)", sublabel: "Individualna nastava", price: "preko 1.000€", muted: true },
-              { label: "Učenje u grupi (A1–B1)", sublabel: "Grupni kursevi", price: "preko 700€", muted: true },
+              { label: "1:1 časovi (A1-B1)", sublabel: "Individualna nastava", price: "preko 1.000€", muted: true },
+              { label: "Učenje u grupi (A1-B1)", sublabel: "Grupni kursevi", price: "preko 700€", muted: true },
               { label: "Pojedinačno na hartweger.rs", sublabel: "3 × 99€", price: "297€", muted: true },
             ].map((row, i) => (
               <div key={i} className="flex items-center justify-between bg-gray-50 rounded-xl px-5 py-4">
@@ -300,7 +300,7 @@ export default function PaketA1B1Page() {
             {/* THE PAKET */}
             <div className="flex items-center justify-between bg-[#0AB3D7]/[.08] border-2 border-[#0AB3D7] rounded-xl px-5 py-5">
               <div>
-                <p className="font-bold text-gray-900 text-[17px]">Hartweger paket A1–B1</p>
+                <p className="font-bold text-gray-900 text-[17px]">Hartweger paket A1-B1</p>
                 <p className="text-[#0AB3D7] text-sm font-medium">Sve uključeno + podrška</p>
               </div>
               <p className="font-bold text-2xl text-[#0AB3D7]">249€</p>
@@ -335,7 +335,7 @@ export default function PaketA1B1Page() {
               href="/kupovina/paket-a1-a2-b1"
               className="inline-block bg-[#F78687] hover:bg-[#e06060] text-white font-bold text-lg py-4 px-10 rounded-xl transition-all hover:-translate-y-0.5 shadow-lg shadow-[#F78687]/25"
             >
-              Upiši se — 29.133 din
+              Upiši se - 29.133 din
             </Link>
             <p className="text-sm text-gray-400 mt-2.5">≈ 249€ · plaćanje na rate preko Banca Intesa</p>
             <div className="flex items-center justify-center gap-5 mt-4 text-xs text-gray-400">
@@ -370,7 +370,7 @@ export default function PaketA1B1Page() {
               <p className="text-[#0AB3D7] text-sm font-medium mb-4">Profesorka nemačkog · Preduzetnica · Edukatorka</p>
               <div className="space-y-3 text-gray-600 text-[15px] leading-relaxed">
                 <p>
-                  Ovo nije aplikacija koju je napravio neko koga ne možeš da kontaktiraš. Iza svakog kursa, svake lekcije i svakog odgovora na tvoje pitanje stojim ja — lično, svojom firmom i 20+ godina iskustva u nastavi nemačkog jezika.
+                  Ovo nije aplikacija koju je napravio neko koga ne možeš da kontaktiraš. Iza svakog kursa, svake lekcije i svakog odgovora na tvoje pitanje stojim ja - lično, svojom firmom i 20+ godina iskustva u nastavi nemačkog jezika.
                 </p>
                 <p>
                   Radim sa polaznicima svaki dan. Pratim svaki komentar, svako pitanje u WhatsApp grupi, svaki napredak.
@@ -395,7 +395,7 @@ export default function PaketA1B1Page() {
 
           <div className="mt-8 border-l-4 border-[#0AB3D7] bg-white rounded-r-xl px-6 py-4">
             <p className="text-gray-600 italic text-[15px]">
-              &ldquo;Kad se upišeš, ne kupuješ samo kurs — dobijaš mene, moj tim i moju posvećenost da naučiš nemački.&rdquo;
+              &ldquo;Kad se upišeš, ne kupuješ samo kurs - dobijaš mene, moj tim i moju posvećenost da naučiš nemački.&rdquo;
             </p>
           </div>
         </div>
@@ -411,13 +411,13 @@ export default function PaketA1B1Page() {
 
           <div className="space-y-6">
             {[
-              { q: "Da li mogu stvarno da naučim online?", a: "Da. 4.000+ polaznika je dokaz. Ključ je struktura — svaka lekcija ima jasan cilj, test za proveru i podršku kad zapneš. Nisi sam/sama." },
-              { q: "Koliko vremena dnevno treba?", a: "Preporučujemo 30–60 minuta dnevno, ali učiš svojim tempom. Imaš 12 meseci pristupa — nema pritiska." },
+              { q: "Da li mogu stvarno da naučim online?", a: "Da. 4.000+ polaznika je dokaz. Ključ je struktura - svaka lekcija ima jasan cilj, test za proveru i podršku kad zapneš. Nisi sam/sama." },
+              { q: "Koliko vremena dnevno treba?", a: "Preporučujemo 30-60 minuta dnevno, ali učiš svojim tempom. Imaš 12 meseci pristupa - nema pritiska." },
               { q: "Šta ako ne završim za 12 meseci?", a: "12 meseci je više nego dovoljno za sva tri nivoa. Većina polaznika završi ranije. Ako ti treba više, možeš produžiti pristup po 50% manjoj ceni." },
-              { q: "Šta posle B1?", a: "Posle B1 možeš da nastaviš sa individualnim časovima ili grupnim kursevima. Ovo nije kraj puta — ovo je početak." },
-              { q: "Da li dobijem sertifikat?", a: "Da, dobijaš Hartweger sertifikat za svaki nivo — ukupno 3 sertifikata (A1, A2, B1) po završetku testova." },
+              { q: "Šta posle B1?", a: "Posle B1 možeš da nastaviš sa individualnim časovima ili grupnim kursevima. Ovo nije kraj puta - ovo je početak." },
+              { q: "Da li dobijem sertifikat?", a: "Da, dobijaš Hartweger sertifikat za svaki nivo - ukupno 3 sertifikata (A1, A2, B1) po završetku testova." },
               { q: "Kako funkcioniše plaćanje na rate?", a: "Plaćanje na rate moguće je isključivo karticama Banca Intesa (do 6 rata). Jednokratno možeš platiti bilo kojom karticom, uplatom na račun ili PayPal-om." },
-              { q: "Mogu li da učim sa telefona?", a: "Da! Imamo aplikaciju — šaljemo ti link, instaliraš za sekund, bez Google ili Apple prodavnice. Radi i na tabletu i računaru." },
+              { q: "Mogu li da učim sa telefona?", a: "Da! Imamo aplikaciju - šaljemo ti link, instaliraš za sekund, bez Google ili Apple prodavnice. Radi i na tabletu i računaru." },
             ].map((item, i) => (
               <div key={i} className="border-b border-gray-100 pb-5 last:border-0 last:pb-0">
                 <h3 className="font-bold text-gray-900 text-[16px] mb-2">{item.q}</h3>
@@ -441,7 +441,7 @@ export default function PaketA1B1Page() {
             href="/kupovina/paket-a1-a2-b1"
             className="inline-block bg-[#F78687] hover:bg-[#e06060] text-white font-bold text-lg py-4 px-10 rounded-xl transition-all hover:-translate-y-0.5 shadow-lg shadow-[#F78687]/25"
           >
-            Upiši se — 29.133 din
+            Upiši se - 29.133 din
           </Link>
           <p className="text-sm text-gray-400 mt-2.5">≈ 249€ · plaćanje na rate dostupno</p>
           <div className="flex items-center justify-center gap-6 mt-4 text-sm text-gray-400">

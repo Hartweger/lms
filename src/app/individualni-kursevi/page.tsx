@@ -5,11 +5,11 @@ import IndividualniPonuda from "@/components/IndividualniPonuda";
 import { INDIVIDUALNI_CARDS } from "@/lib/individualni-cards";
 
 export const metadata: Metadata = {
-  title: "Individualni kursevi nemačkog jezika — Hartweger",
+  title: "Individualni kursevi nemačkog jezika - Hartweger",
   description: "Individualna nastava nemačkog jezika sa sertifikovanim profesorima. Prilagođen tempo i program.",
   openGraph: {
-    images: [{ url: "/og/share.png", width: 1200, height: 630, alt: "Hartweger — Škola nemačkog jezika" }],
-    title: "Individualni kursevi nemačkog jezika — Hartweger",
+    images: [{ url: "/og/share.png", width: 1200, height: 630, alt: "Hartweger - Škola nemačkog jezika" }],
+    title: "Individualni kursevi nemačkog jezika - Hartweger",
     description: "Individualna nastava nemačkog jezika sa sertifikovanim profesorima.",
   },
 };
@@ -40,17 +40,17 @@ const BENEFITI = [
       </svg>
     ),
     title: "Prilagođen tempo",
-    desc: "Učiš brzinom koja ti odgovara. Nema pritiska ni fiksnog trajanja — fokus je na tvom napretku.",
+    desc: "Učiš brzinom koja ti odgovara. Nema pritiska ni fiksnog trajanja - fokus je na tvom napretku.",
   },
 ];
 
 const profesori = [
-  { name: "Nataša Hartweger", role: "Osnivač · A1–C1", bio: "Kreator Hartweger metode. Fokus na vokabularu i komunikaciji." },
-  { name: "Milica Vučić", role: "A1–C1 · spec. FSP", bio: "Sve nivoe; specijalnost FSP (medicinski nemački za lekare)." },
-  { name: "Katarina Todosijević", role: "A1–C1 · spec. konverzacija", bio: "Sve nivoe; specijalnost konverzacija na B2/C1." },
-  { name: "Hristina Šarčević", role: "A1–C1 · spec. ispiti", bio: "Sve nivoe; specijalnost priprema za ispite." },
-  { name: "Suzana Marjanović", role: "A1–C1", bio: "Sve nivoe; fokus na konverzaciji i svakodnevnim situacijama." },
-  { name: "Marija Radojković Stanojić", role: "A1–C1 · spec. ispiti", bio: "Sve nivoe; specijalnost priprema ispita i sertifikata." },
+  { name: "Nataša Hartweger", role: "Osnivač · A1-C1", bio: "Kreator Hartweger metode. Fokus na vokabularu i komunikaciji." },
+  { name: "Milica Vučić", role: "A1-C1 · spec. FSP", bio: "Sve nivoe; specijalnost FSP (medicinski nemački za lekare)." },
+  { name: "Katarina Todosijević", role: "A1-C1 · spec. konverzacija", bio: "Sve nivoe; specijalnost konverzacija na B2/C1." },
+  { name: "Hristina Šarčević", role: "A1-C1 · spec. ispiti", bio: "Sve nivoe; specijalnost priprema za ispite." },
+  { name: "Suzana Marjanović", role: "A1-C1", bio: "Sve nivoe; fokus na konverzaciji i svakodnevnim situacijama." },
+  { name: "Marija Radojković Stanojić", role: "A1-C1 · spec. ispiti", bio: "Sve nivoe; specijalnost priprema ispita i sertifikata." },
 ];
 
 export default function IndividualniKurseviPage() {
@@ -63,7 +63,7 @@ export default function IndividualniKurseviPage() {
             Individualni kursevi nemačkog
           </h1>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Nastava 1-na-1 sa profesorkom. Prilagođen tempo, raspored i program — izaberi nivo i kreni.
+            Nastava 1-na-1 sa profesorkom. Prilagođen tempo, raspored i program - izaberi nivo i kreni.
           </p>
         </div>
       </section>
@@ -85,12 +85,12 @@ export default function IndividualniKurseviPage() {
         </div>
       </section>
 
-      {/* Ponuda — iste kartice kao u katalogu */}
+      {/* Ponuda - iste kartice kao u katalogu */}
       <section className="py-14 px-4 bg-gray-50">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-2xl font-montserrat font-bold text-center mb-3">Izaberi kurs</h2>
           <p className="text-gray-600 text-center mb-8">
-            Po nivou ili mesečni paket. Klikni na kurs, kupi — profesora i termine biraš odmah nakon uplate.
+            Po nivou ili mesečni paket. Klikni na kurs, kupi - profesora i termine biraš odmah nakon uplate.
           </p>
           <IndividualniPonuda cards={INDIVIDUALNI_CARDS} />
         </div>
@@ -100,7 +100,7 @@ export default function IndividualniKurseviPage() {
       <section className="py-14 px-4">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-2xl font-montserrat font-bold text-center mb-3">Naš tim</h2>
-          <p className="text-gray-600 text-center mb-8">Svi profesori rade nivoe A1–C1. Profesora biraš nakon kupovine kursa.</p>
+          <p className="text-gray-600 text-center mb-8">Svi profesori rade nivoe A1-C1. Profesora biraš nakon kupovine kursa.</p>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-6">
             {profesori.map((prof) => (
               <ProfesorKartica key={prof.name} name={prof.name} role={prof.role} bio={prof.bio} />

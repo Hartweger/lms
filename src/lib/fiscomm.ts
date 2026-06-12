@@ -1,12 +1,12 @@
-// src/lib/fiscomm.ts — Fiscomm PURS fiskalizacija (Virtual PFR)
+// src/lib/fiscomm.ts - Fiscomm PURS fiskalizacija (Virtual PFR)
 import { createAdminClient } from "@/lib/supabase/admin";
 import { SITE_URL } from "@/lib/site-url";
 
 const FISCOMM = {
-  // v0.1.0 API (Google Cloud Functions) — isti koji stari WP plugin koristi; ključ je važeći ovde
+  // v0.1.0 API (Google Cloud Functions) - isti koji stari WP plugin koristi; ključ je važeći ovde
   apiUrl: process.env.FISCOMM_API_URL ?? "https://us-central1-fiscal-38558.cloudfunctions.net/api",
   apiKey: process.env.FISCOMM_API_KEY ?? "",
-  // Poreske labele iz Fiscomm naloga — domaći 20% vs inostranstvo (izvoz/0%).
+  // Poreske labele iz Fiscomm naloga - domaći 20% vs inostranstvo (izvoz/0%).
   // PURS standard: "Ђ" = 20% opšta, "А" = 0%/oslobođeno. Potvrditi preko /receipt/tax-rates.
   labelDomestic: process.env.FISCOMM_TAX_LABEL_DOMESTIC ?? "Ђ",
   labelForeign: process.env.FISCOMM_TAX_LABEL_FOREIGN ?? "А",
@@ -22,12 +22,12 @@ function pursPaymentType(method: string): string {
 
 /**
  * Izdaje fiskalni račun preko Fiscomm API-ja (POST /receipt/normal/sale) i upisuje
- * fiskalna polja na narudžbinu. Idempotentno. NE baca grešku — fiskalizacija ne sme
+ * fiskalna polja na narudžbinu. Idempotentno. NE baca grešku - fiskalizacija ne sme
  * da blokira pristup kupcu (ako padne, loguje se i može retry).
  */
 export async function fiscalizeOrder(orderId: string): Promise<{ ok: boolean; error?: string }> {
   if (!FISCOMM.apiKey) {
-    console.warn("[fiscomm] FISCOMM_API_KEY nije postavljen — preskačem fiskalizaciju");
+    console.warn("[fiscomm] FISCOMM_API_KEY nije postavljen - preskačem fiskalizaciju");
     return { ok: false, error: "no_api_key" };
   }
 
@@ -72,7 +72,7 @@ export async function fiscalizeOrder(orderId: string): Promise<{ ok: boolean; er
       return { ok: false, error: `http_${res.status}` };
     }
 
-    // Mapiranje best-effort (tačni nazivi se potvrđuju iz prvog stvarnog odgovora — zato čuvamo i sirov)
+    // Mapiranje best-effort (tačni nazivi se potvrđuju iz prvog stvarnog odgovora - zato čuvamo i sirov)
     const pick = (...keys: string[]): string | null => {
       for (const k of keys) { const v = data[k]; if (typeof v === "string" && v) return v; }
       return null;

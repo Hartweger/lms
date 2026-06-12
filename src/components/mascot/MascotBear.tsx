@@ -31,7 +31,7 @@ function BaseHead() {
   );
 }
 
-// Mirne kratke šapice sa strane (iste u svim stanjima) — crtaju se IZA tela,
+// Mirne kratke šapice sa strane (iste u svim stanjima) - crtaju se IZA tela,
 // pa proviruju sa strane kao prirodne ruke.
 function CalmArms() {
   return (

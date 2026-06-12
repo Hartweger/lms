@@ -43,7 +43,7 @@ function fmt(n: number) {
 }
 
 function shortenCourseName(name: string): string {
-  if (!name) return "—";
+  if (!name) return "-";
   // "Video kurs A1" → "Video A1"
   // "Grupni kurs A2.1" → "Grupni A2.1"
   // "Individualni kurs B1" → "Indiv. B1"
@@ -103,8 +103,8 @@ export default function KupciDashboard({ orders }: { orders: WcOrder[] }) {
       if (!map.has(email)) {
         map.set(email, {
           email,
-          name: order.customer_name || "—",
-          country: order.country || "—",
+          name: order.customer_name || "-",
+          country: order.country || "-",
           orderCount: 0,
           totalSpent: 0,
           avgOrder: 0,
@@ -117,15 +117,15 @@ export default function KupciDashboard({ orders }: { orders: WcOrder[] }) {
       const row = map.get(email)!;
 
       // Keep the most recent non-empty name
-      if (!row.name || row.name === "—") {
-        row.name = order.customer_name || "—";
+      if (!row.name || row.name === "-") {
+        row.name = order.customer_name || "-";
       }
 
       // Track dates across ALL orders
       if (orderDate < row.firstPurchase) row.firstPurchase = orderDate;
       if (orderDate > row.lastPurchase) row.lastPurchase = orderDate;
 
-      // Revenue metrics — only completed orders with total > 0
+      // Revenue metrics - only completed orders with total > 0
       if (isCompleted) {
         row.orderCount += 1;
         row.totalSpent += Number(order.total);
@@ -431,7 +431,7 @@ function CoursePills({ courses }: { courses: string[] }) {
         </span>
       )}
       {courses.length === 0 && (
-        <span className="text-xs text-gray-400">—</span>
+        <span className="text-xs text-gray-400">-</span>
       )}
     </div>
   );

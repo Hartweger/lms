@@ -53,7 +53,7 @@ export function mapWcVariationsToRows(input: {
     const email = profEmailForWcName(profName);
     if (!email) continue;
     const profId = input.profIdByEmail[email];
-    if (!profId) continue; // profesorka nije u bazi/seed-u — preskoči
+    if (!profId) continue; // profesorka nije u bazi/seed-u - preskoči
 
     const packageType = input.isMonthly ? attr(v, "Paket") : null;
     let price = parseInt(String(v.price), 10);

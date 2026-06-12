@@ -177,7 +177,7 @@ export default function EditLessonSections() {
       {jsonMode !== null && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-xl p-6 w-full max-w-2xl max-h-[80vh] flex flex-col">
-            <h3 className="font-bold text-gray-900 mb-3">Uredi JSON — sekcija {jsonMode + 1}</h3>
+            <h3 className="font-bold text-gray-900 mb-3">Uredi JSON - sekcija {jsonMode + 1}</h3>
             <textarea
               value={jsonText}
               onChange={(e) => setJsonText(e.target.value)}
@@ -291,7 +291,7 @@ export default function EditLessonSections() {
               </div>
             )}
 
-            {/* For complex types (table, spoiler, flashcard, vocabulary, mistakes) — show JSON preview + edit button */}
+            {/* For complex types (table, spoiler, flashcard, vocabulary, mistakes) - show JSON preview + edit button */}
             {["table", "spoiler", "flashcard", "vocabulary", "mistakes", "link", "image", "pdf"].includes(section.type) && (
               <div>
                 <pre className="text-xs text-gray-500 bg-gray-50 rounded-lg p-3 overflow-auto max-h-40">

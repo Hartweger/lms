@@ -44,7 +44,7 @@ export default function LekcijaContent({
   inlineExercises?: InlineExerciseMap;
   level?: string;
 }) {
-  // New block system — takes precedence when sections exist
+  // New block system - takes precedence when sections exist
   const sections = lesson.sections as Section[] | null;
   if (sections && sections.length > 0) {
     const hasVideoSection = sections.some((section) => section.type === "video");
@@ -62,7 +62,7 @@ export default function LekcijaContent({
     return <BlockRenderer sections={sections} inlineExercises={inlineExercises} level={level} />;
   }
 
-  // Legacy rendering — fallback for old lessons
+  // Legacy rendering - fallback for old lessons
   switch (lesson.lesson_type) {
     case "video":
       return (

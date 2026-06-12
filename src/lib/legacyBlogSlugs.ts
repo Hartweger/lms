@@ -1,6 +1,6 @@
 // Stari WP blog URL-ovi bili su na root nivou: hartweger.rs/<slug>/
 // Na novom sajtu su pod /magazin/<slug>. Ova lista čuva SEO posle domen migracije.
-// Snimak postojećih objava (75) — nove objave idu direktno na /magazin/... pa ne trebaju ovde.
+// Snimak postojećih objava (75) - nove objave idu direktno na /magazin/... pa ne trebaju ovde.
 // Regenerisati po potrebi iz blog_posts (is_published=true).
 
 export const legacyBlogSlugs: string[] = [

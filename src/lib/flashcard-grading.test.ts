@@ -4,7 +4,7 @@ import type { FlashcardItem } from "./flashcard-types";
 
 const vater: FlashcardItem = { front: "Vater", back: "otac", article: "der", plural: "Väter" };
 
-describe("gradeTyping — smer SR→DE (ukucaj nemački)", () => {
+describe("gradeTyping - smer SR→DE (ukucaj nemački)", () => {
   it("tačan unos", () => {
     expect(gradeTyping("Vater", vater, "sr-de").status).toBe("correct");
   });
@@ -41,7 +41,7 @@ describe("gradeTyping — smer SR→DE (ukucaj nemački)", () => {
   });
 });
 
-describe("gradeTyping — smer DE→SR (ukucaj srpski) sa više prevoda", () => {
+describe("gradeTyping - smer DE→SR (ukucaj srpski) sa više prevoda", () => {
   const hallo: FlashcardItem = { front: "Hallo", back: "Zdravo|Ćao" };
   it("bilo koji prevod je tačan", () => {
     expect(gradeTyping("ćao", hallo, "de-sr").status).toBe("correct");

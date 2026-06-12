@@ -56,7 +56,7 @@ for (const [n, mod] of [...byModule.entries()].sort((a, b) => a[0] - b[0])) {
     seen.add(key);
     items.push({ front: it.front.trim(), back: (it.back || "").trim() });
   }
-  const out = { type: "wordset", title: `Modul ${n} — Reči`, setKey: `${prefix}-modul-${n}`, frontLabel: "DE", backLabel: "SR", items };
+  const out = { type: "wordset", title: `Modul ${n} - Reči`, setKey: `${prefix}-modul-${n}`, frontLabel: "DE", backLabel: "SR", items };
   const file = path.join(__dirname, "flashcards", `${prefix}-modul-${n}.json`);
   fs.writeFileSync(file, JSON.stringify(out, null, 2));
   console.log(`Modul ${n}: ${mod.items.length} kartica → ${items.length} posle dedup-a | free modul: ${mod.free} → ${file}`);

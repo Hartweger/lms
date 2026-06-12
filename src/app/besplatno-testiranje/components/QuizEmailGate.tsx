@@ -58,7 +58,7 @@ export default function QuizEmailGate({ recommendedLevel, onSubmit, onSkip, isLo
         onClick={onSkip}
         className="mt-4 text-sm text-gray-400 hover:text-gray-600 transition-colors"
       >
-        Preskoči — prikaži samo osnovni rezultat
+        Preskoči - prikaži samo osnovni rezultat
       </button>
       <p className="text-xs text-gray-400 mt-4">
         Nema spama. Samo tvoj rezultat + povremeni saveti za učenje nemačkog.

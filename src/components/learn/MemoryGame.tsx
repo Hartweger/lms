@@ -36,7 +36,7 @@ export default function MemoryGame({ items, onExit }: { items: FlashcardItem[]; 
   return (
     <div>
       <div className="flex items-center justify-between mb-2">
-        <p className="text-sm text-gray-500">🧩 Igra memorije — spoji parove</p>
+        <p className="text-sm text-gray-500">🧩 Igra memorije - spoji parove</p>
         <button onClick={onExit} className="text-xs px-3 py-1.5 rounded-full bg-white border border-gray-200 text-gray-600 hover:bg-gray-50">← Nazad</button>
       </div>
       <div className="grid grid-cols-3 gap-2">

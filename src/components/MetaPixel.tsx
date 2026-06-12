@@ -2,9 +2,9 @@ import Script from "next/script";
 import { META_PIXEL_ID } from "@/lib/fbq";
 import PixelPageView from "@/components/PixelPageView";
 
-// Server komponenta — base kod se renderuje u SSR HTML (kao GTM/GA4), pa se okida rano.
+// Server komponenta - base kod se renderuje u SSR HTML (kao GTM/GA4), pa se okida rano.
 // Base kod čita saglasnost SINHRONO iz localStorage (ključ 'cookie-consent', mora ostati
-// u sinhronizaciji sa CONSENT_KEY iz src/lib/consent.ts — inline skript ne uvozi TS).
+// u sinhronizaciji sa CONSENT_KEY iz src/lib/consent.ts - inline skript ne uvozi TS).
 // Ako saglasnost nije data → fbq('consent','revoke') PRE init/PageView-a, pa pixel ništa
 // ne šalje dok korisnik ne prihvati u CookieBanner-u.
 function baseCode(pixelId: string): string {

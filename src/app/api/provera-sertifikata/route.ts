@@ -4,7 +4,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 export const dynamic = "force-dynamic";
 
 // Javna provera sertifikata. Ime vlasnika je u user_profiles (RLS dozvoljava
-// samo sopstveni profil/admin), pa browser/anon ne može da ga pročita —
+// samo sopstveni profil/admin), pa browser/anon ne može da ga pročita -
 // čitamo service-role klijentom na serveru i vraćamo samo ime+kurs+datum.
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);

@@ -28,9 +28,9 @@ const preduslov: Record<string, string> = {
 const courseFallbacks: Record<string, { marketing_description: string; features: string[] }> = {
   "grupni-kurs-nemackog-jezika-a1-1": {
     marketing_description:
-      "Nikada niste učili nemački — ili ste pokušali, ali niste daleko stigli? Ovaj kurs je napravljen za taj prvi korak. Za 7 nedelja naučićete da se predstavite, postavljate pitanja i vodite prve kratke razgovore na nemačkom.",
+      "Nikada niste učili nemački - ili ste pokušali, ali niste daleko stigli? Ovaj kurs je napravljen za taj prvi korak. Za 7 nedelja naučićete da se predstavite, postavljate pitanja i vodite prve kratke razgovore na nemačkom.",
     features: [
-      "Živa online nastava 2× nedeljno u grupi od 3–6 polaznika",
+      "Živa online nastava 2× nedeljno u grupi od 3-6 polaznika",
       "7 modula sa video lekcijama, testovima i završnim ispitom",
       "Interaktivne vežbe i beleške dostupne 24/7",
       "Pristup materijalima godinu dana i sertifikat po uspehu",
@@ -38,9 +38,9 @@ const courseFallbacks: Record<string, { marketing_description: string; features:
   },
   "grupni-kurs-nemackog-jezika-a1-2-2": {
     marketing_description:
-      "Savladali ste osnove — sad je vreme da ih povežete. Na A1.2 proširujete rečnik, učvršćujete gramatiku i počinjete da se snalazite u svakodnevnim situacijama: u prodavnici, kod lekara, na poslu.",
+      "Savladali ste osnove - sad je vreme da ih povežete. Na A1.2 proširujete rečnik, učvršćujete gramatiku i počinjete da se snalazite u svakodnevnim situacijama: u prodavnici, kod lekara, na poslu.",
     features: [
-      "Živa online nastava 2× nedeljno u grupi od 3–6 polaznika",
+      "Živa online nastava 2× nedeljno u grupi od 3-6 polaznika",
       "7 modula sa video lekcijama, testovima i završnim ispitom",
       "Pristup beleškama i vežbama u sopstvenom tempu",
       "Sertifikat po završetku kursa",
@@ -48,7 +48,7 @@ const courseFallbacks: Record<string, { marketing_description: string; features:
   },
   "grupni-kurs-nemackog-jezika-a2": {
     marketing_description:
-      "Razumete dosta, ali kad treba da progovorite — zastanete? A2.1 je tu da prekinete tu blokadu. Učite da pričate o sebi, porodici, poslu i svakodnevnim situacijama bez prevođenja u glavi.",
+      "Razumete dosta, ali kad treba da progovorite - zastanete? A2.1 je tu da prekinete tu blokadu. Učite da pričate o sebi, porodici, poslu i svakodnevnim situacijama bez prevođenja u glavi.",
     features: [
       "Online nastava 2× nedeljno u maloj grupi",
       "7 modula sa video lekcijama i interaktivnim vežbama",
@@ -60,7 +60,7 @@ const courseFallbacks: Record<string, { marketing_description: string; features:
     marketing_description:
       "Na A2.2 vaš nemački postaje funkcionalan. Razumete glavne teme razgovora, pišete poruke i mejlove, i sve ređe tražite pomoć na engleskom ili srpskom.",
     features: [
-      "2 časa nedeljno sa profesorkom u grupi od 3–6 polaznika",
+      "2 časa nedeljno sa profesorkom u grupi od 3-6 polaznika",
       "7 modula sa video lekcijama, testovima i završnim ispitom",
       "Zadatke radite kad vam odgovara i prateći materijale",
       "Sertifikat po položenom završnom ispitu",
@@ -68,9 +68,9 @@ const courseFallbacks: Record<string, { marketing_description: string; features:
   },
   "grupni-kurs-nemackog-jezika-b1-1-2": {
     marketing_description:
-      "B1 je nivo koji traže poslodavci i ambasade. Na B1.1 učite da izražavate mišljenje, argumentujete i razumete složenije tekstove — sve što vam treba za posao ili ispit.",
+      "B1 je nivo koji traže poslodavci i ambasade. Na B1.1 učite da izražavate mišljenje, argumentujete i razumete složenije tekstove - sve što vam treba za posao ili ispit.",
     features: [
-      "Online nastava 2× nedeljno u grupi od 3–6 polaznika",
+      "Online nastava 2× nedeljno u grupi od 3-6 polaznika",
       "7 modula sa video lekcijama, testovima i završnim ispitom",
       "Pripremu za B1 situacije na poslu, u školi i u svakodnevnom životu",
       "Pristup materijalima godinu dana i sertifikat",
@@ -80,7 +80,7 @@ const courseFallbacks: Record<string, { marketing_description: string; features:
     marketing_description:
       "Poslednji korak do B1 sertifikata. Na B1.2 savladavate kompleksnu gramatiku, vežbate pisanje i govor na ispitnom nivou i pripremate se za Goethe B1 ispit.",
     features: [
-      "Živa online nastava 2× nedeljno u grupi od 3–6 polaznika",
+      "Živa online nastava 2× nedeljno u grupi od 3-6 polaznika",
       "7 modula sa video lekcijama na platformi",
       "Test posle svake lekcije i završni ispit",
       "Interaktivne vežbe umesto klasičnog domaćeg",
@@ -101,7 +101,7 @@ const courseFallbacks: Record<string, { marketing_description: string; features:
     marketing_description:
       "Na B2.1 prelazite sa „snalaženja“ na tečnu komunikaciju. Diskutujete o apstraktnim temama, razumete autentične tekstove i koristite složene jezičke strukture.",
     features: [
-      "Online nastava 2× nedeljno u grupi od 3–6 polaznika",
+      "Online nastava 2× nedeljno u grupi od 3-6 polaznika",
       "7 modula sa video lekcijama, testovima i završnim ispitom",
       "Vežbanje napredne gramatike i poslovnog jezika",
       "Pristup materijalima godinu dana i sertifikat",
@@ -109,7 +109,7 @@ const courseFallbacks: Record<string, { marketing_description: string; features:
   },
   "grupni-kurs-b2-2": {
     marketing_description:
-      "Završni korak do B2 nivoa. Usavršavate pisanje eseja, argumentovani govor i razumevanje kompleksnih tekstova — kompletna priprema za Goethe B2 ispit.",
+      "Završni korak do B2 nivoa. Usavršavate pisanje eseja, argumentovani govor i razumevanje kompleksnih tekstova - kompletna priprema za Goethe B2 ispit.",
     features: [
       "2 časa nedeljno u maloj grupi za intenzivnu konverzaciju",
       "7 modula sa video lekcijama, testovima i završnim ispitom",
@@ -121,7 +121,7 @@ const courseFallbacks: Record<string, { marketing_description: string; features:
     marketing_description:
       "Akademski i poslovni nemački na naprednom nivou. Na C1.1 analizirate kompleksne tekstove, pišete struktuirane eseje i diskutujete sa preciznošću koja se očekuje u profesionalnom okruženju.",
     features: [
-      "Online nastava 2× nedeljno u grupi od 3–6 polaznika",
+      "Online nastava 2× nedeljno u grupi od 3-6 polaznika",
       "7 modula sa video lekcijama, testovima i završnim ispitom",
       "Analizu složenih tekstova i poslovnu komunikaciju",
       "Pristup materijalima godinu dana i sertifikat",
@@ -129,7 +129,7 @@ const courseFallbacks: Record<string, { marketing_description: string; features:
   },
   "grupni-kurs-c1-2": {
     marketing_description:
-      "Poslednja stepenica. Na C1.2 dovodite nemački do nivoa koji se traži na univerzitetima i u korporacijama — kompletna priprema za Goethe C1 ispit.",
+      "Poslednja stepenica. Na C1.2 dovodite nemački do nivoa koji se traži na univerzitetima i u korporacijama - kompletna priprema za Goethe C1 ispit.",
     features: [
       "2 časa nedeljno u maloj grupi za naprednu konverzaciju",
       "7 modula sa video lekcijama, testovima i završnim ispitom",
@@ -160,23 +160,23 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     .eq("slug", slug)
     .eq("is_purchasable", true)
     .single();
-  if (!course) return { title: "Kurs nije pronađen — Hartweger" };
+  if (!course) return { title: "Kurs nije pronađen - Hartweger" };
   // Kursevi (za sada) nemaju svoje slike → fallback na brend og sliku,
   // inače mreže pri deljenju zgrabe logo i iseku ga ružno.
   const ogImage = course.thumbnail_url
     ? { url: course.thumbnail_url, alt: course.title }
-    : { url: "/og/share.png", width: 1200, height: 630, alt: "Hartweger — Škola nemačkog jezika" };
+    : { url: "/og/share.png", width: 1200, height: 630, alt: "Hartweger - Škola nemačkog jezika" };
   return {
-    title: `${course.title} — Hartweger`,
+    title: `${course.title} - Hartweger`,
     description: course.description,
     openGraph: {
-      title: `${course.title} — Hartweger`,
+      title: `${course.title} - Hartweger`,
       description: course.description,
       images: [ogImage],
     },
     twitter: {
       card: "summary_large_image",
-      title: `${course.title} — Hartweger`,
+      title: `${course.title} - Hartweger`,
       description: course.description,
       images: [ogImage.url],
     },
@@ -241,7 +241,7 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
 
   return (
     <>
-      {/* Meta Pixel — ViewContent na stranici proizvoda */}
+      {/* Meta Pixel - ViewContent na stranici proizvoda */}
       <PixelViewContent contentId={course.slug} contentName={course.title} value={course.price} />
       <script
         type="application/ld+json"
@@ -306,7 +306,7 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
           </nav>
 
           <div className="flex flex-col lg:flex-row gap-10 lg:gap-14 items-start">
-            {/* Left — Content */}
+            {/* Left - Content */}
             <div className="flex-1 min-w-0">
               {/* Badge */}
               <span className={`inline-block text-xs font-bold tracking-wide uppercase px-3 py-1 rounded-full mb-4 ${cat.color} ${cat.bg}`}>
@@ -320,7 +320,7 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
               {/* Rating */}
               <div className="flex items-center gap-2 text-sm text-gray-400 mb-6">
                 <span className="text-amber-400">★★★★★</span>
-                <span>5.0 — 300+ Google recenzija</span>
+                <span>5.0 - 300+ Google recenzija</span>
               </div>
 
               {/* ─── Preduslov ─── */}
@@ -363,14 +363,14 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
                   <div className="flex items-center gap-3 text-[15px]">
                     <span>👥</span>
                     {grupa.full ? (
-                      <span className="text-red-600 font-bold">Popunjeno — nema slobodnih mesta</span>
+                      <span className="text-red-600 font-bold">Popunjeno - nema slobodnih mesta</span>
                     ) : (
                       <span className="text-gray-600"><strong>Slobodnih mesta:</strong> {grupa.slobodnih}</span>
                     )}
                   </div>
                   <div className="flex items-center gap-3 text-[15px]">
                     <span>💻</span>
-                    <span className="text-gray-600">Online nastava — Google Meet</span>
+                    <span className="text-gray-600">Online nastava - Google Meet</span>
                   </div>
                 </div>
               )}
@@ -378,11 +378,11 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
                 <div className="bg-white border border-gray-200 rounded-xl p-5 mb-8 space-y-2.5">
                   <div className="flex items-center gap-3 text-[15px]">
                     <span>👥</span>
-                    <span className="text-gray-600">Male grupe: 3–6 polaznika</span>
+                    <span className="text-gray-600">Male grupe: 3-6 polaznika</span>
                   </div>
                   <div className="flex items-center gap-3 text-[15px]">
                     <span>💻</span>
-                    <span className="text-gray-600">Online nastava — Google Meet</span>
+                    <span className="text-gray-600">Online nastava - Google Meet</span>
                   </div>
                   <div className="flex items-center gap-3 text-[15px]">
                     <span>📩</span>
@@ -395,7 +395,7 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
               {(category === "individualni" || category === "mesecni") && (
                 <div className="bg-white border border-gray-200 rounded-xl p-5 mb-8 space-y-2.5 text-[15px]">
                   {termini && (
-                    <p className="text-gray-700"><strong>{termini} termina po 60 minuta</strong> — nastava 1:1 sa profesorkom</p>
+                    <p className="text-gray-700"><strong>{termini} termina po 60 minuta</strong> - nastava 1:1 sa profesorkom</p>
                   )}
                   {!termini && category === "individualni" && (
                     <p className="text-gray-700"><strong>Nastava 1-na-1</strong> sa profesorkom</p>
@@ -403,7 +403,7 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
                   {slug !== "fsp-individualni" && (
                     <p className="text-gray-600">Birate profesorku u sledećem koraku</p>
                   )}
-                  <p className="text-gray-600">Ti biraš termin — dobijaš Google Calendar link i zakazuješ</p>
+                  <p className="text-gray-600">Ti biraš termin - dobijaš Google Calendar link i zakazuješ</p>
                   {category === "mesecni" && (
                     <p className="text-gray-500">Mesečni paket ne uključuje video lekcije ni sertifikat</p>
                   )}
@@ -442,7 +442,7 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
               <ProductFaq category={category} slug={slug} />
             </div>
 
-            {/* Right — Price card (hidden on mobile, sticky bar instead) */}
+            {/* Right - Price card (hidden on mobile, sticky bar instead) */}
             <div className="hidden lg:block lg:w-[360px] flex-shrink-0">
               {category === "grupni" && grupa?.full ? (
                 <div className="border border-gray-200 rounded-xl p-6 text-center space-y-4">
@@ -487,7 +487,7 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
                 value={course.price}
                 className="bg-[#F78687] hover:bg-[#e06060] text-white font-bold text-lg py-4 px-10 rounded-xl transition-all hover:-translate-y-0.5 shadow-lg shadow-[#F78687]/20"
               >
-                {ctaLabel} — {isVariable ? "od " : ""}{formatPrice(course.price)} din
+                {ctaLabel} - {isVariable ? "od " : ""}{formatPrice(course.price)} din
               </BuyButton>
             )}
             <Link href="/besplatno-testiranje" className="text-plava font-semibold hover:underline text-[15px]">

@@ -41,7 +41,7 @@ export function getRecommendedLevel(scores: BlockScore[]): HalfLevel | "C1+" {
   if (scores.length === HALF_LEVELS.length) {
     return "C1+";
   }
-  // Stopped early — recommend the next level after last completed
+  // Stopped early - recommend the next level after last completed
   const lastLevel = scores[scores.length - 1]?.level;
   const lastIndex = HALF_LEVELS.indexOf(lastLevel);
   if (lastIndex < HALF_LEVELS.length - 1) {

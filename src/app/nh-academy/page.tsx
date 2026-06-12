@@ -2,9 +2,9 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "NH Academy — Program za edukatore | Hartweger",
+  title: "NH Academy - Program za edukatore | Hartweger",
   description:
-    "NH Academy — 12-nedeljni program koji vodi edukatore od prve ideje do biznisa koji radi. Konkretni alati, isprobano u praksi.",
+    "NH Academy - 12-nedeljni program koji vodi edukatore od prve ideje do biznisa koji radi. Konkretni alati, isprobano u praksi.",
 };
 
 export default function NhAcademyPage() {
@@ -33,7 +33,7 @@ export default function NhAcademyPage() {
           <div className="flex-shrink-0">
             <img
               src="/images/MIN05603.jpg"
-              alt="Nataša Hartweger — NH Academy"
+              alt="Nataša Hartweger - NH Academy"
               className="rounded-2xl shadow-lg w-[280px] md:w-[360px] object-cover"
             />
           </div>
@@ -164,7 +164,7 @@ export default function NhAcademyPage() {
             </div>
             <div className="flex items-start gap-4 bg-plava-light rounded-xl p-5">
               <span className="text-plava text-xl font-bold mt-0.5">05</span>
-              <p className="text-gray-700">Template biblioteka — gotovi šabloni za odmah</p>
+              <p className="text-gray-700">Template biblioteka - gotovi šabloni za odmah</p>
             </div>
             <div className="flex items-start gap-4 bg-plava-light rounded-xl p-5">
               <span className="text-plava text-xl font-bold mt-0.5">06</span>
@@ -190,14 +190,14 @@ export default function NhAcademyPage() {
             </div>
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
               <p className="text-gray-600 text-sm leading-relaxed italic mb-4">
-                &ldquo;Mislila sam da moram da imam sve gotovo pre nego što krenem. Naučila sam da kreneš sa onim što imaš — i gradiš u hodu.&rdquo;
+                &ldquo;Mislila sam da moram da imam sve gotovo pre nego što krenem. Naučila sam da kreneš sa onim što imaš - i gradiš u hodu.&rdquo;
               </p>
               <p className="font-bold text-gray-900 text-sm">Sofija R.</p>
               <p className="text-gray-400 text-xs">Nastavnica engleskog</p>
             </div>
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
               <p className="text-gray-600 text-sm leading-relaxed italic mb-4">
-                &ldquo;Nikad nisam mislila da mogu da naplatim znanje koje imam. Pokazala mi je kako — i zašto je to jedino pošteno prema sebi.&rdquo;
+                &ldquo;Nikad nisam mislila da mogu da naplatim znanje koje imam. Pokazala mi je kako - i zašto je to jedino pošteno prema sebi.&rdquo;
               </p>
               <p className="font-bold text-gray-900 text-sm">Ivana V.</p>
               <p className="text-gray-400 text-xs">Pedagog u OŠ</p>
@@ -213,7 +213,7 @@ export default function NhAcademyPage() {
             Upiši se u NH Academy
           </h2>
           <div className="bg-gradient-to-br from-plava-light to-white rounded-2xl p-8 shadow-lg border border-plava/20">
-            <p className="text-gray-500 text-sm mb-2">Generacija I — maksimalno 15 polaznika</p>
+            <p className="text-gray-500 text-sm mb-2">Generacija I - maksimalno 15 polaznika</p>
             <p className="font-montserrat font-bold text-5xl text-gray-900 mb-1">
               64.000 <span className="text-xl font-normal text-gray-500">RSD</span>
             </p>
@@ -226,7 +226,7 @@ export default function NhAcademyPage() {
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-plava mt-0.5">&#10003;</span>
-                Rate bez kartice — pošalji email
+                Rate bez kartice - pošalji email
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-plava mt-0.5">&#10003;</span>
@@ -235,10 +235,10 @@ export default function NhAcademyPage() {
             </ul>
 
             <Link
-              href="mailto:kurs@hartweger.rs?subject=NH Academy — upis"
+              href="mailto:kurs@hartweger.rs?subject=NH Academy - upis"
               className="inline-block w-full bg-koral text-white px-8 py-3.5 rounded-xl font-semibold hover:bg-koral-dark transition-colors shadow-lg shadow-koral/20"
             >
-              Upiši se — 550&euro;
+              Upiši se - 550&euro;
             </Link>
             <p className="text-gray-400 text-xs mt-4">
               Samo 15 mesta

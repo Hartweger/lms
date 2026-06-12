@@ -158,7 +158,7 @@ export default function ProfesorEseji() {
             </div>
 
             <p className="text-xs text-gray-400 mb-3">
-              {essay.lessons?.title} — {essay.exercises?.title}
+              {essay.lessons?.title} - {essay.exercises?.title}
             </p>
 
             <div className="bg-gray-50 rounded-lg p-4 mb-4">
@@ -188,7 +188,7 @@ export default function ProfesorEseji() {
                         <span className="text-koral line-through">{c.original}</span>
                         {" → "}
                         <span className="text-green-600 font-medium">{c.corrected}</span>
-                        {c.explanation && <span className="text-gray-400"> — {c.explanation}</span>}
+                        {c.explanation && <span className="text-gray-400"> - {c.explanation}</span>}
                       </div>
                     ))}
                   </div>

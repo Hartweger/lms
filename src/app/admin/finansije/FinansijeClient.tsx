@@ -32,7 +32,7 @@ export default function FinansijeClient({ data, year, mesec, pendingTotal, profN
 
   const periodLabel = mesec ? `${MESECI_KRATKO[mesec - 1]} ${year}.` : `${year}.`;
 
-  // Filter promene idu kroz URL — server preračuna.
+  // Filter promene idu kroz URL - server preračuna.
   function setPeriod(g: number, m: number | null) {
     const p = new URLSearchParams({ godina: String(g) });
     if (m) p.set("mesec", String(m));
@@ -62,7 +62,7 @@ export default function FinansijeClient({ data, year, mesec, pendingTotal, profN
       setModalOpen(false); setEditing(null);
       router.refresh();
     } catch {
-      setErr("Greška na mreži — pokušaj ponovo.");
+      setErr("Greška na mreži - pokušaj ponovo.");
     } finally {
       setSaving(false);
     }
@@ -109,12 +109,12 @@ export default function FinansijeClient({ data, year, mesec, pendingTotal, profN
         </div>
       </div>
 
-      {/* Kartice — za izabrani period (mesec filter utiče preko sekcijskih suma) */}
+      {/* Kartice - za izabrani period (mesec filter utiče preko sekcijskih suma) */}
       <PeriodCards data={data} mesec={mesec} pendingTotal={pendingTotal} periodLabel={periodLabel} />
 
-      {/* P&L po mesecima — uvek cela godina */}
+      {/* P&L po mesecima - uvek cela godina */}
       <section className="bg-white rounded-xl border border-gray-100 p-4 overflow-x-auto">
-        <h2 className="font-semibold mb-3">Pregled po mesecima — {year}.</h2>
+        <h2 className="font-semibold mb-3">Pregled po mesecima - {year}.</h2>
         <table className="text-sm w-full min-w-[900px]">
           <thead>
             <tr className="text-left text-gray-400">
@@ -158,7 +158,7 @@ export default function FinansijeClient({ data, year, mesec, pendingTotal, profN
 
       {/* Marže po kursevima */}
       <section className="bg-white rounded-xl border border-gray-100 p-4 overflow-x-auto">
-        <h2 className="font-semibold mb-3">Marže po kursevima — {periodLabel}</h2>
+        <h2 className="font-semibold mb-3">Marže po kursevima - {periodLabel}</h2>
         <table className="text-sm w-full min-w-[700px]">
           <thead>
             <tr className="text-left text-gray-400">
@@ -174,10 +174,10 @@ export default function FinansijeClient({ data, year, mesec, pendingTotal, profN
                 <td className="py-2 pr-3">{k.title}</td>
                 <td className="py-2 px-2 text-gray-500">{KATEGORIJA_LABELS[k.kategorija]}</td>
                 <td className="py-2 px-2 text-right">{din(k.prihod)}</td>
-                <td className="py-2 px-2 text-right">{k.honorar ? `−${din(k.honorar)}` : "—"}</td>
-                <td className="py-2 px-2 text-right">{k.direktniTroskovi ? `−${din(k.direktniTroskovi)}` : "—"}</td>
+                <td className="py-2 px-2 text-right">{k.honorar ? `−${din(k.honorar)}` : "-"}</td>
+                <td className="py-2 px-2 text-right">{k.direktniTroskovi ? `−${din(k.direktniTroskovi)}` : "-"}</td>
                 <td className={`py-2 px-2 text-right font-semibold ${k.marza < 0 ? "text-red-600" : ""}`}>{din(k.marza)}</td>
-                <td className="py-2 pl-2 text-right text-gray-500">{k.marzaPct !== null ? `${k.marzaPct}%` : "—"}</td>
+                <td className="py-2 pl-2 text-right text-gray-500">{k.marzaPct !== null ? `${k.marzaPct}%` : "-"}</td>
               </tr>
             ))}
             <tr className="border-t border-gray-200">
@@ -200,7 +200,7 @@ export default function FinansijeClient({ data, year, mesec, pendingTotal, profN
 
       {/* Po grupama */}
       <section className="bg-white rounded-xl border border-gray-100 p-4 overflow-x-auto">
-        <h2 className="font-semibold mb-1">Po grupama — {periodLabel}</h2>
+        <h2 className="font-semibold mb-1">Po grupama - {periodLabel}</h2>
         <p className="text-xs text-gray-400 mb-3">Crveno = grupa ispod break-even tačke (honorar veći od prihoda u periodu).</p>
         <table className="text-sm w-full min-w-[700px]">
           <thead>
@@ -221,13 +221,13 @@ export default function FinansijeClient({ data, year, mesec, pendingTotal, profN
                 <td className="py-2 px-2 text-right">{din(g.prihod)}</td>
                 <td className="py-2 px-2 text-right">−{din(g.honorar)}</td>
                 <td className={`py-2 px-2 text-right font-semibold ${g.zarada < 0 ? "text-red-600" : ""}`}>{din(g.zarada)}</td>
-                <td className="py-2 pl-2 text-right text-gray-500">{g.clanovi > 0 ? din(g.zaradaPoClanu) : "—"}</td>
+                <td className="py-2 pl-2 text-right text-gray-500">{g.clanovi > 0 ? din(g.zaradaPoClanu) : "-"}</td>
               </tr>
             ))}
           </tbody>
         </table>
         {(() => {
-          // Prosečna popunjenost po nivou — samo aktivne/otvorene grupe
+          // Prosečna popunjenost po nivou - samo aktivne/otvorene grupe
           const aktivneGrupe = data.grupe.filter((g) => g.status === "u_toku" || g.status === "otvoren");
           if (aktivneGrupe.length === 0) return null;
           const byLevel = new Map<string, { ukupnoClanovi: number; ukupnoSeats: number }>();
@@ -253,7 +253,7 @@ export default function FinansijeClient({ data, year, mesec, pendingTotal, profN
 
       {/* Po profesorkama */}
       <section className="bg-white rounded-xl border border-gray-100 p-4 overflow-x-auto">
-        <h2 className="font-semibold mb-1">Po profesorkama — {periodLabel}</h2>
+        <h2 className="font-semibold mb-1">Po profesorkama - {periodLabel}</h2>
         <p className="text-xs text-gray-400 mb-3">Retencija = prosečan broj meseci u kojima polaznik plaća (cela istorija, ne samo izabrani period). Prihod uključuje i autorski procenat video kurseva (FSP/FIDE); retencija se odnosi samo na polaznike časova.</p>
         <table className="text-sm w-full min-w-[700px]">
           <thead>
@@ -274,7 +274,7 @@ export default function FinansijeClient({ data, year, mesec, pendingTotal, profN
                 <td className="py-2 px-2 text-right">−{din(p.honorar)}</td>
                 <td className={`py-2 px-2 text-right font-semibold ${p.neto < 0 ? "text-red-600" : ""}`}>{din(p.neto)}</td>
                 <td className="py-2 px-2 text-center">{p.aktivniPolaznici}</td>
-                <td className="py-2 pl-2 text-right">{p.retencijaMeseci ?? "—"}</td>
+                <td className="py-2 pl-2 text-right">{p.retencijaMeseci ?? "-"}</td>
               </tr>
             ))}
           </tbody>
@@ -284,7 +284,7 @@ export default function FinansijeClient({ data, year, mesec, pendingTotal, profN
       {/* Troškovi CRUD */}
       <section className="bg-white rounded-xl border border-gray-100 p-4">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="font-semibold">Troškovi — {periodLabel}</h2>
+          <h2 className="font-semibold">Troškovi - {periodLabel}</h2>
           <button onClick={() => { setEditing(null); setModalOpen(true); }}
             className="bg-plava text-white text-sm px-4 py-2 rounded-lg hover:opacity-90">
             + Dodaj trošak
@@ -347,9 +347,9 @@ export default function FinansijeClient({ data, year, mesec, pendingTotal, profN
               <label className="block">Prestaje (samo za mesečne; prazno = aktivan)
                 <input name="ended_at" type="date" defaultValue={editing?.ended_at ?? ""} className="mt-1 w-full border border-gray-200 rounded-lg px-3 py-2" />
               </label>
-              <label className="block">Kurs (opciono — direktan trošak kursa)
+              <label className="block">Kurs (opciono - direktan trošak kursa)
                 <select name="course_id" defaultValue={editing?.course_id ?? ""} className="mt-1 w-full border border-gray-200 rounded-lg px-3 py-2 bg-white">
-                  <option value="">— opšti trošak —</option>
+                  <option value="">- opšti trošak -</option>
                   {courseOptions.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
                 </select>
               </label>
@@ -378,9 +378,9 @@ function Row({ label, cells, bold, indent, negative, pctOf }: { label: string; c
   return (
     <tr className={bold ? "border-t border-gray-100" : ""}>
       <td className={`py-1 pr-3 ${indent ? "pl-4 text-gray-500" : ""} ${bold ? "font-semibold" : ""}`}>{label}</td>
-      {cells.map((c, i) => <td key={i} className={cls(c)}>{c !== 0 ? din(c) : "—"}</td>)}
+      {cells.map((c, i) => <td key={i} className={cls(c)}>{c !== 0 ? din(c) : "-"}</td>)}
       <td className={`py-1 pl-3 text-right ${bold ? "font-semibold" : "text-gray-500"}`}>
-        {total !== 0 ? din(total) : "—"}
+        {total !== 0 ? din(total) : "-"}
         {pct !== null && <span className="block text-xs text-gray-400 font-normal">({pct}%)</span>}
       </td>
     </tr>
@@ -395,10 +395,10 @@ function PeriodCards({ data, mesec, pendingTotal, periodLabel }: { data: Finansi
   const neto = prihod - rashodi;
   const marza = prihod > 0 ? Math.round((neto / prihod) * 100) : null;
   const cards = [
-    { label: `Prihod — ${periodLabel}`, value: din(prihod), sub: pendingTotal ? `+ ${din(pendingTotal)} na čekanju` : null, color: "" },
+    { label: `Prihod - ${periodLabel}`, value: din(prihod), sub: pendingTotal ? `+ ${din(pendingTotal)} na čekanju` : null, color: "" },
     { label: "Rashodi", value: din(rashodi), sub: null, color: "" },
     { label: "Neto zarada", value: din(neto), sub: null, color: neto < 0 ? "text-red-600" : "text-green-700" },
-    { label: "Marža", value: marza !== null ? `${marza}%` : "—", sub: null, color: "" },
+    { label: "Marža", value: marza !== null ? `${marza}%` : "-", sub: null, color: "" },
   ];
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-3">

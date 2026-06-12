@@ -55,7 +55,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Too many messages" }, { status: 400 });
   }
 
-  // Fetch dialog config from database — never trust client
+  // Fetch dialog config from database - never trust client
   const { data: question } = await supabase
     .from("exercise_questions")
     .select("options")
@@ -66,7 +66,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Exercise not found" }, { status: 404 });
   }
 
-  // options may be stored as a JSON string (double-encoded) — parse before use
+  // options may be stored as a JSON string (double-encoded) - parse before use
   const config = (typeof question.options === "string"
     ? JSON.parse(question.options)
     : question.options) as DialogConfig;
@@ -90,7 +90,7 @@ Student uči nemački na nivou ${level}.
 
 PRAVILA:
 - Odgovaraj SAMO na nemačkom, u ulozi ${aiRole}
-- Budi kratak — 1-2 rečenice po odgovoru
+- Budi kratak - 1-2 rečenice po odgovoru
 - NE ispravljaj greške studenta tokom dijaloga
 - Ako student skrene s teme, vrati ga na zadatak
 - Prilagodi složenost jezika nivou ${level}

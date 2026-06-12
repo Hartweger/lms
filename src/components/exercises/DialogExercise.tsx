@@ -257,7 +257,7 @@ export default function DialogExercise({ exerciseId, config, previousAttempts, o
           </div>
         )}
 
-        {/* Retry button — max 2 attempts */}
+        {/* Retry button - max 2 attempts */}
         <div className="text-center mt-6">
           {attemptCount < MAX_ATTEMPTS ? (
             <button

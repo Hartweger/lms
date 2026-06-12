@@ -14,7 +14,7 @@ async function requireAdmin() {
   return profile?.role === "admin" ? admin : null;
 }
 
-// POST: nova generacija — isprazni prijave (0/6) + napravi NOV event/Meet/beleške. Pristup polaznicima ostaje.
+// POST: nova generacija - isprazni prijave (0/6) + napravi NOV event/Meet/beleške. Pristup polaznicima ostaje.
 export async function POST(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const admin = await requireAdmin();
   if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
@@ -43,7 +43,7 @@ export async function POST(_req: NextRequest, { params }: { params: Promise<{ id
     return NextResponse.json({ error: "Google greška: " + (e instanceof Error ? e.message : String(e)) }, { status: 502 });
   }
 
-  // Isprazni prethodnu generaciju (pristup na sadržaj im OSTAJE — dira se samo članstvo u grupi).
+  // Isprazni prethodnu generaciju (pristup na sadržaj im OSTAJE - dira se samo članstvo u grupi).
   await admin.from("group_enrollments").update({ status: "cancelled", cancelled_at: new Date().toISOString() }).eq("group_id", id).eq("status", "active");
 
   const { error } = await admin.from("groups").update({

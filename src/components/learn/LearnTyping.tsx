@@ -15,12 +15,12 @@ export default function LearnTyping({
   const [input, setInput] = useState("");
   const [done, setDone] = useState<null | { status: string; fullForm: string }>(null);
 
-  // Korak 1: „Proveri" — POKAŽI tačan odgovor (ne prelazi). Prazno → otkrije odgovor (gradeTyping("") = wrong + pun oblik).
+  // Korak 1: „Proveri" - POKAŽI tačan odgovor (ne prelazi). Prazno → otkrije odgovor (gradeTyping("") = wrong + pun oblik).
   const check = () => {
     if (done) return;
     setDone(gradeTyping(input, card, direction));
   };
-  // Korak 2: „Dalje" — tek sad pređi na sledeću.
+  // Korak 2: „Dalje" - tek sad pređi na sledeću.
   const next = () => {
     if (done) onResult(done.status !== "wrong");
   };

@@ -32,14 +32,14 @@ export async function GET(request: NextRequest) {
     const profIme: string = prof?.full_name || "";
     const nextNivo = nextNivoFor(g.level);
 
-    // 1) Podsetnik adminu — 14 dana pre kraja.
+    // 1) Podsetnik adminu - 14 dana pre kraja.
     if (!g.reminder_sent_at && g.end_date <= in14) {
       await sendNatasaNextTermReminder({ nivo: g.level, nextNivo, endDate: g.end_date, profIme });
       await admin.from("groups").update({ reminder_sent_at: now }).eq("id", g.id);
       reminders++;
     }
 
-    // 2) Ponuda polaznicima — 7 dana pre kraja.
+    // 2) Ponuda polaznicima - 7 dana pre kraja.
     if (!g.offer_sent_at && g.end_date <= in7) {
       if (nextNivo) {
         const slug = grupniSlugForNivo(nextNivo);

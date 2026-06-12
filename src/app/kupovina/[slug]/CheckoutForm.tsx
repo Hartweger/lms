@@ -72,7 +72,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
   const discountedRsd = appliedCoupon ? Math.round(basePrice * (1 - appliedCoupon.discountPercent / 100)) : basePrice;
   const eurApprox = Math.round(discountedRsd / EUR_RATE);
 
-  // Meta Pixel — InitiateCheckout kad korisnik dođe na korak kupovine (jednom).
+  // Meta Pixel - InitiateCheckout kad korisnik dođe na korak kupovine (jednom).
   useEffect(() => {
     trackInitiateCheckout({ contentId: courseSlug, contentName: courseTitle, value: basePrice, currency: "RSD" });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -209,7 +209,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
         {appliedCoupon ? (
           <div className="flex items-center justify-between gap-3">
             <p className="text-sm font-medium text-green-600">
-              Kupon {appliedCoupon.code} — {appliedCoupon.discountPercent}% popusta
+              Kupon {appliedCoupon.code} - {appliedCoupon.discountPercent}% popusta
             </p>
             <button
               type="button"
@@ -289,7 +289,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
           />
           {isLoggedIn && emailLocked && (
             <p className="text-xs text-gray-500 mt-1">
-              Kupuješ kao <strong>{email}</strong> — kurs se aktivira na ovom nalogu.{" "}
+              Kupuješ kao <strong>{email}</strong> - kurs se aktivira na ovom nalogu.{" "}
               <button type="button" onClick={() => setEmailLocked(false)} className="text-[#0AB3D7] hover:underline">
                 Kupujem za nekog drugog
               </button>
@@ -330,11 +330,11 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
         <div className="space-y-2">
           {(isRS
             ? [
-                { v: "kartica", label: "Platnom karticom", desc: "Visa, Mastercard, Maestro — sigurno preko Banca Intesa. Vlasnici Banca Intesa kartica mogu na rate — broj rata biraš u sledećem koraku (na strani banke)." },
+                { v: "kartica", label: "Platnom karticom", desc: "Visa, Mastercard, Maestro - sigurno preko Banca Intesa. Vlasnici Banca Intesa kartica mogu na rate - broj rata biraš u sledećem koraku (na strani banke)." },
                 { v: "uplatnica", label: "Uplatnica / internet bankarstvo", desc: "Podaci za uplatu stižu na email; pristup po potvrdi uplate." },
               ]
             : [
-                { v: "kartica", label: "Platnom karticom", desc: "Visa, Mastercard, Maestro — sigurno preko Banca Intesa. Naplata u dinarima (tvoja banka konvertuje u tvoju valutu)." },
+                { v: "kartica", label: "Platnom karticom", desc: "Visa, Mastercard, Maestro - sigurno preko Banca Intesa. Naplata u dinarima (tvoja banka konvertuje u tvoju valutu)." },
                 { v: "paypal", label: "PayPal", desc: "PayPal link stiže na email. Naplata u evrima, uključuje 12% PayPal naknadu." },
               ]
           ).map((m) => (

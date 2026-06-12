@@ -15,7 +15,7 @@ function shouldShowBanner(): boolean {
   try {
     return parseConsent(localStorage.getItem(CONSENT_KEY)) === null;
   } catch {
-    // localStorage nedostupan (npr. privatni režim) — ne prikazuj banner
+    // localStorage nedostupan (npr. privatni režim) - ne prikazuj banner
     return false;
   }
 }
@@ -41,7 +41,7 @@ export default function CookieBanner() {
     }
     // Šaljemo update za obe opcije: "denied" je bitan kod povlačenja ranije date saglasnosti
     window.gtag?.("consent", "update", consentParams(value));
-    // Isto i za Meta Pixel — grant odmršava queue (PageView i sl.), revoke ga zaustavlja
+    // Isto i za Meta Pixel - grant odmršava queue (PageView i sl.), revoke ga zaustavlja
     setPixelConsent(value === "granted");
     setVisible(false);
   }

@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { fiscalizeOrder } from "@/lib/fiscomm";
 
-// Ručna (ponovna) fiskalizacija već potvrđene narudžbine koja nije fiskalizovana —
+// Ručna (ponovna) fiskalizacija već potvrđene narudžbine koja nije fiskalizovana -
 // npr. starije ručne narudžbine napravljene pre nego što je create ruta počela da fiskalizuje.
 // fiscalizeOrder je idempotentan: preskače ako je već fiskalizovano.
 export async function POST(

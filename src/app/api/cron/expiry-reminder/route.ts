@@ -1,7 +1,7 @@
 // src/app/api/cron/expiry-reminder/route.ts
 // Podsetnik ~15 dana pre isteka pristupa + poziv na obnovu (kupon OBNOVI50).
 // Cilja sav pristup sa istekom u narednih 15 dana. Isključuje individualne mesečne pakete
-// (category="mesecni" = ind paket 4/8/12 — nemaju godišnji platformski pristup).
+// (category="mesecni" = ind paket 4/8/12 - nemaju godišnji platformski pristup).
 // U praksi istek imaju samo VIDEO (samostalni) kursevi, uključujući VIDEO FSP i FIDE.
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -56,7 +56,7 @@ export async function GET(request: Request) {
 
   // Pristup koji ističe u narednih WINDOW_DAYS dana (i još nije istekao).
   // Dva izvora: VIDEO (course_access) + INDIVIDUALNI (individual_enrollments).
-  // Grupni se NE obrađuje ovde — nema istek po polazniku (vezan za kraj kohorte).
+  // Grupni se NE obrađuje ovde - nema istek po polazniku (vezan za kraj kohorte).
   const videoAccess = await fetchAll(() =>
     admin
       .from("course_access")

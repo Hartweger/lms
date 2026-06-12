@@ -72,7 +72,7 @@ export default function LessonCompleteButton({
           <div className="text-3xl mb-2">🎉</div>
           <p className="text-lg font-bold text-plava mb-1">Čestitamo! Završio/la si ceo nivo!</p>
           <p className="text-sm text-gray-600">
-            Sjajan posao — istrajao/la si do kraja. Sada uvežbaj kroz Prüfungstraining lekcije i
+            Sjajan posao - istrajao/la si do kraja. Sada uvežbaj kroz Prüfungstraining lekcije i
             pripremi se za ispit. Ponosni smo na tebe! 💪
           </p>
         </div>
@@ -86,7 +86,7 @@ export default function LessonCompleteButton({
     );
   }
 
-  // Već završena (ponovni dolazak) — oznaka + navigacija, bez ponovnog „završavanja"
+  // Već završena (ponovni dolazak) - oznaka + navigacija, bez ponovnog „završavanja"
   if (completed) {
     return (
       <div className="mt-8">
@@ -107,7 +107,7 @@ export default function LessonCompleteButton({
     );
   }
 
-  // Nije završena — jedno glavno dugme: „Završi i nastavi →" (ili „Završi lekciju" na kraju)
+  // Nije završena - jedno glavno dugme: „Završi i nastavi →" (ili „Završi lekciju" na kraju)
   return (
     <div className="mt-8 flex gap-3 pt-6 border-t border-gray-100">
       {PrevLink}

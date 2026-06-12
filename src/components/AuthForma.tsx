@@ -57,7 +57,7 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
         // 4xx (npr. 422 "signups not allowed") = nema naloga sa tim mejlom
         setNoAccount(true);
       } else {
-        // 5xx / mrežna greška — ne tvrdi da nema nalog
+        // 5xx / mrežna greška - ne tvrdi da nema nalog
         setGreska("Trenutno ne možemo da pošaljemo link. Pokušaj ponovo za koji trenutak.");
       }
     } else {
@@ -127,7 +127,7 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
             {googleLoading ? "Učitavanje..." : "Nastavi sa Google"}
           </button>
           <p className="text-xs text-gray-400 text-center -mt-1">
-            Imaš @gmail nalog? Ovo je najbrže — bez čekanja mejla.
+            Imaš @gmail nalog? Ovo je najbrže - bez čekanja mejla.
           </p>
 
           <div className="flex items-center gap-3">

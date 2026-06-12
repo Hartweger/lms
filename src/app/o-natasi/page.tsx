@@ -3,10 +3,10 @@ import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "O nama — Hartweger škola nemačkog jezika",
-  description: "Upoznaj Natašu Hartweger — osnivačicu Hartweger Centra i autorku VoKuM metode — i tim profesorki koje te vode kroz učenje nemačkog jezika.",
+  title: "O nama - Hartweger škola nemačkog jezika",
+  description: "Upoznaj Natašu Hartweger - osnivačicu Hartweger Centra i autorku VoKuM metode - i tim profesorki koje te vode kroz učenje nemačkog jezika.",
   openGraph: {
-    title: "O nama — Hartweger škola nemačkog jezika",
+    title: "O nama - Hartweger škola nemačkog jezika",
     description: "Upoznaj Natašu Hartweger i tim profesorki Hartweger škole.",
     images: [{ url: "/og/o-natasi.jpg", alt: "Nataša Hartweger" }],
   },
@@ -75,7 +75,7 @@ const profesorke = [
 export default function ONatasiPage() {
   return (
     <>
-      {/* Hero — Nataša */}
+      {/* Hero - Nataša */}
       <section className="bg-gradient-to-b from-plava-light to-white py-16 md:py-24 px-4">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-10 md:gap-16">
           <div className="flex-shrink-0">
@@ -113,7 +113,7 @@ export default function ONatasiPage() {
 
           <h2 className="font-montserrat font-bold text-2xl text-gray-900 mt-10">Osnivanje Hartweger Centra</h2>
           <p>
-            Hartweger Centar sam osnovala 2016. godine. Od marketinga, ljudskih resursa, finansija, IT odeljenja do menadžmenta — sve sam radila sama. Poslednjih 10 godina intenzivno se bavim digitalnim marketingom, što mi je pomoglo da školu podignem na novi nivo.
+            Hartweger Centar sam osnovala 2016. godine. Od marketinga, ljudskih resursa, finansija, IT odeljenja do menadžmenta - sve sam radila sama. Poslednjih 10 godina intenzivno se bavim digitalnim marketingom, što mi je pomoglo da školu podignem na novi nivo.
           </p>
           <p>
             Danas Hartweger Centar ima oko 300 učenika, 20 profesora i preko 30.000 pratilaca na društvenim mrežama.
@@ -121,7 +121,7 @@ export default function ONatasiPage() {
 
           <h2 className="font-montserrat font-bold text-2xl text-gray-900 mt-10">Više od škole</h2>
           <p>
-            Pored nastave, aktivno se bavim sportom — istrčala sam nekoliko polumaratona, a sledeći cilj je maraton. Praktikujem zdrav životni stil jer verujem da su telo i um podjednako važni za uspešno učenje.
+            Pored nastave, aktivno se bavim sportom - istrčala sam nekoliko polumaratona, a sledeći cilj je maraton. Praktikujem zdrav životni stil jer verujem da su telo i um podjednako važni za uspešno učenje.
           </p>
         </div>
       </section>

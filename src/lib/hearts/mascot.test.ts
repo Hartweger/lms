@@ -14,7 +14,7 @@ describe("getMascotState", () => {
   it("7+ dana odsutan → sad", () => {
     expect(getMascotState({ ...base, lastActiveDate: "2026-05-28" }, "2026-06-06")).toBe("sad");
   });
-  it("3–6 dana odsutan → sleepy", () => {
+  it("3-6 dana odsutan → sleepy", () => {
     expect(getMascotState({ ...base, lastActiveDate: "2026-06-02" }, "2026-06-06")).toBe("sleepy");
   });
   it("niz ≥3 → proud", () => {

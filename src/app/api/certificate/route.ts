@@ -4,7 +4,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { sendCourseCompletedEmail } from "@/lib/email";
 
 /**
- * Issue a course certificate — server-side only.
+ * Issue a course certificate - server-side only.
  *
  * The client no longer inserts into `certificates` (RLS denies it). This route
  * authenticates the user, recomputes the Modelltest result from STORED
@@ -69,7 +69,7 @@ export async function POST(request: Request) {
     }
   }
 
-  // Require the whole Modelltest to be attempted — otherwise a single easy
+  // Require the whole Modelltest to be attempted - otherwise a single easy
   // exercise at 100% could clear the 60% bar on a partial set.
   if (bestByExercise.size < exerciseIds.length) {
     return NextResponse.json({ eligible: false, percent: 0, reason: "incomplete" });
@@ -104,7 +104,7 @@ export async function POST(request: Request) {
     .select("id")
     .single();
   if (error || !created) {
-    // Possible race on the unique constraint — re-read.
+    // Possible race on the unique constraint - re-read.
     const { data: again } = await admin
       .from("certificates")
       .select("id")
@@ -117,7 +117,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Issue failed" }, { status: 500 });
   }
 
-  // Čestitka + link ka sertifikatu — SAMO pri prvom izdavanju (unique user+course garantuje
+  // Čestitka + link ka sertifikatu - SAMO pri prvom izdavanju (unique user+course garantuje
   // jedno slanje; postojeći sertifikat se vraća iznad bez mejla). Best-effort, ne blokira odgovor.
   try {
     const [{ data: profile }, { data: course }] = await Promise.all([

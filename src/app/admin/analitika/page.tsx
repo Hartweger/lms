@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 export default async function AdminAnalitika() {
   const supabase = createAdminClient();
 
-  // Supabase returns max 1000 rows per query — paginate to get all
+  // Supabase returns max 1000 rows per query - paginate to get all
   const allOrders: any[] = [];
   const PAGE_SIZE = 1000;
   let offset = 0;
@@ -25,7 +25,7 @@ export default async function AdminAnalitika() {
   }
 
   // Nove uplate (post-flip) žive u `orders` tabeli (wc_orders je zamrznut na ~28.05.2026,
-  // WooCommerce prodaja zatvorena posle flipa). Mapiraj na wc_orders oblik i spoji —
+  // WooCommerce prodaja zatvorena posle flipa). Mapiraj na wc_orders oblik i spoji -
   // disjunktni skupovi (wc istorija vs nove uplate), bez dupliranja.
   const { data: newOrders } = await supabase
     .from("orders")

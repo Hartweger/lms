@@ -79,7 +79,7 @@ export default function KuponiClient({ initialCoupons }: Props) {
   }
 
   function formatDate(dateStr: string | null) {
-    if (!dateStr) return "—";
+    if (!dateStr) return "-";
     return new Date(dateStr).toLocaleDateString("sr-RS");
   }
 

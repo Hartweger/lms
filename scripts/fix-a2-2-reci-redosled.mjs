@@ -31,7 +31,7 @@ const test5 = lessons.find((l) => /^Test Modul 5/.test(l.title));
 if (!reci5 || !reci6 || !bank || !test5) { console.error("Ne nalazim očekivane lekcije — već sređeno?", { reci5: !!reci5, reci6: !!reci6, bank: !!bank, test5: !!test5 }); process.exit(1); }
 
 console.log(`Plan: "${reci5.title}"(${reci5.order_index}) → "Modul 5 — Reči (1. deo)" posle "${bank.title}"(${bank.order_index})`);
-console.log(`      "${reci6.title}"(${reci6.order_index}) → "Modul 5 — Reči (2. deo)" pre "${test5.title}"(${test5.order_index})`);
+console.log(`      "${reci6.title}"(${reci6.order_index}) → "Modul 5 [—-] ? Reči (2. deo)" pre "${test5.title}"(${test5.order_index})`);
 if (!APPLY) { console.log("(dry-run — dodaj --apply)"); process.exit(0); }
 
 // 1) preimenovanje lekcija + wordset naslova u sekcijama

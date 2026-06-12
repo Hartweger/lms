@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 export default async function AdminKupci() {
   const supabase = createAdminClient();
 
-  // Supabase returns max 1000 rows per query — paginate to get all
+  // Supabase returns max 1000 rows per query - paginate to get all
   const allOrders: any[] = [];
   const PAGE_SIZE = 1000;
   let offset = 0;

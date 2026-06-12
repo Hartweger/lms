@@ -1,7 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 /**
- * Da li mejl već poseduje (kupio ranije) dati kurs — koristi se za `renewal_only` kupone
+ * Da li mejl već poseduje (kupio ranije) dati kurs - koristi se za `renewal_only` kupone
  * (npr. OBNOVI50) koji važe SAMO za obnovu kursa koji polaznik već ima.
  * Gleda course_access (video/grupni preko video pristupa) i individual_enrollments.
  */
@@ -26,7 +26,7 @@ export async function emailOwnsCourse(
 }
 
 /**
- * Da li korisnik (po user_id) već poseduje BILO KOJI video kurs — koristi se za
+ * Da li korisnik (po user_id) već poseduje BILO KOJI video kurs - koristi se za
  * `new_customers_only` kupone (npr. NAKI10) namenjene samo prvoj kupovini video kursa.
  */
 export async function userOwnsAnyVideoCourse(

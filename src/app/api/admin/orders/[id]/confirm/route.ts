@@ -39,13 +39,13 @@ export async function POST(
   const result = await grantAccessForOrder(id);
   if (!result.ok) return NextResponse.json({ error: result.error }, { status: 400 });
 
-  // NAPOMENA: potvrda uplatnice/PayPal samo daje pristup — fiskalizacija je RUČNA (dugme
+  // NAPOMENA: potvrda uplatnice/PayPal samo daje pristup - fiskalizacija je RUČNA (dugme
   // „Fiskalizuj" u adminu), po odluci 09.06.2026. Kartice se i dalje fiskalizuju automatski
   // u nestpay callback-u (nema ručne potvrde za njih).
 
-  // Meta Conversions API — Purchase za uplatnicu/PayPal ide ISKLJUČIVO ovde (kad je uplata
+  // Meta Conversions API - Purchase za uplatnicu/PayPal ide ISKLJUČIVO ovde (kad je uplata
   // stvarno potvrđena), pa browser pixel za ove načine ne šalje Purchase. Ovo je adminov
-  // zahtev (ne korisnikov browser), pa nema fbp/fbc/IP — match preko hešovanog mejla.
+  // zahtev (ne korisnikov browser), pa nema fbp/fbc/IP - match preko hešovanog mejla.
   const base = SITE_URL;
   await sendPurchaseEvent(order, { eventSourceUrl: `${base}/kupovina/hvala/${order.id}` });
 

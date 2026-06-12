@@ -68,7 +68,7 @@ export default function AdminSidebar() {
           aria-expanded={open}
           aria-label="Admin navigacija"
         >
-          <span>Admin — {currentLabel}</span>
+          <span>Admin - {currentLabel}</span>
           <svg className={`w-4 h-4 transition-transform ${open ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>

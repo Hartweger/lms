@@ -52,7 +52,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // Iznos mora biti ceo broj dinara (total/subtotal su integer kolone — decimala obara upis).
+    // Iznos mora biti ceo broj dinara (total/subtotal su integer kolone - decimala obara upis).
     const amount = Math.round(Number(totalAmount));
     if (!Number.isFinite(amount) || amount <= 0) {
       return NextResponse.json({ error: "Iznos mora biti broj veći od 0." }, { status: 400 });
@@ -152,7 +152,7 @@ export async function POST(request: Request) {
     console.log(`[admin/orders] Created order ${order.order_number} for ${email}`);
 
     // markAsPaid → isti tok kao "Potvrdi uplatu": course_unlocks → pristup (svi vezani kursevi),
-    // welcome mejl. Fiskalizacija SAMO ako je admin eksplicitno čekirao "Fiskalizuj" — neki računi
+    // welcome mejl. Fiskalizacija SAMO ako je admin eksplicitno čekirao "Fiskalizuj" - neki računi
     // idu preko SEF-a i ne smeju da dobiju fiskalni račun (odluka 12.06.2026).
     if (markAsPaid) {
       const result = await grantAccessForOrder(order.id);

@@ -49,7 +49,7 @@ export default function SprechenExercise({ task, exerciseId, lessonId, onAnswer 
     }
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      // iOS/Safari ne podržava webm — izaberi prvi podržan tip
+      // iOS/Safari ne podržava webm - izaberi prvi podržan tip
       const cands = ["audio/webm", "audio/mp4", "audio/ogg"];
       const mime = cands.find((t) => MediaRecorder.isTypeSupported?.(t)) || "";
       const mr = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream);

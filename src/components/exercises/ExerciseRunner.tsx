@@ -73,7 +73,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
     });
   }, [exercise.id, exercise.exercise_type, supabase]);
 
-  // Ispitni (grupni) prikaz: kad sva pitanja dele tekst (Lesen) ili audio (Hören) —
+  // Ispitni (grupni) prikaz: kad sva pitanja dele tekst (Lesen) ili audio (Hören) -
   // prikaži ceo deo odjednom, provera na kraju dela. Ostale vežbe → standardni prikaz.
   const isGroupedExam = questions.length > 1 && questions.every((q) => {
     const o = q.options as Record<string, unknown> | null;
@@ -86,7 +86,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
 
   const question = questions[currentIndex];
 
-  // Parse options — handles both old format (string[]) and new format ({ type, items })
+  // Parse options - handles both old format (string[]) and new format ({ type, items })
   function parseOptions(opts: unknown): { type: string; items: unknown } {
     if (!opts) {
       // Check if it's a true_false question by looking at correct_answer
@@ -194,7 +194,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
             body: JSON.stringify({ reason: "exercise", correct: score, hadStreak: maxStreak >= 3 }),
           });
         } catch {
-          /* tiho — srca su sekundarna */
+          /* tiho - srca su sekundarna */
         }
 
         // Modelltest: calculate total score across ALL exercises on this lesson
@@ -207,7 +207,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
 
           const siblingIds = (siblingExs || []).map((e: { id: string }) => e.id);
 
-          // Get best attempt for each sibling exercise (except current — use live score)
+          // Get best attempt for each sibling exercise (except current - use live score)
           let totalScore = score;
           let totalQuestions = questions.length;
 
@@ -257,7 +257,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
                 if (data.certificateId) setCertificateId(data.certificateId);
               }
             } catch {
-              // Network error — certificate can be re-issued on next completion.
+              // Network error - certificate can be re-issued on next completion.
             }
           }
         }
@@ -497,7 +497,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
         />
       </div>
 
-      {/* Audio player — per-question if audio_url exists */}
+      {/* Audio player - per-question if audio_url exists */}
       {question?.audio_url && (
         <div className="mb-6 bg-gray-50 rounded-xl p-4">
           <p className="text-sm text-gray-500 mb-2">Poslušaj audio:</p>
@@ -516,12 +516,12 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
         </div>
       )}
 
-      {/* Question — type determined per-question from options.type, or exercise_type as fallback */}
+      {/* Question - type determined per-question from options.type, or exercise_type as fallback */}
       <div className="bg-white rounded-xl p-6 shadow-sm">
         {(() => {
-          // Dialog exercise — handles its own flow, including summary
+          // Dialog exercise - handles its own flow, including summary
           if (exercise.exercise_type === "dialog") {
-            // options may be stored as a JSON string (double-encoded) — parse before use
+            // options may be stored as a JSON string (double-encoded) - parse before use
             const rawOptions = question.options;
             const dialogConfig = (typeof rawOptions === "string"
               ? JSON.parse(rawOptions)
@@ -543,7 +543,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
                 config={dialogConfig}
                 previousAttempts={dialogAttempts}
                 onComplete={(dialogScore, total) => {
-                  // Save attempt to DB, but don't set finished — DialogExercise shows its own summary
+                  // Save attempt to DB, but don't set finished - DialogExercise shows its own summary
                   supabase.auth.getUser().then(({ data: { user } }: { data: { user: { id: string } | null } }) => {
                     if (user) {
                       supabase.from("exercise_attempts").insert({
@@ -559,7 +559,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
             );
           }
 
-          // Speak exercise — handles its own flow
+          // Speak exercise - handles its own flow
           if (exercise.exercise_type === "speak") {
             return (
               <SpeakExercise
@@ -572,7 +572,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
             );
           }
 
-          // Sprechen — snimi usmeni odgovor, profesor pregleda
+          // Sprechen - snimi usmeni odgovor, profesor pregleda
           if (exercise.exercise_type === "sprechen") {
             return (
               <SprechenExercise
@@ -714,7 +714,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
                 url={url as string}
                 onAnswer={(correct) => {
                   handleAnswer(correct);
-                  // Auto-advance after wordwall — no need for extra "next" click
+                  // Auto-advance after wordwall - no need for extra "next" click
                   setTimeout(() => handleNext(), 800);
                 }}
               />

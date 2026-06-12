@@ -53,7 +53,7 @@ export default function Instaliraj() {
             Instaliraj aplikaciju
           </h1>
           <p className="text-gray-500">
-            Pristupaj lekcijama direktno sa telefona — bez otvaranja browsera.
+            Pristupaj lekcijama direktno sa telefona - bez otvaranja browsera.
           </p>
         </div>
 
@@ -96,7 +96,7 @@ export default function Instaliraj() {
               </li>
               <li className="flex gap-3">
                 <span className="shrink-0 w-7 h-7 bg-plava text-white rounded-full flex items-center justify-center text-xs font-bold">4</span>
-                <span>Kliknite <strong>&quot;Add&quot;</strong> — gotovo!</span>
+                <span>Kliknite <strong>&quot;Add&quot;</strong> - gotovo!</span>
               </li>
             </ol>
           </div>
@@ -166,7 +166,7 @@ export default function Instaliraj() {
           </div>
           <div className="flex items-center gap-3 text-gray-600">
             <span className="text-plava text-lg">&#127760;</span>
-            <span>Uvek najnovija verzija — bez azuriranja</span>
+            <span>Uvek najnovija verzija - bez azuriranja</span>
           </div>
         </div>
       </div>

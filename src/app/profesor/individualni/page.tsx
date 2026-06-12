@@ -12,7 +12,7 @@ export default async function ProfesorIndividualni({ searchParams }: { searchPar
   const admin = createAdminClient();
   const isAdmin = ctx.isAdmin;
 
-  // Profesor vidi svoje upise; admin sve — osim kad „uđe kao" profesor (?prof) → samo tog profesora.
+  // Profesor vidi svoje upise; admin sve - osim kad „uđe kao" profesor (?prof) → samo tog profesora.
   let q = admin.from("individual_enrollments")
     .select("id, user_id, course_id, professor_id, package_lessons, lessons_used, status, expires_at, notes_doc_url, created_at")
     .order("created_at", { ascending: false });

@@ -1,4 +1,4 @@
-// Odjava od funnel/ponudbenih mejlova — link iz mejla (potpisan HMAC tokenom).
+// Odjava od funnel/ponudbenih mejlova - link iz mejla (potpisan HMAC tokenom).
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { odjavaToken } from "@/lib/optout";
@@ -44,7 +44,7 @@ export async function GET(request: Request) {
 
   console.log(`[odjava] ${email} odjavljen sa funnel mejlova`);
   return new NextResponse(
-    page("Odjavljen/a si — nećemo ti više slati ponude na ovaj mejl. 💙<br><br>Ako se predomisliš, dovoljno je da ponovo uradiš test znanja na sajtu."),
+    page("Odjavljen/a si - nećemo ti više slati ponude na ovaj mejl. 💙<br><br>Ako se predomisliš, dovoljno je da ponovo uradiš test znanja na sajtu."),
     { headers: { "Content-Type": "text/html; charset=utf-8" } },
   );
 }

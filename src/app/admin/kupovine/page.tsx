@@ -28,7 +28,7 @@ export default async function AdminKupovine() {
             {purchases?.map((p: Record<string, unknown>) => (
               <tr key={p.id as string} className="hover:bg-gray-50">
                 <td className="px-6 py-4">
-                  <div className="font-medium text-gray-900">{(p.user_profiles as Record<string, string>)?.full_name || "—"}</div>
+                  <div className="font-medium text-gray-900">{(p.user_profiles as Record<string, string>)?.full_name || "-"}</div>
                   <div className="text-xs text-gray-400">{(p.user_profiles as Record<string, string>)?.email}</div>
                 </td>
                 <td className="px-6 py-4 text-gray-500">{(p.courses as Record<string, string>)?.title}</td>

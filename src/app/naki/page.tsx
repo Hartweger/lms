@@ -3,9 +3,9 @@ import NakiChat from "@/components/naki/NakiChat";
 import { NakiAvatar } from "@/components/naki/NakiAvatar";
 
 export const metadata: Metadata = {
-  title: "NaKI — AI asistent za nemački | Hartweger",
+  title: "NaKI - AI asistent za nemački | Hartweger",
   description:
-    "NaKI je AI asistent Nataše Hartweger za učenje nemačkog jezika. Postavi pitanje, vežbaj gramatiku i dobij objašnjenja na srpskom — besplatno.",
+    "NaKI je AI asistent Nataše Hartweger za učenje nemačkog jezika. Postavi pitanje, vežbaj gramatiku i dobij objašnjenja na srpskom - besplatno.",
 };
 
 const NAKI_CSS = `
@@ -55,7 +55,7 @@ const NAKI_CSS = `
 `;
 
 const FEATURES = [
-  { icon: "📖", title: "Gramatika", text: "Padeži, vremena, red reči — sve objašnjeno jednostavno." },
+  { icon: "📖", title: "Gramatika", text: "Padeži, vremena, red reči - sve objašnjeno jednostavno." },
   { icon: "💬", title: "Razgovori", text: "Vežbaj dijaloge za svakodnevne situacije na nemačkom." },
   { icon: "✍️", title: "Vežbanja", text: "Interaktivni zadaci prilagođeni tvom nivou znanja." },
   { icon: "🎯", title: "Schreiben", text: "Ocenjujem ti pismeni rad kao ispitivač, po nivou." },
@@ -73,11 +73,11 @@ export default function NakiPage() {
         </div>
         <div className="naki-hero-text">
           <h1>
-            Zdravo! Ja sam <span>NaKI</span> — tvoj lični asistent za nemački!
+            Zdravo! Ja sam <span>NaKI</span> - tvoj lični asistent za nemački!
           </h1>
           <p>
             NaKI je Natašin AI asistent koji ti pomaže da savladaš nemačku gramatiku,
-            vežbaš razgovore i naučiš nove reči — brzo, lako i uz osmeh.
+            vežbaš razgovore i naučiš nove reči - brzo, lako i uz osmeh.
           </p>
           <a href="#naki-chat" className="naki-btn-primary">
             Počni razgovor

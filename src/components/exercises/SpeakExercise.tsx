@@ -25,7 +25,7 @@ function levenshtein(a: string, b: string): number {
   return matrix[b.length][a.length];
 }
 
-// Skini SVU interpunkciju (i unutar rečenice) — prepoznavanje govora je
+// Skini SVU interpunkciju (i unutar rečenice) - prepoznavanje govora je
 // dodaje nepredvidivo, a izgovor se ocenjuje po rečima, ne po znacima.
 function normalize(s: string): string {
   return s.trim().toLowerCase()
@@ -144,7 +144,7 @@ export default function SpeakExercise({ question, correctAnswer, explanation, on
     let done = false;
 
     // Jedinstven završetak: zaustavi, oceni jednom (tajmer tišine, ručni stop
-    // i onend mogu svi da okinu — sme da prođe samo prvi).
+    // i onend mogu svi da okinu - sme da prođe samo prvi).
     const finish = () => {
       if (done) return;
       done = true;
@@ -173,7 +173,7 @@ export default function SpeakExercise({ question, correctAnswer, explanation, on
       lastTranscriptRef.current = lastTranscript;
       setTranscript(lastTranscript);
 
-      // NE ocenjuj na prvu mikropauzu — sačekaj 2,5 s tišine da polaznik
+      // NE ocenjuj na prvu mikropauzu - sačekaj 2,5 s tišine da polaznik
       // završi celu rečenicu (svaki novi rezultat resetuje tajmer).
       if (silenceTimer) clearTimeout(silenceTimer);
       silenceTimer = setTimeout(finish, 2500);
@@ -196,7 +196,7 @@ export default function SpeakExercise({ question, correctAnswer, explanation, on
 
     recognition.onend = () => {
       setListening(false);
-      // Safari sometimes fires onend without onresult final — evaluate last captured text
+      // Safari sometimes fires onend without onresult final - evaluate last captured text
       if (lastTranscriptRef.current) finish();
     };
 
@@ -294,7 +294,7 @@ export default function SpeakExercise({ question, correctAnswer, explanation, on
           ) : result.score >= 0.75 ? (
             <p className="text-green-700 font-semibold text-base">Vrlo dobro!</p>
           ) : (
-            <p className="text-koral-dark font-semibold text-base">Ima razlika — pogledaj ispod.</p>
+            <p className="text-koral-dark font-semibold text-base">Ima razlika - pogledaj ispod.</p>
           )}
 
           {/* What was recognized / typed */}

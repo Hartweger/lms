@@ -31,7 +31,7 @@ export default function LearnModule({
   const [checkpoint, setCheckpoint] = useState<number | null>(null); // „Bravo, X naučeno" pauza (null = ne prikazuj)
 
   const total = items.length;
-  // Jeftino — računa se svaki render (nema potrebe za memoizacijom).
+  // Jeftino - računa se svaki render (nema potrebe za memoizacijom).
   const masteredCount = items.filter((c) => prog.get(idOf(c))?.status === "mastered").length;
   const learningCount = items.filter((c) => prog.get(idOf(c))?.status === "learning").length;
 
@@ -44,7 +44,7 @@ export default function LearnModule({
       <div className="text-center py-10">
         <div className="text-4xl mb-2">🎉</div>
         <p className="text-lg font-bold mb-1">Bravo! Naučila si {checkpoint} reči!</p>
-        <p className="text-sm text-gray-500 mb-5">Možeš da nastaviš ili napraviš pauzu — napredak je sačuvan.</p>
+        <p className="text-sm text-gray-500 mb-5">Možeš da nastaviš ili napraviš pauzu - napredak je sačuvan.</p>
         <div className="flex justify-center gap-2">
           <button onClick={() => setCheckpoint(null)} className="bg-ljubicasta text-white rounded-xl px-6 py-3 font-bold">Nastavi</button>
           <button onClick={onExit} className="bg-white border border-gray-200 text-gray-600 rounded-xl px-6 py-3 font-bold">Pauza</button>
@@ -74,7 +74,7 @@ export default function LearnModule({
   const quizDir: Direction = (card.front.charCodeAt(0) + card.front.length) % 2 === 0 ? direction : flip;
   const quiz = wantTyping ? null : buildQuizOptions(card, items, quizDir);
   const doTyping = wantTyping || !quiz; // ako set ima < 4 kartice, kviz nije moguć → kucanje
-  // Spajanje parova kao pauza — samo u vođenom režimu, na svakih 8 odgovora, koristi tekuću grupu (varira).
+  // Spajanje parova kao pauza - samo u vođenom režimu, na svakih 8 odgovora, koristi tekuću grupu (varira).
   const showMatch = mode === "guided" && seen > 0 && seen % 8 === 0 && queue.length >= 4;
 
   const advance = async (correct: boolean) => {
@@ -106,7 +106,7 @@ export default function LearnModule({
     const pairs = queue.slice(0, 6).map((c) => ({ de: c.front, sr: c.back.split("|")[0].trim() }));
     return (
       <Frame mastered={masteredCount} learning={learningCount} total={total} onExit={onExit}>
-        <p className="text-sm text-gray-500 mb-2">Pauza — spoji parove 🧩 <span className="text-gray-400">(ne računa se)</span></p>
+        <p className="text-sm text-gray-500 mb-2">Pauza - spoji parove 🧩 <span className="text-gray-400">(ne računa se)</span></p>
         <MatchPairsExercise pairs={pairs} onAnswer={() => setSeen((s) => s + 1)} />
       </Frame>
     );

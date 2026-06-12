@@ -8,7 +8,7 @@
  * Ključ = TAČAN naslov lekcije (lessons.title). Dugme „AI prevod" se na
  * lekciji prikazuje samo ako naslov postoji u ovoj mapi.
  *
- * Izvor: LMS/B1/Prevod B1.2.pdf (Schritte 6, Lektion 8–14 + gramatika).
+ * Izvor: LMS/B1/Prevod B1.2.pdf (Schritte 6, Lektion 8-14 + gramatika).
  */
 export interface FixedSentence {
   sr: string;
@@ -16,7 +16,7 @@ export interface FixedSentence {
 }
 
 export const FIXED_TRANSLATIONS: Record<string, FixedSentence[]> = {
-  // ── Nove tematske lekcije (Schritte L8–14) ───────────────────────────────
+  // ── Nove tematske lekcije (Schritte L8-14) ───────────────────────────────
   "Familie, Generationen und Lebensformen": [
     { sr: "Danas mnogi mladi ljudi žive u životnim zajednicama.", de: "Heute leben viele junge Menschen in Wohngemeinschaften." },
     { sr: "Moji roditelji imaju drugačije mišljenje o vaspitanju dece.", de: "Meine Eltern haben eine andere Meinung zur Kindererziehung." },
@@ -54,7 +54,7 @@ export const FIXED_TRANSLATIONS: Record<string, FixedSentence[]> = {
     { sr: "Kupci imaju pravo na povraćaj novca.", de: "Kunden haben das Recht auf eine Rückerstattung." },
     { sr: "Uvek upoređujem cene pre kupovine.", de: "Vor dem Kauf vergleiche ich immer die Preise." },
   ],
-  "Freundschaften im Job – Leseverstehen und Wortschatz": [
+  "Freundschaften im Job - Leseverstehen und Wortschatz": [
     { sr: "Pravi prijatelji pomažu jedni drugima u teškim situacijama.", de: "Wahre Freunde helfen einander in schwierigen Situationen." },
     { sr: "Juče smo imali nesporazum, ali smo ga brzo rešili.", de: "Gestern hatten wir ein Missverständnis, aber wir haben es schnell gelöst." },
     { sr: "Važno je otvoreno razgovarati o problemima.", de: "Es ist wichtig, offen über Probleme zu sprechen." },
@@ -91,9 +91,9 @@ export const FIXED_TRANSLATIONS: Record<string, FixedSentence[]> = {
     { sr: "Tokom sastanka nije bilo pitanja.", de: "Während der Besprechung gab es keine Fragen." },
   ],
 
-  // ── B2.1 (Vielfalt) — po jedan AI-prevod po modulu, gramatika tog modula ──
+  // ── B2.1 (Vielfalt) - po jedan AI-prevod po modulu, gramatika tog modula ──
   // MODUL 1: Nomen mit fester Präposition, kausale Zusammenhänge
-  "Das Leben neu gestalten – Vielfalt B2.1": [
+  "Das Leben neu gestalten - Vielfalt B2.1": [
     { sr: "Mnogi ljudi imaju strah od neuspeha.", de: "Viele Menschen haben Angst vor dem Misserfolg." },
     { sr: "Doneo je odluku da iz temelja promeni svoj život.", de: "Er hat die Entscheidung getroffen, sein Leben komplett zu verändern." },
     { sr: "Pošto je bio nezadovoljan, krenuo je novim putem.", de: "Weil er unzufrieden war, schlug er einen neuen Weg ein." },
@@ -111,7 +111,7 @@ export const FIXED_TRANSLATIONS: Record<string, FixedSentence[]> = {
     { sr: "Da je bila otvorenija, lakše bi rešila konflikt.", de: "Wäre sie offener gewesen, hätte sie den Konflikt leichter gelöst." },
   ],
   // MODUL 3: Passiv / Passiversatz, finale Zusammenhänge
-  "Alles unter Kontrolle? – Ernährung": [
+  "Alles unter Kontrolle? - Ernährung": [
     { sr: "Jelo se priprema od svežih namirnica.", de: "Das Essen wird aus frischen Lebensmitteln zubereitet." },
     { sr: "Problem sa ishranom može da se reši.", de: "Das Problem mit der Ernährung lässt sich lösen." },
     { sr: "Jedem zdravo da bih ostao u formi.", de: "Ich esse gesund, um fit zu bleiben." },
@@ -128,7 +128,7 @@ export const FIXED_TRANSLATIONS: Record<string, FixedSentence[]> = {
     { sr: "Pre nego što je doneo odluku, dugo je razmišljao.", de: "Bevor er die Entscheidung traf, dachte er lange nach." },
     { sr: "Uspeh i neuspeh su dve strane iste medalje.", de: "Erfolg und Scheitern sind zwei Seiten derselben Medaille." },
   ],
-  // ── B2.1 — preostale tematske lekcije ───────────────────────────────────
+  // ── B2.1 - preostale tematske lekcije ───────────────────────────────────
   "Migration": [
     { sr: "Moji preci su emigrirali iz ekonomskih razloga.", de: "Meine Vorfahren sind aus wirtschaftlichen Gründen emigriert." },
     { sr: "Morala je da pobegne iz svoje domovine.", de: "Sie musste aus ihrer Heimat fliehen." },
@@ -161,7 +161,7 @@ export const FIXED_TRANSLATIONS: Record<string, FixedSentence[]> = {
     { sr: "Mnogi korisnici odmah kliknu dalje ako je video predugačak.", de: "Viele Nutzer klicken sofort weg, wenn das Video zu lang ist." },
     { sr: "Objavila je novi prilog na svom kanalu.", de: "Sie hat einen neuen Beitrag auf ihrem Kanal gepostet." },
   ],
-  "Extrem unter Kontrolle – Lena auf Expedition": [
+  "Extrem unter Kontrolle - Lena auf Expedition": [
     { sr: "On rado preuzima rizike.", de: "Er geht gern Risiken ein." },
     { sr: "Da bi poboljšao kondiciju, trči svaki dan.", de: "Um seine Kondition zu verbessern, läuft er jeden Tag." },
     { sr: "Na velikoj visini telo radi punom snagom.", de: "In großer Höhe arbeitet der Körper auf Hochtouren." },
@@ -169,7 +169,7 @@ export const FIXED_TRANSLATIONS: Record<string, FixedSentence[]> = {
     { sr: "Izdržljivost i koordinacija su pri penjanju presudni.", de: "Ausdauer und Koordination sind beim Klettern entscheidend." },
     { sr: "Skakanje padobranom mi je previše rizično.", de: "Fallschirmspringen ist mir zu riskant." },
   ],
-  "So tickt unsere innere Uhr! – Tagesrhythmus": [
+  "So tickt unsere innere Uhr! - Tagesrhythmus": [
     { sr: "Ja sam ranoranilac, dok moj brat dugo spava.", de: "Ich bin Frühaufsteher, während mein Bruder lange schläft." },
     { sr: "Unutrašnji sat određuje kada postajemo umorni.", de: "Die innere Uhr bestimmt, wann wir müde werden." },
     { sr: "Ujutru bi trebalo upijati mnogo dnevne svetlosti.", de: "Morgens sollte man viel Tageslicht aufnehmen." },
@@ -194,7 +194,7 @@ export const FIXED_TRANSLATIONS: Record<string, FixedSentence[]> = {
     { sr: "Komšiluk se ponekad doživljava kao socijalna kontrola.", de: "Die Nachbarschaft wird manchmal als soziale Kontrolle wahrgenommen." },
   ],
 
-  // ── A2.1 — fiksne rečenice za prevod (ključ = naslov lekcije) ─────────────
+  // ── A2.1 - fiksne rečenice za prevod (ključ = naslov lekcije) ─────────────
   "Persönliche Angaben": [
     { sr: "Imam dvoje dece i jednog brata.", de: "Ich habe zwei Kinder und einen Bruder." },
     { sr: "Zašto učiš nemački?", de: "Warum lernst du Deutsch?" },
@@ -207,7 +207,7 @@ export const FIXED_TRANSLATIONS: Record<string, FixedSentence[]> = {
     { sr: "Moj šurak je penzioner.", de: "Mein Schwager ist Rentner." },
     { sr: "Moji baba i deda žive u malom gradu.", de: "Meine Großeltern leben in einer kleinen Stadt." },
     { sr: "Ona je razvedena i sama podiže decu.", de: "Sie ist geschieden und alleinerziehend." },
-    { sr: "Moja zaova ima sina i ćerku — to su moj bratanac i moja bratanica.", de: "Meine Schwägerin hat einen Sohn und eine Tochter — das sind mein Neffe und meine Nichte." },
+    { sr: "Moja zaova ima sina i ćerku - to su moj bratanac i moja bratanica.", de: "Meine Schwägerin hat einen Sohn und eine Tochter - das sind mein Neffe und meine Nichte." },
     { sr: "Moja unuka ima tri godine.", de: "Meine Enkelin ist drei Jahre alt." },
     { sr: "Sutra dolaze rođaci u posetu.", de: "Morgen kommen die Verwandten zu Besuch." },
   ],
@@ -220,7 +220,7 @@ export const FIXED_TRANSLATIONS: Record<string, FixedSentence[]> = {
     { sr: "Film je počeo u osam i ona nije razumela ništa.", de: "Der Film hat um acht angefangen und sie hat nichts verstanden." },
   ],
   "Wie wohnen die Deutschen?": [
-    { sr: "Stan ima tri sobe — spavaću sobu, dnevnu sobu i kuhinju.", de: "Die Wohnung hat drei Zimmer — ein Schlafzimmer, ein Wohnzimmer und eine Küche." },
+    { sr: "Stan ima tri sobe - spavaću sobu, dnevnu sobu i kuhinju.", de: "Die Wohnung hat drei Zimmer - ein Schlafzimmer, ein Wohnzimmer und eine Küche." },
     { sr: "Kolika je kirija?", de: "Wie hoch ist die Miete?" },
     { sr: "Kupatilo je malo, ali hodnik je veliki.", de: "Das Badezimmer ist klein, aber der Flur ist groß." },
     { sr: "Stan ima 65 kvadratnih metara.", de: "Die Wohnung hat 65 Quadratmeter." },
@@ -230,7 +230,7 @@ export const FIXED_TRANSLATIONS: Record<string, FixedSentence[]> = {
   "Müll": [
     { sr: "U Nemačkoj se smeće razdvaja.", de: "In Deutschland trennt man den Müll." },
     { sr: "Baci limenku u žutu kantu za smeće.", de: "Wirf die Dose in die gelbe Mülltonne!" },
-    { sr: "Ova kutija je od kartona — ne bacaj je u obični otpad.", de: "Diese Schachtel ist aus Karton — wirf sie nicht in den Restmüll!" },
+    { sr: "Ova kutija je od kartona - ne bacaj je u obični otpad.", de: "Diese Schachtel ist aus Karton - wirf sie nicht in den Restmüll!" },
     { sr: "Staklene flaše bacamo u kontejner za staklo.", de: "Glasflaschen werfen wir in den Glascontainer." },
     { sr: "Gde da bacim ovu kesu?", de: "Wo soll ich diese Tüte wegwerfen?" },
     { sr: "Ostatke hrane stavi u bio otpad.", de: "Wirf die Essensreste in den Biomüll!" },
@@ -265,7 +265,7 @@ export const FIXED_TRANSLATIONS: Record<string, FixedSentence[]> = {
     { sr: "Želim šniclu sa prilogom, molim.", de: "Ich möchte ein Schnitzel mit Beilage, bitte." },
     { sr: "Za desert uzimam sladoled sa šlagom.", de: "Als Nachspeise nehme ich Eis mit Sahne." },
     { sr: "Mogu li da dobijem račun?", de: "Kann ich bitte die Rechnung bekommen?" },
-    { sr: "To je ukupno 26,90€ — napojnica je uključena.", de: "Das macht 26,90€ — das Trinkgeld ist inklusive." },
+    { sr: "To je ukupno 26,90€ - napojnica je uključena.", de: "Das macht 26,90€ - das Trinkgeld ist inklusive." },
   ],
   "Indefinitpronomen im Nominativ und Akkusativ": [
     { sr: "Na stolu nema nijedne viljuške.", de: "Auf dem Tisch ist keine Gabel." },
@@ -319,16 +319,16 @@ export const FIXED_TRANSLATIONS: Record<string, FixedSentence[]> = {
     { sr: "Savezna liga je najpopularnija liga u Nemačkoj.", de: "Die Bundesliga ist die beliebteste Liga in Deutschland." },
     { sr: "Sudija je svirao kraj utakmice.", de: "Der Schiedsrichter hat das Spiel abgepfiffen." },
     { sr: "U kom klubu on igra?", de: "In welchem Verein spielt er?" },
-    { sr: "Stadion je pun — ima 50.000 gledalaca.", de: "Das Stadion ist voll — es gibt 50.000 Zuschauer." },
+    { sr: "Stadion je pun - ima 50.000 gledalaca.", de: "Das Stadion ist voll - es gibt 50.000 Zuschauer." },
     { sr: "Izgubili smo 2:1, ali smo dali jedan gol.", de: "Wir haben 2:1 verloren, aber wir haben ein Tor geschossen." },
   ],
   "Worauf, darauf": [
-    { sr: "Na šta čekaš? — Na autobus.", de: "Worauf wartest du? — Auf den Bus." },
-    { sr: "Na šta se žališ? — Na buku.", de: "Worüber beschwerst du dich? — Über den Lärm." },
-    { sr: "Čime si zadovoljan? — Svojom ocenom.", de: "Womit bist du zufrieden? — Mit meiner Note." },
+    { sr: "Na šta čekaš? - Na autobus.", de: "Worauf wartest du? - Auf den Bus." },
+    { sr: "Na šta se žališ? - Na buku.", de: "Worüber beschwerst du dich? - Über den Lärm." },
+    { sr: "Čime si zadovoljan? - Svojom ocenom.", de: "Womit bist du zufrieden? - Mit meiner Note." },
     { sr: "Ne mogu da se odreknem kafe.", de: "Ich kann nicht auf Kaffee verzichten." },
     { sr: "Torta se sastoji od brašna, šećera i jaja.", de: "Die Torte besteht aus Mehl, Zucker und Eiern." },
-    { sr: "Za šta se interesuješ? — Za sport.", de: "Wofür interessierst du dich? — Für Sport." },
+    { sr: "Za šta se interesuješ? - Za sport.", de: "Wofür interessierst du dich? - Für Sport." },
   ],
   "Modalni glagoli u prošlosti": [
     { sr: "Kao dete nisam smela da izlazim sama.", de: "Als Kind durfte ich nicht alleine ausgehen." },
@@ -338,7 +338,7 @@ export const FIXED_TRANSLATIONS: Record<string, FixedSentence[]> = {
     { sr: "Ovde se ne sme pušiti.", de: "Hier darf man nicht rauchen." },
     { sr: "Da li si mogao da razumeš sve?", de: "Konntest du alles verstehen?" },
   ],
-  "Schule – Deutschlandlabor": [
+  "Schule - Deutschlandlabor": [
     { sr: "U Nemačkoj deca idu u osnovnu školu sa šest godina.", de: "In Deutschland gehen die Kinder mit sechs Jahren in die Grundschule." },
     { sr: "Posle osnovne škole, on je otišao u gimnaziju.", de: "Nach der Grundschule ist er aufs Gymnasium gegangen." },
     { sr: "U Nemačkoj postoji obavezno školovanje.", de: "In Deutschland gibt es die Schulpflicht." },

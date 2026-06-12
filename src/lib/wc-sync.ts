@@ -102,7 +102,7 @@ export async function grantAccess(
         : null;
 
       if (existingExpiry && existingExpiry < new Date()) {
-        // Expired — renew
+        // Expired - renew
         await supabase
           .from("course_access")
           .update({ expires_at: expiry.toISOString() })

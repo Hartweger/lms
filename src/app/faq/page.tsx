@@ -5,16 +5,16 @@ import type { FaqItem } from "@/lib/types";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Česta pitanja — Hartweger",
+  title: "Česta pitanja - Hartweger",
   description: "Odgovori na najčešća pitanja o kursevima nemačkog jezika, plaćanju, pristupu platformi i sertifikatima.",
   openGraph: {
-    images: [{ url: "/og/share.png", width: 1200, height: 630, alt: "Hartweger — Škola nemačkog jezika" }],
-    title: "Česta pitanja — Hartweger",
+    images: [{ url: "/og/share.png", width: 1200, height: 630, alt: "Hartweger - Škola nemačkog jezika" }],
+    title: "Česta pitanja - Hartweger",
     description: "Odgovori na najčešća pitanja o kursevima nemačkog jezika, plaćanju, pristupu platformi i sertifikatima.",
   },
 };
 
-// Redosled i nazivi sekcija — prati put kupca (pre → posle kupovine).
+// Redosled i nazivi sekcija - prati put kupca (pre → posle kupovine).
 const CATEGORY_ORDER: { value: string; label: string }[] = [
   { value: "pre-kupovine", label: "Pre kupovine" },
   { value: "nakon-kupovine", label: "Nakon kupovine" },

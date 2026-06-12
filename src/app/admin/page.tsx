@@ -159,8 +159,8 @@ export default async function AdminPregled() {
     activities.push({
       type: "lesson",
       date: p.completed_at ?? "",
-      name: profile?.full_name || profile?.email || "—",
-      detail: lesson?.title || "—",
+      name: profile?.full_name || profile?.email || "-",
+      detail: lesson?.title || "-",
     });
   });
 
@@ -207,12 +207,12 @@ export default async function AdminPregled() {
             <div className="text-sm font-medium text-gray-700 mb-3">Uplate za potvrdu</div>
             <div className="space-y-2.5">
               {pendingConfirm.map((o) => {
-                const title = (o.items as { title?: string }[] | null)?.[0]?.title ?? "—";
+                const title = (o.items as { title?: string }[] | null)?.[0]?.title ?? "-";
                 return (
                   <div key={o.id} className="flex items-center justify-between gap-3 text-sm">
                     <div className="min-w-0 flex-1">
                       <span className="font-medium text-gray-900">{o.full_name || o.email}</span>
-                      <span className="text-gray-400"> — {title}</span>
+                      <span className="text-gray-400"> - {title}</span>
                     </div>
                     <div className="flex items-center gap-3 whitespace-nowrap">
                       <span className="text-gray-500">{Number(o.total).toLocaleString("sr-RS")} RSD</span>
@@ -292,11 +292,11 @@ export default async function AdminPregled() {
                   return (
                     <tr key={row.id} className="border-b last:border-0">
                       <td className="py-2 pr-4">
-                        {profile?.full_name || profile?.email || "—"}
+                        {profile?.full_name || profile?.email || "-"}
                       </td>
-                      <td className="py-2 pr-4">{course?.title || "—"}</td>
+                      <td className="py-2 pr-4">{course?.title || "-"}</td>
                       <td className="py-2 pr-4">
-                        {row.expires_at ? formatDate(row.expires_at) : "—"}
+                        {row.expires_at ? formatDate(row.expires_at) : "-"}
                       </td>
                       <td className="py-2">
                         <Link
@@ -334,8 +334,8 @@ export default async function AdminPregled() {
                   <span className="font-medium text-gray-900">{a.name}</span>
                   <span className="text-gray-500">
                     {a.type === "registration"
-                      ? ` — novi ${a.detail}`
-                      : ` — završio/la: ${a.detail}`}
+                      ? ` - novi ${a.detail}`
+                      : ` - završio/la: ${a.detail}`}
                   </span>
                 </div>
                 <span className="text-gray-400 text-xs whitespace-nowrap">

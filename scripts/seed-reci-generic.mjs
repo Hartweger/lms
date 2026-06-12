@@ -31,8 +31,8 @@ const { data: course } = await sb.from("courses").select("id,title").eq("slug", 
 if (!course) { console.error("Nema kursa:", slug); process.exit(1); }
 const COURSE_ID = course.id;
 const TESTLIKE = /test|prüfung|pruefung|ispit/i;
-const reciTitle = (n) => `Modul ${n} — Reči`;
-const isReci = (t) => /^Modul\s*\d+\s*—\s*Reči$/.test(t);
+const reciTitle = (n) => `Modul ${n} - Reči`;
+const isReci = (t) => /^Modul\s*\d+\s*[—-]\s*Reči$/.test(t);
 
 const { data: lessons } = await sb.from("lessons")
   .select("id,title,order_index,is_free_preview,sections")
@@ -63,7 +63,7 @@ for (const l of lessons) {
 }
 
 const existingReci = new Map();
-for (const l of lessons) { const m = l.title.match(/^Modul\s*(\d+)\s*—\s*Reči$/); if (m) existingReci.set(Number(m[1]), l); }
+for (const l of lessons) { const m = l.title.match(/^Modul\s*(\d+)\s*[—-]\s*Reči$/); if (m) existingReci.set(Number(m[1]), l); }
 
 const plan = [];
 for (const [n, anchor] of [...anchors.entries()].sort((a, b) => a[0] - b[0])) {
@@ -104,7 +104,7 @@ for (const p of plan.filter((x) => x.action === "insert")) {
 // renumeracija: prođi ne-Reči lekcije po starom redu; Reči N ide pre svog beforeId / posle afterId
 const { data: all2 } = await sb.from("lessons").select("id,title,order_index").eq("course_id", COURSE_ID).order("order_index");
 const reciByMod = new Map();
-for (const l of all2) { const m = l.title.match(/^Modul\s*(\d+)\s*—\s*Reči$/); if (m) reciByMod.set(Number(m[1]), l.id); }
+for (const l of all2) { const m = l.title.match(/^Modul\s*(\d+)\s*[—-]\s*Reči$/); if (m) reciByMod.set(Number(m[1]), l.id); }
 
 const beforeMap = new Map(); // anchorLessonId -> reciId (ubaci pre)
 const afterMap = new Map();  // anchorLessonId -> reciId (ubaci posle)

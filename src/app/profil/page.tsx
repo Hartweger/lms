@@ -64,7 +64,7 @@ export default function Profil() {
 
   const handleDeleteAccount = async () => {
     if (!confirm("Da li ste sigurni da želite da obrišete nalog? Ova radnja je nepovratna.")) return;
-    if (!confirm("Poslednja potvrda — brisanje naloga je trajno. Nastaviti?")) return;
+    if (!confirm("Poslednja potvrda - brisanje naloga je trajno. Nastaviti?")) return;
     await supabase.auth.signOut();
     router.push("/?obrisan=1");
   };

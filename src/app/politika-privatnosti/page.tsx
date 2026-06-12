@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Politika privatnosti — Hartweger",
+  title: "Politika privatnosti - Hartweger",
   description:
     "Kako prikupljamo, koristimo i štitimo tvoje podatke na hartweger.rs, koje kolačiće koristimo i koja su tvoja prava.",
   alternates: { canonical: "/politika-privatnosti" },
   openGraph: {
-    images: [{ url: "/og/share.png", width: 1200, height: 630, alt: "Hartweger — Škola nemačkog jezika" }],
-    title: "Politika privatnosti — Hartweger",
+    images: [{ url: "/og/share.png", width: 1200, height: 630, alt: "Hartweger - Škola nemačkog jezika" }],
+    title: "Politika privatnosti - Hartweger",
     description: "Kako prikupljamo, koristimo i štitimo tvoje podatke na hartweger.rs.",
   },
 };
@@ -36,7 +36,7 @@ export default function PolitikaPrivatnosti() {
           <h2>Koje podatke prikupljamo</h2>
           <ul>
             <li>
-              <strong>Podaci o nalogu:</strong> ime, e-mail adresa i podaci o pristupu kursevima —
+              <strong>Podaci o nalogu:</strong> ime, e-mail adresa i podaci o pristupu kursevima -
               kako bismo ti omogućili prijavu i praćenje napretka.
             </li>
             <li>
@@ -60,26 +60,26 @@ export default function PolitikaPrivatnosti() {
           <h2>Sa kim delimo podatke (obrađivači)</h2>
           <ul>
             <li>
-              <strong>Supabase</strong> — čuvanje naloga, autentikacija i sesija korisnika.
+              <strong>Supabase</strong> - čuvanje naloga, autentikacija i sesija korisnika.
             </li>
             <li>
-              <strong>Google (Google Analytics, Google Ads, Google Tag Manager)</strong> — analitika
+              <strong>Google (Google Analytics, Google Ads, Google Tag Manager)</strong> - analitika
               i oglašavanje. Aktivira se samo uz tvoju saglasnost.
             </li>
             <li>
-              <strong>Vercel</strong> — hosting sajta i anonimna analitika učinka (bez kolačića).
+              <strong>Vercel</strong> - hosting sajta i anonimna analitika učinka (bez kolačića).
             </li>
             <li>
-              <strong>Resend</strong> — slanje transakcionih i informativnih e-mail poruka.
+              <strong>Resend</strong> - slanje transakcionih i informativnih e-mail poruka.
             </li>
             <li>
-              <strong>Banca Intesa (NestPay)</strong> — obrada plaćanja platnim karticama i na rate.
+              <strong>Banca Intesa (NestPay)</strong> - obrada plaćanja platnim karticama i na rate.
             </li>
             <li>
-              <strong>PayPal</strong> — obrada plaćanja za korisnike iz inostranstva.
+              <strong>PayPal</strong> - obrada plaćanja za korisnike iz inostranstva.
             </li>
             <li>
-              <strong>Fiscomm</strong> — izdavanje fiskalnih računa u skladu sa zakonom.
+              <strong>Fiscomm</strong> - izdavanje fiskalnih računa u skladu sa zakonom.
             </li>
           </ul>
 

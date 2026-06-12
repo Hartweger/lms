@@ -4,12 +4,12 @@ import Image from "next/image";
 import GoogleRecenzije from "@/components/GoogleRecenzije";
 
 export const metadata: Metadata = {
-  title: "Hartweger — Online škola nemačkog jezika",
-  description: "Nauči nemački koji ćeš stvarno koristiti. VoKuM metoda — video kursevi, grupni kursevi i individualni časovi sa Natašom Hartweger.",
+  title: "Hartweger - Online škola nemačkog jezika",
+  description: "Nauči nemački koji ćeš stvarno koristiti. VoKuM metoda - video kursevi, grupni kursevi i individualni časovi sa Natašom Hartweger.",
   openGraph: {
-    images: [{ url: "/og/share.png", width: 1200, height: 630, alt: "Hartweger — Škola nemačkog jezika" }],
-    title: "Hartweger — Online škola nemačkog jezika",
-    description: "Nauči nemački koji ćeš stvarno koristiti. VoKuM metoda — video kursevi, grupni kursevi i individualni časovi.",
+    images: [{ url: "/og/share.png", width: 1200, height: 630, alt: "Hartweger - Škola nemačkog jezika" }],
+    title: "Hartweger - Online škola nemačkog jezika",
+    description: "Nauči nemački koji ćeš stvarno koristiti. VoKuM metoda - video kursevi, grupni kursevi i individualni časovi.",
   },
 };
 
@@ -31,7 +31,7 @@ export default function Pocetna() {
               Razvila sam VoKuM metodu uz pomoć koje je već više hiljada ljudi progovorilo.
             </p>
             <p className="text-gray-400 text-base mb-8 max-w-lg">
-              VoKabular, KomUnikacija i Motivacija — tri stvari koje zaista prave razliku.
+              VoKabular, KomUnikacija i Motivacija - tri stvari koje zaista prave razliku.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center md:justify-start mb-8">
               <Link
@@ -130,7 +130,7 @@ export default function Pocetna() {
                     Aa
                   </div>
                   <div>
-                    <h3 className="font-montserrat font-bold text-lg text-gray-900 mb-2">1. VO — Vokabular</h3>
+                    <h3 className="font-montserrat font-bold text-lg text-gray-900 mb-2">1. VO - Vokabular</h3>
                     <p className="text-gray-600 text-sm leading-relaxed">
                       Sve počinje sa rečima. Dete prvo nauči reči, a zatim od njih sklapa rečenicu. Napamet naučene definicije o gramatičkim pravilima ne pomažu kada treba da kažeš da te boli glava ili želiš povišicu na poslu. Na kursu učiš razne tehnike za lakše pamćenje reči.
                     </p>
@@ -145,7 +145,7 @@ export default function Pocetna() {
                     </svg>
                   </div>
                   <div>
-                    <h3 className="font-montserrat font-bold text-lg text-gray-900 mb-2">2. KU — Komunikacija</h3>
+                    <h3 className="font-montserrat font-bold text-lg text-gray-900 mb-2">2. KU - Komunikacija</h3>
                     <p className="text-gray-600 text-sm leading-relaxed">
                       Naučene reči postaju vredne kroz praktičnu komunikaciju. Učimo kroz dijaloge u realnim situacijama (restorani, apoteke, banke) i upoznajemo kulturu DACH zemalja. To čini razliku između dobre i loše komunikacije.
                     </p>
@@ -160,7 +160,7 @@ export default function Pocetna() {
                     </svg>
                   </div>
                   <div>
-                    <h3 className="font-montserrat font-bold text-lg text-gray-900 mb-2">3. M — Motivacija</h3>
+                    <h3 className="font-montserrat font-bold text-lg text-gray-900 mb-2">3. M - Motivacija</h3>
                     <p className="text-gray-600 text-sm leading-relaxed">
                       Svakome je potrebna podrška i motivacija. Naš zajednički cilj je da uspešno progovoriš nemački jezik. Odustajanje nije opcija!
                     </p>
@@ -269,7 +269,7 @@ export default function Pocetna() {
         </div>
       </section>
 
-      {/* Google recenzije — live sa Google Places API */}
+      {/* Google recenzije - live sa Google Places API */}
       <GoogleRecenzije />
 
       {/* Footer tagline */}
@@ -315,10 +315,10 @@ export default function Pocetna() {
           <div>
             <p className="text-koral font-semibold text-sm mb-2">Blog, Ispiti, Magazin</p>
             <h2 className="font-montserrat font-bold text-2xl text-gray-900 mb-3">
-              Gde položiti FSP — uporedna analiza svih nemačkih pokrajina (vodič za 2026)
+              Gde položiti FSP - uporedna analiza svih nemačkih pokrajina (vodič za 2026)
             </h2>
             <p className="text-gray-600 mb-6">
-              Dva lekara, isti FSP. Jedan plati 400 evra i prođe iz prve. Drugi plati 700 evra i padne tri puta — sa istim nivoom nemačkog. Gde položiti FSP nije slučajna...
+              Dva lekara, isti FSP. Jedan plati 400 evra i prođe iz prve. Drugi plati 700 evra i padne tri puta - sa istim nivoom nemačkog. Gde položiti FSP nije slučajna...
             </p>
             <Link
               href="/magazin/gde-poloziti-fsp-pokrajine-2026"

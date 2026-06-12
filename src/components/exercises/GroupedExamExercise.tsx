@@ -69,7 +69,7 @@ export default function GroupedExamExercise({ exercise, questions, nextLessonId,
       setCtxOpen(true);
       return;
     }
-    // kraj — sačuvaj pokušaj
+    // kraj - sačuvaj pokušaj
     const { data: { user } } = await supabase.auth.getUser();
     if (user) {
       await supabase.from("exercise_attempts").insert({
@@ -83,7 +83,7 @@ export default function GroupedExamExercise({ exercise, questions, nextLessonId,
   if (finished) {
     const sc = totalCorrect();
     const pct = Math.round((sc / questions.length) * 100);
-    const msg = pct >= 80 ? "Odlično! Spreman/na si za ovaj deo ispita." : pct >= 60 ? "Dobar rezultat — još malo vežbe i ide!" : "Nastavi da vežbaš — proći ćeš tekst/audio još jednom i biće bolje.";
+    const msg = pct >= 80 ? "Odlično! Spreman/na si za ovaj deo ispita." : pct >= 60 ? "Dobar rezultat - još malo vežbe i ide!" : "Nastavi da vežbaš - proći ćeš tekst/audio još jednom i biće bolje.";
     const restart = () => { setSelected({}); setChecked({}); setPartIdx(0); setCtxOpen(true); setFinished(false); };
     return (
       <div className="mt-4 bg-plava-light rounded-2xl p-8 text-center">
@@ -94,7 +94,7 @@ export default function GroupedExamExercise({ exercise, questions, nextLessonId,
         {isTest && (
           <p className="text-sm mb-6 max-w-md mx-auto">
             <span className={`inline-block px-3 py-1.5 rounded-lg font-medium ${pct >= 60 ? "bg-green-50 text-green-700" : "bg-amber-50 text-amber-700"}`}>
-              ℹ️ Na Goethe ispitu treba <strong>60%</strong> za prolaz{pct >= 60 ? " — ti si iznad praga! ✅" : "."}
+              ℹ️ Na Goethe ispitu treba <strong>60%</strong> za prolaz{pct >= 60 ? " - ti si iznad praga! ✅" : "."}
             </span>
           </p>
         )}
@@ -119,7 +119,7 @@ export default function GroupedExamExercise({ exercise, questions, nextLessonId,
         <span className="text-sm text-gray-400 whitespace-nowrap">Deo {partIdx + 1} / {groups.length}</span>
       </div>
 
-      {/* Tekst / audio dela — jednom za sva pitanja */}
+      {/* Tekst / audio dela - jednom za sva pitanja */}
       {ctx && (
         <div className="mb-6 border border-gray-200 rounded-xl overflow-hidden">
           <button onClick={() => setCtxOpen(!ctxOpen)} className="w-full flex items-center justify-between px-5 py-3 bg-gray-50 hover:bg-gray-100 text-left">

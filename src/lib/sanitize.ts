@@ -10,7 +10,7 @@ import { FilterXSS } from "xss";
  * Implemented with `xss` (pure JS) rather than DOMPurify on purpose: this module
  * is imported by BOTH Server Components (LekcijaContent, TextBlock, TableBlock)
  * and Client Components (the exercise renderers). DOMPurify needs a real DOM, so
- * `isomorphic-dompurify` pulls in `jsdom` on the server — and jsdom's transitive
+ * `isomorphic-dompurify` pulls in `jsdom` on the server - and jsdom's transitive
  * `@exodus/bytes` is ESM-only, which crashes the Vercel serverless runtime with
  * ERR_REQUIRE_ESM, 500-ing every lesson page. `xss` has no DOM dependency and
  * runs identically in Node and the browser.

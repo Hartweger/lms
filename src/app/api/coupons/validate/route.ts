@@ -79,7 +79,7 @@ export async function GET(request: NextRequest) {
   if (coupon.renewal_only) {
     if (!email) {
       return NextResponse.json(
-        { error: "Unesi svoj mejl iznad pa primeni kod — ovaj kod važi za obnovu tvog kursa." },
+        { error: "Unesi svoj mejl iznad pa primeni kod - ovaj kod važi za obnovu tvog kursa." },
         { status: 400 }
       );
     }

@@ -20,7 +20,7 @@ interface RevenueChartProps {
 }
 
 function formatRSD(value: number | undefined) {
-  if (value == null) return "—";
+  if (value == null) return "-";
   return value.toLocaleString("sr-Latn-RS") + " din";
 }
 

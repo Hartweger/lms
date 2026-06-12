@@ -1,5 +1,5 @@
 // Čista logika za statistiku napretka po kursu (stopa završavanja / odustajanja).
-// Bez DB poziva — testabilno; podaci se prosleđuju iz admin stranice.
+// Bez DB poziva - testabilno; podaci se prosleđuju iz admin stranice.
 
 export type LessonRef = { id: string; course_id: string };
 export type AccessRef = { user_id: string; course_id: string };

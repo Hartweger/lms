@@ -49,7 +49,7 @@ export async function GET(request: NextRequest) {
     .eq("payment_status", "pending")
     .order("created_at", { ascending: true });
   const neplacene: DailyBrief["neplacene"] = (pending ?? []).map((o) => ({
-    orderNumber: o.order_number ?? "—",
+    orderNumber: o.order_number ?? "-",
     ime: o.full_name ?? "",
     total: o.total ?? 0,
     metod: o.payment_method ?? "",
@@ -70,7 +70,7 @@ export async function GET(request: NextRequest) {
     return { ime: u?.full_name || u?.email || "", kurs: c?.title || "", datum: fmtDate(r.expires_at as string) };
   });
 
-  // 5) Individualni paketi — ostao tačno 1 čas.
+  // 5) Individualni paketi - ostao tačno 1 čas.
   const { data: indEnr } = await admin
     .from("individual_enrollments")
     .select("package_lessons, lessons_used, user:user_id(full_name), professor:professor_id(full_name), course:course_id(title)")

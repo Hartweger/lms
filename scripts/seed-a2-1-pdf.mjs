@@ -18,7 +18,7 @@ const sb = createClient(env.NEXT_PUBLIC_SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_
 const { data: lessons } = await sb.from("lessons").select("id,title,sections").eq("course_id", COURSE_ID).order("order_index");
 
 for (const l of lessons) {
-  const m = l.title.match(/^Modul\s*(\d+)\s*—\s*Reči$/);
+  const m = l.title.match(/^Modul\s*(\d+)\s*[—-]\s*Reči$/);
   if (!m) continue;
   const n = m[1];
   const file = path.join(__dirname, "flashcards", "pdf", `a2-1-lektion-${n}.pdf`);

@@ -2,9 +2,9 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Za preduzetnice — Resursi za preduzetnice u edukaciji | Hartweger",
+  title: "Za preduzetnice - Resursi za preduzetnice u edukaciji | Hartweger",
   description:
-    "Resursi za preduzetnice u edukaciji — autentičan brend, digitalni alati, AI, oglašavanje i kreiranje ponude.",
+    "Resursi za preduzetnice u edukaciji - autentičan brend, digitalni alati, AI, oglašavanje i kreiranje ponude.",
 };
 
 export default function ZaPreduzetnicePage() {
@@ -17,7 +17,7 @@ export default function ZaPreduzetnicePage() {
             Za preduzetnice u edukaciji
           </h1>
           <p className="text-gray-600 text-lg leading-relaxed mb-4">
-            Imaš znanje i iskustvo, ali ne znaš kako da od toga napraviš biznis? Nisi sama. Upravo zato sam kreirala NH Academy — program koji ti pokazuje korak po korak kako da to ostvariš.
+            Imaš znanje i iskustvo, ali ne znaš kako da od toga napraviš biznis? Nisi sama. Upravo zato sam kreirala NH Academy - program koji ti pokazuje korak po korak kako da to ostvariš.
           </p>
         </div>
       </section>

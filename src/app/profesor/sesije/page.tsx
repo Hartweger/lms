@@ -52,7 +52,7 @@ export default async function ProfesorSesije({ searchParams }: { searchParams: P
   const studentsByGroup = new Map<string, string[]>();
   for (const e of enrolls ?? []) {
     const list = studentsByGroup.get(e.group_id) ?? [];
-    list.push(nameMap.get(e.user_id) || "—");
+    list.push(nameMap.get(e.user_id) || "-");
     studentsByGroup.set(e.group_id, list);
   }
 
@@ -73,7 +73,7 @@ export default async function ProfesorSesije({ searchParams }: { searchParams: P
 
   return (
     <div>
-      <p className="text-xs text-gray-400 mb-4">Grupne sesije {isAdmin ? "(sve grupe)" : ""} — osnova za honorar. Skini otkazane, dodaj vanredne.</p>
+      <p className="text-xs text-gray-400 mb-4">Grupne sesije {isAdmin ? "(sve grupe)" : ""} - osnova za honorar. Skini otkazane, dodaj vanredne.</p>
       <SesijeClient rows={rows} showProfessor={isAdmin} />
     </div>
   );

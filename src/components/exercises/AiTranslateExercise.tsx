@@ -116,7 +116,7 @@ export default function AiTranslateExercise({ lessonId, lessonTitle }: AiTransla
         <h2 className="text-xl font-bold text-gray-900 mb-2">Prevedi rečenice</h2>
         <p className="text-sm text-gray-500 mb-2">{lessonTitle}</p>
         <p className="text-xs text-gray-400 mb-6 max-w-sm mx-auto">
-          AI generiše rečenice na srpskom — ti ih prevedeš na nemački.
+          AI generiše rečenice na srpskom - ti ih prevedeš na nemački.
           Ova vežba koristi veštačku inteligenciju i može povremeno sadržati greške.
         </p>
         <button
@@ -148,7 +148,7 @@ export default function AiTranslateExercise({ lessonId, lessonTitle }: AiTransla
     );
   }
 
-  // Finished — show all results
+  // Finished - show all results
   if (finished) {
     const correctCount = results.filter((r) => r.result.correct).length;
 

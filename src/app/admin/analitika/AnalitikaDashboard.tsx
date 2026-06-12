@@ -163,7 +163,7 @@ function getPreviousPeriodRange(
   }
 }
 
-// Isti period prošle godine (YoY) — pomeri tekući opseg za godinu unazad.
+// Isti period prošle godine (YoY) - pomeri tekući opseg za godinu unazad.
 function getYearAgoRange(
   period: Period,
   customFrom: string,
@@ -191,7 +191,7 @@ const monthNames = [
   "Jul", "Avg", "Sep", "Okt", "Nov", "Dec",
 ];
 
-// Ljudski naziv opsega: cela godina → "2025"; pun mesec → "Jun 2026"; inače "dd.mm–dd.mm.yyyy".
+// Ljudski naziv opsega: cela godina → "2025"; pun mesec → "Jun 2026"; inače "dd.mm-dd.mm.yyyy".
 function rangeLabel(start: Date, end: Date): string {
   const fullYear =
     start.getMonth() === 0 && start.getDate() === 1 &&
@@ -202,7 +202,7 @@ function rangeLabel(start: Date, end: Date): string {
     return `${monthNames[start.getMonth()]} ${start.getFullYear()}`;
   }
   const d = (x: Date) => `${String(x.getDate()).padStart(2, "0")}.${String(x.getMonth() + 1).padStart(2, "0")}.${x.getFullYear()}`;
-  return `${d(start)}–${d(new Date(end.getTime() - 1))}`;
+  return `${d(start)}-${d(new Date(end.getTime() - 1))}`;
 }
 
 // ── Main component ───────────────────────────────────────────────────────────
@@ -273,9 +273,9 @@ export default function AnalitikaDashboard({ orders }: { orders: WcOrder[] }) {
     const count = completed.length;
     const prevCount = prevCompleted.length;
 
-    // Revenue by month — last 12 from today.
+    // Revenue by month - last 12 from today.
     // NB: gradi se iz SVIH narudžbina (`orders`), ne iz `completed` koji je filtriran po
-    // izabranom periodu — da grafik trenda uvek pokazuje svih 12 meseci bez obzira na filter gore.
+    // izabranom periodu - da grafik trenda uvek pokazuje svih 12 meseci bez obzira na filter gore.
     const allCompleted = orders.filter(
       (o) => o.status === "completed" && Number(o.total) > 0
     );
@@ -323,7 +323,7 @@ export default function AnalitikaDashboard({ orders }: { orders: WcOrder[] }) {
     const countryData =
       ostaloValue > 0 ? [...top5, { name: "Ostalo", value: ostaloValue }] : top5;
 
-    // Izvori / kanali (normalizovan utm_source) — prihod po kanalu
+    // Izvori / kanali (normalizovan utm_source) - prihod po kanalu
     const sourceMap: Record<string, number> = {};
     for (const order of completed) {
       const ch = channelOf(order.utm_source);
@@ -333,7 +333,7 @@ export default function AnalitikaDashboard({ orders }: { orders: WcOrder[] }) {
       .map(([name, value]) => ({ name, value }))
       .sort((a, b) => b.value - a.value);
 
-    // Payment methods — from all filtered orders (not just completed)
+    // Payment methods - from all filtered orders (not just completed)
     const paymentMap: Record<string, number> = {};
     for (const order of filteredOrders) {
       const pm = order.payment_method_title || order.payment_method || "Nepoznato";
@@ -360,7 +360,7 @@ export default function AnalitikaDashboard({ orders }: { orders: WcOrder[] }) {
       for (const item of order.items) {
         const key = String(item.product_id ?? item.name);
         if (!productMap[key]) {
-          productMap[key] = { name: item.name ?? "—", sales: 0, revenue: 0 };
+          productMap[key] = { name: item.name ?? "-", sales: 0, revenue: 0 };
         }
         productMap[key].sales += item.quantity ?? 1;
         productMap[key].revenue += Number(item.total ?? 0);
@@ -395,7 +395,7 @@ export default function AnalitikaDashboard({ orders }: { orders: WcOrder[] }) {
   const pctCount = pct(metrics.count, metrics.prevCount);
   const hasPrev = previousRange !== null;
 
-  // YoY — isti period prošle godine
+  // YoY - isti period prošle godine
   const yearAgoRange = useMemo(
     () => getYearAgoRange(period, customFrom, customTo),
     [period, customFrom, customTo]
@@ -545,7 +545,7 @@ export default function AnalitikaDashboard({ orders }: { orders: WcOrder[] }) {
       {/* ── Revenue chart ─────────────────────────────────────────────────── */}
       <div className="bg-white rounded-xl shadow-sm p-6">
         <h2 className="text-lg font-semibold text-gray-900 mb-4">
-          Prihod po mesecima (poslednjih 12 meseci — ne zavisi od filtera)
+          Prihod po mesecima (poslednjih 12 meseci - ne zavisi od filtera)
         </h2>
         <RevenueChart data={metrics.revenueByMonth} />
       </div>
@@ -712,7 +712,7 @@ export default function AnalitikaDashboard({ orders }: { orders: WcOrder[] }) {
                     </td>
                     <td className="px-4 py-3">
                       <div className="font-medium text-gray-900">
-                        {order.customer_name || "—"}
+                        {order.customer_name || "-"}
                       </div>
                       <div className="text-xs text-gray-400">{order.customer_email}</div>
                     </td>
@@ -720,7 +720,7 @@ export default function AnalitikaDashboard({ orders }: { orders: WcOrder[] }) {
                       {fmt(Number(order.total))}
                     </td>
                     <td className="px-4 py-3 text-gray-500 text-xs">
-                      {order.payment_method_title || order.payment_method || "—"}
+                      {order.payment_method_title || order.payment_method || "-"}
                     </td>
                     <td className="px-4 py-3">
                       <span className={`text-xs px-2 py-1 rounded-full ${badge.cls}`}>

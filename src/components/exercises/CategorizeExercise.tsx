@@ -60,7 +60,7 @@ export default function CategorizeExercise({ question, categories, items, onAnsw
           : `Sad klikni na kategoriju gde pripada "${selectedItem}"`}
       </p>
 
-      {/* Unplaced items — show FIRST so user knows what to click */}
+      {/* Unplaced items - show FIRST so user knows what to click */}
       {unplaced.length > 0 && (
         <div className="flex flex-wrap gap-2 mb-5">
           {unplaced.map((item) => (

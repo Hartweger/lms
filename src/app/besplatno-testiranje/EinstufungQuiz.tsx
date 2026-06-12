@@ -48,7 +48,7 @@ export default function EinstufungQuiz() {
         // Next question in block
         setCurrentQuestionIndex(currentQuestionIndex + 1);
       } else {
-        // Block complete — score it
+        // Block complete - score it
         const score = scoreBlock(currentQuestions, newAnswers);
         const newBlockScores = [...blockScores, { level: currentLevel, correct: score, total: 10 }];
         setBlockScores(newBlockScores);
@@ -101,7 +101,7 @@ export default function EinstufungQuiz() {
         }),
       });
     } catch {
-      // Silently fail — still show result
+      // Silently fail - still show result
     }
     setIsSubmitting(false);
     setShowFullResult(true);

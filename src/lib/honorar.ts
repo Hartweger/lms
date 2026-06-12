@@ -1,4 +1,4 @@
-// src/lib/honorar.ts — čiste funkcije za mesečni obračun honorara. Bez I/O.
+// src/lib/honorar.ts - čiste funkcije za mesečni obračun honorara. Bez I/O.
 
 export interface HonorarResult {
   ind: number; grp: number;

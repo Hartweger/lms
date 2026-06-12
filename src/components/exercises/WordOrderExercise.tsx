@@ -14,7 +14,7 @@ function normalize(s: string): string {
   return s.replace(/\s+([.,!?;:])/g, "$1");
 }
 
-// Fisher–Yates, ali garantuje da ponuđeni redosled NIJE već tačan odgovor
+// Fisher-Yates, ali garantuje da ponuđeni redosled NIJE već tačan odgovor
 // (kad postoji više od jednog mogućeg rasporeda). Ranije se ništa nije mešalo,
 // pa su se reči javljale u tačnom redosledu.
 function shuffleTokens(
@@ -35,7 +35,7 @@ function shuffleTokens(
 }
 
 export default function WordOrderExercise({ words, correctAnswer, hint, onAnswer }: WordOrderProps) {
-  // Stabilni id po poziciji — radi ispravno i kad se reč ponavlja u rečenici
+  // Stabilni id po poziciji - radi ispravno i kad se reč ponavlja u rečenici
   // (npr. dva „ich" / „die"). Ranije je filter po stringu brisao SVE iste reči
   // odjednom, pa se nikad nije moglo doći do dugmeta „Proveri".
   const [tokens] = useState(() =>

@@ -4,10 +4,10 @@ import { useCallback, useEffect, useRef, useState, type ReactNode } from "react"
 import { NakiFace } from "./NakiAvatar";
 
 // NaKI šalje markdown (**bold**, *kurziv*, [tekst](url)). Pretvori u React čvorove
-// (kao stari WP widget) — inače se vide gole zvezdice. Novi red čuva whitespace-pre-wrap.
+// (kao stari WP widget) - inače se vide gole zvezdice. Novi red čuva whitespace-pre-wrap.
 function renderRich(text: string): ReactNode[] {
   const withBullets = text.replace(/^- /gm, "• ");
-  // markdown link | bold | kurziv | goli URL (www. ili https://) | mejl | goli domen (hartweger.rs / youtube — NaKI često izostavi https://)
+  // markdown link | bold | kurziv | goli URL (www. ili https://) | mejl | goli domen (hartweger.rs / youtube - NaKI često izostavi https://)
   const re =
     /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)|\*\*([^*]+)\*\*|\*([^*]+)\*|((?:https?:\/\/|www\.)[^\s)]+)|([^\s@]+@[^\s@]+\.[A-Za-z]{2,})|((?:[a-z0-9-]+\.)*(?:hartweger\.rs|youtube\.com|youtu\.be)(?:\/[^\s)]*)?)/gi;
   const nodes: ReactNode[] = [];
@@ -158,7 +158,7 @@ export default function NakiChat() {
       setMessages(nextHistory);
       setInput("");
 
-      // Email gate trigger — 6. i 13. poruka (KPI checkpoint 1: capture <10% → gate ranije)
+      // Email gate trigger - 6. i 13. poruka (KPI checkpoint 1: capture <10% → gate ranije)
       if (messageCount.current === 6 && !emailGiven.current && !emailFinal.current) {
         setShowGate(true);
         ga("naki_email_gate_shown", { session_id: sessionId.current });
@@ -238,7 +238,7 @@ export default function NakiChat() {
         },
       ]);
     } catch {
-      // tiho — korisnik može nastaviti razgovor
+      // tiho - korisnik može nastaviti razgovor
     } finally {
       setGateSubmitting(false);
     }
@@ -264,8 +264,8 @@ export default function NakiChat() {
           <NakiFace className="h-9 w-9" />
         </div>
         <div className="flex flex-col gap-0.5">
-          <span className="font-heading text-base font-bold">NaKI — Natašin AI asistent</span>
-          <span className="text-xs text-white/85">Online · Nemački A1–C1</span>
+          <span className="font-heading text-base font-bold">NaKI - Natašin AI asistent</span>
+          <span className="text-xs text-white/85">Online · Nemački A1-C1</span>
         </div>
       </div>
 
@@ -292,7 +292,7 @@ export default function NakiChat() {
         {showGate && (
           <div className="rounded-2xl border border-plava bg-plava-light p-4">
             <p className="mb-3 text-sm text-gray-700">
-              Super ti ide! Ostavi email — pošaljem ti <strong>plan učenja</strong> prilagođen tebi:
+              Super ti ide! Ostavi email - pošaljem ti <strong>plan učenja</strong> prilagođen tebi:
               šta već znaš i šta dalje da vežbaš. Besplatno.
             </p>
             <input

@@ -52,7 +52,7 @@ export async function POST(request: Request) {
     console.error("Supabase error:", dbError);
   }
 
-  // Mejl #1 (rezultat) — odmah iz LMS-a preko Resend-a. MailerLite automacija "rezultat" je ugašena;
+  // Mejl #1 (rezultat) - odmah iz LMS-a preko Resend-a. MailerLite automacija "rezultat" je ugašena;
   // u MailerLite i dalje upisujemo osobu (lista za newsletter), samo ne šalje ona ovaj mejl.
   await sendTestResultEmail(trimmedEmail, {
     nivo: recommendedLevel,

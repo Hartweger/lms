@@ -212,7 +212,7 @@ export default function AdminProfesori() {
                 {assignments.map((a) => (
                   <tr key={a.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4">
-                      <div className="font-medium text-gray-900">{a.student_name || "—"}</div>
+                      <div className="font-medium text-gray-900">{a.student_name || "-"}</div>
                       <div className="text-xs text-gray-400">{a.student_email}</div>
                     </td>
                     <td className="px-6 py-4 text-gray-600">{a.course_title}</td>
@@ -286,7 +286,7 @@ export default function AdminProfesori() {
             <tbody className="divide-y divide-gray-50">
               {professors.map((prof) => (
                 <tr key={prof.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 font-medium text-gray-900">{prof.full_name || "—"}</td>
+                  <td className="px-6 py-4 font-medium text-gray-900">{prof.full_name || "-"}</td>
                   <td className="px-6 py-4 text-gray-500">{prof.email}</td>
                   <td className="px-6 py-4 text-gray-500">
                     {prof.studentCount + (prof.groupCount ?? 0)}

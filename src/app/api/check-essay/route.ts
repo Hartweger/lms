@@ -49,7 +49,7 @@ Pravila:
 - Feedback na SRPSKOM jeziku, kratak (1-2 rečenice)
 - Maksimum 3 najvažnije ispravke
 - Objašnjenja kratka (1 rečenica)
-- Ocenjuj STROGO prema nivou — isti tekst na A1 može biti 4/5, a na B1 samo 2/5
+- Ocenjuj STROGO prema nivou - isti tekst na A1 može biti 4/5, a na B1 samo 2/5
 - Budi ohrabrujući ali tačan
 
 Odgovori SAMO sa validnim JSON objektom, bez markdown blokova:

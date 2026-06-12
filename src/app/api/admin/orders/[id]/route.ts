@@ -34,7 +34,7 @@ export async function DELETE(
   // Potvrđene se storniraju (Fiscomm + oduzimanje pristupa), ne brišu iz baze.
   if (!canDeleteOrder(order)) {
     return NextResponse.json(
-      { error: "Potvrđena narudžbina se ne može obrisati — koristi storno." },
+      { error: "Potvrđena narudžbina se ne može obrisati - koristi storno." },
       { status: 400 }
     );
   }

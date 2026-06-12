@@ -2,11 +2,11 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Opšti uslovi poslovanja — Hartweger",
-  description: "Opšti uslovi korišćenja platforme Hartweger — uslovi kupovine, pristup kursevima i pravila korišćenja.",
+  title: "Opšti uslovi poslovanja - Hartweger",
+  description: "Opšti uslovi korišćenja platforme Hartweger - uslovi kupovine, pristup kursevima i pravila korišćenja.",
   openGraph: {
-    images: [{ url: "/og/share.png", width: 1200, height: 630, alt: "Hartweger — Škola nemačkog jezika" }],
-    title: "Opšti uslovi poslovanja — Hartweger",
+    images: [{ url: "/og/share.png", width: 1200, height: 630, alt: "Hartweger - Škola nemačkog jezika" }],
+    title: "Opšti uslovi poslovanja - Hartweger",
     description: "Opšti uslovi korišćenja platforme Hartweger.",
   },
 };
@@ -30,7 +30,7 @@ export default function UsloviPage() {
           <ul>
             <li>Pristup video lekcijama i svim materijalima na platformi traje <strong>godinu dana</strong> od dana kupovine.</li>
             <li>Po završetku kursa i ispita polaznik dobija sertifikat HARTWEGER centra.</li>
-            <li>Materijali su namenjeni isključivo za ličnu upotrebu — zabranjena je redistribucija, snimanje i deljenje.</li>
+            <li>Materijali su namenjeni isključivo za ličnu upotrebu - zabranjena je redistribucija, snimanje i deljenje.</li>
           </ul>
 
           <h2>2. Grupni kursevi</h2>
@@ -43,9 +43,9 @@ export default function UsloviPage() {
 
           <h3>Otkazivanje grupnog kursa:</h3>
           <ul>
-            <li>Dva dana pre početka kursa — povraćaj 100%.</li>
-            <li>Prvih 15 dana od početka kursa — povraćaj 50%.</li>
-            <li>Nakon 15 dana od početka kursa — bez povraćaja.</li>
+            <li>Dva dana pre početka kursa - povraćaj 100%.</li>
+            <li>Prvih 15 dana od početka kursa - povraćaj 50%.</li>
+            <li>Nakon 15 dana od početka kursa - bez povraćaja.</li>
           </ul>
 
           <h2>3. Individualni kursevi</h2>

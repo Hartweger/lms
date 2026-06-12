@@ -39,7 +39,7 @@ export async function GET() {
     }
   }
 
-  // 2) Sekvenca povraćaja (abandoned cart) — mašina stanja po recovery_stage:
+  // 2) Sekvenca povraćaja (abandoned cart) - mašina stanja po recovery_stage:
   //    mejl1 (1h) → mejl2 (3 dana) → otkazivanje + mejl (7 dana). Ako je polaznik prešao na drugi
   //    način plaćanja / platio isti kurs, mejlovi se preskaču, a mrtva porudžbina se tiho otkaže posle 7 dana.
   const { data: candidates } = await admin
@@ -87,14 +87,14 @@ export async function GET() {
       await admin.from("orders").update({ recovery_stage: 3, payment_status: "cancelled" }).eq("id", o.id);
       counts.cancel++;
     } else if (action === "cancel-silent") {
-      // Polaznik je platio/prešao na drugi način — samo zatvori mrtvu porudžbinu, bez mejla.
+      // Polaznik je platio/prešao na drugi način - samo zatvori mrtvu porudžbinu, bez mejla.
       await admin.from("orders").update({ recovery_stage: 3, payment_status: "cancelled" }).eq("id", o.id);
       counts.cancelSilent++;
     }
   }
 
-  // 3) Podsetnici za uplatnicu/PayPal koji čekaju uplatu — mejl1 (3 dana) → mejl2 (8 dana).
-  //    BEZ automatskog otkazivanja (uplata je možda već poslata — odluku donosi admin);
+  // 3) Podsetnici za uplatnicu/PayPal koji čekaju uplatu - mejl1 (3 dana) → mejl2 (8 dana).
+  //    BEZ automatskog otkazivanja (uplata je možda već poslata - odluku donosi admin);
   //    izuzetak: ako je isti kurs plaćen drugačije / postoji novija narudžbina, tiho se zatvori.
   const { data: uplate } = await admin
     .from("orders")

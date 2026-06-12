@@ -129,7 +129,7 @@ export default function IndividualniClient({ rows, showProfessor }: { rows: Enro
               return (
                 <tr key={r.id} className="hover:bg-gray-50 align-top">
                   <td className="px-6 py-4">
-                    <div className="font-medium text-gray-900">{r.studentName || "—"}</div>
+                    <div className="font-medium text-gray-900">{r.studentName || "-"}</div>
                     <div className="text-xs text-gray-400">{r.studentEmail}</div>
                     {r.notesUrl ? (
                       <div className="flex items-center gap-2">
@@ -140,7 +140,7 @@ export default function IndividualniClient({ rows, showProfessor }: { rows: Enro
                       <button type="button" onClick={() => saveNotes(r.id, null)} disabled={busy === r.id} className="text-xs text-gray-400 hover:underline">➕ Dodaj beleške</button>
                     )}
                   </td>
-                  {showProfessor && <td className="px-6 py-4 text-gray-600">{r.professorName || "—"}</td>}
+                  {showProfessor && <td className="px-6 py-4 text-gray-600">{r.professorName || "-"}</td>}
                   <td className="px-6 py-4 text-gray-600">
                     {r.courseTitle}
                     {r.expiresAt && <div className="text-xs text-gray-400">rok: {new Date(r.expiresAt).toLocaleDateString("sr-Latn")}</div>}
@@ -183,7 +183,7 @@ export default function IndividualniClient({ rows, showProfessor }: { rows: Enro
                         onClick={() => addLesson(r.id)}
                         disabled={busy === r.id || done || remaining === 0}
                         className="bg-plava hover:bg-plava-dark disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium px-3 py-1.5 rounded-lg whitespace-nowrap"
-                        title={done || remaining === 0 ? "Paket je popunjen — novi čas ide u novi paket" : undefined}
+                        title={done || remaining === 0 ? "Paket je popunjen - novi čas ide u novi paket" : undefined}
                       >
                         {done || remaining === 0 ? "Paket pun" : busy === r.id ? "..." : "Upiši čas"}
                       </button>

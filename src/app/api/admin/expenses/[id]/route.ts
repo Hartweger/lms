@@ -40,7 +40,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
   if (body.note !== undefined) patch.note = body.note || null;
 
   // Validacija ended_at >= expense_date: proveravamo samo kad su OBA u body-ju.
-  // Kad je samo jedan prisutan, ne dohvatamo postojeći red — jednostavnost > pokrivenost
+  // Kad je samo jedan prisutan, ne dohvatamo postojeći red - jednostavnost > pokrivenost
   // (edge-case parcijalni patch pokriva UI validacija i DB constraint ako postoji).
   if (body.ended_at && body.expense_date && body.ended_at < body.expense_date) {
     return NextResponse.json({ error: "Datum kraja ne može biti pre datuma početka." }, { status: 400 });

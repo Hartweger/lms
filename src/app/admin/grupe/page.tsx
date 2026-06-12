@@ -137,7 +137,7 @@ export default function AdminGrupePage() {
       alert("Greška: " + (j.error || "nešto nije u redu"));
       return;
     }
-    // Ostani u formi posle čuvanja (da možeš da nastaviš — npr. „Napravi/osveži termin").
+    // Ostani u formi posle čuvanja (da možeš da nastaviš - npr. „Napravi/osveži termin").
     if (!form.id && j.id) setForm({ ...form, id: j.id }); // nova grupa → pređi u režim izmene
     setSavedAt(Date.now());
     fetchGroups();
@@ -149,16 +149,16 @@ export default function AdminGrupePage() {
     fetchGroups();
   }
 
-  // Napravi termin (ako ga nema) ili pomeri postojeći na nove datume — ISTI Meet, BEZ reseta prijava.
+  // Napravi termin (ako ga nema) ili pomeri postojeći na nove datume - ISTI Meet, BEZ reseta prijava.
   async function osveziTermin() {
     if (!form?.id) return;
-    if (!confirm("Napravi/osveži termin?\n\nNapravi Google event+Meet (ako ne postoji) ili pomeri postojeći na nove datume — ISTI Meet link. Prijave OSTAJU. Sačuvaj izmene pre ovoga ako si menjala datum.")) return;
+    if (!confirm("Napravi/osveži termin?\n\nNapravi Google event+Meet (ako ne postoji) ili pomeri postojeći na nove datume - ISTI Meet link. Prijave OSTAJU. Sačuvaj izmene pre ovoga ako si menjala datum.")) return;
     setSaving(true);
     const r = await fetch(`/api/admin/grupe/${form.id}/osvezi-termin`, { method: "POST" });
     const j = await r.json();
     setSaving(false);
     if (!r.ok) { alert("Greška: " + j.error); return; }
-    alert("Termin osvežen! ✅\n\nMeet: " + (j.meetLink || "—") + "\nBeleške: " + (j.notesUrl || "(zadržane postojeće)"));
+    alert("Termin osvežen! ✅\n\nMeet: " + (j.meetLink || "-") + "\nBeleške: " + (j.notesUrl || "(zadržane postojeće)"));
     cancelEdit();
     fetchGroups();
   }
@@ -171,7 +171,7 @@ export default function AdminGrupePage() {
     const j = await r.json().catch(() => ({}));
     setSaving(false);
     if (!r.ok) { alert("Greška: " + (j.error || "nešto nije u redu")); return; }
-    alert("Termin napravljen! ✅\n\nMeet: " + (j.meetLink || "—") + "\nBeleške: " + (j.notesUrl || "(zadržane)"));
+    alert("Termin napravljen! ✅\n\nMeet: " + (j.meetLink || "-") + "\nBeleške: " + (j.notesUrl || "(zadržane)"));
     fetchGroups();
   }
 
@@ -187,7 +187,7 @@ export default function AdminGrupePage() {
     if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  // Nova generacija — isprazni prijave (0/6) + NOV Meet/beleške.
+  // Nova generacija - isprazni prijave (0/6) + NOV Meet/beleške.
   async function novaGeneracija() {
     if (!form?.id) return;
     if (!confirm("NOVA generacija?\n\nPRAZNI broj upisanih na 0 i pravi NOV Meet + nove beleške (novi ciklus). Pristup sadržaju prethodnim polaznicima OSTAJE. Koristi kad prethodna grupa završi/popuni.")) return;
@@ -196,7 +196,7 @@ export default function AdminGrupePage() {
     const j = await r.json();
     setSaving(false);
     if (!r.ok) { alert("Greška: " + j.error); return; }
-    alert("Nova generacija otvorena! ✅ (0/6)\n\nMeet: " + (j.meetLink || "—") + "\nBeleške: " + (j.notesUrl || "—"));
+    alert("Nova generacija otvorena! ✅ (0/6)\n\nMeet: " + (j.meetLink || "-") + "\nBeleške: " + (j.notesUrl || "-"));
     cancelEdit();
     fetchGroups();
   }
@@ -290,7 +290,7 @@ export default function AdminGrupePage() {
                 }
                 className={inputCls}
               >
-                <option value="">—</option>
+                <option value="">-</option>
                 {profs.map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.full_name}
@@ -307,7 +307,7 @@ export default function AdminGrupePage() {
                 }
                 className={inputCls}
               >
-                <option value="">—</option>
+                <option value="">-</option>
                 {courses.map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.slug}
@@ -331,7 +331,7 @@ export default function AdminGrupePage() {
               <input
                 type="text"
                 readOnly
-                value={computeEndDate(form.start_date ?? null, form.days ?? null, form.duration_weeks ?? null) ?? "—"}
+                value={computeEndDate(form.start_date ?? null, form.days ?? null, form.duration_weeks ?? null) ?? "-"}
                 title="Računa se iz početka + broja nedelja; upisuje se kad otvoriš termin."
                 className={inputCls + " bg-gray-50 text-gray-500"}
               />
@@ -362,7 +362,7 @@ export default function AdminGrupePage() {
                 className={inputCls}
               />
             </div>
-            {/* Cena se ne unosi ovde — naplata ide po ceni kursa (courses tabela). */}
+            {/* Cena se ne unosi ovde - naplata ide po ceni kursa (courses tabela). */}
             <div>
               <label className={labelCls}>Min mesta</label>
               <input
@@ -467,7 +467,7 @@ export default function AdminGrupePage() {
             )}
           </div>
 
-          {/* Polaznici — samo za postojeću grupu */}
+          {/* Polaznici - samo za postojeću grupu */}
           {form.id && (
             <div className="mt-4 pt-4 border-t border-gray-100">
               <h3 className="font-semibold text-gray-800 mb-1">Polaznici</h3>
@@ -509,13 +509,13 @@ export default function AdminGrupePage() {
         </form>
       )}
 
-      {/* Lista grupa — aktivne gore (po datumu), arhiva sakrivena, sa upozorenjima */}
+      {/* Lista grupa - aktivne gore (po datumu), arhiva sakrivena, sa upozorenjima */}
       {(() => {
         const t0 = new Date(); t0.setHours(0, 0, 0, 0);
         const daysUntil = (d: string | null) => d ? Math.round((new Date(d + "T00:00:00").getTime() - t0.getTime()) / 86400000) : null;
         const hasSchedule = (g: Group) => !!(g.start_date && g.days?.length && g.session_time && g.duration_weeks);
         const hasTermin = (g: Group) => !!(g.gcal_event_id || g.meet_link);
-        // Samo grupe koje TEK treba da krenu (ne u_toku — te već imaju Meet, da se ne dupliraju).
+        // Samo grupe koje TEK treba da krenu (ne u_toku - te već imaju Meet, da se ne dupliraju).
         const needsTermin = (g: Group) => ["planiran", "uskoro", "otvoren"].includes(g.status) && hasSchedule(g) && !hasTermin(g);
         const lowEnroll = (g: Group) => { const d = daysUntil(g.start_date); return AKTIVNI_STATUSI.includes(g.status) && d !== null && d >= 0 && d <= 7 && g.enrolled < g.min_seats; };
 
@@ -562,11 +562,11 @@ export default function AdminGrupePage() {
                             {lowEnroll(g) && <span className="text-[11px] text-amber-600">🟡 Malo upisa</span>}
                           </div>
                         </td>
-                        <td className="px-4 py-3 text-gray-600">{g.professor?.full_name || "—"}</td>
+                        <td className="px-4 py-3 text-gray-600">{g.professor?.full_name || "-"}</td>
                         <td className="px-4 py-3">
                           <span className={`text-xs px-2 py-0.5 rounded-full ${STATUS_BOJA[g.status] || "bg-gray-100 text-gray-600"}`}>{g.status}</span>
                         </td>
-                        <td className="px-4 py-3 text-gray-600">{g.start_date || "—"}</td>
+                        <td className="px-4 py-3 text-gray-600">{g.start_date || "-"}</td>
                         <td className={`px-4 py-3 ${aktivna && g.enrolled < g.min_seats ? "text-red-500" : "text-gray-600"}`}>{g.enrolled}/{g.max_seats}</td>
                         <td className="px-4 py-3">
                           {hasTermin(g) ? (
@@ -577,7 +577,7 @@ export default function AdminGrupePage() {
                           ) : needsTermin(g) ? (
                             <button type="button" onClick={() => napraviTerminRow(g)} disabled={saving} className="text-xs bg-plava text-white px-2 py-1 rounded-lg hover:bg-plava-dark disabled:opacity-50">Napravi termin</button>
                           ) : (
-                            <span className="text-gray-300">—</span>
+                            <span className="text-gray-300">-</span>
                           )}
                         </td>
                         <td className="px-4 py-3">

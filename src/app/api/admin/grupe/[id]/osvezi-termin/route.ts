@@ -14,7 +14,7 @@ async function requireAdmin() {
   return profile?.role === "admin" ? admin : null;
 }
 
-// POST: napravi termin (ako ga nema) ILI pomeri postojeći na nove datume — ISTI Meet, BEZ reseta prijava.
+// POST: napravi termin (ako ga nema) ILI pomeri postojeći na nove datume - ISTI Meet, BEZ reseta prijava.
 export async function POST(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const admin = await requireAdmin();
   if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });

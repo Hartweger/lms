@@ -32,7 +32,7 @@ async function attach(lesson, pdfName, key) {
 }
 
 for (const l of lessons) {
-  const m = l.title.match(/^Modul\s*(\d+)\s*—\s*Reči$/);
+  const m = l.title.match(/^Modul\s*(\d+)\s*[—-]\s*Reči$/);
   if (m) await attach(l, `a1-2-lektion-${m[1]}.pdf`, `flashcards/a1-2-lektion-${m[1]}.pdf`);
   else if (/Reči za ispit A1/i.test(l.title)) await attach(l, "a1-2-ispit-a1.pdf", "flashcards/a1-2-ispit-a1.pdf");
 }

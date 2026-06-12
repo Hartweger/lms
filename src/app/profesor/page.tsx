@@ -54,17 +54,17 @@ export default async function ProfesorStudenti({ searchParams }: { searchParams:
   for (const e of indEnr ?? []) {
     const p = pMap.get(e.user_id);
     rows.push({
-      name: p?.full_name || "—",
+      name: p?.full_name || "-",
       email: p?.email || "",
       type: "1:1",
-      label: cMap.get(e.course_id) ?? "—",
+      label: cMap.get(e.course_id) ?? "-",
       detail: `${e.lessons_used ?? 0}/${e.package_lessons ?? "?"} časova`,
     });
   }
   for (const e of ge ?? []) {
     const p = pMap.get(e.user_id);
     rows.push({
-      name: p?.full_name || "—",
+      name: p?.full_name || "-",
       email: p?.email || "",
       type: "grupa",
       label: `Grupa ${groupLevel.get(e.group_id) ?? ""}`.trim(),
@@ -109,7 +109,7 @@ export default async function ProfesorStudenti({ searchParams }: { searchParams:
                     </span>
                   )}
                 </td>
-                <td className="px-6 py-4 text-gray-500">{r.detail || "—"}</td>
+                <td className="px-6 py-4 text-gray-500">{r.detail || "-"}</td>
               </tr>
             ))}
           </tbody>

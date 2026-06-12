@@ -110,7 +110,7 @@ export async function POST(request: Request) {
   // Ulogovani koji već imaju video kurs ne dobijaju NAKI10 (kupon je za nove kupce).
   const couponAddon =
     userId && (await userOwnsAnyVideoCourse(admin, userId))
-      ? "\n\nOvaj korisnik je već kupac video kursa — NE pominji kupon NAKI10 (važi samo za prvu kupovinu)."
+      ? "\n\nOvaj korisnik je već kupac video kursa - NE pominji kupon NAKI10 (važi samo za prvu kupovinu)."
       : "";
   const system: Anthropic.TextBlockParam[] = [
     { type: "text", text: NAKI_SYSTEM_PROMPT, cache_control: { type: "ephemeral" } },

@@ -1,5 +1,5 @@
 // Čista logika za cookie saglasnost (Google Consent Mode v2).
-// Bez DOM/gtag poziva — to radi CookieBanner. Lako za testiranje (node env).
+// Bez DOM/gtag poziva - to radi CookieBanner. Lako za testiranje (node env).
 
 export const CONSENT_KEY = "cookie-consent";
 

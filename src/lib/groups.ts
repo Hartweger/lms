@@ -16,7 +16,7 @@ export function formatPocetak(d: string | null): string {
 }
 
 const YEAR_MS = 365 * 86400000;
-// Vrati ms roka: max(postojeći, danas+365) — nikad ne skraćuje.
+// Vrati ms roka: max(postojeći, danas+365) - nikad ne skraćuje.
 export function nextExpiry(existingMs: number | null): number {
   const base = Date.now() + YEAR_MS;
   return existingMs != null && existingMs > base ? existingMs : base;

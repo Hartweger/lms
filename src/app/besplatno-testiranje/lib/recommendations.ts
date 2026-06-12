@@ -18,7 +18,7 @@ export interface LevelRecommendation {
 const recommendations: Record<string, LevelRecommendation> = {
   "A1.1": {
     level: "A1.1",
-    title: "Krećeš od nule — sjajan početak!",
+    title: "Krećeš od nule - sjajan početak!",
     description: "Naš A1 kurs te vodi korak po korak kroz osnove nemačkog jezika.",
     courses: [
       { type: "grupni", label: "Grupni kurs A1.1", subtitle: "Učiš uživo sa profesorom i grupom od 4-6 polaznika.", price: "168€", url: "/kursevi/grupni-kurs-nemackog-jezika-a1-1" },
@@ -28,7 +28,7 @@ const recommendations: Record<string, LevelRecommendation> = {
   },
   "A1.2": {
     level: "A1.2",
-    title: "Osnove su tu — treba ih učvrstiti!",
+    title: "Osnove su tu - treba ih učvrstiti!",
     description: "Imaš osnove nemačkog, ali treba ti čvrsta baza pre nego što nastaviš.",
     courses: [
       { type: "grupni", label: "Grupni kurs A1.2", subtitle: "Učiš uživo sa profesorom i grupom od 4-6 polaznika.", price: "168€", url: "/kursevi/grupni-kurs-nemackog-jezika-a1-2-2" },
@@ -49,7 +49,7 @@ const recommendations: Record<string, LevelRecommendation> = {
   "A2.2": {
     level: "A2.2",
     title: "Na dobrom si putu kroz A2!",
-    description: "Nastavi gde si stao/la — do kraja A2 nivoa je još malo.",
+    description: "Nastavi gde si stao/la - do kraja A2 nivoa je još malo.",
     courses: [
       { type: "grupni", label: "Grupni kurs A2.2", subtitle: "Učiš uživo sa profesorom i grupom od 4-6 polaznika.", price: "168€", url: "/kursevi/grupni-kurs-nemackog-jezika-a2-2" },
       { type: "video", label: "Video kurs A2", subtitle: "Učiš sam/a, u svom tempu, sa snimljenim lekcijama.", price: "99€", url: "/kursevi/video-kurs-a2" },
@@ -69,7 +69,7 @@ const recommendations: Record<string, LevelRecommendation> = {
   "B1.2": {
     level: "B1.2",
     title: "Još malo do B1 cilja!",
-    description: "Ovo je završni sprint — posle ovoga možeš slobodno da komuniciraš na nemačkom.",
+    description: "Ovo je završni sprint - posle ovoga možeš slobodno da komuniciraš na nemačkom.",
     courses: [
       { type: "grupni", label: "Grupni kurs B1.2", subtitle: "Učiš uživo sa profesorom i grupom od 4-6 polaznika.", price: "168€", url: "/kursevi/grupni-kurs-nemackog-b1-2" },
       { type: "video", label: "Video kurs B1", subtitle: "Učiš sam/a, u svom tempu, sa snimljenim lekcijama.", price: "99€", url: "/kursevi/video-kurs-b1" },
@@ -88,7 +88,7 @@ const recommendations: Record<string, LevelRecommendation> = {
   "B2.2": {
     level: "B2.2",
     title: "Skoro na C1 nivou!",
-    description: "Ostao ti je još samo B2.2 — posle toga si spreman/na za napredni nivo.",
+    description: "Ostao ti je još samo B2.2 - posle toga si spreman/na za napredni nivo.",
     courses: [
       { type: "grupni", label: "Grupni kurs B2.2", subtitle: "Učiš uživo sa profesorom i grupom od 4-6 polaznika.", price: "181€", url: "/kursevi/grupni-kurs-b2-2" },
     ],

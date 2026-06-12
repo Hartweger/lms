@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import type { UserProfile } from "@/lib/types";
 
-// Javni linkovi — isti za sve (ulogovan ili ne). Kursevi prvi (prodaja).
+// Javni linkovi - isti za sve (ulogovan ili ne). Kursevi prvi (prodaja).
 const PUBLIC_LINKS = [
   { href: "/kursevi", label: "Kursevi" },
   { href: "/naki", label: "NaKI" },

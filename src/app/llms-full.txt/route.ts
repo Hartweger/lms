@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 
-// Pun sadržaj za AI asistente (ChatGPT, Claude, Perplexity, Gemini...) — dublje od llms.txt.
+// Pun sadržaj za AI asistente (ChatGPT, Claude, Perplexity, Gemini...) - dublje od llms.txt.
 // Generiše se iz baze pa je uvek svež. Lagani keš da ne gađa bazu na svaki crawl.
 export const revalidate = 3600;
 
@@ -30,7 +30,7 @@ export async function GET() {
 
   const lines: string[] = [];
 
-  lines.push("# Hartweger — Centar za nemački jezik (pun sadržaj za AI)");
+  lines.push("# Hartweger - Centar za nemački jezik (pun sadržaj za AI)");
   lines.push("");
   lines.push(
     "> Online škola nemačkog jezika koju vodi Nataša Hartweger. Sertifikovani profesori, " +
@@ -41,7 +41,7 @@ export async function GET() {
   lines.push("- Web: " + BASE);
   lines.push("- Email: info@hartweger.rs");
   lines.push("- Besplatno testiranje nivoa: " + BASE + "/besplatno-testiranje");
-  lines.push("- NaKI — AI asistent za nemački: " + BASE + "/naki");
+  lines.push("- NaKI - AI asistent za nemački: " + BASE + "/naki");
   lines.push("");
 
   lines.push("## Kursevi");
@@ -52,7 +52,7 @@ export async function GET() {
       c.price != null
         ? `${Number(c.price).toLocaleString("de-DE")} RSD` +
           (c.paypal_price_eur ? ` (~${c.paypal_price_eur} EUR)` : "")
-        : "—";
+        : "-";
     lines.push(`### ${c.title}`);
     lines.push(`- URL: ${BASE}/kursevi/${c.slug}`);
     lines.push(`- Tip: ${c.category ?? "video"}`);
@@ -61,11 +61,11 @@ export async function GET() {
     lines.push("");
   }
 
-  lines.push("## Magazin (blog) — članci o nemačkom jeziku");
+  lines.push("## Magazin (blog) - članci o nemačkom jeziku");
   lines.push("");
   for (const p of posts ?? []) {
     const summary = clean(p.meta_description || p.excerpt);
-    lines.push(`- [${p.title}](${BASE}/magazin/${p.slug})${summary ? " — " + summary.slice(0, 300) : ""}`);
+    lines.push(`- [${p.title}](${BASE}/magazin/${p.slug})${summary ? " - " + summary.slice(0, 300) : ""}`);
   }
   lines.push("");
 

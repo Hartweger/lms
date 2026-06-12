@@ -4,7 +4,7 @@ import { useState } from "react";
 
 interface FillBlankProps {
   question: string; // Text with ______ placeholders (can have multiple)
-  options: string[]; // Word bank — correct answers (shuffled for display)
+  options: string[]; // Word bank - correct answers (shuffled for display)
   correctAnswer: string; // Comma-separated answers in order: "komme, bin, wohne"
   explanation: string | null;
   onAnswer: (correct: boolean) => void;
@@ -15,7 +15,7 @@ export default function FillBlankExercise({ question, options, correctAnswer, ex
   const blankCount = (question.match(/______/g) || []).length || 1;
 
   // Shuffle word bank (options + maybe extra distractors).
-  // Bank je niz reči; istu reč može sadržati više puta (npr. "werden" 2x) — zato
+  // Bank je niz reči; istu reč može sadržati više puta (npr. "werden" 2x) - zato
   // iskorišćenost pratimo po INDEKSU u banci, ne po tekstu reči.
   const [wordBank] = useState(() => {
     const words = [...options];
@@ -82,7 +82,7 @@ export default function FillBlankExercise({ question, options, correctAnswer, ex
           {contextText}
         </div>
       )}
-      <p className="text-sm text-gray-500 mb-3">Dopuni rečenicu — izaberi tačnu reč:</p>
+      <p className="text-sm text-gray-500 mb-3">Dopuni rečenicu - izaberi tačnu reč:</p>
       {/* Word bank */}
       <div className="flex gap-2 flex-wrap mb-6">
         {wordBank.map((word, i) => {

@@ -58,7 +58,7 @@ export async function DELETE(request: Request) {
   return NextResponse.json({ ok: true });
 }
 
-// PATCH — snimi/izmeni link beleški (Google Doc) za grupu.
+// PATCH - snimi/izmeni link beleški (Google Doc) za grupu.
 export async function PATCH(request: Request) {
   const staff = await requireStaff();
   if (!staff) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });

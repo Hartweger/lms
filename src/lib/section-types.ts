@@ -97,7 +97,7 @@ export interface AudioSection {
 
 export interface ExerciseSection {
   type: "exercise";
-  /** Tačan naslov vežbe iz `exercises` tabele iste lekcije — renderuje se inline ispod sadržaja. */
+  /** Tačan naslov vežbe iz `exercises` tabele iste lekcije - renderuje se inline ispod sadržaja. */
   title: string;
 }
 

@@ -27,7 +27,7 @@ export async function POST(request: Request) {
       from: "Hartweger <kurs@hartweger.rs>",
       to: "info@hartweger.rs",
       replyTo: email,
-      subject: `Kontakt forma: ${category} — ${name}`,
+      subject: `Kontakt forma: ${category} - ${name}`,
       text: [
         `Ime: ${name}`,
         `Email: ${email}`,

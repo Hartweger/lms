@@ -6,7 +6,7 @@ const FROM = "Hartweger <kurs@hartweger.rs>";
 
 function getResend() {
   if (!process.env.RESEND_API_KEY) {
-    console.warn("[email] RESEND_API_KEY not set — emails disabled");
+    console.warn("[email] RESEND_API_KEY not set - emails disabled");
     return null;
   }
   return new Resend(process.env.RESEND_API_KEY);
@@ -69,7 +69,7 @@ export async function sendWelcomeEmail(
       </div>
 
       <p style="font-size: 13px; color: #999; line-height: 1.5; margin: 0 0 8px;">
-        Prijava je bez lozinke — uneseš mejl kojim si kupio/la kurs i stigne ti link za ulazak.
+        Prijava je bez lozinke - uneseš mejl kojim si kupio/la kurs i stigne ti link za ulazak.
       </p>
 
       <p style="font-size: 13px; color: #999; line-height: 1.5; margin: 0 0 8px;">
@@ -80,7 +80,7 @@ export async function sendWelcomeEmail(
     </div>
 
     <div style="text-align: center; padding: 20px; font-size: 12px; color: #bbb;">
-      <p style="margin: 0;">Hartweger — Škola nemačkog jezika</p>
+      <p style="margin: 0;">Hartweger - Škola nemačkog jezika</p>
       <p style="margin: 4px 0 0;"><a href="mailto:info@hartweger.rs" style="color: #bbb; text-decoration: none;">info@hartweger.rs</a></p>
     </div>
   </div>
@@ -144,7 +144,7 @@ export async function sendCourseCompletedEmail(
       <div style="background: #f8fcfd; border-radius: 8px; padding: 16px; margin: 20px 0; text-align: center;">
         <p style="font-size: 14px; color: #666; margin: 0; font-style: italic;">
           „Übung macht den Meister"<br>
-          <span style="font-size: 12px; color: #999;">— Vežba čini majstora</span>
+          <span style="font-size: 12px; color: #999;">- Vežba čini majstora</span>
         </p>
       </div>
 
@@ -157,7 +157,7 @@ export async function sendCourseCompletedEmail(
     </div>
 
     <div style="text-align: center; padding: 20px; font-size: 12px; color: #bbb;">
-      <p style="margin: 0;">Hartweger — Škola nemačkog jezika</p>
+      <p style="margin: 0;">Hartweger - Škola nemačkog jezika</p>
     </div>
   </div>
 </body>
@@ -229,7 +229,7 @@ export async function sendInactivityReminder(
     </div>
 
     <div style="text-align: center; padding: 20px; font-size: 12px; color: #bbb;">
-      <p style="margin: 0;">Hartweger — Škola nemačkog jezika</p>
+      <p style="margin: 0;">Hartweger - Škola nemačkog jezika</p>
     </div>
   </div>
 </body>
@@ -242,7 +242,7 @@ export async function sendInactivityReminder(
   }
 }
 
-// Blokovi sa podacima za uplatu — dele ih mejl sa instrukcijama i podsetnici za uplatu.
+// Blokovi sa podacima za uplatu - dele ih mejl sa instrukcijama i podsetnici za uplatu.
 function uplatnicaBlockHtml(totalRsd: number, orderNumber: string, ipsQrUrl?: string) {
   return `
       <div style="background: #f8fcfd; border-left: 3px solid #4fb1d3; border-radius: 6px; padding: 14px 16px; margin: 0 0 20px;">
@@ -334,7 +334,7 @@ export async function sendPaymentInstructionsEmail(
       from: FROM,
       to,
       replyTo: "info@hartweger.rs",
-      subject: `Narudžbina #${orderNumber} — instrukcije za uplatu`,
+      subject: `Narudžbina #${orderNumber} - instrukcije za uplatu`,
       html: `
 <!DOCTYPE html>
 <html lang="sr">
@@ -365,7 +365,7 @@ export async function sendPaymentInstructionsEmail(
     </div>
 
     <div style="text-align: center; padding: 20px; font-size: 12px; color: #bbb;">
-      <p style="margin: 0;">Hartweger — Škola nemačkog jezika</p>
+      <p style="margin: 0;">Hartweger - Škola nemačkog jezika</p>
       <p style="margin: 4px 0 0;"><a href="mailto:info@hartweger.rs" style="color: #bbb; text-decoration: none;">info@hartweger.rs</a></p>
     </div>
   </div>
@@ -400,11 +400,11 @@ export async function sendUplataReminderEmail(o: {
       ? uplatnicaBlockHtml(o.totalRsd, o.orderNumber, o.ipsQrUrl)
       : paypalBlockHtml(o.paypalEur);
     const uvod = o.stage === 1
-      ? `Pre par dana si naručio/la kurs <strong>${esc(o.courseTitle)}</strong> (narudžbina #${esc(o.orderNumber)}), a uplatu još nismo videli — pa evo malog podsetnika sa svim podacima:`
+      ? `Pre par dana si naručio/la kurs <strong>${esc(o.courseTitle)}</strong> (narudžbina #${esc(o.orderNumber)}), a uplatu još nismo videli - pa evo malog podsetnika sa svim podacima:`
       : `Tvoja narudžbina za <strong>${esc(o.courseTitle)}</strong> (#${esc(o.orderNumber)}) i dalje čeka uplatu, pa se javljamo poslednji put da proverimo treba li ti nešto:`;
     const karticaAlt = o.stage === 2
       ? `<p style="font-size:14px;line-height:1.6;color:#444;margin:0 0 16px;">
-        Ako ti je jednostavnije, isti kurs možeš platiti i <a href="${SITE_URL}/kupovina/${esc(o.courseSlug)}" style="color:#4fb1d3;">karticom online</a> — pristup se tada aktivira odmah.
+        Ako ti je jednostavnije, isti kurs možeš platiti i <a href="${SITE_URL}/kupovina/${esc(o.courseSlug)}" style="color:#4fb1d3;">karticom online</a> - pristup se tada aktivira odmah.
       </p>`
       : "";
     await resend.emails.send({
@@ -412,8 +412,8 @@ export async function sendUplataReminderEmail(o: {
       to: o.email,
       replyTo: "info@hartweger.rs",
       subject: o.stage === 1
-        ? `Podsetnik — čekamo tvoju uplatu za narudžbinu #${o.orderNumber} 🙂`
-        : `Tvoje mesto na kursu još čeka — narudžbina #${o.orderNumber}`,
+        ? `Podsetnik - čekamo tvoju uplatu za narudžbinu #${o.orderNumber} 🙂`
+        : `Tvoje mesto na kursu još čeka - narudžbina #${o.orderNumber}`,
       html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
 <body style="font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a2e;background:#f8f9fa;margin:0;padding:0;">
   <div style="max-width:520px;margin:0 auto;padding:40px 20px;">
@@ -426,15 +426,15 @@ export async function sendUplataReminderEmail(o: {
       <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 16px;">${uvod}</p>
       ${paymentBlock}
       <p style="font-size:13px;line-height:1.6;color:#888;margin:0 0 16px;">
-        ✅ Ako si uplatu već poslao/la, slobodno ignoriši ovaj mejl — uplate putuju 1-3 radna dana, a potvrda i pristup stižu čim je vidimo.
+        ✅ Ako si uplatu već poslao/la, slobodno ignoriši ovaj mejl - uplate putuju 1-3 radna dana, a potvrda i pristup stižu čim je vidimo.
       </p>
       ${karticaAlt}
       <p style="font-size:14px;line-height:1.6;color:#444;margin:0 0 8px;">
-        Imaš pitanje ili želiš drugačiji način plaćanja? Samo odgovori na ovaj mejl — tu smo.
+        Imaš pitanje ili želiš drugačiji način plaćanja? Samo odgovori na ovaj mejl - tu smo.
       </p>
-      <p style="font-size:14px;color:#444;margin:0;">— Hartweger tim</p>
+      <p style="font-size:14px;color:#444;margin:0;">- Hartweger tim</p>
     </div>
-    <div style="text-align:center;padding:20px;font-size:12px;color:#bbb;"><p style="margin:0;">Hartweger — Škola nemačkog jezika · hartweger.rs</p></div>
+    <div style="text-align:center;padding:20px;font-size:12px;color:#bbb;"><p style="margin:0;">Hartweger - Škola nemačkog jezika · hartweger.rs</p></div>
   </div>
 </body></html>`,
     });
@@ -458,7 +458,7 @@ export async function sendGrupniWelcomeEmail(
 <p style="font-size:13px;color:#999;text-align:center;margin:0 0 16px;">Isti Meet link važi za sve časove. Termin ti stiže i u Google kalendar.</p>`
       : `<p style="font-size:14px;color:#666;margin:0 0 16px;">Link za Google Meet i raspored stižu ti uskoro.</p>`;
     const notesRow = opts.notesUrl
-      ? `<p style="font-size:14px;color:#444;margin:0 0 16px;">📝 <a href="${esc(opts.notesUrl)}" style="color:#4fb1d3;">Beleške sa časova</a> — profesor/ka ih popunjava posle svakog časa.</p>`
+      ? `<p style="font-size:14px;color:#444;margin:0 0 16px;">📝 <a href="${esc(opts.notesUrl)}" style="color:#4fb1d3;">Beleške sa časova</a> - profesor/ka ih popunjava posle svakog časa.</p>`
       : "";
     const profRow = opts.profIme ? `<p style="font-size:15px;color:#444;margin:0 0 16px;"><strong>Profesor/ka:</strong> ${esc(opts.profIme)}</p>` : "";
     await resend.emails.send({
@@ -481,12 +481,12 @@ export async function sendGrupniWelcomeEmail(
       ${notesRow}
       <div style="background:#f8fcfd;border-left:3px solid #4fb1d3;border-radius:6px;padding:14px 16px;margin:0 0 20px;">
         <p style="font-size:14px;color:#1a1a2e;margin:0 0 6px;">📚 Video lekcije i materijali te čekaju na platformi: <a href="${SITE_URL}/prijava" style="color:#4fb1d3;">hartweger.rs/prijava</a></p>
-        <p style="font-size:13px;color:#888;margin:0;">Prijava je bez lozinke — uneseš mejl kojim si se upisao/la i stigne ti link za ulazak. Pristup platformi važi godinu dana.</p>
+        <p style="font-size:13px;color:#888;margin:0;">Prijava je bez lozinke - uneseš mejl kojim si se upisao/la i stigne ti link za ulazak. Pristup platformi važi godinu dana.</p>
       </div>
       <p style="font-size:15px;color:#444;margin:0;">Vidimo se na času!<br>Hartweger tim</p>
     </div>
     <div style="text-align:center;padding:20px;font-size:12px;color:#bbb;">
-      <p style="margin:0;">Hartweger — Škola nemačkog jezika</p>
+      <p style="margin:0;">Hartweger - Škola nemačkog jezika</p>
       <p style="margin:4px 0 0;"><a href="mailto:info@hartweger.rs" style="color:#bbb;text-decoration:none;">info@hartweger.rs</a></p>
     </div>
   </div>
@@ -536,7 +536,7 @@ export async function sendNextLevelOffer(
       from: FROM,
       to,
       replyTo: "info@hartweger.rs",
-      subject: `Nastavi nemački — upiši ${opts.nextNivo}`,
+      subject: `Nastavi nemački - upiši ${opts.nextNivo}`,
       html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
 <body style="font-family:sans-serif;line-height:1.6;color:#222">
 <h2>Bravo${ime ? ", " + esc(ime) : ""}! 🎉</h2>
@@ -564,12 +564,12 @@ export async function sendProfNewStudentEmail(
       from: FROM,
       to: profEmail,
       replyTo: "info@hartweger.rs",
-      subject: `Novi polaznik — grupni ${opts.nivo}`,
+      subject: `Novi polaznik - grupni ${opts.nivo}`,
       html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
 <body style="font-family:sans-serif;line-height:1.6;color:#222">
 <p>Zdravo${ime ? ", " + esc(ime) : ""}!</p>
 <p>Upisao/la se novi polaznik u tvoju grupu <strong>${esc(opts.nivo)}</strong>:</p>
-<p><strong>Ime:</strong> ${esc(opts.studentName || "—")}<br>
+<p><strong>Ime:</strong> ${esc(opts.studentName || "-")}<br>
 <strong>Mejl:</strong> ${esc(opts.studentEmail)}</p>
 <p>Dodat/a je na termin u tvom Google kalendaru i u tvoj spisak (GRP tab).</p>
 <p style="margin-top:20px">Hartweger tim</p>
@@ -598,7 +598,7 @@ export async function sendIndividualWelcomeEmail(
     const platformRow = opts.hasPlatform
       ? `<div style="background:#f8fcfd;border-left:3px solid #4fb1d3;border-radius:6px;padding:14px 16px;margin:0 0 20px;">
         <p style="font-size:14px;color:#1a1a2e;margin:0 0 6px;">📚 Video lekcije i materijali te čekaju na platformi: <a href="${SITE_URL}/prijava" style="color:#4fb1d3;">hartweger.rs/prijava</a></p>
-        <p style="font-size:13px;color:#888;margin:0;">Prijava je bez lozinke — uneseš mejl kojim si kupio/la kurs i stigne ti link za ulazak.</p>
+        <p style="font-size:13px;color:#888;margin:0;">Prijava je bez lozinke - uneseš mejl kojim si kupio/la kurs i stigne ti link za ulazak.</p>
       </div>`
       : "";
     await resend.emails.send({
@@ -623,7 +623,7 @@ export async function sendIndividualWelcomeEmail(
       <p style="font-size:15px;color:#444;margin:0;">Vidimo se na času!<br>Hartweger tim</p>
     </div>
     <div style="text-align:center;padding:20px;font-size:12px;color:#bbb;">
-      <p style="margin:0;">Hartweger — Škola nemačkog jezika</p>
+      <p style="margin:0;">Hartweger - Škola nemačkog jezika</p>
       <p style="margin:4px 0 0;"><a href="mailto:info@hartweger.rs" style="color:#bbb;text-decoration:none;">info@hartweger.rs</a></p>
     </div>
   </div>
@@ -648,12 +648,12 @@ export async function sendProfNewIndividualStudentEmail(
       from: FROM,
       to: profEmail,
       replyTo: "info@hartweger.rs",
-      subject: `Novi individualni polaznik${opts.nivo ? " — " + opts.nivo : ""}`,
+      subject: `Novi individualni polaznik${opts.nivo ? " - " + opts.nivo : ""}`,
       html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
 <body style="font-family:sans-serif;line-height:1.6;color:#222">
 <p>Zdravo${ime ? ", " + esc(ime) : ""}!</p>
 <p>Imaš novog individualnog polaznika (${opts.nivo ? `<strong>${esc(opts.nivo)}</strong>, ` : ""}paket ${opts.lessons} časova):</p>
-<p><strong>Ime:</strong> ${esc(opts.studentName || "—")}<br>
+<p><strong>Ime:</strong> ${esc(opts.studentName || "-")}<br>
 <strong>Mejl:</strong> ${esc(opts.studentEmail)}</p>
 ${notesRow}
 <p>Polaznik zakazuje termine preko tvog kalendara. Održane časove upisuješ na platformi.</p>
@@ -711,10 +711,10 @@ export async function sendHonorarSummaryEmail(
     await resend.emails.send({
       from: FROM,
       to: ["info@hartweger.rs", "natasa@hartweger.rs"],
-      subject: `Honorari ${label} — ukupno ${fmt(grandTotal)} din`,
+      subject: `Honorari ${label} - ukupno ${fmt(grandTotal)} din`,
       html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
 <body style="font-family:sans-serif;line-height:1.6;color:#222">
-<h2>Honorari — ${esc(label)}</h2>
+<h2>Honorari - ${esc(label)}</h2>
 <table style="border-collapse:collapse;font-size:14px">
 <thead><tr style="background:#f5f5f5"><th style="padding:4px 10px;text-align:left">Profesorka</th><th style="padding:4px 10px">ind</th><th style="padding:4px 10px">grp</th><th style="padding:4px 10px;text-align:right">din</th></tr></thead>
 <tbody>${trs}</tbody>
@@ -740,17 +740,17 @@ export async function sendOneLessonLeftEmail(
       ? `<p style="margin:24px 0"><a href="${esc(opts.courseUrl)}" style="background:#F78687;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:bold;display:inline-block">Pogledaj sledeći nivo</a></p>`
       : "";
     const nastavak = opts.nextLevelLabel
-      ? `Da ne praviš pauzu, nastavi na <strong>sledeći nivo (${esc(opts.nextLevelLabel)})</strong> — ili obnovi paket sa svojom profesorkom.`
+      ? `Da ne praviš pauzu, nastavi na <strong>sledeći nivo (${esc(opts.nextLevelLabel)})</strong> - ili obnovi paket sa svojom profesorkom.`
       : `Možeš da obnoviš paket sa svojom profesorkom i nastaviš dalje.`;
     await resend.emails.send({
       from: FROM,
       to,
       replyTo: "info@hartweger.rs",
-      subject: "Ostao ti je još jedan čas — nastavi nemački",
+      subject: "Ostao ti je još jedan čas - nastavi nemački",
       html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
 <body style="font-family:sans-serif;line-height:1.6;color:#222">
 <h2>Bravo${ime ? ", " + esc(ime) : ""}! 🎉</h2>
-<p>Skoro si na kraju paketa — ostao ti je <strong>još jedan</strong> individualni čas${opts.nivo ? ` (${esc(opts.nivo)})` : ""}.</p>
+<p>Skoro si na kraju paketa - ostao ti je <strong>još jedan</strong> individualni čas${opts.nivo ? ` (${esc(opts.nivo)})` : ""}.</p>
 <p>${nastavak}</p>
 ${cta}
 <p style="margin-top:20px">Vidimo se i dalje!<br>Hartweger tim</p>
@@ -769,12 +769,12 @@ export async function sendInteresNotification(nivo: string, email: string, ime: 
       from: FROM,
       to: ["info@hartweger.rs", "natasa@hartweger.rs"],
       replyTo: email,
-      subject: `Interes za sledeći termin — ${nivo}`,
+      subject: `Interes za sledeći termin - ${nivo}`,
       html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
 <body style="font-family:sans-serif;line-height:1.6">
 <h2>Novi interes za grupni termin</h2>
 <p><strong>Nivo:</strong> ${esc(nivo)}</p>
-<p><strong>Ime:</strong> ${esc(ime || "—")}</p>
+<p><strong>Ime:</strong> ${esc(ime || "-")}</p>
 <p><strong>Mejl:</strong> ${esc(email)}</p>
 <p>Grupa za ovaj nivo je trenutno popunjena. Kontaktiraj polaznika kad otvoriš novi termin.</p>
 </body></html>`,
@@ -784,7 +784,7 @@ export async function sendInteresNotification(nivo: string, email: string, ime: 
   }
 }
 
-// Trenutna notifikacija adminu (Nataši) čim stigne nova narudžbina — bez obzira na način plaćanja.
+// Trenutna notifikacija adminu (Nataši) čim stigne nova narudžbina - bez obzira na način plaćanja.
 export async function sendNewOrderAdminEmail(o: {
   orderNumber: string;
   fullName: string;
@@ -808,7 +808,7 @@ export async function sendNewOrderAdminEmail(o: {
       from: FROM,
       to: ["info@hartweger.rs", "natasa@hartweger.rs"],
       replyTo: o.email,
-      subject: `Nova narudžbina — ${o.fullName} · ${fmt(o.total)} din`,
+      subject: `Nova narudžbina - ${o.fullName} · ${fmt(o.total)} din`,
       html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
 <body style="font-family:sans-serif;line-height:1.6;color:#222;max-width:560px;margin:0 auto;padding:16px">
 <h2 style="margin:0 0 12px">🛒 Nova narudžbina</h2>
@@ -834,7 +834,7 @@ export async function sendNewOrderAdminEmail(o: {
   }
 }
 
-// Polazniku čija kartična kupovina nije prošla (odbijena ili nezavršena) — ponuda da pokuša ponovo.
+// Polazniku čija kartična kupovina nije prošla (odbijena ili nezavršena) - ponuda da pokuša ponovo.
 export async function sendCardRetryEmail(o: {
   email: string;
   fullName: string;
@@ -850,7 +850,7 @@ export async function sendCardRetryEmail(o: {
       from: FROM,
       to: o.email,
       replyTo: "info@hartweger.rs",
-      subject: "Kupovina nije prošla — pokušaj ponovo 🙂",
+      subject: "Kupovina nije prošla - pokušaj ponovo 🙂",
       html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
 <body style="font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a2e;background:#f8f9fa;margin:0;padding:0;">
   <div style="max-width:520px;margin:0 auto;padding:40px 20px;">
@@ -858,7 +858,7 @@ export async function sendCardRetryEmail(o: {
       <div style="text-align:center;margin-bottom:24px;"><img src="https://hartweger.rs/logo.jpg" alt="Hartweger" style="width:120px;height:auto;"/></div>
       <h1 style="font-size:20px;margin:0 0 16px;">Zdravo, ${esc(o.fullName || "")}!</h1>
       <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 16px;">
-        Primetili smo da tvoja kupovina kursa <strong>${esc(o.courseTitle)}</strong> nije prošla — plaćanje karticom nije uspelo da se završi.
+        Primetili smo da tvoja kupovina kursa <strong>${esc(o.courseTitle)}</strong> nije prošla - plaćanje karticom nije uspelo da se završi.
       </p>
       <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 20px;">
         To se ponekad desi (banka traži dodatnu potvrdu, istekla sesija…). Nije ti ništa naplaćeno. Možeš da pokušaš ponovo jednim klikom:
@@ -867,12 +867,12 @@ export async function sendCardRetryEmail(o: {
         <a href="${retryUrl}" style="display:inline-block;background:#4fb1d3;color:white;padding:14px 32px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;">Završi kupovinu</a>
       </div>
       <p style="font-size:14px;line-height:1.6;color:#444;margin:0 0 8px;">
-        Ako je bilo problema sa karticom ili želiš da platiš na drugi način (uplatnica), samo nam odgovori na ovaj mejl — rado pomažemo.
+        Ako je bilo problema sa karticom ili želiš da platiš na drugi način (uplatnica), samo nam odgovori na ovaj mejl - rado pomažemo.
       </p>
-      <p style="font-size:14px;color:#444;margin:0;">— Hartweger tim</p>
+      <p style="font-size:14px;color:#444;margin:0;">- Hartweger tim</p>
     </div>
     <div style="text-align:center;padding:20px;font-size:12px;color:#bbb;">
-      <p style="margin:0;">Hartweger — Škola nemačkog jezika · hartweger.rs</p>
+      <p style="margin:0;">Hartweger - Škola nemačkog jezika · hartweger.rs</p>
     </div>
   </div>
 </body></html>`,
@@ -910,11 +910,11 @@ export async function sendCardReminder2Email(o: {
         <a href="${retryUrl}" style="display:inline-block;background:#4fb1d3;color:white;padding:14px 32px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;">Završi upis</a>
       </div>
       <p style="font-size:14px;line-height:1.6;color:#444;margin:0 0 8px;">
-        Imaš pitanje ili želiš da platiš uplatnicom? Samo odgovori na ovaj mejl — tu smo.
+        Imaš pitanje ili želiš da platiš uplatnicom? Samo odgovori na ovaj mejl - tu smo.
       </p>
-      <p style="font-size:14px;color:#444;margin:0;">— Hartweger tim</p>
+      <p style="font-size:14px;color:#444;margin:0;">- Hartweger tim</p>
     </div>
-    <div style="text-align:center;padding:20px;font-size:12px;color:#bbb;"><p style="margin:0;">Hartweger — Škola nemačkog jezika · hartweger.rs</p></div>
+    <div style="text-align:center;padding:20px;font-size:12px;color:#bbb;"><p style="margin:0;">Hartweger - Škola nemačkog jezika · hartweger.rs</p></div>
   </div>
 </body></html>`,
     });
@@ -934,7 +934,7 @@ export async function sendOrderCancelledEmail(o: {
     const retryUrl = `${SITE_URL}/kupovina/${o.courseSlug}`;
     await resend.emails.send({
       from: FROM, to: o.email, replyTo: "info@hartweger.rs",
-      subject: "Porudžbina je otkazana — ali možeš ponovo kad god želiš",
+      subject: "Porudžbina je otkazana - ali možeš ponovo kad god želiš",
       html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
 <body style="font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a2e;background:#f8f9fa;margin:0;padding:0;">
   <div style="max-width:520px;margin:0 auto;padding:40px 20px;">
@@ -945,14 +945,14 @@ export async function sendOrderCancelledEmail(o: {
         Tvoja porudžbina za <strong>${esc(o.courseTitle)}</strong> nije plaćena, pa smo je zatvorili. Ništa ti nije naplaćeno.
       </p>
       <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 20px;">
-        Ako se predomisliš, uvek možeš da se upišeš ponovo — bićemo tu:
+        Ako se predomisliš, uvek možeš da se upišeš ponovo - bićemo tu:
       </p>
       <div style="text-align:center;margin:24px 0;">
         <a href="${retryUrl}" style="display:inline-block;background:#4fb1d3;color:white;padding:14px 32px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;">Pogledaj kurs</a>
       </div>
-      <p style="font-size:14px;color:#444;margin:0;">— Hartweger tim</p>
+      <p style="font-size:14px;color:#444;margin:0;">- Hartweger tim</p>
     </div>
-    <div style="text-align:center;padding:20px;font-size:12px;color:#bbb;"><p style="margin:0;">Hartweger — Škola nemačkog jezika · hartweger.rs</p></div>
+    <div style="text-align:center;padding:20px;font-size:12px;color:#bbb;"><p style="margin:0;">Hartweger - Škola nemačkog jezika · hartweger.rs</p></div>
   </div>
 </body></html>`,
     });
@@ -962,7 +962,7 @@ export async function sendOrderCancelledEmail(o: {
   }
 }
 
-// Aktivacioni nudge: polaznik ima pristup ali nije otvorio nijednu lekciju — poziv da započne.
+// Aktivacioni nudge: polaznik ima pristup ali nije otvorio nijednu lekciju - poziv da započne.
 export async function sendActivationNudge(o: {
   email: string; name: string; courseTitle: string; lessonId: string | null; lessonTitle: string | null;
 }) {
@@ -980,18 +980,18 @@ export async function sendActivationNudge(o: {
       <div style="text-align:center;margin-bottom:24px;"><img src="https://hartweger.rs/logo.jpg" alt="Hartweger" style="width:120px;height:auto;"/></div>
       <h1 style="font-size:20px;margin:0 0 16px;">Zdravo, ${esc(o.name || "")}!</h1>
       <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 16px;">
-        Tvoj pristup kursu <strong>${esc(o.courseTitle)}</strong> je aktivan, ali primetili smo da još nisi započeo/la. Najteži korak je prvi — a traje samo par minuta 🙂
+        Tvoj pristup kursu <strong>${esc(o.courseTitle)}</strong> je aktivan, ali primetili smo da još nisi započeo/la. Najteži korak je prvi - a traje samo par minuta 🙂
       </p>
       ${o.lessonTitle ? `<div style="background:#f8fcfd;border-left:3px solid #4fb1d3;border-radius:6px;padding:14px 16px;margin:0 0 20px;"><div style="font-size:12px;color:#999;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">Prva lekcija</div><div style="font-size:14px;color:#1a1a2e;">${esc(o.lessonTitle)}</div></div>` : ""}
       <div style="text-align:center;margin:24px 0;">
         <a href="${startUrl}" style="display:inline-block;background:#4fb1d3;color:white;padding:14px 32px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;">Započni prvu lekciju</a>
       </div>
       <p style="font-size:14px;line-height:1.6;color:#444;margin:0 0 8px;">
-        Ako ti nešto nije jasno ili ti treba pomoć oko prvog koraka, samo odgovori na ovaj mejl — tu smo.
+        Ako ti nešto nije jasno ili ti treba pomoć oko prvog koraka, samo odgovori na ovaj mejl - tu smo.
       </p>
-      <p style="font-size:14px;color:#444;margin:0;">— Hartweger tim</p>
+      <p style="font-size:14px;color:#444;margin:0;">- Hartweger tim</p>
     </div>
-    <div style="text-align:center;padding:20px;font-size:12px;color:#bbb;"><p style="margin:0;">Hartweger — Škola nemačkog jezika · hartweger.rs</p></div>
+    <div style="text-align:center;padding:20px;font-size:12px;color:#bbb;"><p style="margin:0;">Hartweger - Škola nemačkog jezika · hartweger.rs</p></div>
   </div>
 </body></html>`,
     });
@@ -1017,7 +1017,7 @@ export async function sendExpiryReminder(o: {
 
     const couponBlock = `
       <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 16px;">
-        Ako želiš da nastaviš, možeš da <strong>obnoviš pristup na još godinu dana</strong> — i to uz <strong>50% popusta</strong> sa kodom:
+        Ako želiš da nastaviš, možeš da <strong>obnoviš pristup na još godinu dana</strong> - i to uz <strong>50% popusta</strong> sa kodom:
       </p>
       <div style="text-align:center;margin:0 0 20px;">
         <span style="display:inline-block;background:#fff7ed;border:1px dashed #f59e0b;color:#b45309;font-weight:700;font-size:18px;letter-spacing:1px;padding:10px 20px;border-radius:8px;">OBNOVI50</span>
@@ -1031,7 +1031,7 @@ export async function sendExpiryReminder(o: {
 
     const noCouponBlock = `
       <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 16px;">
-        Ako želiš da nastaviš ili pređeš na sledeći nivo, javi nam se — dogovorićemo najbolji sledeći korak za tebe.
+        Ako želiš da nastaviš ili pređeš na sledeći nivo, javi nam se - dogovorićemo najbolji sledeći korak za tebe.
       </p>
       <div style="text-align:center;margin:24px 0;">
         <a href="mailto:info@hartweger.rs" style="display:inline-block;background:#4fb1d3;color:white;padding:14px 32px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;">Javi nam se</a>
@@ -1040,7 +1040,7 @@ export async function sendExpiryReminder(o: {
     await resend.emails.send({
       from: FROM, to: o.email, replyTo: "info@hartweger.rs",
       subject: withCoupon
-        ? `Tvoj pristup kursu ističe ${datum} — obnovi sa 50% popusta`
+        ? `Tvoj pristup kursu ističe ${datum} - obnovi sa 50% popusta`
         : `Tvoj pristup materijalima ističe ${datum}`,
       html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
 <body style="font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a2e;background:#f8f9fa;margin:0;padding:0;">
@@ -1052,9 +1052,9 @@ export async function sendExpiryReminder(o: {
         Tvoj pristup materijalima na platformi za <strong>${esc(o.courseTitle)}</strong> ističe <strong>${datum}</strong> (za ${daysLeft} ${daysLeft === 1 ? "dan" : "dana"}). Posle toga lekcije više neće biti dostupne.
       </p>
       ${withCoupon ? couponBlock : noCouponBlock}
-      <p style="font-size:14px;color:#444;margin:0;">— Hartweger tim</p>
+      <p style="font-size:14px;color:#444;margin:0;">- Hartweger tim</p>
     </div>
-    <div style="text-align:center;padding:20px;font-size:12px;color:#bbb;"><p style="margin:0;">Hartweger — Škola nemačkog jezika · hartweger.rs</p></div>
+    <div style="text-align:center;padding:20px;font-size:12px;color:#bbb;"><p style="margin:0;">Hartweger - Škola nemačkog jezika · hartweger.rs</p></div>
   </div>
 </body></html>`,
     });
@@ -1064,7 +1064,7 @@ export async function sendExpiryReminder(o: {
   }
 }
 
-// Zamolnica aktivnom polazniku da podeli utisak (Google forma) — radi na zadržavanju + društvenom dokazu.
+// Zamolnica aktivnom polazniku da podeli utisak (Google forma) - radi na zadržavanju + društvenom dokazu.
 const REVIEW_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdkhFGw1YN0A6fQp2xvcqrqpSGbUEmcpUHtfLRCi3PagI0Ksw/viewform";
 export async function sendReviewRequest(o: { email: string; name: string }) {
   try {
@@ -1080,17 +1080,17 @@ export async function sendReviewRequest(o: { email: string; name: string }) {
       <div style="text-align:center;margin-bottom:24px;"><img src="https://hartweger.rs/logo.jpg" alt="Hartweger" style="width:120px;height:auto;"/></div>
       <h1 style="font-size:20px;margin:0 0 16px;">Zdravo, ${esc(o.name || "")}!</h1>
       <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 16px;">
-        Vidimo da redovno učiš i napreduješ — bravo! 🎉 Ako ti se kurs dopada, znači nam mnogo da čujemo tvoj utisak.
+        Vidimo da redovno učiš i napreduješ - bravo! 🎉 Ako ti se kurs dopada, znači nam mnogo da čujemo tvoj utisak.
       </p>
       <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 20px;">
-        Treba ti samo minut — popuni kratku formu (i pomozi nekom ko se još dvoumi da krene):
+        Treba ti samo minut - popuni kratku formu (i pomozi nekom ko se još dvoumi da krene):
       </p>
       <div style="text-align:center;margin:24px 0;">
         <a href="${REVIEW_FORM_URL}" style="display:inline-block;background:#4fb1d3;color:white;padding:14px 32px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;">Podeli utisak</a>
       </div>
-      <p style="font-size:14px;color:#444;margin:0;">Hvala ti puno! — Hartweger tim</p>
+      <p style="font-size:14px;color:#444;margin:0;">Hvala ti puno! - Hartweger tim</p>
     </div>
-    <div style="text-align:center;padding:20px;font-size:12px;color:#bbb;"><p style="margin:0;">Hartweger — Škola nemačkog jezika · hartweger.rs</p></div>
+    <div style="text-align:center;padding:20px;font-size:12px;color:#bbb;"><p style="margin:0;">Hartweger - Škola nemačkog jezika · hartweger.rs</p></div>
   </div>
 </body></html>`,
     });
@@ -1100,7 +1100,7 @@ export async function sendReviewRequest(o: { email: string; name: string }) {
   }
 }
 
-// Jutarnji pregled adminu (Nataši) — dnevni snapshot stanja iz Supabase.
+// Jutarnji pregled adminu (Nataši) - dnevni snapshot stanja iz Supabase.
 export type DailyBrief = {
   datum: string;
   noveNarudzbine: { broj: number; iznos: number };
@@ -1125,7 +1125,7 @@ export async function sendDailyAdminBrief(d: DailyBrief) {
     const neplaceneHtml = d.neplacene.length
       ? `<table style="border-collapse:collapse;font-size:13px;width:100%">
 <thead><tr style="background:#f5f5f5"><th style="padding:4px 8px;text-align:left">Narudžbina</th><th style="padding:4px 8px;text-align:left">Polaznik</th><th style="padding:4px 8px;text-align:right">din</th><th style="padding:4px 8px;text-align:left">Način</th><th style="padding:4px 8px;text-align:right">dana</th></tr></thead>
-<tbody>${d.neplacene.map((r) => `<tr><td style="padding:4px 8px">${esc(r.orderNumber)}</td><td style="padding:4px 8px">${esc(r.ime)}</td><td style="padding:4px 8px;text-align:right">${fmt(r.total)}</td><td style="padding:4px 8px">${esc(r.metod)}</td><td style="padding:4px 8px;text-align:right">${r.danaStaro}${r.danaStaro >= 21 ? " ⚠️" : ""}</td></tr>`).join("")}</tbody></table>${d.neplacene.some((r) => r.danaStaro >= 21) ? `<p style="margin:6px 0 0;font-size:12px;color:#b45309">⚠️ = starije od 21 dan, polaznik je dobio oba podsetnika — razmisli o ručnom otkazivanju u /admin/narudzbine.</p>` : ""}`
+<tbody>${d.neplacene.map((r) => `<tr><td style="padding:4px 8px">${esc(r.orderNumber)}</td><td style="padding:4px 8px">${esc(r.ime)}</td><td style="padding:4px 8px;text-align:right">${fmt(r.total)}</td><td style="padding:4px 8px">${esc(r.metod)}</td><td style="padding:4px 8px;text-align:right">${r.danaStaro}${r.danaStaro >= 21 ? " ⚠️" : ""}</td></tr>`).join("")}</tbody></table>${d.neplacene.some((r) => r.danaStaro >= 21) ? `<p style="margin:6px 0 0;font-size:12px;color:#b45309">⚠️ = starije od 21 dan, polaznik je dobio oba podsetnika - razmisli o ručnom otkazivanju u /admin/narudzbine.</p>` : ""}`
       : "";
 
     const isteknHtml = d.isticePristup.length
@@ -1149,7 +1149,7 @@ export async function sendDailyAdminBrief(d: DailyBrief) {
     await resend.emails.send({
       from: FROM,
       to: ["info@hartweger.rs", "natasa@hartweger.rs"],
-      subject: `Jutarnji pregled — ${d.datum}`,
+      subject: `Jutarnji pregled - ${d.datum}`,
       html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
 <body style="font-family:sans-serif;line-height:1.6;color:#222;max-width:640px;margin:0 auto;padding:16px">
 <h2 style="margin:0 0 4px">Dobro jutro ☀️</h2>
@@ -1158,15 +1158,15 @@ export async function sendDailyAdminBrief(d: DailyBrief) {
   <strong>Juče:</strong> ${d.noveNarudzbine.broj} ${d.noveNarudzbine.broj === 1 ? "nova narudžbina" : "novih narudžbina"} (${fmt(d.noveNarudzbine.iznos)} din naplaćeno) · ${d.neaktivnostPoslato} podsetnika za neaktivnost
 </div>
 ${sekcija(`Neplaćene narudžbine (${d.neplacene.length})`, neplaceneHtml, "Nema neplaćenih narudžbina.")}
-${sekcija(`Ističe pristup — narednih 7 dana (${d.isticePristup.length})`, isteknHtml, "Niko ne ističe ove nedelje.")}
-${sekcija(`Individualni — ostao 1 čas (${d.indOstao1.length})`, indHtml, "Nema paketa pri kraju.")}
-${sekcija(`Grupe se završavaju — narednih 14 dana (${d.grupeKraj.length})`, grupeHtml, "Nijedna grupa se ne završava uskoro.")}
+${sekcija(`Ističe pristup - narednih 7 dana (${d.isticePristup.length})`, isteknHtml, "Niko ne ističe ove nedelje.")}
+${sekcija(`Individualni - ostao 1 čas (${d.indOstao1.length})`, indHtml, "Nema paketa pri kraju.")}
+${sekcija(`Grupe se završavaju - narednih 14 dana (${d.grupeKraj.length})`, grupeHtml, "Nijedna grupa se ne završava uskoro.")}
 ${(d.bounces?.length ?? 0) > 0 ? sekcija(
-  `📪 Mejlovi koji nisu stigli — juče (${d.bounces!.length})`,
+  `📪 Mejlovi koji nisu stigli - juče (${d.bounces!.length})`,
   `<table style="border-collapse:collapse;font-size:13px;width:100%">
 <thead><tr style="background:#f5f5f5"><th style="padding:4px 8px;text-align:left">Mejl</th><th style="padding:4px 8px;text-align:left">Šta</th><th style="padding:4px 8px;text-align:left">Razlog</th></tr></thead>
 <tbody>${d.bounces!.map((b) => `<tr><td style="padding:4px 8px">${esc(b.email)}</td><td style="padding:4px 8px">${esc(b.tip)}</td><td style="padding:4px 8px;color:#888">${esc(b.razlog.slice(0, 80))}</td></tr>`).join("")}</tbody></table>
-<p style="margin:6px 0 0;font-size:12px;color:#b45309">Ovi polaznici NE dobijaju naše mejlove — proveri da li imaš drugi kontakt (telefon) ili ispravi mejl u /admin/studenti.</p>`,
+<p style="margin:6px 0 0;font-size:12px;color:#b45309">Ovi polaznici NE dobijaju naše mejlove - proveri da li imaš drugi kontakt (telefon) ili ispravi mejl u /admin/studenti.</p>`,
   "",
 ) : ""}
 <p style="margin-top:24px;font-size:12px;color:#aaa">Automatski izveštaj iz LMS-a. Detalji na <a href="https://www.hartweger.rs/admin" style="color:#4fb1d3;text-decoration:none">/admin</a>.</p>
@@ -1178,7 +1178,7 @@ ${(d.bounces?.length ?? 0) > 0 ? sekcija(
 }
 
 // Mejl #1 testiranje-funnela: rezultat testa znanja, šalje se ODMAH po testu iz LMS-a
-// (zamena za MailerLite automaciju "Einstufungstest - rezultat" — nju ugasiti u MailerLite-u).
+// (zamena za MailerLite automaciju "Einstufungstest - rezultat" - nju ugasiti u MailerLite-u).
 export async function sendTestResultEmail(
   to: string,
   opts: {
@@ -1198,18 +1198,18 @@ export async function sendTestResultEmail(
 
     const linkovi =
       `<div style="background:#f8fcfd;border-left:3px solid #4fb1d3;border-radius:6px;padding:14px 16px;margin:20px 0;font-size:14px;">` +
-      (opts.grupniUrl ? `<p style="margin:0 0 6px;">👥 <a href="${esc(opts.grupniUrl)}" style="color:#4fb1d3;">Grupni kurs ${nivo}</a> — grupe do 6 polaznika, uživo preko Google Meet-a</p>` : "") +
-      (opts.individualniUrl ? `<p style="margin:0 0 6px;">🎯 <a href="${esc(opts.individualniUrl)}" style="color:#4fb1d3;">Individualni kurs ${nivo}</a> — 1-na-1 sa profesorkom</p>` : "") +
+      (opts.grupniUrl ? `<p style="margin:0 0 6px;">👥 <a href="${esc(opts.grupniUrl)}" style="color:#4fb1d3;">Grupni kurs ${nivo}</a> - grupe do 6 polaznika, uživo preko Google Meet-a</p>` : "") +
+      (opts.individualniUrl ? `<p style="margin:0 0 6px;">🎯 <a href="${esc(opts.individualniUrl)}" style="color:#4fb1d3;">Individualni kurs ${nivo}</a> - 1-na-1 sa profesorkom</p>` : "") +
       (opts.videoUrl
-        ? `<p style="margin:0;">🎬 <a href="${esc(opts.videoUrl)}" style="color:#4fb1d3;">Video kurs ${videoLabel}</a> — uči svojim tempom</p>`
-        : `<p style="margin:0;">🎬 <a href="${esc(opts.kurseviUrl)}" style="color:#4fb1d3;">Video kursevi</a> — uči svojim tempom</p>`) +
+        ? `<p style="margin:0;">🎬 <a href="${esc(opts.videoUrl)}" style="color:#4fb1d3;">Video kurs ${videoLabel}</a> - uči svojim tempom</p>`
+        : `<p style="margin:0;">🎬 <a href="${esc(opts.kurseviUrl)}" style="color:#4fb1d3;">Video kursevi</a> - uči svojim tempom</p>`) +
       `</div>`;
 
     await resend.emails.send({
       from: FROM,
       to,
       replyTo: "info@hartweger.rs",
-      subject: `Tvoj rezultat testa znanja — nivo ${opts.nivo}`,
+      subject: `Tvoj rezultat testa znanja - nivo ${opts.nivo}`,
       html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
 <body style="font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a2e;background:#f8f9fa;margin:0;padding:0;">
   <div style="max-width:520px;margin:0 auto;padding:40px 20px;">
@@ -1229,12 +1229,12 @@ export async function sendTestResultEmail(
       </p>
       ${linkovi}
       <p style="font-size:14px;line-height:1.6;color:#444;margin:0 0 8px;">
-        Ako nisi siguran/na šta ti najviše odgovara, samo odgovori na ovaj mejl — rado pomažemo da izabereš.
+        Ako nisi siguran/na šta ti najviše odgovara, samo odgovori na ovaj mejl - rado pomažemo da izabereš.
       </p>
       <p style="font-size:14px;color:#444;margin:16px 0 0;">Srdačan pozdrav,<br>Nataša Hartweger</p>
     </div>
     <div style="text-align:center;padding:20px;font-size:12px;color:#bbb;">
-      <p style="margin:0;">Hartweger — Škola nemačkog jezika · hartweger.rs</p>
+      <p style="margin:0;">Hartweger - Škola nemačkog jezika · hartweger.rs</p>
       <p style="margin:4px 0 0;">Dobijaš ovaj mejl jer si uradio/la test znanja na hartweger.rs. <a href="${odjavaUrl(to)}" style="color:#bbb;">Odjavi se od ponuda</a></p>
     </div>
   </div>
@@ -1270,11 +1270,11 @@ export async function sendTestFunnelEmail(
 
     const linkovi =
       `<div style="background:#f8fcfd;border-left:3px solid #4fb1d3;border-radius:6px;padding:14px 16px;margin:20px 0;font-size:14px">` +
-      (opts.grupniUrl ? `<p style="margin:0 0 6px">👥 <a href="${esc(opts.grupniUrl)}" style="color:#4fb1d3">Grupni kurs ${nivo}</a> — grupe do 6 polaznika</p>` : "") +
-      (opts.individualniUrl ? `<p style="margin:0 0 6px">🎯 <a href="${esc(opts.individualniUrl)}" style="color:#4fb1d3">Individualni kurs ${nivo}</a> — 1-na-1 sa profesorkom</p>` : "") +
+      (opts.grupniUrl ? `<p style="margin:0 0 6px">👥 <a href="${esc(opts.grupniUrl)}" style="color:#4fb1d3">Grupni kurs ${nivo}</a> - grupe do 6 polaznika</p>` : "") +
+      (opts.individualniUrl ? `<p style="margin:0 0 6px">🎯 <a href="${esc(opts.individualniUrl)}" style="color:#4fb1d3">Individualni kurs ${nivo}</a> - 1-na-1 sa profesorkom</p>` : "") +
       (opts.videoUrl
-        ? `<p style="margin:0">🎬 <a href="${esc(opts.videoUrl)}" style="color:#4fb1d3">Video kurs ${videoLabel}</a> — uči svojim tempom</p>`
-        : `<p style="margin:0">🎬 <a href="${esc(opts.kurseviUrl)}" style="color:#4fb1d3">Video kursevi</a> — uči svojim tempom</p>`) +
+        ? `<p style="margin:0">🎬 <a href="${esc(opts.videoUrl)}" style="color:#4fb1d3">Video kurs ${videoLabel}</a> - uči svojim tempom</p>`
+        : `<p style="margin:0">🎬 <a href="${esc(opts.kurseviUrl)}" style="color:#4fb1d3">Video kursevi</a> - uči svojim tempom</p>`) +
       `</div>`;
 
     let subject: string;
@@ -1294,9 +1294,9 @@ export async function sendTestFunnelEmail(
       telo = `<p>Znamo da je odluka o kursu važna, pa delimo iskustva naših polaznika:</p>
 <blockquote style="border-left:3px solid #ddd;margin:14px 0;padding:4px 14px;color:#555;font-style:italic">„Konačno sam našla kurs koji je prilagođen mom tempu učenja."</blockquote>
 <blockquote style="border-left:3px solid #ddd;margin:14px 0;padding:4px 14px;color:#555;font-style:italic">„Profesorke su fantastične, sve je jasno objašnjeno."</blockquote>
-<p>Pridruži se i ti — tvoj nivo je <strong>${nivo}</strong>:</p>`;
+<p>Pridruži se i ti - tvoj nivo je <strong>${nivo}</strong>:</p>`;
     } else {
-      subject = `Poslednja šansa — započni ${opts.nivo} ovog meseca`;
+      subject = `Poslednja šansa - započni ${opts.nivo} ovog meseca`;
       telo = `<p>Ovo je poslednji put da ti se javljamo u vezi sa rezultatom testa znanja.</p>
 <p>Tvoj preporučeni nivo je <strong>${nivo}</strong> i kursevi su dostupni odmah:</p>`;
     }

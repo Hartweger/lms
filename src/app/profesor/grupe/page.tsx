@@ -65,7 +65,7 @@ export default async function ProfesorGrupe({ searchParams }: { searchParams: Pr
     .in("id", userIds);
   const profileMap = new Map(profiles?.map((p) => [p.id, p]) ?? []);
 
-  // Lekcije po sadržajnom kursu grupe (prazan in() vraća prazno — bezbedno)
+  // Lekcije po sadržajnom kursu grupe (prazan in() vraća prazno - bezbedno)
   const { data: allLessons } = await admin
     .from("lessons").select("id, course_id").in("course_id", courseIds.length ? courseIds : ["__none__"]);
   const lessonsByCourse = new Map<string, Set<string>>();
@@ -144,7 +144,7 @@ export default async function ProfesorGrupe({ searchParams }: { searchParams: Pr
             {polaznici.map((s, i) => (
               <tr key={`${s.user_id}-${s.nivo}-${i}`} className="hover:bg-gray-50">
                 <td className="px-6 py-4">
-                  <div className="font-medium text-gray-900">{s.full_name || "—"}</div>
+                  <div className="font-medium text-gray-900">{s.full_name || "-"}</div>
                   <div className="text-xs text-gray-400">{s.email}</div>
                 </td>
                 <td className="px-6 py-4 text-gray-600">{s.nivo}</td>
@@ -160,7 +160,7 @@ export default async function ProfesorGrupe({ searchParams }: { searchParams: Pr
                   {s.last_activity ? new Date(s.last_activity).toLocaleDateString("sr-Latn") : "Nema aktivnosti"}
                 </td>
                 <td className="px-6 py-4 text-gray-400 text-sm">
-                  {s.enrolled_at ? new Date(s.enrolled_at).toLocaleDateString("sr-Latn") : "—"}
+                  {s.enrolled_at ? new Date(s.enrolled_at).toLocaleDateString("sr-Latn") : "-"}
                 </td>
               </tr>
             ))}

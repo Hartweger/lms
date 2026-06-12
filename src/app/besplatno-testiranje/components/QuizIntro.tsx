@@ -14,7 +14,7 @@ export default function QuizIntro({ onStart }: QuizIntroProps) {
         Testiraj svoj nivo nemačkog
       </h1>
       <p className="text-lg text-gray-600 mb-8 max-w-lg mx-auto">
-        Odgovori na pitanja i saznaj koji kurs je pravi za tebe. Bez registracije — rezultat odmah.
+        Odgovori na pitanja i saznaj koji kurs je pravi za tebe. Bez registracije - rezultat odmah.
       </p>
       <button
         onClick={onStart}

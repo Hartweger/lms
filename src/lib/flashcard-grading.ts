@@ -24,13 +24,13 @@ function levenshtein(a: string, b: string): number {
 /** Skup prihvatljivih odgovora za zadati smer. Član i množina su opcioni (dodaju se kao varijante). */
 function acceptedAnswers(card: FlashcardItem, dir: Direction): string[] {
   if (dir === "de-sr") return card.back.split("|").map((s) => s.trim());
-  // „front" može da nosi više oblika („üben, hat geübt") — prihvati svaki pojedinačno i ceo niz.
+  // „front" može da nosi više oblika („üben, hat geübt") - prihvati svaki pojedinačno i ceo niz.
   const forms = card.front.split(",").map((s) => s.trim()).filter(Boolean);
   const out = [...forms, card.front];
   if (card.article) for (const f of forms) out.push(`${card.article} ${f}`);
   if (card.plural) {
     out.push(card.plural);
-    // Pun rečnički oblik (jednina + množina) — baš ono što prikazujemo kao „Tačan odgovor".
+    // Pun rečnički oblik (jednina + množina) - baš ono što prikazujemo kao „Tačan odgovor".
     // normalize() svejedno skida zarez, pa pokriva i unos sa i bez zareza.
     for (const f of forms) {
       out.push(`${f}, ${card.plural}`);
@@ -53,7 +53,7 @@ export function gradeTyping(input: string, card: FlashcardItem, dir: Direction):
   const accepted = acceptedAnswers(card, dir).map(normalize);
   const ff = fullForm(card, dir);
   if (accepted.some((a) => a === inN)) return { status: "correct", fullForm: ff };
-  // „skoro" samo za reči od bar 4 slova — na kraćima je 1 greška preveliki udeo (npr. "da" vs "ja").
+  // „skoro" samo za reči od bar 4 slova - na kraćima je 1 greška preveliki udeo (npr. "da" vs "ja").
   if (accepted.some((a) => a.length >= 4 && levenshtein(a, inN) <= 1)) return { status: "almost", fullForm: ff };
   return { status: "wrong", fullForm: ff };
 }

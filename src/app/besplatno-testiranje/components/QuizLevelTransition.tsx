@@ -25,7 +25,7 @@ export default function QuizLevelTransition({
         {score >= 8 ? "🎉" : score >= 4 ? "👍" : "📊"}
       </div>
       <h2 className="text-2xl font-bold text-gray-900 mb-2">
-        {completedLevel} — {score}/10
+        {completedLevel} - {score}/10
       </h2>
       <div className="w-full bg-gray-100 rounded-full h-3 mb-6">
         <div

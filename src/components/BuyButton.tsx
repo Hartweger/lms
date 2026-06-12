@@ -15,7 +15,7 @@ interface Props {
 
 /**
  * CTA dugme "Kupi / Kupi kurs / Prijavi se" koje vodi na /kupovina/[slug].
- * Sajt nema klasičnu korpu — klik na ovo dugme je trenutak "Dodaj u korpu",
+ * Sajt nema klasičnu korpu - klik na ovo dugme je trenutak "Dodaj u korpu",
  * pa tu šaljemo Meta Pixel AddToCart događaj.
  */
 export default function BuyButton({ slug, className, contentId, contentName, value, currency = "RSD", children }: Props) {

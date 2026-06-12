@@ -3,12 +3,12 @@ import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "VoKuM metoda — Hartweger škola nemačkog jezika",
-  description: "VoKuM metoda — Vokabular, Komunikacija i Motivacija. Saznajte kako učimo nemački u Hartweger školi.",
+  title: "VoKuM metoda - Hartweger škola nemačkog jezika",
+  description: "VoKuM metoda - Vokabular, Komunikacija i Motivacija. Saznajte kako učimo nemački u Hartweger školi.",
   openGraph: {
-    images: [{ url: "/og/share.png", width: 1200, height: 630, alt: "Hartweger — Škola nemačkog jezika" }],
-    title: "VoKuM metoda — Hartweger škola nemačkog jezika",
-    description: "VoKuM metoda — Vokabular, Komunikacija i Motivacija.",
+    images: [{ url: "/og/share.png", width: 1200, height: 630, alt: "Hartweger - Škola nemačkog jezika" }],
+    title: "VoKuM metoda - Hartweger škola nemačkog jezika",
+    description: "VoKuM metoda - Vokabular, Komunikacija i Motivacija.",
   },
 };
 
@@ -20,13 +20,13 @@ export default function MetodologijaPage() {
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-10 md:gap-16">
           <div className="flex-1 text-center md:text-left">
             <h1 className="font-montserrat font-bold text-3xl md:text-5xl text-gray-900 mb-6 leading-tight">
-              VoKuM metoda — da konačno progovoriš nemački
+              VoKuM metoda - da konačno progovoriš nemački
             </h1>
             <p className="text-gray-600 text-lg leading-relaxed mb-4">
-              VoKabular, KomUnikacija i Motivacija — tri stvari koje zaista prave razliku u učenju nemačkog jezika.
+              VoKabular, KomUnikacija i Motivacija - tri stvari koje zaista prave razliku u učenju nemačkog jezika.
             </p>
             <p className="text-gray-500 text-base leading-relaxed">
-              Razvila sam VoKuM metodu na osnovu višegodišnjeg iskustva u nastavi i rada sa hiljadama polaznika. Umesto tradicionalnog pristupa gde se gramatika uči napamet, mi učimo jezik onako kako ga deca usvajaju — prirodno, kroz reči i komunikaciju.
+              Razvila sam VoKuM metodu na osnovu višegodišnjeg iskustva u nastavi i rada sa hiljadama polaznika. Umesto tradicionalnog pristupa gde se gramatika uči napamet, mi učimo jezik onako kako ga deca usvajaju - prirodno, kroz reči i komunikaciju.
             </p>
           </div>
           <div className="flex-shrink-0">
@@ -57,7 +57,7 @@ export default function MetodologijaPage() {
                   Sve počinje sa rečima. Dete prvo nauči reči, a zatim od njih sklapa rečenicu. Napamet naučene definicije o gramatičkim pravilima ne pomažu kada treba da kažeš da te boli glava ili želiš povišicu na poslu.
                 </p>
                 <p>
-                  Na kursu učiš razne tehnike za lakše pamćenje reči — od vizuelnih asocijacija, preko kontekstualnog učenja, do ponavljanja u intervalima. Cilj je da reči postanu deo tvog aktivnog rečnika, a ne da ih samo prepoznaješ u testu.
+                  Na kursu učiš razne tehnike za lakše pamćenje reči - od vizuelnih asocijacija, preko kontekstualnog učenja, do ponavljanja u intervalima. Cilj je da reči postanu deo tvog aktivnog rečnika, a ne da ih samo prepoznaješ u testu.
                 </p>
               </div>
             </div>
@@ -72,10 +72,10 @@ export default function MetodologijaPage() {
               <h2 className="font-montserrat font-bold text-2xl text-gray-900 mb-4">Komunikacija</h2>
               <div className="prose prose-lg text-gray-600">
                 <p>
-                  Naučene reči postaju vredne kroz praktičnu komunikaciju. Učimo kroz dijaloge u realnim situacijama — restorani, apoteke, banke, posao — i upoznajemo kulturu DACH zemalja.
+                  Naučene reči postaju vredne kroz praktičnu komunikaciju. Učimo kroz dijaloge u realnim situacijama - restorani, apoteke, banke, posao - i upoznajemo kulturu DACH zemalja.
                 </p>
                 <p>
-                  To čini razliku između dobre i loše komunikacije. Nije dovoljno znati gramatiku — treba znati kako da se snađeš u stvarnom životu, kako da vodiš razgovor, kako da izraziš mišljenje.
+                  To čini razliku između dobre i loše komunikacije. Nije dovoljno znati gramatiku - treba znati kako da se snađeš u stvarnom životu, kako da vodiš razgovor, kako da izraziš mišljenje.
                 </p>
               </div>
             </div>
@@ -93,7 +93,7 @@ export default function MetodologijaPage() {
                   Svakome je potrebna podrška i motivacija. Naš zajednički cilj je da uspešno progovoriš nemački jezik. Odustajanje nije opcija!
                 </p>
                 <p>
-                  Bilo da učiš sam uz video kurseve ili u grupi sa profesorom — nikada nisi prepušten sebi. Podrška zajednice, redovan feedback i jasna struktura kursa čine da ostaneš na pravom putu.
+                  Bilo da učiš sam uz video kurseve ili u grupi sa profesorom - nikada nisi prepušten sebi. Podrška zajednice, redovan feedback i jasna struktura kursa čine da ostaneš na pravom putu.
                 </p>
               </div>
             </div>
@@ -110,19 +110,19 @@ export default function MetodologijaPage() {
           <div className="space-y-4">
             <div className="flex items-start gap-4 bg-white rounded-xl p-5 shadow-sm">
               <span className="text-plava text-xl mt-0.5">&#10003;</span>
-              <p className="text-gray-700">Učiš jezik onako kako ga deca usvajaju — prvo reči, pa tek onda pravila</p>
+              <p className="text-gray-700">Učiš jezik onako kako ga deca usvajaju - prvo reči, pa tek onda pravila</p>
             </div>
             <div className="flex items-start gap-4 bg-white rounded-xl p-5 shadow-sm">
               <span className="text-plava text-xl mt-0.5">&#10003;</span>
-              <p className="text-gray-700">Komunikacija od prvog dana — ne čekaš da &ldquo;budeš spreman&rdquo;</p>
+              <p className="text-gray-700">Komunikacija od prvog dana - ne čekaš da &ldquo;budeš spreman&rdquo;</p>
             </div>
             <div className="flex items-start gap-4 bg-white rounded-xl p-5 shadow-sm">
               <span className="text-plava text-xl mt-0.5">&#10003;</span>
-              <p className="text-gray-700">Realne situacije umesto udžbeničkih primera — učiš ono što ćeš stvarno koristiti</p>
+              <p className="text-gray-700">Realne situacije umesto udžbeničkih primera - učiš ono što ćeš stvarno koristiti</p>
             </div>
             <div className="flex items-start gap-4 bg-white rounded-xl p-5 shadow-sm">
               <span className="text-plava text-xl mt-0.5">&#10003;</span>
-              <p className="text-gray-700">Stalna motivacija i podrška — nikada nisi sam u procesu učenja</p>
+              <p className="text-gray-700">Stalna motivacija i podrška - nikada nisi sam u procesu učenja</p>
             </div>
           </div>
         </div>

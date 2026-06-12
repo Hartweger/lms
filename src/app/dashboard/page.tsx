@@ -68,7 +68,7 @@ async function getCourseProgress(
       currentLessonId = firstUncompleted.id;
       currentLessonTitle = firstUncompleted.title;
     } else if (lessonList.length > 0) {
-      // All completed — show last lesson
+      // All completed - show last lesson
       const lastLesson = lessonList[lessonList.length - 1];
       currentLessonId = lastLesson.id;
       currentLessonTitle = lastLesson.title;
@@ -112,7 +112,7 @@ export default async function Dashboard() {
   let courseIds: string[] = [];
 
   if (isAdmin || isProfessor) {
-    // Admins and professors see all courses that actually have lessons —
+    // Admins and professors see all courses that actually have lessons -
     // this hides the sales/marketing shells (grupni/individualni/paket…),
     // which are purchasable products with no lesson content of their own.
     const { data: lessonRows } = await supabase
@@ -204,7 +204,7 @@ export default async function Dashboard() {
         <p className="text-sm text-gray-500 italic mt-1">
           „{quote.text_de}“
           {quote.show_translation && (
-            <span className="text-gray-400"> — {quote.text_sr}</span>
+            <span className="text-gray-400"> - {quote.text_sr}</span>
           )}
         </p>
       </div>
@@ -224,7 +224,7 @@ export default async function Dashboard() {
         />
       </div>
 
-      {/* NaKI — AI asistent za vežbanje */}
+      {/* NaKI - AI asistent za vežbanje */}
       <Link
         href="/naki"
         className="flex items-center gap-4 bg-white rounded-2xl p-4 border border-gray-100 hover:shadow-md hover:border-plava/30 transition-all mb-8"
@@ -233,7 +233,7 @@ export default async function Dashboard() {
         <div className="flex-1 min-w-0">
           <h3 className="font-bold text-sm text-gray-900">Vežbaj sa NaKI-jem</h3>
           <p className="text-xs text-gray-400 mt-0.5">
-            Postavi pitanje, vežbaj konverzaciju ili proveri rečenicu — NaKI odgovara odmah.
+            Postavi pitanje, vežbaj konverzaciju ili proveri rečenicu - NaKI odgovara odmah.
           </p>
         </div>
         <span className="inline-flex items-center gap-1 shrink-0 text-xs font-semibold text-plava bg-plava-light px-3 py-1.5 rounded-lg">

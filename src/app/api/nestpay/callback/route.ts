@@ -51,14 +51,14 @@ export async function POST(request: Request) {
   // Potpis je kriptografski verifikovan (banka potpisuje odgovor sa store_key), a ProcReturnCode
   // i oid su u potpisanim HASHPARAMS → uplata je zaista odobrena. To je dovoljan dokaz (isto kao
   // stari WP). Iznos koji se naplaćuje je naš (potpisan u request hash-u), pa ne zavisimo od
-  // echo-vanog params.amount. Server-side query je UKLONJEN — obarao se na IP/whitelist i lažno
+  // echo-vanog params.amount. Server-side query je UKLONJEN - obarao se na IP/whitelist i lažno
   // označavao uspele uplate kao neuspeh.
   await admin.from("orders").update({ nestpay_status: "charged" }).eq("id", order.id);
   await grantAccessForOrder(order.id);
-  await fiscalizeOrder(order.id); // fiskalni račun (kartica) — ne blokira pristup ako padne
+  await fiscalizeOrder(order.id); // fiskalni račun (kartica) - ne blokira pristup ako padne
 
-  // Meta Conversions API — server-side Purchase (dedup sa browser pixel-om preko event_id).
-  // Callback dolazi od banke (server-to-server), pa nemamo korisnikov fbp/fbc/IP — match ide
+  // Meta Conversions API - server-side Purchase (dedup sa browser pixel-om preko event_id).
+  // Callback dolazi od banke (server-to-server), pa nemamo korisnikov fbp/fbc/IP - match ide
   // preko hešovanog mejla. Best-effort: ne blokira redirect ako padne.
   await sendPurchaseEvent(order, { eventSourceUrl: `${base}/kupovina/hvala/${order.id}?status=ok` });
 

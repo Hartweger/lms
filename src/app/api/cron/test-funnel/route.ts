@@ -1,6 +1,6 @@
 // src/app/api/cron/test-funnel/route.ts
 // Testiranje-funnel: follow-up ponude posle testa znanja (zamena za Apps Script skenirajTestiranje).
-// Mejl #1 (rezultat) šalje LMS odmah po testu (sendTestResultEmail u /api/besplatno-testiranje) —
+// Mejl #1 (rezultat) šalje LMS odmah po testu (sendTestResultEmail u /api/besplatno-testiranje) -
 // ovde idu samo #2 (15 dana), #3 (30 dana) i #4 (45 dana posle testa).
 // Stop: čim osoba kupi bilo šta (orders completed, WC istorija u poslednjih godinu dana, ima pristup
 // kursu) ili se odjavi preko linka u mejlu (email_optouts).
@@ -11,9 +11,9 @@ import { funnelUrlsForNivo } from "@/lib/course-nivo";
 
 export const dynamic = "force-dynamic";
 
-const MAX_PER_RUN = 20; // Resend kvota (100/dan) — ostavi prostora drugim mejlovima
+const MAX_PER_RUN = 20; // Resend kvota (100/dan) - ostavi prostora drugim mejlovima
 const FUNNEL_START = "2026-05-25"; // od kada MailerLite šalje rezultat (mejl #1); starije testove ne diramo
-const MAX_TEST_AGE_DAYS = 75; // test stariji od ovoga je hladan lead — ne šaljemo
+const MAX_TEST_AGE_DAYS = 75; // test stariji od ovoga je hladan lead - ne šaljemo
 const INTERVAL_DANA = 15; // #2 na +15d, #3 na +30d, #4 na +45d od testa
 const MIN_GAP_DANA = 10; // minimalan razmak između dva funnel mejla istoj osobi
 
@@ -59,7 +59,7 @@ export async function GET(request: NextRequest) {
 
   const emails = [...latest.keys()];
 
-  // Odjavljeni preko linka u mejlu — ne dobijaju ništa.
+  // Odjavljeni preko linka u mejlu - ne dobijaju ništa.
   const { data: optouts } = await admin
     .from("email_optouts")
     .select("email")

@@ -14,7 +14,7 @@ describe("computeCourseProgress", () => {
     { user_id: "u2", course_id: "A" },
     { user_id: "u3", course_id: "A" },
     { user_id: "u4", course_id: "A" }, // 4 upisana na A
-    { user_id: "u1", course_id: "A" }, // duplikat pristupa — ne sme da se broji dvaput
+    { user_id: "u1", course_id: "A" }, // duplikat pristupa - ne sme da se broji dvaput
   ];
   const progress = [
     // u1 završio sve 4 (completed)

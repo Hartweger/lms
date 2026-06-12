@@ -27,7 +27,7 @@ const { data: lessons, error } = await sb.from("lessons")
 if (error) { console.error("ERR:", error.message); process.exit(1); }
 
 for (const l of lessons) {
-  const m = l.title.match(/^Modul\s*(\d+)\s*—\s*Reči$/);
+  const m = l.title.match(/^Modul\s*(\d+)\s*[—-]\s*Reči$/);
   if (!m) continue;
   const n = Number(m[1]);
   const file = path.join(__dirname, "flashcards", "pdf", `a1-1-lektion-${n}.pdf`);

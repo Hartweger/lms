@@ -43,7 +43,7 @@ describe("allocateOrderTotal", () => {
     expect(a.map((x) => x.amount)).toEqual([6000, 3000]);
     expect(a.reduce((s, x) => s + x.amount, 0)).toBe(9000);
   });
-  it("zaokruživanje ne gubi dinar — poslednja stavka pokupi ostatak", () => {
+  it("zaokruživanje ne gubi dinar - poslednja stavka pokupi ostatak", () => {
     const a = allocateOrderTotal(order(10000, [3000, 3000, 3000]));
     expect(a.reduce((s, x) => s + x.amount, 0)).toBe(10000);
   });
@@ -90,7 +90,7 @@ function fixture(overrides: Partial<FinansijeInput> = {}): FinansijeInput {
       // maj: individualni 14000 (Ivan, prof Hristina)
       { id: "o3", user_id: "ivan", created_at: "2026-05-10T10:00:00Z", total: 14000,
         items: [{ course_id: "c-ind", course_slug: "nemacki-1na1-a1", title: "1:1 A1", price: 14000 }] },
-      // jun: individualni obnova (Ivan, prof Hristina) — 2. mesec plaćanja → retencija 2
+      // jun: individualni obnova (Ivan, prof Hristina) - 2. mesec plaćanja → retencija 2
       { id: "o4", user_id: "ivan", created_at: "2026-06-10T10:00:00Z", total: 14000,
         items: [{ course_id: "c-ind", course_slug: "nemacki-1na1-a1", title: "1:1 A1", price: 14000 }] },
     ],
@@ -127,7 +127,7 @@ function fixture(overrides: Partial<FinansijeInput> = {}): FinansijeInput {
   };
 }
 
-describe("buildFinansije — P&L po mesecima", () => {
+describe("buildFinansije - P&L po mesecima", () => {
   it("prihod po kategoriji pada u pravi mesec", () => {
     const d = buildFinansije(fixture());
     const jun = d.months[5];
@@ -165,7 +165,7 @@ describe("buildFinansije — P&L po mesecima", () => {
   });
 });
 
-describe("buildFinansije — marže po kursevima", () => {
+describe("buildFinansije - marže po kursevima", () => {
   it("kurs: prihod − honorar − direktni troškovi", () => {
     const d = buildFinansije(fixture());
     const video = d.kursevi.find((k) => k.course_id === "c-video")!;
@@ -193,7 +193,7 @@ describe("buildFinansije — marže po kursevima", () => {
   });
 });
 
-describe("buildFinansije — grupe", () => {
+describe("buildFinansije - grupe", () => {
   it("zarada grupe = prihod članova − sesije × stopa", () => {
     const d = buildFinansije(fixture());
     const g = d.grupe.find((x) => x.group_id === "g1")!;
@@ -217,7 +217,7 @@ describe("buildFinansije — grupe", () => {
     const f = fixture();
     f.groups.push({ id: "g0", level: "A1.1", status: "zavrsena", max_seats: 6, professor_id: "p-katarina",
       purchasable_course_id: "c-grupni", session_time: "pon/sre 18h" });
-    // g0 namerno PRE g1 u groupMembers — bez fixa bi find() pokupio g0
+    // g0 namerno PRE g1 u groupMembers - bez fixa bi find() pokupio g0
     f.groupMembers = [{ group_id: "g0", user_id: "maja", status: "cancelled" }, ...f.groupMembers];
     const d = buildFinansije(f);
     expect(d.grupe.find((x) => x.group_id === "g1")!.prihod).toBe(6000);
@@ -225,7 +225,7 @@ describe("buildFinansije — grupe", () => {
   });
 });
 
-describe("buildFinansije — profesorke", () => {
+describe("buildFinansije - profesorke", () => {
   it("prihod profesorke: individualni preko order→enrollment, grupni preko njenih grupa", () => {
     const d = buildFinansije(fixture());
     const hristina = d.profesorke.find((p) => p.professor_id === "p-hristina")!;
@@ -334,7 +334,7 @@ describe("fillGroupCourseIds", () => {
   });
 });
 
-describe("buildFinansije — autorski procenti", () => {
+describe("buildFinansije - autorski procenti", () => {
   // Fixture sa video FSP kursom i Milicom kao autoricom (50%)
   function royaltyFixture(orderOverrides: Partial<FinansijeInput> = {}): FinansijeInput {
     return fixture({
@@ -379,7 +379,7 @@ describe("buildFinansije — autorski procenti", () => {
     expect(milica.prihod).toBe(24000);
     expect(milica.honorar).toBe(12000);
     expect(milica.neto).toBe(12000);
-    // Video kupci NISU njeni polaznici — retencija i aktivni ne računaju se za autorski prihod
+    // Video kupci NISU njeni polaznici - retencija i aktivni ne računaju se za autorski prihod
     expect(milica.retencijaMeseci).toBeNull();
     expect(milica.aktivniPolaznici).toBe(0);
   });
@@ -388,7 +388,7 @@ describe("buildFinansije — autorski procenti", () => {
     const d = buildFinansije(royaltyFixture({
       orders: [
         ...fixture().orders,
-        // doc1 kupuje FSP sa popustom — total 18000, ali price u items 24000
+        // doc1 kupuje FSP sa popustom - total 18000, ali price u items 24000
         { id: "o-fsp-popust", user_id: "doc1", created_at: "2026-06-15T10:00:00Z", total: 18000,
           items: [{ course_id: "c-fsp", course_slug: "fsp", title: "VIDEO FSP", price: 24000 }] },
       ],

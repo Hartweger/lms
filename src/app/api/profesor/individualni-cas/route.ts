@@ -52,11 +52,11 @@ export async function POST(request: Request) {
 
   // Blokada prepunjavanja: na paket od N časova ne može da se upiše N+1 (novi čas ide u novi paket).
   if (owned.enr.status === "completed") {
-    return NextResponse.json({ error: "Ovaj paket je završen/arhiviran — čas upiši na novi paket." }, { status: 400 });
+    return NextResponse.json({ error: "Ovaj paket je završen/arhiviran - čas upiši na novi paket." }, { status: 400 });
   }
   const { count: existing } = await staff.admin.from("individual_lessons").select("*", { count: "exact", head: true }).eq("enrollment_id", enrollmentId);
   if ((existing ?? 0) >= owned.enr.package_lessons) {
-    return NextResponse.json({ error: `Paket je popunjen (${existing}/${owned.enr.package_lessons}) — čas upiši na novi paket.` }, { status: 400 });
+    return NextResponse.json({ error: `Paket je popunjen (${existing}/${owned.enr.package_lessons}) - čas upiši na novi paket.` }, { status: 400 });
   }
 
   const { error } = await staff.admin.from("individual_lessons").insert({
@@ -84,7 +84,7 @@ export async function POST(request: Request) {
           courseUrl: nextSlug ? `${SITE_URL}/kursevi/${nextSlug}` : null,
         });
       }
-      // Označi poslato (i ako mejl tiho padne — ne spamuj na svaki re-count).
+      // Označi poslato (i ako mejl tiho padne - ne spamuj na svaki re-count).
       await staff.admin.from("individual_enrollments").update({ one_left_email_sent_at: new Date().toISOString() }).eq("id", enrollmentId);
     } catch (e) {
       console.error("[individualni-cas] 'još 1 čas' mejl pao:", e);
@@ -113,7 +113,7 @@ export async function DELETE(request: Request) {
   return NextResponse.json({ ok: true, lessonsUsed: used });
 }
 
-// PATCH — snimi/izmeni link beleški (Google Doc) za individualni upis,
+// PATCH - snimi/izmeni link beleški (Google Doc) za individualni upis,
 // ili (samo admin) ručno arhiviraj/vrati paket: { enrollmentId, archive: true|false }.
 // Arhiviranje radi i kad časovi nisu iskorišćeni (polaznik odustao / paket istekao).
 export async function PATCH(request: Request) {

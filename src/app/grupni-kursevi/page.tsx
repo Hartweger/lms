@@ -4,11 +4,11 @@ import { fetchRaspored } from "@/lib/raspored";
 import RasporedGrupa from "@/components/RasporedGrupa";
 
 export const metadata: Metadata = {
-  title: "Grupni kursevi nemačkog jezika — Hartweger",
+  title: "Grupni kursevi nemačkog jezika - Hartweger",
   description: "Pogledajte raspored grupnih kurseva nemačkog jezika i prijavite se online.",
   openGraph: {
-    images: [{ url: "/og/share.png", width: 1200, height: 630, alt: "Hartweger — Škola nemačkog jezika" }],
-    title: "Grupni kursevi nemačkog jezika — Hartweger",
+    images: [{ url: "/og/share.png", width: 1200, height: 630, alt: "Hartweger - Škola nemačkog jezika" }],
+    title: "Grupni kursevi nemačkog jezika - Hartweger",
     description: "Pogledajte raspored grupnih kurseva nemačkog jezika i prijavite se online.",
   },
 };
@@ -39,7 +39,7 @@ const BENEFITI = [
       </svg>
     ),
     title: "Video lekcije sa Natašom",
-    desc: "Uz kurs dobijaš snimljene video lekcije sa prof. Natašom Hartweger — propušten čas nije izgubljen čas.",
+    desc: "Uz kurs dobijaš snimljene video lekcije sa prof. Natašom Hartweger - propušten čas nije izgubljen čas.",
   },
   {
     icon: (
@@ -57,7 +57,7 @@ const BENEFITI = [
       </svg>
     ),
     title: "Beleške sa svakog časa",
-    desc: "Profesorka vodi beleške — pristup Google dokumentu sa svim temama i primerima.",
+    desc: "Profesorka vodi beleške - pristup Google dokumentu sa svim temama i primerima.",
   },
   {
     icon: (

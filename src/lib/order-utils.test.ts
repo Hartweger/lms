@@ -179,7 +179,7 @@ describe("uplataReminderAction", () => {
   });
 });
 
-describe("uplataReminderAction — razmak između podsetnika", () => {
+describe("uplataReminderAction - razmak između podsetnika", () => {
   const T0 = new Date("2026-06-09T12:00:00Z").getTime();
   const atDays = (d: number) => T0 + d * 86400000;
 

@@ -10,14 +10,14 @@ const matchesIgnoreList = (message: string) =>
     typeof pattern === "string" ? message.includes(pattern) : pattern.test(message)
   );
 
-describe("Sentry ignore lista — Supabase auth lock greške", () => {
+describe("Sentry ignore lista - Supabase auth lock greške", () => {
   afterEach(() => {
     vi.unstubAllGlobals();
   });
 
   it("navigatorLock baca 'stole it' grešku kad drugi tab ukrade lock, a filter je hvata", async () => {
     // Simulira Web Locks API koji odbija zahtev AbortError-om dok NAŠ
-    // acquire-timeout još nije istekao — tačno stanje kad drugi tab
+    // acquire-timeout još nije istekao - tačno stanje kad drugi tab
     // izvrši steal:true nad lock-om koji mi držimo.
     vi.stubGlobal("navigator", {
       locks: {

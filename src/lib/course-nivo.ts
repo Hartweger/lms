@@ -59,7 +59,7 @@ const VIDEO_SLUG: Record<string, string> = {
   B2: "video-kurs-b2",
 };
 
-// Linkovi ka kursevima za dati nivo — koristi ih testiranje-funnel (#1 rezultat i #2-#4 podsetnici).
+// Linkovi ka kursevima za dati nivo - koristi ih testiranje-funnel (#1 rezultat i #2-#4 podsetnici).
 export function funnelUrlsForNivo(rawNivo: string) {
   const nivo = rawNivo === "C1+" ? "C1.1" : rawNivo;
   const grupniSlug = grupniSlugForNivo(nivo);

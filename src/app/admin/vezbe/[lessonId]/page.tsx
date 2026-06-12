@@ -54,7 +54,7 @@ export default function AdminVezbe() {
       .from("exercises")
       .insert({
         lesson_id: lessonId,
-        title: `Nova vežba — ${typeLabels[type]}`,
+        title: `Nova vežba - ${typeLabels[type]}`,
         exercise_type: type,
         order_index: exercises.length,
       })

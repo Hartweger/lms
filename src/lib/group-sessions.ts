@@ -1,4 +1,4 @@
-// src/lib/group-sessions.ts — auto-izvođenje grupnih sesija iz rasporeda (za honorar).
+// src/lib/group-sessions.ts - auto-izvođenje grupnih sesija iz rasporeda (za honorar).
 import type { createAdminClient } from "@/lib/supabase/admin";
 import { computeSessionDates } from "@/lib/groups";
 
@@ -13,7 +13,7 @@ interface GroupForSessions {
 /**
  * Regeneriše 'auto' grupne sesije iz rasporeda. Briše postojeće 'auto' redove pa upiše nove
  * iz computeSessionDates. 'manual' redovi (prof dodao/skinuo) se NE diraju (ignoreDuplicates
- * preskače datume koji već imaju red). Best-effort — ne baca.
+ * preskače datume koji već imaju red). Best-effort - ne baca.
  */
 export async function syncGroupSessions(admin: ReturnType<typeof createAdminClient>, g: GroupForSessions): Promise<void> {
   try {

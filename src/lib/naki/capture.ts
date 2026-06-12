@@ -1,4 +1,4 @@
-// NaKI email capture — welcome mejl (Resend), MailerLite, fallback planovi.
+// NaKI email capture - welcome mejl (Resend), MailerLite, fallback planovi.
 // Portovano sa starog PHP-a (sendWelcomeEmail / addToMailerLite / getFallbackPlan).
 import { Resend } from "resend";
 import { NAKI_MAILERLITE_GROUP } from "./system-prompt";
@@ -22,12 +22,12 @@ function escapeHtml(s: string): string {
 export function getFallbackPlan(name: string, level: string): string {
   const lvl = level.toUpperCase();
   const plans: Record<string, string> = {
-    A1: `Hallo, ${name}! Odlično što počinješ od samog početka — A1 je temelj svega! Na osnovu naših razgovora, vidiš se da imaš motivaciju i volju, što je pola posla. Evo tvojih 3 prioriteta:\n\n1. Glagol 'sein' i 'haben' — nauči ih napamet! Ich bin, du bist, er ist. Ich habe, du hast, er hat.\n2. Rod imenica — uvek uči sa članom: der Mann, die Frau, das Kind.\n3. Prezent glagola — nastavci E-ST-T-EN-T-EN: ich lerne, du lernst, er lernt.\n\nMali koraci svaki dan — za mesec dana ćeš videti ogromnu razliku!`,
-    A2: `Hallo, ${name}! Ti si već prošao osnove i spreman si za sledeći korak — bravo! Vidi se da razumeš strukturu rečenice, sada je vreme da je utvrdiš. Evo tvojih 3 prioriteta:\n\n1. Akuzativ — samo muški rod se menja: den Mann (ne der!). Sve ostalo ostaje isto.\n2. Modalni glagoli — können, müssen, wollen. Ich kann schwimmen. Du musst lernen.\n3. Perfekt za razgovor — haben/sein + Partizip: Ich habe gegessen. Ich bin gefahren.\n\nSvaki dan po 15 minuta — jezik je kao mišić, treba vežbanje!`,
-    B1: `Hallo, ${name}! B1 nivo znači da možeš da se sporazumeš — to je veliki uspeh! Sada radimo na tečnosti i sigurnosti. Evo tvojih 3 prioriteta:\n\n1. Zavisne rečenice sa 'weil' i 'dass' — glagol ide na kraj! Ich lerne, weil ich nach Deutschland fahren möchte.\n2. Konjunktiv II za uljudnost — Könnten Sie mir helfen? Ich würde gerne...\n3. Pasiv — Das Buch wird gelesen. Proširuje ti izražavanje za pisane tekstove.\n\nTi si na pravom putu — samo nastavi!`,
+    A1: `Hallo, ${name}! Odlično što počinješ od samog početka - A1 je temelj svega! Na osnovu naših razgovora, vidiš se da imaš motivaciju i volju, što je pola posla. Evo tvojih 3 prioriteta:\n\n1. Glagol 'sein' i 'haben' - nauči ih napamet! Ich bin, du bist, er ist. Ich habe, du hast, er hat.\n2. Rod imenica - uvek uči sa članom: der Mann, die Frau, das Kind.\n3. Prezent glagola - nastavci E-ST-T-EN-T-EN: ich lerne, du lernst, er lernt.\n\nMali koraci svaki dan - za mesec dana ćeš videti ogromnu razliku!`,
+    A2: `Hallo, ${name}! Ti si već prošao osnove i spreman si za sledeći korak - bravo! Vidi se da razumeš strukturu rečenice, sada je vreme da je utvrdiš. Evo tvojih 3 prioriteta:\n\n1. Akuzativ - samo muški rod se menja: den Mann (ne der!). Sve ostalo ostaje isto.\n2. Modalni glagoli - können, müssen, wollen. Ich kann schwimmen. Du musst lernen.\n3. Perfekt za razgovor - haben/sein + Partizip: Ich habe gegessen. Ich bin gefahren.\n\nSvaki dan po 15 minuta - jezik je kao mišić, treba vežbanje!`,
+    B1: `Hallo, ${name}! B1 nivo znači da možeš da se sporazumeš - to je veliki uspeh! Sada radimo na tečnosti i sigurnosti. Evo tvojih 3 prioriteta:\n\n1. Zavisne rečenice sa 'weil' i 'dass' - glagol ide na kraj! Ich lerne, weil ich nach Deutschland fahren möchte.\n2. Konjunktiv II za uljudnost - Könnten Sie mir helfen? Ich würde gerne...\n3. Pasiv - Das Buch wird gelesen. Proširuje ti izražavanje za pisane tekstove.\n\nTi si na pravom putu - samo nastavi!`,
   };
   if (plans[lvl]) return plans[lvl];
-  return `Hallo, ${name}! Drago mi je što si ovde! Na osnovu naših razgovora, vidiš se da imaš pravi pristup učenju nemačkog. Evo tvojih 3 prioriteta:\n\n1. Gradivo svaki dan — i 10-15 minuta je dovoljno za napredak.\n2. Rod imenica — uvek uči sa članom: der, die, das.\n3. Perfekt u govoru — Ich habe gemacht, Ich bin gegangen — ovo ti treba odmah!\n\nJa sam tu za sva pitanja. Hajde da učimo zajedno!`;
+  return `Hallo, ${name}! Drago mi je što si ovde! Na osnovu naših razgovora, vidiš se da imaš pravi pristup učenju nemačkog. Evo tvojih 3 prioriteta:\n\n1. Gradivo svaki dan - i 10-15 minuta je dovoljno za napredak.\n2. Rod imenica - uvek uči sa članom: der, die, das.\n3. Perfekt u govoru - Ich habe gemacht, Ich bin gegangen - ovo ti treba odmah!\n\nJa sam tu za sva pitanja. Hajde da učimo zajedno!`;
 }
 
 export async function sendNakiWelcomeEmail(
@@ -38,17 +38,17 @@ export async function sendNakiWelcomeEmail(
   includeCoupon: boolean = true
 ): Promise<void> {
   if (!process.env.RESEND_API_KEY) {
-    console.warn("[naki] RESEND_API_KEY not set — welcome email disabled");
+    console.warn("[naki] RESEND_API_KEY not set - welcome email disabled");
     return;
   }
   const resend = new Resend(process.env.RESEND_API_KEY);
   const linksHtml = LEVEL_LINKS[level.toUpperCase()] ??
     '<a href="https://www.hartweger.rs/?utm_source=naki&utm_medium=email" style="color:#4EADC5;">Blog Hartweger centra</a>';
   const planHtml = escapeHtml(plan).replace(/\n/g, "<br>");
-  // NAKI10 samo za nove kupce — postojeći video kupci ne dobijaju kupon blok.
+  // NAKI10 samo za nove kupce - postojeći video kupci ne dobijaju kupon blok.
   const couponHtml = includeCoupon
     ? `<table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="background:#fdf6e3;border:1px dashed #e0b94f;border-radius:8px;padding:18px;">
-        <p style="margin:0 0 6px;font-size:14px;color:#333;">Poklon za tebe — <strong>10% popusta</strong> na bilo koji video kurs:</p>
+        <p style="margin:0 0 6px;font-size:14px;color:#333;">Poklon za tebe - <strong>10% popusta</strong> na bilo koji video kurs:</p>
         <p style="margin:0;font-size:22px;font-weight:bold;letter-spacing:2px;color:#b8860b;">NAKI10</p>
         <p style="margin:6px 0 0;font-size:12px;color:#999;">Uneseš ga pri kupovini. Važi jednom po osobi, za video kurseve.</p>
       </td></tr></table>`

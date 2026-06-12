@@ -83,7 +83,7 @@ export async function POST(request: Request) {
 
 ZADATAK:
 - Vodiš kratki svakodnevni dijalog na temu: "${lesson.title}"
-- Situacija i tvoja uloga MORAJU biti direktno povezani sa temom lekcije "${lesson.title}". Primeri: ako je tema "Familie" — razgovor o porodici sa kolegom ili komšijom. Ako je tema "Perfekt" — pričanje o tome šta si radio juče. Ako je tema "Bewerbungen" — razgovor za posao.
+- Situacija i tvoja uloga MORAJU biti direktno povezani sa temom lekcije "${lesson.title}". Primeri: ako je tema "Familie" - razgovor o porodici sa kolegom ili komšijom. Ako je tema "Perfekt" - pričanje o tome šta si radio juče. Ako je tema "Bewerbungen" - razgovor za posao.
 - Student bira od 2 ponuđene opcije za svaku svoju repliku
 
 NAJVAŽNIJA PRAVILA:
@@ -100,8 +100,8 @@ NAJVAŽNIJA PRAVILA:
 ${level === "A1" ? "- Koristi Präsens, jednostavne rečenice, osnovni vokabular" : level === "A2" ? "- Koristi Präsens/Perfekt, srednje složene rečenice" : "- Možeš koristiti složenije strukture, modalne glagole, Konjunktiv II"}
 ${vocabList ? `- Koristi ove reči iz lekcije kad je moguće: ${vocabList}` : ""}
 
-FORMAT ODGOVORA — odgovaraj ISKLJUČIVO validnim JSON objektom:
-${turnNumber === 1 ? `{"scenario": "opis situacije na srpskom (1 rečenica)", "aiMessage": "tvoja prva replika na nemačkom", "options": ["opcija A", "opcija B"], "finished": false}` : isLastTurn ? `{"aiMessage": "tvoja poslednja replika na nemačkom — zaključi razgovor", "options": null, "finished": true, "summary": "kratka pohvala na srpskom", "translations": [{"de": "nemački tekst", "sr": "srpski prevod"} za SVAKU repliku iz celog dijaloga uključujući ovu poslednju]}` : `{"aiMessage": "tvoja replika na nemačkom", "options": ["opcija A", "opcija B"], "finished": false}`}`;
+FORMAT ODGOVORA - odgovaraj ISKLJUČIVO validnim JSON objektom:
+${turnNumber === 1 ? `{"scenario": "opis situacije na srpskom (1 rečenica)", "aiMessage": "tvoja prva replika na nemačkom", "options": ["opcija A", "opcija B"], "finished": false}` : isLastTurn ? `{"aiMessage": "tvoja poslednja replika na nemačkom - zaključi razgovor", "options": null, "finished": true, "summary": "kratka pohvala na srpskom", "translations": [{"de": "nemački tekst", "sr": "srpski prevod"} za SVAKU repliku iz celog dijaloga uključujući ovu poslednju]}` : `{"aiMessage": "tvoja replika na nemačkom", "options": ["opcija A", "opcija B"], "finished": false}`}`;
 
   try {
     const claudeMessages: { role: "user" | "assistant"; content: string }[] = messages

@@ -117,7 +117,7 @@ Odgovori ISKLJUČIVO validnim JSON nizom:
         messages: [{ role: "user", content: `Srpska rečenica: "${sentence}"\nTačan prevod: "${correct}"\nOdgovor studenta: "${answer}"` }],
         system: `Ti si profesor nemačkog na nivou ${level}. Student prevodi rečenicu sa srpskog na nemački.
 
-Uporedi odgovor studenta sa tačnim prevodom. Budi BLAG — ako je smisao isti i gramatika uglavnom tačna, prihvati kao tačno. Male greške u članu ili redu reči na A1 nivou su OK.
+Uporedi odgovor studenta sa tačnim prevodom. Budi BLAG - ako je smisao isti i gramatika uglavnom tačna, prihvati kao tačno. Male greške u članu ili redu reči na A1 nivou su OK.
 
 Odgovori ISKLJUČIVO validnim JSON objektom:
 {"correct": true/false, "feedback": "kratko objašnjenje na srpskom (1 rečenica)", "corrected": "ispravna verzija ako je netačno, ili odgovor studenta ako je tačno"}`

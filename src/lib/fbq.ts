@@ -1,4 +1,4 @@
-// Meta (Facebook) Pixel — tanak klijentski helper.
+// Meta (Facebook) Pixel - tanak klijentski helper.
 // fbq stub se definiše u <MetaPixel/> (base kod iz Meta-e). Ovde su samo
 // tipovi i bezbedni omotači koji ne pucaju ako pixel nije učitan
 // (npr. blokiran adblockom ili dok korisnik nije dao saglasnost).
@@ -6,7 +6,7 @@
 export const META_PIXEL_ID = process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID;
 
 /**
- * Deterministički event_id za Purchase — isti na browseru (pixel) i serveru (CAPI),
+ * Deterministički event_id za Purchase - isti na browseru (pixel) i serveru (CAPI),
  * pa Meta deduplikuje dva izvora u jedan događaj. Bazira se na broju porudžbine
  * (jedan Purchase po porudžbini). Mora biti identičan na obe strane.
  */
@@ -23,7 +23,7 @@ declare global {
   }
 }
 
-/** Bezbedan poziv fbq-a — tiho ne radi ništa ako pixel nije prisutan. */
+/** Bezbedan poziv fbq-a - tiho ne radi ništa ako pixel nije prisutan. */
 function fbq(...args: unknown[]): void {
   if (typeof window !== "undefined" && typeof window.fbq === "function") {
     window.fbq(...args);
@@ -77,7 +77,7 @@ export function trackPurchase(p: ContentParams & { orderId: string; eventId?: st
 
 /**
  * Saglasnost za pixel (Meta consent API). Poziva se iz CookieBanner-a kad
- * korisnik prihvati/odbije — paralelno sa gtag consent update-om.
+ * korisnik prihvati/odbije - paralelno sa gtag consent update-om.
  * Dok je 'revoke', pixel ne šalje nijedan događaj.
  */
 export function setPixelConsent(granted: boolean): void {

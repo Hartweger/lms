@@ -17,9 +17,9 @@ export function HeartsInfoPopover() {
       </button>
       {open && (
         <>
-          {/* poluprovidna pozadina — klik bilo gde zatvara */}
+          {/* poluprovidna pozadina - klik bilo gde zatvara */}
           <div className="fixed inset-0 z-40 bg-black/30" onClick={close} aria-hidden="true" />
-          {/* centriran prozor — mobilno-prijateljski */}
+          {/* centriran prozor - mobilno-prijateljski */}
           <div className="fixed z-50 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-sm max-h-[80vh] overflow-y-auto bg-white border border-gray-200 rounded-2xl p-5 shadow-xl text-sm text-gray-700 text-left">
             <button
               type="button"
@@ -32,8 +32,8 @@ export function HeartsInfoPopover() {
             <h4 className="font-bold mb-2 pr-6">❤️ Šta su srca?</h4>
             <p className="leading-relaxed">
               Srca su poeni koje skupljaš dok učiš nemački. Svaki tačan odgovor, lekcija i test pune tvoje srce.
-              Što redovnije vežbaš — više srca i viši nivo.{" "}
-              <em>I ne brini — srca se samo skupljaju, nikad ih ne gubiš!</em> Tvoj meda se raduje svakom srcu 🐻
+              Što redovnije vežbaš - više srca i viši nivo.{" "}
+              <em>I ne brini - srca se samo skupljaju, nikad ih ne gubiš!</em> Tvoj meda se raduje svakom srcu 🐻
             </p>
             <ul className="mt-3 space-y-1 list-disc pl-5">
               <li>Tačan odgovor: <b>+10 ❤️</b> (+5 za niz)</li>
@@ -43,7 +43,7 @@ export function HeartsInfoPopover() {
             </ul>
             <h4 className="font-bold mt-4 mb-2">🏅 Šta su nivoi?</h4>
             <p className="leading-relaxed">
-              Što više srca skupiš, prelaziš na viši <b>Nivo</b>. Nivo nije jezički nivo (A1, A2…) —
+              Što više srca skupiš, prelaziš na viši <b>Nivo</b>. Nivo nije jezički nivo (A1, A2…) -
               to je tvoj nivo truda i redovnosti, i svaki nosi novu titulu:
             </p>
             <p className="mt-2 text-xs text-gray-600 leading-relaxed">

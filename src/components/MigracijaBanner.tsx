@@ -6,7 +6,7 @@ import Link from "next/link";
 // Privremena traka tokom prelaznog perioda (migracija sa starog WP/LearnDash).
 // Ukloniti (ili obrisati render iz layout-a) kad se stari WP ugasi.
 const DISMISS_KEY = "migracija-obavestenje-2026-06";
-// Datum do kog stari napredak ostaje dostupan na old. — promeni ako se prelazni period pomeri.
+// Datum do kog stari napredak ostaje dostupan na old. - promeni ako se prelazni period pomeri.
 const ROK = "8. jula 2026.";
 
 function shouldShow(): boolean {
@@ -18,7 +18,7 @@ function shouldShow(): boolean {
 }
 
 export default function MigracijaBanner() {
-  // Kreće vidljiva (renderuje se i u SSR HTML-u — instant, bez flash-a za većinu);
+  // Kreće vidljiva (renderuje se i u SSR HTML-u - instant, bez flash-a za većinu);
   // sakriva se posle hydracije samo ako ju je korisnik već zatvorio.
   const [visible, setVisible] = useState(true);
 
@@ -45,7 +45,7 @@ export default function MigracijaBanner() {
             ℹ️ Postojeći polaznici
           </span>
           <span className="font-semibold">Prešli smo na novu platformu.</span>{" "}
-          Tvoj nalog i kursevi su ovde — najlakše se prijaviš preko{" "}
+          Tvoj nalog i kursevi su ovde - najlakše se prijaviš preko{" "}
           <span className="font-semibold">„Nastavi sa Google"</span> (bez čekanja mejla). Ako si
           bio/la na pola kursa, raniji napredak je sačuvan na{" "}
           <a

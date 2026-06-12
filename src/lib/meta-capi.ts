@@ -1,6 +1,6 @@
-// Meta Conversions API (CAPI) — server-side slanje Purchase događaja.
+// Meta Conversions API (CAPI) - server-side slanje Purchase događaja.
 // Radi paralelno sa browser pixel-om; deduplikacija ide preko event_id
-// (purchaseEventId(order_number)) — Meta spaja browser + server događaj u jedan.
+// (purchaseEventId(order_number)) - Meta spaja browser + server događaj u jedan.
 //
 // Best-effort: ako token nije postavljen ili poziv padne, samo logujemo i ne
 // rušimo tok plaćanja (isto kao Resend/Fiscomm obrazac).
@@ -26,9 +26,9 @@ interface OrderLike {
 }
 
 export interface CapiContext {
-  /** _fbp cookie (browser pixel ga postavlja) — poboljšava match ako je dostupan. */
+  /** _fbp cookie (browser pixel ga postavlja) - poboljšava match ako je dostupan. */
   fbp?: string | null;
-  /** _fbc cookie (klik atribucija) — poboljšava match ako je dostupan. */
+  /** _fbc cookie (klik atribucija) - poboljšava match ako je dostupan. */
   fbc?: string | null;
   /** IP korisnika (ne banke/admina). Izostaviti ako nije pouzdano korisnikov. */
   clientIp?: string | null;
@@ -38,7 +38,7 @@ export interface CapiContext {
   eventSourceUrl?: string | null;
 }
 
-/** SHA-256 hex od normalizovane vrednosti (trim + lowercase) — Meta zahteva za PII. */
+/** SHA-256 hex od normalizovane vrednosti (trim + lowercase) - Meta zahteva za PII. */
 function hash(value: string): string {
   return crypto.createHash("sha256").update(value.trim().toLowerCase(), "utf8").digest("hex");
 }
@@ -50,7 +50,7 @@ function hash(value: string): string {
 export async function sendPurchaseEvent(order: OrderLike, ctx: CapiContext = {}): Promise<boolean> {
   const token = process.env.META_CONVERSIONS_API_KEY;
   if (!token || !META_PIXEL_ID) {
-    console.warn("[meta-capi] META_CONVERSIONS_API_KEY ili pixel ID nije postavljen — CAPI preskočen");
+    console.warn("[meta-capi] META_CONVERSIONS_API_KEY ili pixel ID nije postavljen - CAPI preskočen");
     return false;
   }
 

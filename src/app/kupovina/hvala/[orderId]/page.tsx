@@ -8,7 +8,7 @@ import IpsQrCode from "./IpsQrCode";
 import PixelPurchase from "@/components/PixelPurchase";
 
 export const metadata: Metadata = {
-  title: "Hvala na narudžbini — Hartweger",
+  title: "Hvala na narudžbini - Hartweger",
   robots: { index: false },
 };
 
@@ -47,7 +47,7 @@ export default async function HvalaPage({
   const paypalEur = order.paypal_note ? parseInt(order.paypal_note) : null;
   const isCard = order.payment_method === "kartica" || order.payment_method === "kartica_rate";
 
-  // Browser pixel Purchase šaljemo SAMO za potvrđenu karticu (status=ok) — tu je naplata
+  // Browser pixel Purchase šaljemo SAMO za potvrđenu karticu (status=ok) - tu je naplata
   // gotova i poklapa se sa server-side CAPI događajem iz nestpay callback-a (dedup po event_id).
   // Za uplatnicu/PayPal Purchase ide isključivo server-side (CAPI) tek kad admin potvrdi uplatu,
   // pa se ovde ništa ne šalje (porudžbina je kreirana ali još nije plaćena).
@@ -87,7 +87,7 @@ export default async function HvalaPage({
         {isCard && status === "ok" && (
           <div className="bg-green-50 border border-green-200 rounded-xl px-5 py-4 mb-6 text-sm text-green-800">
             <p className="font-semibold">Plaćanje uspešno! 🎉</p>
-            <p className="mt-1">Pristup kursu je aktiviran. Poslali smo ti email — prijavi se i počni.</p>
+            <p className="mt-1">Pristup kursu je aktiviran. Poslali smo ti email - prijavi se i počni.</p>
           </div>
         )}
         {isCard && status === "fail" && (
@@ -189,7 +189,7 @@ export default async function HvalaPage({
           </div>
         )}
 
-        {/* Info note (samo za uplatnicu/PayPal — kartica je instant) */}
+        {/* Info note (samo za uplatnicu/PayPal - kartica je instant) */}
         {!isCard && (
         <div className="bg-plava-light/60 rounded-xl px-5 py-4 mb-8 text-sm text-gray-700 space-y-2">
           <p>
@@ -197,8 +197,8 @@ export default async function HvalaPage({
           </p>
           <p>
             {order.payment_method === "paypal"
-              ? "Tvoju uplatu potvrđujemo ručno — obično u roku od 24h, najkasnije 3 radna dana. Čim potvrdimo, dobićeš email i pristup kursu se aktivira."
-              : "Čim potvrdimo uplatu — obično u roku od 24h, najkasnije 3 radna dana — dobićeš email i pristup kursu se aktivira."}
+              ? "Tvoju uplatu potvrđujemo ručno - obično u roku od 24h, najkasnije 3 radna dana. Čim potvrdimo, dobićeš email i pristup kursu se aktivira."
+              : "Čim potvrdimo uplatu - obično u roku od 24h, najkasnije 3 radna dana - dobićeš email i pristup kursu se aktivira."}
           </p>
           <p className="text-gray-500">
             Ako ne dobiješ pristup, piši nam na{" "}

@@ -14,7 +14,7 @@ const BULLETS = [
   { icon: "🧠", text: "kako da praviš svoje kartice i grupe reči" },
   { icon: "🌳", text: "kako da koristiš mape uma i asocijacije" },
   { icon: "📱", text: "koje aplikacije ti zaista pomažu da pamtiš efikasno" },
-  { icon: "🔁", text: "kako da obnavljaš reči tako da ostanu u glavi — ne samo u svesci" },
+  { icon: "🔁", text: "kako da obnavljaš reči tako da ostanu u glavi - ne samo u svesci" },
 ];
 
 export default function MasterclassReci() {
@@ -91,14 +91,14 @@ export default function MasterclassReci() {
             <span className="text-2xl">📋</span>
             <span>
               <span className="font-medium text-gray-900 block">Tabela reči</span>
-              <span className="text-gray-500 text-sm">Radi samo ako imaš Google nalog — kopiraj je na svoj Google Drive i koristi kao Google Sheet.</span>
+              <span className="text-gray-500 text-sm">Radi samo ako imaš Google nalog - kopiraj je na svoj Google Drive i koristi kao Google Sheet.</span>
             </span>
             <span className="ml-auto text-plava text-sm font-medium whitespace-nowrap">Otvori →</span>
           </a>
           <a href={QUIZLET_URL} target="_blank" rel="noopener noreferrer"
             className="flex items-center gap-3 p-4 rounded-xl border border-gray-200 hover:border-plava hover:bg-plava-light/40 transition-colors">
             <span className="text-2xl">🗂️</span>
-            <span className="font-medium text-gray-900">Quizlet — kartice za vežbanje</span>
+            <span className="font-medium text-gray-900">Quizlet - kartice za vežbanje</span>
             <span className="ml-auto text-plava text-sm font-medium">Otvori →</span>
           </a>
         </div>
@@ -138,7 +138,7 @@ export default function MasterclassReci() {
       </ul>
 
       <p className="text-gray-700 mb-8">
-        Bez obzira na nivo — bilo da tek počinješ sa nemačkim ili si već na B1/B2 — naučićeš <strong>taktike koje funkcionišu.</strong>
+        Bez obzira na nivo - bilo da tek počinješ sa nemačkim ili si već na B1/B2 - naučićeš <strong>taktike koje funkcionišu.</strong>
       </p>
 
       <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">

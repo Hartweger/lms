@@ -4,11 +4,11 @@ import { computeCourseProgress, type LessonRef, type AccessRef, type ProgressRef
 
 export const dynamic = "force-dynamic";
 
-// Pristup dodeljen migracijom sa starog WP-a (stari napredak nije prenet) — `source` počinje sa "wp-migration".
+// Pristup dodeljen migracijom sa starog WP-a (stari napredak nije prenet) - `source` počinje sa "wp-migration".
 type AccessWithSource = AccessRef & { source: string | null };
 const isMigrated = (s: string | null) => String(s ?? "").startsWith("wp-migration");
 
-// Supabase vraća max 1000 redova po upitu — povuci sve u stranicama.
+// Supabase vraća max 1000 redova po upitu - povuci sve u stranicama.
 type Rangeable = { range: (from: number, to: number) => PromiseLike<{ data: unknown[] | null }> };
 async function fetchAll<T>(build: () => Rangeable): Promise<T[]> {
   const out: T[] = [];
@@ -78,7 +78,7 @@ export default async function AdminNapredak({
         {onlyNew && (
           <p className="text-xs text-gray-400 mt-2">
             Prikazani su samo polaznici koji su pristup dobili na novoj platformi (bez {" "}
-            {/* migrirani isključeni */}migriranih sa starog sajta) — realnija slika završavanja.
+            {/* migrirani isključeni */}migriranih sa starog sajta) - realnija slika završavanja.
           </p>
         )}
       </div>

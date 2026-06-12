@@ -23,7 +23,7 @@ for (const line of fs.readFileSync(path.join(__dirname, "..", ".env.local"), "ut
 }
 const sb = createClient(env.NEXT_PUBLIC_SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY);
 
-const reciTitle = (n) => `Modul ${n} — Reči`;
+const reciTitle = (n) => `Modul ${n} - Reči`;
 // Modul 1 je besplatan preview (kao i ostale lekcije tog modula); 2–7 plaćeno.
 const isFree = (n) => n === 1;
 
@@ -50,7 +50,7 @@ function wordsetSection(n) {
 // Postojeće REČI lekcije (idempotentnost)
 const existingReci = new Map();
 for (const l of lessons) {
-  const m = l.title.match(/^Modul\s*(\d+)\s*—\s*Reči$/);
+  const m = l.title.match(/^Modul\s*(\d+)\s*[—-]\s*Reči$/);
   if (m) existingReci.set(Number(m[1]), l);
 }
 
@@ -88,10 +88,10 @@ for (const p of plan.filter((x) => x.action === "insert")) {
 const { data: all2 } = await sb.from("lessons")
   .select("id,title,order_index").eq("course_id", COURSE_ID).order("order_index");
 const reciByMod = new Map();
-for (const l of all2) { const m = l.title.match(/^Modul\s*(\d+)\s*—\s*Reči$/); if (m) reciByMod.set(Number(m[1]), l.id); }
+for (const l of all2) { const m = l.title.match(/^Modul\s*(\d+)\s*[—-]\s*Reči$/); if (m) reciByMod.set(Number(m[1]), l.id); }
 
 // Redosled: prođi sve NE-reči lekcije po order-u; kad naiđeš na Test: Modul N, prvo ubaci REČI N pa Test.
-const ordered = all2.filter((l) => !/^Modul\s*\d+\s*—\s*Reči$/.test(l.title));
+const ordered = all2.filter((l) => !/^Modul\s*\d+\s*[—-]\s*Reči$/.test(l.title));
 const final = [];
 for (const l of ordered) {
   const m = l.title.match(/Test:\s*Modul\s*(\d+)/i);

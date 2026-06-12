@@ -21,7 +21,7 @@ interface CountryChartProps {
 const COLORS = ["#4fb1d3", "#F59E0B", "#34A853", "#F78687", "#8B5CF6", "#94a3b8"];
 
 function formatRSD(value: number | undefined) {
-  if (value == null) return "—";
+  if (value == null) return "-";
   return value.toLocaleString("sr-Latn-RS") + " din";
 }
 

@@ -91,7 +91,7 @@ export default function QuizResult({ result, showFull, onRequestEmail }: QuizRes
               <div>
                 <p className="font-semibold text-gray-900 mb-1">Nataša Hartweger</p>
                 <p className="text-gray-600 text-sm">
-                  Hvala ti što si odvojio/la vreme za test! Ako te bilo šta zanima o kursevima ili učenju nemačkog — slobodno mi piši na{" "}
+                  Hvala ti što si odvojio/la vreme za test! Ako te bilo šta zanima o kursevima ili učenju nemačkog - slobodno mi piši na{" "}
                   <a href="mailto:info@hartweger.rs" className="text-plava hover:underline">info@hartweger.rs</a>. Rado ću pomoći.
                 </p>
               </div>

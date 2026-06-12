@@ -64,7 +64,7 @@ export async function POST(request: Request) {
             activeEnrollments: count ?? 0,
           });
           if (seats.full) {
-            console.log(`[orders] Grupna blokada (409): ${course.slug} / ${nivo} — grupa ${group.id} popunjena`);
+            console.log(`[orders] Grupna blokada (409): ${course.slug} / ${nivo} - grupa ${group.id} popunjena`);
             return NextResponse.json(
               { error: "Grupa je trenutno popunjena. Ostavi mejl da te obavestimo za sledeći termin." },
               { status: 409 },
@@ -77,7 +77,7 @@ export async function POST(request: Request) {
     // Individualni: cena i broj časova dolaze iz product_variants (server-side, ne veruj klijentu).
     // Samo stvarno individualni proizvodi idu kroz product_variants (cena/prof/paket).
     // Video paketi (category="paket", course_type="video") imaju fiksnu cenu na kursu
-    // i NE smeju da se tretiraju kao individualni — inače traže variant koji ne postoji
+    // i NE smeju da se tretiraju kao individualni - inače traže variant koji ne postoji
     // i kupovina pada sa "Izabrana kombinacija nije dostupna".
     const isIndividual = course.course_type === "individual" ||
       ["individualni", "mesecni"].includes(course.category ?? "");
@@ -247,7 +247,7 @@ export async function POST(request: Request) {
         source_type: attr.source_type ?? null,
         paypal_note:
           paymentMethod === "paypal"
-            ? `${paypalEur} EUR — paypal.me/natasahartweger1`
+            ? `${paypalEur} EUR - paypal.me/natasahartweger1`
             : null,
       })
       .select("id, order_number")
@@ -262,7 +262,7 @@ export async function POST(request: Request) {
     }
 
     console.log(
-      `[orders] Created order ${order.order_number} for ${email} — ${courseSlug} via ${paymentMethod}`
+      `[orders] Created order ${order.order_number} for ${email} - ${courseSlug} via ${paymentMethod}`
     );
 
     // Trenutna notifikacija adminu o svakoj novoj narudžbini (ne blokira odgovor ako mejl padne)
@@ -284,7 +284,7 @@ export async function POST(request: Request) {
       }
     }
 
-    // Kartice se naplaćaju instant na bankovnoj strani — bez mejla sa instrukcijama;
+    // Kartice se naplaćaju instant na bankovnoj strani - bez mejla sa instrukcijama;
     // narudžbina ostaje 'pending' dok NestPay callback ne potvrdi.
     const isCard = paymentMethod === "kartica" || paymentMethod === "kartica_rate";
     if (!isCard) {

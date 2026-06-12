@@ -21,7 +21,7 @@ interface CategoryChartProps {
 const COLORS = ["#4fb1d3", "#F78687", "#34A853", "#F59E0B", "#8B5CF6"];
 
 function formatRSD(value: number | undefined) {
-  if (value == null) return "—";
+  if (value == null) return "-";
   return value.toLocaleString("sr-Latn-RS") + " din";
 }
 

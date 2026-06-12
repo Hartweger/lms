@@ -27,7 +27,7 @@ export default async function AdminNakiPage() {
       <h1 className="font-heading mb-1 text-2xl font-bold text-gray-900">NaKI logovi</h1>
       <p className="mb-6 text-sm text-gray-500">
         Razgovori sa NaKI-jem, grupisani po sesiji (najnovije prvo).
-        {error ? " — tabela još nije migrirana (032_naki.sql)." : ""}
+        {error ? " - tabela još nije migrirana (032_naki.sql)." : ""}
       </p>
       <NakiLogs rows={rows} usage={usage ?? []} />
     </div>

@@ -33,8 +33,8 @@ export const viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.hartweger.rs"),
-  title: "Hartweger — Škola nemačkog jezika",
-  description: "Naučite nemački jezik online — video kursevi, individualna i grupna nastava",
+  title: "Hartweger - Škola nemačkog jezika",
+  description: "Naučite nemački jezik online - video kursevi, individualna i grupna nastava",
   manifest: "/manifest.json",
   alternates: { canonical: "./" },
   robots: { index: true, follow: true },
@@ -44,16 +44,16 @@ export const metadata: Metadata = {
     title: "Hartweger",
   },
   openGraph: {
-    title: "Hartweger — Škola nemačkog jezika",
-    description: "Naučite nemački jezik online — video kursevi, individualna i grupna nastava",
+    title: "Hartweger - Škola nemačkog jezika",
+    description: "Naučite nemački jezik online - video kursevi, individualna i grupna nastava",
     locale: "sr_RS",
     type: "website",
-    images: [{ url: "/og/share.png", width: 1200, height: 630, alt: "Hartweger — Škola nemačkog jezika" }],
+    images: [{ url: "/og/share.png", width: 1200, height: 630, alt: "Hartweger - Škola nemačkog jezika" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Hartweger — Škola nemačkog jezika",
-    description: "Naučite nemački jezik online — video kursevi, individualna i grupna nastava",
+    title: "Hartweger - Škola nemačkog jezika",
+    description: "Naučite nemački jezik online - video kursevi, individualna i grupna nastava",
   },
 };
 
@@ -65,7 +65,7 @@ export default function RootLayout({
   return (
     <html lang="sr" className={`${lato.variable} ${montserrat.variable}`}>
       <body className="min-h-screen flex flex-col">
-        {/* Google Consent Mode v2 — mora pre GTM-a. Inline skript ne može da importuje TS,
+        {/* Google Consent Mode v2 - mora pre GTM-a. Inline skript ne može da importuje TS,
             pa je ključ 'cookie-consent' hardkodiran: mora ostati u sinhronizaciji sa CONSENT_KEY iz src/lib/consent.ts */}
         <Script
           id="consent-default"
@@ -111,7 +111,7 @@ try {
                 "@type": "EducationalOrganization",
                 "@id": "https://www.hartweger.rs/#organization",
                 name: "Centar za nemački jezik Hartweger",
-                alternateName: "Hartweger — Škola nemačkog jezika",
+                alternateName: "Hartweger - Škola nemačkog jezika",
                 description:
                   "Online škola nemačkog jezika sa sertifikovanim profesorima. Video kursevi, grupna i individualna nastava od A1 do C1 nivoa po VoKuM metodi.",
                 url: "https://www.hartweger.rs",
@@ -150,7 +150,7 @@ try {
                 "@context": "https://schema.org",
                 "@type": "WebSite",
                 "@id": "https://www.hartweger.rs/#website",
-                name: "Hartweger — Škola nemačkog jezika",
+                name: "Hartweger - Škola nemačkog jezika",
                 url: "https://www.hartweger.rs",
                 inLanguage: "sr-RS",
                 publisher: { "@id": "https://www.hartweger.rs/#organization" },

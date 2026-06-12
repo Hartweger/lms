@@ -20,10 +20,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!course) return { title: "Kurs nije pronađen" };
 
   return {
-    title: `${course.title} — Hartweger`,
+    title: `${course.title} - Hartweger`,
     description: course.description,
     openGraph: {
-      images: [{ url: "/og/share.png", width: 1200, height: 630, alt: "Hartweger — Škola nemačkog jezika" }],
+      images: [{ url: "/og/share.png", width: 1200, height: 630, alt: "Hartweger - Škola nemačkog jezika" }],
       title: course.title,
       description: course.description,
     },
@@ -272,7 +272,7 @@ export default async function KursStranica({ params }: PageProps) {
                   </span>
                   <div>
                     <div className="font-medium text-gray-900">{lesson.title}</div>
-                    <div className="text-xs text-plava">Besplatno — klikni za pregled</div>
+                    <div className="text-xs text-plava">Besplatno - klikni za pregled</div>
                   </div>
                 </div>
               </Link>
