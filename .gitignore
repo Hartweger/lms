@@ -60,3 +60,4 @@ wc-orders-report-*.csv
 
 # data exports (WooCommerce/analytics — sadrže lične podatke, ne u repo)
 *.csv
+supabase/.temp/
