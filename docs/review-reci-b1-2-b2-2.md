@@ -52,7 +52,7 @@ Postojećih 7 dvodelnih konektora iz lekcije. Dodati pojedinačni B1 veznici:
 | falls | ako, u slučaju da |
 | sondern | nego, već |
 
-## B2.2 · Lektion 13–24 — Reči — 616 reči (zvanični Hueber glosar + moji prevodi)
+## B2.2 · Lektion 13–24 — Reči — 616 reči ✅ ODOBRENO (Nataša, 12.06.2026)
 
 Nemačka strana je 1:1 iz **Vielfalt B2.2 Lernwortschatz** (Glossar blanko PDF, po lekcijama) —
 nju ne treba proveravati. **Srpske prevode sam dodao ja** (glosar je blanko), pa vredi

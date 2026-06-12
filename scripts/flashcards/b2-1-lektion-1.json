@@ -1,0 +1,197 @@
+{
+  "type": "wordset",
+  "title": "Lektion 1 — Reči",
+  "setKey": "b2-1-lektion-1",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    {
+      "front": "das Unternehmen, –",
+      "back": "preduzeće, firma"
+    },
+    {
+      "front": "großartig",
+      "back": "sjajan, izvanredan"
+    },
+    {
+      "front": "hervorragend",
+      "back": "izvrstan, vrhunski"
+    },
+    {
+      "front": "bedenklich",
+      "back": "zabrinjavajuć, sporan"
+    },
+    {
+      "front": "halten für",
+      "back": "smatrati (nečim)"
+    },
+    {
+      "front": "die Veränderung, -en",
+      "back": "promena"
+    },
+    {
+      "front": "wagen + Akk.",
+      "back": "usuditi se, rizikovati"
+    },
+    {
+      "front": "der Weg, -e",
+      "back": "put"
+    },
+    {
+      "front": "gestalten",
+      "back": "oblikovati, urediti"
+    },
+    {
+      "front": "schwer|fallen (fällt schwer, fiel schwer, ist schwergefallen)",
+      "back": "biti teško (nekome)"
+    },
+    {
+      "front": "vertraut",
+      "back": "poznat, prisan"
+    },
+    {
+      "front": "ein|schlagen (schlägt ein, schlug ein, hat eingeschlagen)",
+      "back": "krenuti (novim putem); udariti"
+    },
+    {
+      "front": "der Grund, ¨e für + Akk.",
+      "back": "razlog (za)"
+    },
+    {
+      "front": "vielfältig",
+      "back": "raznovrstan, mnogostruk"
+    },
+    {
+      "front": "die Angst, ¨e vor + Dat.",
+      "back": "strah (od)"
+    },
+    {
+      "front": "der Misserfolg, -e",
+      "back": "neuspeh"
+    },
+    {
+      "front": "hinterfragen",
+      "back": "preispitivati"
+    },
+    {
+      "front": "der Pädagoge, -n / die Pädagogin, -nen",
+      "back": "pedagog / pedagoškinja"
+    },
+    {
+      "front": "die Großstadt, ¨e",
+      "back": "velegrad"
+    },
+    {
+      "front": "sich sehnen nach + Dat.",
+      "back": "čeznuti za"
+    },
+    {
+      "front": "verwirklichen",
+      "back": "ostvariti"
+    },
+    {
+      "front": "die Begeisterung (nur Sg.) für + Akk.",
+      "back": "oduševljenje (za)"
+    },
+    {
+      "front": "die Anregung, -en",
+      "back": "podsticaj, ideja"
+    },
+    {
+      "front": "verbunden mit + Dat.",
+      "back": "povezan sa"
+    },
+    {
+      "front": "die Welle, -n",
+      "back": "talas"
+    },
+    {
+      "front": "die Ausbildung, -en zu + Dat.",
+      "back": "obuka, školovanje (za)"
+    },
+    {
+      "front": "eingesperrt",
+      "back": "zatvoren, zarobljen"
+    },
+    {
+      "front": "der Mut (nur Sg.)",
+      "back": "hrabrost"
+    },
+    {
+      "front": "zusammen|nehmen (nimmt zusammen, nahm zusammen, hat zusammengenommen)",
+      "back": "skupiti (svu hrabrost/snagu)"
+    },
+    {
+      "front": "der Lebensunterhalt (nur Sg.)",
+      "back": "sredstva za život, izdržavanje"
+    },
+    {
+      "front": "die Nähe (nur Sg.) zu + Dat.",
+      "back": "blizina (nečega)"
+    },
+    {
+      "front": "der Unternehmensberater, – / die Unternehmensberaterin, -nen",
+      "back": "poslovni savetnik / savetnica"
+    },
+    {
+      "front": "die Führungsposition, -en",
+      "back": "rukovodeća pozicija"
+    },
+    {
+      "front": "der Druck (nur Sg.)",
+      "back": "pritisak"
+    },
+    {
+      "front": "überleben",
+      "back": "preživeti"
+    },
+    {
+      "front": "der Schock (nur Sg.)",
+      "back": "šok"
+    },
+    {
+      "front": "entscheidend",
+      "back": "presudan, odlučujući"
+    },
+    {
+      "front": "der Wendepunkt, -e",
+      "back": "prekretnica"
+    },
+    {
+      "front": "meditieren",
+      "back": "meditirati"
+    },
+    {
+      "front": "die Einstellung, -en zu + Dat.",
+      "back": "stav (prema)"
+    },
+    {
+      "front": "bewusst",
+      "back": "svestan; svesno"
+    },
+    {
+      "front": "um|stellen",
+      "back": "preurediti, promeniti (navike)"
+    },
+    {
+      "front": "an|kommen (kommt an, kam an, ist angekommen)",
+      "back": "stići; biti dobro primljen"
+    },
+    {
+      "front": "aus|wandern",
+      "back": "iseliti se"
+    },
+    {
+      "front": "jdn. / sich an|lügen (lügt an, log an, hat angelogen)",
+      "back": "lagati (nekoga / sebe)"
+    },
+    {
+      "front": "etw. zu|geben (gibt zu, gab zu, hat zugegeben)",
+      "back": "priznati (nešto)"
+    },
+    {
+      "front": "zusammen|hängen mit + Dat. (hängt zusammen, hing zusammen, hat zusammengehangen)",
+      "back": "biti povezan sa"
+    }
+  ]
+}

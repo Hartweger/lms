@@ -1,0 +1,261 @@
+{
+  "type": "wordset",
+  "title": "Lektion 9 — Reči",
+  "setKey": "b2-1-lektion-9",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    {
+      "front": "das Timing, -s",
+      "back": "tajming"
+    },
+    {
+      "front": "geistig",
+      "back": "umni, mentalni"
+    },
+    {
+      "front": "anspruchsvoll",
+      "back": "zahtevan"
+    },
+    {
+      "front": "das Sachbuch, ¨er",
+      "back": "stručna/popularno-naučna knjiga"
+    },
+    {
+      "front": "das Referat, -e",
+      "back": "referat"
+    },
+    {
+      "front": "der Vortrag, ¨e",
+      "back": "predavanje"
+    },
+    {
+      "front": "der Ausdauersport",
+      "back": "sport izdržljivosti"
+    },
+    {
+      "front": "erholsam",
+      "back": "okrepljujuć, odmoran"
+    },
+    {
+      "front": "gesellig",
+      "back": "društven"
+    },
+    {
+      "front": "ausgleichend",
+      "back": "koji uravnotežuje, opuštajući"
+    },
+    {
+      "front": "die Sauna, -s / die Saunen",
+      "back": "sauna"
+    },
+    {
+      "front": "das Hörbuch, ¨er",
+      "back": "audio-knjiga"
+    },
+    {
+      "front": "sich an|hören",
+      "back": "poslušati"
+    },
+    {
+      "front": "das Hoch, -s",
+      "back": "vrhunac, „haj“ (faza energije)"
+    },
+    {
+      "front": "das Tief, -s",
+      "back": "pad, niska faza"
+    },
+    {
+      "front": "leistungsfähig",
+      "back": "sposoban za rad, učinkovit"
+    },
+    {
+      "front": "der Nobelpreis, -e",
+      "back": "Nobelova nagrada"
+    },
+    {
+      "front": "genetisch",
+      "back": "genetski"
+    },
+    {
+      "front": "der Rhythmus, die Rhythmen",
+      "back": "ritam"
+    },
+    {
+      "front": "bestimmen",
+      "back": "određivati"
+    },
+    {
+      "front": "der Frühaufsteher, – / die Frühaufsteherin, -nen",
+      "back": "ranoranilac / ranoranilica"
+    },
+    {
+      "front": "der Langschläfer, – / die Langschläferin, -nen",
+      "back": "onaj/ona koji dugo spava, „noćna ptica“"
+    },
+    {
+      "front": "der Normaltyp, -en",
+      "back": "normalni tip"
+    },
+    {
+      "front": "rein|hören",
+      "back": "preslušati na brzinu, „baciti uvo“"
+    },
+    {
+      "front": "langfristig",
+      "back": "dugoročno"
+    },
+    {
+      "front": "das Tageslicht (nur Sg.)",
+      "back": "dnevna svetlost"
+    },
+    {
+      "front": "das Gehirn, -e",
+      "back": "mozak"
+    },
+    {
+      "front": "die Zeitverschiebung, -en",
+      "back": "vremenska razlika"
+    },
+    {
+      "front": "das Gen, -e",
+      "back": "gen"
+    },
+    {
+      "front": "das Flugpersonal (nur Sg.)",
+      "back": "letačko osoblje"
+    },
+    {
+      "front": "der Tagesrhythmus, die Tagesrhythmen",
+      "back": "dnevni ritam"
+    },
+    {
+      "front": "versetzt",
+      "back": "pomeren (vremenski)"
+    },
+    {
+      "front": "auf|nehmen (nimmt auf, nahm auf, hat aufgenommen)",
+      "back": "primiti, upiti; snimiti"
+    },
+    {
+      "front": "signalisieren",
+      "back": "signalizirati"
+    },
+    {
+      "front": "rötlich",
+      "back": "crvenkast"
+    },
+    {
+      "front": "erstaunlich",
+      "back": "začuđujuć, zadivljujuć"
+    },
+    {
+      "front": "ab|weichen von + Dat.",
+      "back": "odstupati od"
+    },
+    {
+      "front": "angeblich",
+      "back": "navodno"
+    },
+    {
+      "front": "unbestritten",
+      "back": "neosporan"
+    },
+    {
+      "front": "weiter|schlafen (schläft weiter, schlief weiter, hat weitergeschlafen)",
+      "back": "nastaviti da spava"
+    },
+    {
+      "front": "verschlafen (verschläft, verschlief, hat verschlafen)",
+      "back": "prespavati (propustiti)"
+    },
+    {
+      "front": "aus|schlafen (schläft aus, schlief aus, hat ausgeschlafen)",
+      "back": "naspavati se"
+    },
+    {
+      "front": "der Gegensatz, ¨e",
+      "back": "suprotnost"
+    },
+    {
+      "front": "im Gegensatz zu + Dat. (Präp., adversativ)",
+      "back": "za razliku od"
+    },
+    {
+      "front": "während (Nebensatz-Konnektor, adversativ)",
+      "back": "dok (suprotnost)"
+    },
+    {
+      "front": "hingegen (Hauptsatz-Konnektor, adversativ)",
+      "back": "nasuprot tome"
+    },
+    {
+      "front": "dagegen (Hauptsatz-Konnektor, adversativ)",
+      "back": "naprotiv, nasuprot tome"
+    },
+    {
+      "front": "energiegeladen",
+      "back": "pun energije"
+    },
+    {
+      "front": "erzielen",
+      "back": "postići"
+    },
+    {
+      "front": "das Glashaus, ¨er",
+      "back": "staklenik, staklena kuća"
+    },
+    {
+      "front": "der Forscher, – / die Forscherin, -nen",
+      "back": "istraživač / istraživačica"
+    },
+    {
+      "front": "das Bewusstsein für + Akk.",
+      "back": "svest o"
+    },
+    {
+      "front": "die Schichtarbeit, -en",
+      "back": "rad u smenama"
+    },
+    {
+      "front": "heraus|filtern",
+      "back": "izdvojiti, „isfiltrirati“"
+    },
+    {
+      "front": "das Schlafmittel, –",
+      "back": "sredstvo za spavanje"
+    },
+    {
+      "front": "die Schlafstörung, -en",
+      "back": "poremećaj spavanja"
+    },
+    {
+      "front": "das Aufputschmittel, –",
+      "back": "stimulans"
+    },
+    {
+      "front": "das Koffein (nur Sg.)",
+      "back": "kofein"
+    },
+    {
+      "front": "pharmazeutisch",
+      "back": "farmaceutski"
+    },
+    {
+      "front": "unglaubwürdig",
+      "back": "neuverljiv"
+    },
+    {
+      "front": "das Merkmal, -e",
+      "back": "obeležje, odlika"
+    },
+    {
+      "front": "sich aus|zeichnen durch + Akk.",
+      "back": "odlikovati se (nečim)"
+    },
+    {
+      "front": "einmalig",
+      "back": "jedinstven"
+    }
+  ]
+}

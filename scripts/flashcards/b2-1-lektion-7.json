@@ -1,0 +1,201 @@
+{
+  "type": "wordset",
+  "title": "Lektion 7 — Reči",
+  "setKey": "b2-1-lektion-7",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    {
+      "front": "um|gestalten",
+      "back": "preurediti"
+    },
+    {
+      "front": "der Sensor, -en",
+      "back": "senzor"
+    },
+    {
+      "front": "der Ton, ¨e",
+      "back": "ton, zvuk"
+    },
+    {
+      "front": "hinauf|gehen (geht hinauf, ging hinauf, ist hinaufgegangen)",
+      "back": "popeti se, ići gore"
+    },
+    {
+      "front": "hinunter|gehen (geht hinunter, ging hinunter, ist hinuntergegangen)",
+      "back": "sići, ići dole"
+    },
+    {
+      "front": "die Rolltreppe, -n",
+      "back": "pokretne stepenice"
+    },
+    {
+      "front": "der Schweinehund, -e",
+      "back": "unutrašnji lenjivac („innerer Schweinehund“)"
+    },
+    {
+      "front": "kämpfen gegen + Akk.",
+      "back": "boriti se protiv"
+    },
+    {
+      "front": "die Ausrede, -n",
+      "back": "izgovor"
+    },
+    {
+      "front": "der Laufschuh, -e",
+      "back": "patika za trčanje"
+    },
+    {
+      "front": "los|legen (ugs.)",
+      "back": "krenuti, zapeti (žarg.)"
+    },
+    {
+      "front": "sich entspannen",
+      "back": "opustiti se"
+    },
+    {
+      "front": "besiegen",
+      "back": "pobediti"
+    },
+    {
+      "front": "die Kondition, -en",
+      "back": "kondicija"
+    },
+    {
+      "front": "dazu (Hauptsatz-Konnektor, final)",
+      "back": "za to, u tu svrhu"
+    },
+    {
+      "front": "dafür (Hauptsatz-Konnektor, final)",
+      "back": "za to, radi toga"
+    },
+    {
+      "front": "der Papierkorb, ¨e",
+      "back": "korpa za papir"
+    },
+    {
+      "front": "stärken",
+      "back": "ojačati"
+    },
+    {
+      "front": "der Fettabbau (nur Sg.)",
+      "back": "sagorevanje masti"
+    },
+    {
+      "front": "der Kreislauf, ¨e",
+      "back": "krvotok; ciklus"
+    },
+    {
+      "front": "die Ausdauer (nur Sg.)",
+      "back": "izdržljivost"
+    },
+    {
+      "front": "der Marathon, -s",
+      "back": "maraton"
+    },
+    {
+      "front": "binnen (temporal)",
+      "back": "u roku od"
+    },
+    {
+      "front": "hinauf|laufen (läuft hinauf, lief hinauf, ist hinaufgelaufen)",
+      "back": "istrčati uz, potrčati gore"
+    },
+    {
+      "front": "hinunter|laufen (läuft hinunter, lief hinunter, ist hinuntergelaufen)",
+      "back": "strčati niz, potrčati dole"
+    },
+    {
+      "front": "zusammen|rechnen",
+      "back": "sabrati"
+    },
+    {
+      "front": "riskieren",
+      "back": "rizikovati"
+    },
+    {
+      "front": "die Grenze, -n",
+      "back": "granica"
+    },
+    {
+      "front": "durch|halten (hält durch, hielt durch, hat durchgehalten)",
+      "back": "istrajati, izdržati do kraja"
+    },
+    {
+      "front": "der Versuch, -e",
+      "back": "pokušaj"
+    },
+    {
+      "front": "das Risiko, die Risiken",
+      "back": "rizik"
+    },
+    {
+      "front": "ein|gehen (geht ein, ging ein, ist eingegangen)",
+      "back": "preuzeti (rizik); ući u"
+    },
+    {
+      "front": "stoßen an + Akk.",
+      "back": "naići na, udariti u (granice)"
+    },
+    {
+      "front": "die Anstrengung, -en",
+      "back": "napor"
+    },
+    {
+      "front": "überwinden (überwindet, überwand, hat überwunden)",
+      "back": "savladati, prevazići"
+    },
+    {
+      "front": "balancieren",
+      "back": "balansirati"
+    },
+    {
+      "front": "die Achterbahn, -en",
+      "back": "rolerkoster"
+    },
+    {
+      "front": "das Achterbahnfahren (nur Sg.)",
+      "back": "vožnja rolerkosterom"
+    },
+    {
+      "front": "das Freiklettern (nur Sg.)",
+      "back": "slobodno penjanje"
+    },
+    {
+      "front": "das Tiefseetauchen (nur Sg.)",
+      "back": "duboko ronjenje"
+    },
+    {
+      "front": "das Eisbaden (nur Sg.)",
+      "back": "kupanje u ledenoj vodi"
+    },
+    {
+      "front": "das Fallschirmspringen (nur Sg.)",
+      "back": "skakanje padobranom"
+    },
+    {
+      "front": "reizen",
+      "back": "privlačiti, mamiti; nadraživati"
+    },
+    {
+      "front": "aus|probieren",
+      "back": "isprobati"
+    },
+    {
+      "front": "riskant",
+      "back": "rizičan"
+    },
+    {
+      "front": "prinzipiell",
+      "back": "načelno"
+    },
+    {
+      "front": "in der Tat",
+      "back": "zaista, doista"
+    },
+    {
+      "front": "sich vor|nehmen (nimmt sich vor, nahm sich vor, hat sich vorgenommen)",
+      "back": "naumiti, zacrtati sebi"
+    }
+  ]
+}

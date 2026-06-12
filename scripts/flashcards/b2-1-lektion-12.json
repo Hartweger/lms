@@ -1,0 +1,193 @@
+{
+  "type": "wordset",
+  "title": "Lektion 12 — Reči",
+  "setKey": "b2-1-lektion-12",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    {
+      "front": "sich unterhalten mit + Dat. (unterhält, unterhielt, hat unterhalten)",
+      "back": "razgovarati sa"
+    },
+    {
+      "front": "sich streiten mit + Dat. (streitet, stritt, hat gestritten)",
+      "back": "svađati se sa"
+    },
+    {
+      "front": "das Schwesterherz, -en",
+      "back": "seka, sestrica (od milja)"
+    },
+    {
+      "front": "das Angebot, -e an + Dat.",
+      "back": "ponuda (nečega)"
+    },
+    {
+      "front": "die Nachbarschaft, -en",
+      "back": "komšiluk"
+    },
+    {
+      "front": "an|geben mit + Dat. (gibt an, gab an, hat angegeben)",
+      "back": "hvalisati se (nečim)"
+    },
+    {
+      "front": "leiden (leidet, litt, hat gelitten)",
+      "back": "patiti"
+    },
+    {
+      "front": "sich wenden an + Akk.",
+      "back": "obratiti se (nekome)"
+    },
+    {
+      "front": "verbinden mit + Dat.",
+      "back": "povezati sa"
+    },
+    {
+      "front": "her|stellen",
+      "back": "proizvesti; uspostaviti"
+    },
+    {
+      "front": "ab|stellen",
+      "back": "odložiti, ostaviti; isključiti"
+    },
+    {
+      "front": "der Nachtdienst, -e",
+      "back": "noćna smena"
+    },
+    {
+      "front": "sich einigen auf + Akk.",
+      "back": "dogovoriti se o, usaglasiti se oko"
+    },
+    {
+      "front": "wahr|nehmen als + Akk. (nimmt wahr, nahm wahr, hat wahrgenommen)",
+      "back": "doživeti, opažati kao"
+    },
+    {
+      "front": "in Kontakt bleiben (bleibt, blieb, ist geblieben)",
+      "back": "ostati u kontaktu"
+    },
+    {
+      "front": "ausbaufähig",
+      "back": "sa prostorom za napredak, proširiv"
+    },
+    {
+      "front": "die Plattform, -en",
+      "back": "platforma"
+    },
+    {
+      "front": "die Bohrmaschine, -n",
+      "back": "bušilica"
+    },
+    {
+      "front": "suchen nach + Dat.",
+      "back": "tražiti (nešto)"
+    },
+    {
+      "front": "der Leihopa, -s",
+      "back": "„deka na pozajmicu“ (volonterski deka)"
+    },
+    {
+      "front": "diskret",
+      "back": "diskretan"
+    },
+    {
+      "front": "der Aushang, ¨e",
+      "back": "oglas (na tabli), obaveštenje"
+    },
+    {
+      "front": "der Spieleabend, -e",
+      "back": "veče društvenih igara"
+    },
+    {
+      "front": "die Lebensqualität, -en",
+      "back": "kvalitet života"
+    },
+    {
+      "front": "realisierbar",
+      "back": "ostvariv"
+    },
+    {
+      "front": "benutzbar",
+      "back": "upotrebljiv"
+    },
+    {
+      "front": "die Antwort, -en auf + Akk.",
+      "back": "odgovor na"
+    },
+    {
+      "front": "der Trend, -s zu + Dat.",
+      "back": "trend ka"
+    },
+    {
+      "front": "die Kleinfamilie, -n",
+      "back": "uža porodica"
+    },
+    {
+      "front": "der Austausch, -e",
+      "back": "razmena"
+    },
+    {
+      "front": "die Vereinsamung, -en",
+      "back": "usamljivanje"
+    },
+    {
+      "front": "die Anonymität (nur Sg.)",
+      "back": "anonimnost"
+    },
+    {
+      "front": "die Nachhaltigkeit (nur Sg.)",
+      "back": "održivost"
+    },
+    {
+      "front": "das Haushaltsgerät, -e",
+      "back": "kućni aparat"
+    },
+    {
+      "front": "die Ressource, -n",
+      "back": "resurs"
+    },
+    {
+      "front": "kommunizieren mit + Dat.",
+      "back": "komunicirati sa"
+    },
+    {
+      "front": "die Selbstinszenierung, -en",
+      "back": "samopromocija, glumljenje sebe"
+    },
+    {
+      "front": "sich dar|stellen",
+      "back": "predstavljati se, prikazivati se"
+    },
+    {
+      "front": "der Schritt, -e zu + Dat.",
+      "back": "korak ka"
+    },
+    {
+      "front": "leicht|fallen (fällt leicht, fiel leicht, ist leichtgefallen)",
+      "back": "biti lako (nekome)"
+    },
+    {
+      "front": "analog",
+      "back": "analogni; uživo (van interneta)"
+    },
+    {
+      "front": "die Busanbindung, -en",
+      "back": "autobuska veza"
+    },
+    {
+      "front": "die Tauschbörse, -n",
+      "back": "berza razmene"
+    },
+    {
+      "front": "der Aufwand, ¨e",
+      "back": "utrošak (truda/vremena)"
+    },
+    {
+      "front": "durch|führen",
+      "back": "sprovesti"
+    },
+    {
+      "front": "problemlos",
+      "back": "bez problema"
+    }
+  ]
+}

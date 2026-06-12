@@ -1,0 +1,229 @@
+{
+  "type": "wordset",
+  "title": "Lektion 11 — Reči",
+  "setKey": "b2-1-lektion-11",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    {
+      "front": "sich wohl|fühlen",
+      "back": "osećati se prijatno"
+    },
+    {
+      "front": "die Matratze, -n",
+      "back": "dušek"
+    },
+    {
+      "front": "quadratisch",
+      "back": "kvadratni"
+    },
+    {
+      "front": "der Krempel (ugs., nur Sg.)",
+      "back": "starudija, krš (žarg.)"
+    },
+    {
+      "front": "der Krimskrams (ugs., nur Sg.)",
+      "back": "drangulije (žarg.)"
+    },
+    {
+      "front": "an|sammeln",
+      "back": "nagomilati"
+    },
+    {
+      "front": "entrümpeln",
+      "back": "raskrčiti, osloboditi se starudije"
+    },
+    {
+      "front": "sich trennen von + Dat.",
+      "back": "rastati se od, odvojiti se od"
+    },
+    {
+      "front": "der Podcast, -s",
+      "back": "podkast"
+    },
+    {
+      "front": "die Zahl, -en an + Dat.",
+      "back": "broj (nečega)"
+    },
+    {
+      "front": "der Besitz, -e",
+      "back": "posed, imovina"
+    },
+    {
+      "front": "radikal",
+      "back": "radikalan"
+    },
+    {
+      "front": "belasten",
+      "back": "opterećivati"
+    },
+    {
+      "front": "der Wunsch, ¨e nach + Dat.",
+      "back": "želja za"
+    },
+    {
+      "front": "das Konsumverhalten (nur Sg.)",
+      "back": "potrošačke navike"
+    },
+    {
+      "front": "das Aussortieren (nur Sg.)",
+      "back": "odvajanje, sortiranje (viška)"
+    },
+    {
+      "front": "hinzu|kommen (kommt hinzu, kam hinzu, ist hinzugekommen)",
+      "back": "pridodati se; povrh toga"
+    },
+    {
+      "front": "umweltfreundlich",
+      "back": "ekološki prihvatljiv"
+    },
+    {
+      "front": "energiesparend",
+      "back": "energetski štedljiv"
+    },
+    {
+      "front": "das Weggeben (nur Sg.)",
+      "back": "davanje, poklanjanje (stvari)"
+    },
+    {
+      "front": "aus|kommen (kommt aus, kam aus, ist ausgekommen)",
+      "back": "snaći se (sa manje), izlaziti na kraj"
+    },
+    {
+      "front": "spenden",
+      "back": "donirati"
+    },
+    {
+      "front": "verschenken",
+      "back": "pokloniti"
+    },
+    {
+      "front": "die Folge, -n",
+      "back": "posledica; epizoda"
+    },
+    {
+      "front": "der Überblick, -e über + Akk.",
+      "back": "pregled (nad)"
+    },
+    {
+      "front": "die Entrümpelung, -en",
+      "back": "raskrčivanje"
+    },
+    {
+      "front": "der Korb, ¨e",
+      "back": "korpa"
+    },
+    {
+      "front": "der Karton, -s",
+      "back": "kutija, karton"
+    },
+    {
+      "front": "weg|geben (gibt weg, gab weg, hat weggegeben)",
+      "back": "dati, pokloniti (rešiti se)"
+    },
+    {
+      "front": "weg|tun (ugs.) (tut weg, tat weg, hat weggetan)",
+      "back": "skloniti, baciti (žarg.)"
+    },
+    {
+      "front": "die Schublade, -n",
+      "back": "fioka"
+    },
+    {
+      "front": "bewerten",
+      "back": "oceniti, vrednovati"
+    },
+    {
+      "front": "zwischen|lagern",
+      "back": "privremeno uskladištiti"
+    },
+    {
+      "front": "das Bügeleisen, –",
+      "back": "pegla"
+    },
+    {
+      "front": "grundsätzlich",
+      "back": "načelno, u principu"
+    },
+    {
+      "front": "nervig",
+      "back": "iritantan, naporan"
+    },
+    {
+      "front": "sortieren",
+      "back": "sortirati"
+    },
+    {
+      "front": "hin|kriegen (ugs.)",
+      "back": "uspeti, srediti (žarg.)"
+    },
+    {
+      "front": "der Schuss, ¨e",
+      "back": "pucanj; prsk („ein Schuss…“ — malo nečega)"
+    },
+    {
+      "front": "nerven (ugs.)",
+      "back": "nervirati (žarg.)"
+    },
+    {
+      "front": "drauf|gehen (ugs.) (geht drauf, ging drauf, ist draufgegangen)",
+      "back": "potrošiti se, otići (na nešto) (žarg.)"
+    },
+    {
+      "front": "die Klamotten (ugs., nur Pl.)",
+      "back": "krpe, garderoba (žarg.)"
+    },
+    {
+      "front": "aus|misten (ugs.)",
+      "back": "raščistiti, „očistiti štalu“ (žarg.)"
+    },
+    {
+      "front": "sich drücken vor + Dat. (ugs.)",
+      "back": "zabušavati, izvlačiti se od (žarg.)"
+    },
+    {
+      "front": "anstatt dass (Nebensatz-Konnektor, modal)",
+      "back": "umesto da"
+    },
+    {
+      "front": "anstatt … zu (Nebensatz-Konnektor, modal)",
+      "back": "umesto da"
+    },
+    {
+      "front": "dadurch (Hauptsatz-Konnektor, modal)",
+      "back": "time, na taj način"
+    },
+    {
+      "front": "dadurch, dass (Nebensatz-Konnektor, modal)",
+      "back": "time što"
+    },
+    {
+      "front": "die Freude (nur Sg.)",
+      "back": "radost"
+    },
+    {
+      "front": "stattdessen (Hauptsatz-Konnektor, modal)",
+      "back": "umesto toga"
+    },
+    {
+      "front": "lagern",
+      "back": "skladištiti"
+    },
+    {
+      "front": "das Elektrogerät, -e",
+      "back": "električni uređaj"
+    },
+    {
+      "front": "der Wertstoffhof, ¨e",
+      "back": "reciklažno dvorište"
+    },
+    {
+      "front": "unverpackt",
+      "back": "bez ambalaže"
+    },
+    {
+      "front": "liegen an + Dat. (liegt, lag, hat gelegen)",
+      "back": "zavisiti od; biti do (nečega)"
+    }
+  ]
+}

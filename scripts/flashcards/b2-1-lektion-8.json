@@ -1,0 +1,185 @@
+{
+  "type": "wordset",
+  "title": "Lektion 8 — Reči",
+  "setKey": "b2-1-lektion-8",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    {
+      "front": "die Hauptsache, -n",
+      "back": "glavna stvar"
+    },
+    {
+      "front": "körperlich",
+      "back": "telesni, fizički"
+    },
+    {
+      "front": "das Sprichwort, ¨er",
+      "back": "poslovica"
+    },
+    {
+      "front": "widmen",
+      "back": "posvetiti"
+    },
+    {
+      "front": "die Aufmerksamkeit",
+      "back": "pažnja"
+    },
+    {
+      "front": "neugierig auf + Akk.",
+      "back": "radoznao na, znatiželjan za"
+    },
+    {
+      "front": "jdn. / sich trösten mit + Dat.",
+      "back": "tešiti (nekoga / sebe) nečim"
+    },
+    {
+      "front": "die Nahrung, -en",
+      "back": "hrana, ishrana"
+    },
+    {
+      "front": "die Nahrungsaufnahme, -n",
+      "back": "unos hrane"
+    },
+    {
+      "front": "die Kalorie, -n",
+      "back": "kalorija"
+    },
+    {
+      "front": "der Nährstoff, -e",
+      "back": "hranljiva materija"
+    },
+    {
+      "front": "die Kontrolle, -n",
+      "back": "kontrola"
+    },
+    {
+      "front": "die Kolumne, -n",
+      "back": "kolumna"
+    },
+    {
+      "front": "durch und durch",
+      "back": "skroz-naskroz"
+    },
+    {
+      "front": "sorgenfrei",
+      "back": "bezbrižan"
+    },
+    {
+      "front": "der Umgang (nur Sg.) mit + Dat.",
+      "back": "ophođenje sa, odnos prema"
+    },
+    {
+      "front": "wortreich",
+      "back": "rečit, opširan"
+    },
+    {
+      "front": "senken",
+      "back": "sniziti"
+    },
+    {
+      "front": "der Blutzucker (nur Sg.)",
+      "back": "šećer u krvi"
+    },
+    {
+      "front": "sich aus|kennen mit + Dat. (kennt sich aus, kannte sich aus, hat sich ausgekannt)",
+      "back": "razumeti se u"
+    },
+    {
+      "front": "fettarm",
+      "back": "sa malo masti"
+    },
+    {
+      "front": "das Calcium (nur Sg.)",
+      "back": "kalcijum"
+    },
+    {
+      "front": "der Lachs, -e",
+      "back": "losos"
+    },
+    {
+      "front": "fettreich",
+      "back": "bogat mastima"
+    },
+    {
+      "front": "naiv",
+      "back": "naivan"
+    },
+    {
+      "front": "die Selbstoptimierung, -en",
+      "back": "samooptimizacija"
+    },
+    {
+      "front": "optimal",
+      "back": "optimalan"
+    },
+    {
+      "front": "die Leistung, -en",
+      "back": "učinak, performansa"
+    },
+    {
+      "front": "verständnislos",
+      "back": "bez razumevanja"
+    },
+    {
+      "front": "sachlich",
+      "back": "stvaran, trezven, objektivan"
+    },
+    {
+      "front": "hin und wieder",
+      "back": "s vremena na vreme"
+    },
+    {
+      "front": "die Auskunft, ¨e über + Akk.",
+      "back": "informacija o"
+    },
+    {
+      "front": "kalorienarm",
+      "back": "niskokaloričan"
+    },
+    {
+      "front": "vitaminreich",
+      "back": "bogat vitaminima"
+    },
+    {
+      "front": "schlicht und einfach",
+      "back": "prosto i jednostavno"
+    },
+    {
+      "front": "koffeinfrei",
+      "back": "bez kofeina"
+    },
+    {
+      "front": "kurz und gut",
+      "back": "ukratko"
+    },
+    {
+      "front": "der Griff, -e",
+      "back": "zahvat, potez („der Griff zu…“ — posezanje za)"
+    },
+    {
+      "front": "fix und fertig",
+      "back": "potpuno iscrpljen; gotov"
+    },
+    {
+      "front": "grinsen",
+      "back": "ceriti se"
+    },
+    {
+      "front": "gewiss",
+      "back": "izvestan; svakako"
+    },
+    {
+      "front": "der Nährwert, -e",
+      "back": "hranljiva vrednost"
+    },
+    {
+      "front": "das Essverhalten (nur Sg.)",
+      "back": "navike u ishrani"
+    },
+    {
+      "front": "das Bauchgefühl, -e",
+      "back": "instinkt, osećaj „u stomaku“"
+    }
+  ]
+}

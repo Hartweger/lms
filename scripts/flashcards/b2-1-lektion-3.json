@@ -1,0 +1,229 @@
+{
+  "type": "wordset",
+  "title": "Lektion 3 — Reči",
+  "setKey": "b2-1-lektion-3",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    {
+      "front": "die Perspektive, -n",
+      "back": "perspektiva"
+    },
+    {
+      "front": "der Stadtführer, – / die Stadtführerin, -nen",
+      "back": "turistički vodič / vodičkinja"
+    },
+    {
+      "front": "die Stadtführung, -en",
+      "back": "obilazak grada (sa vodičem)"
+    },
+    {
+      "front": "das Stammlokal, -e",
+      "back": "omiljeni lokal (u koji se stalno ide)"
+    },
+    {
+      "front": "fein",
+      "back": "fin"
+    },
+    {
+      "front": "kombinieren",
+      "back": "kombinovati"
+    },
+    {
+      "front": "stundenlang",
+      "back": "satima"
+    },
+    {
+      "front": "der Instrumentenbauer, – / die Instrumentenbauerin, -nen",
+      "back": "graditelj / graditeljka instrumenata"
+    },
+    {
+      "front": "der Nationalpark, -s",
+      "back": "nacionalni park"
+    },
+    {
+      "front": "das Geräusch, -e",
+      "back": "zvuk, šum"
+    },
+    {
+      "front": "der Dom, -e",
+      "back": "katedrala"
+    },
+    {
+      "front": "der Heiratsantrag, ¨e",
+      "back": "bračna ponuda, prosidba"
+    },
+    {
+      "front": "ab|brechen (bricht ab, brach ab, hat abgebrochen)",
+      "back": "prekinuti (npr. studije)"
+    },
+    {
+      "front": "der Studienabschluss, ¨e",
+      "back": "diploma, završetak studija"
+    },
+    {
+      "front": "Fernost (ohne Artikel)",
+      "back": "Daleki istok"
+    },
+    {
+      "front": "der Blick, -e",
+      "back": "pogled"
+    },
+    {
+      "front": "bummeln",
+      "back": "tumarati, šetkati"
+    },
+    {
+      "front": "die Gasse, -n",
+      "back": "uličica, sokak"
+    },
+    {
+      "front": "die Altstadt, ¨e",
+      "back": "staro gradsko jezgro"
+    },
+    {
+      "front": "das Einkaufsviertel, –",
+      "back": "trgovačka četvrt"
+    },
+    {
+      "front": "das Pulsieren (nur Sg.)",
+      "back": "pulsiranje"
+    },
+    {
+      "front": "die Melange, -n (A)",
+      "back": "melanž (bečka kafa)"
+    },
+    {
+      "front": "der Akzent, -e",
+      "back": "akcenat"
+    },
+    {
+      "front": "fehlerfrei",
+      "back": "bez greške"
+    },
+    {
+      "front": "der Pianist, -en / die Pianistin, -nen",
+      "back": "pijanista / pijanistkinja"
+    },
+    {
+      "front": "begeistert von + Dat.",
+      "back": "oduševljen (nečim)"
+    },
+    {
+      "front": "die Denkpause, -n",
+      "back": "pauza za razmišljanje"
+    },
+    {
+      "front": "sich orientieren",
+      "back": "orijentisati se"
+    },
+    {
+      "front": "aus (Präp., kausal) + Dat.",
+      "back": "iz (uzrok: aus Angst)"
+    },
+    {
+      "front": "das Interesse an + Dat.",
+      "back": "interesovanje za"
+    },
+    {
+      "front": "ab|legen",
+      "back": "položiti (ispit)"
+    },
+    {
+      "front": "der Studiengang, ¨e",
+      "back": "studijski program"
+    },
+    {
+      "front": "das Management, -s",
+      "back": "menadžment"
+    },
+    {
+      "front": "dank (Präp., kausal) + Dat. oder Gen.",
+      "back": "zahvaljujući"
+    },
+    {
+      "front": "vertraut mit + Dat.",
+      "back": "upoznat sa, prisan sa"
+    },
+    {
+      "front": "hetzen",
+      "back": "juriti, žuriti (pod pritiskom)"
+    },
+    {
+      "front": "ein|schlafen (schläft ein, schlief ein, ist eingeschlafen)",
+      "back": "zaspati"
+    },
+    {
+      "front": "vor (Präp., kausal) + Dat.",
+      "back": "od (uzrok: vor Müdigkeit)"
+    },
+    {
+      "front": "die Müdigkeit (nur Sg.)",
+      "back": "umor"
+    },
+    {
+      "front": "deutschsprachig",
+      "back": "nemačkog govornog područja"
+    },
+    {
+      "front": "aufgrund (Präp., kausal) + Gen.",
+      "back": "zbog, usled"
+    },
+    {
+      "front": "der Hintergrund, ¨e",
+      "back": "pozadina"
+    },
+    {
+      "front": "die Sicht auf + Akk. (nur Sg.)",
+      "back": "pogled na"
+    },
+    {
+      "front": "ab|schließen (schließt ab, schloss ab, hat abgeschlossen)",
+      "back": "završiti (studije); zaključati"
+    },
+    {
+      "front": "das Studienfach, ¨er",
+      "back": "studijski predmet, smer"
+    },
+    {
+      "front": "absolvieren",
+      "back": "apsolvirati, završiti"
+    },
+    {
+      "front": "der Auslandsaufenthalt, -e",
+      "back": "boravak u inostranstvu"
+    },
+    {
+      "front": "die Geldnot, ¨e",
+      "back": "novčana oskudica"
+    },
+    {
+      "front": "der Zeitmangel (nur Sg.)",
+      "back": "nedostatak vremena"
+    },
+    {
+      "front": "die Aufregung, -en",
+      "back": "uzbuđenje"
+    },
+    {
+      "front": "die Architektur (nur Sg.)",
+      "back": "arhitektura"
+    },
+    {
+      "front": "die Säule, -n",
+      "back": "stub"
+    },
+    {
+      "front": "flanieren",
+      "back": "šetati ležerno, flanirati"
+    },
+    {
+      "front": "schlendern",
+      "back": "šetkati se, vući se polako"
+    },
+    {
+      "front": "trödeln",
+      "back": "oklevati, dangubiti"
+    }
+  ]
+}

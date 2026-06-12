@@ -1,0 +1,205 @@
+{
+  "type": "wordset",
+  "title": "Lektion 5 — Reči",
+  "setKey": "b2-1-lektion-5",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    {
+      "front": "dynamisch",
+      "back": "dinamičan"
+    },
+    {
+      "front": "seriös",
+      "back": "ozbiljan, pouzdan"
+    },
+    {
+      "front": "natürlich",
+      "back": "prirodan"
+    },
+    {
+      "front": "bieder",
+      "back": "staromodan, malograđanski"
+    },
+    {
+      "front": "unkonventionell",
+      "back": "nekonvencionalan"
+    },
+    {
+      "front": "äußerst",
+      "back": "krajnje, izuzetno"
+    },
+    {
+      "front": "rüber|kommen (kommt rüber, kam rüber, ist rübergekommen) (ugs.)",
+      "back": "ostaviti utisak, „doći do“ publike (žarg.)"
+    },
+    {
+      "front": "der Kabarettist, -en / die Kabarettistin, -nen",
+      "back": "kabaretista / kabaretistkinja"
+    },
+    {
+      "front": "der Steuerberater, – / die Steuerberaterin, -nen",
+      "back": "poreski savetnik / savetnica"
+    },
+    {
+      "front": "die Präsenz, -en",
+      "back": "prisustvo (npr. na mrežama)"
+    },
+    {
+      "front": "der Abonnent, -en / die Abonnentin, -nen",
+      "back": "pretplatnik / pretplatnica"
+    },
+    {
+      "front": "hellauf",
+      "back": "potpuno, sasvim (oduševljen)"
+    },
+    {
+      "front": "der / das Event, -s",
+      "back": "događaj, event"
+    },
+    {
+      "front": "das Design, -s",
+      "back": "dizajn"
+    },
+    {
+      "front": "professionell",
+      "back": "profesionalan"
+    },
+    {
+      "front": "der Berater, –",
+      "back": "savetnik"
+    },
+    {
+      "front": "der Absatz, ¨e",
+      "back": "pasus; prodaja"
+    },
+    {
+      "front": "die Zwischenüberschrift, -en",
+      "back": "međunaslov"
+    },
+    {
+      "front": "erfassen",
+      "back": "obuhvatiti, shvatiti"
+    },
+    {
+      "front": "die Lesedauer (nur Sg.)",
+      "back": "vreme čitanja"
+    },
+    {
+      "front": "verspielt",
+      "back": "razigran"
+    },
+    {
+      "front": "die Schriftart, -en",
+      "back": "font, vrsta pisma"
+    },
+    {
+      "front": "der Hintergrund, ¨e",
+      "back": "pozadina"
+    },
+    {
+      "front": "beauftragen",
+      "back": "angažovati, dati nalog"
+    },
+    {
+      "front": "der Neukunde, -n / die Neukundin, -nen",
+      "back": "novi klijent / klijentkinja"
+    },
+    {
+      "front": "der Videokanal, ¨e",
+      "back": "video-kanal"
+    },
+    {
+      "front": "der Kontakt, -e",
+      "back": "kontakt"
+    },
+    {
+      "front": "der Einstieg, -e",
+      "back": "uvod, početak"
+    },
+    {
+      "front": "weg|klicken",
+      "back": "kliknuti i skloniti, preskočiti"
+    },
+    {
+      "front": "das Intro, -s",
+      "back": "intro, uvodna špica"
+    },
+    {
+      "front": "ewig",
+      "back": "večno, beskrajno"
+    },
+    {
+      "front": "spärlich",
+      "back": "oskudan"
+    },
+    {
+      "front": "beleuchtet",
+      "back": "osvetljen"
+    },
+    {
+      "front": "die Miniaturansicht, -en",
+      "back": "umanjeni prikaz, sličica (thumbnail)"
+    },
+    {
+      "front": "sich vernetzen mit + Dat.",
+      "back": "umrežiti se sa"
+    },
+    {
+      "front": "profitieren von + Dat.",
+      "back": "imati koristi od"
+    },
+    {
+      "front": "gegenseitig",
+      "back": "uzajaman, međusoban"
+    },
+    {
+      "front": "verlinken",
+      "back": "povezati linkom"
+    },
+    {
+      "front": "beständig",
+      "back": "postojan, stalan"
+    },
+    {
+      "front": "rasend",
+      "back": "munjevito, besno (brzo)"
+    },
+    {
+      "front": "posten",
+      "back": "objaviti (na mreži)"
+    },
+    {
+      "front": "kommentieren",
+      "back": "komentarisati"
+    },
+    {
+      "front": "der Berufseinstieg, -e",
+      "back": "ulazak u profesiju"
+    },
+    {
+      "front": "empfehlenswert",
+      "back": "preporučljiv"
+    },
+    {
+      "front": "das Image, -s",
+      "back": "imidž"
+    },
+    {
+      "front": "das Gesicht, -er",
+      "back": "lice"
+    },
+    {
+      "front": "ausführlich",
+      "back": "detaljan, iscrpan"
+    },
+    {
+      "front": "gezielt",
+      "back": "ciljano"
+    },
+    {
+      "front": "überraschend",
+      "back": "iznenađujuće"
+    }
+  ]
+}

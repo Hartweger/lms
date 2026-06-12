@@ -1,0 +1,185 @@
+{
+  "type": "wordset",
+  "title": "Lektion 6 — Reči",
+  "setKey": "b2-1-lektion-6",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    {
+      "front": "ab|geben (gibt ab, gab ab, hat abgegeben)",
+      "back": "predati; prepustiti"
+    },
+    {
+      "front": "die Kompetenz, -en",
+      "back": "kompetencija"
+    },
+    {
+      "front": "ein|bringen (bringt ein, brachte ein, hat eingebracht)",
+      "back": "uneti, doprineti"
+    },
+    {
+      "front": "die Wertschätzung, -en",
+      "back": "uvažavanje"
+    },
+    {
+      "front": "entgegen|bringen (bringt entgegen, brachte entgegen, hat entgegengebracht)",
+      "back": "ukazati (poverenje, poštovanje)"
+    },
+    {
+      "front": "der Auftrag, ¨e",
+      "back": "nalog, zadatak"
+    },
+    {
+      "front": "die Verantwortung (nur Sg.)",
+      "back": "odgovornost"
+    },
+    {
+      "front": "die Eigeninitiative, -n",
+      "back": "sopstvena inicijativa"
+    },
+    {
+      "front": "bedeutsam",
+      "back": "značajan"
+    },
+    {
+      "front": "wesentlich",
+      "back": "bitan, suštinski"
+    },
+    {
+      "front": "der Aspekt, -e",
+      "back": "aspekt"
+    },
+    {
+      "front": "die Zufriedenheit, -en",
+      "back": "zadovoljstvo"
+    },
+    {
+      "front": "der / die Vorgesetzte, -n",
+      "back": "pretpostavljeni / pretpostavljena, šef"
+    },
+    {
+      "front": "autoritär",
+      "back": "autoritaran"
+    },
+    {
+      "front": "der Führungsstil, -e",
+      "back": "stil rukovođenja"
+    },
+    {
+      "front": "motivieren",
+      "back": "motivisati"
+    },
+    {
+      "front": "verantwortungsvoll",
+      "back": "odgovoran"
+    },
+    {
+      "front": "starr",
+      "back": "krut, rigidan"
+    },
+    {
+      "front": "die Hierarchie, -n",
+      "back": "hijerarhija"
+    },
+    {
+      "front": "agil",
+      "back": "agilan, okretan"
+    },
+    {
+      "front": "an|passen an + Akk.",
+      "back": "prilagoditi (nečemu)"
+    },
+    {
+      "front": "die Anforderung, -en",
+      "back": "zahtev"
+    },
+    {
+      "front": "der Psychologe, -n / die Psychologin, -nen",
+      "back": "psiholog / psihološkinja"
+    },
+    {
+      "front": "die Flexibilität (nur Sg.)",
+      "back": "fleksibilnost"
+    },
+    {
+      "front": "der Einzelkämpfer, – / die Einzelkämpferin, -nen",
+      "back": "usamljeni borac, solista"
+    },
+    {
+      "front": "programmieren",
+      "back": "programirati"
+    },
+    {
+      "front": "flach",
+      "back": "ravan, plitak (hijerarhija)"
+    },
+    {
+      "front": "zwanglos",
+      "back": "neusiljen, opušten"
+    },
+    {
+      "front": "der Arbeitnehmer, – / die Arbeitnehmerin, -nen",
+      "back": "zaposleni / zaposlena"
+    },
+    {
+      "front": "das Stichwort, ¨er",
+      "back": "ključna reč, natuknica"
+    },
+    {
+      "front": "die Selbstverwirklichung, -en",
+      "back": "samoostvarenje"
+    },
+    {
+      "front": "offen für + Akk.",
+      "back": "otvoren za"
+    },
+    {
+      "front": "die Teamarbeit, -en",
+      "back": "timski rad"
+    },
+    {
+      "front": "der Stand (hier nur Sg.)",
+      "back": "stanje, status"
+    },
+    {
+      "front": "das Argument, -e",
+      "back": "argument"
+    },
+    {
+      "front": "aus|reden",
+      "back": "pustiti (nekoga) da završi; odgovoriti (nekoga od nečega)"
+    },
+    {
+      "front": "hinzu|fügen",
+      "back": "dodati"
+    },
+    {
+      "front": "plädieren für + Akk.",
+      "back": "zalagati se za"
+    },
+    {
+      "front": "bestehen in + Dat.",
+      "back": "sastojati se u"
+    },
+    {
+      "front": "durchaus",
+      "back": "sasvim, svakako"
+    },
+    {
+      "front": "das Erachten (nur Sg.)",
+      "back": "mišljenje (meines Erachtens — po mom mišljenju)"
+    },
+    {
+      "front": "das Fazit, -e / -s",
+      "back": "zaključak, rezime"
+    },
+    {
+      "front": "lauten",
+      "back": "glasiti"
+    },
+    {
+      "front": "zusammenfassend",
+      "back": "sažeto, ukratko"
+    }
+  ]
+}

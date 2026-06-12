@@ -1,0 +1,233 @@
+{
+  "type": "wordset",
+  "title": "Lektion 10 — Reči",
+  "setKey": "b2-1-lektion-10",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    {
+      "front": "das Scheitern (nur Sg.)",
+      "back": "neuspeh, propast"
+    },
+    {
+      "front": "die Leidenschaft, -en",
+      "back": "strast"
+    },
+    {
+      "front": "nach|gehen + Dat. (geht nach, ging nach, ist nachgegangen)",
+      "back": "posvetiti se, baviti se (nečim)"
+    },
+    {
+      "front": "die Niederlage, -n",
+      "back": "poraz"
+    },
+    {
+      "front": "ein|stecken",
+      "back": "progutati, podneti (poraz)"
+    },
+    {
+      "front": "die Bewertung, -en",
+      "back": "ocena, procena"
+    },
+    {
+      "front": "die Stärke, -n",
+      "back": "snaga, jača strana"
+    },
+    {
+      "front": "heraus|arbeiten",
+      "back": "izdvojiti, razraditi"
+    },
+    {
+      "front": "die Option, -en",
+      "back": "opcija"
+    },
+    {
+      "front": "der Studienabbrecher, – / die Studienabbrecherin, -nen",
+      "back": "osoba koja je prekinula studije"
+    },
+    {
+      "front": "verkürzt",
+      "back": "skraćen"
+    },
+    {
+      "front": "die App, -s",
+      "back": "aplikacija"
+    },
+    {
+      "front": "das Ende, -n",
+      "back": "kraj"
+    },
+    {
+      "front": "der Schluss, ¨e",
+      "back": "kraj, zaključak"
+    },
+    {
+      "front": "das Ziel, -e",
+      "back": "cilj"
+    },
+    {
+      "front": "der Programmierer, – / die Programmiererin, -nen",
+      "back": "programer / programerka"
+    },
+    {
+      "front": "scheitern an + Dat.",
+      "back": "doživeti neuspeh zbog/na"
+    },
+    {
+      "front": "die Medaille, -n",
+      "back": "medalja"
+    },
+    {
+      "front": "das Tabu, -s",
+      "back": "tabu"
+    },
+    {
+      "front": "freiberuflich",
+      "back": "frilenserski, kao slobodna profesija"
+    },
+    {
+      "front": "der Coach, -(e)s",
+      "back": "kouč, trener"
+    },
+    {
+      "front": "verarbeiten",
+      "back": "preraditi; psihički obraditi"
+    },
+    {
+      "front": "ehe (Nebensatz-Konnektor, temporal)",
+      "back": "pre nego što"
+    },
+    {
+      "front": "mittelständisch",
+      "back": "srednje veličine (preduzeće)"
+    },
+    {
+      "front": "angestellt",
+      "back": "zaposlen (kod poslodavca)"
+    },
+    {
+      "front": "zusammen|legen",
+      "back": "spojiti, udružiti"
+    },
+    {
+      "front": "der Gedanke, -n",
+      "back": "misao"
+    },
+    {
+      "front": "das Loch, ¨er",
+      "back": "rupa (i fig. „pasti u rupu“)"
+    },
+    {
+      "front": "währenddessen (Hauptsatz-Konnektor, temporal)",
+      "back": "u međuvremenu"
+    },
+    {
+      "front": "die Ablehnung, -en",
+      "back": "odbijanje"
+    },
+    {
+      "front": "die Anstellung, -en",
+      "back": "zaposlenje"
+    },
+    {
+      "front": "betreiben (betreibt, betrieb, hat betrieben)",
+      "back": "voditi (posao), baviti se"
+    },
+    {
+      "front": "bereit für + Akk.",
+      "back": "spreman za"
+    },
+    {
+      "front": "auf|bauen auf + Dat.",
+      "back": "graditi na (nečemu)"
+    },
+    {
+      "front": "die Verfügung, -en",
+      "back": "raspolaganje (zur Verfügung stehen — biti na raspolaganju)"
+    },
+    {
+      "front": "der Entschluss, ¨e",
+      "back": "odluka"
+    },
+    {
+      "front": "fassen",
+      "back": "doneti (odluku); shvatiti"
+    },
+    {
+      "front": "sich selbstständig machen als + Akk.",
+      "back": "pokrenuti sopstveni posao kao"
+    },
+    {
+      "front": "bereuen",
+      "back": "kajati se"
+    },
+    {
+      "front": "nach|denken über + Akk. (denkt nach, dachte nach, hat nachgedacht)",
+      "back": "razmišljati o"
+    },
+    {
+      "front": "die Schwierigkeit, -en",
+      "back": "teškoća"
+    },
+    {
+      "front": "geraten in + Akk.",
+      "back": "dospeti, zapasti u"
+    },
+    {
+      "front": "versetzen in + Akk.",
+      "back": "staviti, preneti u (stanje)"
+    },
+    {
+      "front": "das Sprungbrett, -er",
+      "back": "odskočna daska"
+    },
+    {
+      "front": "leisten",
+      "back": "postići, učiniti; priuštiti"
+    },
+    {
+      "front": "die Basis für + Akk.",
+      "back": "osnova za"
+    },
+    {
+      "front": "entmutigen + Akk.",
+      "back": "obeshrabriti"
+    },
+    {
+      "front": "die Schwäche, -n",
+      "back": "slabost"
+    },
+    {
+      "front": "der Teamleiter, – / die Teamleiterin, -nen",
+      "back": "vođa tima / liderka tima"
+    },
+    {
+      "front": "arbeiten an + Dat.",
+      "back": "raditi na"
+    },
+    {
+      "front": "vertreten (vertritt, vertrat, hat vertreten)",
+      "back": "zastupati"
+    },
+    {
+      "front": "harmonisch",
+      "back": "harmoničan"
+    },
+    {
+      "front": "scheuen",
+      "back": "zazirati od, izbegavati"
+    },
+    {
+      "front": "ab|wägen (wiegt ab, wog ab, hat abgewogen)",
+      "back": "odmeriti, odvagati"
+    },
+    {
+      "front": "ein|halten (hält ein, hielt ein, hat eingehalten)",
+      "back": "pridržavati se (roka, pravila)"
+    },
+    {
+      "front": "bedenken (bedenkt, bedachte, hat bedacht)",
+      "back": "imati u vidu, razmotriti"
+    }
+  ]
+}
