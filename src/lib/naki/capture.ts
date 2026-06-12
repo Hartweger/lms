@@ -34,7 +34,8 @@ export async function sendNakiWelcomeEmail(
   to: string,
   name: string,
   level: string,
-  plan: string
+  plan: string,
+  includeCoupon: boolean = true
 ): Promise<void> {
   if (!process.env.RESEND_API_KEY) {
     console.warn("[naki] RESEND_API_KEY not set — welcome email disabled");
@@ -44,6 +45,14 @@ export async function sendNakiWelcomeEmail(
   const linksHtml = LEVEL_LINKS[level.toUpperCase()] ??
     '<a href="https://www.hartweger.rs/?utm_source=naki&utm_medium=email" style="color:#4EADC5;">Blog Hartweger centra</a>';
   const planHtml = escapeHtml(plan).replace(/\n/g, "<br>");
+  // NAKI10 samo za nove kupce — postojeći video kupci ne dobijaju kupon blok.
+  const couponHtml = includeCoupon
+    ? `<table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="background:#fdf6e3;border:1px dashed #e0b94f;border-radius:8px;padding:18px;">
+        <p style="margin:0 0 6px;font-size:14px;color:#333;">Poklon za tebe — <strong>10% popusta</strong> na bilo koji video kurs:</p>
+        <p style="margin:0;font-size:22px;font-weight:bold;letter-spacing:2px;color:#b8860b;">NAKI10</p>
+        <p style="margin:6px 0 0;font-size:12px;color:#999;">Uneseš ga pri kupovini. Važi jednom po osobi, za video kurseve.</p>
+      </td></tr></table>`
+    : "";
 
   const html = `<!DOCTYPE html>
 <html lang="sr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
@@ -61,11 +70,7 @@ export async function sendNakiWelcomeEmail(
       <p style="font-size:14px;">${linksHtml}</p>
       <p style="font-size:14px;color:#666;">YouTube lekcije: <a href="https://www.youtube.com/@NatasaHartweger?utm_source=naki&utm_medium=email" style="color:#4EADC5;">@NatasaHartweger</a></p>
       <hr style="border:none;border-top:1px solid #e8e8e8;margin:30px 0;">
-      <table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="background:#fdf6e3;border:1px dashed #e0b94f;border-radius:8px;padding:18px;">
-        <p style="margin:0 0 6px;font-size:14px;color:#333;">Poklon za tebe — <strong>10% popusta</strong> na bilo koji video kurs:</p>
-        <p style="margin:0;font-size:22px;font-weight:bold;letter-spacing:2px;color:#b8860b;">NAKI10</p>
-        <p style="margin:6px 0 0;font-size:12px;color:#999;">Uneseš ga pri kupovini. Važi jednom po osobi, za video kurseve.</p>
-      </td></tr></table>
+      ${couponHtml}
       <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:24px;"><tr><td align="center">
         <a href="https://www.hartweger.rs/kursevi?utm_source=naki&utm_medium=email&utm_campaign=welcome_plan" style="display:inline-block;background:#4EADC5;color:#ffffff;text-decoration:none;padding:14px 32px;border-radius:6px;font-size:16px;font-weight:bold;">Pogledaj kurseve</a>
       </td></tr></table>

@@ -4,6 +4,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { rateLimit } from "@/lib/rate-limit";
 import { NAKI_MODEL } from "@/lib/naki/system-prompt";
 import { getFallbackPlan, sendNakiWelcomeEmail, addToMailerLite } from "@/lib/naki/capture";
+import { emailOwnsAnyVideoCourse } from "@/lib/coupon-ownership";
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
@@ -69,14 +70,16 @@ export async function POST(request: Request) {
   }
   if (!VALID_LEVELS.includes(level)) level = "";
 
-  // Generiši plan → pošalji mejl → MailerLite (kao stari PHP, redom)
+  // Generiši plan → pošalji mejl → MailerLite (kao stari PHP, redom).
+  // Kupon NAKI10 ide samo onima koji još nemaju video kurs.
+  const admin = createAdminClient();
+  const alreadyCustomer = await emailOwnsAnyVideoCourse(admin, email);
   const plan = await generateLearningPlan(name, level, history);
-  await sendNakiWelcomeEmail(email, name, level, plan);
+  await sendNakiWelcomeEmail(email, name, level, plan, !alreadyCustomer);
   await addToMailerLite(email, name, level);
 
   // Upiši/azuriraj profil (bez čuvanja istorije; email je ključ).
   // Brojači se uvećavaju pri svakom capture-u: +1 sesija, + user poruke te sesije.
-  const admin = createAdminClient();
   const { data: existing } = await admin
     .from("naki_profiles")
     .select("total_sessions, total_messages")

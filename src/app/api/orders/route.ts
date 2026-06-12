@@ -3,7 +3,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { generateOrderNumber, calculatePaypalEur } from "@/lib/order-utils";
 import { sendPaymentInstructionsEmail, sendNewOrderAdminEmail } from "@/lib/email";
 import { nivoForSlug } from "@/lib/course-nivo";
-import { emailOwnsCourse } from "@/lib/coupon-ownership";
+import { emailOwnsCourse, emailOwnsAnyVideoCourse } from "@/lib/coupon-ownership";
 import { computeSeats, pickOpenGroupForNivo } from "@/lib/groups";
 
 export async function POST(request: Request) {
@@ -124,6 +124,13 @@ export async function POST(request: Request) {
         if (coupon.renewal_only && !renewalOk) {
           return NextResponse.json(
             { error: "Ovaj kod važi samo za obnovu kursa koji već imaš (na isti mejl)." },
+            { status: 400 }
+          );
+        }
+        // new_customers_only: samo za mejlove koji još nemaju nijedan video kurs
+        if (coupon.new_customers_only && (await emailOwnsAnyVideoCourse(supabase, email))) {
+          return NextResponse.json(
+            { error: "Ovaj kod važi samo za prvu kupovinu video kursa." },
             { status: 400 }
           );
         }

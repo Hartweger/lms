@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { emailOwnsCourse } from "@/lib/coupon-ownership";
+import { emailOwnsCourse, emailOwnsAnyVideoCourse } from "@/lib/coupon-ownership";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -65,6 +65,14 @@ export async function GET(request: NextRequest) {
         { status: 400 }
       );
     }
+  }
+
+  // new_customers_only: samo za mejlove koji još nemaju nijedan video kurs (npr. NAKI10).
+  if (coupon.new_customers_only && email && (await emailOwnsAnyVideoCourse(supabase, email))) {
+    return NextResponse.json(
+      { error: "Ovaj kod važi samo za prvu kupovinu video kursa." },
+      { status: 400 }
+    );
   }
 
   // renewal_only: važi samo za obnovu kursa koji polaznik već poseduje (po mejlu).

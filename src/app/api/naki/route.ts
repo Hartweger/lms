@@ -11,6 +11,7 @@ import {
   blogLinkAddon,
 } from "@/lib/naki/system-prompt";
 import { createHash } from "crypto";
+import { userOwnsAnyVideoCourse } from "@/lib/coupon-ownership";
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
@@ -103,12 +104,19 @@ export async function POST(request: Request) {
   const history = messages.slice(-12);
 
   // ── Blog link detekcija ──
-  // Statični prompt se kešira (prompt caching); promenljivi blog-addon ide
-  // kao odvojen blok da ne kvari keš.
+  // Statični prompt se kešira (prompt caching); promenljivi dodaci idu
+  // kao odvojeni blokovi da ne kvare keš.
   const linkAddon = last.role === "user" ? blogLinkAddon(last.content) : "";
+  // Ulogovani koji već imaju video kurs ne dobijaju NAKI10 (kupon je za nove kupce).
+  const couponAddon =
+    userId && (await userOwnsAnyVideoCourse(admin, userId))
+      ? "\n\nOvaj korisnik je već kupac video kursa — NE pominji kupon NAKI10 (važi samo za prvu kupovinu)."
+      : "";
   const system: Anthropic.TextBlockParam[] = [
     { type: "text", text: NAKI_SYSTEM_PROMPT, cache_control: { type: "ephemeral" } },
-    ...(linkAddon ? [{ type: "text" as const, text: linkAddon }] : []),
+    ...(linkAddon || couponAddon
+      ? [{ type: "text" as const, text: linkAddon + couponAddon }]
+      : []),
   ];
 
   // ── Poziv Claude API ──
