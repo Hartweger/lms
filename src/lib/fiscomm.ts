@@ -1,5 +1,6 @@
 // src/lib/fiscomm.ts — Fiscomm PURS fiskalizacija (Virtual PFR)
 import { createAdminClient } from "@/lib/supabase/admin";
+import { SITE_URL } from "@/lib/site-url";
 
 const FISCOMM = {
   // v0.1.0 API (Google Cloud Functions) — isti koji stari WP plugin koristi; ključ je važeći ovde
@@ -41,7 +42,7 @@ export async function fiscalizeOrder(orderId: string): Promise<{ ok: boolean; er
   const items = (order.items ?? []) as OrderItem[];
   const name = items[0]?.title ?? "Kurs";
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kurs.hartweger.rs";
+  const siteUrl = SITE_URL;
   // IAdditionalData šema (v0.1.0): payment[], items[], invoicePdfUrl (obavezno)
   const payload = {
     payment: [{ amount: total, paymentType: pursPaymentType(order.payment_method) }],

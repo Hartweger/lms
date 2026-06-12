@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { grantAccessForOrder } from "@/lib/grant-access";
 import { sendPurchaseEvent } from "@/lib/meta-capi";
+import { SITE_URL } from "@/lib/site-url";
 
 export async function POST(
   _request: Request,
@@ -45,7 +46,7 @@ export async function POST(
   // Meta Conversions API — Purchase za uplatnicu/PayPal ide ISKLJUČIVO ovde (kad je uplata
   // stvarno potvrđena), pa browser pixel za ove načine ne šalje Purchase. Ovo je adminov
   // zahtev (ne korisnikov browser), pa nema fbp/fbc/IP — match preko hešovanog mejla.
-  const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kurs.hartweger.rs";
+  const base = SITE_URL;
   await sendPurchaseEvent(order, { eventSourceUrl: `${base}/kupovina/hvala/${order.id}` });
 
   return NextResponse.json({ ok: true });

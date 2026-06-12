@@ -5,6 +5,7 @@ import { verifyCallbackHash, NESTPAY } from "@/lib/nestpay";
 import { grantAccessForOrder } from "@/lib/grant-access";
 import { fiscalizeOrder } from "@/lib/fiscomm";
 import { sendPurchaseEvent } from "@/lib/meta-capi";
+import { SITE_URL } from "@/lib/site-url";
 
 export const dynamic = "force-dynamic";
 
@@ -13,7 +14,7 @@ export async function POST(request: Request) {
   const params: Record<string, string> = {};
   form.forEach((v, k) => { params[k] = String(v); });
 
-  const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kurs.hartweger.rs";
+  const base = SITE_URL;
   const admin = createAdminClient();
   const oid = params.oid ?? "";
 

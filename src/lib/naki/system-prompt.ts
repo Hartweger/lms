@@ -111,9 +111,9 @@ VAN NEMAČKOG:
 
 Sajt: ${SITE_HOST} | Kursevi: ${SITE_HOST}/kursevi | Magazin (blog tekstovi): ${SITE_HOST}/magazin | YouTube (video lekcije): youtube.com/@NatasaHartweger | Kontakt: info@hartweger.rs`;
 
-// ── Magazin baza: tema (regex) → slug članka na kurs.hartweger.rs/magazin. ──
+// ── Magazin baza: tema (regex) → slug članka na hartweger.rs/magazin. ──
 // Detektuje temu iz poslednje poruke i ubaci max 1 referencu u system prompt. Specifičnije ide gore.
-const MAGAZIN = "https://kurs.hartweger.rs/magazin/";
+const MAGAZIN = "https://www.hartweger.rs/magazin/";
 const UTM = "?utm_source=naki&utm_medium=chat";
 export const NAKI_YOUTUBE = "https://www.youtube.com/@NatasaHartweger";
 

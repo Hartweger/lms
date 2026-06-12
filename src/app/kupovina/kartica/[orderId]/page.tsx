@@ -2,6 +2,7 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { buildPaymentFields, NESTPAY } from "@/lib/nestpay";
 import { notFound } from "next/navigation";
+import { SITE_URL } from "@/lib/site-url";
 
 export const dynamic = "force-dynamic";
 
@@ -14,7 +15,7 @@ export default async function KarticaPage({ params }: { params: Promise<{ orderI
 
   if (!order || (order.payment_method !== "kartica" && order.payment_method !== "kartica_rate")) notFound();
 
-  const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kurs.hartweger.rs";
+  const base = SITE_URL;
   const callbackUrl = `${base}/api/nestpay/callback`;
   const fields = buildPaymentFields({
     orderNumber: order.order_number,

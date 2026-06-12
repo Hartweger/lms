@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { sendCourseCompletedEmail } from "@/lib/email";
 
 /**
  * Issue a course certificate — server-side only.
@@ -114,6 +115,20 @@ export async function POST(request: Request) {
       return NextResponse.json({ eligible: true, percent, certificateId: again.id });
     }
     return NextResponse.json({ error: "Issue failed" }, { status: 500 });
+  }
+
+  // Čestitka + link ka sertifikatu — SAMO pri prvom izdavanju (unique user+course garantuje
+  // jedno slanje; postojeći sertifikat se vraća iznad bez mejla). Best-effort, ne blokira odgovor.
+  try {
+    const [{ data: profile }, { data: course }] = await Promise.all([
+      admin.from("user_profiles").select("email, full_name").eq("id", user.id).single(),
+      admin.from("courses").select("title").eq("id", courseId).single(),
+    ]);
+    if (profile?.email) {
+      await sendCourseCompletedEmail(profile.email, profile.full_name || "", course?.title ?? "Kurs", created.id);
+    }
+  } catch (e) {
+    console.error("[certificate] Slanje čestitke palo:", e);
   }
 
   return NextResponse.json({ eligible: true, percent, certificateId: created.id });
