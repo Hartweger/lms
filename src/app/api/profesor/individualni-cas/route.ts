@@ -113,16 +113,26 @@ export async function DELETE(request: Request) {
   return NextResponse.json({ ok: true, lessonsUsed: used });
 }
 
-// PATCH — snimi/izmeni link beleški (Google Doc) za individualni upis.
+// PATCH — snimi/izmeni link beleški (Google Doc) za individualni upis,
+// ili (samo admin) ručno arhiviraj/vrati paket: { enrollmentId, archive: true|false }.
+// Arhiviranje radi i kad časovi nisu iskorišćeni (polaznik odustao / paket istekao).
 export async function PATCH(request: Request) {
   const staff = await requireStaff();
   if (!staff) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
 
-  const { enrollmentId, notesUrl } = await request.json();
+  const { enrollmentId, notesUrl, archive } = await request.json();
   if (!enrollmentId) return NextResponse.json({ error: "enrollmentId je obavezan" }, { status: 400 });
 
   const owned = await loadOwnedEnrollment(staff.admin, enrollmentId, staff.userId, staff.isAdmin);
   if ("error" in owned) return NextResponse.json({ error: owned.error }, { status: owned.status });
+
+  if (typeof archive === "boolean") {
+    if (!staff.isAdmin) return NextResponse.json({ error: "Samo admin može da arhivira/vrati paket." }, { status: 403 });
+    const { error } = await staff.admin
+      .from("individual_enrollments").update({ status: archive ? "completed" : "active" }).eq("id", enrollmentId);
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ ok: true, status: archive ? "completed" : "active" });
+  }
 
   const url = String(notesUrl ?? "").trim() || null;
   const { error } = await staff.admin

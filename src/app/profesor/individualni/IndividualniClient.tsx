@@ -66,6 +66,24 @@ export default function IndividualniClient({ rows, showProfessor }: { rows: Enro
     finally { setBusy(null); }
   }
 
+  async function setArchived(enrollmentId: string, archive: boolean, studentName: string) {
+    const q = archive
+      ? `Arhivirati paket polaznika ${studentName}? Neiskorišćeni časovi propadaju (odustao/istekao).`
+      : `Vratiti paket polaznika ${studentName} u aktivne?`;
+    if (!window.confirm(q)) return;
+    setBusy(enrollmentId); setError(null);
+    try {
+      const res = await fetch("/api/profesor/individualni-cas", {
+        method: "PATCH", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ enrollmentId, archive }),
+      });
+      const j = await res.json();
+      if (!res.ok) { setError(j.error || "Greška."); return; }
+      router.refresh();
+    } catch { setError("Greška u mreži."); }
+    finally { setBusy(null); }
+  }
+
   async function saveNotes(enrollmentId: string, current: string | null) {
     const url = window.prompt("Zalepi link beleški (Google Doc) za ovog polaznika:", current ?? "");
     if (url === null) return; // otkazano
@@ -130,6 +148,12 @@ export default function IndividualniClient({ rows, showProfessor }: { rows: Enro
                   <td className="px-6 py-4">
                     <div className={`font-medium ${done ? "text-gray-400" : "text-gray-900"}`}>{r.lessonsUsed}/{r.packageLessons}</div>
                     <div className="text-xs text-gray-400">{done ? "završeno" : `još ${remaining}`}</div>
+                    {showProfessor && (
+                      <button type="button" onClick={() => setArchived(r.id, !done, r.studentName)} disabled={busy === r.id}
+                        className="text-xs text-gray-400 hover:text-koral hover:underline mt-0.5 block">
+                        {done ? "vrati u aktivne" : "arhiviraj"}
+                      </button>
+                    )}
                     {r.lessons.length > 0 && (
                       <button type="button" onClick={() => setOpenHistory(openHistory === r.id ? null : r.id)} className="text-xs text-plava hover:underline mt-1">
                         {openHistory === r.id ? "sakrij" : "istorija"}
