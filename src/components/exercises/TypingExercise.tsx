@@ -10,22 +10,37 @@ interface TypingProps {
   onAnswer: (correct: boolean) => void;
 }
 
+// Izjednači tipografske varijante koje polaznik ne može da kuca pouzdano:
+// sve crtice u "-", sve navodnike/apostrofe u "'", višestruke razmake u jedan.
+function unifyTypography(s: string): string {
+  return s
+    .replace(/[—–‒―−]/g, "-")
+    .replace(/[„“”«»]/g, '"')
+    .replace(/[‚’‘´`]/g, "'")
+    .replace(/\s*-\s*/g, " - ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 function normalize(s: string): string {
-  return s.trim().toLowerCase().replace(/[.!?]+$/g, "")
+  return unifyTypography(s).toLowerCase().replace(/[.!?]+$/g, "")
     .replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss")
-    .replace(/ae/g, "ae").replace(/oe/g, "oe").replace(/ue/g, "ue")
-    .replace(/\s+/g, " ");
+    .replace(/\s+/g, " ").trim();
+}
+
+// Najblaže poređenje: samo slova/brojevi — interpunkcija i crtice se ignorišu.
+function lettersOnly(s: string): string {
+  return normalize(s).replace(/[^a-z0-9äöüß ]/gi, "").replace(/\s+/g, " ").trim();
 }
 
 function checkAnswer(input: string, answer: string): boolean {
   // Support multiple correct answers separated by |
   const answers = answer.split("|").map((a) => a.trim());
   const inputNorm = normalize(input);
-  const inputRaw = input.trim().toLowerCase().replace(/[.!?]+$/g, "").replace(/\s+/g, " ");
+  const inputLetters = lettersOnly(input);
   return answers.some((a) => {
     if (normalize(a) === inputNorm) return true;
-    const aRaw = a.trim().toLowerCase().replace(/[.!?]+$/g, "").replace(/\s+/g, " ");
-    return inputRaw === aRaw;
+    return lettersOnly(a) === inputLetters;
   });
 }
 

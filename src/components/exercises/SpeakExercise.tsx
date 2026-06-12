@@ -25,8 +25,13 @@ function levenshtein(a: string, b: string): number {
   return matrix[b.length][a.length];
 }
 
+// Skini SVU interpunkciju (i unutar rečenice) — prepoznavanje govora je
+// dodaje nepredvidivo, a izgovor se ocenjuje po rečima, ne po znacima.
 function normalize(s: string): string {
-  return s.trim().toLowerCase().replace(/[.!?,;:]+$/g, "").replace(/\s+/g, " ");
+  return s.trim().toLowerCase()
+    .replace(/[.!?,;:„“”‚’‘"'\-—–…()]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 function similarity(a: string, b: string): number {
@@ -39,15 +44,34 @@ function similarity(a: string, b: string): number {
   return 1 - dist / maxLen;
 }
 
+// Da li su dve reči "iste" za potrebe izgovora: jednake, ili se za duže reči
+// razlikuju najviše za 1 slovo (varijacije u prepoznavanju govora).
+function wordsMatch(a: string, b: string): boolean {
+  if (a === b) return true;
+  if (Math.min(a.length, b.length) >= 4) return levenshtein(a, b) <= 1;
+  return false;
+}
+
+// Poravnanje sa tolerancijom na umetnute/izostavljene reči: za svaku očekivanu
+// reč tražimo sledeću podudarnu u izgovorenom nizu (umesto krutog poređenja
+// pozicija i pozicija, gde jedna umetnuta reč oboji sve iza nje u crveno).
 function findDifferences(spoken: string, expected: string): { word: string; status: "correct" | "wrong" | "missing" }[] {
-  const spokenWords = normalize(spoken).split(" ");
-  const expectedWords = normalize(expected).split(" ");
+  const spokenWords = normalize(spoken).split(" ").filter(Boolean);
+  const expectedWords = normalize(expected).split(" ").filter(Boolean);
   const result: { word: string; status: "correct" | "wrong" | "missing" }[] = [];
+  let si = 0;
   for (let i = 0; i < expectedWords.length; i++) {
-    if (i < spokenWords.length && normalize(spokenWords[i]) === normalize(expectedWords[i])) {
+    // potraži očekivanu reč u narednih nekoliko izgovorenih (preskoči umetke)
+    let found = -1;
+    for (let j = si; j < Math.min(si + 3, spokenWords.length); j++) {
+      if (wordsMatch(spokenWords[j], expectedWords[i])) { found = j; break; }
+    }
+    if (found >= 0) {
       result.push({ word: expectedWords[i], status: "correct" });
-    } else if (i < spokenWords.length) {
+      si = found + 1;
+    } else if (si < spokenWords.length) {
       result.push({ word: expectedWords[i], status: "wrong" });
+      si++;
     } else {
       result.push({ word: expectedWords[i], status: "missing" });
     }
@@ -79,8 +103,12 @@ export default function SpeakExercise({ question, correctAnswer, explanation, on
   const inputRef = useRef<HTMLInputElement>(null);
 
   const evaluate = (text: string) => {
-    const score = similarity(text, correctAnswer);
     const differences = findDifferences(text, correctAnswer);
+    const wordScore = differences.length
+      ? differences.filter((d) => d.status === "correct").length / differences.length
+      : 0;
+    // uzmi povoljniju ocenu: poklapanje reči ili sličnost celog niza
+    const score = Math.max(similarity(text, correctAnswer), wordScore);
     setResult({ score, differences });
     setAnswered(true);
     onAnswer(score >= 0.75);
@@ -112,6 +140,19 @@ export default function SpeakExercise({ question, correctAnswer, explanation, on
     recognition.continuous = true;
 
     let lastTranscript = "";
+    let silenceTimer: ReturnType<typeof setTimeout> | null = null;
+    let done = false;
+
+    // Jedinstven završetak: zaustavi, oceni jednom (tajmer tišine, ručni stop
+    // i onend mogu svi da okinu — sme da prođe samo prvi).
+    const finish = () => {
+      if (done) return;
+      done = true;
+      if (silenceTimer) clearTimeout(silenceTimer);
+      setListening(false);
+      try { recognition.stop(); } catch { /* already stopped */ }
+      if (lastTranscriptRef.current) evaluate(lastTranscriptRef.current);
+    };
 
     recognition.onresult = (event) => {
       let final = "";
@@ -122,22 +163,20 @@ export default function SpeakExercise({ question, correctAnswer, explanation, on
           // Check if result is final (isFinal property)
           const isFinal = (result as unknown as { isFinal: boolean }).isFinal;
           if (isFinal) {
-            final += result[0].transcript;
+            final += result[0].transcript + " ";
           } else {
             interim += result[0].transcript;
           }
         }
       }
-      lastTranscript = final || interim;
+      lastTranscript = (final + interim).trim() || lastTranscript;
       lastTranscriptRef.current = lastTranscript;
       setTranscript(lastTranscript);
 
-      // If we got a final result, evaluate immediately
-      if (final) {
-        setListening(false);
-        try { recognition.stop(); } catch { /* already stopped */ }
-        evaluate(final);
-      }
+      // NE ocenjuj na prvu mikropauzu — sačekaj 2,5 s tišine da polaznik
+      // završi celu rečenicu (svaki novi rezultat resetuje tajmer).
+      if (silenceTimer) clearTimeout(silenceTimer);
+      silenceTimer = setTimeout(finish, 2500);
     };
 
     recognition.onerror = (event) => {
@@ -148,9 +187,7 @@ export default function SpeakExercise({ question, correctAnswer, explanation, on
         setTranscript("Nije prepoznat govor. Pokušaj ponovo.");
       } else if (event.error === "aborted") {
         // On abort, evaluate whatever we captured
-        if (lastTranscript) {
-          evaluate(lastTranscript);
-        }
+        if (lastTranscript) finish();
         return;
       } else {
         setTranscript(`Greška: ${event.error}`);
@@ -160,9 +197,7 @@ export default function SpeakExercise({ question, correctAnswer, explanation, on
     recognition.onend = () => {
       setListening(false);
       // Safari sometimes fires onend without onresult final — evaluate last captured text
-      if (lastTranscriptRef.current && !answered) {
-        evaluate(lastTranscriptRef.current);
-      }
+      if (lastTranscriptRef.current) finish();
     };
 
     recognitionRef.current = recognition;
