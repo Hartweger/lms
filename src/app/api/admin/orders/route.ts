@@ -42,7 +42,7 @@ export async function POST(request: Request) {
   if (profile?.role !== "admin") return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
 
   try {
-    const { email, courseId, totalAmount, paymentMethod, markAsPaid, sendPaymentEmail } = await request.json();
+    const { email, courseId, totalAmount, paymentMethod, markAsPaid, sendPaymentEmail, fiscalize } = await request.json();
 
     // Validate required fields
     if (!email || !courseId || !totalAmount || !paymentMethod) {
@@ -152,8 +152,8 @@ export async function POST(request: Request) {
     console.log(`[admin/orders] Created order ${order.order_number} for ${email}`);
 
     // markAsPaid → isti tok kao "Potvrdi uplatu": course_unlocks → pristup (svi vezani kursevi),
-    // welcome mejl, pa fiskalizacija. Bez ovoga je ručna narudžbina davala pristup samo "ljušturi"
-    // proizvoda i nikad se nije fiskalizovala.
+    // welcome mejl. Fiskalizacija SAMO ako je admin eksplicitno čekirao "Fiskalizuj" — neki računi
+    // idu preko SEF-a i ne smeju da dobiju fiskalni račun (odluka 12.06.2026).
     if (markAsPaid) {
       const result = await grantAccessForOrder(order.id);
       if (!result.ok) {
@@ -163,7 +163,9 @@ export async function POST(request: Request) {
           { status: 500 }
         );
       }
-      await fiscalizeOrder(order.id); // idempotentno; ne blokira pristup ako padne
+      if (fiscalize) {
+        await fiscalizeOrder(order.id); // idempotentno; ne blokira pristup ako padne
+      }
     } else if (sendPaymentEmail) {
       // Pošalji kupcu podatke za uplatu (uplatnica/PayPal/kartica). Best-effort.
       try {

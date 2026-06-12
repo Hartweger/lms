@@ -32,6 +32,7 @@ export default function NarudzbineClient({ initialOrders, courses }: Props) {
   const [newAmount, setNewAmount] = useState("");
   const [newPayment, setNewPayment] = useState("uplatnica");
   const [newMarkPaid, setNewMarkPaid] = useState(false);
+  const [newFiscalize, setNewFiscalize] = useState(false);
   const [newSendEmail, setNewSendEmail] = useState(true);
   const [newLoading, setNewLoading] = useState(false);
   const [newError, setNewError] = useState<string | null>(null);
@@ -57,6 +58,7 @@ export default function NarudzbineClient({ initialOrders, courses }: Props) {
           totalAmount: Number(newAmount),
           paymentMethod: newPayment,
           markAsPaid: newMarkPaid,
+          fiscalize: newMarkPaid && newFiscalize,
           sendPaymentEmail: newSendEmail && !newMarkPaid,
         }),
       });
@@ -72,6 +74,7 @@ export default function NarudzbineClient({ initialOrders, courses }: Props) {
       setNewAmount("");
       setNewPayment("uplatnica");
       setNewMarkPaid(false);
+      setNewFiscalize(false);
     } catch {
       setNewError("Greška na serveru.");
     } finally {
@@ -266,6 +269,19 @@ export default function NarudzbineClient({ initialOrders, courses }: Props) {
                 Označi odmah kao plaćeno (daje pristup kursu)
               </span>
             </label>
+            {newMarkPaid && (
+              <label className="flex items-center gap-2 cursor-pointer pl-6">
+                <input
+                  type="checkbox"
+                  checked={newFiscalize}
+                  onChange={(e) => setNewFiscalize(e.target.checked)}
+                  className="rounded border-gray-300 text-plava focus:ring-plava"
+                />
+                <span className="text-sm text-gray-700">
+                  Fiskalizuj račun (ne čekiraj ako račun ide preko SEF-a)
+                </span>
+              </label>
+            )}
             <label className={`flex items-center gap-2 ${newMarkPaid ? "opacity-40 cursor-not-allowed" : "cursor-pointer"}`}>
               <input
                 type="checkbox"
