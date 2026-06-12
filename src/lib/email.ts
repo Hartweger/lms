@@ -1109,6 +1109,7 @@ export type DailyBrief = {
   isticePristup: { ime: string; kurs: string; datum: string }[];
   indOstao1: { ime: string; profesorka: string; kurs: string }[];
   grupeKraj: { nivo: string; profesorka: string; endDate: string; brojPolaznika: number }[];
+  bounces?: { email: string; tip: string; razlog: string }[];
 };
 
 export async function sendDailyAdminBrief(d: DailyBrief) {
@@ -1160,6 +1161,14 @@ ${sekcija(`Neplaćene narudžbine (${d.neplacene.length})`, neplaceneHtml, "Nema
 ${sekcija(`Ističe pristup — narednih 7 dana (${d.isticePristup.length})`, isteknHtml, "Niko ne ističe ove nedelje.")}
 ${sekcija(`Individualni — ostao 1 čas (${d.indOstao1.length})`, indHtml, "Nema paketa pri kraju.")}
 ${sekcija(`Grupe se završavaju — narednih 14 dana (${d.grupeKraj.length})`, grupeHtml, "Nijedna grupa se ne završava uskoro.")}
+${(d.bounces?.length ?? 0) > 0 ? sekcija(
+  `📪 Mejlovi koji nisu stigli — juče (${d.bounces!.length})`,
+  `<table style="border-collapse:collapse;font-size:13px;width:100%">
+<thead><tr style="background:#f5f5f5"><th style="padding:4px 8px;text-align:left">Mejl</th><th style="padding:4px 8px;text-align:left">Šta</th><th style="padding:4px 8px;text-align:left">Razlog</th></tr></thead>
+<tbody>${d.bounces!.map((b) => `<tr><td style="padding:4px 8px">${esc(b.email)}</td><td style="padding:4px 8px">${esc(b.tip)}</td><td style="padding:4px 8px;color:#888">${esc(b.razlog.slice(0, 80))}</td></tr>`).join("")}</tbody></table>
+<p style="margin:6px 0 0;font-size:12px;color:#b45309">Ovi polaznici NE dobijaju naše mejlove — proveri da li imaš drugi kontakt (telefon) ili ispravi mejl u /admin/studenti.</p>`,
+  "",
+) : ""}
 <p style="margin-top:24px;font-size:12px;color:#aaa">Automatski izveštaj iz LMS-a. Detalji na <a href="https://www.hartweger.rs/admin" style="color:#4fb1d3;text-decoration:none">/admin</a>.</p>
 </body></html>`,
     });

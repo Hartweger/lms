@@ -109,6 +109,18 @@ export async function GET(request: NextRequest) {
     });
   }
 
+  // 7) Odbijeni mejlovi / spam prijave u poslednja 24h (Resend webhook → email_bounces).
+  const { data: bounceRows } = await admin
+    .from("email_bounces")
+    .select("email, event, reason, created_at")
+    .gte("created_at", startYday.toISOString())
+    .order("created_at", { ascending: false });
+  const bounces: DailyBrief["bounces"] = (bounceRows ?? []).map((b) => ({
+    email: b.email,
+    tip: b.event === "complained" ? "spam prijava" : "odbijen",
+    razlog: b.reason ?? "",
+  }));
+
   const brief: DailyBrief = {
     datum: fmtDate(startToday),
     noveNarudzbine,
@@ -117,6 +129,7 @@ export async function GET(request: NextRequest) {
     isticePristup,
     indOstao1,
     grupeKraj,
+    bounces,
   };
 
   await sendDailyAdminBrief(brief);
