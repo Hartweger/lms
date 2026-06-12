@@ -1103,6 +1103,7 @@ export async function sendTestResultEmail(
     score: string;
     grupniUrl: string | null;
     individualniUrl: string | null;
+    videoUrl: string | null;
     kurseviUrl: string;
   },
 ) {
@@ -1110,12 +1111,15 @@ export async function sendTestResultEmail(
     const resend = getResend();
     if (!resend) return;
     const nivo = esc(opts.nivo);
+    const videoLabel = esc(opts.nivo.split(".")[0]);
 
     const linkovi =
       `<div style="background:#f8fcfd;border-left:3px solid #4fb1d3;border-radius:6px;padding:14px 16px;margin:20px 0;font-size:14px;">` +
       (opts.grupniUrl ? `<p style="margin:0 0 6px;">👥 <a href="${esc(opts.grupniUrl)}" style="color:#4fb1d3;">Grupni kurs ${nivo}</a> — grupe do 6 polaznika, uživo preko Google Meet-a</p>` : "") +
       (opts.individualniUrl ? `<p style="margin:0 0 6px;">🎯 <a href="${esc(opts.individualniUrl)}" style="color:#4fb1d3;">Individualni kurs ${nivo}</a> — 1-na-1 sa profesorkom</p>` : "") +
-      `<p style="margin:0;">🎬 <a href="${esc(opts.kurseviUrl)}" style="color:#4fb1d3;">Video kursevi</a> — uči svojim tempom</p>` +
+      (opts.videoUrl
+        ? `<p style="margin:0;">🎬 <a href="${esc(opts.videoUrl)}" style="color:#4fb1d3;">Video kurs ${videoLabel}</a> — uči svojim tempom</p>`
+        : `<p style="margin:0;">🎬 <a href="${esc(opts.kurseviUrl)}" style="color:#4fb1d3;">Video kursevi</a> — uči svojim tempom</p>`) +
       `</div>`;
 
     await resend.emails.send({
@@ -1169,6 +1173,7 @@ export async function sendTestFunnelEmail(
     emailNumber: 2 | 3 | 4;
     grupniUrl: string | null;
     individualniUrl: string | null;
+    videoUrl: string | null;
     kurseviUrl: string;
   },
 ) {
@@ -1178,12 +1183,15 @@ export async function sendTestFunnelEmail(
     const ime = opts.name ? opts.name.split(" ")[0] : "";
     const pozdrav = `Pozdrav${ime ? ", " + esc(ime) : ""}!`;
     const nivo = esc(opts.nivo);
+    const videoLabel = esc(opts.nivo.split(".")[0]);
 
     const linkovi =
       `<div style="background:#f8fcfd;border-left:3px solid #4fb1d3;border-radius:6px;padding:14px 16px;margin:20px 0;font-size:14px">` +
       (opts.grupniUrl ? `<p style="margin:0 0 6px">👥 <a href="${esc(opts.grupniUrl)}" style="color:#4fb1d3">Grupni kurs ${nivo}</a> — grupe do 6 polaznika</p>` : "") +
       (opts.individualniUrl ? `<p style="margin:0 0 6px">🎯 <a href="${esc(opts.individualniUrl)}" style="color:#4fb1d3">Individualni kurs ${nivo}</a> — 1-na-1 sa profesorkom</p>` : "") +
-      `<p style="margin:0">🎬 <a href="${esc(opts.kurseviUrl)}" style="color:#4fb1d3">Video kursevi</a> — uči svojim tempom</p>` +
+      (opts.videoUrl
+        ? `<p style="margin:0">🎬 <a href="${esc(opts.videoUrl)}" style="color:#4fb1d3">Video kurs ${videoLabel}</a> — uči svojim tempom</p>`
+        : `<p style="margin:0">🎬 <a href="${esc(opts.kurseviUrl)}" style="color:#4fb1d3">Video kursevi</a> — uči svojim tempom</p>`) +
       `</div>`;
 
     let subject: string;

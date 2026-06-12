@@ -51,14 +51,24 @@ export function individualniSlugForNivo(nivo: string): string | null {
   return null;
 }
 
+// Video kursevi postoje za A1-B2 (jedan kurs pokriva ceo nivo, npr. A2.1 i A2.2); za C1 nema videa.
+const VIDEO_SLUG: Record<string, string> = {
+  A1: "video-kurs-a1",
+  A2: "video-kurs-a2",
+  B1: "video-kurs-b1",
+  B2: "video-kurs-b2",
+};
+
 // Linkovi ka kursevima za dati nivo — koristi ih testiranje-funnel (#1 rezultat i #2-#4 podsetnici).
 export function funnelUrlsForNivo(rawNivo: string) {
   const nivo = rawNivo === "C1+" ? "C1.1" : rawNivo;
   const grupniSlug = grupniSlugForNivo(nivo);
   const indSlug = individualniSlugForNivo(nivo);
+  const videoSlug = VIDEO_SLUG[nivo.split(".")[0]];
   return {
     grupniUrl: grupniSlug ? `${SITE_URL}/kursevi/${grupniSlug}` : null,
     individualniUrl: indSlug ? `${SITE_URL}/kursevi/${indSlug}` : null,
+    videoUrl: videoSlug ? `${SITE_URL}/kursevi/${videoSlug}` : null,
     kurseviUrl: `${SITE_URL}/kursevi`,
   };
 }
