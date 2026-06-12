@@ -1,0 +1,129 @@
+{
+  "type": "wordset",
+  "title": "Modul 1 — Reči",
+  "setKey": "b1-1-modul-1",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    {
+      "front": "gehen",
+      "back": "ging"
+    },
+    {
+      "front": "kommen",
+      "back": "kam"
+    },
+    {
+      "front": "sehen",
+      "back": "sah"
+    },
+    {
+      "front": "essen",
+      "back": "aß"
+    },
+    {
+      "front": "trinken",
+      "back": "trank"
+    },
+    {
+      "front": "schlafen",
+      "back": "schlief"
+    },
+    {
+      "front": "sprechen",
+      "back": "sprach"
+    },
+    {
+      "front": "nehmen",
+      "back": "nahm"
+    },
+    {
+      "front": "laufen",
+      "back": "lief"
+    },
+    {
+      "front": "rufen",
+      "back": "rief"
+    },
+    {
+      "front": "Als ich ein Kind war...",
+      "back": "Kad sam bio dete..."
+    },
+    {
+      "front": "Wenn es regnet...",
+      "back": "Kad pada kiša..."
+    },
+    {
+      "front": "Als ich nach Deutschland kam...",
+      "back": "Kad sam došao u Nemačku..."
+    },
+    {
+      "front": "Wenn ich Zeit habe...",
+      "back": "Kad imam vremena..."
+    },
+    {
+      "front": "Immer wenn sie lachte...",
+      "back": "Svaki put kad bi se smejala..."
+    },
+    {
+      "front": "Als ich die Prüfung bestand...",
+      "back": "Kad sam položio ispit..."
+    },
+    {
+      "front": "Wenn du willst...",
+      "back": "Ako hoćeš..."
+    },
+    {
+      "front": "Wann kommst du?",
+      "back": "Kada dolaziš?"
+    },
+    {
+      "front": "Als wir uns trafen...",
+      "back": "Kad smo se sreli..."
+    },
+    {
+      "front": "Wenn ich groß bin...",
+      "back": "Kad porastem..."
+    },
+    {
+      "front": "das Glück",
+      "back": "sreća"
+    },
+    {
+      "front": "glücklich",
+      "back": "srećan"
+    },
+    {
+      "front": "zufrieden",
+      "back": "zadovoljan"
+    },
+    {
+      "front": "der Zufall",
+      "back": "slučaj"
+    },
+    {
+      "front": "der Wunsch",
+      "back": "želja"
+    },
+    {
+      "front": "sich freuen",
+      "back": "radovati se"
+    },
+    {
+      "front": "genießen",
+      "back": "uživati"
+    },
+    {
+      "front": "dankbar",
+      "back": "zahvalan"
+    },
+    {
+      "front": "der Glücksbringer",
+      "back": "simbol sreće"
+    },
+    {
+      "front": "Schwein haben",
+      "back": "imati sreće"
+    }
+  ]
+}

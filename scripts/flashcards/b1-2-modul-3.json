@@ -1,0 +1,97 @@
+{
+  "type": "wordset",
+  "title": "Modul 3 — Reči",
+  "setKey": "b1-2-modul-3",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    {
+      "front": "die Tablette, -n",
+      "back": "tableta"
+    },
+    {
+      "front": "das Rezept, -e",
+      "back": "recept"
+    },
+    {
+      "front": "einnehmen",
+      "back": "uzimati (lek)"
+    },
+    {
+      "front": "untersuchen",
+      "back": "pregledati"
+    },
+    {
+      "front": "sich ausruhen",
+      "back": "odmoriti se"
+    },
+    {
+      "front": "der Ratschlag, ¨e",
+      "back": "savet"
+    },
+    {
+      "front": "das Medikament, -e",
+      "back": "lek"
+    },
+    {
+      "front": "der Arzt, ¨e / die Ärztin, -nen",
+      "back": "lekar / lekarka"
+    },
+    {
+      "front": "der Patient, -en",
+      "back": "pacijent"
+    },
+    {
+      "front": "die Untersuchung, -en",
+      "back": "pregled (kod lekara)"
+    },
+    {
+      "front": "das Formular, -e",
+      "back": "formular, obrazac"
+    },
+    {
+      "front": "ausfüllen",
+      "back": "popuniti (füllt aus)"
+    },
+    {
+      "front": "verschreiben",
+      "back": "prepisati (lek)"
+    },
+    {
+      "front": "die Apotheke, -n",
+      "back": "apoteka"
+    },
+    {
+      "front": "der Schmerz, -en",
+      "back": "bol"
+    },
+    {
+      "front": "der Termin, -e",
+      "back": "termin, zakazani pregled"
+    },
+    {
+      "front": "die Behandlung, -en",
+      "back": "lečenje, tretman"
+    },
+    {
+      "front": "die Krankenversicherung, -en",
+      "back": "zdravstveno osiguranje"
+    },
+    {
+      "front": "sich erholen",
+      "back": "oporaviti se"
+    },
+    {
+      "front": "empfehlen",
+      "back": "preporučiti"
+    },
+    {
+      "front": "vermeiden",
+      "back": "izbegavati"
+    },
+    {
+      "front": "die Gesundheit (nur Sg.)",
+      "back": "zdravlje"
+    }
+  ]
+}

@@ -1,0 +1,209 @@
+{
+  "type": "wordset",
+  "title": "Modul 3 — Reči",
+  "setKey": "b1-1-modul-3",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    {
+      "front": "der Krankenpfleger",
+      "back": "medicinski tehničar"
+    },
+    {
+      "front": "die Krankenschwester",
+      "back": "medicinska sestra"
+    },
+    {
+      "front": "die Diagnose",
+      "back": "dijagnoza"
+    },
+    {
+      "front": "die Behandlung",
+      "back": "lečenje"
+    },
+    {
+      "front": "die Pflege",
+      "back": "nega"
+    },
+    {
+      "front": "die Schicht",
+      "back": "smena"
+    },
+    {
+      "front": "der Blutdruck",
+      "back": "krvni pritisak"
+    },
+    {
+      "front": "die Dienstbesprechung",
+      "back": "radni sastanak"
+    },
+    {
+      "front": "die Spritze",
+      "back": "injekcija"
+    },
+    {
+      "front": "der Verband",
+      "back": "zavoj"
+    },
+    {
+      "front": "die Blutgruppe",
+      "back": "krvna grupa"
+    },
+    {
+      "front": "die Entdeckung",
+      "back": "otkriće"
+    },
+    {
+      "front": "die Forschung",
+      "back": "istraživanje"
+    },
+    {
+      "front": "der Wissenschaftler",
+      "back": "naučnik"
+    },
+    {
+      "front": "die Bluttransfusion",
+      "back": "transfuzija krvi"
+    },
+    {
+      "front": "die Zelle",
+      "back": "ćelija"
+    },
+    {
+      "front": "der Antikörper",
+      "back": "antitelo"
+    },
+    {
+      "front": "entdecken",
+      "back": "otkriti"
+    },
+    {
+      "front": "forschen",
+      "back": "istraživati"
+    },
+    {
+      "front": "lebensgefährlich",
+      "back": "opasno po život"
+    },
+    {
+      "front": "werden + Partizip II",
+      "back": "Passiv Präsens"
+    },
+    {
+      "front": "Modalverb + Partizip II + werden",
+      "back": "Passiv mit Modalverb"
+    },
+    {
+      "front": "Die Praxis wird geputzt.",
+      "back": "Ordinacija se čisti."
+    },
+    {
+      "front": "Der Patient muss untersucht werden.",
+      "back": "Pacijent mora biti pregledan."
+    },
+    {
+      "front": "untersuchen",
+      "back": "pregledati"
+    },
+    {
+      "front": "behandeln",
+      "back": "lečiti"
+    },
+    {
+      "front": "operieren",
+      "back": "operisati"
+    },
+    {
+      "front": "verschreiben",
+      "back": "prepisati (lek)"
+    },
+    {
+      "front": "versorgen",
+      "back": "zbrinuti"
+    },
+    {
+      "front": "pflegen",
+      "back": "negovati"
+    },
+    {
+      "front": "des Mannes",
+      "back": "muškarca (Genitiv m.)"
+    },
+    {
+      "front": "der Frau",
+      "back": "žene (Genitiv f.)"
+    },
+    {
+      "front": "des Kindes",
+      "back": "deteta (Genitiv n.)"
+    },
+    {
+      "front": "der Eltern",
+      "back": "roditelja (Genitiv Pl.)"
+    },
+    {
+      "front": "wegen + Genitiv",
+      "back": "zbog"
+    },
+    {
+      "front": "trotz + Genitiv",
+      "back": "uprkos"
+    },
+    {
+      "front": "während + Genitiv",
+      "back": "tokom"
+    },
+    {
+      "front": "innerhalb + Genitiv",
+      "back": "unutar"
+    },
+    {
+      "front": "außerhalb + Genitiv",
+      "back": "izvan"
+    },
+    {
+      "front": "Wessen Auto ist das?",
+      "back": "Čije je to auto?"
+    },
+    {
+      "front": "die Pflegekraft",
+      "back": "negovatelj/ica"
+    },
+    {
+      "front": "das Altersheim",
+      "back": "starački dom"
+    },
+    {
+      "front": "die Arbeitsbedingungen",
+      "back": "uslovi rada"
+    },
+    {
+      "front": "das Gehalt",
+      "back": "plata"
+    },
+    {
+      "front": "sich kümmern um",
+      "back": "brinuti se o"
+    },
+    {
+      "front": "Meiner Meinung nach...",
+      "back": "Po mom mišljenju..."
+    },
+    {
+      "front": "An deiner Stelle würde ich...",
+      "back": "Na tvom mestu bih..."
+    },
+    {
+      "front": "Ich stimme dir zu.",
+      "back": "Slažem se s tobom."
+    },
+    {
+      "front": "Das sehe ich anders.",
+      "back": "Ja to vidim drugačije."
+    },
+    {
+      "front": "ein schlechtes Gewissen haben",
+      "back": "imati grižu savesti"
+    }
+  ]
+}

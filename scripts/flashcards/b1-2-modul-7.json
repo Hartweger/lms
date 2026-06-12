@@ -1,0 +1,89 @@
+{
+  "type": "wordset",
+  "title": "Modul 7 — Reči",
+  "setKey": "b1-2-modul-7",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    {
+      "front": "entweder … oder",
+      "back": "ili … ili"
+    },
+    {
+      "front": "nicht nur … sondern auch",
+      "back": "ne samo … nego i"
+    },
+    {
+      "front": "sowohl … als auch",
+      "back": "i … i"
+    },
+    {
+      "front": "weder … noch",
+      "back": "ni … ni"
+    },
+    {
+      "front": "einerseits … andererseits",
+      "back": "s jedne … s druge strane"
+    },
+    {
+      "front": "je … desto",
+      "back": "što … to"
+    },
+    {
+      "front": "je … umso",
+      "back": "što … to (isto kao je … desto)"
+    },
+    {
+      "front": "zwar … aber",
+      "back": "doduše … ali"
+    },
+    {
+      "front": "trotzdem",
+      "back": "uprkos tome, ipak"
+    },
+    {
+      "front": "deshalb / deswegen",
+      "back": "zato, zbog toga"
+    },
+    {
+      "front": "außerdem",
+      "back": "osim toga"
+    },
+    {
+      "front": "jedoch",
+      "back": "međutim"
+    },
+    {
+      "front": "allerdings",
+      "back": "doduše, međutim"
+    },
+    {
+      "front": "sonst",
+      "back": "inače"
+    },
+    {
+      "front": "sobald",
+      "back": "čim"
+    },
+    {
+      "front": "solange",
+      "back": "dok god"
+    },
+    {
+      "front": "während",
+      "back": "dok; za vreme"
+    },
+    {
+      "front": "obwohl",
+      "back": "iako"
+    },
+    {
+      "front": "falls",
+      "back": "ako, u slučaju da"
+    },
+    {
+      "front": "sondern",
+      "back": "nego, već"
+    }
+  ]
+}

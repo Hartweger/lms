@@ -1,0 +1,193 @@
+{
+  "type": "wordset",
+  "title": "Modul 4 — Reči",
+  "setKey": "b1-2-modul-4",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    {
+      "front": "wäre",
+      "back": "bio bih (Konj. II von sein)"
+    },
+    {
+      "front": "hätte",
+      "back": "imao bih (Konj. II von haben)"
+    },
+    {
+      "front": "könnte",
+      "back": "mogao bih (Konj. II von können)"
+    },
+    {
+      "front": "müsste",
+      "back": "morao bih (Konj. II von müssen)"
+    },
+    {
+      "front": "dürfte",
+      "back": "smeo bih (Konj. II von dürfen)"
+    },
+    {
+      "front": "wüsste",
+      "back": "znao bih (Konj. II von wissen)"
+    },
+    {
+      "front": "würde + Infinitiv",
+      "back": "za sve ostale glagole"
+    },
+    {
+      "front": "Wenn ich reich wäre...",
+      "back": "Kad bih bio bogat..."
+    },
+    {
+      "front": "Könnten Sie mir helfen?",
+      "back": "Da li biste mogli da mi pomognete?"
+    },
+    {
+      "front": "An deiner Stelle würde ich...",
+      "back": "Na tvom mestu bih..."
+    },
+    {
+      "front": "der Wunsch",
+      "back": "želja"
+    },
+    {
+      "front": "die Möglichkeit",
+      "back": "mogućnost"
+    },
+    {
+      "front": "die Bitte",
+      "back": "molba"
+    },
+    {
+      "front": "der Rat / der Ratschlag",
+      "back": "savet"
+    },
+    {
+      "front": "die Bedingung",
+      "back": "uslov"
+    },
+    {
+      "front": "gern / lieber / am liebsten",
+      "back": "rado / radije / najradije"
+    },
+    {
+      "front": "vielleicht",
+      "back": "možda"
+    },
+    {
+      "front": "wahrscheinlich",
+      "back": "verovatno"
+    },
+    {
+      "front": "statt",
+      "back": "umesto"
+    },
+    {
+      "front": "falls",
+      "back": "u slučaju da"
+    },
+    {
+      "front": "sich vorstellen",
+      "back": "zamisliti"
+    },
+    {
+      "front": "sich wünschen",
+      "back": "poželeti"
+    },
+    {
+      "front": "duzen",
+      "back": "obraćati se sa „du“ (ti)"
+    },
+    {
+      "front": "siezen",
+      "back": "obraćati se sa „Sie“ (Vi)"
+    },
+    {
+      "front": "unmöglich",
+      "back": "nemoguće, neprihvatljivo"
+    },
+    {
+      "front": "die Distanz, -en",
+      "back": "distanca"
+    },
+    {
+      "front": "die Entwicklung, -en",
+      "back": "razvoj, tok"
+    },
+    {
+      "front": "die Überstunden (Pl.)",
+      "back": "prekovremeni sati"
+    },
+    {
+      "front": "seine Rechte durchsetzen",
+      "back": "izboriti svoja prava"
+    },
+    {
+      "front": "negativ auffallen",
+      "back": "ostaviti loš utisak"
+    },
+    {
+      "front": "die Reklamation, -en",
+      "back": "reklamacija (formalna pritužba)"
+    },
+    {
+      "front": "die Beschwerde, -n",
+      "back": "žalba"
+    },
+    {
+      "front": "die Lieferung, -en",
+      "back": "dostava"
+    },
+    {
+      "front": "der Defekt, -e",
+      "back": "kvar"
+    },
+    {
+      "front": "die Rückerstattung, -en",
+      "back": "povrat novca"
+    },
+    {
+      "front": "der Umtausch (nur Sg.)",
+      "back": "zamena"
+    },
+    {
+      "front": "die Garantie, -n",
+      "back": "garancija"
+    },
+    {
+      "front": "der Kundenservice (nur Sg.)",
+      "back": "korisnička podrška"
+    },
+    {
+      "front": "die Bestellnummer, -n",
+      "back": "broj narudžbine"
+    },
+    {
+      "front": "beschädigt",
+      "back": "oštećen"
+    },
+    {
+      "front": "reklamieren",
+      "back": "reklamirati (hat reklamiert)"
+    },
+    {
+      "front": "sich beschweren (über + Akk)",
+      "back": "žaliti se (hat sich beschwert)"
+    },
+    {
+      "front": "zurückschicken",
+      "back": "poslati nazad (schickt zurück)"
+    },
+    {
+      "front": "umtauschen",
+      "back": "zameniti (tauscht um)"
+    },
+    {
+      "front": "erstatten",
+      "back": "nadoknaditi, vratiti novac"
+    },
+    {
+      "front": "liefern",
+      "back": "isporučiti"
+    }
+  ]
+}

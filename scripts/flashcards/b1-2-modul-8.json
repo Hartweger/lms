@@ -1,0 +1,333 @@
+{
+  "type": "wordset",
+  "title": "Modul 8 — Reči",
+  "setKey": "b1-2-modul-8",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    {
+      "front": "sich melden",
+      "back": "javiti se"
+    },
+    {
+      "front": "zurückschreiben",
+      "back": "odgovoriti pismeno"
+    },
+    {
+      "front": "bestätigen",
+      "back": "potvrditi"
+    },
+    {
+      "front": "zustimmen",
+      "back": "složiti se"
+    },
+    {
+      "front": "ablehnen",
+      "back": "odbiti"
+    },
+    {
+      "front": "empfehlen",
+      "back": "preporučiti"
+    },
+    {
+      "front": "verhandeln",
+      "back": "pregovarati"
+    },
+    {
+      "front": "zugeben",
+      "back": "priznati"
+    },
+    {
+      "front": "sich entscheiden",
+      "back": "odlučiti se"
+    },
+    {
+      "front": "überlegen",
+      "back": "razmisliti"
+    },
+    {
+      "front": "vermeiden",
+      "back": "izbeći"
+    },
+    {
+      "front": "erreichen",
+      "back": "postići, dostići"
+    },
+    {
+      "front": "beantragen",
+      "back": "podneti zahtev"
+    },
+    {
+      "front": "sich kümmern um",
+      "back": "brinuti se o"
+    },
+    {
+      "front": "erinnern an",
+      "back": "podsetiti na"
+    },
+    {
+      "front": "sich erinnern an",
+      "back": "setiti se"
+    },
+    {
+      "front": "erklären",
+      "back": "objasniti"
+    },
+    {
+      "front": "versichern",
+      "back": "uveriti, osigurati"
+    },
+    {
+      "front": "nachschauen",
+      "back": "proveriti, pogledati"
+    },
+    {
+      "front": "vorbeugen",
+      "back": "sprečiti, preduprediti"
+    },
+    {
+      "front": "sich kümmern (um + Akk)",
+      "back": "brinuti se (o)"
+    },
+    {
+      "front": "erinnern (an + Akk)",
+      "back": "podsetiti (na)"
+    },
+    {
+      "front": "sich erinnern (an + Akk)",
+      "back": "setiti se"
+    },
+    {
+      "front": "die Bewerbung",
+      "back": "prijava za posao"
+    },
+    {
+      "front": "die Überweisung",
+      "back": "uplata"
+    },
+    {
+      "front": "die Rückerstattung",
+      "back": "povrat novca"
+    },
+    {
+      "front": "die Ursache",
+      "back": "uzrok"
+    },
+    {
+      "front": "der Vorteil / der Nachteil",
+      "back": "prednost / mana"
+    },
+    {
+      "front": "das Vertrauen",
+      "back": "poverenje"
+    },
+    {
+      "front": "die Entscheidung",
+      "back": "odluka"
+    },
+    {
+      "front": "das Schlüsselwort",
+      "back": "ključna reč"
+    },
+    {
+      "front": "die Bewerbung, -en",
+      "back": "prijava (za posao)"
+    },
+    {
+      "front": "der Vertrag, ¨e",
+      "back": "ugovor"
+    },
+    {
+      "front": "der Vertragspartner, -",
+      "back": "ugovorni partner"
+    },
+    {
+      "front": "die Zusammenarbeit (nur Sg.)",
+      "back": "saradnja"
+    },
+    {
+      "front": "der Auftrag, ¨e",
+      "back": "nalog, zadatak"
+    },
+    {
+      "front": "die Frist, -en",
+      "back": "rok"
+    },
+    {
+      "front": "die Besprechung, -en",
+      "back": "sastanak"
+    },
+    {
+      "front": "der Fortschritt, -e",
+      "back": "napredak"
+    },
+    {
+      "front": "die Erfahrung, -en",
+      "back": "iskustvo"
+    },
+    {
+      "front": "die Teilnahme (an + Dat)",
+      "back": "učešće"
+    },
+    {
+      "front": "die Rechnung, -en",
+      "back": "račun"
+    },
+    {
+      "front": "die Überweisung, -en",
+      "back": "uplata, doznaka"
+    },
+    {
+      "front": "die Lieferung, -en",
+      "back": "isporuka, dostava"
+    },
+    {
+      "front": "die Bestellung, -en",
+      "back": "narudžbina"
+    },
+    {
+      "front": "die Rückerstattung, -en",
+      "back": "povrat novca"
+    },
+    {
+      "front": "der Umtausch (nur Sg.)",
+      "back": "zamena"
+    },
+    {
+      "front": "die Garantie, -n",
+      "back": "garancija"
+    },
+    {
+      "front": "die Versicherung, -en",
+      "back": "osiguranje"
+    },
+    {
+      "front": "der Kunde, -n",
+      "back": "kupac, klijent"
+    },
+    {
+      "front": "der Kundenservice (nur Sg.)",
+      "back": "korisnička podrška"
+    },
+    {
+      "front": "die Meinung, -en",
+      "back": "mišljenje"
+    },
+    {
+      "front": "der Vorteil, -e",
+      "back": "prednost"
+    },
+    {
+      "front": "der Nachteil, -e",
+      "back": "mana, nedostatak"
+    },
+    {
+      "front": "die Möglichkeit, -en",
+      "back": "mogućnost"
+    },
+    {
+      "front": "die Ursache, -n",
+      "back": "uzrok"
+    },
+    {
+      "front": "der Grund, ¨e",
+      "back": "razlog"
+    },
+    {
+      "front": "die Lösung, -en",
+      "back": "rešenje"
+    },
+    {
+      "front": "die Absicht, -en",
+      "back": "namera"
+    },
+    {
+      "front": "der Hinweis, -e",
+      "back": "napomena, savet"
+    },
+    {
+      "front": "die Empfehlung, -en",
+      "back": "preporuka"
+    },
+    {
+      "front": "das Ereignis, -se",
+      "back": "događaj"
+    },
+    {
+      "front": "die Verbindung, -en",
+      "back": "veza"
+    },
+    {
+      "front": "das Vertrauen (nur Sg.)",
+      "back": "poverenje"
+    },
+    {
+      "front": "die Gewohnheit, -en",
+      "back": "navika"
+    },
+    {
+      "front": "die Umstellung, -en",
+      "back": "promena, prilagođavanje"
+    },
+    {
+      "front": "die Entscheidung, -en",
+      "back": "odluka"
+    },
+    {
+      "front": "die Verantwortung, -en",
+      "back": "odgovornost"
+    },
+    {
+      "front": "die Unterstützung (nur Sg.)",
+      "back": "podrška"
+    },
+    {
+      "front": "der Eindruck, ¨e",
+      "back": "utisak"
+    },
+    {
+      "front": "die Stimmung, -en",
+      "back": "raspoloženje"
+    },
+    {
+      "front": "die Prüfung, -en",
+      "back": "ispit"
+    },
+    {
+      "front": "die Aufgabe, -n",
+      "back": "zadatak"
+    },
+    {
+      "front": "die Strategie, -n",
+      "back": "strategija"
+    },
+    {
+      "front": "das Schlüsselwort, ¨er",
+      "back": "ključna reč"
+    },
+    {
+      "front": "die Aussage, -n",
+      "back": "izjava, tvrdnja"
+    },
+    {
+      "front": "der Textabschnitt, -e",
+      "back": "deo teksta, pasus"
+    },
+    {
+      "front": "die Zusammenfassung, -en",
+      "back": "sažetak"
+    },
+    {
+      "front": "der Zusammenhang, ¨e",
+      "back": "kontekst, veza"
+    },
+    {
+      "front": "das Beispiel, -e",
+      "back": "primer"
+    },
+    {
+      "front": "der Vergleich, -e",
+      "back": "poređenje"
+    }
+  ]
+}

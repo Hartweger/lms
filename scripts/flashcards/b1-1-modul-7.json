@@ -1,0 +1,165 @@
+{
+  "type": "wordset",
+  "title": "Modul 7 — Reči",
+  "setKey": "b1-1-modul-7",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    {
+      "front": "hätte + Partizip II",
+      "back": "Konjunktiv II Verg. (sa haben)"
+    },
+    {
+      "front": "wäre + Partizip II",
+      "back": "Konjunktiv II Verg. (sa sein)"
+    },
+    {
+      "front": "Ich hätte das nicht gemacht.",
+      "back": "Ne bih to uradio/la."
+    },
+    {
+      "front": "Ich wäre gern gekommen.",
+      "back": "Rado bih došao/la."
+    },
+    {
+      "front": "Wenn ich gewusst hätte...",
+      "back": "Da sam znao/la..."
+    },
+    {
+      "front": "Du hättest mich anrufen können!",
+      "back": "Mogao/la si da me pozoveš!"
+    },
+    {
+      "front": "trotz + Genitiv",
+      "back": "uprkos"
+    },
+    {
+      "front": "trotz des Wetters",
+      "back": "uprkos vremenu"
+    },
+    {
+      "front": "trotz der Kälte",
+      "back": "uprkos hladnoći"
+    },
+    {
+      "front": "Ich hätte mehr lernen sollen.",
+      "back": "Trebalo je više da učim."
+    },
+    {
+      "front": "der Umzug",
+      "back": "selidba"
+    },
+    {
+      "front": "einziehen",
+      "back": "useliti se"
+    },
+    {
+      "front": "ausziehen",
+      "back": "iseliti se"
+    },
+    {
+      "front": "der Nachbar",
+      "back": "komšija"
+    },
+    {
+      "front": "die Hausordnung",
+      "back": "kućni red"
+    },
+    {
+      "front": "die Miete",
+      "back": "kirija"
+    },
+    {
+      "front": "der Vermieter",
+      "back": "stanodavac"
+    },
+    {
+      "front": "kündigen",
+      "back": "otkazati (ugovor)"
+    },
+    {
+      "front": "das Erdgeschoss",
+      "back": "prizemlje"
+    },
+    {
+      "front": "der Mietvertrag",
+      "back": "ugovor o zakupu"
+    },
+    {
+      "front": "sowohl ... als auch",
+      "back": "i ... i (oba)"
+    },
+    {
+      "front": "weder ... noch",
+      "back": "ni ... ni"
+    },
+    {
+      "front": "nicht nur ... sondern auch",
+      "back": "ne samo ... nego i"
+    },
+    {
+      "front": "zwar ... aber",
+      "back": "doduše ... ali"
+    },
+    {
+      "front": "entweder ... oder",
+      "back": "ili ... ili"
+    },
+    {
+      "front": "Die Wohnung ist zwar klein, aber gemütlich.",
+      "back": "Stan je doduše mali, ali udoban."
+    },
+    {
+      "front": "Ich trinke weder Kaffee noch Tee.",
+      "back": "Ne pijem ni kafu ni čaj."
+    },
+    {
+      "front": "Er ist nicht nur klug, sondern auch fleißig.",
+      "back": "On je ne samo pametan, nego i vredan."
+    },
+    {
+      "front": "sowohl ... als auch (prevod)",
+      "back": "kako ... tako i"
+    },
+    {
+      "front": "Entweder ja oder nein.",
+      "back": "Ili da ili ne."
+    },
+    {
+      "front": "Hotel Mama",
+      "back": "život kod roditelja (kao odrasla osoba)"
+    },
+    {
+      "front": "selbstständig",
+      "back": "samostalan"
+    },
+    {
+      "front": "die Privatsphäre",
+      "back": "privatnost"
+    },
+    {
+      "front": "die Verantwortung",
+      "back": "odgovornost"
+    },
+    {
+      "front": "sparen",
+      "back": "štedeti"
+    },
+    {
+      "front": "bequem",
+      "back": "udobno"
+    },
+    {
+      "front": "der Beitrag",
+      "back": "komentar, objava"
+    },
+    {
+      "front": "Ich kann dich verstehen, aber...",
+      "back": "Razumem te, ali..."
+    },
+    {
+      "front": "Meiner Meinung nach...",
+      "back": "Po mom mišljenju..."
+    }
+  ]
+}

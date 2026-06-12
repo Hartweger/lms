@@ -1,0 +1,69 @@
+{
+  "type": "wordset",
+  "title": "Modul 5 — Reči",
+  "setKey": "b1-2-modul-5",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    {
+      "front": "die Umstellung, -en",
+      "back": "promena, prilagođavanje"
+    },
+    {
+      "front": "sich gewöhnen an + Akk",
+      "back": "naviknuti se na"
+    },
+    {
+      "front": "sich einleben",
+      "back": "udomaćiti se"
+    },
+    {
+      "front": "das Herkunftsland, ¨er",
+      "back": "zemlja porekla"
+    },
+    {
+      "front": "pünktlich",
+      "back": "tačan"
+    },
+    {
+      "front": "Heimweh haben",
+      "back": "čeznuti za domom"
+    },
+    {
+      "front": "ankommen",
+      "back": "snaći se, biti prihvaćen"
+    },
+    {
+      "front": "herunterladen",
+      "back": "preuzeti (Perf. heruntergeladen)"
+    },
+    {
+      "front": "speichern",
+      "back": "sačuvati"
+    },
+    {
+      "front": "ausschalten",
+      "back": "isključiti"
+    },
+    {
+      "front": "hochladen",
+      "back": "otpremiti, uploadovati"
+    },
+    {
+      "front": "löschen",
+      "back": "obrisati"
+    },
+    {
+      "front": "installieren",
+      "back": "instalirati"
+    },
+    {
+      "front": "fremd",
+      "back": "stran, nepoznat"
+    },
+    {
+      "front": "vermissen",
+      "back": "nedostajati, čeznuti"
+    }
+  ]
+}

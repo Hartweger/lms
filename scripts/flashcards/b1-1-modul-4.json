@@ -1,0 +1,169 @@
+{
+  "type": "wordset",
+  "title": "Modul 4 — Reči",
+  "setKey": "b1-1-modul-4",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    {
+      "front": "Könnten Sie das wiederholen?",
+      "back": "Da li biste mogli to da ponovite?"
+    },
+    {
+      "front": "Was bedeutet...?",
+      "back": "Šta znači...?"
+    },
+    {
+      "front": "Moment, ich überlege...",
+      "back": "Sačekajte, razmišljam..."
+    },
+    {
+      "front": "Langsamer, bitte!",
+      "back": "Sporije, molim!"
+    },
+    {
+      "front": "Wie sagt man... auf Deutsch?",
+      "back": "Kako se kaže... na nemačkom?"
+    },
+    {
+      "front": "Habe ich das richtig gesagt?",
+      "back": "Da li sam to dobro rekao/la?"
+    },
+    {
+      "front": "die Sprechblockade",
+      "back": "blokada u govoru"
+    },
+    {
+      "front": "der Mut",
+      "back": "hrabrost"
+    },
+    {
+      "front": "sich trauen",
+      "back": "usuditi se"
+    },
+    {
+      "front": "üben",
+      "back": "vežbati"
+    },
+    {
+      "front": "die Fremdsprache",
+      "back": "strani jezik"
+    },
+    {
+      "front": "die Muttersprache",
+      "back": "maternji jezik"
+    },
+    {
+      "front": "die Mehrsprachigkeit",
+      "back": "višejezičnost"
+    },
+    {
+      "front": "fließend",
+      "back": "tečno"
+    },
+    {
+      "front": "das Gehirn",
+      "back": "mozak"
+    },
+    {
+      "front": "der Muttersprachler",
+      "back": "izvorni govornik"
+    },
+    {
+      "front": "spielerisch",
+      "back": "na igriv način"
+    },
+    {
+      "front": "regelmäßig",
+      "back": "redovno"
+    },
+    {
+      "front": "der Sprachpartner",
+      "back": "jezički partner"
+    },
+    {
+      "front": "die Untertitel",
+      "back": "titlovi"
+    },
+    {
+      "front": "der Alltag",
+      "back": "svakodnevica"
+    },
+    {
+      "front": "die Veranstaltung",
+      "back": "događaj"
+    },
+    {
+      "front": "sich verabreden",
+      "back": "dogovoriti se za susret"
+    },
+    {
+      "front": "die Bewerbung",
+      "back": "prijava za posao"
+    },
+    {
+      "front": "der Lebenslauf",
+      "back": "biografija (CV)"
+    },
+    {
+      "front": "kündigen",
+      "back": "dati otkaz"
+    },
+    {
+      "front": "sich erkälten",
+      "back": "prehladiti se"
+    },
+    {
+      "front": "die Versicherung",
+      "back": "osiguranje"
+    },
+    {
+      "front": "sich erholen",
+      "back": "oporaviti se"
+    },
+    {
+      "front": "die Nachrichten",
+      "back": "vesti"
+    },
+    {
+      "front": "die Werbung",
+      "back": "reklama"
+    },
+    {
+      "front": "herunterladen",
+      "back": "preuzeti"
+    },
+    {
+      "front": "soziale Medien",
+      "back": "društvene mreže"
+    },
+    {
+      "front": "die Abwechslung",
+      "back": "promena, raznolikost"
+    },
+    {
+      "front": "die Erfahrung",
+      "back": "iskustvo"
+    },
+    {
+      "front": "das Gehalt",
+      "back": "plata"
+    },
+    {
+      "front": "die Qualifikation",
+      "back": "kvalifikacija"
+    },
+    {
+      "front": "die Grippe",
+      "back": "grip"
+    },
+    {
+      "front": "sich informieren",
+      "back": "informisati se"
+    },
+    {
+      "front": "unternehmen",
+      "back": "preduzeti nešto"
+    }
+  ]
+}

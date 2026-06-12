@@ -1,0 +1,521 @@
+{
+  "type": "wordset",
+  "title": "Modul 3 — Reči",
+  "setKey": "b2-1-modul-3",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    {
+      "front": "binnen",
+      "back": "u roku od"
+    },
+    {
+      "front": "hinauf|laufen / hinunter|laufen",
+      "back": "trčati gore / dole"
+    },
+    {
+      "front": "hinauf|gehen / hinunter|gehen",
+      "back": "ići gore / dole"
+    },
+    {
+      "front": "die Rolltreppe, -n",
+      "back": "pokretne stepenice"
+    },
+    {
+      "front": "um|gestalten",
+      "back": "preurediti, preoblikovati"
+    },
+    {
+      "front": "zusammen|rechnen",
+      "back": "sabrati, izračunati"
+    },
+    {
+      "front": "der Sensor, -en",
+      "back": "senzor"
+    },
+    {
+      "front": "der Ton, ̈-e",
+      "back": "ton, zvuk"
+    },
+    {
+      "front": "riskieren",
+      "back": "rizikovati"
+    },
+    {
+      "front": "das Risiko, die Risiken",
+      "back": "rizik"
+    },
+    {
+      "front": "ein Risiko ein|gehen",
+      "back": "preuzeti rizik"
+    },
+    {
+      "front": "riskant",
+      "back": "rizičan"
+    },
+    {
+      "front": "der Versuch, -e",
+      "back": "pokušaj"
+    },
+    {
+      "front": "den Versuch unternehmen",
+      "back": "učiniti pokušaj"
+    },
+    {
+      "front": "aus|probieren",
+      "back": "isprobati"
+    },
+    {
+      "front": "die Grenze, -n",
+      "back": "granica"
+    },
+    {
+      "front": "an seine Grenzen stoßen",
+      "back": "doći do svojih granica"
+    },
+    {
+      "front": "stoßen an + Akk.",
+      "back": "udariti u, naići na"
+    },
+    {
+      "front": "durch|halten",
+      "back": "izdržati"
+    },
+    {
+      "front": "die Anstrengung, -en",
+      "back": "napor"
+    },
+    {
+      "front": "auf sich nehmen",
+      "back": "preuzeti (na sebe)"
+    },
+    {
+      "front": "überwinden",
+      "back": "savladati, prevazići"
+    },
+    {
+      "front": "der (innere) Schweinehund",
+      "back": "unutrašnja lenjost (slabost volje)"
+    },
+    {
+      "front": "die Aufmerksamkeit (nur Sg.)",
+      "back": "pažnja"
+    },
+    {
+      "front": "neugierig auf + Akk.",
+      "back": "radoznao (na)"
+    },
+    {
+      "front": "jdn. / sich trösten mit + Dat.",
+      "back": "tešiti (nekoga / sebe)"
+    },
+    {
+      "front": "balancieren",
+      "back": "balansirati"
+    },
+    {
+      "front": "die Achterbahn, -en",
+      "back": "rolerkoster"
+    },
+    {
+      "front": "das Freiklettern (nur Sg.)",
+      "back": "slobodno penjanje"
+    },
+    {
+      "front": "das Tiefseetauchen (nur Sg.)",
+      "back": "duboko ronjenje"
+    },
+    {
+      "front": "das Eisbaden (nur Sg.)",
+      "back": "kupanje u ledenoj vodi"
+    },
+    {
+      "front": "das Fallschirmspringen (nur Sg.)",
+      "back": "skakanje padobranom"
+    },
+    {
+      "front": "reizen",
+      "back": "privlačiti, mamiti"
+    },
+    {
+      "front": "sorgenfrei",
+      "back": "bezbrižan"
+    },
+    {
+      "front": "der Umgang (nur Sg.) mit + Dat.",
+      "back": "ophođenje (sa)"
+    },
+    {
+      "front": "prinzipiell",
+      "back": "principijelno, načelno"
+    },
+    {
+      "front": "sich aus|kennen mit + Dat.",
+      "back": "razumeti se (u)"
+    },
+    {
+      "front": "in der Tat",
+      "back": "zaista, doista"
+    },
+    {
+      "front": "sich vor|nehmen",
+      "back": "naumiti, odlučiti"
+    },
+    {
+      "front": "der Laufschuh, -e",
+      "back": "patika za trčanje"
+    },
+    {
+      "front": "die Kondition, -en",
+      "back": "kondicija"
+    },
+    {
+      "front": "die Ausdauer (nur Sg.)",
+      "back": "izdržljivost"
+    },
+    {
+      "front": "der Kreislauf (nur Sg.)",
+      "back": "krvotok"
+    },
+    {
+      "front": "der Fettabbau (nur Sg.)",
+      "back": "razgradnja masti"
+    },
+    {
+      "front": "stärken",
+      "back": "jačati"
+    },
+    {
+      "front": "los|legen (ugs.)",
+      "back": "krenuti, dati se na posao"
+    },
+    {
+      "front": "naiv",
+      "back": "naivan"
+    },
+    {
+      "front": "die Selbstoptimierung (nur Sg.)",
+      "back": "samooptimizacija"
+    },
+    {
+      "front": "optimal",
+      "back": "optimalan"
+    },
+    {
+      "front": "die Leistung, -en",
+      "back": "učinak, postignuće"
+    },
+    {
+      "front": "Leistung bringen",
+      "back": "postizati učinak"
+    },
+    {
+      "front": "leistungsfähig",
+      "back": "sposoban, produktivan"
+    },
+    {
+      "front": "die Hauptsache, -n",
+      "back": "glavna stvar"
+    },
+    {
+      "front": "körperlich",
+      "back": "telesni"
+    },
+    {
+      "front": "etw. / jdn. unter Kontrolle haben",
+      "back": "imati pod kontrolom"
+    },
+    {
+      "front": "etw. im Griff haben",
+      "back": "vladati nečim, imati pod kontrolom"
+    },
+    {
+      "front": "der Griff, -e",
+      "back": "hvat"
+    },
+    {
+      "front": "verständnislos",
+      "back": "bez razumevanja"
+    },
+    {
+      "front": "das Sprichwort, ̈-er",
+      "back": "poslovica"
+    },
+    {
+      "front": "sachlich",
+      "back": "objektivan, stvaran"
+    },
+    {
+      "front": "widmen",
+      "back": "posvetiti"
+    },
+    {
+      "front": "hin und wieder",
+      "back": "s vremena na vreme"
+    },
+    {
+      "front": "die Auskunft, ̈-e über + Akk.",
+      "back": "informacija (o)"
+    },
+    {
+      "front": "die Nahrung (nur Sg.)",
+      "back": "hrana"
+    },
+    {
+      "front": "die Nahrungsaufnahme (nur Sg.)",
+      "back": "unos hrane"
+    },
+    {
+      "front": "die Kalorie, -n",
+      "back": "kalorija"
+    },
+    {
+      "front": "kalorienarm",
+      "back": "niskokaloričan"
+    },
+    {
+      "front": "der Nährstoff, -e",
+      "back": "hranljiva materija"
+    },
+    {
+      "front": "der Nährwert, -e",
+      "back": "hranljiva vrednost"
+    },
+    {
+      "front": "der Blutzucker (nur Sg.)",
+      "back": "šećer u krvi"
+    },
+    {
+      "front": "senken",
+      "back": "smanjiti, sniziti"
+    },
+    {
+      "front": "fettarm / fettreich",
+      "back": "nemastan / mastan"
+    },
+    {
+      "front": "vitaminreich",
+      "back": "bogat vitaminima"
+    },
+    {
+      "front": "koffeinfrei",
+      "back": "bez kofeina"
+    },
+    {
+      "front": "das Calcium (nur Sg.)",
+      "back": "kalcijum"
+    },
+    {
+      "front": "der Lachs, -e",
+      "back": "losos"
+    },
+    {
+      "front": "das Essverhalten (nur Sg.)",
+      "back": "navike u ishrani"
+    },
+    {
+      "front": "das Bauchgefühl, -e",
+      "back": "intuicija, osećaj"
+    },
+    {
+      "front": "ausgleichend",
+      "back": "uravnotežujući"
+    },
+    {
+      "front": "das Hoch, -s / das Tief, -s",
+      "back": "uspon / pad (najviša/najniža tačka)"
+    },
+    {
+      "front": "kurz und gut",
+      "back": "ukratko, jednom rečju"
+    },
+    {
+      "front": "schlicht und einfach",
+      "back": "sasvim jednostavno"
+    },
+    {
+      "front": "fix und fertig",
+      "back": "potpuno iscrpljen"
+    },
+    {
+      "front": "grinsen",
+      "back": "ceriti se"
+    },
+    {
+      "front": "gewiss",
+      "back": "izvestan, siguran"
+    },
+    {
+      "front": "die Kolumne, -n",
+      "back": "kolumna"
+    },
+    {
+      "front": "das Hörbuch, ̈-er",
+      "back": "audio-knjiga"
+    },
+    {
+      "front": "sich an|hören",
+      "back": "preslušati"
+    },
+    {
+      "front": "die Sauna, -s / die Saunen",
+      "back": "sauna"
+    },
+    {
+      "front": "der Rhythmus, die Rhythmen",
+      "back": "ritam"
+    },
+    {
+      "front": "der Tagesrhythmus, die Tagesrhythmen",
+      "back": "dnevni ritam"
+    },
+    {
+      "front": "die innere Uhr",
+      "back": "unutrašnji (biološki) sat"
+    },
+    {
+      "front": "der Frühaufsteher, – / die Frühaufsteherin, -nen",
+      "back": "ranoranilac / ranoranilka"
+    },
+    {
+      "front": "der Langschläfer, – / die Langschläferin, -nen",
+      "back": "spavalica (ko dugo spava)"
+    },
+    {
+      "front": "der Normaltyp, -en",
+      "back": "uobičajeni (normalni) tip"
+    },
+    {
+      "front": "bestimmen",
+      "back": "određivati"
+    },
+    {
+      "front": "genetisch",
+      "back": "genetski"
+    },
+    {
+      "front": "das Gen, -e",
+      "back": "gen"
+    },
+    {
+      "front": "das Gehirn, -e",
+      "back": "mozak"
+    },
+    {
+      "front": "das Tageslicht (nur Sg.)",
+      "back": "dnevno svetlo"
+    },
+    {
+      "front": "die Zeitverschiebung, -en",
+      "back": "vremenska razlika (jet lag)"
+    },
+    {
+      "front": "das Timing, -s",
+      "back": "tajming, vremensko usklađivanje"
+    },
+    {
+      "front": "geistig",
+      "back": "mentalni, umni"
+    },
+    {
+      "front": "anspruchsvoll",
+      "back": "zahtevan"
+    },
+    {
+      "front": "das Sachbuch, ̈-er",
+      "back": "stručna knjiga"
+    },
+    {
+      "front": "das Referat, -e",
+      "back": "referat"
+    },
+    {
+      "front": "der Vortrag, ̈-e",
+      "back": "predavanje, izlaganje"
+    },
+    {
+      "front": "der Ausdauersport (nur Sg.)",
+      "back": "sport izdržljivosti"
+    },
+    {
+      "front": "erholsam",
+      "back": "okrepljujući"
+    },
+    {
+      "front": "das Flugpersonal (nur Sg.)",
+      "back": "avio-osoblje"
+    },
+    {
+      "front": "versetzt",
+      "back": "pomeren"
+    },
+    {
+      "front": "auf|nehmen",
+      "back": "primati, upijati"
+    },
+    {
+      "front": "gesellig",
+      "back": "društven"
+    },
+    {
+      "front": "signalisieren",
+      "back": "signalizirati, davati znak"
+    },
+    {
+      "front": "langfristig",
+      "back": "dugoročan"
+    },
+    {
+      "front": "rein|hören",
+      "back": "preslušati (uzgred)"
+    },
+    {
+      "front": "weiter|schlafen",
+      "back": "nastaviti da spava"
+    },
+    {
+      "front": "rötlich",
+      "back": "crvenkast"
+    },
+    {
+      "front": "pharmazeutisch",
+      "back": "farmaceutski"
+    },
+    {
+      "front": "erstaunlich",
+      "back": "zapanjujući"
+    },
+    {
+      "front": "unglaubwürdig",
+      "back": "neuverljiv"
+    },
+    {
+      "front": "ab|weichen von + Dat.",
+      "back": "odstupati (od)"
+    },
+    {
+      "front": "das Merkmal, -e",
+      "back": "obeležje, karakteristika"
+    },
+    {
+      "front": "sich aus|zeichnen durch + Akk.",
+      "back": "odlikovati se (čime)"
+    },
+    {
+      "front": "angeblich",
+      "back": "navodno"
+    },
+    {
+      "front": "unbestritten",
+      "back": "neosporan"
+    },
+    {
+      "front": "einmalig",
+      "back": "jedinstven"
+    },
+    {
+      "front": "der Nobelpreis, -e",
+      "back": "Nobelova nagrada"
+    }
+  ]
+}

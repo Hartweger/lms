@@ -1,0 +1,205 @@
+{
+  "type": "wordset",
+  "title": "Modul 5 — Reči",
+  "setKey": "b1-1-modul-5",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    {
+      "front": "die Stellenanzeige",
+      "back": "oglas za posao"
+    },
+    {
+      "front": "sich bewerben",
+      "back": "prijaviti se za posao"
+    },
+    {
+      "front": "der Lebenslauf",
+      "back": "biografija (CV)"
+    },
+    {
+      "front": "das Anschreiben",
+      "back": "propratno pismo"
+    },
+    {
+      "front": "das Vorstellungsgespräch",
+      "back": "razgovor za posao"
+    },
+    {
+      "front": "die Berufserfahrung",
+      "back": "radno iskustvo"
+    },
+    {
+      "front": "die Qualifikation",
+      "back": "kvalifikacija"
+    },
+    {
+      "front": "die Zusage",
+      "back": "potvrda (dobio si posao)"
+    },
+    {
+      "front": "die Absage",
+      "back": "odbijanje"
+    },
+    {
+      "front": "einstellen",
+      "back": "zaposliti (nekoga)"
+    },
+    {
+      "front": "vergessen zu...",
+      "back": "zaboraviti da..."
+    },
+    {
+      "front": "anfangen zu...",
+      "back": "početi da..."
+    },
+    {
+      "front": "versuchen zu...",
+      "back": "pokušati da..."
+    },
+    {
+      "front": "aufhören zu...",
+      "back": "prestati da..."
+    },
+    {
+      "front": "Es ist wichtig zu...",
+      "back": "Važno je da..."
+    },
+    {
+      "front": "Ich habe Lust zu...",
+      "back": "Imam želju da..."
+    },
+    {
+      "front": "Ich habe Zeit zu...",
+      "back": "Imam vremena da..."
+    },
+    {
+      "front": "Ich habe Angst zu...",
+      "back": "Plašim se da..."
+    },
+    {
+      "front": "anrufen → anzurufen",
+      "back": "zu ide između prefiksa i glagola"
+    },
+    {
+      "front": "verstehen → zu verstehen",
+      "back": "nerazdvojivi: zu ispred glagola"
+    },
+    {
+      "front": "Studierende",
+      "back": "studenti/kinje (neutralno)"
+    },
+    {
+      "front": "Lehrkräfte",
+      "back": "nastavno osoblje (neutralno)"
+    },
+    {
+      "front": "Mitarbeitende",
+      "back": "zaposleni (neutralno)"
+    },
+    {
+      "front": "m/w/d",
+      "back": "männlich/weiblich/divers"
+    },
+    {
+      "front": "das Gendersternchen",
+      "back": "zvezdica za Gendern (*)"
+    },
+    {
+      "front": "geschlechtergerecht",
+      "back": "rodno osetljivo"
+    },
+    {
+      "front": "die Gleichberechtigung",
+      "back": "ravnopravnost"
+    },
+    {
+      "front": "neutral",
+      "back": "neutralno"
+    },
+    {
+      "front": "die Vielfalt",
+      "back": "raznolikost"
+    },
+    {
+      "front": "der Berufswechsel",
+      "back": "promena karijere"
+    },
+    {
+      "front": "kündigen",
+      "back": "dati otkaz"
+    },
+    {
+      "front": "die Ausbildung",
+      "back": "stručna obuka"
+    },
+    {
+      "front": "die Leidenschaft",
+      "back": "strast"
+    },
+    {
+      "front": "unbezahlbar",
+      "back": "neprocenjivo"
+    },
+    {
+      "front": "zufrieden sein mit",
+      "back": "biti zadovoljan (čime)"
+    },
+    {
+      "front": "sich vorbereiten auf",
+      "back": "pripremiti se za"
+    },
+    {
+      "front": "die Erwartung",
+      "back": "očekivanje"
+    },
+    {
+      "front": "verdienen",
+      "back": "zarađivati"
+    },
+    {
+      "front": "der Neuanfang",
+      "back": "novi početak"
+    },
+    {
+      "front": "Ich möchte heute über ... sprechen.",
+      "back": "Danas bih govorio/la o..."
+    },
+    {
+      "front": "Mein Thema ist...",
+      "back": "Moja tema je..."
+    },
+    {
+      "front": "Ich persönlich habe die Erfahrung gemacht, dass...",
+      "back": "Ja lično imam iskustvo da..."
+    },
+    {
+      "front": "In meinem Heimatland...",
+      "back": "U mojoj zemlji..."
+    },
+    {
+      "front": "Ein Vorteil ist, dass...",
+      "back": "Prednost je što..."
+    },
+    {
+      "front": "Ein Nachteil könnte sein, dass...",
+      "back": "Mana bi mogla biti što..."
+    },
+    {
+      "front": "Einerseits ... andererseits ...",
+      "back": "S jedne strane ... s druge strane ..."
+    },
+    {
+      "front": "Ich bin der Meinung, dass...",
+      "back": "Ja sam mišljenja da..."
+    },
+    {
+      "front": "Zusammenfassend möchte ich sagen, dass...",
+      "back": "Ukratko bih rekao/la da..."
+    },
+    {
+      "front": "Vielen Dank für Ihre Aufmerksamkeit!",
+      "back": "Hvala na pažnji!"
+    }
+  ]
+}

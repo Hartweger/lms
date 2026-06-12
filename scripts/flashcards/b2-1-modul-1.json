@@ -1,0 +1,545 @@
+{
+  "type": "wordset",
+  "title": "Modul 1 — Reči",
+  "setKey": "b2-1-modul-1",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    {
+      "front": "das Unternehmen, –",
+      "back": "preduzeće, firma"
+    },
+    {
+      "front": "großartig",
+      "back": "sjajan, izvanredan"
+    },
+    {
+      "front": "hervorragend",
+      "back": "izvrstan, vrhunski"
+    },
+    {
+      "front": "bedenklich",
+      "back": "zabrinjavajuć, sporan"
+    },
+    {
+      "front": "halten für + Akk.",
+      "back": "smatrati (nečim)"
+    },
+    {
+      "front": "die Veränderung, -en",
+      "back": "promena"
+    },
+    {
+      "front": "wagen + Akk.",
+      "back": "usuditi se, rizikovati"
+    },
+    {
+      "front": "gestalten",
+      "back": "oblikovati, urediti"
+    },
+    {
+      "front": "schwer|fallen",
+      "back": "biti teško (nekome)"
+    },
+    {
+      "front": "vertraut",
+      "back": "poznat, prisan"
+    },
+    {
+      "front": "eine neue Richtung ein|schlagen",
+      "back": "krenuti u novom pravcu"
+    },
+    {
+      "front": "der Grund, ̈-e für + Akk.",
+      "back": "razlog (za)"
+    },
+    {
+      "front": "vielfältig",
+      "back": "raznovrstan, mnogostruk"
+    },
+    {
+      "front": "die Angst vor + Dat.",
+      "back": "strah (od)"
+    },
+    {
+      "front": "der Misserfolg, -e",
+      "back": "neuspeh"
+    },
+    {
+      "front": "hinterfragen",
+      "back": "preispitivati"
+    },
+    {
+      "front": "der Mut (nur Sg.)",
+      "back": "hrabrost"
+    },
+    {
+      "front": "all seinen Mut zusammen|nehmen",
+      "back": "skupiti svu hrabrost"
+    },
+    {
+      "front": "der Lebensunterhalt (nur Sg.)",
+      "back": "sredstva za život, izdržavanje"
+    },
+    {
+      "front": "sich seinen Lebensunterhalt verdienen",
+      "back": "zarađivati za život"
+    },
+    {
+      "front": "der Unternehmensberater, – / die -beraterin, -nen",
+      "back": "poslovni savetnik / savetnica"
+    },
+    {
+      "front": "die Führungsposition, -en",
+      "back": "rukovodeća pozicija"
+    },
+    {
+      "front": "der Druck (nur Sg.)",
+      "back": "pritisak"
+    },
+    {
+      "front": "unter Druck stehen",
+      "back": "biti pod pritiskom"
+    },
+    {
+      "front": "überleben",
+      "back": "preživeti"
+    },
+    {
+      "front": "der Schock (nur Sg.)",
+      "back": "šok"
+    },
+    {
+      "front": "entscheidend",
+      "back": "presudan, odlučujući"
+    },
+    {
+      "front": "der Wendepunkt, -e",
+      "back": "prekretnica"
+    },
+    {
+      "front": "meditieren",
+      "back": "meditirati"
+    },
+    {
+      "front": "die Einstellung, -en zu + Dat.",
+      "back": "stav (prema)"
+    },
+    {
+      "front": "bewusst",
+      "back": "svestan"
+    },
+    {
+      "front": "sich um|stellen",
+      "back": "preorijentisati se, prilagoditi se"
+    },
+    {
+      "front": "die Großstadt, ̈-e",
+      "back": "velegrad"
+    },
+    {
+      "front": "sich sehnen nach + Dat.",
+      "back": "čeznuti (za)"
+    },
+    {
+      "front": "verwirklichen",
+      "back": "ostvariti"
+    },
+    {
+      "front": "die Begeisterung (nur Sg.) für + Akk.",
+      "back": "oduševljenje (za)"
+    },
+    {
+      "front": "die Anregung, -en",
+      "back": "podsticaj, predlog"
+    },
+    {
+      "front": "verbunden mit + Dat.",
+      "back": "povezan (sa)"
+    },
+    {
+      "front": "die Ausbildung, -en zu + Dat.",
+      "back": "obuka, školovanje (za)"
+    },
+    {
+      "front": "die Nähe (nur Sg.) zu + Dat.",
+      "back": "blizina"
+    },
+    {
+      "front": "an|kommen",
+      "back": "stići; ovde: biti prihvaćen"
+    },
+    {
+      "front": "zusammen|hängen mit + Dat.",
+      "back": "biti povezan (sa)"
+    },
+    {
+      "front": "etw. zu|geben",
+      "back": "priznati (nešto)"
+    },
+    {
+      "front": "jdn. / sich an|lügen",
+      "back": "lagati (nekoga / sebe)"
+    },
+    {
+      "front": "der Pädagoge, -n / die Pädagogin, -nen",
+      "back": "pedagog / pedagoškinja"
+    },
+    {
+      "front": "die Migration, -en",
+      "back": "migracija"
+    },
+    {
+      "front": "aus|wandern",
+      "back": "iseliti se, emigrirati"
+    },
+    {
+      "front": "ein|wandern",
+      "back": "useliti se, imigrirati"
+    },
+    {
+      "front": "emigrieren",
+      "back": "emigrirati"
+    },
+    {
+      "front": "der Flüchtling, -e",
+      "back": "izbeglica"
+    },
+    {
+      "front": "das Asyl (nur Sg.)",
+      "back": "azil"
+    },
+    {
+      "front": "der Schutz (nur Sg.)",
+      "back": "zaštita"
+    },
+    {
+      "front": "fliehen vor + Dat.",
+      "back": "bežati (od)"
+    },
+    {
+      "front": "zurück|kehren nach + Dat.",
+      "back": "vratiti se (u)"
+    },
+    {
+      "front": "die Heimat (nur Sg.)",
+      "back": "domovina, zavičaj"
+    },
+    {
+      "front": "die Staatsbürgerschaft, -en",
+      "back": "državljanstvo"
+    },
+    {
+      "front": "der Staatsbürger, – / die Staatsbürgerin, -nen",
+      "back": "državljanin / državljanka"
+    },
+    {
+      "front": "nach|weisen",
+      "back": "dokazati, potvrditi"
+    },
+    {
+      "front": "der Vorfahr, -en / die Vorfahrin, -nen",
+      "back": "predak / pretkinja"
+    },
+    {
+      "front": "der Nachfahre, -n / die Nachfahrin, -nen",
+      "back": "potomak / potomkinja"
+    },
+    {
+      "front": "der Urgroßvater, ̈-",
+      "back": "pradeda"
+    },
+    {
+      "front": "der Spätaussiedler, –",
+      "back": "kasni nemački doseljenik (iz ist. Evrope)"
+    },
+    {
+      "front": "der Gastarbeiter, – / die Gastarbeiterin, -nen",
+      "back": "gastarbajter / gastarbajterka"
+    },
+    {
+      "front": "der Migrationshintergrund (nur Sg.)",
+      "back": "migrantsko poreklo"
+    },
+    {
+      "front": "die Lebensbedingung, -en",
+      "back": "uslovi života"
+    },
+    {
+      "front": "das Fernweh (nur Sg.)",
+      "back": "čežnja za daljinama"
+    },
+    {
+      "front": "auf|brechen",
+      "back": "krenuti (na put)"
+    },
+    {
+      "front": "sich nieder|lassen",
+      "back": "nastaniti se"
+    },
+    {
+      "front": "sich heimisch / zu Hause fühlen",
+      "back": "osećati se kao kod kuće"
+    },
+    {
+      "front": "der / die Einheimische, -n",
+      "back": "meštanin, domorodac"
+    },
+    {
+      "front": "Kontakte knüpfen",
+      "back": "uspostavljati kontakte"
+    },
+    {
+      "front": "überwinden",
+      "back": "savladati, prevazići"
+    },
+    {
+      "front": "die Tradition, -en",
+      "back": "tradicija"
+    },
+    {
+      "front": "pflegen",
+      "back": "negovati"
+    },
+    {
+      "front": "hin- und hergerissen sein",
+      "back": "biti razapet (između)"
+    },
+    {
+      "front": "die Erfahrung, -en",
+      "back": "iskustvo"
+    },
+    {
+      "front": "der Beitrag, ̈-e",
+      "back": "prilog, članak"
+    },
+    {
+      "front": "erforschen",
+      "back": "istraživati"
+    },
+    {
+      "front": "wirtschaftlich",
+      "back": "privredni, ekonomski"
+    },
+    {
+      "front": "ehemalig",
+      "back": "bivši"
+    },
+    {
+      "front": "beherrschen",
+      "back": "vladati (jezikom), znati odlično"
+    },
+    {
+      "front": "jdm. etw. bei|bringen",
+      "back": "naučiti (nekoga nečemu)"
+    },
+    {
+      "front": "ab|brechen",
+      "back": "prekinuti (npr. studije)"
+    },
+    {
+      "front": "der Studienabschluss, ̈-e",
+      "back": "diploma, završetak studija"
+    },
+    {
+      "front": "zurück|lassen",
+      "back": "ostaviti (za sobom)"
+    },
+    {
+      "front": "in der Lage sein",
+      "back": "biti u stanju, moći"
+    },
+    {
+      "front": "heutzutage",
+      "back": "danas, u današnje vreme"
+    },
+    {
+      "front": "bei|tragen zu + Dat.",
+      "back": "doprineti"
+    },
+    {
+      "front": "die Altstadt, ̈-e",
+      "back": "stari grad"
+    },
+    {
+      "front": "der Dom, -e",
+      "back": "katedrala"
+    },
+    {
+      "front": "bummeln / schlendern",
+      "back": "šetati, tumarati"
+    },
+    {
+      "front": "die Gasse, -n",
+      "back": "uličica"
+    },
+    {
+      "front": "der Akzent, -e",
+      "back": "akcenat"
+    },
+    {
+      "front": "fehlerfrei",
+      "back": "bez greške"
+    },
+    {
+      "front": "der Pianist, -en / die Pianistin, -nen",
+      "back": "pijanista / pijanistkinja"
+    },
+    {
+      "front": "der Stadtführer, – / die Stadtführerin, -nen",
+      "back": "gradski vodič / vodičkinja"
+    },
+    {
+      "front": "die Stadtführung, -en",
+      "back": "vođenje po gradu, tura"
+    },
+    {
+      "front": "begeistert von + Dat.",
+      "back": "oduševljen (nečim)"
+    },
+    {
+      "front": "die Perspektive, -n",
+      "back": "perspektiva, ugao gledanja"
+    },
+    {
+      "front": "die Denkpause, -n",
+      "back": "pauza za razmišljanje"
+    },
+    {
+      "front": "sich orientieren",
+      "back": "orijentisati se"
+    },
+    {
+      "front": "das Interesse an + Dat. / aus Interesse an",
+      "back": "interesovanje (za) / iz interesovanja"
+    },
+    {
+      "front": "eine Prüfung ab|legen",
+      "back": "polagati ispit"
+    },
+    {
+      "front": "fein",
+      "back": "fin, otmen"
+    },
+    {
+      "front": "der Studiengang, ̈-e",
+      "back": "studijski program"
+    },
+    {
+      "front": "das Studienfach, ̈-er",
+      "back": "studijski predmet, smer"
+    },
+    {
+      "front": "absolvieren",
+      "back": "završiti, odslušati"
+    },
+    {
+      "front": "ab|schließen",
+      "back": "završiti (studije)"
+    },
+    {
+      "front": "kombinieren",
+      "back": "kombinovati"
+    },
+    {
+      "front": "das Management, -s",
+      "back": "menadžment"
+    },
+    {
+      "front": "stundenlang",
+      "back": "satima"
+    },
+    {
+      "front": "dank + Gen./Dat.",
+      "back": "zahvaljujući"
+    },
+    {
+      "front": "der Instrumentenbauer, – / die -bauerin, -nen",
+      "back": "graditelj / graditeljka instrumenata"
+    },
+    {
+      "front": "der Nationalpark, -s",
+      "back": "nacionalni park"
+    },
+    {
+      "front": "vertraut sein mit + Dat.",
+      "back": "biti upoznat (sa)"
+    },
+    {
+      "front": "hetzen",
+      "back": "juriti, žuriti"
+    },
+    {
+      "front": "ein|schlafen",
+      "back": "zaspati"
+    },
+    {
+      "front": "das Geräusch, -e",
+      "back": "zvuk, šum"
+    },
+    {
+      "front": "die Müdigkeit (nur Sg.)",
+      "back": "umor"
+    },
+    {
+      "front": "das Stammlokal, -e",
+      "back": "omiljeni lokal/kafić"
+    },
+    {
+      "front": "der Irrtum, ̈-er",
+      "back": "zabluda, greška"
+    },
+    {
+      "front": "deutschsprachig",
+      "back": "nemačkog govornog područja"
+    },
+    {
+      "front": "aufgrund + Gen.",
+      "back": "na osnovu, zbog"
+    },
+    {
+      "front": "das Verständnis (nur Sg.) für + Akk.",
+      "back": "razumevanje (za)"
+    },
+    {
+      "front": "das Gespräch, -e mit + Dat.",
+      "back": "razgovor (sa)"
+    },
+    {
+      "front": "der Hintergrund, ̈-e",
+      "back": "pozadina"
+    },
+    {
+      "front": "die Sicht auf + Akk. / aus meiner Sicht",
+      "back": "pogled (na) / iz mog ugla"
+    },
+    {
+      "front": "die Architektur (nur Sg.)",
+      "back": "arhitektura"
+    },
+    {
+      "front": "die Säule, -n",
+      "back": "stub"
+    },
+    {
+      "front": "flanieren",
+      "back": "šetati, flanirati"
+    },
+    {
+      "front": "nachvollziehbar",
+      "back": "razumljiv, shvatljiv"
+    },
+    {
+      "front": "ehrlich",
+      "back": "iskren"
+    },
+    {
+      "front": "trödeln",
+      "back": "oklevati, gubiti vreme"
+    },
+    {
+      "front": "problematisch",
+      "back": "problematičan"
+    }
+  ]
+}

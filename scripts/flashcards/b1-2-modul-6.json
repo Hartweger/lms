@@ -1,0 +1,61 @@
+{
+  "type": "wordset",
+  "title": "Modul 6 — Reči",
+  "setKey": "b1-2-modul-6",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    {
+      "front": "löschen",
+      "back": "obrisati"
+    },
+    {
+      "front": "herunterladen",
+      "back": "preuzeti"
+    },
+    {
+      "front": "wiederherstellen",
+      "back": "povratiti, vratiti"
+    },
+    {
+      "front": "vorschlagen",
+      "back": "predložiti"
+    },
+    {
+      "front": "beeindruckt",
+      "back": "impresioniran"
+    },
+    {
+      "front": "die eigene Stimme, -n",
+      "back": "vlastiti glas"
+    },
+    {
+      "front": "zusammenarbeiten",
+      "back": "sarađivati"
+    },
+    {
+      "front": "lächeln",
+      "back": "lächelnd"
+    },
+    {
+      "front": "wachsen",
+      "back": "wachsend"
+    },
+    {
+      "front": "steigen",
+      "back": "steigend"
+    },
+    {
+      "front": "motivieren",
+      "back": "motivierend"
+    },
+    {
+      "front": "zunehmen",
+      "back": "zunehmend"
+    },
+    {
+      "front": "beunruhigen",
+      "back": "beunruhigend"
+    }
+  ]
+}

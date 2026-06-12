@@ -1,0 +1,81 @@
+{
+  "type": "wordset",
+  "title": "Modul 10 — Reči",
+  "setKey": "b1-2-modul-10",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    {
+      "front": "das Schlüsselwort, ¨er",
+      "back": "ključna reč"
+    },
+    {
+      "front": "die Aussage, -n",
+      "back": "tvrdnja, izjava"
+    },
+    {
+      "front": "paraphrasieren",
+      "back": "reći drugim rečima"
+    },
+    {
+      "front": "das Ladegerät, -e",
+      "back": "punjač"
+    },
+    {
+      "front": "der Anschluss, ¨e",
+      "back": "priključak"
+    },
+    {
+      "front": "einstellen",
+      "back": "podesiti"
+    },
+    {
+      "front": "die Sprachbausteine (Pl.)",
+      "back": "jezički elementi (telc deo)"
+    },
+    {
+      "front": "der Ausdruck, ¨e",
+      "back": "izražavanje"
+    },
+    {
+      "front": "die Kontaktaufnahme (nur Sg.)",
+      "back": "uspostavljanje kontakta (usmeni deo)"
+    },
+    {
+      "front": "schriftlich",
+      "back": "pismeno"
+    },
+    {
+      "front": "mündlich",
+      "back": "usmeno"
+    },
+    {
+      "front": "die Lücke, -n",
+      "back": "praznina, rupa (za popunjavanje)"
+    },
+    {
+      "front": "die Prüfung, -en",
+      "back": "ispit"
+    },
+    {
+      "front": "bestehen",
+      "back": "položiti"
+    },
+    {
+      "front": "die Aufgabe, -n",
+      "back": "zadatak"
+    },
+    {
+      "front": "der Leitpunkt, -e",
+      "back": "tačka koju moraš obraditi"
+    },
+    {
+      "front": "die Strategie, -n",
+      "back": "strategija"
+    },
+    {
+      "front": "die Note, -n",
+      "back": "ocena"
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "type": "wordset",
+  "title": "Modul 6 — Reči",
+  "setKey": "b1-1-modul-6",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    {
+      "front": "während + Genitiv",
+      "back": "tokom"
+    },
+    {
+      "front": "außerhalb + Genitiv",
+      "back": "izvan"
+    },
+    {
+      "front": "innerhalb + Genitiv",
+      "back": "unutar"
+    },
+    {
+      "front": "es gibt + Akkusativ",
+      "back": "postoji / ima"
+    },
+    {
+      "front": "es ist + Adjektiv",
+      "back": "to je..."
+    },
+    {
+      "front": "es lohnt sich",
+      "back": "isplati se"
+    },
+    {
+      "front": "die Öffnungszeiten",
+      "back": "radno vreme (prodavnice)"
+    },
+    {
+      "front": "die Dienstleistung",
+      "back": "usluga"
+    },
+    {
+      "front": "die Beschwerde",
+      "back": "žalba, reklamacija"
+    },
+    {
+      "front": "die Rechnung",
+      "back": "račun"
+    },
+    {
+      "front": "um...zu + Infinitiv",
+      "back": "da bi... (isti subjekat)"
+    },
+    {
+      "front": "damit + Nebensatz",
+      "back": "da bi... (različiti subjekti)"
+    },
+    {
+      "front": "statt...zu + Infinitiv",
+      "back": "umesto da..."
+    },
+    {
+      "front": "ohne...zu + Infinitiv",
+      "back": "bez da..."
+    },
+    {
+      "front": "Ich lerne, um die Prüfung zu bestehen.",
+      "back": "Učim da bih položio/la ispit."
+    },
+    {
+      "front": "...damit mein Kind versteht.",
+      "back": "...da bi moje dete razumelo."
+    },
+    {
+      "front": "Statt zu kochen, bestellt er Pizza.",
+      "back": "Umesto da kuva, naručuje picu."
+    },
+    {
+      "front": "Er ging, ohne zu grüßen.",
+      "back": "Otišao je bez da se javio."
+    },
+    {
+      "front": "sich verabschieden",
+      "back": "pozdraviti se"
+    },
+    {
+      "front": "unterschreiben",
+      "back": "potpisati"
+    }
+  ]
+}

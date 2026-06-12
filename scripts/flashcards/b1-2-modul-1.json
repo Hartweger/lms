@@ -1,0 +1,145 @@
+{
+  "type": "wordset",
+  "title": "Modul 1 — Reči",
+  "setKey": "b1-2-modul-1",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    {
+      "front": "der Auftrag, ¨e",
+      "back": "nalog, zadatak"
+    },
+    {
+      "front": "die Konsequenz, -en",
+      "back": "posledica"
+    },
+    {
+      "front": "sich wenden an + Akk",
+      "back": "obratiti se"
+    },
+    {
+      "front": "sich krankmelden",
+      "back": "javiti se da si bolestan"
+    },
+    {
+      "front": "plötzlich",
+      "back": "iznenada"
+    },
+    {
+      "front": "eventuell",
+      "back": "eventualno"
+    },
+    {
+      "front": "die Zusammenarbeit (nur Sg.)",
+      "back": "saradnja"
+    },
+    {
+      "front": "der Einfluss, ¨e",
+      "back": "uticaj"
+    },
+    {
+      "front": "der Arbeitsplatz, ¨e",
+      "back": "radno mesto"
+    },
+    {
+      "front": "sich bewerben um + Akk",
+      "back": "prijaviti se za"
+    },
+    {
+      "front": "kannst du",
+      "back": "könntest du"
+    },
+    {
+      "front": "können Sie",
+      "back": "könnten Sie"
+    },
+    {
+      "front": "darf ich",
+      "back": "dürfte ich"
+    },
+    {
+      "front": "hast du Zeit",
+      "back": "hättest du Zeit"
+    },
+    {
+      "front": "gibst du mir",
+      "back": "würdest du mir geben"
+    },
+    {
+      "front": "die Beschwerde, -n",
+      "back": "pritužba"
+    },
+    {
+      "front": "das Problem, -e",
+      "back": "problem"
+    },
+    {
+      "front": "die Frist, -en",
+      "back": "rok"
+    },
+    {
+      "front": "die Mahnung, -en",
+      "back": "opomena"
+    },
+    {
+      "front": "der Fehler, -",
+      "back": "greška"
+    },
+    {
+      "front": "das Missverständnis, -se",
+      "back": "nesporazum"
+    },
+    {
+      "front": "die Lösung, -en",
+      "back": "rešenje"
+    },
+    {
+      "front": "der Termin, -e",
+      "back": "termin, rok sastanka"
+    },
+    {
+      "front": "der Vorgesetzte, -n",
+      "back": "nadređeni"
+    },
+    {
+      "front": "die Verspätung, -en",
+      "back": "kašnjenje"
+    },
+    {
+      "front": "das Betriebsklima (nur Sg.)",
+      "back": "atmosfera na poslu"
+    },
+    {
+      "front": "die Karriereexpertin, -nen",
+      "back": "stručnjakinja za karijeru"
+    },
+    {
+      "front": "der Umgang (nur Sg.)",
+      "back": "ophođenje, odnos"
+    },
+    {
+      "front": "vermeiden",
+      "back": "izbeći"
+    },
+    {
+      "front": "verwechseln (mit + Dat)",
+      "back": "pobrkati, zameniti"
+    },
+    {
+      "front": "das Tabuthema, -themen",
+      "back": "tabu tema"
+    },
+    {
+      "front": "die Geldsorgen (Pl.)",
+      "back": "novčane brige"
+    },
+    {
+      "front": "trennen (von + Dat)",
+      "back": "razdvojiti"
+    },
+    {
+      "front": "professionell",
+      "back": "profesionalan"
+    }
+  ]
+}

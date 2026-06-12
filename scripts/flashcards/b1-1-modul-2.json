@@ -1,0 +1,129 @@
+{
+  "type": "wordset",
+  "title": "Modul 2 — Reči",
+  "setKey": "b1-1-modul-2",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    {
+      "front": "Der Film, _____ mir gefällt, ... (m. Nom.)",
+      "back": "der"
+    },
+    {
+      "front": "Die Serie, _____ ich sehe, ... (f. Akk.)",
+      "back": "die"
+    },
+    {
+      "front": "Das Buch, _____ ich lese, ... (n. Akk.)",
+      "back": "das"
+    },
+    {
+      "front": "Der Mann, _____ ich geholfen habe, ... (m. Dat.)",
+      "back": "dem"
+    },
+    {
+      "front": "Die Leute, _____ ich vertraue, ... (Pl. Dat.)",
+      "back": "denen"
+    },
+    {
+      "front": "echt",
+      "back": "stvarno"
+    },
+    {
+      "front": "ziemlich",
+      "back": "prilično"
+    },
+    {
+      "front": "total",
+      "back": "totalno"
+    },
+    {
+      "front": "wirklich",
+      "back": "zaista"
+    },
+    {
+      "front": "ganz schön",
+      "back": "baš (pojačano)"
+    },
+    {
+      "front": "die Komödie",
+      "back": "komedija"
+    },
+    {
+      "front": "der Thriller",
+      "back": "triler"
+    },
+    {
+      "front": "der Krimi",
+      "back": "krimić"
+    },
+    {
+      "front": "die Dokumentation",
+      "back": "dokumentarac"
+    },
+    {
+      "front": "der Horrorfilm",
+      "back": "horor"
+    },
+    {
+      "front": "die Liebesgeschichte",
+      "back": "ljubavna priča"
+    },
+    {
+      "front": "der Zeichentrickfilm",
+      "back": "crtani film"
+    },
+    {
+      "front": "spannend",
+      "back": "napeto, uzbudljivo"
+    },
+    {
+      "front": "langweilig",
+      "back": "dosadno"
+    },
+    {
+      "front": "empfehlen",
+      "back": "preporučiti"
+    },
+    {
+      "front": "weil",
+      "back": "jer (razlog)"
+    },
+    {
+      "front": "obwohl",
+      "back": "iako (kontrast)"
+    },
+    {
+      "front": "Ich lerne Deutsch, weil...",
+      "back": "Učim nemački jer..."
+    },
+    {
+      "front": "Ich gehe raus, obwohl...",
+      "back": "Izlazim napolje, iako..."
+    },
+    {
+      "front": "dass",
+      "back": "da"
+    },
+    {
+      "front": "wenn",
+      "back": "kad / ako"
+    },
+    {
+      "front": "als",
+      "back": "kad (jednom, prošlost)"
+    },
+    {
+      "front": "damit",
+      "back": "da bi"
+    },
+    {
+      "front": "Glagol u Nebensatz?",
+      "back": "Na KRAJU rečenice!"
+    },
+    {
+      "front": "trotzdem (za poredjenje sa obwohl)",
+      "back": "ipak (ali u glavnoj rečenici, glagol na 2. mestu)"
+    }
+  ]
+}

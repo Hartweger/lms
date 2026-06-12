@@ -1,0 +1,57 @@
+{
+  "type": "wordset",
+  "title": "Modul 2 — Reči",
+  "setKey": "b1-2-modul-2",
+  "frontLabel": "DE",
+  "backLabel": "SR",
+  "items": [
+    {
+      "front": "sich freuen …",
+      "back": "auf / über (Akk.)"
+    },
+    {
+      "front": "sich interessieren …",
+      "back": "für (Akk.)"
+    },
+    {
+      "front": "sich ärgern …",
+      "back": "über (Akk.)"
+    },
+    {
+      "front": "sich kümmern …",
+      "back": "um (Akk.)"
+    },
+    {
+      "front": "sich treffen …",
+      "back": "mit (Dat.)"
+    },
+    {
+      "front": "sich erinnern …",
+      "back": "an (Akk.)"
+    },
+    {
+      "front": "sein",
+      "back": "wäre"
+    },
+    {
+      "front": "haben",
+      "back": "hätte"
+    },
+    {
+      "front": "können",
+      "back": "könnte"
+    },
+    {
+      "front": "müssen",
+      "back": "müsste"
+    },
+    {
+      "front": "dürfen",
+      "back": "dürfte"
+    },
+    {
+      "front": "sollen",
+      "back": "sollte"
+    }
+  ]
+}
