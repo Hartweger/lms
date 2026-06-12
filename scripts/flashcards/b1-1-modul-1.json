@@ -124,6 +124,331 @@
     {
       "front": "Schwein haben",
       "back": "imati sreće"
+    },
+    {
+      "front": "tragen, trägt, trug, hat getragen",
+      "back": "nositi"
+    },
+    {
+      "front": "heißen, hieß, hat geheißen",
+      "back": "zvati se"
+    },
+    {
+      "front": "sagen",
+      "back": "reći|kazati"
+    },
+    {
+      "front": "bringen, brachte, hat gebracht",
+      "back": "doneti"
+    },
+    {
+      "front": "gehen, ging, ist gegangen",
+      "back": "ići"
+    },
+    {
+      "front": "begegnen, ist begegnet",
+      "back": "sresti"
+    },
+    {
+      "front": "wissen, wusste, hat gewusst",
+      "back": "znati"
+    },
+    {
+      "front": "erzählen von",
+      "back": "pričati o"
+    },
+    {
+      "front": "denken, dachte, hat gedacht",
+      "back": "misliti"
+    },
+    {
+      "front": "pflücken, pflückte, hat gepflückt",
+      "back": "brati"
+    },
+    {
+      "front": "laufen, lief, ist gelaufen",
+      "back": "trčati"
+    },
+    {
+      "front": "anziehen, zog an, hat angezogen",
+      "back": "obući"
+    },
+    {
+      "front": "kommen, kam, ist gekommen",
+      "back": "doći"
+    },
+    {
+      "front": "erschrecken, erschrak, ist erschrocken",
+      "back": "uplašiti se"
+    },
+    {
+      "front": "sehen, sah, hat gesehen",
+      "back": "videti"
+    },
+    {
+      "front": "springen, sprang, ist gesprungen",
+      "back": "skočiti"
+    },
+    {
+      "front": "verschlucken",
+      "back": "progutati"
+    },
+    {
+      "front": "schlafen, schlief, hat geschlafen",
+      "back": "spavati"
+    },
+    {
+      "front": "schnarchen",
+      "back": "hrkati"
+    },
+    {
+      "front": "vorbeigehen, ging vorbei, ist vorbeigegangen",
+      "back": "proći pored"
+    },
+    {
+      "front": "schneiden, schnitt, hat geschnitten",
+      "back": "seći"
+    },
+    {
+      "front": "herauskommen, kam heraus, ist herausgekommen",
+      "back": "izaći"
+    },
+    {
+      "front": "rufen, rief, hat gerufen",
+      "back": "zvati|pozvati"
+    },
+    {
+      "front": "danken für",
+      "back": "zahvaliti se"
+    },
+    {
+      "front": "trinken, trank, hat getrunken",
+      "back": "piti"
+    },
+    {
+      "front": "essen, aß, hat gegessen",
+      "back": "jesti"
+    },
+    {
+      "front": "verschwinden, verschwand, ist verschwunden",
+      "back": "nestati"
+    },
+    {
+      "front": "steigen, stieg, ist gestiegen",
+      "back": "peti se"
+    },
+    {
+      "front": "sich wundern",
+      "back": "čuditi se"
+    },
+    {
+      "front": "verwechseln",
+      "back": "pobrkati|zameniti"
+    },
+    {
+      "front": "sich befinden",
+      "back": "nalaziti se"
+    },
+    {
+      "front": "nachdenken",
+      "back": "razmisliti"
+    },
+    {
+      "front": "retten",
+      "back": "spasiti"
+    },
+    {
+      "front": "ausreichen, reichte aus, hat ausgereicht",
+      "back": "biti dovoljan"
+    },
+    {
+      "front": "folgen",
+      "back": "slediti"
+    },
+    {
+      "front": "absperren, hat abgesperrt",
+      "back": "blokirati|zaključati"
+    },
+    {
+      "front": "festnehmen, nahm fest, hat festgenommen",
+      "back": "uhapsiti"
+    },
+    {
+      "front": "brechen, brach, hat gebrochen",
+      "back": "lomiti|polomiti"
+    },
+    {
+      "front": "Tor schießen",
+      "back": "dati gol"
+    },
+    {
+      "front": "unterstützen",
+      "back": "podržavati"
+    },
+    {
+      "front": "zunähen",
+      "back": "ušiti"
+    },
+    {
+      "front": "verliebt sein",
+      "back": "biti zaljubljen"
+    },
+    {
+      "front": "Wolf",
+      "back": "vuk",
+      "article": "der",
+      "plural": "die Wölfe"
+    },
+    {
+      "front": "Strauß",
+      "back": "buket",
+      "article": "der",
+      "plural": "die Sträuße"
+    },
+    {
+      "front": "Vorhang",
+      "back": "zavesa",
+      "article": "der",
+      "plural": "die Vorhänge"
+    },
+    {
+      "front": "Maul",
+      "back": "usta (kod životinje)",
+      "article": "das",
+      "plural": "die Mäuler"
+    },
+    {
+      "front": "Jäger",
+      "back": "lovac",
+      "article": "der",
+      "plural": "die Jäger"
+    },
+    {
+      "front": "Stein",
+      "back": "kamen",
+      "article": "der",
+      "plural": "die Steine"
+    },
+    {
+      "front": "Gewinn",
+      "back": "dobit",
+      "article": "der",
+      "plural": "die Gewinne"
+    },
+    {
+      "front": "Steuer",
+      "back": "porez",
+      "article": "die",
+      "plural": "die Steuern"
+    },
+    {
+      "front": "Meldung",
+      "back": "vest|prijava",
+      "article": "die",
+      "plural": "die Meldungen"
+    },
+    {
+      "front": "Überschrift",
+      "back": "natpis|naslov",
+      "article": "die",
+      "plural": "die Überschriften"
+    },
+    {
+      "front": "Rentner",
+      "back": "penzioner",
+      "article": "der",
+      "plural": "die Rentner"
+    },
+    {
+      "front": "Angabe",
+      "back": "podatak",
+      "article": "die",
+      "plural": "die Angaben"
+    },
+    {
+      "front": "Einbrecher",
+      "back": "provalnik",
+      "article": "der",
+      "plural": "die Einbrecher"
+    },
+    {
+      "front": "Feld",
+      "back": "polje",
+      "article": "das",
+      "plural": "die Felder"
+    },
+    {
+      "front": "Standesamt",
+      "back": "matičar (opština za venčanja)",
+      "article": "das",
+      "plural": "die Standesämter"
+    },
+    {
+      "front": "Bedarf",
+      "back": "potreba",
+      "article": "der"
+    },
+    {
+      "front": "Vermittlung",
+      "back": "posredovanje",
+      "article": "die",
+      "plural": "die Vermittlungen"
+    },
+    {
+      "front": "Verhältnis",
+      "back": "odnos",
+      "article": "das",
+      "plural": "die Verhältnisse"
+    },
+    {
+      "front": "Bericht",
+      "back": "izveštaj",
+      "article": "der",
+      "plural": "die Berichte"
+    },
+    {
+      "front": "Mitternacht",
+      "back": "ponoć",
+      "article": "die"
+    },
+    {
+      "front": "Löwe",
+      "back": "lav",
+      "article": "der",
+      "plural": "die Löwen"
+    },
+    {
+      "front": "Mut",
+      "back": "hrabrost",
+      "article": "der"
+    },
+    {
+      "front": "entsetzlich",
+      "back": "užasan|zaprepašćujući"
+    },
+    {
+      "front": "verrückt",
+      "back": "lud"
+    },
+    {
+      "front": "mutig",
+      "back": "hrabar"
+    },
+    {
+      "front": "vergeblich",
+      "back": "uzaludno"
+    },
+    {
+      "front": "zumindest",
+      "back": "bar|najmanje"
+    },
+    {
+      "front": "betrunken",
+      "back": "pijan"
+    },
+    {
+      "front": "unbekannt",
+      "back": "nepoznat"
     }
   ]
 }

@@ -124,6 +124,309 @@
     {
       "front": "trotzdem (za poredjenje sa obwohl)",
       "back": "ipak (ali u glavnoj rečenici, glagol na 2. mestu)"
+    },
+    {
+      "front": "Actionfilm",
+      "back": "akcioni film",
+      "article": "der",
+      "plural": "die Actionfilme"
+    },
+    {
+      "front": "ausdrucksstark",
+      "back": "izražajan"
+    },
+    {
+      "front": "auf etwas basieren",
+      "back": "bazirati se na nečemu"
+    },
+    {
+      "front": "Blindheit",
+      "back": "slepilo",
+      "article": "die"
+    },
+    {
+      "front": "Buchverfilmung",
+      "back": "filmska adaptacija",
+      "article": "die",
+      "plural": "die Buchverfilmungen"
+    },
+    {
+      "front": "Drama",
+      "back": "drama",
+      "article": "das",
+      "plural": "die Dramen"
+    },
+    {
+      "front": "Drehbuch",
+      "back": "scenario",
+      "article": "das",
+      "plural": "die Drehbücher"
+    },
+    {
+      "front": "Elefant",
+      "back": "slon",
+      "article": "der",
+      "plural": "die Elefanten"
+    },
+    {
+      "front": "ernst",
+      "back": "ozbiljan"
+    },
+    {
+      "front": "Filmgenre",
+      "back": "filmski žanr",
+      "article": "das",
+      "plural": "die Filmgenres"
+    },
+    {
+      "front": "Handlung",
+      "back": "radnja",
+      "article": "die",
+      "plural": "die Handlungen"
+    },
+    {
+      "front": "Kommissar",
+      "back": "komesar|inspektor",
+      "article": "der",
+      "plural": "die Kommissare"
+    },
+    {
+      "front": "Operation",
+      "back": "operacija",
+      "article": "die",
+      "plural": "die Operationen"
+    },
+    {
+      "front": "Schicksal",
+      "back": "sudbina|životna priča",
+      "article": "das",
+      "plural": "die Schicksale"
+    },
+    {
+      "front": "tätig sein",
+      "back": "biti aktivan (kao)|raditi"
+    },
+    {
+      "front": "tragisch",
+      "back": "tragično"
+    },
+    {
+      "front": "Tragödie",
+      "back": "tragedija",
+      "article": "die",
+      "plural": "die Tragödien"
+    },
+    {
+      "front": "Worum geht es in dem Film?",
+      "back": "O čemu se radi u filmu?"
+    },
+    {
+      "front": "unschlüssig",
+      "back": "neodlučan"
+    },
+    {
+      "front": "gelungen",
+      "back": "uspeo|uspešan"
+    },
+    {
+      "front": "Stimmung",
+      "back": "raspoloženje",
+      "article": "die",
+      "plural": "die Stimmungen"
+    },
+    {
+      "front": "humorvoll",
+      "back": "duhovit"
+    },
+    {
+      "front": "Spannung",
+      "back": "uzbuđenje|napetost",
+      "article": "die",
+      "plural": "die Spannungen"
+    },
+    {
+      "front": "gruselig",
+      "back": "jeziv"
+    },
+    {
+      "front": "Abenteuer",
+      "back": "avantura",
+      "article": "das",
+      "plural": "die Abenteuer"
+    },
+    {
+      "front": "Träne",
+      "back": "suza",
+      "article": "die",
+      "plural": "die Tränen"
+    },
+    {
+      "front": "rührend",
+      "back": "dirljiv"
+    },
+    {
+      "front": "kitschig",
+      "back": "kičast"
+    },
+    {
+      "front": "tiefsinnig",
+      "back": "dubokouman"
+    },
+    {
+      "front": "lehrreich",
+      "back": "poučan"
+    },
+    {
+      "front": "erfahren",
+      "back": "saznati"
+    },
+    {
+      "front": "Dialog",
+      "back": "dijalog",
+      "article": "der",
+      "plural": "die Dialoge"
+    },
+    {
+      "front": "sich gemütlich machen",
+      "back": "udobno se smestiti"
+    },
+    {
+      "front": "abonnieren, hat abonniert",
+      "back": "pretplatiti se"
+    },
+    {
+      "front": "knabbern, hat geknabbert",
+      "back": "grickati"
+    },
+    {
+      "front": "stehen auf etw./jmdn.",
+      "back": "dopadati se|sviđati se"
+    },
+    {
+      "front": "zugeben, gab zu, hat zugegeben",
+      "back": "priznati|dodati"
+    },
+    {
+      "front": "Nachteule",
+      "back": "noćna ptica",
+      "article": "die",
+      "plural": "die Nachteulen"
+    },
+    {
+      "front": "Decke",
+      "back": "ćebe|plafon",
+      "article": "die",
+      "plural": "die Decken"
+    },
+    {
+      "front": "Staffel",
+      "back": "sezona (serije)",
+      "article": "die",
+      "plural": "die Staffeln"
+    },
+    {
+      "front": "Folge",
+      "back": "epizoda|posledica",
+      "article": "die",
+      "plural": "die Folgen"
+    },
+    {
+      "front": "loben",
+      "back": "hvaliti (nekoga)"
+    },
+    {
+      "front": "Mord",
+      "back": "ubistvo",
+      "article": "der",
+      "plural": "die Morde"
+    },
+    {
+      "front": "Verbrechen",
+      "back": "prestup|zločin",
+      "article": "das",
+      "plural": "die Verbrechen"
+    },
+    {
+      "front": "Strafe",
+      "back": "kazna",
+      "article": "die",
+      "plural": "die Strafen"
+    },
+    {
+      "front": "Zeuge",
+      "back": "svedok",
+      "article": "der",
+      "plural": "die Zeugen"
+    },
+    {
+      "front": "lügen, log, hat gelogen",
+      "back": "lagati"
+    },
+    {
+      "front": "stehlen, stahl, hat gestohlen",
+      "back": "krasti"
+    },
+    {
+      "front": "sich verhalten",
+      "back": "ponašati se"
+    },
+    {
+      "front": "Du spinnst ja!",
+      "back": "Jesi lud?"
+    },
+    {
+      "front": "Da irrst du dich aber gewaltig!",
+      "back": "Grdno se varaš!"
+    },
+    {
+      "front": "Quatsch!",
+      "back": "glupost!"
+    },
+    {
+      "front": "vorschlagen",
+      "back": "predložiti"
+    },
+    {
+      "front": "Da hast du völlig recht.",
+      "back": "Potpuno si u pravu."
+    },
+    {
+      "front": "zustimmen",
+      "back": "složiti se|saglasiti se"
+    },
+    {
+      "front": "ablehnen",
+      "back": "odbiti"
+    },
+    {
+      "front": "einen Gegenvorschlag machen",
+      "back": "dati protivpredlog"
+    },
+    {
+      "front": "sich einigen",
+      "back": "dogovoriti se"
+    },
+    {
+      "front": "echt super!",
+      "back": "stvarno super!"
+    },
+    {
+      "front": "es geht mir auf die Nerven",
+      "back": "ide mi na živce"
+    },
+    {
+      "front": "zu Ende sehen",
+      "back": "gledati do kraja"
+    },
+    {
+      "front": "überprüfen",
+      "back": "prekontrolisati|proveriti"
+    },
+    {
+      "front": "Mond",
+      "back": "mesec (na nebu)",
+      "article": "der",
+      "plural": "die Monde"
     }
   ]
 }

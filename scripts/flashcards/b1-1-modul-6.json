@@ -84,6 +84,75 @@
     {
       "front": "unterschreiben",
       "back": "potpisati"
+    },
+    {
+      "front": "regelmäßiges Einkommen",
+      "back": "redovan prihod"
+    },
+    {
+      "front": "Sicherheit",
+      "back": "sigurnost",
+      "article": "die",
+      "plural": "die Sicherheiten"
+    },
+    {
+      "front": "sich Sorgen machen",
+      "back": "brinuti se"
+    },
+    {
+      "front": "verantwortlich",
+      "back": "odgovoran"
+    },
+    {
+      "front": "sich weiterbilden",
+      "back": "usavršavati se"
+    },
+    {
+      "front": "aufsteigen",
+      "back": "napredovati (u karijeri)"
+    },
+    {
+      "front": "Projekt",
+      "back": "projekat",
+      "article": "das",
+      "plural": "die Projekte"
+    },
+    {
+      "front": "Zeit einteilen",
+      "back": "organizovati vreme"
+    },
+    {
+      "front": "flexibel",
+      "back": "fleksibilan"
+    },
+    {
+      "front": "Karrierechancen",
+      "back": "mogućnosti za karijeru",
+      "article": "die"
+    },
+    {
+      "front": "weniger Freiheit",
+      "back": "manje slobode"
+    },
+    {
+      "front": "unabhängig",
+      "back": "nezavistan"
+    },
+    {
+      "front": "bieten",
+      "back": "nuditi|pružati"
+    },
+    {
+      "front": "übernehmen",
+      "back": "preuzeti"
+    },
+    {
+      "front": "karriereorientiert",
+      "back": "orijentisan na karijeru"
+    },
+    {
+      "front": "anspruchsvoll",
+      "back": "zahtevan"
     }
   ]
 }
