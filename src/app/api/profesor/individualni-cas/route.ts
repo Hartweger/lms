@@ -21,7 +21,7 @@ async function requireStaff() {
 async function loadOwnedEnrollment(admin: ReturnType<typeof createAdminClient>, enrollmentId: string, userId: string, isAdmin: boolean) {
   const { data: enr } = await admin
     .from("individual_enrollments")
-    .select("id, professor_id, package_lessons, user_id, course_id, one_left_email_sent_at")
+    .select("id, professor_id, package_lessons, user_id, course_id, status, one_left_email_sent_at")
     .eq("id", enrollmentId)
     .single();
   if (!enr) return { error: "Upis nije pronađen", status: 404 as const };
@@ -49,6 +49,15 @@ export async function POST(request: Request) {
 
   const owned = await loadOwnedEnrollment(staff.admin, enrollmentId, staff.userId, staff.isAdmin);
   if ("error" in owned) return NextResponse.json({ error: owned.error }, { status: owned.status });
+
+  // Blokada prepunjavanja: na paket od N časova ne može da se upiše N+1 (novi čas ide u novi paket).
+  if (owned.enr.status === "completed") {
+    return NextResponse.json({ error: "Ovaj paket je završen/arhiviran — čas upiši na novi paket." }, { status: 400 });
+  }
+  const { count: existing } = await staff.admin.from("individual_lessons").select("*", { count: "exact", head: true }).eq("enrollment_id", enrollmentId);
+  if ((existing ?? 0) >= owned.enr.package_lessons) {
+    return NextResponse.json({ error: `Paket je popunjen (${existing}/${owned.enr.package_lessons}) — čas upiši na novi paket.` }, { status: 400 });
+  }
 
   const { error } = await staff.admin.from("individual_lessons").insert({
     enrollment_id: enrollmentId,

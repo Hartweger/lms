@@ -157,10 +157,11 @@ export default function IndividualniClient({ rows, showProfessor }: { rows: Enro
                       <button
                         type="button"
                         onClick={() => addLesson(r.id)}
-                        disabled={busy === r.id}
-                        className="bg-plava hover:bg-plava-dark disabled:opacity-50 text-white text-sm font-medium px-3 py-1.5 rounded-lg whitespace-nowrap"
+                        disabled={busy === r.id || done || remaining === 0}
+                        className="bg-plava hover:bg-plava-dark disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium px-3 py-1.5 rounded-lg whitespace-nowrap"
+                        title={done || remaining === 0 ? "Paket je popunjen — novi čas ide u novi paket" : undefined}
                       >
-                        {busy === r.id ? "..." : "Upiši čas"}
+                        {done || remaining === 0 ? "Paket pun" : busy === r.id ? "..." : "Upiši čas"}
                       </button>
                     </div>
                   </td>
