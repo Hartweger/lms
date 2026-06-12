@@ -127,6 +127,30 @@ export async function POST(request: Request) {
             { status: 400 }
           );
         }
+        // video_only kupon (npr. NAKI10): važi samo na video kurseve
+        if (coupon.video_only && course.course_type !== "video") {
+          return NextResponse.json(
+            { error: "Ovaj kod važi samo za video kurseve." },
+            { status: 400 }
+          );
+        }
+        // once_per_email: isti mejl sme da iskoristi kod samo jednom
+        let onceOk = true;
+        if (coupon.once_per_email) {
+          const { data: prior } = await supabase
+            .from("orders")
+            .select("id")
+            .eq("coupon_code", coupon.code)
+            .ilike("email", email)
+            .limit(1);
+          if (prior && prior.length) onceOk = false;
+        }
+        if (!onceOk) {
+          return NextResponse.json(
+            { error: "Ovaj kod si već iskoristio/la." },
+            { status: 400 }
+          );
+        }
         if (notExpired && notMaxed && renewalOk) {
           discountPercent = Number(coupon.amount);
           validCouponCode = coupon.code;

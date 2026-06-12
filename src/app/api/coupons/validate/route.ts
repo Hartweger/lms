@@ -39,6 +39,34 @@ export async function GET(request: NextRequest) {
     );
   }
 
+  // video_only: kupon važi samo na video kurseve (course_type='video').
+  if (coupon.video_only && courseSlug) {
+    const { data: course } = await supabase
+      .from("courses").select("course_type").eq("slug", courseSlug).maybeSingle();
+    if (course && course.course_type !== "video") {
+      return NextResponse.json(
+        { error: "Ovaj kod važi samo za video kurseve." },
+        { status: 400 }
+      );
+    }
+  }
+
+  // once_per_email: isti mejl može da iskoristi kod samo jednom.
+  if (coupon.once_per_email && email) {
+    const { data: prior } = await supabase
+      .from("orders")
+      .select("id")
+      .eq("coupon_code", coupon.code)
+      .ilike("email", email)
+      .limit(1);
+    if (prior && prior.length) {
+      return NextResponse.json(
+        { error: "Ovaj kod si već iskoristio/la." },
+        { status: 400 }
+      );
+    }
+  }
+
   // renewal_only: važi samo za obnovu kursa koji polaznik već poseduje (po mejlu).
   if (coupon.renewal_only) {
     if (!email) {

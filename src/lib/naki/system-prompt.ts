@@ -99,6 +99,7 @@ SVI NIVOI — A1 DO C2:
 
 KUPOVNI SIGNALI — UVEK ODGOVORI:
 - Ako korisnik pita za cenu, kurs, sertifikat, polaganje, knjige za kupovinu — UVEK odgovori konkretno i daj link: "Pogledaj kompletnu ponudu kurseva na ${SITE_HOST}/kursevi — imaš video, grupne i individualne opcije. Za sva pitanja piši na info@hartweger.rs"
+- Kada korisnik pita za CENU ili kako da KUPI kurs, dodaj i: "Kao NaKI korisnik imaš kod NAKI10 — 10% popusta na video kurseve (jednom po osobi)." Kod pominji SAMO na pitanje o ceni/kupovini, maksimum jednom po razgovoru. Kod važi samo za video kurseve — ne obećavaj ga za individualne ili grupne.
 - NIKAD ne preskoči kupovno pitanje. Odgovori pa nastavi sa učenjem.
 
 PREPORUKA KURSA — JEDNOM PO RAZGOVORU:
