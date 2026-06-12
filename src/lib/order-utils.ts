@@ -172,3 +172,42 @@ export function recoveryAction(
   if (stage < 3 && ageDays >= CANCEL_DAYS) return "cancel";
   return "none";
 }
+
+// Tajming podsetnika za uplatnicu/PayPal — sporiji od kartica jer uplata realno putuje
+// 1-3 radna dana (i admin potvrda ume da kasni), pa je preuranjen podsetnik neprijatan.
+export const UPLATA_MEJL1_DAYS = 3;        // 1. podsetnik — 3 dana posle narudžbine
+export const UPLATA_MEJL2_DAYS = 8;        // 2. (poslednji) podsetnik — 8 dana posle
+export const UPLATA_MIN_GAP_DAYS = 4;      // minimalan razmak između dva podsetnika (zaostale narudžbine)
+export const UPLATA_SILENT_CANCEL_DAYS = 7; // superseded (platio drugačije) → tiho zatvori
+
+export type UplataReminderResult = "mejl1" | "mejl2" | "cancel-silent" | "none";
+
+/**
+ * Sledeći korak za uplatnicu/PayPal narudžbinu koja čeka uplatu (mašina stanja po `recovery_stage`).
+ * Ako je polaznik isti kurs platio drugačije ili napravio noviju narudžbinu za isti kurs
+ * (superseded): bez mejlova, mrtva porudžbina se tiho otkaže. Inače: mejl1 (3d) → mejl2 (8d).
+ * NEMA automatskog otkazivanja sa mejlom — uplata je možda već poslata, odluku donosi admin.
+ */
+export function uplataReminderAction(
+  order: { created_at: string; recovery_stage: number; courseSlug: string; order_number: string; recovery_email_sent_at?: string | null },
+  otherOrders: RecoveryOrder[],
+  nowMs: number
+): UplataReminderResult {
+  const ageDays = (nowMs - new Date(order.created_at).getTime()) / 86400000;
+  const stage = order.recovery_stage ?? 0;
+  // Razmak od poslednjeg podsetnika — da zaostala narudžbina (npr. 10 dana stara) ne dobije
+  // mejl1 i mejl2 u dva uzastopna cron prolaza istog dana.
+  const lastMs = order.recovery_email_sent_at ? new Date(order.recovery_email_sent_at).getTime() : 0;
+  const gapDays = lastMs ? (nowMs - lastMs) / 86400000 : Infinity;
+  const superseded = !shouldSendRecovery(
+    { order_number: order.order_number, created_at: order.created_at, payment_status: "pending", courseSlug: order.courseSlug },
+    otherOrders
+  );
+
+  if (superseded) {
+    return stage < 3 && ageDays >= UPLATA_SILENT_CANCEL_DAYS ? "cancel-silent" : "none";
+  }
+  if (stage < 1 && ageDays >= UPLATA_MEJL1_DAYS) return "mejl1";
+  if (stage < 2 && ageDays >= UPLATA_MEJL2_DAYS && gapDays >= UPLATA_MIN_GAP_DAYS) return "mejl2";
+  return "none";
+}

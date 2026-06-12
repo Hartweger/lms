@@ -242,33 +242,9 @@ export async function sendInactivityReminder(
   }
 }
 
-export async function sendPaymentInstructionsEmail(
-  to: string,
-  name: string,
-  courseTitle: string,
-  orderNumber: string,
-  totalRsd: number,
-  paymentMethod: "uplatnica" | "paypal" | "kartica",
-  paypalEur?: number,
-  orderId?: string,
-  ipsQrUrl?: string
-) {
-  const karticaBlock = `
-      <div style="background: #f8fcfd; border-left: 3px solid #4fb1d3; border-radius: 6px; padding: 14px 16px; margin: 0 0 20px;">
-        <div style="font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;">Plaćanje karticom</div>
-        <p style="font-size: 14px; color: #1a1a2e; margin: 0 0 8px;">Iznos: <strong>${totalRsd} RSD</strong></p>
-        <p style="font-size: 13px; color: #888; margin: 0 0 16px;">Klikni na dugme i plati karticom (Visa/Mastercard) sigurno preko banke.</p>
-        <div style="text-align: center;">
-          <a href="${SITE_URL}/kupovina/kartica/${orderId ?? ""}" style="display: inline-block; background: #4fb1d3; color: white; padding: 12px 28px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 14px;">
-            Plati karticom
-          </a>
-        </div>
-      </div>`;
-  const paymentBlock =
-    paymentMethod === "kartica"
-      ? karticaBlock
-      : paymentMethod === "uplatnica"
-      ? `
+// Blokovi sa podacima za uplatu — dele ih mejl sa instrukcijama i podsetnici za uplatu.
+function uplatnicaBlockHtml(totalRsd: number, orderNumber: string, ipsQrUrl?: string) {
+  return `
       <div style="background: #f8fcfd; border-left: 3px solid #4fb1d3; border-radius: 6px; padding: 14px 16px; margin: 0 0 20px;">
         <div style="font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;">Podaci za uplatu</div>
         <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
@@ -301,8 +277,11 @@ export async function sendPaymentInstructionsEmail(
           <img src="${ipsQrUrl}" alt="IPS QR kod" width="180" height="180" style="border-radius: 8px;" />
           <div style="font-size: 12px; color: #888; margin-top: 6px;">📱 Skeniraj IPS QR kod u aplikaciji za mobilno bankarstvo</div>
         </div>` : ""}
-      </div>`
-      : `
+      </div>`;
+}
+
+function paypalBlockHtml(paypalEur?: number) {
+  return `
       <div style="background: #f8fcfd; border-left: 3px solid #4fb1d3; border-radius: 6px; padding: 14px 16px; margin: 0 0 20px;">
         <div style="font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;">PayPal uplata</div>
         <p style="font-size: 14px; color: #1a1a2e; margin: 0 0 8px;">
@@ -317,6 +296,36 @@ export async function sendPaymentInstructionsEmail(
           </a>
         </div>
       </div>`;
+}
+
+export async function sendPaymentInstructionsEmail(
+  to: string,
+  name: string,
+  courseTitle: string,
+  orderNumber: string,
+  totalRsd: number,
+  paymentMethod: "uplatnica" | "paypal" | "kartica",
+  paypalEur?: number,
+  orderId?: string,
+  ipsQrUrl?: string
+) {
+  const karticaBlock = `
+      <div style="background: #f8fcfd; border-left: 3px solid #4fb1d3; border-radius: 6px; padding: 14px 16px; margin: 0 0 20px;">
+        <div style="font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;">Plaćanje karticom</div>
+        <p style="font-size: 14px; color: #1a1a2e; margin: 0 0 8px;">Iznos: <strong>${totalRsd} RSD</strong></p>
+        <p style="font-size: 13px; color: #888; margin: 0 0 16px;">Klikni na dugme i plati karticom (Visa/Mastercard) sigurno preko banke.</p>
+        <div style="text-align: center;">
+          <a href="${SITE_URL}/kupovina/kartica/${orderId ?? ""}" style="display: inline-block; background: #4fb1d3; color: white; padding: 12px 28px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 14px;">
+            Plati karticom
+          </a>
+        </div>
+      </div>`;
+  const paymentBlock =
+    paymentMethod === "kartica"
+      ? karticaBlock
+      : paymentMethod === "uplatnica"
+      ? uplatnicaBlockHtml(totalRsd, orderNumber, ipsQrUrl)
+      : paypalBlockHtml(paypalEur);
 
   try {
     const resend = getResend();
@@ -367,6 +376,71 @@ export async function sendPaymentInstructionsEmail(
     console.log(`[email] Payment instructions email sent to ${to}`);
   } catch (error) {
     console.error(`[email] Failed to send payment instructions email to ${to}:`, error);
+  }
+}
+
+// Podsetnik za uplatnicu/PayPal narudžbinu koja čeka uplatu (3. i 8. dan).
+// Obavezno blag ton: uplata je možda već poslata (putuje 1-3 radna dana), pa nema pretnji otkazivanjem.
+export async function sendUplataReminderEmail(o: {
+  email: string;
+  fullName: string;
+  courseTitle: string;
+  courseSlug: string;
+  orderNumber: string;
+  totalRsd: number;
+  paymentMethod: "uplatnica" | "paypal";
+  stage: 1 | 2;
+  paypalEur?: number;
+  ipsQrUrl?: string;
+}) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    const paymentBlock = o.paymentMethod === "uplatnica"
+      ? uplatnicaBlockHtml(o.totalRsd, o.orderNumber, o.ipsQrUrl)
+      : paypalBlockHtml(o.paypalEur);
+    const uvod = o.stage === 1
+      ? `Pre par dana si naručio/la kurs <strong>${esc(o.courseTitle)}</strong> (narudžbina #${esc(o.orderNumber)}), a uplatu još nismo videli — pa evo malog podsetnika sa svim podacima:`
+      : `Tvoja narudžbina za <strong>${esc(o.courseTitle)}</strong> (#${esc(o.orderNumber)}) i dalje čeka uplatu, pa se javljamo poslednji put da proverimo treba li ti nešto:`;
+    const karticaAlt = o.stage === 2
+      ? `<p style="font-size:14px;line-height:1.6;color:#444;margin:0 0 16px;">
+        Ako ti je jednostavnije, isti kurs možeš platiti i <a href="${SITE_URL}/kupovina/${esc(o.courseSlug)}" style="color:#4fb1d3;">karticom online</a> — pristup se tada aktivira odmah.
+      </p>`
+      : "";
+    await resend.emails.send({
+      from: FROM,
+      to: o.email,
+      replyTo: "info@hartweger.rs",
+      subject: o.stage === 1
+        ? `Podsetnik — čekamo tvoju uplatu za narudžbinu #${o.orderNumber} 🙂`
+        : `Tvoje mesto na kursu još čeka — narudžbina #${o.orderNumber}`,
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a2e;background:#f8f9fa;margin:0;padding:0;">
+  <div style="max-width:520px;margin:0 auto;padding:40px 20px;">
+    <div style="background:white;border-radius:12px;padding:32px;box-shadow:0 1px 3px rgba(0,0,0,0.08);">
+      <div style="text-align:center;margin-bottom:24px;">
+        <div style="font-size:24px;font-weight:700;color:#4fb1d3;">Hartweger</div>
+        <div style="font-size:13px;color:#999;margin-top:4px;">Škola nemačkog jezika</div>
+      </div>
+      <h1 style="font-size:20px;margin:0 0 16px;">Zdravo, ${esc(o.fullName || "")}!</h1>
+      <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 16px;">${uvod}</p>
+      ${paymentBlock}
+      <p style="font-size:13px;line-height:1.6;color:#888;margin:0 0 16px;">
+        ✅ Ako si uplatu već poslao/la, slobodno ignoriši ovaj mejl — uplate putuju 1-3 radna dana, a potvrda i pristup stižu čim je vidimo.
+      </p>
+      ${karticaAlt}
+      <p style="font-size:14px;line-height:1.6;color:#444;margin:0 0 8px;">
+        Imaš pitanje ili želiš drugačiji način plaćanja? Samo odgovori na ovaj mejl — tu smo.
+      </p>
+      <p style="font-size:14px;color:#444;margin:0;">— Hartweger tim</p>
+    </div>
+    <div style="text-align:center;padding:20px;font-size:12px;color:#bbb;"><p style="margin:0;">Hartweger — Škola nemačkog jezika · hartweger.rs</p></div>
+  </div>
+</body></html>`,
+    });
+    console.log(`[email] Podsetnik za uplatu #${o.stage} → ${o.email} (${o.orderNumber})`);
+  } catch (e) {
+    console.error(`[email] sendUplataReminderEmail pao za ${o.orderNumber}:`, e);
   }
 }
 
@@ -1050,7 +1124,7 @@ export async function sendDailyAdminBrief(d: DailyBrief) {
     const neplaceneHtml = d.neplacene.length
       ? `<table style="border-collapse:collapse;font-size:13px;width:100%">
 <thead><tr style="background:#f5f5f5"><th style="padding:4px 8px;text-align:left">Narudžbina</th><th style="padding:4px 8px;text-align:left">Polaznik</th><th style="padding:4px 8px;text-align:right">din</th><th style="padding:4px 8px;text-align:left">Način</th><th style="padding:4px 8px;text-align:right">dana</th></tr></thead>
-<tbody>${d.neplacene.map((r) => `<tr><td style="padding:4px 8px">${esc(r.orderNumber)}</td><td style="padding:4px 8px">${esc(r.ime)}</td><td style="padding:4px 8px;text-align:right">${fmt(r.total)}</td><td style="padding:4px 8px">${esc(r.metod)}</td><td style="padding:4px 8px;text-align:right">${r.danaStaro}</td></tr>`).join("")}</tbody></table>`
+<tbody>${d.neplacene.map((r) => `<tr><td style="padding:4px 8px">${esc(r.orderNumber)}</td><td style="padding:4px 8px">${esc(r.ime)}</td><td style="padding:4px 8px;text-align:right">${fmt(r.total)}</td><td style="padding:4px 8px">${esc(r.metod)}</td><td style="padding:4px 8px;text-align:right">${r.danaStaro}${r.danaStaro >= 21 ? " ⚠️" : ""}</td></tr>`).join("")}</tbody></table>${d.neplacene.some((r) => r.danaStaro >= 21) ? `<p style="margin:6px 0 0;font-size:12px;color:#b45309">⚠️ = starije od 21 dan, polaznik je dobio oba podsetnika — razmisli o ručnom otkazivanju u /admin/narudzbine.</p>` : ""}`
       : "";
 
     const isteknHtml = d.isticePristup.length
