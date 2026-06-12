@@ -1047,3 +1047,74 @@ ${sekcija(`Grupe se završavaju — narednih 14 dana (${d.grupeKraj.length})`, g
     console.error("[email] sendDailyAdminBrief pao:", e);
   }
 }
+
+// Testiranje-funnel: follow-up mejlovi #2-#4 posle testa znanja (mejl #1 "rezultat" šalje MailerLite).
+// Zamena za Apps Script generisiTestiranjeMejl/skenirajTestiranje.
+export async function sendTestFunnelEmail(
+  to: string,
+  opts: {
+    name: string;
+    nivo: string;
+    emailNumber: 2 | 3 | 4;
+    grupniUrl: string | null;
+    individualniUrl: string | null;
+    kurseviUrl: string;
+  },
+) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    const ime = opts.name ? opts.name.split(" ")[0] : "";
+    const pozdrav = `Pozdrav${ime ? ", " + esc(ime) : ""}!`;
+    const nivo = esc(opts.nivo);
+
+    const linkovi =
+      `<div style="background:#f8fcfd;border-left:3px solid #4fb1d3;border-radius:6px;padding:14px 16px;margin:20px 0;font-size:14px">` +
+      (opts.grupniUrl ? `<p style="margin:0 0 6px">👥 <a href="${esc(opts.grupniUrl)}" style="color:#4fb1d3">Grupni kurs ${nivo}</a> — grupe do 6 polaznika</p>` : "") +
+      (opts.individualniUrl ? `<p style="margin:0 0 6px">🎯 <a href="${esc(opts.individualniUrl)}" style="color:#4fb1d3">Individualni kurs ${nivo}</a> — 1-na-1 sa profesorkom</p>` : "") +
+      `<p style="margin:0">🎬 <a href="${esc(opts.kurseviUrl)}" style="color:#4fb1d3">Video kursevi</a> — uči svojim tempom</p>` +
+      `</div>`;
+
+    let subject: string;
+    let telo: string;
+    if (opts.emailNumber === 2) {
+      subject = `Još razmišljaš? Evo šta uključuje kurs ${opts.nivo}`;
+      telo = `<p>Uradio/la si test znanja i odgovara ti nivo <strong>${nivo}</strong>.</p>
+<p>Evo šta dobijaš na kursu:</p>
+<ul style="padding-left:20px">
+<li>Video lekcije sa objašnjenjima gramatike i vežbama</li>
+<li>Kvizove za proveru znanja nakon svake lekcije</li>
+<li>Završni test i sertifikat po završetku nivoa</li>
+<li>Pristup materijalima 24/7</li>
+</ul>`;
+    } else if (opts.emailNumber === 3) {
+      subject = `Polaznici kursa ${opts.nivo} kažu...`;
+      telo = `<p>Znamo da je odluka o kursu važna, pa delimo iskustva naših polaznika:</p>
+<blockquote style="border-left:3px solid #ddd;margin:14px 0;padding:4px 14px;color:#555;font-style:italic">„Konačno sam našla kurs koji je prilagođen mom tempu učenja."</blockquote>
+<blockquote style="border-left:3px solid #ddd;margin:14px 0;padding:4px 14px;color:#555;font-style:italic">„Profesorke su fantastične, sve je jasno objašnjeno."</blockquote>
+<p>Pridruži se i ti — tvoj nivo je <strong>${nivo}</strong>:</p>`;
+    } else {
+      subject = `Poslednja šansa — započni ${opts.nivo} ovog meseca`;
+      telo = `<p>Ovo je poslednji put da ti se javljamo u vezi sa rezultatom testa znanja.</p>
+<p>Tvoj preporučeni nivo je <strong>${nivo}</strong> i kursevi su dostupni odmah:</p>`;
+    }
+
+    await resend.emails.send({
+      from: FROM,
+      to,
+      replyTo: "info@hartweger.rs",
+      subject,
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:sans-serif;line-height:1.6;color:#222;max-width:560px;margin:0 auto;padding:16px">
+<p>${pozdrav}</p>
+${telo}
+${linkovi}
+<p>Ako imaš bilo kakvih pitanja pre upisa, samo odgovori na ovaj mejl.</p>
+<p style="margin-top:20px">Srdačan pozdrav,<br>Nataša Hartweger</p>
+<p style="margin-top:24px;font-size:12px;color:#aaa">Dobijaš ovaj mejl jer si uradio/la test znanja na hartweger.rs. Ako ne želiš više ponuda, odgovori sa „odjava".</p>
+</body></html>`,
+    });
+  } catch (e) {
+    console.error("[email] sendTestFunnelEmail pao:", e);
+  }
+}

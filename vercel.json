@@ -33,12 +33,20 @@
       "schedule": "0 1 * * *"
     },
     {
+      "path": "/api/cron/jutarnji-pregled",
+      "schedule": "0 5 * * *"
+    },
+    {
       "path": "/api/cron/grupe-podsetnik",
       "schedule": "30 8 * * *"
     },
     {
       "path": "/api/cron/honorari",
       "schedule": "0 8 1 * *"
+    },
+    {
+      "path": "/api/cron/test-funnel",
+      "schedule": "0 13 * * *"
     }
   ]
 }
