@@ -24,7 +24,9 @@ export default async function AdminFinansijePage({
       admin.from("courses").select("id, title, slug, course_type"),
       admin.from("user_profiles").select("id, full_name, honorar_ind, honorar_grp").eq("role", "professor"),
       admin.from("individual_lessons").select("lesson_date, professor_id, enrollment_id")
-        .gte("lesson_date", `${year}-01-01`).lt("lesson_date", `${year + 1}-01-01`).limit(10000),
+        .gte("lesson_date", `${year}-01-01`).lt("lesson_date", `${year + 1}-01-01`)
+        .lte("lesson_date", now.toISOString().slice(0, 10)) // samo održani — budući upisi ne ulaze u zaradu
+        .limit(10000),
       // samo održane sesije — raspored je unapred generisan; semantika je 'zarada do danas'
       admin.from("group_sessions").select("session_date, professor_id, group_id")
         .gte("session_date", `${year}-01-01`).lt("session_date", `${year + 1}-01-01`)

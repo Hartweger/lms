@@ -18,6 +18,8 @@ export default async function ProfesorHonorar({ searchParams }: { searchParams: 
   const year = god && /^\d{4}$/.test(god) ? parseInt(god, 10) : nowYear;
   const from = `${year}-01-01`;
   const toExcl = `${year + 1}-01-01`;
+  // Samo održani časovi/sesije: budući (zakazani) datumi ne ulaze u honorar.
+  const today = new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Belgrade" }).format(new Date());
 
   const YearTabs = (
     <div className="flex gap-2 mb-5">
@@ -33,8 +35,8 @@ export default async function ProfesorHonorar({ searchParams }: { searchParams: 
   // ───────── Profesorka: mesečni pregled svojih (i kad admin „gleda kao" profesora) ─────────
   if (!isAdmin || prof) {
     const [{ data: il }, { data: gs }] = await Promise.all([
-      admin.from("individual_lessons").select("lesson_date").eq("professor_id", ctx.profId).gte("lesson_date", from).lt("lesson_date", toExcl),
-      admin.from("group_sessions").select("session_date").eq("professor_id", ctx.profId).eq("cancelled", false).gte("session_date", from).lt("session_date", toExcl),
+      admin.from("individual_lessons").select("lesson_date").eq("professor_id", ctx.profId).gte("lesson_date", from).lt("lesson_date", toExcl).lte("lesson_date", today),
+      admin.from("group_sessions").select("session_date").eq("professor_id", ctx.profId).eq("cancelled", false).gte("session_date", from).lt("session_date", toExcl).lte("session_date", today),
     ]);
     const { months, yearTotal } = aggregateMonthly(
       year,
@@ -76,8 +78,8 @@ export default async function ProfesorHonorar({ searchParams }: { searchParams: 
   // ───────── Admin: godišnji pregled po profesorki ─────────
   const { data: profs } = await admin.from("user_profiles").select("id, full_name, honorar_ind, honorar_grp").not("honorar_ind", "is", null);
   const [{ data: ilAll }, { data: gsAll }] = await Promise.all([
-    admin.from("individual_lessons").select("professor_id").gte("lesson_date", from).lt("lesson_date", toExcl),
-    admin.from("group_sessions").select("professor_id").eq("cancelled", false).gte("session_date", from).lt("session_date", toExcl),
+    admin.from("individual_lessons").select("professor_id").gte("lesson_date", from).lt("lesson_date", toExcl).lte("lesson_date", today),
+    admin.from("group_sessions").select("professor_id").eq("cancelled", false).gte("session_date", from).lt("session_date", toExcl).lte("session_date", today),
   ]);
   const indByProf = new Map<string, number>();
   for (const r of ilAll ?? []) indByProf.set(r.professor_id, (indByProf.get(r.professor_id) ?? 0) + 1);
