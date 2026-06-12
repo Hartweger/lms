@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { normalizeDialogSummary, type DialogSummary } from "@/lib/dialog-summary";
 
 interface DialogConfig {
   scenario: string;
@@ -17,24 +18,6 @@ interface DialogConfig {
 interface ChatMessage {
   role: "user" | "assistant";
   content: string;
-}
-
-interface GoalResult {
-  goal: string;
-  completed: boolean;
-}
-
-interface Correction {
-  original: string;
-  corrected: string;
-  explanation: string;
-}
-
-interface DialogSummary {
-  goals_completed: GoalResult[];
-  corrections: Correction[];
-  score: number;
-  total: number;
 }
 
 interface DialogExerciseProps {
@@ -125,16 +108,7 @@ export default function DialogExercise({ exerciseId, config, previousAttempts, o
       }
 
       if (data.is_finished) {
-        const goalsCount = config.goals.filter((g) => g.trim()).length;
-        const summaryData: DialogSummary = data.summary || {
-          goals_completed: config.goals.map((g) => ({ goal: g, completed: false })),
-          corrections: [],
-          score: 0,
-          total: goalsCount,
-        };
-        // Ensure score and total are valid numbers
-        summaryData.score = typeof summaryData.score === "number" ? summaryData.score : 0;
-        summaryData.total = typeof summaryData.total === "number" ? summaryData.total : goalsCount;
+        const summaryData: DialogSummary = normalizeDialogSummary(data.summary, config.goals);
         setSummary(summaryData);
         setPhase("summary");
         setAttemptCount((prev) => prev + 1);

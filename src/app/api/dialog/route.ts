@@ -115,7 +115,9 @@ Score je broj ispunjenih ciljeva.` : `Odgovori SAMO sa validnim JSON objektom, b
 completed_goals: niz indeksa (0-based) SVIH ciljeva ispunjenih DO SAD (kumulativno).
 is_finished: true samo ako su SVI ciljevi ispunjeni.${dialogMode === "guided" ? "\nchoices: 3 ponuđena odgovora za studenta na nemačkom, prilagođena nivou " + level + "." : ""}
 
-Ako su svi ciljevi ispunjeni, postavi is_finished na true i dodaj summary polje sa korekcijama (kao u formatu za poslednju razmenu).`}`;
+Ako su svi ciljevi ispunjeni, postavi is_finished na true i dodaj summary polje u TAČNO ovom formatu:
+"summary":{"goals_completed":[{"goal":"tekst cilja","completed":true}],"corrections":[{"original":"greška studenta","corrected":"ispravka","explanation":"kratko objašnjenje na srpskom"}],"score":2,"total":${goals.length}}
+U goals_completed navedi SVE ciljeve sa statusom. U corrections maksimum 3 najvažnije greške. Score je broj ispunjenih ciljeva.`}`;
 
   try {
     const claudeMessages = messages.map((m) => ({
