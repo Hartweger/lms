@@ -37,18 +37,18 @@ function buildEmail(name: string | null): string {
   return `<!doctype html><html><body style="margin:0;padding:0;background:#f8f9fa;font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a2e">
 <span style="display:none;max-height:0;overflow:hidden;color:#f8f9fa">Više vežbanja, bolja priprema za ispit i priručnik — sve te čeka na novoj platformi.</span>
 <div style="max-width:560px;margin:0 auto;padding:24px">
-<div style="text-align:center;padding:8px 0 20px"><img src="https://kurs.hartweger.rs/logo.jpg" alt="Hartweger" width="150" style="max-width:150px;height:auto"><div style="font-size:13px;color:#999;margin-top:6px">Škola nemačkog jezika</div></div>
+<div style="text-align:center;padding:8px 0 20px"><img src="https://www.hartweger.rs/logo.jpg" alt="Hartweger" width="150" style="max-width:150px;height:auto"><div style="font-size:13px;color:#999;margin-top:6px">Škola nemačkog jezika</div></div>
 <div style="background:#fff;border-radius:12px;padding:32px;box-shadow:0 1px 3px rgba(0,0,0,0.08)">
 <h1 style="font-size:22px;margin:0 0 16px;color:#1a1a2e">Tvoj kurs je postao bolji 🎉</h1>
 <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 16px">${pozdrav}</p>
 <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 18px">Preselili smo tvoju školu nemačkog na novu, bržu platformu — i usput je napravili <strong>znatno boljom</strong>. Tvoj nalog i svi kursevi su <strong>već prebačeni</strong>, ništa ne kupuješ ponovo.</p>
 <div style="background:#f8fcfd;border-left:3px solid #4fb1d3;border-radius:6px;padding:16px 18px;margin:0 0 22px"><div style="font-size:15px;line-height:1.9;color:#1a1a2e">✅ <strong>Mnogo više vežbanja</strong> — interaktivni zadaci uz svaku lekciju<br>✅ <strong>Bolja priprema za ispit</strong> — probni testovi i modeli ispita<br>✅ <strong>Priručnik i e-book</strong> uz kurs<br>✅ <strong>Prati svoj napredak</strong> i osvajaj srca 💛<br>✅ <strong>Sertifikat</strong> po završetku</div></div>
-<div style="text-align:center;margin:26px 0"><a href="https://kurs.hartweger.rs/prijava" style="display:inline-block;background:#4fb1d3;color:#fff;text-decoration:none;font-size:16px;font-weight:700;padding:14px 34px;border-radius:8px">Uđi u svoj nalog →</a></div>
-<p style="font-size:14px;line-height:1.6;color:#666;margin:0 0 6px"><strong>Prijava je laka:</strong> na <a href="https://kurs.hartweger.rs/prijava" style="color:#4fb1d3">kurs.hartweger.rs/prijava</a> ukucaš svoj mejl (ovaj na koji si dobio/la poruku) i stigne ti link za prijavu — bez lozinke.</p>
+<div style="text-align:center;margin:26px 0"><a href="https://www.hartweger.rs/prijava" style="display:inline-block;background:#4fb1d3;color:#fff;text-decoration:none;font-size:16px;font-weight:700;padding:14px 34px;border-radius:8px">Uđi u svoj nalog →</a></div>
+<p style="font-size:14px;line-height:1.6;color:#666;margin:0 0 6px"><strong>Prijava je laka:</strong> na <a href="https://www.hartweger.rs/prijava" style="color:#4fb1d3">hartweger.rs/prijava</a> ukucaš svoj mejl (ovaj na koji si dobio/la poruku) i stigne ti link za prijavu — bez lozinke.</p>
 <p style="font-size:14px;line-height:1.6;color:#666;margin:14px 0 0">Pitanja? Samo odgovori na ovaj mejl ili nam piši na <a href="mailto:info@hartweger.rs" style="color:#4fb1d3">info@hartweger.rs</a>.</p>
 <p style="font-size:15px;line-height:1.6;color:#444;margin:20px 0 0">Srdačno,<br><strong>Hartweger tim</strong></p>
 </div>
-<div style="text-align:center;font-size:12px;color:#999;padding:18px 0">Hartweger — Škola nemačkog jezika · <a href="https://kurs.hartweger.rs" style="color:#999">kurs.hartweger.rs</a><br>Dobijaš ovaj mejl jer imaš kurs kod nas.</div>
+<div style="text-align:center;font-size:12px;color:#999;padding:18px 0">Hartweger — Škola nemačkog jezika · <a href="https://www.hartweger.rs" style="color:#999">hartweger.rs</a><br>Dobijaš ovaj mejl jer imaš kurs kod nas.</div>
 </div></body></html>`;
 }
 
@@ -117,7 +117,7 @@ async function run() {
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { Authorization: `Bearer ${RESEND_KEY}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ from: FROM, to: [u.email], subject: SUBJECT, html: buildEmail(u.name?.split(" ")[0] || null) }),
+      body: JSON.stringify({ from: FROM, to: [u.email], reply_to: "info@hartweger.rs", subject: SUBJECT, html: buildEmail(u.name?.split(" ")[0] || null) }),
     });
     if (res.ok) ok++; else { fail++; console.error(`  ✗ ${u.email}: ${res.status} ${await res.text()}`); }
     await sleep(700);
