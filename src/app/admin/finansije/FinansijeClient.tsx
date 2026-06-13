@@ -95,7 +95,10 @@ export default function FinansijeClient({ data, year, mesec, pendingTotal, profN
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto space-y-8">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-bold">Finansije</h1>
+        <div className="flex items-center gap-3">
+          <h1 className="text-2xl font-bold">Finansije</h1>
+          <a href="/admin/obaveze" className="text-sm px-3 py-1.5 rounded-lg bg-plava-light text-plava font-medium">Obaveze prema profesorkama →</a>
+        </div>
         <div className="flex gap-2">
           <select value={year} onChange={(e) => setPeriod(Number(e.target.value), mesec)}
             className="border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white">
