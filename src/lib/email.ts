@@ -727,6 +727,40 @@ export async function sendHonorarSummaryEmail(
   }
 }
 
+export async function sendPaymentEmail(
+  profEmail: string,
+  profIme: string,
+  opts: { amount: number; date: string; balance: number; note?: string | null },
+) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    const ime = profIme ? profIme.split(" ")[0] : "";
+    const fmt = (n: number) => n.toLocaleString("de-DE");
+    const saldoLine = opts.balance > 0
+      ? `Preostali saldo (još ti dugujemo): <strong>${fmt(opts.balance)} din</strong>.`
+      : opts.balance < 0
+        ? `Stanje: <strong>${fmt(-opts.balance)} din</strong> preplate.`
+        : `Saldo je izmiren — <strong>0 din</strong>.`;
+    await resend.emails.send({
+      from: FROM,
+      to: profEmail,
+      replyTo: "info@hartweger.rs",
+      subject: `Isplata honorara — ${fmt(opts.amount)} din`,
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:sans-serif;line-height:1.6;color:#222">
+<p>Zdravo${ime ? ", " + esc(ime) : ""}!</p>
+<p>Isplaćeno ti je <strong>${fmt(opts.amount)} din</strong> (datum: ${esc(opts.date)}).${opts.note ? " Napomena: " + esc(opts.note) + "." : ""}</p>
+<p>${saldoLine}</p>
+<p style="font-size:13px;color:#666">Ako nešto ne štima, javi nam na info@hartweger.rs.</p>
+<p style="margin-top:20px">Hartweger tim</p>
+</body></html>`,
+    });
+  } catch (e) {
+    console.error("[email] sendPaymentEmail pao:", e);
+  }
+}
+
 export async function sendOneLessonLeftEmail(
   to: string,
   name: string,
