@@ -3,6 +3,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { aggregateMonthly, computeHonorar, MESECI } from "@/lib/honorar";
 import { resolveProfessorView } from "@/lib/professor-view";
 import AktivnostForm from "./AktivnostForm";
+import ZamenaForm from "./ZamenaForm";
 import { loadPayables } from "@/lib/professor-payable";
 
 export const dynamic = "force-dynamic";
@@ -50,6 +51,18 @@ export default async function ProfesorHonorar({ searchParams }: { searchParams: 
     const { data: acts } = await admin.from("professor_activities")
       .select("id, description, amount, activity_date, status, reject_reason")
       .eq("professor_id", ctx.profId).order("created_at", { ascending: false });
+    const { data: allGroups } = await admin.from("groups").select("id, level, professor_id").in("status", ["otvoren", "u_toku"]);
+    const { data: allProfs } = await admin.from("user_profiles").select("id, full_name").eq("role", "professor");
+    const profNameMap = new Map((allProfs ?? []).map((p) => [p.id, p.full_name ?? "?"]));
+    const groupLabel = (gid: string) => {
+      const g = (allGroups ?? []).find((x) => x.id === gid);
+      return g ? `${g.level} (prof: ${profNameMap.get(g.professor_id) ?? "?"})` : "grupa";
+    };
+    const groupOptions = (allGroups ?? []).map((g) => ({ id: g.id, label: `${g.level} (prof: ${profNameMap.get(g.professor_id) ?? "?"})` }));
+    const { data: myReq } = await admin.from("substitution_requests")
+      .select("id, group_id, session_date, status, reject_reason")
+      .eq("requested_by", ctx.profId).order("created_at", { ascending: false });
+    const myZamene = (myReq ?? []).map((r) => ({ id: r.id, groupLabel: groupLabel(r.group_id), session_date: r.session_date, status: r.status, reject_reason: r.reject_reason }));
     return (
       <div>
         {YearTabs}
@@ -87,6 +100,7 @@ export default async function ProfesorHonorar({ searchParams }: { searchParams: 
           </>
         )}
         <AktivnostForm activities={acts ?? []} />
+        <ZamenaForm groups={groupOptions} requests={myZamene} />
         <p className="text-xs text-gray-400 mt-3">Računato uživo iz održanih časova/sesija. Zvaničan obračun stiže mejlom 1. u mesecu.</p>
       </div>
     );
