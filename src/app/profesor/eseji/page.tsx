@@ -82,15 +82,14 @@ export default function ProfesorEseji() {
 
   const publishEssay = async (essayId: string) => {
     setSaving(true);
-    const { error } = await supabase.from("essay_submissions").update({
-      professor_feedback: profFeedback,
-      professor_score: profScore,
-      status: "published",
-      reviewed_at: new Date().toISOString(),
-    }).eq("id", essayId);
-
-    if (error) {
-      alert("Greška pri čuvanju: " + error.message);
+    const res = await fetch("/api/essays/publish", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ essayId, professorFeedback: profFeedback, professorScore: profScore }),
+    });
+    if (!res.ok) {
+      const j = await res.json().catch(() => ({}));
+      alert("Greška pri objavi: " + (j.error ?? res.status));
       setSaving(false);
       return;
     }
