@@ -44,4 +44,9 @@ describe("essaysOverdue", () => {
     const r = essaysOverdue(essays, now, 3);
     expect(r.map((x) => x.id)).toEqual(["old"]);
   });
+
+  it("esej star tačno N dana se računa kao zakasneli", () => {
+    const r = essaysOverdue([e({ id: "exact", submittedAt: "2026-06-10T05:00:00Z" })], now, 3);
+    expect(r.map((x) => x.id)).toEqual(["exact"]);
+  });
 });

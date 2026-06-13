@@ -1,5 +1,7 @@
 // Cista logika za dnevni rezime Schreiben-a. Bez I/O - sve zavisnosti se prosledjuju.
 
+const MS_PER_DAY = 86400000;
+
 export type DigestEssay = {
   id: string;
   userId: string;       // ucenik (auth.users.id)
@@ -25,6 +27,7 @@ export type DigestGrouping = {
 // Grupise pending eseje: oni ciji (student, kurs) ima reda u professor_students idu pod tog profa,
 // ostali (npr. samostalni video kursevi bez profa) idu u `unassigned` -> adminu.
 export function groupEssaysForDigest(essays: DigestEssay[], assignments: Assignment[]): DigestGrouping {
+  // Pretpostavka: najviše jedan profesor po (učenik, kurs). Ako bi bilo više redova - poslednji pobeđuje.
   const profByKey = new Map<string, string>(); // `${studentId}|${courseId}` -> professorId
   for (const a of assignments) {
     profByKey.set(`${a.studentId}|${a.courseId}`, a.professorId);
@@ -52,6 +55,6 @@ export function groupEssaysForDigest(essays: DigestEssay[], assignments: Assignm
 
 // Eseji koji cekaju >= `days` dana (za osigurac u jutarnjem pregledu).
 export function essaysOverdue<T extends { submittedAt: string }>(essays: T[], nowMs: number, days: number): T[] {
-  const cutoff = nowMs - days * 86400000;
+  const cutoff = nowMs - days * MS_PER_DAY;
   return essays.filter((e) => new Date(e.submittedAt).getTime() <= cutoff);
 }
