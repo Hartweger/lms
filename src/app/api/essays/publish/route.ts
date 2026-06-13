@@ -23,9 +23,9 @@ export async function POST(request: Request) {
   if (!staff) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
 
   const { essayId, professorFeedback, professorScore } = await request.json();
-  if (!essayId) return NextResponse.json({ error: "essayId je obavezan" }, { status: 400 });
-  if (typeof professorScore !== "number" || professorScore < 1 || professorScore > 5) {
-    return NextResponse.json({ error: "professorScore mora biti 1-5" }, { status: 400 });
+  if (!essayId || typeof essayId !== "string") return NextResponse.json({ error: "essayId je obavezan" }, { status: 400 });
+  if (typeof professorScore !== "number" || !Number.isInteger(professorScore) || professorScore < 1 || professorScore > 5) {
+    return NextResponse.json({ error: "professorScore mora biti ceo broj 1-5" }, { status: 400 });
   }
 
   const { admin, userId, isAdmin } = staff;
