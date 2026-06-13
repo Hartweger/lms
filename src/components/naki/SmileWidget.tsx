@@ -8,6 +8,21 @@ const BLOCKED_PREFIXES = ["/naki", "/dashboard", "/kurs/", "/admin", "/prijava",
 const CORAL = "#F78687";
 const QUICK = ["Odakle da počnem?", "Koliko košta kurs za početnike?", "Da li se dobija sertifikat?", "Kako da platim iz EU?"];
 const WELCOME = "Hej! Ja sam Smile, KI asistent u Hartweger timu. Pomažem ti da nađeš pravi kurs nemačkog - pitaj slobodno!";
+const STORAGE_KEY = "smile_chat_v1";
+
+// Smile lik - prijateljsko lice (belo sa koralnim crtama). Koralni brend, vizuelno odvojen od NaKI tutora.
+function SmileFace({ size = 30 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <circle cx="12" cy="12" r="10" fill="#fff" />
+      <circle cx="8.7" cy="10.2" r="1.35" fill={CORAL} />
+      <circle cx="15.3" cy="10.2" r="1.35" fill={CORAL} />
+      <path d="M7.5 13.6 Q12 17.6 16.5 13.6" stroke={CORAL} strokeWidth="1.7" strokeLinecap="round" fill="none" />
+      <circle cx="6.5" cy="13.2" r="1.1" fill={CORAL} opacity="0.35" />
+      <circle cx="17.5" cy="13.2" r="1.1" fill={CORAL} opacity="0.35" />
+    </svg>
+  );
+}
 
 type Msg = { role: "user" | "assistant"; content: string };
 type Config = { enabled: boolean; nudge: boolean; leadCapture: boolean };
@@ -49,6 +64,27 @@ export default function SmileWidget() {
   const [leadDone, setLeadDone] = useState(false);
   const sessionId = useRef<string>(typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now()));
   const scrollRef = useRef<HTMLDivElement>(null);
+  const hydrated = useRef(false);
+
+  // Vrati prethodni razgovor (preživi reload / novo učitavanje u istoj sesiji)
+  useEffect(() => {
+    const raw = ssGet(STORAGE_KEY);
+    if (raw) {
+      try {
+        const s = JSON.parse(raw);
+        if (Array.isArray(s.msgs) && s.msgs.length) { setMsgs(s.msgs); setInited(true); }
+        if (typeof s.sessionId === "string" && s.sessionId) sessionId.current = s.sessionId;
+        if (s.leadDone) setLeadDone(true);
+      } catch { /* ignore */ }
+    }
+    hydrated.current = true;
+  }, []);
+
+  // Sačuvaj razgovor pri svakoj promeni (tek posle hidracije, da ne pregazi sačuvano)
+  useEffect(() => {
+    if (!hydrated.current) return;
+    ssSet(STORAGE_KEY, JSON.stringify({ sessionId: sessionId.current, msgs, inited, leadDone }));
+  }, [msgs, inited, leadDone]);
 
   // Učitaj konfiguraciju jednom (samo na dozvoljenim stranama)
   useEffect(() => {
@@ -141,16 +177,18 @@ export default function SmileWidget() {
 
       {/* Launcher */}
       <button onClick={toggle} aria-label="Razgovaraj sa Smile" style={{ position: "fixed", bottom: 20, right: 20, zIndex: 9999, width: 56, height: 56, borderRadius: "50%", background: CORAL, border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 2px 14px rgba(0,0,0,.18)", animation: open ? "none" : "smileSway 3s ease-in-out infinite" }}>
-        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round">
-          {open ? (<><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></>) : (<><circle cx="12" cy="12" r="9" /><path d="M8 14s1.5 2 4 2 4-2 4-2" /><line x1="9" y1="9" x2="9.01" y2="9" /><line x1="15" y1="9" x2="15.01" y2="9" /></>)}
-        </svg>
+        {open ? (
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+        ) : (
+          <SmileFace size={32} />
+        )}
       </button>
 
       {/* Panel */}
       {open && (
         <div role="dialog" aria-label="Smile chat" style={{ position: "fixed", bottom: 88, right: 20, zIndex: 9999, width: 340, maxWidth: "calc(100vw - 24px)", background: "#fff", borderRadius: 18, border: "1px solid #e2e5e9", boxShadow: "0 4px 24px rgba(0,0,0,.13)", display: "flex", flexDirection: "column", overflow: "hidden" }}>
           <div style={{ background: CORAL, padding: "14px 16px", display: "flex", alignItems: "center", gap: 10 }}>
-            <div style={{ width: 38, height: 38, borderRadius: "50%", background: "rgba(255,255,255,.22)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, color: "#fff", fontSize: 12 }}>:)</div>
+            <div style={{ width: 38, height: 38, borderRadius: "50%", background: "#fff", display: "flex", alignItems: "center", justifyContent: "center" }}><SmileFace size={26} /></div>
             <div>
               <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: "#fff" }}>Smile</p>
               <p style={{ margin: 0, fontSize: 10, color: "rgba(255,255,255,.82)" }}>● KI asistent · Hartweger tim</p>
