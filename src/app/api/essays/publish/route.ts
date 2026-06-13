@@ -33,10 +33,11 @@ export async function POST(request: Request) {
   // Učitaj esej + učenika + lekciju.
   const { data: essay } = await admin
     .from("essay_submissions")
-    .select("id, user_id, lesson_id, user_profiles(full_name, email), lessons(title, course_id)")
+    .select("id, status, user_id, lesson_id, user_profiles(full_name, email), lessons(title, course_id)")
     .eq("id", essayId)
     .single();
   if (!essay) return NextResponse.json({ error: "Esej nije pronađen" }, { status: 404 });
+  if (essay.status === "published") return NextResponse.json({ ok: true, alreadyPublished: true });
 
   const student = one(essay.user_profiles as unknown) as { full_name: string | null; email: string | null } | null;
   const lesson = one(essay.lessons as unknown) as { title: string | null; course_id: string } | null;

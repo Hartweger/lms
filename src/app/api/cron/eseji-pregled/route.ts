@@ -29,9 +29,10 @@ export async function GET(request: NextRequest) {
   const admin = createAdminClient();
 
   // Pending eseji + učenik + lekcija (radi course_id i naslova).
+  // Samo 'pending' - status 'reviewed' se zasad ne koristi (nema "sacuvaj bez objave" u UI).
   const { data: rows } = await admin
     .from("essay_submissions")
-    .select("id, user_id, submitted_at, user_profiles(full_name, email), lessons(title, course_id)")
+    .select("id, user_id, submitted_at, user_profiles(full_name), lessons(title, course_id)")
     .eq("status", "pending")
     .order("submitted_at", { ascending: true });
 
@@ -39,7 +40,7 @@ export async function GET(request: NextRequest) {
     Array.isArray(x) ? (x[0] ?? null) : (x ?? null);
 
   const essays: DigestEssay[] = (rows ?? []).map((r) => {
-    const up = one(r.user_profiles as unknown) as { full_name: string | null; email: string | null } | null;
+    const up = one(r.user_profiles as unknown) as { full_name: string | null } | null;
     const ls = one(r.lessons as unknown) as { title: string | null; course_id: string } | null;
     return {
       id: r.id as string,
@@ -71,15 +72,15 @@ export async function GET(request: NextRequest) {
     });
   }
 
-  // Test: pošalji samo admin-rezime (bez profa) na test mejl.
+  // Test: pošalji rezime SVIH pending eseja na test mejl (da test pouzdano stigne).
   if (testEmail) {
     await sendPendingEssaysDigest({
       to: testEmail,
       recipientName: "Test",
-      essays: unassigned.map((e) => ({ studentName: e.studentName, lessonTitle: e.lessonTitle, submittedAt: e.submittedAt })),
+      essays: essays.map((e) => ({ studentName: e.studentName, lessonTitle: e.lessonTitle, submittedAt: e.submittedAt })),
       forAdmin: true,
     });
-    return NextResponse.json({ test: testEmail, bezProfa: unassigned.length });
+    return NextResponse.json({ test: testEmail, ukupno: essays.length, bezProfa: unassigned.length });
   }
 
   // Profesorima — svakom svoji.
