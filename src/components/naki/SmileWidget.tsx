@@ -186,17 +186,17 @@ export default function SmileWidget() {
 
       {/* Panel */}
       {open && (
-        <div role="dialog" aria-label="Smile chat" style={{ position: "fixed", bottom: 88, right: 20, zIndex: 9999, width: 340, maxWidth: "calc(100vw - 24px)", background: "#fff", borderRadius: 18, border: "1px solid #e2e5e9", boxShadow: "0 4px 24px rgba(0,0,0,.13)", display: "flex", flexDirection: "column", overflow: "hidden" }}>
+        <div className="smile-panel" role="dialog" aria-label="Smile chat" style={{ position: "fixed", bottom: 88, right: 20, zIndex: 9999, width: 340, maxWidth: "calc(100vw - 24px)", maxHeight: "calc(100dvh - 108px)", background: "#fff", borderRadius: 18, border: "1px solid #e2e5e9", boxShadow: "0 4px 24px rgba(0,0,0,.13)", display: "flex", flexDirection: "column", overflow: "hidden" }}>
           <div style={{ background: CORAL, padding: "14px 16px", display: "flex", alignItems: "center", gap: 10 }}>
             <div style={{ width: 38, height: 38, borderRadius: "50%", background: "#fff", display: "flex", alignItems: "center", justifyContent: "center" }}><SmileFace size={26} /></div>
             <div>
               <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: "#fff" }}>Smile</p>
               <p style={{ margin: 0, fontSize: 10, color: "rgba(255,255,255,.82)" }}>● KI asistent · Hartweger tim</p>
             </div>
-            <button onClick={toggle} aria-label="Zatvori" style={{ marginLeft: "auto", background: "none", border: "none", cursor: "pointer", color: "rgba(255,255,255,.8)", fontSize: 20 }}>×</button>
+            <button onClick={toggle} aria-label="Zatvori" style={{ marginLeft: "auto", background: "rgba(255,255,255,.25)", border: "none", borderRadius: "50%", width: 30, height: 30, cursor: "pointer", color: "#fff", fontSize: 22, lineHeight: "1", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>×</button>
           </div>
 
-          <div ref={scrollRef} style={{ height: 300, overflowY: "auto", padding: 13, display: "flex", flexDirection: "column", gap: 9, background: "#f7f8fa" }}>
+          <div ref={scrollRef} className="smile-msgs" style={{ height: 300, overflowY: "auto", padding: 13, display: "flex", flexDirection: "column", gap: 9, background: "#f7f8fa" }}>
             {msgs.map((m, i) => (
               <div key={i} style={{ maxWidth: "84%", padding: "9px 13px", fontSize: 13.5, lineHeight: 1.55, whiteSpace: "pre-wrap", alignSelf: m.role === "user" ? "flex-end" : "flex-start", background: m.role === "user" ? CORAL : "#fff", color: m.role === "user" ? "#fff" : "#0c0d24", border: m.role === "user" ? "none" : "1px solid #eaecef", borderRadius: m.role === "user" ? "14px 4px 14px 14px" : "4px 14px 14px 14px" }}>
                 {m.role === "assistant"
@@ -230,7 +230,11 @@ export default function SmileWidget() {
         </div>
       )}
 
-      <style>{`@keyframes smileSway{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}`}</style>
+      <style>{`@keyframes smileSway{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@media (max-width:480px){
+.smile-panel{left:8px!important;right:8px!important;width:auto!important;max-width:none!important;bottom:84px!important;max-height:calc(100dvh - 104px)!important;}
+.smile-msgs{height:auto!important;flex:1 1 auto!important;min-height:120px!important;}
+}`}</style>
     </div>
   );
 }
