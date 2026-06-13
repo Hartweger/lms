@@ -1,67 +1,8 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { NakiFace } from "./NakiAvatar";
-
-// NaKI šalje markdown (**bold**, *kurziv*, [tekst](url)). Pretvori u React čvorove
-// (kao stari WP widget) - inače se vide gole zvezdice. Novi red čuva whitespace-pre-wrap.
-function renderRich(text: string): ReactNode[] {
-  const withBullets = text.replace(/^- /gm, "• ");
-  // markdown link | bold | kurziv | goli URL (www. ili https://) | mejl | goli domen (hartweger.rs / youtube - NaKI često izostavi https://)
-  const re =
-    /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)|\*\*([^*]+)\*\*|\*([^*]+)\*|((?:https?:\/\/|www\.)[^\s)]+)|([^\s@]+@[^\s@]+\.[A-Za-z]{2,})|((?:[a-z0-9-]+\.)*(?:hartweger\.rs|youtube\.com|youtu\.be)(?:\/[^\s)]*)?)/gi;
-  const nodes: ReactNode[] = [];
-  let last = 0;
-  let key = 0;
-  let m: RegExpExecArray | null;
-  while ((m = re.exec(withBullets)) !== null) {
-    if (m.index > last) nodes.push(withBullets.slice(last, m.index));
-    if (m[1]) {
-      nodes.push(
-        <a key={key++} href={m[2]} target="_blank" rel="noopener noreferrer" className="text-plava underline">
-          {m[1]}
-        </a>
-      );
-    } else if (m[3]) {
-      nodes.push(<strong key={key++}>{m[3]}</strong>);
-    } else if (m[4]) {
-      nodes.push(<em key={key++}>{m[4]}</em>);
-    } else if (m[5] || m[7]) {
-      // odvoji rep interpunkcije (tačka/zarez na kraju rečenice nije deo URL-a)
-      let url = (m[5] || m[7]) as string;
-      let trail = "";
-      const tm = url.match(/[.,;:!?]+$/);
-      if (tm) {
-        trail = tm[0];
-        url = url.slice(0, url.length - trail.length);
-      }
-      const href = /^https?:\/\//i.test(url) ? url : `https://${url}`;
-      nodes.push(
-        <a key={key++} href={href} target="_blank" rel="noopener noreferrer" className="text-plava underline">
-          {url}
-        </a>
-      );
-      if (trail) nodes.push(trail);
-    } else if (m[6]) {
-      let mail = m[6];
-      let trail = "";
-      const tm = mail.match(/[.,;:!?]+$/);
-      if (tm) {
-        trail = tm[0];
-        mail = mail.slice(0, mail.length - trail.length);
-      }
-      nodes.push(
-        <a key={key++} href={`mailto:${mail}`} className="text-plava underline">
-          {mail}
-        </a>
-      );
-      if (trail) nodes.push(trail);
-    }
-    last = re.lastIndex;
-  }
-  if (last < withBullets.length) nodes.push(withBullets.slice(last));
-  return nodes;
-}
+import { renderRich } from "./render-rich";
 
 // GA event helper (gtag je globalno učitan u layout.tsx)
 function ga(event: string, params?: Record<string, unknown>) {

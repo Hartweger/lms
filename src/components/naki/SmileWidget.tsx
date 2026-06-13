@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
+import { renderRich } from "./render-rich";
 
 const ALLOWED_PREFIXES = ["/", "/kursevi", "/grupni-kursevi", "/individualni-kursevi"];
 const BLOCKED_PREFIXES = ["/naki", "/dashboard", "/kurs/", "/admin", "/prijava", "/kupovina"];
@@ -16,11 +17,22 @@ function isAllowed(pathname: string): boolean {
   return ALLOWED_PREFIXES.some((p) => (p === "/" ? pathname === "/" : pathname.startsWith(p)));
 }
 
-// Markdown strip + linkifikacija (kao stari widget)
-function formatReply(text: string): string {
-  let t = text.replace(/\*\*(.*?)\*\*/g, "$1").replace(/\*(.*?)\*/g, "$1");
-  t = t.replace(/(https?:\/\/[^\s)\,]+)/g, `<a href="$1" target="_blank" rel="noopener" style="color:${CORAL};text-decoration:underline;">$1</a>`);
-  return t.replace(/\n/g, "<br/>");
+// sessionStorage može da baci (Safari private mode) - guard
+function ssGet(key: string): string | null {
+  try {
+    if (typeof window === "undefined") return null;
+    return window.sessionStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+function ssSet(key: string, value: string): void {
+  try {
+    if (typeof window === "undefined") return;
+    window.sessionStorage.setItem(key, value);
+  } catch {
+    /* ignore */
+  }
 }
 
 export default function SmileWidget() {
@@ -49,7 +61,7 @@ export default function SmileWidget() {
   // Nudge posle 9s, jednom po sesiji
   useEffect(() => {
     if (!cfg?.enabled || !cfg.nudge || open) return;
-    const seen = sessionStorage.getItem("smile_nudge_seen");
+    const seen = ssGet("smile_nudge_seen");
     if (seen) return;
     const t = setTimeout(() => setShowNudge(true), 9000);
     return () => clearTimeout(t);
@@ -59,12 +71,20 @@ export default function SmileWidget() {
     if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   }, [msgs, busy]);
 
+  // Escape zatvara panel kada je otvoren
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+
   if (!cfg?.enabled || !isAllowed(pathname)) return null;
 
   const toggle = () => {
     setOpen((o) => !o);
     setShowNudge(false);
-    sessionStorage.setItem("smile_nudge_seen", "1");
+    ssSet("smile_nudge_seen", "1");
     if (!inited) { setInited(true); setMsgs([{ role: "assistant", content: WELCOME }]); }
   };
 
@@ -81,8 +101,12 @@ export default function SmileWidget() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ session_id: sessionId.current, messages: next.filter((m) => m.role !== "assistant" || m.content !== WELCOME) }),
       });
-      const d = await r.json();
-      const reply = d.reply || d.message || "Ups, pokušaj ponovo!";
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) {
+        setMsgs((m) => [...m, { role: "assistant", content: d.message || d.error || "Ups, pokušaj ponovo!" }]);
+        return;
+      }
+      const reply = d.reply || "Ups, pokušaj ponovo!";
       setMsgs((m) => [...m, { role: "assistant", content: reply }]);
       if (cfg.leadCapture && next.filter((m) => m.role === "user").length >= 2 && !leadDone) setShowLead(true);
     } catch {
@@ -124,20 +148,23 @@ export default function SmileWidget() {
 
       {/* Panel */}
       {open && (
-        <div style={{ position: "fixed", bottom: 88, right: 20, zIndex: 9999, width: 340, maxWidth: "calc(100vw - 24px)", background: "#fff", borderRadius: 18, border: "1px solid #e2e5e9", boxShadow: "0 4px 24px rgba(0,0,0,.13)", display: "flex", flexDirection: "column", overflow: "hidden" }}>
+        <div role="dialog" aria-label="Smile chat" style={{ position: "fixed", bottom: 88, right: 20, zIndex: 9999, width: 340, maxWidth: "calc(100vw - 24px)", background: "#fff", borderRadius: 18, border: "1px solid #e2e5e9", boxShadow: "0 4px 24px rgba(0,0,0,.13)", display: "flex", flexDirection: "column", overflow: "hidden" }}>
           <div style={{ background: CORAL, padding: "14px 16px", display: "flex", alignItems: "center", gap: 10 }}>
             <div style={{ width: 38, height: 38, borderRadius: "50%", background: "rgba(255,255,255,.22)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, color: "#fff", fontSize: 12 }}>:)</div>
             <div>
               <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: "#fff" }}>Smile</p>
               <p style={{ margin: 0, fontSize: 10, color: "rgba(255,255,255,.82)" }}>● KI asistent · Hartweger tim</p>
             </div>
-            <button onClick={toggle} style={{ marginLeft: "auto", background: "none", border: "none", cursor: "pointer", color: "rgba(255,255,255,.8)", fontSize: 20 }}>×</button>
+            <button onClick={toggle} aria-label="Zatvori" style={{ marginLeft: "auto", background: "none", border: "none", cursor: "pointer", color: "rgba(255,255,255,.8)", fontSize: 20 }}>×</button>
           </div>
 
           <div ref={scrollRef} style={{ height: 300, overflowY: "auto", padding: 13, display: "flex", flexDirection: "column", gap: 9, background: "#f7f8fa" }}>
             {msgs.map((m, i) => (
-              <div key={i} style={{ maxWidth: "84%", padding: "9px 13px", fontSize: 13.5, lineHeight: 1.55, alignSelf: m.role === "user" ? "flex-end" : "flex-start", background: m.role === "user" ? CORAL : "#fff", color: m.role === "user" ? "#fff" : "#0c0d24", border: m.role === "user" ? "none" : "1px solid #eaecef", borderRadius: m.role === "user" ? "14px 4px 14px 14px" : "4px 14px 14px 14px" }}
-                {...(m.role === "assistant" ? { dangerouslySetInnerHTML: { __html: formatReply(m.content) } } : { children: m.content })} />
+              <div key={i} style={{ maxWidth: "84%", padding: "9px 13px", fontSize: 13.5, lineHeight: 1.55, whiteSpace: "pre-wrap", alignSelf: m.role === "user" ? "flex-end" : "flex-start", background: m.role === "user" ? CORAL : "#fff", color: m.role === "user" ? "#fff" : "#0c0d24", border: m.role === "user" ? "none" : "1px solid #eaecef", borderRadius: m.role === "user" ? "14px 4px 14px 14px" : "4px 14px 14px 14px" }}>
+                {m.role === "assistant"
+                  ? renderRich(m.content, { linkClassName: "", linkStyle: { color: CORAL, textDecoration: "underline" } })
+                  : m.content}
+              </div>
             ))}
             {busy && <div style={{ alignSelf: "flex-start", fontSize: 13, color: "#adb5bd", padding: "9px 13px" }}>Smile piše…</div>}
           </div>
@@ -152,14 +179,14 @@ export default function SmileWidget() {
 
           {showLead && !leadDone && (
             <div style={{ padding: "10px 13px", background: "#fdf6f6", borderTop: "1px solid #f0e0e0", display: "flex", gap: 6 }}>
-              <input value={leadEmail} onChange={(e) => setLeadEmail(e.target.value)} placeholder="Tvoj mejl - šaljem ti preporuku" style={{ flex: 1, border: "1.5px solid #dde0e4", borderRadius: 22, padding: "8px 12px", fontSize: 12.5, outline: "none" }} />
+              <input value={leadEmail} onChange={(e) => setLeadEmail(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") submitLead(); }} placeholder="Tvoj mejl - šaljem ti preporuku" style={{ flex: 1, border: "1.5px solid #dde0e4", borderRadius: 22, padding: "8px 12px", fontSize: 12.5, outline: "none" }} />
               <button onClick={submitLead} style={{ background: CORAL, color: "#fff", border: "none", borderRadius: 22, padding: "0 14px", cursor: "pointer", fontSize: 12.5 }}>Pošalji</button>
             </div>
           )}
 
           <div style={{ display: "flex", gap: 8, padding: "10px 13px", background: "#fff", borderTop: "1px solid #f0f0f0" }}>
             <input value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") send(input); }} placeholder="Napiši pitanje za Smile..." style={{ flex: 1, border: "1.5px solid #dde0e4", borderRadius: 22, padding: "8px 14px", fontSize: 13, outline: "none", color: "#0c0d24" }} />
-            <button onClick={() => send(input)} disabled={busy} style={{ width: 36, height: 36, borderRadius: "50%", background: CORAL, border: "none", cursor: "pointer", color: "#fff", flexShrink: 0 }}>›</button>
+            <button onClick={() => send(input)} disabled={busy} aria-label="Pošalji" style={{ width: 36, height: 36, borderRadius: "50%", background: CORAL, border: "none", cursor: "pointer", color: "#fff", flexShrink: 0 }}>›</button>
           </div>
           <div style={{ textAlign: "center", padding: "5px 0 6px", fontSize: 10, color: "#c0c4cb", background: "#fff" }}>Smile · Powered by Claude AI</div>
         </div>
