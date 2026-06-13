@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { reassignGroupSession } from "@/lib/reassign-session";
 
 // Zamena izvođača: NAMERNO samo grupne sesije (group_sessions). Zamene 1:1 časova
 // (individual_lessons) su van opsega ove verzije - admin UI nudi samo izbor grupe.
@@ -28,19 +29,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Cilj nije profesor" }, { status: 400 });
   }
 
-  const { data: existing } = await admin.from("group_sessions")
-    .select("id").eq("group_id", groupId).eq("session_date", sessionDate).maybeSingle();
-
-  if (existing) {
-    const { error } = await admin.from("group_sessions")
-      .update({ professor_id: newProfessorId }).eq("id", existing.id);
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-    return NextResponse.json({ ok: true, mode: "reassigned" });
+  try {
+    const { mode } = await reassignGroupSession(admin, groupId, sessionDate, newProfessorId);
+    return NextResponse.json({ ok: true, mode });
+  } catch (e) {
+    return NextResponse.json({ error: e instanceof Error ? e.message : "Greška" }, { status: 500 });
   }
-
-  const { error } = await admin.from("group_sessions").insert({
-    group_id: groupId, professor_id: newProfessorId, session_date: sessionDate, source: "manual",
-  });
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ ok: true, mode: "created" });
 }
