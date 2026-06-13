@@ -1470,3 +1470,35 @@ export async function sendEssayFeedbackEmail(o: {
     console.error(`[email] sendEssayFeedbackEmail pao za ${o.to}:`, e);
   }
 }
+
+/** Alarm Nataši: pristupi (course_access) upisani BEZ source taga posle uvođenja taga = sumnjivo (možda bug u mapiranju). */
+export async function sendAccessAuditEmail(rows: { ime: string; email: string; kurs: string; datum: string }[]) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    const redovi = rows
+      .map(
+        (r) =>
+          `<tr><td style="padding:6px 10px;border-bottom:1px solid #eee">${esc(r.ime || "")}</td><td style="padding:6px 10px;border-bottom:1px solid #eee">${esc(r.email || "")}</td><td style="padding:6px 10px;border-bottom:1px solid #eee">${esc(r.kurs || "")}</td><td style="padding:6px 10px;border-bottom:1px solid #eee">${esc(r.datum || "")}</td></tr>`,
+      )
+      .join("");
+    await resend.emails.send({
+      from: FROM,
+      to: ["info@hartweger.rs", "natasa@hartweger.rs"],
+      subject: `⚠️ Provera pristupa: ${rows.length} ${rows.length === 1 ? "grant bez opravdanja" : "grantova bez opravdanja"}`,
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:sans-serif;line-height:1.6;color:#222">
+<h2>Pristup dodeljen bez traga (source)</h2>
+<p>Ovi pristupi su upisani u <code>course_access</code> bez <code>source</code> taga otkad je tag uveden. Svaki regularan grant (kupovina, grupa, migracija) sad ostavlja trag — pa ovo može da znači grešku u mapiranju proizvoda ili ručan unos. Proveri da li je svaki opravdan.</p>
+<table style="border-collapse:collapse;width:100%;font-size:14px">
+<thead><tr style="background:#f5f5f5"><th style="padding:6px 10px;text-align:left">Ime</th><th style="padding:6px 10px;text-align:left">Email</th><th style="padding:6px 10px;text-align:left">Kurs</th><th style="padding:6px 10px;text-align:left">Dodeljeno</th></tr></thead>
+<tbody>${redovi}</tbody>
+</table>
+<p style="font-size:13px;color:#666;margin-top:16px">Ako je grant ispravan, ne treba ništa — alarm je samo upozorenje. Ako nije, ukloni red u Supabase ili javi.</p>
+</body></html>`,
+    });
+    console.log(`[email] Access audit alarm → ${rows.length} redova`);
+  } catch (e) {
+    console.error("[email] sendAccessAuditEmail pao:", e);
+  }
+}

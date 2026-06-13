@@ -38,6 +38,7 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
     if (!existing) {
       await admin.from("course_access").insert({
         user_id: order.user_id, course_id: courseId, expires_at: expiresAt.toISOString(),
+        source: `order:${order.order_number ?? orderId}`,
       });
     }
   }

@@ -118,6 +118,7 @@ export async function grantAccess(
         user_id: userId,
         course_id: course.id,
         expires_at: expiry.toISOString(),
+        source: "wc-webhook",
       });
       coursesGranted.push(slug);
       console.log(`[wc-sync] Granted access: ${slug} for ${email}`);

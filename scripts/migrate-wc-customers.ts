@@ -19,7 +19,7 @@ const WC_PRODUCT_MAP: Record<number, string[]> = {
 
   // VIDEO paketi
   46478: ["nemacki-a1-1", "nemacki-a1-2", "nemacki-a2-1", "nemacki-a2-2"],  // Paket A1+A2
-  46480: ["nemacki-a1-1", "nemacki-a1-2", "nemacki-a2-1", "nemacki-a2-2"],  // Paket A1+A2+B1
+  46480: ["nemacki-a1-1", "nemacki-a1-2", "nemacki-a2-1", "nemacki-a2-2", "nemacki-b1-1", "nemacki-b1-2"],  // Paket A1+A2+B1
 
   // INDIVIDUALNI A1
   35766: ["nemacki-a1-1"],
@@ -39,8 +39,8 @@ const WC_PRODUCT_MAP: Record<number, string[]> = {
   35851: ["nemacki-a2-2"],
 
   // OSTALO
-  47440: ["nemacki-a1-1", "nemacki-a1-2"],
-  36863: ["nemacki-a1-1", "nemacki-a1-2"],
+  47440: ["gramatika-a2-b1"],  // ranije POGREŠNO mapirano na A1
+  36863: ["polozi-goethe-b1"], // ranije POGREŠNO mapirano na A1
 };
 
 const WC_URL = "https://www.hartweger.rs/wp-json/wc/v3";

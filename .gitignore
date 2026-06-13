@@ -68,3 +68,7 @@ supabase/.temp/
 # generisani izveštaji skripti (snimci stanja baze — regenerišu se, ne u repo)
 scripts/*-report.json
 scripts/*-audit.json
+
+# jednokratni backup/scratch fajlovi skripti (sadrže lične podatke / snimke — ne u repo)
+scripts/_backup_*.json
+scripts/_ld_recipients.json

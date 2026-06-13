@@ -10,7 +10,7 @@ export const WC_PRODUCT_MAP: Record<number, string[]> = {
 
   // === VIDEO paketi ===
   46478: ["nemacki-a1-1", "nemacki-a1-2", "nemacki-a2-1", "nemacki-a2-2"], // Video Paket A1+A2
-  46480: ["nemacki-a1-1", "nemacki-a1-2", "nemacki-a2-1", "nemacki-a2-2"], // Video Paket A1+A2+B1 → B1 kad bude spreman
+  46480: ["nemacki-a1-1", "nemacki-a1-2", "nemacki-a2-1", "nemacki-a2-2", "nemacki-b1-1", "nemacki-b1-2"], // Video Paket A1+A2+B1 (B1 dodat - sad postoji)
 
   // === INDIVIDUALNI A1 ===
   35766: ["nemacki-a1-1"],                 // IND A1.1 → samo A1.1
@@ -32,6 +32,6 @@ export const WC_PRODUCT_MAP: Record<number, string[]> = {
   // 36132: GRUPNI B1.2 → nemacki-b1-2
 
   // === OSTALO ===
-  47440: ["nemacki-a1-1", "nemacki-a1-2"], // VIDEO Gramatika A2-B1
-  36863: ["nemacki-a1-1", "nemacki-a1-2"], // Video B1 ispit priprema
+  47440: ["gramatika-a2-b1"],  // VIDEO + E-book Gramatika A2-B1 (ranije POGREŠNO mapirano na A1 - vidi migrate-gramatika-buyers.ts)
+  36863: ["polozi-goethe-b1"], // VIDEO + B1 ispit - kompletna priprema (ranije POGREŠNO mapirano na A1)
 };
