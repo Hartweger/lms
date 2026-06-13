@@ -20,11 +20,13 @@ export default function ObavezeClient({ payables, pending, groups, profs }: { pa
   async function decide(id: string, action: "odobri" | "odbij") {
     const reason = action === "odbij" ? (prompt("Razlog odbijanja (opciono):") ?? "") : "";
     setBusy(id);
-    await fetch(`/api/admin/aktivnosti/${id}`, {
+    const res = await fetch(`/api/admin/aktivnosti/${id}`, {
       method: "PATCH", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ action, reason }),
     });
-    setBusy(null); router.refresh();
+    setBusy(null);
+    if (!res.ok) { alert((await res.json()).error || "Greška"); return; }
+    router.refresh();
   }
 
   async function pay(professorId: string) {
@@ -35,7 +37,7 @@ export default function ObavezeClient({ payables, pending, groups, profs }: { pa
     });
     setBusy(null);
     if (!res.ok) { alert((await res.json()).error || "Greška"); return; }
-    setPayFor(null); setAmount(""); setNote(""); router.refresh();
+    setPayFor(null); setAmount(""); setNote(""); setPayDate(today()); router.refresh();
   }
 
   const [zGroup, setZGroup] = useState("");
@@ -50,7 +52,7 @@ export default function ObavezeClient({ payables, pending, groups, profs }: { pa
     });
     setBusy(null);
     if (!res.ok) { alert((await res.json()).error || "Greška"); return; }
-    alert("Izvođač promenjen."); router.refresh();
+    alert("Izvođač promenjen."); setZGroup(""); setZDate(today()); setZProf(""); router.refresh();
   }
 
   return (
@@ -66,9 +68,9 @@ export default function ObavezeClient({ payables, pending, groups, profs }: { pa
             {payables.map((p) => (
               <tr key={p.professorId}>
                 <td className="px-4 py-3 text-gray-900">{p.name}</td>
-                <td className="px-4 py-3 text-right">{fmt(p.earned)}</td>
-                <td className="px-4 py-3 text-right">{fmt(p.paid)}</td>
-                <td className="px-4 py-3 text-right font-bold text-plava">{fmt(p.balance)}</td>
+                <td className="px-4 py-3 text-right">{fmt(p.earned)} din</td>
+                <td className="px-4 py-3 text-right">{fmt(p.paid)} din</td>
+                <td className="px-4 py-3 text-right font-bold text-plava">{fmt(p.balance)} din</td>
                 <td className="px-4 py-3 text-right">
                   <button onClick={() => { setPayFor(payFor === p.professorId ? null : p.professorId); setAmount(String(Math.max(0, p.balance))); }}
                     className="text-sm px-3 py-1.5 rounded-lg bg-plava-light text-plava font-medium">Zabeleži isplatu</button>

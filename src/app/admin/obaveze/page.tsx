@@ -9,7 +9,7 @@ export default async function AdminObavezePage() {
   const payables = await loadPayables();
 
   const { data: pending } = await admin.from("professor_activities")
-    .select("id, professor_id, description, amount, activity_date, created_at")
+    .select("id, professor_id, description, amount, activity_date")
     .eq("status", "na_cekanju").order("created_at", { ascending: true });
 
   const { data: groups } = await admin.from("groups")
@@ -22,7 +22,7 @@ export default async function AdminObavezePage() {
 
   return (
     <ObavezeClient
-      payables={payables}
+      payables={payables.map((p) => ({ professorId: p.professorId, name: p.name, earned: p.earned, paid: p.paid, balance: p.balance }))}
       pending={(pending ?? []).map((a) => ({ ...a, profName: profName[a.professor_id] ?? "-" }))}
       groups={(groups ?? []).map((g) => ({ id: g.id, label: `${g.level} (${profName[g.professor_id] ?? "?"})` }))}
       profs={(profs ?? []).map((p) => ({ id: p.id, name: p.full_name ?? "-" }))}
