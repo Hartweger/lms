@@ -19,6 +19,13 @@ function esc(s: string) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
+/** Escape-uje, pretvara gole URL-ove u klikabilne linkove, pa prelome redova u <br>. */
+function renderBody(message: string) {
+  return esc(message)
+    .replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" style="color:#4fb1d3;">$1</a>')
+    .replace(/\n/g, "<br>");
+}
+
 export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const admin = await requireAdmin();
   if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
@@ -41,7 +48,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
 
   const resend = new Resend(process.env.RESEND_API_KEY);
   const html = `<div style="font-family:Arial,sans-serif;font-size:16px;color:#333;line-height:1.6;">
-    ${esc(message).replace(/\n/g, "<br>")}
+    ${renderBody(message)}
     <p style="margin-top:16px;">Srdačno,<br>Hartweger tim</p>
   </div>`;
   try {

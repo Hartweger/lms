@@ -57,9 +57,17 @@ export async function POST(_request: Request, { params }: { params: Promise<{ id
 PRAVILA:
 - Obraćaj se na "ti" (ti-forma), prijateljski ali profesionalno.
 - Ako je relevantno, predloži konkretan kurs i navedi cenu iz kataloga ispod. Ne izmišljaj cene ni kurseve kojih nema.
-- Kratko i jasno (4-8 rečenica). Ne dodaji potpis na kraju (dodaje se automatski).
-- Koristi isključivo običnu crticu (-), nikada — ni –.
 - Ako lid nije postavio konkretno pitanje, napiši ljubazan podsticaj da nastavi razgovor.
+- Za nivoe A2 i više, uvek pomeni da nudimo besplatno testiranje nivoa: https://www.hartweger.rs/besplatno-testiranje
+- Koristi isključivo običnu crticu (-), nikada — ni –.
+- Ne dodaji potpis na kraju (dodaje se automatski).
+
+FORMATIRANJE (mejl se renderuje, pa formatiraj čitljivo):
+- Kratak pozdrav u prvom redu, pa prazan red.
+- Ako nudiš više kurseva, svaki stavi u poseban red koji počinje crticom (-), sa nazivom, cenom i linkom.
+- Prazan red između celina. Ne pakuj sve u jedan dugačak pasus.
+- Linkove piši kao gole URL-ove (postaće klikabilni automatski), ne u zagradama.
+- Ukupno kratko: pozdrav + ponuda + poziv na sledeći korak.
 
 KONTAKT: ${ime}. ${nivo}
 
