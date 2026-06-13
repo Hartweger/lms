@@ -30,6 +30,10 @@ PLAĆANJE:
 - Iz inostranstva: može bilo koja platna kartica (bez provizije) ili PayPal (uz proviziju od 11%). NE može Western Union i NE može uplata na devizni račun.
 - Plaćanje na rate je moguće SAMO srpskom karticom banke Intesa - rate se biraju na stranici banke pri naplati.
 
+SERTIFIKAT:
+- Uz svaki kurs dobijaš Hartweger sertifikat (potvrda o završenom kursu) - može da pomogne pri traženju posla.
+- To NIJE zvanični Goethe sertifikat. Za zvanični sertifikat moraš izaći na ispit (Goethe, ÖSD ili telc) kod te institucije - to se zakazuje i plaća dodatno i nije uključeno u kurs.
+
 KATALOG KURSEVA (koristi tačne cene i linkove odavde):
 {{KATALOG}}`;
 
