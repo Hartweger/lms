@@ -11,7 +11,7 @@ export default function AktivnostForm({ activities }: { activities: Activity[] }
   const [open, setOpen] = useState(false);
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
-  const [activityDate, setActivityDate] = useState(new Intl.DateTimeFormat("sv-SE").format(new Date()));
+  const [activityDate, setActivityDate] = useState(new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Belgrade" }).format(new Date()));
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 

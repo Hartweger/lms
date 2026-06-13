@@ -7,7 +7,7 @@ type Pending = { id: string; profName: string; description: string; amount: numb
 type Group = { id: string; label: string };
 type Prof = { id: string; name: string };
 const fmt = (n: number) => n.toLocaleString("de-DE");
-const today = () => new Intl.DateTimeFormat("sv-SE").format(new Date());
+const today = () => new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Belgrade" }).format(new Date());
 
 export default function ObavezeClient({ payables, pending, groups, profs }: { payables: Payable[]; pending: Pending[]; groups: Group[]; profs: Prof[] }) {
   const router = useRouter();

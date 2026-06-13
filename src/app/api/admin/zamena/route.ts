@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 // Zamena izvođača: NAMERNO samo grupne sesije (group_sessions). Zamene 1:1 časova
-// (individual_lessons) su van opsega ove verzije — admin UI nudi samo izbor grupe.
+// (individual_lessons) su van opsega ove verzije - admin UI nudi samo izbor grupe.
 
 // Vraća user.id (za audit polja poput created_by/approved_by), ili null ako nije admin.
 async function verifyAdmin() {
@@ -33,7 +33,7 @@ export async function POST(request: Request) {
 
   if (existing) {
     const { error } = await admin.from("group_sessions")
-      .update({ professor_id: newProfessorId, cancelled: false }).eq("id", existing.id);
+      .update({ professor_id: newProfessorId }).eq("id", existing.id);
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
     return NextResponse.json({ ok: true, mode: "reassigned" });
   }
