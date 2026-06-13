@@ -60,7 +60,7 @@ NATAŠIN STIL (uvek prati):
 - Objašnjavaš kroz situacije: kafana, doktor, kupovina, putovanje
 - Naglašavaš šta JE važno za govor, šta NIJE (genitiv se retko koristi u govoru)
 - Koristiš srpski za objašnjenje, primeri ostaju na nemačkom
-- "Nataša kaže/preporučuje" koristi JEDNOM po razgovoru, ne u svakom odgovoru.
+- "Nataša kaže/preporučuje/voli da objasni..." je njen pečat - ubacuj ga prirodno kroz razgovor (ne u baš svakom odgovoru, ali ne ustručavaj se). Cilj je da korisnik oseti da iza tebe stoji Nataša i njen način rada.
 - Kada korisnik podeli nešto lično (umor, trudnoća, frustracija, teški dan), pokaži empatiju bar jednom rečenicom PRE nego što pređeš na gramatiku.
 
 NATAŠINI TRIKOVI (koristi u objašnjenjima):
@@ -183,16 +183,24 @@ const NAKI_ARTICLES: [RegExp, string][] = [
 // Video lekcije / slušanje / izgovor → YouTube kanal.
 const NAKI_YT_RE = /video lekcij|video.*nema[čc]ki|youtube|slu[šs]anje|h[öo]ren|izgovor|aussprache|akcen/i;
 
-// Detektuj temu iz poslednje poruke i vrati dodatak za system prompt (max 1 referenca).
-export function blogLinkAddon(lastUserMessage: string): string {
-  const text = lastUserMessage.toLowerCase();
-  for (const [pattern, slug] of NAKI_ARTICLES) {
-    if (pattern.test(text)) {
-      return `\n\nAko se prirodno uklapa u odgovor, možeš pomenuti da detaljno objašnjenje sa primerima postoji u Hartweger magazinu: ${MAGAZIN}${slug}${UTM} - nemoj forsirati link, maksimum jednom po razgovoru.`;
+// Detektuj temu iz skorašnjih korisničkih poruka (ne samo poslednje) i vrati dodatak
+// za system prompt (max 1 referenca). Tema ostaje "zalepljena" dok je u prozoru
+// razgovora: skeniramo od najnovije ka najstarijoj poruci i uzimamo prvi pogodak,
+// tako da link o npr. modalnim glagolima ne nestane čim korisnik kaže "daj mi vežbu".
+export function blogLinkAddon(recentUserMessages: string[]): string {
+  const texts = recentUserMessages.map((m) => m.toLowerCase());
+  // Blog ima prioritet nad YouTube-om; najnovija poruka koja se poklapa diktira temu.
+  for (let i = texts.length - 1; i >= 0; i--) {
+    for (const [pattern, slug] of NAKI_ARTICLES) {
+      if (pattern.test(texts[i])) {
+        return `\n\nNataša ima detaljan tekst baš o ovoj temi u svom magazinu: ${MAGAZIN}${slug}${UTM}. Preporuči ga korisniku dok objašnjavaš ovu temu - prirodno, u stilu "Nataša je o ovome napisala ceo tekst sa primerima...". Jednom po razgovoru je dovoljno.`;
+      }
     }
   }
-  if (NAKI_YT_RE.test(text)) {
-    return `\n\nAko se prirodno uklapa, možeš preporučiti video lekcije na Natašinom YouTube kanalu: ${NAKI_YOUTUBE} - bez forsiranja, maksimum jednom po razgovoru.`;
+  for (let i = texts.length - 1; i >= 0; i--) {
+    if (NAKI_YT_RE.test(texts[i])) {
+      return `\n\nPreporuči video lekcije na Natašinom YouTube kanalu kad se uklopi u temu: ${NAKI_YOUTUBE} - prirodno, jednom po razgovoru.`;
+    }
   }
   return "";
 }

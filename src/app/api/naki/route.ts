@@ -106,7 +106,8 @@ export async function POST(request: Request) {
   // ── Blog link detekcija ──
   // Statični prompt se kešira (prompt caching); promenljivi dodaci idu
   // kao odvojeni blokovi da ne kvare keš.
-  const linkAddon = last.role === "user" ? blogLinkAddon(last.content) : "";
+  // Tema se detektuje iz cele skorašnje istorije (lepljiva tema), ne samo poslednje poruke.
+  const linkAddon = blogLinkAddon(history.filter((m) => m.role === "user").map((m) => m.content));
   // Ulogovani koji već imaju video kurs ne dobijaju NAKI10 (kupon je za nove kupce).
   const couponAddon =
     userId && (await userOwnsAnyVideoCourse(admin, userId))
