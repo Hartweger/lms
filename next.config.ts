@@ -11,6 +11,13 @@ const nextConfig: NextConfig = {
       { hostname: "www.hartweger.rs" },
       { hostname: "vumbnail.com" },
     ],
+    // Transformacija se naplaćuje po jedinstvenoj kombinaciji (slika + širina + format).
+    // Duži keš = ista slika se ne transformiše iznova (30 dana umesto podrazumevana 4h).
+    minimumCacheTTL: 2592000,
+    // Najveća slika na sajtu je ~800px (hero/ImageBlock). Skidamo ogromne retina širine
+    // (2048/3840) koje nikad ne treba - manje varijanti = manje transformacija.
+    deviceSizes: [640, 750, 828, 1080, 1920],
+    imageSizes: [128, 256, 384],
   },
   async redirects() {
     return [
