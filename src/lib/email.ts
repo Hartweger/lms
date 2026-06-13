@@ -1320,3 +1320,118 @@ ${linkovi}
     console.error("[email] sendTestFunnelEmail pao:", e);
   }
 }
+
+// Dnevni rezime: koliko Schreiben-a čeka pregled. Šalje se profesoru (njegovi učenici)
+// ili adminu (eseji bez dodeljenog profa). `link` vodi na odgovarajuću stranicu za pregled.
+export async function sendPendingEssaysDigest(o: {
+  to: string;
+  recipientName: string;
+  essays: { studentName: string; lessonTitle: string; submittedAt: string }[];
+  forAdmin: boolean;
+}) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    if (o.essays.length === 0) return;
+
+    const link = o.forAdmin ? `${SITE_URL}/admin/eseji` : `${SITE_URL}/profesor/eseji`;
+    const n = o.essays.length;
+    const naslov = o.forAdmin
+      ? `${n} Schreiben-a bez profesora čeka pregled`
+      : `Imaš ${n} ${n === 1 ? "Schreiben" : "Schreiben-a"} za pregled`;
+    const fmtDan = (v: string) =>
+      new Date(v).toLocaleDateString("sr-RS", { day: "2-digit", month: "2-digit", year: "numeric" });
+
+    const redovi = o.essays
+      .map(
+        (e) =>
+          `<tr><td style="padding:6px 8px">${esc(e.studentName)}</td><td style="padding:6px 8px">${esc(
+            e.lessonTitle
+          )}</td><td style="padding:6px 8px;text-align:right;color:#888">${esc(fmtDan(e.submittedAt))}</td></tr>`
+      )
+      .join("");
+
+    await resend.emails.send({
+      from: FROM,
+      to: o.to,
+      replyTo: "info@hartweger.rs",
+      subject: `📝 ${naslov}`,
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a2e;background:#f8f9fa;margin:0;padding:0;">
+  <div style="max-width:560px;margin:0 auto;padding:40px 20px;">
+    <div style="background:white;border-radius:12px;padding:32px;box-shadow:0 1px 3px rgba(0,0,0,0.08);">
+      <h1 style="font-size:19px;margin:0 0 12px;">Zdravo, ${esc(o.recipientName || "")}!</h1>
+      <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 16px;">${esc(naslov)}. Pregled počinje od AI provere koja je već urađena - ti samo dodaš svoj komentar i ocenu i objaviš.</p>
+      <table style="border-collapse:collapse;font-size:14px;width:100%;margin:0 0 8px;">
+        <thead><tr style="background:#f5f5f5"><th style="padding:6px 8px;text-align:left">Učenik</th><th style="padding:6px 8px;text-align:left">Lekcija</th><th style="padding:6px 8px;text-align:right">Poslato</th></tr></thead>
+        <tbody>${redovi}</tbody>
+      </table>
+      <div style="text-align:center;margin:24px 0 8px;">
+        <a href="${link}" style="display:inline-block;background:#4fb1d3;color:white;padding:14px 32px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;">Otvori pregled</a>
+      </div>
+      <p style="font-size:13px;color:#888;margin:12px 0 0;">Hartweger tim</p>
+    </div>
+  </div>
+</body></html>`,
+    });
+    console.log(`[email] Rezime eseja (${o.essays.length}) → ${o.to}`);
+  } catch (e) {
+    console.error(`[email] sendPendingEssaysDigest pao za ${o.to}:`, e);
+  }
+}
+
+// Učeniku kad profesor/admin objavi pregled njegovog Schreiben-a.
+export async function sendEssayFeedbackEmail(o: {
+  to: string;
+  studentName: string;
+  lessonTitle: string;
+  lessonId: string;
+  score: number | null;
+  feedback: string | null;
+}) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+
+    const labels: Record<number, string> = {
+      1: "Treba još vežbe",
+      2: "Solidno, ali ima prostora",
+      3: "Dobro",
+      4: "Vrlo dobro",
+      5: "Odlično!",
+    };
+    const ocenaHtml =
+      o.score != null
+        ? `<p style="font-size:15px;margin:0 0 12px;color:#1a1a2e;"><strong>Ocena:</strong> ${"★".repeat(o.score)}${"☆".repeat(5 - o.score)} - ${esc(labels[o.score] ?? "")}</p>`
+        : "";
+    const komentarHtml = o.feedback
+      ? `<div style="background:#f8fcfd;border-radius:8px;padding:14px 16px;margin:0 0 16px;font-size:15px;line-height:1.6;color:#333;">${esc(o.feedback)}</div>`
+      : "";
+
+    await resend.emails.send({
+      from: FROM,
+      to: o.to,
+      replyTo: "info@hartweger.rs",
+      subject: "📝 Tvoj Schreiben je pregledan",
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a2e;background:#f8f9fa;margin:0;padding:0;">
+  <div style="max-width:520px;margin:0 auto;padding:40px 20px;">
+    <div style="background:white;border-radius:12px;padding:32px;box-shadow:0 1px 3px rgba(0,0,0,0.08);">
+      <div style="text-align:center;margin-bottom:20px;"><img src="https://hartweger.rs/logo.jpg" alt="Hartweger" style="width:120px;height:auto;"/></div>
+      <h1 style="font-size:20px;margin:0 0 12px;">Zdravo, ${esc(o.studentName || "")}!</h1>
+      <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 16px;">Tvoj profesor je pregledao Schreiben iz lekcije <strong>${esc(o.lessonTitle)}</strong>.</p>
+      ${ocenaHtml}
+      ${komentarHtml}
+      <div style="text-align:center;margin:24px 0 8px;">
+        <a href="${SITE_URL}/lekcija/${esc(o.lessonId)}" style="display:inline-block;background:#4fb1d3;color:white;padding:14px 32px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;">Pogledaj feedback</a>
+      </div>
+      <p style="font-size:14px;color:#444;margin:12px 0 0;">Samo nastavi ovako! - Hartweger tim</p>
+    </div>
+  </div>
+</body></html>`,
+    });
+    console.log(`[email] Feedback eseja → ${o.to}`);
+  } catch (e) {
+    console.error(`[email] sendEssayFeedbackEmail pao za ${o.to}:`, e);
+  }
+}
