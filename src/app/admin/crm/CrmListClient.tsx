@@ -14,17 +14,35 @@ export default function CrmListClient({ contacts }: { contacts: CrmContact[] }) 
   const [source, setSource] = useState<CrmSource | "">("");
   const [q, setQ] = useState("");
   const [creating, setCreating] = useState(false);
+  const [rows, setRows] = useState<CrmContact[]>(contacts);
+  const [savingId, setSavingId] = useState<string | null>(null);
+
+  async function changeStage(id: string, newStage: CrmStage) {
+    const prev = rows;
+    setSavingId(id);
+    setRows((rs) => rs.map((c) => (c.id === id ? { ...c, stage: newStage } : c)));
+    const res = await fetch(`/api/admin/crm/${id}`, {
+      method: "PATCH",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ stage: newStage }),
+    });
+    setSavingId(null);
+    if (!res.ok) {
+      setRows(prev);
+      alert((await res.json()).error ?? "Greška pri promeni faze.");
+    }
+  }
 
   const today = new Date().toISOString().slice(0, 10);
   const zaDanas = useMemo(
-    () => contacts.filter(
+    () => rows.filter(
       (c) => c.stage === "nov" ||
         (c.next_action_at && c.next_action_at.slice(0, 10) <= today)
     ).slice(0, 50),
-    [contacts, today],
+    [rows, today],
   );
 
-  const filtered = useMemo(() => contacts.filter((c) => {
+  const filtered = useMemo(() => rows.filter((c) => {
     if (stage && c.stage !== stage) return false;
     if (source && c.source !== source) return false;
     if (q) {
@@ -32,7 +50,7 @@ export default function CrmListClient({ contacts }: { contacts: CrmContact[] }) 
       if (!hay.includes(q.toLowerCase())) return false;
     }
     return true;
-  }), [contacts, stage, source, q]);
+  }), [rows, stage, source, q]);
 
   async function createContact(form: FormData) {
     setCreating(false);
@@ -109,7 +127,16 @@ export default function CrmListClient({ contacts }: { contacts: CrmContact[] }) 
                   </Link>
                   <div className="text-xs text-gray-500">{c.email || c.instagram_handle || c.phone}</div>
                 </td>
-                <td className="p-2">{STAGE_LABEL[c.stage]}</td>
+                <td className="p-2">
+                  <select
+                    value={c.stage}
+                    disabled={savingId === c.id}
+                    onChange={(e) => changeStage(c.id, e.target.value as CrmStage)}
+                    className="rounded border px-1 py-0.5 text-xs disabled:opacity-50"
+                  >
+                    {CRM_STAGES.map((s) => <option key={s} value={s}>{STAGE_LABEL[s]}</option>)}
+                  </select>
+                </td>
                 <td className="p-2">{c.source}</td>
                 <td className="p-2">{c.level || "—"}</td>
                 <td className="p-2 text-xs text-gray-500">{c.last_interaction_at.slice(0, 10)}</td>
