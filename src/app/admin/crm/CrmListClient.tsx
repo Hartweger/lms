@@ -9,11 +9,15 @@ const STAGE_LABEL: Record<CrmStage, string> = {
   ponuda: "Ponuda", upisan: "Upisan", izgubljen: "Izgubljen",
 };
 
+// Završene faze — idu u arhivu, podrazumevano skrivene iz aktivnog spiska.
+const ARHIVA_FAZE: CrmStage[] = ["upisan", "izgubljen"];
+
 export default function CrmListClient({ contacts }: { contacts: CrmContact[] }) {
   const [stage, setStage] = useState<CrmStage | "">("");
   const [source, setSource] = useState<CrmSource | "">("");
   const [q, setQ] = useState("");
   const [creating, setCreating] = useState(false);
+  const [showArhiva, setShowArhiva] = useState(false);
   const [rows, setRows] = useState<CrmContact[]>(contacts);
   const [savingId, setSavingId] = useState<string | null>(null);
 
@@ -43,6 +47,8 @@ export default function CrmListClient({ contacts }: { contacts: CrmContact[] }) 
   );
 
   const filtered = useMemo(() => rows.filter((c) => {
+    // Arhiva (upisan/izgubljen) skrivena dok se izričito ne traži ili ne filtrira po toj fazi
+    if (!showArhiva && !stage && ARHIVA_FAZE.includes(c.stage)) return false;
     if (stage && c.stage !== stage) return false;
     if (source && c.source !== source) return false;
     if (q) {
@@ -50,7 +56,9 @@ export default function CrmListClient({ contacts }: { contacts: CrmContact[] }) 
       if (!hay.includes(q.toLowerCase())) return false;
     }
     return true;
-  }), [rows, stage, source, q]);
+  }), [rows, stage, source, q, showArhiva]);
+
+  const arhivaBroj = useMemo(() => rows.filter((c) => ARHIVA_FAZE.includes(c.stage)).length, [rows]);
 
   async function createContact(form: FormData) {
     setCreating(false);
@@ -111,6 +119,13 @@ export default function CrmListClient({ contacts }: { contacts: CrmContact[] }) 
             {["naki","smile","kontakt-forma","masterclass","manychat","instagram","whatsapp","rucno"]
               .map((s) => <option key={s} value={s}>{s}</option>)}
           </select>
+          <button
+            type="button"
+            onClick={() => setShowArhiva((v) => !v)}
+            className={`rounded border px-2 py-1 text-sm ${showArhiva ? "bg-gray-800 text-white" : ""}`}
+          >
+            {showArhiva ? "Sakrij arhivu" : `Prikaži arhivu (${arhivaBroj})`}
+          </button>
         </div>
         <table className="w-full text-sm">
           <thead><tr className="border-b text-left text-gray-500">
