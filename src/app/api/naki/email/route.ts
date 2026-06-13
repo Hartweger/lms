@@ -28,7 +28,14 @@ async function generateLearningPlan(name: string, level: string, history: HistMs
 Razgovor:
 ${historyText}
 
-Napiši plan na srpskom jeziku, latinicom. Počni sa 'Hallo, ${name}!' Zatim 2-3 rečenice analize (šta korisnik već zna, na čemu treba da radi). Zatim 3 konkretna prioriteta, svaki sa kratkim primerom na nemačkom. Maksimalno 200 reči. Ton topao i ohrabrujući, kao Nataša Hartweger.`;
+Napiši plan na srpskom jeziku, latinicom. Maksimalno 200 reči. Ton topao i ohrabrujući, kao Nataša Hartweger.
+
+Format (obavezno, jer se renderuje u mejlu):
+- Počni sa 'Hallo, ${name}!' pa 2-3 rečenice analize (šta korisnik već zna, na čemu treba da radi).
+- Zatim u zasebnom redu: **Tvoja 3 prioriteta:**
+- Zatim 3 prioriteta. Svaki počinje novim redom kao '**1. naslov prioriteta**', pa kratko objašnjenje, pa konkretan primer na nemačkom u zasebnom redu obavijen *jednom zvezdicom*.
+- Između prioriteta ostavi prazan red.
+- Koristi isključivo običnu crticu (-), nikada — ni –.`;
 
   try {
     const completion = await anthropic.messages.create({

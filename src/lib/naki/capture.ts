@@ -19,6 +19,83 @@ function escapeHtml(s: string): string {
     .replace(/"/g, "&quot;");
 }
 
+// Inline markdown: **bold** -> <strong>, *kurziv* -> <em>. Ulaz je vec escapovan.
+function inlineMd(s: string): string {
+  return s
+    .replace(/\*\*([^*]+)\*\*/g, '<strong style="color:#1a1a1a;">$1</strong>')
+    .replace(/\*([^*]+)\*/g, '<em style="font-style:italic;">$1</em>');
+}
+
+// Nemacki primer (cela linija u jednoj zvezdici) -> istaknuti okvir.
+function exampleBox(inner: string): string {
+  return `<table width="100%" cellpadding="0" cellspacing="0" style="margin:6px 0;"><tr>
+    <td style="background:#eef7fa;border-left:3px solid #4EADC5;border-radius:0 6px 6px 0;padding:10px 14px;font-size:16px;font-style:italic;color:#1a6b7d;line-height:1.5;">${inner}</td>
+  </tr></table>`;
+}
+
+// Jedan prioritet -> kartica sa brojem-badzom, naslovom i telom.
+function renderCard(heading: string, body: string[]): string {
+  const h = heading.match(/^(?:\*\*\s*)?(\d+)\.\s*(.+?)(?:\s*\*\*)?$/);
+  const num = h ? h[1] : "";
+  const title = inlineMd(h ? h[2] : heading);
+  const bodyHtml = body
+    .map((line) => {
+      const ex = line.match(/^\*([^*].*?)\*$/);
+      if (ex) return exampleBox(escapeHtml(ex[1]));
+      return `<p style="margin:4px 0;font-size:15px;color:#444;line-height:1.55;">${inlineMd(escapeHtml(line))}</p>`;
+    })
+    .join("");
+  return `<table width="100%" cellpadding="0" cellspacing="0" style="margin:14px 0;"><tr>
+    <td style="background:#f7fbfc;border:1px solid #e3eef1;border-radius:8px;padding:16px 18px;">
+      <table cellpadding="0" cellspacing="0"><tr>
+        <td valign="top" style="padding-right:12px;">
+          <div style="width:30px;height:30px;background:#4EADC5;border-radius:50%;color:#ffffff;font-size:15px;font-weight:bold;text-align:center;line-height:30px;">${num}</div>
+        </td>
+        <td valign="top" style="font-size:16px;font-weight:bold;color:#1a1a1a;line-height:1.4;padding-top:4px;">${title}</td>
+      </tr></table>
+      <div style="margin-top:8px;">${bodyHtml}</div>
+    </td>
+  </tr></table>`;
+}
+
+// Markdown plan (od Claude-a/fallback) -> uredjen HTML. Normalizuje — i – u obicnu crticu.
+function renderPlanHtml(plan: string): string {
+  const lines = plan.replace(/[—–]/g, "-").replace(/\r/g, "").trim().split("\n");
+  const blocks: string[] = [];
+  let cardHeading: string | null = null;
+  let cardBody: string[] = [];
+  const flush = () => {
+    if (cardHeading !== null) blocks.push(renderCard(cardHeading, cardBody));
+    cardHeading = null;
+    cardBody = [];
+  };
+  for (const raw of lines) {
+    const line = raw.trim();
+    if (!line) {
+      flush();
+      continue;
+    }
+    if (/^(\*\*\s*)?\d+\.\s/.test(line)) {
+      flush();
+      cardHeading = line;
+      continue;
+    }
+    if (cardHeading !== null) {
+      cardBody.push(line);
+      continue;
+    }
+    // Intro: pozdrav + analiza, ili podnaslov tipa "Tvoja 3 prioriteta:".
+    const plain = line.replace(/\*\*/g, "");
+    if (plain.endsWith(":") && plain.length < 40) {
+      blocks.push(`<p style="margin:18px 0 4px;font-size:15px;font-weight:bold;color:#4EADC5;text-transform:uppercase;letter-spacing:0.5px;">${escapeHtml(plain)}</p>`);
+    } else {
+      blocks.push(`<p style="margin:0 0 12px;font-size:16px;color:#333;line-height:1.65;">${inlineMd(escapeHtml(line))}</p>`);
+    }
+  }
+  flush();
+  return blocks.join("\n");
+}
+
 export function getFallbackPlan(name: string, level: string): string {
   const lvl = level.toUpperCase();
   const plans: Record<string, string> = {
@@ -44,7 +121,7 @@ export async function sendNakiWelcomeEmail(
   const resend = new Resend(process.env.RESEND_API_KEY);
   const linksHtml = LEVEL_LINKS[level.toUpperCase()] ??
     '<a href="https://www.hartweger.rs/?utm_source=naki&utm_medium=email" style="color:#4EADC5;">Blog Hartweger centra</a>';
-  const planHtml = escapeHtml(plan).replace(/\n/g, "<br>");
+  const planHtml = renderPlanHtml(plan);
   // NAKI10 samo za nove kupce - postojeći video kupci ne dobijaju kupon blok.
   const couponHtml = includeCoupon
     ? `<table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="background:#fdf6e3;border:1px dashed #e0b94f;border-radius:8px;padding:18px;">
@@ -64,7 +141,7 @@ export async function sendNakiWelcomeEmail(
       <p style="margin:8px 0 0;color:#e0f4f9;font-size:14px;">Natašin AI asistent za nemački jezik</p>
     </td></tr>
     <tr><td style="padding:40px;">
-      <p style="font-size:16px;color:#333;line-height:1.6;">${planHtml}</p>
+      <div style="font-size:16px;color:#333;line-height:1.6;">${planHtml}</div>
       <hr style="border:none;border-top:1px solid #e8e8e8;margin:30px 0;">
       <p style="font-size:14px;color:#666;">Korisni članci za tvoj nivo:</p>
       <p style="font-size:14px;">${linksHtml}</p>
