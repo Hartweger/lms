@@ -668,7 +668,7 @@ ${notesRow}
 export async function sendHonorarProfEmail(
   profEmail: string,
   profIme: string,
-  opts: { label: string; ind: number; grp: number; rateInd: number; rateGrp: number; indTotal: number; grpTotal: number; total: number },
+  opts: { label: string; ind: number; grp: number; rateInd: number; rateGrp: number; indTotal: number; grpTotal: number; total: number; balance?: number },
 ) {
   try {
     const resend = getResend();
@@ -689,6 +689,7 @@ export async function sendHonorarProfEmail(
 <li>Grupne sesije: ${opts.grp} × ${fmt(opts.rateGrp)} din = <strong>${fmt(opts.grpTotal)} din</strong></li>
 </ul>
 <p style="font-size:18px"><strong>Ukupno: ${fmt(opts.total)} din</strong></p>
+${typeof opts.balance === "number" ? `<p style="font-size:13px;color:#666">Trenutni saldo (zarađeno - isplaćeno): <strong>${fmt(opts.balance)} din</strong>.</p>` : ""}
 <p style="font-size:13px;color:#666">Ako nešto ne štima, javi nam na info@hartweger.rs.</p>
 <p style="margin-top:20px">Hartweger tim</p>
 </body></html>`,

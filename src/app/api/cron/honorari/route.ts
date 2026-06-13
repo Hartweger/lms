@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { computeHonorar, previousMonth, monthDateRange, DEFAULT_HONORAR_IND, DEFAULT_HONORAR_GRP } from "@/lib/honorar";
 import { sendHonorarProfEmail, sendHonorarSummaryEmail } from "@/lib/email";
+import { loadPayables } from "@/lib/professor-payable";
 
 // Mesečni cron (1. u mesecu): obračun honorara za PRETHODNI mesec + mejlovi.
 // Override meseca: ?month=YYYY-MM (za backfill/test). Zaštita: Bearer CRON_SECRET.
@@ -48,9 +49,10 @@ export async function GET(request: NextRequest) {
       summary.push({ name: p.full_name || p.email, ind, grp, total: h.total });
       grandTotal += h.total;
       if (p.email) {
+        const [pay] = await loadPayables(p.id);
         await sendHonorarProfEmail(p.email, p.full_name || "", {
           label, ind, grp, rateInd: p.honorar_ind ?? DEFAULT_HONORAR_IND, rateGrp: p.honorar_grp ?? DEFAULT_HONORAR_GRP,
-          indTotal: h.indTotal, grpTotal: h.grpTotal, total: h.total,
+          indTotal: h.indTotal, grpTotal: h.grpTotal, total: h.total, balance: pay?.balance,
         });
         mailed++;
       }
