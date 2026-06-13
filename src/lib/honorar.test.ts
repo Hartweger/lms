@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { computeHonorar, previousMonth, monthDateRange, aggregateMonthly } from "./honorar";
+import { computeBalance, sumActivities } from "./honorar";
 import { computeSessionDates } from "./groups";
 
 describe("computeHonorar", () => {
@@ -54,5 +55,36 @@ describe("computeSessionDates", () => {
   it("prazno bez podataka", () => {
     expect(computeSessionDates(null, [1], 2)).toEqual([]);
     expect(computeSessionDates("2026-06-01", [], 2)).toEqual([]);
+  });
+});
+
+describe("sumActivities", () => {
+  it("sabira samo odobrene aktivnosti", () => {
+    const rows = [
+      { amount: 3000, status: "odobreno" as const },
+      { amount: 1500, status: "na_cekanju" as const },
+      { amount: 2000, status: "odbijeno" as const },
+      { amount: 500, status: "odobreno" as const },
+    ];
+    expect(sumActivities(rows)).toBe(3500);
+  });
+  it("prazno → 0", () => {
+    expect(sumActivities([])).toBe(0);
+  });
+});
+
+describe("computeBalance", () => {
+  it("zarađeno (časovi + aktivnosti) − isplaćeno", () => {
+    expect(computeBalance(18800, 3500, 20000)).toEqual({
+      earnedLessons: 18800, earnedActivities: 3500, earned: 22300, paid: 20000, balance: 2300,
+    });
+  });
+  it("preplata daje negativan saldo", () => {
+    expect(computeBalance(5000, 0, 8000).balance).toBe(-3000);
+  });
+  it("sve nule", () => {
+    expect(computeBalance(0, 0, 0)).toEqual({
+      earnedLessons: 0, earnedActivities: 0, earned: 0, paid: 0, balance: 0,
+    });
   });
 });

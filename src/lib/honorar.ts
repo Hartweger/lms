@@ -53,3 +53,18 @@ export function monthDateRange(year: number, month: number): { from: string; toE
   const toExclusive = `${ny}-${p2(nm)}-01`;
   return { from, toExclusive };
 }
+
+/** Zbir samo odobrenih dodatnih aktivnosti. */
+export function sumActivities(rows: { amount: number; status: "na_cekanju" | "odobreno" | "odbijeno" }[]): number {
+  return rows.reduce((s, r) => (r.status === "odobreno" ? s + (r.amount || 0) : s), 0);
+}
+
+export interface BalanceResult {
+  earnedLessons: number; earnedActivities: number; earned: number; paid: number; balance: number;
+}
+
+/** Saldo profesorke: (zarada od časova + odobrene aktivnosti) − isplaćeno. */
+export function computeBalance(earnedLessons: number, earnedActivities: number, paid: number): BalanceResult {
+  const earned = earnedLessons + earnedActivities;
+  return { earnedLessons, earnedActivities, earned, paid, balance: earned - paid };
+}
