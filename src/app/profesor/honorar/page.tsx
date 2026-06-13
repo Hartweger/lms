@@ -2,6 +2,8 @@ import Link from "next/link";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { aggregateMonthly, computeHonorar, MESECI } from "@/lib/honorar";
 import { resolveProfessorView } from "@/lib/professor-view";
+import AktivnostForm from "./AktivnostForm";
+import { loadPayables } from "@/lib/professor-payable";
 
 export const dynamic = "force-dynamic";
 
@@ -44,6 +46,10 @@ export default async function ProfesorHonorar({ searchParams }: { searchParams: 
       (gs ?? []).map((x) => x.session_date),
       ctx.honorarInd, ctx.honorarGrp,
     );
+    const [payable] = await loadPayables(ctx.profId);
+    const { data: acts } = await admin.from("professor_activities")
+      .select("id, description, amount, activity_date, status, reject_reason")
+      .eq("professor_id", ctx.profId).order("created_at", { ascending: false });
     return (
       <div>
         {YearTabs}
@@ -70,6 +76,14 @@ export default async function ProfesorHonorar({ searchParams }: { searchParams: 
             </tfoot>
           </table>
         </div>
+        {payable && (
+          <div className="bg-white rounded-xl shadow-sm p-4 mt-4 grid grid-cols-3 gap-3 text-center">
+            <div><div className="text-xs text-gray-400 uppercase">Zarađeno</div><div className="font-bold text-gray-900">{fmt(payable.earned)} din</div></div>
+            <div><div className="text-xs text-gray-400 uppercase">Isplaćeno</div><div className="font-bold text-gray-900">{fmt(payable.paid)} din</div></div>
+            <div><div className="text-xs text-gray-400 uppercase">Saldo</div><div className="font-bold text-plava">{fmt(payable.balance)} din</div></div>
+          </div>
+        )}
+        <AktivnostForm activities={acts ?? []} />
         <p className="text-xs text-gray-400 mt-3">Računato uživo iz održanih časova/sesija. Zvaničan obračun stiže mejlom 1. u mesecu.</p>
       </div>
     );
