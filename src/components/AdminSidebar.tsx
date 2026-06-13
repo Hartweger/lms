@@ -20,7 +20,7 @@ const links = [
   { href: "/admin/analitika/kupci", label: "Kupci", indent: true },
   { href: "/admin/napredak", label: "Napredak", indent: true },
   { href: "/admin/finansije", label: "Finansije" },
-  { href: "/admin/naki", label: "NaKI logovi" },
+  { href: "/admin/naki", label: "NaKI & Smile" },
 ];
 
 export default function AdminSidebar() {
