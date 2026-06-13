@@ -40,6 +40,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# git worktrees
+.worktrees/
+
 # PDF lesson scripts
 A1.1/
 A1.2/
