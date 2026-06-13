@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { rateLimit } from "@/lib/rate-limit";
+import { upsertContact, logInteraction } from "@/lib/crm/contacts";
 
 export async function POST(request: Request) {
   const ip = request.headers.get("x-forwarded-for") || "unknown";
@@ -49,6 +51,27 @@ export async function POST(request: Request) {
     } catch (mlError) {
       console.error("MailerLite error:", mlError);
     }
+  }
+
+  // Upis u CRM (best-effort)
+  try {
+    const admin = createAdminClient();
+    const contactId = await upsertContact(admin, {
+      email: trimmedEmail,
+      source: "masterclass",
+    });
+    if (contactId) {
+      await logInteraction(admin, {
+        contactId,
+        channel: "sistem",
+        direction: "dolazna",
+        summary: "Prijava na masterclass „reci\"",
+        body: null,
+        meta: { masterclass: "reci" },
+      });
+    }
+  } catch (e) {
+    console.error("[masterclass] CRM upis nije uspeo", e);
   }
 
   return NextResponse.json({ success: true });

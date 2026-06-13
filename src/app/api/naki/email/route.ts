@@ -5,6 +5,7 @@ import { rateLimit } from "@/lib/rate-limit";
 import { NAKI_MODEL } from "@/lib/naki/system-prompt";
 import { getFallbackPlan, sendNakiWelcomeEmail, addToMailerLite } from "@/lib/naki/capture";
 import { emailOwnsAnyVideoCourse } from "@/lib/coupon-ownership";
+import { upsertContact, logInteraction } from "@/lib/crm/contacts";
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
@@ -120,6 +121,30 @@ export async function POST(request: Request) {
     message: `[email_capture] nivo=${level || "?"}`,
     level: level || null,
   });
+
+  // Upis u CRM (best-effort)
+  try {
+    const convo = history
+      .filter((m) => typeof m.content === "string")
+      .map((m) => `${m.role === "user" ? "Korisnik" : "NaKI"}: ${m.content.trim()}`)
+      .join("\n")
+      .slice(0, 8000);
+    const contactId = await upsertContact(admin, {
+      email, name, level, source: "naki",
+    });
+    if (contactId) {
+      await logInteraction(admin, {
+        contactId,
+        channel: "naki",
+        direction: "dolazna",
+        summary: "NaKI tutor - plan učenja",
+        body: convo,
+        meta: { level, session_id: sessionId },
+      });
+    }
+  } catch (e) {
+    console.error("[naki] CRM upis nije uspeo", e);
+  }
 
   return NextResponse.json({ success: true });
 }

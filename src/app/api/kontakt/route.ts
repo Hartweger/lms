@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { upsertContact, logInteraction } from "@/lib/crm/contacts";
 
 export async function POST(request: Request) {
   try {
@@ -37,6 +39,28 @@ export async function POST(request: Request) {
         message,
       ].join("\n"),
     });
+
+    // Upis u CRM da upit ne propadne (best-effort; ne ruši formu ako padne)
+    try {
+      const admin = createAdminClient();
+      const contactId = await upsertContact(admin, {
+        email,
+        name,
+        source: "kontakt-forma",
+      });
+      if (contactId) {
+        await logInteraction(admin, {
+          contactId,
+          channel: "mejl",
+          direction: "dolazna",
+          summary: `Kontakt forma: ${category}`,
+          body: message,
+          meta: { category },
+        });
+      }
+    } catch (e) {
+      console.error("[kontakt] CRM upis nije uspeo", e);
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {
