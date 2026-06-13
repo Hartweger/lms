@@ -88,6 +88,7 @@ type SpeechRecognitionInstance = {
   onresult: ((event: { results: { [key: number]: { [key: number]: { transcript: string } } } }) => void) | null;
   onerror: ((event: { error: string }) => void) | null;
   onend: (() => void) | null;
+  onstart: (() => void) | null;
 };
 
 export default function SpeakExercise({ question, correctAnswer, explanation, onAnswer }: SpeakExerciseProps) {
@@ -97,9 +98,11 @@ export default function SpeakExercise({ question, correctAnswer, explanation, on
   const [result, setResult] = useState<{ score: number; differences: { word: string; status: string }[] } | null>(null);
   const [retries, setRetries] = useState(0);
   const [micFailed, setMicFailed] = useState(false);
+  const [micReady, setMicReady] = useState(false);
   const [fallbackInput, setFallbackInput] = useState("");
   const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
   const lastTranscriptRef = useRef("");
+  const manualStopRef = useRef(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const evaluate = (text: string) => {
@@ -142,16 +145,28 @@ export default function SpeakExercise({ question, correctAnswer, explanation, on
     let lastTranscript = "";
     let silenceTimer: ReturnType<typeof setTimeout> | null = null;
     let done = false;
+    manualStopRef.current = false;
 
-    // Jedinstven završetak: zaustavi, oceni jednom (tajmer tišine, ručni stop
-    // i onend mogu svi da okinu - sme da prođe samo prvi).
+    // Jedinstven završetak: zaustavi, oceni jednom (tajmer tišine i ručni stop
+    // mogu da okinu - sme da prođe samo prvi).
     const finish = () => {
       if (done) return;
       done = true;
       if (silenceTimer) clearTimeout(silenceTimer);
       setListening(false);
+      setMicReady(false);
       try { recognition.stop(); } catch { /* already stopped */ }
-      if (lastTranscriptRef.current) evaluate(lastTranscriptRef.current);
+      if (lastTranscriptRef.current) {
+        evaluate(lastTranscriptRef.current);
+      } else {
+        setTranscript("Nisam te čula. Klikni i probaj ponovo.");
+      }
+    };
+
+    // Mikrofon je stvarno spreman tek kad engine pokrene slušanje - do tad
+    // polaznik ne treba da govori (inače se prve reči izgube na prvom pitanju).
+    recognition.onstart = () => {
+      setMicReady(true);
     };
 
     recognition.onresult = (event) => {
@@ -180,35 +195,50 @@ export default function SpeakExercise({ question, correctAnswer, explanation, on
     };
 
     recognition.onerror = (event) => {
-      setListening(false);
       if (event.error === "not-allowed" || event.error === "service-not-allowed") {
+        setListening(false);
+        setMicReady(false);
         setMicFailed(true);
-      } else if (event.error === "no-speech") {
-        setTranscript("Nije prepoznat govor. Pokušaj ponovo.");
-      } else if (event.error === "aborted") {
-        // On abort, evaluate whatever we captured
-        if (lastTranscript) finish();
+      } else if (event.error === "no-speech" || event.error === "aborted") {
+        // Ne prekidaj - onend će restartovati ili će tajmer tišine završiti.
         return;
       } else {
+        setListening(false);
         setTranscript(`Greška: ${event.error}`);
       }
     };
 
     recognition.onend = () => {
-      setListening(false);
-      // Safari sometimes fires onend without onresult final - evaluate last captured text
-      if (lastTranscriptRef.current) finish();
+      if (done) return;
+      // Ručni stop polaznika -> završi i oceni.
+      if (manualStopRef.current) {
+        finish();
+        return;
+      }
+      // Engine je sam prekinuo na pauzu (Chrome/Safari to rade i kad je
+      // continuous=true). Polaznik možda nije završio - nastavi da slušaš.
+      // Završava jedino tajmer tišine (2,5 s) ili ručni stop.
+      try {
+        recognition.start();
+      } catch {
+        finish();
+      }
     };
 
     recognitionRef.current = recognition;
     lastTranscriptRef.current = "";
     setListening(true);
+    // Sigurnosni okvir: ako polaznik ćuti, ne vrti restart unedogled -
+    // posle 6 s bez ijedne reči završavamo. Svaki rezultat ga skrati na 2,5 s.
+    silenceTimer = setTimeout(finish, 6000);
     recognition.start();
   };
 
   const stopListening = () => {
+    manualStopRef.current = true;
     recognitionRef.current?.stop();
     setListening(false);
+    setMicReady(false);
   };
 
   const handleRetry = () => {
@@ -216,6 +246,7 @@ export default function SpeakExercise({ question, correctAnswer, explanation, on
     setTranscript("");
     setFallbackInput("");
     setResult(null);
+    setMicReady(false);
     setRetries(retries + 1);
     if (micFailed) {
       setTimeout(() => inputRef.current?.focus(), 100);
@@ -258,7 +289,11 @@ export default function SpeakExercise({ question, correctAnswer, explanation, on
             </svg>
           </button>
           <p className="text-sm text-gray-400">
-            {listening ? "Slušam... govori sada" : "Klikni i izgovori rečenicu"}
+            {listening
+              ? micReady
+                ? "Slušam... govori sada"
+                : "Pripremam mikrofon..."
+              : "Klikni i izgovori rečenicu"}
           </p>
 
           {/* Transcript while not answered */}

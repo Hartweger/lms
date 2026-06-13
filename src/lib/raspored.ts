@@ -17,6 +17,10 @@ export interface GrupaRaspored {
 
 // Server-only: čita grupe iz Supabase (zamena za Google Sheet RasporedAPI).
 export async function fetchRaspored(): Promise<GrupaRaspored[]> {
+  // Bez service-role ključa (npr. preview build koji ga nema) ne ruši ceo
+  // build - prikaži prazan raspored umesto da prerender stranice padne.
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return [];
+
   const admin = createAdminClient();
   const { data: groups } = await admin
     .from("groups")
