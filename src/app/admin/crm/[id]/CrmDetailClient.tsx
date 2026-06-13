@@ -24,6 +24,20 @@ export default function CrmDetailClient({
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
+  const [drafting, setDrafting] = useState(false);
+
+  async function draftReply() {
+    setDrafting(true);
+    const res = await fetch(`/api/admin/crm/${contact.id}/draft`, { method: "POST" });
+    setDrafting(false);
+    if (res.ok) {
+      const d = await res.json();
+      setSubject(d.subject ?? "");
+      setMessage(d.message ?? "");
+    } else {
+      alert((await res.json()).error ?? "AI predlog nije uspeo.");
+    }
+  }
 
   async function patch(body: Record<string, unknown>) {
     setBusy(true);
@@ -82,7 +96,13 @@ export default function CrmDetailClient({
         </section>
 
         <section className="rounded border p-4">
-          <h2 className="mb-2 font-semibold">Pošalji mejl</h2>
+          <div className="mb-2 flex items-center justify-between">
+            <h2 className="font-semibold">Pošalji mejl</h2>
+            <button disabled={drafting || busy} onClick={draftReply}
+              className="rounded border px-2 py-1 text-xs disabled:opacity-50">
+              {drafting ? "Pišem predlog…" : "✨ Predloži odgovor (AI)"}
+            </button>
+          </div>
           <input value={subject} onChange={(e) => setSubject(e.target.value)} placeholder="Naslov"
             className="mb-2 w-full rounded border px-2 py-1 text-sm" />
           <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Poruka…"
