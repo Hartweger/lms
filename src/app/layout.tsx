@@ -7,6 +7,7 @@ import "./globals.css";
 import Navigacija from "@/components/Navigacija";
 import Footer from "@/components/Footer";
 import CookieBanner from "@/components/CookieBanner";
+import SmileWidget from "@/components/naki/SmileWidget";
 import MigracijaBanner from "@/components/MigracijaBanner";
 import AttributionTracker from "@/components/AttributionTracker";
 import MetaPixel from "@/components/MetaPixel";
@@ -160,6 +161,7 @@ try {
         />
         <main className="flex-1">{children}</main>
         <Footer />
+        <SmileWidget />
         <CookieBanner />
         <AttributionTracker />
         <MetaPixel />
