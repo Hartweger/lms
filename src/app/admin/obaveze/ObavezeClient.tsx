@@ -6,10 +6,11 @@ type Payable = { professorId: string; name: string; earned: number; paid: number
 type Pending = { id: string; profName: string; description: string; amount: number; activity_date: string };
 type Group = { id: string; label: string };
 type Prof = { id: string; name: string };
+type Zamena = { id: string; profName: string; groupLabel: string; session_date: string };
 const fmt = (n: number) => n.toLocaleString("de-DE");
 const today = () => new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Belgrade" }).format(new Date());
 
-export default function ObavezeClient({ payables, pending, groups, profs }: { payables: Payable[]; pending: Pending[]; groups: Group[]; profs: Prof[] }) {
+export default function ObavezeClient({ payables, pending, groups, profs, pendingZamene }: { payables: Payable[]; pending: Pending[]; groups: Group[]; profs: Prof[]; pendingZamene: Zamena[] }) {
   const router = useRouter();
   const [busy, setBusy] = useState<string | null>(null);
   const [payFor, setPayFor] = useState<string | null>(null);
@@ -21,6 +22,18 @@ export default function ObavezeClient({ payables, pending, groups, profs }: { pa
     const reason = action === "odbij" ? (prompt("Razlog odbijanja (opciono):") ?? "") : "";
     setBusy(id);
     const res = await fetch(`/api/admin/aktivnosti/${id}`, {
+      method: "PATCH", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action, reason }),
+    });
+    setBusy(null);
+    if (!res.ok) { alert((await res.json()).error || "Greška"); return; }
+    router.refresh();
+  }
+
+  async function decideZamena(id: string, action: "odobri" | "odbij") {
+    const reason = action === "odbij" ? (prompt("Razlog odbijanja (opciono):") ?? "") : "";
+    setBusy(id);
+    const res = await fetch(`/api/admin/zamene/${id}`, {
       method: "PATCH", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ action, reason }),
     });
@@ -87,6 +100,26 @@ export default function ObavezeClient({ payables, pending, groups, profs }: { pa
             ))}
           </tbody>
         </table>
+      </section>
+
+      <section>
+        <h2 className="font-medium text-gray-900 mb-3">Zamene na čekanju ({pendingZamene.length})</h2>
+        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+          {pendingZamene.length === 0 ? <p className="px-4 py-4 text-gray-400 text-sm">Nema prijavljenih zamena.</p> : (
+            <table className="w-full text-sm"><tbody className="divide-y divide-gray-50">
+              {pendingZamene.map((z) => (
+                <tr key={z.id}>
+                  <td className="px-4 py-3 text-gray-900">{z.profName}</td>
+                  <td className="px-4 py-3">{z.groupLabel}<span className="text-gray-400"> · {z.session_date}</span></td>
+                  <td className="px-4 py-3 text-right space-x-2">
+                    <button disabled={busy === z.id} onClick={() => decideZamena(z.id, "odobri")} className="px-3 py-1 rounded-lg bg-green-600 text-white disabled:opacity-50">Odobri</button>
+                    <button disabled={busy === z.id} onClick={() => decideZamena(z.id, "odbij")} className="px-3 py-1 rounded-lg bg-gray-200 text-gray-700 disabled:opacity-50">Odbij</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody></table>
+          )}
+        </div>
       </section>
 
       <section>

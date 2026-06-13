@@ -12,6 +12,10 @@ export default async function AdminObavezePage() {
     .select("id, professor_id, description, amount, activity_date")
     .eq("status", "na_cekanju").order("created_at", { ascending: true });
 
+  const { data: pendingZamene } = await admin.from("substitution_requests")
+    .select("id, requested_by, group_id, session_date")
+    .eq("status", "na_cekanju").order("created_at", { ascending: true });
+
   const { data: groups } = await admin.from("groups")
     .select("id, level, professor_id").in("status", ["otvoren", "u_toku"]);
 
@@ -20,12 +24,17 @@ export default async function AdminObavezePage() {
 
   const profName: Record<string, string> = Object.fromEntries((profs ?? []).map((p) => [p.id, p.full_name ?? "-"]));
 
+  const groupLabelMap: Record<string, string> = Object.fromEntries(
+    (groups ?? []).map((g) => [g.id, `${g.level} (${profName[g.professor_id] ?? "?"})`])
+  );
+
   return (
     <ObavezeClient
       payables={payables.map((p) => ({ professorId: p.professorId, name: p.name, earned: p.earned, paid: p.paid, balance: p.balance }))}
       pending={(pending ?? []).map((a) => ({ ...a, profName: profName[a.professor_id] ?? "-" }))}
       groups={(groups ?? []).map((g) => ({ id: g.id, label: `${g.level} (${profName[g.professor_id] ?? "?"})` }))}
       profs={(profs ?? []).map((p) => ({ id: p.id, name: p.full_name ?? "-" }))}
+      pendingZamene={(pendingZamene ?? []).map((z) => ({ id: z.id, profName: profName[z.requested_by] ?? "-", groupLabel: groupLabelMap[z.group_id] ?? "grupa", session_date: z.session_date }))}
     />
   );
 }
