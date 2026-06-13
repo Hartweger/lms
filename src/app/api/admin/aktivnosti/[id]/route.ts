@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 
+// Vraća user.id (za audit polja poput created_by/approved_by), ili null ako nije admin.
 async function verifyAdmin() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -25,12 +26,13 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
   if (!row) return NextResponse.json({ error: "Aktivnost nije pronađena" }, { status: 404 });
   if (row.status !== "na_cekanju") return NextResponse.json({ error: "Već je odlučeno" }, { status: 409 });
 
-  const { error } = await admin.from("professor_activities").update({
+  const { error, count } = await admin.from("professor_activities").update({
     status: action === "odobri" ? "odobreno" : "odbijeno",
     reject_reason: action === "odbij" ? (String(reason ?? "").trim() || null) : null,
     approved_by: adminId,
     decided_at: new Date().toISOString(),
-  }).eq("id", id).eq("status", "na_cekanju");
+  }, { count: "exact" }).eq("id", id).eq("status", "na_cekanju");
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (!count) return NextResponse.json({ error: "Već je odlučeno" }, { status: 409 });
   return NextResponse.json({ ok: true });
 }

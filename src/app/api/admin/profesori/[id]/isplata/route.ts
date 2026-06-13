@@ -4,6 +4,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { loadPayables } from "@/lib/professor-payable";
 import { sendPaymentEmail } from "@/lib/email";
 
+// Vraća user.id (za audit polja poput created_by/approved_by), ili null ako nije admin.
 async function verifyAdmin() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -25,11 +26,17 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
   if (!/^\d{4}-\d{2}-\d{2}$/.test(paymentDate)) return NextResponse.json({ error: "Datum nije validan" }, { status: 400 });
 
   const admin = createAdminClient();
+
+  // Profesor mora da postoji (loadPayables vraća prazno za nepoznat/ne-profesor id).
+  const before = await loadPayables(professorId);
+  if (before.length === 0) return NextResponse.json({ error: "Profesor nije pronađen" }, { status: 404 });
+
   const { error } = await admin.from("professor_payments").insert({
     professor_id: professorId, payment_date: paymentDate, amount, note, created_by: adminId,
   });
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
+  // Saldo posle isplate + mejl profesorki.
   const [pay] = await loadPayables(professorId);
   if (pay?.email) {
     await sendPaymentEmail(pay.email, pay.name, { amount, date: paymentDate, balance: pay.balance, note });

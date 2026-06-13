@@ -2,6 +2,10 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 
+// Zamena izvođača: NAMERNO samo grupne sesije (group_sessions). Zamene 1:1 časova
+// (individual_lessons) su van opsega ove verzije — admin UI nudi samo izbor grupe.
+
+// Vraća user.id (za audit polja poput created_by/approved_by), ili null ako nije admin.
 async function verifyAdmin() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
