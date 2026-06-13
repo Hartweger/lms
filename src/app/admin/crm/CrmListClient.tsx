@@ -84,6 +84,18 @@ export default function CrmListClient({ contacts }: { contacts: CrmContact[] }) 
         </button>
       </div>
 
+      <details className="rounded border bg-gray-50 p-3 text-sm text-gray-600">
+        <summary className="cursor-pointer font-medium text-gray-800">Šta znače faze?</summary>
+        <ul className="mt-2 space-y-1">
+          <li><b>Nov</b> — upravo stigao upit, niko mu još nije odgovorio.</li>
+          <li><b>Kontaktiran</b> — javili smo se, čekamo njegov odgovor.</li>
+          <li><b>Zainteresovan</b> — pokazao interes, ali se još nije odlučio.</li>
+          <li><b>Ponuda</b> — poslali smo konkretnu ponudu/cenu, čekamo odluku.</li>
+          <li><b>Upisan</b> — kupio/upisao se (uspeh, ide u arhivu).</li>
+          <li><b>Izgubljen</b> — odustao ili neće (zatvoreno, ide u arhivu).</li>
+        </ul>
+      </details>
+
       <section>
         <h2 className="mb-2 text-lg font-semibold">Za danas ({zaDanas.length})</h2>
         {zaDanas.length === 0 ? (
