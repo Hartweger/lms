@@ -163,6 +163,22 @@ describe("buildFinansije - P&L po mesecima", () => {
       items: [{ course_id: "c-video", course_slug: "osnove-gramatike", title: "G", price: 99999 }] });
     expect(buildFinansije(f).totals.prihod).toBe(43000);
   });
+  it("istorijski WC prihod ulazi u mesečni grid po kategoriji, ne u sekcije", () => {
+    const f = fixture();
+    f.historyRevenue = [
+      { month: 3, kategorija: "video", amount: 11000 },
+      { month: 3, kategorija: "grupni", amount: 18000 },
+      { month: 3, kategorija: "individualni", amount: 22000 },
+    ];
+    const d = buildFinansije(f);
+    expect(d.months[2].prihod.video).toBe(11000);      // mart
+    expect(d.months[2].prihod.grupni).toBe(18000);
+    expect(d.months[2].prihod.individualni).toBe(22000);
+    expect(d.months[2].prihodUkupno).toBe(51000);
+    expect(d.totals.prihod).toBe(43000 + 51000);
+    // sekcije ostaju nativne - istorijski prihod ne pravi nove redove po kursevima
+    expect(d.kursevi.every((k) => k.course_id !== "")).toBe(true);
+  });
 });
 
 describe("buildFinansije - marže po kursevima", () => {

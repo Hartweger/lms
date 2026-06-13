@@ -29,6 +29,12 @@ export const EXPENSE_CATEGORY_LABELS: Record<ExpenseCategory, string> = {
 
 export interface FinOrderItem { course_id: string; course_slug: string; title: string; price: number }
 export interface FinOrder { id: string; user_id: string | null; created_at: string; total: number; items: FinOrderItem[] }
+/**
+ * Istorijski WooCommerce prihod, već agregiran po mesecu i kategoriji (tabela wc_revenue_monthly).
+ * Total po mesecu je autoritativan iz WC Analytics (date_paid, minus povraćaji) - poklapa se sa dashboardom.
+ * Ulazi samo u mesečni P&L i totale, ne u sekcije (nema LMS course_id/user_id veze).
+ */
+export interface FinMonthlyRevenue { month: number; kategorija: Kategorija; amount: number }
 export interface Allocation { course_id: string; course_slug: string; amount: number }
 export interface ExpenseRow {
   id: string; name: string; category: string; amount: number;
@@ -50,6 +56,7 @@ export function kategorijaForItem(slug: string, courseType: string | null | unde
   if (s.startsWith("video-") || courseType === "video") return "video";
   return "ostalo";
 }
+
 
 /**
  * Raspodela order.total na stavke proporcionalno cenama (popust se "razmaže").
@@ -90,6 +97,7 @@ export interface FinansijeInput {
   mesec: number | null;       // null = cela godina (filter za sekcije, P&L je uvek cela godina)
   nowKey: string;             // tekući "yyyy-mm", za mesečne troškove bez kraja
   orders: FinOrder[];         // SVE completed porudžbine (cela istorija - retencija)
+  historyRevenue?: FinMonthlyRevenue[]; // istorijski WC prihod po mesecu/kategoriji - samo mesečni P&L + totale
   courses: CourseInfo[];
   professors: ProfInfo[];
   lessons: LessonRow[];       // course_id = individual_enrollments.course_id (spojeno na strani servera)
@@ -209,6 +217,15 @@ export function buildFinansije(input: FinansijeInput): FinansijeData {
         mo.honorariUkupno += iznos;
       }
     }
+  }
+  // Istorijski WC prihod (wc_revenue_monthly): autoritativni mesečni total po kategoriji u grid.
+  // Bez sekcija (nema LMS course_id/user_id veze) - "Po kursevima/profesorkama" ostaju nativne.
+  for (const r of (input.historyRevenue ?? [])) {
+    const mo = months[r.month - 1];
+    if (!mo) continue;
+    const amount = Number(r.amount) || 0;
+    mo.prihod[r.kategorija] += amount;
+    mo.prihodUkupno += amount;
   }
   for (const l of input.lessons) {
     const mo = monthOf(l.lesson_date);

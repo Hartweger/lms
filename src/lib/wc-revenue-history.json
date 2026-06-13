@@ -1,0 +1,58 @@
+{
+  "2026": [
+    {
+      "year": 2026,
+      "month": 1,
+      "video": 308862,
+      "grupni": 259301,
+      "individualni": 635278,
+      "paket": 601859,
+      "ostalo": 0
+    },
+    {
+      "year": 2026,
+      "month": 2,
+      "video": 229107,
+      "grupni": 604316.2,
+      "individualni": 501337,
+      "paket": 393999,
+      "ostalo": 0
+    },
+    {
+      "year": 2026,
+      "month": 3,
+      "video": 238185,
+      "grupni": 305229,
+      "individualni": 791179,
+      "paket": 670475,
+      "ostalo": 0
+    },
+    {
+      "year": 2026,
+      "month": 4,
+      "video": 118096,
+      "grupni": 236640,
+      "individualni": 331078,
+      "paket": 249199,
+      "ostalo": 0
+    },
+    {
+      "year": 2026,
+      "month": 5,
+      "video": 230511,
+      "grupni": 332257,
+      "individualni": 540193,
+      "paket": 270850,
+      "ostalo": 0
+    },
+    {
+      "year": 2026,
+      "month": 6,
+      "video": 32177,
+      "grupni": 139419,
+      "individualni": 115413,
+      "paket": 120337,
+      "ostalo": 0
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 import { createAdminClient } from "@/lib/supabase/admin";
-import { buildFinansije, fillGroupCourseIds, monthKey, type ExpenseRow, type FinOrder } from "@/lib/finansije";
+import { buildFinansije, fillGroupCourseIds, monthKey, type ExpenseRow, type FinOrder, type FinMonthlyRevenue, type Kategorija } from "@/lib/finansije";
+import wcRevenueHistory from "@/lib/wc-revenue-history.json";
 import FinansijeClient from "./FinansijeClient";
 
 export const dynamic = "force-dynamic";
@@ -82,10 +83,19 @@ export default async function AdminFinansijePage({
   const indProfByOrderId: Record<string, string> = {};
   for (const e of enrollments) if (e.order_id && e.professor_id) indProfByOrderId[e.order_id] = e.professor_id;
 
+  // Istorijski WC prihod (statički JSON, autoritativan iz WC Analytics) → mesečni P&L. NH Academy već izuzet.
+  const KATEGORIJE_HIST: Kategorija[] = ["video", "grupni", "individualni", "paket", "ostalo"];
+  const histRows = (wcRevenueHistory as Record<string, { month: number; [k: string]: number }[]>)[String(year)] ?? [];
+  const historyRevenue: FinMonthlyRevenue[] = histRows.flatMap((row) =>
+    KATEGORIJE_HIST.map((k) => ({ month: row.month, kategorija: k, amount: Number(row[k]) || 0 }))
+      .filter((r) => r.amount !== 0)
+  );
+
   const data = buildFinansije({
     year, mesec,
     nowKey: monthKey(now.toISOString()),
     orders: completed,
+    historyRevenue,
     courses: coursesRes.data ?? [],
     professors: profsRes.data ?? [],
     lessons, sessions,
