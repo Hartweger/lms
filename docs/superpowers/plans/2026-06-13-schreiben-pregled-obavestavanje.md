@@ -627,6 +627,8 @@ git commit -m "feat(eseji): objava preko API rute + mejl učeniku (prof/admin)"
 
 ## Task 5: Osigurač — eseji 3+ dana u jutarnjem pregledu
 
+> ⏸️ **ODLOŽENO (odluka 13.06.2026).** Ne implementirati u ovom prolazu. Eseji bez profa ionako stižu adminu svaki dan kroz Task 3; osigurač hvata samo „prof zanemaruje esej 3+ dana", a još ne znamo da li se to dešava. Dodaje se kasnije ako se pokaže potreba (tada po mogućstvu preko `groupEssaysForDigest` iz Task 1, bez zasebnog join-a). Preskočiti na Task 6.
+
 **Files:**
 - Modify: `src/lib/email.ts` (`DailyBrief` tip + sekcija u `sendDailyAdminBrief`)
 - Modify: `src/app/api/cron/jutarnji-pregled/route.ts`
