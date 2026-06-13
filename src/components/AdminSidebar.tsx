@@ -21,6 +21,7 @@ const links = [
   { href: "/admin/napredak", label: "Napredak", indent: true },
   { href: "/admin/finansije", label: "Finansije" },
   { href: "/admin/naki", label: "NaKI & Smile" },
+  { href: "/admin/crm", label: "CRM" },
 ];
 
 export default function AdminSidebar() {
