@@ -1324,7 +1324,7 @@ ${linkovi}
 // Dnevni rezime: koliko Schreiben-a čeka pregled. Šalje se profesoru (njegovi učenici)
 // ili adminu (eseji bez dodeljenog profa). `link` vodi na odgovarajuću stranicu za pregled.
 export async function sendPendingEssaysDigest(o: {
-  to: string;
+  to: string | string[];
   recipientName: string;
   essays: { studentName: string; lessonTitle: string; submittedAt: string }[];
   forAdmin: boolean;

@@ -9,7 +9,7 @@ import { sendPendingEssaysDigest } from "@/lib/email";
 
 export const dynamic = "force-dynamic";
 
-const ADMIN_EMAILS = "info@hartweger.rs";
+const ADMIN_EMAILS = ["info@hartweger.rs", "natasa@hartweger.rs"];
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -20,6 +20,10 @@ export async function GET(request: NextRequest) {
   const isCron = authHeader === `Bearer ${process.env.CRON_SECRET}`;
   if (!isCron && !testEmail && !dryRun) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  if (testEmail && !testEmail.endsWith("@hartweger.rs")) {
+    return NextResponse.json({ error: "test mejl mora biti @hartweger.rs" }, { status: 400 });
   }
 
   const admin = createAdminClient();
@@ -62,7 +66,7 @@ export async function GET(request: NextRequest) {
   if (dryRun) {
     return NextResponse.json({
       dry: true,
-      profesori: byProfessor.map((g) => ({ professorId: g.professorId, broj: g.essays.length })),
+      profesori: byProfessor.map((g) => ({ broj: g.essays.length })),
       bezProfa: unassigned.length,
     });
   }
