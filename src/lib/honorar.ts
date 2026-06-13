@@ -1,5 +1,9 @@
 // src/lib/honorar.ts - čiste funkcije za mesečni obračun honorara. Bez I/O.
 
+/** Podrazumevane rate honorara (din) kad profesorka nema postavljenu vrednost. */
+export const DEFAULT_HONORAR_IND = 1400;
+export const DEFAULT_HONORAR_GRP = 1600;
+
 export interface HonorarResult {
   ind: number; grp: number;
   indTotal: number; grpTotal: number; total: number;

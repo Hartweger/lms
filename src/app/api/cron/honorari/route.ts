@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { computeHonorar, previousMonth, monthDateRange } from "@/lib/honorar";
+import { computeHonorar, previousMonth, monthDateRange, DEFAULT_HONORAR_IND, DEFAULT_HONORAR_GRP } from "@/lib/honorar";
 import { sendHonorarProfEmail, sendHonorarSummaryEmail } from "@/lib/email";
 
 // Mesečni cron (1. u mesecu): obračun honorara za PRETHODNI mesec + mejlovi.
@@ -43,13 +43,13 @@ export async function GET(request: NextRequest) {
         .eq("professor_id", p.id).eq("cancelled", false).gte("session_date", from).lt("session_date", toExclusive),
     ]);
     const ind = indCount ?? 0, grp = grpCount ?? 0;
-    const h = computeHonorar(ind, grp, p.honorar_ind ?? 1400, p.honorar_grp ?? 1600);
+    const h = computeHonorar(ind, grp, p.honorar_ind ?? DEFAULT_HONORAR_IND, p.honorar_grp ?? DEFAULT_HONORAR_GRP);
     if (ind + grp > 0) {
       summary.push({ name: p.full_name || p.email, ind, grp, total: h.total });
       grandTotal += h.total;
       if (p.email) {
         await sendHonorarProfEmail(p.email, p.full_name || "", {
-          label, ind, grp, rateInd: p.honorar_ind ?? 1400, rateGrp: p.honorar_grp ?? 1600,
+          label, ind, grp, rateInd: p.honorar_ind ?? DEFAULT_HONORAR_IND, rateGrp: p.honorar_grp ?? DEFAULT_HONORAR_GRP,
           indTotal: h.indTotal, grpTotal: h.grpTotal, total: h.total,
         });
         mailed++;

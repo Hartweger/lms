@@ -1,16 +1,13 @@
 // src/lib/professor-payable.ts
 // I/O: učitaj zarađeno (časovi + odobrene aktivnosti) i isplaćeno po profesorki, vrati saldo.
 import { createAdminClient } from "@/lib/supabase/admin";
-import { computeBalance, sumActivities, type BalanceResult } from "@/lib/honorar";
+import { computeBalance, sumActivities, type BalanceResult, DEFAULT_HONORAR_IND, DEFAULT_HONORAR_GRP } from "@/lib/honorar";
 
 export interface ProfPayable extends BalanceResult {
   professorId: string;
   name: string;
   email: string | null;
 }
-
-const DEFAULT_IND = 1400;
-const DEFAULT_GRP = 1600;
 
 /**
  * Saldo za jednu profesorku (ako je profId zadat) ili sve profesorke sa honorar konfiguracijom.
@@ -26,9 +23,9 @@ export async function loadPayables(profId?: string): Promise<ProfPayable[]> {
 
   const result: ProfPayable[] = [];
   for (const p of profs ?? []) {
-    const rateInd = p.honorar_ind ?? DEFAULT_IND;
-    const rateGrp = p.honorar_grp ?? DEFAULT_GRP;
-    const [{ count: indCount }, { count: grpCount }, { data: acts }, { data: pays }] = await Promise.all([
+    const rateInd = p.honorar_ind ?? DEFAULT_HONORAR_IND;
+    const rateGrp = p.honorar_grp ?? DEFAULT_HONORAR_GRP;
+    const [indRes, grpRes, actsRes, paysRes] = await Promise.all([
       admin.from("individual_lessons").select("*", { count: "exact", head: true })
         .eq("professor_id", p.id).lte("lesson_date", today),
       admin.from("group_sessions").select("*", { count: "exact", head: true })
@@ -36,6 +33,11 @@ export async function loadPayables(profId?: string): Promise<ProfPayable[]> {
       admin.from("professor_activities").select("amount, status").eq("professor_id", p.id),
       admin.from("professor_payments").select("amount").eq("professor_id", p.id),
     ]);
+    if (indRes.error || grpRes.error || actsRes.error || paysRes.error) {
+      console.error("[professor-payable] DB greška za", p.id, indRes.error ?? grpRes.error ?? actsRes.error ?? paysRes.error);
+    }
+    const indCount = indRes.count; const grpCount = grpRes.count;
+    const acts = actsRes.data; const pays = paysRes.data;
     const earnedLessons = (indCount ?? 0) * rateInd + (grpCount ?? 0) * rateGrp;
     const earnedActivities = sumActivities((acts ?? []) as { amount: number; status: "na_cekanju" | "odobreno" | "odbijeno" }[]);
     const paid = (pays ?? []).reduce((s, r) => s + (r.amount || 0), 0);

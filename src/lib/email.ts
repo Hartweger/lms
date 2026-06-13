@@ -741,12 +741,12 @@ export async function sendPaymentEmail(
       ? `Preostali saldo (još ti dugujemo): <strong>${fmt(opts.balance)} din</strong>.`
       : opts.balance < 0
         ? `Stanje: <strong>${fmt(-opts.balance)} din</strong> preplate.`
-        : `Saldo je izmiren — <strong>0 din</strong>.`;
+        : `Saldo je izmiren - <strong>0 din</strong>.`;
     await resend.emails.send({
       from: FROM,
       to: profEmail,
       replyTo: "info@hartweger.rs",
-      subject: `Isplata honorara — ${fmt(opts.amount)} din`,
+      subject: `Isplata honorara - ${fmt(opts.amount)} din`,
       html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
 <body style="font-family:sans-serif;line-height:1.6;color:#222">
 <p>Zdravo${ime ? ", " + esc(ime) : ""}!</p>

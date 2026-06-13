@@ -1,6 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { computeHonorar, previousMonth, monthDateRange, aggregateMonthly } from "./honorar";
-import { computeBalance, sumActivities } from "./honorar";
+import { computeHonorar, previousMonth, monthDateRange, aggregateMonthly, computeBalance, sumActivities } from "./honorar";
 import { computeSessionDates } from "./groups";
 
 describe("computeHonorar", () => {
