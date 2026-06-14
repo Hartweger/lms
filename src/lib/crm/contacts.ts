@@ -24,6 +24,17 @@ export async function upsertContact(
   const email = normalizeEmail(input.email);
   const instagram = input.instagram?.trim().replace(/^@/, "").toLowerCase() || null;
 
+  // Auto-poveži sa nalogom polaznika po mejlu (ako već nije prosleđen userId).
+  let userId = input.userId || null;
+  if (!userId && email) {
+    const { data: prof } = await admin
+      .from("user_profiles")
+      .select("id")
+      .ilike("email", email)
+      .maybeSingle();
+    if (prof?.id) userId = prof.id;
+  }
+
   // Učitaj kandidate (mali skup: po mejlu ili IG-u)
   const filters: string[] = [];
   if (email) filters.push(`email.ilike.${email}`);
@@ -49,7 +60,7 @@ export async function upsertContact(
     if (email) patch.email = email;
     if (instagram) patch.instagram_handle = instagram;
     if (input.level) patch.level = input.level;
-    if (input.userId) patch.user_id = input.userId;
+    if (userId) patch.user_id = userId;
     const { data: cur } = await admin
       .from("crm_contacts")
       .select("name,phone,level,user_id")
@@ -70,7 +81,7 @@ export async function upsertContact(
       name: input.name || null,
       phone: input.phone || null,
       instagram_handle: instagram,
-      user_id: input.userId || null,
+      user_id: userId,
       source: input.source,
       level: input.level || null,
       stage: "nov",

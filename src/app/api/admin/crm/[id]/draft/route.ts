@@ -27,8 +27,19 @@ export async function POST(_request: Request, { params }: { params: Promise<{ id
   const { id } = await params;
 
   const { data: contact } = await admin
-    .from("crm_contacts").select("name,level,email,instagram_handle").eq("id", id).single();
+    .from("crm_contacts").select("name,level,email,instagram_handle,user_id").eq("id", id).single();
   if (!contact) return NextResponse.json({ error: "Kontakt ne postoji." }, { status: 404 });
+
+  // Šta osoba već poseduje (da AI ne nudi ono što već ima)
+  let owned: string[] = [];
+  if (contact.user_id) {
+    const { data: access } = await admin
+      .from("course_access").select("courses(title)").eq("user_id", contact.user_id);
+    owned = (access ?? [])
+      .map((a: { courses: { title: string } | { title: string }[] | null }) =>
+        Array.isArray(a.courses) ? a.courses[0]?.title : a.courses?.title)
+      .filter((t): t is string => Boolean(t));
+  }
 
   const { data: rawInteractions } = await admin
     .from("crm_interactions")
@@ -51,6 +62,9 @@ export async function POST(_request: Request, { params }: { params: Promise<{ id
 
   const ime = contact.name || "lid";
   const nivo = contact.level ? `Procenjeni nivo: ${contact.level}.` : "Nivo nije poznat.";
+  const vecKupac = owned.length
+    ? `\n\nVAŽNO - OVA OSOBA JE VEĆ KUPAC i poseduje ove kurseve: ${owned.join(", ")}. NE nudi joj te kurseve ponovo. Umesto toga predloži logičan sledeći korak: viši nivo, dopunski sadržaj, ili obnovu pristupa ako ističe. Ako nema šta da se ponudi, napiši topao mejl za održavanje odnosa (pitaj kako napreduje).`
+    : "";
 
   const prompt = `Ti si Nataša Hartweger, vlasnica škole nemačkog jezika Hartweger. Pišeš predlog mejl-odgovora osobi koja se zainteresovala za kurs. Tvoj zadatak je da napišeš topao, profesionalan i konkretan odgovor na osnovu razgovora.
 
@@ -69,7 +83,7 @@ FORMATIRANJE (mejl se renderuje, pa formatiraj čitljivo):
 - Linkove piši kao gole URL-ove (postaće klikabilni automatski), ne u zagradama.
 - Ukupno kratko: pozdrav + ponuda + poziv na sledeći korak.
 
-KONTAKT: ${ime}. ${nivo}
+KONTAKT: ${ime}. ${nivo}${vecKupac}
 
 KATALOG KURSEVA I CENA:
 ${catalogText}

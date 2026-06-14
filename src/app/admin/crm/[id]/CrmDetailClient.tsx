@@ -14,7 +14,7 @@ export default function CrmDetailClient({
 }: {
   contact: CrmContact;
   interactions: CrmInteraction[];
-  courses: { course_id: string; expires_at: string | null }[];
+  courses: { title: string; expires_at: string | null }[];
 }) {
   const router = useRouter();
   const [stage, setStage] = useState<CrmStage>(contact.stage);
@@ -66,7 +66,14 @@ export default function CrmDetailClient({
     <div className="grid gap-6 md:grid-cols-3">
       <div className="space-y-4 md:col-span-2">
         <header className="rounded border p-4">
-          <h1 className="text-xl font-bold">{contact.name || "Bez imena"}</h1>
+          <h1 className="text-xl font-bold">
+            {contact.name || "Bez imena"}
+            {courses.length > 0 && (
+              <span className="ml-2 rounded bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700 align-middle">
+                ✅ Već kupac
+              </span>
+            )}
+          </h1>
           <div className="mt-1 text-sm text-gray-600">
             {contact.email && <div>✉ {contact.email}</div>}
             {contact.phone && <div>☎ {contact.phone}</div>}
@@ -144,9 +151,9 @@ export default function CrmDetailClient({
           {contact.user_id ? (
             courses.length ? (
               <ul className="text-sm">
-                {courses.map((c) => (
-                  <li key={c.course_id}>
-                    {c.course_id}{c.expires_at ? ` — ističe ${c.expires_at.slice(0, 10)}` : ""}
+                {courses.map((c, i) => (
+                  <li key={i}>
+                    {c.title}{c.expires_at ? ` — ističe ${c.expires_at.slice(0, 10)}` : ""}
                   </li>
                 ))}
               </ul>
