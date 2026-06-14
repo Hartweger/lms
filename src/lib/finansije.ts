@@ -35,6 +35,11 @@ export interface FinOrder { id: string; user_id: string | null; created_at: stri
  * Ulazi samo u mesečni P&L i totale, ne u sekcije (nema LMS course_id/user_id veze).
  */
 export interface FinMonthlyRevenue { month: number; kategorija: Kategorija; amount: number }
+/**
+ * Istorijski honorar po mesecu/profesorki (Natašin "Isplata" sheet, stvarne isplate za časove).
+ * ZAMENJUJE obračun iz migriranih časova za te mesece (koji je nepotpun). Samo mesečni grid + totali.
+ */
+export interface FinMonthlyHonorar { month: number; professor_id: string; amount: number }
 export interface Allocation { course_id: string; course_slug: string; amount: number }
 export interface ExpenseRow {
   id: string; name: string; category: string; amount: number;
@@ -102,6 +107,7 @@ export interface FinansijeInput {
   nowKey: string;             // tekući "yyyy-mm", za mesečne troškove bez kraja
   orders: FinOrder[];         // SVE completed porudžbine (cela istorija - retencija)
   historyRevenue?: FinMonthlyRevenue[]; // istorijski WC prihod po mesecu/kategoriji - samo mesečni P&L + totale
+  historyHonorari?: FinMonthlyHonorar[]; // istorijski honorar po mesecu/profesorki - zamenjuje časove za te mesece
   courses: CourseInfo[];
   professors: ProfInfo[];
   lessons: LessonRow[];       // course_id = individual_enrollments.course_id (spojeno na strani servera)
@@ -231,19 +237,29 @@ export function buildFinansije(input: FinansijeInput): FinansijeData {
     mo.prihod[r.kategorija] += amount;
     mo.prihodUkupno += amount;
   }
+  // Meseci sa istorijskim honorar override-om: za njih NE računamo časove (override ih zamenjuje).
+  const honorarOverrideMonths = new Set((input.historyHonorari ?? []).map((h) => h.month));
   for (const l of input.lessons) {
     const mo = monthOf(l.lesson_date);
-    if (!mo) continue;
+    if (!mo || honorarOverrideMonths.has(mo.month)) continue;
     const h = rateInd(l.professor_id);
     mo.honorari[l.professor_id] = (mo.honorari[l.professor_id] ?? 0) + h;
     mo.honorariUkupno += h;
   }
   for (const s of input.sessions) {
     const mo = monthOf(s.session_date);
-    if (!mo || !s.professor_id) continue;
+    if (!mo || honorarOverrideMonths.has(mo.month) || !s.professor_id) continue;
     const h = rateGrp(s.professor_id);
     mo.honorari[s.professor_id] = (mo.honorari[s.professor_id] ?? 0) + h;
     mo.honorariUkupno += h;
+  }
+  // Istorijski honorar (Isplata sheet) za jan-apr: zamenjuje časove u mesečnom gridu.
+  for (const h of (input.historyHonorari ?? [])) {
+    const mo = months[h.month - 1];
+    if (!mo) continue;
+    const amount = Number(h.amount) || 0;
+    mo.honorari[h.professor_id] = (mo.honorari[h.professor_id] ?? 0) + amount;
+    mo.honorariUkupno += amount;
   }
   for (const e of input.expenses) {
     for (const m of expenseMonthsInYear(e, input.year, input.nowKey)) {

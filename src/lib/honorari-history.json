@@ -1,0 +1,144 @@
+{
+  "2026": [
+    {
+      "year": 2026,
+      "month": 1,
+      "professor_id": "65a2d0e8-acbe-4dc1-bcd4-bb2df42c9b31",
+      "ime": "Hristina Šarčević Bulatović",
+      "amount": 25200
+    },
+    {
+      "year": 2026,
+      "month": 2,
+      "professor_id": "65a2d0e8-acbe-4dc1-bcd4-bb2df42c9b31",
+      "ime": "Hristina Šarčević Bulatović",
+      "amount": 34300
+    },
+    {
+      "year": 2026,
+      "month": 3,
+      "professor_id": "65a2d0e8-acbe-4dc1-bcd4-bb2df42c9b31",
+      "ime": "Hristina Šarčević Bulatović",
+      "amount": 49000
+    },
+    {
+      "year": 2026,
+      "month": 4,
+      "professor_id": "65a2d0e8-acbe-4dc1-bcd4-bb2df42c9b31",
+      "ime": "Hristina Šarčević Bulatović",
+      "amount": 40600
+    },
+    {
+      "year": 2026,
+      "month": 1,
+      "professor_id": "f555ef90-407d-486b-a288-576d4d461148",
+      "ime": "Katarina Todosijević",
+      "amount": 74280
+    },
+    {
+      "year": 2026,
+      "month": 2,
+      "professor_id": "f555ef90-407d-486b-a288-576d4d461148",
+      "ime": "Katarina Todosijević",
+      "amount": 105046
+    },
+    {
+      "year": 2026,
+      "month": 3,
+      "professor_id": "f555ef90-407d-486b-a288-576d4d461148",
+      "ime": "Katarina Todosijević",
+      "amount": 96480
+    },
+    {
+      "year": 2026,
+      "month": 4,
+      "professor_id": "f555ef90-407d-486b-a288-576d4d461148",
+      "ime": "Katarina Todosijević",
+      "amount": 71200
+    },
+    {
+      "year": 2026,
+      "month": 1,
+      "professor_id": "5b55ea68-5caf-4387-b5cf-017b19c67d37",
+      "ime": "Marija Radojković Stanojić",
+      "amount": 20600
+    },
+    {
+      "year": 2026,
+      "month": 2,
+      "professor_id": "5b55ea68-5caf-4387-b5cf-017b19c67d37",
+      "ime": "Marija Radojković Stanojić",
+      "amount": 29800
+    },
+    {
+      "year": 2026,
+      "month": 3,
+      "professor_id": "5b55ea68-5caf-4387-b5cf-017b19c67d37",
+      "ime": "Marija Radojković Stanojić",
+      "amount": 39200
+    },
+    {
+      "year": 2026,
+      "month": 4,
+      "professor_id": "5b55ea68-5caf-4387-b5cf-017b19c67d37",
+      "ime": "Marija Radojković Stanojić",
+      "amount": 54200
+    },
+    {
+      "year": 2026,
+      "month": 1,
+      "professor_id": "7e65e4f7-7f77-4a05-8e66-c5d1cce3d12e",
+      "ime": "Milica Vučić",
+      "amount": 102525
+    },
+    {
+      "year": 2026,
+      "month": 2,
+      "professor_id": "7e65e4f7-7f77-4a05-8e66-c5d1cce3d12e",
+      "ime": "Milica Vučić",
+      "amount": 112890
+    },
+    {
+      "year": 2026,
+      "month": 3,
+      "professor_id": "7e65e4f7-7f77-4a05-8e66-c5d1cce3d12e",
+      "ime": "Milica Vučić",
+      "amount": 142600
+    },
+    {
+      "year": 2026,
+      "month": 4,
+      "professor_id": "7e65e4f7-7f77-4a05-8e66-c5d1cce3d12e",
+      "ime": "Milica Vučić",
+      "amount": 92600
+    },
+    {
+      "year": 2026,
+      "month": 1,
+      "professor_id": "c703a053-5ef6-410f-bbab-a2f099568839",
+      "ime": "Suzana Marjanović",
+      "amount": 82200
+    },
+    {
+      "year": 2026,
+      "month": 2,
+      "professor_id": "c703a053-5ef6-410f-bbab-a2f099568839",
+      "ime": "Suzana Marjanović",
+      "amount": 52400
+    },
+    {
+      "year": 2026,
+      "month": 3,
+      "professor_id": "c703a053-5ef6-410f-bbab-a2f099568839",
+      "ime": "Suzana Marjanović",
+      "amount": 52000
+    },
+    {
+      "year": 2026,
+      "month": 4,
+      "professor_id": "c703a053-5ef6-410f-bbab-a2f099568839",
+      "ime": "Suzana Marjanović",
+      "amount": 49600
+    }
+  ]
+}

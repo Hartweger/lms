@@ -164,6 +164,25 @@ describe("buildFinansije - P&L po mesecima", () => {
       items: [{ course_id: "c-video", course_slug: "osnove-gramatike", title: "G", price: 99999 }] });
     expect(buildFinansije(f).totals.prihod).toBe(43000);
   });
+  it("istorijski honorar override zamenjuje časove za taj mesec", () => {
+    const f = fixture();
+    // jun u fixture-u ima honorare iz časova (Hristina 2800, Katarina 3600 = 6400)
+    f.historyHonorari = [
+      { month: 6, professor_id: "p-hristina", amount: 25200 },
+      { month: 6, professor_id: "p-katarina", amount: 74280 },
+    ];
+    const jun = buildFinansije(f).months[5];
+    expect(jun.honorari["p-hristina"]).toBe(25200); // override, NE 2800 iz časova
+    expect(jun.honorari["p-katarina"]).toBe(74280);
+    expect(jun.honorariUkupno).toBe(25200 + 74280); // časovi preskočeni
+  });
+  it("meseci bez override-a i dalje računaju honorare iz časova", () => {
+    const f = fixture();
+    f.historyHonorari = [{ month: 3, professor_id: "p-hristina", amount: 25200 }];
+    const d = buildFinansije(f);
+    expect(d.months[2].honorariUkupno).toBe(25200);       // mart: override
+    expect(d.months[5].honorariUkupno).toBe(2800 + 3600); // jun: i dalje časovi
+  });
   it("istorijski WC prihod ulazi u mesečni grid po kategoriji, ne u sekcije", () => {
     const f = fixture();
     f.historyRevenue = [

@@ -1,6 +1,7 @@
 import { createAdminClient } from "@/lib/supabase/admin";
-import { buildFinansije, fillGroupCourseIds, monthKey, type ExpenseRow, type FinOrder, type FinMonthlyRevenue, type Kategorija } from "@/lib/finansije";
+import { buildFinansije, fillGroupCourseIds, monthKey, type ExpenseRow, type FinOrder, type FinMonthlyRevenue, type FinMonthlyHonorar, type Kategorija } from "@/lib/finansije";
 import wcRevenueHistory from "@/lib/wc-revenue-history.json";
+import honorariHistory from "@/lib/honorari-history.json";
 import FinansijeClient from "./FinansijeClient";
 
 export const dynamic = "force-dynamic";
@@ -91,11 +92,16 @@ export default async function AdminFinansijePage({
       .filter((r) => r.amount !== 0)
   );
 
+  // Istorijski honorar (Isplata sheet) za jan-apr → zamenjuje obračun iz migriranih časova.
+  const honRows = (honorariHistory as Record<string, { month: number; professor_id: string; amount: number }[]>)[String(year)] ?? [];
+  const historyHonorari: FinMonthlyHonorar[] = honRows.map((r) => ({ month: r.month, professor_id: r.professor_id, amount: Number(r.amount) || 0 }));
+
   const data = buildFinansije({
     year, mesec,
     nowKey: monthKey(now.toISOString()),
     orders: completed,
     historyRevenue,
+    historyHonorari,
     courses: coursesRes.data ?? [],
     professors: profsRes.data ?? [],
     lessons, sessions,
