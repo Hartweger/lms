@@ -10,7 +10,9 @@ const CK = "ck_5fa42d3e78f75b6ddc9b166f70f0efddb3625322", CS = "cs_55c370aec2ab6
 const curlJson = (u) => JSON.parse(execFileSync("curl", ["-fsSL", "--max-time", "40", u], { maxBuffer: 5e7 }).toString());
 const NH = 51065; // NH Academy — drugi brend (natasahartweger.rs)
 const CATS = ["video", "grupni", "individualni", "paket", "ostalo"];
-const kat = (n) => { n = String(n || ""); if (/paket/i.test(n) && !/mesečni/i.test(n)) return "paket"; if (/grupni/i.test(n)) return "grupni"; if (/individualni/i.test(n)) return "individualni"; if (/video|fsp|fide|goethe|gramatik|prevo[đdj]|biografij/i.test(n)) return "video"; return "ostalo"; };
+// Mapiranje proizvod→kategorija prati WooCommerce taksonomiju: VIDEO ide PRVO (video paketi su pod
+// WP "Video kursevi"), individualni/mesečni paketi su "individualni", Prevođenje/biografija → ostalo.
+const kat = (n) => { n = String(n || ""); if (/video/i.test(n)) return "video"; if (/grupni/i.test(n)) return "grupni"; if (/individualni|mesečni/i.test(n)) return "individualni"; if (/paket/i.test(n)) return "paket"; return "ostalo"; };
 
 const YEAR = 2026;
 const MONTHS = [["01","31"],["02","28"],["03","31"],["04","30"],["05","31"],["06","30"]];

@@ -3,55 +3,55 @@
     {
       "year": 2026,
       "month": 1,
-      "video": 308862,
+      "video": 814450,
       "grupni": 259301,
-      "individualni": 635278,
-      "paket": 601859,
-      "ostalo": 0
+      "individualni": 712930,
+      "paket": 0,
+      "ostalo": 18619
     },
     {
       "year": 2026,
       "month": 2,
-      "video": 229107,
-      "grupni": 604316.2,
-      "individualni": 501337,
-      "paket": 393999,
-      "ostalo": 0
+      "video": 449681,
+      "grupni": 604317,
+      "individualni": 672103.2,
+      "paket": 0,
+      "ostalo": 2658
     },
     {
       "year": 2026,
       "month": 3,
-      "video": 238185,
+      "video": 596681,
       "grupni": 305229,
-      "individualni": 791179,
-      "paket": 670475,
+      "individualni": 1103158,
+      "paket": 0,
       "ostalo": 0
     },
     {
       "year": 2026,
       "month": 4,
-      "video": 118096,
+      "video": 319087,
       "grupni": 236640,
-      "individualni": 331078,
-      "paket": 249199,
+      "individualni": 379286,
+      "paket": 0,
       "ostalo": 0
     },
     {
       "year": 2026,
       "month": 5,
-      "video": 230511,
+      "video": 495975,
       "grupni": 332257,
       "individualni": 540193,
-      "paket": 270850,
-      "ostalo": 0
+      "paket": 0,
+      "ostalo": 5386
     },
     {
       "year": 2026,
       "month": 6,
-      "video": 32177,
+      "video": 99424,
       "grupni": 139419,
-      "individualni": 115413,
-      "paket": 120337,
+      "individualni": 168503,
+      "paket": 0,
       "ostalo": 0
     }
   ]
