@@ -35,6 +35,19 @@ export async function upsertContact(
     if (prof?.id) userId = prof.id;
   }
 
+  // Aktivan kupac (ima bar jedan važeći pristup) → ne vodi se kao svež lid, ide u „upisan".
+  let isActiveCustomer = false;
+  if (userId) {
+    const { data: acc } = await admin
+      .from("course_access")
+      .select("expires_at")
+      .eq("user_id", userId);
+    const nowMs = Date.now();
+    isActiveCustomer = (acc ?? []).some(
+      (a: { expires_at: string | null }) => a.expires_at === null || new Date(a.expires_at).getTime() > nowMs,
+    );
+  }
+
   // Učitaj kandidate (mali skup: po mejlu ili IG-u)
   const filters: string[] = [];
   if (email) filters.push(`email.ilike.${email}`);
@@ -61,6 +74,7 @@ export async function upsertContact(
     if (instagram) patch.instagram_handle = instagram;
     if (input.level) patch.level = input.level;
     if (userId) patch.user_id = userId;
+    if (isActiveCustomer) patch.stage = "upisan";
     const { data: cur } = await admin
       .from("crm_contacts")
       .select("name,phone,level,user_id")
@@ -84,7 +98,7 @@ export async function upsertContact(
       user_id: userId,
       source: input.source,
       level: input.level || null,
-      stage: "nov",
+      stage: isActiveCustomer ? "upisan" : "nov",
       last_interaction_at: now,
     })
     .select("id")
