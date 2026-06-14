@@ -47,13 +47,17 @@ export function monthKey(dateStr: string): string {
   return String(dateStr).slice(0, 7);
 }
 
-/** Kategorija stavke: prefiks slug-a, pa courses.course_type kao fallback. */
+/**
+ * Kategorija stavke po course_type, pa prefiks slug-a kao fallback.
+ * Paketi se NE prikazuju kao zaseban red - rutiraju se po tipu: video-paketi → "video",
+ * individualni/mesečni paketi → "individualni" (usklađeno sa WooCommerce taksonomijom).
+ */
 export function kategorijaForItem(slug: string, courseType: string | null | undefined): Kategorija {
   const s = String(slug ?? "");
-  if (s.startsWith("paket")) return "paket";
   if (s.startsWith("grupni-") || courseType === "group") return "grupni";
   if (courseType === "individual") return "individualni";
   if (s.startsWith("video-") || courseType === "video") return "video";
+  if (s.startsWith("paket")) return "video"; // paket-bundle bez eksplicitnog tipa = video paket
   return "ostalo";
 }
 

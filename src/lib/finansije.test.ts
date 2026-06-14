@@ -12,14 +12,15 @@ describe("kategorijaForItem", () => {
   it("prepoznaje kategorije po slug-u", () => {
     expect(kategorijaForItem("video-a1", null)).toBe("video");
     expect(kategorijaForItem("grupni-a1", null)).toBe("grupni");
-    expect(kategorijaForItem("paket-a1-a2", null)).toBe("paket");
+    expect(kategorijaForItem("paket-a1-a2", null)).toBe("video"); // paketi → video (nema zaseban Paketi red)
   });
   it("koristi course_type kad slug nije prefiksiran", () => {
     expect(kategorijaForItem("nemacki-1na1-a1", "individual")).toBe("individualni");
     expect(kategorijaForItem("osnove-gramatike", "video")).toBe("video");
   });
-  it("paket ima prednost nad course_type", () => {
-    expect(kategorijaForItem("paket-a1-a2", "video")).toBe("paket");
+  it("paket-proizvodi idu po tipu: video-paket→video, 1:1 paket→individualni", () => {
+    expect(kategorijaForItem("paket-a1-a2", "video")).toBe("video");
+    expect(kategorijaForItem("paket-nivo-a1-individualni-standard", "individual")).toBe("individualni");
   });
   it("nepoznato → ostalo", () => {
     expect(kategorijaForItem("nesto", null)).toBe("ostalo");
