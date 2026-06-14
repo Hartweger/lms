@@ -38,4 +38,16 @@ describe("parseIngest", () => {
     const r = parseIngest({ email: "{{email}}", phone: "{{phone}}", instagram_handle: "{{ig_username}}", channel: "instagram" });
     expect(r.ok).toBe(false);
   });
+  it("prihvata mejl kanal sa email + subject", () => {
+    const r = parseIngest({ channel: "mejl", email: "ana@x.rs", name: "Ana", subject: "Pitanje o B1", message: "Koliko traje?" });
+    expect(r.ok).toBe(true);
+    if (r.ok) {
+      expect(r.value.channel).toBe("mejl");
+      expect(r.value.subject).toBe("Pitanje o B1");
+    }
+  });
+  it("odbija mejl kanal bez email-a", () => {
+    const r = parseIngest({ channel: "mejl", name: "Ana", message: "x" });
+    expect(r.ok).toBe(false);
+  });
 });

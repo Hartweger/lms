@@ -33,7 +33,7 @@ export async function POST(request: Request) {
     contactId,
     channel: v.channel,
     direction: "dolazna",
-    summary: `Poruka sa ${v.channel}`,
+    summary: v.subject || `Poruka sa ${v.channel}`,
     body: v.message,
   });
   return NextResponse.json({ ok: true, contact_id: contactId });

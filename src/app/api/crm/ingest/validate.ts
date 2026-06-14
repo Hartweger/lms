@@ -1,7 +1,7 @@
-// Kanali koje ManyChat šalje — svi su validni i kao CrmChannel i kao CrmSource.
-export type IngestChannel = "instagram" | "whatsapp" | "manychat";
+// Kanali ingesta: ManyChat (instagram/whatsapp/manychat) + Gmail/Apps Script (mejl).
+export type IngestChannel = "instagram" | "whatsapp" | "manychat" | "mejl";
 
-const VALID: IngestChannel[] = ["instagram", "whatsapp", "manychat"];
+const VALID: IngestChannel[] = ["instagram", "whatsapp", "manychat", "mejl"];
 
 export interface IngestValue {
   email: string | null;
@@ -9,6 +9,7 @@ export interface IngestValue {
   phone: string | null;
   instagram: string | null;
   message: string | null;
+  subject: string | null;
   channel: IngestChannel;
 }
 
@@ -35,7 +36,10 @@ export function parseIngest(body: unknown): ParseResult {
   const email = str(b.email);
   const phone = str(b.phone);
   const instagram = str(b.instagram_handle ?? b.instagram);
-  if (!email && !phone && !instagram) {
+  // Za mejl kanal email je obavezan (prirodni ključ); za ostale dovoljan je bilo koji identifikator.
+  if (channel === "mejl") {
+    if (!email) return { ok: false, error: "Mejl kanal zahteva email." };
+  } else if (!email && !phone && !instagram) {
     return { ok: false, error: "Nedostaje identifikator (mejl/telefon/instagram)." };
   }
   return {
@@ -46,6 +50,7 @@ export function parseIngest(body: unknown): ParseResult {
       phone,
       instagram,
       message: str(b.message),
+      subject: str(b.subject),
       channel: channel as IngestChannel,
     },
   };
