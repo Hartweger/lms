@@ -17,7 +17,12 @@ export type ParseResult =
   | { ok: false; error: string };
 
 function str(v: unknown): string | null {
-  return typeof v === "string" && v.trim() ? v.trim().slice(0, 4000) : null;
+  if (typeof v !== "string") return null;
+  const t = v.trim();
+  if (!t) return null;
+  // ManyChat prazno polje renderuje kao neispunjen token, npr. "{{email}}" — tretiraj kao prazno.
+  if (/^\{\{[^}]*\}\}$/.test(t)) return null;
+  return t.slice(0, 4000);
 }
 
 export function parseIngest(body: unknown): ParseResult {

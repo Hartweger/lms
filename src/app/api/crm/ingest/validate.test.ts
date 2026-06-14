@@ -22,4 +22,20 @@ describe("parseIngest", () => {
     const r = parseIngest({ phone: "+38160", message: "zdravo", channel: "whatsapp" });
     expect(r.ok).toBe(true);
   });
+  it("ignoriše neispunjene ManyChat tokene ({{phone}}, {{email}})", () => {
+    const r = parseIngest({
+      instagram_handle: "marko", message: "ćao", channel: "instagram",
+      email: "{{email}}", phone: "{{phone}}",
+    });
+    expect(r.ok).toBe(true);
+    if (r.ok) {
+      expect(r.value.email).toBeNull();
+      expect(r.value.phone).toBeNull();
+      expect(r.value.instagram).toBe("marko");
+    }
+  });
+  it("odbija kad su svi identifikatori neispunjeni tokeni", () => {
+    const r = parseIngest({ email: "{{email}}", phone: "{{phone}}", instagram_handle: "{{ig_username}}", channel: "instagram" });
+    expect(r.ok).toBe(false);
+  });
 });
