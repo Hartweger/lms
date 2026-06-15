@@ -1,7 +1,7 @@
 // src/app/test-nivoa/EinstufungQuiz.tsx
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { HALF_LEVELS, getQuestionsForLevel, type HalfLevel } from "./lib/questions";
 import { scoreBlock, shouldContinue, calculateResult, type BlockScore, type TestResult } from "./lib/scoring";
 import QuizIntro from "./components/QuizIntro";
@@ -10,6 +10,12 @@ import QuizQuestion from "./components/QuizQuestion";
 import QuizLevelTransition from "./components/QuizLevelTransition";
 import QuizEmailGate from "./components/QuizEmailGate";
 import QuizResult from "./components/QuizResult";
+
+// GA4 event helper (gtag globalno učitan u layout.tsx)
+function gaEvent(event: string, params?: Record<string, unknown>) {
+  const w = window as unknown as { gtag?: (...a: unknown[]) => void };
+  if (typeof w.gtag === "function") w.gtag("event", event, params || {});
+}
 
 type Phase = "intro" | "question" | "transition" | "email" | "result";
 
@@ -23,10 +29,25 @@ export default function EinstufungQuiz() {
   const [result, setResult] = useState<TestResult | null>(null);
   const [showFullResult, setShowFullResult] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [emailCaptured, setEmailCaptured] = useState(false);
+  const completedFiredRef = useRef(false);
 
   const currentLevel = HALF_LEVELS[currentLevelIndex];
   const currentQuestions = getQuestionsForLevel(currentLevel);
   const currentQuestion = currentQuestions[currentQuestionIndex];
+
+  // GA4: jednom okini event kad se test završi (za funnel testiranje → kupovina)
+  useEffect(() => {
+    if (phase === "result" && result && !completedFiredRef.current) {
+      completedFiredRef.current = true;
+      gaEvent("test_completed", {
+        recommended_level: result.recommendedLevel,
+        score: result.totalCorrect,
+        total_questions: result.totalQuestions,
+        email_captured: emailCaptured,
+      });
+    }
+  }, [phase, result, emailCaptured]);
 
   const handleStart = useCallback(() => {
     setPhase("question");
@@ -104,6 +125,7 @@ export default function EinstufungQuiz() {
       // Silently fail - still show result
     }
     setIsSubmitting(false);
+    setEmailCaptured(true);
     setShowFullResult(true);
     setPhase("result");
   }, [result]);
