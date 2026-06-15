@@ -11,7 +11,7 @@ export type SmileConfig = {
 
 export const DEFAULT_SMILE_CONFIG: SmileConfig = {
   enabled: true,
-  nudge: false,
+  nudge: true,
   leadCapture: false,
   coupon: true,
   model: SMILE_MODEL,
