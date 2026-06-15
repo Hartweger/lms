@@ -4,6 +4,7 @@ import { sendWelcomeEmail, sendGrupniWelcomeEmail, sendProfNewStudentEmail, send
 import { nivoForSlug } from "@/lib/course-nivo";
 import { computeSeats, pickOpenGroupForNivo } from "@/lib/groups";
 import { callGas } from "@/lib/gas";
+import { sendGa4Purchase } from "@/lib/ga4-mp";
 
 interface OrderItem { course_id: string; course_slug: string; title: string; price: number; }
 
@@ -184,6 +185,8 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
   }
 
   await admin.from("orders").update({ payment_status: "completed", granted: true }).eq("id", orderId);
+  // GA4 prihod (server-side) za SVE načine plaćanja — klijentski purchase hvata samo karticu.
+  await sendGa4Purchase(order);
   // Generički welcome šaljemo samo ako nismo već poslali grupni/individualni (da polaznik dobije jedan mejl).
   if (!grupniWelcomeSent && !individualWelcomeSent) await sendWelcomeEmail(order.email, order.full_name, items.map((i) => i.title));
   return { ok: true };
