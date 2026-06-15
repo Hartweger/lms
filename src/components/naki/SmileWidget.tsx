@@ -99,7 +99,7 @@ export default function SmileWidget() {
     if (!cfg?.enabled || !cfg.nudge || open) return;
     const seen = ssGet("smile_nudge_seen");
     if (seen) return;
-    const t = setTimeout(() => setShowNudge(true), 9000);
+    const t = setTimeout(() => setShowNudge(true), 4000);
     return () => clearTimeout(t);
   }, [cfg, open]);
 
@@ -172,6 +172,14 @@ export default function SmileWidget() {
       {showNudge && !open && (
         <button onClick={toggle} style={{ position: "fixed", bottom: 86, right: 20, zIndex: 9998, background: "#fff", border: "1px solid #e2e5e9", borderRadius: 14, padding: "10px 14px", fontSize: 13.5, color: "#0c0d24", boxShadow: "0 4px 18px rgba(0,0,0,.12)", maxWidth: 220, cursor: "pointer", textAlign: "left" }}>
           Treba ti pomoć oko izbora kursa? 😊
+        </button>
+      )}
+
+      {/* Labela uz kružić - da se odmah vidi da je pomoć (samo kad je panel zatvoren) */}
+      {!open && (
+        <button onClick={toggle} className="smile-label" aria-label="Razgovaraj sa Smile" style={{ position: "fixed", bottom: 31, right: 86, zIndex: 9998, background: "#fff", border: "1px solid #e2e5e9", borderRadius: 20, padding: "8px 14px", fontSize: 13, fontWeight: 600, color: "#0c0d24", boxShadow: "0 2px 14px rgba(0,0,0,.12)", cursor: "pointer", whiteSpace: "nowrap", display: "flex", alignItems: "center", gap: 6 }}>
+          <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 22, height: 22, borderRadius: "50%", background: CORAL }}><SmileFace size={16} /></span>
+          Imaš pitanje? 💬
         </button>
       )}
 
