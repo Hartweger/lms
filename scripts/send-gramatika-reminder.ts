@@ -1,5 +1,5 @@
 /**
- * Blagi PODSETNIK Gramatika kupcima koji se JOŠ NISU ulogovali na kurs.hartweger.rs.
+ * Blagi PODSETNIK Gramatika kupcima koji se JOŠ NISU ulogovali na www.hartweger.rs.
  * Originalni mejl poslat 2026-06-02. Ovo gađa samo one koji imaju nalog ali se nikad nisu ulogovali.
  *
  *   npx tsx scripts/send-gramatika-reminder.ts                              # dry-run (lista neulogovanih)
@@ -19,7 +19,7 @@ const sb = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPAB
 
 const TEST = process.argv.includes("--test");
 const SEND = process.argv.includes("--send");
-const FROM = "Hartweger <kurs@hartweger.rs>";
+const FROM = "Hartweger <info@hartweger.rs>";
 const TEST_TO = "info@hartweger.rs";
 const resend = TEST || SEND ? new Resend(process.env.RESEND_API_KEY!) : null;
 
@@ -51,10 +51,10 @@ function buildEmail(name: string): string {
 <body style="font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a2e;background:#f8f9fa;margin:0;padding:0;">
   <div style="max-width:520px;margin:0 auto;padding:40px 20px;">
     <div style="background:white;border-radius:12px;padding:32px;box-shadow:0 1px 3px rgba(0,0,0,0.08);">
-      <div style="text-align:center;margin-bottom:24px;"><img src="https://kurs.hartweger.rs/logo.jpg" alt="Hartweger" style="width:120px;height:auto;"/></div>
+      <div style="text-align:center;margin-bottom:24px;"><img src="https://www.hartweger.rs/logo.jpg" alt="Hartweger" style="width:120px;height:auto;"/></div>
       <h1 style="font-size:20px;margin:0 0 16px;">Zdravo, ${name || "draga koleginice/kolega"}!</h1>
       <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 16px;">
-        Pre par dana poslala sam ti mejl da se tvoj kurs <strong>Gramatika A2–B1</strong> preselio na novu platformu — <a href="https://kurs.hartweger.rs" style="color:#4fb1d3;text-decoration:none;font-weight:600;">kurs.hartweger.rs</a>. Vidim da se još nisi prijavio/la, pa te samo blago podsećam — tvoj pristup čeka, ništa nisi izgubio/la. 😊
+        Pre par dana poslala sam ti mejl da se tvoj kurs <strong>Gramatika A2–B1</strong> preselio na novu platformu — <a href="https://www.hartweger.rs" style="color:#4fb1d3;text-decoration:none;font-weight:600;">www.hartweger.rs</a>. Vidim da se još nisi prijavio/la, pa te samo blago podsećam — tvoj pristup čeka, ništa nisi izgubio/la. 😊
       </p>
       <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 8px;"><strong>Prijava traje minut:</strong></p>
       <ol style="font-size:14px;line-height:1.7;color:#444;margin:0 0 20px;padding-left:20px;">
@@ -63,7 +63,7 @@ function buildEmail(name: string): string {
         <li>Stiže ti link za prijavu na email — klikni i ušao/la si!</li>
       </ol>
       <div style="text-align:center;margin:24px 0;">
-        <a href="https://kurs.hartweger.rs/prijava" style="display:inline-block;background:#4fb1d3;color:white;padding:14px 32px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;">Prijavi se na novu platformu</a>
+        <a href="https://www.hartweger.rs/prijava" style="display:inline-block;background:#4fb1d3;color:white;padding:14px 32px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;">Prijavi se na novu platformu</a>
       </div>
       <div style="background:#f0faf0;border-left:3px solid #34d399;border-radius:6px;padding:14px 16px;margin:0 0 20px;">
         <div style="font-size:14px;font-weight:700;margin-bottom:6px;">Šta te čeka u kursu?</div>

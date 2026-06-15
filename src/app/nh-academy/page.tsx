@@ -235,7 +235,7 @@ export default function NhAcademyPage() {
             </ul>
 
             <Link
-              href="mailto:kurs@hartweger.rs?subject=NH Academy - upis"
+              href="mailto:info@hartweger.rs?subject=NH Academy - upis"
               className="inline-block w-full bg-koral text-white px-8 py-3.5 rounded-xl font-semibold hover:bg-koral-dark transition-colors shadow-lg shadow-koral/20"
             >
               Upiši se - 550&euro;

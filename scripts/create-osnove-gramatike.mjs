@@ -176,5 +176,5 @@ for (const g of grants) {
 }
 console.log(`  ✓ course_access: ${inserted} novih, ${skipped} već postojalo (od ${grants.length} uparenih kupaca)`);
 
-console.log("\n✓ Gotovo. Proveri: https://kurs.hartweger.rs/kursevi/" + COURSE.slug);
+console.log("\n✓ Gotovo. Proveri: https://www.hartweger.rs/kursevi/" + COURSE.slug);
 console.log("⚠ Smoke test: otvori lekciju i potvrdi da se Vimeo " + VIMEO_ID + " pušta (stari video — proveri da nije domenski zaključan).");

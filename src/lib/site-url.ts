@@ -1,6 +1,6 @@
 // Jedan izvor istine za javni domen sajta.
-// Default je produkcioni domen www.hartweger.rs (flip sa kurs.hartweger.rs obavljen -
-// stari domen sada 308-redirektuje na www). Env `NEXT_PUBLIC_SITE_URL` ga overriduje.
+// Default je produkcioni domen www.hartweger.rs.
+// Env `NEXT_PUBLIC_SITE_URL` ga overriduje.
 //
 // NAPOMENA: koristimo eksplicitnu proveru praznog stringa, NE `?? fallback`.
 // Na produkciji je env trenutno postavljen na "" (prazan string), a `??` hvata

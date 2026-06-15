@@ -18,7 +18,7 @@ function doPost(e) {
     "Preporučeni nivo: " + data.level + "\n" +
     "Rezultat: " + data.score + "\n" +
     "Detalji: " + data.details + "\n\n" +
-    "Pogledaj sve rezultate: https://kurs.hartweger.rs/admin/test-nivoa";
+    "Pogledaj sve rezultate: https://www.hartweger.rs/admin/test-nivoa";
 
   GmailApp.sendEmail("natasa@hartweger.rs", subject, body);
 

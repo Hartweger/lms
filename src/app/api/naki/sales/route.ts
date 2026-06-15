@@ -120,7 +120,7 @@ export async function POST(request: Request) {
     try {
       const resend = new Resend(process.env.RESEND_API_KEY);
       await resend.emails.send({
-        from: "Smile <kurs@hartweger.rs>",
+        from: "Smile <info@hartweger.rs>",
         to: "info@hartweger.rs",
         subject: "Smile · Kupovni signal sa sajta",
         text: `Korisnik je pitao:\n\n${last.content}\n\nSmile je odgovorio:\n${reply}\n\n---\nSmile · Hartweger sajt`,

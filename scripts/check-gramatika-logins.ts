@@ -1,5 +1,5 @@
 /**
- * Provera: koliko Gramatika kupaca (kojima je danas poslat mejl) se ulogovalo na kurs.hartweger.rs.
+ * Provera: koliko Gramatika kupaca (kojima je danas poslat mejl) se ulogovalo na www.hartweger.rs.
  *   npx tsx scripts/check-gramatika-logins.ts
  */
 import { createClient } from "@supabase/supabase-js";

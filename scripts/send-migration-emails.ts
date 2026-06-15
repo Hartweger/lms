@@ -18,7 +18,7 @@ const supabase = createClient(
 
 const DRY_RUN = process.argv.includes("--dry-run");
 const resend = DRY_RUN ? null : new Resend(process.env.RESEND_API_KEY!);
-const FROM = "Hartweger <kurs@hartweger.rs>";
+const FROM = "Hartweger <info@hartweger.rs>";
 
 // A1 course slugs
 const A1_SLUGS = ["nemacki-a1-1", "nemacki-a1-2"];
@@ -176,7 +176,7 @@ function buildMigrationEmail(name: string, courses: string[], expiresAt: string)
     <div style="background: white; border-radius: 12px; padding: 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.08);">
 
       <div style="text-align: center; margin-bottom: 24px;">
-        <img src="https://kurs.hartweger.rs/logo.jpg" alt="Hartweger" style="width: 120px; height: auto;" />
+        <img src="https://www.hartweger.rs/logo.jpg" alt="Hartweger" style="width: 120px; height: auto;" />
       </div>
 
       <h1 style="font-size: 20px; color: #1a1a2e; margin: 0 0 16px;">
@@ -184,7 +184,7 @@ function buildMigrationEmail(name: string, courses: string[], expiresAt: string)
       </h1>
 
       <p style="font-size: 15px; line-height: 1.6; color: #444; margin: 0 0 16px;">
-        Vaš kurs nemačkog se sada nalazi na <strong>novoj platformi</strong> — <a href="https://kurs.hartweger.rs" style="color: #4fb1d3; text-decoration: none; font-weight: 600;">kurs.hartweger.rs</a>. Platforma radi u svakom browseru, na telefonu i na računaru. Brža je, preglednija i prilagođena za učenje u pokretu.
+        Vaš kurs nemačkog se sada nalazi na <strong>novoj platformi</strong> — <a href="https://www.hartweger.rs" style="color: #4fb1d3; text-decoration: none; font-weight: 600;">www.hartweger.rs</a>. Platforma radi u svakom browseru, na telefonu i na računaru. Brža je, preglednija i prilagođena za učenje u pokretu.
       </p>
 
       <div style="background: #f8fcfd; border-left: 3px solid #4fb1d3; border-radius: 6px; padding: 14px 16px; margin: 0 0 20px;">
@@ -203,7 +203,7 @@ function buildMigrationEmail(name: string, courses: string[], expiresAt: string)
       </ol>
 
       <div style="text-align: center; margin: 24px 0;">
-        <a href="https://kurs.hartweger.rs/prijava" style="display: inline-block; background: #4fb1d3; color: white; padding: 14px 32px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 15px;">
+        <a href="https://www.hartweger.rs/prijava" style="display: inline-block; background: #4fb1d3; color: white; padding: 14px 32px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 15px;">
           Prijavi se na novu platformu
         </a>
       </div>
@@ -232,7 +232,7 @@ function buildMigrationEmail(name: string, courses: string[], expiresAt: string)
         <p style="font-size: 13px; line-height: 1.5; color: #666; margin: 0 0 12px;">
           Pristupajte lekcijama direktno sa početnog ekrana — bez otvaranja browsera. Izgleda kao prava aplikacija!
         </p>
-        <a href="https://kurs.hartweger.rs/instaliraj" style="display: inline-block; background: white; color: #4fb1d3; border: 1px solid #4fb1d3; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 13px;">
+        <a href="https://www.hartweger.rs/instaliraj" style="display: inline-block; background: white; color: #4fb1d3; border: 1px solid #4fb1d3; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 13px;">
           Kako da instaliram →
         </a>
       </div>
