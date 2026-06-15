@@ -6,7 +6,17 @@
 // (steal: true) - ugrađeni recovery, vidi supabase/supabase#42505.
 // Tab-žrtva tada dobije NavigatorLockAcquireTimeoutError; sama
 // biblioteka kaže da je benigna i da je pozivaoci treba da filtriraju.
+//
+// In-app browseri (Instagram/Facebook WebView na Androdu) ubacuju svoj
+// instrumentacioni skript (navigation_performance_logger_android) koji pri
+// napuštanju stranice zove svoj native Java most. Kad se WebView ruši, taj
+// Java objekat više ne postoji -> "Java object is gone". Nije naš kod
+// (jedini naš frejm je generički event handler), benigno, dolazi sa
+// app://... izvora. Filtriramo da ne troši kvotu/šum.
 export const SENTRY_IGNORE_ERRORS: (string | RegExp)[] = [
   /was released because another request stole it/,
   /Acquiring an exclusive Navigator LockManager lock/,
+  /Java object is gone/,
+  /Java exception was raised during method invocation/,
+  /enableButtonsClickedMetaDataLogging/,
 ];
