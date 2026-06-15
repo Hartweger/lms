@@ -188,20 +188,6 @@ export default function AdminGrupePage() {
     if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  // Nova generacija - isprazni prijave (0/6) + NOV Meet/beleške.
-  async function novaGeneracija() {
-    if (!form?.id) return;
-    if (!confirm("NOVA generacija?\n\nPRAZNI broj upisanih na 0 i pravi NOV Meet + nove beleške (novi ciklus). Pristup sadržaju prethodnim polaznicima OSTAJE. Koristi kad prethodna grupa završi/popuni.")) return;
-    setSaving(true);
-    const r = await fetch(`/api/admin/grupe/${form.id}/nova-generacija`, { method: "POST" });
-    const j = await r.json();
-    setSaving(false);
-    if (!r.ok) { alert("Greška: " + j.error); return; }
-    alert("Nova generacija otvorena! ✅ (0/6)\n\nMeet: " + (j.meetLink || "-") + "\nBeleške: " + (j.notesUrl || "-"));
-    cancelEdit();
-    fetchGroups();
-  }
-
   async function addMember() {
     if (!form?.id) return;
     const r = await fetch(`/api/admin/grupe/${form.id}/enroll`, {
@@ -454,15 +440,6 @@ export default function AdminGrupePage() {
                   title="Napravi event+Meet ili pomeri postojeći na nove datume (isti Meet). Prijave ostaju."
                 >
                   Napravi / osveži termin
-                </button>
-                <button
-                  type="button"
-                  onClick={novaGeneracija}
-                  disabled={saving}
-                  className="bg-amber-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 disabled:opacity-50"
-                  title="Isprazni prijave (0/6) + nov Meet/beleške (novi ciklus)"
-                >
-                  Nova generacija
                 </button>
               </>
             )}
