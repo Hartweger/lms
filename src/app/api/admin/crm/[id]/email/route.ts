@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { logInteraction } from "@/lib/crm/contacts";
 
-const FROM = "Hartweger <kurs@hartweger.rs>";
+const FROM = "Hartweger <info@hartweger.rs>";
 
 async function requireAdmin() {
   const supabase = await createClient();

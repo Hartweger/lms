@@ -8,7 +8,7 @@
  * domenu i padne (exit 1) ako bilo koja vrati ne-200 ili "server error" marker.
  *
  * Pokretanje:
- *   node scripts/smoke-deploy.mjs                      # default https://kurs.hartweger.rs
+ *   node scripts/smoke-deploy.mjs                      # default https://www.hartweger.rs
  *   node scripts/smoke-deploy.mjs https://<preview>... # drugi domen
  *
  * Supabase URL/anon ključ se čitaju iz .env.local / .env.production / process.env

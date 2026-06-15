@@ -51,7 +51,7 @@ console.log(`<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"><style>
 </style></head><body>
   <div class="head">
     ${logoData ? `<img src="${logoData}" alt="Hartweger">` : ""}
-    <div><div class="t">${esc(ws.title)}</div><div class="s">Hartweger — Škola nemačkog jezika · kurs.hartweger.rs · ${ws.items.length} reči</div></div>
+    <div><div class="t">${esc(ws.title)}</div><div class="s">Hartweger — Škola nemačkog jezika · www.hartweger.rs · ${ws.items.length} reči</div></div>
   </div>
   <div class="bar"></div>
   <div class="grid">

@@ -1,5 +1,5 @@
 /**
- * Staged obaveštavanje migriranih korisnika o novoj platformi (kurs.hartweger.rs).
+ * Staged obaveštavanje migriranih korisnika o novoj platformi (www.hartweger.rs).
  * Publika: korisnici sa AKTIVNIM course_access (port-later bez pristupa su automatski izostavljeni).
  * "Ne dupliraj": dedup je iz Resend loga — preskaču se svi kojima je već poslat "selidba/bolji" mejl
  *   (uklj. stari A1 batch 27.05). Pošto svako kome pošaljem odmah uđe u log, naredni run ih sam preskoči.
@@ -22,7 +22,7 @@ for (const line of fs.readFileSync(envPath, "utf-8").split("\n")) {
 }
 const sb = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
 const RESEND_KEY = process.env.RESEND_API_KEY!;
-const FROM = "Hartweger <kurs@hartweger.rs>";
+const FROM = "Hartweger <info@hartweger.rs>";
 const SUBJECT = "Tvoj kurs nemačkog je postao bolji — uđi u svoj novi nalog";
 const SEND = process.argv.includes("--send");
 const limitArg = process.argv.find((a) => a.startsWith("--limit="));
