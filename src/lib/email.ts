@@ -2,7 +2,7 @@ import { Resend } from "resend";
 import { SITE_URL } from "@/lib/site-url";
 import { odjavaUrl } from "@/lib/optout";
 
-const FROM = "Hartweger <kurs@hartweger.rs>";
+const FROM = "Hartweger <info@hartweger.rs>";
 
 function getResend() {
   if (!process.env.RESEND_API_KEY) {
