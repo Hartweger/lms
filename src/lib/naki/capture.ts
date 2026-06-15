@@ -2,6 +2,7 @@
 // Portovano sa starog PHP-a (sendWelcomeEmail / addToMailerLite / getFallbackPlan).
 import { Resend } from "resend";
 import { NAKI_MAILERLITE_GROUP } from "./system-prompt";
+import { couponPrice, type LevelCourse } from "./courses";
 
 const FROM = "Nataša Hartweger <natasa@hartweger.rs>";
 
@@ -107,22 +108,16 @@ export function getFallbackPlan(name: string, level: string): string {
   return `Hallo, ${name}! Drago mi je što si ovde! Na osnovu naših razgovora, vidiš se da imaš pravi pristup učenju nemačkog. Evo tvojih 3 prioriteta:\n\n1. Gradivo svaki dan - i 10-15 minuta je dovoljno za napredak.\n2. Rod imenica - uvek uči sa članom: der, die, das.\n3. Perfekt u govoru - Ich habe gemacht, Ich bin gegangen - ovo ti treba odmah!\n\nJa sam tu za sva pitanja. Hajde da učimo zajedno!`;
 }
 
-export async function sendNakiWelcomeEmail(
-  to: string,
+export function buildWelcomeHtml(
   name: string,
   level: string,
   plan: string,
-  includeCoupon: boolean = true
-): Promise<void> {
-  if (!process.env.RESEND_API_KEY) {
-    console.warn("[naki] RESEND_API_KEY not set - welcome email disabled");
-    return;
-  }
-  const resend = new Resend(process.env.RESEND_API_KEY);
+  includeCoupon: boolean,
+  levelCourse: LevelCourse | null
+): string {
   const linksHtml = LEVEL_LINKS[level.toUpperCase()] ??
     '<a href="https://www.hartweger.rs/?utm_source=naki&utm_medium=email" style="color:#4EADC5;">Blog Hartweger centra</a>';
   const planHtml = renderPlanHtml(plan);
-  // NAKI10 samo za nove kupce - postojeći video kupci ne dobijaju kupon blok.
   const couponHtml = includeCoupon
     ? `<table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="background:#fdf6e3;border:1px dashed #e0b94f;border-radius:8px;padding:18px;">
         <p style="margin:0 0 6px;font-size:14px;color:#333;">Poklon za tebe - <strong>10% popusta</strong> na bilo koji video kurs:</p>
@@ -131,7 +126,18 @@ export async function sendNakiWelcomeEmail(
       </td></tr></table>`
     : "";
 
-  const html = `<!DOCTYPE html>
+  // CTA: ako znamo kurs nivoa, dugme vodi baš na njega + prikaz cene (sa popustom ako kupon ide).
+  const courseLink = levelCourse
+    ? `https://www.hartweger.rs/kursevi/${levelCourse.slug}?utm_source=naki&utm_medium=email&utm_campaign=welcome_plan`
+    : "https://www.hartweger.rs/kursevi?utm_source=naki&utm_medium=email&utm_campaign=welcome_plan";
+  const courseBtnText = levelCourse ? `Pogledaj ${levelCourse.title}` : "Pogledaj kurseve";
+  const priceLine = levelCourse
+    ? includeCoupon
+      ? `<p style="margin:0 0 10px;font-size:14px;color:#333;text-align:center;">${levelCourse.price.toLocaleString("sr-RS")} RSD, a sa kodom NAKI10 samo <strong>${couponPrice(levelCourse.price).toLocaleString("sr-RS")} RSD</strong>.</p>`
+      : `<p style="margin:0 0 10px;font-size:14px;color:#333;text-align:center;">${levelCourse.price.toLocaleString("sr-RS")} RSD.</p>`
+    : "";
+
+  return `<!DOCTYPE html>
 <html lang="sr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
 <body style="margin:0;padding:0;background:#f4f4f4;font-family:Arial,sans-serif;">
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f4;padding:30px 0;"><tr><td align="center">
@@ -149,7 +155,8 @@ export async function sendNakiWelcomeEmail(
       <hr style="border:none;border-top:1px solid #e8e8e8;margin:30px 0;">
       ${couponHtml}
       <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:24px;"><tr><td align="center">
-        <a href="https://www.hartweger.rs/kursevi?utm_source=naki&utm_medium=email&utm_campaign=welcome_plan" style="display:inline-block;background:#4EADC5;color:#ffffff;text-decoration:none;padding:14px 32px;border-radius:6px;font-size:16px;font-weight:bold;">Pogledaj kurseve</a>
+        ${priceLine}
+        <a href="${courseLink}" style="display:inline-block;background:#4EADC5;color:#ffffff;text-decoration:none;padding:14px 32px;border-radius:6px;font-size:16px;font-weight:bold;">${courseBtnText}</a>
       </td></tr></table>
     </td></tr>
     <tr><td style="background:#f9f9f9;padding:20px 40px;text-align:center;">
@@ -158,6 +165,22 @@ export async function sendNakiWelcomeEmail(
   </table>
 </td></tr></table>
 </body></html>`;
+}
+
+export async function sendNakiWelcomeEmail(
+  to: string,
+  name: string,
+  level: string,
+  plan: string,
+  includeCoupon: boolean = true,
+  levelCourse: LevelCourse | null = null
+): Promise<void> {
+  if (!process.env.RESEND_API_KEY) {
+    console.warn("[naki] RESEND_API_KEY not set - welcome email disabled");
+    return;
+  }
+  const resend = new Resend(process.env.RESEND_API_KEY);
+  const html = buildWelcomeHtml(name, level, plan, includeCoupon, levelCourse);
 
   try {
     await resend.emails.send({
