@@ -4,6 +4,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { rateLimit } from "@/lib/rate-limit";
 import { NAKI_MODEL } from "@/lib/naki/system-prompt";
 import { getFallbackPlan, sendNakiWelcomeEmail, addToMailerLite } from "@/lib/naki/capture";
+import { getLevelCourse } from "@/lib/naki/courses";
 import { emailOwnsAnyVideoCourse } from "@/lib/coupon-ownership";
 import { upsertContact, logInteraction } from "@/lib/crm/contacts";
 
@@ -81,9 +82,13 @@ export async function POST(request: Request) {
   // Generiši plan → pošalji mejl → MailerLite (kao stari PHP, redom).
   // Kupon NAKI10 ide samo onima koji još nemaju video kurs.
   const admin = createAdminClient();
-  const alreadyCustomer = await emailOwnsAnyVideoCourse(admin, email);
-  const plan = await generateLearningPlan(name, level, history);
-  await sendNakiWelcomeEmail(email, name, level, plan, !alreadyCustomer);
+  // Tri nezavisna posla paralelno (2 Supabase čitanja + LLM plan) - korisnik čeka na spinneru.
+  const [alreadyCustomer, levelCourse, plan] = await Promise.all([
+    emailOwnsAnyVideoCourse(admin, email),
+    getLevelCourse(admin, level),
+    generateLearningPlan(name, level, history),
+  ]);
+  await sendNakiWelcomeEmail(email, name, level, plan, !alreadyCustomer, levelCourse);
   await addToMailerLite(email, name, level);
 
   // Upiši/azuriraj profil (bez čuvanja istorije; email je ključ).

@@ -12,6 +12,7 @@ import {
 } from "@/lib/naki/system-prompt";
 import { createHash } from "crypto";
 import { userOwnsAnyVideoCourse } from "@/lib/coupon-ownership";
+import { stickyLevel, getLevelCourse, courseUpsellAddon } from "@/lib/naki/courses";
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
@@ -107,17 +108,21 @@ export async function POST(request: Request) {
   // Statični prompt se kešira (prompt caching); promenljivi dodaci idu
   // kao odvojeni blokovi da ne kvare keš.
   // Tema se detektuje iz cele skorašnje istorije (lepljiva tema), ne samo poslednje poruke.
-  const linkAddon = blogLinkAddon(history.filter((m) => m.role === "user").map((m) => m.content));
+  const userTexts = history.filter((m) => m.role === "user").map((m) => m.content);
+  const linkAddon = blogLinkAddon(userTexts);
   // Ulogovani koji već imaju video kurs ne dobijaju NAKI10 (kupon je za nove kupce).
   const couponAddon =
     userId && (await userOwnsAnyVideoCourse(admin, userId))
       ? "\n\nOvaj korisnik je već kupac video kursa - NE pominji kupon NAKI10 (važi samo za prvu kupovinu)."
       : "";
+  // Konkretan kurs za detektovani nivo (cena uživo). Prazno ako nivo nije A1/A2/B1.
+  const levelCourse = await getLevelCourse(admin, stickyLevel(userTexts));
+  const upsellAddon = courseUpsellAddon(levelCourse);
+  // Statični prompt se kešira; promenljivi dodaci idu kao odvojen nekeširan blok da ne kvare keš.
+  const dynamic = linkAddon + couponAddon + upsellAddon;
   const system: Anthropic.TextBlockParam[] = [
     { type: "text", text: NAKI_SYSTEM_PROMPT, cache_control: { type: "ephemeral" } },
-    ...(linkAddon || couponAddon
-      ? [{ type: "text" as const, text: linkAddon + couponAddon }]
-      : []),
+    ...(dynamic ? [{ type: "text" as const, text: dynamic }] : []),
   ];
 
   // ── Poziv Claude API ──
