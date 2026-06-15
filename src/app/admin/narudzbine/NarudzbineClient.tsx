@@ -21,6 +21,8 @@ interface Props {
 export default function NarudzbineClient({ initialOrders, courses }: Props) {
   const [orders, setOrders] = useState<Order[]>(initialOrders);
   const [filter, setFilter] = useState<Filter>("sve");
+  const [search, setSearch] = useState("");
+  const [productFilter, setProductFilter] = useState("");
   const [confirmId, setConfirmId] = useState<string | null>(null);
   const [loading, setLoading] = useState<string | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
@@ -92,8 +94,28 @@ export default function NarudzbineClient({ initialOrders, courses }: Props) {
     }
   }
 
+  const orderProduct = (o: Order) =>
+    (o.items as { title: string }[])[0]?.title ?? "-";
+  const products = Array.from(new Set(orders.map(orderProduct)))
+    .filter((p) => p !== "-")
+    .sort((a, b) => a.localeCompare(b, "sr"));
+
+  const q = search.trim().toLowerCase();
+  const filtered = orders.filter((o) => {
+    if (filter === "na-cekanju" && o.payment_status !== "pending") return false;
+    if (filter === "potvrdjene" && o.payment_status !== "completed") return false;
+    if (productFilter && orderProduct(o) !== productFilter) return false;
+    if (
+      q &&
+      !(`${o.full_name ?? ""}`.toLowerCase().includes(q) ||
+        `${o.email ?? ""}`.toLowerCase().includes(q))
+    )
+      return false;
+    return true;
+  });
+
   const pendingCount = orders.filter((o) => o.payment_status === "pending").length;
-  const totals = orderTotals(orders);
+  const totals = orderTotals(filtered);
 
   async function deleteOrder(orderId: string) {
     setDeleting(orderId);
@@ -107,12 +129,6 @@ export default function NarudzbineClient({ initialOrders, courses }: Props) {
       setDeleteId(null);
     }
   }
-
-  const filtered = orders.filter((o) => {
-    if (filter === "na-cekanju") return o.payment_status === "pending";
-    if (filter === "potvrdjene") return o.payment_status === "completed";
-    return true;
-  });
 
   async function confirmPayment(orderId: string) {
     setLoading(orderId);
@@ -177,7 +193,11 @@ export default function NarudzbineClient({ initialOrders, courses }: Props) {
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Narudžbine</h1>
           <div className="mt-1 flex items-center gap-4 text-sm">
-            <span className="text-gray-500">{orders.length} ukupno</span>
+            <span className="text-gray-500">
+              {filtered.length === orders.length
+                ? `${orders.length} ukupno`
+                : `${filtered.length} od ${orders.length}`}
+            </span>
             <span className="text-green-600 font-medium">
               Potvrđeno: {totals.confirmed.toLocaleString("sr-RS")} RSD
             </span>
@@ -316,6 +336,40 @@ export default function NarudzbineClient({ initialOrders, courses }: Props) {
         </div>
       )}
 
+      {/* Search + product filter */}
+      <div className="flex flex-wrap gap-2 mb-3">
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="🔍 Pretraži po imenu ili mejlu"
+          className="flex-1 min-w-[220px] rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-plava"
+        />
+        <select
+          value={productFilter}
+          onChange={(e) => setProductFilter(e.target.value)}
+          className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-plava max-w-[260px]"
+        >
+          <option value="">Svi proizvodi</option>
+          {products.map((p) => (
+            <option key={p} value={p}>
+              {p}
+            </option>
+          ))}
+        </select>
+        {(search || productFilter) && (
+          <button
+            onClick={() => {
+              setSearch("");
+              setProductFilter("");
+            }}
+            className="px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100 border border-gray-200"
+          >
+            ✕ Očisti
+          </button>
+        )}
+      </div>
+
       {/* Filter buttons */}
       <div className="flex gap-2 mb-6">
         <button
@@ -401,7 +455,14 @@ export default function NarudzbineClient({ initialOrders, courses }: Props) {
                       <div className="text-gray-400 text-xs">{order.email}</div>
                     </td>
                     <td className="px-6 py-4 text-gray-700">
-                      {courseTitle}
+                      <button
+                        type="button"
+                        onClick={() => setProductFilter(courseTitle)}
+                        className="text-left hover:text-plava hover:underline"
+                        title="Filtriraj po ovom proizvodu"
+                      >
+                        {courseTitle}
+                      </button>
                       {order.professor_name && (
                         <div className="text-gray-400 text-xs mt-0.5">👩‍🏫 {order.professor_name}</div>
                       )}
