@@ -112,6 +112,7 @@ export default function AdminGrupePage() {
     setForm({ ...g });
     setMembers([]);
     setSavedAt(0);
+    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
   }
   function cancelEdit() {
     setForm(null);
