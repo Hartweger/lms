@@ -27,6 +27,18 @@ function SmileFace({ size = 30 }: { size?: number }) {
 type Msg = { role: "user" | "assistant"; content: string };
 type Config = { enabled: boolean; nudge: boolean; leadCapture: boolean };
 
+// crypto.randomUUID ne postoji na starijim browserima (npr. iOS Safari < 15.4) - fallback
+function genId(): string {
+  try {
+    if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+      return crypto.randomUUID();
+    }
+  } catch {
+    /* ignore */
+  }
+  return "s-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 10);
+}
+
 function isAllowed(pathname: string): boolean {
   if (BLOCKED_PREFIXES.some((p) => pathname === p || pathname.startsWith(p))) return false;
   return ALLOWED_PREFIXES.some((p) => (p === "/" ? pathname === "/" : pathname.startsWith(p)));
@@ -62,7 +74,7 @@ export default function SmileWidget() {
   const [showLead, setShowLead] = useState(false);
   const [leadEmail, setLeadEmail] = useState("");
   const [leadDone, setLeadDone] = useState(false);
-  const sessionId = useRef<string>(typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now()));
+  const sessionId = useRef<string>(genId());
   const scrollRef = useRef<HTMLDivElement>(null);
   const hydrated = useRef(false);
 

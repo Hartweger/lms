@@ -49,6 +49,14 @@ describe("Sentry ignore lista - Supabase auth lock greške", () => {
     ).toBe(true);
   });
 
+  it("hvata iOS in-app browser (Meta WebView) webkit most grešku", () => {
+    expect(
+      matchesIgnoreList(
+        "undefined is not an object (evaluating 'window.webkit.messageHandlers')"
+      )
+    ).toBe(true);
+  });
+
   it("ne guta nepovezane greške", () => {
     expect(matchesIgnoreList("TypeError: Failed to fetch")).toBe(false);
     expect(matchesIgnoreList("Cannot read properties of undefined")).toBe(false);
