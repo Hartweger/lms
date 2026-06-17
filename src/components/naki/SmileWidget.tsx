@@ -74,6 +74,7 @@ export default function SmileWidget() {
   const [showLead, setShowLead] = useState(false);
   const [leadEmail, setLeadEmail] = useState("");
   const [leadDone, setLeadDone] = useState(false);
+  const [dismissed, setDismissed] = useState(false);
   const sessionId = useRef<string>(genId());
   const scrollRef = useRef<HTMLDivElement>(null);
   const hydrated = useRef(false);
@@ -89,6 +90,7 @@ export default function SmileWidget() {
         if (s.leadDone) setLeadDone(true);
       } catch { /* ignore */ }
     }
+    if (ssGet("smile_dismissed") === "1") setDismissed(true);
     hydrated.current = true;
   }, []);
 
@@ -127,13 +129,25 @@ export default function SmileWidget() {
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
-  if (!cfg?.enabled || !isAllowed(pathname)) return null;
+  if (dismissed || !cfg?.enabled || !isAllowed(pathname)) return null;
+
+  // Da li ova strana ima mobilnu "Kupi" traku zakovanu za dno (detaljne strane kursa).
+  // Na tim stranama (ispod lg) Smile se podiže iznad trake i pločica se sklanja.
+  const hasBuyBar = pathname.startsWith("/kursevi/");
 
   const toggle = () => {
     setOpen((o) => !o);
     setShowNudge(false);
     ssSet("smile_nudge_seen", "1");
     if (!inited) { setInited(true); setMsgs([{ role: "assistant", content: WELCOME }]); }
+  };
+
+  // × sklanja Smile do kraja sesije (vraća se kod sledeće posete)
+  const dismiss = () => {
+    setOpen(false);
+    setShowNudge(false);
+    setDismissed(true);
+    ssSet("smile_dismissed", "1");
   };
 
   const send = async (text: string) => {
@@ -179,10 +193,10 @@ export default function SmileWidget() {
   };
 
   return (
-    <div style={{ fontFamily: "var(--font-lato), sans-serif" }}>
+    <div className={`smile-root${hasBuyBar ? " smile-has-bar" : ""}`} style={{ fontFamily: "var(--font-lato), sans-serif" }}>
       {/* Nudge */}
       {showNudge && !open && (
-        <button onClick={toggle} style={{ position: "fixed", bottom: 86, right: 20, zIndex: 9998, background: "#fff", border: "1px solid #e2e5e9", borderRadius: 14, padding: "10px 14px", fontSize: 13.5, color: "#0c0d24", boxShadow: "0 4px 18px rgba(0,0,0,.12)", maxWidth: 220, cursor: "pointer", textAlign: "left" }}>
+        <button onClick={toggle} className="smile-nudge" style={{ position: "fixed", bottom: 86, right: 20, zIndex: 9998, background: "#fff", border: "1px solid #e2e5e9", borderRadius: 14, padding: "10px 14px", fontSize: 13.5, color: "#0c0d24", boxShadow: "0 4px 18px rgba(0,0,0,.12)", maxWidth: 220, cursor: "pointer", textAlign: "left" }}>
           Treba ti pomoć oko izbora kursa? 😊
         </button>
       )}
@@ -196,13 +210,18 @@ export default function SmileWidget() {
       )}
 
       {/* Launcher */}
-      <button onClick={toggle} aria-label="Razgovaraj sa Smile" style={{ position: "fixed", bottom: 20, right: 20, zIndex: 9999, width: 56, height: 56, borderRadius: "50%", background: CORAL, border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 2px 14px rgba(0,0,0,.18)", animation: open ? "none" : "smileSway 3s ease-in-out infinite" }}>
-        {open ? (
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
-        ) : (
-          <SmileFace size={32} />
+      <div className="smile-launcher-wrap" style={{ position: "fixed", bottom: 20, right: 20, zIndex: 9999 }}>
+        <button onClick={toggle} aria-label="Razgovaraj sa Smile" style={{ width: 56, height: 56, borderRadius: "50%", background: CORAL, border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 2px 14px rgba(0,0,0,.18)", animation: open ? "none" : "smileSway 3s ease-in-out infinite" }}>
+          {open ? (
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+          ) : (
+            <SmileFace size={32} />
+          )}
+        </button>
+        {!open && (
+          <button onClick={dismiss} aria-label="Sakrij Smile" title="Sakrij" style={{ position: "absolute", top: -5, right: -5, width: 22, height: 22, borderRadius: "50%", background: "#fff", border: "1px solid #e2e5e9", boxShadow: "0 1px 6px rgba(0,0,0,.22)", color: "#6b7280", fontSize: 15, lineHeight: 1, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", padding: 0 }}>×</button>
         )}
-      </button>
+      </div>
 
       {/* Panel */}
       {open && (
@@ -254,6 +273,14 @@ export default function SmileWidget() {
 @media (max-width:480px){
 .smile-panel{left:8px!important;right:8px!important;width:auto!important;max-width:none!important;bottom:84px!important;max-height:calc(100dvh - 104px)!important;}
 .smile-msgs{height:auto!important;flex:1 1 auto!important;min-height:120px!important;}
+}
+/* Strane kursa imaju mobilnu "Kupi" traku zakovanu za dno (vidljiva ispod lg=1024px).
+   Podigni Smile iznad nje i sakrij pločicu da dugme "Kupi" ostane slobodno. */
+@media (max-width:1023px){
+.smile-has-bar .smile-launcher-wrap{bottom:calc(88px + env(safe-area-inset-bottom))!important;}
+.smile-has-bar .smile-label{display:none!important;}
+.smile-has-bar .smile-nudge{bottom:calc(154px + env(safe-area-inset-bottom))!important;}
+.smile-has-bar .smile-panel{bottom:calc(154px + env(safe-area-inset-bottom))!important;max-height:calc(100dvh - 174px - env(safe-area-inset-bottom))!important;}
 }`}</style>
     </div>
   );
