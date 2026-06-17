@@ -66,5 +66,8 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/dashboard/:path*", "/profil/:path*", "/admin/:path*", "/profesor/:path*"],
+  // "/" namerno IZBAČEN: početna je javna i statička, ne treba joj auth provera.
+  // Sa "/" u matcheru, svaki poseta početnoj je radila supabase.auth.getUser()
+  // (mrežni round-trip) i izbacivala homepage iz CDN keša -> visok TTFB.
+  matcher: ["/dashboard/:path*", "/profil/:path*", "/admin/:path*", "/profesor/:path*"],
 };
