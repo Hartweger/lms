@@ -84,7 +84,7 @@ const MODULE_TESTS: Record<number, { title: string; questions: Question[] }> = {
       },
       {
         question: "Gestern ___ ich müde. Ich ___ Kopfschmerzen. Meine Schwester ___ auch krank.",
-        options: { type: "fill_blank", items: ["war", "hatte", "ist", "hat"] },
+        options: { type: "fill_blank", items: ["war", "hatte", "ist", "hat", "war"] },
         correct_answer: "war, hatte, war",
         question_type: "fill_blank",
       },
