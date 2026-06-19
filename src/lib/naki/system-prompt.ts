@@ -53,6 +53,8 @@ POHVALE I POČETAK ODGOVORA:
 - Kada polaznik pošalje vežbu, odmah je ispravi - bez dugog uvoda.
 - Greške ispravljaš ovako: "Skoro pa! Samo: ..." - nikad grubo.
 - Kad ispravljaš vežbu, daj samo ispravku i sledeće pitanje. Ne ponavljaj pravilo koje si već objasnio.
+- KLJUČNO - ne izmišljaj ispravke: pre nego što označiš odgovor kao grešku, proveri da li je STVARNO pogrešan. Ako je korisnikov odgovor tačan ili sasvim prihvatljiva varijanta, pohvali ga i idi dalje - NE pravi nepostojeću ispravku. Lažna ispravka tačnog odgovora je gora od propuštene greške jer korisnik nauči pogrešno.
+- Ako te korisnik ispravi i zaista je u pravu, priznaj kratko ("Imaš pravo!") i nastavi - ne insistiraj na svojoj verziji.
 
 NATAŠIN STIL (uvek prati):
 - Topao, ohrabrujući, strpljiv - nikad kritičan
@@ -203,6 +205,37 @@ export function blogLinkAddon(recentUserMessages: string[]): string {
     }
   }
   return "";
+}
+
+// Ime se traži samo iz jednoznačnih fraza ("ich heiße X", "zovem se X"...) da se izbegne
+// lažno hvatanje ("ja sam umorna"). Vraća ime sa velikim početnim slovom.
+function detectName(userTexts: string[]): string | null {
+  for (let i = userTexts.length - 1; i >= 0; i--) {
+    const m = userTexts[i].match(
+      /(?:ich hei(?:ß|ss)e|mein name ist|zovem se|ime mi je)\s+([A-Za-zČĆŽŠĐčćžšđÄÖÜäöüß]{2,20})/i
+    );
+    if (m) return m[1].charAt(0).toUpperCase() + m[1].slice(1).toLowerCase();
+  }
+  return null;
+}
+
+// Nekeširan dodatak: ubacuje zapamćeni nivo i ime iz CELE istorije razgovora.
+// Bez ovoga model u dugim sesijama (istorija sečena na 12 poruka) izgubi nivo
+// pa iznova pita "koji nivo" i menja rod oslovljavanja iz poruke u poruku.
+export function conversationMemoryAddon(userTexts: string[], level: string | null): string {
+  const parts: string[] = [];
+  if (level) {
+    parts.push(
+      `Korisnik uči nivo ${level} (rekao je to ranije u razgovoru). Koristi taj nivo za vežbe i NE pitaj ponovo "koji nivo".`
+    );
+  }
+  const name = detectName(userTexts);
+  if (name) {
+    parts.push(
+      `Korisnik se zove ${name}. Oslovljavaj ga po imenu kad je prirodno i koristi DOSLEDNO isti gramatički rod kroz ceo razgovor (ne menjaj radila/radio iz poruke u poruku).`
+    );
+  }
+  return parts.length ? "\n\n" + parts.join(" ") : "";
 }
 
 export const NAKI_MODEL = "claude-sonnet-4-6";

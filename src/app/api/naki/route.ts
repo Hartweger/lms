@@ -9,6 +9,7 @@ import {
   NAKI_MAX_TOKENS,
   NAKI_MAX_REQUESTS_PER_DAY,
   blogLinkAddon,
+  conversationMemoryAddon,
 } from "@/lib/naki/system-prompt";
 import { createHash } from "crypto";
 import { userOwnsAnyVideoCourse } from "@/lib/coupon-ownership";
@@ -109,17 +110,23 @@ export async function POST(request: Request) {
   // kao odvojeni blokovi da ne kvare keš.
   // Tema se detektuje iz cele skorašnje istorije (lepljiva tema), ne samo poslednje poruke.
   const userTexts = history.filter((m) => m.role === "user").map((m) => m.content);
-  const linkAddon = blogLinkAddon(userTexts);
+  const linkAddon = blogLinkAddon(userTexts); // tema se gleda iz skorašnje istorije
+  // Nivo i ime se pamte iz CELE istorije (ne samo poslednjih 12 poruka) i ubacuju
+  // u nekeširani blok - inače u dugim sesijama model izgubi nivo pa iznova pita
+  // "koji nivo" i menja rod oslovljavanja.
+  const allUserTexts = messages.filter((m) => m.role === "user").map((m) => m.content);
+  const knownLevel = stickyLevel(allUserTexts);
+  const memoryAddon = conversationMemoryAddon(allUserTexts, knownLevel);
   // Ulogovani koji već imaju video kurs ne dobijaju NAKI10 (kupon je za nove kupce).
   const couponAddon =
     userId && (await userOwnsAnyVideoCourse(admin, userId))
       ? "\n\nOvaj korisnik je već kupac video kursa - NE pominji kupon NAKI10 (važi samo za prvu kupovinu)."
       : "";
   // Konkretan kurs za detektovani nivo (cena uživo). Prazno ako nivo nije A1/A2/B1.
-  const levelCourse = await getLevelCourse(admin, stickyLevel(userTexts));
+  const levelCourse = await getLevelCourse(admin, knownLevel);
   const upsellAddon = courseUpsellAddon(levelCourse);
   // Statični prompt se kešira; promenljivi dodaci idu kao odvojen nekeširan blok da ne kvare keš.
-  const dynamic = linkAddon + couponAddon + upsellAddon;
+  const dynamic = memoryAddon + linkAddon + couponAddon + upsellAddon;
   const system: Anthropic.TextBlockParam[] = [
     { type: "text", text: NAKI_SYSTEM_PROMPT, cache_control: { type: "ephemeral" } },
     ...(dynamic ? [{ type: "text" as const, text: dynamic }] : []),
