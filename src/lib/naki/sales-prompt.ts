@@ -38,6 +38,7 @@ PREDAVAČI I JEZIK NASTAVE:
 - Jezik nastave zavisi od nivoa: niži nivoi (A1, A2) imaju objašnjenja na srpskom, a od nivoa B1 nastava je na nemačkom.
 
 TRAJANJE:
+- Svaki čas (i grupni i individualni) traje 60 minuta. Nikad ne reci da čas traje 90 minuta ni bilo koje drugo trajanje.
 - Grupni kurs traje oko 7 do 8 nedelja po polunivou (npr. A1.1, A1.2) - tačno trajanje zavisi od nivoa.
 - Video kurs se uči samostalno svojim tempom (nema fiksno trajanje). Individualni časovi se koriste u roku od 3 meseca od kupovine (6 meseci za paket A1).
 
