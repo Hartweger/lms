@@ -1502,3 +1502,51 @@ export async function sendAccessAuditEmail(rows: { ime: string; email: string; k
     console.error("[email] sendAccessAuditEmail pao:", e);
   }
 }
+
+// Nedeljni "NaKI pitanje nedelje" - content podsetnik Nataši (info@).
+// Tema = najtraženija iz NaKI razgovora te nedelje + gotov YT/IG ugao.
+export async function sendNakiContentEmail(opts: {
+  tema: string;
+  sesija: number;
+  primeri: string[];
+  yt: string;
+  ig: string;
+  dani: number;
+}) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    const primeriHtml = opts.primeri.length
+      ? `<ul style="margin:8px 0 0;padding-left:20px;color:#444">${opts.primeri
+          .map((p) => `<li style="margin:2px 0">${esc(p)}</li>`)
+          .join("")}</ul>`
+      : `<p style="color:#888;margin:8px 0 0">(nema kratkih primera ove nedelje)</p>`;
+    await resend.emails.send({
+      from: "Hartweger NaKI <kurs@hartweger.rs>",
+      to: "info@hartweger.rs",
+      replyTo: "info@hartweger.rs",
+      subject: `NaKI pitanje nedelje: ${opts.tema}`,
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:'Helvetica Neue',Arial,sans-serif;line-height:1.6;color:#1a1a2e;background:#f8f9fa;margin:0;padding:0">
+<div style="max-width:560px;margin:0 auto;padding:32px 20px">
+<div style="background:#fff;border-radius:12px;padding:28px;box-shadow:0 1px 3px rgba(0,0,0,.08)">
+<div style="font-size:13px;color:#999">NaKI pitanje nedelje · poslednjih ${opts.dani} dana</div>
+<h2 style="margin:6px 0 4px;color:#4fb1d3">${esc(opts.tema)}</h2>
+<p style="margin:0;color:#666;font-size:14px">Javilo se u <strong>${opts.sesija}</strong> različitih NaKI sesija ove nedelje - dokazana tražnja.</p>
+<p style="margin:18px 0 4px;font-weight:600">Šta učenici stvarno pišu:</p>
+${primeriHtml}
+<p style="margin:18px 0 4px;font-weight:600">YouTube ugao:</p>
+<p style="margin:0;color:#444">${esc(opts.yt)}</p>
+<p style="margin:14px 0 4px;font-weight:600">Instagram ideja:</p>
+<p style="margin:0;color:#444">${esc(opts.ig)}</p>
+<p style="margin:22px 0 0;font-size:13px;color:#888">Cela lista tema: <code>cd LMS/lms &amp;&amp; node scripts/naki-topics.mjs</code></p>
+</div>
+<p style="text-align:center;font-size:12px;color:#bbb;margin-top:16px">Automatski podsetnik · ponedeljkom</p>
+</div>
+</body></html>`,
+    });
+    console.log(`[email] NaKI pitanje nedelje → "${opts.tema}" (${opts.sesija} sesija)`);
+  } catch (e) {
+    console.error("[email] sendNakiContentEmail pao:", e);
+  }
+}
