@@ -3,9 +3,15 @@ import NakiChat from "@/components/naki/NakiChat";
 import { NakiAvatar } from "@/components/naki/NakiAvatar";
 
 export const metadata: Metadata = {
-  title: "NaKI - AI asistent za nemački | Hartweger",
+  title: "NaKI - prvi AI asistent za učenje nemačkog | Hartweger",
   description:
-    "NaKI je AI asistent Nataše Hartweger za učenje nemačkog jezika. Postavi pitanje, vežbaj gramatiku i dobij objašnjenja na srpskom - besplatno.",
+    "Vežbaj razgovor i gramatiku na nemačkom sa NaKI, prvim AI asistentom na srpskom. Besplatno, dostupno 0-24, uz pravog profesora i ispitivača.",
+  openGraph: {
+    images: [{ url: "/og/share.png", width: 1200, height: 630, alt: "Hartweger - Škola nemačkog jezika" }],
+    title: "NaKI - prvi AI asistent za učenje nemačkog | Hartweger",
+    description:
+      "Vežbaj razgovor i gramatiku na nemačkom sa NaKI, prvim AI asistentom na srpskom. Besplatno, 0-24, uz pravog profesora.",
+  },
 };
 
 const NAKI_CSS = `
@@ -47,6 +53,23 @@ const NAKI_CSS = `
 .naki-feature-card h3 { font-size: 1rem; margin-bottom: 0.3rem; color: #0AB3D7; }
 .naki-feature-card p { font-size: 0.85rem; color: #718096; margin: 0; }
 
+.naki-seo { max-width: 820px; margin: 1rem auto 0; padding: 0 1.5rem; }
+.naki-seo h2 { font-size: 1.5rem; color: #2d3748; margin: 2rem 0 0.8rem; text-align: center; }
+.naki-seo p { color: #4a5568; margin-bottom: 1rem; }
+.naki-seo ul { color: #4a5568; padding-left: 1.2rem; margin-bottom: 1rem; }
+.naki-seo li { margin-bottom: 0.5rem; }
+
+.naki-faq { max-width: 820px; margin: 1.5rem auto 2rem; padding: 0 1.5rem; }
+.naki-faq h2 { font-size: 1.5rem; color: #2d3748; margin-bottom: 1rem; text-align: center; }
+.naki-faq details {
+  background: white; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 0.8rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+}
+.naki-faq summary { font-weight: 700; cursor: pointer; color: #2d3748; list-style: none; }
+.naki-faq summary::-webkit-details-marker { display: none; }
+.naki-faq details p { color: #718096; margin: 0.6rem 0 0; }
+.naki-cta-final { text-align: center; margin: 2rem auto 0; }
+
 @media (max-width: 680px) {
   .naki-hero { flex-direction: column; text-align: center; padding: 2rem 1.5rem; }
   .naki-hero-text { text-align: center; }
@@ -61,10 +84,43 @@ const FEATURES = [
   { icon: "🎯", title: "Schreiben", text: "Ocenjujem ti pismeni rad kao ispitivač, po nivou." },
 ];
 
+const FAQ = [
+  {
+    q: "Da li je NaKI zaista besplatan?",
+    a: "Da, vežbanje sa NaKI je besplatno. Dovoljno je da otvoriš stranicu i počneš razgovor.",
+  },
+  {
+    q: "Mogu li da vežbam razgovor, ne samo gramatiku?",
+    a: "Možeš oboje - NaKI vodi razgovor sa tobom na nemačkom i ispravlja greške usput.",
+  },
+  {
+    q: "Treba li mi predznanje?",
+    a: "Ne. NaKI radi sa svim nivoima, od potpunih početnika (A1) do naprednih.",
+  },
+  {
+    q: "Da li NaKI zamenjuje časove?",
+    a: "NaKI je odlična dopuna za svakodnevno vežbanje. Za strukturisano napredovanje i pripremu za ispit, tu su video kursevi i individualni časovi sa Natašom Hartweger.",
+  },
+];
+
 export default function NakiPage() {
   return (
     <main className="naki-page min-h-screen bg-gray-50 pb-8">
       <style dangerouslySetInnerHTML={{ __html: NAKI_CSS }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: FAQ.map((item) => ({
+              "@type": "Question",
+              name: item.q,
+              acceptedAnswer: { "@type": "Answer", text: item.a },
+            })),
+          }),
+        }}
+      />
 
       {/* HERO */}
       <section className="naki-hero">
@@ -100,6 +156,37 @@ export default function NakiPage() {
             <p>{f.text}</p>
           </div>
         ))}
+      </section>
+
+      {/* SEO CONTENT */}
+      <section className="naki-seo">
+        <h2>Zašto NaKI, a ne obična aplikacija</h2>
+        <p>
+          Globalne aplikacije te uče uopšteno i bezlično. NaKI je drugačiji - napravljen je
+          uz pravu školu nemačkog i profesora koji je licencirani ispitivač za Goethe i TELC ispite.
+        </p>
+        <ul>
+          <li><strong>Na srpskom</strong> - objašnjenja razumeš odmah, bez prevođenja.</li>
+          <li><strong>Uz pravog profesora</strong> - radi po VoKuM metodi Nataše Hartweger (vokabular, komunikacija, motivacija).</li>
+          <li><strong>Sa kontekstom ispita</strong> - korisno ako se spremaš za Goethe, TELC ili FSP ispit.</li>
+          <li><strong>Deo prave škole</strong> - kad budeš spreman za korak dalje, tu su video kursevi i individualni časovi.</li>
+        </ul>
+      </section>
+
+      {/* FAQ */}
+      <section className="naki-faq">
+        <h2>Često postavljana pitanja</h2>
+        {FAQ.map((item) => (
+          <details key={item.q}>
+            <summary>{item.q}</summary>
+            <p>{item.a}</p>
+          </details>
+        ))}
+        <div className="naki-cta-final">
+          <a href="#naki-chat" className="naki-btn-primary">
+            Počni da vežbaš sa NaKI
+          </a>
+        </div>
       </section>
     </main>
   );
