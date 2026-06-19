@@ -79,13 +79,21 @@ function findDifferences(spoken: string, expected: string): { word: string; stat
   return result;
 }
 
+type SpeechRecognitionEvent = {
+  resultIndex: number;
+  results: {
+    length: number;
+    [key: number]: { isFinal: boolean; [key: number]: { transcript: string } };
+  };
+};
+
 type SpeechRecognitionInstance = {
   lang: string;
   interimResults: boolean;
   continuous: boolean;
   start: () => void;
   stop: () => void;
-  onresult: ((event: { results: { [key: number]: { [key: number]: { transcript: string } } } }) => void) | null;
+  onresult: ((event: SpeechRecognitionEvent) => void) | null;
   onerror: ((event: { error: string }) => void) | null;
   onend: (() => void) | null;
   onstart: (() => void) | null;
@@ -143,6 +151,7 @@ export default function SpeakExercise({ question, correctAnswer, explanation, on
     recognition.continuous = true;
 
     let lastTranscript = "";
+    let finalTranscript = "";
     let silenceTimer: ReturnType<typeof setTimeout> | null = null;
     let done = false;
     manualStopRef.current = false;
@@ -170,21 +179,22 @@ export default function SpeakExercise({ question, correctAnswer, explanation, on
     };
 
     recognition.onresult = (event) => {
-      let final = "";
+      // Obrađuj SAMO nove rezultate (od resultIndex), finalne nakupljaj u bafer,
+      // a interim ZAMENI (poslednji), NE nadovezuj. Chrome (posebno Android)
+      // emituje rastuće interim rezultate kao zasebne unose - nadovezivanje je
+      // pravilo "wie / wie geht / wie geht es ..." iako je polaznik rekao jednom.
       let interim = "";
-      for (let i = 0; i < Object.keys(event.results).length; i++) {
+      for (let i = event.resultIndex; i < event.results.length; i++) {
         const result = event.results[i];
-        if (result && result[0]) {
-          // Check if result is final (isFinal property)
-          const isFinal = (result as unknown as { isFinal: boolean }).isFinal;
-          if (isFinal) {
-            final += result[0].transcript + " ";
-          } else {
-            interim += result[0].transcript;
-          }
+        if (!result || !result[0]) continue;
+        if (result.isFinal) {
+          finalTranscript += result[0].transcript + " ";
+        } else {
+          interim = result[0].transcript;
         }
       }
-      lastTranscript = (final + interim).trim() || lastTranscript;
+      const combined = (finalTranscript + interim).replace(/\s+/g, " ").trim();
+      lastTranscript = combined || lastTranscript;
       lastTranscriptRef.current = lastTranscript;
       setTranscript(lastTranscript);
 
