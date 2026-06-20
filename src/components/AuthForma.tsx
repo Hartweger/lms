@@ -156,7 +156,6 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              minLength={6}
               className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-plava focus:border-transparent"
               placeholder="Tvoja lozinka"
             />
