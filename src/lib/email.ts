@@ -1550,3 +1550,94 @@ ${primeriHtml}
     console.error("[email] sendNakiContentEmail pao:", e);
   }
 }
+
+// Ponedeljni podsetnik profesorki: njeni polaznici koji "traže pažnju" na platformi
+// (crveni: neaktivni >14 dana ili nije počeo posle grejs-perioda). Zamena za stari LD mejl.
+export async function sendProfPodsetnik(opts: {
+  to: string;
+  profIme: string;
+  polaznici: { ime: string; razlog: string }[];
+}) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    const n = opts.polaznici.length;
+    if (n === 0) return;
+    const ime = opts.profIme ? opts.profIme.split(" ")[0] : "";
+    const redovi = opts.polaznici
+      .map(
+        (p) =>
+          `<tr><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;color:#1a1a2e;">${esc(p.ime)}</td>
+<td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;color:#e74c3c;font-size:13px;">${esc(p.razlog)}</td></tr>`,
+      )
+      .join("");
+    const naslov = n === 1 ? "1 polaznik ti traži pažnju na platformi" : `${n} polaznika ti traže pažnju na platformi`;
+    await resend.emails.send({
+      from: FROM,
+      to: opts.to,
+      replyTo: "info@hartweger.rs",
+      subject: naslov,
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a2e;background:#f8f9fa;margin:0;padding:0;">
+  <div style="max-width:520px;margin:0 auto;padding:40px 20px;">
+    <div style="background:white;border-radius:12px;padding:32px;box-shadow:0 1px 3px rgba(0,0,0,0.08);">
+      <div style="text-align:center;margin-bottom:24px;">
+        <div style="font-size:24px;font-weight:700;color:#4fb1d3;">Hartweger</div>
+        <div style="font-size:13px;color:#999;margin-top:4px;">Nedeljni pregled</div>
+      </div>
+      <h1 style="font-size:19px;margin:0 0 8px;">Hallo${ime ? ", " + esc(ime) : ""}!</h1>
+      <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 16px;">Ovi tvoji polaznici se nisu javljali na platformi - možda im treba mali podstrek:</p>
+      <table style="border-collapse:collapse;width:100%;margin:0 0 8px;">${redovi}</table>
+      <div style="text-align:center;margin:24px 0 8px;">
+        <a href="${SITE_URL}/profesor" style="display:inline-block;background:#4fb1d3;color:white;padding:13px 30px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;">Otvori panel</a>
+      </div>
+      <p style="font-size:13px;color:#999;text-align:center;margin:8px 0 0;">Na panelu vidiš napredak svih polaznika u realnom vremenu.</p>
+    </div>
+    <p style="text-align:center;font-size:12px;color:#bbb;margin-top:16px;">Automatski podsetnik · ponedeljkom</p>
+  </div>
+</body></html>`,
+    });
+    console.log(`[email] prof-podsetnik → ${opts.to} (${n} polaznika)`);
+  } catch (e) {
+    console.error("[email] sendProfPodsetnik pao:", e);
+  }
+}
+
+// Zbirni pregled Nataši: koja profesorka ima koliko polaznika koji traže pažnju.
+export async function sendNatasaProfPodsetnikZbirni(opts: {
+  stavke: { prof: string; broj: number }[];
+}) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    const ukupno = opts.stavke.reduce((s, x) => s + x.broj, 0);
+    const redovi = opts.stavke.length
+      ? opts.stavke
+          .map(
+            (s) =>
+              `<tr><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;">${esc(s.prof)}</td>
+<td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:right;color:#e74c3c;font-weight:600;">${s.broj}</td></tr>`,
+          )
+          .join("")
+      : `<tr><td colspan="2" style="padding:10px;color:#27ae60;">Nijedna profesorka nema polaznike koji traže pažnju ✓</td></tr>`;
+    await resend.emails.send({
+      from: FROM,
+      to: ["info@hartweger.rs", "natasa@hartweger.rs"],
+      replyTo: "info@hartweger.rs",
+      subject: `Nedeljni pregled profesorki: ${ukupno} polaznika traži pažnju`,
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a2e;background:#f8f9fa;margin:0;padding:0;">
+  <div style="max-width:520px;margin:0 auto;padding:40px 20px;">
+    <div style="background:white;border-radius:12px;padding:32px;box-shadow:0 1px 3px rgba(0,0,0,0.08);">
+      <h1 style="font-size:19px;margin:0 0 16px;color:#4fb1d3;">Nedeljni pregled - profesorke</h1>
+      <table style="border-collapse:collapse;width:100%;">${redovi}</table>
+    </div>
+    <p style="text-align:center;font-size:12px;color:#bbb;margin-top:16px;">Automatski zbirni pregled · ponedeljkom</p>
+  </div>
+</body></html>`,
+    });
+    console.log(`[email] prof-podsetnik zbirni → Nataša (${ukupno} ukupno)`);
+  } catch (e) {
+    console.error("[email] sendNatasaProfPodsetnikZbirni pao:", e);
+  }
+}
