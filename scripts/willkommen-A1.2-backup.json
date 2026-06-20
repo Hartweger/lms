@@ -1,0 +1,66 @@
+{
+  "course": {
+    "id": "3dc26901-a719-43d5-96eb-5c95de5322cc",
+    "title": "Nemački A1.2"
+  },
+  "willkommen": {
+    "id": "fd45eb3c-0ba4-4410-92ee-b5a883c1493c",
+    "title": "Willkommen",
+    "order_index": 0,
+    "sections": [
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Dobrodošli u kurs **Nemački A1.2**! Ovo je nastavak kursa A1 - proširićeš vokabular, naučiti dativ, imperativ, modalne glagole i pripremiti se za ispit A1."
+      },
+      {
+        "type": "text",
+        "style": "uebung",
+        "content": "**Priručnik za A1 kurs**\n\nUz ovaj kurs ide priručnik sa kompletnim vokabularom, gramatikom i vežbama. Preuzmite ga i koristite uz lekcije:"
+      },
+      {
+        "href": "https://drive.google.com/file/d/1dd29RtYvHX_JeZ45THujNf_FmHOATVbD/view?usp=sharing",
+        "type": "link",
+        "label": "Preuzmi priručnik za A1 kurs (PDF)",
+        "linkType": "pdf"
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "**WhatsApp grupa za učenike A1**\n\nPridružite se našoj WhatsApp grupi gde možete da postavljate pitanja, delite iskustva i vežbate nemački sa drugim učenicima:"
+      },
+      {
+        "href": "https://chat.whatsapp.com/FFthWnle8F7H1i0H9nS6S8?mode=gi_t",
+        "type": "link",
+        "label": "Pridruži se WhatsApp grupi",
+        "linkType": "external"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Šta ćeš naučiti u A1.2?\n\n- Zanimanja i kako reći čime se baviš\n- Prošlo vreme sa *hatte* i *war*\n- Imperativ - kako davati uputstva\n- Modalni glagoli - können, müssen, dürfen, sollen, wollen, mögen\n- Delovi tela i kako reći šta te boli\n- Dativ sa predlozima (mit, zu, in, bei, nach)\n- Odeća (Kleidung)\n- Pisanje mejlova i upita\n- ADUSO veznici\n- Priprema za ispit A1"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Reči za ovaj kurs\n\nReči možeš da vežbaš uz Quizlet:"
+      },
+      {
+        "href": "https://quizlet.com/join/R6HAAKJrn?i=2a998&x=1bqt",
+        "type": "link",
+        "label": "Quizlet - A1 reči",
+        "linkType": "quizlet"
+      },
+      {
+        "href": "https://drive.google.com/drive/folders/1sMlcU6zkAVDiU9hwR5xHECGeYy0k4ktj?usp=sharing",
+        "type": "link",
+        "label": "📁 Materijal (Google Drive)",
+        "linkType": "external"
+      }
+    ]
+  },
+  "firstReal": {
+    "id": "055bffbf-4abf-4590-afee-0e67b5027375",
+    "title": "Berufe"
+  }
+}

@@ -12,6 +12,7 @@ export default function LessonCompleteButton({
   levelComplete,
   prevLessonId,
   nextLessonId,
+  nextLabel,
 }: {
   lessonId: string;
   initialCompleted: boolean;
@@ -21,6 +22,8 @@ export default function LessonCompleteButton({
   levelComplete: boolean;
   prevLessonId?: string | null;
   nextLessonId?: string | null;
+  /** Natpis dugmeta za sledeću lekciju (npr. „Počni prvu lekciju →" na uvodnoj). */
+  nextLabel?: string | null;
 }) {
   const router = useRouter();
   const [completed, setCompleted] = useState(initialCompleted);
@@ -97,7 +100,7 @@ export default function LessonCompleteButton({
           {PrevLink}
           {nextLessonId ? (
             <Link href={`/lekcija/${nextLessonId}`} className={nextClasses}>
-              Sledeća →
+              {nextLabel || "Sledeća →"}
             </Link>
           ) : (
             <div className="flex-1" />
@@ -116,7 +119,7 @@ export default function LessonCompleteButton({
         disabled={saving}
         className="flex-1 bg-plava text-white py-3 rounded-lg font-bold hover:bg-plava-dark transition-colors disabled:opacity-50"
       >
-        {saving ? "Čuvam..." : nextLessonId ? "Završi i nastavi →" : "Završi lekciju"}
+        {saving ? "Čuvam..." : nextLessonId ? (nextLabel || "Završi i nastavi →") : "Završi lekciju"}
       </button>
     </div>
   );

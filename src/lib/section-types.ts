@@ -9,6 +9,8 @@ export interface BadgeSection {
   type: "badge";
   module: string;
   category?: BadgeCategory;
+  /** Ispitna lekcija — prikazuje dodatnu „Prüfung" oznaku. */
+  pruefung?: boolean;
 }
 
 export interface VideoSection {

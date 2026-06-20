@@ -1,0 +1,97 @@
+{
+  "id": "734aca58-2063-463b-9b19-a458c9ce126f",
+  "title": "Willkommen",
+  "course_id": "0e9a62b5-9b1c-44b6-a8cb-9b1985abe0cb",
+  "order_index": 1,
+  "sections": [
+    {
+      "type": "text",
+      "style": "info",
+      "content": "Dobrodošli u kurs **Nemački A1.1**! Ovaj kurs je podeljen u 7 modula. Svaka lekcija ima video, objašnjenje, vežbe i kartice za učenje reči.\n\nUz svaku lekciju možete vežbati reči i na Quizlet-u."
+    },
+    {
+      "type": "text",
+      "style": "uebung",
+      "content": "**Priručnik za A1 kurs**\n\nUz ovaj kurs ide priručnik sa kompletnim vokabularom, gramatikom i vežbama. Preuzmite ga i koristite uz lekcije:"
+    },
+    {
+      "href": "https://drive.google.com/file/d/1dd29RtYvHX_JeZ45THujNf_FmHOATVbD/view?usp=sharing",
+      "type": "link",
+      "label": "Preuzmi priručnik za A1 kurs (PDF)",
+      "linkType": "pdf"
+    },
+    {
+      "type": "text",
+      "style": "beispiele",
+      "content": "**WhatsApp grupa za učenike A1**\n\nPridružite se našoj WhatsApp grupi gde možete da postavljate pitanja, delite iskustva i vežbate nemački sa drugim učenicima:"
+    },
+    {
+      "href": "https://chat.whatsapp.com/FFthWnle8F7H1i0H9nS6S8?mode=gi_t",
+      "type": "link",
+      "label": "Pridruži se WhatsApp grupi",
+      "linkType": "external"
+    },
+    {
+      "rows": [
+        [
+          "<mark>Modul 1</mark>",
+          "Pozdravi, pitanja, dijalozi, alfabet",
+          "2-5"
+        ],
+        [
+          "<mark>Modul 2</mark>",
+          "Porodica, kako si, brojevi, prezent",
+          "6-9"
+        ],
+        [
+          "<mark>Modul 3</mark>",
+          "Hrana, cene, restoran",
+          "10-12"
+        ],
+        [
+          "<mark>Modul 4</mark>",
+          "Stan, nameštaj, oglasi",
+          "13-15"
+        ],
+        [
+          "<mark>Modul 5</mark>",
+          "Razdvojni prefiksi, vreme, raspored, dnevni tok",
+          "16-20"
+        ],
+        [
+          "<mark>Modul 6</mark>",
+          "Vreme (meteo), akuzativ, hobiji, ja/nein/doch",
+          "21-25"
+        ],
+        [
+          "<mark>Modul 7</mark>",
+          "Modalni glagoli, perfekat",
+          "26-29"
+        ]
+      ],
+      "type": "table",
+      "headers": [
+        "Modul",
+        "Tema",
+        "Lekcije"
+      ]
+    },
+    {
+      "href": "https://quizlet.com/user/hartweger",
+      "type": "link",
+      "label": "Quizlet kartice za ceo A1.1 kurs",
+      "linkType": "quizlet"
+    },
+    {
+      "type": "text",
+      "style": "default",
+      "content": "**Saveti za učenje:**\n\n1. Pogledaj video i ponovi naglas\n2. Pročitaj objašnjenje i primere\n3. Uradi mini vežbu (klikni za rešenje)\n4. Nauči reči uz kartice\n5. Ponavljaj svaki dan po malo!"
+    },
+    {
+      "href": "https://drive.google.com/drive/folders/1sMlcU6zkAVDiU9hwR5xHECGeYy0k4ktj?usp=sharing",
+      "type": "link",
+      "label": "📁 Materijal (Google Drive)",
+      "linkType": "external"
+    }
+  ]
+}

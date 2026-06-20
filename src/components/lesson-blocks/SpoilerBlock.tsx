@@ -13,7 +13,7 @@ export default function SpoilerBlock({ title, items }: SpoilerSection) {
             className="bg-gray-100 rounded-lg p-3 md:p-4 cursor-pointer"
           >
             <summary className="text-sm text-gray-700 list-none">
-              <p>{item.question}</p>
+              <p className="whitespace-pre-line">{item.question}</p>
               <p className="mt-1 text-xs text-gray-400">Klikni za rešenje</p>
             </summary>
             <p className="mt-2 pt-2 border-t border-gray-300 text-green-700 font-bold text-sm whitespace-pre-line">

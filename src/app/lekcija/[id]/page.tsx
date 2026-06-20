@@ -129,6 +129,10 @@ export default async function LekcijaStranica({ params }: PageProps) {
   const totalLessons = allLessons?.length ?? 0;
   const lessonNumber = currentIndex + 1;
 
+  // Uvodna (prva) lekcija — „Willkommen": dugme ka sledećoj glasi „Počni prvu lekciju →"
+  const isIntroLesson = currentIndex === 0 && !!nextLesson;
+  const nextLabel = isIntroLesson ? "Počni prvu lekciju →" : null;
+
   // Manuelno označavanje završetka (Nataša: pravo dugme, bez auto-čekiranja na otvaranje)
   const lessonCompleted = completedLessonIds.has(typedLesson.id);
   const levelComplete = totalLessons > 0 && completedCount === totalLessons;
@@ -208,6 +212,7 @@ export default async function LekcijaStranica({ params }: PageProps) {
           levelComplete={levelComplete}
           prevLessonId={prevLesson?.id ?? null}
           nextLessonId={nextLesson?.id ?? null}
+          nextLabel={nextLabel}
         />
       ) : (
         <div className="flex gap-3 mt-8 pt-6 border-t border-gray-100">
@@ -226,7 +231,7 @@ export default async function LekcijaStranica({ params }: PageProps) {
               href={`/lekcija/${nextLesson.id}`}
               className="flex-1 text-center py-3 bg-plava text-white rounded-lg text-sm font-bold hover:bg-plava-dark transition-colors"
             >
-              Sledeća →
+              {nextLabel || "Sledeća →"}
             </Link>
           ) : (
             <div className="flex-1" />

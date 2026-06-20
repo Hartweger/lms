@@ -16,20 +16,22 @@ const categoryLabels: Record<BadgeCategory, string> = {
   wortschatz: "Wortschatz",
 };
 
-export default function BadgeBlock({ module, category }: BadgeSection) {
-  if (!category) {
-    return (
-      <span className="inline-block text-white text-xs font-bold px-3 py-1 rounded-full bg-plava">
-        {module}
-      </span>
-    );
-  }
-  const label = categoryLabels[category];
+export default function BadgeBlock({ module, category, pruefung }: BadgeSection) {
+  const mainBg = category ? categoryStyles[category] : "bg-plava";
+  const mainText = category
+    ? (module ? `${module} · ${categoryLabels[category]}` : categoryLabels[category])
+    : module;
+
   return (
-    <span
-      className={`inline-block text-white text-xs font-bold px-3 py-1 rounded-full ${categoryStyles[category]}`}
-    >
-      {module ? `${module} · ${label}` : label}
+    <span className="inline-flex items-center gap-2 flex-wrap">
+      <span className={`inline-block text-white text-xs font-bold px-3 py-1 rounded-full ${mainBg}`}>
+        {mainText}
+      </span>
+      {pruefung && (
+        <span className="inline-block text-white text-xs font-bold px-3 py-1 rounded-full bg-gray-900">
+          🎯 Prüfung
+        </span>
+      )}
     </span>
   );
 }

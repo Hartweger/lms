@@ -1,0 +1,72 @@
+{
+  "course": {
+    "id": "16a471dd-9544-4da1-8f74-a52469a6e726",
+    "title": "Nemački A2.1"
+  },
+  "willkommen": {
+    "id": "324ed5fc-ae37-4cf7-90ff-e9ac93349cd3",
+    "title": "Willkommen",
+    "order_index": 0,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Uvod",
+        "category": "wortschatz"
+      },
+      {
+        "type": "text",
+        "style": "uebung",
+        "content": "**Priručnik za A2 kurs**\n\nUz ovaj kurs ide priručnik sa kompletnim vokabularom, gramatikom i vežbama. Preuzmi ga i koristi uz lekcije:"
+      },
+      {
+        "url": "https://drive.google.com/file/d/1_F2GZtlXPgeXvHeSppV21g_j5e_NZYfM/view?usp=sharing",
+        "href": "https://drive.google.com/file/d/1_F2GZtlXPgeXvHeSppV21g_j5e_NZYfM/view?usp=sharing",
+        "type": "link",
+        "label": "Preuzmi priručnik za A2 kurs (PDF)",
+        "title": "Preuzmi priručnik za A2 (PDF)",
+        "linkType": "pdf"
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "**WhatsApp grupa za učenike A2**\n\nPridruži se našoj WhatsApp grupi gde možeš da postavljaš pitanja, deliš iskustva i vežbaš nemački sa drugim učenicima:"
+      },
+      {
+        "href": "https://chat.whatsapp.com/GkIMxGTD20xIATm1GlBT56?mode=gi_t",
+        "type": "link",
+        "label": "Pridruži se WhatsApp grupi",
+        "linkType": "external"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Dobrodošli u kurs **Nemački A2.1**! Ovo je prvi deo A2 nivoa. Nadovezuješ se na sve iz A1 kursa i proširuješ znanje."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Šta ćeš naučiti u A2.1?\n\n- **Lični podaci** - formulari, bračni status, adresa\n- **Porodica** - širi članovi (bratanac, snaja, zet...)\n- **Perfekt** - ponavljanje i proširenje (nepravilni glagoli)\n- **weil rečenice** - objašnjavanje razloga\n- **Stanovanje** - tipovi stanova, nameštaj, okruženje\n- **Smeće i reciklaža** - Müll u Nemačkoj\n- **Wechselpräpositionen** - predlozi koji menjaju padež\n- **Hrana i restoran** - naručivanje, navike u ishrani\n- **Posao** - prijava za posao, radno vreme, praznici\n- **Refleksivni glagoli** - sich waschen, sich interessieren...\n- **Škola u Nemačkoj** - školski sistem, obrazovanje"
+      },
+      {
+        "type": "text",
+        "style": "uebung",
+        "content": "## Kako da učiš?\n\n1. **Pogledaj video** - svaka lekcija ima video objašnjenje\n2. **Pročitaj sadržaj** - tabele, formule i primeri ispod videa\n3. **Uradi vežbe** - spoileri, flashcards i kvizovi\n4. **AI vežbe** - prevod i dijalog na kraju svake lekcije\n5. **Modularni test** - posle svakog modula proveri znanje\n6. **Modelltest** - na kraju kursa uradiš završni test"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Saveti za uspeh\n\n- Uči **redovno** - bolje 20 minuta svaki dan nego 3 sata jednom nedeljno\n- **Ponavljaj** - vrati se na lekcije koje ti nisu jasne\n- Ako imaš pitanja, piši profesorki na **info@hartweger.rs**\n\nSrećno učenje!"
+      },
+      {
+        "href": "https://drive.google.com/drive/folders/1sMlcU6zkAVDiU9hwR5xHECGeYy0k4ktj?usp=sharing",
+        "type": "link",
+        "label": "📁 Materijal (Google Drive)",
+        "linkType": "external"
+      }
+    ]
+  },
+  "firstReal": {
+    "id": "f14821fb-d431-48e6-a7c5-97d02f11decd",
+    "title": "Persönliche Angaben"
+  }
+}

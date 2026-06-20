@@ -1,0 +1,78 @@
+{
+  "course": {
+    "id": "0b4a095e-2841-4fe8-b6b0-ed0973a30e31",
+    "title": "Nemački A2.2"
+  },
+  "willkommen": {
+    "id": "70d4d91d-c05e-49ed-ba13-b03250de960a",
+    "title": "Willkommen",
+    "order_index": 0,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Uvod",
+        "category": "wortschatz"
+      },
+      {
+        "type": "text",
+        "style": "uebung",
+        "content": "**Priručnik za A2 kurs**\n\nUz ovaj kurs ide priručnik sa kompletnim vokabularom, gramatikom i vežbama. Preuzmite ga i koristite uz lekcije:"
+      },
+      {
+        "url": "https://drive.google.com/file/d/1_F2GZtlXPgeXvHeSppV21g_j5e_NZYfM/view?usp=sharing",
+        "href": "https://drive.google.com/file/d/1_F2GZtlXPgeXvHeSppV21g_j5e_NZYfM/view?usp=sharing",
+        "type": "link",
+        "label": "Preuzmi priručnik za A2 kurs (PDF)",
+        "title": "Preuzmi priručnik za A2 (PDF)",
+        "linkType": "pdf"
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "**WhatsApp grupa za učenike A2**\n\nPridružite se našoj WhatsApp grupi gde možete da postavljate pitanja, delite iskustva i vežbate nemački sa drugim učenicima:"
+      },
+      {
+        "href": "https://chat.whatsapp.com/GkIMxGTD20xIATm1GlBT56?mode=gi_t",
+        "type": "link",
+        "label": "Pridruži se WhatsApp grupi",
+        "linkType": "external"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Dobrodošli u kurs **Nemački A2.2**! Ovo je drugi deo A2 nivoa. Posle ovog kursa možeš da izađeš na **Goethe-Zertifikat A2** ispit."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Šta ćeš naučiti u A2.2?\n\n- **Konjunktiv II** - kako da izraziš želje (hätte, wäre, würde, könnte)\n- **trotzdem** - kako da kažeš \"ipak\"\n- **Dialoge führen** - predlozi, dogovaranje termina, reagovanje\n- **Deklinacija prideva** - nastavci prideva sa svim članovima\n- **Pasiv** - kako reći \"nešto se radi\"\n- **Komparacija** - poređenje (veći, manji, najbolji)\n- **Reisen und Verkehr** - putovanja, karte, prevoz\n- **Bank und Geld** - račun, bankomat, transakcije\n- **Schreiben** - pisanje mejlova i kratkih poruka"
+      },
+      {
+        "type": "text",
+        "style": "uebung",
+        "content": "## Kako da učiš?\n\n1. **Pogledaj video** - svaka lekcija ima video objašnjenje\n2. **Pročitaj sadržaj** - tabele, formule i primeri ispod videa\n3. **Uradi vežbe** - spoileri, flashcards i kvizovi\n4. **AI vežbe** - prevod i dijalog na kraju svake lekcije\n5. **Modularni test** - posle svakog modula proveri znanje\n6. **Modelltest** - na kraju kursa uradiš pravi ispit po Goethe formatu"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Saveti za uspeh\n\n- Uči **redovno** - bolje 20 minuta svaki dan nego 3 sata jednom nedeljno\n- **Ponavljaj** - vrati se na lekcije koje ti nisu jasne\n- Koristi **Quizlet** za vežbanje reči - link je u prvoj lekciji\n- Ako imaš pitanja, piši profesorki na **info@hartweger.rs**\n\nSrećno učenje!"
+      },
+      {
+        "href": "https://quizlet.com/join/4uCquAgJk?i=2a998&x=1bqt",
+        "type": "link",
+        "label": "Vežbaj reči iz celog kursa na Quizlet-u",
+        "linkType": "quizlet"
+      },
+      {
+        "href": "https://drive.google.com/drive/folders/1sMlcU6zkAVDiU9hwR5xHECGeYy0k4ktj?usp=sharing",
+        "type": "link",
+        "label": "📁 Materijal (Google Drive)",
+        "linkType": "external"
+      }
+    ]
+  },
+  "firstReal": {
+    "id": "c96bab8c-87f4-4a2b-8229-a4584a8296c1",
+    "title": "Hätte und wäre"
+  }
+}
