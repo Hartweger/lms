@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { trackInitiateCheckout } from "@/lib/fbq";
 import { EUR_RATE } from "@/lib/order-utils";
+import { computeCouponDiscount } from "@/lib/coupon-discount";
 import { professorsFromVariants, packageTypesFromVariants, resolveVariant, type Variant } from "@/lib/individual-pricing";
 
 interface Props {
@@ -58,7 +59,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
   const [showCoupon, setShowCoupon] = useState(false);
   const [couponCode, setCouponCode] = useState("");
   const [couponLoading, setCouponLoading] = useState(false);
-  const [appliedCoupon, setAppliedCoupon] = useState<{ code: string; discountPercent: number } | null>(null);
+  const [appliedCoupon, setAppliedCoupon] = useState<{ code: string; discountType: string; amount: number } | null>(null);
   const [couponError, setCouponError] = useState<string | null>(null);
 
   const isRS = country === "RS";
@@ -69,7 +70,9 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
   const selectedVariant = isIndividual ? resolveVariant(variants, { professorId, packageType }) : null;
   // Za individualne cena dolazi iz varijacije; inače prop priceRsd.
   const basePrice = isIndividual ? (selectedVariant?.price ?? 0) : priceRsd;
-  const discountedRsd = appliedCoupon ? Math.round(basePrice * (1 - appliedCoupon.discountPercent / 100)) : basePrice;
+  const discountedRsd = appliedCoupon
+    ? computeCouponDiscount(appliedCoupon.discountType, appliedCoupon.amount, basePrice).finalPrice
+    : basePrice;
   const eurApprox = Math.round(discountedRsd / EUR_RATE);
 
   // Meta Pixel - InitiateCheckout kad korisnik dođe na korak kupovine (jednom).
@@ -209,7 +212,9 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
         {appliedCoupon ? (
           <div className="flex items-center justify-between gap-3">
             <p className="text-sm font-medium text-green-600">
-              Kupon {appliedCoupon.code} - {appliedCoupon.discountPercent}% popusta
+              Kupon {appliedCoupon.code} - {appliedCoupon.discountType === "fixed"
+                ? `${formatPrice(appliedCoupon.amount)} din popusta`
+                : `${appliedCoupon.amount}% popusta`}
             </p>
             <button
               type="button"
