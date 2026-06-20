@@ -2,8 +2,6 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { grantAccessForOrder } from "@/lib/grant-access";
-import { sendPurchaseEvent } from "@/lib/meta-capi";
-import { SITE_URL } from "@/lib/site-url";
 
 export async function POST(
   _request: Request,
@@ -36,18 +34,14 @@ export async function POST(
     return NextResponse.json({ error: "Order already completed" }, { status: 400 });
   }
 
+  // grantAccessForOrder daje pristup + šalje GA4 i Meta Purchase (CAPI) iz jedne tačke
+  // (kad je uplata stvarno potvrđena). Browser pixel za uplatnicu/PayPal ništa ne šalje.
   const result = await grantAccessForOrder(id);
   if (!result.ok) return NextResponse.json({ error: result.error }, { status: 400 });
 
   // NAPOMENA: potvrda uplatnice/PayPal samo daje pristup - fiskalizacija je RUČNA (dugme
   // „Fiskalizuj" u adminu), po odluci 09.06.2026. Kartice se i dalje fiskalizuju automatski
   // u nestpay callback-u (nema ručne potvrde za njih).
-
-  // Meta Conversions API - Purchase za uplatnicu/PayPal ide ISKLJUČIVO ovde (kad je uplata
-  // stvarno potvrđena), pa browser pixel za ove načine ne šalje Purchase. Ovo je adminov
-  // zahtev (ne korisnikov browser), pa nema fbp/fbc/IP - match preko hešovanog mejla.
-  const base = SITE_URL;
-  await sendPurchaseEvent(order, { eventSourceUrl: `${base}/kupovina/hvala/${order.id}` });
 
   return NextResponse.json({ ok: true });
 }

@@ -5,6 +5,8 @@ import { nivoForSlug } from "@/lib/course-nivo";
 import { computeSeats, pickOpenGroupForNivo } from "@/lib/groups";
 import { callGas } from "@/lib/gas";
 import { sendGa4Purchase } from "@/lib/ga4-mp";
+import { sendPurchaseEvent } from "@/lib/meta-capi";
+import { SITE_URL } from "@/lib/site-url";
 
 interface OrderItem { course_id: string; course_slug: string; title: string; price: number; }
 
@@ -187,6 +189,14 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
   await admin.from("orders").update({ payment_status: "completed", granted: true }).eq("id", orderId);
   // GA4 prihod (server-side) za SVE načine plaćanja — klijentski purchase hvata samo karticu.
   await sendGa4Purchase(order);
+  // Meta Purchase (CAPI) iz JEDNE tačke — pokriva SVE puteve do "completed" (kartica callback,
+  // admin potvrda uplatnice/PayPala, recovery cron, ručna admin porudžbina). Dedup sa browser
+  // pixel-om ide preko event_id (purchase_<order_number>). Rezultat pamtimo u meta_purchase_sent
+  // (trajna evidencija + osnova za retry). Best-effort: ne ruši dodelu pristupa ako padne.
+  if (!order.meta_purchase_sent) {
+    const metaOk = await sendPurchaseEvent(order, { eventSourceUrl: `${SITE_URL}/kupovina/hvala/${order.id}` });
+    if (metaOk) await admin.from("orders").update({ meta_purchase_sent: true }).eq("id", orderId);
+  }
   // Generički welcome šaljemo samo ako nismo već poslali grupni/individualni (da polaznik dobije jedan mejl).
   if (!grupniWelcomeSent && !individualWelcomeSent) await sendWelcomeEmail(order.email, order.full_name, items.map((i) => i.title));
   return { ok: true };

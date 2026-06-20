@@ -4,7 +4,6 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { verifyCallbackHash, NESTPAY } from "@/lib/nestpay";
 import { grantAccessForOrder } from "@/lib/grant-access";
 import { fiscalizeOrder } from "@/lib/fiscomm";
-import { sendPurchaseEvent } from "@/lib/meta-capi";
 import { SITE_URL } from "@/lib/site-url";
 
 export const dynamic = "force-dynamic";
@@ -54,13 +53,8 @@ export async function POST(request: Request) {
   // echo-vanog params.amount. Server-side query je UKLONJEN - obarao se na IP/whitelist i lažno
   // označavao uspele uplate kao neuspeh.
   await admin.from("orders").update({ nestpay_status: "charged" }).eq("id", order.id);
-  await grantAccessForOrder(order.id);
+  await grantAccessForOrder(order.id); // dodela pristupa + GA4 + Meta Purchase (CAPI) iz jedne tačke
   await fiscalizeOrder(order.id); // fiskalni račun (kartica) - ne blokira pristup ako padne
-
-  // Meta Conversions API - server-side Purchase (dedup sa browser pixel-om preko event_id).
-  // Callback dolazi od banke (server-to-server), pa nemamo korisnikov fbp/fbc/IP - match ide
-  // preko hešovanog mejla. Best-effort: ne blokira redirect ako padne.
-  await sendPurchaseEvent(order, { eventSourceUrl: `${base}/kupovina/hvala/${order.id}?status=ok` });
 
   return NextResponse.redirect(`${base}/kupovina/hvala/${order.id}?status=ok`, { status: 303 });
 }

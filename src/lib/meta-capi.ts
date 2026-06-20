@@ -6,6 +6,7 @@
 // rušimo tok plaćanja (isto kao Resend/Fiscomm obrazac).
 
 import crypto from "node:crypto";
+import * as Sentry from "@sentry/nextjs";
 import { META_PIXEL_ID, purchaseEventId } from "@/lib/fbq";
 
 const GRAPH_VERSION = "v21.0";
@@ -95,12 +96,17 @@ export async function sendPurchaseEvent(order: OrderLike, ctx: CapiContext = {})
     if (!res.ok) {
       const text = await res.text();
       console.error(`[meta-capi] Purchase ${order.order_number} odbijen (${res.status}): ${text}`);
+      Sentry.captureMessage(`[meta-capi] Purchase odbijen (${res.status}) za ${order.order_number}`, {
+        level: "error",
+        extra: { order_number: order.order_number, status: res.status, response: text },
+      });
       return false;
     }
     console.log(`[meta-capi] Purchase poslat za ${order.order_number} (value=${order.total} RSD)`);
     return true;
   } catch (err) {
     console.error(`[meta-capi] greška pri slanju Purchase ${order.order_number}:`, err);
+    Sentry.captureException(err, { extra: { scope: "meta-capi", order_number: order.order_number } });
     return false;
   }
 }
