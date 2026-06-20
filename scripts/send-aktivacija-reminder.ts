@@ -21,7 +21,7 @@ for (const line of fs.readFileSync(envPath, "utf-8").split("\n")) {
 const sb = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
 const RESEND_KEY = process.env.RESEND_API_KEY!;
 const FROM = "Hartweger <info@hartweger.rs>";
-const SUBJECT = "Tvoj kurs te čeka — uđi za 30 sekundi 🇩🇪";
+const SUBJECT = "Tvoj kurs te čeka - napravi lozinku i uđi 🇩🇪";
 const SEND = process.argv.includes("--send");
 const limitArg = process.argv.find((a) => a.startsWith("--limit="));
 const LIMIT = limitArg ? parseInt(limitArg.split("=")[1], 10) : 100000;
@@ -43,8 +43,8 @@ function buildEmail(name: string | null): string {
 <h1 style="font-size:22px;margin:0 0 16px;color:#1a1a2e">Tvoj kurs te čeka 👋</h1>
 <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 16px">${pozdrav}</p>
 <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 18px">Primetili smo da još nisi ušao/la na našu novu platformu. Tvoj nalog i svi kursevi su <strong>već prebačeni i čekaju te</strong> — ništa ne kupuješ ponovo, samo se prijaviš i nastaviš.</p>
-<div style="background:#f8fcfd;border-left:3px solid #4fb1d3;border-radius:6px;padding:16px 18px;margin:0 0 22px"><div style="font-size:15px;line-height:1.7;color:#1a1a2e"><strong>Prijava traje 30 sekundi, bez lozinke:</strong><br>1. Idi na <a href="https://www.hartweger.rs/prijava" style="color:#4fb1d3">hartweger.rs/prijava</a><br>2. Ukucaj svoj mejl (ovaj na koji si dobio/la poruku)<br>3. Stigne ti link za prijavu — klikneš i unutra si 🎉</div></div>
-<div style="text-align:center;margin:26px 0"><a href="https://www.hartweger.rs/prijava" style="display:inline-block;background:#4fb1d3;color:#fff;text-decoration:none;font-size:16px;font-weight:700;padding:14px 34px;border-radius:8px">Uđi u svoj nalog →</a></div>
+<div style="background:#f8fcfd;border-left:3px solid #4fb1d3;border-radius:6px;padding:16px 18px;margin:0 0 22px"><div style="font-size:15px;line-height:1.7;color:#1a1a2e"><strong>Napravi lozinku i uđi:</strong><br>1. Klikni na dugme ispod<br>2. Ukucaj svoj mejl (ovaj na koji si dobio/la poruku)<br>3. Stigne ti link - postaviš lozinku i unutra si 🎉<br><br><span style="font-size:13px;color:#666">Ako si ranije koristio/la staru platformu, tvoja stara lozinka tamo ovde ne važi - zato praviš novu.</span></div></div>
+<div style="text-align:center;margin:26px 0"><a href="https://www.hartweger.rs/reset-lozinke" style="display:inline-block;background:#4fb1d3;color:#fff;text-decoration:none;font-size:16px;font-weight:700;padding:14px 34px;border-radius:8px">Napravi lozinku →</a></div>
 <p style="font-size:14px;line-height:1.6;color:#666;margin:0 0 0">Ako ti ne stigne link ili nešto zapinje, samo odgovori na ovaj mejl ili nam piši na <a href="mailto:info@hartweger.rs" style="color:#4fb1d3">info@hartweger.rs</a> — rešićemo odmah.</p>
 <p style="font-size:15px;line-height:1.6;color:#444;margin:20px 0 0">Srdačno,<br><strong>Hartweger tim</strong></p>
 </div>

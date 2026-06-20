@@ -11,15 +11,18 @@ export default function ResetLozinke() {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}/auth/callback?next=/profil`,
     });
-    if (error) return "Greška pri slanju linka. Pokušajte ponovo.";
-    return "OK:Link za reset lozinke je poslat na vaš email.";
+    if (error) return "Greška pri slanju linka. Pokušaj ponovo.";
+    return "OK:Link je poslat na tvoj email. Otvori ga i postavi lozinku.";
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
       <div className="text-center">
-        <h1 className="text-2xl font-bold text-plava mb-2">Reset lozinke</h1>
-        <p className="text-gray-500 mb-8">Unesite email za reset lozinke</p>
+        <h1 className="text-2xl font-bold text-plava mb-2">Napravi novu lozinku</h1>
+        <p className="text-gray-500 mb-8 max-w-sm mx-auto">
+          Unesi svoj email pa ti šaljemo link da postaviš lozinku. Ako si ranije bio/la na staroj
+          platformi, stara lozinka ovde ne važi - ovde praviš novu.
+        </p>
 
         <AuthForma tip="reset" onSubmit={handleReset} />
 

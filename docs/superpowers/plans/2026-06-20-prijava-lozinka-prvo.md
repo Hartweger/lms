@@ -82,7 +82,7 @@ function isInvalidCredentials(error: AuthErrorLike): boolean {
 export function loginErrorMessage(error: AuthErrorLike | null): string {
   if (!error) return "";
   if (isInvalidCredentials(error)) {
-    return "Lozinka nije prošla. Ako si ranije bio/la na staroj platformi, stara lozinka ovde ne važi — napravi novu za 30 sekundi.";
+    return "Lozinka nije prošla. Ako si ranije bio/la na staroj platformi, stara lozinka ovde ne važi - napravi novu za 30 sekundi.";
   }
   if (error.status === 429) {
     return "Previše pokušaja. Sačekaj minut pa probaj ponovo.";

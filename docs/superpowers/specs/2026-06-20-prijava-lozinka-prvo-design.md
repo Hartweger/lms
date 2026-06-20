@@ -54,7 +54,7 @@ Magic link se NE uklanja iz koda, ali više nije glavno dugme — ostaje dostupa
 
 Kad `signInWithPassword` vrati grešku (pogrešna ili nepostojeća lozinka), ispod forme se prikazuje:
 
-> „Lozinka nije prošla. Ako si ranije bio/la na staroj platformi, stara lozinka ovde ne važi — napravi novu za 30 sekundi."
+> „Lozinka nije prošla. Ako si ranije bio/la na staroj platformi, stara lozinka ovde ne važi - napravi novu za 30 sekundi."
 
 uz vidljivo dugme/link **„Napravi lozinku"**. Ova poruka se prikazuje samo nakon neuspelog pokušaja — novi korisnici i oni koji znaju lozinku je nikad ne vide.
 

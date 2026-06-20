@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import AuthForma from "@/components/AuthForma";
+import { loginErrorMessage } from "@/lib/auth-messages";
 
 export default function Prijava() {
   const router = useRouter();
@@ -11,8 +12,7 @@ export default function Prijava() {
 
   const handleLogin = async ({ email, password }: { email: string; password: string }) => {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error)
-      return 'Email ili lozinka nisu tačni. Ako nemaš lozinku, vrati se i uđi linkom na mejl ili preko Google.';
+    if (error) return loginErrorMessage(error);
     router.push("/dashboard");
     return null;
   };
