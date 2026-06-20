@@ -26,3 +26,15 @@ on conflict (code) do update set
   applies_to_course_id = excluded.applies_to_course_id,
   once_per_email       = excluded.once_per_email,
   is_active            = excluded.is_active;
+
+-- Osigurač: ako neki slug ne postoji u ovom okruženju, gornji subselect bi upisao
+-- NULL i FSP1NA1 bi postao NEOGRANIČEN fiksni popust na bilo koji kurs. Padni glasno.
+do $$ begin
+  if exists (
+    select 1 from coupons
+    where code = 'FSP1NA1'
+      and (requires_course_id is null or applies_to_course_id is null)
+  ) then
+    raise exception 'FSP1NA1 seed: kurs slug nije nađen (fsp / fsp-individualni)';
+  end if;
+end $$;
