@@ -56,26 +56,26 @@ export default function CookieBanner() {
     >
       <div className="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row sm:items-center gap-4">
         <p className="text-sm leading-relaxed flex-1">
-          Koristimo kolačiće da bismo poboljšali tvoje iskustvo i razumeli kako se sajt koristi.
-          Neophodni kolačići su uvek uključeni. Analitičke i marketinške kolačiće postavljamo samo
-          uz tvoju saglasnost. Više u{" "}
+          Uz tvoju saglasnost pratimo kako se sajt koristi da bismo ti prikazali pravi sadržaj i
+          stalno unapređivali časove i platformu. Neophodni kolačići rade uvek; analitičke i
+          marketinške postavljamo samo ako prihvatiš. Detaljnije u{" "}
           <Link href="/politika-privatnosti" className="underline text-plava hover:text-white">
             politici privatnosti
           </Link>
           .
         </p>
-        <div className="flex gap-3 shrink-0">
+        <div className="flex items-center gap-2 sm:gap-4 shrink-0">
           <button
             type="button"
             onClick={() => choose("denied")}
-            className="px-4 py-2 rounded-md border border-gray-500 text-sm hover:bg-gray-700 transition-colors"
+            className="px-3 py-2 rounded-md text-sm text-gray-400 hover:text-white hover:underline transition-colors"
           >
             Odbijam
           </button>
           <button
             type="button"
             onClick={() => choose("granted")}
-            className="px-4 py-2 rounded-md bg-plava text-white text-sm font-semibold hover:opacity-90 transition-opacity"
+            className="px-6 py-2.5 rounded-md bg-plava text-white text-sm font-semibold shadow-md hover:opacity-90 transition-opacity"
           >
             Prihvatam
           </button>
