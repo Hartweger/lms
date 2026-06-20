@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { emailOwnsCourse, emailOwnsAnyVideoCourse } from "@/lib/coupon-ownership";
+import { isTermPackage } from "@/lib/coupon-discount";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const code = (searchParams.get("code") ?? "").trim().toUpperCase();
   const courseSlug = (searchParams.get("courseSlug") ?? "").trim();
   const email = (searchParams.get("email") ?? "").trim();
+  const packageType = (searchParams.get("packageType") ?? "").trim();
 
   if (!code) {
     return NextResponse.json({ error: "Kod je obavezan." }, { status: 400 });
@@ -123,6 +125,14 @@ export async function GET(request: NextRequest) {
         { status: 400 }
       );
     }
+  }
+
+  // term_packages_only: kupon važi samo na individualne pakete od 4/8/12 termina
+  if (coupon.term_packages_only && !isTermPackage(packageType)) {
+    return NextResponse.json(
+      { error: "Ovaj kod važi samo za individualne pakete (4, 8 ili 12 termina)." },
+      { status: 400 }
+    );
   }
 
   return NextResponse.json({

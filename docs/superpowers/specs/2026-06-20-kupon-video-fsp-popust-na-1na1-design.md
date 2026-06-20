@@ -2,6 +2,24 @@
 
 Datum: 2026-06-20
 
+## Dodatak (2026-06-20): prof-kuponi 10% na individualne pakete
+
+Pored FSP1NA1, u istom radu prave se i **prof-kuponi**: po jedan kod na ime
+profesorke (`IME10`), 10% popusta, koji profesorka deli lično polaznicima.
+
+- **Kodovi:** DANICA10, HRISTINA10, KATARINA10, MARIJA10, MILICA10, SUZANA10,
+  NATASA10. `discount_type='percent'`, `amount=10`.
+- **Važi samo** na individualne 1:1 pakete od 4/8/12 termina, tj. kada je izabrani
+  `package_type` ∈ {`paket4`, `paket8`, `paket12`}. Ne važi za mesečne pakete,
+  video kurseve ni jednokratne (null package_type).
+- **Istek:** 31.08.2026 (`expires_at`).
+- **Bez** provere vlasništva, bez `once_per_email`, bez limita korišćenja
+  (profesorka deli lično, više polaznika sme isti kod).
+- **Mehanizam (reusable):** novi flag `coupons.term_packages_only boolean`. Kada
+  je `true`, kupon važi samo ako je `package_type` jedan od paket4/8/12.
+  Proverava se u `orders` (izvor istine) i `validate` (UX); `CheckoutForm` šalje
+  `packageType` u `validate`. Skup paketa: `TERM_PACKAGE_TYPES` (jedan izvor).
+
 ## Cilj
 
 Polaznik koji je kupio **video FSP** kurs (`fsp`) može da kupi **individualni FSP**

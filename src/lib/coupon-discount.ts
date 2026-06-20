@@ -20,3 +20,14 @@ export function computeCouponDiscount(
   if (discount < 0) discount = 0;
   return { discount, finalPrice: unitPrice - discount };
 }
+
+/**
+ * Individualni 1:1 paketi po broju termina. Kupon sa `term_packages_only`
+ * (npr. prof-kuponi IME10) važi samo kada je izabrani paket jedan od ovih -
+ * ne za mesečne, video ni jednokratne kupovine.
+ */
+export const TERM_PACKAGE_TYPES = ["paket4", "paket8", "paket12"] as const;
+
+export function isTermPackage(packageType: string | null | undefined): boolean {
+  return !!packageType && (TERM_PACKAGE_TYPES as readonly string[]).includes(packageType);
+}

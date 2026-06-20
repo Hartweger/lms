@@ -4,7 +4,7 @@ import { generateOrderNumber, calculatePaypalEur } from "@/lib/order-utils";
 import { sendPaymentInstructionsEmail, sendNewOrderAdminEmail } from "@/lib/email";
 import { nivoForSlug } from "@/lib/course-nivo";
 import { emailOwnsCourse, emailOwnsAnyVideoCourse } from "@/lib/coupon-ownership";
-import { computeCouponDiscount } from "@/lib/coupon-discount";
+import { computeCouponDiscount, isTermPackage } from "@/lib/coupon-discount";
 import { computeSeats, pickOpenGroupForNivo } from "@/lib/groups";
 
 export async function POST(request: Request) {
@@ -170,6 +170,13 @@ export async function POST(request: Request) {
         if (coupon.requires_course_id && !(await emailOwnsCourse(supabase, email, coupon.requires_course_id))) {
           return NextResponse.json(
             { error: "Ovaj kod važi samo za polaznike koji su kupili video FSP kurs (na taj mejl)." },
+            { status: 400 }
+          );
+        }
+        // term_packages_only: kupon važi samo na individualne pakete od 4/8/12 termina
+        if (coupon.term_packages_only && !isTermPackage(packageType)) {
+          return NextResponse.json(
+            { error: "Ovaj kod važi samo za individualne pakete (4, 8 ili 12 termina)." },
             { status: 400 }
           );
         }
