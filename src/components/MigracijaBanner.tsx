@@ -45,9 +45,10 @@ export default function MigracijaBanner() {
             ℹ️ Postojeći polaznici
           </span>
           <span className="font-semibold">Prešli smo na novu platformu.</span>{" "}
-          Tvoj nalog i kursevi su ovde - najlakše se prijaviš preko{" "}
-          <span className="font-semibold">„Nastavi sa Google"</span> (bez čekanja mejla). Ako si
-          bio/la na pola kursa, raniji napredak je sačuvan na{" "}
+          Tvoj nalog i kursevi su ovde - prijaviš se preko{" "}
+          <span className="font-semibold">„Nastavi sa Google"</span> ili emailom i lozinkom (nemaš
+          lozinku? na strani za prijavu klikni „Napravi je"). Ako si bio/la na pola kursa, raniji
+          napredak je sačuvan na{" "}
           <a
             href="https://old.hartweger.rs/moj-nalog/"
             className="underline font-semibold hover:text-[#1a2332]"
