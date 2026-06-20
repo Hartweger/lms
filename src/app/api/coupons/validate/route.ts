@@ -94,8 +94,40 @@ export async function GET(request: NextRequest) {
     }
   }
 
+  // applies_to_course_id: kupon se sme iskoristiti samo na tačno taj kurs
+  // (npr. FSP1NA1 važi samo na individualni FSP, ne na bilo koji 1:1 kurs).
+  if (coupon.applies_to_course_id) {
+    const { data: course } = await supabase
+      .from("courses").select("id").eq("slug", courseSlug).maybeSingle();
+    if (!course || course.id !== coupon.applies_to_course_id) {
+      return NextResponse.json(
+        { error: "Ovaj kod važi samo za individualni FSP kurs." },
+        { status: 400 }
+      );
+    }
+  }
+
+  // requires_course_id: kupon važi samo ako mejl već poseduje taj kurs
+  // (npr. FSP1NA1: mora da imaš kupljen video FSP).
+  if (coupon.requires_course_id) {
+    if (!email) {
+      return NextResponse.json(
+        { error: "Unesi svoj mejl iznad pa primeni kod - proveravamo da li imaš video FSP kurs." },
+        { status: 400 }
+      );
+    }
+    const owns = await emailOwnsCourse(supabase, email, coupon.requires_course_id);
+    if (!owns) {
+      return NextResponse.json(
+        { error: "Ovaj kod važi samo za polaznike koji su kupili video FSP kurs (na taj mejl)." },
+        { status: 400 }
+      );
+    }
+  }
+
   return NextResponse.json({
     code: coupon.code,
-    discountPercent: Number(coupon.amount),
+    discountType: coupon.discount_type,
+    amount: Number(coupon.amount),
   });
 }

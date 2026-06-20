@@ -189,6 +189,8 @@ export interface Coupon {
   code: string;
   discount_type: string;
   amount: number;
+  requires_course_id: string | null;
+  applies_to_course_id: string | null;
   min_order: number | null;
   max_uses: number | null;
   usage_count: number;

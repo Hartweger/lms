@@ -4,6 +4,7 @@ import { generateOrderNumber, calculatePaypalEur } from "@/lib/order-utils";
 import { sendPaymentInstructionsEmail, sendNewOrderAdminEmail } from "@/lib/email";
 import { nivoForSlug } from "@/lib/course-nivo";
 import { emailOwnsCourse, emailOwnsAnyVideoCourse } from "@/lib/coupon-ownership";
+import { computeCouponDiscount } from "@/lib/coupon-discount";
 import { computeSeats, pickOpenGroupForNivo } from "@/lib/groups";
 
 export async function POST(request: Request) {
@@ -105,7 +106,7 @@ export async function POST(request: Request) {
     }
 
     // Validate coupon if provided
-    let discountPercent = 0;
+    let couponForDiscount: { discount_type: string; amount: number } | null = null;
     let validCouponCode: string | null = null;
 
     if (rawCouponCode) {
@@ -158,15 +159,30 @@ export async function POST(request: Request) {
             { status: 400 }
           );
         }
+        // applies_to_course_id: kupon važi samo na tačno taj kurs
+        if (coupon.applies_to_course_id && coupon.applies_to_course_id !== course.id) {
+          return NextResponse.json(
+            { error: "Ovaj kod važi samo za individualni FSP kurs." },
+            { status: 400 }
+          );
+        }
+        // requires_course_id: mejl mora već da poseduje taj kurs (npr. video FSP)
+        if (coupon.requires_course_id && !(await emailOwnsCourse(supabase, email, coupon.requires_course_id))) {
+          return NextResponse.json(
+            { error: "Ovaj kod važi samo za polaznike koji su kupili video FSP kurs (na taj mejl)." },
+            { status: 400 }
+          );
+        }
         if (notExpired && notMaxed && renewalOk) {
-          discountPercent = Number(coupon.amount);
+          couponForDiscount = { discount_type: coupon.discount_type, amount: Number(coupon.amount) };
           validCouponCode = coupon.code;
         }
       }
     }
 
-    const discount = discountPercent > 0 ? Math.round(unitPrice * discountPercent / 100) : 0;
-    const finalPrice = unitPrice - discount;
+    const { discount, finalPrice } = couponForDiscount
+      ? computeCouponDiscount(couponForDiscount.discount_type, couponForDiscount.amount, unitPrice)
+      : { discount: 0, finalPrice: unitPrice };
 
     // Find or create user by email
     let userId: string;
