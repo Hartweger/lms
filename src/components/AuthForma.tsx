@@ -17,7 +17,7 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
   const [uspeh, setUspeh] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
-  const [passwordMode, setPasswordMode] = useState(false);
+  const [magicLoading, setMagicLoading] = useState(false);
   const [magicLinkSent, setMagicLinkSent] = useState(false);
   const [noAccount, setNoAccount] = useState(false);
 
@@ -33,13 +33,13 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
   const handleMagicLink = async () => {
     const cistEmail = email.trim();
     if (!cistEmail) {
-      setGreska("Unesi email adresu.");
+      setGreska("Unesi email adresu pa onda pošalji link.");
       return;
     }
     setGreska(null);
     setUspeh(null);
     setNoAccount(false);
-    setLoading(true);
+    setMagicLoading(true);
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithOtp({
       email: cistEmail,
@@ -54,22 +54,22 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
       if (status === 429) {
         setGreska("Previše pokušaja. Sačekaj minut pa probaj ponovo.");
       } else if (typeof status === "number" && status >= 400 && status < 500) {
-        // 4xx (npr. 422 "signups not allowed") = nema naloga sa tim mejlom
+        // 4xx (npr. 422 „signups not allowed") = nema naloga sa tim mejlom
         setNoAccount(true);
       } else {
-        // 5xx / mrežna greška - ne tvrdi da nema nalog
         setGreska("Trenutno ne možemo da pošaljemo link. Pokušaj ponovo za koji trenutak.");
       }
     } else {
       setMagicLinkSent(true);
     }
-    setLoading(false);
+    setMagicLoading(false);
   };
 
-  const handlePasswordSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setGreska(null);
     setUspeh(null);
+    setNoAccount(false);
     setLoading(true);
     const result = await onSubmit({ email, password });
     if (result) {
@@ -80,15 +80,6 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
       }
     }
     setLoading(false);
-  };
-
-  const handleFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (tip === "prijava" && !passwordMode) {
-      handleMagicLink();
-      return;
-    }
-    handlePasswordSubmit(e);
   };
 
   if (magicLinkSent) {
@@ -138,7 +129,7 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
         </>
       )}
 
-      <form onSubmit={handleFormSubmit} className="space-y-4 w-full max-w-sm">
+      <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-sm">
         <div>
           <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
             Email
@@ -154,7 +145,7 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
           />
         </div>
 
-        {tip === "prijava" && passwordMode && (
+        {tip === "prijava" && (
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
               Lozinka
@@ -198,36 +189,26 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
           disabled={loading}
           className="w-full bg-plava text-white py-3 rounded-lg font-medium hover:bg-plava-dark transition-colors disabled:opacity-50"
         >
-          {loading
-            ? tip === "prijava" && !passwordMode
-              ? "Slanje..."
-              : "Učitavanje..."
-            : tip === "reset"
-            ? "Pošalji link za reset"
-            : passwordMode
-            ? "Prijavi se"
-            : "Pošalji mi link na mejl"}
+          {loading ? "Učitavanje..." : tip === "reset" ? "Pošalji mi link" : "Prijavi se"}
         </button>
       </form>
 
       {tip === "prijava" && (
         <div className="space-y-2 text-sm text-center">
+          <Link href="/reset-lozinke" className="block text-plava hover:underline font-medium">
+            Prvi put ovde ili nemaš lozinku? Napravi je
+          </Link>
+          <Link href="/reset-lozinke" className="block text-gray-500 hover:underline">
+            Zaboravio/la si lozinku?
+          </Link>
           <button
             type="button"
-            onClick={() => {
-              setPasswordMode(!passwordMode);
-              setGreska(null);
-              setNoAccount(false);
-            }}
-            className="w-full text-plava hover:underline"
+            onClick={handleMagicLink}
+            disabled={magicLoading}
+            className="w-full text-gray-400 hover:underline disabled:opacity-50"
           >
-            {passwordMode ? "← Uđi linkom na mejl (bez lozinke)" : "Imam lozinku"}
+            {magicLoading ? "Slanje..." : "Radije bez lozinke? Pošalji mi link na mejl"}
           </button>
-          {passwordMode && (
-            <Link href="/reset-lozinke" className="block text-plava hover:underline">
-              Zaboravio/la si lozinku? Napravi novu
-            </Link>
-          )}
         </div>
       )}
     </div>
