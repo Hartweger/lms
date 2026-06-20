@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { emailOwnsCourse, emailOwnsAnyVideoCourse } from "@/lib/coupon-ownership";
+import { isTermPackage } from "@/lib/coupon-discount";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const code = (searchParams.get("code") ?? "").trim().toUpperCase();
   const courseSlug = (searchParams.get("courseSlug") ?? "").trim();
   const email = (searchParams.get("email") ?? "").trim();
+  const packageType = (searchParams.get("packageType") ?? "").trim();
 
   if (!code) {
     return NextResponse.json({ error: "Kod je obavezan." }, { status: 400 });
@@ -94,8 +96,48 @@ export async function GET(request: NextRequest) {
     }
   }
 
+  // applies_to_course_id: kupon se sme iskoristiti samo na tačno taj kurs
+  // (npr. FSP1NA1 važi samo na individualni FSP, ne na bilo koji 1:1 kurs).
+  if (coupon.applies_to_course_id) {
+    const { data: course } = await supabase
+      .from("courses").select("id").eq("slug", courseSlug).maybeSingle();
+    if (!course || course.id !== coupon.applies_to_course_id) {
+      return NextResponse.json(
+        { error: "Ovaj kod važi samo za individualni FSP kurs." },
+        { status: 400 }
+      );
+    }
+  }
+
+  // requires_course_id: kupon važi samo ako mejl već poseduje taj kurs
+  // (npr. FSP1NA1: mora da imaš kupljen video FSP).
+  if (coupon.requires_course_id) {
+    if (!email) {
+      return NextResponse.json(
+        { error: "Unesi svoj mejl iznad pa primeni kod - proveravamo da li imaš video FSP kurs." },
+        { status: 400 }
+      );
+    }
+    const owns = await emailOwnsCourse(supabase, email, coupon.requires_course_id);
+    if (!owns) {
+      return NextResponse.json(
+        { error: "Ovaj kod važi samo za polaznike koji su kupili video FSP kurs (na taj mejl)." },
+        { status: 400 }
+      );
+    }
+  }
+
+  // term_packages_only: kupon važi samo na individualne pakete od 4/8/12 termina
+  if (coupon.term_packages_only && !isTermPackage(packageType)) {
+    return NextResponse.json(
+      { error: "Ovaj kod važi samo za individualne pakete (4, 8 ili 12 termina)." },
+      { status: 400 }
+    );
+  }
+
   return NextResponse.json({
     code: coupon.code,
-    discountPercent: Number(coupon.amount),
+    discountType: coupon.discount_type,
+    amount: Number(coupon.amount),
   });
 }
