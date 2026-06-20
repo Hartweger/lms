@@ -34,3 +34,36 @@ export function napredakLekcije(completed: number, total: number | null): string
   if (total && total > 0) return `${completed}/${total} lekcija`;
   return `${completed} lekcija`;
 }
+
+// Grejs-period: "nije počeo" se flaguje tek kad pristup traje duže od ovoliko dana
+// (da se sveži upisi ne prijavljuju kao zapostavljeni).
+export const NIJE_POCEO_GRACE_DANA = 7;
+
+export interface TrebaPaznjuInput {
+  hasPlatform: boolean;
+  completedCount: number;
+  lastActivity: string | null;
+  accessGrantedAt: string | null; // najstariji course_access.granted_at polaznika
+  now: Date;
+}
+
+// Da li polaznik "traži pažnju" za ponedeljni podsetnik profesorki:
+// crven (>14 dana neaktivnosti) ILI "nije počeo" (0 lekcija) ali tek posle grejs-perioda.
+export function trebaPaznju(input: TrebaPaznjuInput): { red: boolean; razlog: string } {
+  const badge = platformaBadge({
+    hasPlatform: input.hasPlatform,
+    completedCount: input.completedCount,
+    lastActivity: input.lastActivity,
+    now: input.now,
+  });
+  if (!badge || badge.tone !== "red") return { red: false, razlog: "" };
+
+  if (badge.label === "nije počeo") {
+    if (!input.accessGrantedAt) return { red: false, razlog: "" };
+    const dana = Math.floor((input.now.getTime() - new Date(input.accessGrantedAt).getTime()) / (24 * 60 * 60 * 1000));
+    if (dana <= NIJE_POCEO_GRACE_DANA) return { red: false, razlog: "" };
+    return { red: true, razlog: "nije počeo" };
+  }
+
+  return { red: true, razlog: `neaktivna ${badge.label}` };
+}

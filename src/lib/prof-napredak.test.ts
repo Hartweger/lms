@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { platformaBadge, napredakLekcije } from "./prof-napredak";
+import { platformaBadge, napredakLekcije, trebaPaznju } from "./prof-napredak";
 
 const NOW = new Date("2026-06-20T12:00:00Z");
 function daysAgo(n: number): string {
@@ -57,5 +57,43 @@ describe("napredakLekcije", () => {
 
   it("0/Y kada nije počeo a kurs ima lekcije", () => {
     expect(napredakLekcije(0, 40)).toBe("0/40 lekcija");
+  });
+});
+
+describe("trebaPaznju", () => {
+  const base = { hasPlatform: true, accessGrantedAt: daysAgo(60), now: NOW };
+
+  it("ne flaguje bez platforme", () => {
+    expect(trebaPaznju({ ...base, hasPlatform: false, completedCount: 0, lastActivity: null }).red).toBe(false);
+  });
+
+  it("ne flaguje aktivnu (zelena)", () => {
+    expect(trebaPaznju({ ...base, completedCount: 5, lastActivity: daysAgo(3) }).red).toBe(false);
+  });
+
+  it("ne flaguje žutu (8-14 dana)", () => {
+    expect(trebaPaznju({ ...base, completedCount: 5, lastActivity: daysAgo(10) }).red).toBe(false);
+  });
+
+  it("flaguje neaktivnu >14 dana sa razlogom", () => {
+    expect(trebaPaznju({ ...base, completedCount: 5, lastActivity: daysAgo(20) }))
+      .toEqual({ red: true, razlog: "neaktivna 20d" });
+  });
+
+  it("flaguje 'nije počeo' kad pristup traje > 7 dana", () => {
+    expect(trebaPaznju({ ...base, completedCount: 0, lastActivity: null, accessGrantedAt: daysAgo(30) }))
+      .toEqual({ red: true, razlog: "nije počeo" });
+  });
+
+  it("NE flaguje 'nije počeo' u grejs-periodu (pristup <= 7 dana)", () => {
+    expect(trebaPaznju({ ...base, completedCount: 0, lastActivity: null, accessGrantedAt: daysAgo(3) }).red).toBe(false);
+  });
+
+  it("granica grejsa: tačno 7 dana još ne flaguje", () => {
+    expect(trebaPaznju({ ...base, completedCount: 0, lastActivity: null, accessGrantedAt: daysAgo(7) }).red).toBe(false);
+  });
+
+  it("NE flaguje 'nije počeo' kad nema datuma pristupa", () => {
+    expect(trebaPaznju({ ...base, completedCount: 0, lastActivity: null, accessGrantedAt: null }).red).toBe(false);
   });
 });
