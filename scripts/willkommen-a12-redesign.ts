@@ -23,7 +23,8 @@ const supabase = createClient(
 
 const LESSON_ID = "fd45eb3c-0ba4-4410-92ee-b5a883c1493c";
 // PDF i WhatsApp su isti kao A1.1 (priručnik za ceo A1, grupa A1)
-const PDF_URL = "https://drive.google.com/file/d/1dd29RtYvHX_JeZ45THujNf_FmHOATVbD/view?usp=sharing";
+const PDF_URL = "https://drive.google.com/file/d/1dd29RtYvHX_JeZ45THujNf_FmHOATVbD/preview";
+const COVER_URL = "https://rzmyglynjcygsbicssbt.supabase.co/storage/v1/object/public/blog-media/prirucnici/ana-u-nemackoj-a1-cover.jpg";
 const WHATSAPP_URL = "https://chat.whatsapp.com/FFthWnle8F7H1i0H9nS6S8?mode=gi_t";
 
 async function main() {
@@ -81,7 +82,8 @@ async function main() {
       content:
         "**📄 PDF priručnik za ceo A1** *(nije obavezno)*\n\nPriručnik prati sadržaj kursa (pokriva A1.1 i A1.2). Prelistaj ga i uči uz njegovu pomoć kad želiš nešto na miru da pročitaš ili odštampaš. Nije uslov da kreneš.",
     },
-    { type: "link", linkType: "external", href: PDF_URL, label: "📄 Preuzmi PDF priručnik" },
+    { type: "image", url: COVER_URL, alt: "Korice priručnika Ana u Nemačkoj — od nule do A1", caption: "Priručnik Ana u Nemačkoj — Od nule do A1 ispita" },
+    { type: "pdf", url: PDF_URL, label: "📄 Otvori PDF priručnik za A1" },
 
     {
       type: "text",

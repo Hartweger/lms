@@ -22,7 +22,8 @@ const supabase = createClient(
 );
 
 const LESSON_ID = "734aca58-2063-463b-9b19-a458c9ce126f";
-const PDF_URL = "https://drive.google.com/file/d/1dd29RtYvHX_JeZ45THujNf_FmHOATVbD/view?usp=sharing";
+const PDF_URL = "https://drive.google.com/file/d/1dd29RtYvHX_JeZ45THujNf_FmHOATVbD/preview";
+const COVER_URL = "https://rzmyglynjcygsbicssbt.supabase.co/storage/v1/object/public/blog-media/prirucnici/ana-u-nemackoj-a1-cover.jpg";
 const WHATSAPP_URL = "https://chat.whatsapp.com/FFthWnle8F7H1i0H9nS6S8?mode=gi_t";
 
 const MODUL_ROWS: string[][] = [
@@ -93,7 +94,8 @@ async function main() {
       content:
         "**📄 PDF priručnik** *(nije obavezno)*\n\nPriručnik prati sadržaj kursa. Prelistaj ga i uči uz njegovu pomoć kad želiš nešto na miru da pročitaš ili odštampaš. Nije uslov da kreneš.",
     },
-    { type: "link", linkType: "external", href: PDF_URL, label: "📄 Preuzmi PDF priručnik" },
+    { type: "image", url: COVER_URL, alt: "Korice priručnika Ana u Nemačkoj — od nule do A1", caption: "Priručnik Ana u Nemačkoj — Od nule do A1 ispita" },
+    { type: "pdf", url: PDF_URL, label: "📄 Otvori PDF priručnik za A1" },
 
     {
       type: "text",
