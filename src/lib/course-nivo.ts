@@ -19,6 +19,8 @@ export const SLUG_TO_NIVO: Record<string, string> = {
   "individualni-kurs-nemackog-jezika-b2-1": "B2.1",
   "grupni-kurs-c1-1": "C1.1",
   "grupni-kurs-c1-2": "C1.2",
+  // Konverzacijski kurs (B1+) - poseban "nivo" string, nije CEFR podnivo.
+  "grupni-konverzacijski-kurs-nemackog-b1": "Konverzacija B1+",
 };
 
 export function nivoForSlug(slug: string): string | null {

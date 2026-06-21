@@ -6,7 +6,7 @@ import KursCard from "@/components/KursCard";
 import { INDIVIDUALNI_CARDS } from "@/lib/individualni-cards";
 
 /* ─── Types ─── */
-type TabId = "grupni" | "video" | "individualni" | "besplatno";
+type TabId = "grupni" | "konverzacijski" | "video" | "individualni" | "besplatno";
 
 interface KursKartica {
   badges: { label: string; color: string }[];
@@ -52,6 +52,11 @@ const PersonIcon = (
     <circle cx="12" cy="7" r="4" /><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
   </svg>
 );
+const ChatIcon = (
+  <svg className="w-[17px] h-[17px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+  </svg>
+);
 const GiftIcon = (
   <svg className="w-[17px] h-[17px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
     <path d="M20 12V22H4V12" /><path d="M22 7H2v5h20V7z" /><path d="M12 22V7" /><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" /><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
@@ -92,6 +97,25 @@ const tabs: TabConfig[] = [
       { badges: [{ label: "B2.2", color: "b2" }], title: "Grupni kurs B2.2", meta: "3-6 polaznika", desc: "Nastavak B2.1. Priprema za Goethe B2 ispit i napredna konverzacija.", price: "21.200 din", priceEur: "≈ 181€", href: "/kursevi/grupni-kurs-b2-2", cta: "Prijavi se", level: "b2" },
       { badges: [{ label: "C1.1", color: "c1" }], title: "Grupni kurs C1.1", meta: "3-6 polaznika", desc: "Napredni nivo. Poslovni i akademski nemački, priprema za C1 ispit.", price: "21.200 din", priceEur: "≈ 181€", href: "/kursevi/grupni-kurs-c1-1", cta: "Prijavi se", level: "c1" },
       { badges: [{ label: "C1.2", color: "c1" }], title: "Grupni kurs C1.2", meta: "3-6 polaznika", desc: "Nastavak C1.1. Kompleksne strukture i kompletna priprema za Goethe C1 ispit.", price: "21.200 din", priceEur: "≈ 181€", href: "/kursevi/grupni-kurs-c1-2", cta: "Prijavi se", level: "c1" },
+    ],
+  },
+  {
+    id: "konverzacijski",
+    label: "Konverzacijski",
+    icon: ChatIcon,
+    info: {
+      items: [
+        "Fokus na govor - za one koji su završili B1",
+        "Žive teme iz svakodnevnog života na DACH području",
+        "Mala grupa, maksimalno 6 polaznika",
+        "Online preko Google Meet, jednom nedeljno",
+      ],
+      color: "#7c3aed",
+    },
+    levels: [],
+    defaultLevel: "sve",
+    cards: [
+      { badges: [{ label: "Konverzacija", color: "novo" }, { label: "B1+", color: "b1" }], title: "Konverzacijski kurs nemačkog (B1+)", meta: "max 6 polaznika · petkom", desc: "Praksa govora za one koji razumeju nemački, ali im govor blokira. Žive teme iz svakodnevnog života na DACH području, u maloj grupi.", price: "17.550 din", priceEur: "≈ 150€", href: "/kursevi/grupni-konverzacijski-kurs-nemackog-b1", cta: "Prijavi se", level: "sve" },
     ],
   },
   {
@@ -180,6 +204,7 @@ const tabs: TabConfig[] = [
 /* ─── Tab accent colors ─── */
 const tabAccent: Record<TabId, { active: string; border: string; bg: string }> = {
   grupni: { active: "text-[#0AB3D7]", border: "border-[#0AB3D7]", bg: "bg-[#0AB3D7]/[.08]" },
+  konverzacijski: { active: "text-[#7c3aed]", border: "border-[#7c3aed]", bg: "bg-[#7c3aed]/[.07]" },
   video: { active: "text-[#cc3333]", border: "border-[#cc3333]", bg: "bg-[#cc3333]/[.07]" },
   individualni: { active: "text-[#1a5fa8]", border: "border-[#1a5fa8]", bg: "bg-[#1a5fa8]/[.07]" },
   besplatno: { active: "text-[#0a7a4a]", border: "border-[#0a7a4a]", bg: "bg-[#0a7a4a]/[.07]" },
@@ -190,6 +215,7 @@ export default function KurseviKatalog() {
   const [activeTab, setActiveTab] = useState<TabId>("grupni");
   const [activeLevel, setActiveLevel] = useState<Record<TabId, string>>({
     grupni: "a1",
+    konverzacijski: "sve",
     video: "a1",
     individualni: "a1",
     besplatno: "sve",

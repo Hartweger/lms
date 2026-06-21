@@ -32,11 +32,16 @@ function getNivoKey(nivo: string): string {
 }
 
 export default function RasporedGrupa({
-  grupe,
+  grupe: grupeProp,
 }: {
   grupe: GrupaRaspored[];
 }) {
   const [level, setLevel] = useState<string>("sve");
+
+  // Prikazuj samo CEFR nivoe (A1-C1). Posebni kursevi (npr. "Konverzacija B1+")
+  // imaju svoju cenu/checkout i prodaju se iz kataloga, pa ih ovde izostavljamo
+  // da ne dobiju pogrešnu cenu/pokvaren link (getNivoKey čita prva 2 slova).
+  const grupe = grupeProp.filter((g) => LEVEL_ORDER.includes(getNivoKey(g.nivo)));
 
   if (grupe.length === 0) {
     return (

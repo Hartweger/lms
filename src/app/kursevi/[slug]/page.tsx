@@ -139,6 +139,30 @@ const courseFallbacks: Record<string, { marketing_description: string; features:
   },
 };
 
+// Dodatne sekcije po slug-u (raspored tema, za koga) - za kurseve kojima ne
+// odgovara standardni grupni layout (npr. konverzacijski).
+const courseExtras: Record<string, { topics?: string[]; audience?: string[] }> = {
+  "grupni-konverzacijski-kurs-nemackog-b1": {
+    topics: [
+      "Icebreaker Plauderstunde - upoznavanje + kako kurs funkcioniše",
+      "Hobby, Beruf & Alltag",
+      "Familie, Feste & Erziehung",
+      "Stadt- und Landleben",
+      "Arbeit & Karriere",
+      "Reisen & Urlaub",
+      "Umwelt & Umweltschutz",
+      "Internet & Digitalisierung",
+      "Hoffnungen & Erwartungen + Fazit",
+    ],
+    audience: [
+      "Za sve koji su završili B1 i žele konverzacijsku praksu",
+      "Za one koji razumeju nemački, ali im govor blokira",
+      "Za ljude koji žive na DACH području i svakodnevno koriste nemački",
+      "Za sve koji žele strukturirano učenje u toploj, opuštenoj atmosferi",
+    ],
+  },
+};
+
 function formatPrice(price: number): string {
   return price.toLocaleString("de-DE");
 }
@@ -437,6 +461,34 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
 
               {/* Features */}
               <ProductFeatures features={features} title={featuresTitle} />
+
+              {/* Raspored tema + Za koga (po slug-u) */}
+              {courseExtras[slug]?.topics && (
+                <div className="mt-10">
+                  <h2 className="font-montserrat font-bold text-xl text-gray-900 mb-4">Raspored tema</h2>
+                  <ol className="space-y-2.5">
+                    {courseExtras[slug].topics!.map((t, i) => (
+                      <li key={i} className="flex items-start gap-3 text-[15px] text-gray-700">
+                        <span className="flex-shrink-0 w-6 h-6 mt-0.5 rounded-full bg-plava-light text-plava font-bold text-xs flex items-center justify-center">{i + 1}</span>
+                        <span>{t}</span>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              )}
+              {courseExtras[slug]?.audience && (
+                <div className="mt-10">
+                  <h2 className="font-montserrat font-bold text-xl text-gray-900 mb-4">Za koga je ovaj kurs?</h2>
+                  <ul className="space-y-2">
+                    {courseExtras[slug].audience!.map((a, i) => (
+                      <li key={i} className="flex items-start gap-2 text-[15px] text-gray-700">
+                        <span className="text-plava mt-0.5">✓</span>
+                        <span>{a}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
               {/* FAQ */}
               <ProductFaq category={category} slug={slug} />
