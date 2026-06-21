@@ -34,20 +34,49 @@ function parseTsv(path) {
     .map((l) => { const [front, back] = l.split("\t"); return { front: front.trim(), back: back.trim() }; });
 }
 
-const lessons = TOPICS.map((t, i) => {
-  const items = parseTsv(`${DIR}/${t.file}`);
-  return {
-    order_index: i + 1,
-    title: t.title,
-    section: { type: "wordset", title: `${t.title} - Reči`, setKey: t.key, frontLabel: "DE", backLabel: "SR", items },
-    count: items.length,
-  };
-});
+const WILLKOMMEN = `## Dobrodošao/la u konverzacijski kurs! 👋
+
+Drago nam je što si tu. Ovaj kurs je za vežbanje govora - da ono što već razumeš počneš slobodno da koristiš.
+
+### Kako kurs funkcioniše
+- Srećemo se jednom nedeljno, petkom, online preko Google Meet-a (link za svaki čas dobijaš mejlom).
+- Svaki čas je posvećen jednoj temi iz svakodnevnog života.
+- Prvi čas je opušteni Icebreaker - upoznajemo se i pričamo slobodno, bez pritiska.
+- Grupa je mala (do 6 ljudi), pa svako stigne da priča.
+
+### Preporuka pre svakog časa
+Pre svakog časa prođi set reči koji se nalazi ovde na platformi (kartice po temama). Ne moraš da ih bubaš - dovoljno je da ih jednom prođeš: vođeno, kviz, kucanje ili igra memorije. Na času ih odmah koristimo u razgovoru, pa će same "sesti".
+
+### Redosled tema
+1. Icebreaker - upoznavanje
+2. Hobby, Beruf & Alltag
+3. Familie, Feste & Erziehung
+4. Stadt- und Landleben
+5. Arbeit & Karriere
+6. Reisen & Urlaub
+7. Umwelt & Umweltschutz
+8. Internet & Digitalisierung
+9. Hoffnungen & Erwartungen
+
+Vidimo se na prvom času! 💬`;
+
+const lessons = [
+  { order_index: 0, title: "Willkommen - kako kurs radi", section: { type: "text", style: "info", content: WILLKOMMEN }, count: 0 },
+  ...TOPICS.map((t, i) => {
+    const items = parseTsv(`${DIR}/${t.file}`);
+    return {
+      order_index: i + 1,
+      title: t.title,
+      section: { type: "wordset", title: `${t.title} - Reči`, setKey: t.key, frontLabel: "DE", backLabel: "SR", items },
+      count: items.length,
+    };
+  }),
+];
 
 console.log("Sadržajni kurs:", CONTENT_SLUG);
 lessons.forEach((l) => console.log(`  #${l.order_index} ${l.title} — ${l.count} reči (setKey ${l.section.setKey})`));
 console.log("Ukupno reči:", lessons.reduce((s, l) => s + l.count, 0));
-console.log("Primer kartice:", JSON.stringify(lessons[0].section.items[0]));
+console.log("Primer kartice:", JSON.stringify(lessons.find((l) => l.section.type === "wordset").section.items[0]));
 
 if (!APPLY) { console.log("\nDry-run — pokreni sa --apply za upis."); process.exit(0); }
 
