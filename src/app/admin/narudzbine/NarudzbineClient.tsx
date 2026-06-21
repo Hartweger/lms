@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { Order } from "@/lib/types";
 import { orderTotals, orderFiscalStatus, canDeleteOrder, pendingPaymentState } from "@/lib/order-utils";
+import { professorsFromVariants, packageTypesFromVariants, resolveVariant, type Variant } from "@/lib/individual-pricing";
 
 type Filter = "sve" | "na-cekanju" | "potvrdjene";
 
@@ -16,9 +17,12 @@ interface CourseOption {
 interface Props {
   initialOrders: Order[];
   courses: CourseOption[];
+  variantsByCourse?: Record<string, Variant[]>;
 }
 
-export default function NarudzbineClient({ initialOrders, courses }: Props) {
+const PAKET_LABEL: Record<string, string> = { paket4: "4 termina", paket8: "8 termina", paket12: "12 termina" };
+
+export default function NarudzbineClient({ initialOrders, courses, variantsByCourse = {} }: Props) {
   const [orders, setOrders] = useState<Order[]>(initialOrders);
   const [filter, setFilter] = useState<Filter>("sve");
   const [search, setSearch] = useState("");
@@ -31,6 +35,8 @@ export default function NarudzbineClient({ initialOrders, courses }: Props) {
   const [showNewForm, setShowNewForm] = useState(false);
   const [newEmail, setNewEmail] = useState("");
   const [newCourseId, setNewCourseId] = useState("");
+  const [newProfessorId, setNewProfessorId] = useState<string | null>(null);
+  const [newPackageType, setNewPackageType] = useState<string | null>(null);
   const [newAmount, setNewAmount] = useState("");
   const [newPayment, setNewPayment] = useState("uplatnica");
   const [newMarkPaid, setNewMarkPaid] = useState(false);
@@ -41,10 +47,49 @@ export default function NarudzbineClient({ initialOrders, courses }: Props) {
   const [sendingPay, setSendingPay] = useState<string | null>(null);
   const [sentPay, setSentPay] = useState<string | null>(null);
 
+  // Varijacije izabranog kursa (prazno za ne-individualne). Cena 1:1 narudžbine
+  // dolazi iz varijacije (profesorka + broj termina), ne iz osnovne cene kursa.
+  const selVariants = variantsByCourse[newCourseId] ?? [];
+  const selIsIndividual = selVariants.length > 0;
+  const selProfessors = professorsFromVariants(selVariants);
+  const selPackageTypes = packageTypesFromVariants(selVariants);
+
+  function priceFor(profId: string | null, pkg: string | null): number | null {
+    const v = resolveVariant(selVariants, { professorId: profId, packageType: pkg });
+    return v?.price ?? null;
+  }
+
   function handleCourseChange(courseId: string) {
     setNewCourseId(courseId);
     const course = courses.find((c) => c.id === courseId);
-    if (course) setNewAmount(String(course.price));
+    const variants = variantsByCourse[courseId] ?? [];
+    if (variants.length > 0) {
+      // Individualni: podrazumevano prva profesorka + prvi paket, cena iz varijacije.
+      const profs = professorsFromVariants(variants);
+      const pkgs = packageTypesFromVariants(variants);
+      const profId = profs[0]?.id ?? null;
+      const pkg = pkgs[0] ?? null;
+      setNewProfessorId(profId);
+      setNewPackageType(pkg);
+      const v = resolveVariant(variants, { professorId: profId, packageType: pkg });
+      setNewAmount(v ? String(v.price) : "");
+    } else {
+      setNewProfessorId(null);
+      setNewPackageType(null);
+      if (course) setNewAmount(String(course.price));
+    }
+  }
+
+  function handleProfessorChange(profId: string) {
+    setNewProfessorId(profId);
+    const p = priceFor(profId, newPackageType);
+    if (p != null) setNewAmount(String(p));
+  }
+
+  function handlePackageChange(pkg: string) {
+    setNewPackageType(pkg);
+    const p = priceFor(newProfessorId, pkg);
+    if (p != null) setNewAmount(String(p));
   }
 
   async function createOrder() {
@@ -62,6 +107,8 @@ export default function NarudzbineClient({ initialOrders, courses }: Props) {
           markAsPaid: newMarkPaid,
           fiscalize: newMarkPaid && newFiscalize,
           sendPaymentEmail: newSendEmail && !newMarkPaid,
+          professorId: selIsIndividual ? newProfessorId : null,
+          packageType: selIsIndividual ? newPackageType : null,
         }),
       });
       const json = await res.json();
@@ -69,10 +116,17 @@ export default function NarudzbineClient({ initialOrders, courses }: Props) {
         setNewError(json.error ?? "Greška pri kreiranju narudžbine.");
         return;
       }
-      setOrders((prev) => [json.order, ...prev]);
+      // Ime profesorke se na serveru izvodi iz individual_enrollments (vidi se po
+      // osvežavanju); ovde ga dodamo odmah radi prikaza u tabeli.
+      const profName = selIsIndividual
+        ? selProfessors.find((p) => p.id === newProfessorId)?.full_name ?? null
+        : null;
+      setOrders((prev) => [{ ...json.order, professor_name: profName }, ...prev]);
       setShowNewForm(false);
       setNewEmail("");
       setNewCourseId("");
+      setNewProfessorId(null);
+      setNewPackageType(null);
       setNewAmount("");
       setNewPayment("uplatnica");
       setNewMarkPaid(false);
@@ -250,6 +304,40 @@ export default function NarudzbineClient({ initialOrders, courses }: Props) {
                 ))}
               </select>
             </div>
+            {selIsIndividual && (
+              <>
+                {selPackageTypes.length > 0 && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Broj termina
+                    </label>
+                    <select
+                      value={newPackageType ?? ""}
+                      onChange={(e) => handlePackageChange(e.target.value)}
+                      className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-plava"
+                    >
+                      {selPackageTypes.map((p) => (
+                        <option key={p} value={p}>{PAKET_LABEL[p] ?? p}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Profesorka
+                  </label>
+                  <select
+                    value={newProfessorId ?? ""}
+                    onChange={(e) => handleProfessorChange(e.target.value)}
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-plava"
+                  >
+                    {selProfessors.map((p) => (
+                      <option key={p.id} value={p.id}>{p.full_name}</option>
+                    ))}
+                  </select>
+                </div>
+              </>
+            )}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Iznos RSD

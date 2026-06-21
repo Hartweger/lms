@@ -42,7 +42,7 @@ export async function POST(request: Request) {
   if (profile?.role !== "admin") return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
 
   try {
-    const { email, courseId, totalAmount, paymentMethod, markAsPaid, sendPaymentEmail, fiscalize } = await request.json();
+    const { email, courseId, totalAmount, paymentMethod, markAsPaid, sendPaymentEmail, fiscalize, professorId, packageType } = await request.json();
 
     // Validate required fields
     if (!email || !courseId || !totalAmount || !paymentMethod) {
@@ -61,13 +61,46 @@ export async function POST(request: Request) {
     // Load course by ID
     const { data: course, error: courseError } = await admin
       .from("courses")
-      .select("id, slug, title, price")
+      .select("id, slug, title, price, course_type, category, included_lessons")
       .eq("id", courseId)
       .single();
 
     if (courseError || !course) {
       return NextResponse.json({ error: "Kurs nije pronađen." }, { status: 404 });
     }
+
+    // Individualni: cena, profesorka i broj časova dolaze iz product_variants
+    // (kao na javnom checkout-u) - ne veruj iznosu s klijenta. professor_id +
+    // package_lessons se upisuju u items[0] da grantAccessForOrder kreira
+    // individual_enrollments i professor_students vezu.
+    const isIndividual = course.course_type === "individual" ||
+      ["individualni", "mesecni"].includes(course.category ?? "");
+    let chosenProfessorId: string | null = null;
+    let packageLessons: number | null = null;
+    let variantPrice: number | null = null;
+    if (isIndividual) {
+      let q = admin
+        .from("product_variants")
+        .select("id, professor_id, package_type, price")
+        .eq("course_id", course.id)
+        .eq("is_active", true);
+      q = professorId ? q.eq("professor_id", professorId) : q.is("professor_id", null);
+      q = packageType ? q.eq("package_type", packageType) : q.is("package_type", null);
+      const { data: variant } = await q.maybeSingle();
+      if (!variant) {
+        return NextResponse.json(
+          { error: "Izabrana kombinacija (profesorka/paket) nije dostupna." },
+          { status: 400 },
+        );
+      }
+      chosenProfessorId = variant.professor_id;
+      variantPrice = variant.price;
+      packageLessons = variant.package_type
+        ? parseInt(variant.package_type.replace(/\D/g, ""), 10)
+        : (course.included_lessons ?? null);
+    }
+    // Za individualne cena je autoritativna iz varijacije; inače uneti iznos.
+    const finalAmount = variantPrice ?? amount;
 
     // Find or create user by email
     let userId: string;
@@ -119,7 +152,8 @@ export async function POST(request: Request) {
         course_id: course.id,
         course_slug: course.slug,
         title: course.title,
-        price: amount,
+        price: finalAmount,
+        ...(isIndividual ? { professor_id: chosenProfessorId, package_lessons: packageLessons } : {}),
       },
     ];
 
@@ -131,8 +165,8 @@ export async function POST(request: Request) {
         email,
         full_name: userName,
         items,
-        subtotal: amount,
-        total: amount,
+        subtotal: finalAmount,
+        total: finalAmount,
         payment_method: paymentMethod,
         order_number: orderNumber,
         payment_status: "pending",
@@ -171,13 +205,13 @@ export async function POST(request: Request) {
       try {
         const { sendPaymentInstructionsEmail } = await import("@/lib/email");
         const { calculatePaypalEur } = await import("@/lib/order-utils");
-        const paypalEur = paymentMethod === "paypal" ? calculatePaypalEur(amount) : undefined;
+        const paypalEur = paymentMethod === "paypal" ? calculatePaypalEur(finalAmount) : undefined;
         let ipsQrUrl: string | null = null;
         if (paymentMethod === "uplatnica") {
           const { generateIpsQrUrl } = await import("@/lib/ips-qr");
           ipsQrUrl = await generateIpsQrUrl(admin, order);
         }
-        await sendPaymentInstructionsEmail(email, userName, course.title, order.order_number, amount, paymentMethod, paypalEur, order.id, ipsQrUrl ?? undefined);
+        await sendPaymentInstructionsEmail(email, userName, course.title, order.order_number, finalAmount, paymentMethod, paypalEur, order.id, ipsQrUrl ?? undefined);
       } catch (e) {
         console.error(`[admin/orders] payment email failed for ${order.order_number}:`, e);
       }
