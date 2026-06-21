@@ -1,0 +1,136 @@
+{
+  "lesson": {
+    "id": "4e5ccd81-6dfb-4ca7-bdd1-7efb5e2b441f",
+    "course_id": "393b99f7-abe9-40e4-9cab-2e39ae523fff",
+    "title": "Familie, Generationen und Lebensformen",
+    "lesson_type": "text",
+    "content": "",
+    "vimeo_video_id": null,
+    "order_index": 37,
+    "is_free_preview": false,
+    "created_at": "2026-06-01T14:53:27.334998+00:00",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Schritte teme · L8-14",
+        "category": "wortschatz"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Tema porodice, generacija i različitih oblika života. Učiš vokabular i fraze da pričaš o porodici, vaspitanju i zajedničkom životu. (Schritte 6, Lektion 8)"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Vokabular"
+      },
+      {
+        "rows": [
+          [
+            "die Wohngemeinschaft (WG), -en",
+            "stambena zajednica"
+          ],
+          [
+            "die Kindererziehung (nur Sg.)",
+            "vaspitanje dece"
+          ],
+          [
+            "die Hausarbeit, -en",
+            "kućni posao"
+          ],
+          [
+            "die Lebensform, -en",
+            "oblik života"
+          ],
+          [
+            "alleinerziehend",
+            "koji sam podiže dete"
+          ],
+          [
+            "die Generation, -en",
+            "generacija"
+          ],
+          [
+            "zusammenleben",
+            "živeti zajedno"
+          ],
+          [
+            "respektieren",
+            "poštovati"
+          ]
+        ],
+        "type": "vocabulary"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "stambena zajednica",
+            "front": "die Wohngemeinschaft (WG)"
+          },
+          {
+            "back": "vaspitanje dece",
+            "front": "die Kindererziehung"
+          },
+          {
+            "back": "kućni posao",
+            "front": "die Hausarbeit"
+          },
+          {
+            "back": "oblik života",
+            "front": "die Lebensform"
+          },
+          {
+            "back": "koji sam podiže dete",
+            "front": "alleinerziehend"
+          },
+          {
+            "back": "generacija",
+            "front": "die Generation"
+          },
+          {
+            "back": "živeti zajedno",
+            "front": "zusammenleben"
+          },
+          {
+            "back": "poštovati",
+            "front": "respektieren"
+          }
+        ],
+        "backLabel": "Prevod",
+        "frontLabel": "Nemački"
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "## Lesen: Familie heute\n\nDie Familie hat sich in den letzten Jahrzehnten stark verändert. Früher lebten oft mehrere Generationen unter einem Dach: Großeltern, Eltern und Kinder. Heute ist das seltener. Viele junge Menschen wohnen in einer Wohngemeinschaft, andere leben allein oder als Paar ohne Kinder. Auch die Zahl der Alleinerziehenden steigt. In vielen Familien teilen sich Mann und Frau die Hausarbeit und die Kindererziehung. Trotzdem bleibt für die meisten Menschen die Familie sehr wichtig - sie gibt Sicherheit und Unterstützung. Wichtig ist heute vor allem, verschiedene Lebensformen zu respektieren."
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Richtig - früher lebten Großeltern, Eltern und Kinder unter einem Dach.",
+            "question": "Früher lebten mehrere Generationen oft zusammen."
+          },
+          {
+            "answer": "Falsch - in vielen Familien teilen sie sich Hausarbeit und Kindererziehung.",
+            "question": "Heute teilen sich Partner nie die Hausarbeit."
+          },
+          {
+            "answer": "Falsch - sie bleibt sehr wichtig (Sicherheit und Unterstützung).",
+            "question": "Familie ist den meisten Menschen heute unwichtig."
+          }
+        ],
+        "title": "Pitanja za čitanje - Richtig oder Falsch?"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "💬 **Uvežbaj prevod:** otvori vežbu **AI prevod** (ispod lekcije) i prevedi rečenice na ovu temu sa srpskog na nemački."
+      }
+    ]
+  },
+  "exercises": [],
+  "questions": {}
+}

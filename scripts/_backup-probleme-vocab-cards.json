@@ -1,0 +1,92 @@
+[
+  {
+    "rows": [
+      [
+        "die Beschwerde, -n",
+        "pritužba"
+      ],
+      [
+        "das Problem, -e",
+        "problem"
+      ],
+      [
+        "die Frist, -en",
+        "rok"
+      ],
+      [
+        "die Mahnung, -en",
+        "opomena"
+      ],
+      [
+        "der Fehler, -",
+        "greška"
+      ],
+      [
+        "das Missverständnis, -se",
+        "nesporazum"
+      ],
+      [
+        "die Lösung, -en",
+        "rešenje"
+      ],
+      [
+        "der Termin, -e",
+        "termin, rok sastanka"
+      ],
+      [
+        "der Vorgesetzte, -n",
+        "nadređeni"
+      ],
+      [
+        "die Verspätung, -en",
+        "kašnjenje"
+      ]
+    ],
+    "type": "vocabulary"
+  },
+  {
+    "type": "flashcard",
+    "items": [
+      {
+        "back": "pritužba",
+        "front": "die Beschwerde, -n"
+      },
+      {
+        "back": "problem",
+        "front": "das Problem, -e"
+      },
+      {
+        "back": "rok",
+        "front": "die Frist, -en"
+      },
+      {
+        "back": "opomena",
+        "front": "die Mahnung, -en"
+      },
+      {
+        "back": "greška",
+        "front": "der Fehler, -"
+      },
+      {
+        "back": "nesporazum",
+        "front": "das Missverständnis, -se"
+      },
+      {
+        "back": "rešenje",
+        "front": "die Lösung, -en"
+      },
+      {
+        "back": "termin, rok sastanka",
+        "front": "der Termin, -e"
+      },
+      {
+        "back": "nadređeni",
+        "front": "der Vorgesetzte, -n"
+      },
+      {
+        "back": "kašnjenje",
+        "front": "die Verspätung, -en"
+      }
+    ]
+  }
+]

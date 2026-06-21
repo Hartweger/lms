@@ -1,0 +1,200 @@
+{
+  "lesson": {
+    "id": "0b9b24f0-d4eb-4eb0-ba0c-960cdcf8c27a",
+    "course_id": "393b99f7-abe9-40e4-9cab-2e39ae523fff",
+    "title": "Seitdem ich hier lebe",
+    "lesson_type": "text",
+    "content": "",
+    "vimeo_video_id": null,
+    "order_index": 34,
+    "is_free_preview": false,
+    "created_at": "2026-05-31T20:20:24.298145+00:00",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 5 · Zukunft & Reisen",
+        "category": "lesen"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Kad se preseliš u novu zemlju, sve se menja - posao, jezik, pravila, hrana, ljudi. U ovoj lekciji čitaš priče troje ljudi i učiš gramatiku **seit / seitdem** (otkad)."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Dva oblika - jedno značenje"
+      },
+      {
+        "rows": [
+          [
+            "seit + imenica/vreme",
+            "predlog",
+            "Ich lebe seit fünf Jahren in Berlin."
+          ],
+          [
+            "seitdem + cela rečenica",
+            "veznik",
+            "Seitdem ich hier lebe, spreche ich besser Deutsch."
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Oblik",
+          "Vrsta",
+          "Primer"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "📌 **seit** + vremenska odrednica → nema glagola posle (*seit drei Jahren*, *seit Januar*).\n📌 **seitdem** + zavisna rečenica → glagol ide na kraj (*Seitdem ich hier lebe, …*).\n\n💡 U govoru mnogi koriste i *seit* umesto *seitdem* ispred rečenice - i to je tačno. Ali na ispitu znaj razliku!"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Vremena - ovo je važno!\n\nSa *seit/seitdem* koristiš **Präsens** ili **Perfekt** - nikad prošlo vreme (Präteritum). Jer opisuješ nešto što je počelo u prošlosti i **još traje**."
+      },
+      {
+        "type": "mistakes",
+        "items": [
+          {
+            "wrong": "Seitdem ich hier lebte, …",
+            "correct": "Seitdem ich hier lebe, …",
+            "explanation": "Situacija još traje → Präsens, ne Präteritum."
+          }
+        ]
+      },
+      {
+        "rows": [
+          [
+            "radnja još traje",
+            "Präsens",
+            "Seitdem ich in Berlin wohne, fahre ich Fahrrad."
+          ],
+          [
+            "završeno, ali deluje sad",
+            "Perfekt",
+            "Seitdem ich Deutsch gelernt habe, verstehe ich mehr."
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Situacija",
+          "Vreme",
+          "Primer"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "## Priče - Sally, Mohd i María\n\n- **Sally (Teksas, Berlin):** *Seitdem ich hier bin, staune ich jeden Tag. Die Deutschen sind sehr direkt - seitdem ich das weiß, missverstehe ich sie seltener.*\n- **Mohd (Mumbaj, Beč):** *Seit ich hier arbeite, bemühe ich mich jeden Tag pünktlich zu sein. Seitdem ich verstehe, dass Pünktlichkeit Respekt bedeutet, fällt es mir leichter.*\n- **María (Bogota, Cirih):** *Seitdem ich hier bin, plane ich alles im Voraus.*"
+      },
+      {
+        "rows": [
+          [
+            "sich gewöhnen an + Akk",
+            "naviknuti se na"
+          ],
+          [
+            "die Umstellung, -en",
+            "promena, prilagođavanje"
+          ],
+          [
+            "sich einleben",
+            "udomaćiti se"
+          ],
+          [
+            "fremd",
+            "stran, nepoznat"
+          ],
+          [
+            "vermissen",
+            "nedostajati, čeznuti"
+          ],
+          [
+            "ankommen",
+            "snaći se, biti prihvaćen"
+          ]
+        ],
+        "type": "vocabulary"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Seit (vremenska odrednica)",
+            "question": "___ drei Jahren lebe ich in Deutschland."
+          },
+          {
+            "answer": "Seitdem (cela rečenica, glagol na kraju)",
+            "question": "___ ich hier lebe, spreche ich besser Deutsch."
+          },
+          {
+            "answer": "Seit (imenica)",
+            "question": "___ meiner Ankunft habe ich viel gelernt."
+          },
+          {
+            "answer": "Seitdem (rečenica)",
+            "question": "___ sie den Job hat, ist sie glücklicher."
+          }
+        ],
+        "title": "Mini vežba - seit ili seitdem?"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "lebe (još traje → Präsens)",
+            "question": "Seitdem ich in Deutschland ___ (leben), fahre ich Fahrrad."
+          },
+          {
+            "answer": "gelernt habe (završeno, deluje sad → Perfekt)",
+            "question": "Seit ich Deutsch ___ (lernen), kann ich mich besser ausdrücken."
+          },
+          {
+            "answer": "wohnt (još traje → Präsens)",
+            "question": "Seit er in München ___ (wohnen), vermisst er das Meer."
+          }
+        ],
+        "title": "Vežba - Präsens ili Perfekt?"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "💬 **Tvoj zadatak (Schreiben):** Napiši 5-6 rečenica o nekoj promeni u svom životu. Koristi *seit* i *seitdem* - bar po jednom. Npr.: *Seitdem ich Deutsch lerne, schaue ich Serien auf Deutsch…*"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "naviknuti se na",
+            "front": "sich gewöhnen an + Akk"
+          },
+          {
+            "back": "promena, prilagođavanje",
+            "front": "die Umstellung, -en"
+          },
+          {
+            "back": "udomaćiti se",
+            "front": "sich einleben"
+          },
+          {
+            "back": "stran, nepoznat",
+            "front": "fremd"
+          },
+          {
+            "back": "nedostajati, čeznuti",
+            "front": "vermissen"
+          },
+          {
+            "back": "snaći se, biti prihvaćen",
+            "front": "ankommen"
+          }
+        ]
+      }
+    ]
+  },
+  "exercises": [],
+  "questions": {}
+}

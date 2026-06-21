@@ -1,0 +1,316 @@
+{
+  "lesson": {
+    "id": "ae67a5f1-01a3-413b-ab76-250a9166998f",
+    "course_id": "393b99f7-abe9-40e4-9cab-2e39ae523fff",
+    "title": "Konjunktiv II - Irreale Wünsche",
+    "lesson_type": "text",
+    "content": "",
+    "vimeo_video_id": null,
+    "order_index": 33,
+    "is_free_preview": false,
+    "created_at": "2026-05-25T18:16:49.5022+00:00",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Za raspoređivanje"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "U ovoj lekciji učiš **Konjunktiv II** - oblik za nerealne želje, pristojne molbe i hipotetičke situacije. Najvažniji oblik za svakodnevnu komunikaciju!"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Konjunktiv II - najvažniji oblici\n\nNeke glagole koristimo u sopstvenom obliku Konjunktiva II, a za ostale koristimo **würde + Infinitiv**."
+      },
+      {
+        "rows": [
+          [
+            "sein",
+            "wäre",
+            "bio bih"
+          ],
+          [
+            "haben",
+            "hätte",
+            "imao bih"
+          ],
+          [
+            "können",
+            "könnte",
+            "mogao bih"
+          ],
+          [
+            "müssen",
+            "müsste",
+            "morao bih"
+          ],
+          [
+            "dürfen",
+            "dürfte",
+            "smeo bih"
+          ],
+          [
+            "wissen",
+            "wüsste",
+            "znao bih"
+          ],
+          [
+            "sollen",
+            "sollte",
+            "trebalo bi"
+          ],
+          [
+            "wollen",
+            "wollte",
+            "hteo bih"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Infinitiv",
+          "Konjunktiv II",
+          "Prevod"
+        ]
+      },
+      {
+        "type": "formula",
+        "content": "Za sve ostale glagole:\n**würde + Infinitiv**\n\nich würde machen, du würdest machen, er würde machen...\n\nIch **würde** gern nach Berlin **reisen**.\nWir **würden** lieber zu Hause **bleiben**."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Wenn-Sätze - irealni uslov"
+      },
+      {
+        "type": "formula",
+        "content": "**Wenn** ich reich **wäre**, **würde** ich um die Welt **reisen**.\n**Wenn** ich mehr Zeit **hätte**, **würde** ich mehr Deutsch **lernen**.\n**Wenn** ich fliegen **könnte**, **würde** ich jeden Tag **fliegen**."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Kada koristiti wäre/hätte, a kada würde?\n\n- **wäre, hätte, könnte, müsste, dürfte, wüsste, sollte** → sopstveni oblici (uvek ih koristi)\n- **würde + Infinitiv** → za sve ostale glagole (spielen, lernen, reisen, arbeiten...)"
+      },
+      {
+        "rows": [
+          [
+            "Nerealna želja",
+            "Ich wäre gern berühmt. / Ich hätte gern ein Haus."
+          ],
+          [
+            "Pristojna molba",
+            "Könnten Sie mir helfen? / Dürfte ich Sie etwas fragen?"
+          ],
+          [
+            "Savet",
+            "An deiner Stelle würde ich mehr lernen."
+          ],
+          [
+            "Irealni uslov",
+            "Wenn ich Zeit hätte, würde ich kommen."
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Situacija",
+          "Primer"
+        ]
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "hätte",
+            "question": "Wenn ich Geld ______ (haben), würde ich nach Japan reisen."
+          },
+          {
+            "answer": "wäre",
+            "question": "Wenn sie Ärztin ______ (sein), würde sie Menschen helfen."
+          },
+          {
+            "answer": "Könnten",
+            "question": "______ (können) Sie mir bitte helfen?"
+          },
+          {
+            "answer": "würde",
+            "question": "Ich ______ (werden) gern in München leben."
+          },
+          {
+            "answer": "Dürfte",
+            "question": "______ (dürfen) ich Sie etwas fragen?"
+          },
+          {
+            "answer": "würde",
+            "question": "An deiner Stelle ______ (werden) ich früher aufstehen."
+          }
+        ],
+        "title": "Mini vežba - Konjunktiv II"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "bio bih (Konj. II von sein)",
+            "front": "wäre"
+          },
+          {
+            "back": "imao bih (Konj. II von haben)",
+            "front": "hätte"
+          },
+          {
+            "back": "mogao bih (Konj. II von können)",
+            "front": "könnte"
+          },
+          {
+            "back": "morao bih (Konj. II von müssen)",
+            "front": "müsste"
+          },
+          {
+            "back": "smeo bih (Konj. II von dürfen)",
+            "front": "dürfte"
+          },
+          {
+            "back": "znao bih (Konj. II von wissen)",
+            "front": "wüsste"
+          },
+          {
+            "back": "za sve ostale glagole",
+            "front": "würde + Infinitiv"
+          },
+          {
+            "back": "Kad bih bio bogat...",
+            "front": "Wenn ich reich wäre..."
+          },
+          {
+            "back": "Da li biste mogli da mi pomognete?",
+            "front": "Könnten Sie mir helfen?"
+          },
+          {
+            "back": "Na tvom mestu bih...",
+            "front": "An deiner Stelle würde ich..."
+          }
+        ]
+      },
+      {
+        "rows": [
+          [
+            "der Wunsch",
+            "želja"
+          ],
+          [
+            "die Möglichkeit",
+            "mogućnost"
+          ],
+          [
+            "die Bitte",
+            "molba"
+          ],
+          [
+            "der Rat / der Ratschlag",
+            "savet"
+          ],
+          [
+            "die Bedingung",
+            "uslov"
+          ],
+          [
+            "gern / lieber / am liebsten",
+            "rado / radije / najradije"
+          ],
+          [
+            "vielleicht",
+            "možda"
+          ],
+          [
+            "wahrscheinlich",
+            "verovatno"
+          ],
+          [
+            "statt",
+            "umesto"
+          ],
+          [
+            "falls",
+            "u slučaju da"
+          ],
+          [
+            "sich vorstellen",
+            "zamisliti"
+          ],
+          [
+            "sich wünschen",
+            "poželeti"
+          ]
+        ],
+        "type": "vocabulary"
+      }
+    ]
+  },
+  "exercises": [
+    {
+      "id": "e0ef1c17-92e2-48d8-b4b6-beb43ea67808",
+      "lesson_id": "ae67a5f1-01a3-413b-ab76-250a9166998f",
+      "title": "Prevedi rečenice",
+      "exercise_type": "quiz",
+      "order_index": 0,
+      "created_at": "2026-05-26T21:52:19.099685+00:00"
+    }
+  ],
+  "questions": {
+    "e0ef1c17-92e2-48d8-b4b6-beb43ea67808": [
+      {
+        "id": "9156cc74-feb8-4c0c-83fa-e97f7b3b092b",
+        "exercise_id": "e0ef1c17-92e2-48d8-b4b6-beb43ea67808",
+        "question": "Da imam više novca, kupio bih kuću.",
+        "options": {
+          "type": "typing"
+        },
+        "correct_answer": "Wenn ich mehr Geld hätte, würde ich ein Haus kaufen.",
+        "explanation": "Wenn ich mehr Geld hätte, würde ich ein Haus kaufen.",
+        "audio_url": null,
+        "order_index": 0,
+        "question_type": "quiz"
+      },
+      {
+        "id": "54d0129c-a996-448a-a225-d1d214010452",
+        "exercise_id": "e0ef1c17-92e2-48d8-b4b6-beb43ea67808",
+        "question": "Da sam na tvom mestu, prihvatio bih posao.",
+        "options": {
+          "type": "typing"
+        },
+        "correct_answer": "Wenn ich an deiner Stelle wäre, würde ich den Job annehmen.",
+        "explanation": "Wenn ich an deiner Stelle wäre, würde ich den Job annehmen.",
+        "audio_url": null,
+        "order_index": 1,
+        "question_type": "quiz"
+      },
+      {
+        "id": "fc00b7cd-eb00-4b1f-9f9e-d0980ee40679",
+        "exercise_id": "e0ef1c17-92e2-48d8-b4b6-beb43ea67808",
+        "question": "Voleo bih da mogu da letim.",
+        "options": {
+          "type": "typing"
+        },
+        "correct_answer": "Ich wünschte, ich könnte fliegen.",
+        "explanation": "Ich wünschte, ich könnte fliegen.",
+        "audio_url": null,
+        "order_index": 2,
+        "question_type": "quiz"
+      },
+      {
+        "id": "53b6263c-bd44-477e-a847-0323e58606f3",
+        "exercise_id": "e0ef1c17-92e2-48d8-b4b6-beb43ea67808",
+        "question": "Da govorim bolji nemački, našao bih posao.",
+        "options": {
+          "type": "typing"
+        },
+        "correct_answer": "Wenn ich besser Deutsch sprechen würde, würde ich einen Job finden.",
+        "explanation": "Wenn ich besser Deutsch sprechen würde, würde ich einen Job finden.",
+        "audio_url": null,
+        "order_index": 3,
+        "question_type": "quiz"
+      }
+    ]
+  }
+}

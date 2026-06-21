@@ -1,0 +1,197 @@
+{
+  "lesson": {
+    "id": "07d96c4f-cd55-43cf-ac7a-5e93f78cac91",
+    "course_id": "393b99f7-abe9-40e4-9cab-2e39ae523fff",
+    "title": "Reflexive Verben mit Präpositionen",
+    "lesson_type": "text",
+    "content": "",
+    "vimeo_video_id": null,
+    "order_index": 29,
+    "is_free_preview": false,
+    "created_at": "2026-05-31T20:31:30.033296+00:00",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Za raspoređivanje",
+        "category": "grammatik"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Mnogi povratni glagoli idu sa fiksnim predlogom: *sich freuen **auf**, sich interessieren **für**, sich ärgern **über**.* Predlog se mora naučiti zajedno sa glagolom - i određuje padež. Plus: učiš **Pronominaladverbien** (*worüber → darüber*)."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Najvažniji povratni glagoli sa predlogom"
+      },
+      {
+        "rows": [
+          [
+            "sich freuen auf",
+            "Akkusativ",
+            "radovati se (unapred)"
+          ],
+          [
+            "sich freuen über",
+            "Akkusativ",
+            "radovati se (nečemu)"
+          ],
+          [
+            "sich interessieren für",
+            "Akkusativ",
+            "interesovati se za"
+          ],
+          [
+            "sich ärgern über",
+            "Akkusativ",
+            "ljutiti se na"
+          ],
+          [
+            "sich kümmern um",
+            "Akkusativ",
+            "brinuti se o"
+          ],
+          [
+            "sich erinnern an",
+            "Akkusativ",
+            "sećati se"
+          ],
+          [
+            "sich treffen mit",
+            "Dativ",
+            "sastati se sa"
+          ],
+          [
+            "sich beschäftigen mit",
+            "Dativ",
+            "baviti se"
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Glagol + predlog",
+          "Padež",
+          "Prevod"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "## Primeri\n\n- *Ich **freue mich auf** das Wochenende.* (Radujem se vikendu.)\n- *Sie **interessiert sich für** Kunst.* (Zanima je umetnost.)\n- *Er **ärgert sich über** den Stau.* (Ljuti se zbog gužve.)\n- *Wir **treffen uns mit** Freunden.* (Nalazimo se s prijateljima.)"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Pronominaladverbien - da ne ponavljaš stvar\n\nKad se predlog odnosi na **stvar** (ne na osobu), spajaš ga u jednu reč:\n\n- pitanje: **wo(r) + predlog** → *worüber? worauf? wofür?*\n- odgovor: **da(r) + predlog** → *darüber, darauf, dafür*\n\n*r* se ubacuje kad predlog počinje samoglasnikom (*wor**über**, dar**auf***)."
+      },
+      {
+        "rows": [
+          [
+            "über",
+            "Worüber sprichst du?",
+            "Ich spreche darüber."
+          ],
+          [
+            "auf",
+            "Worauf wartest du?",
+            "Ich warte darauf."
+          ],
+          [
+            "für",
+            "Wofür interessierst du dich?",
+            "Ich interessiere mich dafür."
+          ],
+          [
+            "an",
+            "Woran denkst du?",
+            "Ich denke daran."
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Predlog",
+          "Pitanje (stvar)",
+          "Odgovor (stvar)"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "📌 **Važno:** za **osobe** NE koristiš da-/wo- oblik, nego predlog + zamenicu: *Auf **wen** wartest du? - Ich warte **auf ihn**.* (Worauf = stvar, Auf wen = osoba.)"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "auf",
+            "question": "Ich freue mich ___ das Wochenende. (radujem se unapred)"
+          },
+          {
+            "answer": "für",
+            "question": "Sie interessiert sich ___ Musik."
+          },
+          {
+            "answer": "über",
+            "question": "Er ärgert sich ___ das Wetter."
+          },
+          {
+            "answer": "um",
+            "question": "Wir kümmern uns ___ die Kinder."
+          }
+        ],
+        "title": "Mini vežba - dopuni predlog"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Worauf",
+            "question": "___ wartest du? (na šta?)"
+          },
+          {
+            "answer": "daran",
+            "question": "Ich denke oft ___. (na to)"
+          },
+          {
+            "answer": "Wofür",
+            "question": "___ interessierst du dich? (za šta?)"
+          }
+        ],
+        "title": "Vežba - worüber/darüber?"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "auf / über (Akk.)",
+            "front": "sich freuen …"
+          },
+          {
+            "back": "für (Akk.)",
+            "front": "sich interessieren …"
+          },
+          {
+            "back": "über (Akk.)",
+            "front": "sich ärgern …"
+          },
+          {
+            "back": "um (Akk.)",
+            "front": "sich kümmern …"
+          },
+          {
+            "back": "mit (Dat.)",
+            "front": "sich treffen …"
+          },
+          {
+            "back": "an (Akk.)",
+            "front": "sich erinnern …"
+          }
+        ],
+        "backLabel": "Predlog (+ padež)",
+        "frontLabel": "Glagol"
+      }
+    ]
+  },
+  "exercises": []
+}

@@ -78,6 +78,20 @@ export interface LinkSection {
   label?: string;
 }
 
+/** Jedna kartica u ilustrovanoj galeriji. */
+export interface GalleryItem {
+  image: string;       // URL slike/SVG-a (npr. Supabase Storage)
+  de: string;          // nemački pojam (može početi sa der/die/das)
+  sr: string;          // prevod
+}
+
+/** Ilustrovana galerija pojmova - mreža slika sa nemačkim pojmom i prevodom (npr. oblici lekova, delovi tela). */
+export interface GallerySection {
+  type: "gallery";
+  title?: string;
+  items: GalleryItem[];
+}
+
 export interface FlashcardSection {
   type: "flashcard";
   frontLabel?: string;
@@ -115,6 +129,7 @@ export type Section =
   | PdfSection
   | ImageSection
   | LinkSection
+  | GallerySection
   | FlashcardSection
   | YoutubeSection
   | AudioSection

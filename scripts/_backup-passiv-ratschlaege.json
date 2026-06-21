@@ -1,0 +1,187 @@
+{
+  "lesson": {
+    "id": "cd0ad37e-1178-44b4-8c4c-7ae85411b7b2",
+    "course_id": "393b99f7-abe9-40e4-9cab-2e39ae523fff",
+    "title": "Passiv und Ratschläge",
+    "lesson_type": "text",
+    "content": "",
+    "vimeo_video_id": null,
+    "order_index": 36,
+    "is_free_preview": false,
+    "created_at": "2026-05-31T20:31:30.105184+00:00",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 3 · Gesundheit",
+        "category": "grammatik"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Dve teme iz oblasti zdravlja: **Passiv** (kad je važna radnja, a ne ko je vrši - *Das Medikament **wird** zweimal täglich **genommen***) i davanje **saveta** (*An deiner Stelle würde ich…*). Obe su standardne na B1."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Pasiv - fokus na radnju\n\nAktiv: *Der Arzt untersucht den Patienten.* (Ko? bitno)\nPasiv: *Der Patient **wird** untersucht.* (Šta se radi? bitno)\n\nGradi se: **werden** (lično) + **Partizip II** (na kraju)."
+      },
+      {
+        "type": "formula",
+        "content": "Präsens Passiv: werden + Partizip II\nDas Rezept wird ausgestellt.\nDie Tabletten werden eingenommen."
+      },
+      {
+        "rows": [
+          [
+            "Man nimmt die Tablette mit Wasser.",
+            "Die Tablette wird mit Wasser genommen."
+          ],
+          [
+            "Der Arzt schreibt ein Rezept.",
+            "Ein Rezept wird geschrieben."
+          ],
+          [
+            "Man operiert den Patienten.",
+            "Der Patient wird operiert."
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Aktiv",
+          "Passiv"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Pasiv sa modalnim glagolom\n\n**Modalverb + Partizip II + werden** (Infinitiv na kraju):\n\n- *Die Tablette **muss** vor dem Essen **genommen werden**.* (mora se uzeti pre jela)\n- *Das Formular **kann** online **ausgefüllt werden**.* (može se popuniti onlajn)"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Davanje saveta (Ratschläge)\n\nViše načina, od mekšeg ka jačem:\n\n- *Du **solltest** mehr schlafen.* (Trebalo bi da…)\n- *An deiner Stelle **würde ich** einen Arzt fragen.* (Da sam na tvom mestu…)\n- *Es **wäre** besser, wenn du dich ausruhst.* (Bilo bi bolje da…)"
+      },
+      {
+        "rows": [
+          [
+            "Du solltest weniger Kaffee trinken.",
+            "Trebalo bi da piješ manje kafe."
+          ],
+          [
+            "An deiner Stelle würde ich zum Arzt gehen.",
+            "Da sam na tvom mestu, otišao bih kod lekara."
+          ],
+          [
+            "Es wäre gut, wenn du mehr Wasser trinkst.",
+            "Bilo bi dobro da piješ više vode."
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Nemački",
+          "Prevod"
+        ]
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Die Tablette wird dreimal täglich genommen.",
+            "question": "Man nimmt die Tablette dreimal täglich. →"
+          },
+          {
+            "answer": "Ein Rezept wird (vom Arzt) geschrieben.",
+            "question": "Der Arzt schreibt ein Rezept. →"
+          },
+          {
+            "answer": "Das Formular muss ausgefüllt werden.",
+            "question": "Man muss das Formular ausfüllen. →"
+          }
+        ],
+        "title": "Mini vežba - pretvori u pasiv"
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Du solltest mehr schlafen / dich ausruhen.",
+            "question": "Tvoj prijatelj je umoran. (sollen)"
+          },
+          {
+            "answer": "An deiner Stelle würde ich einen Arzt fragen.",
+            "question": "Boli ga glava. (an deiner Stelle)"
+          },
+          {
+            "answer": "Es wäre besser, wenn du eine Pause machst.",
+            "question": "Stalno je pod stresom. (es wäre besser)"
+          }
+        ],
+        "title": "Vežba - daj savet"
+      },
+      {
+        "rows": [
+          [
+            "die Tablette, -n",
+            "tableta"
+          ],
+          [
+            "das Rezept, -e",
+            "recept"
+          ],
+          [
+            "einnehmen",
+            "uzimati (lek)"
+          ],
+          [
+            "untersuchen",
+            "pregledati"
+          ],
+          [
+            "sich ausruhen",
+            "odmoriti se"
+          ],
+          [
+            "der Ratschlag, ¨e",
+            "savet"
+          ]
+        ],
+        "type": "vocabulary"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "📌 **Pasiv ukratko:** *werden + Partizip II*. Sa modalom: *muss/kann … Partizip II + werden*. **Saveti:** *solltest*, *an deiner Stelle würde ich*, *es wäre besser, wenn*."
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "tableta",
+            "front": "die Tablette, -n"
+          },
+          {
+            "back": "recept",
+            "front": "das Rezept, -e"
+          },
+          {
+            "back": "uzimati (lek)",
+            "front": "einnehmen"
+          },
+          {
+            "back": "pregledati",
+            "front": "untersuchen"
+          },
+          {
+            "back": "odmoriti se",
+            "front": "sich ausruhen"
+          },
+          {
+            "back": "savet",
+            "front": "der Ratschlag, ¨e"
+          }
+        ]
+      }
+    ]
+  },
+  "exercises": [],
+  "questions": {}
+}

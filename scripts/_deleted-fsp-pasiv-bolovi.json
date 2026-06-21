@@ -1,0 +1,416 @@
+{
+  "lessons": [
+    {
+      "id": "246ccadd-3db3-4bb8-b350-1c7ba53f99a5",
+      "course_id": "290d07e1-f7d2-4df9-9ead-fd4685607a69",
+      "title": "Bolovi",
+      "lesson_type": "text",
+      "content": "",
+      "vimeo_video_id": null,
+      "order_index": 19,
+      "is_free_preview": false,
+      "created_at": "2026-04-15T20:23:54.740082+00:00",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Rečnik",
+          "category": "wortschatz"
+        },
+        {
+          "type": "text",
+          "content": "## bolovi - rečnik"
+        },
+        {
+          "type": "text",
+          "content": "- die Armschmerzen (Pl.) - bolovi u rukama\n\n- die Bauchschmerzen (Pl.) - bolovi u stomaku\n\n- die Beinschmerzen (Pl.) - bolovi u nogama\n\n- der Eingeweideschmerz - bol u unutrašnjim organima\n\n- die Flankenschmerzen (Pl.) - bolovi u slabinama\n\n- die Gelenkschmerzen (Pl.) - bolovi u zglobovima\n\n- die Knochenschmerzen (Pl.) - bolovi u kostima\n\n- die Kopfschmerzen (Pl.) - glavobolje\n\n- die Muskelschmerzen (Pl.) - bolovi u mišićima\n\n- die Nackenschmerzen (Pl.) - bolovi u vratu\n\n- die Halsschmerzen (Pl.) - bolovi u grlu\n\n- die Nervenschmerzen (Pl.) - bolovi u nervima\n\n- die Oberbauchschmerzen (Pl.) - bolovi u gornjem stomaku\n\n- die Rückenschmerzen (Pl.) - bolovi u leđima\n\n- die Schmerzen (Pl.) hinter dem Brustbein - bolovi iza grudne kosti\n\n- die Schmerzen (Pl.) im Brustkorb - bolovi u grudnom košu\n\n- die Schmerzen (Pl.) im unteren Rücken - bolovi u donjem delu leđa\n\n- die Schulterschmerzen (Pl.) - bolovi u ramenima die Unterbauchschmerzen (Pl.) - bolovi u donjem stomaku\n\n \n\n- chronisch - hroničan\n\n- akut - akutni\n\n- brennend - pekući\n\n- drückend - stiskajući\n\n- dumpf - tup\n\n- stark - jak\n\n- gleichbleibend - stalan\n\n- klopfend - pulsirajući\n\n- krampfartig - grčevit\n\n- nachlassend - opadajući\n\n- epigastrisch - epigastrični\n\n- schlimm - ozbiljan\n\n- ausstrahlend - zračeći (šireći se)\n\n- bohrend - prodoran\n\n- hämmernd - udarajući\n\n- zerschnürend - zatežući\n\n- bohrend - prodoran\n\n- klopfend - pulsirajući\n\n- reißend - kidajući\n\n- brennend - pekući\n\n- kolikartig = krampfartig- kolikast (grčevit)\n\n- schneidend - seckajući\n\n- stechend - probadajući\n\n- kribbelnd - trnjenje\n\n- ziehend - povlačeći\n\n- einschießend - probadajući (ubodna bol)\n\n- pochend - kucajući\n\n- hämmernd - udarajući\n\n \n\n- in der Mitte - u sredini\n\n- oben/unten - gore/dole\n\n- ubiquitär / überall - ubikvitaran / svuda\n\n- wandernd - lutajući / pokretni\n\n- rechts/links - desno/levo\n\n- seitlich - bočno\n\n- beidseitig - obostrano\n\n- diffus - difuzan (raspršen)\n\n- einseitig - jednostrano\n\n- punktuell - tačkasto\n\n- seitlich - bočno\n\n \n\n \n\n- die Schmerzen (Pl.) in Ruhe / der Ruheschmerz - bolovi u mirovanju / bol u mirovanju\n\n-  die Schmerzen (Pl.) bei Bewegung / der Bewegungsschmerz / die bewegungsabhängigen Schmerzen (Pl.) - bolovi pri kretanju / bol pri kretanju / bolovi zavisni od pokreta\n\n- die Schmerzen (Pl.) bei Belastung / der Belastungsschmerz / die belastungsabhängigen Schmerzen (Pl.) - bolovi pri opterećenju / bol pri opterećenju / bolovi zavisni od opterećenja\n\n- die Schmerzen (Pl.) vor/nach dem Essen (präprandial/postprandial) / die essensabhängigen Schmerzen (Pl.) / der Nüchternschmerz - bolovi pre/posle jela / bolovi zavisni od hrane / bol na prazan stomak\n\n- der Dehnungsschmerz - bol pri istezanju\n\n- der Druckschmerz (die Druckdolenz) - bol pri pritisku (oštećenje pritiska)\n\n- der Erschütterungsschmerz - bol pri udarcu\n\n- der Klopfschmerz - bol pri kucanju\n\n- der Loslassschmerz - bol pri oslobađanju\n\n- der Spannungsschmerz - bol pri napetosti"
+        },
+        {
+          "type": "text",
+          "content": "## bolovi - vežbe"
+        },
+        {
+          "type": "text",
+          "content": "[Bolovi - vežbe](https://quizlet.com/965235439/match/)"
+        }
+      ]
+    },
+    {
+      "id": "d0d349db-0a95-43a4-8830-fdd14a325dc3",
+      "course_id": "290d07e1-f7d2-4df9-9ead-fd4685607a69",
+      "title": "Pasiv",
+      "lesson_type": "text",
+      "content": "",
+      "vimeo_video_id": "1013800593",
+      "order_index": 10,
+      "is_free_preview": false,
+      "created_at": "2026-04-15T20:23:54.347761+00:00",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Gramatika",
+          "category": "grammatik"
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## Pasiv u Fachsprachprüfung\n\nPasiv je nezaobilazan u medicinskoj komunikaciji - u nalazima, izveštajima i opisu postupaka stalno govorimo o tome šta se sa pacijentom radi, a ne ko to radi (*Der Patient wird untersucht*, *Die OP wird durchgeführt*). Zato ga moraš pravilno koristiti u svim vremenima i sa modalnim glagolima.\n\nU videu ispod Nataša objašnjava kako se pasiv gradi u svim vremenima, kako radi pasiv sa modalnim glagolima i na šta da paziš na ispitu. Pogledaj video, pa proveri znanje kroz vežbe na dnu."
+        },
+        {
+          "type": "video",
+          "vimeoId": "1013800593"
+        },
+        {
+          "type": "text",
+          "style": "info",
+          "content": "### Kratko podsećanje\n\n- **Vorgangspassiv** se gradi sa **werden + Partizip II**.\n- U perfektu i pluskvamperfektu Partizip od *werden* glasi **worden** (ne *geworden*): *ist untersucht worden*, *war stabilisiert worden*.\n- Sa modalnim glagolom: modalni glagol ostaje, a punoznačni glagol ide u oblik **Partizip II + werden**: *Der Patient muss untersucht werden.*"
+        },
+        {
+          "type": "text",
+          "style": "uebung",
+          "content": "## Vežbe\n\nProveri šta si naučio iz videa:"
+        },
+        {
+          "type": "exercise",
+          "title": "Aufgabe 1 - Das richtige Passiv"
+        },
+        {
+          "type": "exercise",
+          "title": "Aufgabe 2 - Richtig oder falsch?"
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "### Aufgabe 3 - Aktiv → Passiv\n\nPreoblikuj rečenice iz aktiva u pasiv. Razmisli, pa klikni da vidiš rešenje:"
+        },
+        {
+          "type": "spoiler",
+          "items": [
+            {
+              "answer": "Der Patient wird vom Arzt untersucht.",
+              "question": "Aktiv: Der Arzt untersucht den Patienten. (Präsens Passiv)"
+            },
+            {
+              "answer": "Die Probe ist von der Schwester ins Labor geschickt worden.",
+              "question": "Aktiv: Die Schwester hat die Probe ins Labor geschickt. (Perfekt Passiv)"
+            },
+            {
+              "answer": "Die OP wurde vom Team durchgeführt.",
+              "question": "Aktiv: Das Team führte die OP durch. (Präteritum Passiv)"
+            },
+            {
+              "answer": "Der Patient muss sofort operiert werden.",
+              "question": "Aktiv: Man muss den Patienten sofort operieren. (Passiv mit Modalverb)"
+            },
+            {
+              "answer": "Der Patient wird morgen vom Arzt entlassen werden.",
+              "question": "Aktiv: Der Arzt wird den Patienten morgen entlassen. (Futur I Passiv)"
+            }
+          ],
+          "title": "Aufgabe 3 - klikni za rešenje"
+        },
+        {
+          "type": "exercise",
+          "title": "Aufgabe 4 - Aktiv → Passiv"
+        }
+      ]
+    }
+  ],
+  "exercises": [
+    {
+      "id": "8b2ea083-96f7-4b3f-bd0e-a7f3231718cb",
+      "lesson_id": "d0d349db-0a95-43a4-8830-fdd14a325dc3",
+      "title": "Aufgabe 4 - Aktiv → Passiv",
+      "exercise_type": "typing",
+      "order_index": 2,
+      "created_at": "2026-06-21T11:15:17.430468+00:00"
+    },
+    {
+      "id": "9ab93be6-be1d-4f02-877f-48b5faded1b5",
+      "lesson_id": "d0d349db-0a95-43a4-8830-fdd14a325dc3",
+      "title": "Aufgabe 2 - Richtig oder falsch?",
+      "exercise_type": "true_false",
+      "order_index": 1,
+      "created_at": "2026-06-21T11:15:17.320487+00:00"
+    },
+    {
+      "id": "bdf469a1-1b93-4e5a-819c-b3fd5360cd40",
+      "lesson_id": "d0d349db-0a95-43a4-8830-fdd14a325dc3",
+      "title": "Aufgabe 1 - Das richtige Passiv",
+      "exercise_type": "quiz",
+      "order_index": 0,
+      "created_at": "2026-06-21T11:15:17.148196+00:00"
+    }
+  ],
+  "exercise_questions": [
+    {
+      "id": "f33dea1a-9cb0-4a90-8734-a22dbaa3c1e2",
+      "exercise_id": "9ab93be6-be1d-4f02-877f-48b5faded1b5",
+      "question": "Richtig oder falsch? „Die Probe wurde ins Labor geschickt.“",
+      "options": null,
+      "correct_answer": "true",
+      "explanation": "Tačno. Präteritum Passiv: „wurde geschickt“.",
+      "audio_url": null,
+      "order_index": 4,
+      "question_type": "quiz"
+    },
+    {
+      "id": "61a19248-46e2-4344-8f9a-ca7f8870136e",
+      "exercise_id": "9ab93be6-be1d-4f02-877f-48b5faded1b5",
+      "question": "Richtig oder falsch? „Die Probe wurde ins Labor geschickt worden.“",
+      "options": null,
+      "correct_answer": "false",
+      "explanation": "Pogrešno. Präteritum Passiv završava se sa „geschickt“ - „worden“ je suvišno: „Die Probe wurde ins Labor geschickt.“",
+      "audio_url": null,
+      "order_index": 5,
+      "question_type": "quiz"
+    },
+    {
+      "id": "94e95167-6487-48e6-9191-52b6de14f121",
+      "exercise_id": "8b2ea083-96f7-4b3f-bd0e-a7f3231718cb",
+      "question": "Aktiv: Das Team untersucht den Patienten. Formulieren Sie im Präsens Passiv (mit „vom Team“).",
+      "options": {
+        "type": "typing"
+      },
+      "correct_answer": "Der Patient wird vom Team untersucht.|Der Patient wird vom Team untersucht",
+      "explanation": "Der Patient wird vom Team untersucht.",
+      "audio_url": null,
+      "order_index": 0,
+      "question_type": "quiz"
+    },
+    {
+      "id": "b1ca8f42-0342-47a7-ba71-d4425a41fc7c",
+      "exercise_id": "8b2ea083-96f7-4b3f-bd0e-a7f3231718cb",
+      "question": "Aktiv: Das Team hat den Patienten untersucht. Formulieren Sie im Perfekt Passiv (mit „vom Team“).",
+      "options": {
+        "type": "typing"
+      },
+      "correct_answer": "Der Patient ist vom Team untersucht worden.|Der Patient ist vom Team untersucht worden",
+      "explanation": "Der Patient ist vom Team untersucht worden.",
+      "audio_url": null,
+      "order_index": 1,
+      "question_type": "quiz"
+    },
+    {
+      "id": "7d1c0636-2f07-4d7b-863c-84521b669bfd",
+      "exercise_id": "8b2ea083-96f7-4b3f-bd0e-a7f3231718cb",
+      "question": "Aktiv: Das Team muss den Patienten untersuchen. Formulieren Sie im Passiv mit Modalverb (mit „vom Team“).",
+      "options": {
+        "type": "typing"
+      },
+      "correct_answer": "Der Patient muss vom Team untersucht werden.|Der Patient muss vom Team untersucht werden",
+      "explanation": "Der Patient muss vom Team untersucht werden.",
+      "audio_url": null,
+      "order_index": 2,
+      "question_type": "quiz"
+    },
+    {
+      "id": "766db3cf-3dff-4577-b1b4-c6e258e7e6a9",
+      "exercise_id": "8b2ea083-96f7-4b3f-bd0e-a7f3231718cb",
+      "question": "Aktiv: Das Team wird den Patienten untersuchen. Formulieren Sie im Futur I Passiv (mit „vom Team“).",
+      "options": {
+        "type": "typing"
+      },
+      "correct_answer": "Der Patient wird vom Team untersucht werden.|Der Patient wird vom Team untersucht werden",
+      "explanation": "Der Patient wird vom Team untersucht werden.",
+      "audio_url": null,
+      "order_index": 3,
+      "question_type": "quiz"
+    },
+    {
+      "id": "9ea52838-f8bb-4ba7-986e-217bd3c6af8a",
+      "exercise_id": "bdf469a1-1b93-4e5a-819c-b3fd5360cd40",
+      "question": "Aktiv: Das Team untersucht den Patienten gründlich. - Der Patient ______ vom Team gründlich untersucht. (Präsens)",
+      "options": {
+        "type": "quiz",
+        "items": [
+          "wird",
+          "ist",
+          "wurde"
+        ]
+      },
+      "correct_answer": "0",
+      "explanation": "Präsens Passiv -> wird untersucht.",
+      "audio_url": null,
+      "order_index": 0,
+      "question_type": "quiz"
+    },
+    {
+      "id": "34f03826-70bd-4456-a237-c48612286d9c",
+      "exercise_id": "bdf469a1-1b93-4e5a-819c-b3fd5360cd40",
+      "question": "Aktiv: Das Team untersuchte den Patienten gründlich. - Der Patient ______ vom Team gründlich untersucht. (Präteritum)",
+      "options": {
+        "type": "quiz",
+        "items": [
+          "wird",
+          "wurde",
+          "ist"
+        ]
+      },
+      "correct_answer": "1",
+      "explanation": "Präteritum Passiv -> wurde untersucht.",
+      "audio_url": null,
+      "order_index": 1,
+      "question_type": "quiz"
+    },
+    {
+      "id": "44a63a74-16d1-4ccf-b663-c748794dd7f8",
+      "exercise_id": "9ab93be6-be1d-4f02-877f-48b5faded1b5",
+      "question": "Richtig oder falsch? „Der Patient ist gründlich untersucht worden.“",
+      "options": null,
+      "correct_answer": "true",
+      "explanation": "Tačno. Perfekt Passiv: Partizip od werden glasi „worden“ - „ist untersucht worden“.",
+      "audio_url": null,
+      "order_index": 0,
+      "question_type": "quiz"
+    },
+    {
+      "id": "2dafaaab-b64f-42f7-b06c-c12e23cd3cb7",
+      "exercise_id": "9ab93be6-be1d-4f02-877f-48b5faded1b5",
+      "question": "Richtig oder falsch? „Der Patient ist gründlich untersucht geworden.“",
+      "options": null,
+      "correct_answer": "false",
+      "explanation": "Pogrešno. U Vorgangspassivu Partizip od werden glasi „worden“, ne „geworden“: „ist untersucht worden“.",
+      "audio_url": null,
+      "order_index": 1,
+      "question_type": "quiz"
+    },
+    {
+      "id": "8f359f66-decc-4924-813e-07fad7748b62",
+      "exercise_id": "9ab93be6-be1d-4f02-877f-48b5faded1b5",
+      "question": "Richtig oder falsch? „Der Patient muss sofort operiert werden.“",
+      "options": null,
+      "correct_answer": "true",
+      "explanation": "Tačno. Pasiv sa modalnim glagolom: „muss operiert werden“.",
+      "audio_url": null,
+      "order_index": 2,
+      "question_type": "quiz"
+    },
+    {
+      "id": "370ad2f4-0f85-431d-9857-89b8f22d8f73",
+      "exercise_id": "9ab93be6-be1d-4f02-877f-48b5faded1b5",
+      "question": "Richtig oder falsch? „Der Patient muss sofort operiert worden.“",
+      "options": null,
+      "correct_answer": "false",
+      "explanation": "Pogrešno. Pasiv sa modalnim glagolom traži „operiert werden“: „Der Patient muss sofort operiert werden.“",
+      "audio_url": null,
+      "order_index": 3,
+      "question_type": "quiz"
+    },
+    {
+      "id": "d39c0229-545b-4e9e-a521-876fdb920ca7",
+      "exercise_id": "bdf469a1-1b93-4e5a-819c-b3fd5360cd40",
+      "question": "Aktiv: Das Team hat den Patienten gründlich untersucht. - Der Patient ______ vom Team. (Perfekt)",
+      "options": {
+        "type": "quiz",
+        "items": [
+          "wurde untersucht",
+          "ist untersucht worden",
+          "wird untersucht"
+        ]
+      },
+      "correct_answer": "1",
+      "explanation": "Perfekt Passiv -> ist untersucht worden.",
+      "audio_url": null,
+      "order_index": 2,
+      "question_type": "quiz"
+    },
+    {
+      "id": "6ddb8f3c-2240-46c0-807d-4e62f59c3b16",
+      "exercise_id": "bdf469a1-1b93-4e5a-819c-b3fd5360cd40",
+      "question": "Aktiv: Das Team hatte den Patienten gründlich untersucht. - Der Patient ______ vom Team. (Plusquamperfekt)",
+      "options": {
+        "type": "quiz",
+        "items": [
+          "war untersucht worden",
+          "ist untersucht worden",
+          "wurde untersucht"
+        ]
+      },
+      "correct_answer": "0",
+      "explanation": "Plusquamperfekt Passiv -> war untersucht worden.",
+      "audio_url": null,
+      "order_index": 3,
+      "question_type": "quiz"
+    },
+    {
+      "id": "467d4ae6-4029-4c3f-bde6-c008544f43b0",
+      "exercise_id": "bdf469a1-1b93-4e5a-819c-b3fd5360cd40",
+      "question": "Aktiv: Das Team wird den Patienten gründlich untersuchen. - Der Patient ______ vom Team. (Futur I)",
+      "options": {
+        "type": "quiz",
+        "items": [
+          "wird untersucht werden",
+          "wird untersucht worden",
+          "wurde untersucht"
+        ]
+      },
+      "correct_answer": "0",
+      "explanation": "Futur I Passiv -> wird untersucht werden.",
+      "audio_url": null,
+      "order_index": 4,
+      "question_type": "quiz"
+    },
+    {
+      "id": "73c71dea-3fe7-48d5-ba2b-8209113f5c75",
+      "exercise_id": "bdf469a1-1b93-4e5a-819c-b3fd5360cd40",
+      "question": "Aktiv: Das Team muss den Patienten gründlich untersuchen. - Der Patient muss vom Team gründlich ______. (Passiv mit Modalverb)",
+      "options": {
+        "type": "quiz",
+        "items": [
+          "untersucht werden",
+          "untersucht worden",
+          "untersuchen werden"
+        ]
+      },
+      "correct_answer": "0",
+      "explanation": "Pasiv sa modalnim glagolom -> muss untersucht werden.",
+      "audio_url": null,
+      "order_index": 5,
+      "question_type": "quiz"
+    }
+  ],
+  "lesson_progress": [
+    {
+      "id": "0e7d653c-7665-4d34-adf7-79ace089995b",
+      "user_id": "2df8df38-9ad9-4c91-b34c-073942265237",
+      "lesson_id": "246ccadd-3db3-4bb8-b350-1c7ba53f99a5",
+      "completed": true,
+      "completed_at": "2026-06-14T21:26:45.494+00:00"
+    },
+    {
+      "id": "b0dd50c3-eb27-41b3-b2d0-9c6de781218d",
+      "user_id": "2df8df38-9ad9-4c91-b34c-073942265237",
+      "lesson_id": "d0d349db-0a95-43a4-8830-fdd14a325dc3",
+      "completed": true,
+      "completed_at": "2026-06-14T21:25:52.497+00:00"
+    },
+    {
+      "id": "07e586ab-253a-440e-bcfe-9f3dacb5d49c",
+      "user_id": "852f295a-c733-4e6a-82cc-5c95946b967d",
+      "lesson_id": "246ccadd-3db3-4bb8-b350-1c7ba53f99a5",
+      "completed": true,
+      "completed_at": "2026-06-12T10:59:34.934+00:00"
+    },
+    {
+      "id": "345bc294-ef64-4b6f-bd87-59f717bbad9d",
+      "user_id": "852f295a-c733-4e6a-82cc-5c95946b967d",
+      "lesson_id": "d0d349db-0a95-43a4-8830-fdd14a325dc3",
+      "completed": true,
+      "completed_at": "2026-06-12T10:58:53.647+00:00"
+    },
+    {
+      "id": "fa5dcde4-ea80-4c7b-8334-47ded1fd50da",
+      "user_id": "9b1b0d36-b2dc-40c9-ac56-41464365e2c1",
+      "lesson_id": "246ccadd-3db3-4bb8-b350-1c7ba53f99a5",
+      "completed": true,
+      "completed_at": "2026-06-16T17:08:53.314+00:00"
+    },
+    {
+      "id": "e9bdffd9-dd55-4e24-9e8f-fcde9343ae23",
+      "user_id": "9b1b0d36-b2dc-40c9-ac56-41464365e2c1",
+      "lesson_id": "d0d349db-0a95-43a4-8830-fdd14a325dc3",
+      "completed": true,
+      "completed_at": "2026-06-16T17:08:28.584+00:00"
+    }
+  ]
+}

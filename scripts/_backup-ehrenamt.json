@@ -1,0 +1,136 @@
+{
+  "lesson": {
+    "id": "aa2936d2-bc75-4cac-b977-f6a638968ee3",
+    "course_id": "393b99f7-abe9-40e4-9cab-2e39ae523fff",
+    "title": "Ehrenamt und gesellschaftliches Engagement",
+    "lesson_type": "text",
+    "content": "",
+    "vimeo_video_id": null,
+    "order_index": 35,
+    "is_free_preview": false,
+    "created_at": "2026-06-01T14:53:27.912855+00:00",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Schritte teme · L8-14",
+        "category": "wortschatz"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Tema volontiranja i angažovanja u društvu. Učiš da pričaš o dobrovoljnom radu, projektima i zaštiti životne sredine. (Schritte 6, Lektion 12)"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Vokabular"
+      },
+      {
+        "rows": [
+          [
+            "das Ehrenamt, ¨er",
+            "volonterski rad"
+          ],
+          [
+            "ehrenamtlich",
+            "volonterski"
+          ],
+          [
+            "sich engagieren für + Akk",
+            "angažovati se za"
+          ],
+          [
+            "der Umweltschutz (nur Sg.)",
+            "zaštita životne sredine"
+          ],
+          [
+            "die Gesellschaft, -en",
+            "društvo"
+          ],
+          [
+            "freiwillig",
+            "dobrovoljno"
+          ],
+          [
+            "teilnehmen an + Dat",
+            "učestvovati u"
+          ],
+          [
+            "die Spende, -n",
+            "donacija"
+          ]
+        ],
+        "type": "vocabulary"
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "volonterski rad",
+            "front": "das Ehrenamt"
+          },
+          {
+            "back": "volonterski",
+            "front": "ehrenamtlich"
+          },
+          {
+            "back": "angažovati se za",
+            "front": "sich engagieren für"
+          },
+          {
+            "back": "zaštita životne sredine",
+            "front": "der Umweltschutz"
+          },
+          {
+            "back": "društvo",
+            "front": "die Gesellschaft"
+          },
+          {
+            "back": "dobrovoljno",
+            "front": "freiwillig"
+          },
+          {
+            "back": "učestvovati u",
+            "front": "teilnehmen an"
+          },
+          {
+            "back": "donacija",
+            "front": "die Spende"
+          }
+        ],
+        "backLabel": "Prevod",
+        "frontLabel": "Nemački"
+      },
+      {
+        "type": "text",
+        "style": "beispiele",
+        "content": "## Lesen: Ehrenamt in Deutschland\n\nIn Deutschland engagieren sich Millionen Menschen ehrenamtlich. Das bedeutet: Sie arbeiten freiwillig und ohne Bezahlung für andere. Manche helfen im Sportverein, andere bei der Feuerwehr, in der Flüchtlingshilfe oder im Umweltschutz. Besonders am Wochenende nehmen viele an Projekten teil. Das Ehrenamt ist wichtig für die Gesellschaft: Ohne diese freiwillige Arbeit würden viele Aufgaben liegen bleiben. Auch für die Helfer selbst hat es Vorteile - sie lernen neue Menschen kennen und tun etwas Sinnvolles. Experten meinen: Junge Menschen sollten sich noch stärker engagieren."
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "Falsch - man arbeitet freiwillig und ohne Bezahlung.",
+            "question": "Ehrenamtliche Arbeit wird gut bezahlt."
+          },
+          {
+            "answer": "Richtig - ohne diese Arbeit würden viele Aufgaben liegen bleiben.",
+            "question": "Das Ehrenamt ist wichtig für die Gesellschaft."
+          },
+          {
+            "answer": "Richtig - sie lernen Menschen kennen und tun etwas Sinnvolles.",
+            "question": "Auch die Helfer selbst haben Vorteile vom Ehrenamt."
+          }
+        ],
+        "title": "Pitanja za čitanje - Richtig oder Falsch?"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "💬 **Uvežbaj prevod:** otvori vežbu **AI prevod** (ispod lekcije) i prevedi rečenice na ovu temu sa srpskog na nemački."
+      }
+    ]
+  },
+  "exercises": [],
+  "questions": {}
+}

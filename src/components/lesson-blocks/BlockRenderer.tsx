@@ -12,6 +12,7 @@ import VocabularyBlock from "./VocabularyBlock";
 import PdfBlock from "./PdfBlock";
 import ImageBlock from "./ImageBlock";
 import LinkBlock from "./LinkBlock";
+import GalleryBlock from "./GalleryBlock";
 import FlashcardBlock from "./FlashcardBlock";
 import WordSetBlock from "./WordSetBlock";
 import YoutubeBlock from "./YoutubeBlock";
@@ -41,6 +42,8 @@ function renderBlock(section: Section, index: number) {
       return <ImageBlock key={index} {...section} />;
     case "link":
       return <LinkBlock key={index} {...section} />;
+    case "gallery":
+      return <GalleryBlock key={index} {...section} />;
     case "flashcard":
       return <FlashcardBlock key={index} {...section} />;
     case "wordset":

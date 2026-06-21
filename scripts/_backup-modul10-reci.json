@@ -1,0 +1,99 @@
+{
+  "id": "52c3d9ca-3637-41b2-a0cc-848fb5d69a81",
+  "course_id": "393b99f7-abe9-40e4-9cab-2e39ae523fff",
+  "title": "Modul 10 - Reči",
+  "lesson_type": "text",
+  "content": "",
+  "vimeo_video_id": null,
+  "order_index": 38,
+  "is_free_preview": false,
+  "created_at": "2026-06-12T19:09:51.469609+00:00",
+  "sections": [
+    {
+      "type": "wordset",
+      "items": [
+        {
+          "back": "ključna reč",
+          "front": "das Schlüsselwort, ¨er"
+        },
+        {
+          "back": "tvrdnja, izjava",
+          "front": "die Aussage, -n"
+        },
+        {
+          "back": "reći drugim rečima",
+          "front": "paraphrasieren"
+        },
+        {
+          "back": "punjač",
+          "front": "das Ladegerät, -e"
+        },
+        {
+          "back": "priključak",
+          "front": "der Anschluss, ¨e"
+        },
+        {
+          "back": "podesiti",
+          "front": "einstellen"
+        },
+        {
+          "back": "jezički elementi (telc deo)",
+          "front": "die Sprachbausteine (Pl.)"
+        },
+        {
+          "back": "izražavanje",
+          "front": "der Ausdruck, ¨e"
+        },
+        {
+          "back": "uspostavljanje kontakta (usmeni deo)",
+          "front": "die Kontaktaufnahme (nur Sg.)"
+        },
+        {
+          "back": "pismeno",
+          "front": "schriftlich"
+        },
+        {
+          "back": "usmeno",
+          "front": "mündlich"
+        },
+        {
+          "back": "praznina, rupa (za popunjavanje)",
+          "front": "die Lücke, -n"
+        },
+        {
+          "back": "ispit",
+          "front": "die Prüfung, -en"
+        },
+        {
+          "back": "položiti",
+          "front": "bestehen"
+        },
+        {
+          "back": "zadatak",
+          "front": "die Aufgabe, -n"
+        },
+        {
+          "back": "tačka koju moraš obraditi",
+          "front": "der Leitpunkt, -e"
+        },
+        {
+          "back": "strategija",
+          "front": "die Strategie, -n"
+        },
+        {
+          "back": "ocena",
+          "front": "die Note, -n"
+        }
+      ],
+      "title": "Modul 10 - Reči",
+      "setKey": "b1-2-modul-10",
+      "backLabel": "SR",
+      "frontLabel": "DE"
+    },
+    {
+      "url": "https://rzmyglynjcygsbicssbt.supabase.co/storage/v1/object/public/blog-media/flashcards/b1-2-modul-10.pdf",
+      "type": "pdf",
+      "label": "Preuzmi reči (PDF)"
+    }
+  ]
+}

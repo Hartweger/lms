@@ -1,0 +1,52 @@
+{
+  "course": {
+    "id": "b8c765b7-c377-4941-a1f9-ebe39372fe4a",
+    "title": "Nemački B1.1"
+  },
+  "willkommen": {
+    "id": "af4fefa8-55ed-4e30-9e21-a421b7f00a46",
+    "title": "Willkommen",
+    "order_index": 0,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Uvod"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Dobrodošli u kurs **Nemački B1.1**! Ovaj kurs prati udžbenik Schritte International Neu 5 i priprema te za **ispit B1** (Goethe ili TELC)."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Šta ćeš naučiti u B1.1?\n\n- **Präteritum** - prošlo vreme za pripovedanje i bajke\n- **Als/wenn** - razlika između ova dva veznika\n- **Plusquamperfekt** - davno prošlo vreme\n- **Relativne rečenice** - opisivanje osoba i stvari\n- **Obwohl** - koncesivne rečenice\n- **Passiv sa modalnim glagolima** - šta se mora/sme/može uraditi\n- **Genitiv** - četvrti padež + wegen/trotz\n- **Konjunktiv II** - irealne želje i uslovi\n- **Infinitiv mit zu** - konstrukcije sa zu\n- **Finalsätze** - um...zu / damit\n- **Zweiteilige Konjunktionen** - sowohl...als auch, weder...noch\n- **Priprema za ispit B1** - Schreiben, Sprechen, Leseverstehen"
+      },
+      {
+        "type": "text",
+        "style": "uebung",
+        "content": "## Kako da učiš?\n\n1. **Pogledaj video** - svaka lekcija ima video objašnjenje\n2. **Pročitaj sadržaj** - tabele, formule i primeri ispod videa\n3. **Uradi vežbe** - spoileri, flashcards i kvizovi\n4. **AI vežbe** - prevod i dijalog na kraju svake lekcije\n5. **Test po modulu** - posle svakog modula proveri znanje\n6. **Modelltest** - na kraju kursa uradiš završni test"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## 7 modula\n\n| Modul | Tema | Gramatika |\n|-------|------|-----------|\n| 1 | Glück im Alltag | Präteritum, als/wenn, Plusquamperfekt |\n| 2 | Unterhaltung | obwohl, Relativpronomen, Gradpartikeln |\n| 3 | Gesund bleiben | Passiv + Modalverben, Genitiv |\n| 4 | Sprachen | Konjunktiv II, wegen + Genitiv |\n| 5 | Eine Arbeit finden | Infinitiv mit zu |\n| 6 | Dienstleistung | um...zu/damit, statt/ohne...zu |\n| 7 | Rund ums Wohnen | Zweiteilige Konjunktionen, Konj. II Vergangenheit |"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Saveti za uspeh\n\n- Uči **redovno** - bolje 20 minuta svaki dan nego 3 sata jednom nedeljno\n- **Ponavljaj** - vrati se na lekcije koje ti nisu jasne\n- Ako imaš pitanja, piši profesorki na **info@hartweger.rs**\n\nSrećno učenje! 🍀"
+      },
+      {
+        "href": "https://drive.google.com/drive/folders/1sMlcU6zkAVDiU9hwR5xHECGeYy0k4ktj?usp=sharing",
+        "type": "link",
+        "label": "📁 Materijal (Google Drive)",
+        "linkType": "external"
+      }
+    ]
+  },
+  "firstReal": {
+    "id": "b5547482-c6b5-4701-9c5e-bf4efd4d13e0",
+    "title": "Rotkäppchen und das Präteritum"
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "lessons": [
+    {
+      "id": "5dd38cf4-2b79-4ade-b578-897f9e43c2a3",
+      "course_id": "290d07e1-f7d2-4df9-9ead-fd4685607a69",
+      "title": "Delovi tela i organi",
+      "lesson_type": "text",
+      "content": "",
+      "vimeo_video_id": null,
+      "order_index": 6,
+      "is_free_preview": false,
+      "created_at": "2026-04-15T20:23:53.680747+00:00",
+      "sections": []
+    },
+    {
+      "id": "f31c4914-b8f8-4eca-99dc-86eae44c21ae",
+      "course_id": "290d07e1-f7d2-4df9-9ead-fd4685607a69",
+      "title": "Predstavljanje pacijenata - gotove rečenice i vežbe",
+      "lesson_type": "text",
+      "content": "",
+      "vimeo_video_id": null,
+      "order_index": 10,
+      "is_free_preview": false,
+      "created_at": "2026-04-15T20:23:53.93723+00:00",
+      "sections": []
+    }
+  ],
+  "lesson_progress": [
+    {
+      "id": "3327f258-4279-42cf-bb13-f6b9d30ad69e",
+      "user_id": "1a153723-de03-421d-85bc-7a63596ecbd5",
+      "lesson_id": "5dd38cf4-2b79-4ade-b578-897f9e43c2a3",
+      "completed": true,
+      "completed_at": "2026-06-14T18:17:32.819+00:00"
+    },
+    {
+      "id": "b7dbae22-2637-499a-8b50-8a1acf4a91c0",
+      "user_id": "2b8dc1c1-599f-4660-be34-eb73763bc570",
+      "lesson_id": "5dd38cf4-2b79-4ade-b578-897f9e43c2a3",
+      "completed": true,
+      "completed_at": "2026-06-08T16:29:02.673+00:00"
+    },
+    {
+      "id": "229e7e4a-9d72-4b6f-90f9-07aefbacf974",
+      "user_id": "2df8df38-9ad9-4c91-b34c-073942265237",
+      "lesson_id": "5dd38cf4-2b79-4ade-b578-897f9e43c2a3",
+      "completed": true,
+      "completed_at": "2026-06-14T21:23:30.683+00:00"
+    },
+    {
+      "id": "b4ce595d-59b4-4239-a9e1-a604a1f2a3bf",
+      "user_id": "2df8df38-9ad9-4c91-b34c-073942265237",
+      "lesson_id": "f31c4914-b8f8-4eca-99dc-86eae44c21ae",
+      "completed": true,
+      "completed_at": "2026-06-14T21:24:25.962+00:00"
+    },
+    {
+      "id": "287196d2-b379-4d07-b8f0-d33a3ec47a90",
+      "user_id": "36ebfbb6-5916-4192-a508-fb05093456a4",
+      "lesson_id": "5dd38cf4-2b79-4ade-b578-897f9e43c2a3",
+      "completed": true,
+      "completed_at": "2026-06-02T13:33:54.913+00:00"
+    },
+    {
+      "id": "e56ab236-3803-4849-89bf-6851cc4ff205",
+      "user_id": "36ebfbb6-5916-4192-a508-fb05093456a4",
+      "lesson_id": "f31c4914-b8f8-4eca-99dc-86eae44c21ae",
+      "completed": true,
+      "completed_at": "2026-06-02T13:34:13.908+00:00"
+    },
+    {
+      "id": "c78a4009-fbee-4d5b-9bd5-668d1ad06b1e",
+      "user_id": "7e65e4f7-7f77-4a05-8e66-c5d1cce3d12e",
+      "lesson_id": "5dd38cf4-2b79-4ade-b578-897f9e43c2a3",
+      "completed": true,
+      "completed_at": "2026-06-09T18:24:29.268+00:00"
+    },
+    {
+      "id": "ebd1718a-c1e6-40dc-a62b-5f77e563d8ed",
+      "user_id": "7e65e4f7-7f77-4a05-8e66-c5d1cce3d12e",
+      "lesson_id": "f31c4914-b8f8-4eca-99dc-86eae44c21ae",
+      "completed": true,
+      "completed_at": "2026-06-12T13:38:46.243+00:00"
+    },
+    {
+      "id": "86ef89ca-356c-4d60-b57d-be3ad14c1c6a",
+      "user_id": "852f295a-c733-4e6a-82cc-5c95946b967d",
+      "lesson_id": "5dd38cf4-2b79-4ade-b578-897f9e43c2a3",
+      "completed": true,
+      "completed_at": "2026-06-12T10:57:11.203+00:00"
+    },
+    {
+      "id": "fcfcedfc-38cf-4d5b-b057-27dd116e55f0",
+      "user_id": "852f295a-c733-4e6a-82cc-5c95946b967d",
+      "lesson_id": "f31c4914-b8f8-4eca-99dc-86eae44c21ae",
+      "completed": true,
+      "completed_at": "2026-06-12T10:57:59.485+00:00"
+    },
+    {
+      "id": "d971f6d6-1958-423f-a277-3efcb708cd80",
+      "user_id": "9b1b0d36-b2dc-40c9-ac56-41464365e2c1",
+      "lesson_id": "5dd38cf4-2b79-4ade-b578-897f9e43c2a3",
+      "completed": true,
+      "completed_at": "2026-06-16T17:07:31.208+00:00"
+    },
+    {
+      "id": "18fabf7f-481f-46c6-802f-8d942460439f",
+      "user_id": "9b1b0d36-b2dc-40c9-ac56-41464365e2c1",
+      "lesson_id": "f31c4914-b8f8-4eca-99dc-86eae44c21ae",
+      "completed": true,
+      "completed_at": "2026-06-16T17:07:48.864+00:00"
+    }
+  ]
+}

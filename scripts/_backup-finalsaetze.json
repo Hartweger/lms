@@ -1,0 +1,161 @@
+{
+  "lesson": {
+    "id": "efd8ffc1-323d-4f1a-815c-553918463449",
+    "course_id": "393b99f7-abe9-40e4-9cab-2e39ae523fff",
+    "title": "Finalsätze: um … zu / damit",
+    "lesson_type": "video",
+    "content": "",
+    "vimeo_video_id": "1100291090",
+    "order_index": 39,
+    "is_free_preview": false,
+    "created_at": "2026-04-15T20:23:50.509755+00:00",
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Modul 6 · Umwelt & Konsum",
+        "category": "grammatik"
+      },
+      {
+        "type": "video",
+        "vimeoId": "1100291090"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Finalsatz pokazuje **cilj ili svrhu** radnje. Odgovara na pitanja **Wozu?** i **Warum?** Imamo dve konstrukcije: **um … zu** i **damit**. Cela poenta je u tome ko je subjekat."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## „um … zu\" - kada je subjekat ISTI\n\nKad je subjekat u glavnoj i u zavisnoj rečenici **isti**, koristimo *um … zu + Infinitiv*. U zavisnoj rečenici nema subjekta, glagol (Infinitiv) ide na kraj."
+      },
+      {
+        "type": "formula",
+        "content": "Hauptsatz + um + … + zu + Infinitiv\n(isti subjekat u obe rečenice)"
+      },
+      {
+        "rows": [
+          [
+            "Ich lerne Deutsch, um in Deutschland zu arbeiten.",
+            "Učim nemački da bih radio/la u Nemačkoj."
+          ],
+          [
+            "Wir sparen Geld, um eine Reise zu machen.",
+            "Štedimo novac da bismo otputovali."
+          ],
+          [
+            "Sie trainiert jeden Tag, um gesund zu bleiben.",
+            "Vežba svaki dan da bi ostala zdrava."
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Nemački",
+          "Prevod"
+        ]
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "📌 Kod **razdvojivih glagola** „zu\" ide IZMEĐU prefiksa i glagola: *um pünktlich **anzukommen***, *um einen Termin **auszumachen***."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## „damit\" - kada su subjekti RAZLIČITI\n\nKad subjekat glavne rečenice **nije isti** kao subjekat zavisne, koristimo *damit + subjekat + … + glagol (na kraju)*."
+      },
+      {
+        "type": "formula",
+        "content": "Hauptsatz + damit + Subjekt + … + Verb (Ende)\n(različiti subjekti)"
+      },
+      {
+        "rows": [
+          [
+            "Ich erkläre es ihm, damit er es versteht.",
+            "Objašnjavam mu da bi (on) razumeo."
+          ],
+          [
+            "Sie spricht langsam, damit alle sie verstehen.",
+            "Govori sporo da bi je svi razumeli."
+          ],
+          [
+            "Ich gebe meinem Sohn Geld, damit er ein Buch kaufen kann.",
+            "Dajem sinu novac da bi mogao da kupi knjigu."
+          ]
+        ],
+        "type": "table",
+        "headers": [
+          "Nemački",
+          "Prevod"
+        ]
+      },
+      {
+        "type": "mistakes",
+        "items": [
+          {
+            "wrong": "Ich lerne Deutsch, um in Deutschland arbeiten zu wollen.",
+            "correct": "Ich lerne Deutsch, um in Deutschland zu arbeiten.",
+            "explanation": "„um … zu\" već znači nameru - ne kombinuje se sa „wollen\"."
+          }
+        ]
+      },
+      {
+        "type": "spoiler",
+        "items": [
+          {
+            "answer": "um … zu",
+            "question": "Ich gehe ins Bett, ______ früh aufzustehen. (isti subjekat)"
+          },
+          {
+            "answer": "damit",
+            "question": "Ich wecke ihn, ______ er pünktlich aufsteht. (različiti subjekti)"
+          },
+          {
+            "answer": "um … zu",
+            "question": "Er kauft ein Wörterbuch, ______ neue Wörter zu lernen. (isti)"
+          },
+          {
+            "answer": "damit",
+            "question": "Sie erklärt es noch einmal, ______ alle es verstehen. (različiti)"
+          }
+        ],
+        "title": "Mini vežba - um … zu ili damit?"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Zapamti\n\n1. **Cilj/svrha?** → Finalsatz (Wozu? Warum?)\n2. **Isti subjekat?** → da: *um … zu* · ne: *damit*\n3. Kod razdvojivih glagola: *zu* između prefiksa i glagola. Izbegavaj *wollen*."
+      },
+      {
+        "type": "flashcard",
+        "items": [
+          {
+            "back": "Učim nemački da bih radio/la u Nemačkoj.",
+            "front": "Ich lerne Deutsch, um in Deutschland zu arbeiten."
+          },
+          {
+            "back": "Štedimo novac da bismo otputovali.",
+            "front": "Wir sparen Geld, um eine Reise zu machen."
+          },
+          {
+            "back": "Vežba svaki dan da bi ostala zdrava.",
+            "front": "Sie trainiert jeden Tag, um gesund zu bleiben."
+          },
+          {
+            "back": "Objašnjavam mu da bi (on) razumeo.",
+            "front": "Ich erkläre es ihm, damit er es versteht."
+          },
+          {
+            "back": "Govori sporo da bi je svi razumeli.",
+            "front": "Sie spricht langsam, damit alle sie verstehen."
+          },
+          {
+            "back": "Dajem sinu novac da bi mogao da kupi knjigu.",
+            "front": "Ich gebe meinem Sohn Geld, damit er ein Buch kaufen kann."
+          }
+        ]
+      }
+    ]
+  },
+  "exercises": []
+}

@@ -1,0 +1,128 @@
+{
+  "title": "Lese - und Hörverstehen",
+  "sections": [
+    {
+      "type": "badge",
+      "module": "Modul 10 · Prüfungstraining",
+      "category": "lesen"
+    },
+    {
+      "type": "video",
+      "vimeoId": "1128598236"
+    },
+    {
+      "type": "text",
+      "style": "info",
+      "content": "Lesen i Hören su moduli gde se najlakše skupljaju poeni - ako znaš tehniku. Ista strategija (prvo pitanja, pa tekst/audio, pa potvrda) radi za oba. Ispod je i pravi ispitni zadatak za vežbu."
+    },
+    {
+      "type": "text",
+      "style": "uebung",
+      "content": "## Lesen - korak po korak\n\n1. Pročitaj **naslov i pitanja** pre teksta.\n2. **Podvuci ključne reči** u svakom pitanju.\n3. Pređi tekst i traži ta mesta - odgovor je obično parafraza (sinonim), ne ista reč.\n4. Za **Richtig/Falsch**: nađi rečenicu u tekstu koja to dokazuje. Nema dokaza → verovatno Falsch."
+    },
+    {
+      "type": "text",
+      "style": "uebung",
+      "content": "## Hören - korak po korak\n\n1. U pauzi pre slušanja **pročitaj pitanja** i predvidi temu.\n2. Slušaj **glavnu informaciju**, ne svaku reč.\n3. Hvataj **imenice, brojeve, datume**.\n4. Drugi put slušaj samo da **proveriš** ono što ti nije jasno."
+    },
+    {
+      "type": "text",
+      "style": "default",
+      "content": "## Pravi zadatak za vežbu (Lesen)\n\nKoji tekst (A-G) odgovara kojoj situaciji? Svaki opis je kratko uputstvo - poveži ga sa temom. Ovo je tipičan B1 Lesen zadatak „uparivanja“."
+    },
+    {
+      "type": "text",
+      "style": "beispiele",
+      "content": "**A** - Stecken Sie das Ladegerät in eine Steckdose… Während Ihr Telefon lädt, sehen Sie das Symbol für **Akku laden**. → *punjenje telefona*\n\n**B** - Wenn Sie einen neuen Kontakt erstellen möchten, wählen Sie **Kontakte**… tippen Sie auf **Speichern**. → *novi kontakt*\n\n**C** - Stecken Sie ein LAN-Kabel in den LAN-Anschluss… **Netzwerk einstellen** → **Starten**. → *TV na internet*\n\n**D** - Wenn Ihr Gerät nicht mehr reagiert, schließen Sie die App… schalten Sie das Gerät aus und wieder ein. → *uređaj se zamrznuo*\n\n**E** - Wählen Sie **Kontakte**, dann Ihren Namen und das Bleistift-Symbol… Kontaktdaten versenden/freigeben. → *deljenje svojih podataka*\n\n**F** - Tippen Sie auf das **Wecker-Symbol**… Uhrzeit und Tage auswählen → **Speichern**. → *podešavanje alarma*\n\n**G** - Öffnen Sie den Shop, tippen Sie bei **Suche** den Namen der App ein… **Installieren**. → *instaliranje aplikacije*"
+    },
+    {
+      "type": "spoiler",
+      "items": [
+        {
+          "answer": "F (Wecker)",
+          "question": "Želiš da podesiš da te telefon budi ujutru."
+        },
+        {
+          "answer": "D (Gerät reagiert nicht)",
+          "question": "Aplikacija se zaledila i ne reaguje."
+        },
+        {
+          "answer": "G (Shop → installieren)",
+          "question": "Hoćeš novu aplikaciju."
+        },
+        {
+          "answer": "A (Ladegerät)",
+          "question": "Telefon je prazan, treba da ga napuniš."
+        },
+        {
+          "answer": "C (LAN-Kabel)",
+          "question": "Hoćeš da povežeš TV na internet."
+        }
+      ],
+      "title": "Vežba - poveži situaciju sa tekstom (A-G)"
+    },
+    {
+      "rows": [
+        [
+          "das Schlüsselwort, ¨er",
+          "ključna reč"
+        ],
+        [
+          "die Aussage, -n",
+          "tvrdnja, izjava"
+        ],
+        [
+          "paraphrasieren",
+          "reći drugim rečima"
+        ],
+        [
+          "das Ladegerät, -e",
+          "punjač"
+        ],
+        [
+          "der Anschluss, ¨e",
+          "priključak"
+        ],
+        [
+          "einstellen",
+          "podesiti"
+        ]
+      ],
+      "type": "vocabulary"
+    },
+    {
+      "type": "text",
+      "style": "default",
+      "content": "🎧 **Vežbaj redovno:** Deutsche Welle „Langsam gesprochene Nachrichten“ za slušanje + kratki članci za čitanje. 15 minuta dnevno diže razumevanje brže od svega."
+    },
+    {
+      "type": "flashcard",
+      "items": [
+        {
+          "back": "ključna reč",
+          "front": "das Schlüsselwort, ¨er"
+        },
+        {
+          "back": "tvrdnja, izjava",
+          "front": "die Aussage, -n"
+        },
+        {
+          "back": "reći drugim rečima",
+          "front": "paraphrasieren"
+        },
+        {
+          "back": "punjač",
+          "front": "das Ladegerät, -e"
+        },
+        {
+          "back": "priključak",
+          "front": "der Anschluss, ¨e"
+        },
+        {
+          "back": "podesiti",
+          "front": "einstellen"
+        }
+      ]
+    }
+  ]
+}

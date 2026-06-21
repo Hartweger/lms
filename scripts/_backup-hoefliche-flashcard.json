@@ -1,0 +1,29 @@
+[
+  {
+    "type": "flashcard",
+    "items": [
+      {
+        "back": "könntest du",
+        "front": "kannst du"
+      },
+      {
+        "back": "könnten Sie",
+        "front": "können Sie"
+      },
+      {
+        "back": "dürfte ich",
+        "front": "darf ich"
+      },
+      {
+        "back": "hättest du Zeit",
+        "front": "hast du Zeit"
+      },
+      {
+        "back": "würdest du mir geben",
+        "front": "gibst du mir"
+      }
+    ],
+    "backLabel": "Učtivo",
+    "frontLabel": "Direktno"
+  }
+]

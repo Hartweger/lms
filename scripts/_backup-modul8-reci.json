@@ -1,0 +1,345 @@
+{
+  "id": "b1d2b3e7-41d2-4824-9598-fe86c78eb70a",
+  "title": "Modul 8 - Reči",
+  "sections": [
+    {
+      "type": "wordset",
+      "items": [
+        {
+          "back": "javiti se",
+          "front": "sich melden"
+        },
+        {
+          "back": "odgovoriti pismeno",
+          "front": "zurückschreiben"
+        },
+        {
+          "back": "potvrditi",
+          "front": "bestätigen"
+        },
+        {
+          "back": "složiti se",
+          "front": "zustimmen"
+        },
+        {
+          "back": "odbiti",
+          "front": "ablehnen"
+        },
+        {
+          "back": "preporučiti",
+          "front": "empfehlen"
+        },
+        {
+          "back": "pregovarati",
+          "front": "verhandeln"
+        },
+        {
+          "back": "priznati",
+          "front": "zugeben"
+        },
+        {
+          "back": "odlučiti se",
+          "front": "sich entscheiden"
+        },
+        {
+          "back": "razmisliti",
+          "front": "überlegen"
+        },
+        {
+          "back": "izbeći",
+          "front": "vermeiden"
+        },
+        {
+          "back": "postići, dostići",
+          "front": "erreichen"
+        },
+        {
+          "back": "podneti zahtev",
+          "front": "beantragen"
+        },
+        {
+          "back": "brinuti se o",
+          "front": "sich kümmern um"
+        },
+        {
+          "back": "podsetiti na",
+          "front": "erinnern an"
+        },
+        {
+          "back": "setiti se",
+          "front": "sich erinnern an"
+        },
+        {
+          "back": "objasniti",
+          "front": "erklären"
+        },
+        {
+          "back": "uveriti, osigurati",
+          "front": "versichern"
+        },
+        {
+          "back": "proveriti, pogledati",
+          "front": "nachschauen"
+        },
+        {
+          "back": "sprečiti, preduprediti",
+          "front": "vorbeugen"
+        },
+        {
+          "back": "brinuti se (o)",
+          "front": "sich kümmern (um + Akk)"
+        },
+        {
+          "back": "podsetiti (na)",
+          "front": "erinnern (an + Akk)"
+        },
+        {
+          "back": "setiti se",
+          "front": "sich erinnern (an + Akk)"
+        },
+        {
+          "back": "prijava za posao",
+          "front": "die Bewerbung"
+        },
+        {
+          "back": "uplata",
+          "front": "die Überweisung"
+        },
+        {
+          "back": "povrat novca",
+          "front": "die Rückerstattung"
+        },
+        {
+          "back": "uzrok",
+          "front": "die Ursache"
+        },
+        {
+          "back": "prednost / mana",
+          "front": "der Vorteil / der Nachteil"
+        },
+        {
+          "back": "poverenje",
+          "front": "das Vertrauen"
+        },
+        {
+          "back": "odluka",
+          "front": "die Entscheidung"
+        },
+        {
+          "back": "ključna reč",
+          "front": "das Schlüsselwort"
+        },
+        {
+          "back": "prijava (za posao)",
+          "front": "die Bewerbung, -en"
+        },
+        {
+          "back": "ugovor",
+          "front": "der Vertrag, ¨e"
+        },
+        {
+          "back": "ugovorni partner",
+          "front": "der Vertragspartner, -"
+        },
+        {
+          "back": "saradnja",
+          "front": "die Zusammenarbeit (nur Sg.)"
+        },
+        {
+          "back": "nalog, zadatak",
+          "front": "der Auftrag, ¨e"
+        },
+        {
+          "back": "rok",
+          "front": "die Frist, -en"
+        },
+        {
+          "back": "sastanak",
+          "front": "die Besprechung, -en"
+        },
+        {
+          "back": "napredak",
+          "front": "der Fortschritt, -e"
+        },
+        {
+          "back": "iskustvo",
+          "front": "die Erfahrung, -en"
+        },
+        {
+          "back": "učešće",
+          "front": "die Teilnahme (an + Dat)"
+        },
+        {
+          "back": "račun",
+          "front": "die Rechnung, -en"
+        },
+        {
+          "back": "uplata, doznaka",
+          "front": "die Überweisung, -en"
+        },
+        {
+          "back": "isporuka, dostava",
+          "front": "die Lieferung, -en"
+        },
+        {
+          "back": "narudžbina",
+          "front": "die Bestellung, -en"
+        },
+        {
+          "back": "povrat novca",
+          "front": "die Rückerstattung, -en"
+        },
+        {
+          "back": "zamena",
+          "front": "der Umtausch (nur Sg.)"
+        },
+        {
+          "back": "garancija",
+          "front": "die Garantie, -n"
+        },
+        {
+          "back": "osiguranje",
+          "front": "die Versicherung, -en"
+        },
+        {
+          "back": "kupac, klijent",
+          "front": "der Kunde, -n"
+        },
+        {
+          "back": "korisnička podrška",
+          "front": "der Kundenservice (nur Sg.)"
+        },
+        {
+          "back": "mišljenje",
+          "front": "die Meinung, -en"
+        },
+        {
+          "back": "prednost",
+          "front": "der Vorteil, -e"
+        },
+        {
+          "back": "mana, nedostatak",
+          "front": "der Nachteil, -e"
+        },
+        {
+          "back": "mogućnost",
+          "front": "die Möglichkeit, -en"
+        },
+        {
+          "back": "uzrok",
+          "front": "die Ursache, -n"
+        },
+        {
+          "back": "razlog",
+          "front": "der Grund, ¨e"
+        },
+        {
+          "back": "rešenje",
+          "front": "die Lösung, -en"
+        },
+        {
+          "back": "namera",
+          "front": "die Absicht, -en"
+        },
+        {
+          "back": "napomena, savet",
+          "front": "der Hinweis, -e"
+        },
+        {
+          "back": "preporuka",
+          "front": "die Empfehlung, -en"
+        },
+        {
+          "back": "događaj",
+          "front": "das Ereignis, -se"
+        },
+        {
+          "back": "veza",
+          "front": "die Verbindung, -en"
+        },
+        {
+          "back": "poverenje",
+          "front": "das Vertrauen (nur Sg.)"
+        },
+        {
+          "back": "navika",
+          "front": "die Gewohnheit, -en"
+        },
+        {
+          "back": "promena, prilagođavanje",
+          "front": "die Umstellung, -en"
+        },
+        {
+          "back": "odluka",
+          "front": "die Entscheidung, -en"
+        },
+        {
+          "back": "odgovornost",
+          "front": "die Verantwortung, -en"
+        },
+        {
+          "back": "podrška",
+          "front": "die Unterstützung (nur Sg.)"
+        },
+        {
+          "back": "utisak",
+          "front": "der Eindruck, ¨e"
+        },
+        {
+          "back": "raspoloženje",
+          "front": "die Stimmung, -en"
+        },
+        {
+          "back": "ispit",
+          "front": "die Prüfung, -en"
+        },
+        {
+          "back": "zadatak",
+          "front": "die Aufgabe, -n"
+        },
+        {
+          "back": "strategija",
+          "front": "die Strategie, -n"
+        },
+        {
+          "back": "ključna reč",
+          "front": "das Schlüsselwort, ¨er"
+        },
+        {
+          "back": "izjava, tvrdnja",
+          "front": "die Aussage, -n"
+        },
+        {
+          "back": "deo teksta, pasus",
+          "front": "der Textabschnitt, -e"
+        },
+        {
+          "back": "sažetak",
+          "front": "die Zusammenfassung, -en"
+        },
+        {
+          "back": "kontekst, veza",
+          "front": "der Zusammenhang, ¨e"
+        },
+        {
+          "back": "primer",
+          "front": "das Beispiel, -e"
+        },
+        {
+          "back": "poređenje",
+          "front": "der Vergleich, -e"
+        }
+      ],
+      "title": "Modul 8 - Reči",
+      "setKey": "b1-2-modul-8",
+      "backLabel": "SR",
+      "frontLabel": "DE"
+    },
+    {
+      "url": "https://rzmyglynjcygsbicssbt.supabase.co/storage/v1/object/public/blog-media/flashcards/b1-2-modul-8.pdf",
+      "type": "pdf",
+      "label": "Preuzmi reči (PDF)"
+    }
+  ],
+  "order_index": 43
+}

@@ -1,0 +1,52 @@
+{
+  "course": {
+    "id": "393b99f7-abe9-40e4-9cab-2e39ae523fff",
+    "title": "Nemački B1.2"
+  },
+  "willkommen": {
+    "id": "a5d1e212-a3be-4661-b453-a15a6461f4d7",
+    "title": "Willkommen",
+    "order_index": 0,
+    "sections": [
+      {
+        "type": "badge",
+        "module": "Uvod"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "Dobrodošli u kurs **Nemački B1.2**! Ovaj kurs prati udžbenik Schritte International Neu 6 i vodi te do **ispita B1** (Goethe ili TELC). Nastavak je na B1.1 - zajedno pokrivaju ceo nivo B1."
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "## Šta ćeš naučiti u B1.2?\n\n- **Als ob** - Konjunktiv II za nestvarne situacije\n- **Wenn / Falls** - razlika i upotreba u mejlovima\n- **Relativsätze sa predlozima** - *der Kollege, von dem…*\n- **Futur I** - werden + Infinitiv za planove i predviđanja\n- **Temporalsätze** - während / bevor / nachdem\n- **Finalsätze** - um…zu / damit\n- **Partizip Präsens** - kao pridev i kao prilog\n- **Zweiteilige Konnektoren** - sowohl…als auch, weder…noch\n- **Lesen & Schreiben** - reklamacije, mejlovi, argumentovanje\n- **Priprema za ispit B1** - Lesen, Hören, Schreiben, Sprechen + Modelltest"
+      },
+      {
+        "type": "text",
+        "style": "uebung",
+        "content": "## Kako da učiš?\n\n1. **Pogledaj video** - gramatičke lekcije imaju video objašnjenje\n2. **Pročitaj sadržaj** - tabele, formule i primeri ispod videa\n3. **Uradi vežbe** - spoileri, flashcards i kvizovi\n4. **AI vežbe** - prevod i dijalog na kraju svake lekcije\n5. **Test po modulu** - proveri znanje posle svake celine\n6. **Modelltest** - na kraju kursa uradiš završni ispit"
+      },
+      {
+        "type": "text",
+        "style": "default",
+        "content": "Počni sa prvom lekcijom kad god želiš. **Viel Erfolg!** 🎉"
+      },
+      {
+        "type": "text",
+        "style": "info",
+        "content": "💡 **Savet:** Ako ti treba podsetnik gramatike sa nižih nivoa, koristi naš **Masterclass A2-B1** kurs."
+      },
+      {
+        "href": "https://drive.google.com/drive/folders/1sMlcU6zkAVDiU9hwR5xHECGeYy0k4ktj?usp=sharing",
+        "type": "link",
+        "label": "📁 Materijal (Google Drive)",
+        "linkType": "external"
+      }
+    ]
+  },
+  "firstReal": {
+    "id": "90dac693-4bc7-4355-ad03-76f7f1859064",
+    "title": "Wenn oder Falls - Konditionalsätze"
+  }
+}
