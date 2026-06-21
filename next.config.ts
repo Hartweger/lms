@@ -154,7 +154,11 @@ const nextConfig: NextConfig = {
       { source: "/proizvod/individualni-mesecni-paketi-izaberi-profesora-paket-i-kreni", destination: "/kursevi/individualni-mesecni-paketi", permanent: true },
       { source: "/proizvod/kurs-nemackog-za-mame-i-trudnice", destination: "/kursevi/kurs-za-mame-i-trudnice", permanent: true },
       { source: "/proizvod/paket-a1-a2-i-b1", destination: "/kursevi/paket-a1-a2-b1", permanent: true },
-      { source: "/proizvod/paket-a1-i-a2", destination: "/kursevi/paket-a1-i-a2", permanent: true },
+      { source: "/proizvod/paket-a1-i-a2", destination: "/kursevi/paket-a1-a2", permanent: true },
+      // Duplikat paketa ugašen (is_purchasable=false) → vodi na pravi paket-a1-a2
+      { source: "/kursevi/paket-a1-i-a2", destination: "/kursevi/paket-a1-a2", permanent: true },
+      // Masterclass „reči" preseljen sa kurs stranice na email-gate landing
+      { source: "/kursevi/kako-uciti-reci", destination: "/masterclass-reci", permanent: true },
       { source: "/proizvod/polozi-fide-ispit", destination: "/kursevi/polozi-fide", permanent: true },
       { source: "/proizvod/polozi-goethe-b1-sa-natasom-i-katarinom", destination: "/kursevi/polozi-goethe-b1", permanent: true },
       { source: "/proizvod/polozi-goethe-c1", destination: "/kursevi/polozi-goethe-c1", permanent: true },
