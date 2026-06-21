@@ -9,6 +9,7 @@ interface EssayProps {
   onAnswer: (correct: boolean) => void;
   exerciseId?: string;
   lessonId?: string;
+  maxPoints?: number;
 }
 
 interface Correction {
@@ -24,7 +25,7 @@ interface PublishedResult {
   ai_corrections: Correction[] | null;
 }
 
-export default function EssayExercise({ task, level, onAnswer, exerciseId, lessonId }: EssayProps) {
+export default function EssayExercise({ task, level, onAnswer, exerciseId, lessonId, maxPoints = 5 }: EssayProps) {
   const supabase = createClient();
   const [text, setText] = useState("");
   const [checking, setChecking] = useState(false);
@@ -55,7 +56,7 @@ export default function EssayExercise({ task, level, onAnswer, exerciseId, lesso
             ai_feedback: data.ai_feedback,
             ai_corrections: data.ai_corrections as Correction[] | null,
           });
-          onAnswer((data.professor_score || 0) >= 3);
+          onAnswer((data.professor_score || 0) >= 0.6 * maxPoints);
         } else {
           setAlreadyPending(true);
         }
@@ -137,16 +138,19 @@ export default function EssayExercise({ task, level, onAnswer, exerciseId, lesso
           <p className="text-gray-600 bg-gray-50 rounded-lg p-4 whitespace-pre-line">{task}</p>
         </div>
         <div className="mt-6 space-y-4">
-          {published.professor_score && (
-            <div className="flex items-center gap-3">
-              <span className={`text-3xl font-bold ${scoreColors[published.professor_score]}`}>
-                {published.professor_score}/5
-              </span>
-              <span className={`text-sm font-medium ${scoreColors[published.professor_score]}`}>
-                {scoreLabels[published.professor_score]}
-              </span>
-            </div>
-          )}
+          {published.professor_score != null && (() => {
+            const pct = maxPoints > 0 ? published.professor_score / maxPoints : 0;
+            const color = pct >= 0.8 ? "text-green-600" : pct >= 0.6 ? "text-green-500" : pct >= 0.4 ? "text-yellow-600" : "text-koral";
+            const label = maxPoints <= 5 ? (scoreLabels[published.professor_score] ?? "") : (pct >= 0.6 ? "Položeno!" : "Nije položeno");
+            return (
+              <div className="flex items-center gap-3">
+                <span className={`text-3xl font-bold ${color}`}>
+                  {published.professor_score}/{maxPoints}{maxPoints > 5 ? " P" : ""}
+                </span>
+                <span className={`text-sm font-medium ${color}`}>{label}</span>
+              </div>
+            );
+          })()}
           {published.professor_feedback && (
             <div className="bg-plava-light rounded-xl p-4">
               <p className="text-xs font-semibold text-gray-500 mb-1">Komentar profesora:</p>

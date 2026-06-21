@@ -62,10 +62,14 @@ export default function BlockRenderer({
   sections,
   inlineExercises,
   level,
+  isModelltest = false,
+  courseId = null,
 }: {
   sections: Section[];
   inlineExercises?: InlineExerciseMap;
   level?: string;
+  isModelltest?: boolean;
+  courseId?: string | null;
 }) {
   return (
     <div className="space-y-4">
@@ -74,7 +78,7 @@ export default function BlockRenderer({
         if (section.type === "exercise") {
           const found = inlineExercises?.[section.title];
           if (!found) return null;
-          return <InlineExercise key={i} exercise={found.exercise} questions={found.questions} level={level} />;
+          return <InlineExercise key={i} exercise={found.exercise} questions={found.questions} level={level} isModelltest={isModelltest} courseId={courseId} />;
         }
         // Handle audio sections that may not be recognized by TypeScript narrowing
         const s = section as unknown as Record<string, unknown>;

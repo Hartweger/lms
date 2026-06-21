@@ -11,6 +11,8 @@ interface Props {
   questions: ExerciseQuestion[];
   nextLessonId?: string | null;
   isTest?: boolean;
+  isModelltest?: boolean;
+  courseId?: string | null;
 }
 
 type Ctx = { title: string; type: string; content?: string; headers?: string[]; rows?: string[][] };
@@ -35,8 +37,9 @@ function fmtMd(md: string): string {
     .replace(/\n/g, "<br>");
 }
 
-export default function GroupedExamExercise({ exercise, questions, nextLessonId, isTest = false }: Props) {
+export default function GroupedExamExercise({ exercise, questions, nextLessonId, isTest = false, isModelltest = false, courseId = null }: Props) {
   const supabase = createClient();
+  const [certificateId, setCertificateId] = useState<string | null>(null);
 
   // Grupiši pitanja u delove po zajedničkom tekstu (context) ili audiju
   const groups: ExerciseQuestion[][] = [];
@@ -76,6 +79,16 @@ export default function GroupedExamExercise({ exercise, questions, nextLessonId,
         exercise_id: exercise.id, user_id: user.id,
         score: totalCorrect(), total_questions: questions.length,
       });
+      // Modelltest: na poslednjem modulu server proverava sve module (≥60%) i izdaje sertifikat.
+      if (isModelltest && courseId) {
+        try {
+          const res = await fetch("/api/certificate", {
+            method: "POST", headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ lessonId: exercise.lesson_id, courseId }),
+          });
+          if (res.ok) { const data = await res.json(); if (data.certificateId) setCertificateId(data.certificateId); }
+        } catch { /* tiho - sertifikat se može izdati na sledećem prolazu */ }
+      }
     }
     setFinished(true);
   };
@@ -97,6 +110,12 @@ export default function GroupedExamExercise({ exercise, questions, nextLessonId,
               ℹ️ Na Goethe ispitu treba <strong>60%</strong> za prolaz{pct >= 60 ? " - ti si iznad praga! ✅" : "."}
             </span>
           </p>
+        )}
+        {certificateId && (
+          <div className="mb-6">
+            <p className="text-lg font-bold text-green-600 mb-2">🎓 Položio/la si ceo ispit! Čestitamo!</p>
+            <a href={`/sertifikat/${certificateId}`} className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium">Pogledaj sertifikat</a>
+          </div>
         )}
         <div className="flex flex-wrap items-center justify-center gap-3">
           <button onClick={restart} className="px-5 py-2.5 rounded-lg border border-gray-300 text-gray-600 hover:bg-white transition-colors text-sm font-medium">↺ Pokušaj ponovo</button>

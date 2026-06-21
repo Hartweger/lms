@@ -6,6 +6,7 @@ import LessonDrawer from "@/components/LessonDrawer";
 import LessonCompleteButton from "@/components/LessonCompleteButton";
 import { exerciseKindBadge } from "@/lib/exercise-kind";
 import { getFixedTranslations } from "@/lib/fixed-translations";
+import { getFixedWriting } from "@/lib/fixed-writing";
 import type { Lesson, Exercise, ExerciseQuestion } from "@/lib/types";
 
 interface PageProps {
@@ -138,6 +139,9 @@ export default async function LekcijaStranica({ params }: PageProps) {
   const levelComplete = totalLessons > 0 && completedCount === totalLessons;
   const willCompleteLevel = !lessonCompleted && completedCount === totalLessons - 1;
 
+  // Završni ispit (Modelltest): nije obična lekcija - bez „Završi lekciju", sa sertifikatom.
+  const isExamLesson = /Modelltest|Završni ispit/.test(typedLesson.title || "");
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-4">
       {/* Top bar */}
@@ -159,7 +163,7 @@ export default async function LekcijaStranica({ params }: PageProps) {
       </h1>
 
       {/* Lesson content */}
-      <LekcijaContent lesson={typedLesson} inlineExercises={inlineExercises} level={courseLevel} />
+      <LekcijaContent lesson={typedLesson} inlineExercises={inlineExercises} level={courseLevel} isModelltest={isExamLesson} courseId={course?.id ?? null} />
 
       {/* Exercises (samo one koje nisu inline u sadržaju) */}
       {bottomExercises.length > 0 && (
@@ -187,24 +191,39 @@ export default async function LekcijaStranica({ params }: PageProps) {
         </div>
       )}
 
-      {/* AI prevod vežba - samo na lekcijama sa fiksnim prevodima */}
-      {getFixedTranslations(typedLesson.title) && (
+      {/* AI vežbe - prevod i/ili pisanje, samo na lekcijama koje ih imaju */}
+      {(getFixedTranslations(typedLesson.title) || getFixedWriting(typedLesson.title)) && (
         <div className="mt-8">
           <h3 className="font-semibold text-gray-900 mb-3">AI vežbe</h3>
-          <Link
-            href={`/vezba/ai-prevod/${typedLesson.id}`}
-            className="block bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
-          >
-            <div className="flex items-center justify-between">
-              <span className="font-medium text-gray-900">Prevedi rečenice (AI prevod)</span>
-              <span className="text-xs text-plava bg-plava-light px-3 py-1 rounded-full">AI prevod</span>
-            </div>
-          </Link>
+          <div className="space-y-3">
+            {getFixedTranslations(typedLesson.title) && (
+              <Link
+                href={`/vezba/ai-prevod/${typedLesson.id}`}
+                className="block bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="font-medium text-gray-900">Prevedi rečenice (AI prevod)</span>
+                  <span className="text-xs text-plava bg-plava-light px-3 py-1 rounded-full">AI prevod</span>
+                </div>
+              </Link>
+            )}
+            {getFixedWriting(typedLesson.title) && (
+              <Link
+                href={`/vezba/ai-schreiben/${typedLesson.id}`}
+                className="block bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="font-medium text-gray-900">Napiši rečenice (AI vežba pisanja)</span>
+                  <span className="text-xs text-plava bg-plava-light px-3 py-1 rounded-full">AI pisanje</span>
+                </div>
+              </Link>
+            )}
+          </div>
         </div>
       )}
 
-      {/* Završetak lekcije + navigacija (jedno dugme „Završi i nastavi →") */}
-      {user ? (
+      {/* Završetak lekcije + navigacija (jedno dugme „Završi i nastavi →"). Završni ispit nema „Završi lekciju". */}
+      {user && !isExamLesson ? (
         <LessonCompleteButton
           lessonId={typedLesson.id}
           initialCompleted={lessonCompleted}

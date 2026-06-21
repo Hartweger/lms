@@ -3,6 +3,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { createClient } from "@/lib/supabase/server";
 import { rateLimit } from "@/lib/rate-limit";
 import { getFixedTranslations } from "@/lib/fixed-translations";
+import { getFixedWriting } from "@/lib/fixed-writing";
 import type { Section } from "@/lib/section-types";
 
 const anthropic = new Anthropic({
@@ -25,7 +26,8 @@ export async function POST(request: Request) {
   }
 
   const body = await request.json();
-  const { lessonId, action } = body as { lessonId: string; action: "generate" | "check"; sentence?: string; answer?: string; correct?: string };
+  const { lessonId, action, mode } = body as { lessonId: string; action: "generate" | "check"; mode?: "translate" | "writing"; sentence?: string; answer?: string; correct?: string };
+  const isWriting = mode === "writing";
 
   if (!lessonId) {
     return NextResponse.json({ error: "Missing lessonId" }, { status: 400 });
@@ -57,6 +59,15 @@ export async function POST(request: Request) {
     .map((item) => `${item.front} = ${item.back}`)
     .slice(0, 30)
     .join(", ");
+
+  if (action === "generate" && isWriting) {
+    // Vežba pisanja: samo fiksni zadaci (bez AI-generisanja).
+    const tasks = getFixedWriting(lesson.title);
+    if (tasks && tasks.length > 0) {
+      return NextResponse.json({ sentences: tasks });
+    }
+    return NextResponse.json({ error: "Nema zadataka pisanja za ovu lekciju." }, { status: 404 });
+  }
 
   if (action === "generate") {
     // Fiksni prevodi imaju prioritet (pravilo: prevod = fiksne rečenice, ne AI)
@@ -110,17 +121,29 @@ Odgovori ISKLJUČIVO validnim JSON nizom:
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
     }
 
-    try {
-      const message = await anthropic.messages.create({
-        model: "claude-haiku-4-5-20251001",
-        max_tokens: 400,
-        messages: [{ role: "user", content: `Srpska rečenica: "${sentence}"\nTačan prevod: "${correct}"\nOdgovor studenta: "${answer}"` }],
-        system: `Ti si profesor nemačkog na nivou ${level}. Student prevodi rečenicu sa srpskog na nemački.
+    const userMsg = isWriting
+      ? `Elementi zadatka: "${sentence}"\nTačno rešenje: "${correct}"\nOdgovor studenta: "${answer}"`
+      : `Srpska rečenica: "${sentence}"\nTačan prevod: "${correct}"\nOdgovor studenta: "${answer}"`;
+    const systemMsg = isWriting
+      ? `Ti si profesor nemačkog na nivou ${level}. Student spaja zadate elemente u JEDNU rečenicu sa odgovarajućim gramatičkim sredstvom (npr. vremenski veznik bevor/nachdem/während i ispravno slaganje vremena).
+
+Uporedi odgovor studenta sa tačnim rešenjem. Prihvati kao tačno ako je upotrebljen ISPRAVAN veznik/struktura i gramatika je tačna (slaganje vremena, red reči, glagol na kraju zavisne rečenice). Budi blag oko sitnih, gramatički ispravnih varijacija (npr. drugačiji red glavne i zavisne rečenice ako je smisao isti). Netačan veznik ili pogrešno vreme = netačno.
+
+Odgovori ISKLJUČIVO validnim JSON objektom:
+{"correct": true/false, "feedback": "kratko objašnjenje na srpskom (1 rečenica)", "corrected": "ispravna verzija ako je netačno, ili odgovor studenta ako je tačno"}`
+      : `Ti si profesor nemačkog na nivou ${level}. Student prevodi rečenicu sa srpskog na nemački.
 
 Uporedi odgovor studenta sa tačnim prevodom. Budi BLAG - ako je smisao isti i gramatika uglavnom tačna, prihvati kao tačno. Male greške u članu ili redu reči na A1 nivou su OK.
 
 Odgovori ISKLJUČIVO validnim JSON objektom:
-{"correct": true/false, "feedback": "kratko objašnjenje na srpskom (1 rečenica)", "corrected": "ispravna verzija ako je netačno, ili odgovor studenta ako je tačno"}`
+{"correct": true/false, "feedback": "kratko objašnjenje na srpskom (1 rečenica)", "corrected": "ispravna verzija ako je netačno, ili odgovor studenta ako je tačno"}`;
+
+    try {
+      const message = await anthropic.messages.create({
+        model: "claude-haiku-4-5-20251001",
+        max_tokens: 400,
+        messages: [{ role: "user", content: userMsg }],
+        system: systemMsg
       });
 
       let text = message.content[0].type === "text" ? message.content[0].text : "{}";

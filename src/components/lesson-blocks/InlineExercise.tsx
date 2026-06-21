@@ -11,10 +11,14 @@ export default function InlineExercise({
   exercise,
   questions,
   level,
+  isModelltest = false,
+  courseId = null,
 }: {
   exercise: Exercise;
   questions: ExerciseQuestion[];
   level?: string;
+  isModelltest?: boolean;
+  courseId?: string | null;
 }) {
   if (!questions || questions.length === 0) return null;
   return (
@@ -25,6 +29,9 @@ export default function InlineExercise({
         level={level}
         nextExerciseId={null}
         nextLessonId={null}
+        isModelltest={isModelltest}
+        isTest={isModelltest}
+        courseId={courseId}
       />
     </div>
   );

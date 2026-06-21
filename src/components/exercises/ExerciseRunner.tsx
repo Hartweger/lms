@@ -81,7 +81,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
     return hasCtx || !!q.audio_url;
   });
   if (isGroupedExam) {
-    return <GroupedExamExercise exercise={exercise} questions={questions} nextLessonId={nextLessonId} isTest={isTest} />;
+    return <GroupedExamExercise exercise={exercise} questions={questions} nextLessonId={nextLessonId} isTest={isTest} isModelltest={isModelltest} courseId={courseId} />;
   }
 
   const question = questions[currentIndex];
@@ -595,6 +595,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
                 onAnswer={handleAnswer}
                 exerciseId={exercise.id}
                 lessonId={exercise.lesson_id}
+              maxPoints={(question.options as { maxPoints?: number } | null)?.maxPoints ?? 5}
               />
             );
           }
@@ -731,6 +732,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
                 onAnswer={handleAnswer}
                 exerciseId={exercise.id}
                 lessonId={exercise.lesson_id}
+              maxPoints={(question.options as { maxPoints?: number } | null)?.maxPoints ?? 5}
               />
             );
           }
@@ -743,6 +745,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
               onAnswer={handleAnswer}
               exerciseId={exercise.id}
               lessonId={exercise.lesson_id}
+            maxPoints={(question.options as { maxPoints?: number } | null)?.maxPoints ?? 5}
             />
           );
         })()}

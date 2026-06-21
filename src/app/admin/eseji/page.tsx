@@ -31,6 +31,7 @@ export default function AdminEseji() {
   const [profFeedback, setProfFeedback] = useState("");
   const [profScore, setProfScore] = useState(3);
   const [saving, setSaving] = useState(false);
+  const [maxByEx, setMaxByEx] = useState<Record<string, number>>({});
 
   useEffect(() => {
     const load = async () => {
@@ -45,7 +46,19 @@ export default function AdminEseji() {
       }
 
       const { data } = await query;
-      setEssays((data as EssayRow[]) || []);
+      const rows = (data as EssayRow[]) || [];
+      setEssays(rows);
+      // Max bodovi po eseju (options.maxPoints, default 5).
+      const exIds = [...new Set(rows.map((e) => e.exercise_id))];
+      if (exIds.length) {
+        const { data: eqs } = await supabase.from("exercise_questions").select("exercise_id, options").in("exercise_id", exIds);
+        const m: Record<string, number> = {};
+        for (const q of eqs || []) {
+          const mp = (q.options as { maxPoints?: number } | null)?.maxPoints;
+          if (m[q.exercise_id] === undefined) m[q.exercise_id] = typeof mp === "number" ? mp : 5;
+        }
+        setMaxByEx(m);
+      }
       setLoading(false);
     };
     load();
@@ -178,21 +191,22 @@ export default function AdminEseji() {
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-semibold text-gray-500 block mb-1">Ocena:</label>
-                  <div className="flex gap-2">
-                    {[1, 2, 3, 4, 5].map((s) => (
-                      <button
-                        key={s}
-                        onClick={() => setProfScore(s)}
-                        className={`w-10 h-10 rounded-lg text-sm font-bold ${
-                          profScore === s
-                            ? "bg-plava text-white"
-                            : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                        }`}
-                      >
-                        {s}
-                      </button>
-                    ))}
+                  <label className="text-xs font-semibold text-gray-500 block mb-1">
+                    Ocena (0 - {maxByEx[essay.exercise_id] ?? 5} {(maxByEx[essay.exercise_id] ?? 5) > 5 ? "Punkte" : ""}):
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      min={0}
+                      max={maxByEx[essay.exercise_id] ?? 5}
+                      value={profScore}
+                      onChange={(e) => {
+                        const mx = maxByEx[essay.exercise_id] ?? 5;
+                        setProfScore(Math.max(0, Math.min(mx, parseInt(e.target.value) || 0)));
+                      }}
+                      className="w-24 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-plava"
+                    />
+                    <span className="text-sm text-gray-400">/ {maxByEx[essay.exercise_id] ?? 5}</span>
                   </div>
                 </div>
                 <div className="flex gap-2">
@@ -225,7 +239,7 @@ export default function AdminEseji() {
             {essay.status === "published" && essay.professor_feedback && (
               <div className="bg-green-50 rounded-lg p-4 mt-4">
                 <p className="text-xs font-semibold text-green-600 mb-1">
-                  Profesor (ocena: {essay.professor_score}/5):
+                  Profesor (ocena: {essay.professor_score}/{maxByEx[essay.exercise_id] ?? 5}):
                 </p>
                 <p className="text-sm text-gray-700">{essay.professor_feedback}</p>
               </div>

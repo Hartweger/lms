@@ -39,10 +39,14 @@ export default function LekcijaContent({
   lesson,
   inlineExercises,
   level,
+  isModelltest = false,
+  courseId = null,
 }: {
   lesson: Lesson;
   inlineExercises?: InlineExerciseMap;
   level?: string;
+  isModelltest?: boolean;
+  courseId?: string | null;
 }) {
   // New block system - takes precedence when sections exist
   const sections = lesson.sections as Section[] | null;
@@ -53,13 +57,13 @@ export default function LekcijaContent({
         <>
           <VideoPlayer vimeoId={lesson.vimeo_video_id} />
           <div className="mt-6">
-            <BlockRenderer sections={sections} inlineExercises={inlineExercises} level={level} />
+            <BlockRenderer sections={sections} inlineExercises={inlineExercises} level={level} isModelltest={isModelltest} courseId={courseId} />
           </div>
         </>
       );
     }
 
-    return <BlockRenderer sections={sections} inlineExercises={inlineExercises} level={level} />;
+    return <BlockRenderer sections={sections} inlineExercises={inlineExercises} level={level} isModelltest={isModelltest} courseId={courseId} />;
   }
 
   // Legacy rendering - fallback for old lessons
