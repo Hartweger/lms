@@ -1,6 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import {
+  buildSrTokens,
+  resolveSrClick,
+  isTokenUsed,
+  isComplete,
+  type SrToken,
+} from "@/lib/match-pairs";
 
 interface MatchPairsProps {
   pairs: { de: string; sr: string }[];
@@ -9,35 +16,36 @@ interface MatchPairsProps {
 
 export default function MatchPairsExercise({ pairs, onAnswer }: MatchPairsProps) {
   const [selectedDe, setSelectedDe] = useState<string | null>(null);
-  const [matched, setMatched] = useState<Record<string, string>>({});
-  const [wrong, setWrong] = useState<string | null>(null);
+  // de -> reserved right-token id (NOT the value: two pairs may share a value)
+  const [matched, setMatched] = useState<Record<string, number>>({});
+  const [wrong, setWrong] = useState<number | null>(null);
 
-  const [shuffledSr] = useState(() =>
-    [...pairs].sort(() => Math.random() - 0.5).map((p) => p.sr)
+  const [shuffledSr] = useState<SrToken[]>(() =>
+    [...buildSrTokens(pairs)].sort(() => Math.random() - 0.5)
   );
   const [done, setDone] = useState(false);
 
-  const allMatched = Object.keys(matched).length === pairs.length;
+  const allMatched = isComplete(pairs, matched);
 
   const handleDeClick = (de: string) => {
-    if (matched[de]) return;
+    if (matched[de] !== undefined) return;
     setSelectedDe(de);
     setWrong(null);
   };
 
-  const handleSrClick = (sr: string) => {
-    if (!selectedDe || Object.values(matched).includes(sr)) return;
-    const pair = pairs.find((p) => p.de === selectedDe);
-    if (pair?.sr === sr) {
-      const newMatched = { ...matched, [selectedDe]: sr };
+  const handleSrClick = (token: SrToken) => {
+    if (!selectedDe || isTokenUsed(matched, token.id)) return;
+    const reserved = resolveSrClick(pairs, matched, selectedDe, token);
+    if (reserved !== null) {
+      const newMatched = { ...matched, [selectedDe]: reserved };
       setMatched(newMatched);
       setSelectedDe(null);
-      if (Object.keys(newMatched).length === pairs.length && !done) {
+      if (isComplete(pairs, newMatched) && !done) {
         setDone(true);
         onAnswer(true);
       }
     } else {
-      setWrong(sr);
+      setWrong(token.id);
       setTimeout(() => setWrong(null), 800);
     }
   };
@@ -52,9 +60,9 @@ export default function MatchPairsExercise({ pairs, onAnswer }: MatchPairsProps)
             <button
               key={p.de}
               onClick={() => handleDeClick(p.de)}
-              disabled={!!matched[p.de]}
+              disabled={matched[p.de] !== undefined}
               className={`w-full px-4 py-3 rounded-xl border-2 text-sm font-medium transition-colors ${
-                matched[p.de]
+                matched[p.de] !== undefined
                   ? "border-green-500 bg-green-50 text-green-700"
                   : selectedDe === p.de
                   ? "border-plava bg-plava-light text-plava"
@@ -66,22 +74,25 @@ export default function MatchPairsExercise({ pairs, onAnswer }: MatchPairsProps)
           ))}
         </div>
         <div className="space-y-3">
-          {shuffledSr.map((sr) => (
-            <button
-              key={sr}
-              onClick={() => handleSrClick(sr)}
-              disabled={Object.values(matched).includes(sr)}
-              className={`w-full px-4 py-3 rounded-xl border-2 text-sm font-medium transition-colors ${
-                Object.values(matched).includes(sr)
-                  ? "border-green-500 bg-green-50 text-green-700"
-                  : wrong === sr
-                  ? "border-koral bg-koral-light text-koral-dark"
-                  : "border-gray-200 hover:border-plava text-gray-700 cursor-pointer"
-              }`}
-            >
-              {sr}
-            </button>
-          ))}
+          {shuffledSr.map((token) => {
+            const used = isTokenUsed(matched, token.id);
+            return (
+              <button
+                key={token.id}
+                onClick={() => handleSrClick(token)}
+                disabled={used}
+                className={`w-full px-4 py-3 rounded-xl border-2 text-sm font-medium transition-colors ${
+                  used
+                    ? "border-green-500 bg-green-50 text-green-700"
+                    : wrong === token.id
+                    ? "border-koral bg-koral-light text-koral-dark"
+                    : "border-gray-200 hover:border-plava text-gray-700 cursor-pointer"
+                }`}
+              >
+                {token.value}
+              </button>
+            );
+          })}
         </div>
       </div>
       {allMatched && (
