@@ -134,8 +134,13 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
         .select("*", { count: "exact", head: true }).eq("purchasable_course_id", item.course_id);
       const hasPlatform = (unlockCount ?? 0) > 0;
 
-      // Rok = uplata + 3 meseca; format dd.MM.yyyy.
-      const expEnroll = new Date(); expEnroll.setMonth(expEnroll.getMonth() + 3);
+      // Mesečni (KTZ) paketi važe mesec dana; ostali individualni 3 meseca.
+      const { data: courseRow } = await admin.from("courses")
+        .select("category").eq("id", item.course_id).maybeSingle();
+      const isMonthly = courseRow?.category === "mesecni";
+
+      // Rok = uplata + (1 mesec za mesečne, inače 3 meseca); format dd.MM.yyyy.
+      const expEnroll = new Date(); expEnroll.setMonth(expEnroll.getMonth() + (isMonthly ? 1 : 3));
       const rok = `${String(expEnroll.getDate()).padStart(2, "0")}.${String(expEnroll.getMonth() + 1).padStart(2, "0")}.${expEnroll.getFullYear()}.`;
 
       // Materijali: regularni nivoi → jedan folder; FIDE/FSP (naziv) i KTZ (bez platforme) → bez linka.
@@ -172,7 +177,7 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
       }
 
       await sendIndividualWelcomeEmail(order.email, order.full_name, {
-        nivo, profIme, calendarUrl, notesUrl, hasPlatform,
+        nivo, profIme, calendarUrl, notesUrl, hasPlatform, isMonthly, rok,
       });
       individualWelcomeSent = true;
 

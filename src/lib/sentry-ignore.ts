@@ -19,6 +19,14 @@
 // Kad taj most nije prisutan -> "undefined is not an object (evaluating
 // 'window.webkit.messageHandlers')". Nije naš kod (grep: ne koristimo webkit
 // messageHandlers nigde), dolazi iz app:///... injektovanog skripta.
+//
+// Browser ekstenzije (ad-blocker, menadžer lozinki, prevodilac...) ubace svoj
+// skript u stranicu i preko webextension-polyfill-a zovu runtime.sendMessage da
+// pričaju sa svojim background kontekstom. Kad taj kontekst (tab/worker) više ne
+// postoji -> "Invalid call to runtime.sendMessage(). Tab not found." Odbijeni
+// promise se diže do našeg globalnog onunhandledrejection pa Sentry to pripiše
+// nama. Nije naš kod (ne koristimo runtime.sendMessage nigde), benigno, zavisi
+// od korisnikove ekstenzije. Filtriramo da ne troši kvotu/šum.
 export const SENTRY_IGNORE_ERRORS: (string | RegExp)[] = [
   /was released because another request stole it/,
   /Acquiring an exclusive Navigator LockManager lock/,
@@ -26,4 +34,5 @@ export const SENTRY_IGNORE_ERRORS: (string | RegExp)[] = [
   /Java exception was raised during method invocation/,
   /enableButtonsClickedMetaDataLogging/,
   /window\.webkit\.messageHandlers/,
+  /runtime\.sendMessage/,
 ];

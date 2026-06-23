@@ -33,6 +33,7 @@ interface Course {
   id: string;
   slug: string;
   title: string;
+  category: string | null;
 }
 
 const STATUSI = ["planiran", "uskoro", "otvoren", "u_toku", "zavrsena", "otkazana"];
@@ -295,11 +296,22 @@ export default function AdminGrupePage() {
                 className={inputCls}
               >
                 <option value="">-</option>
-                {courses.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.slug}
-                  </option>
-                ))}
+                {/* Sadržaj (lekcije) = kursevi bez kategorije (nemacki-*, konverzacijski-*);
+                    Proizvodi (prodaja) = grupni/individualni/video/paket - imaju kategoriju. */}
+                <optgroup label="Sadržaj (lekcije)">
+                  {courses.filter((c) => !c.category).map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.slug}
+                    </option>
+                  ))}
+                </optgroup>
+                <optgroup label="Proizvodi (prodaja)">
+                  {courses.filter((c) => c.category).map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.slug}
+                    </option>
+                  ))}
+                </optgroup>
               </select>
             </div>
             <div>

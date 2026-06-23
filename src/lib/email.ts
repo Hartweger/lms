@@ -583,7 +583,7 @@ export async function sendProfNewStudentEmail(
 export async function sendIndividualWelcomeEmail(
   to: string,
   name: string,
-  opts: { nivo: string; profIme?: string; calendarUrl?: string | null; notesUrl?: string | null; hasPlatform: boolean },
+  opts: { nivo: string; profIme?: string; calendarUrl?: string | null; notesUrl?: string | null; hasPlatform: boolean; isMonthly?: boolean; rok?: string },
 ) {
   try {
     const resend = getResend();
@@ -595,6 +595,10 @@ export async function sendIndividualWelcomeEmail(
       : `<p style="font-size:14px;color:#666;margin:0 0 16px;">Link za zakazivanje termina stiže ti uskoro.</p>`;
     const notesRow = opts.notesUrl ? `<p style="font-size:14px;color:#444;margin:0 0 16px;">📝 <a href="${esc(opts.notesUrl)}" style="color:#4fb1d3;">Beleške sa časova</a></p>` : "";
     const profRow = opts.profIme ? `<p style="font-size:15px;color:#444;margin:0 0 16px;"><strong>Profesorka:</strong> ${esc(opts.profIme)}</p>` : "";
+    // Mesečni (KTZ) paket važi mesec dana, ostali 3 meseca. Ako imamo konkretan rok, pokaži datum.
+    const vaznost = opts.rok
+      ? `Paket časova važi do <strong>${esc(opts.rok)}</strong>`
+      : (opts.isMonthly ? "Paket časova važi <strong>mesec dana</strong> od uplate" : "Paket časova važi <strong>3 meseca</strong> od uplate");
     const platformRow = opts.hasPlatform
       ? `<div style="background:#f8fcfd;border-left:3px solid #4fb1d3;border-radius:6px;padding:14px 16px;margin:0 0 20px;">
         <p style="font-size:14px;color:#1a1a2e;margin:0 0 6px;">📚 Video lekcije i materijali te čekaju na platformi: <a href="${SITE_URL}/prijava" style="color:#4fb1d3;">hartweger.rs/prijava</a></p>
@@ -615,7 +619,7 @@ export async function sendIndividualWelcomeEmail(
         <div style="font-size:13px;color:#999;margin-top:4px;">Škola nemačkog jezika</div>
       </div>
       <h1 style="font-size:20px;margin:0 0 16px;">Dobrodošli${ime ? ", " + esc(ime) : ""}! 💚</h1>
-      <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 16px;">Kupovina <strong>individualnog kursa nemačkog${opts.nivo ? " " + esc(opts.nivo) : ""}</strong> je potvrđena. Paket časova važi <strong>3 meseca</strong> od uplate.</p>
+      <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 16px;">Kupovina <strong>individualnog kursa nemačkog${opts.nivo ? " " + esc(opts.nivo) : ""}</strong> je potvrđena. ${vaznost}.</p>
       ${profRow}
       ${calBtn}
       ${notesRow}

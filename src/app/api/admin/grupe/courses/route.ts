@@ -9,6 +9,6 @@ export async function GET() {
   const admin = createAdminClient();
   const { data: profile } = await admin.from("user_profiles").select("role").eq("id", user.id).single();
   if (profile?.role !== "admin") return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
-  const { data } = await admin.from("courses").select("id, slug, title").order("slug");
+  const { data } = await admin.from("courses").select("id, slug, title, category").order("slug");
   return NextResponse.json({ courses: data || [] });
 }
