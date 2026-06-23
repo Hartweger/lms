@@ -56,10 +56,12 @@ export default function ProfesorEseji() {
         return;
       }
 
-      // Fetch essays only from assigned students
+      // Fetch essays only from assigned students.
+      // NAPOMENA: nema FK veze essay_submissions->user_profiles, pa embed user_profiles(...)
+      // ruši ceo upit (vraća null) - imena učenika se čitaju zasebno i spajaju ispod.
       let query = supabase
         .from("essay_submissions")
-        .select("*, user_profiles(full_name, email), lessons(title), exercises(title)")
+        .select("*, lessons(title), exercises(title)")
         .in("user_id", studentIds)
         .order("submitted_at", { ascending: false });
 
@@ -68,7 +70,22 @@ export default function ProfesorEseji() {
       }
 
       const { data } = await query;
-      setEssays((data as EssayRow[]) || []);
+      const rows = (data as EssayRow[]) || [];
+
+      // Imena/mejlovi učenika - zaseban upit (vidi napomenu gore).
+      const ids = [...new Set(rows.map((r) => r.user_id))];
+      const profById = new Map<string, { full_name: string; email: string }>();
+      if (ids.length > 0) {
+        const { data: profs } = await supabase
+          .from("user_profiles")
+          .select("id, full_name, email")
+          .in("id", ids);
+        for (const p of (profs as { id: string; full_name: string; email: string }[]) ?? []) {
+          profById.set(p.id, { full_name: p.full_name, email: p.email });
+        }
+      }
+
+      setEssays(rows.map((r) => ({ ...r, user_profiles: profById.get(r.user_id) })));
       setLoading(false);
     };
     load();

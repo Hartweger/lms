@@ -36,9 +36,11 @@ export default function AdminEseji() {
   useEffect(() => {
     const load = async () => {
       setLoading(true);
+      // NAPOMENA: nema FK veze essay_submissions->user_profiles, pa embed user_profiles(...)
+      // ruši ceo upit (vraća null) - imena učenika se čitaju zasebno i spajaju ispod.
       let query = supabase
         .from("essay_submissions")
-        .select("*, user_profiles(full_name, email), lessons(title), exercises(title)")
+        .select("*, lessons(title), exercises(title)")
         .order("submitted_at", { ascending: false });
 
       if (filter !== "all") {
@@ -46,7 +48,22 @@ export default function AdminEseji() {
       }
 
       const { data } = await query;
-      const rows = (data as EssayRow[]) || [];
+      const baseRows = (data as EssayRow[]) || [];
+
+      // Imena/mejlovi učenika - zaseban upit (vidi napomenu gore).
+      const userIds = [...new Set(baseRows.map((r) => r.user_id))];
+      const profById = new Map<string, { full_name: string; email: string }>();
+      if (userIds.length > 0) {
+        const { data: profs } = await supabase
+          .from("user_profiles")
+          .select("id, full_name, email")
+          .in("id", userIds);
+        for (const p of (profs as { id: string; full_name: string; email: string }[]) ?? []) {
+          profById.set(p.id, { full_name: p.full_name, email: p.email });
+        }
+      }
+
+      const rows = baseRows.map((r) => ({ ...r, user_profiles: profById.get(r.user_id) }));
       setEssays(rows);
       // Max bodovi po eseju (options.maxPoints, default 5).
       const exIds = [...new Set(rows.map((e) => e.exercise_id))];

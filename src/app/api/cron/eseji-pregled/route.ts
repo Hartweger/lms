@@ -28,25 +28,42 @@ export async function GET(request: NextRequest) {
 
   const admin = createAdminClient();
 
-  // Pending eseji + učenik + lekcija (radi course_id i naslova).
+  // Pending eseji + lekcija (radi course_id i naslova).
   // Samo 'pending' - status 'reviewed' se zasad ne koristi (nema "sacuvaj bez objave" u UI).
-  const { data: rows } = await admin
+  // NAPOMENA: imena učenika se čitaju ZASEBNO - nema FK veze essay_submissions->user_profiles,
+  // pa embed `user_profiles(...)` puca i tiho vraća null (bug: cron je slao 0 rezimea).
+  const { data: rows, error: rowsErr } = await admin
     .from("essay_submissions")
-    .select("id, user_id, submitted_at, user_profiles(full_name), lessons(title, course_id)")
+    .select("id, user_id, submitted_at, lessons(title, course_id)")
     .eq("status", "pending")
     .order("submitted_at", { ascending: true });
+
+  if (rowsErr) {
+    console.error("[cron/eseji-pregled] greška pri čitanju eseja:", rowsErr.message);
+    return NextResponse.json({ error: rowsErr.message }, { status: 500 });
+  }
+
+  // Imena učenika - zaseban upit (vidi napomenu gore).
+  const studentIds = [...new Set((rows ?? []).map((r) => r.user_id as string))];
+  const nameById = new Map<string, string>();
+  if (studentIds.length > 0) {
+    const { data: profs } = await admin
+      .from("user_profiles")
+      .select("id, full_name")
+      .in("id", studentIds);
+    for (const p of profs ?? []) nameById.set(p.id as string, (p.full_name as string) ?? "");
+  }
 
   const one = <T,>(x: T | T[] | null | undefined): T | null =>
     Array.isArray(x) ? (x[0] ?? null) : (x ?? null);
 
   const essays: DigestEssay[] = (rows ?? []).map((r) => {
-    const up = one(r.user_profiles as unknown) as { full_name: string | null } | null;
     const ls = one(r.lessons as unknown) as { title: string | null; course_id: string } | null;
     return {
       id: r.id as string,
       userId: r.user_id as string,
       courseId: (ls?.course_id as string) ?? "",
-      studentName: up?.full_name ?? "Učenik",
+      studentName: nameById.get(r.user_id as string) || "Učenik",
       lessonTitle: ls?.title ?? "Schreiben",
       submittedAt: r.submitted_at as string,
     };
