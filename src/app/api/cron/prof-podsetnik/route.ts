@@ -64,10 +64,8 @@ export async function GET(request: NextRequest) {
   const { data: caRows } = await admin.from("course_access").select("user_id, course_id, granted_at").in("user_id", userIds);
   const accessByUserCourse = new Map<string, Map<string, string>>();
   const oldestAccessByUser = new Map<string, string>();
-  const hasAnyAccess = new Set<string>();
   for (const r of caRows ?? []) {
     const uid = r.user_id as string;
-    hasAnyAccess.add(uid);
     const g = (r.granted_at as string | null) ?? null;
     const m = accessByUserCourse.get(uid) ?? new Map<string, string>();
     if (g) m.set(r.course_id as string, g);
@@ -110,20 +108,18 @@ export async function GET(request: NextRequest) {
 
   // Da li polaznik (u datom sadržaj-kursu) "traži pažnju".
   function ocena(userId: string, contentCourseId: string | null): { red: boolean; razlog: string } {
+    // Kurs bez platforme (npr. KTZ, mesečni paketi) — nema šta da se prati, nikad crveno.
+    if (!contentCourseId) return { red: false, razlog: "" };
     const all = progressByUser.get(userId) ?? [];
-    const lessonIds = contentCourseId ? lessonsByCourse.get(contentCourseId) ?? null : null;
+    const lessonIds = lessonsByCourse.get(contentCourseId) ?? null;
     const relevant = lessonIds ? all.filter((p) => lessonIds.has(p.lesson_id)) : all;
     const completedCount = relevant.length;
     const lastActivity = relevant.reduce<string | null>(
       (latest, p) => (p.completed_at && (!latest || p.completed_at > latest) ? p.completed_at : latest),
       null,
     );
-    const hasPlatform = contentCourseId
-      ? !!accessByUserCourse.get(userId)?.has(contentCourseId)
-      : hasAnyAccess.has(userId);
-    const accessGrantedAt = contentCourseId
-      ? accessByUserCourse.get(userId)?.get(contentCourseId) ?? oldestAccessByUser.get(userId) ?? null
-      : oldestAccessByUser.get(userId) ?? null;
+    const hasPlatform = !!accessByUserCourse.get(userId)?.has(contentCourseId);
+    const accessGrantedAt = accessByUserCourse.get(userId)?.get(contentCourseId) ?? oldestAccessByUser.get(userId) ?? null;
     return trebaPaznju({ hasPlatform, completedCount, lastActivity, accessGrantedAt, now });
   }
 

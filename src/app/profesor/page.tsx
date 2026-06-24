@@ -107,11 +107,12 @@ export default async function ProfesorStudenti({ searchParams }: { searchParams:
 
   const now = new Date();
 
-  // Vrati { badge, lessons } za polaznika u datom sadržaj-kursu (null => fallback na ceo nalog)
+  // Vrati { badge, lessons } za polaznika u datom sadržaj-kursu.
+  // contentCourseId === null => kurs nema platformu (npr. KTZ, mesečni paketi) → ne prikazuj ništa.
   function platformaZa(userId: string, contentCourseId: string | null): { badge: PlatformaBadge | null; lessons: string | null } {
-    if (!hasPlatform.has(userId)) return { badge: null, lessons: null };
+    if (!contentCourseId || !hasPlatform.has(userId)) return { badge: null, lessons: null };
     const all = progressByUser.get(userId) ?? [];
-    const lessonIds = contentCourseId ? lessonsByCourse.get(contentCourseId) ?? null : null;
+    const lessonIds = lessonsByCourse.get(contentCourseId) ?? null;
     const relevant = lessonIds ? all.filter((p) => lessonIds.has(p.lesson_id)) : all;
     const completedCount = relevant.length;
     const total = lessonIds ? lessonIds.size : null;
