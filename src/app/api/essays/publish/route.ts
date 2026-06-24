@@ -45,13 +45,15 @@ export async function POST(request: Request) {
 
   const { admin, userId, isAdmin } = staff;
 
-  // Učitaj esej + učenika + lekciju.
-  const { data: essay } = await admin
+  // Učitaj esej + lekciju. NAPOMENA: NE embeduj user_profiles - nema FK veze
+  // essay_submissions->user_profiles, pa embed obori ceo upit (esej "nije pronađen").
+  // Ime/mejl učenika se čita zasebno ispod.
+  const { data: essay, error: essayErr } = await admin
     .from("essay_submissions")
-    .select("id, status, user_id, lesson_id, exercise_id, user_profiles(full_name, email), lessons(title, course_id)")
+    .select("id, status, user_id, lesson_id, exercise_id, lessons(title, course_id)")
     .eq("id", essayId)
     .single();
-  if (!essay) return NextResponse.json({ error: "Esej nije pronađen" }, { status: 404 });
+  if (essayErr || !essay) return NextResponse.json({ error: "Esej nije pronađen" }, { status: 404 });
   if (essay.status === "published") return NextResponse.json({ ok: true, alreadyPublished: true });
 
   // Max bodovi po eseju (options.maxPoints, default 5) - gornja granica ocene.
@@ -66,8 +68,15 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: `Ocena ne sme biti veća od ${maxPoints}` }, { status: 400 });
   }
 
-  const student = one(essay.user_profiles as unknown) as { full_name: string | null; email: string | null } | null;
   const lesson = one(essay.lessons as unknown) as { title: string | null; course_id: string } | null;
+
+  // Ime/mejl učenika - zaseban upit (vidi napomenu gore o nepostojećem FK-u).
+  const { data: studentRow } = await admin
+    .from("user_profiles")
+    .select("full_name, email")
+    .eq("id", essay.user_id as string)
+    .single();
+  const student = studentRow as { full_name: string | null; email: string | null } | null;
 
   // Profesor sme samo ako mu je taj (učenik, kurs) dodeljen.
   if (!isAdmin) {
