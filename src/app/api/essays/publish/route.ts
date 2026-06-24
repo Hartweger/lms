@@ -23,10 +23,24 @@ export async function POST(request: Request) {
   const staff = await requireStaff();
   if (!staff) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
 
-  const { essayId, professorFeedback, professorScore } = await request.json();
+  const { essayId, professorFeedback, professorScore, corrections } = await request.json();
   if (!essayId || typeof essayId !== "string") return NextResponse.json({ error: "essayId je obavezan" }, { status: 400 });
   if (typeof professorScore !== "number" || !Number.isInteger(professorScore) || professorScore < 0) {
     return NextResponse.json({ error: "professorScore mora biti ceo broj ≥ 0" }, { status: 400 });
+  }
+
+  // Izmenjene ispravke (opciono). Ako su poslate, prepisuju ai_corrections - to je ono
+  // što učenik vidi pod "Ispravke". Prazni redovi se izbacuju.
+  let editedCorrections: { original: string; corrected: string; explanation: string }[] | undefined;
+  if (Array.isArray(corrections)) {
+    editedCorrections = corrections
+      .filter((c: unknown): c is Record<string, unknown> => !!c && typeof c === "object")
+      .map((c) => ({
+        original: typeof c.original === "string" ? c.original : "",
+        corrected: typeof c.corrected === "string" ? c.corrected : "",
+        explanation: typeof c.explanation === "string" ? c.explanation : "",
+      }))
+      .filter((c) => c.original.trim() !== "" || c.corrected.trim() !== "");
   }
 
   const { admin, userId, isAdmin } = staff;
@@ -75,6 +89,7 @@ export async function POST(request: Request) {
       professor_score: professorScore,
       status: "published",
       reviewed_at: new Date().toISOString(),
+      ...(editedCorrections !== undefined ? { ai_corrections: editedCorrections } : {}),
     })
     .eq("id", essayId);
   if (updErr) return NextResponse.json({ error: updErr.message }, { status: 500 });
