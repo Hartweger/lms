@@ -169,7 +169,7 @@ export default function AdminEseji() {
       <p className="text-gray-500 mb-6">Pregled i ocenjivanje studentskih Schreiben radova</p>
 
       <div className="flex gap-2 mb-6">
-        {(["pending", "reviewed", "published", "all"] as const).map((f) => (
+        {(["pending", "published", "all"] as const).map((f) => (
           <button
             key={f}
             onClick={() => setFilter(f)}
@@ -179,7 +179,7 @@ export default function AdminEseji() {
                 : "bg-gray-100 text-gray-600 hover:bg-gray-200"
             }`}
           >
-            {f === "pending" ? "Čekaju pregled" : f === "reviewed" ? "Pregledano" : f === "published" ? "Objavljeno" : "Svi"}
+            {f === "pending" ? "Čekaju pregled" : f === "published" ? "Objavljeno" : "Svi"}
           </button>
         ))}
       </div>

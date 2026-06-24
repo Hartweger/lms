@@ -158,7 +158,7 @@ export default function ProfesorEseji() {
   return (
     <div>
       <div className="flex gap-2 mb-6">
-        {(["pending", "reviewed", "published", "all"] as const).map((f) => (
+        {(["pending", "published", "all"] as const).map((f) => (
           <button
             key={f}
             onClick={() => setFilter(f)}
@@ -168,7 +168,7 @@ export default function ProfesorEseji() {
                 : "bg-gray-100 text-gray-600 hover:bg-gray-200"
             }`}
           >
-            {f === "pending" ? "Čekaju pregled" : f === "reviewed" ? "Pregledano" : f === "published" ? "Objavljeno" : "Svi"}
+            {f === "pending" ? "Čekaju pregled" : f === "published" ? "Objavljeno" : "Svi"}
           </button>
         ))}
       </div>
