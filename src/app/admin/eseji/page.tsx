@@ -33,6 +33,7 @@ export default function AdminEseji() {
   const [editCorrections, setEditCorrections] = useState<{ original: string; corrected: string; explanation: string }[]>([]);
   const [saving, setSaving] = useState(false);
   const [maxByEx, setMaxByEx] = useState<Record<string, number>>({});
+  const [assignees, setAssignees] = useState<Record<string, { professorName: string }>>({});
 
   useEffect(() => {
     const load = async () => {
@@ -72,6 +73,21 @@ export default function AdminEseji() {
 
       const rows = baseRows.map((r) => ({ ...r, user_profiles: profById.get(r.user_id) }));
       setEssays(rows);
+
+      // Koji esej je dodeljen profesorki (da admin zna šta profesor pregleda).
+      const essayIds = rows.map((r) => r.id);
+      if (essayIds.length > 0) {
+        const ares = await fetch("/api/admin/essay-assignees", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ essayIds }),
+        });
+        if (ares.ok) {
+          const { assignees: a } = (await ares.json()) as { assignees: Record<string, { professorName: string }> };
+          setAssignees(a ?? {});
+        }
+      }
+
       // Max bodovi po eseju (options.maxPoints, default 5).
       const exIds = [...new Set(rows.map((e) => e.exercise_id))];
       if (exIds.length) {
@@ -184,9 +200,20 @@ export default function AdminEseji() {
                   {new Date(essay.submitted_at).toLocaleDateString("sr-Latn")}
                 </span>
               </div>
-              <span className={`text-xs px-2 py-1 rounded-full ${statusColors[essay.status]}`}>
-                {statusLabels[essay.status]}
-              </span>
+              <div className="flex items-center gap-2">
+                {assignees[essay.id] ? (
+                  <span className="text-xs px-2 py-1 rounded-full bg-purple-100 text-purple-700">
+                    👩‍🏫 Profesorka: {assignees[essay.id].professorName}
+                  </span>
+                ) : (
+                  <span className="text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-500">
+                    Bez profesora (ti)
+                  </span>
+                )}
+                <span className={`text-xs px-2 py-1 rounded-full ${statusColors[essay.status]}`}>
+                  {statusLabels[essay.status]}
+                </span>
+              </div>
             </div>
 
             <p className="text-xs text-gray-400 mb-3">
