@@ -32,6 +32,7 @@ export default function ProfesorEseji() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [profFeedback, setProfFeedback] = useState("");
   const [profScore, setProfScore] = useState(3);
+  const [editCorrections, setEditCorrections] = useState<{ original: string; corrected: string; explanation: string }[]>([]);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -76,12 +77,16 @@ export default function ProfesorEseji() {
       const ids = [...new Set(rows.map((r) => r.user_id))];
       const profById = new Map<string, { full_name: string; email: string }>();
       if (ids.length > 0) {
-        const { data: profs } = await supabase
-          .from("user_profiles")
-          .select("id, full_name, email")
-          .in("id", ids);
-        for (const p of (profs as { id: string; full_name: string; email: string }[]) ?? []) {
-          profById.set(p.id, { full_name: p.full_name, email: p.email });
+        const res = await fetch("/api/essays/student-names", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ids }),
+        });
+        if (res.ok) {
+          const { names } = (await res.json()) as { names: Record<string, { full_name: string; email: string }> };
+          for (const [id, info] of Object.entries(names ?? {})) {
+            profById.set(id, info);
+          }
         }
       }
 
@@ -95,14 +100,30 @@ export default function ProfesorEseji() {
     setEditingId(essay.id);
     setProfFeedback(essay.professor_feedback || essay.ai_feedback || "");
     setProfScore(essay.professor_score || essay.ai_score || 3);
+    setEditCorrections((essay.ai_corrections ?? []).map((c) => ({
+      original: c.original ?? "",
+      corrected: c.corrected ?? "",
+      explanation: c.explanation ?? "",
+    })));
+  };
+
+  const updateCorrection = (i: number, field: "original" | "corrected" | "explanation", val: string) => {
+    setEditCorrections((prev) => prev.map((c, idx) => (idx === i ? { ...c, [field]: val } : c)));
+  };
+  const removeCorrection = (i: number) => {
+    setEditCorrections((prev) => prev.filter((_, idx) => idx !== i));
+  };
+  const addCorrection = () => {
+    setEditCorrections((prev) => [...prev, { original: "", corrected: "", explanation: "" }]);
   };
 
   const publishEssay = async (essayId: string) => {
     setSaving(true);
+    const cleanedCorrections = editCorrections.filter((c) => c.original.trim() !== "" || c.corrected.trim() !== "");
     const res = await fetch("/api/essays/publish", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ essayId, professorFeedback: profFeedback, professorScore: profScore }),
+      body: JSON.stringify({ essayId, professorFeedback: profFeedback, professorScore: profScore, corrections: cleanedCorrections }),
     });
     if (!res.ok) {
       const j = await res.json().catch(() => ({}));
@@ -113,7 +134,7 @@ export default function ProfesorEseji() {
 
     setEssays(essays.map(e =>
       e.id === essayId
-        ? { ...e, professor_feedback: profFeedback, professor_score: profScore, status: "published" as const, reviewed_at: new Date().toISOString() }
+        ? { ...e, professor_feedback: profFeedback, professor_score: profScore, ai_corrections: cleanedCorrections, status: "published" as const, reviewed_at: new Date().toISOString() }
         : e
     ));
     setEditingId(null);
@@ -222,6 +243,53 @@ export default function ProfesorEseji() {
                     rows={3}
                     className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-plava resize-none"
                   />
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-gray-500 block mb-2">
+                    Ispravke (učenik ovo vidi - izmeni ili obriši pogrešne):
+                  </label>
+                  <div className="space-y-3">
+                    {editCorrections.map((c, i) => (
+                      <div key={i} className="border border-gray-200 rounded-lg p-3 space-y-2">
+                        <div className="flex items-center gap-2">
+                          <input
+                            value={c.original}
+                            onChange={(e) => updateCorrection(i, "original", e.target.value)}
+                            placeholder="pogrešno (original)"
+                            className="flex-1 px-2 py-1.5 border border-gray-200 rounded text-sm text-koral focus:outline-none focus:ring-2 focus:ring-plava"
+                          />
+                          <span className="text-gray-400">→</span>
+                          <input
+                            value={c.corrected}
+                            onChange={(e) => updateCorrection(i, "corrected", e.target.value)}
+                            placeholder="ispravno"
+                            className="flex-1 px-2 py-1.5 border border-gray-200 rounded text-sm text-green-600 font-medium focus:outline-none focus:ring-2 focus:ring-plava"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => removeCorrection(i)}
+                            className="text-koral hover:bg-red-50 rounded px-2 py-1 text-sm"
+                            title="Obriši ispravku"
+                          >
+                            ✕
+                          </button>
+                        </div>
+                        <input
+                          value={c.explanation}
+                          onChange={(e) => updateCorrection(i, "explanation", e.target.value)}
+                          placeholder="objašnjenje (opciono)"
+                          className="w-full px-2 py-1.5 border border-gray-200 rounded text-xs text-gray-500 focus:outline-none focus:ring-2 focus:ring-plava"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={addCorrection}
+                    className="mt-2 text-sm text-plava hover:underline"
+                  >
+                    + Dodaj ispravku
+                  </button>
                 </div>
                 <div>
                   <label className="text-xs font-semibold text-gray-500 block mb-1">Ocena:</label>
