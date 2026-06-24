@@ -34,23 +34,29 @@ export async function POST(request: Request) {
       messages: [
         {
           role: "user",
-          content: `Ti si profesor nemačkog jezika. Student je na nivou ${level || "A1"}.
+          content: `Ti si iskusan ocenjivač Schreiben zadataka po kriterijumima Goethe-Instituta. Student je na nivou ${level || "A1"}.
 
-Kriterijumi za ocenjivanje prema nivou:
-- A1: Očekuju se jednostavne rečenice, osnovni vokabular. Tolerišu se greške u redu reči. Važno je da student koristi prave glagole i osnovna pravila (član, rod).
-- A2: Očekuju se povezane rečenice, prošlo vreme (Perfekt), modalni glagoli. Manje tolerancije za osnovne greške.
-- B1: Očekuju se složenije rečenice, veznici (weil, dass, obwohl), Konjunktiv II za želje. Greške u osnovnoj gramatici se strogo ocenjuju.
-- B2: Očekuje se tečan izraz, pasiv, indirektni govor, bogat vokabular. Visoki standardi.
+Goethe pristup (NE traži se savršenstvo, već KOMUNIKATIVNI USPEH) - oceni kroz 4 dimenzije:
+1. ERFÜLLUNG (sadržaj/zadatak) - da li su obrađene sve tačke zadatka i da li je dužina primerena? Ovo je NAJVAŽNIJE.
+2. KOHÄRENZ (povezanost) - da li tekst teče i da li su rečenice smisleno povezane?
+3. WORTSCHATZ (vokabular) - da li je izbor reči razumljiv i primeren nivou?
+4. KORREKTHEIT (gramatika) - broje se prvenstveno greške koje OTEŽAVAJU RAZUMEVANJE. Sitne greške koje ne ometaju komunikaciju NE snižavaju ocenu bitno.
+
+Očekivanja po nivou (greške su NORMALNE, posebno na nižim nivoima):
+- A1: jednostavne rečenice i osnovni vokabular su SASVIM DOVOLJNI. Ako se poruka razume i tačke su obrađene - visoka ocena, i pored grešaka u rodu, redu reči ili pravopisu.
+- A2: povezane rečenice, prošlo vreme, modalni glagoli. Greške se tolerišu ako poruka prolazi.
+- B1: složenije rečenice i veznici; greške koje ometaju razumevanje se računaju, ali komunikativni uspeh ostaje glavno merilo.
+- B2: tečan i precizan izraz, viši standard - ali ni ovde se ne traži savršenstvo.
 
 Zadatak: "${task}"
 Student je napisao: "${text}"
 
 Pravila:
-- Feedback na SRPSKOM jeziku, kratak (1-2 rečenice)
-- Maksimum 3 najvažnije ispravke
-- Objašnjenja kratka (1 rečenica)
-- Ocenjuj STROGO prema nivou - isti tekst na A1 može biti 4/5, a na B1 samo 2/5
-- Budi ohrabrujući ali tačan
+- Oceni KOMUNIKATIVNI USPEH, ne savršenstvo. Ako je zadatak ispunjen i tekst razumljiv, ocena je visoka i pored grešaka.
+- Skala 1-5: 5 = zadatak ispunjen, komunikacija potpuno uspešna (sitne greške dozvoljene); 4 = uspešno uz manje greške; 3 = razumljivo uz nekoliko grešaka ili delimično ispunjen zadatak; 2 = otežano razumevanje ili dosta nedostaje; 1 = zadatak nije ispunjen ili tekst nerazumljiv.
+- Označi NAJVIŠE 3 ispravke, i to SAMO jasne greške (ne stilske preferencije); prednost greškama koje ometaju razumevanje. Na A1/A2 ne preteruj sa ispravkama.
+- Feedback na SRPSKOM jeziku, kratak (1-2 rečenice), ohrabrujući ali konkretan.
+- Objašnjenja kratka (1 rečenica).
 
 Odgovori SAMO sa validnim JSON objektom, bez markdown blokova:
 {"feedback":"kratka pohvala i savet","corrections":[{"original":"greška","corrected":"ispravka","explanation":"zašto"}],"score":3}`,
