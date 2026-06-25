@@ -106,9 +106,9 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
         `&packageType=${encodeURIComponent(isIndividual ? (packageType ?? "") : "")}`
       );
       const data = await res.json();
-      if (!res.ok) { setCouponError(data.error || "Nepoznata greška."); setAppliedCoupon(null); return; }
+      if (!res.ok) { setCouponError(data.error || (en ? "Unknown error." : "Nepoznata greška.")); setAppliedCoupon(null); return; }
       setAppliedCoupon(data);
-    } catch { setCouponError("Greška pri proveri kupona."); }
+    } catch { setCouponError(en ? "Error checking the coupon." : "Greška pri proveri kupona."); }
     finally { setCouponLoading(false); }
   }
 
@@ -151,7 +151,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || "Došlo je do greške. Pokušaj ponovo.");
+        setError(data.error || (en ? "Something went wrong. Please try again." : "Došlo je do greške. Pokušaj ponovo."));
         return;
       }
 
@@ -161,7 +161,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
         router.push(`/kupovina/hvala/${data.orderId}`);
       }
     } catch {
-      setError("Došlo je do greške. Proveri internet konekciju i pokušaj ponovo.");
+      setError(en ? "Something went wrong. Check your internet connection and try again." : "Došlo je do greške. Proveri internet konekciju i pokušaj ponovo.");
     } finally {
       setLoading(false);
     }
@@ -171,7 +171,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Order summary card */}
       <div className="bg-white border border-gray-200 rounded-xl p-5">
-        <p className="text-xs font-bold uppercase tracking-wide text-gray-400 mb-3">Tvoja porudžbina</p>
+        <p className="text-xs font-bold uppercase tracking-wide text-gray-400 mb-3">{ct.orderSummaryTitle}</p>
         <div className="flex items-start justify-between gap-4">
           <p className="font-semibold text-gray-900 text-[15px] leading-snug">{courseTitle}</p>
           <div className="text-right flex-shrink-0">
@@ -194,11 +194,11 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
       {/* Individualni: izbor profesorke / paketa + napomena */}
       {isIndividual && (
         <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-4">
-          <p className="text-xs font-bold uppercase tracking-wide text-gray-400">Izaberi</p>
+          <p className="text-xs font-bold uppercase tracking-wide text-gray-400">{en ? "Choose" : "Izaberi"}</p>
 
           {packageTypes.length > 0 && (
             <div>
-              <label htmlFor="paket" className="block text-sm font-medium text-gray-700 mb-1">Broj termina</label>
+              <label htmlFor="paket" className="block text-sm font-medium text-gray-700 mb-1">{en ? "Number of sessions" : "Broj termina"}</label>
               <select id="paket" value={packageType ?? ""} onChange={(e) => setPackageType(e.target.value)}
                 className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#0AB3D7]">
                 {packageTypes.map((p) => (<option key={p} value={p}>{PAKET_LABEL[p] ?? p}</option>))}
@@ -208,7 +208,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
 
           {professors.length > 1 && (
             <div>
-              <label htmlFor="prof" className="block text-sm font-medium text-gray-700 mb-1">Profesorka</label>
+              <label htmlFor="prof" className="block text-sm font-medium text-gray-700 mb-1">{en ? "Tutor" : "Profesorka"}</label>
               <select id="prof" value={professorId ?? ""} onChange={(e) => setProfessorId(e.target.value)}
                 className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#0AB3D7]">
                 {professors.map((p) => (<option key={p.id} value={p.id}>{p.full_name}</option>))}
@@ -231,16 +231,16 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
         {appliedCoupon ? (
           <div className="flex items-center justify-between gap-3">
             <p className="text-sm font-medium text-green-600">
-              Kupon {appliedCoupon.code} - {appliedCoupon.discountType === "fixed"
-                ? `${formatPrice(appliedCoupon.amount)} din popusta`
-                : `${appliedCoupon.amount}% popusta`}
+              {en ? "Coupon" : "Kupon"} {appliedCoupon.code} - {appliedCoupon.discountType === "fixed"
+                ? (en ? `${formatPrice(appliedCoupon.amount)} din off` : `${formatPrice(appliedCoupon.amount)} din popusta`)
+                : (en ? `${appliedCoupon.amount}% off` : `${appliedCoupon.amount}% popusta`)}
             </p>
             <button
               type="button"
               onClick={removeCoupon}
               className="text-sm text-gray-400 hover:text-gray-600 underline flex-shrink-0"
             >
-              Ukloni
+              {en ? "Remove" : "Ukloni"}
             </button>
           </div>
         ) : showCoupon ? (
@@ -250,7 +250,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
                 type="text"
                 value={couponCode}
                 onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                placeholder="Unesi kod kupona"
+                placeholder={en ? "Enter coupon code" : "Unesi kod kupona"}
                 className="flex-1 border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0AB3D7] focus:border-transparent transition"
                 onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); validateCoupon(); } }}
               />
@@ -280,7 +280,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
 
       {/* Personal info */}
       <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-4">
-        <p className="text-xs font-bold uppercase tracking-wide text-gray-400">Tvoji podaci</p>
+        <p className="text-xs font-bold uppercase tracking-wide text-gray-400">{en ? "Your details" : "Tvoji podaci"}</p>
 
         <div>
           <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">
@@ -292,7 +292,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
             required
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
-            placeholder="Ana Anić"
+            placeholder={en ? "John Smith" : "Ana Anić"}
             className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0AB3D7] focus:border-transparent transition"
           />
         </div>
@@ -313,17 +313,17 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
           />
           {isLoggedIn && emailLocked && (
             <p className="text-xs text-gray-500 mt-1">
-              Kupuješ kao <strong>{email}</strong> - kurs se aktivira na ovom nalogu.{" "}
+              {en ? <>Buying as <strong>{email}</strong> - the course is activated on this account.{" "}</> : <>Kupuješ kao <strong>{email}</strong> - kurs se aktivira na ovom nalogu.{" "}</>}
               <button type="button" onClick={() => setEmailLocked(false)} className="text-[#0AB3D7] hover:underline">
-                Kupujem za nekog drugog
+                {en ? "I'm buying for someone else" : "Kupujem za nekog drugog"}
               </button>
             </p>
           )}
           {isLoggedIn && !emailLocked && (
             <p className="text-xs text-[#F78687] mt-1">
-              Pristup ide na nalog sa ovim emailom, ne na tvoj.{" "}
+              {en ? "Access goes to the account with this email, not yours." : "Pristup ide na nalog sa ovim emailom, ne na tvoj."}{" "}
               <button type="button" onClick={() => { setEmail(initialEmail); setEmailLocked(true); }} className="text-[#0AB3D7] hover:underline">
-                Vrati na moj nalog
+                {en ? "Back to my account" : "Vrati na moj nalog"}
               </button>
             </p>
           )}
@@ -350,16 +350,16 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
 
       {/* Payment method info */}
       <div className="bg-white border border-gray-200 rounded-xl p-5">
-        <p className="text-xs font-bold uppercase tracking-wide text-gray-400 mb-3">Način plaćanja</p>
+        <p className="text-xs font-bold uppercase tracking-wide text-gray-400 mb-3">{en ? "Payment method" : "Način plaćanja"}</p>
         <div className="space-y-2">
           {(isRS
             ? [
-                { v: "kartica", label: ct.methodCard, desc: "Visa, Mastercard, Maestro - sigurno preko Banca Intesa. Vlasnici Banca Intesa kartica mogu na rate - broj rata biraš u sledećem koraku (na strani banke)." },
-                { v: "uplatnica", label: ct.methodBank, desc: "Podaci za uplatu stižu na email; pristup po potvrdi uplate." },
+                { v: "kartica", label: ct.methodCard, desc: en ? "Visa, Mastercard, Maestro - secure payment via Banca Intesa. Banca Intesa cardholders can pay in installments - choose the number in the next step (on the bank's page)." : "Visa, Mastercard, Maestro - sigurno preko Banca Intesa. Vlasnici Banca Intesa kartica mogu na rate - broj rata biraš u sledećem koraku (na strani banke)." },
+                { v: "uplatnica", label: ct.methodBank, desc: en ? "Payment details are sent by email; access after the payment is confirmed." : "Podaci za uplatu stižu na email; pristup po potvrdi uplate." },
               ]
             : [
-                { v: "kartica", label: ct.methodCard, desc: "Visa, Mastercard, Maestro - sigurno preko Banca Intesa. Naplata u dinarima (tvoja banka konvertuje u tvoju valutu)." },
-                { v: "paypal", label: ct.methodPaypal, desc: "PayPal link stiže na email. Naplata u evrima, uključuje 12% PayPal naknadu." },
+                { v: "kartica", label: ct.methodCard, desc: en ? "Visa, Mastercard, Maestro - secure payment via Banca Intesa. Charged in RSD (your bank converts to your currency)." : "Visa, Mastercard, Maestro - sigurno preko Banca Intesa. Naplata u dinarima (tvoja banka konvertuje u tvoju valutu)." },
+                { v: "paypal", label: ct.methodPaypal, desc: en ? "A PayPal link is sent by email. Charged in EUR." : "PayPal link stiže na email. Naplata u evrima, uključuje 12% PayPal naknadu." },
               ]
           ).map((m) => (
             <label
@@ -394,7 +394,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
         disabled={loading}
         className="w-full bg-[#F78687] hover:bg-[#E06566] disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold text-base py-4 rounded-xl transition-colors"
       >
-        {loading ? "Slanje..." : ct.payButton}
+        {loading ? (en ? "Sending..." : "Slanje...") : ct.payButton}
       </button>
     </form>
   );

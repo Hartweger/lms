@@ -70,19 +70,20 @@ const faqBySlug: Record<string, { q: string; a: string }[]> = {
   "private-german-lessons-online": [
     { q: "What happens after I pay?", a: "You'll get a Google Calendar link to book your lessons whenever it suits you. You choose the day and time." },
     { q: "In what language are the lessons taught?", a: "Lessons and explanations are in English, while you learn and practice German. Perfect if you live in a German-speaking country and don't speak Serbian." },
-    { q: "Who is my tutor?", a: "Your tutor is Katarina, an experienced Hartweger teacher. You don't choose — every booking in this package is 1-on-1 with her." },
+    { q: "Who is my tutor?", a: "Your tutor is Katarina, an experienced Hartweger teacher. You don't choose - every booking in this package is 1-on-1 with her." },
     { q: "What if I don't use all my sessions in a month?", a: "Unused sessions don't roll over to the next month. We recommend booking regularly." },
-    { q: "Can I cancel a booked lesson?", a: "Yes — you can cancel up to 24 hours before the scheduled lesson." },
+    { q: "Can I cancel a booked lesson?", a: "Yes - you can cancel up to 24 hours before the scheduled lesson." },
     { q: "How do I pay?", a: "You can pay by card (Visa, MasterCard) or via PayPal. Prices are shown in EUR." },
   ],
 };
 
-export default function ProductFaq({ category, slug }: { category: string; slug?: string }) {
+export default function ProductFaq({ category, slug, lang = "sr" }: { category: string; slug?: string; lang?: "sr" | "en" }) {
   const faq = (slug && faqBySlug[slug]) || faqByCategory[category] || faqByCategory.video;
+  const title = lang === "en" ? "Frequently asked questions" : "Česta pitanja";
 
   return (
     <div>
-      <h2 className="font-montserrat font-bold text-xl text-gray-900 mb-5">Česta pitanja</h2>
+      <h2 className="font-montserrat font-bold text-xl text-gray-900 mb-5">{title}</h2>
       <div className="space-y-5">
         {faq.map((item, i) => (
           <div key={i} className="border-b border-gray-100 pb-5 last:border-0 last:pb-0">

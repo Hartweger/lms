@@ -17,6 +17,7 @@ export interface ProductStrings {
   relatedTitle: string;
   breadcrumbHome: string;
   breadcrumbCourses: string;
+  faqTitle: string;
 }
 
 const SR_PRODUCT: ProductStrings = {
@@ -36,15 +37,16 @@ const SR_PRODUCT: ProductStrings = {
   relatedTitle: "Možda će te zanimati",
   breadcrumbHome: "Početna",
   breadcrumbCourses: "Kursevi",
+  faqTitle: "Česta pitanja",
 };
 
 const EN_PRODUCT: ProductStrings = {
   categoryLabel: "Monthly package",
   featuresTitle: "What's included",
-  ratingText: "5.0 — 300+ Google reviews",
-  oneOnOneWithKatarina: "1-on-1 with Katarina — taught in English",
+  ratingText: "5.0 - 300+ Google reviews",
+  oneOnOneWithKatarina: "1-on-1 with Katarina - taught in English",
   chooseProfessorLine: null,
-  bookYourTimeLine: "You pick your times — you get a Google Calendar link and book yourself",
+  bookYourTimeLine: "You pick your times - you get a Google Calendar link and book yourself",
   noVideoCertLine: "Monthly packages don't include video lessons or a certificate",
   ctaBuy: "Buy",
   pricePrefixFrom: "from ",
@@ -55,6 +57,7 @@ const EN_PRODUCT: ProductStrings = {
   relatedTitle: "You might also like",
   breadcrumbHome: "Home",
   breadcrumbCourses: "Courses",
+  faqTitle: "Frequently asked questions",
 };
 
 export interface CheckoutStrings {
@@ -70,6 +73,7 @@ export interface CheckoutStrings {
   couponApply: string;
   payButton: string;
   totalLabel: string;
+  orderSummaryTitle: string;
 }
 
 const SR_CHECKOUT: CheckoutStrings = {
@@ -85,6 +89,7 @@ const SR_CHECKOUT: CheckoutStrings = {
   couponApply: "Primeni",
   payButton: "Plati",
   totalLabel: "Ukupno",
+  orderSummaryTitle: "Tvoja porudžbina",
 };
 
 const EN_CHECKOUT: CheckoutStrings = {
@@ -100,6 +105,7 @@ const EN_CHECKOUT: CheckoutStrings = {
   couponApply: "Apply",
   payButton: "Pay",
   totalLabel: "Total",
+  orderSummaryTitle: "Your order",
 };
 
 export function productStrings(lang: Lang): ProductStrings {

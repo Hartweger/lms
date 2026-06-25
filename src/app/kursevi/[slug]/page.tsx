@@ -504,7 +504,7 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
               )}
 
               {/* FAQ */}
-              <ProductFaq category={category} slug={slug} />
+              <ProductFaq category={category} slug={slug} lang={lang} />
             </div>
 
             {/* Right - Price card (hidden on mobile, sticky bar instead) */}
