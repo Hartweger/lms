@@ -29,6 +29,7 @@ export interface Course {
   is_published: boolean;
   is_purchasable: boolean;
   paypal_price_eur: number | null;
+  lang: string;
   old_wc_product_id: number | null;
   created_at: string;
 }

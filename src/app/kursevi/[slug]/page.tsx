@@ -11,6 +11,7 @@ import { SLUG_TO_NIVO as slugToNivo } from "@/lib/course-nivo";
 import InteresForm from "./InteresForm";
 import BuyButton from "@/components/BuyButton";
 import PixelViewContent from "@/components/PixelViewContent";
+import { productStrings, formatMoney, type Lang } from "@/lib/product-i18n";
 
 /* ─── Preduslovi po nivou ─── */
 const preduslov: Record<string, string> = {
@@ -215,6 +216,12 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
 
   const course = data as Course;
   const category = course.category || "video";
+  const lang = (course.lang === "en" ? "en" : "sr") as Lang;
+  const en = lang === "en";
+  const t = productStrings(lang);
+  const heroPrimary = en
+    ? formatMoney(course.paypal_price_eur ?? 0, "EUR")
+    : formatMoney(course.price, "RSD");
   const courseFallback = courseFallbacks[slug];
   const marketingDescription = course.marketing_description || courseFallback?.marketing_description || course.description;
   const paragraphs = marketingDescription.split("\n").filter((p: string) => p.trim());
@@ -222,16 +229,18 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
   const cat = categoryConfig[category] || categoryConfig.video;
   const isVariable = category === "individualni" || category === "mesecni";
 
-  const ctaLabel =
+  const ctaLabel = en ? t.ctaBuy : (
     category === "grupni" ? "Prijavi se" :
     category === "individualni" || category === "mesecni" ? "Kupi" :
-    category === "paket" ? "Kupi paket" : "Kupi kurs";
+    category === "paket" ? "Kupi paket" : "Kupi kurs"
+  );
 
-  const featuresTitle =
+  const featuresTitle = en ? t.featuresTitle : (
     category === "grupni" ? "Šta dobijaš upisom?" :
     category === "individualni" ? "Šta uključuje kurs?" :
     category === "mesecni" ? "Šta uključuje paket?" :
-    category === "paket" ? "Šta dobijaš u paketu?" : "Šta dobijaš upisom?";
+    category === "paket" ? "Šta dobijaš u paketu?" : "Šta dobijaš upisom?"
+  );
 
   // Number of individual sessions by level
   const brojTermina: Record<string, number> = {
@@ -260,7 +269,7 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
   // Related products (same category, different slug)
   const { data: related } = await supabase
     .from("courses").select("title, slug, price, paypal_price_eur, category")
-    .eq("is_purchasable", true).eq("category", category).neq("slug", slug)
+    .eq("is_purchasable", true).eq("category", category).eq("lang", lang).neq("slug", slug)
     .order("price", { ascending: true }).limit(3);
 
   return (
@@ -322,9 +331,9 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
         <div className="max-w-6xl mx-auto px-4 pt-6 pb-12 md:pb-16">
           {/* Breadcrumb */}
           <nav className="flex items-center gap-2 text-sm text-gray-400 mb-8">
-            <Link href="/" className="hover:text-plava">Početna</Link>
+            <Link href="/" className="hover:text-plava">{t.breadcrumbHome}</Link>
             <span>/</span>
-            <Link href="/kursevi" className="hover:text-plava">Kursevi</Link>
+            <Link href="/kursevi" className="hover:text-plava">{t.breadcrumbCourses}</Link>
             <span>/</span>
             <span className="text-gray-600 truncate">{course.title}</span>
           </nav>
@@ -334,7 +343,7 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
             <div className="flex-1 min-w-0">
               {/* Badge */}
               <span className={`inline-block text-xs font-bold tracking-wide uppercase px-3 py-1 rounded-full mb-4 ${cat.color} ${cat.bg}`}>
-                {cat.label}
+                {en ? t.categoryLabel : cat.label}
               </span>
 
               <h1 className="font-montserrat font-bold text-3xl md:text-4xl lg:text-[2.6rem] text-gray-900 leading-tight mb-4">
@@ -344,7 +353,7 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
               {/* Rating */}
               <div className="flex items-center gap-2 text-sm text-gray-400 mb-6">
                 <span className="text-amber-400">★★★★★</span>
-                <span>5.0 - 300+ Google recenzija</span>
+                <span>{t.ratingText}</span>
               </div>
 
               {/* ─── Preduslov ─── */}
@@ -424,12 +433,16 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
                   {!termini && category === "individualni" && (
                     <p className="text-gray-700"><strong>Nastava 1-na-1</strong> sa profesorkom</p>
                   )}
-                  {slug !== "fsp-individualni" && (
-                    <p className="text-gray-600">Birate profesorku u sledećem koraku</p>
+                  {en ? (
+                    <p className="text-gray-700"><strong>{t.oneOnOneWithKatarina}</strong></p>
+                  ) : (
+                    slug !== "fsp-individualni" && (
+                      <p className="text-gray-600">{t.chooseProfessorLine}</p>
+                    )
                   )}
-                  <p className="text-gray-600">Ti biraš termin - dobijaš Google Calendar link i zakazuješ</p>
+                  <p className="text-gray-600">{t.bookYourTimeLine}</p>
                   {category === "mesecni" && (
-                    <p className="text-gray-500">Mesečni paket ne uključuje video lekcije ni sertifikat</p>
+                    <p className="text-gray-500">{t.noVideoCertLine}</p>
                   )}
                 </div>
               )}
@@ -512,6 +525,7 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
                   ctaLabel={ctaLabel}
                   isVariable={isVariable}
                   title={course.title}
+                  lang={lang}
                 />
               )}
             </div>
@@ -523,10 +537,10 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
       <section className="py-14 px-4 bg-plava-light">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="font-montserrat font-bold text-2xl md:text-3xl text-gray-900 mb-3">
-            Spremi se da progovoriš nemački
+            {t.bottomTitle}
           </h2>
           <p className="text-gray-600 mb-8 text-lg">
-            Pridruži se grupi od 3000+ polaznika koji su već krenuli sa učenjem.
+            {t.bottomSubtitle}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             {category === "grupni" && grupa?.full ? (
@@ -539,11 +553,11 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
                 value={course.price}
                 className="bg-[#F78687] hover:bg-[#e06060] text-white font-bold text-lg py-4 px-10 rounded-xl transition-all hover:-translate-y-0.5 shadow-lg shadow-[#F78687]/20"
               >
-                {ctaLabel} - {isVariable ? "od " : ""}{formatPrice(course.price)} din
+                {ctaLabel} - {isVariable ? t.pricePrefixFrom : ""}{heroPrimary}
               </BuyButton>
             )}
             <Link href="/besplatno-testiranje" className="text-plava font-semibold hover:underline text-[15px]">
-              Ili uradi besplatno testiranje →
+              {t.freeTestLink}
             </Link>
           </div>
         </div>
@@ -554,7 +568,7 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
         <section className="py-14 px-4 bg-white">
           <div className="max-w-5xl mx-auto">
             <h2 className="font-montserrat font-bold text-xl text-gray-900 mb-8 text-center">
-              Možda će te zanimati
+              {t.relatedTitle}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
               {(related as Course[]).map((r) => {
@@ -564,8 +578,8 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
                     <span className={`inline-block text-[11px] font-bold tracking-wide uppercase px-2.5 py-0.5 rounded-full mb-3 ${rCat.color} ${rCat.bg}`}>{rCat.label}</span>
                     <h3 className="font-bold text-gray-900 group-hover:text-plava transition-colors mb-2 text-[15px]">{r.title}</h3>
                     <div className="flex items-baseline gap-2">
-                      <span className="font-bold text-gray-900">{formatPrice(r.price)} din</span>
-                      {r.paypal_price_eur && <span className="text-xs text-[#F78687] font-bold">≈ {r.paypal_price_eur}€</span>}
+                      <span className="font-bold text-gray-900">{en && r.paypal_price_eur != null ? formatMoney(r.paypal_price_eur, "EUR") : formatMoney(r.price, "RSD")}</span>
+                      {!en && r.paypal_price_eur && <span className="text-xs text-[#F78687] font-bold">≈ {r.paypal_price_eur}€</span>}
                     </div>
                   </Link>
                 );
@@ -585,10 +599,14 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
           <>
             <div>
               <p className="font-bold text-gray-900 text-lg leading-tight">
-                {isVariable && "od "}{formatPrice(course.price)} din
+                {isVariable && t.pricePrefixFrom}{heroPrimary}
               </p>
-              {course.paypal_price_eur && (
-                <p className="text-[#F78687] text-xs font-bold">≈ {course.paypal_price_eur}€</p>
+              {en ? (
+                <p className="text-[#F78687] text-xs font-bold">{formatMoney(course.price, "RSD")}</p>
+              ) : (
+                course.paypal_price_eur && (
+                  <p className="text-[#F78687] text-xs font-bold">≈ {course.paypal_price_eur}€</p>
+                )
               )}
             </div>
             <BuyButton
