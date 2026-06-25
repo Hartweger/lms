@@ -43,5 +43,30 @@ export default async function AdminAnalitika() {
     });
   }
 
-  return <AnalitikaDashboard orders={allOrders} />;
+  // NaKI lead-ovi (email + datum) — za atribuciju nezavisnu od last-touch utm-a.
+  // NaKI je gornji levak (hvata mejl), pa direktnu prodaju merimo join-om email↔porudžbina,
+  // ne preko utm_source (koji last-touch prepiše IG/YT oglas). Vidi memoriju naki_levak_atribucija.
+  const nakiLeads: { email: string; created_at: string }[] = [];
+  let nakiOffset = 0;
+  while (true) {
+    const { data } = await supabase
+      .from("naki_profiles")
+      .select("email, created_at")
+      .order("created_at", { ascending: false })
+      .range(nakiOffset, nakiOffset + PAGE_SIZE - 1);
+    if (!data || data.length === 0) break;
+    for (const p of data) {
+      if (p.email) nakiLeads.push({ email: p.email, created_at: p.created_at });
+    }
+    if (data.length < PAGE_SIZE) break;
+    nakiOffset += PAGE_SIZE;
+  }
+
+  // Dnevni obim NaKI razgovora (zbir po danu) — kontekst za broj lead-ova.
+  const { data: nakiUsageRows } = await supabase
+    .from("naki_daily_usage")
+    .select("day, count");
+  const nakiUsage = (nakiUsageRows ?? []).map((u) => ({ day: u.day, count: u.count }));
+
+  return <AnalitikaDashboard orders={allOrders} nakiLeads={nakiLeads} nakiUsage={nakiUsage} />;
 }

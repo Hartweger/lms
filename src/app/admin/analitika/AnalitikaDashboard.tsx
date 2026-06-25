@@ -207,7 +207,18 @@ function rangeLabel(start: Date, end: Date): string {
 
 // ── Main component ───────────────────────────────────────────────────────────
 
-export default function AnalitikaDashboard({ orders }: { orders: WcOrder[] }) {
+type NakiLead = { email: string; created_at: string };
+type NakiUsage = { day: string; count: number };
+
+export default function AnalitikaDashboard({
+  orders,
+  nakiLeads = [],
+  nakiUsage = [],
+}: {
+  orders: WcOrder[];
+  nakiLeads?: NakiLead[];
+  nakiUsage?: NakiUsage[];
+}) {
   const [period, setPeriod] = useState<Period>("ovaj-mesec");
   const [customFrom, setCustomFrom] = useState("");
   const [customTo, setCustomTo] = useState("");
@@ -247,6 +258,42 @@ export default function AnalitikaDashboard({ orders }: { orders: WcOrder[] }) {
       return true;
     });
   }, [orders, start, end, search]);
+
+  // ── NaKI doprinos (atribucija nezavisna od last-touch) ──────────────────────
+  // NaKI je gornji levak: hvata mejl, a prodaju zatvori kasniji dodir (IG/YT) koji
+  // last-touch utm prepiše. Zato NaKI vrednost merimo join-om email↔porudžbina, ne utm-om.
+  const naki = useMemo(() => {
+    const leadEmails = new Set(
+      nakiLeads.map((l) => (l.email ?? "").toLowerCase().trim()).filter(Boolean)
+    );
+    const leadsInPeriod = nakiLeads.filter((l) => {
+      const d = new Date(l.created_at);
+      return d >= start && d < end;
+    }).length;
+    const sessionsInPeriod = nakiUsage.reduce((sum, u) => {
+      const d = new Date(u.day);
+      return d >= start && d < end ? sum + (Number(u.count) || 0) : sum;
+    }, 0);
+    // "NaKI-dodirnuta" prodaja: završene porudžbine u periodu čiji je mejl ostavio NaKI lead.
+    const influencedOrders = filteredOrders.filter(
+      (o) =>
+        o.status === "completed" &&
+        Number(o.total) > 0 &&
+        leadEmails.has((o.customer_email ?? "").toLowerCase().trim())
+    );
+    const influencedRevenue = influencedOrders.reduce((s, o) => s + Number(o.total), 0);
+    const influencedBuyers = new Set(
+      influencedOrders.map((o) => (o.customer_email ?? "").toLowerCase().trim())
+    ).size;
+    return {
+      totalLeads: leadEmails.size,
+      leadsInPeriod,
+      sessionsInPeriod,
+      influencedCount: influencedOrders.length,
+      influencedBuyers,
+      influencedRevenue,
+    };
+  }, [nakiLeads, nakiUsage, filteredOrders, start, end]);
 
   // Poređenje "do istog dana": ako je period u toku (npr. ovaj mesec/godina), poredi se
   // ISTI proteklim broj dana iz prethodnog/prošlogodišnjeg perioda (month-to-date), ne ceo.
@@ -744,6 +791,39 @@ export default function AnalitikaDashboard({ orders }: { orders: WcOrder[] }) {
               Prikazano prvih 20 od {filteredOrders.length} narudžbina u periodu.
             </p>
           )}
+        </div>
+      </div>
+
+      {/* NaKI asistent — doprinos preko lead-mejla (nezavisno od last-touch utm-a) */}
+      <div className="bg-white rounded-xl shadow-sm p-6">
+        <h2 className="text-lg font-semibold text-gray-900 mb-1">NaKI asistent</h2>
+        <p className="text-xs text-gray-400 mb-4">
+          Prodaja se meri spajanjem mejla lead-a sa porudžbinom (NaKI je gornji levak —
+          last-touch utm ga prepiše IG/YT oglasom, pa se ovde ne oslanja na utm).
+        </p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div>
+            <div className="text-sm text-gray-500 mb-1">Razgovori (period)</div>
+            <div className="text-2xl font-bold text-plava">
+              {naki.sessionsInPeriod.toLocaleString("sr-Latn-RS")}
+            </div>
+          </div>
+          <div>
+            <div className="text-sm text-gray-500 mb-1">Novi mejlovi (period)</div>
+            <div className="text-2xl font-bold text-plava">{naki.leadsInPeriod}</div>
+            <div className="text-xs text-gray-400 mt-1">ukupno baza: {naki.totalLeads}</div>
+          </div>
+          <div>
+            <div className="text-sm text-gray-500 mb-1">Kupci preko NaKI lead-a</div>
+            <div className="text-2xl font-bold text-plava">{naki.influencedBuyers}</div>
+            <div className="text-xs text-gray-400 mt-1">
+              {naki.influencedCount} završenih narudžbina
+            </div>
+          </div>
+          <div>
+            <div className="text-sm text-gray-500 mb-1">Prihod (NaKI-dodirnut)</div>
+            <div className="text-2xl font-bold text-plava">{fmt(naki.influencedRevenue)}</div>
+          </div>
         </div>
       </div>
     </div>
