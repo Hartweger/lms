@@ -6,6 +6,7 @@ import { trackInitiateCheckout } from "@/lib/fbq";
 import { EUR_RATE } from "@/lib/order-utils";
 import { computeCouponDiscount } from "@/lib/coupon-discount";
 import { professorsFromVariants, packageTypesFromVariants, resolveVariant, type Variant } from "@/lib/individual-pricing";
+import { checkoutStrings } from "@/lib/product-i18n";
 
 interface Props {
   courseSlug: string;
@@ -17,6 +18,7 @@ interface Props {
   initialEmail?: string;
   initialName?: string;
   isLoggedIn?: boolean;
+  lang?: "sr" | "en";
 }
 
 const COUNTRIES = [
@@ -35,24 +37,34 @@ const COUNTRIES = [
   { code: "OTHER", label: "Druga zemlja" },
 ];
 
+const COUNTRIES_EN = [
+  { code: "DE", label: "Germany" }, { code: "AT", label: "Austria" },
+  { code: "CH", label: "Switzerland" }, { code: "GB", label: "United Kingdom" },
+  { code: "US", label: "USA" }, { code: "RS", label: "Serbia" },
+  { code: "OTHER", label: "Other country" },
+];
+
 function formatPrice(price: number): string {
   return price.toLocaleString("de-DE");
 }
 
-export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, variants = [], includedLessons = null, initialEmail = "", initialName = "", isLoggedIn = false }: Props) {
+export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, variants = [], includedLessons = null, initialEmail = "", initialName = "", isLoggedIn = false, lang = "sr" }: Props) {
   const router = useRouter();
   void includedLessons;
+
+  const en = lang === "en";
+  const ct = checkoutStrings(lang ?? "sr");
 
   const isIndividual = variants.length > 0;
   const professors = professorsFromVariants(variants);
   const packageTypes = packageTypesFromVariants(variants);
-  const PAKET_LABEL: Record<string, string> = { paket4: "4 termina", paket8: "8 termina", paket12: "12 termina" };
+  const PAKET_LABEL: Record<string, string> = ct.packageLabels;
   const [professorId, setProfessorId] = useState<string | null>(professors[0]?.id ?? null);
   const [packageType, setPackageType] = useState<string | null>(packageTypes[0] ?? null);
   const [fullName, setFullName] = useState(initialName);
   const [email, setEmail] = useState(initialEmail);
   const [emailLocked, setEmailLocked] = useState(isLoggedIn);
-  const [country, setCountry] = useState("RS");
+  const [country, setCountry] = useState(en ? "DE" : "RS");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -62,6 +74,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
   const [appliedCoupon, setAppliedCoupon] = useState<{ code: string; discountType: string; amount: number } | null>(null);
   const [couponError, setCouponError] = useState<string | null>(null);
 
+  const countryList = en ? COUNTRIES_EN : COUNTRIES;
   const isRS = country === "RS";
   const [method, setMethod] = useState<"kartica" | "uplatnica" | "paypal">("kartica");
   const paymentMethod = method;
@@ -74,6 +87,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
     ? computeCouponDiscount(appliedCoupon.discountType, appliedCoupon.amount, basePrice).finalPrice
     : basePrice;
   const eurApprox = Math.round(discountedRsd / EUR_RATE);
+  const eurDisplay = selectedVariant?.paypal_price_eur ?? eurApprox;
 
   // Meta Pixel - InitiateCheckout kad korisnik dođe na korak kupovine (jednom).
   useEffect(() => {
@@ -164,13 +178,13 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
             {appliedCoupon ? (
               <div>
                 <p className="text-sm text-gray-400 line-through">{formatPrice(basePrice)} din</p>
-                <p className="font-bold text-gray-900">{formatPrice(discountedRsd)} din</p>
-                <p className="text-xs text-gray-400 mt-0.5">≈ {eurApprox} €</p>
+                <p className="font-bold text-gray-900">{en ? `${eurDisplay} €` : `${formatPrice(discountedRsd)} din`}</p>
+                <p className="text-xs text-gray-400 mt-0.5">{en ? `≈ ${formatPrice(discountedRsd)} din` : `≈ ${eurApprox}€`}</p>
               </div>
             ) : (
               <div>
-                <p className="font-bold text-gray-900">{formatPrice(basePrice)} din</p>
-                <p className="text-xs text-gray-400 mt-0.5">≈ {eurApprox} €</p>
+                <p className="font-bold text-gray-900">{en ? `${eurDisplay} €` : `${formatPrice(basePrice)} din`}</p>
+                <p className="text-xs text-gray-400 mt-0.5">{en ? `≈ ${formatPrice(discountedRsd)} din` : `≈ ${eurApprox}€`}</p>
               </div>
             )}
           </div>
@@ -192,19 +206,23 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
             </div>
           )}
 
-          <div>
-            <label htmlFor="prof" className="block text-sm font-medium text-gray-700 mb-1">Profesorka</label>
-            <select id="prof" value={professorId ?? ""} onChange={(e) => setProfessorId(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#0AB3D7]">
-              {professors.map((p) => (<option key={p.id} value={p.id}>{p.full_name}</option>))}
-            </select>
-          </div>
+          {professors.length > 1 && (
+            <div>
+              <label htmlFor="prof" className="block text-sm font-medium text-gray-700 mb-1">Profesorka</label>
+              <select id="prof" value={professorId ?? ""} onChange={(e) => setProfessorId(e.target.value)}
+                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#0AB3D7]">
+                {professors.map((p) => (<option key={p.id} value={p.id}>{p.full_name}</option>))}
+              </select>
+            </div>
+          )}
 
-          <div className="bg-[#FFF7E6] border border-[#F0D9A0] rounded-lg p-3">
-            <p className="text-xs text-[#8A6D3B] leading-relaxed">
-              Pre uplate proveri mejlom na <a href="mailto:info@hartweger.rs" className="underline">info@hartweger.rs</a> da li je izabrana profesorka trenutno na raspolaganju za nove termine.
-            </p>
-          </div>
+          {!en && (
+            <div className="bg-[#FFF7E6] border border-[#F0D9A0] rounded-lg p-3">
+              <p className="text-xs text-[#8A6D3B] leading-relaxed">
+                Pre uplate proveri mejlom na <a href="mailto:info@hartweger.rs" className="underline">info@hartweger.rs</a> da li je izabrana profesorka trenutno na raspolaganju za nove termine.
+              </p>
+            </div>
+          )}
         </div>
       )}
 
@@ -242,7 +260,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
                 disabled={couponLoading || !couponCode.trim()}
                 className="bg-[#0AB3D7] hover:bg-[#089bbf] disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-sm px-4 py-2.5 rounded-lg transition-colors flex-shrink-0"
               >
-                {couponLoading ? "..." : "Primeni"}
+                {couponLoading ? "..." : ct.couponApply}
               </button>
             </div>
             {couponError && (
@@ -255,7 +273,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
             onClick={() => setShowCoupon(true)}
             className="text-sm text-[#0AB3D7] hover:underline"
           >
-            Imaš kupon?
+            {ct.couponToggle}
           </button>
         )}
       </div>
@@ -266,7 +284,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
 
         <div>
           <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">
-            Ime i prezime
+            {ct.fullNameLabel}
           </label>
           <input
             id="fullName"
@@ -281,7 +299,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
 
         <div>
           <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-            Email adresa
+            {ct.emailLabel}
           </label>
           <input
             id="email"
@@ -313,7 +331,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
 
         <div>
           <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-1">
-            Zemlja
+            {ct.countryLabel}
           </label>
           <select
             id="country"
@@ -321,7 +339,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
             onChange={(e) => { setCountry(e.target.value); setMethod("kartica"); }}
             className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#0AB3D7] focus:border-transparent transition bg-white"
           >
-            {COUNTRIES.map((c) => (
+            {countryList.map((c) => (
               <option key={c.code} value={c.code}>
                 {c.label}
               </option>
@@ -336,12 +354,12 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
         <div className="space-y-2">
           {(isRS
             ? [
-                { v: "kartica", label: "Platnom karticom", desc: "Visa, Mastercard, Maestro - sigurno preko Banca Intesa. Vlasnici Banca Intesa kartica mogu na rate - broj rata biraš u sledećem koraku (na strani banke)." },
-                { v: "uplatnica", label: "Uplatnica / internet bankarstvo", desc: "Podaci za uplatu stižu na email; pristup po potvrdi uplate." },
+                { v: "kartica", label: ct.methodCard, desc: "Visa, Mastercard, Maestro - sigurno preko Banca Intesa. Vlasnici Banca Intesa kartica mogu na rate - broj rata biraš u sledećem koraku (na strani banke)." },
+                { v: "uplatnica", label: ct.methodBank, desc: "Podaci za uplatu stižu na email; pristup po potvrdi uplate." },
               ]
             : [
-                { v: "kartica", label: "Platnom karticom", desc: "Visa, Mastercard, Maestro - sigurno preko Banca Intesa. Naplata u dinarima (tvoja banka konvertuje u tvoju valutu)." },
-                { v: "paypal", label: "PayPal", desc: "PayPal link stiže na email. Naplata u evrima, uključuje 12% PayPal naknadu." },
+                { v: "kartica", label: ct.methodCard, desc: "Visa, Mastercard, Maestro - sigurno preko Banca Intesa. Naplata u dinarima (tvoja banka konvertuje u tvoju valutu)." },
+                { v: "paypal", label: ct.methodPaypal, desc: "PayPal link stiže na email. Naplata u evrima, uključuje 12% PayPal naknadu." },
               ]
           ).map((m) => (
             <label
@@ -376,7 +394,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
         disabled={loading}
         className="w-full bg-[#F78687] hover:bg-[#E06566] disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold text-base py-4 rounded-xl transition-colors"
       >
-        {loading ? "Slanje..." : "Naruči"}
+        {loading ? "Slanje..." : ct.payButton}
       </button>
     </form>
   );
