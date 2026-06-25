@@ -434,7 +434,10 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
                     <p className="text-gray-700"><strong>Nastava 1-na-1</strong> sa profesorkom</p>
                   )}
                   {en ? (
-                    <p className="text-gray-700"><strong>{t.oneOnOneWithKatarina}</strong></p>
+                    <>
+                      <p className="text-gray-700"><strong>{t.oneOnOneInEnglish}</strong></p>
+                      <p className="text-gray-600">{t.chooseProfessorLine}</p>
+                    </>
                   ) : (
                     slug !== "fsp-individualni" && (
                       <p className="text-gray-600">{t.chooseProfessorLine}</p>

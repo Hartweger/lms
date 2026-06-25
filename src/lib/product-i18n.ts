@@ -4,7 +4,7 @@ export interface ProductStrings {
   categoryLabel: string;
   featuresTitle: string;
   ratingText: string;
-  oneOnOneWithKatarina: string;
+  oneOnOneInEnglish: string;
   chooseProfessorLine: string | null;
   bookYourTimeLine: string;
   noVideoCertLine: string;
@@ -24,7 +24,7 @@ const SR_PRODUCT: ProductStrings = {
   categoryLabel: "Mesečni paket",
   featuresTitle: "Šta uključuje paket?",
   ratingText: "5.0 - 300+ Google recenzija",
-  oneOnOneWithKatarina: "",
+  oneOnOneInEnglish: "",
   chooseProfessorLine: "Birate profesorku u sledećem koraku",
   bookYourTimeLine: "Ti biraš termin - dobijaš Google Calendar link i zakazuješ",
   noVideoCertLine: "Mesečni paket ne uključuje video lekcije ni sertifikat",
@@ -44,8 +44,8 @@ const EN_PRODUCT: ProductStrings = {
   categoryLabel: "Monthly package",
   featuresTitle: "What's included",
   ratingText: "5.0 - 300+ Google reviews",
-  oneOnOneWithKatarina: "1-on-1 with Katarina - taught in English",
-  chooseProfessorLine: null,
+  oneOnOneInEnglish: "1-on-1, taught in English",
+  chooseProfessorLine: "You choose your tutor in the next step",
   bookYourTimeLine: "You pick your times - you get a Google Calendar link and book yourself",
   noVideoCertLine: "Monthly packages don't include video lessons or a certificate",
   ctaBuy: "Buy",
