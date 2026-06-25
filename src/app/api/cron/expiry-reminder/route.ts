@@ -12,6 +12,11 @@ export const dynamic = "force-dynamic";
 const MAX_PER_RUN = 30;
 const WINDOW_DAYS = 15;
 
+// Kursevi koji NE dobijaju podsetnik o isteku/obnovi, iako imaju expires_at u course_access.
+// "kurs-konverzacije" = stari migrirani LearnDash konverzacijski (živi grupni kurs) - nema
+// platformsku obnovu ni važeći kupon; obnova = upis u novi živi termin, ne "obnovi 50%".
+const EXCLUDED_SLUGS = new Set(["kurs-konverzacije", "konverzacijski-b1-sadrzaj"]);
+
 type Row = Record<string, unknown>;
 async function fetchAll(build: () => { range: (a: number, b: number) => PromiseLike<{ data: Row[] | null }> }): Promise<Row[]> {
   const out: Row[] = [];
@@ -38,7 +43,11 @@ export async function GET(request: Request) {
 
   const { data: courses } = await admin.from("courses").select("id, title, slug, category");
   const courseMap = new Map((courses ?? []).map((c) => [c.id, c]));
-  const excluded = new Set((courses ?? []).filter((c) => c.category === "mesecni").map((c) => c.id));
+  const excluded = new Set(
+    (courses ?? [])
+      .filter((c) => c.category === "mesecni" || EXCLUDED_SLUGS.has(c.slug))
+      .map((c) => c.id)
+  );
 
   // TEST režim: pošalji jedan probni na dati mejl
   if (testEmail) {

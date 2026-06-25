@@ -57,17 +57,30 @@ export async function GET(request: NextRequest) {
   }));
 
   // 4) Pristup koji ističe narednih 7 dana.
+  // NB: course_access nema FK veze ka user_profiles/courses u PostgREST schema cache-u,
+  // pa embed select (`user:user_id(...)`) puca (PGRST200) i tiho vraća 0. Zato odvojeni upiti.
   const { data: expiring } = await admin
     .from("course_access")
-    .select("expires_at, user:user_id(full_name, email), course:course_id(title)")
+    .select("user_id, course_id, expires_at")
     .not("expires_at", "is", null)
     .gte("expires_at", now.toISOString())
     .lte("expires_at", plusDays(7).toISOString())
     .order("expires_at", { ascending: true });
-  const isticePristup: DailyBrief["isticePristup"] = (expiring ?? []).map((r) => {
-    const u = one(r.user as unknown) as { full_name?: string; email?: string } | null;
-    const c = one(r.course as unknown) as { title?: string } | null;
-    return { ime: u?.full_name || u?.email || "", kurs: c?.title || "", datum: fmtDate(r.expires_at as string) };
+  const expRows = (expiring ?? []) as { user_id: string; course_id: string; expires_at: string }[];
+  const expUserIds = [...new Set(expRows.map((r) => r.user_id))];
+  const expCourseIds = [...new Set(expRows.map((r) => r.course_id))];
+  const { data: expProfiles } = expUserIds.length
+    ? await admin.from("user_profiles").select("id, full_name, email").in("id", expUserIds)
+    : { data: [] as { id: string; full_name?: string; email?: string }[] };
+  const { data: expCourses } = expCourseIds.length
+    ? await admin.from("courses").select("id, title").in("id", expCourseIds)
+    : { data: [] as { id: string; title?: string }[] };
+  const expProfMap = new Map((expProfiles ?? []).map((p) => [p.id, p]));
+  const expCourseMap = new Map((expCourses ?? []).map((c) => [c.id, c]));
+  const isticePristup: DailyBrief["isticePristup"] = expRows.map((r) => {
+    const u = expProfMap.get(r.user_id);
+    const c = expCourseMap.get(r.course_id);
+    return { ime: u?.full_name || u?.email || "", kurs: c?.title || "", datum: fmtDate(r.expires_at) };
   });
 
   // 5) Individualni paketi - ostao tačno 1 čas.
