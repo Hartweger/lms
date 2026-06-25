@@ -26,16 +26,19 @@ URL strukture, bez diranja logike plaćanja/fiskalizacije.
    - `slug = 'private-german-lessons-online'` → `/kursevi/private-german-lessons-online`
    - `lang = 'en'`, `category = 'mesecni'`, `course_type` = isto kao srpski mesečni
    - `is_purchasable = true`, `is_published` = po potrebi (proizvod, ne sadržaj)
-   - `price` = 17500 (entry/paket4, radi „od" i fallback), `paypal_price_eur = 150`
+   - `price` = 16400 (entry/paket4, radi „od" i fallback), `paypal_price_eur = 140`
    - engleski `title`, `description`, `marketing_description`, `features`
 3. Tri `product_variants` (sve `professor_id` = Katarina Todosijević
    `f555ef90-407d-486b-a288-576d4d461148`, `is_active=true`):
 
    | package_type | price (din) | paypal_price_eur |
    |---|---|---|
-   | paket4  | 17500 | 150 |
-   | paket8  | 34000 | 290 |
-   | paket12 | 51000 | 440 |
+   | paket4  | 16400 | 140 |
+   | paket8  | 32800 | 280 |
+   | paket12 | 49100 | 420 |
+
+   Honorar profesorke za engleske časove se NE rešava u kodu: prof upisuje razliku
+   kao „dodatnu aktivnost", admin (Nataša) odobrava. Tarifa `honorar_ind` ostaje ista.
 
    RSD ostaje radi naplate karticom (NestPay) i fiskalizacije — kartica se skida u
    dinarima, kupac konvertuje preko banke (kao i sad za strance). EUR se prikazuje

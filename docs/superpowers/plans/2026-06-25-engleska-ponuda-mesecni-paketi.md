@@ -21,7 +21,9 @@ TypeScript, Supabase (Postgres), Tailwind, vitest.
 - Deploy je ručno `vercel --prod` (NE preko gita); smoke test hook se okida posle.
 - Profesorka Katarina Todosijević id: `f555ef90-407d-486b-a288-576d4d461148`.
 - Supabase DDL: SQL Editor ili Management API (sbp_ token). Service-role ključ u `.env.local`.
-- Cene: paket4 17500din/150€, paket8 34000din/290€, paket12 51000din/440€.
+- Cene (35 €/čas): paket4 16400din/140€, paket8 32800din/280€, paket12 49100din/420€.
+- Honorar: NE kroz kod. Razliku za engleske časove prof upisuje kao „dodatnu
+  aktivnost", Nataša odobrava. Nema honorar override-a u kodu (Opcija A).
 
 ---
 
@@ -82,8 +84,8 @@ values (
   ],
   'mesecni',
   (select course_type from public.courses where slug = 'individualni-mesecni-paketi'),
-  17500,
-  150,
+  16400,
+  140,
   true,
   true,
   'en'
@@ -101,9 +103,9 @@ select
   v.package_type, v.price, v.eur, true
 from public.courses c
 cross join (values
-  ('paket4', 17500, 150),
-  ('paket8', 34000, 290),
-  ('paket12', 51000, 440)
+  ('paket4', 16400, 140),
+  ('paket8', 32800, 280),
+  ('paket12', 49100, 420)
 ) as v(package_type, price, eur)
 where c.slug = 'private-german-lessons-online';
 ```
@@ -119,7 +121,7 @@ join public.product_variants v on v.course_id = c.id
 where c.slug = 'private-german-lessons-online'
 order by v.price;
 ```
-Expected: 3 reda, svi `lang=en`, `professor_id = f555ef90-...`, cene 17500/34000/51000, eur 150/290/440.
+Expected: 3 reda, svi `lang=en`, `professor_id = f555ef90-...`, cene 16400/32800/49100, eur 140/280/420.
 
 - [ ] **Step 6: (bez commita — DB promena)**
 
@@ -770,11 +772,11 @@ Expected: nema TS grešaka; testovi PASS.
 - [ ] **Step 2: Lokalna provera u browseru (dev)**
 
 Run: `npm run dev` pa otvori:
-- `/kursevi/private-german-lessons-online` — sve na engleskom, EUR primarno (od 150 €),
+- `/kursevi/private-german-lessons-online` — sve na engleskom, EUR primarno (od 140 €),
   badge „Monthly package", bez „choose professor" (piše „1-on-1 with Katarina"),
   engleski FAQ, donji CTA engleski.
 - `/kupovina/private-german-lessons-online` — naslov „Checkout", engleske labele,
-  NEMA izbora profesorke, paketi „4/8/12 sessions", cena EUR primarno (150/290/440 €),
+  NEMA izbora profesorke, paketi „4/8/12 sessions", cena EUR primarno (140/280/420 €),
   default zemlja Germany.
 - `/kursevi/individualni-mesecni-paketi` (srpski) — i dalje srpski, RSD primarno,
   „related" NE prikazuje engleski proizvod.
