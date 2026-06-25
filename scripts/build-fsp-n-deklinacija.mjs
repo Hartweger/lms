@@ -93,7 +93,8 @@ Imenice **der Herr**, **der Name** i **das Herz** treba naučiti napamet, jer im
   { type: "text", style: "uebung", content: "## Vežbe\n\nProveri šta si naučio:" },
   { type: "exercise", title: "Aufgabe 1 - Die richtige Form" },
   { type: "exercise", title: "Aufgabe 2 - Richtig oder falsch?" },
-  { type: "spoiler", title: "Aufgabe 3 - klikni za rešenje", items: [
+  { type: "text", style: "default", content: "### Aufgabe 3 - pronađi grešku\n\nU svakoj rečenici ima po jedna greška u N-deklinaciji. Pronađi je, pa klikni da vidiš tačno rešenje i objašnjenje:" },
+  { type: "spoiler", title: "Aufgabe 3 - pronađi grešku (klikni za rešenje)", items: [
     { question: "Ich habe den Patient untersucht.", answer: "Pogrešno: „Patient“. Akuzativ → „Ich habe den Patienten untersucht.“" },
     { question: "Der Bericht des Chirurg liegt vor.", answer: "Pogrešno: „Chirurg“. Genitiv → „Der Bericht des Chirurgen liegt vor.“" },
     { question: "Sie arbeitet mit einem Praktikant zusammen.", answer: "Pogrešno: „Praktikant“. Dativ → „Sie arbeitet mit einem Praktikanten zusammen.“" },

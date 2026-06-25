@@ -105,6 +105,9 @@ Kod složenih vremena u Konjunktiv I prebacujemo **samo glagol koji se menja**, 
     ["sagen", "reći"],
   ] },
 
+  { type: "text", style: "info", content:
+`**Napomena uz vežbe:** u primerima i vežbama pacijent je žena - **die Patientin**, pa je glagol u 3. licu jednine („sie habe", „sie sei", „sie könne"). Ako je tvoj pacijent muškarac, pravilo je isto, samo umesto „sie" koristiš „er" („er habe", „er sei"). Zato se ne zbuni kada svuda vidiš „sie".` },
+
   { type: "text", style: "uebung", content: "## Vežbe\n\nProveri šta si naučio:" },
   { type: "exercise", title: "Aufgabe 1 - Konjunktiv I oder Indikativ?" },
   { type: "exercise", title: "Aufgabe 2 - Richtig oder falsch?" },
