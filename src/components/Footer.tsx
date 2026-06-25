@@ -28,6 +28,7 @@ export default function Footer() {
               <li><Link href="/magazin" className="hover:text-white transition-colors">Magazin</Link></li>
               <li><Link href="/faq" className="hover:text-white transition-colors">Često postavljena pitanja</Link></li>
               <li><Link href="/besplatno-testiranje" className="hover:text-white transition-colors">Besplatno testiranje</Link></li>
+              <li><Link href="/kursevi/private-german-lessons-online" className="hover:text-white transition-colors">English: private German lessons</Link></li>
             </ul>
           </div>
 
