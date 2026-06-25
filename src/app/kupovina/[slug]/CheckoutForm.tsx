@@ -352,14 +352,21 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
       <div className="bg-white border border-gray-200 rounded-xl p-5">
         <p className="text-xs font-bold uppercase tracking-wide text-gray-400 mb-3">{en ? "Payment method" : "Način plaćanja"}</p>
         <div className="space-y-2">
-          {(isRS
+          {(en
             ? [
-                { v: "kartica", label: ct.methodCard, desc: en ? "Visa, Mastercard, Maestro - secure payment via Banca Intesa. Banca Intesa cardholders can pay in installments - choose the number in the next step (on the bank's page)." : "Visa, Mastercard, Maestro - sigurno preko Banca Intesa. Vlasnici Banca Intesa kartica mogu na rate - broj rata biraš u sledećem koraku (na strani banke)." },
-                { v: "uplatnica", label: ct.methodBank, desc: en ? "Payment details are sent by email; access after the payment is confirmed." : "Podaci za uplatu stižu na email; pristup po potvrdi uplate." },
+                // Engleska ponuda: samo kartica. Cena je EUR-primarno (npr. 140€); kartica
+                // se skida u RSD ekvivalentu pa kupac plati tačno oglašeno. PayPal je isključen
+                // jer bi sistem dodao 12% (→ 157€) i razlikovao se od oglašene cene.
+                { v: "kartica", label: ct.methodCard, desc: "Visa, Mastercard, Maestro - secure payment via Banca Intesa. Charged in RSD (your bank converts to your currency)." },
+              ]
+            : isRS
+            ? [
+                { v: "kartica", label: ct.methodCard, desc: "Visa, Mastercard, Maestro - sigurno preko Banca Intesa. Vlasnici Banca Intesa kartica mogu na rate - broj rata biraš u sledećem koraku (na strani banke)." },
+                { v: "uplatnica", label: ct.methodBank, desc: "Podaci za uplatu stižu na email; pristup po potvrdi uplate." },
               ]
             : [
-                { v: "kartica", label: ct.methodCard, desc: en ? "Visa, Mastercard, Maestro - secure payment via Banca Intesa. Charged in RSD (your bank converts to your currency)." : "Visa, Mastercard, Maestro - sigurno preko Banca Intesa. Naplata u dinarima (tvoja banka konvertuje u tvoju valutu)." },
-                { v: "paypal", label: ct.methodPaypal, desc: en ? "A PayPal link is sent by email. Charged in EUR." : "PayPal link stiže na email. Naplata u evrima, uključuje 12% PayPal naknadu." },
+                { v: "kartica", label: ct.methodCard, desc: "Visa, Mastercard, Maestro - sigurno preko Banca Intesa. Naplata u dinarima (tvoja banka konvertuje u tvoju valutu)." },
+                { v: "paypal", label: ct.methodPaypal, desc: "PayPal link stiže na email. Naplata u evrima, uključuje 12% PayPal naknadu." },
               ]
           ).map((m) => (
             <label

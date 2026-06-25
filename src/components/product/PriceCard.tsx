@@ -19,7 +19,7 @@ export default function PriceCard({ price, priceEur, slug, ctaLabel, isVariable,
   const secondary = en ? (price ? `≈ ${formatMoney(price, "RSD")}` : null)
                        : (priceEur ? `≈ ${priceEur}€` : null);
   const bullets = en
-    ? ["Instant access after payment", "Card, bank transfer or PayPal", "3000+ happy students"]
+    ? ["Book your lessons right after payment", "Secure card payment (Visa, Mastercard)", "3000+ happy students"]
     : ["Pristup odmah nakon uplate", "Kartica, uplatnica ili PayPal", "3000+ zadovoljnih polaznika"];
   const questionText = en ? "Have a question?" : "Imate pitanje?";
   const questionLink = en ? "Write to us" : "Pišite nam";

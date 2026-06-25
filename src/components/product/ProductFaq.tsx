@@ -73,7 +73,7 @@ const faqBySlug: Record<string, { q: string; a: string }[]> = {
     { q: "Who is my tutor?", a: "You're taught by an experienced Hartweger teacher who works in English - currently Katarina or Milica. You pick your tutor during checkout, and every lesson is 1-on-1." },
     { q: "What if I don't use all my sessions in a month?", a: "Unused sessions don't roll over to the next month. We recommend booking regularly." },
     { q: "Can I cancel a booked lesson?", a: "Yes - you can cancel up to 24 hours before the scheduled lesson." },
-    { q: "How do I pay?", a: "You can pay by card (Visa, MasterCard) or via PayPal. Prices are shown in EUR." },
+    { q: "How do I pay?", a: "Payment is by card (Visa, Mastercard, Maestro), secured through Banca Intesa. Prices are shown in EUR; your card is charged the equivalent amount and your bank converts it to your currency." },
   ],
 };
 
