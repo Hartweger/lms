@@ -69,7 +69,7 @@ const faqBySlug: Record<string, { q: string; a: string }[]> = {
   ],
   "private-german-lessons-online": [
     { q: "What happens after I pay?", a: "You'll get a Google Calendar link to book your lessons whenever it suits you. You choose the day and time." },
-    { q: "In what language are the lessons taught?", a: "Lessons and explanations are in English, while you learn and practice German. Perfect if you live in a German-speaking country and don't speak Serbian." },
+    { q: "What language are the lessons in?", a: "The goal is to practice German as much as possible. Explanations are given in English whenever you need them, so you always understand - perfect if you live in a German-speaking country and don't speak Serbian." },
     { q: "Who is my tutor?", a: "You're taught by an experienced Hartweger teacher who works in English - currently Katarina or Milica. You pick your tutor during checkout, and every lesson is 1-on-1." },
     { q: "What if I don't use all my sessions in a month?", a: "Unused sessions don't roll over to the next month. We recommend booking regularly." },
     { q: "Can I cancel a booked lesson?", a: "Yes - you can cancel up to 24 hours before the scheduled lesson." },

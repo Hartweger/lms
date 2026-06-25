@@ -44,7 +44,7 @@ const EN_PRODUCT: ProductStrings = {
   categoryLabel: "Monthly package",
   featuresTitle: "What's included",
   ratingText: "5.0 - 300+ Google reviews",
-  oneOnOneInEnglish: "1-on-1, taught in English",
+  oneOnOneInEnglish: "1-on-1 - you practice German, with explanations in English",
   chooseProfessorLine: "You choose your tutor in the next step",
   bookYourTimeLine: "You pick your times - you get a Google Calendar link and book yourself",
   noVideoCertLine: "Monthly packages don't include video lessons or a certificate",
