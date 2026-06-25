@@ -23,7 +23,7 @@ URL strukture, bez diranja logike plaćanja/fiskalizacije.
 
 1. Nova kolona `courses.lang text not null default 'sr'`. Svi postojeći redovi → `'sr'`.
 2. Novi proizvod (jedan red u `courses`):
-   - `slug = 'german-1-on-1-monthly-packages'` → `/kursevi/german-1-on-1-monthly-packages`
+   - `slug = 'private-german-lessons-online'` → `/kursevi/private-german-lessons-online`
    - `lang = 'en'`, `category = 'mesecni'`, `course_type` = isto kao srpski mesečni
    - `is_purchasable = true`, `is_published` = po potrebi (proizvod, ne sadržaj)
    - `price` = 17500 (entry/paket4, radi „od" i fallback), `paypal_price_eur = 150`
@@ -78,8 +78,19 @@ Gde je moguće, koristi se postojeća logika; menja se samo jezik i redosled val
 
 ## Pronalaženje
 - Footer (`src/components/Footer.tsx`): mali link **„English"** →
-  `/kursevi/german-1-on-1-monthly-packages`.
+  `/kursevi/private-german-lessons-online`.
 - Nije u glavnoj (srpskoj) navigaciji.
+
+## Marketing ugao (za stranu publiku)
+
+Drugačija poruka od srpske kopije. Pet aduta (hero + features):
+- **Taught fully in English** — objašnjenja na engleskom od prvog dana
+- **Flexible scheduling across time zones** — kupac bira termin (Google Calendar)
+- **1-on-1, fully personalized** — privatno, tempo prilagođen polazniku
+- **No long-term commitment** — mesečni paket, otkazivanje kad želi
+- **Pay in EUR** — jasna cena u evrima
+Brend signali poverenja zadržati (Hartweger, 300+ Google recenzija, VoKuM metoda) —
+publika ne poznaje školu pa poverenje treba eksplicitno graditi.
 
 ## Van obima (YAGNI)
 - Pun i18n sajta, locale routing, engleska navigacija/footer (osim jednog linka),
