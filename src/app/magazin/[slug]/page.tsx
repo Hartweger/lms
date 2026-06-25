@@ -203,7 +203,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             height={400}
             className="w-full rounded-xl shadow-md"
             sizes="(max-width: 768px) 100vw, 800px"
-            priority
+            preload
+            fetchPriority="high"
           />
         </div>
       )}

@@ -60,7 +60,7 @@ export default function Pocetna() {
               src="https://rzmyglynjcygsbicssbt.supabase.co/storage/v1/object/public/blog-media/2025/06/Hartweger_Centar_Natasa_Hartweger.jpg"
               alt="Nataša Hartweger"
               className="w-full h-auto"
-              width={540} height={540} priority sizes="(max-width: 768px) 280px, 540px"
+              width={540} height={540} preload fetchPriority="high" sizes="(max-width: 768px) 280px, 540px"
             />
             {/* Name card */}
             <div className="absolute bottom-3 left-3 md:bottom-6 md:left-6 bg-white/90 backdrop-blur-sm rounded-xl px-3 py-2 md:px-5 md:py-3 shadow-lg">

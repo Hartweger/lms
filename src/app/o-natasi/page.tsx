@@ -85,7 +85,8 @@ export default function ONatasiPage() {
               className="rounded-2xl shadow-lg max-w-xs md:max-w-sm w-full"
               width={320}
               height={400}
-              priority
+              preload
+              fetchPriority="high"
               sizes="(max-width: 768px) 256px, 320px"
             />
           </div>

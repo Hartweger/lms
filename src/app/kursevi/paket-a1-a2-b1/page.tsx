@@ -70,7 +70,8 @@ export default function PaketA1B1Page() {
                 className="rounded-2xl shadow-xl w-full"
                 width={600}
                 height={400}
-                priority
+                preload
+                fetchPriority="high"
                 sizes="(max-width: 768px) 100vw, 50vw"
               />
               <div className="bg-white rounded-xl shadow-md px-5 py-3 -mt-6 mx-6 relative z-10">
