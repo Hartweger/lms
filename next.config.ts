@@ -89,6 +89,46 @@ const nextConfig: NextConfig = {
       { source: "/kursevi/b1-2/:path*", destination: "/kursevi/video-kurs-b1", permanent: true },
       { source: "/kursevi/polozi-fsp/:path*", destination: "/kursevi/fsp", permanent: true },
       { source: "/kursevi/kako-da-ucis-reci/:path*", destination: "/masterclass-reci", permanent: true },
+
+      // Broken-link audit (2026-06-24): interni linkovi iz migriranog blog/kurs sadržaja
+      // koji su padali na 404. Ciljevi provereni naspram sitemap-a (živi 200).
+      // -- blog tekstovi pogrešno pod /kursevi/ → /magazin/
+      { source: "/kursevi/dass-recenice-u-nemackom-jeziku", destination: "/magazin/dass-recenice-u-nemackom-jeziku", permanent: true },
+      { source: "/kursevi/weil-recenice", destination: "/magazin/weil-recenice", permanent: true },
+      { source: "/kursevi/modalni-glagoli-u-nemackom-jeziku-kroz-najkorisnije-primere", destination: "/magazin/modalni-glagoli-u-nemackom-jeziku-kroz-najkorisnije-primere", permanent: true },
+      { source: "/kursevi/odredjivanje-roda-imenice-u-nemackom-jeziku", destination: "/magazin/odredjivanje-roda-imenice-u-nemackom-jeziku", permanent: true },
+      { source: "/kursevi/najbolje-za-sebe", destination: "/magazin/najbolje-za-sebe", permanent: true },
+      // -- blog tekstovi koji NISU migrirani (nema posta) → /magazin lista
+      { source: "/dete-i-mobilni-telefon-da-ili-ne", destination: "/magazin", permanent: true },
+      { source: "/kursevi/dete-i-mobilni-telefon-da-ili-ne", destination: "/magazin", permanent: true },
+      { source: "/blog", destination: "/magazin", permanent: true },
+      { source: "/blog/:path*", destination: "/magazin", permanent: true },
+      // -- stari kurs/proizvod slugovi → tačne kurs stranice
+      { source: "/kursevi/polozi-fide-ispit", destination: "/kursevi/polozi-fide", permanent: true },
+      { source: "/kursevi/polozi-goethe-b1-sa-natasom-i-katarinom", destination: "/kursevi/polozi-goethe-b1", permanent: true },
+      { source: "/kursevi/polozi-geothe-c1", destination: "/kursevi/polozi-goethe-c1", permanent: true },
+      { source: "/kursevi/video-polozi-goethe-b2-sa-natasom-i-ankom", destination: "/kursevi", permanent: true },
+      { source: "/kursevi/kurs-nemackog-jezika-video-kurs-a1", destination: "/kursevi/video-kurs-a1", permanent: true },
+      { source: "/kursevi/fsp-pripremni-kurs", destination: "/kursevi/fsp", permanent: true },
+      { source: "/kursevi/grupni-kurs-nemackog-jezika-a1-2", destination: "/kursevi/grupni-kurs-nemackog-jezika-a1-2-2", permanent: true },
+      { source: "/kursevi/grupni-kurs-nemackog-jezika-b2-1-b2-2", destination: "/grupni-kursevi", permanent: true },
+      { source: "/kursevi/individualni-kurs-b2-poslednji-korak-do-b2-sertifikata", destination: "/kursevi/individualni-kurs-nemackog-jezika-b2-1", permanent: true },
+      { source: "/kursevi/progovori", destination: "/kursevi/grupni-konverzacijski-kurs-nemackog-b1", permanent: true },
+      { source: "/kursevi/a1", destination: "/kursevi/video-kurs-a1", permanent: true },
+      { source: "/kursevi/nivo-a1", destination: "/kursevi/video-kurs-a1", permanent: true },
+      // -- generičke kurs liste
+      { source: "/kursevi/video-kursevi", destination: "/kursevi", permanent: true },
+      { source: "/kursevi/individualni-kursevi", destination: "/individualni-kursevi", permanent: true },
+      { source: "/kursevi/individualni", destination: "/individualni-kursevi", permanent: true },
+      { source: "/kursevi/grupni", destination: "/grupni-kursevi", permanent: true },
+      { source: "/casovi-nemackog-11", destination: "/individualni-kursevi", permanent: true },
+      { source: "/onlajn-kursevi-nemackog-u-grupi", destination: "/grupni-kursevi", permanent: true },
+      { source: "/besplatni-kurs", destination: "/kursevi", permanent: true },
+      { source: "/medicinski-nemacki", destination: "/kursevi/fsp", permanent: true },
+      { source: "/kupovina/grupni-a2", destination: "/grupni-kursevi", permanent: true },
+      { source: "/nastim", destination: "/o-natasi", permanent: true },
+      { source: "/kursevi/od-individualne-do-grupne-nastave-skaliraj-svoj-biznis", destination: "https://natasahartweger.rs", permanent: true },
+
       // Stare samostalne LearnDash lekcije/testovi (root-level)
       { source: "/lekcije/:path*", destination: "/kursevi/video-kurs-a1", permanent: true },
       { source: "/testovi/:path*", destination: "/besplatno-testiranje", permanent: true },
@@ -111,7 +151,7 @@ const nextConfig: NextConfig = {
       { source: "/proizvod/osnovna-ponuda-kurs-nemackog-jezika-a2", destination: "/kursevi/video-kurs-a2", permanent: true },
       { source: "/proizvod/osnovna-ponuda-kurs-b1", destination: "/kursevi/video-kurs-b1", permanent: true },
       { source: "/proizvod/polozi-goethe-b1", destination: "/kursevi/polozi-goethe-b1", permanent: true },
-      { source: "/proizvod/polozi-goethe-b2", destination: "/kursevi/polozi-goethe-b2", permanent: true },
+      { source: "/proizvod/polozi-goethe-b2", destination: "/kursevi", permanent: true },
       { source: "/proizvod/polozi-c1", destination: "/kursevi/polozi-goethe-c1", permanent: true },
       { source: "/proizvod/gramatika-a2-b1", destination: "/kursevi/gramatika-a2-b1", permanent: true },
       { source: "/proizvod/kurs-za-mame", destination: "/kursevi/kurs-za-mame-i-trudnice", permanent: true },
@@ -162,7 +202,7 @@ const nextConfig: NextConfig = {
       { source: "/proizvod/polozi-fide-ispit", destination: "/kursevi/polozi-fide", permanent: true },
       { source: "/proizvod/polozi-goethe-b1-sa-natasom-i-katarinom", destination: "/kursevi/polozi-goethe-b1", permanent: true },
       { source: "/proizvod/polozi-goethe-c1", destination: "/kursevi/polozi-goethe-c1", permanent: true },
-      { source: "/proizvod/video-polozi-goethe-b2-sa-natasom-i-ankom", destination: "/kursevi/polozi-goethe-b2", permanent: true },
+      { source: "/proizvod/video-polozi-goethe-b2-sa-natasom-i-ankom", destination: "/kursevi", permanent: true },
       { source: "/proizvod/grupni-kurs-konverzacije-na-nemackom-jeziku-2", destination: "/grupni-kursevi", permanent: true },
       { source: "/proizvod/kako-da-naucis-reci-na-stranom-jeziku", destination: "/kurs/kako-uciti-reci", permanent: true },
 
