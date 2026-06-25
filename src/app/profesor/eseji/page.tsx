@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
 interface EssayRow {
@@ -26,6 +27,10 @@ interface EssayRow {
 
 export default function ProfesorEseji() {
   const supabase = createClient();
+  // Admin „Uđi kao" profesor: ?prof=<id> (nav čuva parametar kroz tabove). Bez ovoga
+  // je stranica gledala ulogovanog admina, koji nema dodeljene studente → prazna lista.
+  // RLS dozvoljava: admin čita sve professor_students; profesor sa tuđim ?prof dobije 0 redova.
+  const prof = useSearchParams().get("prof");
   const [essays, setEssays] = useState<EssayRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"pending" | "reviewed" | "published" | "all">("pending");
@@ -43,11 +48,14 @@ export default function ProfesorEseji() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
+      // Čiji panel gledamo: sopstveni (profesor) ili izabrani (admin „Uđi kao").
+      const professorId = prof || user.id;
+
       // Get assigned student IDs
       const { data: assignments } = await supabase
         .from("professor_students")
         .select("student_id")
-        .eq("professor_id", user.id);
+        .eq("professor_id", professorId);
 
       const studentIds = [...new Set(assignments?.map((a: { student_id: string }) => a.student_id) ?? [])];
 
@@ -94,7 +102,7 @@ export default function ProfesorEseji() {
       setLoading(false);
     };
     load();
-  }, [filter, supabase]);
+  }, [filter, supabase, prof]);
 
   const startReview = (essay: EssayRow) => {
     setEditingId(essay.id);

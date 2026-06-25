@@ -56,7 +56,7 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
       // Status filter radi pickOpenGroupForNivo (jedinstveno mesto definicije "otvoren").
       const { data: groupsForNivo } = await admin
         .from("groups")
-        .select("id, level, status, start_date, max_seats, manual_enrolled, gcal_event_id, meet_link, notes_url, professor:professor_id(full_name, email)")
+        .select("id, level, status, start_date, max_seats, manual_enrolled, gcal_event_id, meet_link, notes_url, professor_id, content_course_id, professor:professor_id(full_name, email)")
         .eq("level", nivo);
       const group = pickOpenGroupForNivo(groupsForNivo ?? [], nivo);
       if (!group) { console.warn(`[grant] Nema otvorene grupe za nivo ${nivo} (order ${orderId})`); continue; }
@@ -74,6 +74,16 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
         { onConflict: "group_id,user_id" },
       );
       console.log(`[grant] Auto-upis u grupu ${group.id} (${nivo}) za order ${orderId}`);
+
+      // Profesorska veza za grupnog polaznika: lista Schreiben radova i objava (essays/publish)
+      // čitaju professor_students. Bez ovoga je grupni student nevidljiv svojoj profesorki.
+      const g = group as unknown as { professor_id?: string | null; content_course_id?: string | null };
+      if (g.professor_id && g.content_course_id) {
+        await admin.from("professor_students").upsert(
+          { professor_id: g.professor_id, student_id: order.user_id, course_id: g.content_course_id, assigned_via: "group" },
+          { onConflict: "professor_id,student_id,course_id", ignoreDuplicates: true },
+        );
+      }
 
       const prof = Array.isArray(group.professor) ? group.professor[0] : group.professor;
       const profIme: string = prof?.full_name || "";

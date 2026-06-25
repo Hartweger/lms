@@ -78,14 +78,18 @@ export async function POST(request: Request) {
     .single();
   const student = studentRow as { full_name: string | null; email: string | null } | null;
 
-  // Profesor sme samo ako mu je taj (učenik, kurs) dodeljen.
+  // Profesor sme da oceni svakog svog učenika - isti kriterijum kao lista radova
+  // (profesor/eseji): professor_students po (profesor, učenik), BEZ vezivanja za course_id.
+  // course_id je nepouzdan kao filter jer i 1:1 i grupni sadržaj žive u deljenim sadržajnim
+  // kursevima (3-slojna arhitektura: proizvod ≠ sadržaj), pa se kurs lekcije ne poklapa sa
+  // kursom iz professor_students. Ranije je ovde puca­lo "Nije tvoj učenik" iako je rad bio u listi.
   if (!isAdmin) {
     const { data: link } = await admin
       .from("professor_students")
       .select("id")
       .eq("professor_id", userId)
       .eq("student_id", essay.user_id as string)
-      .eq("course_id", (lesson?.course_id as string) ?? "")
+      .limit(1)
       .maybeSingle();
     if (!link) return NextResponse.json({ error: "Nije tvoj učenik" }, { status: 403 });
   }
