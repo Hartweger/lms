@@ -25,11 +25,39 @@ function levenshtein(a: string, b: string): number {
   return matrix[b.length][a.length];
 }
 
+// Prepoznavanje govora izgovoreni broj UVEK vrati kao cifru ("zweiunddreißig"
+// -> "32"), pa se ne poklapa sa rečju u tačnom odgovoru. Zato cifre pre
+// poređenja pretvaramo u nemačke reči. Podržava 0-9999 (dovoljno za A1-B2);
+// veće ostavljamo kako jesu.
+const NUM_UNITS = ["null", "eins", "zwei", "drei", "vier", "fünf", "sechs", "sieben", "acht", "neun"];
+const NUM_TEENS = ["zehn", "elf", "zwölf", "dreizehn", "vierzehn", "fünfzehn", "sechzehn", "siebzehn", "achtzehn", "neunzehn"];
+const NUM_TENS = ["zwanzig", "dreißig", "vierzig", "fünfzig", "sechzig", "siebzig", "achtzig", "neunzig"];
+
+function numberToGermanWords(n: number): string {
+  if (!Number.isFinite(n) || n < 0 || n > 9999) return String(n);
+  if (n < 10) return NUM_UNITS[n];
+  if (n < 20) return NUM_TEENS[n - 10];
+  if (n < 100) {
+    const u = n % 10, t = Math.floor(n / 10);
+    if (u === 0) return NUM_TENS[t - 2];
+    return (u === 1 ? "ein" : NUM_UNITS[u]) + "und" + NUM_TENS[t - 2];
+  }
+  if (n < 1000) {
+    const h = Math.floor(n / 100), rem = n % 100;
+    const hw = (h === 1 ? "ein" : NUM_UNITS[h]) + "hundert";
+    return rem === 0 ? hw : hw + numberToGermanWords(rem);
+  }
+  const th = Math.floor(n / 1000), rem = n % 1000;
+  const tw = (th === 1 ? "ein" : NUM_UNITS[th]) + "tausend";
+  return rem === 0 ? tw : tw + numberToGermanWords(rem);
+}
+
 // Skini SVU interpunkciju (i unutar rečenice) - prepoznavanje govora je
 // dodaje nepredvidivo, a izgovor se ocenjuje po rečima, ne po znacima.
 function normalize(s: string): string {
   return s.trim().toLowerCase()
     .replace(/[.!?,;:„“”‚’‘"'\-—–…()]/g, " ")
+    .replace(/\d+/g, (m) => numberToGermanWords(parseInt(m, 10)))
     .replace(/\s+/g, " ")
     .trim();
 }
