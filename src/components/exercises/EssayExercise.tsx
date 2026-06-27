@@ -19,6 +19,8 @@ interface Correction {
 }
 
 interface PublishedResult {
+  text: string | null;
+  audio_url: string | null;
   professor_feedback: string;
   professor_score: number;
   ai_feedback: string | null;
@@ -51,6 +53,8 @@ export default function EssayExercise({ task, level, onAnswer, exerciseId, lesso
       if (data) {
         if (data.status === "published") {
           setPublished({
+            text: data.text ?? null,
+            audio_url: data.audio_url ?? null,
             professor_feedback: data.professor_feedback,
             professor_score: data.professor_score,
             ai_feedback: data.ai_feedback,
@@ -137,6 +141,16 @@ export default function EssayExercise({ task, level, onAnswer, exerciseId, lesso
           <p className="text-lg font-medium text-gray-900 mb-2">Zadatak:</p>
           <p className="text-gray-600 bg-gray-50 rounded-lg p-4 whitespace-pre-line">{task}</p>
         </div>
+        {(published.text || published.audio_url) && (
+          <div className="mb-4">
+            <p className="text-xs font-semibold text-gray-500 mb-1">Tvoj rad:</p>
+            {published.audio_url ? (
+              <audio controls className="w-full" src={published.audio_url} />
+            ) : (
+              <p className="text-sm text-gray-700 bg-gray-50 rounded-lg p-4 whitespace-pre-wrap">{published.text}</p>
+            )}
+          </div>
+        )}
         <div className="mt-6 space-y-4">
           {published.professor_score != null && (() => {
             const pct = maxPoints > 0 ? published.professor_score / maxPoints : 0;
