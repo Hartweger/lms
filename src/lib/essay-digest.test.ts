@@ -25,9 +25,37 @@ describe("groupEssaysForDigest", () => {
     expect(r.unassigned.map((x) => x.id)).toEqual(["e1"]);
   });
 
-  it("match mora biti i po studentu i po kursu (prof za drugi kurs ne vazi)", () => {
+  it("tačan (učenik, kurs) ima prednost nad fallback-om kad učenik ima više profa", () => {
+    // s1 ima p1 za cA i p2 za cB; esej u cB mora ići p2 (tačan match), ne p1.
     const essays = [e({ id: "e1", userId: "s1", courseId: "cB" })];
-    const assignments: Assignment[] = [{ professorId: "p1", studentId: "s1", courseId: "cA" }];
+    const assignments: Assignment[] = [
+      { professorId: "p1", studentId: "s1", courseId: "cA" },
+      { professorId: "p2", studentId: "s1", courseId: "cB" },
+    ];
+    const r = groupEssaysForDigest(essays, assignments);
+    expect(r.unassigned).toHaveLength(0);
+    expect(r.byProfessor).toHaveLength(1);
+    expect(r.byProfessor[0]).toMatchObject({ professorId: "p2" });
+  });
+
+  it("grupni učenik: prof je upisan pod grupnim kursom, lekcija pripada sadržajnom kursu -> ide profu", () => {
+    // professor_students.course_id = grupni proizvod; lesson.course_id = sadržajni kurs. Ne poklapaju se,
+    // ali učenik ima tačno jednog profa -> rezime ide tom profu (kao i panel).
+    const essays = [e({ id: "e1", userId: "s1", courseId: "nemacki-b12" })];
+    const assignments: Assignment[] = [{ professorId: "p1", studentId: "s1", courseId: "grupni-b12" }];
+    const r = groupEssaysForDigest(essays, assignments);
+    expect(r.unassigned).toHaveLength(0);
+    expect(r.byProfessor).toHaveLength(1);
+    expect(r.byProfessor[0]).toMatchObject({ professorId: "p1" });
+    expect(r.byProfessor[0].essays.map((x) => x.id)).toEqual(["e1"]);
+  });
+
+  it("više profa a nijedan ne odgovara kursu (dvosmisleno) -> unassigned", () => {
+    const essays = [e({ id: "e1", userId: "s1", courseId: "cX" })];
+    const assignments: Assignment[] = [
+      { professorId: "p1", studentId: "s1", courseId: "cA" },
+      { professorId: "p2", studentId: "s1", courseId: "cB" },
+    ];
     const r = groupEssaysForDigest(essays, assignments);
     expect(r.unassigned.map((x) => x.id)).toEqual(["e1"]);
     expect(r.byProfessor).toHaveLength(0);

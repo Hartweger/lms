@@ -24,20 +24,33 @@ export type DigestGrouping = {
   unassigned: DigestEssay[];
 };
 
-// Grupise pending eseje: oni ciji (student, kurs) ima reda u professor_students idu pod tog profa,
-// ostali (npr. samostalni video kursevi bez profa) idu u `unassigned` -> adminu.
+// Grupise pending eseje po profesoru. Rutiranje:
+//  1) tačan (učenik, kurs) red u professor_students -> taj prof (individualni 1:1: course_id se poklapa).
+//  2) nema tačnog kursa, ali učenik ima TAČNO JEDNOG profa -> taj prof. Ovo hvata grupne učenike:
+//     oni su u professor_students pod *grupnim* kursom (proizvod, npr. „Grupni kurs B1.2"), a Schreiben
+//     lekcija pripada *sadržajnom* kursu („Nemački B1.2") - course_id se nikad ne poklapa. Panel ionako
+//     prikazuje radove po učeniku, pa ovo izjednačava rezime sa panelom.
+//  3) bez profa, ili učenik ima više profa a nijedan ne odgovara kursu (dvosmisleno) -> `unassigned` (adminu).
 export function groupEssaysForDigest(essays: DigestEssay[], assignments: Assignment[]): DigestGrouping {
   // Pretpostavka: najviše jedan profesor po (učenik, kurs). Ako bi bilo više redova - poslednji pobeđuje.
   const profByKey = new Map<string, string>(); // `${studentId}|${courseId}` -> professorId
+  const profsByStudent = new Map<string, Set<string>>(); // studentId -> set profesora (svi kursevi)
   for (const a of assignments) {
     profByKey.set(`${a.studentId}|${a.courseId}`, a.professorId);
+    const set = profsByStudent.get(a.studentId) ?? new Set<string>();
+    set.add(a.professorId);
+    profsByStudent.set(a.studentId, set);
   }
 
   const groups = new Map<string, DigestEssay[]>();
   const unassigned: DigestEssay[] = [];
 
   for (const essay of essays) {
-    const professorId = profByKey.get(`${essay.userId}|${essay.courseId}`);
+    let professorId = profByKey.get(`${essay.userId}|${essay.courseId}`);
+    if (!professorId) {
+      const profs = profsByStudent.get(essay.userId);
+      if (profs && profs.size === 1) professorId = [...profs][0];
+    }
     if (!professorId) {
       unassigned.push(essay);
       continue;
