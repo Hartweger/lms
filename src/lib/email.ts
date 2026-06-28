@@ -1129,6 +1129,44 @@ export async function sendExpiryReminder(o: {
 
 // Zamolnica aktivnom polazniku da podeli utisak (Google forma) - radi na zadržavanju + društvenom dokazu.
 const REVIEW_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdkhFGw1YN0A6fQp2xvcqrqpSGbUEmcpUHtfLRCi3PagI0Ksw/viewform";
+// Direktan link za pisanje Google recenzije (place ID iz src/app/api/reviews/route.ts).
+const GOOGLE_REVIEW_URL = "https://search.google.com/local/writereview?placeid=ChIJ179g3CAhV0cRrQOcfltnpgc";
+
+// Kratak ask za recenziju posle položenog ispita (nov sertifikat). Google link je PRVI/glavni.
+export async function sendReviewRequestRecert(o: { email: string; name: string }) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    await sendEmail(resend, {
+      bulk: true,
+      from: FROM, to: o.email, replyTo: "info@hartweger.rs",
+      subject: "Čestitamo na položenom ispitu! 🎉",
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a2e;background:#f8f9fa;margin:0;padding:0;">
+  <div style="max-width:520px;margin:0 auto;padding:40px 20px;">
+    <div style="background:white;border-radius:12px;padding:32px;box-shadow:0 1px 3px rgba(0,0,0,0.08);">
+      <div style="text-align:center;margin-bottom:24px;"><img src="https://hartweger.rs/logo.jpg" alt="Hartweger" style="width:120px;height:auto;"/></div>
+      <h1 style="font-size:20px;margin:0 0 16px;">Bravo, ${esc(o.name || "")}! 🎉</h1>
+      <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 20px;">
+        Položio/la si ispit i osvojio/la novi nivo - svaka čast na trudu! Ako ti je škola pomogla na tom putu, par reči na Google-u mnogo znači i pomaže nekom ko se još dvoumi da krene.
+      </p>
+      <div style="text-align:center;margin:24px 0;">
+        <a href="${GOOGLE_REVIEW_URL}" style="display:inline-block;background:#4fb1d3;color:white;padding:14px 32px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;">Ostavi recenziju na Google-u</a>
+      </div>
+      <p style="font-size:13px;line-height:1.6;color:#888;margin:0 0 8px;text-align:center;">
+        Više voliš par rečenica nama direktno? <a href="${REVIEW_FORM_URL}" style="color:#4fb1d3;">Popuni kratku formu</a>.
+      </p>
+      <p style="font-size:14px;color:#444;margin:16px 0 0;">Hvala ti i vidimo se na sledećem nivou! - Hartweger tim</p>
+    </div>
+    <div style="text-align:center;padding:20px;font-size:12px;color:#bbb;"><p style="margin:0;">Hartweger - Škola nemačkog jezika · hartweger.rs</p></div>
+  </div>
+</body></html>`,
+    });
+    console.log(`[email] Recenzija posle sertifikata → ${o.email}`);
+  } catch (e) {
+    console.error(`[email] sendReviewRequestRecert pao za ${o.email}:`, e);
+  }
+}
 export async function sendReviewRequest(o: { email: string; name: string }) {
   try {
     const resend = getResend();
