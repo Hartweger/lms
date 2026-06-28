@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { accessStatus, remainingSessions, shouldShowRenew } from "./account";
+import { accessStatus, remainingSessions, shouldShowRenew, isRenewable } from "./account";
 
 const NOW = new Date("2026-06-28T10:00:00Z");
 
@@ -33,5 +33,19 @@ describe("shouldShowRenew", () => {
     expect(shouldShowRenew({ state: "expired", daysLeft: -1 })).toBe(true);
     expect(shouldShowRenew({ state: "active", daysLeft: 40 })).toBe(false);
     expect(shouldShowRenew({ state: "none", daysLeft: null })).toBe(false);
+  });
+});
+
+describe("isRenewable", () => {
+  it("video kurs → obnovljiv", () => {
+    expect(isRenewable("video", "kurs-nemackog-jezika-a1-1")).toBe(true);
+    expect(isRenewable(null, "neki-kurs")).toBe(true);
+  });
+  it("mesecni ind paket → nije obnovljiv kuponom", () => {
+    expect(isRenewable("mesecni", "ind-paket-8")).toBe(false);
+  });
+  it("konverzacijski slug → nije obnovljiv kuponom", () => {
+    expect(isRenewable("grupni", "kurs-konverzacije")).toBe(false);
+    expect(isRenewable(null, "konverzacijski-b1-sadrzaj")).toBe(false);
   });
 });

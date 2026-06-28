@@ -22,3 +22,14 @@ export function remainingSessions(packageLessons: number, lessonsUsed: number): 
 export function shouldShowRenew(s: AccessStatus): boolean {
   return s.state === "expiring" || s.state === "expired";
 }
+
+// Kursevi koji NEMAJU platformsku obnovu kuponom OBNOVI50 (mora se poklapati sa
+// src/app/api/cron/expiry-reminder/route.ts). "mesecni" = ind paketi 4/8/12;
+// konverzacijski = živi grupni, obnova = upis u novi termin, ne "obnovi 50%".
+const NON_RENEWABLE_SLUGS = new Set(["kurs-konverzacije", "konverzacijski-b1-sadrzaj"]);
+
+export function isRenewable(category: string | null, slug: string): boolean {
+  if (category === "mesecni") return false;
+  if (NON_RENEWABLE_SLUGS.has(slug)) return false;
+  return true;
+}
