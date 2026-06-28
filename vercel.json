@@ -17,6 +17,10 @@
       "schedule": "0 12 * * *"
     },
     {
+      "path": "/api/cron/review-recert",
+      "schedule": "0 15 * * *"
+    },
+    {
       "path": "/api/cron/eseji-pregled",
       "schedule": "0 7 * * *"
     },
