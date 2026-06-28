@@ -1,6 +1,7 @@
 import { Resend } from "resend";
 import { SITE_URL } from "@/lib/site-url";
-import { odjavaUrl } from "@/lib/optout";
+import { odjavaUrl, listUnsubscribeHeaders } from "@/lib/optout";
+import { htmlToText } from "@/lib/html-to-text";
 
 const FROM = "Hartweger <info@hartweger.rs>";
 
@@ -15,6 +16,26 @@ function getResend() {
 /** Minimalni HTML-escape za korisnički unos u mejl telu. */
 function esc(s: string) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+/**
+ * Slanje sa automatskim plain-text delom (bolji spam skor) i, za masovne/promotivne
+ * mejlove (`bulk: true`), List-Unsubscribe header-ima. List-Unsubscribe se dodaje samo za
+ * jednog primaoca (string) - nikad za admin liste (to: [info@, natasa@]).
+ */
+async function sendEmail(
+  resend: Resend,
+  p: { to: string | string[]; subject: string; html: string; from?: string; replyTo?: string; bulk?: boolean },
+) {
+  return resend.emails.send({
+    from: p.from ?? FROM,
+    to: p.to,
+    replyTo: p.replyTo ?? "info@hartweger.rs",
+    subject: p.subject,
+    html: p.html,
+    text: htmlToText(p.html),
+    ...(p.bulk && typeof p.to === "string" ? { headers: listUnsubscribeHeaders(p.to) } : {}),
+  });
 }
 
 export async function sendWelcomeEmail(
@@ -184,7 +205,8 @@ export async function sendInactivityReminder(
   try {
     const resend = getResend();
     if (!resend) return;
-    await resend.emails.send({
+    await sendEmail(resend, {
+      bulk: true,
       from: FROM,
       to,
       replyTo: "info@hartweger.rs",
@@ -532,7 +554,8 @@ export async function sendNextLevelOffer(
     const resend = getResend();
     if (!resend) return;
     const ime = name ? name.split(" ")[0] : "";
-    await resend.emails.send({
+    await sendEmail(resend, {
+      bulk: true,
       from: FROM,
       to,
       replyTo: "info@hartweger.rs",
@@ -1009,7 +1032,8 @@ export async function sendActivationNudge(o: {
     const resend = getResend();
     if (!resend) return;
     const startUrl = o.lessonId ? `${SITE_URL}/lekcija/${o.lessonId}` : `${SITE_URL}/dashboard`;
-    await resend.emails.send({
+    await sendEmail(resend, {
+      bulk: true,
       from: FROM, to: o.email, replyTo: "info@hartweger.rs",
       subject: "Spreman/na da kreneš sa nemačkim? 🇩🇪",
       html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
@@ -1109,7 +1133,8 @@ export async function sendReviewRequest(o: { email: string; name: string }) {
   try {
     const resend = getResend();
     if (!resend) return;
-    await resend.emails.send({
+    await sendEmail(resend, {
+      bulk: true,
       from: FROM, to: o.email, replyTo: "info@hartweger.rs",
       subject: "Kako ti ide sa nemačkim? Podeli utisak 💬",
       html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
@@ -1244,7 +1269,8 @@ export async function sendTestResultEmail(
         : `<p style="margin:0;">🎬 <a href="${esc(opts.kurseviUrl)}" style="color:#4fb1d3;">Video kursevi</a> - uči svojim tempom</p>`) +
       `</div>`;
 
-    await resend.emails.send({
+    await sendEmail(resend, {
+      bulk: true,
       from: FROM,
       to,
       replyTo: "info@hartweger.rs",
@@ -1340,7 +1366,8 @@ export async function sendTestFunnelEmail(
 <p>Tvoj preporučeni nivo je <strong>${nivo}</strong> i kursevi su dostupni odmah:</p>`;
     }
 
-    await resend.emails.send({
+    await sendEmail(resend, {
+      bulk: true,
       from: FROM,
       to,
       replyTo: "info@hartweger.rs",

@@ -18,33 +18,50 @@ function page(poruka: string) {
 </body></html>`;
 }
 
+// Upis odjave - deli ga GET (link iz mejla) i POST (one-click). Vraća HTTP status.
+async function upisiOdjavu(email: string, token: string, source: string): Promise<number> {
+  if (!email || !token || token !== odjavaToken(email)) return 400;
+  const admin = createAdminClient();
+  const { error } = await admin
+    .from("email_optouts")
+    .upsert({ email, source }, { onConflict: "email", ignoreDuplicates: true });
+  if (error) {
+    console.error("[odjava] upis pao:", error);
+    return 500;
+  }
+  console.log(`[odjava] ${email} odjavljen sa funnel mejlova (${source})`);
+  return 200;
+}
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const email = (searchParams.get("e") ?? "").trim().toLowerCase();
   const token = searchParams.get("t") ?? "";
+  const status = await upisiOdjavu(email, token, "link");
 
-  if (!email || !token || token !== odjavaToken(email)) {
+  if (status === 400) {
     return new NextResponse(
       page("Link za odjavu nije ispravan. Piši nam na <a href=\"mailto:info@hartweger.rs\" style=\"color:#4fb1d3\">info@hartweger.rs</a> i odjavićemo te ručno."),
       { status: 400, headers: { "Content-Type": "text/html; charset=utf-8" } },
     );
   }
-
-  const admin = createAdminClient();
-  const { error } = await admin
-    .from("email_optouts")
-    .upsert({ email, source: "link" }, { onConflict: "email", ignoreDuplicates: true });
-  if (error) {
-    console.error("[odjava] upis pao:", error);
+  if (status === 500) {
     return new NextResponse(
       page("Nešto nije u redu na našoj strani. Piši nam na <a href=\"mailto:info@hartweger.rs\" style=\"color:#4fb1d3\">info@hartweger.rs</a> i odjavićemo te ručno."),
       { status: 500, headers: { "Content-Type": "text/html; charset=utf-8" } },
     );
   }
-
-  console.log(`[odjava] ${email} odjavljen sa funnel mejlova`);
   return new NextResponse(
     page("Odjavljen/a si - nećemo ti više slati ponude na ovaj mejl. 💙<br><br>Ako se predomisliš, dovoljno je da ponovo uradiš test znanja na sajtu."),
     { headers: { "Content-Type": "text/html; charset=utf-8" } },
   );
+}
+
+// One-Click List-Unsubscribe (RFC 8058): Gmail/Yahoo POST-uju na ovaj URL (e+t u query-ju). Bez HTML-a.
+export async function POST(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const email = (searchParams.get("e") ?? "").trim().toLowerCase();
+  const token = searchParams.get("t") ?? "";
+  const status = await upisiOdjavu(email, token, "one-click");
+  return new NextResponse(null, { status });
 }

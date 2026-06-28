@@ -12,3 +12,15 @@ export function odjavaUrl(email: string): string {
   const e = email.trim().toLowerCase();
   return `${SITE_URL}/api/odjava?e=${encodeURIComponent(e)}&t=${odjavaToken(e)}`;
 }
+
+/**
+ * List-Unsubscribe header-i za masovne/promotivne mejlove (Gmail/Yahoo to traže od 2024).
+ * One-Click (RFC 8058): Gmail POST-uje na odjavaUrl → /api/odjava POST tiho odjavi.
+ * Koristiti SAMO za jednog primaoca (string), ne za admin liste.
+ */
+export function listUnsubscribeHeaders(email: string): Record<string, string> {
+  return {
+    "List-Unsubscribe": `<${odjavaUrl(email)}>, <mailto:info@hartweger.rs?subject=Odjava>`,
+    "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+  };
+}
