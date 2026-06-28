@@ -102,6 +102,13 @@ export default function NavClient() {
                 >
                   Moji kursevi
                 </Link>
+                <Link
+                  href="/nalog"
+                  onClick={() => setAccountOpen(false)}
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                >
+                  Moj nalog
+                </Link>
                 {user.role === "admin" && (
                   <Link
                     href="/admin"
@@ -178,6 +185,9 @@ export default function NavClient() {
             <>
               <Link href="/dashboard" className="block text-gray-700" onClick={() => setMenuOpen(false)}>
                 Moji kursevi
+              </Link>
+              <Link href="/nalog" className="block text-gray-700" onClick={() => setMenuOpen(false)}>
+                Moj nalog
               </Link>
               {user.role === "admin" && (
                 <Link href="/admin" className="block text-gray-700" onClick={() => setMenuOpen(false)}>

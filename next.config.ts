@@ -22,14 +22,13 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       { source: "/korpa", destination: "/kursevi", permanent: true },
-      { source: "/moj-nalog", destination: "/dashboard", permanent: true },
+      { source: "/moj-nalog", destination: "/nalog", permanent: true },
       { source: "/prodavnica", destination: "/kursevi", permanent: true },
       { source: "/video-kursevi", destination: "/kursevi", permanent: true },
       { source: "/clanice", destination: "/kursevi", permanent: true },
       { source: "/plan-ucenja", destination: "/kursevi", permanent: true },
       { source: "/cesto-postavljena-pitanja", destination: "/faq", permanent: true },
       { source: "/opsti-uslovi-poslovanja", destination: "/uslovi", permanent: true },
-      { source: "/nalog", destination: "/dashboard", permanent: true },
       { source: "/naki-ai-asistent-nemacki", destination: "/naki", permanent: true },
       { source: "/kurs/kako-uciti-reci", destination: "/masterclass-reci", permanent: true },
 

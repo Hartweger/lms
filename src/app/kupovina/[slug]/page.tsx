@@ -27,10 +27,13 @@ export async function generateMetadata({
 
 export default async function KupovinaPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ kupon?: string }>;
 }) {
   const { slug } = await params;
+  const { kupon } = await searchParams;
   const supabase = await createClient();
   const { data: course } = await supabase
     .from("courses")
@@ -100,6 +103,7 @@ export default async function KupovinaPage({
           initialEmail={initialEmail}
           initialName={initialName}
           isLoggedIn={!!user}
+          initialCoupon={kupon ?? ""}
         />
       </div>
     </section>

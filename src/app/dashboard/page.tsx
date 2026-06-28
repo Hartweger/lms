@@ -11,6 +11,7 @@ import { HeartsIntroBanner } from "@/components/hearts/HeartsIntroBanner";
 import { progressToNext } from "@/lib/hearts/levels";
 import { getMascotState } from "@/lib/hearts/mascot";
 import { DAILY_GOAL_HEARTS } from "@/lib/hearts/config";
+import { isRenewable } from "@/lib/account";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +22,7 @@ interface CourseWithProgress extends Course {
   currentLessonId: string | null;
   currentLessonTitle: string | null;
   lastActivityAt: string | null;
+  expired?: boolean;
 }
 
 async function getCourseProgress(
@@ -110,6 +112,7 @@ export default async function Dashboard() {
   const isProfessor = profile?.role === "professor";
 
   let courseIds: string[] = [];
+  let expiredSet = new Set<string>();
 
   if (isAdmin || isProfessor) {
     // Admins and professors see all courses that actually have lessons -
@@ -120,16 +123,17 @@ export default async function Dashboard() {
       .select("course_id");
     courseIds = [...new Set((lessonRows ?? []).map((l) => l.course_id))];
   } else {
-    // Students: filter out expired access
+    // Students: zadrži i istekle (prikazuju se zatamnjeno sa „Obnovi"), označi koji su istekli
     const { data: accessList } = await supabase
       .from("course_access")
       .select("course_id, expires_at")
       .eq("user_id", user.id);
 
     const now = new Date().toISOString();
-    courseIds = (accessList ?? [])
-      .filter((a) => !a.expires_at || a.expires_at >= now)
-      .map((a) => a.course_id);
+    expiredSet = new Set(
+      (accessList ?? []).filter((a) => a.expires_at && a.expires_at < now).map((a) => a.course_id)
+    );
+    courseIds = (accessList ?? []).map((a) => a.course_id);
   }
 
   let courses: CourseWithProgress[] = [];
@@ -147,8 +151,12 @@ export default async function Dashboard() {
         )
       );
 
-      // Sort: most recently interacted first
+      // Označi istekle (zatamnjeni + „Obnovi")
+      courses.forEach((c) => { c.expired = expiredSet.has(c.id); });
+
+      // Sort: aktivni pre isteklih, pa najskorije korišćeni prvi
       courses.sort((a, b) => {
+        if (!!a.expired !== !!b.expired) return a.expired ? 1 : -1;
         if (!a.lastActivityAt && !b.lastActivityAt) return 0;
         if (!a.lastActivityAt) return 1;
         if (!b.lastActivityAt) return -1;
@@ -245,11 +253,17 @@ export default async function Dashboard() {
       {primaryCourse ? (
         <>
           {/* Primary Course Block */}
-          <div className="bg-white rounded-2xl p-6 border border-plava/30 shadow-md mb-8 sm:flex sm:items-center sm:gap-6">
+          <div className={`bg-white rounded-2xl p-6 border shadow-md mb-8 sm:flex sm:items-center sm:gap-6 ${primaryCourse.expired ? "border-gray-200 opacity-70" : "border-plava/30"}`}>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-1.5 text-xs font-bold text-koral tracking-wide mb-2">
                 <BookOpen className="w-3.5 h-3.5" strokeWidth={2.5} />
-                {allCompleted ? "PONOVI KURS" : "NASTAVI SA UČENJEM"}
+                {primaryCourse.expired
+                  ? "PRISTUP ISTEKAO"
+                  : allCompleted
+                  ? "PONOVI KURS"
+                  : primaryCourse.progress === 0
+                  ? "POČNI"
+                  : "NASTAVI SA UČENJEM"}
               </div>
               <h2 className="font-bold text-xl text-gray-900 mb-1">
                 {primaryCourse.title}
@@ -259,10 +273,16 @@ export default async function Dashboard() {
                   {primaryCourse.currentLessonTitle}
                 </p>
               )}
-              <ProgressBar progress={primaryCourse.progress} className="mb-1" />
-              <p className="text-xs text-gray-400">
-                {primaryCourse.completedLessons} od {primaryCourse.totalLessons} lekcija
-              </p>
+              {primaryCourse.expired ? (
+                <p className="text-sm text-koral-dark">Obnovi pristup da nastaviš učenje.</p>
+              ) : (
+                <>
+                  <ProgressBar progress={primaryCourse.progress} className="mb-1" />
+                  <p className="text-xs text-gray-400">
+                    {primaryCourse.completedLessons} od {primaryCourse.totalLessons} lekcija
+                  </p>
+                </>
+              )}
             </div>
 
             <div className="mt-5 sm:mt-0 sm:w-56 shrink-0 space-y-2">
@@ -282,17 +302,32 @@ export default async function Dashboard() {
                 </div>
               )}
 
-              <Link
-                href={primaryCourse.currentLessonId ? `/lekcija/${primaryCourse.currentLessonId}` : `/kurs/${primaryCourse.slug}`}
-                className="flex items-center justify-center gap-2 w-full bg-plava text-white py-3 rounded-xl font-bold text-sm hover:bg-plava-dark transition-colors"
-              >
-                {allCompleted ? (
-                  <RotateCcw className="w-4 h-4" strokeWidth={2.5} />
+              {primaryCourse.expired ? (
+                isRenewable(primaryCourse.category, primaryCourse.slug) ? (
+                  <Link
+                    href={`/kupovina/${primaryCourse.slug}?kupon=OBNOVI50`}
+                    className="flex items-center justify-center gap-2 w-full bg-koral text-white py-3 rounded-xl font-bold text-sm hover:bg-koral-dark transition-colors"
+                  >
+                    Obnovi −50%
+                  </Link>
                 ) : (
-                  <Play className="w-4 h-4 fill-current" strokeWidth={2.5} />
-                )}
-                {allCompleted ? "Ponovi" : "Nastavi"}
-              </Link>
+                  <div className="bg-gray-50 text-gray-500 text-sm rounded-xl p-3 text-center">
+                    Pristup je istekao
+                  </div>
+                )
+              ) : (
+                <Link
+                  href={primaryCourse.currentLessonId ? `/lekcija/${primaryCourse.currentLessonId}` : `/kurs/${primaryCourse.slug}`}
+                  className="flex items-center justify-center gap-2 w-full bg-plava text-white py-3 rounded-xl font-bold text-sm hover:bg-plava-dark transition-colors"
+                >
+                  {allCompleted ? (
+                    <RotateCcw className="w-4 h-4" strokeWidth={2.5} />
+                  ) : (
+                    <Play className="w-4 h-4 fill-current" strokeWidth={2.5} />
+                  )}
+                  {allCompleted ? "Ponovi" : primaryCourse.progress === 0 ? "Počni prvi čas" : "Nastavi"}
+                </Link>
+              )}
             </div>
           </div>
 
@@ -303,32 +338,46 @@ export default async function Dashboard() {
                 OSTALI KURSEVI
               </p>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {secondaryCourses.map((course) => (
+                {secondaryCourses.map((course) => {
+                  const renewExpired = course.expired && isRenewable(course.category, course.slug);
+                  const href = course.expired
+                    ? (renewExpired ? `/kupovina/${course.slug}?kupon=OBNOVI50` : `/kurs/${course.slug}`)
+                    : (course.currentLessonId ? `/lekcija/${course.currentLessonId}` : `/kurs/${course.slug}`);
+                  return (
                   <Link
                     key={course.id}
-                    href={course.currentLessonId ? `/lekcija/${course.currentLessonId}` : `/kurs/${course.slug}`}
-                    className="flex flex-col bg-white rounded-2xl p-4 border border-gray-100 hover:shadow-md hover:border-plava/30 transition-all"
+                    href={href}
+                    className={`flex flex-col bg-white rounded-2xl p-4 border border-gray-100 hover:shadow-md hover:border-plava/30 transition-all ${course.expired ? "opacity-60" : ""}`}
                   >
                     <h3 className="font-bold text-sm text-gray-900">
                       {course.title}
                     </h3>
-                    <p className="text-xs text-gray-400 mt-0.5 mb-3">
-                      {course.completedLessons} od {course.totalLessons} lekcija
-                    </p>
-                    <ProgressBar progress={course.progress} className="mb-3" />
-                    {course.progress === 100 && certifiedCourseIds.has(course.id) ? (
+                    {!course.expired && (
+                      <>
+                        <p className="text-xs text-gray-400 mt-0.5 mb-3">
+                          {course.completedLessons} od {course.totalLessons} lekcija
+                        </p>
+                        <ProgressBar progress={course.progress} className="mb-3" />
+                      </>
+                    )}
+                    {course.expired ? (
+                      <span className="mt-auto inline-flex items-center gap-1 self-start text-xs font-semibold text-koral-dark bg-koral-light px-3 py-1.5 rounded-lg">
+                        {renewExpired ? "Pristup istekao · Obnovi −50%" : "Pristup je istekao"}
+                      </span>
+                    ) : course.progress === 100 && certifiedCourseIds.has(course.id) ? (
                       <span className="mt-auto inline-flex items-center gap-1 self-start text-xs font-semibold text-green-700 bg-green-50 px-3 py-1.5 rounded-lg">
                         <Award className="w-3.5 h-3.5" strokeWidth={2.5} />
                         Sertifikat
                       </span>
                     ) : (
                       <span className="mt-auto inline-flex items-center gap-1 self-start text-xs font-semibold text-plava bg-plava-light px-3 py-1.5 rounded-lg">
-                        Nastavi
+                        {course.progress === 0 ? "Počni" : "Nastavi"}
                         <ArrowRight className="w-3.5 h-3.5" strokeWidth={2.5} />
                       </span>
                     )}
                   </Link>
-                ))}
+                  );
+                })}
               </div>
             </div>
           )}

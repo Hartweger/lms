@@ -19,6 +19,8 @@ interface Props {
   initialName?: string;
   isLoggedIn?: boolean;
   lang?: "sr" | "en";
+  /** Kupon iz URL-a (npr. OBNOVI50 sa „Obnovi" dugmeta) - pre-popuni i auto-primeni. */
+  initialCoupon?: string;
 }
 
 const COUNTRIES = [
@@ -48,7 +50,7 @@ function formatPrice(price: number): string {
   return price.toLocaleString("de-DE");
 }
 
-export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, variants = [], includedLessons = null, initialEmail = "", initialName = "", isLoggedIn = false, lang = "sr" }: Props) {
+export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, variants = [], includedLessons = null, initialEmail = "", initialName = "", isLoggedIn = false, lang = "sr", initialCoupon = "" }: Props) {
   const router = useRouter();
   void includedLessons;
 
@@ -95,13 +97,24 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  async function validateCoupon() {
-    if (!couponCode.trim()) return;
+  // Auto-primena kupona iz URL-a (npr. OBNOVI50 sa „Obnovi" dugmeta): pre-popuni,
+  // otvori sekciju i primeni jednom na mount (samo ako imamo mejl za proveru).
+  useEffect(() => {
+    if (!initialCoupon) return;
+    setShowCoupon(true);
+    setCouponCode(initialCoupon);
+    if (initialEmail.trim()) validateCoupon(initialCoupon);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  async function validateCoupon(codeArg?: string) {
+    const code = (codeArg ?? couponCode).trim();
+    if (!code) return;
     setCouponLoading(true);
     setCouponError(null);
     try {
       const res = await fetch(
-        `/api/coupons/validate?code=${encodeURIComponent(couponCode.trim())}` +
+        `/api/coupons/validate?code=${encodeURIComponent(code)}` +
         `&courseSlug=${encodeURIComponent(courseSlug)}&email=${encodeURIComponent(email.trim())}` +
         `&packageType=${encodeURIComponent(isIndividual ? (packageType ?? "") : "")}`
       );
@@ -256,7 +269,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
               />
               <button
                 type="button"
-                onClick={validateCoupon}
+                onClick={() => validateCoupon()}
                 disabled={couponLoading || !couponCode.trim()}
                 className="bg-[#0AB3D7] hover:bg-[#089bbf] disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-sm px-4 py-2.5 rounded-lg transition-colors flex-shrink-0"
               >
