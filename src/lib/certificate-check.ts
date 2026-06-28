@@ -10,14 +10,25 @@ import { sendCourseCompletedEmail } from "@/lib/email";
  */
 const NIL = "00000000-0000-0000-0000-000000000000";
 
+/**
+ * Da li je lekcija ZAVRŠNI ispit (Modelltest) - jedini kontekst u kom se sme izdati
+ * sertifikat za ceo kurs. Mora se poklapati sa regexom u lekcija stranici (isExamLesson).
+ * Bez ove provere, ocena bilo kog Schreiben eseja u običnoj lekciji je izdavala sertifikat.
+ */
+export function isExamLessonTitle(title: string | null | undefined): boolean {
+  return /Modelltest|Završni ispit/.test(title || "");
+}
+
 export async function checkAndIssueCertificate(
   admin: SupabaseClient,
   userId: string,
   lessonId: string,
   courseId: string,
 ): Promise<{ eligible: boolean; percent?: number; certificateId?: string; reason?: string }> {
-  const { data: lesson } = await admin.from("lessons").select("id, course_id").eq("id", lessonId).single();
+  const { data: lesson } = await admin.from("lessons").select("id, course_id, title").eq("id", lessonId).single();
   if (!lesson || lesson.course_id !== courseId) return { eligible: false, reason: "mismatch" };
+  // Sertifikat se izdaje ISKLJUČIVO za završni ispit (Modelltest), nikad za običnu lekciju.
+  if (!isExamLessonTitle(lesson.title)) return { eligible: false, reason: "not-exam-lesson" };
 
   const { data: exercises } = await admin.from("exercises").select("id, exercise_type").eq("lesson_id", lessonId);
   if (!exercises || exercises.length === 0) return { eligible: false, percent: 0 };

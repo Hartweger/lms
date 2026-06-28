@@ -7,6 +7,7 @@ import LessonCompleteButton from "@/components/LessonCompleteButton";
 import { exerciseKindBadge } from "@/lib/exercise-kind";
 import { getFixedTranslations } from "@/lib/fixed-translations";
 import { getFixedWriting } from "@/lib/fixed-writing";
+import { isExamLessonTitle } from "@/lib/certificate-check";
 import type { Lesson, Exercise, ExerciseQuestion } from "@/lib/types";
 
 interface PageProps {
@@ -140,7 +141,7 @@ export default async function LekcijaStranica({ params }: PageProps) {
   const willCompleteLevel = !lessonCompleted && completedCount === totalLessons - 1;
 
   // Završni ispit (Modelltest): nije obična lekcija - bez „Završi lekciju", sa sertifikatom.
-  const isExamLesson = /Modelltest|Završni ispit/.test(typedLesson.title || "");
+  const isExamLesson = isExamLessonTitle(typedLesson.title);
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-4">
