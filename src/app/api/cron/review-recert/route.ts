@@ -1,18 +1,16 @@
 // src/app/api/cron/review-recert/route.ts
 // Ponovni ask za recenziju posle NOVOG sertifikata (položen ispit). Google link je prvi.
-// Pravila: okidač = sertifikat izdat u zadnja 3 dana; min 60 dana od prošlog ask-a;
-// preskoči ko je popunio formu u zadnjih 90 dana (spajanje po imenu, opcija B).
+// Pravila: okidač = sertifikat izdat u zadnja 3 dana; min 60 dana od prošlog ask-a.
+// (Namerno BEZ "skip ako je popunio formu" - obim je mali, 60-dnevni razmak je dovoljan.)
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendReviewRequestRecert } from "@/lib/email";
-import { nameKey, respondedRecently } from "@/lib/review-match";
 
 export const dynamic = "force-dynamic";
 
 const MAX_PER_RUN = 20;
-const CERT_WINDOW_DAYS = 3;     // koliko unazad gledamo nove sertifikate
-const MIN_GAP_DAYS = 60;        // min razmak od prošlog ask-a istom čoveku
-const RESPONSE_WINDOW_DAYS = 90; // "skoro popunio formu" = preskoči
+const CERT_WINDOW_DAYS = 3;  // koliko unazad gledamo nove sertifikate
+const MIN_GAP_DAYS = 60;     // min razmak od prošlog ask-a istom čoveku
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -56,21 +54,8 @@ export async function GET(request: Request) {
   }
   const gapCutoff = now - MIN_GAP_DAYS * 86400000;
 
-  // 4) Skorašnji ispunjivači forme (spajanje po imenu)
-  const respCutoff = new Date(now - RESPONSE_WINDOW_DAYS * 86400000).toISOString();
-  const { data: responses } = await admin
-    .from("review_responses")
-    .select("full_name")
-    .gte("responded_at", respCutoff);
-  const respondedKeys = new Set((responses ?? []).map((r) => nameKey(r.full_name as string)));
-
-  // 5) Filtriraj: nije pitan u zadnjih 60 dana I nije skoro popunio formu
-  const toSend = eligibleProfiles.filter((p) => {
-    const last = lastAsk.get(p.id as string) ?? 0;
-    if (last >= gapCutoff) return false;
-    if (respondedRecently(p.full_name as string, respondedKeys)) return false;
-    return true;
-  });
+  // 4) Filtriraj: nije pitan u zadnjih 60 dana
+  const toSend = eligibleProfiles.filter((p) => (lastAsk.get(p.id as string) ?? 0) < gapCutoff);
 
   if (dryRun) {
     return NextResponse.json({
