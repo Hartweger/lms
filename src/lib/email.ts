@@ -1129,8 +1129,8 @@ export async function sendExpiryReminder(o: {
 
 // Zamolnica aktivnom polazniku da podeli utisak (Google forma) - radi na zadržavanju + društvenom dokazu.
 const REVIEW_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdkhFGw1YN0A6fQp2xvcqrqpSGbUEmcpUHtfLRCi3PagI0Ksw/viewform";
-// Direktan link za pisanje Google recenzije (place ID iz src/app/api/reviews/route.ts).
-const GOOGLE_REVIEW_URL = "https://search.google.com/local/writereview?placeid=ChIJ179g3CAhV0cRrQOcfltnpgc";
+// Zvanični Google Business review link (isti koji stoji na kraju forme utisaka).
+const GOOGLE_REVIEW_URL = "https://g.page/r/Ca0DnH5bZ6YHEB0/review";
 
 // Kratak ask za recenziju posle položenog ispita (nov sertifikat). Google link je PRVI/glavni.
 export async function sendReviewRequestRecert(o: { email: string; name: string }) {
