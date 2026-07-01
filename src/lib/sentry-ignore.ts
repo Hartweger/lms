@@ -27,6 +27,14 @@
 // promise se diže do našeg globalnog onunhandledrejection pa Sentry to pripiše
 // nama. Nije naš kod (ne koristimo runtime.sendMessage nigde), benigno, zavisi
 // od korisnikove ekstenzije. Filtriramo da ne troši kvotu/šum.
+//
+// SEO/structured-data ekstenzije (uglavnom Safari) skeniraju JSON-LD na
+// stranici i nad svakim objektom zovu nesto kao obj["@context"].toLowerCase().
+// Kad naletu na objekat bez "@context" -> "undefined is not an object
+// (evaluating 'r["@context"].toLowerCase')". Nas kod samo PISE @context u
+// schema.org blokove (layout.tsx), nikad ga ne cita; greska se digne do naseg
+// globalnog onerror pa je Sentry pripise nama. Promenljiva 'r' je minifikovana
+// (menja se po buildu) pa hvatamo stabilan deo: ["@context"].toLowerCase.
 export const SENTRY_IGNORE_ERRORS: (string | RegExp)[] = [
   /was released because another request stole it/,
   /Acquiring an exclusive Navigator LockManager lock/,
@@ -35,4 +43,5 @@ export const SENTRY_IGNORE_ERRORS: (string | RegExp)[] = [
   /enableButtonsClickedMetaDataLogging/,
   /window\.webkit\.messageHandlers/,
   /runtime\.sendMessage/,
+  /\["@context"\]\.toLowerCase/,
 ];

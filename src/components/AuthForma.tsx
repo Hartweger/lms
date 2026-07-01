@@ -20,6 +20,9 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
   const [magicLoading, setMagicLoading] = useState(false);
   const [magicLinkSent, setMagicLinkSent] = useState(false);
   const [noAccount, setNoAccount] = useState(false);
+  const [code, setCode] = useState("");
+  const [codeLoading, setCodeLoading] = useState(false);
+  const [codeError, setCodeError] = useState<string | null>(null);
 
   const handleGoogle = async () => {
     setGoogleLoading(true);
@@ -65,6 +68,29 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
     setMagicLoading(false);
   };
 
+  const handleVerifyCode = async () => {
+    const cistKod = code.trim();
+    if (cistKod.length < 6) {
+      setCodeError("Unesi 6-cifreni kod iz mejla.");
+      return;
+    }
+    setCodeError(null);
+    setCodeLoading(true);
+    const supabase = createClient();
+    const { error } = await supabase.auth.verifyOtp({
+      email: email.trim(),
+      token: cistKod,
+      type: "email",
+    });
+    setCodeLoading(false);
+    if (error) {
+      Sentry.captureException(error);
+      setCodeError("Kod nije ispravan ili je istekao. Proveri mejl ili pošalji novi link.");
+      return;
+    }
+    window.location.href = "/dashboard";
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setGreska(null);
@@ -84,13 +110,48 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
 
   if (magicLinkSent) {
     return (
-      <div className="w-full max-w-sm space-y-3">
-        <div role="alert" className="bg-green-50 text-green-800 px-4 py-3 rounded-lg text-sm">
-          Link za prijavu je poslat na <strong>{email}</strong>. Proveri inbox (i spam folder).
+      <div className="w-full max-w-sm space-y-4">
+        <div role="alert" className="bg-green-50 text-green-800 px-4 py-3 rounded-lg text-sm text-left">
+          Poslali smo mejl na <strong>{email}</strong>. Proveri inbox (i spam folder).
+          <br />
+          Klikni na dugme <strong>Prijavi se</strong> u mejlu — i tu si.
         </div>
+
+        <div className="border-t border-gray-200 pt-4 text-left">
+          <p className="text-sm text-gray-600 mb-2">
+            Link ti se otvara u pogrešnoj aplikaciji? U mejlu imaš i <strong>6-cifreni kod</strong> — ukucaj ga ovde:
+          </p>
+          <input
+            type="text"
+            inputMode="numeric"
+            autoComplete="one-time-code"
+            value={code}
+            onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+            placeholder="123456"
+            className="w-full px-4 py-3 border border-gray-200 rounded-lg text-center text-2xl tracking-[0.4em] focus:outline-none focus:ring-2 focus:ring-plava focus:border-transparent"
+          />
+          {codeError && (
+            <div role="alert" className="mt-2 bg-koral-light text-koral-dark px-4 py-2 rounded-lg text-sm">
+              {codeError}
+            </div>
+          )}
+          <button
+            type="button"
+            onClick={handleVerifyCode}
+            disabled={codeLoading}
+            className="mt-3 w-full bg-plava text-white py-3 rounded-lg font-medium hover:bg-plava-dark transition-colors disabled:opacity-50"
+          >
+            {codeLoading ? "Proveravam..." : "Prijavi se kodom"}
+          </button>
+        </div>
+
         <button
           type="button"
-          onClick={() => setMagicLinkSent(false)}
+          onClick={() => {
+            setMagicLinkSent(false);
+            setCode("");
+            setCodeError(null);
+          }}
           className="w-full text-sm text-plava hover:underline"
         >
           Pogrešan mejl? Pošalji ponovo

@@ -2,6 +2,7 @@ import { Resend } from "resend";
 import { SITE_URL } from "@/lib/site-url";
 import { odjavaUrl, listUnsubscribeHeaders } from "@/lib/optout";
 import { htmlToText } from "@/lib/html-to-text";
+import type { Ga4Weekly } from "@/lib/ga4-report";
 
 const FROM = "Hartweger <info@hartweger.rs>";
 
@@ -1708,5 +1709,186 @@ export async function sendNatasaProfPodsetnikZbirni(opts: {
     console.log(`[email] prof-podsetnik zbirni → Nataša (${ukupno} ukupno)`);
   } catch (e) {
     console.error("[email] sendNatasaProfPodsetnikZbirni pao:", e);
+  }
+}
+
+// ---- Nedeljni poslovni izveštaj (ponedeljkom, adminu) ----
+// Živi podaci iz Supabase. Zamena za stari marketinški Apps Script koji je čitao iz
+// ručno ažuriranog Google Sheet-a. Šalje cron /api/cron/business-summary.
+export type WeeklySummary = {
+  odDatum: string;
+  doDatum: string;
+  prihod: {
+    iznos: number;
+    broj: number;
+    prosleIznos: number;
+    prosleBroj: number;
+    poMetodu: { metod: string; broj: number; iznos: number }[];
+  };
+  aktivacija: {
+    noviPristup: number; // novi pristupi (course_access) ove nedelje
+    odNjihKrenulo: number; // koliko njih je otvorilo bar 1 lekciju
+    zaglavljeni30: number; // pristup u posl. 30 dana, nikad nijedna lekcija
+  };
+  upisi: { nivo: string; tip: string; broj: number }[];
+  upisiUkupno: number;
+  istek: {
+    brojNarednih15: number;
+    obnovi50OveNedelje: number;
+    stavke: { ime: string; kurs: string; datum: string }[];
+  };
+  declined: {
+    broj: number;
+    stavke: { ime: string; iznos: number; datum: string }[];
+  };
+  ga4?: Ga4Weekly | null; // saobraćaj iz GA4; izostaje ako kredencijali nisu postavljeni
+};
+
+export async function sendWeeklyBusinessSummary(s: WeeklySummary) {
+  const resend = getResend();
+  if (!resend) return;
+
+  const num = (n: number) => new Intl.NumberFormat("sr-RS").format(n);
+  const rsd = (n: number) => `${new Intl.NumberFormat("sr-RS").format(Math.round(n))} RSD`;
+
+  const deltaBadge = (now: number, prev: number) => {
+    if (prev === 0) return now > 0 ? `<span style="color:#16a34a;">▲ novo</span>` : `<span style="color:#999;">—</span>`;
+    const pct = Math.round(((now - prev) / prev) * 100);
+    if (pct > 0) return `<span style="color:#16a34a;">▲ +${pct}%</span>`;
+    if (pct < 0) return `<span style="color:#dc2626;">▼ ${pct}%</span>`;
+    return `<span style="color:#999;">— 0%</span>`;
+  };
+
+  const card = (title: string, inner: string) => `
+    <div style="background:white;border-radius:12px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,0.08);margin-bottom:16px;">
+      <h2 style="font-size:15px;margin:0 0 14px;color:#4fb1d3;text-transform:uppercase;letter-spacing:.04em;">${title}</h2>
+      ${inner}
+    </div>`;
+
+  const row = (label: string, value: string) =>
+    `<tr><td style="padding:6px 0;color:#555;font-size:14px;">${label}</td><td style="padding:6px 0;text-align:right;font-weight:600;font-size:14px;">${value}</td></tr>`;
+
+  // 1) Prihod
+  const metodRedovi =
+    s.prihod.poMetodu.length === 0
+      ? `<tr><td style="padding:6px 0;color:#999;font-size:13px;" colspan="2">Nema naplaćenih porudžbina.</td></tr>`
+      : s.prihod.poMetodu
+          .map((m) => row(`${esc(m.metod)} <span style="color:#999;">(${m.broj})</span>`, rsd(m.iznos)))
+          .join("");
+  const prihodCard = card(
+    "💰 Prihod ove nedelje",
+    `<table style="width:100%;border-collapse:collapse;">
+      ${row("Naplaćeno ukupno", `${rsd(s.prihod.iznos)} &nbsp; ${deltaBadge(s.prihod.iznos, s.prihod.prosleIznos)}`)}
+      ${row("Broj porudžbina", `${num(s.prihod.broj)} &nbsp; ${deltaBadge(s.prihod.broj, s.prihod.prosleBroj)}`)}
+      <tr><td colspan="2" style="padding:8px 0 4px;color:#999;font-size:12px;border-top:1px solid #eee;">Po načinu plaćanja</td></tr>
+      ${metodRedovi}
+    </table>`
+  );
+
+  // 2) Aktivacija
+  const aktProcenat =
+    s.aktivacija.noviPristup > 0
+      ? Math.round((s.aktivacija.odNjihKrenulo / s.aktivacija.noviPristup) * 100)
+      : 0;
+  const zaglavBoja = s.aktivacija.zaglavljeni30 > 0 ? "#dc2626" : "#16a34a";
+  const aktivacijaCard = card(
+    "🚀 Aktivacija (tvoj #1 problem)",
+    `<table style="width:100%;border-collapse:collapse;">
+      ${row("Novi pristupi ove nedelje", num(s.aktivacija.noviPristup))}
+      ${row("Od njih krenulo (≥1 lekcija)", `${num(s.aktivacija.odNjihKrenulo)} (${aktProcenat}%)`)}
+      ${row(`<span style="color:${zaglavBoja};">Zaglavljeni — pristup 30 dana, 0 lekcija</span>`, `<span style="color:${zaglavBoja};font-weight:700;">${num(s.aktivacija.zaglavljeni30)}</span>`)}
+    </table>`
+  );
+
+  // 3) Upisi po nivou/tipu
+  const upisRedovi =
+    s.upisi.length === 0
+      ? `<tr><td style="padding:6px 0;color:#999;font-size:13px;" colspan="2">Nema novih upisa.</td></tr>`
+      : s.upisi
+          .map((u) => row(`${esc(u.nivo)} <span style="color:#999;">· ${esc(u.tip)}</span>`, num(u.broj)))
+          .join("");
+  const upisiCard = card(
+    `📚 Novi upisi ove nedelje (${num(s.upisiUkupno)})`,
+    `<table style="width:100%;border-collapse:collapse;">${upisRedovi}</table>`
+  );
+
+  // 4) Istek & obnove
+  const istekStavke =
+    s.istek.stavke.length === 0
+      ? ""
+      : `<tr><td colspan="2" style="padding:8px 0 4px;color:#999;font-size:12px;border-top:1px solid #eee;">Ističe uskoro</td></tr>` +
+        s.istek.stavke
+          .map((x) => row(`${esc(x.ime)} <span style="color:#999;">· ${esc(x.kurs)}</span>`, esc(x.datum)))
+          .join("");
+  const istekCard = card(
+    "⏳ Istek pristupa & obnove",
+    `<table style="width:100%;border-collapse:collapse;">
+      ${row("Ističe narednih 15 dana", num(s.istek.brojNarednih15))}
+      ${row("OBNOVI50 iskorišćen ove nedelje", num(s.istek.obnovi50OveNedelje))}
+      ${istekStavke}
+    </table>`
+  );
+
+  // 5) Declined kartice
+  const declinedStavke =
+    s.declined.stavke.length === 0
+      ? `<tr><td style="padding:6px 0;color:#16a34a;font-size:13px;" colspan="2">Nijedna kartica nije odbijena. 🎉</td></tr>`
+      : s.declined.stavke
+          .map((x) => row(`${esc(x.ime)} <span style="color:#999;">· ${esc(x.datum)}</span>`, rsd(x.iznos)))
+          .join("");
+  const declinedCard = card(
+    `💳 Odbijene kartice (${num(s.declined.broj)})`,
+    `<table style="width:100%;border-collapse:collapse;">${declinedStavke}</table>`
+  );
+
+  // 6) Saobraćaj (GA4) — samo ako ima podataka
+  let ga4Card = "";
+  if (s.ga4) {
+    const g = s.ga4;
+    const izvoriRedovi =
+      g.izvori.length === 0
+        ? ""
+        : `<tr><td colspan="2" style="padding:8px 0 4px;color:#999;font-size:12px;border-top:1px solid #eee;">Top izvori (po konverzijama)</td></tr>` +
+          g.izvori
+            .map((i) =>
+              row(`${esc(i.izvor)} <span style="color:#999;">· ${num(i.sesije)} sesija</span>`, `${num(i.konverzije)} konv.`)
+            )
+            .join("");
+    ga4Card = card(
+      "📈 Saobraćaj (GA4)",
+      `<table style="width:100%;border-collapse:collapse;">
+        ${row("Sesije", `${num(g.sesije)} &nbsp; ${deltaBadge(g.sesije, g.prosleSesije)}`)}
+        ${row("Korisnici", `${num(g.korisnici)} &nbsp; ${deltaBadge(g.korisnici, g.prosleKorisnici)}`)}
+        ${row("Pregledi stranica", `${num(g.pregledi)} &nbsp; ${deltaBadge(g.pregledi, g.proslePregledi)}`)}
+        ${row("Konverzije", `${num(g.konverzije)} &nbsp; ${deltaBadge(g.konverzije, g.prosleKonverzije)}`)}
+        ${izvoriRedovi}
+      </table>`
+    );
+  }
+
+  const html = `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a2e;background:#f8f9fa;margin:0;padding:0;">
+  <div style="max-width:560px;margin:0 auto;padding:32px 16px;">
+    <h1 style="font-size:20px;margin:0 0 4px;color:#1a1a2e;">📊 Nedeljni izveštaj — Hartweger</h1>
+    <p style="margin:0 0 20px;color:#888;font-size:13px;">${s.odDatum} – ${s.doDatum} · uživo iz baze</p>
+    ${prihodCard}
+    ${aktivacijaCard}
+    ${upisiCard}
+    ${istekCard}
+    ${declinedCard}
+    ${ga4Card}
+    <p style="text-align:center;font-size:12px;color:#bbb;margin-top:8px;">Automatski izveštaj · ponedeljkom · Hartweger tim</p>
+  </div>
+</body></html>`;
+
+  try {
+    await sendEmail(resend, {
+      to: "info@hartweger.rs",
+      subject: `📊 Nedeljni izveštaj — Hartweger (${s.doDatum})`,
+      html,
+    });
+    console.log("[email] nedeljni poslovni izveštaj poslat");
+  } catch (e) {
+    console.error("[email] sendWeeklyBusinessSummary pao:", e);
   }
 }

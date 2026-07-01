@@ -17,6 +17,11 @@
         Link vredi 1 sat i može da se iskoristi samo jednom. Ovo je naš bezbedni sistem za prijavu. Ako dugme ne radi, kopiraj ovaj link u browser:
       </p>
       <p style="font-size:12px;line-height:1.5;color:#4fb1d3;word-break:break-all;margin:0 0 20px;">{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=magiclink&next=/dashboard</p>
+      <div style="border-top:1px solid #eee;margin:20px 0;padding-top:20px;">
+        <p style="font-size:13px;line-height:1.6;color:#888;margin:0 0 10px;">Telefon ti otvara link u pogrešnoj aplikaciji? Vrati se na stranicu za prijavu i ukucaj ovaj kod:</p>
+        <div style="text-align:center;"><span style="display:inline-block;font-size:30px;font-weight:800;letter-spacing:8px;color:#1a1a2e;background:#f1f7fb;border-radius:10px;padding:14px 24px;">{{ .Token }}</span></div>
+        <p style="font-size:12px;line-height:1.5;color:#aaa;text-align:center;margin:10px 0 0;">Kod vredi 1 sat.</p>
+      </div>
       <p style="font-size:14px;line-height:1.6;color:#444;margin:0 0 8px;">Ako nisi ti tražio/la prijavu, slobodno zanemari ovaj mejl — niko ne može da uđe bez ovog linka.</p>
       <p style="font-size:14px;color:#444;margin:0;">— Hartweger tim</p>
     </div>

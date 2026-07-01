@@ -62,6 +62,29 @@ export default function AdminStudentDetalji() {
   // Confirm delete
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
+  // „Uđi kao đak" (impersonation link)
+  const [impUrl, setImpUrl] = useState<string | null>(null);
+  const [impLoading, setImpLoading] = useState(false);
+  const [impCopied, setImpCopied] = useState(false);
+
+  async function handleImpersonate() {
+    setImpLoading(true);
+    setImpCopied(false);
+    setImpUrl(null);
+    try {
+      const res = await fetch(`/api/admin/studenti/${params.id}/impersonate`, {
+        method: "POST",
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Greška");
+      setImpUrl(data.url);
+    } catch (e) {
+      alert(e instanceof Error ? e.message : "Neuspelo generisanje linka");
+    } finally {
+      setImpLoading(false);
+    }
+  }
+
   useEffect(() => {
     const load = async () => {
       const res = await fetch(`/api/admin/studenti/${params.id}`);
@@ -194,13 +217,50 @@ export default function AdminStudentDetalji() {
             Poslednja prijava: {lastSignIn ? new Date(lastSignIn).toLocaleDateString("sr-RS") : "nikad"}
           </p>
         </div>
-        <Link
-          href={`/admin/studenti/${params.id}/pregled`}
-          className="text-sm bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors shrink-0"
-        >
-          Pogledaj kao student
-        </Link>
+        <div className="flex gap-2 shrink-0">
+          <Link
+            href={`/admin/studenti/${params.id}/pregled`}
+            className="text-sm bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors"
+          >
+            Pogledaj kao student
+          </Link>
+          <button
+            onClick={handleImpersonate}
+            disabled={impLoading}
+            className="text-sm bg-plava text-white px-4 py-2 rounded-lg hover:bg-plava-dark transition-colors disabled:opacity-50"
+          >
+            {impLoading ? "Pravim link…" : "Uđi kao đak"}
+          </button>
+        </div>
       </div>
+
+      {impUrl && (
+        <div className="bg-plava-light border border-plava rounded-xl p-4 mb-8">
+          <p className="text-sm font-semibold text-gray-900 mb-1">
+            Otvori ovaj link u <strong>anonimnom (incognito) prozoru</strong> da uđeš kao ovaj đak:
+          </p>
+          <p className="text-xs text-gray-500 mb-3">
+            Link je jednokratan i ističe za ~1 sat. Tvoj admin nalog u ovom prozoru ostaje netaknut.
+          </p>
+          <div className="flex gap-2 items-center">
+            <input
+              readOnly
+              value={impUrl}
+              onFocus={(e) => e.currentTarget.select()}
+              className="flex-1 text-xs bg-white border border-gray-200 rounded-lg px-3 py-2 font-mono text-gray-700"
+            />
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(impUrl);
+                setImpCopied(true);
+              }}
+              className="text-sm bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors shrink-0"
+            >
+              {impCopied ? "Kopirano ✓" : "Kopiraj"}
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Uplate */}
       <div className="bg-white rounded-xl shadow-sm p-6 mb-8">

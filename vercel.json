@@ -67,6 +67,10 @@
     {
       "path": "/api/cron/prof-podsetnik",
       "schedule": "0 7 * * 1"
+    },
+    {
+      "path": "/api/cron/business-summary",
+      "schedule": "30 6 * * 1"
     }
   ]
 }
