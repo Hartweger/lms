@@ -696,13 +696,26 @@ ${notesRow}
 export async function sendHonorarProfEmail(
   profEmail: string,
   profIme: string,
-  opts: { label: string; ind: number; grp: number; rateInd: number; rateGrp: number; indTotal: number; grpTotal: number; total: number; balance?: number },
+  opts: {
+    label: string; ind: number; grp: number; rateInd: number; rateGrp: number;
+    indTotal: number; grpTotal: number; total: number; balance?: number;
+    aktivnosti?: { description: string; amount: number }[];
+    isplate?: { date: string; amount: number }[];
+  },
 ) {
   try {
     const resend = getResend();
     if (!resend) return;
     const ime = profIme ? profIme.split(" ")[0] : "";
     const fmt = (n: number) => n.toLocaleString("de-DE");
+    const aktRows = (opts.aktivnosti ?? [])
+      .map((a) => `<li>${esc(a.description || "Dodatna aktivnost")}: <strong>${fmt(a.amount)} din</strong></li>`)
+      .join("");
+    const isplate = opts.isplate ?? [];
+    const isplaceno = isplate.reduce((s, x) => s + x.amount, 0);
+    const isplateBlock = isplate.length > 0
+      ? `<p>Isplaćeno ti je u ovom mesecu <strong>${fmt(isplaceno)} din</strong> (${isplate.map((x) => `${fmt(x.amount)} din ${esc(x.date)}`).join(", ")}).</p>`
+      : "";
     await resend.emails.send({
       from: FROM,
       to: profEmail,
@@ -715,8 +728,10 @@ export async function sendHonorarProfEmail(
 <ul>
 <li>Individualni časovi: ${opts.ind} × ${fmt(opts.rateInd)} din = <strong>${fmt(opts.indTotal)} din</strong></li>
 <li>Grupne sesije: ${opts.grp} × ${fmt(opts.rateGrp)} din = <strong>${fmt(opts.grpTotal)} din</strong></li>
+${aktRows}
 </ul>
 <p style="font-size:18px"><strong>Ukupno: ${fmt(opts.total)} din</strong></p>
+${isplateBlock}
 ${typeof opts.balance === "number" ? `<p style="font-size:13px;color:#666">Trenutni saldo (zarađeno - isplaćeno): <strong>${fmt(opts.balance)} din</strong>.</p>` : ""}
 <p style="font-size:13px;color:#666">Ako nešto ne štima, javi nam na info@hartweger.rs.</p>
 <p style="margin-top:20px">Hartweger tim</p>
