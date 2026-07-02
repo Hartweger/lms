@@ -219,8 +219,10 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
     // Direktan login-link do prve lekcije - kupac iz mejla ulazi bez /prijava zida.
     // Best-effort: ako izračunavanje padne, mejl ide sa starim /prijava CTA.
     let startUrl: string | undefined;
+    let hasLesson = false;
     try {
       const fl = await firstLessonForCourses(admin, [...contentCourseIds]);
+      hasLesson = !!fl;
       const token = createLoginLinkToken({
         email: order.email,
         next: fl ? `/lekcija/${fl.id}` : "/dashboard",
@@ -229,7 +231,7 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
     } catch (e) {
       console.error(`[grant] login-link za welcome pao (order ${orderId}):`, e);
     }
-    await sendWelcomeEmail(order.email, order.full_name, items.map((i) => i.title), { startUrl });
+    await sendWelcomeEmail(order.email, order.full_name, items.map((i) => i.title), { startUrl, hasLesson });
   }
   return { ok: true };
 }

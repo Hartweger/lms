@@ -51,10 +51,13 @@ export default async function HvalaPage({
 
   // Posle kartičnog auto-logina kupac stiže ULOGOVAN - CTA vodi pravo u prvu lekciju
   // umesto na /prijava. Stranica ostaje landing zbog browser Pixel Purchase (dedup sa CAPI).
+  // firstLessonId=null i za KTZ/mesečne BEZ platforme - tada ni poruka ni CTA ne smeju
+  // da obećavaju lekcije (detalji o časovima idu mejlom, individualni welcome tok).
   const supabaseUser = await createClient();
   const { data: { user } } = await supabaseUser.auth.getUser();
+  const cardOk = isCard && status === "ok";
   let firstLessonId: string | null = null;
-  if (user && isCard && status === "ok") {
+  if (cardOk) {
     firstLessonId = (await firstLessonForOrder(supabase, items ?? []))?.id ?? null;
   }
 
@@ -98,7 +101,13 @@ export default async function HvalaPage({
         {isCard && status === "ok" && (
           <div className="bg-green-50 border border-green-200 rounded-xl px-5 py-4 mb-6 text-sm text-green-800">
             <p className="font-semibold">Plaćanje uspešno! 🎉</p>
-            <p className="mt-1">{user ? "Pristup kursu je aktiviran i već si prijavljen/a - kreni odmah." : "Pristup kursu je aktiviran. Poslali smo ti email - prijavi se i počni."}</p>
+            <p className="mt-1">
+              {!firstLessonId
+                ? "Uplata je uspela. Sve detalje o tvojim časovima poslali smo ti na mejl."
+                : user
+                  ? "Pristup kursu je aktiviran i već si prijavljen/a - kreni odmah."
+                  : "Pristup kursu je aktiviran. Poslali smo ti email - prijavi se i počni."}
+            </p>
           </div>
         )}
         {isCard && status === "fail" && (
@@ -220,12 +229,17 @@ export default async function HvalaPage({
 
         {/* CTA */}
         <div className="flex flex-wrap items-center gap-4">
-          {user && isCard && status === "ok" ? (
+          {user && cardOk ? (
             <Link
-              href={firstLessonId ? `/lekcija/${firstLessonId}` : "/dashboard"}
+              href={firstLessonId ? `/lekcija/${firstLessonId}` : "/nalog"}
               className="inline-block px-6 py-3 rounded-lg font-semibold text-white text-sm bg-plava hover:bg-plava-dark transition-colors"
             >
-              {firstLessonId ? "Započni prvu lekciju →" : "Idi na svoje kurseve →"}
+              {firstLessonId ? "Započni prvu lekciju →" : "Moj nalog →"}
+            </Link>
+          ) : cardOk && !firstLessonId ? (
+            // KTZ/mesečni bez platforme, odjavljen: nema lekcija koje bi prijava "otključala".
+            <Link href="/nalog" className="text-sm text-plava hover:underline">
+              Moj nalog →
             </Link>
           ) : (
             <Link

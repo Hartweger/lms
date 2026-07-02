@@ -43,11 +43,15 @@ export async function sendWelcomeEmail(
   to: string,
   name: string,
   courseTitles: string[],
-  /** startUrl = direktan login-link (/auth/mejl token) do prve lekcije. Bez njega CTA vodi na /prijava (npr. wc-webhook). */
-  opts?: { startUrl?: string },
+  /**
+   * startUrl = direktan login-link (/auth/mejl token). Bez njega CTA vodi na /prijava (npr. wc-webhook).
+   * hasLesson = login-link cilja prvu lekciju; false = /dashboard (kurs bez lekcija, ne obećavati lekciju).
+   */
+  opts?: { startUrl?: string; hasLesson?: boolean },
 ) {
   const courseList = courseTitles.map((t) => `• ${t}`).join("\n");
   const startUrl = opts?.startUrl || `${SITE_URL}/prijava`;
+  const ctaLabel = opts?.startUrl ? (opts.hasLesson ? "Započni prvu lekciju" : "Uđi na platformu") : "Započni učenje";
 
   try {
     const resend = getResend();
@@ -85,13 +89,13 @@ export async function sendWelcomeEmail(
 
       <p style="font-size: 15px; line-height: 1.6; color: #444; margin: 0 0 20px;">
         ${opts?.startUrl
-          ? "Klikni na dugme ispod i odmah ulaziš u prvu lekciju. Pristup kursu važi <strong>godinu dana</strong> od kupovine."
+          ? `Klikni na dugme ispod i odmah ulaziš ${opts.hasLesson ? "u prvu lekciju" : "na platformu"}. Pristup kursu važi <strong>godinu dana</strong> od kupovine.`
           : "Prijavi se na platformu i započni prvu lekciju. Pristup kursu važi <strong>godinu dana</strong> od kupovine."}
       </p>
 
       <div style="text-align: center; margin: 24px 0;">
         <a href="${startUrl}" style="display: inline-block; background: #4fb1d3; color: white; padding: 14px 32px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 15px;">
-          Započni prvu lekciju
+          ${ctaLabel}
         </a>
       </div>
 

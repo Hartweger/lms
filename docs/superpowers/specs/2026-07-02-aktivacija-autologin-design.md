@@ -39,6 +39,13 @@ Prva lekcija se računa: order.items → course_unlocks → content kursevi → 
 koji ima lekcije → lekcija sa najmanjim order_index. Izdvojeno u čist modul
 `src/lib/first-lesson.ts` (koriste ga hvala, grant-access/welcome i activation cron).
 
+**KTZ/mesečni bez platforme (Nataša, 02.07):** prva lekcija = null → hvala NE sme da
+obećava lekcije: poruka „Uplata je uspela. Sve detalje o tvojim časovima poslali smo
+ti na mejl." + CTA „Moj nalog →" (ne /dashboard, ne „kreni odmah"). Welcome mejl:
+KTZ ionako dobija individualni welcome (ne generički); generički za slučaj bez lekcija
+nosi label „Uđi na platformu" umesto „Započni prvu lekciju" (`hasLesson` opcija).
+Nudge cron već preskače kurseve bez lekcija - bez izmene.
+
 ### O3: Mejl login-linkovi = naš HMAC exchange token, NE sirovi magic link
 
 Sirovi `token_hash` u mejlu ne valja: ističe za ~1h, single-use, i svaki novi
