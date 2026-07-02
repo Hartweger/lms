@@ -282,7 +282,7 @@ export default function FinansijeClient({ data, year, mesec, pendingTotal, profN
       </section>
 
       {/* Po profesorkama */}
-      <section className="bg-white rounded-xl border border-gray-100 p-4 overflow-x-auto">
+      <section id="po-profesorkama" className="bg-white rounded-xl border border-gray-100 p-4 overflow-x-auto scroll-mt-20">
         <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
           <h2 className="font-semibold">Po profesorkama - {periodLabel}</h2>
           <div className="flex items-center gap-2">

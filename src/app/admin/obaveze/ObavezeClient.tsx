@@ -70,7 +70,14 @@ export default function ObavezeClient({ payables, pending, groups, profs, pendin
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-8">
-      <h1 className="text-2xl font-bold text-gray-900">Obaveze prema profesorkama</h1>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="text-2xl font-bold text-gray-900">Obaveze prema profesorkama</h1>
+        <a href={`/admin/finansije?godina=${new Date().getFullYear()}&mesec=${new Date().getMonth() + 1}#po-profesorkama`}
+          className="text-sm px-3 py-1.5 rounded-lg bg-plava-light text-plava font-medium">
+          Mesečni pregled honorara →
+        </a>
+      </div>
+      <p className="text-xs text-gray-400 -mt-6">Ovde je ukupno stanje (sve vreme). Za pregled po mesecu - zarađeno, isplaćeno i saldo meseca - koristi mesečni pregled na Finansijama.</p>
 
       <section className="bg-white rounded-xl shadow-sm overflow-hidden">
         <table className="w-full text-sm">
