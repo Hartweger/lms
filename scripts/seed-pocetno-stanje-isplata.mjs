@@ -10,7 +10,7 @@ import { client } from "./lib/exam-packer.mjs";
 const sb = client();
 
 const NOTE = "početno stanje - evidencija do 31.05. vođena van platforme (Isplata sheet)";
-const PRETPLATA = { Milica: 2575, Suzana: 6328 }; // Milica: sheet maj "2575 - pretplata"; Suzana: maj uplaćeno 62.328 vs platformski obračun 56.000 (korigovano naknadno 02.07)
+const PRETPLATA = { Milica: 2575, Suzana: 6328, Hristina: 1400 }; // Milica: sheet maj "2575 - pretplata"; Suzana: maj uplaćeno 62.328 vs platformski obračun 56.000 (korigovano naknadno 02.07); Hristina: april uplaćeno 42.000 vs 40.600
 const DATUM = "2026-05-31";
 
 const { data: profs, error: pErr } = await sb.from("user_profiles")
