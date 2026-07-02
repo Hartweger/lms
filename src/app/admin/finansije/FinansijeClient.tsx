@@ -21,9 +21,10 @@ interface Props {
   profName: Record<string, string>;
   expenses: ExpenseRow[];
   courseOptions: { id: string; title: string }[];
+  ukupanSaldo: Record<string, number>;
 }
 
-export default function FinansijeClient({ data, year, mesec, pendingTotal, profName, expenses, courseOptions }: Props) {
+export default function FinansijeClient({ data, year, mesec, pendingTotal, profName, expenses, courseOptions, ukupanSaldo }: Props) {
   const router = useRouter();
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<ExpenseRow | null>(null);
@@ -257,13 +258,16 @@ export default function FinansijeClient({ data, year, mesec, pendingTotal, profN
       {/* Po profesorkama */}
       <section className="bg-white rounded-xl border border-gray-100 p-4 overflow-x-auto">
         <h2 className="font-semibold mb-1">Po profesorkama - {periodLabel}</h2>
-        <p className="text-xs text-gray-400 mb-3">Retencija = prosečan broj meseci u kojima polaznik plaća (cela istorija, ne samo izabrani period). Prihod uključuje i autorski procenat video kurseva (FSP/FIDE); retencija se odnosi samo na polaznike časova.</p>
-        <table className="text-sm w-full min-w-[700px]">
+        <p className="text-xs text-gray-400 mb-3">Retencija = prosečan broj meseci u kojima polaznik plaća (cela istorija, ne samo izabrani period). Prihod uključuje i autorski procenat video kurseva (FSP/FIDE); retencija se odnosi samo na polaznike časova. Zarađeno = časovi + autorski procenat + odobrene aktivnosti. Ukupan saldo danas je ista brojka kao na Obavezama (bez autorskog procenta) i ne zavisi od izabranog perioda.</p>
+        <table className="text-sm w-full min-w-[1000px]">
           <thead>
             <tr className="text-left text-gray-400">
               <th className="py-1 pr-3 font-medium">Profesorka</th>
               <th className="py-1 px-2 text-right font-medium">Prihod koji donosi</th>
-              <th className="py-1 px-2 text-right font-medium">Honorar</th>
+              <th className="py-1 px-2 text-right font-medium">Zarađeno</th>
+              <th className="py-1 px-2 text-right font-medium">Isplaćeno</th>
+              <th className="py-1 px-2 text-right font-medium">Saldo perioda</th>
+              <th className="py-1 px-2 text-right font-medium">Ukupan saldo danas</th>
               <th className="py-1 px-2 text-right font-medium">Neto doprinos</th>
               <th className="py-1 px-2 text-center font-medium">Aktivni polaznici</th>
               <th className="py-1 pl-2 text-right font-medium">Retencija (mes.)</th>
@@ -274,7 +278,10 @@ export default function FinansijeClient({ data, year, mesec, pendingTotal, profN
               <tr key={p.professor_id} className="border-t border-gray-50">
                 <td className="py-2 pr-3">{p.ime}</td>
                 <td className="py-2 px-2 text-right">{din(p.prihod)}</td>
-                <td className="py-2 px-2 text-right">−{din(p.honorar)}</td>
+                <td className="py-2 px-2 text-right">−{din(p.zaradjeno)}</td>
+                <td className="py-2 px-2 text-right">{din(p.isplaceno)}</td>
+                <td className={`py-2 px-2 text-right ${p.saldoPerioda > 0 ? "text-red-600 font-semibold" : ""}`}>{din(p.saldoPerioda)}</td>
+                <td className={`py-2 px-2 text-right ${(ukupanSaldo[p.professor_id] ?? 0) > 0 ? "text-red-600 font-semibold" : ""}`}>{din(ukupanSaldo[p.professor_id] ?? 0)}</td>
                 <td className={`py-2 px-2 text-right font-semibold ${p.neto < 0 ? "text-red-600" : ""}`}>{din(p.neto)}</td>
                 <td className="py-2 px-2 text-center">{p.aktivniPolaznici}</td>
                 <td className="py-2 pl-2 text-right">{p.retencijaMeseci ?? "-"}</td>

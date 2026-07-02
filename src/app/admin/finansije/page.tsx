@@ -1,5 +1,6 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { buildFinansije, fillGroupCourseIds, monthKey, type ExpenseRow, type FinOrder, type FinMonthlyRevenue, type FinMonthlyHonorar, type Kategorija } from "@/lib/finansije";
+import { loadPayables } from "@/lib/professor-payable";
 import wcRevenueHistory from "@/lib/wc-revenue-history.json";
 import honorariHistory from "@/lib/honorari-history.json";
 import FinansijeClient from "./FinansijeClient";
@@ -20,7 +21,7 @@ export default async function AdminFinansijePage({
   const admin = createAdminClient();
   // PostgREST default limit je 1000 redova - eksplicitni limiti + godišnji filter za lekcije/sesije;
   // orders cela istorija zbog retencije.
-  const [ordersRes, coursesRes, profsRes, lessonsRes, sessionsRes, expensesRes, indEnrRes, groupsRes, membersRes, royaltiesRes] =
+  const [ordersRes, coursesRes, profsRes, lessonsRes, sessionsRes, expensesRes, indEnrRes, groupsRes, membersRes, royaltiesRes, paymentsRes, activitiesRes] =
     await Promise.all([
       admin.from("orders").select("id, user_id, created_at, total, items, payment_status").limit(10000),
       admin.from("courses").select("id, title, slug, course_type"),
@@ -40,13 +41,15 @@ export default async function AdminFinansijePage({
       admin.from("groups").select("id, level, status, max_seats, professor_id, purchasable_course_id, session_time"),
       admin.from("group_enrollments").select("group_id, user_id, status").limit(10000),
       admin.from("course_royalties").select("course_id, professor_id, percent"),
+      admin.from("professor_payments").select("professor_id, payment_date, amount").limit(10000),
+      admin.from("professor_activities").select("professor_id, activity_date, amount, status").eq("status", "odobreno").limit(10000),
     ]);
 
   for (const [res, name] of [
     [ordersRes, "orders"], [coursesRes, "courses"], [profsRes, "user_profiles"],
     [lessonsRes, "individual_lessons"], [sessionsRes, "group_sessions"], [expensesRes, "expenses"],
     [indEnrRes, "individual_enrollments"], [groupsRes, "groups"], [membersRes, "group_enrollments"],
-    [royaltiesRes, "course_royalties"],
+    [royaltiesRes, "course_royalties"], [paymentsRes, "professor_payments"], [activitiesRes, "professor_activities"],
   ] as const) {
     if (res.error) throw new Error(`Finansije: upit nije uspeo - ${res.error.message} (tabela: ${name})`);
   }
@@ -111,7 +114,13 @@ export default async function AdminFinansijePage({
     groups,
     groupMembers: membersRes.data ?? [],
     royalties: (royaltiesRes.data ?? []).map((r) => ({ ...r, percent: Number(r.percent) })),
+    payments: (paymentsRes.data ?? []).map((r) => ({ professor_id: r.professor_id, payment_date: r.payment_date, amount: Number(r.amount) || 0 })),
+    activities: (activitiesRes.data ?? []).map((r) => ({ professor_id: r.professor_id, activity_date: r.activity_date, amount: Number(r.amount) || 0 })),
   });
+
+  // "Ukupan saldo danas" - ista računica kao /admin/obaveze (bez autorskog procenta)
+  const payables = await loadPayables();
+  const ukupanSaldo: Record<string, number> = Object.fromEntries(payables.map((p) => [p.professorId, p.balance]));
 
   const profName: Record<string, string> = Object.fromEntries(
     (profsRes.data ?? []).map((p) => [p.id, p.full_name ?? "-"])
@@ -129,6 +138,7 @@ export default async function AdminFinansijePage({
       profName={profName}
       expenses={(expensesRes.data ?? []) as ExpenseRow[]}
       courseOptions={courseOptions}
+      ukupanSaldo={ukupanSaldo}
     />
   );
 }
