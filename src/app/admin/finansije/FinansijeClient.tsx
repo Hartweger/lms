@@ -30,6 +30,8 @@ export default function FinansijeClient({ data, year, mesec, pendingTotal, profN
   const [editing, setEditing] = useState<ExpenseRow | null>(null);
   const [saving, setSaving] = useState(false);
   const [err, setErr] = useState("");
+  const [sending, setSending] = useState(false);
+  const [sendMsg, setSendMsg] = useState("");
 
   const periodLabel = mesec ? `${MESECI_KRATKO[mesec - 1]} ${year}.` : `${year}.`;
 
@@ -73,6 +75,27 @@ export default function FinansijeClient({ data, year, mesec, pendingTotal, profN
     if (!confirm("Obrisati ovaj trošak?")) return;
     const res = await fetch(`/api/admin/expenses/${id}`, { method: "DELETE" });
     if (res.ok) router.refresh();
+  }
+
+  async function posaljiObracun() {
+    if (!mesec) return;
+    if (!confirm(`Poslati obračun za ${periodLabel} svim profesorkama sa stavkama u tom mesecu? Saldo u mejlu je današnji, ne istorijski.`)) return;
+    setSending(true); setSendMsg("");
+    try {
+      const res = await fetch("/api/admin/finansije/posalji-obracun", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ godina: year, mesec }),
+      });
+      const d = await res.json().catch(() => ({}));
+      setSendMsg(res.ok
+        ? `Poslato: ${(d as { poslato?: number }).poslato ?? 0}, preskočeno: ${(d as { preskoceno?: number }).preskoceno ?? 0}.`
+        : (d as { error?: string }).error ?? "Greška pri slanju.");
+    } catch {
+      setSendMsg("Greška na mreži - pokušaj ponovo.");
+    } finally {
+      setSending(false);
+    }
   }
 
   // Period filter za listu troškova (prikaz onih koji važe u izabranom periodu)
@@ -257,7 +280,17 @@ export default function FinansijeClient({ data, year, mesec, pendingTotal, profN
 
       {/* Po profesorkama */}
       <section className="bg-white rounded-xl border border-gray-100 p-4 overflow-x-auto">
-        <h2 className="font-semibold mb-1">Po profesorkama - {periodLabel}</h2>
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
+          <h2 className="font-semibold">Po profesorkama - {periodLabel}</h2>
+          <div className="flex items-center gap-2">
+            {sendMsg && <span className="text-xs text-gray-500">{sendMsg}</span>}
+            <button onClick={posaljiObracun} disabled={!mesec || sending}
+              title={!mesec ? "Izaberi konkretan mesec da bi poslala obračun." : undefined}
+              className="bg-plava text-white text-sm px-4 py-2 rounded-lg hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed">
+              {sending ? "Šaljem..." : "Pošalji obračun profesorkama"}
+            </button>
+          </div>
+        </div>
         <p className="text-xs text-gray-400 mb-3">Retencija = prosečan broj meseci u kojima polaznik plaća (cela istorija, ne samo izabrani period). Prihod uključuje i autorski procenat video kurseva (FSP/FIDE); retencija se odnosi samo na polaznike časova. Zarađeno = časovi + autorski procenat + odobrene aktivnosti. Ukupan saldo danas je ista brojka kao na Obavezama (bez autorskog procenta) i ne zavisi od izabranog perioda. P&L tabela gore ne uključuje aktivnosti - one ulaze samo u ovaj pregled.</p>
         <table className="text-sm w-full min-w-[1000px]">
           <thead>
