@@ -4,10 +4,18 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendActivationNudge } from "@/lib/email";
+import { createLoginLinkToken } from "@/lib/login-link";
+import { SITE_URL } from "@/lib/site-url";
 
 export const dynamic = "force-dynamic";
 
 const MAX_PER_RUN = 40; // Resend free kvota (100/dan) - ostavi prostora drugim mejlovima
+
+// Login-link do prve lekcije: korisnik iz mejla ulazi ULOGOVAN (vidi src/lib/login-link.ts).
+function startUrlFor(email: string, lessonId: string | null): string {
+  const token = createLoginLinkToken({ email, next: lessonId ? `/lekcija/${lessonId}` : "/dashboard" });
+  return `${SITE_URL}/auth/mejl?t=${encodeURIComponent(token)}`;
+}
 
 type Row = Record<string, unknown>;
 async function fetchAll(build: () => { range: (a: number, b: number) => PromiseLike<{ data: Row[] | null }> }): Promise<Row[]> {
@@ -51,6 +59,7 @@ export async function GET(request: Request) {
       courseTitle: course?.title ?? "Nemački A1.1",
       lessonId: lesson?.id ?? null,
       lessonTitle: lesson?.title ?? null,
+      startUrl: startUrlFor(testEmail, lesson?.id ?? null),
     });
     return NextResponse.json({ test: testEmail, sent: 1 });
   }
@@ -122,6 +131,7 @@ export async function GET(request: Request) {
       courseTitle: titleMap.get(cid) ?? "kurs",
       lessonId: fl?.id ?? null,
       lessonTitle: fl?.title ?? null,
+      startUrl: startUrlFor(prof.email, fl?.id ?? null),
     });
     await admin.from("activation_nudges").insert({ user_id: uid });
     sent++;

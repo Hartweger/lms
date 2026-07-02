@@ -1056,11 +1056,13 @@ export async function sendOrderCancelledEmail(o: {
 // Aktivacioni nudge: polaznik ima pristup ali nije otvorio nijednu lekciju - poziv da započne.
 export async function sendActivationNudge(o: {
   email: string; name: string; courseTitle: string; lessonId: string | null; lessonTitle: string | null;
+  /** Direktan login-link (/auth/mejl token). Bez njega pada na goli /lekcija ili /dashboard. */
+  startUrl?: string;
 }) {
   try {
     const resend = getResend();
     if (!resend) return;
-    const startUrl = o.lessonId ? `${SITE_URL}/lekcija/${o.lessonId}` : `${SITE_URL}/dashboard`;
+    const startUrl = o.startUrl ?? (o.lessonId ? `${SITE_URL}/lekcija/${o.lessonId}` : `${SITE_URL}/dashboard`);
     await sendEmail(resend, {
       bulk: true,
       from: FROM, to: o.email, replyTo: "info@hartweger.rs",
