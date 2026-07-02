@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/supabase/server";
+import { firstLessonForOrder } from "@/lib/first-lesson";
 import { BANK_DETAILS, PAYPAL_ME_URL, buildIpsString } from "@/lib/order-utils";
 import type { Order } from "@/lib/types";
 import IpsQrCode from "./IpsQrCode";
@@ -47,6 +49,15 @@ export default async function HvalaPage({
   const paypalEur = order.paypal_note ? parseInt(order.paypal_note) : null;
   const isCard = order.payment_method === "kartica" || order.payment_method === "kartica_rate";
 
+  // Posle kartičnog auto-logina kupac stiže ULOGOVAN - CTA vodi pravo u prvu lekciju
+  // umesto na /prijava. Stranica ostaje landing zbog browser Pixel Purchase (dedup sa CAPI).
+  const supabaseUser = await createClient();
+  const { data: { user } } = await supabaseUser.auth.getUser();
+  let firstLessonId: string | null = null;
+  if (user && isCard && status === "ok") {
+    firstLessonId = (await firstLessonForOrder(supabase, items ?? []))?.id ?? null;
+  }
+
   // Browser pixel Purchase šaljemo SAMO za potvrđenu karticu (status=ok) - tu je naplata
   // gotova i poklapa se sa server-side CAPI događajem iz nestpay callback-a (dedup po event_id).
   // Za uplatnicu/PayPal Purchase ide isključivo server-side (CAPI) tek kad admin potvrdi uplatu,
@@ -87,7 +98,7 @@ export default async function HvalaPage({
         {isCard && status === "ok" && (
           <div className="bg-green-50 border border-green-200 rounded-xl px-5 py-4 mb-6 text-sm text-green-800">
             <p className="font-semibold">Plaćanje uspešno! 🎉</p>
-            <p className="mt-1">Pristup kursu je aktiviran. Poslali smo ti email - prijavi se i počni.</p>
+            <p className="mt-1">{user ? "Pristup kursu je aktiviran i već si prijavljen/a - kreni odmah." : "Pristup kursu je aktiviran. Poslali smo ti email - prijavi se i počni."}</p>
           </div>
         )}
         {isCard && status === "fail" && (
@@ -209,12 +220,21 @@ export default async function HvalaPage({
 
         {/* CTA */}
         <div className="flex flex-wrap items-center gap-4">
-          <Link
-            href="/prijava"
-            className="inline-block px-6 py-3 rounded-lg font-semibold text-white text-sm bg-plava hover:bg-plava-dark transition-colors"
-          >
-            Prijavi se da vidiš kurs
-          </Link>
+          {user && isCard && status === "ok" ? (
+            <Link
+              href={firstLessonId ? `/lekcija/${firstLessonId}` : "/dashboard"}
+              className="inline-block px-6 py-3 rounded-lg font-semibold text-white text-sm bg-plava hover:bg-plava-dark transition-colors"
+            >
+              {firstLessonId ? "Započni prvu lekciju →" : "Idi na svoje kurseve →"}
+            </Link>
+          ) : (
+            <Link
+              href="/prijava"
+              className="inline-block px-6 py-3 rounded-lg font-semibold text-white text-sm bg-plava hover:bg-plava-dark transition-colors"
+            >
+              Prijavi se da vidiš kurs
+            </Link>
+          )}
           <Link href="/kursevi" className="text-sm text-plava hover:underline">
             ← Nazad na kurseve
           </Link>
