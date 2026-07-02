@@ -32,6 +32,10 @@ async function fetchAll(build: () => { range: (a: number, b: number) => PromiseL
 }
 
 export async function GET(request: Request) {
+  const authHeader = request.headers.get("authorization");
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
   const { searchParams } = new URL(request.url);
   const testEmail = searchParams.get("test");
   const dryRun = searchParams.get("dry") === "1";

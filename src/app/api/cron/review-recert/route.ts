@@ -13,6 +13,10 @@ const CERT_WINDOW_DAYS = 3;  // koliko unazad gledamo nove sertifikate
 const MIN_GAP_DAYS = 60;     // min razmak od prošlog ask-a istom čoveku
 
 export async function GET(request: Request) {
+  const authHeader = request.headers.get("authorization");
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
   const { searchParams } = new URL(request.url);
   const testEmail = searchParams.get("test");
   const dryRun = searchParams.get("dry") === "1";
