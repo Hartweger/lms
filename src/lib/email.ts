@@ -42,9 +42,12 @@ async function sendEmail(
 export async function sendWelcomeEmail(
   to: string,
   name: string,
-  courseTitles: string[]
+  courseTitles: string[],
+  /** startUrl = direktan login-link (/auth/mejl token) do prve lekcije. Bez njega CTA vodi na /prijava (npr. wc-webhook). */
+  opts?: { startUrl?: string },
 ) {
   const courseList = courseTitles.map((t) => `• ${t}`).join("\n");
+  const startUrl = opts?.startUrl || `${SITE_URL}/prijava`;
 
   try {
     const resend = getResend();
@@ -81,17 +84,21 @@ export async function sendWelcomeEmail(
       </div>
 
       <p style="font-size: 15px; line-height: 1.6; color: #444; margin: 0 0 20px;">
-        Prijavi se na platformu i započni prvu lekciju. Pristup kursu važi <strong>godinu dana</strong> od kupovine.
+        ${opts?.startUrl
+          ? "Klikni na dugme ispod i odmah ulaziš u prvu lekciju. Pristup kursu važi <strong>godinu dana</strong> od kupovine."
+          : "Prijavi se na platformu i započni prvu lekciju. Pristup kursu važi <strong>godinu dana</strong> od kupovine."}
       </p>
 
       <div style="text-align: center; margin: 24px 0;">
-        <a href="${SITE_URL}/prijava" style="display: inline-block; background: #4fb1d3; color: white; padding: 14px 32px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 15px;">
-          Započni učenje
+        <a href="${startUrl}" style="display: inline-block; background: #4fb1d3; color: white; padding: 14px 32px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 15px;">
+          Započni prvu lekciju
         </a>
       </div>
 
       <p style="font-size: 13px; color: #999; line-height: 1.5; margin: 0 0 8px;">
-        Prijava je bez lozinke - uneseš mejl kojim si kupio/la kurs i stigne ti link za ulazak.
+        ${opts?.startUrl
+          ? `Dugme te automatski prijavljuje. Ako link istekne, uđi na <a href="${SITE_URL}/prijava" style="color: #4fb1d3; text-decoration: none;">hartweger.rs/prijava</a> - bez lozinke, mejlom kojim si kupio/la kurs.`
+          : "Prijava je bez lozinke - uneseš mejl kojim si kupio/la kurs i stigne ti link za ulazak."}
       </p>
 
       <p style="font-size: 13px; color: #999; line-height: 1.5; margin: 0 0 8px;">

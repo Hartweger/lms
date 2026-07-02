@@ -7,6 +7,8 @@ import { callGas } from "@/lib/gas";
 import { sendGa4Purchase } from "@/lib/ga4-mp";
 import { sendPurchaseEvent } from "@/lib/meta-capi";
 import { SITE_URL } from "@/lib/site-url";
+import { createLoginLinkToken } from "@/lib/login-link";
+import { firstLessonForCourses } from "@/lib/first-lesson";
 
 interface OrderItem { course_id: string; course_slug: string; title: string; price: number; }
 
@@ -213,6 +215,21 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
     if (metaOk) await admin.from("orders").update({ meta_purchase_sent: true }).eq("id", orderId);
   }
   // Generički welcome šaljemo samo ako nismo već poslali grupni/individualni (da polaznik dobije jedan mejl).
-  if (!grupniWelcomeSent && !individualWelcomeSent) await sendWelcomeEmail(order.email, order.full_name, items.map((i) => i.title));
+  if (!grupniWelcomeSent && !individualWelcomeSent) {
+    // Direktan login-link do prve lekcije - kupac iz mejla ulazi bez /prijava zida.
+    // Best-effort: ako izračunavanje padne, mejl ide sa starim /prijava CTA.
+    let startUrl: string | undefined;
+    try {
+      const fl = await firstLessonForCourses(admin, [...contentCourseIds]);
+      const token = createLoginLinkToken({
+        email: order.email,
+        next: fl ? `/lekcija/${fl.id}` : "/dashboard",
+      });
+      startUrl = `${SITE_URL}/auth/mejl?t=${encodeURIComponent(token)}`;
+    } catch (e) {
+      console.error(`[grant] login-link za welcome pao (order ${orderId}):`, e);
+    }
+    await sendWelcomeEmail(order.email, order.full_name, items.map((i) => i.title), { startUrl });
+  }
   return { ok: true };
 }
