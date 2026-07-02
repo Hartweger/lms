@@ -436,3 +436,63 @@ describe("buildFinansije - autorski procenti", () => {
     expect(fsp.honorar).toBe(9000);
   });
 });
+
+describe("buildFinansije - isplate i aktivnosti po profesorki", () => {
+  it("isplaceno = zbir isplata u periodu; van perioda ne ulazi", () => {
+    const f = fixture({ mesec: 6 });
+    f.payments = [
+      { professor_id: "p-hristina", payment_date: "2026-06-15", amount: 2000 },
+      { professor_id: "p-hristina", payment_date: "2026-06-28", amount: 500 },
+      { professor_id: "p-hristina", payment_date: "2026-05-15", amount: 9999 }, // maj - van perioda
+      { professor_id: "p-katarina", payment_date: "2026-06-20", amount: 3600 },
+    ];
+    const d = buildFinansije(f);
+    const hristina = d.profesorke.find((p) => p.professor_id === "p-hristina")!;
+    const katarina = d.profesorke.find((p) => p.professor_id === "p-katarina")!;
+    expect(hristina.isplaceno).toBe(2500);
+    expect(katarina.isplaceno).toBe(3600);
+  });
+
+  it("aktivnosti u periodu ulaze u zaradjeno i saldo, van perioda ne", () => {
+    const f = fixture({ mesec: 6 });
+    f.activities = [
+      { professor_id: "p-hristina", activity_date: "2026-06-10", amount: 700 },
+      { professor_id: "p-hristina", activity_date: "2026-03-10", amount: 9999 }, // mart - van perioda
+    ];
+    const d = buildFinansije(f);
+    const hristina = d.profesorke.find((p) => p.professor_id === "p-hristina")!;
+    expect(hristina.aktivnosti).toBe(700);
+    expect(hristina.zaradjeno).toBe(2800 + 700);
+    expect(hristina.saldoPerioda).toBe(3500); // ništa isplaćeno
+  });
+
+  it("saldoPerioda = zaradjeno - isplaceno; neto odbija i aktivnosti", () => {
+    const f = fixture({ mesec: 6 });
+    f.activities = [{ professor_id: "p-hristina", activity_date: "2026-06-10", amount: 700 }];
+    f.payments = [{ professor_id: "p-hristina", payment_date: "2026-06-15", amount: 3000 }];
+    const d = buildFinansije(f);
+    const hristina = d.profesorke.find((p) => p.professor_id === "p-hristina")!;
+    expect(hristina.saldoPerioda).toBe(2800 + 700 - 3000);
+    expect(hristina.neto).toBe(14000 - 3500);
+  });
+
+  it("bez payments/activities polja (stari pozivi) sve je 0 i ništa ne puca", () => {
+    const d = buildFinansije(fixture({ mesec: 6 }));
+    const hristina = d.profesorke.find((p) => p.professor_id === "p-hristina")!;
+    expect(hristina.isplaceno).toBe(0);
+    expect(hristina.aktivnosti).toBe(0);
+    expect(hristina.zaradjeno).toBe(hristina.honorar);
+    expect(hristina.saldoPerioda).toBe(hristina.honorar);
+  });
+
+  it("cela godina (mesec=null): isplate iz svih meseci godine se sabiraju", () => {
+    const f = fixture(); // mesec: null
+    f.payments = [
+      { professor_id: "p-hristina", payment_date: "2026-05-15", amount: 1000 },
+      { professor_id: "p-hristina", payment_date: "2026-06-15", amount: 2000 },
+      { professor_id: "p-hristina", payment_date: "2025-12-31", amount: 9999 }, // druga godina
+    ];
+    const d = buildFinansije(f);
+    expect(d.profesorke.find((p) => p.professor_id === "p-hristina")!.isplaceno).toBe(3000);
+  });
+});

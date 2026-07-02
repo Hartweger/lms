@@ -101,6 +101,9 @@ export interface GroupMember { group_id: string; user_id: string; status: string
 
 export interface RoyaltyRow { course_id: string; professor_id: string; percent: number }
 
+export interface FinPaymentRow { professor_id: string; payment_date: string; amount: number }
+export interface FinActivityRow { professor_id: string; activity_date: string; amount: number }
+
 export interface FinansijeInput {
   year: number;
   mesec: number | null;       // null = cela godina (filter za sekcije, P&L je uvek cela godina)
@@ -118,6 +121,8 @@ export interface FinansijeInput {
   groups: GroupInfo[];
   groupMembers: GroupMember[]; // SVI (i cancelled - atribucija prihoda istorijskih članova)
   royalties: RoyaltyRow[];    // autorski procenti: course_id → professor_id + percent (od plaćenog iznosa)
+  payments?: FinPaymentRow[];   // professor_payments - isplate profesorkama (cela istorija, filtrira se po periodu)
+  activities?: FinActivityRow[]; // professor_activities SAMO status='odobreno' (filtrira pozivalac)
 }
 
 export interface MonthRow {
@@ -137,8 +142,9 @@ export interface GroupRow {
   zarada: number; zaradaPoClanu: number;
 }
 export interface ProfRow {
-  professor_id: string; ime: string; prihod: number; honorar: number; neto: number;
-  aktivniPolaznici: number; retencijaMeseci: number | null;
+  professor_id: string; ime: string; prihod: number; honorar: number;
+  aktivnosti: number; zaradjeno: number; isplaceno: number; saldoPerioda: number;
+  neto: number; aktivniPolaznici: number; retencijaMeseci: number | null;
 }
 export interface FinansijeData {
   months: MonthRow[];
@@ -405,6 +411,13 @@ export function buildFinansije(input: FinansijeInput): FinansijeData {
       input.lessons.filter((l) => l.professor_id === p.id && inSel(l.lesson_date)).length * (p.honorar_ind ?? 0) +
       input.sessions.filter((s) => s.professor_id === p.id && inSel(s.session_date)).length * (p.honorar_grp ?? 0);
     const honorar = honorarCasovi + (royaltyHonorarByProf.get(p.id) ?? 0);
+    const aktivnosti = (input.activities ?? [])
+      .filter((a) => a.professor_id === p.id && inSel(a.activity_date))
+      .reduce((s, a) => s + (a.amount || 0), 0);
+    const isplaceno = (input.payments ?? [])
+      .filter((x) => x.professor_id === p.id && inSel(x.payment_date))
+      .reduce((s, x) => s + (x.amount || 0), 0);
+    const zaradjeno = honorar + aktivnosti;
     const aktivniInd = new Set(input.indEnrollments.filter((e) => e.professor_id === p.id && e.status === "active").map((e) => e.user_id));
     const njeneGrupe = new Set(input.groups.filter((g) => g.professor_id === p.id).map((g) => g.id));
     const aktivniGrp = new Set(input.groupMembers.filter((m) => njeneGrupe.has(m.group_id) && m.status === "active").map((m) => m.user_id));
@@ -429,8 +442,12 @@ export function buildFinansije(input: FinansijeInput): FinansijeData {
       ? Math.round((starijiBrojevi.reduce((a, b) => a + b, 0) / starijiBrojevi.length) * 10) / 10
       : null;
 
-    return { professor_id: p.id, ime: p.full_name ?? "-", prihod, honorar, neto: prihod - honorar, aktivniPolaznici: aktivni, retencijaMeseci: retencija };
-  }).filter((p) => p.prihod !== 0 || p.honorar !== 0 || p.aktivniPolaznici > 0)
+    return {
+      professor_id: p.id, ime: p.full_name ?? "-", prihod, honorar,
+      aktivnosti, zaradjeno, isplaceno, saldoPerioda: zaradjeno - isplaceno,
+      neto: prihod - zaradjeno, aktivniPolaznici: aktivni, retencijaMeseci: retencija,
+    };
+  }).filter((p) => p.prihod !== 0 || p.zaradjeno !== 0 || p.isplaceno !== 0 || p.aktivniPolaznici > 0)
     .sort((a, b) => b.neto - a.neto);
 
   return { months, totals, kursevi, opstiTroskovi, grupe, profesorke };
