@@ -1,10 +1,27 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import AuthForma from "@/components/AuthForma";
-import { loginErrorMessage } from "@/lib/auth-messages";
+import { loginErrorMessage, urlGreskaMessage } from "@/lib/auth-messages";
+
+// Baner kad korisnik stigne sa ?greska= (npr. istekao login-link iz mejla).
+// useSearchParams mora u Suspense (App Router pravilo).
+function GreskaBaner() {
+  const params = useSearchParams();
+  const poruka = urlGreskaMessage(params.get("greska"));
+  if (!poruka) return null;
+  return (
+    <div
+      role="alert"
+      className="max-w-sm mx-auto mb-6 bg-[#FFF3F3] border border-[#F78687]/40 rounded-xl px-4 py-3 text-sm text-gray-700"
+    >
+      {poruka}
+    </div>
+  );
+}
 
 export default function Prijava() {
   const router = useRouter();
@@ -24,6 +41,10 @@ export default function Prijava() {
         <p className="text-gray-500 mb-8 max-w-sm mx-auto">
           Kupio/la si kurs u Hartweger centru? Uđi ovde da pristupiš svojim lekcijama i materijalima.
         </p>
+
+        <Suspense fallback={null}>
+          <GreskaBaner />
+        </Suspense>
 
         <AuthForma tip="prijava" onSubmit={handleLogin} />
 

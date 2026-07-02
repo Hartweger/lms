@@ -1,5 +1,18 @@
 import { describe, it, expect } from "vitest";
-import { loginErrorMessage } from "./auth-messages";
+import { loginErrorMessage, urlGreskaMessage } from "./auth-messages";
+
+describe("urlGreskaMessage", () => {
+  it("poruka za istekao/pokvaren mejl login-link", () => {
+    expect(urlGreskaMessage("link")).toMatch(/istekao/i);
+  });
+  it("poruka za neuspešnu magic-link prijavu", () => {
+    expect(urlGreskaMessage("auth")).toMatch(/link/i);
+  });
+  it("nepoznat kod → prazan string (bez banera)", () => {
+    expect(urlGreskaMessage("nesto")).toBe("");
+    expect(urlGreskaMessage(null)).toBe("");
+  });
+});
 
 describe("loginErrorMessage", () => {
   it("za pogrešnu/nepostojeću lozinku vraća poruku o staroj lozinki", () => {

@@ -8,6 +8,19 @@ function isInvalidCredentials(error: AuthErrorLike): boolean {
   return error.status === 400 || msg.includes("invalid login credentials");
 }
 
+// Baner na /prijava kad korisnik stigne sa ?greska= (redirect iz auth ruta).
+// "link" = login-link iz mejla (auth/mejl) istekao ili pokvaren.
+// "auth" = magic-link verifikacija nije prošla (redirect iz /auth/confirm i /auth/callback).
+export function urlGreskaMessage(kod: string | null): string {
+  if (kod === "link") {
+    return "Link iz mejla je istekao. Ništa strašno - prijavi se ovde, traje pola minuta.";
+  }
+  if (kod === "auth") {
+    return "Link za prijavu nije prošao (možda je već iskorišćen). Zatraži novi ovde.";
+  }
+  return "";
+}
+
 // Poruka koja se prikazuje kad prijava lozinkom ne uspe.
 export function loginErrorMessage(error: AuthErrorLike | null): string {
   if (!error) return "";
