@@ -13,7 +13,10 @@ Uz to, dugmetom šalje svakoj profesorki mejl sa njenim ličnim mesečnim obrač
 
 Postojeća sekcija na `/admin/finansije` (reaguje na filter godina/mesec) dobija tri kolone:
 
-| Profesorka | Prihod | Zarađeno | **Isplaćeno** | **Saldo perioda** | **Ukupan saldo danas** | Aktivni | Retencija |
+| Profesorka | Prihod | Zarađeno | **Isplaćeno** | **Saldo perioda** | **Ukupan saldo danas** | Neto doprinos | Aktivni | Retencija |
+
+Neto doprinos sada = prihod − zarađeno (tj. uključuje i aktivnosti kao trošak,
+jer su realan izdatak vezan za profesorku).
 
 - **Zarađeno** (dosadašnja kolona „Honorar", preimenovana): časovi + sesije + autorski
   procenat + **odobrene aktivnosti** (`professor_activities`, `status='odobreno'`,
@@ -40,35 +43,44 @@ procenat video kurseva (obračunava se kao na Obavezama), dok „Zarađeno" uklj
 3. `src/app/admin/finansije/FinansijeClient.tsx`
    - Tri nove kolone u tabeli „Po profesorkama", isti stil (din format, crveno za dug).
 
-## Deo 2: Dugme „Pošalji pregled profesorkama"
+## Deo 2: Doraditi postojeći mesečni mejl + dugme za ponovno slanje
 
-- Dugme pored naslova sekcije „Po profesorkama". Aktivno samo kad je izabran konkretan
-  mesec (ne „cela godina").
-- Klik → potvrda (`confirm`) → POST `/api/admin/finansije/posalji-preglede`
-  sa `{ godina, mesec }`.
-- Ruta (admin-only, isti guard kao ostale admin rute):
-  1. Ponovo obračuna mesečne podatke po profesorki (server je izvor istine, ne klijent).
-  2. Za svaku profesorku sa bar jednom stavkom u mesecu (zarađeno > 0 ili isplaćeno > 0)
-     šalje mejl na njen nalog-mejl.
-  3. Vraća rezime `{ poslato: n, preskoceno: m }` koji se prikaže u toastu/poruci.
-- Mejl: nova funkcija `sendProfMonthlyReportEmail` u `src/lib/email.ts`, po uzoru na
-  postojeći `sendPaymentEmail` (isti Resend setup, isti vizuelni stil, ti-forma,
-  potpis „Hartweger tim", obična crtica).
-- Sadržaj mejla (samo njeni podaci, bruto iznosi):
-  - broj individualnih časova i iznos
-  - broj grupnih sesija i iznos
-  - odobrene dodatne aktivnosti (opis + iznos, ako ih ima)
-  - autorski procenat (ako ga ima)
-  - ukupno zarađeno u mesecu, isplaćeno u mesecu (sa datumima isplata)
-  - trenutni ukupan saldo
-- Nema automatskog crona — slanje je isključivo ručno. Cron eventualno kasnije,
-  kad se ritam ustali.
+**Otkriće tokom planiranja:** automatski mesečni mejl profesorkama VEĆ POSTOJI —
+`/api/cron/honorari` (1. u mesecu u 8h, vercel.json) šalje `sendHonorarProfEmail`
+(časovi, sesije, iznosi, trenutni saldo) + zbirni `sendHonorarSummaryEmail` Nataši.
+Zato NE gradimo novi mejl, nego doradimo postojeći i dodamo ručno ponovno slanje.
+
+### 2a. Dorada mejla (`sendHonorarProfEmail` u `src/lib/email.ts`)
+
+Mejl dobija, pored postojećeg:
+- odobrene dodatne aktivnosti u mesecu (opis + iznos, ako ih ima)
+- isplate u tom mesecu (datum + iznos, ako ih ima) i zbir isplaćenog
+- ukupno zarađeno u mesecu sada uključuje aktivnosti
+
+Autorski procenat NE ulazi u mejl (kao ni do sada) — mejl ostaje usklađen sa
+saldom sa Obaveza. Stil nepromenjen: ti-forma, „Hartweger tim", obična crtica.
+
+### 2b. Zajednička logika obračuna
+
+Obračun se izvlači iz cron rute u `src/lib/honorar-report.ts`
+(`buildMonthlyHonorarReports(year, month)`) — I/O modul po uzoru na
+`professor-payable.ts`. Cron ruta i nova admin ruta zovu istu funkciju,
+pa automatski i ručni mejl ne mogu da se raziđu.
+
+### 2c. Dugme „Pošalji obračun profesorkama"
+
+- Pored naslova sekcije „Po profesorkama". Aktivno samo kad je izabran konkretan mesec.
+- Klik → `confirm` → POST `/api/admin/finansije/posalji-obracun` sa `{ godina, mesec }`.
+- Ruta (isti `requireAdmin` guard kao expenses rute) zove `buildMonthlyHonorarReports`
+  i šalje mejlove; vraća `{ poslato, preskoceno }` koji se prikaže kao poruka.
+- Mesec pokriven istorijskim override-om (`honorari-history.json`, jan–apr 2026)
+  se odbija sa objašnjenjem — za te mesece nema pojedinačnih časova u bazi,
+  obračun bi bio pogrešan, a mejlovi za njih su davno otišli.
 
 ## Rubne situacije
 
-- Meseci jan–apr 2026 koriste istorijski override (`honorari-history.json`) za zarađeno —
-  kolone Isplaćeno/Saldo rade i za njih (isplate su u bazi), ali mejl-dugme šalje
-  sažetiju verziju bez broja časova (nema pojedinačnih časova za te mesece).
+- Profesorka bez ijedne stavke u mesecu (0 časova, 0 aktivnosti, 0 isplata):
+  ne dobija mejl (kao i do sada u cron-u), broji se u `preskoceno`.
 - Profesorka bez mejla u profilu: preskače se i broji u `preskoceno`.
 - Dvostruki klik na dugme: dugme se zaključa dok POST traje; idempotentnost mejlova
   se ne garantuje (ručna akcija sa confirm dijalogom je dovoljna zaštita).
@@ -77,13 +89,13 @@ procenat video kurseva (obračunava se kao na Obavezama), dok „Zarađeno" uklj
 
 - Vitest za `finansije.ts`: isplate u/van perioda, aktivnosti u/van perioda, saldo
   perioda, profesorka bez isplata.
-- Vitest za čistu funkciju koja gradi sadržaj mejla (bez slanja).
+- `honorar-report.ts` je I/O modul (bez unit testova, kao `professor-payable.ts`) —
+  čista računica ispod njega (`computeHonorar`, `sumActivities`) je već pokrivena.
 - Posle deploya: obavezan smoke test (postojeći hook) + ručna provera da se
   „Ukupan saldo danas" slaže sa `/admin/obaveze`.
 
 ## Van opsega
 
-- Automatski mesečni cron za slanje.
 - Godišnja mreža meseci (postojeći filter mesec-po-mesec je dovoljan).
 - Izmena P&L obračuna (aktivnosti ne ulaze u P&L).
 - Neto/porezi — svi iznosi ostaju bruto, kao svuda.
