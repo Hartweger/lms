@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createAdminClient } from "@/lib/supabase/admin";
-import { computeHonorar, previousMonth, monthDateRange, DEFAULT_HONORAR_IND, DEFAULT_HONORAR_GRP } from "@/lib/honorar";
+import { previousMonth } from "@/lib/honorar";
 import { sendHonorarProfEmail, sendHonorarSummaryEmail } from "@/lib/email";
-import { loadPayables } from "@/lib/professor-payable";
+import { buildMonthlyHonorarReports } from "@/lib/honorar-report";
 
 // Mesečni cron (1. u mesecu): obračun honorara za PRETHODNI mesec + mejlovi.
 // Override meseca: ?month=YYYY-MM (za backfill/test). Zaštita: Bearer CRON_SECRET.
@@ -11,51 +10,33 @@ export async function GET(request: NextRequest) {
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const admin = createAdminClient();
 
-  // Mesec: override ?month=YYYY-MM, inače prethodni mesec.
   const monthParam = request.nextUrl.searchParams.get("month");
-  let year: number, month: number, label: string;
+  let year: number, month: number;
   if (monthParam && /^\d{4}-\d{2}$/.test(monthParam)) {
     const [y, m] = monthParam.split("-").map(Number);
     year = y; month = m;
-    const MES = ["januar","februar","mart","april","maj","jun","jul","avgust","septembar","oktobar","novembar","decembar"];
-    label = `${MES[m - 1]} ${y}.`;
   } else {
-    ({ year, month, label } = previousMonth(new Date()));
+    ({ year, month } = previousMonth(new Date()));
   }
-  const { from, toExclusive } = monthDateRange(year, month);
 
-  // Profesorke sa honorar konfiguracijom (7 seed-ovanih).
-  const { data: profs } = await admin
-    .from("user_profiles")
-    .select("id, full_name, email, honorar_ind, honorar_grp")
-    .not("honorar_ind", "is", null);
-
+  const { label, reports } = await buildMonthlyHonorarReports(year, month);
   const summary: { name: string; ind: number; grp: number; total: number }[] = [];
   let grandTotal = 0;
   let mailed = 0;
 
-  for (const p of profs ?? []) {
-    const [{ count: indCount }, { count: grpCount }] = await Promise.all([
-      admin.from("individual_lessons").select("*", { count: "exact", head: true })
-        .eq("professor_id", p.id).gte("lesson_date", from).lt("lesson_date", toExclusive),
-      admin.from("group_sessions").select("*", { count: "exact", head: true })
-        .eq("professor_id", p.id).eq("cancelled", false).gte("session_date", from).lt("session_date", toExclusive),
-    ]);
-    const ind = indCount ?? 0, grp = grpCount ?? 0;
-    const h = computeHonorar(ind, grp, p.honorar_ind ?? DEFAULT_HONORAR_IND, p.honorar_grp ?? DEFAULT_HONORAR_GRP);
-    if (ind + grp > 0) {
-      summary.push({ name: p.full_name || p.email, ind, grp, total: h.total });
-      grandTotal += h.total;
-      if (p.email) {
-        const [pay] = await loadPayables(p.id);
-        await sendHonorarProfEmail(p.email, p.full_name || "", {
-          label, ind, grp, rateInd: p.honorar_ind ?? DEFAULT_HONORAR_IND, rateGrp: p.honorar_grp ?? DEFAULT_HONORAR_GRP,
-          indTotal: h.indTotal, grpTotal: h.grpTotal, total: h.total, balance: pay?.balance,
-        });
-        mailed++;
-      }
+  for (const r of reports) {
+    if (r.ind + r.grp + r.aktivnosti.length === 0) continue; // ništa održano - ne šalje se (kao do sada)
+    summary.push({ name: r.name, ind: r.ind, grp: r.grp, total: r.total });
+    grandTotal += r.total;
+    if (r.email) {
+      await sendHonorarProfEmail(r.email, r.name, {
+        label, ind: r.ind, grp: r.grp, rateInd: r.rateInd, rateGrp: r.rateGrp,
+        indTotal: r.indTotal, grpTotal: r.grpTotal, total: r.total,
+        aktivnosti: r.aktivnosti, isplate: r.isplate,
+        balance: r.balance ?? undefined,
+      });
+      mailed++;
     }
   }
 
