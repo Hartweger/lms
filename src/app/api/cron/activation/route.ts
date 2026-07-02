@@ -1,6 +1,6 @@
 // src/app/api/cron/activation/route.ts
 // Aktivacioni nudge: polaznik dobio pristup ali nije otvorio nijednu lekciju → mejl da započne.
-// Cilja NATIVE (ne-migrirane), pristup star 3-30 dana, bez ijedne završene lekcije, jednom po čoveku.
+// Cilja NATIVE (ne-migrirane), pristup star 1-30 dana, bez ijedne završene lekcije, jednom po čoveku.
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendActivationNudge } from "@/lib/email";
@@ -54,7 +54,7 @@ export async function GET(request: Request) {
     });
     return NextResponse.json({ test: testEmail, sent: 1 });
   }
-  const minAge = new Date(now - 3 * 86400000).toISOString();   // pristup stariji od 3 dana
+  const minAge = new Date(now - 1 * 86400000).toISOString();   // pristup stariji od 24h (cron dnevno u 10 UTC → nudge stiže 24-48h od kupovine)
   const maxAge = new Date(now - 30 * 86400000).toISOString();  // ali ne stariji od 30 dana
 
   // Lekcije po kursu (prva lekcija = najmanji order_index)
