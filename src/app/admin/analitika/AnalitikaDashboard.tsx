@@ -263,9 +263,15 @@ export default function AnalitikaDashboard({
   // NaKI je gornji levak: hvata mejl, a prodaju zatvori kasniji dodir (IG/YT) koji
   // last-touch utm prepiše. Zato NaKI vrednost merimo join-om email↔porudžbina, ne utm-om.
   const naki = useMemo(() => {
-    const leadEmails = new Set(
-      nakiLeads.map((l) => (l.email ?? "").toLowerCase().trim()).filter(Boolean)
-    );
+    // email → najraniji trenutak kad je lead ostavio mejl (za vremensku atribuciju ispod)
+    const leadFirstSeen = new Map<string, number>();
+    for (const l of nakiLeads) {
+      const email = (l.email ?? "").toLowerCase().trim();
+      if (!email) continue;
+      const t = new Date(l.created_at).getTime();
+      const prev = leadFirstSeen.get(email);
+      if (prev === undefined || t < prev) leadFirstSeen.set(email, t);
+    }
     const leadsInPeriod = nakiLeads.filter((l) => {
       const d = new Date(l.created_at);
       return d >= start && d < end;
@@ -274,19 +280,19 @@ export default function AnalitikaDashboard({
       const d = new Date(u.day);
       return d >= start && d < end ? sum + (Number(u.count) || 0) : sum;
     }, 0);
-    // "NaKI-dodirnuta" prodaja: završene porudžbine u periodu čiji je mejl ostavio NaKI lead.
-    const influencedOrders = filteredOrders.filter(
-      (o) =>
-        o.status === "completed" &&
-        Number(o.total) > 0 &&
-        leadEmails.has((o.customer_email ?? "").toLowerCase().trim())
-    );
+    // "NaKI-dodirnuta" prodaja: završene porudžbine u periodu čiji je mejl ostavio NaKI lead
+    // PRE porudžbine — inače bi kupovina iz doba pre NaKI-ja bila pripisana kasnijem lead-u.
+    const influencedOrders = filteredOrders.filter((o) => {
+      if (o.status !== "completed" || Number(o.total) <= 0) return false;
+      const leadAt = leadFirstSeen.get((o.customer_email ?? "").toLowerCase().trim());
+      return leadAt !== undefined && leadAt <= new Date(o.date_created).getTime();
+    });
     const influencedRevenue = influencedOrders.reduce((s, o) => s + Number(o.total), 0);
     const influencedBuyers = new Set(
       influencedOrders.map((o) => (o.customer_email ?? "").toLowerCase().trim())
     ).size;
     return {
-      totalLeads: leadEmails.size,
+      totalLeads: leadFirstSeen.size,
       leadsInPeriod,
       sessionsInPeriod,
       influencedCount: influencedOrders.length,
