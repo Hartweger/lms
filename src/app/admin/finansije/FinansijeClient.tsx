@@ -39,6 +39,7 @@ export default function FinansijeClient({ data, year, mesec, pendingTotal, profN
   function setPeriod(g: number, m: number | null) {
     const p = new URLSearchParams({ godina: String(g) });
     if (m) p.set("mesec", String(m));
+    setSendMsg("");
     router.push(`/admin/finansije?${p.toString()}`);
   }
 
@@ -79,7 +80,9 @@ export default function FinansijeClient({ data, year, mesec, pendingTotal, profN
 
   async function posaljiObracun() {
     if (!mesec) return;
-    if (!confirm(`Poslati obračun za ${periodLabel} svim profesorkama sa stavkama u tom mesecu? Saldo u mejlu je današnji, ne istorijski.`)) return;
+    const now = new Date();
+    const tekuci = year === now.getFullYear() && mesec === now.getMonth() + 1;
+    if (!confirm(`Poslati obračun za ${periodLabel} svim profesorkama sa stavkama u tom mesecu?${tekuci ? " Mesec još traje - obračun će biti nepotpun." : ""} Saldo u mejlu je današnji, ne istorijski.`)) return;
     setSending(true); setSendMsg("");
     try {
       const res = await fetch("/api/admin/finansije/posalji-obracun", {

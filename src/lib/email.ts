@@ -702,10 +702,10 @@ export async function sendHonorarProfEmail(
     aktivnosti?: { description: string; amount: number }[];
     isplate?: { date: string; amount: number }[];
   },
-) {
+): Promise<boolean> {
   try {
     const resend = getResend();
-    if (!resend) return;
+    if (!resend) return false;
     const ime = profIme ? profIme.split(" ")[0] : "";
     const fmt = (n: number) => n.toLocaleString("de-DE");
     const aktRows = (opts.aktivnosti ?? [])
@@ -741,8 +741,10 @@ ${typeof opts.balance === "number" ? `<p style="font-size:13px;color:#666">Trenu
 <p style="margin-top:20px">Hartweger tim</p>
 </body></html>`,
     });
+    return true;
   } catch (e) {
     console.error("[email] sendHonorarProfEmail pao:", e);
+    return false;
   }
 }
 

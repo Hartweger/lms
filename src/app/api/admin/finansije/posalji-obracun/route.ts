@@ -34,15 +34,16 @@ export async function POST(request: Request) {
   const { label, reports } = await buildMonthlyHonorarReports(godina, mesec);
   let poslato = 0, preskoceno = 0;
   for (const r of reports) {
+    // Za razliku od crona, i sama isplata je stavka - ručno slanje služi i za "posle unosa isplate".
     const imaStavke = r.ind + r.grp + r.aktivnosti.length + r.isplate.length > 0;
     if (!imaStavke || !r.email) { preskoceno++; continue; }
-    await sendHonorarProfEmail(r.email, r.fullName ?? "", {
+    const ok = await sendHonorarProfEmail(r.email, r.fullName ?? "", {
       label, ind: r.ind, grp: r.grp, rateInd: r.rateInd, rateGrp: r.rateGrp,
       indTotal: r.indTotal, grpTotal: r.grpTotal, total: r.total,
       aktivnosti: r.aktivnosti, isplate: r.isplate,
       balance: r.balance ?? undefined,
     });
-    poslato++;
+    if (ok) poslato++; else preskoceno++;
   }
   return NextResponse.json({ poslato, preskoceno, label });
 }
