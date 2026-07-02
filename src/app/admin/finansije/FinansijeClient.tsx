@@ -258,7 +258,7 @@ export default function FinansijeClient({ data, year, mesec, pendingTotal, profN
       {/* Po profesorkama */}
       <section className="bg-white rounded-xl border border-gray-100 p-4 overflow-x-auto">
         <h2 className="font-semibold mb-1">Po profesorkama - {periodLabel}</h2>
-        <p className="text-xs text-gray-400 mb-3">Retencija = prosečan broj meseci u kojima polaznik plaća (cela istorija, ne samo izabrani period). Prihod uključuje i autorski procenat video kurseva (FSP/FIDE); retencija se odnosi samo na polaznike časova. Zarađeno = časovi + autorski procenat + odobrene aktivnosti. Ukupan saldo danas je ista brojka kao na Obavezama (bez autorskog procenta) i ne zavisi od izabranog perioda.</p>
+        <p className="text-xs text-gray-400 mb-3">Retencija = prosečan broj meseci u kojima polaznik plaća (cela istorija, ne samo izabrani period). Prihod uključuje i autorski procenat video kurseva (FSP/FIDE); retencija se odnosi samo na polaznike časova. Zarađeno = časovi + autorski procenat + odobrene aktivnosti. Ukupan saldo danas je ista brojka kao na Obavezama (bez autorskog procenta) i ne zavisi od izabranog perioda. P&L tabela gore ne uključuje aktivnosti - one ulaze samo u ovaj pregled.</p>
         <table className="text-sm w-full min-w-[1000px]">
           <thead>
             <tr className="text-left text-gray-400">

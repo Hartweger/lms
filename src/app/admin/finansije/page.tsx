@@ -19,6 +19,8 @@ export default async function AdminFinansijePage({
   const mesec = rawMesec !== null && rawMesec >= 1 && rawMesec <= 12 ? rawMesec : null;
 
   const admin = createAdminClient();
+  // Namerno se pokreće rano (paralelno sa Promise.all dole) - loadPayables ima N+1 upite unutra.
+  const payablesPromise = loadPayables();
   // PostgREST default limit je 1000 redova - eksplicitni limiti + godišnji filter za lekcije/sesije;
   // orders cela istorija zbog retencije.
   const [ordersRes, coursesRes, profsRes, lessonsRes, sessionsRes, expensesRes, indEnrRes, groupsRes, membersRes, royaltiesRes, paymentsRes, activitiesRes] =
@@ -119,7 +121,7 @@ export default async function AdminFinansijePage({
   });
 
   // "Ukupan saldo danas" - ista računica kao /admin/obaveze (bez autorskog procenta)
-  const payables = await loadPayables();
+  const payables = await payablesPromise;
   const ukupanSaldo: Record<string, number> = Object.fromEntries(payables.map((p) => [p.professorId, p.balance]));
 
   const profName: Record<string, string> = Object.fromEntries(

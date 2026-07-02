@@ -495,4 +495,15 @@ describe("buildFinansije - isplate i aktivnosti po profesorki", () => {
     const d = buildFinansije(f);
     expect(d.profesorke.find((p) => p.professor_id === "p-hristina")!.isplaceno).toBe(3000);
   });
+
+  it("profesorka bez časova/prihoda ali sa isplatom u periodu ostaje vidljiva", () => {
+    const f = fixture({ mesec: 6 });
+    f.professors.push({ id: "p-nova", full_name: "Nova", honorar_ind: 1400, honorar_grp: 1600 });
+    f.payments = [{ professor_id: "p-nova", payment_date: "2026-06-15", amount: 5000 }];
+    const d = buildFinansije(f);
+    const nova = d.profesorke.find((p) => p.professor_id === "p-nova")!;
+    expect(nova).toBeDefined();
+    expect(nova.isplaceno).toBe(5000);
+    expect(nova.saldoPerioda).toBe(-5000);
+  });
 });
