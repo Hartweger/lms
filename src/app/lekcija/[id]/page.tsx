@@ -1,7 +1,9 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import LekcijaContent from "@/components/LekcijaContent";
+import LekcijaGate from "@/components/LekcijaGate";
 import LessonDrawer from "@/components/LessonDrawer";
 import LessonCompleteButton from "@/components/LessonCompleteButton";
 import { exerciseKindBadge } from "@/lib/exercise-kind";
@@ -26,7 +28,27 @@ export default async function LekcijaStranica({ params }: PageProps) {
     .eq("id", id)
     .single();
 
-  if (!lesson) notFound();
+  if (!lesson) {
+    // RLS vraća null i kad lekcija POSTOJI a korisnik nema pristup (odjavljen iz mejla,
+    // istekao pristup). Gate umesto mrtvog 404. Minimalan admin select - sadržaj
+    // lekcije ne sme da procuri odjavljenima.
+    const adminGate = createAdminClient();
+    const { data: gated } = await adminGate
+      .from("lessons")
+      .select("id, title, course_id, courses:course_id(title)")
+      .eq("id", id)
+      .single();
+    if (!gated) notFound();
+    const { data: { user: gateUser } } = await supabase.auth.getUser();
+    const gatedCourse = gated.courses as unknown as { title: string } | null;
+    return (
+      <LekcijaGate
+        lessonTitle={gated.title as string}
+        courseTitle={gatedCourse?.title ?? ""}
+        loggedIn={!!gateUser}
+      />
+    );
+  }
 
   const typedLesson = lesson as Lesson;
 
