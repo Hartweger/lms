@@ -1,8 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { createClient } from "@/lib/supabase/server";
-import type { BlogPost } from "@/lib/types";
+import { createPublicClient } from "@/lib/supabase/public";
+
+// Samo polja koja kartica prikazuje (bez `content` da se ne povlači pun HTML svih postova).
+type BlogCard = {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string | null;
+  thumbnail_url: string | null;
+  category: string | null;
+  published_at: string | null;
+};
+
+// Javni blog: ISR, servira se sa CDN-a kao statika (bez cookies), osvežava se na sat.
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Magazin - Hartweger škola nemačkog jezika",
@@ -15,15 +28,15 @@ export const metadata: Metadata = {
 };
 
 export default async function MagazinPage() {
-  const supabase = await createClient();
+  const supabase = createPublicClient();
 
   const { data: posts } = await supabase
     .from("blog_posts")
-    .select("*")
+    .select("id, slug, title, excerpt, thumbnail_url, category, published_at")
     .eq("is_published", true)
     .order("published_at", { ascending: false });
 
-  const articles = (posts ?? []) as BlogPost[];
+  const articles = (posts ?? []) as BlogCard[];
 
   return (
     <>

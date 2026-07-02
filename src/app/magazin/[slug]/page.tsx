@@ -2,8 +2,22 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import type { BlogPost } from "@/lib/types";
+
+// Javni članak: ISR, servira se sa CDN-a (bez cookies), osvežava se na sat.
+export const revalidate = 3600;
+
+// Prerenderuj poznate objavljene članke pri build-u (SEO funnel); novi slugovi
+// se renderuju on-demand i keširaju (dynamicParams podrazumevano true).
+export async function generateStaticParams() {
+  const supabase = createPublicClient();
+  const { data } = await supabase
+    .from("blog_posts")
+    .select("slug")
+    .eq("is_published", true);
+  return (data ?? []).map((p) => ({ slug: p.slug as string }));
+}
 
 /** Strip Elementor wrapper divs/sections, keep only content */
 function cleanWpContent(html: string): string {
@@ -42,7 +56,7 @@ function cleanWpContent(html: string): string {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const supabase = await createClient();
+  const supabase = createPublicClient();
   const { data: post } = await supabase
     .from("blog_posts")
     .select("title, meta_description, excerpt, thumbnail_url")
@@ -76,7 +90,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const supabase = await createClient();
+  const supabase = createPublicClient();
 
   const { data } = await supabase
     .from("blog_posts")

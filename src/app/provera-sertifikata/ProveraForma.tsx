@@ -40,6 +40,7 @@ export default function ProveraForma() {
       <form onSubmit={handleSubmit} className="flex gap-3 mb-8">
         <input
           type="text"
+          aria-label="ID sertifikata"
           value={code}
           onChange={(e) => setCode(e.target.value)}
           placeholder="ID sertifikata"

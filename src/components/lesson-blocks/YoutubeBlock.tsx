@@ -8,6 +8,7 @@ export default function YoutubeBlock({ videoId, label }: YoutubeSection) {
       )}
       <div className="relative w-full rounded-xl overflow-hidden shadow-sm" style={{ paddingBottom: "56.25%" }}>
         <iframe
+          title="Video lekcija"
           src={`https://www.youtube.com/embed/${videoId}`}
           className="absolute inset-0 w-full h-full"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"

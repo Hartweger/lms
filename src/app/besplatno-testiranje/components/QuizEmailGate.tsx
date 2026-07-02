@@ -39,13 +39,14 @@ export default function QuizEmailGate({ recommendedLevel, onSubmit, onSkip, isLo
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="email"
+          aria-label="Email adresa"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="tvoj@email.com"
           className="w-full px-5 py-4 rounded-xl border-2 border-gray-200 text-center text-lg focus:outline-none focus:border-plava transition-colors"
           disabled={isLoading}
         />
-        {error && <p className="text-koral text-sm">{error}</p>}
+        {error && <p role="alert" className="text-koral text-sm">{error}</p>}
         <button
           type="submit"
           disabled={isLoading}

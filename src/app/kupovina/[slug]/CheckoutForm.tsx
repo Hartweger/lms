@@ -261,6 +261,8 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
             <div className="flex gap-2">
               <input
                 type="text"
+                aria-label={en ? "Coupon code" : "Kod kupona"}
+                aria-describedby={couponError ? "coupon-error" : undefined}
                 value={couponCode}
                 onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
                 placeholder={en ? "Enter coupon code" : "Unesi kod kupona"}
@@ -277,7 +279,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
               </button>
             </div>
             {couponError && (
-              <p className="text-[#F78687] text-sm">{couponError}</p>
+              <p id="coupon-error" role="alert" className="text-[#F78687] text-sm">{couponError}</p>
             )}
           </div>
         ) : (

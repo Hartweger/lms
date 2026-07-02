@@ -66,6 +66,12 @@ export default function RootLayout({
   return (
     <html lang="sr" className={`${lato.variable} ${montserrat.variable}`}>
       <body className="min-h-screen flex flex-col">
+        <a
+          href="#glavni"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:rounded-md focus:bg-white focus:px-4 focus:py-2 focus:text-plava-dark focus:shadow-lg focus:ring-2 focus:ring-plava-dark"
+        >
+          Preskoči na sadržaj
+        </a>
         {/* Google Consent Mode v2 - mora pre GTM-a. Inline skript ne može da importuje TS,
             pa je ključ 'cookie-consent' hardkodiran: mora ostati u sinhronizaciji sa CONSENT_KEY iz src/lib/consent.ts */}
         <Script
@@ -151,7 +157,7 @@ try {
             ]),
           }}
         />
-        <main className="flex-1">{children}</main>
+        <main id="glavni" className="flex-1">{children}</main>
         <Footer />
         <SmileWidget />
         <CookieBanner />

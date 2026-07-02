@@ -89,6 +89,7 @@ export default function LekcijaContent({
             <div>
               <div className="rounded-xl overflow-hidden border border-gray-100 mb-4">
                 <iframe
+                  title="PDF dokument lekcije"
                   src={lesson.content}
                   width="100%"
                   className="w-full hidden md:block"

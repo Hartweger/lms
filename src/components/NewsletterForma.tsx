@@ -45,6 +45,7 @@ export default function NewsletterForma() {
       <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
         <input
           type="email"
+          aria-label="Email adresa"
           placeholder="Vaša email adresa"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -61,10 +62,10 @@ export default function NewsletterForma() {
         </button>
       </form>
       {status === "success" && (
-        <p className="text-green-600 text-sm mt-3 text-center">{message}</p>
+        <p role="status" className="text-green-600 text-sm mt-3 text-center">{message}</p>
       )}
       {status === "error" && (
-        <p className="text-red-500 text-sm mt-3 text-center">{message}</p>
+        <p role="alert" className="text-red-500 text-sm mt-3 text-center">{message}</p>
       )}
     </div>
   );

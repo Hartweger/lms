@@ -22,6 +22,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `${course.title} - Hartweger`,
     description: course.description,
+    // LMS pregled kursa (nastavni plan) - ne sme da rangira ni kanibalizuje prodajnu /kursevi/[slug].
+    robots: { index: false, follow: true },
     openGraph: {
       images: [{ url: "/og/share.png", width: 1200, height: 630, alt: "Hartweger - Škola nemačkog jezika" }],
       title: course.title,

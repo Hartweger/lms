@@ -18,6 +18,7 @@ export default function VideoPlayer({ vimeoId }: { vimeoId: string }) {
     >
       {loaded ? (
         <iframe
+          title="Video lekcija"
           src={`https://player.vimeo.com/video/${id}?h=${hParam}&title=0&byline=0&portrait=0&autoplay=1`}
           className="absolute top-0 left-0 w-full h-full"
           allow="autoplay; fullscreen; picture-in-picture"

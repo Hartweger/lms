@@ -123,6 +123,7 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
           </p>
           <input
             type="text"
+            aria-label="Šestocifreni kod za prijavu"
             inputMode="numeric"
             autoComplete="one-time-code"
             value={code}

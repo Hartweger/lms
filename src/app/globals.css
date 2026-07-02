@@ -420,3 +420,16 @@ h1, h2, h3, h4, h5, h6 {
     opacity: 0;
   }
 }
+
+/* Poštuj korisnike sa vestibularnim smetnjama / decu osetljivu na pokret (WCAG 2.3.3).
+   Gasi konfeti, pulse, bounce i sve tranzicije za one koji su tražili manje pokreta. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
