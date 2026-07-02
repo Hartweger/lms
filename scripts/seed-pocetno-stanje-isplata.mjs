@@ -10,7 +10,9 @@ import { client } from "./lib/exam-packer.mjs";
 const sb = client();
 
 const NOTE = "početno stanje - evidencija do 31.05. vođena van platforme (Isplata sheet)";
-const PRETPLATA = { Milica: 2575, Suzana: 6328, Hristina: 1400 }; // Milica: sheet maj "2575 - pretplata"; Suzana: maj uplaćeno 62.328 vs platformski obračun 56.000 (korigovano naknadno 02.07); Hristina: april uplaćeno 42.000 vs 40.600
+const PRETPLATA = { Milica: 2575 }; // Natašina potvrda 02.07: pre juna SVE na nuli, jedino Milica u pretplati 2.575.
+// Naknadne korekcije 02.07 direktno u bazi: poništeno 7 duplih sesija Suzanine fantomske A1.1 grupe (migracija)
+// + 1 zalutala sesija Milicine stare B2.1 (9.6.) → Suzana stavka 298.200; junski avansi 1.6. Milica+Suzana po 64.295.
 const DATUM = "2026-05-31";
 
 const { data: profs, error: pErr } = await sb.from("user_profiles")
