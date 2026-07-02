@@ -713,8 +713,12 @@ export async function sendHonorarProfEmail(
       .join("");
     const isplate = opts.isplate ?? [];
     const isplaceno = isplate.reduce((s, x) => s + x.amount, 0);
+    const fmtDatum = (iso: string) => {
+      const [y, m, d] = iso.split("-");
+      return y && m && d ? `${Number(d)}.${Number(m)}.${y}.` : iso;
+    };
     const isplateBlock = isplate.length > 0
-      ? `<p>Isplaćeno ti je u ovom mesecu <strong>${fmt(isplaceno)} din</strong> (${isplate.map((x) => `${fmt(x.amount)} din ${esc(x.date)}`).join(", ")}).</p>`
+      ? `<p>Isplaćeno ti je u ovom mesecu <strong>${fmt(isplaceno)} din</strong> (${isplate.map((x) => `${fmt(x.amount)} din (${fmtDatum(x.date)})`).join(", ")}).</p>`
       : "";
     await resend.emails.send({
       from: FROM,

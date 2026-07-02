@@ -7,6 +7,7 @@ import { loadPayables } from "@/lib/professor-payable";
 export interface MonthlyHonorarReport {
   professorId: string;
   name: string;
+  fullName: string | null;
   email: string | null;
   ind: number; grp: number;
   rateInd: number; rateGrp: number;
@@ -30,10 +31,13 @@ export async function buildMonthlyHonorarReports(year: number, month: number): P
   const label = `${MESECI[month - 1]} ${year}.`;
   const { from, toExclusive } = monthDateRange(year, month);
 
-  const { data: profs } = await admin
+  const { data: profs, error } = await admin
     .from("user_profiles")
     .select("id, full_name, email, honorar_ind, honorar_grp")
     .not("honorar_ind", "is", null);
+  if (error) {
+    throw new Error(`honorar-report: user_profiles upit pao - ${error.message}`);
+  }
 
   const payables = await loadPayables();
   const balanceById = new Map(payables.map((p) => [p.professorId, p.balance]));
@@ -52,6 +56,9 @@ export async function buildMonthlyHonorarReports(year: number, month: number): P
         .eq("professor_id", p.id).gte("payment_date", from).lt("payment_date", toExclusive)
         .order("payment_date"),
     ]);
+    if (indRes.error || grpRes.error || actsRes.error || paysRes.error) {
+      console.error("[honorar-report] DB greška za", p.id, indRes.error ?? grpRes.error ?? actsRes.error ?? paysRes.error);
+    }
     const ind = indRes.count ?? 0, grp = grpRes.count ?? 0;
     const rateInd = p.honorar_ind ?? DEFAULT_HONORAR_IND;
     const rateGrp = p.honorar_grp ?? DEFAULT_HONORAR_GRP;
@@ -61,7 +68,7 @@ export async function buildMonthlyHonorarReports(year: number, month: number): P
     const isplate = (paysRes.data ?? []).map((x) => ({ date: x.payment_date, amount: x.amount || 0 }));
     const isplaceno = isplate.reduce((s, x) => s + x.amount, 0);
     reports.push({
-      professorId: p.id, name: p.full_name || p.email || "-", email: p.email,
+      professorId: p.id, name: p.full_name || p.email || "-", fullName: p.full_name, email: p.email,
       ind, grp, rateInd, rateGrp, indTotal: h.indTotal, grpTotal: h.grpTotal,
       aktivnosti, aktivnostiTotal, isplate, isplaceno,
       total: h.total + aktivnostiTotal,

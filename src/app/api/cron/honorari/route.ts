@@ -26,11 +26,11 @@ export async function GET(request: NextRequest) {
   let mailed = 0;
 
   for (const r of reports) {
-    if (r.ind + r.grp + r.aktivnosti.length === 0) continue; // ništa održano - ne šalje se (kao do sada)
+    if (r.ind + r.grp + r.aktivnosti.length === 0) continue; // ništa održano ni odobreno - ne šalje se
     summary.push({ name: r.name, ind: r.ind, grp: r.grp, total: r.total });
     grandTotal += r.total;
     if (r.email) {
-      await sendHonorarProfEmail(r.email, r.name, {
+      await sendHonorarProfEmail(r.email, r.fullName ?? "", {
         label, ind: r.ind, grp: r.grp, rateInd: r.rateInd, rateGrp: r.rateGrp,
         indTotal: r.indTotal, grpTotal: r.grpTotal, total: r.total,
         aktivnosti: r.aktivnosti, isplate: r.isplate,
