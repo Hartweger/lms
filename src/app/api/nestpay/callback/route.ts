@@ -56,5 +56,25 @@ export async function POST(request: Request) {
   await grantAccessForOrder(order.id); // dodela pristupa + GA4 + Meta Purchase (CAPI) iz jedne tačke
   await fiscalizeOrder(order.id); // fiskalni račun (kartica) - ne blokira pristup ako padne
 
-  return NextResponse.redirect(`${base}/kupovina/hvala/${order.id}?status=ok`, { status: 303 });
+  // Auto-login: callback stiže KROZ KUPČEV BROWSER (303 lanac), pa sesiju postavljamo
+  // u istom lancu: generateLink → /auth/confirm (verifyOtp + cookie) → hvala.
+  // Best-effort: ako padne, kupac ide na hvala odjavljen (staro ponašanje) -
+  // plaćanje nikad ne zavisi od logina. Idempotentni replay (gore) NE loguje ponovo.
+  const hvalaPath = `/kupovina/hvala/${order.id}?status=ok`;
+  try {
+    const { data: link, error: linkError } = await admin.auth.admin.generateLink({
+      type: "magiclink",
+      email: order.email,
+    });
+    if (!linkError && link?.properties?.hashed_token) {
+      return NextResponse.redirect(
+        `${base}/auth/confirm?token_hash=${link.properties.hashed_token}&type=magiclink&next=${encodeURIComponent(hvalaPath)}`,
+        { status: 303 },
+      );
+    }
+    console.error(`[nestpay] generateLink za auto-login pao (order ${oid}):`, linkError?.message);
+  } catch (e) {
+    console.error(`[nestpay] auto-login pao (order ${oid}):`, e);
+  }
+  return NextResponse.redirect(`${base}${hvalaPath}`, { status: 303 });
 }
