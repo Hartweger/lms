@@ -12,6 +12,7 @@ import { progressToNext } from "@/lib/hearts/levels";
 import { getMascotState } from "@/lib/hearts/mascot";
 import { DAILY_GOAL_HEARTS } from "@/lib/hearts/config";
 import { isRenewable } from "@/lib/account";
+import { computeCoursesProgress } from "@/lib/course-progress";
 
 export const dynamic = "force-dynamic";
 
@@ -23,72 +24,6 @@ interface CourseWithProgress extends Course {
   currentLessonTitle: string | null;
   lastActivityAt: string | null;
   expired?: boolean;
-}
-
-async function getCourseProgress(
-  supabase: Awaited<ReturnType<typeof createClient>>,
-  userId: string,
-  course: Course
-): Promise<CourseWithProgress> {
-  // Get all lessons ordered by index
-  const { data: lessons } = await supabase
-    .from("lessons")
-    .select("id, title, order_index")
-    .eq("course_id", course.id)
-    .order("order_index");
-
-  const lessonList = lessons ?? [];
-  const lessonIds = lessonList.map((l) => l.id);
-  let completedLessons = 0;
-  let lastActivityAt: string | null = null;
-  let currentLessonId: string | null = null;
-  let currentLessonTitle: string | null = null;
-
-  if (lessonIds.length > 0) {
-    // Get completed lessons with timestamps
-    const { data: progress } = await supabase
-      .from("lesson_progress")
-      .select("lesson_id, completed_at")
-      .eq("user_id", userId)
-      .eq("completed", true)
-      .in("lesson_id", lessonIds);
-
-    const completedIds = new Set(progress?.map((p) => p.lesson_id) ?? []);
-    completedLessons = completedIds.size;
-
-    // Find most recent activity
-    if (progress && progress.length > 0) {
-      lastActivityAt = progress.reduce((latest, p) =>
-        p.completed_at && (!latest || p.completed_at > latest) ? p.completed_at : latest,
-        null as string | null
-      );
-    }
-
-    // Find first uncompleted lesson (current lesson)
-    const firstUncompleted = lessonList.find((l) => !completedIds.has(l.id));
-    if (firstUncompleted) {
-      currentLessonId = firstUncompleted.id;
-      currentLessonTitle = firstUncompleted.title;
-    } else if (lessonList.length > 0) {
-      // All completed - show last lesson
-      const lastLesson = lessonList[lessonList.length - 1];
-      currentLessonId = lastLesson.id;
-      currentLessonTitle = lastLesson.title;
-    }
-  }
-
-  const totalLessons = lessonList.length;
-  const progressPercent = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
-
-  return {
-    ...course,
-    progress: progressPercent,
-    totalLessons,
-    completedLessons,
-    currentLessonId,
-    currentLessonTitle,
-    lastActivityAt,
-  };
 }
 
 function getRandomQuote() {
@@ -139,17 +74,28 @@ export default async function Dashboard() {
   let courses: CourseWithProgress[] = [];
 
   if (courseIds.length > 0) {
-    const { data: courseData } = await supabase
-      .from("courses")
-      .select("*")
-      .in("id", courseIds);
+    // Batch umesto 2 upita po kursu (perf audit jul 2026): kursevi + sve njihove
+    // lekcije paralelno, pa napredak jednim upitom preko svih lekcija.
+    const [{ data: courseData }, { data: allLessons }] = await Promise.all([
+      supabase.from("courses").select("*").in("id", courseIds),
+      supabase
+        .from("lessons")
+        .select("id, title, order_index, course_id")
+        .in("course_id", courseIds),
+    ]);
 
     if (courseData) {
-      courses = await Promise.all(
-        (courseData as Course[]).map((course) =>
-          getCourseProgress(supabase, user.id, course)
-        )
-      );
+      const lessonRows = allLessons ?? [];
+      const { data: progress } = lessonRows.length
+        ? await supabase
+            .from("lesson_progress")
+            .select("lesson_id, completed_at")
+            .eq("user_id", user.id)
+            .eq("completed", true)
+            .in("lesson_id", lessonRows.map((l) => l.id))
+        : { data: [] };
+
+      courses = computeCoursesProgress(courseData as Course[], lessonRows, progress ?? []);
 
       // Označi istekle (zatamnjeni + „Obnovi")
       courses.forEach((c) => { c.expired = expiredSet.has(c.id); });
