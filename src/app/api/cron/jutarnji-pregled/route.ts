@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
+import { withCronLog } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendDailyAdminBrief, type DailyBrief } from "@/lib/email";
 
 // Dnevni cron (7:00): jutarnji pregled stanja adminu (Nataši).
 // Zamenjuje stari Apps Script "jutarnjeUpozorenjeV2". Zaštita: Bearer CRON_SECRET.
-export async function GET(request: NextRequest) {
+async function cronHandler(request: NextRequest) {
   const authHeader = request.headers.get("authorization");
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -163,3 +164,5 @@ export async function GET(request: NextRequest) {
     grupe: brief.grupeKraj.length,
   });
 }
+
+export const GET = withCronLog("jutarnji-pregled", cronHandler);

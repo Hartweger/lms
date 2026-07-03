@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { withCronLog } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { rankNakiTopics, pickExamples } from "@/lib/naki/topics";
 import { sendNakiContentEmail } from "@/lib/email";
@@ -8,7 +9,7 @@ import { sendNakiContentEmail } from "@/lib/email";
 // Nataši (info@). Zaštita: Bearer CRON_SECRET. Vidi scripts/naki-topics.mjs za ad-hoc.
 const DAYS = 7;
 
-export async function GET(request: NextRequest) {
+async function cronHandler(request: NextRequest) {
   const authHeader = request.headers.get("authorization");
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -63,3 +64,5 @@ export async function GET(request: NextRequest) {
     primeri: primeri.length,
   });
 }
+
+export const GET = withCronLog("naki-content-weekly", cronHandler);

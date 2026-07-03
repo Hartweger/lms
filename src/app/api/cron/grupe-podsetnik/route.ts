@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
+import { withCronLog } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { nextNivoFor, grupniSlugForNivo } from "@/lib/course-nivo";
 import { sendNatasaNextTermReminder, sendNextLevelOffer } from "@/lib/email";
 import { SITE_URL } from "@/lib/site-url";
 
 // Dnevni cron: podsetnik adminu 14 dana pre kraja + ponuda polaznicima 7 dana pre kraja.
-export async function GET(request: NextRequest) {
+async function cronHandler(request: NextRequest) {
   const authHeader = request.headers.get("authorization");
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -65,3 +66,5 @@ export async function GET(request: NextRequest) {
 
   return NextResponse.json({ reminders, offers });
 }
+
+export const GET = withCronLog("grupe-podsetnik", cronHandler);

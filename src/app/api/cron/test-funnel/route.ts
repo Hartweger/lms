@@ -5,6 +5,7 @@
 // Stop: čim osoba kupi bilo šta (orders completed, WC istorija u poslednjih godinu dana, ima pristup
 // kursu) ili se odjavi preko linka u mejlu (email_optouts).
 import { NextRequest, NextResponse } from "next/server";
+import { withCronLog } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendTestFunnelEmail } from "@/lib/email";
 import { funnelUrlsForNivo } from "@/lib/course-nivo";
@@ -17,7 +18,7 @@ const MAX_TEST_AGE_DAYS = 75; // test stariji od ovoga je hladan lead - ne šalj
 const INTERVAL_DANA = 15; // #2 na +15d, #3 na +30d, #4 na +45d od testa
 const MIN_GAP_DANA = 10; // minimalan razmak između dva funnel mejla istoj osobi
 
-export async function GET(request: NextRequest) {
+async function cronHandler(request: NextRequest) {
   const authHeader = request.headers.get("authorization");
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -154,3 +155,5 @@ export async function GET(request: NextRequest) {
   console.log("[cron/test-funnel] kandidata:", candidates.length, "poslato:", sent);
   return NextResponse.json({ candidates: candidates.length, sent });
 }
+
+export const GET = withCronLog("test-funnel", cronHandler);

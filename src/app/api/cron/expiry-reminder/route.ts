@@ -4,6 +4,7 @@
 // (category="mesecni" = ind paket 4/8/12 - nemaju godišnji platformski pristup).
 // U praksi istek imaju samo VIDEO (samostalni) kursevi, uključujući VIDEO FSP i FIDE.
 import { NextResponse } from "next/server";
+import { withCronLog } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendExpiryReminder } from "@/lib/email";
 
@@ -31,7 +32,7 @@ async function fetchAll(build: () => { range: (a: number, b: number) => PromiseL
   return out;
 }
 
-export async function GET(request: Request) {
+async function cronHandler(request: Request) {
   const authHeader = request.headers.get("authorization");
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -138,3 +139,5 @@ export async function GET(request: Request) {
 
   return NextResponse.json({ candidates: batch.length, sent });
 }
+
+export const GET = withCronLog("expiry-reminder", cronHandler);

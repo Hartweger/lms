@@ -3,6 +3,7 @@
 // - eseji bez profesora (samostalni video kursevi) → mejl adminu (Nataši)
 // Zaštita: Bearer CRON_SECRET. Test: ?test=mejl (pošalje admin-rezime na taj mejl), ?dry=1 (samo brojevi).
 import { NextRequest, NextResponse } from "next/server";
+import { withCronLog } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { groupEssaysForDigest, type DigestEssay, type Assignment } from "@/lib/essay-digest";
 import { sendPendingEssaysDigest } from "@/lib/email";
@@ -11,7 +12,7 @@ export const dynamic = "force-dynamic";
 
 const ADMIN_EMAILS = ["info@hartweger.rs", "natasa@hartweger.rs"];
 
-export async function GET(request: NextRequest) {
+async function cronHandler(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const dryRun = searchParams.get("dry") === "1";
   const testEmail = searchParams.get("test");
@@ -132,3 +133,5 @@ export async function GET(request: NextRequest) {
   console.log("[cron/eseji-pregled] poslato rezimea:", poslato, "| profa:", byProfessor.length, "| bez profa:", unassigned.length);
   return NextResponse.json({ ok: true, poslato, profesori: byProfessor.length, bezProfa: unassigned.length });
 }
+
+export const GET = withCronLog("eseji-pregled", cronHandler);

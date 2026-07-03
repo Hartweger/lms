@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { withCronLog } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { nivoForSlug } from "@/lib/course-nivo";
 import { fetchGa4Weekly } from "@/lib/ga4-report";
@@ -33,7 +34,7 @@ async function usersWithProgress(admin: SupaAdmin, userIds: string[]): Promise<S
   return found;
 }
 
-export async function GET(request: NextRequest) {
+async function cronHandler(request: NextRequest) {
   const authHeader = request.headers.get("authorization");
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -246,3 +247,5 @@ export async function GET(request: NextRequest) {
     ga4: ga4 ? "ok" : "preskočeno (nema kredencijala)",
   });
 }
+
+export const GET = withCronLog("business-summary", cronHandler);

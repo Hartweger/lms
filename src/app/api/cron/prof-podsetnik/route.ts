@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { withCronLog } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { trebaPaznju } from "@/lib/prof-napredak";
 import { sendProfPodsetnik, sendNatasaProfPodsetnikZbirni } from "@/lib/email";
@@ -7,7 +8,7 @@ import { sendProfPodsetnik, sendNatasaProfPodsetnikZbirni } from "@/lib/email";
 // "traže pažnju" na platformi (crveni: neaktivni >14 dana ili "nije počeo" posle
 // grejs-perioda). Zbirni pregled ide Nataši. Zamena za stari LearnDash mejl,
 // ali čita NOVE Supabase podatke (lesson_progress).
-export async function GET(request: NextRequest) {
+async function cronHandler(request: NextRequest) {
   const authHeader = request.headers.get("authorization");
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -173,3 +174,5 @@ export async function GET(request: NextRequest) {
     ...(dryRun ? { pregled } : {}),
   });
 }
+
+export const GET = withCronLog("prof-podsetnik", cronHandler);

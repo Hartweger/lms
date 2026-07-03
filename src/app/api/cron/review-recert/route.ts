@@ -3,6 +3,7 @@
 // Pravila: okidač = sertifikat izdat u zadnja 3 dana; min 60 dana od prošlog ask-a.
 // (Namerno BEZ "skip ako je popunio formu" - obim je mali, 60-dnevni razmak je dovoljan.)
 import { NextResponse } from "next/server";
+import { withCronLog } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendReviewRequestRecert } from "@/lib/email";
 
@@ -12,7 +13,7 @@ const MAX_PER_RUN = 20;
 const CERT_WINDOW_DAYS = 3;  // koliko unazad gledamo nove sertifikate
 const MIN_GAP_DAYS = 60;     // min razmak od prošlog ask-a istom čoveku
 
-export async function GET(request: Request) {
+async function cronHandler(request: Request) {
   const authHeader = request.headers.get("authorization");
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -80,3 +81,5 @@ export async function GET(request: Request) {
 
   return NextResponse.json({ candidates: toSend.length, sent });
 }
+
+export const GET = withCronLog("review-recert", cronHandler);

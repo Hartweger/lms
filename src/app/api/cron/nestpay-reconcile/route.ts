@@ -1,5 +1,6 @@
 // src/app/api/cron/nestpay-reconcile/route.ts
 import { NextResponse } from "next/server";
+import { withCronLog } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { queryTransaction } from "@/lib/nestpay";
 import { grantAccessForOrder } from "@/lib/grant-access";
@@ -18,7 +19,7 @@ function titleOf(items: unknown): string {
 
 export const dynamic = "force-dynamic";
 
-export async function GET(request: Request) {
+async function cronHandler(request: Request) {
   const authHeader = request.headers.get("authorization");
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -188,3 +189,5 @@ export async function GET(request: Request) {
 
   return NextResponse.json({ checked: pending?.length ?? 0, reconciled, ...counts, ...uplCounts, fiscalRetried, fiscalFailed });
 }
+
+export const GET = withCronLog("nestpay-reconcile", cronHandler);

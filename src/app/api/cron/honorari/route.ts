@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
+import { withCronLog } from "@/lib/cron-log";
 import { previousMonth } from "@/lib/honorar";
 import { sendHonorarProfEmail, sendHonorarSummaryEmail } from "@/lib/email";
 import { buildMonthlyHonorarReports } from "@/lib/honorar-report";
 
 // Mesečni cron (1. u mesecu): obračun honorara za PRETHODNI mesec + mejlovi.
 // Override meseca: ?month=YYYY-MM (za backfill/test). Zaštita: Bearer CRON_SECRET.
-export async function GET(request: NextRequest) {
+async function cronHandler(request: NextRequest) {
   const authHeader = request.headers.get("authorization");
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -47,3 +48,5 @@ export async function GET(request: NextRequest) {
 
   return NextResponse.json({ label, professori: summary.length, mailed, grandTotal });
 }
+
+export const GET = withCronLog("honorari", cronHandler);

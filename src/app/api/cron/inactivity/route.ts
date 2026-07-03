@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
+import { withCronLog } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendInactivityReminder } from "@/lib/email";
 
-export async function GET(request: NextRequest) {
+async function cronHandler(request: NextRequest) {
   // Verify cron secret to prevent unauthorized access
   const authHeader = request.headers.get("authorization");
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
@@ -132,3 +133,5 @@ export async function GET(request: NextRequest) {
   console.log(`[cron/inactivity] Sent ${sent} reminder emails`);
   return NextResponse.json({ sent });
 }
+
+export const GET = withCronLog("inactivity", cronHandler);

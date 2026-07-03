@@ -3,6 +3,7 @@
 // iako im je link u beleškama). Cilj: ≥5 završenih lekcija, aktivan u 14 dana, nalog ≥21 dan,
 // nije već zamoljen. Jednom po čoveku. (Na kraju forme je i Google review link za one koji žele.)
 import { NextResponse } from "next/server";
+import { withCronLog } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendReviewRequest } from "@/lib/email";
 
@@ -28,7 +29,7 @@ async function fetchAll(build: () => { range: (a: number, b: number) => PromiseL
   return out;
 }
 
-export async function GET(request: Request) {
+async function cronHandler(request: Request) {
   const authHeader = request.headers.get("authorization");
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -94,3 +95,5 @@ export async function GET(request: Request) {
 
   return NextResponse.json({ candidates: eligible.length, sent });
 }
+
+export const GET = withCronLog("review-request", cronHandler);

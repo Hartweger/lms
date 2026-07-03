@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import { withCronLog } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
 
-export async function GET(request: NextRequest) {
+async function cronHandler(request: NextRequest) {
   const authHeader = request.headers.get("authorization");
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -29,3 +30,5 @@ export async function GET(request: NextRequest) {
 
   return NextResponse.json({ closed: closed?.length || 0, started: started?.length || 0 });
 }
+
+export const GET = withCronLog("close-groups", cronHandler);

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { withCronLog } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendAccessAuditEmail } from "@/lib/email";
 
@@ -9,7 +10,7 @@ import { sendAccessAuditEmail } from "@/lib/email";
 // Zaštita: Bearer CRON_SECRET.
 const CUTOFF = "2026-06-14T00:00:00Z";
 
-export async function GET(request: NextRequest) {
+async function cronHandler(request: NextRequest) {
   const authHeader = request.headers.get("authorization");
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -57,3 +58,5 @@ export async function GET(request: NextRequest) {
   console.warn(`[cron/access-audit] ${rows.length} grantova bez opravdanja - mejl poslat`);
   return NextResponse.json({ ok: true, flagged: rows.length });
 }
+
+export const GET = withCronLog("access-audit", cronHandler);

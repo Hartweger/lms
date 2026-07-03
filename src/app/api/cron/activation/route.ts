@@ -2,6 +2,7 @@
 // Aktivacioni nudge: polaznik dobio pristup ali nije otvorio nijednu lekciju → mejl da započne.
 // Cilja NATIVE (ne-migrirane), pristup star 1-30 dana, bez ijedne završene lekcije, jednom po čoveku.
 import { NextResponse } from "next/server";
+import { withCronLog } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendActivationNudge } from "@/lib/email";
 import { createLoginLinkToken } from "@/lib/login-link";
@@ -31,7 +32,7 @@ async function fetchAll(build: () => { range: (a: number, b: number) => PromiseL
   return out;
 }
 
-export async function GET(request: Request) {
+async function cronHandler(request: Request) {
   const authHeader = request.headers.get("authorization");
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -139,3 +140,5 @@ export async function GET(request: Request) {
 
   return NextResponse.json({ candidates: candidates.length, sent });
 }
+
+export const GET = withCronLog("activation", cronHandler);
