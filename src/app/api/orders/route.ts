@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { rateLimit } from "@/lib/rate-limit";
 import { generateOrderNumber, calculatePaypalEur } from "@/lib/order-utils";
 import { sendPaymentInstructionsEmail, sendNewOrderAdminEmail } from "@/lib/email";
 import { nivoForSlug } from "@/lib/course-nivo";
@@ -9,6 +10,17 @@ import { computeSeats, pickOpenGroupForNivo } from "@/lib/groups";
 
 export async function POST(request: Request) {
   try {
+    // Ruta kreira naloge (auth.admin.createUser) i šalje mejlove na proizvoljan
+    // mejl - bez kočnica je email-bomb/spam vektor.
+    const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+    const ipLimit = rateLimit(`orders:${ip}`, { max: 5, windowMs: 10 * 60 * 1000 });
+    if (!ipLimit.allowed) {
+      return NextResponse.json(
+        { error: "Previše pokušaja. Sačekaj par minuta pa pokušaj ponovo." },
+        { status: 429 }
+      );
+    }
+
     const { fullName, email, country, courseSlug, paymentMethod, couponCode: rawCouponCode, professorId, packageType, attribution } =
       await request.json();
     const attr = (attribution && typeof attribution === "object") ? attribution as Record<string, string> : {};
@@ -30,6 +42,22 @@ export async function POST(request: Request) {
     }
 
     const supabase = createAdminClient();
+
+    // DB kočnica po mejlu (preživljava cold start, za razliku od in-memory limita):
+    // 3+ porudžbine za isti mejl u poslednjih sat = neko bombarduje tuđi inbox.
+    const hourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+    const { count: recentForEmail } = await supabase
+      .from("orders")
+      .select("*", { count: "exact", head: true })
+      .ilike("email", email)
+      .gte("created_at", hourAgo);
+    if ((recentForEmail ?? 0) >= 3) {
+      console.log(`[orders] Email throttle (429): ${email} - ${recentForEmail} porudžbina u poslednjih sat`);
+      return NextResponse.json(
+        { error: "Previše porudžbina za ovaj mejl. Sačekaj sat vremena ili nam piši na info@hartweger.rs." },
+        { status: 429 }
+      );
+    }
 
     // Load course by slug where is_purchasable = true
     const { data: course, error: courseError } = await supabase

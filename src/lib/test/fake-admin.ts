@@ -53,6 +53,11 @@ export function createFakeAdmin(seed: Record<string, Row[]> = {}) {
       update(p: Row) { op = "update"; payload = p; return api; },
       upsert(p: Row | Row[], _o?: unknown) { op = "upsert"; payload = p; return api; },
       eq(col: string, val: unknown) { filters.push((r) => r[col] === val); return api; },
+      ilike(col: string, val: unknown) {
+        const pattern = new RegExp(`^${String(val).replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/%/g, ".*")}$`, "i");
+        filters.push((r) => pattern.test(String(r[col] ?? "")));
+        return api;
+      },
       neq(col: string, val: unknown) { filters.push((r) => r[col] !== val); return api; },
       in(col: string, vals: unknown[]) { filters.push((r) => vals.includes(r[col])); return api; },
       lt(col: string, val: unknown) { filters.push((r) => String(r[col]) < String(val)); return api; },

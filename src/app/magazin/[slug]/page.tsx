@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { createPublicClient } from "@/lib/supabase/public";
+import { blogHtmlForRender } from "@/lib/sanitize";
 import type { BlogPost } from "@/lib/types";
 
 // Javni članak: ISR, servira se sa CDN-a (bez cookies), osvežava se na sat.
@@ -240,7 +241,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             [&_figcaption]:text-sm [&_figcaption]:text-gray-400 [&_figcaption]:mt-2
             [&_iframe]:rounded-xl [&_iframe]:shadow-md [&_iframe]:max-w-full
             [&_.aligncenter]:mx-auto [&_.aligncenter]:block [&_.aligncenter]:my-6"
-          dangerouslySetInnerHTML={{ __html: post.content }}
+          dangerouslySetInnerHTML={{ __html: blogHtmlForRender(slug, post.content) }}
         />
         </div>
       </article>

@@ -66,3 +66,81 @@ export function sanitizeHtml(dirty: string | null | undefined): string {
   if (!dirty) return "";
   return filter.process(dirty);
 }
+
+/**
+ * Blog varijanta: isti XSS filter, ali sa proširenim allowlistom za markup
+ * koji dolazi iz WP-a (h4 FAQ sekcije, figure/figcaption, blockquote, hr...).
+ * Lekcijski filter ostaje uži - ne proširivati njega.
+ */
+const blogFilter = new FilterXSS({
+  whiteList: {
+    p: ["class"],
+    br: [],
+    hr: ["class"],
+    strong: ["class"],
+    b: ["class"],
+    em: ["class"],
+    i: ["class"],
+    u: ["class"],
+    sup: [],
+    sub: [],
+    mark: ["class", "style"],
+    span: ["class", "style"],
+    bdi: [],
+    div: ["class", "style"],
+    h2: ["class", "id"],
+    h3: ["class", "id"],
+    h4: ["class", "id"],
+    h5: ["class", "id"],
+    h6: ["class", "id"],
+    blockquote: ["class"],
+    pre: ["class"],
+    code: ["class"],
+    figure: ["class", "style"],
+    figcaption: ["class"],
+    ul: ["class"],
+    ol: ["class"],
+    li: ["class"],
+    a: ["href", "target", "rel", "class"],
+    iframe: [
+      "src",
+      "allow",
+      "allowfullscreen",
+      "frameborder",
+      "width",
+      "height",
+      "title",
+      "loading",
+      "class",
+    ],
+    audio: ["controls", "src", "class"],
+    video: ["controls", "src", "width", "height", "class"],
+    source: ["src", "type"],
+    img: ["src", "alt", "class", "width", "height", "loading", "srcset", "sizes"],
+    table: ["class"],
+    thead: ["class"],
+    tbody: ["class"],
+    tr: ["class"],
+    td: ["class", "colspan", "rowspan"],
+    th: ["class", "colspan", "rowspan"],
+  },
+  stripIgnoreTag: true,
+  stripIgnoreTagBody: ["script", "style"],
+});
+
+export function sanitizeBlogHtml(dirty: string | null | undefined): string {
+  if (!dirty) return "";
+  return blogFilter.process(dirty);
+}
+
+/**
+ * Admin-autorski interaktivni postovi koji NAMERNO sadrže <script>
+ * (npr. kalkulator nivoa) - sanitizacija bi im ubila funkcionalnost.
+ * Svaki novi interaktivni post mora svesno da se doda ovde.
+ */
+const INTERACTIVE_BLOG_SLUGS = new Set(["kalkulator-nemackog-a1-b1"]);
+
+export function blogHtmlForRender(slug: string, content: string | null | undefined): string {
+  if (INTERACTIVE_BLOG_SLUGS.has(slug)) return content ?? "";
+  return sanitizeBlogHtml(content);
+}
