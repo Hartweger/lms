@@ -10,6 +10,7 @@ import { exerciseKindBadge } from "@/lib/exercise-kind";
 import { getFixedTranslations } from "@/lib/fixed-translations";
 import { getFixedWriting } from "@/lib/fixed-writing";
 import { isExamLessonTitle } from "@/lib/certificate-check";
+import { buildDrawerLessons } from "@/lib/drawer-lessons";
 import type { Lesson, Exercise, ExerciseQuestion } from "@/lib/types";
 
 interface PageProps {
@@ -52,85 +53,57 @@ export default async function LekcijaStranica({ params }: PageProps) {
 
   const typedLesson = lesson as Lesson;
 
-  const { data: course } = await supabase
-    .from("courses")
-    .select("id, title, slug")
-    .eq("id", typedLesson.course_id)
-    .single();
-
-  const { data: allLessons } = await supabase
-    .from("lessons")
-    .select("id, title, order_index, is_free_preview")
-    .eq("course_id", typedLesson.course_id)
-    .order("order_index");
-
-  const { data: { user } } = await supabase.auth.getUser();
-
-  // Get completion status for all lessons
-  let completedLessonIds = new Set<string>();
-  if (user && allLessons) {
-    const lessonIds = allLessons.map((l) => l.id);
-    const { data: progress } = await supabase
-      .from("lesson_progress")
-      .select("lesson_id")
-      .eq("user_id", user.id)
-      .eq("completed", true)
-      .in("lesson_id", lessonIds);
-
-    completedLessonIds = new Set(progress?.map((p) => p.lesson_id) ?? []);
-  }
-
-  // Fetch sections for all lessons (for module badge info in drawer)
-  const { data: allLessonsWithSections } = await supabase
-    .from("lessons")
-    .select("id, sections")
-    .eq("course_id", typedLesson.course_id);
-
-  const sectionMap = new Map<string, string>();
-  for (const l of allLessonsWithSections ?? []) {
-    if (l.sections) {
-      const badge = (l.sections as { type: string; module?: string }[]).find((s) => s.type === "badge");
-      if (badge?.module) sectionMap.set(l.id, badge.module);
-    }
-  }
-
-  // Build lesson list for drawer
-  const drawerLessons = (allLessons ?? []).map((l) => ({
-    id: l.id,
-    title: l.title,
-    order_index: l.order_index,
-    completed: completedLessonIds.has(l.id),
-    module: sectionMap.get(l.id) || "",
-  }));
-
-  const completedCount = drawerLessons.filter((l) => l.completed).length;
-
-  // Fetch exercises
-  const { data: exercises } = await supabase
-    .from("exercises")
-    .select("*")
-    .eq("lesson_id", typedLesson.id)
-    .order("order_index");
+  // Nezavisni upiti idu paralelno - ranije je 6+ upita išlo sekvencijalno,
+  // a za drawer se povlačio pun sections jsonb SVIH lekcija kursa (MB po pregledu).
+  // module_name je GENERATED kolona (migracija 060) - sections više ne treba.
+  const [{ data: course }, { data: allLessons }, { data: exercises }, { data: { user } }] =
+    await Promise.all([
+      supabase.from("courses").select("id, title, slug").eq("id", typedLesson.course_id).single(),
+      supabase
+        .from("lessons")
+        .select("id, title, order_index, is_free_preview, module_name")
+        .eq("course_id", typedLesson.course_id)
+        .order("order_index"),
+      supabase.from("exercises").select("*").eq("lesson_id", typedLesson.id).order("order_index"),
+      supabase.auth.getUser(),
+    ]);
 
   // Inline vežbe: koje vežbe su referencirane „exercise“ sekcijama u sadržaju
   const lessonSections = (typedLesson.sections as { type: string; title?: string }[] | null) ?? [];
   const inlineTitles = new Set(
     lessonSections.filter((s) => s.type === "exercise" && s.title).map((s) => s.title as string)
   );
+  const inlineIds = inlineTitles.size > 0 && exercises
+    ? (exercises as Exercise[]).filter((e) => inlineTitles.has(e.title)).map((e) => e.id)
+    : [];
+
+  const [progressRes, inlineQuestionsRes] = await Promise.all([
+    user && allLessons
+      ? supabase
+          .from("lesson_progress")
+          .select("lesson_id")
+          .eq("user_id", user.id)
+          .eq("completed", true)
+          .in("lesson_id", allLessons.map((l) => l.id))
+      : Promise.resolve({ data: null }),
+    inlineIds.length > 0
+      ? supabase.from("exercise_questions").select("*").in("exercise_id", inlineIds).order("order_index")
+      : Promise.resolve({ data: null }),
+  ]);
+
+  const completedLessonIds = new Set(progressRes.data?.map((p) => p.lesson_id) ?? []);
+
+  const drawerLessons = buildDrawerLessons(allLessons ?? [], completedLessonIds);
+  const completedCount = drawerLessons.filter((l) => l.completed).length;
+
   // Nivo iz naslova kursa (npr. „Nemački B2.2“ → „B2“)
   const levelMatch = (course?.title || "").match(/(A1|A2|B1|B2|C1|C2)/i);
   const courseLevel = levelMatch ? levelMatch[1].toUpperCase() : "A1";
 
   const inlineExercises: Record<string, { exercise: Exercise; questions: ExerciseQuestion[] }> = {};
-  if (inlineTitles.size > 0 && exercises) {
-    const inlineIds = (exercises as Exercise[]).filter((e) => inlineTitles.has(e.title)).map((e) => e.id);
-    const { data: inlineQuestions } = await supabase
-      .from("exercise_questions")
-      .select("*")
-      .in("exercise_id", inlineIds)
-      .order("order_index");
+  if (inlineIds.length > 0 && exercises) {
     const byExercise = new Map<string, ExerciseQuestion[]>();
-    for (const q of (inlineQuestions as ExerciseQuestion[]) ?? []) {
+    for (const q of (inlineQuestionsRes.data as ExerciseQuestion[] | null) ?? []) {
       const arr = byExercise.get(q.exercise_id) ?? [];
       arr.push(q);
       byExercise.set(q.exercise_id, arr);
