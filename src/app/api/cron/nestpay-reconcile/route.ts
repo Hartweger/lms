@@ -4,8 +4,10 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { queryTransaction } from "@/lib/nestpay";
 import { grantAccessForOrder } from "@/lib/grant-access";
 import { sendCardRetryEmail, sendCardReminder2Email, sendOrderCancelledEmail, sendUplataReminderEmail } from "@/lib/email";
-import { recoveryAction, uplataReminderAction, calculatePaypalEur } from "@/lib/order-utils";
+import { recoveryAction, uplataReminderAction, calculatePaypalEur, needsFiscalRetry } from "@/lib/order-utils";
 import { generateIpsQrUrl } from "@/lib/ips-qr";
+import { fiscalizeOrder } from "@/lib/fiscomm";
+import * as Sentry from "@sentry/nextjs";
 
 function slugOf(items: unknown): string {
   return (Array.isArray(items) ? (items[0] as { course_slug?: string })?.course_slug : "") ?? "";
@@ -161,5 +163,28 @@ export async function GET(request: Request) {
     if (stage === 1) uplCounts.uplMejl1++; else uplCounts.uplMejl2++;
   }
 
-  return NextResponse.json({ checked: pending?.length ?? 0, reconciled, ...counts, ...uplCounts });
+  // 4) Fiskalizacija retry: uspela naplata + pala fiskalizacija = completed bez fiskalnog broja.
+  //    Takva porudžbina je do sada bila NEVIDLJIVA (korak 1 hvata samo pending). Samo skorašnje
+  //    (needsFiscalRetry: >30 min, <7 dana, total>0) — istorijske/migrirane se ne fiskalizuju naknadno.
+  const fiscalCutoff = new Date(now - 7 * 86400000).toISOString();
+  const { data: fiscalGaps } = await admin
+    .from("orders")
+    .select("id, order_number, payment_status, fiscal_referent_number, total, created_at")
+    .eq("payment_status", "completed")
+    .is("fiscal_referent_number", null)
+    .gte("created_at", fiscalCutoff)
+    .limit(20);
+
+  let fiscalRetried = 0, fiscalFailed = 0;
+  for (const o of fiscalGaps ?? []) {
+    if (!needsFiscalRetry(o, now)) continue;
+    const r = await fiscalizeOrder(o.id);
+    if (r.ok) fiscalRetried++;
+    else {
+      fiscalFailed++;
+      Sentry.captureException(new Error(`[fiscomm] retry fiskalizacije pao za order ${o.order_number}: ${r.error}`));
+    }
+  }
+
+  return NextResponse.json({ checked: pending?.length ?? 0, reconciled, ...counts, ...uplCounts, fiscalRetried, fiscalFailed });
 }

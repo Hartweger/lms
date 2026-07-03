@@ -1,4 +1,5 @@
 // src/lib/grant-access.ts
+import * as Sentry from "@sentry/nextjs";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendWelcomeEmail, sendGrupniWelcomeEmail, sendProfNewStudentEmail, sendIndividualWelcomeEmail, sendProfNewIndividualStudentEmail } from "@/lib/email";
 import { nivoForSlug } from "@/lib/course-nivo";
@@ -36,16 +37,26 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
     else { console.warn(`[grant] No course_unlocks for ${item.course_slug} (${item.course_id}) - granting product itself`); contentCourseIds.add(item.course_id); }
   }
 
+  const grantFailures: string[] = [];
   for (const courseId of contentCourseIds) {
     const { data: existing } = await admin
       .from("course_access").select("id")
       .eq("user_id", order.user_id).eq("course_id", courseId).single();
     if (!existing) {
-      await admin.from("course_access").insert({
+      const { error: insertError } = await admin.from("course_access").insert({
         user_id: order.user_id, course_id: courseId, expires_at: expiresAt.toISOString(),
         source: `order:${order.order_number ?? orderId}`,
       });
+      if (insertError) grantFailures.push(`${courseId}: ${insertError.message}`);
     }
+  }
+  // Ako ijedan pristup nije upisan, order OSTAJE pending (reconcile cron ponavlja grant),
+  // bez welcome mejla — kupcu ne obećavamo pristup koji ne postoji.
+  if (grantFailures.length > 0) {
+    const msg = `[grant] course_access insert pao za order ${order.order_number ?? orderId}: ${grantFailures.join("; ")}`;
+    console.error(msg);
+    Sentry.captureException(new Error(msg));
+    return { ok: false, error: msg };
   }
 
   // Grupni proizvodi: auto-upis u otvorenu grupu + Google (kalendar/Sheet) + mejl. Best-effort.
@@ -117,6 +128,7 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
       }
     } catch (e) {
       console.error(`[grant] Grupni tok pao za nivo ${nivo} (order ${orderId}):`, e);
+      Sentry.captureException(e);
     }
   }
 
@@ -200,6 +212,7 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
       }
     } catch (e) {
       console.error(`[grant][ind] Individualni tok pao za ${item.course_slug} (order ${orderId}):`, e);
+      Sentry.captureException(e);
     }
   }
 
@@ -230,6 +243,7 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
       startUrl = `${SITE_URL}/auth/mejl?t=${encodeURIComponent(token)}`;
     } catch (e) {
       console.error(`[grant] login-link za welcome pao (order ${orderId}):`, e);
+      Sentry.captureException(e);
     }
     await sendWelcomeEmail(order.email, order.full_name, items.map((i) => i.title), { startUrl, hasLesson });
   }

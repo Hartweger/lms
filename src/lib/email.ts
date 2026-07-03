@@ -1,4 +1,5 @@
 import { Resend } from "resend";
+import * as Sentry from "@sentry/nextjs";
 import { SITE_URL } from "@/lib/site-url";
 import { odjavaUrl, listUnsubscribeHeaders } from "@/lib/optout";
 import { htmlToText } from "@/lib/html-to-text";
@@ -11,7 +12,32 @@ function getResend() {
     console.warn("[email] RESEND_API_KEY not set - emails disabled");
     return null;
   }
-  return new Resend(process.env.RESEND_API_KEY);
+  return instrumentResend(new Resend(process.env.RESEND_API_KEY));
+}
+
+/**
+ * Resend SDK NE baca izuzetak na API grešku — vraća `{ data: null, error }`, a pozivaoci taj
+ * error ne čitaju. Ovde (jedina tačka kroz koju prolazi svih ~34 slanja) se svaki neuspeh
+ * loguje i šalje u Sentry; throw (mrežni) se takođe beleži pa prosleđuje postojećim catch-evima.
+ */
+function instrumentResend(resend: Resend): Resend {
+  const origSend = resend.emails.send.bind(resend.emails);
+  resend.emails.send = (async (payload, options) => {
+    try {
+      const result = await origSend(payload, options);
+      if (result?.error) {
+        const to = Array.isArray(payload.to) ? payload.to.join(",") : payload.to;
+        const msg = `[email] Resend odbio "${payload.subject}" → ${to}: ${result.error.message ?? JSON.stringify(result.error)}`;
+        console.error(msg);
+        Sentry.captureException(new Error(msg));
+      }
+      return result;
+    } catch (e) {
+      Sentry.captureException(e);
+      throw e;
+    }
+  }) as typeof origSend;
+  return resend;
 }
 
 /** Minimalni HTML-escape za korisnički unos u mejl telu. */

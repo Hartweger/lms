@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { canDeleteOrder, orderTotals, orderFiscalStatus, pendingPaymentState, shouldSendRecovery, recoveryAction, uplataReminderAction } from "./order-utils";
+import { canDeleteOrder, orderTotals, orderFiscalStatus, pendingPaymentState, shouldSendRecovery, recoveryAction, uplataReminderAction, needsFiscalRetry } from "./order-utils";
 
 describe("canDeleteOrder", () => {
   it("dozvoljava brisanje pending narudžbine koja nije dodeljena", () =>
@@ -190,5 +190,30 @@ describe("uplataReminderAction - razmak između podsetnika", () => {
     };
     expect(uplataReminderAction(stara, [], atDays(10.5))).toBe("none");
     expect(uplataReminderAction(stara, [], atDays(14.1))).toBe("mejl2");
+  });
+});
+
+describe("needsFiscalRetry - uspela naplata + pala fiskalizacija", () => {
+  const NOW = new Date("2026-07-03T12:00:00Z").getTime();
+  const hoursAgo = (h: number) => new Date(NOW - h * 3600000).toISOString();
+  const base = { payment_status: "completed", fiscal_referent_number: null as string | null, total: 4800, created_at: hoursAgo(2) };
+
+  it("completed bez fiskalnog broja, 2h stara → retry", () => {
+    expect(needsFiscalRetry(base, NOW)).toBe(true);
+  });
+  it("već fiskalizovana → ne", () => {
+    expect(needsFiscalRetry({ ...base, fiscal_referent_number: "123/456" }, NOW)).toBe(false);
+  });
+  it("pending → ne (nije naplaćena)", () => {
+    expect(needsFiscalRetry({ ...base, payment_status: "pending" }, NOW)).toBe(false);
+  });
+  it("starija od 7 dana → ne (istorijske/migrirane ne diramo)", () => {
+    expect(needsFiscalRetry({ ...base, created_at: hoursAgo(24 * 8) }, NOW)).toBe(false);
+  });
+  it("mlađa od 30 min → ne (callback možda još radi)", () => {
+    expect(needsFiscalRetry({ ...base, created_at: hoursAgo(0.2) }, NOW)).toBe(false);
+  });
+  it("besplatna (total 0) → ne", () => {
+    expect(needsFiscalRetry({ ...base, total: 0 }, NOW)).toBe(false);
   });
 });

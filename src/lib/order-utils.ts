@@ -211,3 +211,20 @@ export function uplataReminderAction(
   if (stage < 2 && ageDays >= UPLATA_MEJL2_DAYS && gapDays >= UPLATA_MIN_GAP_DAYS) return "mejl2";
   return "none";
 }
+
+export const FISCAL_RETRY_MIN_MINUTES = 30;   // callback-u ostavljamo vremena da završi (i bez trke duplog računa)
+export const FISCAL_RETRY_MAX_DAYS = 7;       // istorijske/migrirane porudžbine se NE fiskalizuju naknadno
+
+/** Uspela naplata + pala fiskalizacija: completed bez fiskalnog broja, skorašnja, plaćena. */
+export function needsFiscalRetry(
+  o: { payment_status: string; fiscal_referent_number: string | null; total: number; created_at: string },
+  now: number,
+): boolean {
+  if (o.payment_status !== "completed") return false;
+  if (o.fiscal_referent_number) return false;
+  if (!(o.total > 0)) return false;
+  const age = now - new Date(o.created_at).getTime();
+  if (age < FISCAL_RETRY_MIN_MINUTES * 60000) return false;
+  if (age > FISCAL_RETRY_MAX_DAYS * 86400000) return false;
+  return true;
+}

@@ -1,4 +1,5 @@
 // src/app/api/nestpay/callback/route.ts
+import * as Sentry from "@sentry/nextjs";
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { verifyCallbackHash, NESTPAY } from "@/lib/nestpay";
@@ -53,7 +54,13 @@ export async function POST(request: Request) {
   // echo-vanog params.amount. Server-side query je UKLONJEN - obarao se na IP/whitelist i lažno
   // označavao uspele uplate kao neuspeh.
   await admin.from("orders").update({ nestpay_status: "charged" }).eq("id", order.id);
-  await grantAccessForOrder(order.id); // dodela pristupa + GA4 + Meta Purchase (CAPI) iz jedne tačke
+  // Dodela pristupa + GA4 + Meta Purchase (CAPI) iz jedne tačke. Naplata je USPELA — ako grant
+  // padne, kupac je platio bez pristupa: alarm odmah (Sentry), order ostaje pending pa ga
+  // nestpay-reconcile cron ponavlja. Kupca svejedno vodimo na hvala (novac je prošao).
+  const grant = await grantAccessForOrder(order.id);
+  if (!grant.ok) {
+    Sentry.captureException(new Error(`[nestpay] PLAĆENO-A-NEMA-PRISTUP: grant pao za order ${oid}: ${grant.error}`));
+  }
   await fiscalizeOrder(order.id); // fiskalni račun (kartica) - ne blokira pristup ako padne
 
   // Auto-login: callback stiže KROZ KUPČEV BROWSER (303 lanac), pa sesiju postavljamo

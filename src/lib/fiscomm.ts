@@ -1,4 +1,5 @@
 // src/lib/fiscomm.ts - Fiscomm PURS fiskalizacija (Virtual PFR)
+import * as Sentry from "@sentry/nextjs";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { SITE_URL } from "@/lib/site-url";
 
@@ -68,6 +69,7 @@ export async function fiscalizeOrder(orderId: string): Promise<{ ok: boolean; er
 
     if (!res.ok) {
       console.error(`[fiscomm] API greška ${res.status} za order ${order.order_number}: ${text.slice(0, 300)}`);
+      Sentry.captureException(new Error(`[fiscomm] API greška ${res.status} za order ${order.order_number}: ${text.slice(0, 300)}`));
       await admin.from("orders").update({ fiscal_response: data && Object.keys(data).length ? data : { raw: text.slice(0, 1000), status: res.status } }).eq("id", orderId);
       return { ok: false, error: `http_${res.status}` };
     }
@@ -91,6 +93,7 @@ export async function fiscalizeOrder(orderId: string): Promise<{ ok: boolean; er
     return { ok: true };
   } catch (e) {
     console.error("[fiscomm] izuzetak:", e);
+    Sentry.captureException(e);
     return { ok: false, error: String(e) };
   }
 }
