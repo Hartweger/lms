@@ -9,6 +9,7 @@ import { withCronLog } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendTestFunnelEmail } from "@/lib/email";
 import { funnelUrlsForNivo } from "@/lib/course-nivo";
+import { isDeliverableEmail } from "@/lib/email-valid";
 
 export const dynamic = "force-dynamic";
 
@@ -53,7 +54,8 @@ async function cronHandler(request: NextRequest) {
   const latest = new Map<string, { nivo: string; createdAt: string }>();
   for (const t of tests ?? []) {
     const em = String(t.email).trim().toLowerCase();
-    if (!em || latest.has(em)) continue;
+    // Stare loše adrese u bazi (npr. "gmail.com5") - Resend ih odbija, preskačemo.
+    if (!em || !isDeliverableEmail(em) || latest.has(em)) continue;
     latest.set(em, { nivo: t.recommended_level, createdAt: t.created_at });
   }
   if (latest.size === 0) return NextResponse.json({ candidates: 0, sent: 0 });

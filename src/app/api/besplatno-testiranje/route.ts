@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { rateLimit } from "@/lib/rate-limit";
 import { sendTestResultEmail } from "@/lib/email";
 import { funnelUrlsForNivo } from "@/lib/course-nivo";
+import { isDeliverableEmail } from "@/lib/email-valid";
 
 export async function POST(request: Request) {
   const ip = request.headers.get("x-forwarded-for") || "unknown";
@@ -25,7 +26,7 @@ export async function POST(request: Request) {
   }
 
   const trimmedEmail = String(email).trim().toLowerCase();
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
+  if (!isDeliverableEmail(trimmedEmail)) {
     return NextResponse.json({ error: "Neispravna email adresa." }, { status: 400 });
   }
 
