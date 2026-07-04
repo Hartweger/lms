@@ -1652,7 +1652,7 @@ export async function sendNakiContentEmail(opts: {
           .join("")}</ul>`
       : `<p style="color:#888;margin:8px 0 0">(nema kratkih primera ove nedelje)</p>`;
     await resend.emails.send({
-      from: "Hartweger NaKI <kurs@hartweger.rs>",
+      from: "Hartweger NaKI <info@hartweger.rs>",
       to: "info@hartweger.rs",
       replyTo: "info@hartweger.rs",
       subject: `NaKI pitanje nedelje: ${opts.tema}`,
