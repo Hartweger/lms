@@ -1,29 +1,29 @@
-# /raspored stranica — Implementation Plan
+# /raspored stranica — Implementation Plan (v2)
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Nova javna stranica `/raspored` (raspored grupnih kurseva, živi podaci iz Supabase) + puni nazivi dana na obe javne stranice + redirect stare WP adrese.
+**Goal:** Nova javna stranica `/raspored` (živi podaci iz Supabase) + cene i checkout linkovi IZ BAZE kurseva na obe javne stranice (popravlja živi 404 bag na „Prijavi se") + puni nazivi dana + redirect stare WP adrese.
 
-**Architecture:** Server stranica `src/app/raspored/page.tsx` poziva postojeći `fetchRaspored()`; nova client komponenta `RasporedKartice` renderuje filter i kartice. Zajedničke display konstante (cene, boje nivoa) idu u `src/lib/raspored-prikaz.ts` koji uvoze i stara `RasporedGrupa` i nova komponenta.
+**Architecture:** `fetchRaspored()` uz grupe čita i kupovne grupne kurseve i razrešava kurs po grupi (`purchasable_course_id`, fallback po nivou preko `SLUG_TO_NIVO`). `GrupaRaspored` nosi `daniPuni`, `checkoutSlug`, `cena`, `cenaEur`. Nova client komponenta `RasporedKartice` na `/raspored`; postojeća `RasporedGrupa` prelazi na ista polja. Zajedničke display konstante u `src/lib/raspored-prikaz.ts`.
 
-**Tech Stack:** Next.js 16 (App Router — pre pisanja pogledaj `node_modules/next/dist/docs/` po AGENTS.md), Tailwind (custom klase `plava`/`koral`/`font-montserrat`), vitest.
+**Tech Stack:** Next.js 16 (App Router — pre pisanja pogledaj `node_modules/next/dist/docs/` po AGENTS.md), Tailwind (custom klase `plava`/`koral`/`font-montserrat`), vitest, Supabase (service-role u `fetchRaspored`).
 
 **Spec:** `docs/superpowers/specs/2026-07-06-raspored-stranica-design.md`
 
-**Pravila repoa:** grana `main` (trunk-based — proveri `git branch --show-current` pre commita). U radnom stablu postoje NEPOVEZANE izmene (`src/lib/exercise-kind.ts`, `scripts/send-aktivacija-reminder-3-resume.ts`, spec od 05.07) — NE dodavati ih u commite; `git add` uvek sa eksplicitnim putanjama.
+**Pravila repoa:** grana `main` (proveri `git branch --show-current` pre commita). U radnom stablu postoje NEPOVEZANE izmene (`src/lib/exercise-kind.ts`, `scripts/send-aktivacija-reminder-3-resume.ts`) — NE dodavati ih u commite; `git add` uvek sa eksplicitnim putanjama.
 
 ---
 
-### Task 1: Puni nazivi dana (`formatDaysFull` + `daniPuni`)
+### Task 1: Puni nazivi dana + razrešavanje kupovnog kursa (lib)
 
 **Files:**
-- Modify: `src/lib/groups.ts` (DAY_LABELS na vrhu; `mapGroupToRaspored` na ~88)
+- Modify: `src/lib/groups.ts`
 - Modify: `src/lib/raspored.ts` (interfejs `GrupaRaspored`)
 - Test: `src/lib/groups.test.ts`
 
 - [ ] **Step 1: Napiši failing testove**
 
-U `src/lib/groups.test.ts` dodaj u postojeći import `formatDaysFull` (import na liniji 2), pa dodaj na kraj fajla:
+U `src/lib/groups.test.ts` proširi import (linija 2) sa `formatDaysFull` i `resolveGroupCourse`, pa dodaj na kraj fajla:
 
 ```ts
 describe("formatDaysFull", () => {
@@ -38,19 +38,44 @@ describe("formatDaysFull", () => {
   });
 });
 
-describe("mapGroupToRaspored daniPuni", () => {
-  it("vraća i skraćene i pune dane", () => {
-    const r = mapGroupToRaspored(
-      {
-        level: "A1.1", status: "otvoren", start_date: "2026-09-01",
-        duration_weeks: 7, days: [2, 4], session_time: "17:00-18:00",
-        max_seats: 6, manual_enrolled: 1,
-      },
-      "Suzana Marjanović",
-      1,
-    );
+describe("resolveGroupCourse", () => {
+  const courses = [
+    { id: "c1", slug: "grupni-kurs-nemackog-jezika-a1-1", price: "19600.00", paypal_price_eur: 168 },
+    { id: "c2", slug: "grupni-kurs-b2-1", price: "21200.00", paypal_price_eur: 181 },
+  ];
+  it("po purchasable_course_id kad postoji", () => {
+    expect(resolveGroupCourse({ level: "B2.1", purchasable_course_id: "c1" }, courses)?.id).toBe("c1");
+  });
+  it("fallback po nivou preko SLUG_TO_NIVO", () => {
+    expect(resolveGroupCourse({ level: "A1.1", purchasable_course_id: null }, courses)?.id).toBe("c1");
+    expect(resolveGroupCourse({ level: "B2.1", purchasable_course_id: null }, courses)?.id).toBe("c2");
+  });
+  it("null kad nema pogotka", () => {
+    expect(resolveGroupCourse({ level: "C1.1", purchasable_course_id: null }, courses)).toBeNull();
+  });
+});
+
+describe("mapGroupToRaspored nova polja", () => {
+  const row = {
+    level: "A1.1", status: "otvoren", start_date: "2026-09-01",
+    duration_weeks: 7, days: [2, 4], session_time: "17:00-18:00",
+    max_seats: 6, manual_enrolled: 1,
+  };
+  it("daniPuni + podaci kursa iz baze", () => {
+    const r = mapGroupToRaspored(row, "Suzana Marjanović", 1, {
+      id: "c1", slug: "grupni-kurs-nemackog-jezika-a1-1", price: "19600.00", paypal_price_eur: 168,
+    });
     expect(r.dani).toBe("uto, čet");
     expect(r.daniPuni).toBe("Utorak, Četvrtak");
+    expect(r.checkoutSlug).toBe("grupni-kurs-nemackog-jezika-a1-1");
+    expect(r.cena).toBe(19600);
+    expect(r.cenaEur).toBe(168);
+  });
+  it("bez kursa: null polja, ostalo radi", () => {
+    const r = mapGroupToRaspored(row, "Suzana", 1);
+    expect(r.checkoutSlug).toBeNull();
+    expect(r.cena).toBeNull();
+    expect(r.cenaEur).toBeNull();
   });
 });
 ```
@@ -58,11 +83,17 @@ describe("mapGroupToRaspored daniPuni", () => {
 - [ ] **Step 2: Pokreni test — mora da PADNE**
 
 Run: `npx vitest run src/lib/groups.test.ts`
-Expected: FAIL — `formatDaysFull` nije eksportovan / `daniPuni` ne postoji na tipu.
+Expected: FAIL — `formatDaysFull`/`resolveGroupCourse` nisu eksportovani.
 
-- [ ] **Step 3: Implementacija**
+- [ ] **Step 3: Implementacija u `src/lib/groups.ts`**
 
-U `src/lib/groups.ts`, odmah ispod postojećeg `formatDays` bloka dodaj:
+Na vrh fajla dodaj import:
+
+```ts
+import { nivoForSlug } from "@/lib/course-nivo";
+```
+
+Ispod postojećeg `formatDays` bloka:
 
 ```ts
 export const DAY_LABELS_FULL: Record<number, string> = {
@@ -74,18 +105,68 @@ export function formatDaysFull(days: number[] | null): string {
   if (!days || !days.length) return "";
   return days.map((d) => DAY_LABELS_FULL[d] ?? "").filter(Boolean).join(", ");
 }
+
+export interface PurchasableCourseLite {
+  id: string;
+  slug: string;
+  price: string | number | null;      // numeric iz PostgREST-a stiže kao string
+  paypal_price_eur: number | null;
+}
+
+/**
+ * Kupovni kurs za grupu: prvo direktna veza (purchasable_course_id),
+ * fallback po nivou preko SLUG_TO_NIVO (isti obrazac kao fillGroupCourseIds
+ * u finansijama - grupe iz Sheet migracije nemaju popunjenu vezu).
+ */
+export function resolveGroupCourse(
+  g: { level: string; purchasable_course_id: string | null },
+  courses: PurchasableCourseLite[],
+): PurchasableCourseLite | null {
+  if (g.purchasable_course_id) {
+    const byId = courses.find((c) => c.id === g.purchasable_course_id);
+    if (byId) return byId;
+  }
+  return courses.find((c) => nivoForSlug(c.slug) === g.level) ?? null;
+}
 ```
 
-U `mapGroupToRaspored` (isti fajl, ~linija 88) dodaj polje odmah ispod `dani: formatDays(g.days),`:
+U `mapGroupToRaspored` dodaj 4. opcioni parametar i nova polja:
 
 ```ts
+export function mapGroupToRaspored(
+  g: GroupRowForDisplay,
+  profName: string,
+  activeEnrollments: number,
+  course?: PurchasableCourseLite | null,
+): GrupaRaspored {
+  const seats = computeSeats({ maxSeats: g.max_seats, manualEnrolled: g.manual_enrolled, activeEnrollments });
+  return {
+    nivo: g.level,
+    prof: profName,
+    status: STATUS_LABEL[g.status] ?? g.status,
+    pocetak: formatPocetak(g.start_date),
+    trajanje: g.duration_weeks != null ? String(g.duration_weeks) : "",
+    dani: formatDays(g.days),
     daniPuni: formatDaysFull(g.days),
+    sat: g.session_time ?? "",
+    maks: String(g.max_seats),
+    upisanih: String(seats.enrolled),
+    slobodnih: String(seats.slobodnih),
+    full: seats.full,
+    checkoutSlug: course?.slug ?? null,
+    cena: course?.price != null ? Number(course.price) : null,
+    cenaEur: course?.paypal_price_eur ?? null,
+  };
+}
 ```
 
-U `src/lib/raspored.ts` u interfejs `GrupaRaspored` dodaj ispod `dani: string;`:
+U `src/lib/raspored.ts` u interfejs `GrupaRaspored` dodaj:
 
 ```ts
   daniPuni: string;
+  checkoutSlug: string | null;
+  cena: number | null;
+  cenaEur: number | null;
 ```
 
 - [ ] **Step 4: Testovi prolaze**
@@ -97,17 +178,71 @@ Expected: PASS (svi, uključujući postojeće).
 
 ```bash
 git add src/lib/groups.ts src/lib/raspored.ts src/lib/groups.test.ts
-git commit -m "feat: formatDaysFull + daniPuni u rasporedu grupa"
+git commit -m "feat: puni dani + kupovni kurs (cena/slug iz baze) u rasporedu grupa"
 ```
 
 ---
 
-### Task 2: Zajednički modul `raspored-prikaz.ts` + refactor `RasporedGrupa`
+### Task 2: `fetchRaspored()` čita kupovne kurseve
+
+**Files:**
+- Modify: `src/lib/raspored.ts` (`fetchRaspored`)
+
+- [ ] **Step 1: Proširi upit grupa i dodaj upit kurseva**
+
+U `fetchRaspored()`:
+
+1. U select grupa dodaj `purchasable_course_id` (posle `manual_enrolled`):
+
+```ts
+    .select(
+      "id, level, status, start_date, duration_weeks, days, session_time, max_seats, manual_enrolled, purchasable_course_id, professor:professor_id(full_name)",
+    )
+```
+
+2. Posle upita `group_enrollments` dodaj ODVOJEN upit kurseva (ne embed — groups→courses veza se ne sme oslanjati na PostgREST FK embed, isti oprez kao kod course_access):
+
+```ts
+  // Kupovni grupni kursevi - cena i checkout slug idu iz baze, ne iz koda.
+  const { data: courses } = await admin
+    .from("courses")
+    .select("id, slug, price, paypal_price_eur")
+    .eq("is_purchasable", true)
+    .eq("is_published", true)
+    .like("slug", "grupni%");
+```
+
+3. U map na kraju prosledi razrešeni kurs (import `resolveGroupCourse` iz `@/lib/groups` — dodaj u postojeći import):
+
+```ts
+  const rows = ordered.map((g) => {
+    const prof = Array.isArray(g.professor) ? g.professor[0] : g.professor;
+    const activeEnrollments = counts[g.id] || 0;
+    const course = resolveGroupCourse(g, courses ?? []);
+    return mapGroupToRaspored(g, prof?.full_name || "", activeEnrollments, course);
+  });
+```
+
+- [ ] **Step 2: Tipovi prolaze**
+
+Run: `npx tsc --noEmit`
+Expected: bez grešaka.
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add src/lib/raspored.ts
+git commit -m "feat: fetchRaspored razrešava kupovni kurs po grupi"
+```
+
+---
+
+### Task 3: Zajednički modul `raspored-prikaz.ts` + fix `RasporedGrupa`
 
 **Files:**
 - Create: `src/lib/raspored-prikaz.ts`
 - Create: `src/lib/raspored-prikaz.test.ts`
-- Modify: `src/components/RasporedGrupa.tsx` (linije 1–32: lokalne konstante; linija 129: prikaz dana)
+- Modify: `src/components/RasporedGrupa.tsx`
 
 - [ ] **Step 1: Napiši failing test**
 
@@ -115,7 +250,7 @@ Create `src/lib/raspored-prikaz.test.ts`:
 
 ```ts
 import { describe, expect, it } from "vitest";
-import { LEVEL_ORDER, formatPrice, getNivoKey, nivoPrices } from "./raspored-prikaz";
+import { LEVEL_ORDER, formatPrice, getNivoKey, nivoColors } from "./raspored-prikaz";
 
 describe("raspored-prikaz", () => {
   it("getNivoKey vadi nivo iz oznake grupe", () => {
@@ -125,8 +260,8 @@ describe("raspored-prikaz", () => {
   it("formatPrice koristi tačku kao separator hiljada", () => {
     expect(formatPrice(19600)).toBe("19.600");
   });
-  it("cena definisana za svaki CEFR nivo", () => {
-    LEVEL_ORDER.forEach((l) => expect(nivoPrices[l]).toBeGreaterThan(0));
+  it("boja definisana za svaki CEFR nivo", () => {
+    LEVEL_ORDER.forEach((l) => expect(nivoColors[l]).toBeDefined());
   });
 });
 ```
@@ -138,12 +273,12 @@ Expected: FAIL — modul ne postoji.
 
 - [ ] **Step 3: Implementacija**
 
-Create `src/lib/raspored-prikaz.ts` (vrednosti IDENTIČNE onima koje danas žive u `RasporedGrupa.tsx:7-31`):
+Create `src/lib/raspored-prikaz.ts` (boje IDENTIČNE onima iz `RasporedGrupa.tsx:7-13`; cene se NE sele ovde — dolaze iz baze):
 
 ```ts
 // Zajedničke display konstante za raspored grupa.
-// Koriste ih RasporedGrupa (/grupni-kursevi) i RasporedKartice (/raspored) —
-// cene i boje nivoa se menjaju SAMO ovde.
+// Koriste ih RasporedGrupa (/grupni-kursevi) i RasporedKartice (/raspored).
+// Cene NISU ovde - dolaze iz baze kurseva (GrupaRaspored.cena/cenaEur).
 
 export const nivoColors: Record<string, { bg: string; text: string }> = {
   A1: { bg: "#e0f6fb", text: "#0776a0" },
@@ -153,16 +288,9 @@ export const nivoColors: Record<string, { bg: string; text: string }> = {
   C1: { bg: "#fde4f0", text: "#952060" },
 };
 
-export const nivoPrices: Record<string, number> = {
-  A1: 19600,
-  A2: 19600,
-  B1: 19600,
-  B2: 21200,
-  C1: 21200,
-};
-
 export const LEVEL_ORDER = ["A1", "A2", "B1", "B2", "C1"];
 
+// Fallback za ~€ prikaz kad kurs nema paypal_price_eur.
 export const EUR_RATE = 117;
 
 export function getNivoKey(nivo: string): string {
@@ -180,7 +308,7 @@ export function formatPrice(price: number): string {
 Run: `npx vitest run src/lib/raspored-prikaz.test.ts`
 Expected: PASS.
 
-- [ ] **Step 5: Refactor `RasporedGrupa.tsx`**
+- [ ] **Step 5: Prepravi `RasporedGrupa.tsx`**
 
 U `src/components/RasporedGrupa.tsx`:
 
@@ -193,43 +321,77 @@ import {
   formatPrice,
   getNivoKey,
   nivoColors,
-  nivoPrices,
 } from "@/lib/raspored-prikaz";
 ```
 
-2. Liniju `const eurPrice = Math.round(price / 117);` zameni sa:
+2. U telu map-a zameni izračunavanje cene (linije ~91-92):
 
 ```ts
-const eurPrice = Math.round(price / EUR_RATE);
-```
-
-3. Prikaz dana (linija ~129) — zameni:
-
-```tsx
-<span className="font-medium">Dani:</span> {g.dani}, {g.sat}
+const price = nivoPrices[nivoKey] ?? 19600;
+const eurPrice = Math.round(price / 117);
 ```
 
 sa:
 
-```tsx
-<span className="font-medium">Dani:</span> {g.daniPuni}, {g.sat}
+```ts
+const eurPrice = g.cenaEur ?? (g.cena != null ? Math.round(g.cena / EUR_RATE) : null);
 ```
 
-- [ ] **Step 6: Build i svi testovi prolaze**
+3. Prikaz dana (linija ~129) — zameni `{g.dani}, {g.sat}` sa `{g.daniPuni}, {g.sat}`.
+
+4. Blok cene (linije ~149-154) zameni sa:
+
+```tsx
+{g.cena != null && (
+  <div className="border-t border-gray-100 pt-4 mb-4">
+    <p className="text-xl font-bold text-gray-900">{formatPrice(g.cena)} din</p>
+    {eurPrice != null && <p className="text-xs text-gray-500">~ {eurPrice}€</p>}
+  </div>
+)}
+```
+
+5. CTA (linije ~157-171): umesto `href={`/kupovina/grupni-${nivoKey.toLowerCase()}`}` koristi checkout slug iz baze; bez sluga vodi na kontakt:
+
+```tsx
+{isFull ? (
+  <button
+    disabled
+    className="w-full text-center bg-gray-200 text-gray-500 font-bold py-3 px-6 rounded-xl cursor-not-allowed"
+  >
+    Popunjeno
+  </button>
+) : g.checkoutSlug ? (
+  <Link
+    href={`/kupovina/${g.checkoutSlug}`}
+    className="block w-full text-center bg-koral hover:bg-koral-dark text-white font-bold py-3 px-6 rounded-xl transition-colors"
+  >
+    Prijavi se
+  </Link>
+) : (
+  <Link
+    href="/kontakt"
+    className="block w-full text-center bg-koral hover:bg-koral-dark text-white font-bold py-3 px-6 rounded-xl transition-colors"
+  >
+    Javi nam se
+  </Link>
+)}
+```
+
+- [ ] **Step 6: Svi testovi + build prolaze**
 
 Run: `npm run test && npm run build`
-Expected: vitest PASS, build bez grešaka (bitno: `/grupni-kursevi` se i dalje kompajlira).
+Expected: vitest PASS, build bez grešaka.
 
 - [ ] **Step 7: Commit**
 
 ```bash
 git add src/lib/raspored-prikaz.ts src/lib/raspored-prikaz.test.ts src/components/RasporedGrupa.tsx
-git commit -m "refactor: cene/boje nivoa u zajednički raspored-prikaz + puni dani na /grupni-kursevi"
+git commit -m "fix: cena i checkout link iz baze na /grupni-kursevi (404 na Prijavi se) + puni dani"
 ```
 
 ---
 
-### Task 3: Nova komponenta `RasporedKartice`
+### Task 4: Nova komponenta `RasporedKartice`
 
 **Files:**
 - Create: `src/components/RasporedKartice.tsx`
@@ -252,7 +414,6 @@ import {
   formatPrice,
   getNivoKey,
   nivoColors,
-  nivoPrices,
 } from "@/lib/raspored-prikaz";
 
 export default function RasporedKartice({
@@ -262,8 +423,8 @@ export default function RasporedKartice({
 }) {
   const [level, setLevel] = useState<string>("sve");
 
-  // Samo CEFR nivoi — posebni kursevi (npr. "Konverzacija B1+") imaju svoju
-  // cenu/checkout, pa bi ovde dobili pogrešan link (isti filter kao RasporedGrupa).
+  // Samo CEFR nivoi - posebni kursevi (npr. "Konverzacija B1+") imaju svoju
+  // stranicu/checkout (isti filter kao RasporedGrupa).
   const grupe = grupeProp.filter((g) => LEVEL_ORDER.includes(getNivoKey(g.nivo)));
 
   if (grupe.length === 0) {
@@ -319,8 +480,7 @@ export default function RasporedKartice({
 function Kartica({ g }: { g: GrupaRaspored }) {
   const nivoKey = getNivoKey(g.nivo);
   const colors = nivoColors[nivoKey] ?? { bg: "#f3f4f6", text: "#374151" };
-  const price = nivoPrices[nivoKey] ?? 19600;
-  const eurPrice = Math.round(price / EUR_RATE);
+  const eurPrice = g.cenaEur ?? (g.cena != null ? Math.round(g.cena / EUR_RATE) : null);
   const maks = parseInt(g.maks, 10) || 0;
   const upisanih = parseInt(g.upisanih, 10) || 0;
   const isOpen = g.status?.toLowerCase().includes("otvoren");
@@ -410,10 +570,12 @@ function Kartica({ g }: { g: GrupaRaspored }) {
         {/* Cena + CTA */}
         <div className="flex items-center justify-between gap-4 border-t border-gray-100 pt-4">
           <div>
-            <p className="text-xl font-montserrat font-bold text-gray-900">
-              {formatPrice(price)} din
-            </p>
-            <p className="text-xs text-gray-500">~ {eurPrice}€</p>
+            {g.cena != null && (
+              <p className="text-xl font-montserrat font-bold text-gray-900">
+                {formatPrice(g.cena)} din
+              </p>
+            )}
+            {eurPrice != null && <p className="text-xs text-gray-500">~ {eurPrice}€</p>}
           </div>
           {g.full ? (
             <button
@@ -422,12 +584,19 @@ function Kartica({ g }: { g: GrupaRaspored }) {
             >
               Popunjeno
             </button>
-          ) : (
+          ) : g.checkoutSlug ? (
             <Link
-              href={`/kupovina/grupni-${nivoKey.toLowerCase()}`}
+              href={`/kupovina/${g.checkoutSlug}`}
               className="bg-koral hover:bg-koral-dark text-white font-bold py-3 px-6 rounded-xl transition-colors whitespace-nowrap"
             >
               Prijavi se
+            </Link>
+          ) : (
+            <Link
+              href="/kontakt"
+              className="bg-koral hover:bg-koral-dark text-white font-bold py-3 px-6 rounded-xl transition-colors whitespace-nowrap"
+            >
+              Javi nam se
             </Link>
           )}
         </div>
@@ -461,7 +630,7 @@ function IkonicaOsoba() {
 }
 ```
 
-- [ ] **Step 2: Lint/tipovi prolaze**
+- [ ] **Step 2: Tipovi prolaze**
 
 Run: `npx tsc --noEmit`
 Expected: bez grešaka (komponenta se još nigde ne koristi — to je ok).
@@ -475,7 +644,7 @@ git commit -m "feat: RasporedKartice - nova kartica rasporeda grupa"
 
 ---
 
-### Task 4: Stranica `/raspored`
+### Task 5: Stranica `/raspored`
 
 **Files:**
 - Create: `src/app/raspored/page.tsx`
@@ -556,12 +725,13 @@ git commit -m "feat: javna /raspored stranica"
 
 ---
 
-### Task 5: Redirect, sitemap, footer
+### Task 6: Redirect, sitemap, footer + backfill baze
 
 **Files:**
 - Modify: `next.config.ts:72`
 - Modify: `src/app/sitemap.ts` (niz `staticPages`)
 - Modify: `src/components/Footer.tsx:24`
+- DB: jednokratan UPDATE `groups.purchasable_course_id`
 
 - [ ] **Step 1: Redirect stare adrese**
 
@@ -593,12 +763,37 @@ U `src/components/Footer.tsx`, odmah ispod `<li>` za „Grupni kursevi" (linija 
               <li><Link href="/raspored" className="hover:text-white transition-colors">Raspored grupa</Link></li>
 ```
 
-- [ ] **Step 4: Build prolazi**
+- [ ] **Step 4: Backfill `purchasable_course_id`**
+
+Supabase MCP `execute_sql` (projekat `rzmyglynjcygsbicssbt`) — popuni vezu za grupe bez nje, po istoj SLUG_TO_NIVO mapi (uraditi preko VALUES liste, ne pattern-matchingom):
+
+```sql
+update groups g
+set purchasable_course_id = c.id
+from (values
+  ('A1.1','grupni-kurs-nemackog-jezika-a1-1'),
+  ('A1.2','grupni-kurs-nemackog-jezika-a1-2-2'),
+  ('A2.1','grupni-kurs-nemackog-jezika-a2'),
+  ('A2.2','grupni-kurs-nemackog-jezika-a2-2'),
+  ('B1.1','grupni-kurs-nemackog-jezika-b1-1-2'),
+  ('B1.2','grupni-kurs-nemackog-b1-2'),
+  ('B2.1','grupni-kurs-b2-1'),
+  ('B2.2','grupni-kurs-b2-2'),
+  ('C1.1','grupni-kurs-c1-1'),
+  ('C1.2','grupni-kurs-c1-2')
+) m(level, slug)
+join courses c on c.slug = m.slug
+where g.purchasable_course_id is null and g.level = m.level;
+```
+
+Zatim proveri: `select level, status, purchasable_course_id from groups where status in ('otvoren','uskoro');` — sve popunjeno.
+
+- [ ] **Step 5: Build prolazi**
 
 Run: `npm run build`
 Expected: bez grešaka.
 
-- [ ] **Step 5: Commit**
+- [ ] **Step 6: Commit**
 
 ```bash
 git add next.config.ts src/app/sitemap.ts src/components/Footer.tsx
@@ -607,24 +802,24 @@ git commit -m "feat: /raspored u redirect/sitemap/footer"
 
 ---
 
-### Task 6: Lokalna vizuelna provera (checkpoint pre deploya)
+### Task 7: Lokalna vizuelna provera (checkpoint pre deploya)
 
 **Files:** nema izmena — samo provera.
 
 - [ ] **Step 1: Pokreni dev server i pregledaj**
 
 Pokreni dev server (preview tool ili `npm run dev`) i proveri na `http://localhost:3000/raspored`:
-- kartice prikazuju dane PUNIM rečima („Utorak, Četvrtak"), vreme, početak, trajanje „X nedelja", profesorku, tačkice popunjenosti, cenu, „Prijavi se";
-- filter čipovi rade (Svi nivoi / A1 / …), „Uskoro" grupe (C1) imaju žuti bedž;
-- `http://localhost:3000/grupni-kursevi` — dani puni, sve ostalo netaknuto;
-- mobilni viewport 375px: jedna kolona, ništa ne curi horizontalno;
-- „Prijavi se" vodi na `/kupovina/grupni-a1` itd.
+- kartice prikazuju dane PUNIM rečima („Utorak, Četvrtak"), vreme, početak, trajanje „X nedelja", profesorku, tačkice popunjenosti;
+- cena i € su vrednosti IZ BAZE (19.600/168 za A1-B1, 21.200/181 za B2/C1);
+- „Prijavi se" vodi na `/kupovina/grupni-kurs-nemackog-jezika-a1-2-2` i sl. (pravi slugovi) i te stranice se OTVARAJU (200);
+- filter čipovi rade; `http://localhost:3000/grupni-kursevi` — dani puni, cene iz baze, linkovi rade;
+- mobilni viewport 375px: jedna kolona, ništa ne curi horizontalno.
 
 - [ ] **Step 2: Screenshot Nataši na pregled (desktop + mobile) i sačekaj potvrdu pre deploya**
 
 ---
 
-### Task 7: Deploy + smoke test
+### Task 8: Deploy + smoke test
 
 - [ ] **Step 1: Provera grane i čistoće commita**
 
@@ -638,11 +833,13 @@ Run: `vercel --prod` (iz `/Users/natasahartweger/Documents/Claude/sajt/LMS/lms`;
 - [ ] **Step 3: Ručni smoke**
 
 ```bash
-curl -s -o /dev/null -w "%{http_code}" "https://www.hartweger.rs/raspored?cb=$(date +%s)"
-curl -s -o /dev/null -w "%{http_code} %{redirect_url}" "https://www.hartweger.rs/raspored-grupnih-kurseva?cb=$(date +%s)"
+curl -s -o /dev/null -w "%{http_code}\n" "https://www.hartweger.rs/raspored?cb=$(date +%s)"
+curl -s -o /dev/null -w "%{http_code} %{redirect_url}\n" "https://www.hartweger.rs/raspored-grupnih-kurseva?cb=$(date +%s)"
+# checkout linkovi sa live stranice - svi moraju biti 200:
+curl -s "https://www.hartweger.rs/grupni-kursevi?cb=$(date +%s)" | grep -o 'href="/kupovina/[^"]*"' | sort -u
 ```
 
-Expected: `200`; `308` (ili 301) sa redirect_url na `/raspored`. Plus vizuelno: produkcijski `/raspored` prikazuje grupe, `/grupni-kursevi` radi sa punim danima.
+Expected: `200`; `308` (ili 301) na `/raspored`; hrefs su pravi slugovi (`grupni-kurs-…`) i svaki vraća 200. Plus vizuelno: produkcijski `/raspored` prikazuje grupe sa cenama iz baze.
 
 - [ ] **Step 4: Push na origin**
 
