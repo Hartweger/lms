@@ -1,4 +1,5 @@
 import type { GrupaRaspored } from "./raspored";
+import { nivoForSlug } from "@/lib/course-nivo";
 
 export const DAY_LABELS: Record<number, string> = {
   1: "pon", 2: "uto", 3: "sre", 4: "čet", 5: "pet", 6: "sub", 7: "ned",
@@ -7,6 +8,39 @@ export const DAY_LABELS: Record<number, string> = {
 export function formatDays(days: number[] | null): string {
   if (!days || !days.length) return "";
   return days.map((d) => DAY_LABELS[d] ?? "").filter(Boolean).join(", ");
+}
+
+export const DAY_LABELS_FULL: Record<number, string> = {
+  1: "Ponedeljak", 2: "Utorak", 3: "Sreda", 4: "Četvrtak",
+  5: "Petak", 6: "Subota", 7: "Nedelja",
+};
+
+export function formatDaysFull(days: number[] | null): string {
+  if (!days || !days.length) return "";
+  return days.map((d) => DAY_LABELS_FULL[d] ?? "").filter(Boolean).join(", ");
+}
+
+export interface PurchasableCourseLite {
+  id: string;
+  slug: string;
+  price: string | number | null; // numeric iz PostgREST-a stiže kao string
+  paypal_price_eur: number | null;
+}
+
+/**
+ * Kupovni kurs za grupu: prvo direktna veza (purchasable_course_id),
+ * fallback po nivou preko SLUG_TO_NIVO (isti obrazac kao fillGroupCourseIds
+ * u finansijama - grupe iz Sheet migracije nemaju popunjenu vezu).
+ */
+export function resolveGroupCourse(
+  g: { level: string; purchasable_course_id: string | null },
+  courses: PurchasableCourseLite[],
+): PurchasableCourseLite | null {
+  if (g.purchasable_course_id) {
+    const byId = courses.find((c) => c.id === g.purchasable_course_id);
+    if (byId) return byId;
+  }
+  return courses.find((c) => nivoForSlug(c.slug) === g.level) ?? null;
 }
 
 export function formatPocetak(d: string | null): string {
@@ -85,7 +119,12 @@ export function computeEndDate(startDate: string | null, days: number[] | null, 
   return dates.length ? dates[dates.length - 1] : null;
 }
 
-export function mapGroupToRaspored(g: GroupRowForDisplay, profName: string, activeEnrollments: number): GrupaRaspored {
+export function mapGroupToRaspored(
+  g: GroupRowForDisplay,
+  profName: string,
+  activeEnrollments: number,
+  course?: PurchasableCourseLite | null,
+): GrupaRaspored {
   const seats = computeSeats({ maxSeats: g.max_seats, manualEnrolled: g.manual_enrolled, activeEnrollments });
   return {
     nivo: g.level,
@@ -94,10 +133,14 @@ export function mapGroupToRaspored(g: GroupRowForDisplay, profName: string, acti
     pocetak: formatPocetak(g.start_date),
     trajanje: g.duration_weeks != null ? String(g.duration_weeks) : "",
     dani: formatDays(g.days),
+    daniPuni: formatDaysFull(g.days),
     sat: g.session_time ?? "",
     maks: String(g.max_seats),
     upisanih: String(seats.enrolled),
     slobodnih: String(seats.slobodnih),
     full: seats.full,
+    checkoutSlug: course?.slug ?? null,
+    cena: course?.price != null ? Number(course.price) : null,
+    cenaEur: course?.paypal_price_eur ?? null,
   };
 }

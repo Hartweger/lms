@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { computeSeats, computeEndDate, formatDays, formatPocetak, mapGroupToRaspored, nextExpiry, pickOpenGroupForNivo } from "./groups";
+import { computeSeats, computeEndDate, formatDays, formatDaysFull, formatPocetak, mapGroupToRaspored, nextExpiry, pickOpenGroupForNivo, resolveGroupCourse } from "./groups";
 
 describe("formatDays", () => {
   it("mapira brojeve dana u srpske skraćenice", () => {
@@ -68,6 +68,59 @@ describe("pickOpenGroupForNivo", () => {
       { id: "x", level: "A1.1", status: "otvoren", start_date: null },
       { id: "y", level: "A1.1", status: "otvoren", start_date: "2026-06-01" },
     ], "A1.1")?.id).toBe("y"));
+});
+
+describe("formatDaysFull", () => {
+  it("puni nazivi dana, veliko početno slovo", () => {
+    expect(formatDaysFull([2, 4])).toBe("Utorak, Četvrtak");
+    expect(formatDaysFull([1, 3, 5])).toBe("Ponedeljak, Sreda, Petak");
+  });
+  it("prazno za null/prazan niz, preskače nepoznat broj", () => {
+    expect(formatDaysFull(null)).toBe("");
+    expect(formatDaysFull([])).toBe("");
+    expect(formatDaysFull([9])).toBe("");
+  });
+});
+
+describe("resolveGroupCourse", () => {
+  const courses = [
+    { id: "c1", slug: "grupni-kurs-nemackog-jezika-a1-1", price: "19600.00", paypal_price_eur: 168 },
+    { id: "c2", slug: "grupni-kurs-b2-1", price: "21200.00", paypal_price_eur: 181 },
+  ];
+  it("po purchasable_course_id kad postoji", () => {
+    expect(resolveGroupCourse({ level: "B2.1", purchasable_course_id: "c1" }, courses)?.id).toBe("c1");
+  });
+  it("fallback po nivou preko SLUG_TO_NIVO", () => {
+    expect(resolveGroupCourse({ level: "A1.1", purchasable_course_id: null }, courses)?.id).toBe("c1");
+    expect(resolveGroupCourse({ level: "B2.1", purchasable_course_id: null }, courses)?.id).toBe("c2");
+  });
+  it("null kad nema pogotka", () => {
+    expect(resolveGroupCourse({ level: "C1.1", purchasable_course_id: null }, courses)).toBeNull();
+  });
+});
+
+describe("mapGroupToRaspored nova polja", () => {
+  const row = {
+    level: "A1.1", status: "otvoren", start_date: "2026-09-01",
+    duration_weeks: 7, days: [2, 4], session_time: "17:00-18:00",
+    max_seats: 6, manual_enrolled: 1,
+  };
+  it("daniPuni + podaci kursa iz baze", () => {
+    const r = mapGroupToRaspored(row, "Suzana Marjanović", 1, {
+      id: "c1", slug: "grupni-kurs-nemackog-jezika-a1-1", price: "19600.00", paypal_price_eur: 168,
+    });
+    expect(r.dani).toBe("uto, čet");
+    expect(r.daniPuni).toBe("Utorak, Četvrtak");
+    expect(r.checkoutSlug).toBe("grupni-kurs-nemackog-jezika-a1-1");
+    expect(r.cena).toBe(19600);
+    expect(r.cenaEur).toBe(168);
+  });
+  it("bez kursa: null polja, ostalo radi", () => {
+    const r = mapGroupToRaspored(row, "Suzana", 1);
+    expect(r.checkoutSlug).toBeNull();
+    expect(r.cena).toBeNull();
+    expect(r.cenaEur).toBeNull();
+  });
 });
 
 describe("computeSeats (osnova + nove uplate)", () => {

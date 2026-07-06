@@ -8,11 +8,15 @@ export interface GrupaRaspored {
   pocetak: string;
   trajanje: string;
   dani: string;
+  daniPuni: string;
   sat: string;
   maks: string;
   upisanih: string;
   slobodnih: string;
   full: boolean;
+  checkoutSlug: string | null;
+  cena: number | null;
+  cenaEur: number | null;
 }
 
 // Server-only: čita grupe iz Supabase (zamena za Google Sheet RasporedAPI).
