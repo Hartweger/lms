@@ -69,7 +69,7 @@ const nextConfig: NextConfig = {
       { source: "/kursevi-nemackog/besplatno", destination: "/besplatno-testiranje", permanent: true },
       { source: "/kurs-nemackog-jezika-a1", destination: "/kursevi/video-kurs-a1", permanent: true },
       { source: "/paket-od-a1-do-b1", destination: "/kursevi/paket-a1-a2-b1", permanent: true },
-      { source: "/raspored-grupnih-kurseva", destination: "/grupni-kursevi", permanent: true },
+      { source: "/raspored-grupnih-kurseva", destination: "/raspored", permanent: true },
       { source: "/placanje-platnom-karticom", destination: "/uslovi", permanent: true },
       { source: "/od-individualne-do-grupne-nastave", destination: "/kursevi", permanent: true },
       { source: "/kurs-nemackog-jezika-za-firme-vokum-metoda", destination: "/metodologija", permanent: true },

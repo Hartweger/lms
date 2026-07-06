@@ -15,6 +15,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: "https://www.hartweger.rs", lastModified: now, changeFrequency: "weekly", priority: 1.0 },
     { url: "https://www.hartweger.rs/kursevi", lastModified: now, changeFrequency: "weekly", priority: 0.9 },
     { url: "https://www.hartweger.rs/grupni-kursevi", lastModified: now, changeFrequency: "weekly", priority: 0.8 },
+    { url: "https://www.hartweger.rs/raspored", lastModified: now, changeFrequency: "weekly", priority: 0.8 },
     { url: "https://www.hartweger.rs/individualni-kursevi", lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: "https://www.hartweger.rs/kursevi/paket-a1-a2-b1", lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: "https://www.hartweger.rs/besplatno-testiranje", lastModified: now, changeFrequency: "monthly", priority: 0.8 },
