@@ -147,7 +147,7 @@ export default function RasporedGrupa({
                   </button>
                 ) : g.checkoutSlug ? (
                   <Link
-                    href={`/kupovina/${g.checkoutSlug}`}
+                    href={`/kursevi/${g.checkoutSlug}`}
                     className="block w-full text-center bg-koral hover:bg-koral-dark text-white font-bold py-3 px-6 rounded-xl transition-colors"
                   >
                     Prijavi se

@@ -181,7 +181,7 @@ function Kartica({ g }: { g: GrupaRaspored }) {
             </button>
           ) : g.checkoutSlug ? (
             <Link
-              href={`/kupovina/${g.checkoutSlug}`}
+              href={`/kursevi/${g.checkoutSlug}`}
               className="bg-koral hover:bg-koral-dark text-white font-bold py-3 px-6 rounded-xl transition-colors whitespace-nowrap"
             >
               Prijavi se

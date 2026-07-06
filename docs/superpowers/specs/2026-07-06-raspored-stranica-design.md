@@ -80,7 +80,7 @@ Novi, doteran dizajn kartica u brend stilu (plava/koral, Montserrat, „ti" form
 - Kartica: nivo bedž u boji nivoa, status bedž („Otvoren za upis" / „Uskoro" /
   „Popunjeno"), dani PUNIM rečima + vreme, početak + trajanje, profesorka,
   slobodna mesta sa vizuelnim indikatorom popunjenosti, cena din + ~€ IZ BAZE,
-  dugme „Prijavi se" → `/kupovina/{checkoutSlug}` (postojeći checkout).
+  dugme „Prijavi se" → `/kursevi/{checkoutSlug}` (stranica kursa sa svim detaljima; odatle kupovina).
 - Ista poslovna logika kao `RasporedGrupa`, ali IZDVOJENA u zajednički modul
   `src/lib/raspored-prikaz.ts`: `nivoColors`, `getNivoKey`, `LEVEL_ORDER`,
   `formatPrice`, `EUR_RATE` (fallback za € kad kurs nema `paypal_price_eur`).
