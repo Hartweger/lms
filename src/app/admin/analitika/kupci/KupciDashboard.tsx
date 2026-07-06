@@ -178,8 +178,8 @@ export default function KupciDashboard({ orders }: { orders: WcOrder[] }) {
   const sorted = useMemo(() => {
     let list = allCustomers;
 
-    if (search) {
-      const q = search.toLowerCase();
+    const q = search.trim().toLowerCase();
+    if (q) {
       list = list.filter(
         (c) =>
           c.email.includes(q) ||
@@ -289,7 +289,7 @@ export default function KupciDashboard({ orders }: { orders: WcOrder[] }) {
           <div className="text-2xl font-bold text-plava">
             {stats.newThisMonth.toLocaleString("sr-Latn-RS")}
           </div>
-          <div className="text-xs text-gray-400 mt-1">prva kupovina u maju</div>
+          <div className="text-xs text-gray-400 mt-1">prva kupovina ovog meseca</div>
         </div>
       </div>
 
