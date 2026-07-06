@@ -24,6 +24,37 @@ export default async function RasporedPage() {
 
   return (
     <div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            name: "Raspored grupnih kurseva nemačkog jezika",
+            itemListElement: grupe
+              .filter((g) => g.checkoutSlug)
+              .map((g, i) => ({
+                "@type": "ListItem",
+                position: i + 1,
+                name: `Grupni kurs nemačkog jezika ${g.nivo}`,
+                url: `https://www.hartweger.rs/kursevi/${g.checkoutSlug}`,
+              })),
+          }),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Početna", item: "https://www.hartweger.rs" },
+              { "@type": "ListItem", position: 2, name: "Raspored grupnih kurseva" },
+            ],
+          }),
+        }}
+      />
       {/* Hero + raspored */}
       <section className="py-14 md:py-16 px-4">
         <div className="max-w-5xl mx-auto">
