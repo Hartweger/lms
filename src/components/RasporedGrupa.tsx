@@ -4,32 +4,13 @@ import Link from "next/link";
 import { useState } from "react";
 import type { GrupaRaspored } from "@/lib/raspored";
 
-const nivoColors: Record<string, { bg: string; text: string }> = {
-  A1: { bg: "#e0f6fb", text: "#0776a0" },
-  A2: { bg: "#d6f0f9", text: "#065e88" },
-  B1: { bg: "#fef3e2", text: "#7a4800" },
-  B2: { bg: "#fde8e8", text: "#b52a2a" },
-  C1: { bg: "#fde4f0", text: "#952060" },
-};
-
-const nivoPrices: Record<string, number> = {
-  A1: 19600,
-  A2: 19600,
-  B1: 19600,
-  B2: 21200,
-  C1: 21200,
-};
-
-const LEVEL_ORDER = ["A1", "A2", "B1", "B2", "C1"];
-
-function formatPrice(price: number): string {
-  return price.toLocaleString("de-DE");
-}
-
-function getNivoKey(nivo: string): string {
-  // Extract level like "A1", "B2" from strings like "A1.1", "B2.2"
-  return nivo.substring(0, 2).toUpperCase();
-}
+import {
+  EUR_RATE,
+  LEVEL_ORDER,
+  formatPrice,
+  getNivoKey,
+  nivoColors,
+} from "@/lib/raspored-prikaz";
 
 export default function RasporedGrupa({
   grupe: grupeProp,
@@ -88,8 +69,7 @@ export default function RasporedGrupa({
           {filtered.map((g, i) => {
             const nivoKey = getNivoKey(g.nivo);
             const colors = nivoColors[nivoKey] ?? { bg: "#f3f4f6", text: "#374151" };
-            const price = nivoPrices[nivoKey] ?? 19600;
-            const eurPrice = Math.round(price / 117);
+            const eurPrice = g.cenaEur ?? (g.cena != null ? Math.round(g.cena / EUR_RATE) : null);
             const slobodnih = parseInt(g.slobodnih, 10);
             const isFull = slobodnih <= 0;
             const isOpen = g.status?.toLowerCase().includes("otvoren");
@@ -126,7 +106,7 @@ export default function RasporedGrupa({
                 {/* Schedule details */}
                 <div className="space-y-2 text-sm text-gray-700 mb-4">
                   <p>
-                    <span className="font-medium">Dani:</span> {g.dani}, {g.sat}
+                    <span className="font-medium">Dani:</span> {g.daniPuni}, {g.sat}
                   </p>
                   <p>
                     <span className="font-medium">Početak:</span> {g.pocetak}
@@ -145,13 +125,17 @@ export default function RasporedGrupa({
                   </p>
                 </div>
 
-                {/* Price */}
-                <div className="border-t border-gray-100 pt-4 mb-4">
-                  <p className="text-xl font-bold text-gray-900">
-                    {formatPrice(price)} din
-                  </p>
-                  <p className="text-xs text-gray-500">~ {eurPrice}€</p>
-                </div>
+                {/* Price - iz baze kurseva */}
+                {g.cena != null && (
+                  <div className="border-t border-gray-100 pt-4 mb-4">
+                    <p className="text-xl font-bold text-gray-900">
+                      {formatPrice(g.cena)} din
+                    </p>
+                    {eurPrice != null && (
+                      <p className="text-xs text-gray-500">~ {eurPrice}€</p>
+                    )}
+                  </div>
+                )}
 
                 {/* CTA */}
                 {isFull ? (
@@ -161,12 +145,19 @@ export default function RasporedGrupa({
                   >
                     Popunjeno
                   </button>
-                ) : (
+                ) : g.checkoutSlug ? (
                   <Link
-                    href={`/kupovina/grupni-${nivoKey.toLowerCase()}`}
+                    href={`/kupovina/${g.checkoutSlug}`}
                     className="block w-full text-center bg-koral hover:bg-koral-dark text-white font-bold py-3 px-6 rounded-xl transition-colors"
                   >
                     Prijavi se
+                  </Link>
+                ) : (
+                  <Link
+                    href="/kontakt"
+                    className="block w-full text-center bg-koral hover:bg-koral-dark text-white font-bold py-3 px-6 rounded-xl transition-colors"
+                  >
+                    Javi nam se
                   </Link>
                 )}
               </div>
