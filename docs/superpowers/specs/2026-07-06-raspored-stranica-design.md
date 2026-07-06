@@ -52,9 +52,11 @@ Novi, doteran dizajn kartica u brend stilu (plava/koral, Montserrat, „ti" form
   „Popunjeno"), dani PUNIM rečima + vreme, početak + trajanje, profesorka,
   slobodna mesta sa vizuelnim indikatorom popunjenosti, cena din + ~€,
   dugme „Prijavi se" → `/kupovina/grupni-{nivo}` (postojeći checkout).
-- Ista poslovna logika kao `RasporedGrupa`: cene po nivou (A1/A2/B1 19.600,
-  B2/C1 21.200; €≈din/117), filtriranje ne-CEFR grupa (`getNivoKey` +
-  `LEVEL_ORDER`), popunjeno ⇒ onemogućeno dugme, prazna stanja.
+- Ista poslovna logika kao `RasporedGrupa`, ali IZDVOJENA u zajednički modul
+  `src/lib/raspored-prikaz.ts`: `nivoColors`, `nivoPrices` (A1/A2/B1 19.600,
+  B2/C1 21.200; €≈din/117), `getNivoKey`, `LEVEL_ORDER`, `formatPrice`.
+  Obe komponente ga uvoze — cena se menja na jednom mestu.
+- Popunjeno ⇒ onemogućeno dugme; prazna stanja kao u postojećoj komponenti.
 - Mobile-first: 1 kolona na telefonu, 2 na desktopu; čipovi se prelamaju.
 
 ### 4. Nova stranica `src/app/raspored/page.tsx` (server)
@@ -68,7 +70,10 @@ Novi, doteran dizajn kartica u brend stilu (plava/koral, Montserrat, „ti" form
 
 ### 5. `RasporedGrupa.tsx` (postojeća, `/grupni-kursevi`) — minimalna izmena
 
-- Jedino: prikaz `g.daniPuni` umesto `g.dani`. Ništa drugo se ne dira.
+- Prikaz `g.daniPuni` umesto `g.dani`.
+- Lokalne `nivoColors`/`nivoPrices`/`getNivoKey`/`LEVEL_ORDER`/`formatPrice`
+  zamenjuju se uvozom iz `src/lib/raspored-prikaz.ts` (iste vrednosti,
+  bez promene ponašanja). Ništa drugo se ne dira.
 
 ### 6. Rute i vidljivost
 
