@@ -3,6 +3,10 @@ import Link from "next/link";
 import { fetchRaspored } from "@/lib/raspored";
 import RasporedGrupa from "@/components/RasporedGrupa";
 
+// Podaci (cene, mesta, grupe) idu iz baze - stranica se osvežava sama,
+// ne sme da čeka sledeći deploy.
+export const revalidate = 300;
+
 export const metadata: Metadata = {
   title: "Grupni kursevi nemačkog jezika - Hartweger",
   description: "Pogledajte raspored grupnih kurseva nemačkog jezika i prijavite se online.",
