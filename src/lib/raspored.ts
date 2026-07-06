@@ -1,5 +1,5 @@
 import { createAdminClient } from "@/lib/supabase/admin";
-import { mapGroupToRaspored } from "@/lib/groups";
+import { mapGroupToRaspored, resolveGroupCourse } from "@/lib/groups";
 
 export interface GrupaRaspored {
   nivo: string;
@@ -29,7 +29,7 @@ export async function fetchRaspored(): Promise<GrupaRaspored[]> {
   const { data: groups } = await admin
     .from("groups")
     .select(
-      "id, level, status, start_date, duration_weeks, days, session_time, max_seats, manual_enrolled, professor:professor_id(full_name)",
+      "id, level, status, start_date, duration_weeks, days, session_time, max_seats, manual_enrolled, purchasable_course_id, professor:professor_id(full_name)",
     )
     .in("status", ["otvoren", "uskoro"]);
   if (!groups?.length) return [];
@@ -45,6 +45,15 @@ export async function fetchRaspored(): Promise<GrupaRaspored[]> {
     counts[e.group_id] = (counts[e.group_id] || 0) + 1;
   });
 
+  // Kupovni grupni kursevi - cena i checkout slug idu iz baze, ne iz koda.
+  // Odvojen upit, ne embed (groups→courses veza bez oslanjanja na PostgREST FK).
+  const { data: courses } = await admin
+    .from("courses")
+    .select("id, slug, price, paypal_price_eur")
+    .eq("is_purchasable", true)
+    .eq("is_published", true)
+    .like("slug", "grupni%");
+
   const ordered = [...groups].sort((a, b) => {
     const ao = a.status === "otvoren" ? 0 : 1;
     const bo = b.status === "otvoren" ? 0 : 1;
@@ -55,7 +64,8 @@ export async function fetchRaspored(): Promise<GrupaRaspored[]> {
   const rows = ordered.map((g) => {
     const prof = Array.isArray(g.professor) ? g.professor[0] : g.professor;
     const activeEnrollments = counts[g.id] || 0;
-    return mapGroupToRaspored(g, prof?.full_name || "", activeEnrollments);
+    const course = resolveGroupCourse(g, courses ?? []);
+    return mapGroupToRaspored(g, prof?.full_name || "", activeEnrollments, course);
   });
   return rows;
 }
