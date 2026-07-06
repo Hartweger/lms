@@ -96,6 +96,45 @@ describe("grantAccessForOrder", () => {
     expect(h.sentry.captureException).toHaveBeenCalled(); // ...ali pad mora da se VIDI
   });
 
+  it("obnova: postojeći course_access (npr. wp-migracija) se PRODUŽAVA na +1g od kupovine", async () => {
+    h.fake = createFakeAdmin({
+      orders: [videoOrder()],
+      course_unlocks: [{ purchasable_course_id: "c-prod", content_course_id: "c-content" }],
+      course_access: [{
+        id: "ca1", user_id: "u1", course_id: "c-content",
+        expires_at: "2026-07-05T15:01:29+00:00", source: "wp-migration-2026-06",
+      }],
+    });
+
+    const res = await grantAccessForOrder("o1");
+
+    expect(res.ok).toBe(true);
+    const access = h.fake.row("course_access", (r) => r.id === "ca1")!;
+    expect(new Date(access.expires_at as string).getTime())
+      .toBeGreaterThan(Date.now() + 360 * 24 * 3600 * 1000); // ~1 godina od sada
+    expect(access.source).toBe("order:1001");
+    expect(sendWelcomeEmail).toHaveBeenCalledTimes(1);
+  });
+
+  it("obnova NE skraćuje: postojeći rok duži od +1g ostaje netaknut", async () => {
+    const daleko = "2099-01-01T00:00:00+00:00";
+    h.fake = createFakeAdmin({
+      orders: [videoOrder()],
+      course_unlocks: [{ purchasable_course_id: "c-prod", content_course_id: "c-content" }],
+      course_access: [{
+        id: "ca1", user_id: "u1", course_id: "c-content",
+        expires_at: daleko, source: "poklon",
+      }],
+    });
+
+    const res = await grantAccessForOrder("o1");
+
+    expect(res.ok).toBe(true);
+    const access = h.fake.row("course_access", (r) => r.id === "ca1")!;
+    expect(access.expires_at).toBe(daleko);
+    expect(access.source).toBe("poklon");
+  });
+
   it("idempotentno: već completed order ne dobija ni insert ni mejl", async () => {
     h.fake = createFakeAdmin({
       orders: [videoOrder({ payment_status: "completed", granted: true })],

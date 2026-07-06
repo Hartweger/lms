@@ -40,7 +40,7 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
   const grantFailures: string[] = [];
   for (const courseId of contentCourseIds) {
     const { data: existing } = await admin
-      .from("course_access").select("id")
+      .from("course_access").select("id, expires_at")
       .eq("user_id", order.user_id).eq("course_id", courseId).single();
     if (!existing) {
       const { error: insertError } = await admin.from("course_access").insert({
@@ -48,6 +48,12 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
         source: `order:${order.order_number ?? orderId}`,
       });
       if (insertError) grantFailures.push(`${courseId}: ${insertError.message}`);
+    } else if (existing.expires_at && new Date(existing.expires_at) < expiresAt) {
+      // Obnova: postojeći red (npr. wp-migracija) se produžava, nikad ne skraćuje.
+      const { error: updateError } = await admin.from("course_access")
+        .update({ expires_at: expiresAt.toISOString(), source: `order:${order.order_number ?? orderId}` })
+        .eq("id", existing.id);
+      if (updateError) grantFailures.push(`${courseId}: ${updateError.message}`);
     }
   }
   // Ako ijedan pristup nije upisan, order OSTAJE pending (reconcile cron ponavlja grant),
