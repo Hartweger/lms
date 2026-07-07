@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 import SpeakButton from "@/components/SpeakButton";
 import { sanitizeHtml } from "@/lib/sanitize";
+import { mergeTranscript } from "@/lib/speech-transcript";
 
 interface SpeakExerciseProps {
   question: string;
@@ -207,21 +208,22 @@ export default function SpeakExercise({ question, correctAnswer, explanation, on
     };
 
     recognition.onresult = (event) => {
-      // Obrađuj SAMO nove rezultate (od resultIndex), finalne nakupljaj u bafer,
-      // a interim ZAMENI (poslednji), NE nadovezuj. Chrome (posebno Android)
-      // emituje rastuće interim rezultate kao zasebne unose - nadovezivanje je
-      // pravilo "wie / wie geht / wie geht es ..." iako je polaznik rekao jednom.
+      // Obrađuj SAMO nove rezultate (od resultIndex). Finalne spajaj kroz
+      // mergeTranscript: desktop ih šalje kao zasebne segmente (nadovežu se),
+      // a Chrome na Androidu svaki parcijalni šalje kao KUMULATIVAN finalni -
+      // tamo novi rezultat ZAMENJUJE stari, inače se reči multipliciraju
+      // ("im im Wohnzimmer im Wohnzimmer steht..." - prijave polaznika 07.2026).
       let interim = "";
       for (let i = event.resultIndex; i < event.results.length; i++) {
         const result = event.results[i];
         if (!result || !result[0]) continue;
         if (result.isFinal) {
-          finalTranscript += result[0].transcript + " ";
+          finalTranscript = mergeTranscript(finalTranscript, result[0].transcript);
         } else {
           interim = result[0].transcript;
         }
       }
-      const combined = (finalTranscript + interim).replace(/\s+/g, " ").trim();
+      const combined = mergeTranscript(finalTranscript, interim);
       lastTranscript = combined || lastTranscript;
       lastTranscriptRef.current = lastTranscript;
       setTranscript(lastTranscript);
@@ -233,17 +235,18 @@ export default function SpeakExercise({ question, correctAnswer, explanation, on
     };
 
     recognition.onerror = (event) => {
-      if (event.error === "not-allowed" || event.error === "service-not-allowed") {
-        setListening(false);
-        setMicReady(false);
-        setMicFailed(true);
-      } else if (event.error === "no-speech" || event.error === "aborted") {
+      if (event.error === "no-speech" || event.error === "aborted") {
         // Ne prekidaj - onend će restartovati ili će tajmer tišine završiti.
         return;
-      } else {
-        setListening(false);
-        setTranscript(`Greška: ${event.error}`);
       }
+      // Trajna greška (dozvola, mreža, servis...) - prekini slušanje i pređi
+      // na unos kucanjem, umesto kriptične poruke "Greška: network".
+      done = true;
+      if (silenceTimer) clearTimeout(silenceTimer);
+      setListening(false);
+      setMicReady(false);
+      setMicFailed(true);
+      try { recognition.stop(); } catch { /* already stopped */ }
     };
 
     recognition.onend = () => {
@@ -343,16 +346,33 @@ export default function SpeakExercise({ question, correctAnswer, explanation, on
         </div>
       )}
 
-      {/* Fallback: mic not available */}
+      {/* Fallback: mic not available -> exercise can be finished by typing */}
       {!answered && micFailed && (
-        <div className="bg-amber-50 rounded-xl p-5 text-center">
-          <p className="text-amber-700 font-medium mb-2">Mikrofon nije dostupan u ovom browseru.</p>
-          <p className="text-amber-600 text-sm">Probaj u Safari-ju ili otvori ovu stranicu na telefonu.</p>
+        <div className="bg-amber-50 rounded-xl p-5">
+          <p className="text-amber-700 font-medium mb-1 text-center">Mikrofon trenutno nije dostupan.</p>
+          <p className="text-amber-600 text-sm text-center">Izgovori rečenicu naglas, pa je ukucaj ovde:</p>
+          <div className="mt-3 flex gap-2">
+            <input
+              ref={inputRef}
+              type="text"
+              value={fallbackInput}
+              onChange={(e) => setFallbackInput(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter" && fallbackInput.trim()) evaluate(fallbackInput); }}
+              placeholder="Ukucaj rečenicu"
+              className="flex-1 min-w-0 border border-amber-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-plava"
+            />
+            <button
+              onClick={() => { if (fallbackInput.trim()) evaluate(fallbackInput); }}
+              className="bg-plava text-white rounded-lg px-4 py-2 text-sm font-medium hover:bg-plava-dark shrink-0"
+            >
+              Proveri
+            </button>
+          </div>
           <button
             onClick={() => { setMicFailed(false); setTranscript(""); }}
             className="mt-3 text-sm text-plava hover:underline font-medium"
           >
-            Pokušaj ponovo
+            Pokušaj ponovo sa mikrofonom
           </button>
         </div>
       )}
