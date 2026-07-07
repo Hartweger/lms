@@ -196,7 +196,7 @@ describe("uplataReminderAction - razmak između podsetnika", () => {
 describe("needsFiscalRetry - uspela naplata + pala fiskalizacija", () => {
   const NOW = new Date("2026-07-03T12:00:00Z").getTime();
   const hoursAgo = (h: number) => new Date(NOW - h * 3600000).toISOString();
-  const base = { payment_status: "completed", fiscal_referent_number: null as string | null, total: 4800, created_at: hoursAgo(2) };
+  const base = { payment_status: "completed", payment_method: "kartica", fiscal_referent_number: null as string | null, total: 4800, created_at: hoursAgo(2) };
 
   it("completed bez fiskalnog broja, 2h stara → retry", () => {
     expect(needsFiscalRetry(base, NOW)).toBe(true);
@@ -215,5 +215,14 @@ describe("needsFiscalRetry - uspela naplata + pala fiskalizacija", () => {
   });
   it("besplatna (total 0) → ne", () => {
     expect(needsFiscalRetry({ ...base, total: 0 }, NOW)).toBe(false);
+  });
+  it("uplatnica → ne (fiskalizacija uplatnice je RUČNA, odluka 09.06)", () => {
+    expect(needsFiscalRetry({ ...base, payment_method: "uplatnica" }, NOW)).toBe(false);
+  });
+  it("paypal → ne (fiskalizacija je RUČNA)", () => {
+    expect(needsFiscalRetry({ ...base, payment_method: "paypal" }, NOW)).toBe(false);
+  });
+  it("kartica_rate → retry (rate su isto NestPay naplata)", () => {
+    expect(needsFiscalRetry({ ...base, payment_method: "kartica_rate" }, NOW)).toBe(true);
   });
 });

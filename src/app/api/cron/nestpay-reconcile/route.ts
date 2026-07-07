@@ -170,8 +170,9 @@ async function cronHandler(request: Request) {
   const fiscalCutoff = new Date(now - 7 * 86400000).toISOString();
   const { data: fiscalGaps } = await admin
     .from("orders")
-    .select("id, order_number, payment_status, fiscal_referent_number, total, created_at")
+    .select("id, order_number, payment_status, payment_method, fiscal_referent_number, total, created_at")
     .eq("payment_status", "completed")
+    .in("payment_method", ["kartica", "kartica_rate"])
     .is("fiscal_referent_number", null)
     .gte("created_at", fiscalCutoff)
     .limit(20);

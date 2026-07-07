@@ -215,11 +215,13 @@ export function uplataReminderAction(
 export const FISCAL_RETRY_MIN_MINUTES = 30;   // callback-u ostavljamo vremena da završi (i bez trke duplog računa)
 export const FISCAL_RETRY_MAX_DAYS = 7;       // istorijske/migrirane porudžbine se NE fiskalizuju naknadno
 
-/** Uspela naplata + pala fiskalizacija: completed bez fiskalnog broja, skorašnja, plaćena. */
+/** Uspela naplata + pala fiskalizacija: completed bez fiskalnog broja, skorašnja, plaćena.
+ *  SAMO kartice - uplatnica/PayPal se fiskalizuju RUČNO (odluka 09.06.2026). */
 export function needsFiscalRetry(
-  o: { payment_status: string; fiscal_referent_number: string | null; total: number; created_at: string },
+  o: { payment_status: string; payment_method: string; fiscal_referent_number: string | null; total: number; created_at: string },
   now: number,
 ): boolean {
+  if (o.payment_method !== "kartica" && o.payment_method !== "kartica_rate") return false;
   if (o.payment_status !== "completed") return false;
   if (o.fiscal_referent_number) return false;
   if (!(o.total > 0)) return false;
