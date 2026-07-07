@@ -55,7 +55,7 @@ async function fetchFreeLessonIds(env) {
   }
 }
 
-async function check(path, { expect = 200 } = {}) {
+async function checkOnce(path, expect) {
   const url = `${BASE}${path}`;
   try {
     const r = await fetch(url, { redirect: "manual" });
@@ -71,6 +71,22 @@ async function check(path, { expect = 200 } = {}) {
   } catch (e) {
     return { path, status: "ERR", ok: false, note: String(e.message || e) };
   }
+}
+
+// Prolazni mrežni štucaj (fetch failed) ume da obori svih N provera odjednom i
+// digne lažnu uzbunu — zato svaka ruta dobija do 3 pokušaja pre nego što je FAIL.
+async function check(path, { expect = 200, attempts = 3, delayMs = 4000 } = {}) {
+  let last;
+  for (let i = 1; i <= attempts; i++) {
+    last = await checkOnce(path, expect);
+    if (last.ok) {
+      if (i > 1) last.note = [last.note, `prošlo iz ${i}. pokušaja`].filter(Boolean).join("; ");
+      return last;
+    }
+    if (i < attempts) await new Promise((r) => setTimeout(r, delayMs));
+  }
+  last.note = [last.note, `posle ${attempts} pokušaja`].filter(Boolean).join("; ");
+  return last;
 }
 
 const env = loadEnv();
