@@ -8,7 +8,7 @@ import Navigacija from "@/components/Navigacija";
 import Footer from "@/components/Footer";
 import CookieBanner from "@/components/CookieBanner";
 import SmileWidget from "@/components/naki/SmileWidget";
-import MigracijaBanner from "@/components/MigracijaBanner";
+import PromoBar from "@/components/PromoBar";
 import AttributionTracker from "@/components/AttributionTracker";
 import MetaPixel from "@/components/MetaPixel";
 
@@ -99,7 +99,7 @@ try {
 } catch (e) {}`,
           }}
         />
-        <MigracijaBanner />
+        <PromoBar />
         <Navigacija />
         <script
           type="application/ld+json"
