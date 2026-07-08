@@ -11,7 +11,7 @@ async function requireAdmin() {
   return profile?.role === "admin" ? admin : null;
 }
 
-const FIELDS = ["content_course_id","purchasable_course_id","level","type","professor_id","status","start_date","end_date","duration_weeks","days","session_time","min_seats","max_seats","price","notes","manual_enrolled"];
+const FIELDS = ["content_course_id","purchasable_course_id","level","type","professor_id","status","start_date","end_date","duration_weeks","sessions_count","days","session_time","min_seats","max_seats","price","notes","manual_enrolled"];
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const admin = await requireAdmin();

@@ -10,6 +10,7 @@ interface Group {
   start_date: string | null;
   end_date: string | null;
   duration_weeks: number | null;
+  sessions_count: number | null;
   days: number[] | null;
   session_time: string | null;
   min_seats: number;
@@ -183,6 +184,7 @@ export default function AdminGrupePage() {
       level: g.level, status: "planiran", professor_id: g.professor_id,
       content_course_id: g.content_course_id, days: g.days ? [...g.days] : [],
       session_time: g.session_time, duration_weeks: g.duration_weeks,
+      sessions_count: g.sessions_count,
       min_seats: g.min_seats, max_seats: g.max_seats, start_date: null,
     });
     setMembers([]); setSavedAt(0);
@@ -330,7 +332,7 @@ export default function AdminGrupePage() {
               <input
                 type="text"
                 readOnly
-                value={computeEndDate(form.start_date ?? null, form.days ?? null, form.duration_weeks ?? null) ?? "-"}
+                value={computeEndDate(form.start_date ?? null, form.days ?? null, form.duration_weeks ?? null, form.sessions_count ?? null) ?? "-"}
                 title="Računa se iz početka + broja nedelja; upisuje se kad otvoriš termin."
                 className={inputCls + " bg-gray-50 text-gray-500"}
               />
@@ -348,6 +350,30 @@ export default function AdminGrupePage() {
                 }
                 className={inputCls}
               />
+            </div>
+            <div>
+              <label className={labelCls}>Broj časova</label>
+              <input
+                type="number"
+                min={1}
+                max={15}
+                value={form.sessions_count ?? ""}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    sessions_count: e.target.value ? Number(e.target.value) : null,
+                  })
+                }
+                placeholder={
+                  form.duration_weeks && form.days?.length
+                    ? `auto: ${form.duration_weeks * form.days.length}`
+                    : "auto: nedelje × dani"
+                }
+                className={inputCls}
+              />
+              <p className="mt-1 text-xs text-gray-400">
+                Prazno = nedelje × dani. B2 = 15 (8 ned, poslednja samo 1 čas). Max 15 (šablon beleški).
+              </p>
             </div>
             <div>
               <label className={labelCls}>Sat</label>

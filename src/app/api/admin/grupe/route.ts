@@ -38,6 +38,7 @@ export async function POST(req: NextRequest) {
     start_date: body.start_date || null,
     end_date: body.end_date || null,
     duration_weeks: body.duration_weeks ?? null,
+    sessions_count: body.sessions_count ?? null,
     days: body.days || [],
     session_time: body.session_time || null,
     min_seats: body.min_seats ?? 3,

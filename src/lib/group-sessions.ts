@@ -8,6 +8,7 @@ interface GroupForSessions {
   start_date: string | null;
   days: number[] | null;
   duration_weeks: number | null;
+  sessions_count?: number | null;
 }
 
 /**
@@ -17,7 +18,7 @@ interface GroupForSessions {
  */
 export async function syncGroupSessions(admin: ReturnType<typeof createAdminClient>, g: GroupForSessions): Promise<void> {
   try {
-    const dates = computeSessionDates(g.start_date, g.days, g.duration_weeks);
+    const dates = computeSessionDates(g.start_date, g.days, g.duration_weeks, g.sessions_count);
     const today = new Date().toISOString().slice(0, 10);
     // Briši SAMO buduće, ne-otkazane 'auto' redove (prošlost = istorija honorara; otkazane ostaju otkazane).
     await admin.from("group_sessions").delete()

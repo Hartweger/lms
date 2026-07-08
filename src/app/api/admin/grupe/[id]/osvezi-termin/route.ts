@@ -22,7 +22,7 @@ export async function POST(_req: NextRequest, { params }: { params: Promise<{ id
 
   const { data: g } = await admin
     .from("groups")
-    .select("id, level, days, session_time, duration_weeks, start_date, gcal_event_id, professor_id, professor:professor_id(full_name)")
+    .select("id, level, days, session_time, duration_weeks, sessions_count, start_date, gcal_event_id, professor_id, professor:professor_id(full_name)")
     .eq("id", id)
     .single();
   if (!g) return NextResponse.json({ error: "Grupa ne postoji" }, { status: 404 });
@@ -43,7 +43,7 @@ export async function POST(_req: NextRequest, { params }: { params: Promise<{ id
     polaznici = (profs ?? []).map((pf) => ({ ime: pf.full_name || "", mejl: pf.email || "" }));
   }
 
-  const payload = { nivo: g.level, prof: profIme, days: g.days, time: g.session_time, weeks: g.duration_weeks, startDate: g.start_date, polaznici };
+  const payload = { nivo: g.level, prof: profIme, days: g.days, time: g.session_time, weeks: g.duration_weeks, sessions: g.sessions_count ?? null, startDate: g.start_date, polaznici };
   let gas;
   try {
     gas = g.gcal_event_id
@@ -56,7 +56,7 @@ export async function POST(_req: NextRequest, { params }: { params: Promise<{ id
   const update: Record<string, unknown> = {
     gcal_event_id: gas.eventId ?? g.gcal_event_id ?? null,
     meet_link: gas.meetLink ?? null,
-    end_date: computeEndDate(g.start_date, g.days, g.duration_weeks),
+    end_date: computeEndDate(g.start_date, g.days, g.duration_weeks, g.sessions_count),
     status: "otvoren",
     updated_at: new Date().toISOString(),
   };
@@ -67,7 +67,7 @@ export async function POST(_req: NextRequest, { params }: { params: Promise<{ id
   if (error) return NextResponse.json({ error: error.message }, { status: 400 });
 
   // Auto-izvedi grupne sesije iz rasporeda (za honorar). Best-effort.
-  await syncGroupSessions(admin, { id: g.id, professor_id: g.professor_id, start_date: g.start_date, days: g.days, duration_weeks: g.duration_weeks });
+  await syncGroupSessions(admin, { id: g.id, professor_id: g.professor_id, start_date: g.start_date, days: g.days, duration_weeks: g.duration_weeks, sessions_count: g.sessions_count });
 
   return NextResponse.json({ ok: true, meetLink: gas.meetLink ?? null, notesUrl: gas.notesUrl ?? null });
 }

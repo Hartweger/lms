@@ -93,11 +93,13 @@ export function pickOpenGroupForNivo<T extends OpenGroupRow>(groups: T[], nivo: 
 
 /**
  * Svi datumi časova: od start_date, na zadate dane (1=pon..7=ned), ukupno weeks×dani časova.
+ * sessionsCount (groups.sessions_count) prepisuje ukupan broj - B2 nivoi imaju 8 ned × 2 dana
+ * ali ukupno 15 časova (poslednja nedelja samo 1 čas).
  * Vraća niz "yyyy-mm-dd" (prazan ako nema dovoljno podataka).
  */
-export function computeSessionDates(startDate: string | null, days: number[] | null, weeks: number | null): string[] {
+export function computeSessionDates(startDate: string | null, days: number[] | null, weeks: number | null, sessionsCount?: number | null): string[] {
   if (!startDate || !days?.length || !weeks) return [];
-  const total = weeks * days.length;
+  const total = sessionsCount && sessionsCount > 0 ? sessionsCount : weeks * days.length;
   const jsDays = new Set(days.map((d) => (d === 7 ? 0 : d))); // 0=ned..6=sub
   const d = new Date(startDate + "T00:00:00Z");
   if (isNaN(d.getTime())) return [];
@@ -114,8 +116,8 @@ export function computeSessionDates(startDate: string | null, days: number[] | n
 /**
  * Datum poslednjeg časa (yyyy-mm-dd) ili null. Izveden iz computeSessionDates.
  */
-export function computeEndDate(startDate: string | null, days: number[] | null, weeks: number | null): string | null {
-  const dates = computeSessionDates(startDate, days, weeks);
+export function computeEndDate(startDate: string | null, days: number[] | null, weeks: number | null, sessionsCount?: number | null): string | null {
+  const dates = computeSessionDates(startDate, days, weeks, sessionsCount);
   return dates.length ? dates[dates.length - 1] : null;
 }
 

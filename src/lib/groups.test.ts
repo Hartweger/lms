@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { computeSeats, computeEndDate, formatDays, formatDaysFull, formatPocetak, mapGroupToRaspored, nextExpiry, pickOpenGroupForNivo, resolveGroupCourse } from "./groups";
+import { computeSeats, computeEndDate, computeSessionDates, formatDays, formatDaysFull, formatPocetak, mapGroupToRaspored, nextExpiry, pickOpenGroupForNivo, resolveGroupCourse } from "./groups";
 
 describe("formatDays", () => {
   it("mapira brojeve dana u srpske skraćenice", () => {
@@ -49,6 +49,27 @@ describe("computeEndDate", () => {
     expect(computeEndDate(null, [1], 7)).toBeNull();
     expect(computeEndDate("2026-09-01", [], 7)).toBeNull();
     expect(computeEndDate("2026-09-01", [1], null)).toBeNull();
+  });
+});
+
+describe("sessions_count (B2 = 15 časova, ne 8×2=16)", () => {
+  it("bez sessions_count: 8 ned × uto+čet = 16 termina", () => {
+    const dates = computeSessionDates("2026-09-01", [2, 4], 8);
+    expect(dates).toHaveLength(16);
+    expect(dates[dates.length - 1]).toBe("2026-10-22");
+  });
+  it("sessions_count=15 seče na 15 termina (poslednja nedelja samo 1 čas)", () => {
+    const dates = computeSessionDates("2026-09-01", [2, 4], 8, 15);
+    expect(dates).toHaveLength(15);
+    expect(dates[dates.length - 1]).toBe("2026-10-20");
+  });
+  it("computeEndDate poštuje sessions_count", () => {
+    expect(computeEndDate("2026-09-01", [2, 4], 8, 15)).toBe("2026-10-20");
+    expect(computeEndDate("2026-09-01", [2, 4], 8)).toBe("2026-10-22");
+  });
+  it("null/0 sessions_count = default nedelje × dani", () => {
+    expect(computeEndDate("2026-09-01", [2, 4], 8, null)).toBe("2026-10-22");
+    expect(computeEndDate("2026-09-01", [2, 4], 8, 0)).toBe("2026-10-22");
   });
 });
 
