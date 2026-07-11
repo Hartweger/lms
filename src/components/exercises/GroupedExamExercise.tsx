@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { sanitizeHtml } from "@/lib/sanitize";
+import { examItemsOf, examCorrectIndexOf } from "@/lib/grouped-exam";
 import type { Exercise, ExerciseQuestion } from "@/lib/types";
 
 interface Props {
@@ -23,9 +24,10 @@ function ctxOf(q: ExerciseQuestion): Ctx | null {
   return null;
 }
 function itemsOf(q: ExerciseQuestion): string[] {
-  const o = q.options as Record<string, unknown> | null;
-  if (o && typeof o === "object" && Array.isArray((o as { items?: unknown }).items)) return (o as { items: string[] }).items;
-  return [];
+  return examItemsOf(q.options, q.correct_answer);
+}
+function correctOf(q: ExerciseQuestion): number {
+  return examCorrectIndexOf(q.correct_answer, itemsOf(q));
 }
 function fmtMd(md: string): string {
   return (md || "")
@@ -62,7 +64,7 @@ export default function GroupedExamExercise({ exercise, questions, nextLessonId,
   const isChecked = !!checked[partIdx];
   const allAnswered = part.every((q) => selected[q.id] !== undefined);
 
-  const totalCorrect = () => questions.filter((q) => selected[q.id] === parseInt(q.correct_answer)).length;
+  const totalCorrect = () => questions.filter((q) => selected[q.id] === correctOf(q)).length;
 
   const checkPart = () => setChecked({ ...checked, [partIdx]: true });
 
@@ -164,7 +166,7 @@ export default function GroupedExamExercise({ exercise, questions, nextLessonId,
       <div className="space-y-5">
         {part.map((q) => {
           const items = itemsOf(q);
-          const correct = parseInt(q.correct_answer);
+          const correct = correctOf(q);
           const sel = selected[q.id];
           return (
             <div key={q.id} className="border border-gray-100 rounded-lg p-4">
@@ -204,7 +206,7 @@ export default function GroupedExamExercise({ exercise, questions, nextLessonId,
         ) : (
           <div className="flex items-center gap-4">
             <span className="text-sm font-medium text-gray-700">
-              {part.filter((q) => selected[q.id] === parseInt(q.correct_answer)).length} / {part.length} tačno u ovom delu
+              {part.filter((q) => selected[q.id] === correctOf(q)).length} / {part.length} tačno u ovom delu
             </span>
             <button onClick={next} className="px-6 py-3 rounded-lg font-bold bg-plava text-white hover:bg-plava-dark transition-colors ml-auto">
               {partIdx < groups.length - 1 ? `Sledeći deo →` : "Završi test"}

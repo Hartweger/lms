@@ -17,6 +17,7 @@ import ConversationExercise from "./ConversationExercise";
 import SpeakExercise from "./SpeakExercise";
 import SprechenExercise from "./SprechenExercise";
 import GroupedExamExercise from "./GroupedExamExercise";
+import { canRenderGroupedExam } from "@/lib/grouped-exam";
 import type { Exercise, ExerciseQuestion } from "@/lib/types";
 
 interface ExerciseRunnerProps {
@@ -75,7 +76,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
 
   // Ispitni (grupni) prikaz: kad sva pitanja dele tekst (Lesen) ili audio (Hören) -
   // prikaži ceo deo odjednom, provera na kraju dela. Ostale vežbe → standardni prikaz.
-  const isGroupedExam = questions.length > 1 && questions.every((q) => {
+  const isGroupedExam = questions.length > 1 && canRenderGroupedExam(questions) && questions.every((q) => {
     const o = q.options as Record<string, unknown> | null;
     const hasCtx = !!(o && typeof o === "object" && !Array.isArray(o) && o.context);
     return hasCtx || !!q.audio_url;
