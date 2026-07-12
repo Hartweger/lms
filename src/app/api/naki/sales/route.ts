@@ -6,7 +6,8 @@ import { rateLimit } from "@/lib/rate-limit";
 import { Resend } from "resend";
 import { buildSalesSystemPrompt, SMILE_MAX_TOKENS, SMILE_MAX_REQUESTS_PER_DAY } from "@/lib/naki/sales-prompt";
 import { getCatalogText } from "@/lib/naki/catalog";
-import { getSmileConfig, isPurchaseSignal } from "@/lib/naki/smile-config";
+import { getSmileConfig, isPurchaseSignal, extractEmail } from "@/lib/naki/smile-config";
+import { upsertContact, logInteraction } from "@/lib/crm/contacts";
 import { userOwnsAnyVideoCourse } from "@/lib/coupon-ownership";
 import { createHash } from "crypto";
 
@@ -115,8 +116,43 @@ export async function POST(request: Request) {
     }),
   ]);
 
-  // Admin-notify za kupovni signal (ne ruši chat ako padne)
-  if (last.role === "user" && isPurchaseSignal(last.content) && process.env.RESEND_API_KEY) {
+  // Lid: posetilac ostavio mejl u razgovoru → CRM + notify za ljudski odgovor (ne ruši chat ako padne)
+  const leadEmail = last.role === "user" ? extractEmail(last.content) : null;
+  if (leadEmail) {
+    const convo = history
+      .map((m) => `${m.role === "user" ? "Korisnik" : "Smile"}: ${m.content}`)
+      .join("\n")
+      .slice(0, 8000);
+    try {
+      const contactId = await upsertContact(admin, { email: leadEmail, source: "smile", userId });
+      if (contactId) {
+        await logInteraction(admin, {
+          contactId,
+          channel: "smile",
+          direction: "dolazna",
+          summary: "Ostavio mejl u razgovoru sa Smile-om - čeka odgovor",
+          body: convo,
+        });
+      }
+    } catch (e) {
+      console.error("[smile] CRM upis lida nije uspeo", e);
+    }
+    if (process.env.RESEND_API_KEY) {
+      try {
+        const resend = new Resend(process.env.RESEND_API_KEY);
+        await resend.emails.send({
+          from: "Smile <info@hartweger.rs>",
+          to: "info@hartweger.rs",
+          replyTo: leadEmail,
+          subject: `Smile · Posetilac čeka odgovor: ${leadEmail}`,
+          text: `Posetilac je ostavio mejl u razgovoru i obećan mu je brz odgovor.\nOdgovori mu direktno (reply ide na ${leadEmail}).\n\nRazgovor:\n${convo}\n\nSmile je upravo odgovorio:\n${reply}\n\n---\nSmile · Hartweger sajt`,
+        });
+      } catch (e) {
+        console.error("[smile] lead-notify failed", e);
+      }
+    }
+  } else if (last.role === "user" && isPurchaseSignal(last.content) && process.env.RESEND_API_KEY) {
+    // Admin-notify za kupovni signal (ne ruši chat ako padne)
     try {
       const resend = new Resend(process.env.RESEND_API_KEY);
       await resend.emails.send({

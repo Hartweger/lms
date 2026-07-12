@@ -40,6 +40,12 @@ export async function getSmileConfig(admin: SupabaseClient): Promise<SmileConfig
   }
 }
 
+/** Prvi mejl u tekstu (mala slova) ili null - za hvatanje lida kad ga Smile zamoli za mejl. */
+export function extractEmail(text: string): string | null {
+  const m = text.match(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/);
+  return m ? m[0].toLowerCase() : null;
+}
+
 export function isPurchaseSignal(text: string): boolean {
   const lower = text.toLowerCase();
   if (SMILE_NOTIFY_KEYWORDS.some((kw) => lower.includes(kw))) return true;

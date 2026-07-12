@@ -184,7 +184,7 @@ export default function SmileWidget() {
       await fetch("/api/naki/sales/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: leadEmail }),
+        body: JSON.stringify({ email: leadEmail, history: msgs }),
       });
     } catch {}
     setLeadDone(true);
