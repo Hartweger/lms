@@ -2,7 +2,7 @@
 // čak i unutar lekcije. Vežba = sitna praktična vežba uz temu u nastavnom kursu.
 
 const EXAM_COURSE = /polo[žz]i|fide|fsp|goethe|gramatik/i;
-const EXAM_TITLE = /\btest\b|modell?test|pr[üu]fung|zwischentest|lesen|h[öo]ren|hoeren|schreiben|sprechen|glagoli|\bmodul\b|vortrag|diskussion|modelltest/i;
+const EXAM_TITLE = /\btest\b|modell?test|pr[üu]fung|zwischentest|lesen|h[öo]ren|hoeren|schreiben|sprechen|glagoli|\bmodul\b|vortrag|diskussion|modelltest|\bispit\b/i;
 
 /** true = TEST (ispitno), false = Vežba (praktična). */
 export function isTestExercise(exerciseTitle: string, courseTitleOrSlug?: string | null): boolean {
