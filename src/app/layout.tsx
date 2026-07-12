@@ -139,7 +139,7 @@ try {
                 },
                 sameAs: [
                   "https://www.instagram.com/hartweger_centar/",
-                  "https://www.youtube.com/channel/UCa_7vX8_EtWNUbjA9SqqMwQ",
+                  "https://www.youtube.com/@NatasaHartweger",
                   "https://www.facebook.com/hartwegercentar/",
                   "https://rs.linkedin.com/in/natasahartweger",
                   "https://x.com/nacapaun",

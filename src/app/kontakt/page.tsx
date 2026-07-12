@@ -47,8 +47,8 @@ export default function KontaktPage() {
                 <a href="https://www.instagram.com/hartweger_centar/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-gray-600 hover:text-plava">
                   Instagram - @hartweger_centar
                 </a>
-                <a href="https://www.youtube.com/@hartwegercentar" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-gray-600 hover:text-plava">
-                  YouTube - Hartweger Centar
+                <a href="https://www.youtube.com/@NatasaHartweger" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-gray-600 hover:text-plava">
+                  YouTube - @NatasaHartweger
                 </a>
                 <a href="https://www.facebook.com/hartwegercentar" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-gray-600 hover:text-plava">
                   Facebook - @hartwegercentar
