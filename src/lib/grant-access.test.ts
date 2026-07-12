@@ -147,4 +147,57 @@ describe("grantAccessForOrder", () => {
     expect(h.fake.row("course_access", () => true)).toBeUndefined();
     expect(sendWelcomeEmail).not.toHaveBeenCalled();
   });
+
+  it("kupon: usage_count se uvećava kad porudžbina postane completed", async () => {
+    h.fake = createFakeAdmin({
+      orders: [videoOrder({ coupon_code: "NAKI10" })],
+      course_unlocks: [{ purchasable_course_id: "c-prod", content_course_id: "c-content" }],
+      coupons: [{ code: "NAKI10", usage_count: 0 }],
+    });
+
+    const res = await grantAccessForOrder("o1");
+
+    expect(res.ok).toBe(true);
+    expect(h.fake.row("coupons", (r) => r.code === "NAKI10")!.usage_count).toBe(1);
+  });
+
+  it("kupon: pao grant (order ostaje pending) NE troši usage_count", async () => {
+    h.fake = createFakeAdmin({
+      orders: [videoOrder({ coupon_code: "NAKI10" })],
+      course_unlocks: [{ purchasable_course_id: "c-prod", content_course_id: "c-content" }],
+      coupons: [{ code: "NAKI10", usage_count: 0 }],
+    });
+    h.fake.failInsert("course_access", "RLS: nije dozvoljeno");
+
+    const res = await grantAccessForOrder("o1");
+
+    expect(res.ok).toBe(false);
+    expect(h.fake.row("coupons", (r) => r.code === "NAKI10")!.usage_count).toBe(0);
+  });
+
+  it("kupon: već completed order (retry) NE uvećava usage_count ponovo", async () => {
+    h.fake = createFakeAdmin({
+      orders: [videoOrder({ payment_status: "completed", granted: true, coupon_code: "NAKI10" })],
+      course_unlocks: [{ purchasable_course_id: "c-prod", content_course_id: "c-content" }],
+      coupons: [{ code: "NAKI10", usage_count: 1 }],
+    });
+
+    const res = await grantAccessForOrder("o1");
+
+    expect(res.ok).toBe(true);
+    expect(h.fake.row("coupons", (r) => r.code === "NAKI10")!.usage_count).toBe(1);
+  });
+
+  it("bez kupona: tabela coupons se uopšte ne dira", async () => {
+    h.fake = createFakeAdmin({
+      orders: [videoOrder()],
+      course_unlocks: [{ purchasable_course_id: "c-prod", content_course_id: "c-content" }],
+      coupons: [{ code: "NAKI10", usage_count: 0 }],
+    });
+
+    const res = await grantAccessForOrder("o1");
+
+    expect(res.ok).toBe(true);
+    expect(h.fake.calls.some((c) => c.table === "coupons")).toBe(false);
+  });
 });

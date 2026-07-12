@@ -320,13 +320,8 @@ export async function POST(request: Request) {
       country,
     });
 
-    // Increment coupon usage count if coupon was applied
-    if (validCouponCode) {
-      const { data: coupon } = await supabase.from("coupons").select("usage_count").eq("code", validCouponCode).single();
-      if (coupon) {
-        await supabase.from("coupons").update({ usage_count: coupon.usage_count + 1 }).eq("code", validCouponCode);
-      }
-    }
+    // usage_count se NE uvećava ovde: kupon troši limit tek kad porudžbina postane
+    // completed (grantAccessForOrder) — odbijena kartica ne sme da pojede max_uses.
 
     // Kartice se naplaćaju instant na bankovnoj strani - bez mejla sa instrukcijama;
     // narudžbina ostaje 'pending' dok NestPay callback ne potvrdi.

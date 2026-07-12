@@ -223,6 +223,20 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
   }
 
   await admin.from("orders").update({ payment_status: "completed", granted: true }).eq("id", orderId);
+  // Kupon troši max_uses tek na NAPLATU (jedina tačka gde order postaje completed) —
+  // odbijena kartica / otkazana uplatnica ne sme da pojede limit. Idempotentno preko
+  // completed-guarda na vrhu. Best-effort: brojač ne sme da obori dodelu pristupa.
+  if (order.coupon_code) {
+    try {
+      const { data: coupon } = await admin.from("coupons").select("usage_count").eq("code", order.coupon_code).single();
+      if (coupon) {
+        await admin.from("coupons").update({ usage_count: (coupon.usage_count as number) + 1 }).eq("code", order.coupon_code);
+      }
+    } catch (e) {
+      console.error(`[grant] usage_count increment pao za kupon ${order.coupon_code} (order ${orderId}):`, e);
+      Sentry.captureException(e);
+    }
+  }
   // GA4 prihod (server-side) za SVE načine plaćanja — klijentski purchase hvata samo karticu.
   await sendGa4Purchase(order);
   // Meta Purchase (CAPI) iz JEDNE tačke — pokriva SVE puteve do "completed" (kartica callback,
