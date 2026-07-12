@@ -14,6 +14,12 @@ import {
 import { createHash } from "crypto";
 import { userOwnsAnyVideoCourse } from "@/lib/coupon-ownership";
 import { stickyLevel, getLevelCourse, courseUpsellAddon } from "@/lib/naki/courses";
+import {
+  personalDailyLimit,
+  limitReachedMessage,
+  userIsStudent,
+  countTodayMessages,
+} from "@/lib/naki/limits";
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
@@ -79,7 +85,7 @@ export async function POST(request: Request) {
     );
   }
 
-  // ── Ko je ulogovan (za premium kasnije; sada samo zabeleži user_id) ──
+  // ── Ko je ulogovan ──
   let userId: string | null = null;
   try {
     const supabase = await createClient();
@@ -87,6 +93,35 @@ export async function POST(request: Request) {
     userId = data.user?.id ?? null;
   } catch {
     userId = null;
+  }
+
+  // ── Lični dnevni limit (anon 20, ulogovan 40, polaznik bez limita) ──
+  // Na limitu ne odgovaramo "vidimo se sutra" nego nudimo plan učenja na mejl,
+  // besplatan nalog i kurs za detektovani nivo uz NAKI10.
+  const isStudent = userId ? await userIsStudent(admin, userId) : false;
+  const personalLimit = personalDailyLimit({ loggedIn: !!userId, isStudent });
+  if (personalLimit !== null) {
+    const todayCount = await countTodayMessages(admin, { day: today, userId, ipHash });
+    if (todayCount >= personalLimit) {
+      const knownLevel = stickyLevel(messages.filter((m) => m.role === "user").map((m) => m.content));
+      const levelCourse = await getLevelCourse(admin, knownLevel);
+      await admin.from("naki_messages").insert({
+        session_id: sessionId,
+        role: "assistant",
+        message: `[limit_reached] ${userId ? "user" : "anon"} nivo=${knownLevel ?? "?"}`,
+        level: knownLevel,
+        ip_hash: ipHash,
+        user_id: userId,
+      });
+      return NextResponse.json(
+        {
+          error: "personal_limit_reached",
+          message: limitReachedMessage({ loggedIn: !!userId, course: levelCourse }),
+          show_email_gate: !userId,
+        },
+        { status: 429 }
+      );
+    }
   }
 
   // ── Loguj poslednju korisničku poruku ──

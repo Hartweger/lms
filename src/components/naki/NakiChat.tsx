@@ -124,11 +124,17 @@ export default function NakiChat() {
         });
         const data = await res.json();
         if (!res.ok) {
-          const errMsg =
-            data.error === "limit_reached"
-              ? data.message
-              : "Ups! Greška na serveru. Probaj ponovo.";
+          const isLimit = data.error === "limit_reached" || data.error === "personal_limit_reached";
+          const errMsg = isLimit ? data.message : "Ups! Greška na serveru. Probaj ponovo.";
           setMessages((m) => [...m, { role: "assistant", content: errMsg }]);
+          if (data.error === "personal_limit_reached") {
+            ga("naki_personal_limit", { session_id: sessionId.current });
+            // Limit je prodajni trenutak: anonimnom odmah ponudi plan učenja na mejl
+            if (data.show_email_gate && !emailGiven.current && !emailFinal.current) {
+              setShowGate(true);
+              ga("naki_email_gate_shown", { session_id: sessionId.current, trigger: "limit" });
+            }
+          }
           return;
         }
         extractLevel(data.reply);
