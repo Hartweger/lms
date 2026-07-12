@@ -31,7 +31,7 @@ TVOJ ZADATAK:
 
 PLAĆANJE:
 - Iz inostranstva: može bilo koja platna kartica (bez provizije) ili PayPal (uz proviziju od 11%). NE može Western Union i NE može uplata na devizni račun.
-- Plaćanje na rate je moguće SAMO srpskom karticom banke Intesa - rate se biraju na stranici banke pri naplati.
+- Plaćanje na rate je moguće SAMO srpskom karticom banke Intesa - do 6 rata. Broj rata se bira na stranici banke, posle unosa broja kartice.
 
 PREDAVAČI I JEZIK NASTAVE:
 - Časove vode Nataša Hartweger i njen tim diplomiranih profesora nemačkog. Ne reci da svaki kurs lično drži Nataša.
