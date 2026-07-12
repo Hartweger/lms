@@ -1,0 +1,536 @@
+<title>Audit: 🎯 test vs ✏️ vežba</title>
+<style>
+  :root{
+    --ink:#22262b; --muted:#66707a; --ground:#f6f7f6; --surface:#ffffff;
+    --line:#e2e6e4; --brand:#33544e; --brand-soft:#e7eeec;
+    --test-bg:#f5ead2; --test-tx:#8a5d0b; --test-bd:#e6d2a4;
+    --vez-bg:#e9edf0; --vez-tx:#55636e; --vez-bd:#d4dbe0;
+    --red:#c2453f; --red-bg:#fdf1f0; --amb:#d99a2b; --amb-bg:#fdf8ec;
+    --ok:#2e7d4f; --ok-bg:#eef7f0;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ground);color:var(--ink);
+    font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;}
+  header{background:var(--brand);color:#fff;padding:28px 20px 22px}
+  header .wrap,main{max-width:980px;margin:0 auto}
+  h1{margin:0 0 6px;font-size:24px;font-weight:650;letter-spacing:-.01em;text-wrap:balance}
+  header p{margin:0;opacity:.85;max-width:62ch}
+  .stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+  .stat{background:rgba(255,255,255,.12);border-radius:6px;padding:6px 12px;font-size:13px}
+  .stat b{font-size:16px;font-variant-numeric:tabular-nums}
+  nav{position:sticky;top:0;z-index:5;background:var(--surface);border-bottom:1px solid var(--line);padding:8px 20px}
+  nav .wrap{max-width:980px;margin:0 auto;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+  .filters{display:flex;gap:6px;flex-wrap:wrap}
+  .filters button{border:1px solid var(--line);background:var(--surface);border-radius:20px;
+    padding:4px 12px;font:600 13px system-ui;color:var(--muted);cursor:pointer}
+  .filters button.on{background:var(--brand);border-color:var(--brand);color:#fff}
+  .filters button:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+  .anchors{display:flex;gap:2px;flex-wrap:wrap;font-size:12.5px}
+  .anchors a{color:var(--brand);text-decoration:none;padding:3px 7px;border-radius:4px;font-weight:600}
+  .anchors a:hover{background:var(--brand-soft)}
+  main{padding:20px 20px 60px}
+  .legend{background:var(--surface);border:1px solid var(--line);border-radius:8px;
+    padding:14px 16px;margin-bottom:26px;font-size:13.5px;color:var(--muted)}
+  .legend b{color:var(--ink)}
+  .legend ul{margin:8px 0 0;padding-left:18px}
+  .legend li{margin:3px 0}
+  section{margin-bottom:34px}
+  .course-h{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin:0 0 4px}
+  .course-h h2{margin:0;font-size:18px;font-weight:650}
+  .course-h .counts{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .course-note{font-size:13.5px;color:#8a5d0b;background:var(--amb-bg);border:1px solid #eedfb8;
+    border-radius:6px;padding:8px 12px;margin:8px 0 10px;max-width:75ch}
+  .tblwrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:8px}
+  table{border-collapse:collapse;width:100%;min-width:720px;font-size:13.5px}
+  th{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);
+    text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);background:#fbfcfb}
+  td{padding:7px 10px;border-bottom:1px solid #eef1ef;vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  td.id{font:600 12px ui-monospace,Menlo,monospace;color:var(--muted);white-space:nowrap}
+  td.typ{font:11.5px ui-monospace,Menlo,monospace;color:var(--muted);white-space:nowrap}
+  .chip{display:inline-block;border-radius:4px;padding:1px 8px;font-size:12px;font-weight:650;white-space:nowrap;border:1px solid}
+  .chip.t{background:var(--test-bg);color:var(--test-tx);border-color:var(--test-bd)}
+  .chip.v{background:var(--vez-bg);color:var(--vez-tx);border-color:var(--vez-bd)}
+  tr.s1 td{background:var(--red-bg)}
+  tr.s2 td{background:var(--amb-bg)}
+  tr.s3 td{background:var(--ok-bg)}
+  tr.s1 td:first-child{box-shadow:inset 3px 0 0 var(--red)}
+  tr.s2 td:first-child{box-shadow:inset 3px 0 0 var(--amb)}
+  tr.s3 td:first-child{box-shadow:inset 3px 0 0 var(--ok)}
+  .note{display:block;margin-top:2px;font-size:12px}
+  tr.s1 .note{color:var(--red)}
+  tr.s2 .note{color:#9c6d10}
+  tr.s3 .note{color:var(--ok)}
+  .lesson{color:var(--muted)}
+  tr.hide{display:none}
+  @media (prefers-reduced-motion: no-preference){ html{scroll-behavior:smooth} }
+</style>
+
+<header><div class="wrap">
+  <h1>Audit klasifikacije: 🎯 test vs ✏️ vežba</h1>
+  <p>Sve vežbe u LMS-u onako kako ih trenutna heuristika (exercise-kind.ts) vidi danas.
+     Pass/fail prag od 60% pojaviće se samo na onome što je 🎯 - zato svaki promašaj ovde znači
+     pogrešan ekran kod polaznika.</p>
+  <div class="stats" id="stats"></div>
+</div></header>
+
+<nav><div class="wrap">
+  <div class="filters" role="group" aria-label="Filter">
+    <button class="on" data-f="all">Sve</button>
+    <button data-f="t">🎯 testovi</button>
+    <button data-f="v">✏️ vežbe</button>
+    <button data-f="s">⚠️ sumnjivo</button>
+  </div>
+  <div class="anchors" id="anchors"></div>
+</div></nav>
+
+<main>
+  <div class="legend">
+    <b>Kako da čitaš listu:</b> svaki red je jedna vežba; kolona „sada" pokazuje šta regex danas kaže.
+    <ul>
+      <li><span style="color:var(--red);font-weight:650">Crveni redovi</span> - verovatno promašaj: liči na test, a vodi se kao ✏️ vežba.</li>
+      <li><span style="color:#9c6d10;font-weight:650">Žuti redovi</span> - proveri: vodi se kao 🎯 test, a možda je obična vežba (najčešće Schreiben zadaci u nastavnim lekcijama).</li>
+      <li><span style="color:var(--ok);font-weight:650">Zeleni redovi</span> - već ispravljeno u ovoj sesiji.</li>
+      <li>Za ispravku je dovoljno da kažeš oznaku reda, npr. „A1.1-54 treba test" ili „B1.1-16 je vežba".</li>
+    </ul>
+  </div>
+  <div id="app"></div>
+</main>
+
+<script>
+const C=[
+{k:"A1.1",n:"Nemački A1.1",rows:[
+["Pozdravi","Izgovori - Pozdravi","speak",0,0],
+["Pozdravi","Prevedi rečenice","quiz",0,0],
+["Die ersten Fragen","Izgovori - Die ersten Fragen","speak",0,0],
+["Die ersten Fragen","Prevedi rečenice","quiz",0,0],
+["Dialoge","Dijalog - Upoznavanje","dialog",0,0],
+["Dialoge","Prevedi rečenice","quiz",0,0],
+["Test: Modul 1","Test: Modul 1 - Pozdravi, pitanja, dijalozi","quiz",1,0],
+["Familie","Izgovori - Familie","speak",0,0],
+["Familie","Prevedi rečenice","quiz",0,0],
+["Wie gehts?","Izgovori - Wie gehts?","speak",0,0],
+["Wie gehts?","Prevedi rečenice","quiz",0,0],
+["Zahlen","Izgovori - Zahlen","speak",0,0],
+["Zahlen","Prevedi rečenice","quiz",0,0],
+["Prezent","Prevedi rečenice","quiz",0,0],
+["Test: Modul 2","Test: Modul 2 - Porodica, brojevi, prezent","quiz",1,0],
+["Essen","Izgovori - Essen","speak",0,0],
+["Essen","Prevedi rečenice","quiz",0,0],
+["Preise","Izgovori - Preise","speak",0,0],
+["Preise","Prevedi rečenice","quiz",0,0],
+["Im Restaurant","Izgovori - Im Restaurant","speak",0,0],
+["Im Restaurant","Dijalog - Im Restaurant","dialog",0,0],
+["Im Restaurant","Prevedi rečenice","quiz",0,0],
+["Test: Modul 3","Test: Modul 3 - Hrana, cene, restoran","quiz",1,0],
+["Wohnung","Izgovori - Wohnung","speak",0,0],
+["Wohnung","Prevedi rečenice","quiz",0,0],
+["Möbel","Izgovori - Möbel","speak",0,0],
+["Möbel","Prevedi rečenice","quiz",0,0],
+["Test: Modul 4","Test: Modul 4 - Stan, nameštaj, oglasi","quiz",1,0],
+["Razdvojni prefiksi","Prevedi rečenice","quiz",0,0],
+["Uhrzeiten","Izgovori - Uhrzeiten","speak",0,0],
+["Uhrzeiten","Prevedi rečenice","quiz",0,0],
+["Terminkalendar","Dijalog - Termin vereinbaren","dialog",0,0],
+["Terminkalendar","Prevedi rečenice","quiz",0,0],
+["Tagesablauf","Izgovori - Tagesablauf","speak",0,0],
+["Tagesablauf","Prevedi rečenice","quiz",0,0],
+["Mini Gespräche - Modul 5","Dijalog - Einkaufen","dialog",0,0],
+["Mini Gespräche - Modul 5","Prevedi rečenice","quiz",0,0],
+["Test: Modul 5","Test: Modul 5 - Prefiksi, vreme, raspored","quiz",1,0],
+["Wetter","Izgovori - Wetter","speak",0,0],
+["Wetter","Prevedi rečenice","quiz",0,0],
+["Akuzativ","Prevedi rečenice","quiz",0,0],
+["Freizeit","Izgovori - Freizeit","speak",0,0],
+["Freizeit","Prevedi rečenice","quiz",0,0],
+["Ja, nein, doch","Prevedi rečenice","quiz",0,0],
+["Mini Gespräche - Modul 6","Dijalog - Nach dem Weg fragen","dialog",0,0],
+["Mini Gespräche - Modul 6","Prevedi rečenice","quiz",0,0],
+["Test: Modul 6","Test: Modul 6 - Vreme, akuzativ, hobiji","quiz",1,0],
+["Ich kann, ich will","Izgovori - Ich kann, ich will","speak",0,0],
+["Ich kann, ich will","Prevedi rečenice","quiz",0,0],
+["Perfekat - pravilni glagoli","Prevedi rečenice","quiz",0,0],
+["Perfekat - nepravilni glagoli","Prevedi rečenice","quiz",0,0],
+["Perfekat sa sein + glagoli sa prefiksima","Prevedi rečenice","quiz",0,0],
+["Test: Modul 7","Test: Modul 7 - Modalni glagoli, perfekat","quiz",1,0],
+["Modelltest A1.1","Zavrsni ispit A1.1","quiz",1,3,"Ispravljeno 5.7: u regex dodata reč „ispit\" - sada 🎯 test (čeka deploy)"]
+]},
+{k:"A1.2",n:"Nemački A1.2",rows:[
+["Berufe","Prevedi rečenice","quiz",0,0],
+["Berufe","Izgovori - Berufe","speak",0,0],
+["Hatte und war","Prevedi rečenice","quiz",0,0],
+["Wann? Wie lange? Seit wann?","Prevedi rečenice","quiz",0,0],
+["Test: Modul 1","Test Modul 1","quiz",1,0],
+["Imperativ","Prevedi rečenice","quiz",0,0],
+["Modalni glagoli","Prevedi rečenice","quiz",0,0],
+["Wien","Prevedi rečenice","quiz",0,0],
+["Wien","Izgovori - Wien","speak",0,0],
+["Test: Modul 2","Test Modul 2","quiz",1,0],
+["Körperteile","Prevedi rečenice","quiz",0,0],
+["Körperteile","Izgovori - Körperteile","speak",0,0],
+["Prisvojne zamenice","Prevedi rečenice","quiz",0,0],
+["Anfrage A1.2","Prevedi rečenice","quiz",0,0],
+["Test: Modul 3","Test Modul 3","quiz",1,0],
+["Test: Modul 3","Schreiben - Modul 3","listen_write",1,0],
+["Dativ","Prevedi rečenice","quiz",0,0],
+["Am Schalter","Prevedi rečenice","quiz",0,0],
+["Am Schalter","Izgovori - Am Schalter","speak",0,0],
+["Predlozi - vor, hinter...","Prevedi rečenice","quiz",0,0],
+["Test: Modul 4","Test Modul 4","quiz",1,0],
+["Kleidung","Prevedi rečenice","quiz",0,0],
+["Kleidung","Izgovori - Kleidung","speak",0,0],
+["Kleidung - Leseverstehen und Schreiben","Prevedi rečenice","quiz",0,0],
+["Dativ - ličnih zamenica","Prevedi rečenice","quiz",0,0],
+["Test: Modul 5","Test Modul 5","quiz",1,0],
+["Fragen formulieren","Prevedi rečenice","quiz",0,0],
+["Fragen formulieren","Izgovori - Fragen formulieren","speak",0,0],
+["ADUSO und Feste","Prevedi rečenice","quiz",0,0],
+["E-Mails schreiben","Prevedi rečenice","quiz",0,0],
+["E-Mails schreiben","Schreiben Teil 1 - Informelle SMS","essay",1,2,"Vežba pisanja u nastavnoj lekciji - test je samo zbog reči „Schreiben\" u naslovu"],
+["Test: Modul 6","Test Modul 6","quiz",1,0],
+["Test: Modul 6","Schreiben - Modul 6","listen_write",1,0],
+["Završni ispit A1 - Modelltest","Lesen","quiz",1,0],
+["Završni ispit A1 - Modelltest","Hören","quiz",1,0],
+["Završni ispit A1 - Modelltest","Schreiben - Teil 1: Formular","quiz",1,0],
+["Završni ispit A1 - Modelltest","Schreiben - Teil 2: E-Mail","listen_write",1,0]
+]},
+{k:"A2.1",n:"Nemački A2.1",rows:[
+["Persönliche Angaben","Prevedi rečenice","quiz",0,0],
+["Persönliche Angaben","Izgovori - Persönliche Angaben","speak",0,0],
+["Familie","Prevedi rečenice","quiz",0,0],
+["Familie","Izgovori - Familie","speak",0,0],
+["Perfekt","Prevedi rečenice","quiz",0,0],
+["Weil Sätze","Test Modul 1","quiz",1,0],
+["Weil Sätze","Prevedi rečenice","quiz",0,0],
+["Wie wohnen die Deutschen?","Prevedi rečenice","quiz",0,0],
+["Müll","Prevedi rečenice","quiz",0,0],
+["Wechselpräpositionen","Test Modul 2","quiz",1,0],
+["Wechselpräpositionen","Prevedi rečenice","quiz",0,0],
+["Allgemeine Kommunikation","Prevedi rečenice","quiz",0,0],
+["Allgemeine Kommunikation","Schreiben Teil 1 - Informelle SMS","essay",1,2,"Vežba pisanja u nastavnoj lekciji - test je samo zbog reči „Schreiben\""],
+["Essgewohnheiten","Prevedi rečenice","quiz",0,0],
+["Essgewohnheiten","Izgovori - Essgewohnheiten","speak",0,0],
+["Im Restaurant","Prevedi rečenice","quiz",0,0],
+["Im Restaurant","Izgovori - Im Restaurant","speak",0,0],
+["Indefinitpronomen im Nominativ und Akkusativ","Test Modul 3","quiz",1,0],
+["Arbeitsklima","Prevedi rečenice","quiz",0,0],
+["Arbeitsklima","Izgovori - Arbeitsklima","speak",0,0],
+["Bewerbungen","Prevedi rečenice","quiz",0,0],
+["Bewerbungen","Izgovori - Bewerbungen","speak",0,0],
+["Bewerbungen","Schreiben Teil 2 - Formelle E-Mail","essay",1,2,"Vežba pisanja u nastavnoj lekciji - test je samo zbog reči „Schreiben\""],
+["Weil, denn, dann","Prevedi rečenice","quiz",0,0],
+["Arbeitszeit, Urlaubs- und Feiertage","Test Modul 4","quiz",1,0],
+["Arbeitszeit, Urlaubs- und Feiertage","Prevedi rečenice","quiz",0,0],
+["Refleksivni glagoli","Prevedi rečenice","quiz",0,0],
+["Ich interessiere mich für…","Prevedi rečenice","quiz",0,0],
+["Fußball","Prevedi rečenice","quiz",0,0],
+["Fußball","Izgovori - Fußball","speak",0,0],
+["Worauf, darauf","Prevedi rečenice","quiz",0,0],
+["Modalni glagoli u prošlosti","Test Modul 5","quiz",1,0],
+["Modalni glagoli u prošlosti","Prevedi rečenice","quiz",0,0],
+["Schule - Deutschlandlabor","Prevedi rečenice","quiz",0,0],
+["Schule - Deutschlandlabor","Izgovori - Schule - Deutschlandlabor","speak",0,0],
+["Ausbildung in Deutschland","Prevedi rečenice","quiz",0,0],
+["Krimi roman za nivo A2 - Leseverstehen","Test Modul 6","quiz",1,0],
+["Modelltest A2.1","Završni ispit A2.1","quiz",1,3,"Ispravljeno 5.7: u regex dodata reč „ispit\" - sada 🎯 test (čeka deploy)"],
+["Modelltest A2.1","Schreiben Teil 1 - SMS","listen_write",1,0],
+["Modelltest A2.1","Schreiben Teil 2 - E-Mail","listen_write",1,0]
+]},
+{k:"A2.2",n:"Nemački A2.2",rows:[
+["Hätte und wäre","Prevedi rečenice","quiz",0,0],
+["Video - Wandern","Prevedi rečenice","quiz",0,0],
+["Video - Wandern","Izgovori - Video - Wandern","speak",0,0],
+["Trotzdem","Prevedi rečenice","quiz",0,0],
+["Test Modul 1","Test Modul 1","quiz",1,0],
+["Dialoge führen","Prevedi rečenice","quiz",0,0],
+["Dialoge führen","Izgovori - Dialoge führen","speak",0,0],
+["Sätze formulieren","Prevedi rečenice","quiz",0,0],
+["Dunkelrestaurant","Prevedi rečenice","quiz",0,0],
+["Auf dem Flohmarkt","Prevedi rečenice","quiz",0,0],
+["Test Modul 2","Test Modul 2","quiz",1,0],
+["Pasiv","Prevedi rečenice","quiz",0,0],
+["Deklinacija prideva","Prevedi rečenice","quiz",0,0],
+["Deklinacija prideva - Wiederholung","Prevedi rečenice","quiz",0,0],
+["Über das Internet","Prevedi rečenice","quiz",0,0],
+["Über das Internet","Izgovori - Über das Internet","speak",0,0],
+["Mit freundlichen Grüßen","Prevedi rečenice","quiz",0,0],
+["Mit freundlichen Grüßen","Schreiben Teil 2 - Formelle E-Mail","essay",1,2,"Vežba pisanja u nastavnoj lekciji - test je samo zbog reči „Schreiben\""],
+["Test Modul 3","Test Modul 3","quiz",1,0],
+["Komparacija prideva","Prevedi rečenice","quiz",0,0],
+["Komparation - 4 Minuten Lektion","Prevedi rečenice","quiz",0,0],
+["Trennbare Verben - WH zum Thema Rad fahren","Prevedi rečenice","quiz",0,0],
+["Drahtesel","Prevedi rečenice","quiz",0,0],
+["Test Modul 4","Test Modul 4","quiz",1,0],
+["Reisen und Verkehr","Prevedi rečenice","quiz",0,0],
+["Reisen und Verkehr","Izgovori - Reisen und Verkehr","speak",0,0],
+["Reisen und Verkehr","Schreiben Teil 1 - Informelle SMS","essay",1,2,"Vežba pisanja u nastavnoj lekciji - test je samo zbog reči „Schreiben\""],
+["Wohin fährt Tim?","Prevedi rečenice","quiz",0,0],
+["Am Geldautomaten","Prevedi rečenice","quiz",0,0],
+["Am Geldautomaten","Izgovori - Am Geldautomaten","speak",0,0],
+["Mein Bankkonto","Prevedi rečenice","quiz",0,0],
+["Mein Bankkonto","Izgovori - Mein Bankkonto","speak",0,0],
+["Test Modul 5","Test Modul 5","quiz",1,0],
+["Weihnachten ist…","Prevedi rečenice","quiz",0,0],
+["Adventskranz","Prevedi rečenice","quiz",0,0],
+["Priprema za ispit A2","Schreiben Teil 1 - SMS (Kino)","listen_write",1,0],
+["Priprema za ispit A2","Schreiben Teil 2 - E-Mail (Einladung)","listen_write",1,0],
+["Priprema za ispit A2","Schreiben Teil 2 - E-Mail (Touristeninformation)","listen_write",1,0],
+["Priprema za ispit A2","Schreiben Teil 1 - SMS (Markt, Modelltest 2)","listen_write",1,0],
+["Priprema za ispit A2","Schreiben Teil 2 - E-Mail (Reparatur, Modelltest 2)","listen_write",1,0],
+["Priprema za ispit A2","Schreiben Teil 1 - SMS (Abend, Modelltest 3)","listen_write",1,0],
+["Priprema za ispit A2","Schreiben Teil 2 - E-Mail (Deutschkurs, Modelltest 3)","listen_write",1,0],
+["Priprema za ispit A2","Schreiben Teil 1 - SMS (Schwimmbad, Modelltest 4)","listen_write",1,0],
+["Priprema za ispit A2","Schreiben Teil 2 - E-Mail (Chefin, Modelltest 4)","listen_write",1,0],
+["Modelltest A2","Lesen - Goethe A2","quiz",1,0],
+["Modelltest A2","Hören - Goethe A2","quiz",1,0],
+["Modelltest A2","Schreiben Teil 1 - SMS","listen_write",1,0],
+["Modelltest A2","Schreiben Teil 2 - Formaler Brief","listen_write",1,0],
+["Modelltest 3 - Hören","Hören - Modelltest 3","quiz",1,0],
+["Modelltest 3 - Lesen","Lesen - Modelltest 3","quiz",1,0]
+]},
+{k:"B1.1",n:"Nemački B1.1",rows:[
+["Rotkäppchen und das Präteritum","Prevedi rečenice","quiz",0,0],
+["Als oder wenn","Prevedi rečenice","quiz",0,0],
+["Glück","Prevedi rečenice","quiz",0,0],
+["Relativne rečenice","Prevedi rečenice","quiz",0,0],
+["Filme und Serien","Test Modul 2","quiz",1,0],
+["Filme und Serien","Prevedi rečenice","quiz",0,0],
+["Filme und Serien","In der Filmbranche - Wortschatz & Leseverständnis","quiz",0,0],
+["Obwohl vs. weil","Prevedi rečenice","quiz",0,0],
+["Profis gesucht: Krankenpfleger","Prevedi rečenice","quiz",0,0],
+["Profis gesucht: Krankenpfleger","Beruf Krankenpfleger - Wortschatz & Leseverständnis","quiz",0,0],
+["Blutgruppen - wichtige Entdeckung","Prevedi rečenice","quiz",0,0],
+["Blutgruppen - wichtige Entdeckung","Die Entdeckung der Blutgruppen - Leseverständnis","quiz",0,0],
+["Pasiv prezenta sa modalnim glagolima","Prevedi rečenice","quiz",0,0],
+["Genitiv","Prevedi rečenice","quiz",0,0],
+["Pflegekrise - LV + Schreiben","Test Modul 3","quiz",1,0],
+["Pflegekrise - LV + Schreiben","Schreiben B1 - Pflegekrise","essay",1,2,"Schreiben zadatak (esej) - da li mu treba pass/fail 60% kad ga ionako pregleda profesorka?"],
+["Schreiben B1 - E-Mail an einen Freund","Test Modul 1","quiz",1,0],
+["Schreiben B1 - E-Mail an einen Freund","Schreiben B1 - E-Mail","essay",1,2,"Schreiben zadatak (esej) - isto pitanje"],
+["Schreiben B1 - E-Mail an einen Freund","Prevedi rečenice","quiz",0,0],
+["Lesen & Schreiben B1 — Bore-out","Schreiben B1 — Antwort an Katja","essay",1,2,"Schreiben zadatak (esej) - isto pitanje"],
+["Sprechblockaden? Nur Mut!","Prevedi rečenice","quiz",0,0],
+["Wortschatz B1 - Prüfungsvorbereitung","Test Modul 4","quiz",1,0],
+["Wortschatz B1 - Prüfungsvorbereitung","Prevedi rečenice","quiz",0,0],
+["Schreiben B1 — Forumsbeitrag (Sprachen lernen)","Schreiben B1 — Forumsbeitrag: Meinung","essay",1,2,"Schreiben zadatak (esej) - isto pitanje"],
+["Jobsuche","Prevedi rečenice","quiz",0,0],
+["Jobsuche","Auf Jobsuche - Wortschatz & Leseverständnis","quiz",0,0],
+["Infinitiv mit zu","Prevedi rečenice","quiz",0,0],
+["Geschlechtergerechte Sprache","Prevedi rečenice","quiz",0,0],
+["Sprechen Prüfung B1 - Ein Thema präsentieren","Test Modul 5","quiz",1,0],
+["Sprechen Prüfung B1 - Ein Thema präsentieren","Prevedi rečenice","quiz",0,0],
+["Temporale Präpositionen + es gibt / es ist","Test Modul 6","quiz",1,0],
+["Temporale Präpositionen + es gibt / es ist","Prevedi rečenice","quiz",0,0],
+["Finalsätze (um+zu vs. damit)","Prevedi rečenice","quiz",0,0],
+["Konjunktiv II der Vergangenheit","Prevedi rečenice","quiz",0,0],
+["Zweiteilige Konnektoren","Prevedi rečenice","quiz",0,0],
+["Schreiben B1 - Hotel Mama","Test Modul 7","quiz",1,0],
+["Schreiben B1 - Hotel Mama","Schreiben B1 - Hotel Mama","essay",1,2,"Schreiben zadatak (esej) - isto pitanje"],
+["Schreiben B1 - Hotel Mama","Modelltest B1.1","quiz",1,0],
+["Schreiben B1 - Hotel Mama","Prevedi rečenice","quiz",0,0],
+["Schreiben B1 — Entschuldigung an die Nachbarn","Schreiben B1 — E-Mail an die Nachbarn","essay",1,2,"Schreiben zadatak (esej) - isto pitanje"]
+]},
+{k:"B1.2",n:"Nemački B1.2",rows:[
+["Probleme im Büro","Welche Überschrift passt?","quiz",0,0],
+["Prüfung - Leseverstehen und Schreiben","Duzen - ja oder nein?","categorize",0,1,"U Prüfung lekciji, a vodi se kao vežba - nedosledno sa Modulom 3 gde su iste vežbe test"],
+["Prüfung - Leseverstehen und Schreiben","Schreiben - E-Mail an Frau Duran","essay",1,0],
+["Sind KI-Tools besser als wir?","Schreiben - KI-Tools","essay",1,2,"Schreiben zadatak (esej) u nastavnoj lekciji"],
+["Temporalsätze: während · bevor · nachdem","Welcher Konnektor passt? (während / bevor / nachdem)","quiz",0,0],
+["Prüfung - Lesen und Hören","Welche Anleitung passt?","quiz",0,1,"U Prüfung lekciji, a vodi se kao vežba"],
+["Prüfung - Lesen und Hören","Wer sagt was?","categorize",0,1,"U Prüfung lekciji, a vodi se kao vežba"],
+["Prüfung - Lesen und Hören (Modul 3)","Lesen - richtig oder falsch?","true_false",1,0],
+["Prüfung - Lesen und Hören (Modul 3)","Hören - Text 1","true_false",1,0],
+["Prüfung - Lesen und Hören (Modul 3)","Hören - Text 2","true_false",1,0],
+["Prüfung - Lesen und Hören (Modul 3)","Hören - Text 3","true_false",1,0],
+["Prüfung - Lesen und Hören (Modul 3)","Hören - Text 4","true_false",1,0],
+["Prüfung - Lesen und Hören (Modul 3)","Hören - Text 5","true_false",1,0],
+["da und weil - Gute Umgangsformen","Welche Überschrift passt?","quiz",0,0],
+["Prüfung - Lesen und Hören (Modul 4)","Gespräch 1 - richtig oder falsch?","true_false",0,1,"Ista vrsta vežbe kao u Modulu 3 (tamo 🎯), ovde ✏️ - odluči u kom smeru se izjednačava"],
+["Prüfung - Lesen und Hören (Modul 4)","Gespräch 1 - Was passt (a/b/c)?","quiz",0,1,"Isto - nedosledno sa Modulom 3"],
+["Prüfung - Lesen und Hören (Modul 4)","Gespräch 2 - richtig oder falsch?","true_false",0,1,"Isto - nedosledno sa Modulom 3"],
+["Prüfung - Lesen und Hören (Modul 4)","Gespräch 2 - Was passt (a/b/c)?","quiz",0,1,"Isto - nedosledno sa Modulom 3"],
+["Prüfung - Lesen und Hören (Modul 4)","Gespräch 3 - richtig oder falsch?","true_false",0,1,"Isto - nedosledno sa Modulom 3"],
+["Prüfung - Lesen und Hören (Modul 4)","Gespräch 3 - Was passt (a/b/c)?","quiz",0,1,"Isto - nedosledno sa Modulom 3"],
+["Prüfung - Lesen und Hören (Modul 4)","Gespräch 4 - richtig oder falsch?","true_false",0,1,"Isto - nedosledno sa Modulom 3"],
+["Prüfung - Lesen und Hören (Modul 4)","Gespräch 4 - Was passt (a/b/c)?","quiz",0,1,"Isto - nedosledno sa Modulom 3"],
+["Prüfung - Lesen und Hören (Modul 4)","Lückentext - welches Wort passt?","quiz",0,1,"Isto - nedosledno sa Modulom 3"],
+["seit und bis - Angebote auf Reisen","Welches Angebot passt? (ordnen Sie zu)","quiz",0,0],
+["indem und ohne dass - Vereine","indem oder ohne dass?","quiz",0,0],
+["Prüfung - Leseverstehen: Fitnesshaus Aktivum","Welche Lösung ist richtig? (a/b/c)","quiz",0,1,"U Prüfung lekciji, a vodi se kao vežba"],
+["Passiv - Geschichte des Fußballs","Welches Passiv? (Präteritum oder Perfekt)","quiz",0,0],
+["Prüfung - Lesen und Hören (Modul 6)","Welche Lösung ist richtig? (a/b/c)","quiz",0,1,"U Prüfung lekciji, a vodi se kao vežba - nedosledno sa Modulom 3"],
+["Prüfung - Lesen und Hören (Modul 6)","Aussage a - richtig oder falsch?","true_false",0,1,"Isto - nedosledno sa Modulom 3"],
+["Prüfung - Lesen und Hören (Modul 6)","Aussage b - richtig oder falsch?","true_false",0,1,"Isto - nedosledno sa Modulom 3"],
+["Prüfung - Lesen und Hören (Modul 6)","Aussage c - richtig oder falsch?","true_false",0,1,"Isto - nedosledno sa Modulom 3"],
+["Prüfung - Lesen und Hören (Modul 6)","Aussage d - richtig oder falsch?","true_false",0,1,"Isto - nedosledno sa Modulom 3"],
+["Prüfung - Lesen und Hören (Modul 6)","Aussage e - richtig oder falsch?","true_false",0,1,"Isto - nedosledno sa Modulom 3"],
+["Schreiben Teil 1 - Informelle E-Mail","Schreiben Teil 1 - Informelle E-Mail","essay",1,0],
+["Schreiben Teil 2 - Meinung im Forum","Schreiben Teil 2 - Meinung im Forum","essay",1,0],
+["Schreiben Teil 3 - Formelle E-Mail","Schreiben Teil 3 - Formelle E-Mail","essay",1,0],
+["Gramatika Masterclass (A2-B1)","Test: Glagoli i gramatika","quiz",1,0],
+["Završni ispit B1 - Modelltest 4","Schreiben Aufgabe 1 - E-Mail (Konzert)","essay",1,0],
+["Završni ispit B1 - Modelltest 4","Lesen - Modelltest 4","quiz",1,0],
+["Završni ispit B1 - Modelltest 4","Schreiben Aufgabe 2 - Meinung (Radio)","essay",1,0],
+["Završni ispit B1 - Modelltest 4","Hören - Modelltest 4","quiz",1,0],
+["Završni ispit B1 - Modelltest 4","Schreiben Aufgabe 3 - E-Mail (Sportverein)","essay",1,0]
+]},
+{k:"B2.1",n:"Nemački B2.1",rows:[
+["Das Leben neu gestalten - Vielfalt B2.1","Test: Veränderungen - Leseverstehen","quiz",1,0],
+["Nomen mit Präpositionen","Übung: Nomen mit Präposition","quiz",0,0],
+["Wortstellung mit Dativ und Akkusativ","Übung: Wortstellung im Mittelfeld","quiz",0,0],
+["Migration","Test: Migration - Leseverstehen","quiz",1,0],
+["Modalverben durch die Zeit","Übung: Modalverben im Perfekt","quiz",0,0],
+["WIEN","Test: Wien - Leseverstehen","quiz",1,0],
+["Kausale Verbindungen","Übung: Kausale Verbindungen","quiz",0,0],
+["EXTRA Prüfung (Modul 1)","Leseverstehen - Modul 1","quiz",1,0],
+["Erwartungen in der Familie B2.1","Übung: Konditionale Zusammenhänge","quiz",0,0],
+["Wortstellung im Mittelfeld","Übung: Mittelfeld - Ergänzungen & Angaben","quiz",0,0],
+["TeKaMoLo","Übung: TeKaMoLo","quiz",0,0],
+["Zweiteilige Konnektoren","Übung: Zweiteilige Konnektoren","quiz",0,0],
+["Extrem unter Kontrolle - Lena auf Expedition","Test: Lena - Leseverstehen","quiz",1,0],
+["Finalsätze","Übung: Finalsätze","quiz",0,0],
+["Alles unter Kontrolle? - Ernährung","Test: Esstypen - Leseverstehen","quiz",1,0],
+["Alternativen zu Passiv","Übung: Zustandspassiv & Passiversatz","quiz",0,0],
+["So tickt unsere innere Uhr! - Tagesrhythmus","Übung: Adversative Zusammenhänge","quiz",0,0],
+["Erfolg und Scheitern im Beruf","Übung: Temporale Zusammenhänge","quiz",0,0],
+["Minimalismus","Übung: Modale Zusammenhänge","quiz",0,0],
+["Nachbarschaft 2.0","Übung: Passiversatzformen","quiz",0,0],
+["Primer ispita za deo Schreiben","Schreiben - Kommentar (B2)","essay",1,0],
+["Završni test B2.1","Završni test B2.1","quiz",1,0]
+]},
+{k:"B2.2",n:"Nemački B2.2",rows:[
+["Lektion 13 · Einstieg + Hörverstehen","Sophia Ofuso - Hörverstehen","quiz",0,0],
+["Lektion 13 · Einstieg + Hörverstehen","Mobilitäts-Trends zuordnen","match_pairs",0,0],
+["Lektion 13 · Einstieg + Hörverstehen","Programmhinweis - Leseverstehen","quiz",0,0],
+["Lektion 13 · Einstieg + Hörverstehen","Sophias Bamboorad - richtig oder falsch?","quiz",0,0],
+["Lektion 13 · Einstieg + Hörverstehen","Was haben die drei Personen gemeinsam?","essay",0,0],
+["Lektion 13 · Wortschatz + Wortbildung","Welches Wort passt nicht?","quiz",0,0],
+["Lektion 13 · Wortschatz + Wortbildung","Wortfeld Mobilität - was ist gemeint?","quiz",0,0],
+["Lektion 13 · Wortschatz + Wortbildung","Unternehmensgründung - was gehört zusammen?","match_pairs",0,0],
+["Lektion 13 · Wortschatz + Wortbildung","Nomen mit Un- - sortiere nach Bedeutung","quiz",0,0],
+["Lektion 13 · Grammatik","E-Bike Testbericht - Adjektive mit Präposition","quiz",0,0],
+["Lektion 13 · Grammatik","Gehzeug - wer/wen/wem + der/den/dem","quiz",0,0],
+["Lektion 13 · Grammatik","Relativsätze selbst formulieren","essay",0,0],
+["Lektion 13 · Schreiben + Extra Beruf","Kundenanfrage - Struktur ordnen","quiz",0,0],
+["Lektion 13 · Schreiben + Extra Beruf","Formale Ausdrücke - was bedeuten sie?","match_pairs",0,0],
+["Lektion 13 · Schreiben + Extra Beruf","Schreibaufgabe: Kundenanfrage","essay",0,0],
+["Lektion 13 · Abschlusstest","1 · Wörter: Reza Hosseini","quiz",0,1,"Lekcija je Abschlusstest, a vežba se vodi kao ✏️ - naslov vežbe nema ključnu reč"],
+["Lektion 13 · Abschlusstest","2 · Adjektive mit Präposition","quiz",0,1,"Lekcija je Abschlusstest, a vežba se vodi kao ✏️"],
+["Lektion 13 · Abschlusstest","3 · Relativsätze - Nürnberg und die Eisenbahn","quiz",0,1,"Lekcija je Abschlusstest, a vežba se vodi kao ✏️"],
+["Lektion 13 · Abschlusstest","4 · Kommunikation - Redemittel zuordnen","match_pairs",0,1,"Lekcija je Abschlusstest, a vežba se vodi kao ✏️"],
+["Primer ispita za deo Schreiben","Schreiben B2 Teil 1","essay",1,0],
+["Primer ispita za deo Schreiben","Schreiben B2 Teil 1","essay",1,0],
+["Prüfungstraining B2 - Modelltest 1","Lesen - Modelltest 1","quiz",1,0],
+["Prüfungstraining B2 - Modelltest 1","Hören - Modelltest 1","quiz",1,0],
+["Prüfungstraining B2 - Modelltest 1","Schreiben - Modelltest 1","essay",1,0],
+["Prüfungstraining B2 - Modelltest 1","Sprechen - Modelltest 1","sprechen",1,0]
+]},
+{k:"V-B1",n:"VIDEO + B1 ispit - kompletna priprema",note:"Ceo kurs je ispitni po pravilu kursa - sve vežbe su automatski 🎯.",rows:[
+["Masterclass - Schreiben und Sprechen - B1","Schreiben - Modelltest B1","essay",1,0],
+["Leseverstehen - Modelltest B1","Leseverstehen - Modelltest B1","quiz",1,0],
+["Hörverstehen - Modelltest B1","Hörverstehen - Modelltest B1","quiz",1,0]
+]},
+{k:"V-GRAM",n:"VIDEO + E-book Gramatika A2-B1",note:"Kurs se hvata na reč „gramatik\" u nazivu - sve je automatski 🎯.",rows:[
+["GLAGOLI - test","Test: Glagoli i gramatika","quiz",1,0]
+]},
+{k:"FSP",n:"VIDEO: FSP - pripremni kurs za lekare",note:"Ceo kurs je ispitni po pravilu kursa, pa je svih 36 vežbi automatski 🎯 - uključujući sitne Aufgabe/Übung vežbice uz gramatiku. Odluči: da li u FSP-u baš SVE treba da nosi položeno/palo, ili samo deo?",rows:[
+["Indirektni govor (Konjunktiv I)","Aufgabe 1 - Konjunktiv I oder Indikativ?","quiz",1,2,"Test samo zato što je ceo kurs ispitni - po naslovu je vežba"],
+["Indirektni govor (Konjunktiv I)","Aufgabe 2 - Richtig oder falsch?","true_false",1,2,"Isto"],
+["Indirektni govor (Konjunktiv I)","Aufgabe 4 - Schreiben Sie die indirekte Rede","typing",1,2,"Isto"],
+["Deklinacija prideva","Aufgabe 1 - Wähle die richtige Form","quiz",1,2,"Isto"],
+["Deklinacija prideva","Aufgabe 2 - Richtig oder falsch?","true_false",1,2,"Isto"],
+["Deklinacija prideva","Aufgabe 4 - Schreibe die richtige Form","typing",1,2,"Isto"],
+["N-deklinacija","Aufgabe 1 - Die richtige Form","quiz",1,2,"Isto"],
+["N-deklinacija","Aufgabe 2 - Richtig oder falsch?","true_false",1,2,"Isto"],
+["N-deklinacija","Aufgabe 4 - Schreiben Sie die richtige Form","typing",1,2,"Isto"],
+["Predlozi sa genitivom","Aufgabe 1 - Der richtige Genitiv","quiz",1,2,"Isto"],
+["Predlozi sa genitivom","Aufgabe 2 - Richtig oder falsch?","true_false",1,2,"Isto"],
+["Predlozi sa genitivom","Aufgabe 4 - Setzen Sie den Genitiv","typing",1,2,"Isto"],
+["Modalne rečce","Aufgabe 1 - Welche Partikel passt?","quiz",1,2,"Isto"],
+["Modalne rečce","Aufgabe 2 - Welche Funktion?","quiz",1,2,"Isto"],
+["Modalne rečce","Aufgabe 3 - Partikel und Funktion zuordnen","quiz",1,2,"Isto"],
+["Modalne rečce","Aufgabe 4 - Wohin gehört die Partikel?","quiz",1,2,"Isto"],
+["Modalne rečce","Aufgabe 5 - Ergänzen Sie die Partikel","typing",1,2,"Isto"],
+["Buduće vreme","Aufgabe 1 - Futur I bilden","quiz",1,2,"Isto"],
+["Buduće vreme","Aufgabe 2 - Richtig oder falsch?","true_false",1,2,"Isto"],
+["Buduće vreme","Aufgabe 4 - Im Futur I formulieren","typing",1,2,"Isto"],
+["Glagoli sa predlozima","Aufgabe - Richtig oder falsch?","true_false",1,2,"Isto"],
+["Glagoli sa predlozima","Aufgabe - Präposition ergänzen","typing",1,2,"Isto"],
+["Brojevi","Zahlen und Daten hören","typing",1,2,"Isto"],
+["Medikamenti","Aufgabe 1 - Darreichungsform und Status","quiz",1,2,"Isto"],
+["Medikamenti","Aufgabe 2 - Richtig oder falsch?","true_false",1,2,"Isto"],
+["Medikamenti","Aufgabe 4 - Schreiben Sie den Fachbegriff","typing",1,2,"Isto"],
+["Zanimanja","Aufgabe 1 - Was macht dieser Beruf?","quiz",1,2,"Isto"],
+["Zanimanja","Aufgabe 2 - Richtig oder falsch?","true_false",1,2,"Isto"],
+["Zanimanja","Aufgabe 4 - Schreiben Sie den Beruf","typing",1,2,"Isto"],
+["Povrede i nezgode","Aufgabe 1 - Orte und Gegenstände am Unfallort","quiz",1,2,"Isto"],
+["Povrede i nezgode","Aufgabe 2 - Richtig oder falsch?","true_false",1,2,"Isto"],
+["Povrede i nezgode","Aufgabe 4 - Ergänzen Sie das Verb (Partizip II)","typing",1,2,"Isto"],
+["Anamneza","Übung - Frage auf Deutsch finden","quiz",1,2,"Isto"],
+["Dokumentacija","Übung - Redemittel auf Deutsch finden","quiz",1,2,"Isto"],
+["Objašnjavanje pacijentima","Übung - Satz auf Deutsch finden","quiz",1,2,"Isto"],
+["Predstavljanje pacijenta","Übung - Redemittel auf Deutsch finden","quiz",1,2,"Isto"]
+]},
+{k:"FIDE",n:"VIDEO: Položi FIDE",note:"Ceo kurs je ispitni po pravilu kursa - sve vežbe su automatski 🎯.",rows:[
+["Lesen/Schreiben A1/A2 (primeri zadataka i vežbanje)","Fide Schreiben Email A2","essay",1,0],
+["Lesen/Schreiben A2/B1 (primeri zadataka i vežbanje)","Formeller Brief fide","essay",1,0],
+["Lesen/Schreiben A2/B1 (primeri zadataka i vežbanje)","Fide B1 informelles E-Mail","essay",1,0]
+]},
+{k:"G-B2",n:"VIDEO: Položi Goethe B2",note:"Ceo kurs je ispitni po pravilu kursa - sve vežbe su automatski 🎯.",rows:[
+["Leseverstehen - Modelltest 1","Leseverstehen - Modelltest 1","quiz",1,0],
+["Leseverstehen - Modelltest 2","Leseverstehen - Modelltest 2","quiz",1,0],
+["Leseverstehen - Modelltest 3","Leseverstehen - Modelltest 3","quiz",1,0]
+]},
+{k:"G-C1",n:"VIDEO: Položi Goethe C1",note:"Ceo kurs je ispitni po pravilu kursa - sve vežbe su automatski 🎯.",rows:[
+["HÖREN C1","Hörverstehen - Modelltest C1","quiz",1,0],
+["LESEN C1","Leseverstehen - Modelltest C1","quiz",1,0],
+["SCHREIBEN C1","Schreiben - Modelltest C1","essay",1,0],
+["SPRECHEN C1","Sprechen - snimi svoj odgovor","sprechen",1,0]
+]}
+];
+
+const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+let total=0,tests=0,sus=0;
+const app=document.getElementById("app");
+const anchors=document.getElementById("anchors");
+let html="";
+for(const c of C){
+  let ct=c.rows.filter(r=>r[3]).length, cs=c.rows.filter(r=>r[4]===1||r[4]===2).length;
+  total+=c.rows.length; tests+=ct; sus+=cs;
+  anchors.insertAdjacentHTML("beforeend",`<a href="#${c.k}">${c.k}</a>`);
+  html+=`<section id="${c.k}">
+    <div class="course-h"><h2>${esc(c.n)}</h2>
+    <span class="counts">${c.rows.length} vežbi · ${ct} × 🎯 · ${c.rows.length-ct} × ✏️${cs?` · ⚠️ ${cs}`:""}</span></div>`;
+  if(c.note) html+=`<div class="course-note">⚠️ ${esc(c.note)}</div>`;
+  html+=`<div class="tblwrap"><table>
+    <thead><tr><th>Oznaka</th><th>Lekcija</th><th>Vežba</th><th>Tip</th><th>Sada</th></tr></thead><tbody>`;
+  c.rows.forEach((r,i)=>{
+    const id=`${c.k}-${String(i+1).padStart(2,"0")}`;
+    const cls=[r[3]?"is-t":"is-v", r[4]?`s${r[4]} is-s`:""].join(" ");
+    const note=r[5]?`<span class="note">${r[4]===3?"✅":"⚠️"} ${esc(r[5])}</span>`:"";
+    html+=`<tr class="${cls}"><td class="id">${id}</td>
+      <td class="lesson">${esc(r[0])}</td>
+      <td>${esc(r[1])}${note}</td>
+      <td class="typ">${r[2]}</td>
+      <td><span class="chip ${r[3]?"t":"v"}">${r[3]?"🎯 Test":"✏️ Vežba"}</span></td></tr>`;
+  });
+  html+=`</tbody></table></div></section>`;
+}
+app.innerHTML=html;
+document.getElementById("stats").innerHTML=
+  `<span class="stat"><b>${total}</b> vežbi ukupno</span>
+   <span class="stat"><b>${tests}</b> × 🎯 test</span>
+   <span class="stat"><b>${total-tests}</b> × ✏️ vežba</span>
+   <span class="stat"><b>${sus}</b> ⚠️ za proveru</span>`;
+
+document.querySelector(".filters").addEventListener("click",e=>{
+  const b=e.target.closest("button"); if(!b) return;
+  document.querySelectorAll(".filters button").forEach(x=>x.classList.toggle("on",x===b));
+  const f=b.dataset.f;
+  document.querySelectorAll("tbody tr").forEach(tr=>{
+    const show = f==="all" || (f==="t"&&tr.classList.contains("is-t"))
+      || (f==="v"&&tr.classList.contains("is-v")) || (f==="s"&&tr.classList.contains("is-s"));
+    tr.classList.toggle("hide",!show);
+  });
+});
+</script>
