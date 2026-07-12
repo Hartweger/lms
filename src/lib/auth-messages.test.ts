@@ -15,14 +15,20 @@ describe("urlGreskaMessage", () => {
 });
 
 describe("loginErrorMessage", () => {
-  it("za pogrešnu/nepostojeću lozinku vraća poruku o staroj lozinki", () => {
+  it("za pogrešnu/nepostojeću lozinku nudi pravljenje nove (bez pominjanja stare platforme)", () => {
     const msg = loginErrorMessage({ status: 400, message: "Invalid login credentials" });
-    expect(msg).toContain("stara lozinka ovde ne važi");
+    expect(msg).toContain("napravi novu");
+    expect(msg).not.toMatch(/star(a|oj)/i);
   });
 
   it("prepoznaje invalid credentials i bez status koda (po poruci)", () => {
     const msg = loginErrorMessage({ message: "Invalid login credentials" });
-    expect(msg).toContain("stara lozinka ovde ne važi");
+    expect(msg).toContain("napravi novu");
+  });
+
+  it("odbijena captcha (isto status 400) ne sme da se prikaže kao pogrešna lozinka", () => {
+    const msg = loginErrorMessage({ status: 400, message: "captcha protection: request disallowed" });
+    expect(msg).toContain("Bezbednosna provera");
   });
 
   it("za 429 vraća poruku o previše pokušaja", () => {

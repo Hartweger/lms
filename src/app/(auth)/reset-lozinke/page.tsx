@@ -21,8 +21,7 @@ export default function ResetLozinke() {
       <div className="text-center">
         <h1 className="text-2xl font-bold text-plava mb-2">Napravi novu lozinku</h1>
         <p className="text-gray-500 mb-8 max-w-sm mx-auto">
-          Unesi svoj email pa ti šaljemo link da postaviš lozinku. Ako si ranije bio/la na staroj
-          platformi, stara lozinka ovde ne važi - ovde praviš novu.
+          Unesi svoj email pa ti šaljemo link da postaviš lozinku.
         </p>
 
         <AuthForma tip="reset" onSubmit={handleReset} />
