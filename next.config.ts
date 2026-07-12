@@ -2,6 +2,31 @@ import type { NextConfig } from "next";
 import { withSentryConfig } from "@sentry/nextjs";
 import { legacyBlogSlugs } from "./src/lib/legacyBlogSlugs";
 
+// CSP u REPORT-ONLY režimu (audit jul 2026): ništa ne blokira, samo prijavljuje
+// prekršaje u Sentry (Security feed). Posle ~nedelju dana pregledati prijave pa
+// prebaciti na pravi Content-Security-Policy header (enforce).
+// 'unsafe-inline' u script-src je nužan: Next App Router ubacuje inline skripte,
+// a statičke/ISR strane ne mogu nonce. CSP ovde pre svega ograničava SPOLJNE izvore.
+// NAPOMENA: novi spoljni servis = dodati domen ovde, inače će (posle enforce-a) biti blokiran.
+const CSP_REPORT_ONLY = [
+  "default-src 'self'",
+  // GA4, Meta Pixel, Turnstile, Vimeo player API; blog kalkulator je inline (pokriven unsafe-inline)
+  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://connect.facebook.net https://challenges.cloudflare.com https://player.vimeo.com",
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  "font-src 'self' data: https://fonts.gstatic.com",
+  // slike dolaze sa mnogo strana (Supabase, vumbnail, ytimg, tracking pikseli) - https: je svesni kompromis
+  "img-src 'self' data: blob: https:",
+  "media-src 'self' blob: https://rzmyglynjcygsbicssbt.supabase.co",
+  "connect-src 'self' https://rzmyglynjcygsbicssbt.supabase.co wss://rzmyglynjcygsbicssbt.supabase.co https://*.google-analytics.com https://www.googletagmanager.com https://*.ingest.de.sentry.io https://challenges.cloudflare.com https://graph.facebook.com https://www.facebook.com https://vumbnail.com",
+  // lekcijski embedovi + Turnstile + YouTube/Vimeo + Google mape na kontaktu
+  "frame-src https://player.vimeo.com https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com https://quizlet.com https://*.quizlet.com https://wordwall.net https://*.wordwall.net https://learningapps.org https://www.google.com",
+  "worker-src 'self' blob:",
+  "object-src 'none'",
+  "base-uri 'self'",
+  // prijave idu u Sentry → Security
+  "report-uri https://o4511456054673408.ingest.de.sentry.io/api/4511456059326544/security/?sentry_key=4888c4f4fdf635c39c792f36efd16896",
+].join("; ");
+
 const nextConfig: NextConfig = {
   trailingSlash: false,
   images: {
@@ -21,6 +46,14 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      // Audio ispitnih vežbi preseljen na Supabase Storage (12.07.2026, bucket lekcije-media).
+      // Baza je ažurirana na pune URL-ove; redirect čuva stare linkove iz otvorenih tabova/keša.
+      {
+        source: "/audio/:path*",
+        destination:
+          "https://rzmyglynjcygsbicssbt.supabase.co/storage/v1/object/public/lekcije-media/audio/:path*",
+        permanent: true,
+      },
       { source: "/korpa", destination: "/kursevi", permanent: true },
       { source: "/moj-nalog", destination: "/nalog", permanent: true },
       { source: "/prodavnica", destination: "/kursevi", permanent: true },
@@ -228,6 +261,7 @@ const nextConfig: NextConfig = {
             key: "Strict-Transport-Security",
             value: "max-age=63072000; includeSubDomains; preload",
           },
+          { key: "Content-Security-Policy-Report-Only", value: CSP_REPORT_ONLY },
         ],
       },
     ];
