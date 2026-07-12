@@ -1,20 +1,11 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { requireAdmin } from "@/lib/api-auth";
 import { upsertContact } from "@/lib/crm/contacts";
 
-async function requireAdmin() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return null;
-  const admin = createAdminClient();
-  const { data: profile } = await admin.from("user_profiles").select("role").eq("id", user.id).single();
-  return profile?.role === "admin" ? admin : null;
-}
-
 export async function GET() {
-  const admin = await requireAdmin();
-  if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
+  const admin = auth.admin;
   const { data, error } = await admin
     .from("crm_contacts")
     .select("*")
@@ -25,8 +16,9 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const admin = await requireAdmin();
-  if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
+  const admin = auth.admin;
   const body = await request.json().catch(() => ({}));
   const { name, email, phone, instagram, level, note } = body;
   if (!name && !email && !phone && !instagram) {

@@ -1,21 +1,12 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { requireAdmin } from "@/lib/api-auth";
 import { grantAccessForOrder } from "@/lib/grant-access";
 import { fiscalizeOrder } from "@/lib/fiscomm";
 
 export async function GET() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
-
-  const admin = createAdminClient();
-  const { data: profile } = await admin
-    .from("user_profiles")
-    .select("role")
-    .eq("id", user.id)
-    .single();
-  if (profile?.role !== "admin") return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
+  const admin = auth.admin;
 
   const { data: orders, error } = await admin
     .from("orders")
@@ -29,17 +20,9 @@ export async function GET() {
 
 export async function POST(request: Request) {
   // Admin auth check
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
-
-  const admin = createAdminClient();
-  const { data: profile } = await admin
-    .from("user_profiles")
-    .select("role")
-    .eq("id", user.id)
-    .single();
-  if (profile?.role !== "admin") return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
+  const admin = auth.admin;
 
   try {
     const { email, courseId, totalAmount, paymentMethod, markAsPaid, sendPaymentEmail, fiscalize, professorId, packageType } = await request.json();

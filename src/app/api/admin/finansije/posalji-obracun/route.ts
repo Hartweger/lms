@@ -1,23 +1,13 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { requireAdmin } from "@/lib/api-auth";
 import { sendHonorarProfEmail } from "@/lib/email";
 import { buildMonthlyHonorarReports } from "@/lib/honorar-report";
 import honorariHistory from "@/lib/honorari-history.json";
 
-async function requireAdmin() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return null;
-  const admin = createAdminClient();
-  const { data: profile } = await admin.from("user_profiles").select("role").eq("id", user.id).single();
-  return profile?.role === "admin" ? admin : null;
-}
-
 // Ručno (ponovno) slanje mesečnog obračuna profesorkama, iz Finansija.
 export async function POST(request: Request) {
-  const admin = await requireAdmin();
-  if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
 
   const body = await request.json().catch(() => ({}));
   const godina = Number(body.godina);

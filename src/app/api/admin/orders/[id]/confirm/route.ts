@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { requireAdmin } from "@/lib/api-auth";
 import { grantAccessForOrder } from "@/lib/grant-access";
 
 export async function POST(
@@ -9,17 +8,9 @@ export async function POST(
 ) {
   const { id } = await params;
 
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
-
-  const admin = createAdminClient();
-  const { data: profile } = await admin
-    .from("user_profiles")
-    .select("role")
-    .eq("id", user.id)
-    .single();
-  if (profile?.role !== "admin") return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
+  const admin = auth.admin;
 
   // Load the order
   const { data: order, error: orderError } = await admin

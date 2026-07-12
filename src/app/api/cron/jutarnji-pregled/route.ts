@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { withCronLog } from "@/lib/cron-log";
+import { withCronLog, must } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendDailyAdminBrief, type DailyBrief } from "@/lib/email";
 
@@ -25,11 +25,15 @@ async function cronHandler(request: NextRequest) {
   const in14Date = plusDays(14).toISOString().slice(0, 10);
 
   // 1) Narudžbine kreirane juče (broj + naplaćeni iznos).
-  const { data: yOrders } = await admin
-    .from("orders")
-    .select("total, payment_status")
-    .gte("created_at", startYday.toISOString())
-    .lt("created_at", startToday.toISOString());
+  // Izveštajni cron: svaki glavni upit kroz must - bolje da izveštaj pukne (alarm) nego da stigne prazan.
+  const yOrders = must(
+    await admin
+      .from("orders")
+      .select("total, payment_status")
+      .gte("created_at", startYday.toISOString())
+      .lt("created_at", startToday.toISOString()),
+    "orders juce"
+  );
   const noveNarudzbine = {
     broj: yOrders?.length ?? 0,
     iznos: (yOrders ?? [])
@@ -44,11 +48,14 @@ async function cronHandler(request: NextRequest) {
     .gte("sent_at", startYday.toISOString());
 
   // 3) Neplaćene (pending) narudžbine.
-  const { data: pending } = await admin
-    .from("orders")
-    .select("order_number, full_name, total, payment_method, created_at")
-    .eq("payment_status", "pending")
-    .order("created_at", { ascending: true });
+  const pending = must(
+    await admin
+      .from("orders")
+      .select("order_number, full_name, total, payment_method, created_at")
+      .eq("payment_status", "pending")
+      .order("created_at", { ascending: true }),
+    "orders pending"
+  );
   const neplacene: DailyBrief["neplacene"] = (pending ?? []).map((o) => ({
     orderNumber: o.order_number ?? "-",
     ime: o.full_name ?? "",
@@ -60,22 +67,25 @@ async function cronHandler(request: NextRequest) {
   // 4) Pristup koji ističe narednih 7 dana.
   // NB: course_access nema FK veze ka user_profiles/courses u PostgREST schema cache-u,
   // pa embed select (`user:user_id(...)`) puca (PGRST200) i tiho vraća 0. Zato odvojeni upiti.
-  const { data: expiring } = await admin
-    .from("course_access")
-    .select("user_id, course_id, expires_at")
-    .not("expires_at", "is", null)
-    .gte("expires_at", now.toISOString())
-    .lte("expires_at", plusDays(7).toISOString())
-    .order("expires_at", { ascending: true });
+  const expiring = must(
+    await admin
+      .from("course_access")
+      .select("user_id, course_id, expires_at")
+      .not("expires_at", "is", null)
+      .gte("expires_at", now.toISOString())
+      .lte("expires_at", plusDays(7).toISOString())
+      .order("expires_at", { ascending: true }),
+    "course_access istice"
+  );
   const expRows = (expiring ?? []) as { user_id: string; course_id: string; expires_at: string }[];
   const expUserIds = [...new Set(expRows.map((r) => r.user_id))];
   const expCourseIds = [...new Set(expRows.map((r) => r.course_id))];
-  const { data: expProfiles } = expUserIds.length
-    ? await admin.from("user_profiles").select("id, full_name, email").in("id", expUserIds)
-    : { data: [] as { id: string; full_name?: string; email?: string }[] };
-  const { data: expCourses } = expCourseIds.length
-    ? await admin.from("courses").select("id, title").in("id", expCourseIds)
-    : { data: [] as { id: string; title?: string }[] };
+  const expProfiles = expUserIds.length
+    ? must(await admin.from("user_profiles").select("id, full_name, email").in("id", expUserIds), "user_profiles istice")
+    : ([] as { id: string; full_name?: string; email?: string }[]);
+  const expCourses = expCourseIds.length
+    ? must(await admin.from("courses").select("id, title").in("id", expCourseIds), "courses istice")
+    : ([] as { id: string; title?: string }[]);
   const expProfMap = new Map((expProfiles ?? []).map((p) => [p.id, p]));
   const expCourseMap = new Map((expCourses ?? []).map((c) => [c.id, c]));
   const isticePristup: DailyBrief["isticePristup"] = expRows.map((r) => {
@@ -85,10 +95,13 @@ async function cronHandler(request: NextRequest) {
   });
 
   // 5) Individualni paketi - ostao tačno 1 čas.
-  const { data: indEnr } = await admin
-    .from("individual_enrollments")
-    .select("package_lessons, lessons_used, user:user_id(full_name), professor:professor_id(full_name), course:course_id(title)")
-    .eq("status", "active");
+  const indEnr = must(
+    await admin
+      .from("individual_enrollments")
+      .select("package_lessons, lessons_used, user:user_id(full_name), professor:professor_id(full_name), course:course_id(title)")
+      .eq("status", "active"),
+    "individual_enrollments"
+  );
   const indOstao1: DailyBrief["indOstao1"] = (indEnr ?? [])
     .filter((r) => (r.package_lessons ?? 0) - (r.lessons_used ?? 0) === 1)
     .map((r) => {
@@ -99,14 +112,17 @@ async function cronHandler(request: NextRequest) {
     });
 
   // 6) Grupe koje se završavaju narednih 14 dana (+ broj aktivnih polaznika).
-  const { data: groups } = await admin
-    .from("groups")
-    .select("id, level, end_date, professor:professor_id(full_name)")
-    .in("status", ["otvoren", "u_toku"])
-    .not("end_date", "is", null)
-    .gte("end_date", todayDate)
-    .lte("end_date", in14Date)
-    .order("end_date", { ascending: true });
+  const groups = must(
+    await admin
+      .from("groups")
+      .select("id, level, end_date, professor:professor_id(full_name)")
+      .in("status", ["otvoren", "u_toku"])
+      .not("end_date", "is", null)
+      .gte("end_date", todayDate)
+      .lte("end_date", in14Date)
+      .order("end_date", { ascending: true }),
+    "groups kraj"
+  );
   const grupeKraj: DailyBrief["grupeKraj"] = [];
   for (const g of groups ?? []) {
     const { count } = await admin
@@ -124,11 +140,14 @@ async function cronHandler(request: NextRequest) {
   }
 
   // 7) Odbijeni mejlovi / spam prijave u poslednja 24h (Resend webhook → email_bounces).
-  const { data: bounceRows } = await admin
-    .from("email_bounces")
-    .select("email, event, reason, created_at")
-    .gte("created_at", startYday.toISOString())
-    .order("created_at", { ascending: false });
+  const bounceRows = must(
+    await admin
+      .from("email_bounces")
+      .select("email, event, reason, created_at")
+      .gte("created_at", startYday.toISOString())
+      .order("created_at", { ascending: false }),
+    "email_bounces"
+  );
   const bounces: DailyBrief["bounces"] = (bounceRows ?? []).map((b) => ({
     email: b.email,
     tip: b.event === "complained" ? "spam prijava" : "odbijen",

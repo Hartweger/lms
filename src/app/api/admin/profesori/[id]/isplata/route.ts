@@ -1,22 +1,13 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { requireAdmin } from "@/lib/api-auth";
 import { loadPayables } from "@/lib/professor-payable";
 import { sendPaymentEmail } from "@/lib/email";
 
-// Vraća user.id (za audit polja poput created_by/approved_by), ili null ako nije admin.
-async function verifyAdmin() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return null;
-  const admin = createAdminClient();
-  const { data: profile } = await admin.from("user_profiles").select("role").eq("id", user.id).single();
-  return profile?.role === "admin" ? user.id : null;
-}
-
 export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
-  const adminId = await verifyAdmin();
-  if (!adminId) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
+  const { user, admin } = auth;
+  const adminId = user.id; // audit polje created_by
   const { id: professorId } = await params;
   const body = await request.json();
   const amount = Math.round(Number(body.amount));
@@ -24,8 +15,6 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
   const note = String(body.note ?? "").trim() || null;
   if (!Number.isFinite(amount) || amount <= 0) return NextResponse.json({ error: "Iznos mora biti veći od 0" }, { status: 400 });
   if (!/^\d{4}-\d{2}-\d{2}$/.test(paymentDate)) return NextResponse.json({ error: "Datum nije validan" }, { status: 400 });
-
-  const admin = createAdminClient();
 
   // Profesor mora da postoji (loadPayables vraća prazno za nepoznat/ne-profesor id).
   const before = await loadPayables(professorId);

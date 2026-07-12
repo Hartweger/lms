@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { withCronLog } from "@/lib/cron-log";
+import { withCronLog, must } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { nivoForSlug } from "@/lib/course-nivo";
 import { fetchGa4Weekly } from "@/lib/ga4-report";
@@ -20,11 +20,15 @@ async function usersWithProgress(admin: SupaAdmin, userIds: string[]): Promise<S
     const chunk = userIds.slice(i, i + chunkSize);
     let from = 0;
     for (;;) {
-      const { data } = await admin
-        .from("lesson_progress")
-        .select("user_id")
-        .in("user_id", chunk)
-        .range(from, from + page - 1);
+      // Greška upita mora da obori cron (must) - tiho podbrojavanje bi iskrivilo aktivaciju u izveštaju.
+      const data = must(
+        await admin
+          .from("lesson_progress")
+          .select("user_id")
+          .in("user_id", chunk)
+          .range(from, from + page - 1),
+        "lesson_progress"
+      );
       const rows = (data ?? []) as { user_id: string }[];
       for (const r of rows) found.add(r.user_id);
       if (rows.length < page) break;
@@ -51,17 +55,24 @@ async function cronHandler(request: NextRequest) {
     new Date(v).toLocaleDateString("sr-RS", { day: "2-digit", month: "2-digit", year: "numeric" });
 
   // ---- 1) PRIHOD (naplaćene porudžbine ove i prošle nedelje) ----
-  const { data: weekOrders } = await admin
-    .from("orders")
-    .select("total, payment_method, coupon_code")
-    .eq("payment_status", "completed")
-    .gte("created_at", weekStart.toISOString());
-  const { data: prevOrders } = await admin
-    .from("orders")
-    .select("total")
-    .eq("payment_status", "completed")
-    .gte("created_at", prevStart.toISOString())
-    .lt("created_at", weekStart.toISOString());
+  // Izveštajni cron: svaki glavni upit kroz must - bolje da izveštaj pukne (alarm) nego da stigne prazan.
+  const weekOrders = must(
+    await admin
+      .from("orders")
+      .select("total, payment_method, coupon_code")
+      .eq("payment_status", "completed")
+      .gte("created_at", weekStart.toISOString()),
+    "orders nedelja"
+  );
+  const prevOrders = must(
+    await admin
+      .from("orders")
+      .select("total")
+      .eq("payment_status", "completed")
+      .gte("created_at", prevStart.toISOString())
+      .lt("created_at", weekStart.toISOString()),
+    "orders prosla nedelja"
+  );
 
   const wOrders = (weekOrders ?? []) as { total: number | null; payment_method: string | null; coupon_code: string | null }[];
   const pOrders = (prevOrders ?? []) as { total: number | null }[];
@@ -86,14 +97,20 @@ async function cronHandler(request: NextRequest) {
 
   // ---- 2) AKTIVACIJA ----
   // course_access nema FK embed (PGRST200) → odvojeni upiti, kao u jutarnji-pregled.
-  const { data: acc7 } = await admin
-    .from("course_access")
-    .select("user_id, course_id, granted_at")
-    .gte("granted_at", weekStart.toISOString());
-  const { data: acc30 } = await admin
-    .from("course_access")
-    .select("user_id")
-    .gte("granted_at", start30.toISOString());
+  const acc7 = must(
+    await admin
+      .from("course_access")
+      .select("user_id, course_id, granted_at")
+      .gte("granted_at", weekStart.toISOString()),
+    "course_access 7d"
+  );
+  const acc30 = must(
+    await admin
+      .from("course_access")
+      .select("user_id")
+      .gte("granted_at", start30.toISOString()),
+    "course_access 30d"
+  );
   const acc7Rows = (acc7 ?? []) as { user_id: string; course_id: string; granted_at: string }[];
   const users7 = [...new Set(acc7Rows.map((r) => r.user_id))];
   const users30 = [...new Set(((acc30 ?? []) as { user_id: string }[]).map((r) => r.user_id))];
@@ -113,9 +130,9 @@ async function cronHandler(request: NextRequest) {
 
   // Video (course_access ove nedelje) → naziv kursa kao nivo
   const acc7CourseIds = [...new Set(acc7Rows.map((r) => r.course_id))];
-  const { data: acc7Courses } = acc7CourseIds.length
-    ? await admin.from("courses").select("id, title, course_type, slug").in("id", acc7CourseIds)
-    : { data: [] as { id: string; title?: string; course_type?: string; slug?: string }[] };
+  const acc7Courses = acc7CourseIds.length
+    ? must(await admin.from("courses").select("id, title, course_type, slug").in("id", acc7CourseIds), "courses 7d")
+    : ([] as { id: string; title?: string; course_type?: string; slug?: string }[]);
   const courseMap = new Map((acc7Courses ?? []).map((c) => [c.id, c]));
   for (const r of acc7Rows) {
     const c = courseMap.get(r.course_id);
@@ -124,29 +141,35 @@ async function cronHandler(request: NextRequest) {
   }
 
   // Grupni (group_enrollments ove nedelje)
-  const { data: grpEnr } = await admin
-    .from("group_enrollments")
-    .select("group_id, status, enrolled_at")
-    .eq("status", "active")
-    .gte("enrolled_at", weekStart.toISOString());
+  const grpEnr = must(
+    await admin
+      .from("group_enrollments")
+      .select("group_id, status, enrolled_at")
+      .eq("status", "active")
+      .gte("enrolled_at", weekStart.toISOString()),
+    "group_enrollments"
+  );
   const grpRows = (grpEnr ?? []) as { group_id: string }[];
   const grpIds = [...new Set(grpRows.map((r) => r.group_id))];
-  const { data: grpData } = grpIds.length
-    ? await admin.from("groups").select("id, level").in("id", grpIds)
-    : { data: [] as { id: string; level?: string }[] };
+  const grpData = grpIds.length
+    ? must(await admin.from("groups").select("id, level").in("id", grpIds), "groups")
+    : ([] as { id: string; level?: string }[]);
   const grpLevelMap = new Map((grpData ?? []).map((g) => [g.id, g.level]));
   for (const r of grpRows) bump(grpLevelMap.get(r.group_id) || "Grupa", "Grupni", 1);
 
   // Individualni 1:1 (individual_enrollments ove nedelje)
-  const { data: indEnr } = await admin
-    .from("individual_enrollments")
-    .select("course_id, created_at")
-    .gte("created_at", weekStart.toISOString());
+  const indEnr = must(
+    await admin
+      .from("individual_enrollments")
+      .select("course_id, created_at")
+      .gte("created_at", weekStart.toISOString()),
+    "individual_enrollments"
+  );
   const indRows = (indEnr ?? []) as { course_id: string }[];
   const indCourseIds = [...new Set(indRows.map((r) => r.course_id))];
-  const { data: indCourses } = indCourseIds.length
-    ? await admin.from("courses").select("id, title, slug").in("id", indCourseIds)
-    : { data: [] as { id: string; title?: string; slug?: string }[] };
+  const indCourses = indCourseIds.length
+    ? must(await admin.from("courses").select("id, title, slug").in("id", indCourseIds), "courses 1na1")
+    : ([] as { id: string; title?: string; slug?: string }[]);
   const indCourseMap = new Map((indCourses ?? []).map((c) => [c.id, c]));
   for (const r of indRows) {
     const c = indCourseMap.get(r.course_id);
@@ -163,22 +186,25 @@ async function cronHandler(request: NextRequest) {
   const upisiUkupno = upisi.reduce((s, u) => s + u.broj, 0);
 
   // ---- 4) ISTEK & OBNOVE ----
-  const { data: expiring } = await admin
-    .from("course_access")
-    .select("user_id, course_id, expires_at")
-    .not("expires_at", "is", null)
-    .gte("expires_at", now.toISOString())
-    .lte("expires_at", in15.toISOString())
-    .order("expires_at", { ascending: true });
+  const expiring = must(
+    await admin
+      .from("course_access")
+      .select("user_id, course_id, expires_at")
+      .not("expires_at", "is", null)
+      .gte("expires_at", now.toISOString())
+      .lte("expires_at", in15.toISOString())
+      .order("expires_at", { ascending: true }),
+    "course_access istice"
+  );
   const expRows = (expiring ?? []) as { user_id: string; course_id: string; expires_at: string }[];
   const expUserIds = [...new Set(expRows.map((r) => r.user_id))];
   const expCourseIds = [...new Set(expRows.map((r) => r.course_id))];
-  const { data: expProfiles } = expUserIds.length
-    ? await admin.from("user_profiles").select("id, full_name, email").in("id", expUserIds)
-    : { data: [] as { id: string; full_name?: string; email?: string }[] };
-  const { data: expCourses } = expCourseIds.length
-    ? await admin.from("courses").select("id, title").in("id", expCourseIds)
-    : { data: [] as { id: string; title?: string }[] };
+  const expProfiles = expUserIds.length
+    ? must(await admin.from("user_profiles").select("id, full_name, email").in("id", expUserIds), "user_profiles istice")
+    : ([] as { id: string; full_name?: string; email?: string }[]);
+  const expCourses = expCourseIds.length
+    ? must(await admin.from("courses").select("id, title").in("id", expCourseIds), "courses istice")
+    : ([] as { id: string; title?: string }[]);
   const expProfMap = new Map((expProfiles ?? []).map((p) => [p.id, p]));
   const expCourseMap = new Map((expCourses ?? []).map((c) => [c.id, c]));
   const istekStavke = expRows.slice(0, 8).map((r) => {
@@ -194,12 +220,15 @@ async function cronHandler(request: NextRequest) {
   };
 
   // ---- 5) ODBIJENE KARTICE ----
-  const { data: failed } = await admin
-    .from("orders")
-    .select("full_name, total, created_at, nestpay_status")
-    .eq("nestpay_status", "failed")
-    .gte("created_at", weekStart.toISOString())
-    .order("created_at", { ascending: false });
+  const failed = must(
+    await admin
+      .from("orders")
+      .select("full_name, total, created_at, nestpay_status")
+      .eq("nestpay_status", "failed")
+      .gte("created_at", weekStart.toISOString())
+      .order("created_at", { ascending: false }),
+    "orders failed"
+  );
   const failedRows = (failed ?? []) as { full_name: string | null; total: number | null; created_at: string }[];
   const declined: WeeklySummary["declined"] = {
     broj: failedRows.length,

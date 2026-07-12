@@ -4,7 +4,7 @@
 // (category="mesecni" = ind paket 4/8/12 - nemaju godišnji platformski pristup).
 // U praksi istek imaju samo VIDEO (samostalni) kursevi, uključujući VIDEO FSP i FIDE.
 import { NextResponse } from "next/server";
-import { withCronLog } from "@/lib/cron-log";
+import { withCronLog, must } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendExpiryReminder } from "@/lib/email";
 
@@ -19,11 +19,15 @@ const WINDOW_DAYS = 15;
 const EXCLUDED_SLUGS = new Set(["kurs-konverzacije", "konverzacijski-b1-sadrzaj"]);
 
 type Row = Record<string, unknown>;
-async function fetchAll(build: () => { range: (a: number, b: number) => PromiseLike<{ data: Row[] | null }> }): Promise<Row[]> {
+async function fetchAll(
+  label: string,
+  build: () => { range: (a: number, b: number) => PromiseLike<{ data: Row[] | null; error: { message: string } | null }> }
+): Promise<Row[]> {
   const out: Row[] = [];
   let o = 0;
   for (;;) {
-    const { data } = await build().range(o, o + 999);
+    // Greška upita mora da obori cron (must) - tiho prazna lista bi značila pogrešne kandidate.
+    const data = must(await build().range(o, o + 999), label);
     if (!data || data.length === 0) break;
     out.push(...data);
     if (data.length < 1000) break;
@@ -46,7 +50,7 @@ async function cronHandler(request: Request) {
   const nowIso = new Date(now).toISOString();
   const windowIso = new Date(now + WINDOW_DAYS * 86400000).toISOString();
 
-  const { data: courses } = await admin.from("courses").select("id, title, slug, category");
+  const courses = must(await admin.from("courses").select("id, title, slug, category"), "courses");
   const courseMap = new Map((courses ?? []).map((c) => [c.id, c]));
   const excluded = new Set(
     (courses ?? [])
@@ -71,7 +75,7 @@ async function cronHandler(request: Request) {
   // Pristup koji ističe u narednih WINDOW_DAYS dana (i još nije istekao).
   // Dva izvora: VIDEO (course_access) + INDIVIDUALNI (individual_enrollments).
   // Grupni se NE obrađuje ovde - nema istek po polazniku (vezan za kraj kohorte).
-  const videoAccess = await fetchAll(() =>
+  const videoAccess = await fetchAll("course_access", () =>
     admin
       .from("course_access")
       .select("user_id, course_id, expires_at")
@@ -80,7 +84,7 @@ async function cronHandler(request: Request) {
       .lte("expires_at", windowIso)
   ) as { user_id: string; course_id: string; expires_at: string }[];
 
-  const indEnroll = await fetchAll(() =>
+  const indEnroll = await fetchAll("individual_enrollments", () =>
     admin
       .from("individual_enrollments")
       .select("user_id, course_id, expires_at")
@@ -94,12 +98,12 @@ async function cronHandler(request: Request) {
 
   // Ko dobija mejl BEZ kupona: individualni i grupni polaznici (za njih obnova = sledeći nivo sa
   // profesorom, ne „obnovi isti kurs 50%"). Video kupci → SA kuponom OBNOVI50.
-  const indUsers = await fetchAll(() => admin.from("individual_enrollments").select("user_id").eq("status", "active")) as { user_id: string }[];
-  const grpUsers = await fetchAll(() => admin.from("group_enrollments").select("user_id").eq("status", "active")) as { user_id: string }[];
+  const indUsers = await fetchAll("individual_enrollments active", () => admin.from("individual_enrollments").select("user_id").eq("status", "active")) as { user_id: string }[];
+  const grpUsers = await fetchAll("group_enrollments", () => admin.from("group_enrollments").select("user_id").eq("status", "active")) as { user_id: string }[];
   const noCouponUsers = new Set([...indUsers, ...grpUsers].map((u) => u.user_id));
 
   // Već poslati (dedup po user+course+expires_at)
-  const already = await fetchAll(() => admin.from("expiry_reminders").select("user_id, course_id, expires_at")) as {
+  const already = await fetchAll("expiry_reminders", () => admin.from("expiry_reminders").select("user_id, course_id, expires_at")) as {
     user_id: string; course_id: string; expires_at: string;
   }[];
   const sentSet = new Set(already.map((s) => `${s.user_id}|${s.course_id}|${s.expires_at}`));
@@ -117,7 +121,7 @@ async function cronHandler(request: Request) {
   if (batch.length === 0) return NextResponse.json({ candidates: 0, sent: 0 });
 
   const ids = [...new Set(batch.map((a) => a.user_id))];
-  const { data: profiles } = await admin.from("user_profiles").select("id, email, full_name").in("id", ids);
+  const profiles = must(await admin.from("user_profiles").select("id, email, full_name").in("id", ids), "user_profiles");
   const profMap = new Map((profiles ?? []).map((p) => [p.id, p]));
 
   let sent = 0;
@@ -133,7 +137,11 @@ async function cronHandler(request: Request) {
       expiresAt: a.expires_at,
       withCoupon: !noCouponUsers.has(a.user_id),
     });
-    await admin.from("expiry_reminders").insert({ user_id: a.user_id, course_id: a.course_id, expires_at: a.expires_at });
+    // Pad upisa mora da obori cron: bez dedup zapisa bi isti čovek sutra dobio dupli podsetnik.
+    must(
+      await admin.from("expiry_reminders").insert({ user_id: a.user_id, course_id: a.course_id, expires_at: a.expires_at }),
+      "expiry_reminders insert"
+    );
     sent++;
   }
 

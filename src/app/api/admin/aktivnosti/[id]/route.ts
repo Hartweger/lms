@@ -1,26 +1,17 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
-
-// Vraća user.id (za audit polja poput created_by/approved_by), ili null ako nije admin.
-async function verifyAdmin() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return null;
-  const admin = createAdminClient();
-  const { data: profile } = await admin.from("user_profiles").select("role").eq("id", user.id).single();
-  return profile?.role === "admin" ? user.id : null;
-}
+import { requireAdmin } from "@/lib/api-auth";
 
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
-  const adminId = await verifyAdmin();
-  if (!adminId) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
+  const { user, admin } = auth;
+  // user.id = admin koji odlučuje (audit polje approved_by).
+  const adminId = user.id;
   const { id } = await params;
   const { action, reason } = await request.json();
   if (action !== "odobri" && action !== "odbij") {
     return NextResponse.json({ error: "action mora biti 'odobri' ili 'odbij'" }, { status: 400 });
   }
-  const admin = createAdminClient();
 
   const { data: row } = await admin.from("professor_activities").select("status").eq("id", id).single();
   if (!row) return NextResponse.json({ error: "Aktivnost nije pronađena" }, { status: 404 });

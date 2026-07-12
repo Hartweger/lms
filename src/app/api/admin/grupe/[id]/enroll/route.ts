@@ -1,21 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { requireAdmin } from "@/lib/api-auth";
 import { nextExpiry } from "@/lib/groups";
-
-async function requireAdmin() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return null;
-  const admin = createAdminClient();
-  const { data: profile } = await admin.from("user_profiles").select("role").eq("id", user.id).single();
-  return profile?.role === "admin" ? admin : null;
-}
 
 // POST: dodaj polaznika po mejlu → nađi-ili-kreiraj nalog + enrollment + grant pristupa na content kurs.
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const admin = await requireAdmin();
-  if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
+  const admin = auth.admin;
   const { id: groupId } = await params;
   const email = (((await req.json()).email as string) || "").toLowerCase().trim();
   if (!email.includes("@")) return NextResponse.json({ error: "Neispravan mejl" }, { status: 400 });
@@ -54,8 +45,9 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 
 // DELETE: ukloni polaznika iz grupe (pristup se NE oduzima).
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const admin = await requireAdmin();
-  if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
+  const admin = auth.admin;
   const { id: groupId } = await params;
   const userId = (await req.json()).user_id as string;
   const { error } = await admin.from("group_enrollments")

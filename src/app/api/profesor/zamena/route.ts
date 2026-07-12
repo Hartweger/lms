@@ -1,16 +1,10 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { requireProfessorOrAdmin } from "@/lib/api-auth";
 
 export async function POST(request: Request) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
-  const admin = createAdminClient();
-  const { data: me } = await admin.from("user_profiles").select("role").eq("id", user.id).single();
-  if (me?.role !== "professor" && me?.role !== "admin") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
-  }
+  const auth = await requireProfessorOrAdmin();
+  if (!auth.ok) return auth.response;
+  const { user, admin } = auth;
 
   const { groupId, sessionDate } = await request.json();
   if (!groupId || !/^\d{4}-\d{2}-\d{2}$/.test(String(sessionDate ?? ""))) {

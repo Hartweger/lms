@@ -8,7 +8,7 @@ const h = vi.hoisted(() => ({
 
 vi.mock("@/lib/supabase/admin", () => ({ createAdminClient: () => h.fake.admin }));
 
-import { withCronLog, findCronProblems, EXPECTED_CRONS } from "./cron-log";
+import { withCronLog, findCronProblems, EXPECTED_CRONS, must } from "./cron-log";
 
 function req(): Request {
   return new Request("https://test.local/api/cron/nesto", {
@@ -110,5 +110,17 @@ describe("EXPECTED_CRONS", () => {
       "inactivity", "jutarnji-pregled", "naki-content-weekly", "nestpay-reconcile",
       "prof-podsetnik", "review-recert", "review-request", "test-funnel",
     ]);
+  });
+});
+
+describe("must", () => {
+  it("vraća data kad nema greške", () => {
+    expect(must({ data: [1, 2], error: null }, "lista")).toEqual([1, 2]);
+  });
+
+  it("greška upita → izuzetak sa imenom upita (withCronLog ga beleži kao pad)", () => {
+    expect(() => must({ data: null, error: { message: "timeout" } }, "students")).toThrowError(
+      /students.*timeout/
+    );
   });
 });

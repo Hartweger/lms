@@ -3,7 +3,7 @@
 // Pravila: okidač = sertifikat izdat u zadnja 3 dana; min 60 dana od prošlog ask-a.
 // (Namerno BEZ "skip ako je popunio formu" - obim je mali, 60-dnevni razmak je dovoljan.)
 import { NextResponse } from "next/server";
-import { withCronLog } from "@/lib/cron-log";
+import { withCronLog, must } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendReviewRequestRecert } from "@/lib/email";
 
@@ -32,25 +32,34 @@ async function cronHandler(request: Request) {
 
   // 1) Sertifikati izdati u zadnjih CERT_WINDOW_DAYS dana -> kandidati (po korisniku)
   const certCutoff = new Date(now - CERT_WINDOW_DAYS * 86400000).toISOString();
-  const { data: certs } = await admin
-    .from("certificates")
-    .select("user_id, issued_at")
-    .gte("issued_at", certCutoff);
+  const certs = must(
+    await admin
+      .from("certificates")
+      .select("user_id, issued_at")
+      .gte("issued_at", certCutoff),
+    "certificates"
+  );
   const userIds = [...new Set((certs ?? []).map((c) => c.user_id as string))];
   if (userIds.length === 0) return NextResponse.json({ candidates: 0, sent: 0 });
 
   // 2) Profili kandidata (samo studenti sa mejlom)
-  const { data: profiles } = await admin
-    .from("user_profiles")
-    .select("id, email, full_name, role")
-    .in("id", userIds);
+  const profiles = must(
+    await admin
+      .from("user_profiles")
+      .select("id, email, full_name, role")
+      .in("id", userIds),
+    "user_profiles"
+  );
   const eligibleProfiles = (profiles ?? []).filter((p) => p.role === "student" && p.email);
 
   // 3) Prošli ask-ovi (za 60-dnevni razmak)
-  const { data: asked } = await admin
-    .from("review_requests")
-    .select("user_id, sent_at")
-    .in("user_id", userIds);
+  const asked = must(
+    await admin
+      .from("review_requests")
+      .select("user_id, sent_at")
+      .in("user_id", userIds),
+    "review_requests"
+  );
   const lastAsk = new Map<string, number>();
   for (const a of asked ?? []) {
     const t = a.sent_at ? new Date(a.sent_at as string).getTime() : 0;
@@ -75,7 +84,8 @@ async function cronHandler(request: Request) {
   let sent = 0;
   for (const p of toSend.slice(0, MAX_PER_RUN)) {
     await sendReviewRequestRecert({ email: p.email as string, name: (p.full_name as string) ?? "" });
-    await admin.from("review_requests").insert({ user_id: p.id });
+    // Pad upisa mora da obori cron: bez zapisa 60-dnevni razmak ne važi, pa bi čovek dobio dupli ask.
+    must(await admin.from("review_requests").insert({ user_id: p.id }), "review_requests insert");
     sent++;
   }
 

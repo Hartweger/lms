@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { withCronLog } from "@/lib/cron-log";
+import { withCronLog, must } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { nextNivoFor, grupniSlugForNivo } from "@/lib/course-nivo";
 import { sendNatasaNextTermReminder, sendNextLevelOffer } from "@/lib/email";
@@ -19,11 +19,14 @@ async function cronHandler(request: NextRequest) {
   const in14 = plus(14);
   const in7 = plus(7);
 
-  const { data: groups } = await admin
-    .from("groups")
-    .select("id, level, end_date, term_opened_at, reminder_sent_at, offer_sent_at, professor:professor_id(full_name)")
-    .in("status", ["otvoren", "u_toku"])
-    .not("end_date", "is", null);
+  const groups = must(
+    await admin
+      .from("groups")
+      .select("id, level, end_date, term_opened_at, reminder_sent_at, offer_sent_at, professor:professor_id(full_name)")
+      .in("status", ["otvoren", "u_toku"])
+      .not("end_date", "is", null),
+    "groups"
+  );
 
   let reminders = 0;
   let offers = 0;
@@ -36,7 +39,8 @@ async function cronHandler(request: NextRequest) {
     // 1) Podsetnik adminu - 14 dana pre kraja.
     if (!g.reminder_sent_at && g.end_date <= in14) {
       await sendNatasaNextTermReminder({ nivo: g.level, nextNivo, endDate: g.end_date, profIme });
-      await admin.from("groups").update({ reminder_sent_at: now }).eq("id", g.id);
+      // Pad upisa mora da obori cron: bez reminder_sent_at bi admin sutra dobio dupli podsetnik.
+      must(await admin.from("groups").update({ reminder_sent_at: now }).eq("id", g.id), "groups reminder_sent_at update");
       reminders++;
     }
 
@@ -50,7 +54,7 @@ async function cronHandler(request: NextRequest) {
           .select("enrolled_at, user:user_id(email, full_name)")
           .eq("group_id", g.id).eq("status", "active");
         if (g.term_opened_at) q = q.gte("enrolled_at", g.term_opened_at);
-        const { data: enrs } = await q;
+        const enrs = must(await q, "group_enrollments");
         for (const e of enrs ?? []) {
           const u = Array.isArray(e.user) ? e.user[0] : e.user;
           if (u?.email) {
@@ -60,7 +64,8 @@ async function cronHandler(request: NextRequest) {
         }
       }
       // Označi kao poslato (i kad nema sledećeg nivoa) da se ne proverava svaki dan.
-      await admin.from("groups").update({ offer_sent_at: now }).eq("id", g.id);
+      // Pad upisa mora da obori cron: bez offer_sent_at bi polaznici sutra dobili duplu ponudu.
+      must(await admin.from("groups").update({ offer_sent_at: now }).eq("id", g.id), "groups offer_sent_at update");
     }
   }
 

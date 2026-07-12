@@ -5,7 +5,7 @@
 // Stop: čim osoba kupi bilo šta (orders completed, WC istorija u poslednjih godinu dana, ima pristup
 // kursu) ili se odjavi preko linka u mejlu (email_optouts).
 import { NextRequest, NextResponse } from "next/server";
-import { withCronLog } from "@/lib/cron-log";
+import { withCronLog, must } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendTestFunnelEmail } from "@/lib/email";
 import { funnelUrlsForNivo } from "@/lib/course-nivo";
@@ -45,12 +45,15 @@ async function cronHandler(request: NextRequest) {
   const start = FUNNEL_START > minCreated.slice(0, 10) ? FUNNEL_START : minCreated;
 
   // Najnoviji test po mejlu, u funnel prozoru.
-  const { data: tests } = await admin
-    .from("placement_test_results")
-    .select("email, recommended_level, created_at")
-    .not("email", "is", null)
-    .gte("created_at", start)
-    .order("created_at", { ascending: false });
+  const tests = must(
+    await admin
+      .from("placement_test_results")
+      .select("email, recommended_level, created_at")
+      .not("email", "is", null)
+      .gte("created_at", start)
+      .order("created_at", { ascending: false }),
+    "placement_test_results"
+  );
   const latest = new Map<string, { nivo: string; createdAt: string }>();
   for (const t of tests ?? []) {
     const em = String(t.email).trim().toLowerCase();
@@ -63,17 +66,23 @@ async function cronHandler(request: NextRequest) {
   const emails = [...latest.keys()];
 
   // Odjavljeni preko linka u mejlu - ne dobijaju ništa.
-  const { data: optouts } = await admin
-    .from("email_optouts")
-    .select("email")
-    .in("email", emails);
+  const optouts = must(
+    await admin
+      .from("email_optouts")
+      .select("email")
+      .in("email", emails),
+    "email_optouts"
+  );
   const odjavljeni = new Set((optouts ?? []).map((o) => String(o.email).toLowerCase()));
 
   // Već poslati funnel mejlovi.
-  const { data: sentRows } = await admin
-    .from("test_funnel_emails")
-    .select("email, email_number, sent_at")
-    .in("email", emails);
+  const sentRows = must(
+    await admin
+      .from("test_funnel_emails")
+      .select("email, email_number, sent_at")
+      .in("email", emails),
+    "test_funnel_emails"
+  );
   const sentByEmail = new Map<string, { maxNumber: number; lastSentAt: number }>();
   for (const r of sentRows ?? []) {
     const cur = sentByEmail.get(r.email) ?? { maxNumber: 1, lastSentAt: 0 };
@@ -84,33 +93,45 @@ async function cronHandler(request: NextRequest) {
 
   // Stop-uslovi: kupio na novom sajtu, kupio na starom (godinu dana), ili već ima pristup kursu.
   const kupili = new Set<string>();
-  const { data: paidOrders } = await admin
-    .from("orders")
-    .select("email")
-    .eq("payment_status", "completed")
-    .in("email", emails);
+  const paidOrders = must(
+    await admin
+      .from("orders")
+      .select("email")
+      .eq("payment_status", "completed")
+      .in("email", emails),
+    "orders"
+  );
   for (const o of paidOrders ?? []) kupili.add(String(o.email).toLowerCase());
 
   const yearAgo = new Date(now - 365 * 86400000).toISOString();
-  const { data: wcOrders } = await admin
-    .from("wc_orders")
-    .select("customer_email")
-    .in("status", ["completed", "processing"])
-    .gte("date_created", yearAgo)
-    .in("customer_email", emails);
+  const wcOrders = must(
+    await admin
+      .from("wc_orders")
+      .select("customer_email")
+      .in("status", ["completed", "processing"])
+      .gte("date_created", yearAgo)
+      .in("customer_email", emails),
+    "wc_orders"
+  );
   for (const o of wcOrders ?? []) kupili.add(String(o.customer_email).toLowerCase());
 
-  const { data: profiles } = await admin
-    .from("user_profiles")
-    .select("id, email, full_name")
-    .in("email", emails);
+  const profiles = must(
+    await admin
+      .from("user_profiles")
+      .select("id, email, full_name")
+      .in("email", emails),
+    "user_profiles"
+  );
   const profileByEmail = new Map((profiles ?? []).map((p) => [String(p.email).toLowerCase(), p]));
   const profileIds = (profiles ?? []).map((p) => p.id);
   if (profileIds.length > 0) {
-    const { data: access } = await admin
-      .from("course_access")
-      .select("user_id")
-      .in("user_id", profileIds);
+    const access = must(
+      await admin
+        .from("course_access")
+        .select("user_id")
+        .in("user_id", profileIds),
+      "course_access"
+    );
     const withAccess = new Set((access ?? []).map((a) => a.user_id));
     for (const [em, p] of profileByEmail) if (withAccess.has(p.id)) kupili.add(em);
   }
@@ -148,9 +169,13 @@ async function cronHandler(request: NextRequest) {
       emailNumber: c.emailNumber,
       ...funnelUrlsForNivo(c.nivo),
     });
-    await admin
-      .from("test_funnel_emails")
-      .insert({ email: c.email, nivo: c.nivo, email_number: c.emailNumber });
+    // Pad upisa mora da obori cron: bez zapisa bi ista osoba sutra ponovo dobila isti funnel mejl.
+    must(
+      await admin
+        .from("test_funnel_emails")
+        .insert({ email: c.email, nivo: c.nivo, email_number: c.emailNumber }),
+      "test_funnel_emails insert"
+    );
     sent++;
   }
 

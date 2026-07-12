@@ -3,7 +3,7 @@
 // iako im je link u beleškama). Cilj: ≥5 završenih lekcija, aktivan u 14 dana, nalog ≥21 dan,
 // nije već zamoljen. Jednom po čoveku. (Na kraju forme je i Google review link za one koji žele.)
 import { NextResponse } from "next/server";
-import { withCronLog } from "@/lib/cron-log";
+import { withCronLog, must } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendReviewRequest } from "@/lib/email";
 
@@ -16,11 +16,15 @@ const ACTIVE_DAYS = 14;
 const START_DATE = "2026-06-25T00:00:00Z";
 
 type Row = Record<string, unknown>;
-async function fetchAll(build: () => { range: (a: number, b: number) => PromiseLike<{ data: Row[] | null }> }): Promise<Row[]> {
+async function fetchAll(
+  label: string,
+  build: () => { range: (a: number, b: number) => PromiseLike<{ data: Row[] | null; error: { message: string } | null }> }
+): Promise<Row[]> {
   const out: Row[] = [];
   let o = 0;
   for (;;) {
-    const { data } = await build().range(o, o + 999);
+    // Greška upita mora da obori cron (must) - tiho prazna lista bi značila pogrešne kandidate.
+    const data = must(await build().range(o, o + 999), label);
     if (!data || data.length === 0) break;
     out.push(...data);
     if (data.length < 1000) break;
@@ -47,7 +51,7 @@ async function cronHandler(request: Request) {
   }
 
   // Napredak: broj završenih + poslednja aktivnost po korisniku
-  const progress = await fetchAll(() =>
+  const progress = await fetchAll("lesson_progress", () =>
     admin.from("lesson_progress").select("user_id, completed_at").eq("completed", true)
   ) as { user_id: string; completed_at: string | null }[];
   const stat = new Map<string, { count: number; last: number }>();
@@ -65,7 +69,7 @@ async function cronHandler(request: Request) {
     .map(([uid]) => uid);
 
   // Isključi samo već zamoljene (ne znamo ko je popunio formu - pratimo koga smo zvali)
-  const asked = await fetchAll(() => admin.from("review_requests").select("user_id")) as { user_id: string }[];
+  const asked = await fetchAll("review_requests", () => admin.from("review_requests").select("user_id")) as { user_id: string }[];
   const askedSet = new Set(asked.map((a) => a.user_id));
 
   // ≥5 završenih lekcija + aktivan u 14 dana već znači „radi neko vreme" - starost naloga ne tražimo
@@ -73,10 +77,13 @@ async function cronHandler(request: Request) {
   const candidateIds = engaged.filter((uid) => !askedSet.has(uid));
   if (candidateIds.length === 0) return NextResponse.json({ candidates: 0, sent: 0 });
 
-  const { data: profiles } = await admin
-    .from("user_profiles")
-    .select("id, email, full_name, role")
-    .in("id", candidateIds.slice(0, 1000));
+  const profiles = must(
+    await admin
+      .from("user_profiles")
+      .select("id, email, full_name, role")
+      .in("id", candidateIds.slice(0, 1000)),
+    "user_profiles"
+  );
 
   const eligible = (profiles ?? []).filter((p) => p.role === "student" && p.email);
 
@@ -89,7 +96,8 @@ async function cronHandler(request: Request) {
   let sent = 0;
   for (const p of eligible.slice(0, MAX_PER_RUN)) {
     await sendReviewRequest({ email: p.email, name: p.full_name ?? "" });
-    await admin.from("review_requests").insert({ user_id: p.id });
+    // Pad upisa mora da obori cron: bez zapisa bi isti čovek sutra dobio još jednu zamolnicu.
+    must(await admin.from("review_requests").insert({ user_id: p.id }), "review_requests insert");
     sent++;
   }
 

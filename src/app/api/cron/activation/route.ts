@@ -2,7 +2,7 @@
 // Aktivacioni nudge: polaznik dobio pristup ali nije otvorio nijednu lekciju → mejl da započne.
 // Cilja NATIVE (ne-migrirane), pristup star 1-30 dana, bez ijedne završene lekcije, jednom po čoveku.
 import { NextResponse } from "next/server";
-import { withCronLog } from "@/lib/cron-log";
+import { withCronLog, must } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendActivationNudge } from "@/lib/email";
 import { createLoginLinkToken } from "@/lib/login-link";
@@ -19,11 +19,16 @@ function startUrlFor(email: string, lessonId: string | null): string {
 }
 
 type Row = Record<string, unknown>;
-async function fetchAll(build: () => { range: (a: number, b: number) => PromiseLike<{ data: Row[] | null }> }): Promise<Row[]> {
+async function fetchAll(
+  label: string,
+  build: () => { range: (a: number, b: number) => PromiseLike<{ data: Row[] | null; error: { message: string } | null }> }
+): Promise<Row[]> {
   const out: Row[] = [];
   let o = 0;
   for (;;) {
-    const { data } = await build().range(o, o + 999);
+    // Greška upita mora da obori cron (must) - tiho prazna lista bi značila
+    // pogrešne kandidate (npr. ponovljeni nudge svima koji su ga već dobili).
+    const data = must(await build().range(o, o + 999), label);
     if (!data || data.length === 0) break;
     out.push(...data);
     if (data.length < 1000) break;
@@ -68,7 +73,7 @@ async function cronHandler(request: Request) {
   const maxAge = new Date(now - 30 * 86400000).toISOString();  // ali ne stariji od 30 dana
 
   // Lekcije po kursu (prva lekcija = najmanji order_index)
-  const lessons = await fetchAll(() => admin.from("lessons").select("id, course_id, title, order_index"));
+  const lessons = await fetchAll("lessons", () => admin.from("lessons").select("id, course_id, title, order_index"));
   const firstLesson = new Map<string, { id: string; title: string }>();
   const byCourse = new Map<string, { id: string; title: string; order_index: number }[]>();
   for (const l of lessons as { id: string; course_id: string; title: string; order_index: number }[]) {
@@ -82,13 +87,13 @@ async function cronHandler(request: Request) {
   }
 
   // Već nudgovani + oni koji su BAR jednom nešto završili (= već počeli)
-  const nudged = await fetchAll(() => admin.from("activation_nudges").select("user_id"));
+  const nudged = await fetchAll("activation_nudges", () => admin.from("activation_nudges").select("user_id"));
   const nudgedSet = new Set((nudged as { user_id: string }[]).map((n) => n.user_id));
-  const started = await fetchAll(() => admin.from("lesson_progress").select("user_id").eq("completed", true));
+  const started = await fetchAll("lesson_progress", () => admin.from("lesson_progress").select("user_id").eq("completed", true));
   const startedSet = new Set((started as { user_id: string }[]).map((s) => s.user_id));
 
   // Native aktivan pristup, granted 3-30 dana
-  const access = await fetchAll(() =>
+  const access = await fetchAll("course_access", () =>
     admin
       .from("course_access")
       .select("user_id, course_id, source, granted_at")
@@ -113,12 +118,12 @@ async function cronHandler(request: Request) {
 
   // Profili (email/ime) za kandidate
   const ids = candidates.map(([uid]) => uid);
-  const { data: profiles } = await admin.from("user_profiles").select("id, email, full_name").in("id", ids);
+  const profiles = must(await admin.from("user_profiles").select("id, email, full_name").in("id", ids), "user_profiles");
   const profMap = new Map((profiles ?? []).map((p) => [p.id, p]));
 
   // Naslovi kurseva
   const courseIds = [...new Set(candidates.map(([, cid]) => cid))];
-  const { data: courses } = await admin.from("courses").select("id, title").in("id", courseIds);
+  const courses = must(await admin.from("courses").select("id, title").in("id", courseIds), "courses");
   const titleMap = new Map((courses ?? []).map((c) => [c.id, c.title as string]));
 
   let sent = 0;
@@ -134,7 +139,8 @@ async function cronHandler(request: Request) {
       lessonTitle: fl?.title ?? null,
       startUrl: startUrlFor(prof.email, fl?.id ?? null),
     });
-    await admin.from("activation_nudges").insert({ user_id: uid });
+    // Pad upisa mora da obori cron: bez zapisa bi isti čovek sutra dobio još jedan nudge.
+    must(await admin.from("activation_nudges").insert({ user_id: uid }), "activation_nudges insert");
     sent++;
   }
 

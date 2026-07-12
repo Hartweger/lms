@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { withCronLog } from "@/lib/cron-log";
+import { withCronLog, must } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { trebaPaznju } from "@/lib/prof-napredak";
 import { sendProfPodsetnik, sendNatasaProfPodsetnikZbirni } from "@/lib/email";
@@ -18,39 +18,49 @@ async function cronHandler(request: NextRequest) {
   const dryRun = request.nextUrl.searchParams.get("dry") === "1";
 
   // Profesorke
-  const { data: profs } = await admin
-    .from("user_profiles")
-    .select("id, full_name, email")
-    .eq("role", "professor");
+  // Izveštajni cron: svaki glavni upit kroz must - bolje da pukne (alarm) nego da mejl stigne prazan.
+  const profs = must(
+    await admin
+      .from("user_profiles")
+      .select("id, full_name, email")
+      .eq("role", "professor"),
+    "user_profiles professor"
+  );
   const profList = (profs ?? []).filter((p) => p.email);
   if (profList.length === 0) return NextResponse.json({ ok: true, profesorki: 0, poslato: 0 });
   const profIds = profList.map((p) => p.id);
 
   // Grupe ovih profesorki + aktivni upisi
-  const { data: grps } = await admin
-    .from("groups")
-    .select("id, professor_id, content_course_id, status")
-    .in("professor_id", profIds)
-    .in("status", ["otvoren", "u_toku"]);
+  const grps = must(
+    await admin
+      .from("groups")
+      .select("id, professor_id, content_course_id, status")
+      .in("professor_id", profIds)
+      .in("status", ["otvoren", "u_toku"]),
+    "groups"
+  );
   const groupById = new Map((grps ?? []).map((g) => [g.id, g]));
   const groupIds = (grps ?? []).map((g) => g.id);
 
-  const { data: ge } = groupIds.length
-    ? await admin.from("group_enrollments").select("user_id, group_id").eq("status", "active").in("group_id", groupIds)
-    : { data: [] };
+  const ge = groupIds.length
+    ? must(await admin.from("group_enrollments").select("user_id, group_id").eq("status", "active").in("group_id", groupIds), "group_enrollments")
+    : [];
 
   // 1:1 upisi ovih profesorki
-  const { data: indEnr } = await admin
-    .from("individual_enrollments")
-    .select("user_id, professor_id, course_id")
-    .in("professor_id", profIds)
-    .eq("status", "active");
+  const indEnr = must(
+    await admin
+      .from("individual_enrollments")
+      .select("user_id, professor_id, course_id")
+      .in("professor_id", profIds)
+      .eq("status", "active"),
+    "individual_enrollments"
+  );
 
   // 1:1 kupovni -> sadržaj kurs
   const indPurchasableIds = [...new Set((indEnr ?? []).map((e) => e.course_id))];
-  const { data: unlocks } = indPurchasableIds.length
-    ? await admin.from("course_unlocks").select("purchasable_course_id, content_course_id").in("purchasable_course_id", indPurchasableIds)
-    : { data: [] };
+  const unlocks = indPurchasableIds.length
+    ? must(await admin.from("course_unlocks").select("purchasable_course_id, content_course_id").in("purchasable_course_id", indPurchasableIds), "course_unlocks")
+    : [];
   const purchasableToContent = new Map(
     (unlocks ?? []).map((u) => [u.purchasable_course_id as string, u.content_course_id as string]),
   );
@@ -58,11 +68,11 @@ async function cronHandler(request: NextRequest) {
   // Polaznici (imena)
   const userIds = [...new Set([...(ge ?? []).map((e) => e.user_id), ...(indEnr ?? []).map((e) => e.user_id)])];
   if (userIds.length === 0) return NextResponse.json({ ok: true, profesorki: profList.length, poslato: 0 });
-  const { data: profiles } = await admin.from("user_profiles").select("id, full_name, email").in("id", userIds);
+  const profiles = must(await admin.from("user_profiles").select("id, full_name, email").in("id", userIds), "user_profiles polaznici");
   const nameById = new Map((profiles ?? []).map((p) => [p.id, (p.full_name as string) || (p.email as string) || "-"]));
 
   // Pristup platformi: po (user, course) granted_at + najstariji po useru
-  const { data: caRows } = await admin.from("course_access").select("user_id, course_id, granted_at").in("user_id", userIds);
+  const caRows = must(await admin.from("course_access").select("user_id, course_id, granted_at").in("user_id", userIds), "course_access");
   const accessByUserCourse = new Map<string, Map<string, string>>();
   const oldestAccessByUser = new Map<string, string>();
   for (const r of caRows ?? []) {
@@ -84,9 +94,9 @@ async function cronHandler(request: NextRequest) {
       ...[...purchasableToContent.values()],
     ]),
   ];
-  const { data: allLessons } = contentCourseIds.length
-    ? await admin.from("lessons").select("id, course_id").in("course_id", contentCourseIds)
-    : { data: [] };
+  const allLessons = contentCourseIds.length
+    ? must(await admin.from("lessons").select("id, course_id").in("course_id", contentCourseIds), "lessons")
+    : [];
   const lessonsByCourse = new Map<string, Set<string>>();
   for (const l of allLessons ?? []) {
     const set = lessonsByCourse.get(l.course_id as string) ?? new Set<string>();
@@ -95,11 +105,14 @@ async function cronHandler(request: NextRequest) {
   }
 
   // Završene lekcije po polazniku
-  const { data: allProgress } = await admin
-    .from("lesson_progress")
-    .select("user_id, lesson_id, completed_at")
-    .eq("completed", true)
-    .in("user_id", userIds);
+  const allProgress = must(
+    await admin
+      .from("lesson_progress")
+      .select("user_id, lesson_id, completed_at")
+      .eq("completed", true)
+      .in("user_id", userIds),
+    "lesson_progress"
+  );
   const progressByUser = new Map<string, { lesson_id: string; completed_at: string | null }[]>();
   for (const p of allProgress ?? []) {
     const list = progressByUser.get(p.user_id as string) ?? [];

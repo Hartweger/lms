@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { withCronLog } from "@/lib/cron-log";
+import { withCronLog, must } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendInactivityReminder } from "@/lib/email";
 
@@ -20,10 +20,13 @@ async function cronHandler(request: NextRequest) {
   fourteenDaysAgo.setDate(fourteenDaysAgo.getDate() - 14);
 
   // Get all students with active access
-  const { data: activeAccess } = await supabase
-    .from("course_access")
-    .select("user_id, course_id, courses:course_id (title)")
-    .or(`expires_at.is.null,expires_at.gt.${new Date().toISOString()}`);
+  const activeAccess = must(
+    await supabase
+      .from("course_access")
+      .select("user_id, course_id, courses:course_id (title)")
+      .or(`expires_at.is.null,expires_at.gt.${new Date().toISOString()}`),
+    "course_access"
+  );
 
   if (!activeAccess || activeAccess.length === 0) {
     return NextResponse.json({ sent: 0 });
@@ -42,13 +45,16 @@ async function cronHandler(request: NextRequest) {
 
   for (const [userId, courses] of userCourses) {
     // Check last activity
-    const { data: lastProgress } = await supabase
-      .from("lesson_progress")
-      .select("completed_at")
-      .eq("user_id", userId)
-      .eq("completed", true)
-      .order("completed_at", { ascending: false })
-      .limit(1);
+    const lastProgress = must(
+      await supabase
+        .from("lesson_progress")
+        .select("completed_at")
+        .eq("user_id", userId)
+        .eq("completed", true)
+        .order("completed_at", { ascending: false })
+        .limit(1),
+      "lesson_progress last"
+    );
 
     const lastActivity = lastProgress?.[0]?.completed_at;
 
@@ -68,12 +74,16 @@ async function cronHandler(request: NextRequest) {
     if (!profile?.email) continue;
 
     // Skip if we already sent a reminder in the last 14 days
-    const { data: recentReminder } = await supabase
-      .from("inactivity_reminders")
-      .select("id")
-      .eq("user_id", userId)
-      .gte("sent_at", fourteenDaysAgo.toISOString())
-      .limit(1);
+    // Dedup provera: tihi pad ovde bi značio da 14-dnevni razmak ne važi → dupli mejl.
+    const recentReminder = must(
+      await supabase
+        .from("inactivity_reminders")
+        .select("id")
+        .eq("user_id", userId)
+        .gte("sent_at", fourteenDaysAgo.toISOString())
+        .limit(1),
+      "inactivity_reminders dedup"
+    );
 
     if (recentReminder && recentReminder.length > 0) continue;
 
@@ -90,19 +100,25 @@ async function cronHandler(request: NextRequest) {
     let nextLessonTitle: string | null = null;
 
     for (const c of courses) {
-      const { data: lessons } = await supabase
-        .from("lessons")
-        .select("id, title, order_index")
-        .eq("course_id", c.courseId)
-        .order("order_index");
+      const lessons = must(
+        await supabase
+          .from("lessons")
+          .select("id, title, order_index")
+          .eq("course_id", c.courseId)
+          .order("order_index"),
+        "lessons"
+      );
       if (!lessons || lessons.length === 0) continue;
 
-      const { data: completed } = await supabase
-        .from("lesson_progress")
-        .select("lesson_id")
-        .eq("user_id", userId)
-        .eq("completed", true)
-        .in("lesson_id", lessons.map((l) => l.id));
+      const completed = must(
+        await supabase
+          .from("lesson_progress")
+          .select("lesson_id")
+          .eq("user_id", userId)
+          .eq("completed", true)
+          .in("lesson_id", lessons.map((l) => l.id)),
+        "lesson_progress completed"
+      );
       const completedIds = new Set(completed?.map((x) => x.lesson_id) ?? []);
       const nextLesson = lessons.find((l) => !completedIds.has(l.id));
       if (nextLesson) {
@@ -123,9 +139,13 @@ async function cronHandler(request: NextRequest) {
     );
 
     // Log the reminder so we don't send again for 14 days
-    await supabase
-      .from("inactivity_reminders")
-      .insert({ user_id: userId });
+    // Pad upisa mora da obori cron: bez zapisa bi isti čovek uskoro dobio dupli podsetnik.
+    must(
+      await supabase
+        .from("inactivity_reminders")
+        .insert({ user_id: userId }),
+      "inactivity_reminders insert"
+    );
 
     sent++;
   }

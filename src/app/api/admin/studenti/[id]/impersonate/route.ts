@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import * as Sentry from "@sentry/nextjs";
-import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { requireAdmin } from "@/lib/api-auth";
 
 // „Uđi kao đak" — admin dobija jednokratni magic-link za nalog đaka i otvara ga
 // u anonimnom prozoru da vidi tačno ono što đak vidi (podrška/debug).
@@ -12,19 +11,9 @@ export async function POST(
 ) {
   const { id } = await params;
 
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
-
-  const admin = createAdminClient();
-  const { data: me } = await admin
-    .from("user_profiles")
-    .select("role")
-    .eq("id", user.id)
-    .single();
-  if (me?.role !== "admin") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
-  }
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
+  const { user, admin } = auth;
 
   const { data: student } = await admin
     .from("user_profiles")

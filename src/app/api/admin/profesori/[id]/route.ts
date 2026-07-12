@@ -1,30 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
-
-async function verifyAdmin() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return false;
-  const admin = createAdminClient();
-  const { data: profile } = await admin
-    .from("user_profiles")
-    .select("role")
-    .eq("id", user.id)
-    .single();
-  return profile?.role === "admin";
-}
+import { requireAdmin } from "@/lib/api-auth";
 
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  if (!(await verifyAdmin())) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
-  }
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
+  const admin = auth.admin;
 
   const { id: profId } = await params;
-  const admin = createAdminClient();
 
   const [assignRes, studentRes, courseRes] = await Promise.all([
     admin.from("professor_students").select("id, student_id, course_id, assigned_via").eq("professor_id", profId),

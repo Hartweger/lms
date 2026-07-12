@@ -65,6 +65,16 @@ export function withCronLog<R extends Request>(
   };
 }
 
+/**
+ * Odmotaj Supabase odgovor unutar crona: greška upita → izuzetak, pa withCronLog
+ * upiše ok=false i cron-health digne alarm. Bez ovoga cron tiho preskoči posao
+ * i vrati 200 (audit jul 2026: ~260 { data } bez provere greške).
+ */
+export function must<T>(res: { data: T; error: { message: string } | null }, label: string): T {
+  if (res.error) throw new Error(`[cron] upit "${label}" pao: ${res.error.message}`);
+  return res.data;
+}
+
 export interface CronRunRow {
   name: string;
   ok: boolean;

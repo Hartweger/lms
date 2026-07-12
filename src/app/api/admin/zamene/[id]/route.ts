@@ -1,27 +1,17 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { requireAdmin } from "@/lib/api-auth";
 import { reassignGroupSession } from "@/lib/reassign-session";
 
-// Vraća user.id (za approved_by), ili null ako nije admin.
-async function verifyAdmin() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return null;
-  const admin = createAdminClient();
-  const { data: profile } = await admin.from("user_profiles").select("role").eq("id", user.id).single();
-  return profile?.role === "admin" ? user.id : null;
-}
-
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
-  const adminId = await verifyAdmin();
-  if (!adminId) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
+  const { user, admin } = auth;
+  const adminId = user.id; // za approved_by
   const { id } = await params;
   const { action, reason } = await request.json();
   if (action !== "odobri" && action !== "odbij") {
     return NextResponse.json({ error: "action mora biti 'odobri' ili 'odbij'" }, { status: 400 });
   }
-  const admin = createAdminClient();
 
   const { data: req } = await admin.from("substitution_requests")
     .select("status, group_id, session_date, requested_by").eq("id", id).single();

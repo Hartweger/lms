@@ -1,26 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
-
-async function getAdminUser() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return null;
-
-  const admin = createAdminClient();
-  const { data: profile } = await admin
-    .from("user_profiles")
-    .select("role")
-    .eq("id", user.id)
-    .single();
-
-  if (profile?.role !== "admin") return null;
-  return { admin };
-}
+import { requireAdmin } from "@/lib/api-auth";
 
 export async function GET() {
-  const auth = await getAdminUser();
-  if (!auth) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
 
   const { data: coupons, error } = await auth.admin
     .from("coupons")
@@ -33,8 +16,8 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const auth = await getAdminUser();
-  if (!auth) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
 
   const body = await request.json();
   const { code, amount, maxUses, expiresAt } = body;
