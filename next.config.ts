@@ -17,9 +17,14 @@ const CSP_REPORT_ONLY = [
   // slike dolaze sa mnogo strana (Supabase, vumbnail, ytimg, tracking pikseli) - https: je svesni kompromis
   "img-src 'self' data: blob: https:",
   "media-src 'self' blob: https://rzmyglynjcygsbicssbt.supabase.co",
-  "connect-src 'self' https://rzmyglynjcygsbicssbt.supabase.co wss://rzmyglynjcygsbicssbt.supabase.co https://*.google-analytics.com https://www.googletagmanager.com https://*.ingest.de.sentry.io https://challenges.cloudflare.com https://graph.facebook.com https://www.facebook.com https://vumbnail.com",
-  // lekcijski embedovi + Turnstile + YouTube/Vimeo + Google mape na kontaktu
-  "frame-src https://player.vimeo.com https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com https://quizlet.com https://*.quizlet.com https://wordwall.net https://*.wordwall.net https://learningapps.org https://www.google.com",
+  // Dopune po Sentry CSP prijavama 12.07: connect.facebook.net (fbevents fetch ka svom domenu),
+  // analytics.google.com + region1.* (GA4 beaconi), stats.g.doubleclick.net + www.google.* (GA4
+  // Google signals ping, TLD zavisi od zemlje posetioca - dodate zemlje publike, ostale će u report)
+  "connect-src 'self' https://rzmyglynjcygsbicssbt.supabase.co wss://rzmyglynjcygsbicssbt.supabase.co https://*.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://stats.g.doubleclick.net https://www.google.com https://www.google.rs https://www.google.de https://www.google.at https://www.google.ch https://www.googletagmanager.com https://*.ingest.de.sentry.io https://challenges.cloudflare.com https://connect.facebook.net https://graph.facebook.com https://www.facebook.com https://vumbnail.com",
+  // lekcijski embedovi + Turnstile + YouTube/Vimeo + Google mape na kontaktu.
+  // 'self' + supabase + drive po Sentry prijavama 12.07: PdfBlock/LekcijaContent iframe-uju
+  // PDF-ove sa Supabase Storage (117 lekcija) i Google Drive embede (6 lekcija)
+  "frame-src 'self' https://rzmyglynjcygsbicssbt.supabase.co https://drive.google.com https://player.vimeo.com https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com https://quizlet.com https://*.quizlet.com https://wordwall.net https://*.wordwall.net https://learningapps.org https://www.google.com",
   "worker-src 'self' blob:",
   "object-src 'none'",
   "base-uri 'self'",
