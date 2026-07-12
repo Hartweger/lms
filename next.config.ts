@@ -20,7 +20,8 @@ const CSP_REPORT_ONLY = [
   // Dopune po Sentry CSP prijavama 12.07: connect.facebook.net (fbevents fetch ka svom domenu),
   // analytics.google.com + region1.* (GA4 beaconi), stats.g.doubleclick.net + www.google.* (GA4
   // Google signals ping, TLD zavisi od zemlje posetioca - dodate zemlje publike, ostale će u report)
-  "connect-src 'self' https://rzmyglynjcygsbicssbt.supabase.co wss://rzmyglynjcygsbicssbt.supabase.co https://*.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://stats.g.doubleclick.net https://www.google.com https://www.google.rs https://www.google.de https://www.google.at https://www.google.ch https://www.googletagmanager.com https://*.ingest.de.sentry.io https://challenges.cloudflare.com https://connect.facebook.net https://graph.facebook.com https://www.facebook.com https://vumbnail.com",
+  // 12.07 uveče: + ceo ex-Yu (ba po Sentry prijavi f4d9cdf1, me/hr/si/mk preventivno - ista publika)
+  "connect-src 'self' https://rzmyglynjcygsbicssbt.supabase.co wss://rzmyglynjcygsbicssbt.supabase.co https://*.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://stats.g.doubleclick.net https://www.google.com https://www.google.rs https://www.google.de https://www.google.at https://www.google.ch https://www.google.ba https://www.google.me https://www.google.hr https://www.google.si https://www.google.mk https://www.googletagmanager.com https://*.ingest.de.sentry.io https://challenges.cloudflare.com https://connect.facebook.net https://graph.facebook.com https://www.facebook.com https://vumbnail.com",
   // lekcijski embedovi + Turnstile + YouTube/Vimeo + Google mape na kontaktu.
   // 'self' + supabase + drive po Sentry prijavama 12.07: PdfBlock/LekcijaContent iframe-uju
   // PDF-ove sa Supabase Storage (117 lekcija) i Google Drive embede (6 lekcija)
