@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { emailOwnsCourse, emailOwnsAnyVideoCourse } from "@/lib/coupon-ownership";
+import { emailOwnsCourse, emailOwnsAnyVideoCourse, emailUsedCoupon } from "@/lib/coupon-ownership";
 import { isTermPackage } from "@/lib/coupon-discount";
 
 export async function GET(request: NextRequest) {
@@ -54,19 +54,12 @@ export async function GET(request: NextRequest) {
   }
 
   // once_per_email: isti mejl može da iskoristi kod samo jednom.
-  if (coupon.once_per_email && email) {
-    const { data: prior } = await supabase
-      .from("orders")
-      .select("id")
-      .eq("coupon_code", coupon.code)
-      .ilike("email", email)
-      .limit(1);
-    if (prior && prior.length) {
-      return NextResponse.json(
-        { error: "Ovaj kod si već iskoristio/la." },
-        { status: 400 }
-      );
-    }
+  // Broji se samo naplaćena porudžbina - odbijena kartica ne sme da "potroši" kod.
+  if (coupon.once_per_email && email && (await emailUsedCoupon(supabase, coupon.code, email))) {
+    return NextResponse.json(
+      { error: "Ovaj kod si već iskoristio/la." },
+      { status: 400 }
+    );
   }
 
   // new_customers_only: samo za mejlove koji još nemaju nijedan video kurs (npr. NAKI10).

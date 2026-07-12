@@ -43,6 +43,28 @@ export async function userOwnsAnyVideoCourse(
   return !!(data && data.length);
 }
 
+/**
+ * Da li je mejl već STVARNO iskoristio kupon - koristi se za `once_per_email` kupone.
+ * Broji samo naplaćene porudžbine (payment_status = 'completed'); neuspeo pokušaj
+ * kartice (pending/failed/cancelled) ne sme da blokira ponovni pokušaj kupovine.
+ */
+export async function emailUsedCoupon(
+  admin: SupabaseClient,
+  couponCode: string,
+  email: string
+): Promise<boolean> {
+  const e = (email ?? "").trim();
+  if (!e || !couponCode) return false;
+  const { data } = await admin
+    .from("orders")
+    .select("id")
+    .eq("coupon_code", couponCode)
+    .eq("payment_status", "completed")
+    .ilike("email", e)
+    .limit(1);
+  return !!(data && data.length);
+}
+
 /** Isto kao gore, ali polazi od mejla (checkout pre logina, email capture). */
 export async function emailOwnsAnyVideoCourse(
   admin: SupabaseClient,

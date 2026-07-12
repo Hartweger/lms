@@ -4,7 +4,7 @@ import { rateLimit } from "@/lib/rate-limit";
 import { generateOrderNumber, calculatePaypalEur } from "@/lib/order-utils";
 import { sendPaymentInstructionsEmail, sendNewOrderAdminEmail } from "@/lib/email";
 import { nivoForSlug } from "@/lib/course-nivo";
-import { emailOwnsCourse, emailOwnsAnyVideoCourse } from "@/lib/coupon-ownership";
+import { emailOwnsCourse, emailOwnsAnyVideoCourse, emailUsedCoupon } from "@/lib/coupon-ownership";
 import { computeCouponDiscount, isTermPackage } from "@/lib/coupon-discount";
 import { computeSeats, pickOpenGroupForNivo } from "@/lib/groups";
 
@@ -171,16 +171,9 @@ export async function POST(request: Request) {
           );
         }
         // once_per_email: isti mejl sme da iskoristi kod samo jednom
-        let onceOk = true;
-        if (coupon.once_per_email) {
-          const { data: prior } = await supabase
-            .from("orders")
-            .select("id")
-            .eq("coupon_code", coupon.code)
-            .ilike("email", email)
-            .limit(1);
-          if (prior && prior.length) onceOk = false;
-        }
+        // (broji se samo naplaćena porudžbina - odbijena kartica ne troši kod)
+        const onceOk =
+          !coupon.once_per_email || !(await emailUsedCoupon(supabase, coupon.code, email));
         if (!onceOk) {
           return NextResponse.json(
             { error: "Ovaj kod si već iskoristio/la." },
