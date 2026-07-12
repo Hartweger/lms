@@ -1,18 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import * as Sentry from "@sentry/nextjs";
 import { createClient } from "@/lib/supabase/client";
+import Turnstile, { TURNSTILE_SITE_KEY, type TurnstileHandle } from "@/components/Turnstile";
 
 interface AuthFormaProps {
   tip: "prijava" | "reset";
-  onSubmit: (data: { email: string; password: string }) => Promise<string | null>;
+  onSubmit: (data: { email: string; password: string; captchaToken?: string }) => Promise<string | null>;
 }
 
 export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const turnstileRef = useRef<TurnstileHandle>(null);
+  // Token je jednokratan — posle svakog pokušaja (uspeo ili ne) traži se novi.
+  const consumeCaptcha = () => turnstileRef.current?.reset();
+  // Dugmad se zaključavaju dok token ne stigne SAMO kad je CAPTCHA konfigurisana.
+  const captchaPending = Boolean(TURNSTILE_SITE_KEY) && !captchaToken;
   const [greska, setGreska] = useState<string | null>(null);
   const [uspeh, setUspeh] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -49,8 +56,10 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
       options: {
         shouldCreateUser: false,
         emailRedirectTo: window.location.origin + "/auth/callback",
+        captchaToken: captchaToken ?? undefined,
       },
     });
+    consumeCaptcha();
     if (error) {
       Sentry.captureException(error);
       const status = error.status;
@@ -97,7 +106,8 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
     setUspeh(null);
     setNoAccount(false);
     setLoading(true);
-    const result = await onSubmit({ email, password });
+    const result = await onSubmit({ email, password, captchaToken: captchaToken ?? undefined });
+    consumeCaptcha();
     if (result) {
       if (result.startsWith("OK:")) {
         setUspeh(result.slice(3));
@@ -245,12 +255,14 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
           </div>
         )}
 
+        <Turnstile ref={turnstileRef} onToken={setCaptchaToken} />
+
         <button
           type="submit"
-          disabled={loading}
+          disabled={loading || captchaPending}
           className="w-full bg-plava text-white py-3 rounded-lg font-medium hover:bg-plava-dark transition-colors disabled:opacity-50"
         >
-          {loading ? "Učitavanje..." : tip === "reset" ? "Pošalji mi link" : "Prijavi se"}
+          {loading ? "Učitavanje..." : captchaPending ? "Provera..." : tip === "reset" ? "Pošalji mi link" : "Prijavi se"}
         </button>
       </form>
 
@@ -265,7 +277,7 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
           <button
             type="button"
             onClick={handleMagicLink}
-            disabled={magicLoading}
+            disabled={magicLoading || captchaPending}
             className="w-full text-gray-400 hover:underline disabled:opacity-50"
           >
             {magicLoading ? "Slanje..." : "Radije bez lozinke? Pošalji mi link na mejl"}

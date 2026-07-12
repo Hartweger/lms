@@ -27,8 +27,20 @@ export default function Prijava() {
   const router = useRouter();
   const supabase = createClient();
 
-  const handleLogin = async ({ email, password }: { email: string; password: string }) => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+  const handleLogin = async ({
+    email,
+    password,
+    captchaToken,
+  }: {
+    email: string;
+    password: string;
+    captchaToken?: string;
+  }) => {
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+      options: { captchaToken },
+    });
     if (error) return loginErrorMessage(error);
     router.push("/dashboard");
     return null;

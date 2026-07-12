@@ -7,9 +7,10 @@ import AuthForma from "@/components/AuthForma";
 export default function ResetLozinke() {
   const supabase = createClient();
 
-  const handleReset = async ({ email }: { email: string }) => {
+  const handleReset = async ({ email, captchaToken }: { email: string; captchaToken?: string }) => {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}/auth/callback?next=/profil`,
+      captchaToken,
     });
     if (error) return "Greška pri slanju linka. Pokušaj ponovo.";
     return "OK:Link je poslat na tvoj email. Otvori ga i postavi lozinku.";
