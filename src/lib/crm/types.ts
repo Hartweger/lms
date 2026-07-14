@@ -3,7 +3,7 @@ export type CrmStage =
 
 export type CrmSource =
   | "naki" | "smile" | "kontakt-forma" | "masterclass"
-  | "manychat" | "instagram" | "whatsapp" | "rucno" | "mejl";
+  | "manychat" | "instagram" | "whatsapp" | "rucno" | "mejl" | "testiranje";
 
 export type CrmChannel =
   | "mejl" | "naki" | "smile" | "manychat"

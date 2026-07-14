@@ -128,7 +128,7 @@ export default function CrmListClient({ contacts }: { contacts: CrmContact[] }) 
           <select value={source} onChange={(e) => setSource(e.target.value as CrmSource | "")}
             className="rounded border px-2 py-1 text-sm">
             <option value="">Svi izvori</option>
-            {["naki","smile","kontakt-forma","masterclass","manychat","instagram","whatsapp","rucno"]
+            {["naki","smile","kontakt-forma","masterclass","manychat","instagram","whatsapp","rucno","mejl","testiranje"]
               .map((s) => <option key={s} value={s}>{s}</option>)}
           </select>
           <button
