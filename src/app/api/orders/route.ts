@@ -21,7 +21,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const { fullName, email, country, courseSlug, paymentMethod, couponCode: rawCouponCode, professorId, packageType, attribution } =
+    const { fullName, email, country, courseSlug, paymentMethod, couponCode: rawCouponCode, professorId, packageType, pages: rawPages, attribution } =
       await request.json();
     const attr = (attribution && typeof attribution === "object") ? attribution as Record<string, string> : {};
 
@@ -208,9 +208,17 @@ export async function POST(request: Request) {
       }
     }
 
+    // Usluge (category="usluga", npr. prevod): cena po strani × broj strana.
+    // Server-side clamp - klijentu se ne veruje za iznos.
+    const isService = course.category === "usluga";
+    const pages = isService
+      ? Math.min(50, Math.max(1, Math.trunc(Number(rawPages)) || 1))
+      : 1;
+    const lineTotal = unitPrice * pages;
+
     const { discount, finalPrice } = couponForDiscount
-      ? computeCouponDiscount(couponForDiscount.discount_type, couponForDiscount.amount, unitPrice)
-      : { discount: 0, finalPrice: unitPrice };
+      ? computeCouponDiscount(couponForDiscount.discount_type, couponForDiscount.amount, lineTotal)
+      : { discount: 0, finalPrice: lineTotal };
 
     // Find or create user by email
     let userId: string;
@@ -260,12 +268,15 @@ export async function POST(request: Request) {
         : undefined;
 
     // Build items JSONB
+    // Usluga: broj strana ide u naziv stavke (fiskalni račun čita items[0].title) + quantity.
+    const stranaLabel = pages % 10 >= 2 && pages % 10 <= 4 && (pages % 100 < 12 || pages % 100 > 14) ? "strane" : "strana";
     const items = [
       {
         course_id: course.id,
         course_slug: course.slug,
-        title: course.title,
+        title: isService ? `${course.title} - ${pages} ${stranaLabel}` : course.title,
         price: unitPrice,
+        ...(isService ? { quantity: pages } : {}),
         ...(isIndividual ? { professor_id: chosenProfessorId, package_lessons: packageLessons } : {}),
       },
     ];
@@ -279,7 +290,7 @@ export async function POST(request: Request) {
         full_name: fullName,
         country,
         items,
-        subtotal: unitPrice,
+        subtotal: lineTotal,
         discount,
         total: finalPrice,
         coupon_code: validCouponCode,
@@ -314,7 +325,7 @@ export async function POST(request: Request) {
       orderNumber: order.order_number,
       fullName,
       email,
-      courseTitle: course.title,
+      courseTitle: items[0].title,
       total: finalPrice,
       paymentMethod,
       country,
@@ -335,7 +346,7 @@ export async function POST(request: Request) {
       await sendPaymentInstructionsEmail(
         email,
         fullName,
-        course.title,
+        items[0].title,
         order.order_number,
         finalPrice,
         paymentMethod,

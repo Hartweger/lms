@@ -95,6 +95,7 @@ export default async function KupovinaPage({
         <CheckoutForm
           courseSlug={course.slug}
           courseTitle={course.title}
+          category={course.category}
           priceRsd={course.price}
           priceEur={course.paypal_price_eur}
           variants={variants}

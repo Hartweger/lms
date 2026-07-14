@@ -11,6 +11,7 @@ import { checkoutStrings } from "@/lib/product-i18n";
 interface Props {
   courseSlug: string;
   courseTitle: string;
+  category?: string | null;
   priceRsd: number;
   priceEur: number | null;
   variants?: Variant[];
@@ -50,7 +51,15 @@ function formatPrice(price: number): string {
   return price.toLocaleString("de-DE");
 }
 
-export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, variants = [], includedLessons = null, initialEmail = "", initialName = "", isLoggedIn = false, lang = "sr", initialCoupon = "" }: Props) {
+// 1 strana, 2-4 strane, 5+ strana (21 strana, 22-24 strane...)
+export function stranaLabel(n: number): string {
+  const d = n % 10, dd = n % 100;
+  if (d === 1 && dd !== 11) return "strana";
+  if (d >= 2 && d <= 4 && (dd < 12 || dd > 14)) return "strane";
+  return "strana";
+}
+
+export default function CheckoutForm({ courseSlug, courseTitle, category = null, priceRsd, variants = [], includedLessons = null, initialEmail = "", initialName = "", isLoggedIn = false, lang = "sr", initialCoupon = "" }: Props) {
   const router = useRouter();
   void includedLessons;
 
@@ -58,6 +67,9 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
   const ct = checkoutStrings(lang ?? "sr");
 
   const isIndividual = variants.length > 0;
+  // Usluge (npr. prevod) se naplaćuju po strani - kupac bira broj strana.
+  const isService = category === "usluga";
+  const [pages, setPages] = useState(1);
   const professors = professorsFromVariants(variants);
   const packageTypes = packageTypesFromVariants(variants);
   const PAKET_LABEL: Record<string, string> = ct.packageLabels;
@@ -83,8 +95,8 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
   const isCard = method === "kartica";
 
   const selectedVariant = isIndividual ? resolveVariant(variants, { professorId, packageType }) : null;
-  // Za individualne cena dolazi iz varijacije; inače prop priceRsd.
-  const basePrice = isIndividual ? (selectedVariant?.price ?? 0) : priceRsd;
+  // Za individualne cena dolazi iz varijacije; za usluge cena po strani × broj strana; inače prop priceRsd.
+  const basePrice = isIndividual ? (selectedVariant?.price ?? 0) : isService ? priceRsd * pages : priceRsd;
   const discountedRsd = appliedCoupon
     ? computeCouponDiscount(appliedCoupon.discountType, appliedCoupon.amount, basePrice).finalPrice
     : basePrice;
@@ -157,6 +169,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
           couponCode: appliedCoupon?.code || null,
           professorId: isIndividual ? professorId : null,
           packageType: isIndividual ? packageType : null,
+          pages: isService ? pages : null,
           attribution,
         }),
       });
@@ -186,7 +199,12 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
       <div className="bg-white border border-gray-200 rounded-xl p-5">
         <p className="text-xs font-bold uppercase tracking-wide text-gray-400 mb-3">{ct.orderSummaryTitle}</p>
         <div className="flex items-start justify-between gap-4">
-          <p className="font-semibold text-gray-900 text-[15px] leading-snug">{courseTitle}</p>
+          <div>
+            <p className="font-semibold text-gray-900 text-[15px] leading-snug">{courseTitle}</p>
+            {isService && (
+              <p className="text-xs text-gray-400 mt-0.5">{pages} × {formatPrice(priceRsd)} din po strani</p>
+            )}
+          </div>
           <div className="text-right flex-shrink-0">
             {appliedCoupon ? (
               <div>
@@ -203,6 +221,22 @@ export default function CheckoutForm({ courseSlug, courseTitle, priceRsd, varian
           </div>
         </div>
       </div>
+
+      {/* Usluga (prevod): izbor broja strana */}
+      {isService && (
+        <div className="bg-white border border-gray-200 rounded-xl p-5">
+          <label htmlFor="strane" className="block text-sm font-medium text-gray-700 mb-1">Broj strana</label>
+          <select id="strane" value={pages} onChange={(e) => setPages(Number(e.target.value))}
+            className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#0AB3D7]">
+            {Array.from({ length: 30 }, (_, i) => i + 1).map((n) => (
+              <option key={n} value={n}>{n} {stranaLabel(n)}</option>
+            ))}
+          </select>
+          <p className="text-xs text-gray-500 mt-2">
+            Broj prevodilačkih strana potvrđujemo po prijemu dokumenta - ako nisi siguran/na, piši nam na <a href="mailto:info@hartweger.rs" className="text-[#0AB3D7] hover:underline">info@hartweger.rs</a> pre uplate.
+          </p>
+        </div>
+      )}
 
       {/* Individualni: izbor profesorke / paketa + napomena */}
       {isIndividual && (
