@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { preconnect } from "react-dom";
 import { Lato, Montserrat } from "next/font/google";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/react";
@@ -19,9 +20,12 @@ const lato = Lato({
   variable: "--font-lato",
 });
 
+// Samo težine koje se stvarno koriste (semibold 600 + bold 700) - svaka težina
+// je ~2 preload woff2 fajla na kritičnoj putanji prvog rendera na mobilnom.
+// h1 u magazin prose (800) se sintetizuje iz 700 - vizuelno zanemarljivo.
 const montserrat = Montserrat({
   subsets: ["latin", "latin-ext"],
-  weight: ["500", "600", "700", "800"],
+  weight: ["600", "700"],
   display: "swap",
   variable: "--font-montserrat",
 });
@@ -63,6 +67,9 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  // Sentry ingest se zove rano iz instrumentation-client - preconnect štedi
+  // DNS+TLS handshake (Lighthouse procena ~370ms na sporom 4G).
+  preconnect("https://o4511456054673408.ingest.de.sentry.io");
   return (
     <html lang="sr" className={`${lato.variable} ${montserrat.variable}`}>
       <body className="min-h-screen flex flex-col">
@@ -165,14 +172,17 @@ try {
         <MetaPixel />
         <Analytics />
         <SpeedInsights />
+        {/* lazyOnload (kao Meta Pixel): gtag.js je 176KB i ne sme da se nadmeće
+            sa prvim renderom na mobilnom; dataLayer stub iz consent skripta
+            baferuje evente dok se gtag.js ne učita, ništa se ne gubi. */}
         <Script
           id="ga4-gtag"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           src="https://www.googletagmanager.com/gtag/js?id=G-MB9DRXVVF6"
         />
         <Script
           id="ga4-config"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           dangerouslySetInnerHTML={{
             __html: `window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
