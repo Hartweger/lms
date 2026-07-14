@@ -20,6 +20,25 @@ export async function POST(req: NextRequest) {
   if (!auth.ok) return auth.response;
   const admin = auth.admin;
   const body = await req.json();
+  // Duplikat-zaštita: isti nivo + profesorka + datum početka u aktivnom statusu
+  // (slučaj 14.07: „Dupliraj" + isti datum → dve iste grupe, dupli termin i beleške).
+  // force=true (posle potvrde u formi) preskače proveru.
+  if (!body.force && body.level && body.professor_id && body.start_date) {
+    const { data: dup } = await admin.from("groups")
+      .select("id, status, start_date")
+      .eq("level", body.level)
+      .eq("professor_id", body.professor_id)
+      .eq("start_date", body.start_date)
+      .in("status", ["planiran", "uskoro", "otvoren", "u_toku"])
+      .limit(1)
+      .maybeSingle();
+    if (dup) {
+      return NextResponse.json({
+        error: `Već postoji grupa ${body.level} kod iste profesorke sa početkom ${body.start_date} (status: ${dup.status}).`,
+        duplicate: dup,
+      }, { status: 409 });
+    }
+  }
   const { data, error } = await admin.from("groups").insert({
     content_course_id: body.content_course_id || null,
     purchasable_course_id: body.purchasable_course_id || null,

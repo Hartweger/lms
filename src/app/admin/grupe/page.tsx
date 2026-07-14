@@ -129,12 +129,25 @@ export default function AdminGrupePage() {
     setSaving(true);
     const method = form.id ? "PATCH" : "POST";
     const url = form.id ? `/api/admin/grupe/${form.id}` : "/api/admin/grupe";
-    const r = await fetch(url, {
+    let r = await fetch(url, {
       method,
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
     });
-    const j = await r.json().catch(() => ({}));
+    let j = await r.json().catch(() => ({}));
+    // Duplikat (isti nivo + profesorka + datum početka) - traži potvrdu pa probaj opet sa force.
+    if (r.status === 409 && j.duplicate) {
+      if (!confirm(j.error + "\n\nOvo pravi DUPLU grupu (dupli termin, beleške i honorar).\nSačuvati ipak?")) {
+        setSaving(false);
+        return;
+      }
+      r = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, force: true }),
+      });
+      j = await r.json().catch(() => ({}));
+    }
     setSaving(false);
     if (!r.ok) {
       alert("Greška: " + (j.error || "nešto nije u redu"));
