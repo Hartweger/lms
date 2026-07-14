@@ -21,4 +21,10 @@ describe("buildSalesSystemPrompt", () => {
   it("default model je sonnet", () => {
     expect(SMILE_MODEL).toBe("claude-sonnet-4-6");
   });
+
+  it("za visoke nivoe (C1) upucuje na mesecne pakete umesto 'nemamo u ponudi'", () => {
+    const out = buildSalesSystemPrompt("katalog", { coupon: false });
+    expect(out).toContain("IZUZETAK - visoki nivoi");
+    expect(out).toContain("C1.2");
+  });
 });
