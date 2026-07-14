@@ -5,7 +5,7 @@ const protectedRoutes = ["/dashboard", "/profil"];
 const adminRoutes = ["/admin"];
 const professorRoutes = ["/profesor"];
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const response = NextResponse.next({ request });
 
   const supabase = createServerClient(
