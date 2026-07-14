@@ -45,3 +45,17 @@ export const SENTRY_IGNORE_ERRORS: (string | RegExp)[] = [
   /runtime\.sendMessage/,
   /\["@context"\]\.toLowerCase/,
 ];
+
+// Frejmovi koji dolaze iz tuđih skriptova (browser ekstenzije) - odbacujemo
+// po URL-u fajla u stack trace-u, jer je poruka često preopšta za ignoreErrors.
+//
+// csSpoofGeoMain.bundle.js: content script ekstenzije za lažiranje geolokacije
+// (anti-tracking/VPN tip). Njen cleanup pri napuštanju stranice baci odbijeni
+// promise "Error: cleanup" koji naš globalni onunhandledrejection pripiše nama.
+// Nije naš kod (bundle ne postoji u repou), zavisi od korisnikove ekstenzije.
+export const SENTRY_DENY_URLS: RegExp[] = [
+  /^chrome-extension:\/\//i,
+  /^moz-extension:\/\//i,
+  /^safari(-web)?-extension:\/\//i,
+  /csSpoofGeoMain\.bundle\.js/,
+];
