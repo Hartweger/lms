@@ -19,10 +19,12 @@ async function cronHandler(request: NextRequest) {
     .select("id");
   if (e1) return NextResponse.json({ error: e1.message }, { status: 500 });
 
-  // 2) POKRENI: počela (start prošao), nije se završila → u_toku.
+  // 2) POKRENI: počela, nije se završila → u_toku. Namerno lt, ne lte:
+  // na sam dan početka grupa ostaje "otvoren" da bi termin još bio vidljiv
+  // na sajtu (raspored prikazuje samo otvoren/uskoro).
   const { data: started, error: e2 } = await admin.from("groups")
     .update({ status: "u_toku", updated_at: now })
-    .lte("start_date", today)
+    .lt("start_date", today)
     .in("status", ["planiran", "uskoro", "otvoren"])
     .or(`end_date.gte.${today},end_date.is.null`)
     .select("id");
