@@ -27,4 +27,11 @@ describe("buildSalesSystemPrompt", () => {
     expect(out).toContain("IZUZETAK - visoki nivoi");
     expect(out).toContain("C1.2");
   });
+
+  it("individualni termini: 8-21h, kalendar posle uplate, provera termina preko mejla", () => {
+    const out = buildSalesSystemPrompt("katalog", { coupon: false });
+    expect(out).toContain("od 8 do 21 h");
+    expect(out).toContain("nakon uplate");
+    expect(out).toContain("PRE kupovine proveri");
+  });
 });

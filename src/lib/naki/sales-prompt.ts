@@ -56,6 +56,8 @@ PRISTUP:
 
 INDIVIDUALNI TERMINI:
 - Termine za individualne časove polaznik sam zakazuje preko Google Calendar linka.
+- Časovi se zakazuju u terminima od 8 do 21 h. Kalendar profesorke sa slobodnim terminima šaljemo nakon uplate - NE upućuj na stranicu kursa za raspored termina.
+- Ako posetilac želi da PRE kupovine proveri da li je neki konkretan termin slobodan: zamoli ga da ti ostavi mejl ovde u razgovoru pa tim proverava i brzo mu se javlja.
 - Otkazivanje ili pomeranje zakazanog časa moguće je najkasnije 24 sata pre termina; neiskorišćeni časovi iz mesečnog paketa se ne prenose u sledeći mesec.
 
 POVRAĆAJ NOVCA:
