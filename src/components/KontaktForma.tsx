@@ -19,6 +19,7 @@ export default function KontaktForma() {
   const [email, setEmail] = useState("");
   const [category, setCategory] = useState("");
   const [message, setMessage] = useState("");
+  const [website, setWebsite] = useState(""); // honeypot — ljudi ga ne vide
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -38,7 +39,7 @@ export default function KontaktForma() {
       const res = await fetch("/api/kontakt", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, category, message }),
+        body: JSON.stringify({ name, email, category, message, website }),
       });
       const data = await res.json();
 
@@ -71,6 +72,19 @@ export default function KontaktForma() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
+      <div className="absolute -left-[9999px] top-auto" aria-hidden="true">
+        <label htmlFor="kontakt-website">Website</label>
+        <input
+          id="kontakt-website"
+          type="text"
+          name="website"
+          value={website}
+          onChange={(e) => setWebsite(e.target.value)}
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </div>
+
       <div>
         <label htmlFor="kontakt-name" className="block text-sm font-medium text-gray-700 mb-1">
           Ime i prezime

@@ -2,14 +2,43 @@ import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { upsertContact, logInteraction } from "@/lib/crm/contacts";
+import { rateLimit } from "@/lib/rate-limit";
+
+const VALID_CATEGORIES = ["video", "grupni", "individualni", "usluge", "placanje", "ostalo"];
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function POST(request: Request) {
   try {
-    const { name, email, category, message } = await request.json();
+    const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+    if (!rateLimit(`kontakt:${ip}`, { max: 3, windowMs: 10 * 60 * 1000 }).allowed) {
+      return NextResponse.json(
+        { error: "Previše poruka. Pokušajte ponovo za nekoliko minuta." },
+        { status: 429 }
+      );
+    }
+
+    const { name, email, category, message, website } = await request.json();
+
+    // Honeypot: skriveno polje koje ljudi ne vide — popunjen = bot, lažni uspeh
+    if (website) {
+      return NextResponse.json({ success: true });
+    }
 
     if (!name || !email || !category || !message) {
       return NextResponse.json(
         { error: "Sva polja su obavezna." },
+        { status: 400 }
+      );
+    }
+
+    if (
+      typeof name !== "string" || name.length > 200 ||
+      typeof message !== "string" || message.length > 5000 ||
+      typeof email !== "string" || !EMAIL_RE.test(email) ||
+      !VALID_CATEGORIES.includes(category)
+    ) {
+      return NextResponse.json(
+        { error: "Neispravni podaci u formi." },
         { status: 400 }
       );
     }
