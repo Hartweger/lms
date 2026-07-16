@@ -1,7 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import ClaniceDirectory from "./ClaniceDirectory";
-import { CLANICE } from "./clanice-data";
 
 export const metadata: Metadata = {
   title: "Članice - Naša zajednica preduzetnica | Hartweger",
@@ -23,9 +22,6 @@ export default function ClanicePage() {
           className="absolute -bottom-32 -left-20 w-80 h-80 rounded-full bg-koral/10 blur-3xl"
         />
         <div className="relative max-w-3xl mx-auto text-center">
-          <p className="inline-block bg-white ring-1 ring-plava/20 text-plava-dark text-sm font-semibold px-4 py-1.5 rounded-full mb-5 shadow-sm">
-            {CLANICE.length} preduzetnica i broji se dalje
-          </p>
           <h1 className="font-bold text-3xl md:text-5xl text-gray-900 mb-5 leading-tight">
             Naša zajednica <span className="text-plava-dark">članica</span>
           </h1>
