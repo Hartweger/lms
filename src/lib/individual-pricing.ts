@@ -41,6 +41,23 @@ export function resolveVariant(
   ) ?? null;
 }
 
+/**
+ * Cenovni nivoi po profesorki, rastuće po ceni - za prikaz na prodajnoj strani.
+ * Samo za kurseve bez paketa (package_type null na svim varijacijama);
+ * kod mesečnih cena zavisi i od paketa pa jedna lista nivoa ne važi.
+ */
+export function priceTiersFromVariants(variants: Variant[]): { price: number; names: string[] }[] {
+  if (variants.length === 0 || variants.some((v) => v.package_type)) return [];
+  const byPrice = new Map<number, string[]>();
+  for (const v of variants) {
+    if (!v.professor) continue;
+    byPrice.set(v.price, [...(byPrice.get(v.price) ?? []), v.professor.full_name]);
+  }
+  return Array.from(byPrice.entries())
+    .map(([price, names]) => ({ price, names }))
+    .sort((a, b) => a.price - b.price);
+}
+
 /** Broj časova: paketX → X, inače included_lessons kursa. */
 export function lessonsForVariant(variant: { package_type: string | null }, includedLessons: number | null): number {
   if (variant.package_type) {

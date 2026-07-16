@@ -90,7 +90,7 @@ export default function IndividualniKurseviPage() {
         <div className="max-w-6xl mx-auto">
           <h2 className="text-2xl font-montserrat font-bold text-center mb-3">Izaberi kurs</h2>
           <p className="text-gray-600 text-center mb-8">
-            Po nivou ili mesečni paket. Klikni na kurs, kupi - profesora i termine biraš odmah nakon uplate.
+            Po nivou ili mesečni paket. Profesorku biraš pri kupovini (cena zavisi od izbora), a termine zakazuješ odmah nakon uplate.
           </p>
           <IndividualniPonuda cards={INDIVIDUALNI_CARDS} />
         </div>
@@ -100,7 +100,7 @@ export default function IndividualniKurseviPage() {
       <section className="py-14 px-4">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-2xl font-montserrat font-bold text-center mb-3">Naš tim</h2>
-          <p className="text-gray-600 text-center mb-8">Svi profesori rade nivoe A1-C1. Profesora biraš nakon kupovine kursa.</p>
+          <p className="text-gray-600 text-center mb-8">Sve profesorke rade nivoe A1-C1. Profesorku biraš pri kupovini kursa.</p>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-6">
             {profesori.map((prof) => (
               <ProfesorKartica key={prof.name} name={prof.name} role={prof.role} bio={prof.bio} />

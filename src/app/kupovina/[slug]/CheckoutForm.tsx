@@ -94,6 +94,16 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
   const paymentMethod = method;
   const isCard = method === "kartica";
 
+  // Cena u opcijama dropdown-a: kupac vidi razliku odmah, bez menjanja izbora
+  // (skrivene razlike su pravile duple porudžbine - vraćanje sa bankovne strane).
+  function optionPriceSuffix(sel: { professorId: string | null; packageType: string | null }): string {
+    const v = resolveVariant(variants, sel);
+    if (!v) return "";
+    return en
+      ? ` - ${v.paypal_price_eur ?? Math.round(v.price / EUR_RATE)}€`
+      : ` - ${formatPrice(v.price)} din`;
+  }
+
   const selectedVariant = isIndividual ? resolveVariant(variants, { professorId, packageType }) : null;
   // Za individualne cena dolazi iz varijacije; za usluge cena po strani × broj strana; inače prop priceRsd.
   const basePrice = isIndividual ? (selectedVariant?.price ?? 0) : isService ? priceRsd * pages : priceRsd;
@@ -248,7 +258,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
               <label htmlFor="paket" className="block text-sm font-medium text-gray-700 mb-1">{en ? "Number of sessions" : "Broj termina"}</label>
               <select id="paket" value={packageType ?? ""} onChange={(e) => setPackageType(e.target.value)}
                 className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#0AB3D7]">
-                {packageTypes.map((p) => (<option key={p} value={p}>{PAKET_LABEL[p] ?? p}</option>))}
+                {packageTypes.map((p) => (<option key={p} value={p}>{(PAKET_LABEL[p] ?? p) + optionPriceSuffix({ professorId, packageType: p })}</option>))}
               </select>
             </div>
           )}
@@ -258,7 +268,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
               <label htmlFor="prof" className="block text-sm font-medium text-gray-700 mb-1">{en ? "Tutor" : "Profesorka"}</label>
               <select id="prof" value={professorId ?? ""} onChange={(e) => setProfessorId(e.target.value)}
                 className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#0AB3D7]">
-                {professors.map((p) => (<option key={p.id} value={p.id}>{p.full_name}</option>))}
+                {professors.map((p) => (<option key={p.id} value={p.id}>{p.full_name + optionPriceSuffix({ professorId: p.id, packageType })}</option>))}
               </select>
             </div>
           )}

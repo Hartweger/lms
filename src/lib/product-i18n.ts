@@ -25,7 +25,7 @@ const SR_PRODUCT: ProductStrings = {
   featuresTitle: "Šta uključuje paket?",
   ratingText: "5.0 - 300+ Google recenzija",
   oneOnOneInEnglish: "",
-  chooseProfessorLine: "Birate profesorku u sledećem koraku",
+  chooseProfessorLine: "Profesorku biraš u sledećem koraku",
   bookYourTimeLine: "Ti biraš termin - dobijaš Google Calendar link i zakazuješ",
   noVideoCertLine: "Mesečni paket ne uključuje video lekcije ni sertifikat",
   ctaBuy: "Kupi",

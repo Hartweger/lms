@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { professorsFromVariants, packageTypesFromVariants, resolveVariant, lessonsForVariant } from "./individual-pricing";
+import { professorsFromVariants, packageTypesFromVariants, resolveVariant, lessonsForVariant, priceTiersFromVariants } from "./individual-pricing";
 
 const V = [
   { id: "v1", professor_id: "p-suzana", package_type: null, price: 23000, paypal_price_eur: null, professor: { id: "p-suzana", full_name: "Suzana Marjanović" } },
@@ -33,6 +33,25 @@ describe("resolveVariant", () => {
   });
   it("vraća null za nepostojeću kombinaciju", () => {
     expect(resolveVariant(V, { professorId: "p-x", packageType: null })).toBeNull();
+  });
+});
+
+describe("priceTiersFromVariants", () => {
+  it("grupiše profesorke po ceni, rastuće", () => {
+    const tiers = priceTiersFromVariants([
+      ...V,
+      { id: "v3", professor_id: "p-milica", package_type: null, price: 23000, paypal_price_eur: null, professor: { id: "p-milica", full_name: "Milica Vučić" } },
+    ]);
+    expect(tiers).toEqual([
+      { price: 23000, names: ["Suzana Marjanović", "Milica Vučić"] },
+      { price: 28000, names: ["Nataša Hartweger"] },
+    ]);
+  });
+  it("mesečni (postoji package_type) → prazno", () => {
+    expect(priceTiersFromVariants(MP)).toEqual([]);
+  });
+  it("bez varijacija → prazno", () => {
+    expect(priceTiersFromVariants([])).toEqual([]);
   });
 });
 

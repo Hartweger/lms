@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import type { Course } from "@/lib/types";
 import PriceCard from "@/components/product/PriceCard";
 import ProductFeatures from "@/components/product/ProductFeatures";
@@ -12,6 +13,7 @@ import InteresForm from "./InteresForm";
 import BuyButton from "@/components/BuyButton";
 import PixelViewContent from "@/components/PixelViewContent";
 import { productStrings, formatMoney, type Lang } from "@/lib/product-i18n";
+import { priceTiersFromVariants, type Variant } from "@/lib/individual-pricing";
 
 /* ─── Preduslovi po nivou ─── */
 const preduslov: Record<string, string> = {
@@ -229,6 +231,30 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
   const cat = categoryConfig[category] || categoryConfig.video;
   const isVariable = category === "individualni" || category === "mesecni";
 
+  // Cena zavisi od profesorke (npr. 37.000 tim / 42.500 Nataša) - kupci to moraju
+  // videti VEĆ OVDE, ne tek u checkoutu: skrivena razlika pravi napuštene/duple
+  // porudžbine (kupac se vraća sa bankovne strane da "istraži" cenu).
+  let priceTiers: { price: number; names: string[] }[] = [];
+  // „Profesorku biraš..." ima smisla samo kad izbor stvarno postoji (FSP i FIDE
+  // imaju jednu profesorku - checkout tamo i ne nudi listu).
+  let hasProfessorChoice = false;
+  if (isVariable) {
+    // Service-role kao na /kupovina: RLS na user_profiles skriva imena profesorki
+    // od anon klijenta (join vraća professor=null). U HTML idu samo ime+cena.
+    const admin = createAdminClient();
+    const { data: vdata } = await admin
+      .from("product_variants")
+      .select("id, professor_id, package_type, price, paypal_price_eur, professor:professor_id(id, full_name)")
+      .eq("course_id", course.id)
+      .eq("is_active", true);
+    const variants = (vdata ?? []).map((v) => ({
+      ...v,
+      professor: Array.isArray(v.professor) ? v.professor[0] ?? null : v.professor,
+    })) as Variant[];
+    priceTiers = priceTiersFromVariants(variants);
+    hasProfessorChoice = new Set(variants.map((v) => v.professor_id).filter(Boolean)).size > 1;
+  }
+
   const ctaLabel = en ? t.ctaBuy : (
     category === "grupni" ? "Prijavi se" :
     category === "individualni" || category === "mesecni" ? "Kupi" :
@@ -436,11 +462,27 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
                   {en ? (
                     <>
                       <p className="text-gray-700"><strong>{t.oneOnOneInEnglish}</strong></p>
-                      <p className="text-gray-600">{t.chooseProfessorLine}</p>
+                      {hasProfessorChoice && <p className="text-gray-600">{t.chooseProfessorLine}</p>}
                     </>
                   ) : (
-                    slug !== "fsp-individualni" && (
-                      <p className="text-gray-600">{t.chooseProfessorLine}</p>
+                    hasProfessorChoice && (
+                      priceTiers.length > 1 ? (
+                        <div className="space-y-1">
+                          <p className="text-gray-700 font-medium">Profesorku biraš pri kupovini - cena zavisi od izbora:</p>
+                          {priceTiers.map((tier) => (
+                            <p key={tier.price} className="text-gray-600">
+                              {tier.names.length > 2 ? "Profesorke iz našeg tima" : tier.names.join(" / ")} - <strong>{formatPrice(tier.price)} din</strong>
+                            </p>
+                          ))}
+                        </div>
+                      ) : (
+                        <>
+                          <p className="text-gray-600">{t.chooseProfessorLine}</p>
+                          {category === "mesecni" && (
+                            <p className="text-gray-600">Cena zavisi od izabranog paketa i profesorke - tačan iznos vidiš pre plaćanja.</p>
+                          )}
+                        </>
+                      )
                     )
                   )}
                   <p className="text-gray-600">{t.bookYourTimeLine}</p>
