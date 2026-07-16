@@ -8,6 +8,9 @@ import { SENTRY_DENY_URLS, SENTRY_IGNORE_ERRORS } from "@/lib/sentry-ignore";
 Sentry.init({
   dsn: "https://4888c4f4fdf635c39c792f36efd16896@o4511456054673408.ingest.de.sentry.io/4511456059326544",
 
+  // Samo produkcija - dev greške ne idu u Sentry (vidi sentry.server.config.ts).
+  enabled: process.env.NODE_ENV === "production",
+
   // Benigne Supabase multi-tab lock greške - ne troše kvotu.
   ignoreErrors: SENTRY_IGNORE_ERRORS,
 
