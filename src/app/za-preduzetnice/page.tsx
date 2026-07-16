@@ -69,6 +69,25 @@ export default function ZaPreduzetnicePage() {
         </div>
       </section>
 
+      {/* Zajednica */}
+      <section className="py-16 px-4 bg-white">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="font-montserrat font-bold text-2xl md:text-3xl text-gray-900 mb-4">
+            Upoznaj našu zajednicu
+          </h2>
+          <p className="text-gray-600 leading-relaxed mb-8">
+            Preduzetnice koje su već krenule ovim putem - u jezicima, edukaciji,
+            turizmu, marketingu i zanatima - predstavljamo na posebnoj stranici.
+          </p>
+          <Link
+            href="/clanice"
+            className="inline-block bg-plava text-white px-8 py-3 rounded-xl font-semibold hover:bg-plava-dark transition-colors"
+          >
+            Pogledaj članice
+          </Link>
+        </div>
+      </section>
+
       {/* Tagline */}
       <section className="py-12 px-4 bg-plava-light">
         <div className="max-w-3xl mx-auto text-center">

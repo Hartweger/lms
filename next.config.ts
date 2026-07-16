@@ -65,7 +65,6 @@ const nextConfig: NextConfig = {
       { source: "/moj-nalog", destination: "/nalog", permanent: true },
       { source: "/prodavnica", destination: "/kursevi", permanent: true },
       { source: "/video-kursevi", destination: "/kursevi", permanent: true },
-      { source: "/clanice", destination: "/kursevi", permanent: true },
       { source: "/plan-ucenja", destination: "/kursevi", permanent: true },
       { source: "/cesto-postavljena-pitanja", destination: "/faq", permanent: true },
       { source: "/opsti-uslovi-poslovanja", destination: "/uslovi", permanent: true },
