@@ -67,6 +67,10 @@ const nextConfig: NextConfig = {
       { source: "/video-kursevi", destination: "/kursevi", permanent: true },
       { source: "/plan-ucenja", destination: "/kursevi", permanent: true },
       { source: "/clanice", destination: "https://www.natasahartweger.rs/clanice", permanent: false },
+      // Digitalno preduzetništvo = lični brend → natasahartweger.rs
+      { source: "/nh-academy", destination: "https://www.natasahartweger.rs/academy", permanent: false },
+      { source: "/za-preduzetnice", destination: "https://www.natasahartweger.rs", permanent: false },
+      { source: "/magazin/strucno-usavrsavanje-kada-posao-preraste-vlasnika-i-zasto-je-podrska-kljucna", destination: "https://www.natasahartweger.rs/blog/strucno-usavrsavanje-kada-posao-preraste-vlasnika-i-zasto-je-podrska-kljucna", permanent: false },
       { source: "/cesto-postavljena-pitanja", destination: "/faq", permanent: true },
       { source: "/opsti-uslovi-poslovanja", destination: "/uslovi", permanent: true },
       { source: "/naki-ai-asistent-nemacki", destination: "/naki", permanent: true },
