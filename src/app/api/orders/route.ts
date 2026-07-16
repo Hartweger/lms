@@ -43,23 +43,8 @@ export async function POST(request: Request) {
 
     const supabase = createAdminClient();
 
-    // DB kočnica po mejlu (preživljava cold start, za razliku od in-memory limita):
-    // 3+ porudžbine za isti mejl u poslednjih sat = neko bombarduje tuđi inbox.
-    const hourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
-    const { count: recentForEmail } = await supabase
-      .from("orders")
-      .select("*", { count: "exact", head: true })
-      .ilike("email", email)
-      .gte("created_at", hourAgo);
-    if ((recentForEmail ?? 0) >= 3) {
-      console.log(`[orders] Email throttle (429): ${email} - ${recentForEmail} porudžbina u poslednjih sat`);
-      return NextResponse.json(
-        { error: "Previše porudžbina za ovaj mejl. Sačekaj sat vremena ili nam piši na info@hartweger.rs." },
-        { status: 429 }
-      );
-    }
-
     // Load course by slug where is_purchasable = true
+    // (pre kočnice po mejlu - za reuse pending porudžbine poredimo items[0].course_id)
     const { data: course, error: courseError } = await supabase
       .from("courses")
       .select("id, slug, title, price, category, course_type, included_lessons")
@@ -73,6 +58,46 @@ export async function POST(request: Request) {
         { error: "Kurs nije dostupan za kupovinu." },
         { status: 404 }
       );
+    }
+
+    // Povratak sa NestPay strane: kupac često ponovi pokušaj plaćanja za isti kurs,
+    // pa bi svaki pokušaj pravio novu porudžbinu + novi admin mejl. Umesto toga
+    // ažuriramo njegovu poslednju pending porudžbinu (<24h) za isti kurs.
+    // Reuse SAMO za pending: NestPay veže iznos za order_number, pa se naplaćena
+    // porudžbina ne sme menjati.
+    const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+    const { data: recentOrders } = await supabase
+      .from("orders")
+      .select("id, order_number, created_at, payment_status, items")
+      .ilike("email", email)
+      .gte("created_at", dayAgo);
+
+    const reusableOrder =
+      (recentOrders ?? [])
+        .filter(
+          (o) =>
+            o.payment_status === "pending" &&
+            Array.isArray(o.items) &&
+            o.items[0]?.course_id === course.id
+        )
+        .sort((a, b) => String(b.created_at).localeCompare(String(a.created_at)))[0] ?? null;
+
+    // DB kočnica po mejlu (preživljava cold start, za razliku od in-memory limita):
+    // 3+ porudžbine za isti mejl u poslednjih sat = neko bombarduje tuđi inbox.
+    // Važi samo za stvarno NOVE porudžbine - ponovni pokušaj plaćanja iste (reuse)
+    // je legitiman i ne sme da dobije 429.
+    if (!reusableOrder) {
+      const hourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+      const recentForEmail = (recentOrders ?? []).filter(
+        (o) => String(o.created_at) >= hourAgo
+      ).length;
+      if (recentForEmail >= 3) {
+        console.log(`[orders] Email throttle (429): ${email} - ${recentForEmail} porudžbina u poslednjih sat`);
+        return NextResponse.json(
+          { error: "Previše porudžbina za ovaj mejl. Sačekaj sat vremena ili nam piši na info@hartweger.rs." },
+          { status: 429 }
+        );
+      }
     }
 
     // Grupni kurs: ne dozvoli kupovinu ako je grupa popunjena.
@@ -220,52 +245,16 @@ export async function POST(request: Request) {
       ? computeCouponDiscount(couponForDiscount.discount_type, couponForDiscount.amount, lineTotal)
       : { discount: 0, finalPrice: lineTotal };
 
-    // Find or create user by email
-    let userId: string;
-
-    const { data: existingProfile } = await supabase
-      .from("user_profiles")
-      .select("id")
-      .eq("email", email.toLowerCase())
-      .single();
-
-    if (existingProfile) {
-      userId = existingProfile.id;
-      console.log(`[orders] Existing user: ${email} (${userId})`);
-    } else {
-      const { data: newUser, error: createError } =
-        await supabase.auth.admin.createUser({
-          email,
-          email_confirm: true,
-        });
-
-      if (createError || !newUser.user) {
-        console.error(`[orders] Failed to create user ${email}:`, createError);
-        return NextResponse.json(
-          { error: "Greška pri kreiranju naloga. Pokušajte ponovo." },
-          { status: 500 }
-        );
-      }
-
-      userId = newUser.user.id;
-      console.log(`[orders] Created new user: ${email} (${userId})`);
-
-      await supabase.from("user_profiles").upsert({
-        id: userId,
-        email,
-        full_name: fullName,
-        role: "student",
-      });
-    }
-
-    // Generate order number
-    const orderNumber = await generateOrderNumber();
-
     // Calculate PayPal EUR price if needed
     const paypalEur =
       paymentMethod === "paypal"
         ? calculatePaypalEur(finalPrice)
         : undefined;
+
+    const paypalNote =
+      paymentMethod === "paypal"
+        ? `${paypalEur} EUR - paypal.me/natasahartweger1`
+        : null;
 
     // Build items JSONB
     // Usluga: broj strana ide u naziv stavke (fiskalni račun čita items[0].title) + quantity.
@@ -281,55 +270,132 @@ export async function POST(request: Request) {
       },
     ];
 
-    // Insert order
-    const { data: order, error: orderError } = await supabase
-      .from("orders")
-      .insert({
-        user_id: userId,
-        email,
-        full_name: fullName,
-        country,
-        items,
-        subtotal: lineTotal,
-        discount,
-        total: finalPrice,
-        coupon_code: validCouponCode,
-        payment_method: paymentMethod,
-        order_number: orderNumber,
-        utm_source: attr.utm_source ?? null,
-        utm_medium: attr.utm_medium ?? null,
-        utm_campaign: attr.utm_campaign ?? null,
-        source_type: attr.source_type ?? null,
-        paypal_note:
-          paymentMethod === "paypal"
-            ? `${paypalEur} EUR - paypal.me/natasahartweger1`
-            : null,
-      })
-      .select("id, order_number")
-      .single();
+    let order: { id: string; order_number: string } | null = null;
+    let reusedOrder = false;
 
-    if (orderError || !order) {
-      console.error("[orders] Failed to insert order:", orderError);
-      return NextResponse.json(
-        { error: "Greška pri kreiranju narudžbine. Pokušajte ponovo." },
-        { status: 500 }
+    if (reusableOrder) {
+      // Guard .eq("payment_status", "pending") štiti od trke sa NestPay callbackom:
+      // ako je porudžbina u međuvremenu naplaćena, ne diramo je nego pravimo novu.
+      // order_number ostaje isti - NestPay retry ide preko istog broja.
+      const { data: updated } = await supabase
+        .from("orders")
+        .update({
+          items,
+          subtotal: lineTotal,
+          discount,
+          total: finalPrice,
+          coupon_code: validCouponCode,
+          payment_method: paymentMethod,
+          paypal_note: paypalNote,
+        })
+        .eq("id", reusableOrder.id)
+        .eq("payment_status", "pending")
+        .select("id, order_number")
+        .maybeSingle();
+
+      if (updated) {
+        order = updated;
+        reusedOrder = true;
+        console.log(
+          `[orders] Reused pending order ${updated.order_number} for ${email} - ${courseSlug} via ${paymentMethod}`
+        );
+      }
+    }
+
+    if (!order) {
+      // Find or create user by email
+      let userId: string;
+
+      const { data: existingProfile } = await supabase
+        .from("user_profiles")
+        .select("id")
+        .eq("email", email.toLowerCase())
+        .single();
+
+      if (existingProfile) {
+        userId = existingProfile.id;
+        console.log(`[orders] Existing user: ${email} (${userId})`);
+      } else {
+        const { data: newUser, error: createError } =
+          await supabase.auth.admin.createUser({
+            email,
+            email_confirm: true,
+          });
+
+        if (createError || !newUser.user) {
+          console.error(`[orders] Failed to create user ${email}:`, createError);
+          return NextResponse.json(
+            { error: "Greška pri kreiranju naloga. Pokušajte ponovo." },
+            { status: 500 }
+          );
+        }
+
+        userId = newUser.user.id;
+        console.log(`[orders] Created new user: ${email} (${userId})`);
+
+        await supabase.from("user_profiles").upsert({
+          id: userId,
+          email,
+          full_name: fullName,
+          role: "student",
+        });
+      }
+
+      // Generate order number
+      const orderNumber = await generateOrderNumber();
+
+      // Insert order
+      const { data: inserted, error: orderError } = await supabase
+        .from("orders")
+        .insert({
+          user_id: userId,
+          email,
+          full_name: fullName,
+          country,
+          items,
+          subtotal: lineTotal,
+          discount,
+          total: finalPrice,
+          coupon_code: validCouponCode,
+          payment_method: paymentMethod,
+          order_number: orderNumber,
+          utm_source: attr.utm_source ?? null,
+          utm_medium: attr.utm_medium ?? null,
+          utm_campaign: attr.utm_campaign ?? null,
+          source_type: attr.source_type ?? null,
+          paypal_note: paypalNote,
+        })
+        .select("id, order_number")
+        .single();
+
+      if (orderError || !inserted) {
+        console.error("[orders] Failed to insert order:", orderError);
+        return NextResponse.json(
+          { error: "Greška pri kreiranju narudžbine. Pokušajte ponovo." },
+          { status: 500 }
+        );
+      }
+
+      order = inserted;
+      console.log(
+        `[orders] Created order ${inserted.order_number} for ${email} - ${courseSlug} via ${paymentMethod}`
       );
     }
 
-    console.log(
-      `[orders] Created order ${order.order_number} for ${email} - ${courseSlug} via ${paymentMethod}`
-    );
-
-    // Trenutna notifikacija adminu o svakoj novoj narudžbini (ne blokira odgovor ako mejl padne)
-    await sendNewOrderAdminEmail({
-      orderNumber: order.order_number,
-      fullName,
-      email,
-      courseTitle: items[0].title,
-      total: finalPrice,
-      paymentMethod,
-      country,
-    });
+    // Trenutna notifikacija adminu o svakoj novoj narudžbini (ne blokira odgovor ako mejl padne).
+    // Reuse iste pending porudžbine NE šalje novi admin mejl - to je isti kupac
+    // koji ponavlja pokušaj plaćanja, ne nova narudžbina.
+    if (!reusedOrder) {
+      await sendNewOrderAdminEmail({
+        orderNumber: order.order_number,
+        fullName,
+        email,
+        courseTitle: items[0].title,
+        total: finalPrice,
+        paymentMethod,
+        country,
+      });
+    }
 
     // usage_count se NE uvećava ovde: kupon troši limit tek kad porudžbina postane
     // completed (grantAccessForOrder) — odbijena kartica ne sme da pojede max_uses.

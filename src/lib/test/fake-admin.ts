@@ -1,6 +1,7 @@
 // In-memory zamena za Supabase admin klijent u testovima novčanog puta.
 // Podržava lance koje koriste grant-access/callback/reconcile:
-// from().select().eq().in().lt().is().single()/maybeSingle()/limit(), insert/update/upsert,
+// from().select().eq().in().lt().is().single()/maybeSingle()/limit(), insert/update/upsert
+// (update vraća pogođene redove, pa radi i update().eq().select().maybeSingle()),
 // select sa {count:"exact", head:true}. Greške se ubrizgavaju preko failInsert/failUpdate.
 type Row = Record<string, unknown>;
 
@@ -36,8 +37,9 @@ export function createFakeAdmin(seed: Record<string, Row[]> = {}) {
       if (op === "update") {
         const err = updateErrors.get(name);
         if (err) return { data: null, error: { message: err } };
-        rows.filter(match).forEach((r) => Object.assign(r, payload as Row));
-        return { data: null, error: null };
+        const matched = rows.filter(match);
+        matched.forEach((r) => Object.assign(r, payload as Row));
+        return { data: matched, error: null };
       }
       const found = rows.filter(match);
       if (wantCount) return { data: null, count: found.length, error: null };

@@ -18,6 +18,7 @@ vi.mock("@/lib/order-utils", async (importOriginal) => ({
   ...(await importOriginal<object>()),
   generateOrderNumber: async () => "2026-9999",
 }));
+vi.mock("@/lib/ips-qr", () => ({ generateIpsQrUrl: async () => null }));
 
 import { POST } from "./route";
 
@@ -45,6 +46,22 @@ function seedCourse() {
 
 function minutesAgo(min: number): string {
   return new Date(Date.now() - min * 60_000).toISOString();
+}
+
+function seedPendingOrder(over: Record<string, unknown> = {}) {
+  return {
+    id: "o-pending",
+    order_number: "2026-1000",
+    email: "ana@example.com",
+    payment_status: "pending",
+    payment_method: "kartica",
+    created_at: minutesAgo(10),
+    items: [{ course_id: "c1", course_slug: "nemacki-a1", title: "Nemački A1", price: 19600 }],
+    subtotal: 19600,
+    discount: 0,
+    total: 19600,
+    ...over,
+  };
 }
 
 beforeEach(() => {
@@ -93,6 +110,87 @@ describe("POST /api/orders", () => {
     expect(h.fake.tables.get("orders")!.length).toBe(3);
     expect(h.adminEmail).not.toHaveBeenCalled();
     expect(h.instructionsEmail).not.toHaveBeenCalled();
+  });
+
+  it("povratak sa NestPay: pending za isti mejl+kurs (<24h) se ažurira umesto nove, bez admin mejla", async () => {
+    h.fake = createFakeAdmin({ courses: [seedCourse()], orders: [seedPendingOrder()] });
+
+    const res = await POST(orderRequest({ paymentMethod: "uplatnica" }));
+    const json = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(json.orderNumber).toBe("2026-1000"); // isti order_number, ne novi
+    expect(h.fake.tables.get("orders")!.length).toBe(1);
+    const row = h.fake.row("orders", (r) => r.id === "o-pending")!;
+    expect(row.payment_method).toBe("uplatnica");
+    expect(row.total).toBe(19600);
+    expect(h.adminEmail).not.toHaveBeenCalled();
+    expect(h.instructionsEmail).toHaveBeenCalled(); // kupac ipak dobija instrukcije za uplatnicu
+  });
+
+  it("reuse zaobilazi email kočnicu: 3 pending pokušaja u satu ne daju 429 za isti kurs", async () => {
+    h.fake = createFakeAdmin({
+      courses: [seedCourse()],
+      orders: [
+        seedPendingOrder({ id: "o1", order_number: "2026-1001", created_at: minutesAgo(50) }),
+        seedPendingOrder({ id: "o2", order_number: "2026-1002", created_at: minutesAgo(30) }),
+        seedPendingOrder({ id: "o3", order_number: "2026-1003", created_at: minutesAgo(10) }),
+      ],
+    });
+
+    const res = await POST(orderRequest());
+    const json = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(json.orderNumber).toBe("2026-1003"); // ažurira se najskorija pending
+    expect(h.fake.tables.get("orders")!.length).toBe(3);
+    expect(h.adminEmail).not.toHaveBeenCalled();
+  });
+
+  it("pending za DRUGI kurs se ne ažurira → nova porudžbina + admin mejl", async () => {
+    h.fake = createFakeAdmin({
+      courses: [seedCourse()],
+      orders: [seedPendingOrder({ items: [{ course_id: "c2", course_slug: "nemacki-a2", title: "Nemački A2", price: 19600 }] })],
+    });
+
+    const res = await POST(orderRequest());
+    const json = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(json.orderNumber).toBe("2026-9999");
+    expect(h.fake.tables.get("orders")!.length).toBe(2);
+    expect(h.adminEmail).toHaveBeenCalledOnce();
+  });
+
+  it("pending starija od 24h se ne ažurira → nova porudžbina", async () => {
+    h.fake = createFakeAdmin({
+      courses: [seedCourse()],
+      orders: [seedPendingOrder({ created_at: minutesAgo(25 * 60) })],
+    });
+
+    const res = await POST(orderRequest());
+    const json = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(json.orderNumber).toBe("2026-9999");
+    expect(h.fake.tables.get("orders")!.length).toBe(2);
+  });
+
+  it("naplaćena (completed) porudžbina se ne dira → nova porudžbina", async () => {
+    h.fake = createFakeAdmin({
+      courses: [seedCourse()],
+      orders: [seedPendingOrder({ payment_status: "completed" })],
+    });
+
+    const res = await POST(orderRequest());
+    const json = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(json.orderNumber).toBe("2026-9999");
+    expect(h.fake.tables.get("orders")!.length).toBe(2);
+    const completed = h.fake.row("orders", (r) => r.id === "o-pending")!;
+    expect(completed.total).toBe(19600); // iznos naplaćene se ne menja
+    expect(h.adminEmail).toHaveBeenCalledOnce();
   });
 
   it("stare porudžbine (>1h) ne blokiraju novu", async () => {
