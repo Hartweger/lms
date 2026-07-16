@@ -22,6 +22,7 @@ const links = [
   { href: "/admin/finansije", label: "Finansije" },
   { href: "/admin/naki", label: "NaKI & Smile" },
   { href: "/admin/crm", label: "CRM" },
+  { href: "/admin/clanice", label: "Članice" },
 ];
 
 export default function AdminSidebar() {

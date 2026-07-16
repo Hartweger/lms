@@ -79,12 +79,12 @@ export default function ZaPreduzetnicePage() {
             Preduzetnice koje su već krenule ovim putem - u jezicima, edukaciji,
             turizmu, marketingu i zanatima - predstavljamo na posebnoj stranici.
           </p>
-          <Link
-            href="/clanice"
+          <a
+            href="https://www.natasahartweger.rs/clanice"
             className="inline-block bg-plava text-white px-8 py-3 rounded-xl font-semibold hover:bg-plava-dark transition-colors"
           >
             Pogledaj članice
-          </Link>
+          </a>
         </div>
       </section>
 

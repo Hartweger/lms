@@ -22,7 +22,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: "https://www.hartweger.rs/naki", lastModified: now, changeFrequency: "monthly", priority: 0.6 },
     { url: "https://www.hartweger.rs/magazin", lastModified: now, changeFrequency: "weekly", priority: 0.7 },
     { url: "https://www.hartweger.rs/o-natasi", lastModified: now, changeFrequency: "monthly", priority: 0.6 },
-    { url: "https://www.hartweger.rs/clanice", lastModified: now, changeFrequency: "monthly", priority: 0.6 },
     { url: "https://www.hartweger.rs/metodologija", lastModified: now, changeFrequency: "monthly", priority: 0.6 },
     { url: "https://www.hartweger.rs/kontakt", lastModified: now, changeFrequency: "monthly", priority: 0.5 },
     { url: "https://www.hartweger.rs/faq", lastModified: now, changeFrequency: "monthly", priority: 0.5 },

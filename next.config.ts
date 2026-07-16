@@ -66,6 +66,7 @@ const nextConfig: NextConfig = {
       { source: "/prodavnica", destination: "/kursevi", permanent: true },
       { source: "/video-kursevi", destination: "/kursevi", permanent: true },
       { source: "/plan-ucenja", destination: "/kursevi", permanent: true },
+      { source: "/clanice", destination: "https://www.natasahartweger.rs/clanice", permanent: false },
       { source: "/cesto-postavljena-pitanja", destination: "/faq", permanent: true },
       { source: "/opsti-uslovi-poslovanja", destination: "/uslovi", permanent: true },
       { source: "/naki-ai-asistent-nemacki", destination: "/naki", permanent: true },
