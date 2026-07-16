@@ -76,7 +76,7 @@ function ClanicaCard({ clanica, index }: { clanica: Clanica; index: number }) {
           <img
             src={clanica.foto}
             alt={clanica.brend ? `${clanica.ime} - ${clanica.brend}` : clanica.ime}
-            loading={index > 5 ? "lazy" : undefined}
+            decoding="async"
             className="w-full h-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-500"
           />
         ) : (
