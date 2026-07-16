@@ -1,0 +1,1867 @@
+{
+  "lessons": [
+    {
+      "id": "af4fefa8-55ed-4e30-9e21-a421b7f00a46",
+      "title": "Willkommen",
+      "content": "",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Uvod"
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## Svako može da nauči nemački. Baš svako. Osim onih koji nisu nikada počeli.\n\nDobrodošla/o u **Nemački B1.1**! 👋 Ovo je prvi deo nivoa B1 — zajedno sa B1.2 priprema te za **Goethe-Zertifikat B1**. Kurs prati udžbenik *Schritte International Neu 5*. Ne treba ti nikakva priprema, samo klikni na dugme ispod i kreni. Materijali koji ti mogu pomoći čekaju te niže."
+        },
+        {
+          "href": "/lekcija/b5547482-c6b5-4701-9c5e-bf4efd4d13e0",
+          "type": "link",
+          "label": "▶ Počni prvu lekciju — Rotkäppchen und das Präteritum",
+          "linkType": "kviz"
+        },
+        {
+          "type": "text",
+          "style": "uebung",
+          "content": "## Kako ovaj kurs funkcioniše\n\nSvaka lekcija ima isti ritam — prati ove korake i ne možeš da pogrešiš:\n\n1. **▶ Gledaj video** i ponavljaj naglas za mnom\n2. **📖 Pročitaj objašnjenje** ispod videa (tabele, formule, primeri)\n3. **✏️ Uradi kratke vežbe** (spoileri, kartice, kvizovi)\n4. **🗂 Nauči nove reči na karticama** + AI vežbe (prevod i dijalog) na kraju lekcije\n5. **🧪 Test po modulu** + završni Modelltest na kraju kursa"
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## Pomoćni materijali\n\nOvo nije obavezno za početak — srž učenja su **video lekcije i kartice**. Ali evo šta ti može pomoći usput:"
+        },
+        {
+          "type": "text",
+          "style": "info",
+          "content": "**🎁 Bonus: PDF priručnik „Ana u Nemačkoj — od A2 do B1\"**\n\nPrava mala knjiga (preko 100 strana, 14 poglavlja) koja kroz **Aninu priču** prolazi ceo nivo B1 — gramatiku, malo Landeskunde i pripremu za ispit, sve kroz situacije iz svakodnevnog života. **Ne prati redosled lekcija** — čitaj je kad god želiš, na ekranu ili odštampanu. Prelistaj je odmah ispod 👇"
+        },
+        {
+          "alt": "Korice priručnika Ana u Nemačkoj — od A2 do B1",
+          "url": "https://rzmyglynjcygsbicssbt.supabase.co/storage/v1/object/public/blog-media/prirucnici/ana-u-nemackoj-b1-cover.jpg",
+          "type": "image",
+          "caption": "Priručnik Ana u Nemačkoj — od A2 do B1 (14 poglavlja, preko 100 strana)"
+        },
+        {
+          "url": "https://drive.google.com/file/d/1ZvNoEPHbdtPzPWiwPGtk21hOzIqVkHwJ/preview",
+          "type": "pdf",
+          "label": "📄 Otvori priručnik (Ana u Nemačkoj — B1)"
+        },
+        {
+          "type": "text",
+          "style": "beispiele",
+          "content": "**💬 WhatsApp grupa za B1**\n\nTu pitaš kad ti nešto nije jasno i učiš zajedno sa ostalima. Ne ostaješ sama/sam u učenju."
+        },
+        {
+          "href": "https://chat.whatsapp.com/GHsdfmbeswPCJb70eb0eSs?s=sh&p=i&mlu=4",
+          "type": "link",
+          "label": "💬 Uđi u WhatsApp grupu za B1",
+          "linkType": "external"
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## Šta ćeš naučiti u B1.1?\n\n- **Präteritum** - prošlo vreme za pripovedanje i bajke\n- **Als / wenn** - razlika između ova dva veznika\n- **Plusquamperfekt** - davno prošlo vreme\n- **Relativne rečenice** - opisivanje osoba i stvari\n- **obwohl** - koncesivne rečenice\n- **Passiv sa modalnim glagolima** - šta se mora/sme/može uraditi\n- **Genitiv** - + wegen / trotz\n- **Konjunktiv II** - irealne želje i uslovi\n- **Infinitiv mit zu** - konstrukcije sa zu\n- **Finalsätze** - um...zu / damit\n- **Zweiteilige Konjunktionen** - sowohl...als auch, weder...noch\n- **Priprema za ispit B1** - Schreiben, Sprechen, Leseverstehen\n\n### Kurs ima 7 modula\n\n- **1. Glück im Alltag** — Präteritum, als/wenn, Plusquamperfekt\n- **2. Unterhaltung** — obwohl, Relativpronomen, Gradpartikeln\n- **3. Gesund bleiben** — Passiv + Modalverben, Genitiv\n- **4. Sprachen** — Konjunktiv II, wegen + Genitiv\n- **5. Eine Arbeit finden** — Infinitiv mit zu\n- **6. Dienstleistung** — um...zu / damit, statt / ohne...zu\n- **7. Rund ums Wohnen** — Zweiteilige Konjunktionen, Konj. II Vergangenheit"
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## Saveti za uspeh\n\n- Uči **redovno** - bolje 20 minuta svaki dan nego 3 sata jednom nedeljno\n- **Ponavljaj** - vrati se na lekcije koje ti nisu jasne\n- Ako imaš pitanja, piši profesorki na **info@hartweger.rs** ili u WhatsApp grupu\n\nSrećno učenje! 🍀"
+        }
+      ]
+    },
+    {
+      "id": "cfdf7bbe-3bc8-4e6e-b758-90ea01056c5e",
+      "title": "Leseverstehen B1 — Was bringt Glück?",
+      "content": "",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Modul 1",
+          "category": "lesen",
+          "pruefung": true
+        },
+        {
+          "type": "text",
+          "style": "info",
+          "content": "Vežba čitanja (**Leseverstehen**) — format kao na ispitu B1. Prvo pažljivo pročitaj tri teksta, pa za svako pitanje (1–4) izaberi tačno rešenje **a, b** ili **c**. Klikni na pitanje da vidiš rešenje i objašnjenje."
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## Glücksbringer aus verschiedenen Ländern\n\n**Unsere Reporterin Karin war wieder unterwegs und hat Menschen aus verschiedenen Ländern interviewt zum Thema: „Was bringt in Ihren Heimatländern Glück?“**"
+        },
+        {
+          "type": "text",
+          "style": "beispiele",
+          "content": "**A** — Amadou K. aus dem Senegal berichtet: „Immer, wenn ich wieder nach Deutschland reise, macht meine Mutter ein Glücksritual. Ich ziehe an der Haustür einen Schuh aus und sie gießt kaltes Wasser über meinen Fuß auf den Sandboden. Den nassen Sand legt meine Mutter in ein Tuch. Das hängt sie dann im Haus auf. Das bringt Glück und bedeutet, dass ich gesund wiederkomme. An einem Dienstag oder Freitag sollte man übrigens bei uns nicht reisen, denn das sind Unglückstage.“\n\n**B** — „Bei uns in der Türkei ist das blaue Auge der wichtigste Glücksbringer“, berichtet Filiz T. aus der Türkei. „Es beschützt die Menschen vor Unglück, einem Unfall oder Krankheit. Wenn ein Baby geboren wird, schenkt man oft das blaue Auge, man hängt es an die Wohnungstür oder ins Auto oder trägt es als Schmuck am Körper. Manche Leute malen es sogar an die Wohnzimmerwand. Ja, das blaue Auge findet man bei uns überall.“\n\n**C** — „Also, bei uns in Iran ist das persische Neujahr das wichtigste Fest im ganzen Jahr“, erzählt Keyvan I. „Ein sehr altes Ritual gibt es bei uns in der Nacht vom letzten Dienstag des Jahres auf Mittwoch. Man sieht dann überall in der Stadt und auf dem Land viele schöne kleine und große Feuer, die die Menschen extra für Neujahr gemacht haben. Alle Menschen, auch alte Leute, springen oder steigen darüber. Das bringt Glück. Man ‚verbrennt‘ dabei alle Krankheiten und bekommt die Energie vom Feuer. Dieses Fest ist immer ein besonderes Erlebnis für alle.“"
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "**b** — Lesen Sie noch einmal die Texte in a und die Aufgaben 1–4. Entscheiden Sie, welche Lösung (a, b oder c) richtig ist."
+        },
+        {
+          "type": "spoiler",
+          "items": [
+            {
+              "answer": "Tačno: c — članak je o tome šta u njihovoj zemlji/kulturi donosi sreću (tema: „Was bringt in Ihren Heimatländern Glück?“).",
+              "question": "1. In diesem Zeitungsartikel berichten Personen\n\na) über ihre persönlichen Glücksbringer.\nb) über ein glückliches Erlebnis.\nc) darüber, was in ihrer Kultur Glück bringt."
+            },
+            {
+              "answer": "Tačno: a — mokar pesak „bringt Glück und bedeutet, dass ich gesund wiederkomme“ (da se sa puta vratiš zdrav, ništa loše se ne desi).",
+              "question": "2. Der nasse Sand bedeutet, dass\n\na) auf einer Reise nichts passiert.\nb) man seine Schuhe putzen muss.\nc) man nicht an einem Dienstag reisen soll."
+            },
+            {
+              "answer": "Tačno: c — „Wenn ein Baby geboren wird, schenkt man oft das blaue Auge.“",
+              "question": "3. Das blaue Auge\n\na) kann man nicht als Schmuckstück tragen.\nb) findet man an jeder Wohnzimmerwand.\nc) wird oft bei einer Geburt verschenkt."
+            },
+            {
+              "answer": "Tačno: b — „Man ‚verbrennt‘ dabei alle Krankheiten und bekommt die Energie vom Feuer.“ (zdravlje i energija za novu godinu).",
+              "question": "4. Wenn die Menschen über das Feuer steigen,\n\na) feiern sie den letzten Mittwoch im Jahr.\nb) möchten sie Gesundheit und Energie für das neue Jahr bekommen.\nc) verbrennen sie sich die Kleider."
+            }
+          ],
+          "title": "Aufgaben 1–4 — Welche Lösung ist richtig? (klikni za rešenje)"
+        },
+        {
+          "rows": [
+            [
+              "der Glücksbringer",
+              "donosilac sreće, amajlija"
+            ],
+            [
+              "das Glücksritual",
+              "ritual za sreću"
+            ],
+            [
+              "der Sandboden",
+              "peskovito tlo"
+            ],
+            [
+              "das Tuch",
+              "krpa, marama"
+            ],
+            [
+              "beschützen (vor)",
+              "štititi (od)"
+            ],
+            [
+              "das Unglück",
+              "nesreća"
+            ],
+            [
+              "schenken",
+              "pokloniti"
+            ],
+            [
+              "der Schmuck",
+              "nakit"
+            ],
+            [
+              "das (persische) Neujahr",
+              "(persijska) Nova godina"
+            ],
+            [
+              "verbrennen",
+              "spaliti, sagoreti"
+            ],
+            [
+              "das Erlebnis",
+              "doživljaj"
+            ]
+          ],
+          "type": "vocabulary"
+        }
+      ]
+    },
+    {
+      "id": "5aca0cd4-f4eb-48a9-9a23-43ca15fbb3e9",
+      "title": "Lesen & Schreiben B1 — Bore-out",
+      "content": "",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Modul 3",
+          "category": "lesen",
+          "pruefung": true
+        },
+        {
+          "type": "text",
+          "style": "info",
+          "content": "Ova lekcija ima dva dela: prvo **Leseverstehen** (pročitaj Katjinu mejl i reši tvrdnje *richtig/falsch*), a zatim **Schreiben** (napiši odgovor Katji i pošalji ga profesorki na pregled)."
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## Teil 1 · Leseverstehen\n\n**23 — Lesen Sie den Text und wählen Sie. Sind die Aussagen richtig oder falsch?**"
+        },
+        {
+          "type": "text",
+          "style": "beispiele",
+          "content": "**E-Mail senden**\n\nLiebe/r …,\n\nbestimmt hast Du Dich schon gefragt, warum Du so lange nichts mehr von mir gehört hast. Es gibt einen Grund: Ich habe mein Leben völlig geändert. Mein Job als Büroangestellte hatte mich nämlich krank gemacht. Immer öfter bekam ich Kopfschmerzen oder Magenbeschwerden. Ich schlief schlecht und hatte auf nichts mehr Lust. Jeden Abend, wenn ich nach Hause kam, fühlte ich mich extrem müde und gestresst. Und das, obwohl ich bei der Arbeit mein Soll immer schaffte. Im Gegenteil, ich hatte oft so wenig zu tun, dass ich neben der Arbeit noch private Dinge erledigte. Ich lief von Arzt zu Arzt, aber keiner fand die Ursache für meine gesundheitlichen Probleme. Schließlich ging ich zu einem Psychologen. Er vermutete, dass es Langeweile war, die mich krank machte. Ich war total überrascht, denn jeder weiß ja, dass Stress krank macht. Aber Langeweile? Bore-out nennt man das, hat der Psychologe mir erklärt. Ich konnte es kaum glauben, denn mein sicherer Job bei der Versicherung schien mir immer genau das Richtige für mich zu sein. Ein stressiger Manager-Job oder der anstrengende Beruf einer Krankenschwester, das wäre alles nichts für mich. Ich habe lange nachgedacht und mich schließlich für ein Sabbatjahr, eine Auszeit, entschieden. Jetzt lebe ich auf einem Bauernhof in den Schweizer Bergen und kümmere mich um Schafe und Kühe. Ich habe gelernt, wie man Käse macht, und helfe bei der Feldarbeit. Die körperliche Arbeit gefällt mir. Ob ich das immer machen möchte, weiß ich noch nicht. Aber eins ist sicher: In meine alte Firma gehe ich nicht zurück.\n\nViele Grüße von Katja"
+        },
+        {
+          "type": "spoiler",
+          "items": [
+            {
+              "answer": "richtig — „Mein Job als Büroangestellte hatte mich krank gemacht“ (Kopfschmerzen, Magenbeschwerden).",
+              "question": "a) Katjas beruflicher Alltag führte zu gesundheitlichen Problemen.\n\nrichtig / falsch?"
+            },
+            {
+              "answer": "falsch — naprotiv, imala je premalo posla; problem je bila dosada (Langeweile / Bore-out).",
+              "question": "b) Sie hatte einen sehr stressigen Job.\n\nrichtig / falsch?"
+            },
+            {
+              "answer": "richtig — psiholog: „es war Langeweile, die mich krank machte“ (Bore-out).",
+              "question": "c) Langeweile kann die Ursache für Stress und körperliche Beschwerden sein.\n\nrichtig / falsch?"
+            },
+            {
+              "answer": "richtig — odlučila se za „ein Sabbatjahr, eine Auszeit“.",
+              "question": "d) Katja macht jetzt ein Jahr Pause von ihrem Job.\n\nrichtig / falsch?"
+            },
+            {
+              "answer": "falsch — ne odmara: fizički radi na farmi (Schafe und Kühe, Käse machen, Feldarbeit).",
+              "question": "e) Sie macht Urlaub in den Bergen und entspannt sich.\n\nrichtig / falsch?"
+            },
+            {
+              "answer": "falsch — „In meine alte Firma gehe ich nicht zurück.“",
+              "question": "f) In einem Jahr will sie wieder bei der Versicherung arbeiten.\n\nrichtig / falsch?"
+            }
+          ],
+          "title": "Aussagen a–f — richtig oder falsch? (klikni za rešenje)"
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## Teil 2 · Schreiben\n\nNapiši svoj odgovor (oko **80 reči**) u polje ispod i klikni **Pošalji** — profesorka će ti pregledati rad i dati ocenu i komentar."
+        },
+        {
+          "type": "exercise",
+          "title": "Schreiben B1 — Antwort an Katja"
+        }
+      ]
+    },
+    {
+      "id": "70d4d91d-c05e-49ed-ba13-b03250de960a",
+      "title": "Willkommen",
+      "content": "",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Uvod"
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## Svako može da nauči nemački. Baš svako. Osim onih koji nisu nikada počeli.\n\nDobrodošla/o u **Nemački A2.2**! 👋 Ovo je drugi deo A2 nivoa — posle ovog kursa spremna si za **Goethe-Zertifikat A2** ispit. Ne treba ti nikakva priprema, samo klikni na dugme ispod i kreni. Materijali koji ti mogu pomoći čekaju te niže."
+        },
+        {
+          "href": "/lekcija/c96bab8c-87f4-4a2b-8229-a4584a8296c1",
+          "type": "link",
+          "label": "▶ Počni prvu lekciju — Hätte und wäre",
+          "linkType": "kviz"
+        },
+        {
+          "type": "text",
+          "style": "uebung",
+          "content": "## Kako ovaj kurs funkcioniše\n\nSvaka lekcija ima isti ritam — prati ova 4 koraka i ne možeš da pogrešiš:\n\n1. **▶ Gledaj video** i ponavljaj naglas za mnom\n2. **📖 Pročitaj objašnjenje** ispod videa\n3. **✏️ Uradi kratke vežbe** (spoileri, kartice, kvizovi)\n4. **🗂 Nauči nove reči na karticama** + AI vežbe na kraju lekcije"
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## Pomoćni materijali\n\nOvo nije obavezno za početak — srž učenja su **video lekcije i kartice**. Ali evo šta ti može pomoći usput:"
+        },
+        {
+          "type": "text",
+          "style": "info",
+          "content": "**📄 PDF priručnik za A2** *(nije obavezno)*\n\nPriručnik prati sadržaj kursa. Prelistaj ga i uči uz njegovu pomoć kad želiš nešto na miru da pročitaš ili odštampaš. Nije uslov da kreneš."
+        },
+        {
+          "alt": "Korice priručnika Ana u Nemačkoj — od A1 do A2",
+          "url": "https://rzmyglynjcygsbicssbt.supabase.co/storage/v1/object/public/blog-media/prirucnici/ana-u-nemackoj-a2-cover.jpg",
+          "type": "image",
+          "caption": "Priručnik Ana u Nemačkoj — od A1 do A2"
+        },
+        {
+          "url": "https://drive.google.com/file/d/1_F2GZtlXPgeXvHeSppV21g_j5e_NZYfM/preview",
+          "type": "pdf",
+          "label": "📄 Otvori PDF priručnik za A2"
+        },
+        {
+          "type": "text",
+          "style": "beispiele",
+          "content": "**💬 WhatsApp grupa A2**\n\nTu pitaš kad ti nešto nije jasno i učiš zajedno sa ostalima. Ne ostaješ sama/sam u učenju."
+        },
+        {
+          "href": "https://chat.whatsapp.com/GkIMxGTD20xIATm1GlBT56?mode=gi_t",
+          "type": "link",
+          "label": "💬 Uđi u WhatsApp grupu A2",
+          "linkType": "external"
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## Šta ćeš naučiti u A2.2?\n\n- **Konjunktiv II** - kako da izraziš želje (hätte, wäre, würde, könnte)\n- **trotzdem** - kako da kažeš \"ipak\"\n- **Dialoge führen** - predlozi, dogovaranje termina, reagovanje\n- **Deklinacija prideva** - nastavci prideva sa svim članovima\n- **Pasiv** - kako reći \"nešto se radi\"\n- **Komparacija** - poređenje (veći, manji, najbolji)\n- **Reisen und Verkehr** - putovanja, karte, prevoz\n- **Bank und Geld** - račun, bankomat, transakcije\n- **Schreiben** - pisanje mejlova i kratkih poruka"
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## Saveti za uspeh\n\n- Uči **redovno** - bolje 20 minuta svaki dan nego 3 sata jednom nedeljno\n- **Ponavljaj** - vrati se na lekcije koje ti nisu jasne\n- Ako imaš pitanja, piši profesorki na **info@hartweger.rs**\n\nSrećno učenje!"
+        }
+      ]
+    },
+    {
+      "id": "734aca58-2063-463b-9b19-a458c9ce126f",
+      "title": "Willkommen",
+      "content": "Dobrodošli u kurs nemačkog A1.1! Ovde ćete naći uvodne informacije i savete za učenje.",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Uvod"
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## Svako može da nauči nemački. Baš svako. Osim onih koji nisu nikada počeli.\n\nDobrodošla/o u **Nemački A1.1**! 👋 Ne treba ti nikakva priprema ni materijal unapred — samo klikni na dugme ispod i kreni. Materijali koji ti mogu pomoći čekaju te niže."
+        },
+        {
+          "href": "/lekcija/f6a93fcd-cf29-4427-acbf-a29c4e0c998a",
+          "type": "link",
+          "label": "▶ Počni prvu lekciju — Pozdravi",
+          "linkType": "kviz"
+        },
+        {
+          "type": "text",
+          "style": "uebung",
+          "content": "## Kako ovaj kurs funkcioniše\n\nSvaka lekcija ima isti ritam — prati ova 4 koraka i ne možeš da pogrešiš:\n\n1. **▶ Gledaj video** i ponavljaj naglas za mnom\n2. **📖 Pročitaj objašnjenje** ispod videa\n3. **✏️ Uradi kratke vežbe** (klikni za rešenje)\n4. **🗂 Nauči nove reči na karticama** na kraju lekcije\n\n**Najvažnije pravilo:** bolje 15 minuta svaki dan nego 3 sata jednom nedeljno."
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## Pomoćni materijali\n\nOvo nije obavezno za početak — srž učenja su **video lekcije i kartice**. Ali evo šta ti može pomoći usput:"
+        },
+        {
+          "type": "text",
+          "style": "info",
+          "content": "**📄 PDF priručnik** *(nije obavezno)*\n\nPriručnik prati sadržaj kursa. Prelistaj ga i uči uz njegovu pomoć kad želiš nešto na miru da pročitaš ili odštampaš. Nije uslov da kreneš."
+        },
+        {
+          "alt": "Korice priručnika Ana u Nemačkoj — od nule do A1",
+          "url": "https://rzmyglynjcygsbicssbt.supabase.co/storage/v1/object/public/blog-media/prirucnici/ana-u-nemackoj-a1-cover.jpg",
+          "type": "image",
+          "caption": "Priručnik Ana u Nemačkoj — Od nule do A1 ispita"
+        },
+        {
+          "url": "https://drive.google.com/file/d/1dd29RtYvHX_JeZ45THujNf_FmHOATVbD/preview",
+          "type": "pdf",
+          "label": "📄 Otvori PDF priručnik za A1"
+        },
+        {
+          "type": "text",
+          "style": "beispiele",
+          "content": "**💬 WhatsApp grupa A1**\n\nTu pitaš kad ti nešto nije jasno i učiš zajedno sa ostalima. Ne ostaješ sama/sam u učenju."
+        },
+        {
+          "href": "https://chat.whatsapp.com/FFthWnle8F7H1i0H9nS6S8?mode=gi_t",
+          "type": "link",
+          "label": "💬 Uđi u WhatsApp grupu A1",
+          "linkType": "external"
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## Ceo put kursa\n\nKurs A1.1 ima **7 modula** (lekcije 2–29). Evo cele mape — ne moraš ništa da pamtiš, samo da znaš kuda ideš:"
+        },
+        {
+          "rows": [
+            [
+              "<mark>Modul 1</mark>",
+              "Pozdravi, pitanja, dijalozi, alfabet",
+              "2-5"
+            ],
+            [
+              "<mark>Modul 2</mark>",
+              "Porodica, kako si, brojevi, prezent",
+              "6-9"
+            ],
+            [
+              "<mark>Modul 3</mark>",
+              "Hrana, cene, restoran",
+              "10-12"
+            ],
+            [
+              "<mark>Modul 4</mark>",
+              "Stan, nameštaj, oglasi",
+              "13-15"
+            ],
+            [
+              "<mark>Modul 5</mark>",
+              "Razdvojni prefiksi, vreme, raspored, dnevni tok",
+              "16-20"
+            ],
+            [
+              "<mark>Modul 6</mark>",
+              "Vreme (meteo), akuzativ, hobiji, ja/nein/doch",
+              "21-25"
+            ],
+            [
+              "<mark>Modul 7</mark>",
+              "Modalni glagoli, perfekat",
+              "26-29"
+            ]
+          ],
+          "type": "table",
+          "headers": [
+            "Modul",
+            "Tema",
+            "Lekcije"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b06c313d-1c6e-4e46-ab02-a716a4e610a9",
+      "title": "Lesen & Hören B1 — Praktikum & Bewerbungsgespräch",
+      "content": "",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Modul 5",
+          "category": "lesen",
+          "pruefung": true
+        },
+        {
+          "type": "text",
+          "style": "info",
+          "content": "Lekcija ima dva dela: **Teil 1 — Lückentext** (pročitaj mejl i za svaku prazninu izaberi tačnu reč a/b/c) i **Teil 2 — Hörverstehen** (slušaj razgovor pa reši tvrdnje *richtig/falsch*). Klikni na pitanje da vidiš rešenje."
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## Teil 1 · Lückentext\n\n**12 — Welches Wort (a, b oder c) passt in die Lücken 1–6?**\n\nLesen Sie den folgenden Text und kreuzen Sie an."
+        },
+        {
+          "type": "text",
+          "style": "beispiele",
+          "content": "**E-Mail senden**\n\nLieber Lucas,\n\nDu wolltest wissen, wie es mir __(1)__ meinem Praktikum geht. Heute schaffe ich es endlich, Dir __(2)__ antworten. Gut geht es mir! Besonders gut gefällt mir, __(3)__ ich so viele Aufgaben selbstständig erledigen darf. Ich soll __(4)__ des Praktikums sogar ein eigenes kleines Projekt realisieren. Das macht mich schon ein wenig nervös, denn ich soll __(5)__ von nur drei Monaten einen kleinen Roboter entwickeln. Zum Glück unterstützen __(6)__ die Kollegen sehr.\n\nUnd wie geht es Dir bei Deinem Praktikum? Erzähl doch mal!\n\nViele Grüße, Antonio"
+        },
+        {
+          "type": "spoiler",
+          "items": [
+            {
+              "answer": "a) bei",
+              "question": "1. … wie es mir ___ meinem Praktikum geht\n\na) bei\nb) an\nc) für"
+            },
+            {
+              "answer": "b) zu — „es schaffen, … zu + Infinitiv“.",
+              "question": "2. Heute schaffe ich es endlich, Dir ___ antworten\n\na) –\nb) zu\nc) auch"
+            },
+            {
+              "answer": "c) dass",
+              "question": "3. Besonders gut gefällt mir, ___ ich so viele Aufgaben … erledigen darf\n\na) zu\nb) weil\nc) dass"
+            },
+            {
+              "answer": "a) während — „während des Praktikums“ (Genitiv).",
+              "question": "4. Ich soll ___ des Praktikums sogar ein eigenes Projekt realisieren\n\na) während\nb) außerhalb\nc) bei"
+            },
+            {
+              "answer": "c) innerhalb — „innerhalb von drei Monaten“.",
+              "question": "5. … ich soll ___ von nur drei Monaten einen Roboter entwickeln\n\na) bis\nb) während\nc) innerhalb"
+            },
+            {
+              "answer": "c) mich — „unterstützen“ ide sa akuzativom.",
+              "question": "6. Zum Glück unterstützen ___ die Kollegen sehr\n\na) mir\nb) meine\nc) mich"
+            }
+          ],
+          "title": "Lücken 1–6 — welches Wort? (klikni za rešenje)"
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## Teil 2 · Hörverstehen\n\n**13 — Sie hören nun ein Gespräch.**\n\nSie hören das Gespräch einmal. Dazu gibt es sieben Aufgaben. Wählen Sie: Sind die Aussagen richtig oder falsch?"
+        },
+        {
+          "url": "https://rzmyglynjcygsbicssbt.supabase.co/storage/v1/object/public/blog-media/kursevi/b1-1/hoeren-vorstellungsgespraech/gespraech.mp3",
+          "type": "audio",
+          "label": "Gespräch (hört einmal)"
+        },
+        {
+          "type": "spoiler",
+          "items": [
+            {
+              "answer": "richtig",
+              "question": "a) Rufen Sie vor dem Vorstellungsgespräch noch einmal an oder schreiben Sie, dass Sie kommen und sich auf das Gespräch freuen.\n\nrichtig / falsch?"
+            },
+            {
+              "answer": "falsch",
+              "question": "b) Fahren Sie zur Sicherheit vor dem Gespräch schon einmal zur Firma.\n\nrichtig / falsch?"
+            },
+            {
+              "answer": "richtig",
+              "question": "c) Sammeln Sie möglichst viele Informationen über die Firma.\n\nrichtig / falsch?"
+            },
+            {
+              "answer": "falsch",
+              "question": "d) Geben Sie auf jede Frage des Arbeitgebers eine Antwort. Man muss dabei nicht immer die Wahrheit sagen.\n\nrichtig / falsch?"
+            },
+            {
+              "answer": "richtig",
+              "question": "e) Sagen Sie dem Arbeitgeber, was Sie können und warum Sie sich besonders gut für die Stelle eignen.\n\nrichtig / falsch?"
+            },
+            {
+              "answer": "richtig",
+              "question": "f) Versuchen Sie, mit dem Arbeitgeber ein richtiges Gespräch zu führen. Dabei können Sie auch Fragen stellen.\n\nrichtig / falsch?"
+            },
+            {
+              "answer": "falsch",
+              "question": "g) Ziehen Sie sich so an, wie Sie sich am wohlsten fühlen. Die Kleidung und das Aussehen sind nicht so wichtig.\n\nrichtig / falsch?"
+            }
+          ],
+          "title": "Aussagen a–g — richtig oder falsch? (klikni za rešenje)"
+        }
+      ]
+    },
+    {
+      "id": "b43f8e0e-1a1b-4578-a5c8-a8bdfdfde267",
+      "title": "Glück",
+      "content": "",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Modul 1"
+        },
+        {
+          "type": "video",
+          "vimeoId": "1057560054"
+        },
+        {
+          "type": "text",
+          "style": "info",
+          "content": "Šta te čini srećnim? U ovoj lekciji razgovaramo o sreći, čitamo tekst o simbolima sreće u Nemačkoj i vežbamo vokabular."
+        },
+        {
+          "type": "text",
+          "style": "info",
+          "content": "🎵 **Poslušaj pesmu „Himmel auf“ (Silbermond).** Obrati pažnju na reči koje imaju veze sa srećom (Glück) i zapiši 3 reči koje ti se posebno dopadnu."
+        },
+        {
+          "type": "youtube",
+          "label": "🎵 Lied: „Himmel auf“ — Silbermond",
+          "videoId": "BqYPhP71_uc"
+        },
+        {
+          "type": "text",
+          "style": "info",
+          "content": "🎬 **Pogledaj video „Was macht dich glücklich?“.** Koje stvari čine ljude u videu srećnim?"
+        },
+        {
+          "type": "youtube",
+          "label": "🎬 Video: „Was macht dich glücklich?“",
+          "videoId": "3zBsTyZgDbU"
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## Glücksbringer in Deutschland\n\nU Nemačkoj postoje tradicionalni simboli sreće. Često se poklanjaju za Novu godinu."
+        },
+        {
+          "rows": [
+            [
+              "🍀",
+              "das vierblättrige Kleeblatt",
+              "Redak je - ko ga nađe, ima sreće"
+            ],
+            [
+              "🐞",
+              "der Marienkäfer",
+              "U srednjem veku smatran Božjim poslanikom"
+            ],
+            [
+              "🧹",
+              "der Schornsteinfeger",
+              "Čistač dimnjaka - kad ga vidiš, poželi želju"
+            ],
+            [
+              "🐷",
+              "das Schwein",
+              "\"Schwein haben\" = imati sreće"
+            ],
+            [
+              "🧲",
+              "das Hufeisen",
+              "Štiti kuću od zlih duhova"
+            ],
+            [
+              "🍄",
+              "der Fliegenpilz",
+              "Crvena muhara - simbol sreće na čestitkama"
+            ]
+          ],
+          "type": "table",
+          "headers": [
+            "Symbol",
+            "Na nemačkom",
+            "Zašto donosi sreću?"
+          ]
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## Leseverstehen - Was ist Glück?\n\nWas bedeutet Glück? Für viele Menschen ist Glück etwas sehr Persönliches. Die einen finden ihr Glück in der Familie, die anderen in der Arbeit oder in der Natur. Aber gibt es ein Rezept für Glück?\n\nWissenschaftler an der Universität Freiburg haben eine Studie durchgeführt. Sie haben über 2.000 Menschen in Deutschland gefragt: *Was macht Sie glücklich?* Die Ergebnisse waren überraschend. An erster Stelle stand nicht Geld oder Erfolg, sondern Gesundheit. Fast 90 Prozent der Befragten sagten, dass Gesundheit für sie das Wichtigste ist. An zweiter Stelle kamen gute Beziehungen - zu Freunden, zur Familie und zum Partner.\n\nInteressant war auch: Menschen, die regelmäßig Sport treiben und sich freiwillig engagieren, sind im Durchschnitt zufriedener als andere. Das bedeutet nicht, dass man jeden Tag ins Fitnessstudio gehen muss. Schon ein Spaziergang in der Natur oder ein Gespräch mit einem Nachbarn kann helfen.\n\nDie Forscher fanden außerdem heraus, dass Dankbarkeit eine wichtige Rolle spielt. Menschen, die sich bewusst auf positive Dinge konzentrieren und regelmäßig aufschreiben, wofür sie dankbar sind, fühlen sich langfristig glücklicher. Ein einfaches Glückstagebuch kann also tatsächlich helfen.\n\nZum Schluss stellten die Wissenschaftler fest: Glück ist keine Frage des Zufalls - man kann aktiv etwas dafür tun."
+        },
+        {
+          "type": "spoiler",
+          "items": [
+            {
+              "answer": "Gesundheit - fast 90% der Befragten nannten sie als das Wichtigste.",
+              "question": "Was stand bei der Studie an erster Stelle?"
+            },
+            {
+              "answer": "Regelmäßig Sport treiben und sich freiwillig engagieren.",
+              "question": "Welche zwei Aktivitäten machen Menschen im Durchschnitt zufriedener?"
+            },
+            {
+              "answer": "Man schreibt regelmäßig auf, wofür man dankbar ist - das hilft, sich langfristig glücklicher zu fühlen.",
+              "question": "Was ist ein Glückstagebuch und wie hilft es?"
+            },
+            {
+              "answer": "Glück ist keine Frage des Zufalls - man kann aktiv etwas dafür tun.",
+              "question": "Was war die Haupterkenntnis der Forscher?"
+            },
+            {
+              "answer": "Nein - schon ein Spaziergang oder ein Gespräch mit einem Nachbarn kann helfen.",
+              "question": "Muss man jeden Tag ins Fitnessstudio gehen, um glücklicher zu werden?"
+            }
+          ],
+          "title": "Leseverstehen - pitanja"
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## Konverzacija - Was macht dich glücklich?"
+        },
+        {
+          "type": "spoiler",
+          "items": [
+            {
+              "answer": "Odgovori slobodno: Familie, Freunde, Reisen, Musik...",
+              "question": "Was macht dich glücklich?"
+            },
+            {
+              "answer": "Npr. Ja, ich habe... / Nein, ich glaube nicht an Glücksbringer.",
+              "question": "Hast du einen Glücksbringer?"
+            },
+            {
+              "answer": "Npr. Als ich... (koristi als!)",
+              "question": "Was war der glücklichste Tag in deinem Leben?"
+            },
+            {
+              "answer": "Npr. Ich glaube, dass...",
+              "question": "Glaubst du an Glück oder an harte Arbeit?"
+            }
+          ],
+          "title": "Pitanja za razgovor"
+        },
+        {
+          "type": "flashcard",
+          "items": [
+            {
+              "back": "sreća",
+              "front": "das Glück"
+            },
+            {
+              "back": "srećan",
+              "front": "glücklich"
+            },
+            {
+              "back": "zadovoljan",
+              "front": "zufrieden"
+            },
+            {
+              "back": "slučaj",
+              "front": "der Zufall"
+            },
+            {
+              "back": "želja",
+              "front": "der Wunsch"
+            },
+            {
+              "back": "radovati se",
+              "front": "sich freuen"
+            },
+            {
+              "back": "uživati",
+              "front": "genießen"
+            },
+            {
+              "back": "zahvalan",
+              "front": "dankbar"
+            },
+            {
+              "back": "simbol sreće",
+              "front": "der Glücksbringer"
+            },
+            {
+              "back": "imati sreće",
+              "front": "Schwein haben"
+            }
+          ]
+        },
+        {
+          "rows": [
+            [
+              "das Glück",
+              "sreća"
+            ],
+            [
+              "das Pech",
+              "peh"
+            ],
+            [
+              "glücklich",
+              "srećan"
+            ],
+            [
+              "traurig",
+              "tužan"
+            ],
+            [
+              "zufrieden",
+              "zadovoljan"
+            ],
+            [
+              "der Wunsch",
+              "želja"
+            ],
+            [
+              "der Zufall",
+              "slučaj"
+            ],
+            [
+              "der Glücksbringer",
+              "simbol sreće"
+            ],
+            [
+              "das Kleeblatt",
+              "detelina"
+            ],
+            [
+              "der Schornsteinfeger",
+              "čistač dimnjaka"
+            ],
+            [
+              "das Hufeisen",
+              "potkovica"
+            ],
+            [
+              "sich freuen über",
+              "radovati se nečemu"
+            ],
+            [
+              "genießen",
+              "uživati"
+            ],
+            [
+              "dankbar sein",
+              "biti zahvalan"
+            ],
+            [
+              "Schwein haben",
+              "imati sreće (idiom)"
+            ]
+          ],
+          "type": "vocabulary"
+        }
+      ]
+    },
+    {
+      "id": "e2498b11-9407-4d27-9f4a-7cd733fdeca2",
+      "title": "Hörverstehen B1 — Gesund leben",
+      "content": "",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Modul 3",
+          "category": "hoeren",
+          "pruefung": true
+        },
+        {
+          "type": "text",
+          "style": "info",
+          "content": "Vežba slušanja (**Hörverstehen**) — format kao na ispitu B1. Slušaš četiri najave (Ansagen), svaku **dva puta**. Uz svaku rešavaš dva zadatka — jedno *richtig/falsch* i jedno sa izborom *a/b/c*. Pusti audio, pa klikni na pitanje da vidiš tačno rešenje."
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## D · Gesund leben\n\n**18 — Sie hören vier Ansagen. Sie hören jede Ansage zweimal.**\n\nZu jeder Ansage lösen Sie zwei Aufgaben. Wählen Sie bei jeder Aufgabe die richtige Lösung."
+        },
+        {
+          "url": "https://rzmyglynjcygsbicssbt.supabase.co/storage/v1/object/public/blog-media/kursevi/b1-1/hoeren-gesund-leben/ansage1.mp3",
+          "type": "audio",
+          "label": "Ansage 1"
+        },
+        {
+          "type": "spoiler",
+          "items": [
+            {
+              "answer": "richtig",
+              "question": "1. Im Moment sind alle Telefonleitungen besetzt.\n\nrichtig / falsch?"
+            },
+            {
+              "answer": "a — Noch einmal anrufen.",
+              "question": "2. Was soll der Anrufer tun?\n\na) Noch einmal anrufen.\nb) Sich für die Kurse im Frühjahr anmelden.\nc) Sich beim Kursleiter persönlich anmelden."
+            }
+          ],
+          "title": "Ansage 1 — Aufgaben 1 & 2 (klikni za rešenje)"
+        },
+        {
+          "url": "https://rzmyglynjcygsbicssbt.supabase.co/storage/v1/object/public/blog-media/kursevi/b1-1/hoeren-gesund-leben/ansage2.mp3",
+          "type": "audio",
+          "label": "Ansage 2"
+        },
+        {
+          "type": "spoiler",
+          "items": [
+            {
+              "answer": "richtig",
+              "question": "3. Die Praxis ist gerade nicht geöffnet.\n\nrichtig / falsch?"
+            },
+            {
+              "answer": "b — Persönlich oder telefonisch zu den Öffnungszeiten.",
+              "question": "4. Wann kann man sich zum Rückenkurs anmelden?\n\na) Donnerstags von 9 bis 10 Uhr.\nb) Persönlich oder telefonisch zu den Öffnungszeiten.\nc) Montags bis freitags von 14 bis 20 Uhr."
+            }
+          ],
+          "title": "Ansage 2 — Aufgaben 3 & 4 (klikni za rešenje)"
+        },
+        {
+          "url": "https://rzmyglynjcygsbicssbt.supabase.co/storage/v1/object/public/blog-media/kursevi/b1-1/hoeren-gesund-leben/ansage3.mp3",
+          "type": "audio",
+          "label": "Ansage 3"
+        },
+        {
+          "type": "spoiler",
+          "items": [
+            {
+              "answer": "falsch",
+              "question": "5. Der Anruf bei der Krankenkasse kostet Geld.\n\nrichtig / falsch?"
+            },
+            {
+              "answer": "a — Die 1 wählen.",
+              "question": "6. Sie möchten an einem Kochkurs Ihrer Krankenkasse teilnehmen. Was müssen Sie tun?\n\na) Die 1 wählen.\nb) Die 3 wählen.\nc) Mit einem Mitarbeiter sprechen."
+            }
+          ],
+          "title": "Ansage 3 — Aufgaben 5 & 6 (klikni za rešenje)"
+        },
+        {
+          "url": "https://rzmyglynjcygsbicssbt.supabase.co/storage/v1/object/public/blog-media/kursevi/b1-1/hoeren-gesund-leben/ansage4.mp3",
+          "type": "audio",
+          "label": "Ansage 4"
+        },
+        {
+          "type": "spoiler",
+          "items": [
+            {
+              "answer": "richtig",
+              "question": "7. Der Betriebsarzt empfiehlt die Grippeimpfung.\n\nrichtig / falsch?"
+            },
+            {
+              "answer": "c — Sie müssen Ihren Impfpass mitbringen.",
+              "question": "8. Was müssen Sie für die Grippeimpfung beachten?\n\na) Sie müssen sich zur Impfung anmelden.\nb) Sie sollen Ihre Telefonnummer hinterlassen.\nc) Sie müssen Ihren Impfpass mitbringen."
+            }
+          ],
+          "title": "Ansage 4 — Aufgaben 7 & 8 (klikni za rešenje)"
+        },
+        {
+          "type": "text",
+          "style": "uebung",
+          "content": "💡 **Lerntipp:** Sie sind sich nicht sicher? Kreuzen Sie auf jeden Fall eine Option an — na ispitu se pogrešan odgovor ne kažnjava, pa uvek nešto zaokruži."
+        }
+      ]
+    },
+    {
+      "id": "b42bbc3c-67a0-42ad-9efc-efc0829aa82c",
+      "title": "Schreiben B1 — Forumsbeitrag (Sprachen lernen)",
+      "content": "",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Modul 4",
+          "category": "schreiben",
+          "pruefung": true
+        },
+        {
+          "type": "text",
+          "style": "info",
+          "content": "Vežba pisanja (**Schreiben**) — Forumsbeitrag. Prvo pročitaj mišljenje iz gostne knjige i fraze (Redemittel), pa napiši **svoje mišljenje** (~80 reči) u polje na dnu i pošalji ga profesorki na pregled."
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## 17 · Einen Forumsbeitrag schreiben\n\nIm Fernsehen haben Sie eine Diskussionssendung zum Thema „Erfolgreich Sprachen lernen“ gesehen. Dazu gibt es im Online-Gästebuch der Sendung folgende Meinung:"
+        },
+        {
+          "type": "text",
+          "style": "beispiele",
+          "content": "**Gästebuch** · 20.02. 14:50 Uhr\n\n**Sandra (55 Jahre) aus Wien:**\n\nAlso, ich kann einigen Gästen in Ihrer Sendung gar nicht zustimmen. Sie sagen, dass es für einige Lerner am Anfang nicht so wichtig ist, beim Sprechen an den korrekten Gebrauch der Grammatik zu denken. Viel wichtiger ist es, einfach mal zu sprechen und die Angst vor dem freien Sprechen zu verlieren. Ich arbeite mit Ausländern und sehe, dass manche von ihnen später Probleme mit korrektem Deutsch haben und das brauchen sie halt, wenn sie hier in Österreich arbeiten. Ich finde es jedenfalls wichtig, dass sie von Anfang an auf den korrekten Gebrauch der Grammatik achten. Ein Freund aus Italien hat einmal zu mir gesagt: „Wenn mich einfach immer jemand verbessert hätte, könnte ich heute viel besser Deutsch. Jetzt muss ich mich sehr anstrengen und mich beim Sprechen immer konzentrieren, um nicht immer die gleichen Fehler zu machen.“"
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "**a — Machen Sie Notizen.**\n\nStimmen Sie Sandra zu? Ja oder nein? Was sind Ihre Argumente? Was finden Sie gut? Was finden Sie nicht richtig?"
+        },
+        {
+          "type": "text",
+          "style": "beispiele",
+          "content": "## Redemittel — fraze za izražavanje mišljenja\n\n- *Ich denke, dass …*\n- *Ich finde es sehr gut / wichtig, dass …*\n- *Für mich ist … wichtig, weil / denn …*\n- *Am allerwichtigsten ist … Deswegen / Daher / Aus diesem Grund …*\n- *Es könnte schwierig sein, dass …*\n- *Auf der anderen Seite …*\n- *Ich stimme Sandra (nicht) zu, denn …*\n\n💡 **Lerntipp:** Sie brauchen diese Sätze, wenn Sie Ihre Meinung ausdrücken wollen. Wiederholen Sie sie möglichst oft."
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## b · Schreiben Sie Ihre Meinung\n\nNapiši svoj forum-post (~80 reči) u polje ispod i klikni **Pošalji** — profesorka će ti pregledati rad i dati ocenu i komentar."
+        },
+        {
+          "type": "exercise",
+          "title": "Schreiben B1 — Forumsbeitrag: Meinung"
+        }
+      ]
+    },
+    {
+      "id": "373e2374-861a-4b45-a046-6de743c5d590",
+      "title": "Hörverstehen B1 — Fünf Radioansagen",
+      "content": "",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Modul 6",
+          "category": "hoeren",
+          "pruefung": true
+        },
+        {
+          "type": "text",
+          "style": "info",
+          "content": "Vežba slušanja (**Hörverstehen**) — slušaš **pet najava sa radija** (Ansagen). Uz svaku biraš tačno rešenje *a, b* ili *c*. Pusti audio, pa klikni na pitanje da vidiš rešenje."
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## 22 · Sie hören fünf Ansagen aus dem Radio\n\nWas ist richtig? Hören Sie und kreuzen Sie an."
+        },
+        {
+          "type": "text",
+          "style": "uebung",
+          "content": "💡 **Lerntipp:** Lesen Sie vor dem Hören jeweils die Fragen und Antworten a–c genau durch. Markieren Sie dabei wichtige Informationen und Unterschiede."
+        },
+        {
+          "url": "https://rzmyglynjcygsbicssbt.supabase.co/storage/v1/object/public/blog-media/kursevi/b1-1/hoeren-radio-ansagen/ansage1.mp3",
+          "type": "audio",
+          "label": "Ansage 1"
+        },
+        {
+          "type": "spoiler",
+          "items": [
+            {
+              "answer": "c) die Nachrichten.",
+              "question": "1. Sie hören …\n\na) Werbung.\nb) den Verkehrsfunk.\nc) die Nachrichten."
+            }
+          ],
+          "title": "Ansage 1 — Aufgabe 1 (klikni za rešenje)"
+        },
+        {
+          "url": "https://rzmyglynjcygsbicssbt.supabase.co/storage/v1/object/public/blog-media/kursevi/b1-1/hoeren-radio-ansagen/ansage2.mp3",
+          "type": "audio",
+          "label": "Ansage 2"
+        },
+        {
+          "type": "spoiler",
+          "items": [
+            {
+              "answer": "a) Einen Spanischkurs.",
+              "question": "2. Was kann man bei Radio Glocke gewinnen?\n\na) Einen Spanischkurs.\nb) Einen von hundert Kursen an der Volkshochschule.\nc) Eine Reise nach Spanien."
+            }
+          ],
+          "title": "Ansage 2 — Aufgabe 2 (klikni za rešenje)"
+        },
+        {
+          "url": "https://rzmyglynjcygsbicssbt.supabase.co/storage/v1/object/public/blog-media/kursevi/b1-1/hoeren-radio-ansagen/ansage3.mp3",
+          "type": "audio",
+          "label": "Ansage 3"
+        },
+        {
+          "type": "spoiler",
+          "items": [
+            {
+              "answer": "b) Am Freitagnachmittag von 13–19 Uhr und am Wochenende jeweils den ganzen Tag ab 9 Uhr.",
+              "question": "3. Wann ist die Messe geöffnet?\n\na) Am Freitag und Samstag von 13–19 Uhr, am Sonntag von 9–19 Uhr.\nb) Am Freitagnachmittag von 13–19 Uhr und am Wochenende jeweils den ganzen Tag ab 9 Uhr.\nc) Am Freitag von 9–13 Uhr, am Samstag und Sonntag jeweils von 9–17 Uhr."
+            }
+          ],
+          "title": "Ansage 3 — Aufgabe 3 (klikni za rešenje)"
+        },
+        {
+          "url": "https://rzmyglynjcygsbicssbt.supabase.co/storage/v1/object/public/blog-media/kursevi/b1-1/hoeren-radio-ansagen/ansage4.mp3",
+          "type": "audio",
+          "label": "Ansage 4"
+        },
+        {
+          "type": "spoiler",
+          "items": [
+            {
+              "answer": "c) Man soll sich im Internet nach der aktuellen Verkehrssituation erkundigen.",
+              "question": "4. Was soll man tun?\n\na) Man soll rechtzeitig losfahren.\nb) Man soll sich am Flughafen über die Flüge informieren.\nc) Man soll sich im Internet nach der aktuellen Verkehrssituation erkundigen."
+            }
+          ],
+          "title": "Ansage 4 — Aufgabe 4 (klikni za rešenje)"
+        },
+        {
+          "url": "https://rzmyglynjcygsbicssbt.supabase.co/storage/v1/object/public/blog-media/kursevi/b1-1/hoeren-radio-ansagen/ansage5.mp3",
+          "type": "audio",
+          "label": "Ansage 5"
+        },
+        {
+          "type": "spoiler",
+          "items": [
+            {
+              "answer": "b) einen kostenlosen Friseurbesuch.",
+              "question": "5. Das ist Werbung für …\n\na) ein Modeltraining.\nb) einen kostenlosen Friseurbesuch.\nc) den Friseurberuf."
+            }
+          ],
+          "title": "Ansage 5 — Aufgabe 5 (klikni za rešenje)"
+        }
+      ]
+    },
+    {
+      "id": "14988dea-f67c-40e6-a542-3085aa4e5b76",
+      "title": "Lückentext B1 — WG-Zimmer",
+      "content": "",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Modul 7",
+          "category": "lesen",
+          "pruefung": true
+        },
+        {
+          "type": "text",
+          "style": "info",
+          "content": "Lückentext (čitanje + gramatika). Pročitaj oglas i mejl, pa za svaku prazninu (1–10) izaberi pravu reč iz spiska (a–o). Klikni na prazninu da vidiš rešenje."
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## 22 · Welches Wort passt?\n\nLesen Sie die Anzeige und die E-Mail und ordnen Sie die Wörter (a–o) den Lücken (1–10) zu. Sie können jedes Wort nur einmal verwenden und nicht alle Wörter passen in den Text."
+        },
+        {
+          "type": "text",
+          "style": "beispiele",
+          "content": "**WG-Zimmer frei im April**\n\nIch wohne in Freiburg in einer netten WG und vermiete mein Zimmer im April. Kosten: 450 €. Meine Mitbewohner akzeptieren nur eine Frau.\nZuschriften an: sylvia1543@xmail.com"
+        },
+        {
+          "type": "text",
+          "style": "beispiele",
+          "content": "**Von:** Marina Manzo  ·  **An:** sylvia1543@xmail.com  ·  **Gesendet:** 18.2., 17:46\n**Betreff:** Zimmer\n\nHallo Sylvia,\n\nich heiße Marina Manzo, komme aus Italien, __(1)__ 42 Jahre alt und arbeite __(2)__ Ärztin in Rom. Nun habe ich bald zwei Monate frei, und __(3)__ April möchte ich entweder in Freiburg __(4)__ in Berlin einen Deutschkurs machen. Zu Deinem Zimmer __(5)__ ich noch ein paar Fragen: Sind in dem Preis von 450 € alle Nebenkosten inklusive und __(6)__ ich auch die Küche benutzen? Hast du vielleicht ein Foto von dem Zimmer, __(7)__ du mir per Mail schicken __(8)__? Ich __(9)__ mich sehr freuen, einen Monat in __(10)__ WG zu leben.\n\nViele Grüße\nMarina"
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "**Wörter (a–o):** a) könntest · b) werde · c) das · d) eurer · e) wie · f) oder · g) würde · h) am · i) hätte · j) bin · k) als · l) kann · m) die · n) im · o) haben\n\n*Jedes Wort nur einmal — nicht alle Wörter passen.*"
+        },
+        {
+          "type": "spoiler",
+          "items": [
+            {
+              "answer": "bin (j)",
+              "question": "Lücke 1: … komme aus Italien, ___ 42 Jahre alt"
+            },
+            {
+              "answer": "als (k)",
+              "question": "Lücke 2: … und arbeite ___ Ärztin in Rom"
+            },
+            {
+              "answer": "im (n)",
+              "question": "Lücke 3: … und ___ April möchte ich …"
+            },
+            {
+              "answer": "oder (f)",
+              "question": "Lücke 4: … entweder in Freiburg ___ in Berlin …"
+            },
+            {
+              "answer": "hätte (i) — höflich: „hätte ich ein paar Fragen“.",
+              "question": "Lücke 5: Zu Deinem Zimmer ___ ich noch ein paar Fragen"
+            },
+            {
+              "answer": "kann (l)",
+              "question": "Lücke 6: … und ___ ich auch die Küche benutzen?"
+            },
+            {
+              "answer": "das (c) — relativna zamenica (das Foto).",
+              "question": "Lücke 7: … ein Foto von dem Zimmer, ___ du mir per Mail schicken …"
+            },
+            {
+              "answer": "könntest (a)",
+              "question": "Lücke 8: … schicken ___?"
+            },
+            {
+              "answer": "würde (g)",
+              "question": "Lücke 9: Ich ___ mich sehr freuen"
+            },
+            {
+              "answer": "eurer (d)",
+              "question": "Lücke 10: … einen Monat in ___ WG zu leben"
+            }
+          ],
+          "title": "Lücken 1–10 — Lösung (klikni za rešenje)"
+        }
+      ]
+    },
+    {
+      "id": "32afe71d-7748-473a-83bb-cc237d911a75",
+      "title": "Schreiben B1 — Entschuldigung an die Nachbarn",
+      "content": "",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Modul 7",
+          "category": "schreiben",
+          "pruefung": true
+        },
+        {
+          "type": "text",
+          "style": "info",
+          "content": "Vežba pisanja (**Schreiben**). Pročitaj situaciju, pa napiši mejl (~40 reči) u polje na dnu i pošalji ga profesorki na pregled."
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## Schreiben · E-Mail an die Nachbarn\n\n**Situation:** Sie haben in Ihrer Wohnung Geburtstag gefeiert. Leider waren Ihre Gäste bis 2 Uhr morgens so laut, dass die Nachbarn sogar die Polizei gerufen haben.\n\nSchreiben Sie eine E-Mail an Ihre Nachbarn. Entschuldigen Sie sich höflich und laden Sie Ihre Nachbarn als Entschuldigung zu einem kleinen Essen in Ihre Wohnung ein. Schreiben Sie circa 40 Wörter. Denken Sie auch an die Anrede und einen passenden Gruß am Schluss."
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "Napiši svoj mejl u polje ispod i klikni **Pošalji** — profesorka će ti pregledati rad i dati ocenu i komentar."
+        },
+        {
+          "type": "exercise",
+          "title": "Schreiben B1 — E-Mail an die Nachbarn"
+        }
+      ]
+    },
+    {
+      "id": "324ed5fc-ae37-4cf7-90ff-e9ac93349cd3",
+      "title": "Willkommen",
+      "content": "",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Uvod"
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## Svako može da nauči nemački. Baš svako. Osim onih koji nisu nikada počeli.\n\nDobrodošla/o u **Nemački A2.1**! 👋 Ovo je prvi deo A2 nivoa — nadovezuješ se na sve iz A1 i proširuješ znanje. Ne treba ti nikakva priprema, samo klikni na dugme ispod i kreni. Materijali koji ti mogu pomoći čekaju te niže."
+        },
+        {
+          "href": "/lekcija/f14821fb-d431-48e6-a7c5-97d02f11decd",
+          "type": "link",
+          "label": "▶ Počni prvu lekciju — Persönliche Angaben",
+          "linkType": "kviz"
+        },
+        {
+          "type": "text",
+          "style": "uebung",
+          "content": "## Kako ovaj kurs funkcioniše\n\nSvaka lekcija ima isti ritam — prati ova 4 koraka i ne možeš da pogrešiš:\n\n1. **▶ Gledaj video** i ponavljaj naglas za mnom\n2. **📖 Pročitaj objašnjenje** ispod videa\n3. **✏️ Uradi kratke vežbe** (spoileri, kartice, kvizovi)\n4. **🗂 Nauči nove reči na karticama** + AI vežbe na kraju lekcije"
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## Pomoćni materijali\n\nOvo nije obavezno za početak — srž učenja su **video lekcije i kartice**. Ali evo šta ti može pomoći usput:"
+        },
+        {
+          "type": "text",
+          "style": "info",
+          "content": "**📄 PDF priručnik za A2** *(nije obavezno)*\n\nPriručnik prati sadržaj kursa. Prelistaj ga i uči uz njegovu pomoć kad želiš nešto na miru da pročitaš ili odštampaš. Nije uslov da kreneš."
+        },
+        {
+          "alt": "Korice priručnika Ana u Nemačkoj — od A1 do A2",
+          "url": "https://rzmyglynjcygsbicssbt.supabase.co/storage/v1/object/public/blog-media/prirucnici/ana-u-nemackoj-a2-cover.jpg",
+          "type": "image",
+          "caption": "Priručnik Ana u Nemačkoj — od A1 do A2"
+        },
+        {
+          "url": "https://drive.google.com/file/d/1_F2GZtlXPgeXvHeSppV21g_j5e_NZYfM/preview",
+          "type": "pdf",
+          "label": "📄 Otvori PDF priručnik za A2"
+        },
+        {
+          "type": "text",
+          "style": "beispiele",
+          "content": "**💬 WhatsApp grupa A2**\n\nTu pitaš kad ti nešto nije jasno i učiš zajedno sa ostalima. Ne ostaješ sama/sam u učenju."
+        },
+        {
+          "href": "https://chat.whatsapp.com/GkIMxGTD20xIATm1GlBT56?mode=gi_t",
+          "type": "link",
+          "label": "💬 Uđi u WhatsApp grupu A2",
+          "linkType": "external"
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## Šta ćeš naučiti u A2.1?\n\n- **Lični podaci** - formulari, bračni status, adresa\n- **Porodica** - širi članovi (bratanac, snaja, zet...)\n- **Perfekt** - ponavljanje i proširenje (nepravilni glagoli)\n- **weil rečenice** - objašnjavanje razloga\n- **Stanovanje** - tipovi stanova, nameštaj, okruženje\n- **Smeće i reciklaža** - Müll u Nemačkoj\n- **Wechselpräpositionen** - predlozi koji menjaju padež\n- **Hrana i restoran** - naručivanje, navike u ishrani\n- **Posao** - prijava za posao, radno vreme, praznici\n- **Refleksivni glagoli** - sich waschen, sich interessieren...\n- **Škola u Nemačkoj** - školski sistem, obrazovanje"
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## Saveti za uspeh\n\n- Uči **redovno** - bolje 20 minuta svaki dan nego 3 sata jednom nedeljno\n- **Ponavljaj** - vrati se na lekcije koje ti nisu jasne\n- Ako imaš pitanja, piši profesorki na **info@hartweger.rs**\n\nSrećno učenje!"
+        }
+      ]
+    },
+    {
+      "id": "0771f9a4-9f90-4204-af4a-5bd9304aa0b6",
+      "title": "Završni ispit B1 - Modelltest 4",
+      "content": "",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Priprema za ispit",
+          "pruefung": true
+        },
+        {
+          "type": "text",
+          "style": "info",
+          "content": "## Završni ispit B1 — Modelltest 4\n\nGoethe/ÖSD Zertifikat B1. Svaki modul (Lesen, Hören, Schreiben) se boduje posebno. Položiš sva tri ≥60% → dobijaš sertifikat."
+        },
+        {
+          "type": "exercise",
+          "title": "Lesen - Modelltest 4"
+        },
+        {
+          "type": "exercise",
+          "title": "Hören - Modelltest 4"
+        },
+        {
+          "type": "text",
+          "style": "uebung",
+          "content": "## Modul Schreiben"
+        },
+        {
+          "type": "text",
+          "style": "info",
+          "content": "## Bewertung — Modul Schreiben (Cornelsen B1)\n\nMaksimum **100 bodova**: **Aufgabe 1 = 40 P · Aufgabe 2 = 40 P · Aufgabe 3 = 20 P**. Za prolaz modula Schreiben treba **najmanje 60 bodova**. Radove ocenjuju dva ocenjivača po 4 kriterijuma:\n\n- **Erfüllung** (ispunjenost): sadržaj odgovara zadatku, dovoljna dužina, pravi tip teksta, odgovarajući Redemittel i Register (Sie/du).\n- **Kohärenz** (povezanost): struktura teksta - Anrede, kratak uvod, pasujući Schluss, povezane rečenice.\n- **Wortschatz** (rečnik): tačne reči i izrazi, bez razgovornih reči koje ne pasuju pisanom tekstu.\n- **Strukturen** (gramatika): ispravni glagolski oblici (Modalverben, Passiv, Konjunktiv, vremena), red reči, zavisne/infinitivne rečenice, pravopis i interpunkcija.\n\nU kriterijumima Wortschatz i Strukturen greške se jače kažnjavaju ako ometaju razumevanje."
+        },
+        {
+          "type": "exercise",
+          "title": "Schreiben Aufgabe 1 - E-Mail (Konzert)"
+        },
+        {
+          "type": "exercise",
+          "title": "Schreiben Aufgabe 2 - Meinung (Radio)"
+        },
+        {
+          "type": "exercise",
+          "title": "Schreiben Aufgabe 3 - E-Mail (Sportverein)"
+        }
+      ]
+    },
+    {
+      "id": "a5d1e212-a3be-4661-b453-a15a6461f4d7",
+      "title": "Willkommen",
+      "content": "",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Uvod"
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## Svako može da nauči nemački. Baš svako. Osim onih koji nisu nikada počeli.\n\nDobrodošla/o u **Nemački B1.2**! 👋 Ovo je drugi deo nivoa B1 i nastavak na B1.1 — zajedno pokrivaju ceo nivo i vode te do **Goethe-Zertifikat B1** ispita. Kurs prati udžbenik *Schritte International Neu 6*. Klikni na dugme ispod i kreni; materijali koji ti mogu pomoći čekaju te niže."
+        },
+        {
+          "href": "/lekcija/90dac693-4bc7-4355-ad03-76f7f1859064",
+          "type": "link",
+          "label": "▶ Počni prvu lekciju — Wenn oder Falls - Konditionalsätze",
+          "linkType": "kviz"
+        },
+        {
+          "type": "text",
+          "style": "uebung",
+          "content": "## Kako ovaj kurs funkcioniše\n\nSvaka lekcija ima isti ritam — prati ove korake i ne možeš da pogrešiš:\n\n1. **▶ Gledaj video** i ponavljaj naglas za mnom\n2. **📖 Pročitaj objašnjenje** ispod videa (tabele, formule, primeri)\n3. **✏️ Uradi kratke vežbe** (spoileri, kartice, kvizovi)\n4. **🗂 Nauči nove reči na karticama** + AI vežbe (prevod i dijalog) na kraju lekcije\n5. **🧪 Test po modulu** + završni Modelltest na kraju kursa"
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## Pomoćni materijali\n\nOvo nije obavezno za početak — srž učenja su **video lekcije i kartice**. Ali evo šta ti može pomoći usput:"
+        },
+        {
+          "type": "text",
+          "style": "info",
+          "content": "**🎁 Bonus: PDF priručnik „Ana u Nemačkoj — od A2 do B1\"**\n\nPrava mala knjiga (preko 100 strana, 14 poglavlja) koja kroz **Aninu priču** prolazi ceo nivo B1 — gramatiku, malo Landeskunde i pripremu za ispit, sve kroz situacije iz svakodnevnog života. **Ne prati redosled lekcija** — čitaj je kad god želiš, na ekranu ili odštampanu. Prelistaj je odmah ispod 👇"
+        },
+        {
+          "alt": "Korice priručnika Ana u Nemačkoj — od A2 do B1",
+          "url": "https://rzmyglynjcygsbicssbt.supabase.co/storage/v1/object/public/blog-media/prirucnici/ana-u-nemackoj-b1-cover.jpg",
+          "type": "image",
+          "caption": "Priručnik Ana u Nemačkoj — od A2 do B1 (14 poglavlja, preko 100 strana)"
+        },
+        {
+          "url": "https://drive.google.com/file/d/1ZvNoEPHbdtPzPWiwPGtk21hOzIqVkHwJ/preview",
+          "type": "pdf",
+          "label": "📄 Otvori priručnik (Ana u Nemačkoj — B1)"
+        },
+        {
+          "type": "text",
+          "style": "beispiele",
+          "content": "**💬 WhatsApp grupa za B1**\n\nTu pitaš kad ti nešto nije jasno i učiš zajedno sa ostalima. Ne ostaješ sama/sam u učenju."
+        },
+        {
+          "href": "https://chat.whatsapp.com/GHsdfmbeswPCJb70eb0eSs?s=sh&p=i&mlu=4",
+          "type": "link",
+          "label": "💬 Uđi u WhatsApp grupu za B1",
+          "linkType": "external"
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## Šta ćeš naučiti u B1.2?\n\n- **als ob** - Konjunktiv II za nestvarne situacije\n- **wenn / falls** - razlika i upotreba u mejlovima\n- **Relativsätze sa predlozima** - *der Kollege, von dem…*\n- **Futur I** - werden + Infinitiv za planove i predviđanja\n- **Temporalsätze** - während / bevor / nachdem\n- **Finalsätze** - um…zu / damit\n- **Partizip Präsens** - kao pridev i kao prilog\n- **Zweiteilige Konnektoren** - sowohl…als auch, weder…noch\n- **Lesen & Schreiben** - reklamacije, mejlovi, argumentovanje\n- **Priprema za ispit B1** - Lesen, Hören, Schreiben, Sprechen + Modelltest"
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## Saveti za uspeh\n\n- Uči **redovno** - bolje 20 minuta svaki dan nego 3 sata jednom nedeljno\n- **Ponavljaj** - vrati se na lekcije koje ti nisu jasne\n- Ako ti treba podsetnik gramatike sa nižih nivoa, koristi naš **Masterclass A2-B1** kurs\n- Ako imaš pitanja, piši profesorki na **info@hartweger.rs** ili u WhatsApp grupu\n\nSrećno učenje! 🍀"
+        }
+      ]
+    },
+    {
+      "id": "fd45eb3c-0ba4-4410-92ee-b5a883c1493c",
+      "title": "Willkommen",
+      "content": "",
+      "sections": [
+        {
+          "type": "badge",
+          "module": "Uvod"
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## Svako može da nauči nemački. Baš svako. Osim onih koji nisu nikada počeli.\n\nDobrodošla/o u **Nemački A1.2**! 👋 Ovo je nastavak A1.1 — ideš dalje ka ispitu A1. Ne treba ti nikakva priprema, samo klikni na dugme ispod i kreni. Materijali koji ti mogu pomoći čekaju te niže."
+        },
+        {
+          "href": "/lekcija/055bffbf-4abf-4590-afee-0e67b5027375",
+          "type": "link",
+          "label": "▶ Počni prvu lekciju — Berufe",
+          "linkType": "kviz"
+        },
+        {
+          "type": "text",
+          "style": "uebung",
+          "content": "## Kako ovaj kurs funkcioniše\n\nSvaka lekcija ima isti ritam — prati ova 4 koraka i ne možeš da pogrešiš:\n\n1. **▶ Gledaj video** i ponavljaj naglas za mnom\n2. **📖 Pročitaj objašnjenje** ispod videa\n3. **✏️ Uradi kratke vežbe** (klikni za rešenje)\n4. **🗂 Nauči nove reči na karticama** na kraju lekcije\n\n**Najvažnije pravilo:** bolje 15 minuta svaki dan nego 3 sata jednom nedeljno."
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## Pomoćni materijali\n\nOvo nije obavezno za početak — srž učenja su **video lekcije i kartice**. Ali evo šta ti može pomoći usput:"
+        },
+        {
+          "type": "text",
+          "style": "info",
+          "content": "**📄 PDF priručnik za ceo A1** *(nije obavezno)*\n\nPriručnik prati sadržaj kursa (pokriva A1.1 i A1.2). Prelistaj ga i uči uz njegovu pomoć kad želiš nešto na miru da pročitaš ili odštampaš. Nije uslov da kreneš."
+        },
+        {
+          "alt": "Korice priručnika Ana u Nemačkoj — od nule do A1",
+          "url": "https://rzmyglynjcygsbicssbt.supabase.co/storage/v1/object/public/blog-media/prirucnici/ana-u-nemackoj-a1-cover.jpg",
+          "type": "image",
+          "caption": "Priručnik Ana u Nemačkoj — Od nule do A1 ispita"
+        },
+        {
+          "url": "https://drive.google.com/file/d/1dd29RtYvHX_JeZ45THujNf_FmHOATVbD/preview",
+          "type": "pdf",
+          "label": "📄 Otvori PDF priručnik za A1"
+        },
+        {
+          "type": "text",
+          "style": "beispiele",
+          "content": "**💬 WhatsApp grupa A1**\n\nIsta grupa kao na A1.1 — tu pitaš kad ti nešto nije jasno i učiš zajedno sa ostalima. Ne ostaješ sama/sam u učenju."
+        },
+        {
+          "href": "https://chat.whatsapp.com/FFthWnle8F7H1i0H9nS6S8?mode=gi_t",
+          "type": "link",
+          "label": "💬 Uđi u WhatsApp grupu A1",
+          "linkType": "external"
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## Šta ćeš naučiti u A1.2?\n\n- Zanimanja i kako reći čime se baviš\n- Prošlo vreme sa *hatte* i *war*\n- Imperativ — kako davati uputstva\n- Modalni glagoli — können, müssen, dürfen, sollen, wollen, mögen\n- Delovi tela i kako reći šta te boli\n- Dativ sa predlozima (mit, zu, in, bei, nach)\n- Odeća (Kleidung)\n- Pisanje mejlova i upita\n- ADUSO veznici\n- Priprema za ispit A1"
+        }
+      ]
+    }
+  ],
+  "exercises": [
+    {
+      "id": "fa7d4418-1fe9-4940-80d0-f9721a8b9c62",
+      "title": "Schreiben B1 — Forumsbeitrag: Meinung"
+    },
+    {
+      "id": "2294d90e-5bf7-4d71-87bf-db54b730580d",
+      "title": "Schreiben B1 — E-Mail an die Nachbarn"
+    },
+    {
+      "id": "1baa01b0-1a5d-4d3e-a190-4db6ad98e1e4",
+      "title": "Schreiben B1 — Antwort an Katja"
+    }
+  ],
+  "exercise_questions": [
+    {
+      "id": "c6313987-2d36-4ed0-b260-79b119a82f6b",
+      "question": "<strong>Lesen · Teil 3</strong><br>13. Gerard hat morgens oft Rückenschmerzen und sucht ein neues Bett. → Welche Anzeige passt?",
+      "correct_answer": "1",
+      "explanation": null,
+      "options": {
+        "type": "quiz",
+        "items": [
+          "a",
+          "b",
+          "c",
+          "d",
+          "e",
+          "f",
+          "g",
+          "h",
+          "i",
+          "j",
+          "0 - keine Anzeige"
+        ],
+        "context": {
+          "type": "text",
+          "title": "Lesen - Teil 3",
+          "content": "*Lesen Teil 3 · Arbeitszeit: 10 Min. Lesen Sie die Situationen 13 bis 19 und die Anzeigen a bis j. Welche Anzeige passt zu welcher Situation? Jede Anzeige nur einmal verwenden. Für eine Situation gibt es keine passende Anzeige — in diesem Fall wählen Sie „0“. (Beispiel 0: Alberto möchte einen LCD-Fernseher kaufen → Anzeige c)*\n\n**a** Kaum benutzte Gartengeräte von privat günstig abzugeben! Auch Balkon- und Pflanzenerde. Riesenauswahl. Nur für Selbstabholer. Infos unter: 0172-35655898\n\n**b** Möbelhaus Krombach. Alles, was Sie für Ihr Zuhause brauchen. Wohnzimmermöbel, Schlaf- und Kinderzimmermöbel, Haushaltsgeräte - Kücheneinrichtung. Ab sofort in unserer Schlafzimmerabteilung: jeden Mo. und Mi. fachkundige Beratung zum Thema „gesunder Schlaf“\n\n**c** HIFI Krämer. Radio & TV (LCD, Plasma, 3D). An- und Verkauf. Bei Neukauf eines Fernsehgeräts nehmen wir Ihr altes Gerät in Zahlung. Reparaturservice. Anfahrtskosten im Stadtgebiet: 20 €. (Beispiel)\n\n**d** Unser Ratgeber: Schluss mit Rückenproblemen. Tipps zu Bewegungsabläufen und Muskelaufbauübungen, die Sie problemlos zu Hause machen können. Noch heute online und kostenlos bestellen! www.gesund-werden-durch-fitness.de\n\n**e** Studio 2000. Neu im Sortiment: Alles für Ihren Arbeitsplatz. Tische, Regale und Schränke. Sitzen, Besprechen und Präsentieren. Aufbewahrung, Ordnen, Papier. Bürotechnik. Drucker und Druckerzubehör. www.studio2000.de\n\n**f** Radhaus Bauer. Großes Angebot an Fahrrädern, E-Bikes, Fahrradtaschen, Fahrradbekleidung. Professionelle Beratung. Probefahrten möglich. Fachkundiger Reparaturservice. Aktionswochen: Wir zahlen Ihnen mindestens 80 Euro für Ihr altes Fahrrad, wenn Sie bei uns ein neues kaufen!\n\n**g** Von Privat: Fernsehmöbel zu Top-Preisen. Höhenverstellbares Regal für LCD/Plasma-Fernseher sowie große DVD- und CD-Sammlung wegen Umzugs günstig abzugeben. 0172/45576589\n\n**h** Elektro-Markt. Bei uns finden Sie Waschmaschinen · Geschirrspüler · Elektroherde · Wäschetrockner · Kühlschränke zu einem günstigen Preis. Kundenservice für viele Marken. Fachkundige Verkaufsberatung. Reparatur Ihrer Haushaltsgeräte (in dringenden Fällen auch am Wochenende). Hansaallee 12, 60322 Frankfurt\n\n**i** Motorrad Huber. Für alle, die ihr Traummotorrad einmal testen oder auch eine Zeitlang fahren wollen: Motorräder aller bekannten Marken. Auch Liebhabermodelle. In Top-Zustand, zu günstigen Mietpreisen. www.motorrad-Huber.at\n\n**j** Großer Fahrzeugmarkt. Riesige Auswahl an Neu- und Gebrauchtfahrzeugen, auch Motorräder, Mopeds und Roller, Gebrauchtteile und Zubehör. Bei uns können Sie für Ihr altes Fahrzeug einen guten Preis bekommen. Jeden Samstag 09-18.00 Uhr. Am Industriehof"
+        }
+      }
+    },
+    {
+      "id": "fa17d0cd-9ac8-4552-8899-b5b7bebac822",
+      "question": "<strong>Lesen · Teil 3</strong><br>14. Die Waschmaschine von Jonas ist kaputtgegangen. Er möchte sie reparieren lassen. → Welche Anzeige passt?",
+      "correct_answer": "7",
+      "explanation": null,
+      "options": {
+        "type": "quiz",
+        "items": [
+          "a",
+          "b",
+          "c",
+          "d",
+          "e",
+          "f",
+          "g",
+          "h",
+          "i",
+          "j",
+          "0 - keine Anzeige"
+        ],
+        "context": {
+          "type": "text",
+          "title": "Lesen - Teil 3",
+          "content": "*Lesen Teil 3 · Arbeitszeit: 10 Min. Lesen Sie die Situationen 13 bis 19 und die Anzeigen a bis j. Welche Anzeige passt zu welcher Situation? Jede Anzeige nur einmal verwenden. Für eine Situation gibt es keine passende Anzeige — in diesem Fall wählen Sie „0“. (Beispiel 0: Alberto möchte einen LCD-Fernseher kaufen → Anzeige c)*\n\n**a** Kaum benutzte Gartengeräte von privat günstig abzugeben! Auch Balkon- und Pflanzenerde. Riesenauswahl. Nur für Selbstabholer. Infos unter: 0172-35655898\n\n**b** Möbelhaus Krombach. Alles, was Sie für Ihr Zuhause brauchen. Wohnzimmermöbel, Schlaf- und Kinderzimmermöbel, Haushaltsgeräte - Kücheneinrichtung. Ab sofort in unserer Schlafzimmerabteilung: jeden Mo. und Mi. fachkundige Beratung zum Thema „gesunder Schlaf“\n\n**c** HIFI Krämer. Radio & TV (LCD, Plasma, 3D). An- und Verkauf. Bei Neukauf eines Fernsehgeräts nehmen wir Ihr altes Gerät in Zahlung. Reparaturservice. Anfahrtskosten im Stadtgebiet: 20 €. (Beispiel)\n\n**d** Unser Ratgeber: Schluss mit Rückenproblemen. Tipps zu Bewegungsabläufen und Muskelaufbauübungen, die Sie problemlos zu Hause machen können. Noch heute online und kostenlos bestellen! www.gesund-werden-durch-fitness.de\n\n**e** Studio 2000. Neu im Sortiment: Alles für Ihren Arbeitsplatz. Tische, Regale und Schränke. Sitzen, Besprechen und Präsentieren. Aufbewahrung, Ordnen, Papier. Bürotechnik. Drucker und Druckerzubehör. www.studio2000.de\n\n**f** Radhaus Bauer. Großes Angebot an Fahrrädern, E-Bikes, Fahrradtaschen, Fahrradbekleidung. Professionelle Beratung. Probefahrten möglich. Fachkundiger Reparaturservice. Aktionswochen: Wir zahlen Ihnen mindestens 80 Euro für Ihr altes Fahrrad, wenn Sie bei uns ein neues kaufen!\n\n**g** Von Privat: Fernsehmöbel zu Top-Preisen. Höhenverstellbares Regal für LCD/Plasma-Fernseher sowie große DVD- und CD-Sammlung wegen Umzugs günstig abzugeben. 0172/45576589\n\n**h** Elektro-Markt. Bei uns finden Sie Waschmaschinen · Geschirrspüler · Elektroherde · Wäschetrockner · Kühlschränke zu einem günstigen Preis. Kundenservice für viele Marken. Fachkundige Verkaufsberatung. Reparatur Ihrer Haushaltsgeräte (in dringenden Fällen auch am Wochenende). Hansaallee 12, 60322 Frankfurt\n\n**i** Motorrad Huber. Für alle, die ihr Traummotorrad einmal testen oder auch eine Zeitlang fahren wollen: Motorräder aller bekannten Marken. Auch Liebhabermodelle. In Top-Zustand, zu günstigen Mietpreisen. www.motorrad-Huber.at\n\n**j** Großer Fahrzeugmarkt. Riesige Auswahl an Neu- und Gebrauchtfahrzeugen, auch Motorräder, Mopeds und Roller, Gebrauchtteile und Zubehör. Bei uns können Sie für Ihr altes Fahrzeug einen guten Preis bekommen. Jeden Samstag 09-18.00 Uhr. Am Industriehof"
+        }
+      }
+    },
+    {
+      "id": "54b899e2-0ea7-41b0-86bb-feef356ba123",
+      "question": "<strong>Lesen · Teil 3</strong><br>15. Bea möchte ein günstiges Motorrad kaufen. Es muss nicht neu sein. → Welche Anzeige passt?",
+      "correct_answer": "9",
+      "explanation": null,
+      "options": {
+        "type": "quiz",
+        "items": [
+          "a",
+          "b",
+          "c",
+          "d",
+          "e",
+          "f",
+          "g",
+          "h",
+          "i",
+          "j",
+          "0 - keine Anzeige"
+        ],
+        "context": {
+          "type": "text",
+          "title": "Lesen - Teil 3",
+          "content": "*Lesen Teil 3 · Arbeitszeit: 10 Min. Lesen Sie die Situationen 13 bis 19 und die Anzeigen a bis j. Welche Anzeige passt zu welcher Situation? Jede Anzeige nur einmal verwenden. Für eine Situation gibt es keine passende Anzeige — in diesem Fall wählen Sie „0“. (Beispiel 0: Alberto möchte einen LCD-Fernseher kaufen → Anzeige c)*\n\n**a** Kaum benutzte Gartengeräte von privat günstig abzugeben! Auch Balkon- und Pflanzenerde. Riesenauswahl. Nur für Selbstabholer. Infos unter: 0172-35655898\n\n**b** Möbelhaus Krombach. Alles, was Sie für Ihr Zuhause brauchen. Wohnzimmermöbel, Schlaf- und Kinderzimmermöbel, Haushaltsgeräte - Kücheneinrichtung. Ab sofort in unserer Schlafzimmerabteilung: jeden Mo. und Mi. fachkundige Beratung zum Thema „gesunder Schlaf“\n\n**c** HIFI Krämer. Radio & TV (LCD, Plasma, 3D). An- und Verkauf. Bei Neukauf eines Fernsehgeräts nehmen wir Ihr altes Gerät in Zahlung. Reparaturservice. Anfahrtskosten im Stadtgebiet: 20 €. (Beispiel)\n\n**d** Unser Ratgeber: Schluss mit Rückenproblemen. Tipps zu Bewegungsabläufen und Muskelaufbauübungen, die Sie problemlos zu Hause machen können. Noch heute online und kostenlos bestellen! www.gesund-werden-durch-fitness.de\n\n**e** Studio 2000. Neu im Sortiment: Alles für Ihren Arbeitsplatz. Tische, Regale und Schränke. Sitzen, Besprechen und Präsentieren. Aufbewahrung, Ordnen, Papier. Bürotechnik. Drucker und Druckerzubehör. www.studio2000.de\n\n**f** Radhaus Bauer. Großes Angebot an Fahrrädern, E-Bikes, Fahrradtaschen, Fahrradbekleidung. Professionelle Beratung. Probefahrten möglich. Fachkundiger Reparaturservice. Aktionswochen: Wir zahlen Ihnen mindestens 80 Euro für Ihr altes Fahrrad, wenn Sie bei uns ein neues kaufen!\n\n**g** Von Privat: Fernsehmöbel zu Top-Preisen. Höhenverstellbares Regal für LCD/Plasma-Fernseher sowie große DVD- und CD-Sammlung wegen Umzugs günstig abzugeben. 0172/45576589\n\n**h** Elektro-Markt. Bei uns finden Sie Waschmaschinen · Geschirrspüler · Elektroherde · Wäschetrockner · Kühlschränke zu einem günstigen Preis. Kundenservice für viele Marken. Fachkundige Verkaufsberatung. Reparatur Ihrer Haushaltsgeräte (in dringenden Fällen auch am Wochenende). Hansaallee 12, 60322 Frankfurt\n\n**i** Motorrad Huber. Für alle, die ihr Traummotorrad einmal testen oder auch eine Zeitlang fahren wollen: Motorräder aller bekannten Marken. Auch Liebhabermodelle. In Top-Zustand, zu günstigen Mietpreisen. www.motorrad-Huber.at\n\n**j** Großer Fahrzeugmarkt. Riesige Auswahl an Neu- und Gebrauchtfahrzeugen, auch Motorräder, Mopeds und Roller, Gebrauchtteile und Zubehör. Bei uns können Sie für Ihr altes Fahrzeug einen guten Preis bekommen. Jeden Samstag 09-18.00 Uhr. Am Industriehof"
+        }
+      }
+    },
+    {
+      "id": "0cbfb865-106b-445f-9350-110597286434",
+      "question": "<strong>Lesen · Teil 3</strong><br>16. Veronica möchte ihr altes Fahrrad verkaufen und ein neues kaufen. → Welche Anzeige passt?",
+      "correct_answer": "5",
+      "explanation": null,
+      "options": {
+        "type": "quiz",
+        "items": [
+          "a",
+          "b",
+          "c",
+          "d",
+          "e",
+          "f",
+          "g",
+          "h",
+          "i",
+          "j",
+          "0 - keine Anzeige"
+        ],
+        "context": {
+          "type": "text",
+          "title": "Lesen - Teil 3",
+          "content": "*Lesen Teil 3 · Arbeitszeit: 10 Min. Lesen Sie die Situationen 13 bis 19 und die Anzeigen a bis j. Welche Anzeige passt zu welcher Situation? Jede Anzeige nur einmal verwenden. Für eine Situation gibt es keine passende Anzeige — in diesem Fall wählen Sie „0“. (Beispiel 0: Alberto möchte einen LCD-Fernseher kaufen → Anzeige c)*\n\n**a** Kaum benutzte Gartengeräte von privat günstig abzugeben! Auch Balkon- und Pflanzenerde. Riesenauswahl. Nur für Selbstabholer. Infos unter: 0172-35655898\n\n**b** Möbelhaus Krombach. Alles, was Sie für Ihr Zuhause brauchen. Wohnzimmermöbel, Schlaf- und Kinderzimmermöbel, Haushaltsgeräte - Kücheneinrichtung. Ab sofort in unserer Schlafzimmerabteilung: jeden Mo. und Mi. fachkundige Beratung zum Thema „gesunder Schlaf“\n\n**c** HIFI Krämer. Radio & TV (LCD, Plasma, 3D). An- und Verkauf. Bei Neukauf eines Fernsehgeräts nehmen wir Ihr altes Gerät in Zahlung. Reparaturservice. Anfahrtskosten im Stadtgebiet: 20 €. (Beispiel)\n\n**d** Unser Ratgeber: Schluss mit Rückenproblemen. Tipps zu Bewegungsabläufen und Muskelaufbauübungen, die Sie problemlos zu Hause machen können. Noch heute online und kostenlos bestellen! www.gesund-werden-durch-fitness.de\n\n**e** Studio 2000. Neu im Sortiment: Alles für Ihren Arbeitsplatz. Tische, Regale und Schränke. Sitzen, Besprechen und Präsentieren. Aufbewahrung, Ordnen, Papier. Bürotechnik. Drucker und Druckerzubehör. www.studio2000.de\n\n**f** Radhaus Bauer. Großes Angebot an Fahrrädern, E-Bikes, Fahrradtaschen, Fahrradbekleidung. Professionelle Beratung. Probefahrten möglich. Fachkundiger Reparaturservice. Aktionswochen: Wir zahlen Ihnen mindestens 80 Euro für Ihr altes Fahrrad, wenn Sie bei uns ein neues kaufen!\n\n**g** Von Privat: Fernsehmöbel zu Top-Preisen. Höhenverstellbares Regal für LCD/Plasma-Fernseher sowie große DVD- und CD-Sammlung wegen Umzugs günstig abzugeben. 0172/45576589\n\n**h** Elektro-Markt. Bei uns finden Sie Waschmaschinen · Geschirrspüler · Elektroherde · Wäschetrockner · Kühlschränke zu einem günstigen Preis. Kundenservice für viele Marken. Fachkundige Verkaufsberatung. Reparatur Ihrer Haushaltsgeräte (in dringenden Fällen auch am Wochenende). Hansaallee 12, 60322 Frankfurt\n\n**i** Motorrad Huber. Für alle, die ihr Traummotorrad einmal testen oder auch eine Zeitlang fahren wollen: Motorräder aller bekannten Marken. Auch Liebhabermodelle. In Top-Zustand, zu günstigen Mietpreisen. www.motorrad-Huber.at\n\n**j** Großer Fahrzeugmarkt. Riesige Auswahl an Neu- und Gebrauchtfahrzeugen, auch Motorräder, Mopeds und Roller, Gebrauchtteile und Zubehör. Bei uns können Sie für Ihr altes Fahrzeug einen guten Preis bekommen. Jeden Samstag 09-18.00 Uhr. Am Industriehof"
+        }
+      }
+    },
+    {
+      "id": "893f31f7-6607-47eb-a400-92db6397af83",
+      "question": "<strong>Lesen · Teil 3</strong><br>17. Paolo sucht für seine Terrasse eine große Menge Blumenerde. Da er kein Auto hat, soll sie geliefert werden. → Welche Anzeige passt?",
+      "correct_answer": "10",
+      "explanation": null,
+      "options": {
+        "type": "quiz",
+        "items": [
+          "a",
+          "b",
+          "c",
+          "d",
+          "e",
+          "f",
+          "g",
+          "h",
+          "i",
+          "j",
+          "0 - keine Anzeige"
+        ],
+        "context": {
+          "type": "text",
+          "title": "Lesen - Teil 3",
+          "content": "*Lesen Teil 3 · Arbeitszeit: 10 Min. Lesen Sie die Situationen 13 bis 19 und die Anzeigen a bis j. Welche Anzeige passt zu welcher Situation? Jede Anzeige nur einmal verwenden. Für eine Situation gibt es keine passende Anzeige — in diesem Fall wählen Sie „0“. (Beispiel 0: Alberto möchte einen LCD-Fernseher kaufen → Anzeige c)*\n\n**a** Kaum benutzte Gartengeräte von privat günstig abzugeben! Auch Balkon- und Pflanzenerde. Riesenauswahl. Nur für Selbstabholer. Infos unter: 0172-35655898\n\n**b** Möbelhaus Krombach. Alles, was Sie für Ihr Zuhause brauchen. Wohnzimmermöbel, Schlaf- und Kinderzimmermöbel, Haushaltsgeräte - Kücheneinrichtung. Ab sofort in unserer Schlafzimmerabteilung: jeden Mo. und Mi. fachkundige Beratung zum Thema „gesunder Schlaf“\n\n**c** HIFI Krämer. Radio & TV (LCD, Plasma, 3D). An- und Verkauf. Bei Neukauf eines Fernsehgeräts nehmen wir Ihr altes Gerät in Zahlung. Reparaturservice. Anfahrtskosten im Stadtgebiet: 20 €. (Beispiel)\n\n**d** Unser Ratgeber: Schluss mit Rückenproblemen. Tipps zu Bewegungsabläufen und Muskelaufbauübungen, die Sie problemlos zu Hause machen können. Noch heute online und kostenlos bestellen! www.gesund-werden-durch-fitness.de\n\n**e** Studio 2000. Neu im Sortiment: Alles für Ihren Arbeitsplatz. Tische, Regale und Schränke. Sitzen, Besprechen und Präsentieren. Aufbewahrung, Ordnen, Papier. Bürotechnik. Drucker und Druckerzubehör. www.studio2000.de\n\n**f** Radhaus Bauer. Großes Angebot an Fahrrädern, E-Bikes, Fahrradtaschen, Fahrradbekleidung. Professionelle Beratung. Probefahrten möglich. Fachkundiger Reparaturservice. Aktionswochen: Wir zahlen Ihnen mindestens 80 Euro für Ihr altes Fahrrad, wenn Sie bei uns ein neues kaufen!\n\n**g** Von Privat: Fernsehmöbel zu Top-Preisen. Höhenverstellbares Regal für LCD/Plasma-Fernseher sowie große DVD- und CD-Sammlung wegen Umzugs günstig abzugeben. 0172/45576589\n\n**h** Elektro-Markt. Bei uns finden Sie Waschmaschinen · Geschirrspüler · Elektroherde · Wäschetrockner · Kühlschränke zu einem günstigen Preis. Kundenservice für viele Marken. Fachkundige Verkaufsberatung. Reparatur Ihrer Haushaltsgeräte (in dringenden Fällen auch am Wochenende). Hansaallee 12, 60322 Frankfurt\n\n**i** Motorrad Huber. Für alle, die ihr Traummotorrad einmal testen oder auch eine Zeitlang fahren wollen: Motorräder aller bekannten Marken. Auch Liebhabermodelle. In Top-Zustand, zu günstigen Mietpreisen. www.motorrad-Huber.at\n\n**j** Großer Fahrzeugmarkt. Riesige Auswahl an Neu- und Gebrauchtfahrzeugen, auch Motorräder, Mopeds und Roller, Gebrauchtteile und Zubehör. Bei uns können Sie für Ihr altes Fahrzeug einen guten Preis bekommen. Jeden Samstag 09-18.00 Uhr. Am Industriehof"
+        }
+      }
+    },
+    {
+      "id": "a439da9c-4594-4870-b6b8-ca4f98756a17",
+      "question": "<strong>Lesen · Teil 3</strong><br>18. Jimmy sucht für sein neues Büro einen Schreibtisch, einen Konferenztisch und Bürostühle. → Welche Anzeige passt?",
+      "correct_answer": "4",
+      "explanation": null,
+      "options": {
+        "type": "quiz",
+        "items": [
+          "a",
+          "b",
+          "c",
+          "d",
+          "e",
+          "f",
+          "g",
+          "h",
+          "i",
+          "j",
+          "0 - keine Anzeige"
+        ],
+        "context": {
+          "type": "text",
+          "title": "Lesen - Teil 3",
+          "content": "*Lesen Teil 3 · Arbeitszeit: 10 Min. Lesen Sie die Situationen 13 bis 19 und die Anzeigen a bis j. Welche Anzeige passt zu welcher Situation? Jede Anzeige nur einmal verwenden. Für eine Situation gibt es keine passende Anzeige — in diesem Fall wählen Sie „0“. (Beispiel 0: Alberto möchte einen LCD-Fernseher kaufen → Anzeige c)*\n\n**a** Kaum benutzte Gartengeräte von privat günstig abzugeben! Auch Balkon- und Pflanzenerde. Riesenauswahl. Nur für Selbstabholer. Infos unter: 0172-35655898\n\n**b** Möbelhaus Krombach. Alles, was Sie für Ihr Zuhause brauchen. Wohnzimmermöbel, Schlaf- und Kinderzimmermöbel, Haushaltsgeräte - Kücheneinrichtung. Ab sofort in unserer Schlafzimmerabteilung: jeden Mo. und Mi. fachkundige Beratung zum Thema „gesunder Schlaf“\n\n**c** HIFI Krämer. Radio & TV (LCD, Plasma, 3D). An- und Verkauf. Bei Neukauf eines Fernsehgeräts nehmen wir Ihr altes Gerät in Zahlung. Reparaturservice. Anfahrtskosten im Stadtgebiet: 20 €. (Beispiel)\n\n**d** Unser Ratgeber: Schluss mit Rückenproblemen. Tipps zu Bewegungsabläufen und Muskelaufbauübungen, die Sie problemlos zu Hause machen können. Noch heute online und kostenlos bestellen! www.gesund-werden-durch-fitness.de\n\n**e** Studio 2000. Neu im Sortiment: Alles für Ihren Arbeitsplatz. Tische, Regale und Schränke. Sitzen, Besprechen und Präsentieren. Aufbewahrung, Ordnen, Papier. Bürotechnik. Drucker und Druckerzubehör. www.studio2000.de\n\n**f** Radhaus Bauer. Großes Angebot an Fahrrädern, E-Bikes, Fahrradtaschen, Fahrradbekleidung. Professionelle Beratung. Probefahrten möglich. Fachkundiger Reparaturservice. Aktionswochen: Wir zahlen Ihnen mindestens 80 Euro für Ihr altes Fahrrad, wenn Sie bei uns ein neues kaufen!\n\n**g** Von Privat: Fernsehmöbel zu Top-Preisen. Höhenverstellbares Regal für LCD/Plasma-Fernseher sowie große DVD- und CD-Sammlung wegen Umzugs günstig abzugeben. 0172/45576589\n\n**h** Elektro-Markt. Bei uns finden Sie Waschmaschinen · Geschirrspüler · Elektroherde · Wäschetrockner · Kühlschränke zu einem günstigen Preis. Kundenservice für viele Marken. Fachkundige Verkaufsberatung. Reparatur Ihrer Haushaltsgeräte (in dringenden Fällen auch am Wochenende). Hansaallee 12, 60322 Frankfurt\n\n**i** Motorrad Huber. Für alle, die ihr Traummotorrad einmal testen oder auch eine Zeitlang fahren wollen: Motorräder aller bekannten Marken. Auch Liebhabermodelle. In Top-Zustand, zu günstigen Mietpreisen. www.motorrad-Huber.at\n\n**j** Großer Fahrzeugmarkt. Riesige Auswahl an Neu- und Gebrauchtfahrzeugen, auch Motorräder, Mopeds und Roller, Gebrauchtteile und Zubehör. Bei uns können Sie für Ihr altes Fahrzeug einen guten Preis bekommen. Jeden Samstag 09-18.00 Uhr. Am Industriehof"
+        }
+      }
+    },
+    {
+      "id": "bb4f4733-e8f3-4d82-a941-3909ef7008b3",
+      "question": "<strong>Lesen · Teil 3</strong><br>19. Erik braucht für eine Woche ein Motorrad. → Welche Anzeige passt?",
+      "correct_answer": "8",
+      "explanation": null,
+      "options": {
+        "type": "quiz",
+        "items": [
+          "a",
+          "b",
+          "c",
+          "d",
+          "e",
+          "f",
+          "g",
+          "h",
+          "i",
+          "j",
+          "0 - keine Anzeige"
+        ],
+        "context": {
+          "type": "text",
+          "title": "Lesen - Teil 3",
+          "content": "*Lesen Teil 3 · Arbeitszeit: 10 Min. Lesen Sie die Situationen 13 bis 19 und die Anzeigen a bis j. Welche Anzeige passt zu welcher Situation? Jede Anzeige nur einmal verwenden. Für eine Situation gibt es keine passende Anzeige — in diesem Fall wählen Sie „0“. (Beispiel 0: Alberto möchte einen LCD-Fernseher kaufen → Anzeige c)*\n\n**a** Kaum benutzte Gartengeräte von privat günstig abzugeben! Auch Balkon- und Pflanzenerde. Riesenauswahl. Nur für Selbstabholer. Infos unter: 0172-35655898\n\n**b** Möbelhaus Krombach. Alles, was Sie für Ihr Zuhause brauchen. Wohnzimmermöbel, Schlaf- und Kinderzimmermöbel, Haushaltsgeräte - Kücheneinrichtung. Ab sofort in unserer Schlafzimmerabteilung: jeden Mo. und Mi. fachkundige Beratung zum Thema „gesunder Schlaf“\n\n**c** HIFI Krämer. Radio & TV (LCD, Plasma, 3D). An- und Verkauf. Bei Neukauf eines Fernsehgeräts nehmen wir Ihr altes Gerät in Zahlung. Reparaturservice. Anfahrtskosten im Stadtgebiet: 20 €. (Beispiel)\n\n**d** Unser Ratgeber: Schluss mit Rückenproblemen. Tipps zu Bewegungsabläufen und Muskelaufbauübungen, die Sie problemlos zu Hause machen können. Noch heute online und kostenlos bestellen! www.gesund-werden-durch-fitness.de\n\n**e** Studio 2000. Neu im Sortiment: Alles für Ihren Arbeitsplatz. Tische, Regale und Schränke. Sitzen, Besprechen und Präsentieren. Aufbewahrung, Ordnen, Papier. Bürotechnik. Drucker und Druckerzubehör. www.studio2000.de\n\n**f** Radhaus Bauer. Großes Angebot an Fahrrädern, E-Bikes, Fahrradtaschen, Fahrradbekleidung. Professionelle Beratung. Probefahrten möglich. Fachkundiger Reparaturservice. Aktionswochen: Wir zahlen Ihnen mindestens 80 Euro für Ihr altes Fahrrad, wenn Sie bei uns ein neues kaufen!\n\n**g** Von Privat: Fernsehmöbel zu Top-Preisen. Höhenverstellbares Regal für LCD/Plasma-Fernseher sowie große DVD- und CD-Sammlung wegen Umzugs günstig abzugeben. 0172/45576589\n\n**h** Elektro-Markt. Bei uns finden Sie Waschmaschinen · Geschirrspüler · Elektroherde · Wäschetrockner · Kühlschränke zu einem günstigen Preis. Kundenservice für viele Marken. Fachkundige Verkaufsberatung. Reparatur Ihrer Haushaltsgeräte (in dringenden Fällen auch am Wochenende). Hansaallee 12, 60322 Frankfurt\n\n**i** Motorrad Huber. Für alle, die ihr Traummotorrad einmal testen oder auch eine Zeitlang fahren wollen: Motorräder aller bekannten Marken. Auch Liebhabermodelle. In Top-Zustand, zu günstigen Mietpreisen. www.motorrad-Huber.at\n\n**j** Großer Fahrzeugmarkt. Riesige Auswahl an Neu- und Gebrauchtfahrzeugen, auch Motorräder, Mopeds und Roller, Gebrauchtteile und Zubehör. Bei uns können Sie für Ihr altes Fahrzeug einen guten Preis bekommen. Jeden Samstag 09-18.00 Uhr. Am Industriehof"
+        }
+      }
+    },
+    {
+      "id": "c2c98341-de5e-4862-8643-8c433f6b5efa",
+      "question": "<strong>Lesen · Teil 4</strong><br>23. Karin (17, Würzburg) — ist sie für ein Verbot?",
+      "correct_answer": "0",
+      "explanation": null,
+      "options": {
+        "type": "quiz",
+        "items": [
+          "Ja",
+          "Nein"
+        ],
+        "context": {
+          "type": "text",
+          "title": "Lesen - Teil 4",
+          "content": "*Lesen Teil 4 · Arbeitszeit: 15 Min. Lesen Sie die Texte 20 bis 26. Wählen Sie: Ist die Person für ein Verbot? In einer Zeitschrift lesen Sie Kommentare zu einem Artikel über ein Verbot von Handys in der Schule. (Beispiel: Jonathan → Nein)*\n\n**Leserbriefe**\n\n**Jonathan, 35, Dresden (Beispiel):** Immer mehr Eltern und Lehrer fordern ein Handyverbot im Unterricht. Ich als Lehrer kann diese Forderung verstehen, allerdings finde ich sie schwer zu realisieren, gerade im Zeitalter der neuen Medien. Aber versuchen sollte man es trotzdem.\n\n**20. Nadja, 16, Wien:** Ich wäre mit einem Verbot vollkommen einverstanden. Bei uns in der Schule nehmen bestimmte Schüler immer wieder das Handy, um gemeine Fotos von anderen Schülern zu machen und ins Netz zu stellen. Das muss aufhören und da wäre es schon gut, wenn man Handys gar nicht mehr benutzen dürfte.\n\n**21. Jens, 18, Dresden:** Bei uns in der Schule wurde lange über störende Handys im Unterricht diskutiert. Wie viele Schüler war auch ich auch gegen ein allgemeines Verbot. Wir haben dann versucht, uns auf Regelungen zu einigen, ohne Verbot. Leider hatte das keinen Erfolg, sodass ich inzwischen meine Meinung geändert habe. Manchmal geht es halt nicht ohne Verbot.\n\n**22. Astrid, 40, St.-Pölten:** Keine Frage, Handys sind ein Problem, nicht nur an der Schule. Man wird einfach gestört, wenn es überall klingelt. Ich würde Handys aber eher in anderen Bereichen des Alltagslebens verbieten, zum Beispiel in U- oder S-Bahnen. In der Schule finde ich es besser, mit den Schülern über die neuen Medien, über die Gefahr und den Nutzen von Handys und Smartphones zu sprechen und gemeinsam Regelungen zu finden.\n\n**23. Karin, 17, Würzburg:** Ich fand es früher immer toll, mein Handy zu zeigen. Aber heute sehe ich das anders. Mit dem Handy ist es genauso wie mit der Kleidung. Es gibt bei uns in der Schule eine richtige Konkurrenz, wer das neuste Modell hat. Ich persönlich kann mir einfach kein teures Smartphone leisten. Deshalb würde ich mich freuen, wenn die Schule ein handyfreier Raum wird.\n\n**24. Robert, 30, Hamburg:** In dem Artikel steht viel über die Gefahren der Handynutzung. Nur werden heute im Unterricht immer mehr Medien benutzt. Das Internet und Smartphones gehört genauso zum Unterricht wie Whiteboards, E-Books usw. Wie soll man dann das Handy verbieten? Das macht doch keinen Sinn.\n\n**25. Tobias, 15, Salzburg:** Schule muss doch auch Spaß machen. Und ich finde es toll, SMS und MMS an meine Freunde zu schicken. Immer, wenn ich das will. Klar kann man es auch manchmal ausschalten. Aber trotzdem: Ohne mein Handy könnte ich nicht leben.\n\n**26. Gunter, 44, Jena:** Ich finde, dass ein Verbot wenig Sinn hat, da die Probleme mit dem Handy nach der Schule weiter gehen. Man sollte sich lieber überlegen, die Schüler im Unterricht auf die Gefahren einer unkontrollierten Handynutzung hinzuweisen. Dabei denke ich neben den finanziellen Problemen, die viele durch unbezahlte Handyverträge haben, auch an gesundheitliche Gefahren durch Handys. Darüber wird viel zu wenig diskutiert."
+        }
+      }
+    },
+    {
+      "id": "98bbbc55-e908-4d55-8a21-a641d9e7562c",
+      "question": "<strong>Lesen · Teil 4</strong><br>24. Robert (30, Hamburg) — ist er für ein Verbot?",
+      "correct_answer": "1",
+      "explanation": null,
+      "options": {
+        "type": "quiz",
+        "items": [
+          "Ja",
+          "Nein"
+        ],
+        "context": {
+          "type": "text",
+          "title": "Lesen - Teil 4",
+          "content": "*Lesen Teil 4 · Arbeitszeit: 15 Min. Lesen Sie die Texte 20 bis 26. Wählen Sie: Ist die Person für ein Verbot? In einer Zeitschrift lesen Sie Kommentare zu einem Artikel über ein Verbot von Handys in der Schule. (Beispiel: Jonathan → Nein)*\n\n**Leserbriefe**\n\n**Jonathan, 35, Dresden (Beispiel):** Immer mehr Eltern und Lehrer fordern ein Handyverbot im Unterricht. Ich als Lehrer kann diese Forderung verstehen, allerdings finde ich sie schwer zu realisieren, gerade im Zeitalter der neuen Medien. Aber versuchen sollte man es trotzdem.\n\n**20. Nadja, 16, Wien:** Ich wäre mit einem Verbot vollkommen einverstanden. Bei uns in der Schule nehmen bestimmte Schüler immer wieder das Handy, um gemeine Fotos von anderen Schülern zu machen und ins Netz zu stellen. Das muss aufhören und da wäre es schon gut, wenn man Handys gar nicht mehr benutzen dürfte.\n\n**21. Jens, 18, Dresden:** Bei uns in der Schule wurde lange über störende Handys im Unterricht diskutiert. Wie viele Schüler war auch ich auch gegen ein allgemeines Verbot. Wir haben dann versucht, uns auf Regelungen zu einigen, ohne Verbot. Leider hatte das keinen Erfolg, sodass ich inzwischen meine Meinung geändert habe. Manchmal geht es halt nicht ohne Verbot.\n\n**22. Astrid, 40, St.-Pölten:** Keine Frage, Handys sind ein Problem, nicht nur an der Schule. Man wird einfach gestört, wenn es überall klingelt. Ich würde Handys aber eher in anderen Bereichen des Alltagslebens verbieten, zum Beispiel in U- oder S-Bahnen. In der Schule finde ich es besser, mit den Schülern über die neuen Medien, über die Gefahr und den Nutzen von Handys und Smartphones zu sprechen und gemeinsam Regelungen zu finden.\n\n**23. Karin, 17, Würzburg:** Ich fand es früher immer toll, mein Handy zu zeigen. Aber heute sehe ich das anders. Mit dem Handy ist es genauso wie mit der Kleidung. Es gibt bei uns in der Schule eine richtige Konkurrenz, wer das neuste Modell hat. Ich persönlich kann mir einfach kein teures Smartphone leisten. Deshalb würde ich mich freuen, wenn die Schule ein handyfreier Raum wird.\n\n**24. Robert, 30, Hamburg:** In dem Artikel steht viel über die Gefahren der Handynutzung. Nur werden heute im Unterricht immer mehr Medien benutzt. Das Internet und Smartphones gehört genauso zum Unterricht wie Whiteboards, E-Books usw. Wie soll man dann das Handy verbieten? Das macht doch keinen Sinn.\n\n**25. Tobias, 15, Salzburg:** Schule muss doch auch Spaß machen. Und ich finde es toll, SMS und MMS an meine Freunde zu schicken. Immer, wenn ich das will. Klar kann man es auch manchmal ausschalten. Aber trotzdem: Ohne mein Handy könnte ich nicht leben.\n\n**26. Gunter, 44, Jena:** Ich finde, dass ein Verbot wenig Sinn hat, da die Probleme mit dem Handy nach der Schule weiter gehen. Man sollte sich lieber überlegen, die Schüler im Unterricht auf die Gefahren einer unkontrollierten Handynutzung hinzuweisen. Dabei denke ich neben den finanziellen Problemen, die viele durch unbezahlte Handyverträge haben, auch an gesundheitliche Gefahren durch Handys. Darüber wird viel zu wenig diskutiert."
+        }
+      }
+    },
+    {
+      "id": "c6fc523f-e5ee-4fa1-8f3b-2e4d08888cb8",
+      "question": "Schreiben Sie eine Antwort an Katja.\n\nAntworten Sie Katja mit einer E-Mail (etwa 80 Wörter). Schreiben Sie dabei etwas zu den drei folgenden Punkten:\n\n– Beschreiben Sie Ihre Arbeit / Ihr Studium: Fühlen Sie sich oft gestresst? Oder eher gelangweilt?\n– Wie gefällt Ihnen Katjas Idee eines Sabbatjahrs? Haben Sie das auch schon einmal gemacht? Oder würden Sie es gern tun?\n– Was möchten Sie von Katja außerdem wissen?",
+      "correct_answer": "essay",
+      "explanation": null,
+      "options": null
+    },
+    {
+      "id": "6192def3-657a-4390-8fee-16dff54bb321",
+      "question": "<strong>Lesen · Teil 4</strong><br>26. Gunter (44, Jena) — ist er für ein Verbot?",
+      "correct_answer": "1",
+      "explanation": null,
+      "options": {
+        "type": "quiz",
+        "items": [
+          "Ja",
+          "Nein"
+        ],
+        "context": {
+          "type": "text",
+          "title": "Lesen - Teil 4",
+          "content": "*Lesen Teil 4 · Arbeitszeit: 15 Min. Lesen Sie die Texte 20 bis 26. Wählen Sie: Ist die Person für ein Verbot? In einer Zeitschrift lesen Sie Kommentare zu einem Artikel über ein Verbot von Handys in der Schule. (Beispiel: Jonathan → Nein)*\n\n**Leserbriefe**\n\n**Jonathan, 35, Dresden (Beispiel):** Immer mehr Eltern und Lehrer fordern ein Handyverbot im Unterricht. Ich als Lehrer kann diese Forderung verstehen, allerdings finde ich sie schwer zu realisieren, gerade im Zeitalter der neuen Medien. Aber versuchen sollte man es trotzdem.\n\n**20. Nadja, 16, Wien:** Ich wäre mit einem Verbot vollkommen einverstanden. Bei uns in der Schule nehmen bestimmte Schüler immer wieder das Handy, um gemeine Fotos von anderen Schülern zu machen und ins Netz zu stellen. Das muss aufhören und da wäre es schon gut, wenn man Handys gar nicht mehr benutzen dürfte.\n\n**21. Jens, 18, Dresden:** Bei uns in der Schule wurde lange über störende Handys im Unterricht diskutiert. Wie viele Schüler war auch ich auch gegen ein allgemeines Verbot. Wir haben dann versucht, uns auf Regelungen zu einigen, ohne Verbot. Leider hatte das keinen Erfolg, sodass ich inzwischen meine Meinung geändert habe. Manchmal geht es halt nicht ohne Verbot.\n\n**22. Astrid, 40, St.-Pölten:** Keine Frage, Handys sind ein Problem, nicht nur an der Schule. Man wird einfach gestört, wenn es überall klingelt. Ich würde Handys aber eher in anderen Bereichen des Alltagslebens verbieten, zum Beispiel in U- oder S-Bahnen. In der Schule finde ich es besser, mit den Schülern über die neuen Medien, über die Gefahr und den Nutzen von Handys und Smartphones zu sprechen und gemeinsam Regelungen zu finden.\n\n**23. Karin, 17, Würzburg:** Ich fand es früher immer toll, mein Handy zu zeigen. Aber heute sehe ich das anders. Mit dem Handy ist es genauso wie mit der Kleidung. Es gibt bei uns in der Schule eine richtige Konkurrenz, wer das neuste Modell hat. Ich persönlich kann mir einfach kein teures Smartphone leisten. Deshalb würde ich mich freuen, wenn die Schule ein handyfreier Raum wird.\n\n**24. Robert, 30, Hamburg:** In dem Artikel steht viel über die Gefahren der Handynutzung. Nur werden heute im Unterricht immer mehr Medien benutzt. Das Internet und Smartphones gehört genauso zum Unterricht wie Whiteboards, E-Books usw. Wie soll man dann das Handy verbieten? Das macht doch keinen Sinn.\n\n**25. Tobias, 15, Salzburg:** Schule muss doch auch Spaß machen. Und ich finde es toll, SMS und MMS an meine Freunde zu schicken. Immer, wenn ich das will. Klar kann man es auch manchmal ausschalten. Aber trotzdem: Ohne mein Handy könnte ich nicht leben.\n\n**26. Gunter, 44, Jena:** Ich finde, dass ein Verbot wenig Sinn hat, da die Probleme mit dem Handy nach der Schule weiter gehen. Man sollte sich lieber überlegen, die Schüler im Unterricht auf die Gefahren einer unkontrollierten Handynutzung hinzuweisen. Dabei denke ich neben den finanziellen Problemen, die viele durch unbezahlte Handyverträge haben, auch an gesundheitliche Gefahren durch Handys. Darüber wird viel zu wenig diskutiert."
+        }
+      }
+    },
+    {
+      "id": "453c244e-e0f7-4104-a654-363f43ee5145",
+      "question": "<strong>Lesen · Teil 5</strong><br>27. Der Leseausweis …",
+      "correct_answer": "2",
+      "explanation": null,
+      "options": {
+        "type": "quiz",
+        "items": [
+          "a - ist für Studenten und Kinder kostenlos.",
+          "b - kostet für alle Nutzer 20 Euro.",
+          "c - ist ein Jahr lang gültig."
+        ],
+        "context": {
+          "type": "text",
+          "title": "Lesen - Teil 5",
+          "content": "*Lesen Teil 5 · Arbeitszeit: 10 Min. Lesen Sie die Aufgaben 27 bis 30 und den Text dazu. Wählen Sie bei jeder Aufgabe die richtige Lösung a, b oder c. Sie informieren sich über die Nutzungsbedingungen Ihrer Stadtbücherei.*\n\n**Stadtbibliothek — Nutzungsbedingungen**\n\n**Leseausweis:** Für die Benutzung der Einrichtungen der Stadtbibliothek und das Ausleihen von Medien ist eine Gebühr zu zahlen. Die Jahresgebühr für den Leseausweis beträgt 20,00 € pro erwachsenem Nutzer. Studenten zahlen einen ermäßigten Beitrag, Kinder und Jugendliche unter 18 Jahren sind von der Jahresgebühr befreit.\n\n**Ausleihe und Leihfrist:** Zum Ausleihen brauchen Sie einen gültigen Leseausweis. Die Leihfrist für Bücher beträgt vier Wochen, für CDs und DVDs 14 Tage. Bestimmte Medien (Zeitungen, Zeitschriften, Nachschlagewerke) dürfen nicht ausgeliehen werden. Die Leihfrist kann höchstens zweimal verlängert werden. Ist ein Medium von einem anderen Nutzer vorbestellt, ist eine Verlängerung der Leihfrist nicht möglich.\n\n**Verhaltensregeln:** Es ist nicht erlaubt, Taschen und Ähnliches in die Bibliotheksräume mitzunehmen. Bitte benutzen Sie die Schließfächer am Haupteingang. An der Information können Sie auch durchsichtige Tragetaschen für 1,50 Euro kaufen, die in die Bibliothek mitgenommen werden dürfen. In der Bibliothek ist Essen streng verboten. Getränke dürfen mitgebracht werden, allerdings nicht in Papp- oder Plastikbechern, sondern nur in Flaschen, die fest geschlossen werden können.\n\n**Online-Angebote:** Die Stadtbibliothek bietet Ihnen sowohl im Haus wie auch online von zu Hause aus zahlreiche digitale Angebote. Sie können auch elektronische Medien (E-Books, E-Video, E-Music) für einen begrenzten Zeitraum (sieben Tage) auf Ihren Computer herunterladen. Nach sieben Tagen können Sie die Dateien nicht mehr verwenden und ein anderer Kunde kann sie herunterladen. Um dieses Angebot nutzen zu können, brauchen Sie ein Passwort, das Sie mit Ihrem Leseausweis erhalten."
+        }
+      }
+    },
+    {
+      "id": "b50373c7-3a45-4a19-90a4-a8a316e07f18",
+      "question": "<strong>Lesen · Teil 4</strong><br>20. Nadja (16, Wien) — ist sie für ein Verbot?",
+      "correct_answer": "0",
+      "explanation": null,
+      "options": {
+        "type": "quiz",
+        "items": [
+          "Ja",
+          "Nein"
+        ],
+        "context": {
+          "type": "text",
+          "title": "Lesen - Teil 4",
+          "content": "*Lesen Teil 4 · Arbeitszeit: 15 Min. Lesen Sie die Texte 20 bis 26. Wählen Sie: Ist die Person für ein Verbot? In einer Zeitschrift lesen Sie Kommentare zu einem Artikel über ein Verbot von Handys in der Schule. (Beispiel: Jonathan → Nein)*\n\n**Leserbriefe**\n\n**Jonathan, 35, Dresden (Beispiel):** Immer mehr Eltern und Lehrer fordern ein Handyverbot im Unterricht. Ich als Lehrer kann diese Forderung verstehen, allerdings finde ich sie schwer zu realisieren, gerade im Zeitalter der neuen Medien. Aber versuchen sollte man es trotzdem.\n\n**20. Nadja, 16, Wien:** Ich wäre mit einem Verbot vollkommen einverstanden. Bei uns in der Schule nehmen bestimmte Schüler immer wieder das Handy, um gemeine Fotos von anderen Schülern zu machen und ins Netz zu stellen. Das muss aufhören und da wäre es schon gut, wenn man Handys gar nicht mehr benutzen dürfte.\n\n**21. Jens, 18, Dresden:** Bei uns in der Schule wurde lange über störende Handys im Unterricht diskutiert. Wie viele Schüler war auch ich auch gegen ein allgemeines Verbot. Wir haben dann versucht, uns auf Regelungen zu einigen, ohne Verbot. Leider hatte das keinen Erfolg, sodass ich inzwischen meine Meinung geändert habe. Manchmal geht es halt nicht ohne Verbot.\n\n**22. Astrid, 40, St.-Pölten:** Keine Frage, Handys sind ein Problem, nicht nur an der Schule. Man wird einfach gestört, wenn es überall klingelt. Ich würde Handys aber eher in anderen Bereichen des Alltagslebens verbieten, zum Beispiel in U- oder S-Bahnen. In der Schule finde ich es besser, mit den Schülern über die neuen Medien, über die Gefahr und den Nutzen von Handys und Smartphones zu sprechen und gemeinsam Regelungen zu finden.\n\n**23. Karin, 17, Würzburg:** Ich fand es früher immer toll, mein Handy zu zeigen. Aber heute sehe ich das anders. Mit dem Handy ist es genauso wie mit der Kleidung. Es gibt bei uns in der Schule eine richtige Konkurrenz, wer das neuste Modell hat. Ich persönlich kann mir einfach kein teures Smartphone leisten. Deshalb würde ich mich freuen, wenn die Schule ein handyfreier Raum wird.\n\n**24. Robert, 30, Hamburg:** In dem Artikel steht viel über die Gefahren der Handynutzung. Nur werden heute im Unterricht immer mehr Medien benutzt. Das Internet und Smartphones gehört genauso zum Unterricht wie Whiteboards, E-Books usw. Wie soll man dann das Handy verbieten? Das macht doch keinen Sinn.\n\n**25. Tobias, 15, Salzburg:** Schule muss doch auch Spaß machen. Und ich finde es toll, SMS und MMS an meine Freunde zu schicken. Immer, wenn ich das will. Klar kann man es auch manchmal ausschalten. Aber trotzdem: Ohne mein Handy könnte ich nicht leben.\n\n**26. Gunter, 44, Jena:** Ich finde, dass ein Verbot wenig Sinn hat, da die Probleme mit dem Handy nach der Schule weiter gehen. Man sollte sich lieber überlegen, die Schüler im Unterricht auf die Gefahren einer unkontrollierten Handynutzung hinzuweisen. Dabei denke ich neben den finanziellen Problemen, die viele durch unbezahlte Handyverträge haben, auch an gesundheitliche Gefahren durch Handys. Darüber wird viel zu wenig diskutiert."
+        }
+      }
+    },
+    {
+      "id": "4826b5cb-58d7-42aa-8e20-7d8827644e15",
+      "question": "<strong>Lesen · Teil 4</strong><br>21. Jens (18, Dresden) — ist er für ein Verbot?",
+      "correct_answer": "0",
+      "explanation": null,
+      "options": {
+        "type": "quiz",
+        "items": [
+          "Ja",
+          "Nein"
+        ],
+        "context": {
+          "type": "text",
+          "title": "Lesen - Teil 4",
+          "content": "*Lesen Teil 4 · Arbeitszeit: 15 Min. Lesen Sie die Texte 20 bis 26. Wählen Sie: Ist die Person für ein Verbot? In einer Zeitschrift lesen Sie Kommentare zu einem Artikel über ein Verbot von Handys in der Schule. (Beispiel: Jonathan → Nein)*\n\n**Leserbriefe**\n\n**Jonathan, 35, Dresden (Beispiel):** Immer mehr Eltern und Lehrer fordern ein Handyverbot im Unterricht. Ich als Lehrer kann diese Forderung verstehen, allerdings finde ich sie schwer zu realisieren, gerade im Zeitalter der neuen Medien. Aber versuchen sollte man es trotzdem.\n\n**20. Nadja, 16, Wien:** Ich wäre mit einem Verbot vollkommen einverstanden. Bei uns in der Schule nehmen bestimmte Schüler immer wieder das Handy, um gemeine Fotos von anderen Schülern zu machen und ins Netz zu stellen. Das muss aufhören und da wäre es schon gut, wenn man Handys gar nicht mehr benutzen dürfte.\n\n**21. Jens, 18, Dresden:** Bei uns in der Schule wurde lange über störende Handys im Unterricht diskutiert. Wie viele Schüler war auch ich auch gegen ein allgemeines Verbot. Wir haben dann versucht, uns auf Regelungen zu einigen, ohne Verbot. Leider hatte das keinen Erfolg, sodass ich inzwischen meine Meinung geändert habe. Manchmal geht es halt nicht ohne Verbot.\n\n**22. Astrid, 40, St.-Pölten:** Keine Frage, Handys sind ein Problem, nicht nur an der Schule. Man wird einfach gestört, wenn es überall klingelt. Ich würde Handys aber eher in anderen Bereichen des Alltagslebens verbieten, zum Beispiel in U- oder S-Bahnen. In der Schule finde ich es besser, mit den Schülern über die neuen Medien, über die Gefahr und den Nutzen von Handys und Smartphones zu sprechen und gemeinsam Regelungen zu finden.\n\n**23. Karin, 17, Würzburg:** Ich fand es früher immer toll, mein Handy zu zeigen. Aber heute sehe ich das anders. Mit dem Handy ist es genauso wie mit der Kleidung. Es gibt bei uns in der Schule eine richtige Konkurrenz, wer das neuste Modell hat. Ich persönlich kann mir einfach kein teures Smartphone leisten. Deshalb würde ich mich freuen, wenn die Schule ein handyfreier Raum wird.\n\n**24. Robert, 30, Hamburg:** In dem Artikel steht viel über die Gefahren der Handynutzung. Nur werden heute im Unterricht immer mehr Medien benutzt. Das Internet und Smartphones gehört genauso zum Unterricht wie Whiteboards, E-Books usw. Wie soll man dann das Handy verbieten? Das macht doch keinen Sinn.\n\n**25. Tobias, 15, Salzburg:** Schule muss doch auch Spaß machen. Und ich finde es toll, SMS und MMS an meine Freunde zu schicken. Immer, wenn ich das will. Klar kann man es auch manchmal ausschalten. Aber trotzdem: Ohne mein Handy könnte ich nicht leben.\n\n**26. Gunter, 44, Jena:** Ich finde, dass ein Verbot wenig Sinn hat, da die Probleme mit dem Handy nach der Schule weiter gehen. Man sollte sich lieber überlegen, die Schüler im Unterricht auf die Gefahren einer unkontrollierten Handynutzung hinzuweisen. Dabei denke ich neben den finanziellen Problemen, die viele durch unbezahlte Handyverträge haben, auch an gesundheitliche Gefahren durch Handys. Darüber wird viel zu wenig diskutiert."
+        }
+      }
+    },
+    {
+      "id": "0b37019b-6ac3-4c41-b065-4d58150e2167",
+      "question": "<strong>Lesen · Teil 4</strong><br>22. Astrid (40, St.-Pölten) — ist sie für ein Verbot?",
+      "correct_answer": "1",
+      "explanation": null,
+      "options": {
+        "type": "quiz",
+        "items": [
+          "Ja",
+          "Nein"
+        ],
+        "context": {
+          "type": "text",
+          "title": "Lesen - Teil 4",
+          "content": "*Lesen Teil 4 · Arbeitszeit: 15 Min. Lesen Sie die Texte 20 bis 26. Wählen Sie: Ist die Person für ein Verbot? In einer Zeitschrift lesen Sie Kommentare zu einem Artikel über ein Verbot von Handys in der Schule. (Beispiel: Jonathan → Nein)*\n\n**Leserbriefe**\n\n**Jonathan, 35, Dresden (Beispiel):** Immer mehr Eltern und Lehrer fordern ein Handyverbot im Unterricht. Ich als Lehrer kann diese Forderung verstehen, allerdings finde ich sie schwer zu realisieren, gerade im Zeitalter der neuen Medien. Aber versuchen sollte man es trotzdem.\n\n**20. Nadja, 16, Wien:** Ich wäre mit einem Verbot vollkommen einverstanden. Bei uns in der Schule nehmen bestimmte Schüler immer wieder das Handy, um gemeine Fotos von anderen Schülern zu machen und ins Netz zu stellen. Das muss aufhören und da wäre es schon gut, wenn man Handys gar nicht mehr benutzen dürfte.\n\n**21. Jens, 18, Dresden:** Bei uns in der Schule wurde lange über störende Handys im Unterricht diskutiert. Wie viele Schüler war auch ich auch gegen ein allgemeines Verbot. Wir haben dann versucht, uns auf Regelungen zu einigen, ohne Verbot. Leider hatte das keinen Erfolg, sodass ich inzwischen meine Meinung geändert habe. Manchmal geht es halt nicht ohne Verbot.\n\n**22. Astrid, 40, St.-Pölten:** Keine Frage, Handys sind ein Problem, nicht nur an der Schule. Man wird einfach gestört, wenn es überall klingelt. Ich würde Handys aber eher in anderen Bereichen des Alltagslebens verbieten, zum Beispiel in U- oder S-Bahnen. In der Schule finde ich es besser, mit den Schülern über die neuen Medien, über die Gefahr und den Nutzen von Handys und Smartphones zu sprechen und gemeinsam Regelungen zu finden.\n\n**23. Karin, 17, Würzburg:** Ich fand es früher immer toll, mein Handy zu zeigen. Aber heute sehe ich das anders. Mit dem Handy ist es genauso wie mit der Kleidung. Es gibt bei uns in der Schule eine richtige Konkurrenz, wer das neuste Modell hat. Ich persönlich kann mir einfach kein teures Smartphone leisten. Deshalb würde ich mich freuen, wenn die Schule ein handyfreier Raum wird.\n\n**24. Robert, 30, Hamburg:** In dem Artikel steht viel über die Gefahren der Handynutzung. Nur werden heute im Unterricht immer mehr Medien benutzt. Das Internet und Smartphones gehört genauso zum Unterricht wie Whiteboards, E-Books usw. Wie soll man dann das Handy verbieten? Das macht doch keinen Sinn.\n\n**25. Tobias, 15, Salzburg:** Schule muss doch auch Spaß machen. Und ich finde es toll, SMS und MMS an meine Freunde zu schicken. Immer, wenn ich das will. Klar kann man es auch manchmal ausschalten. Aber trotzdem: Ohne mein Handy könnte ich nicht leben.\n\n**26. Gunter, 44, Jena:** Ich finde, dass ein Verbot wenig Sinn hat, da die Probleme mit dem Handy nach der Schule weiter gehen. Man sollte sich lieber überlegen, die Schüler im Unterricht auf die Gefahren einer unkontrollierten Handynutzung hinzuweisen. Dabei denke ich neben den finanziellen Problemen, die viele durch unbezahlte Handyverträge haben, auch an gesundheitliche Gefahren durch Handys. Darüber wird viel zu wenig diskutiert."
+        }
+      }
+    },
+    {
+      "id": "7d6521e1-17f0-46ec-8d37-da1384e38663",
+      "question": "<strong>Lesen · Teil 4</strong><br>25. Tobias (15, Salzburg) — ist er für ein Verbot?",
+      "correct_answer": "1",
+      "explanation": null,
+      "options": {
+        "type": "quiz",
+        "items": [
+          "Ja",
+          "Nein"
+        ],
+        "context": {
+          "type": "text",
+          "title": "Lesen - Teil 4",
+          "content": "*Lesen Teil 4 · Arbeitszeit: 15 Min. Lesen Sie die Texte 20 bis 26. Wählen Sie: Ist die Person für ein Verbot? In einer Zeitschrift lesen Sie Kommentare zu einem Artikel über ein Verbot von Handys in der Schule. (Beispiel: Jonathan → Nein)*\n\n**Leserbriefe**\n\n**Jonathan, 35, Dresden (Beispiel):** Immer mehr Eltern und Lehrer fordern ein Handyverbot im Unterricht. Ich als Lehrer kann diese Forderung verstehen, allerdings finde ich sie schwer zu realisieren, gerade im Zeitalter der neuen Medien. Aber versuchen sollte man es trotzdem.\n\n**20. Nadja, 16, Wien:** Ich wäre mit einem Verbot vollkommen einverstanden. Bei uns in der Schule nehmen bestimmte Schüler immer wieder das Handy, um gemeine Fotos von anderen Schülern zu machen und ins Netz zu stellen. Das muss aufhören und da wäre es schon gut, wenn man Handys gar nicht mehr benutzen dürfte.\n\n**21. Jens, 18, Dresden:** Bei uns in der Schule wurde lange über störende Handys im Unterricht diskutiert. Wie viele Schüler war auch ich auch gegen ein allgemeines Verbot. Wir haben dann versucht, uns auf Regelungen zu einigen, ohne Verbot. Leider hatte das keinen Erfolg, sodass ich inzwischen meine Meinung geändert habe. Manchmal geht es halt nicht ohne Verbot.\n\n**22. Astrid, 40, St.-Pölten:** Keine Frage, Handys sind ein Problem, nicht nur an der Schule. Man wird einfach gestört, wenn es überall klingelt. Ich würde Handys aber eher in anderen Bereichen des Alltagslebens verbieten, zum Beispiel in U- oder S-Bahnen. In der Schule finde ich es besser, mit den Schülern über die neuen Medien, über die Gefahr und den Nutzen von Handys und Smartphones zu sprechen und gemeinsam Regelungen zu finden.\n\n**23. Karin, 17, Würzburg:** Ich fand es früher immer toll, mein Handy zu zeigen. Aber heute sehe ich das anders. Mit dem Handy ist es genauso wie mit der Kleidung. Es gibt bei uns in der Schule eine richtige Konkurrenz, wer das neuste Modell hat. Ich persönlich kann mir einfach kein teures Smartphone leisten. Deshalb würde ich mich freuen, wenn die Schule ein handyfreier Raum wird.\n\n**24. Robert, 30, Hamburg:** In dem Artikel steht viel über die Gefahren der Handynutzung. Nur werden heute im Unterricht immer mehr Medien benutzt. Das Internet und Smartphones gehört genauso zum Unterricht wie Whiteboards, E-Books usw. Wie soll man dann das Handy verbieten? Das macht doch keinen Sinn.\n\n**25. Tobias, 15, Salzburg:** Schule muss doch auch Spaß machen. Und ich finde es toll, SMS und MMS an meine Freunde zu schicken. Immer, wenn ich das will. Klar kann man es auch manchmal ausschalten. Aber trotzdem: Ohne mein Handy könnte ich nicht leben.\n\n**26. Gunter, 44, Jena:** Ich finde, dass ein Verbot wenig Sinn hat, da die Probleme mit dem Handy nach der Schule weiter gehen. Man sollte sich lieber überlegen, die Schüler im Unterricht auf die Gefahren einer unkontrollierten Handynutzung hinzuweisen. Dabei denke ich neben den finanziellen Problemen, die viele durch unbezahlte Handyverträge haben, auch an gesundheitliche Gefahren durch Handys. Darüber wird viel zu wenig diskutiert."
+        }
+      }
+    },
+    {
+      "id": "61ec5040-2cef-4ef3-8b30-cb58e25e64ab",
+      "question": "<strong>Lesen · Teil 5</strong><br>29. Die Besucher sollen …",
+      "correct_answer": "2",
+      "explanation": null,
+      "options": {
+        "type": "quiz",
+        "items": [
+          "a - Plastiktüten für die Bücher mitbringen.",
+          "b - Rucksäcke an der Information abgeben.",
+          "c - ihre Taschen am Eingang einschließen."
+        ],
+        "context": {
+          "type": "text",
+          "title": "Lesen - Teil 5",
+          "content": "*Lesen Teil 5 · Arbeitszeit: 10 Min. Lesen Sie die Aufgaben 27 bis 30 und den Text dazu. Wählen Sie bei jeder Aufgabe die richtige Lösung a, b oder c. Sie informieren sich über die Nutzungsbedingungen Ihrer Stadtbücherei.*\n\n**Stadtbibliothek — Nutzungsbedingungen**\n\n**Leseausweis:** Für die Benutzung der Einrichtungen der Stadtbibliothek und das Ausleihen von Medien ist eine Gebühr zu zahlen. Die Jahresgebühr für den Leseausweis beträgt 20,00 € pro erwachsenem Nutzer. Studenten zahlen einen ermäßigten Beitrag, Kinder und Jugendliche unter 18 Jahren sind von der Jahresgebühr befreit.\n\n**Ausleihe und Leihfrist:** Zum Ausleihen brauchen Sie einen gültigen Leseausweis. Die Leihfrist für Bücher beträgt vier Wochen, für CDs und DVDs 14 Tage. Bestimmte Medien (Zeitungen, Zeitschriften, Nachschlagewerke) dürfen nicht ausgeliehen werden. Die Leihfrist kann höchstens zweimal verlängert werden. Ist ein Medium von einem anderen Nutzer vorbestellt, ist eine Verlängerung der Leihfrist nicht möglich.\n\n**Verhaltensregeln:** Es ist nicht erlaubt, Taschen und Ähnliches in die Bibliotheksräume mitzunehmen. Bitte benutzen Sie die Schließfächer am Haupteingang. An der Information können Sie auch durchsichtige Tragetaschen für 1,50 Euro kaufen, die in die Bibliothek mitgenommen werden dürfen. In der Bibliothek ist Essen streng verboten. Getränke dürfen mitgebracht werden, allerdings nicht in Papp- oder Plastikbechern, sondern nur in Flaschen, die fest geschlossen werden können.\n\n**Online-Angebote:** Die Stadtbibliothek bietet Ihnen sowohl im Haus wie auch online von zu Hause aus zahlreiche digitale Angebote. Sie können auch elektronische Medien (E-Books, E-Video, E-Music) für einen begrenzten Zeitraum (sieben Tage) auf Ihren Computer herunterladen. Nach sieben Tagen können Sie die Dateien nicht mehr verwenden und ein anderer Kunde kann sie herunterladen. Um dieses Angebot nutzen zu können, brauchen Sie ein Passwort, das Sie mit Ihrem Leseausweis erhalten."
+        }
+      }
+    },
+    {
+      "id": "7d3915b7-abc9-4c90-9887-f9cf630054d2",
+      "question": "<strong>Lesen · Teil 5</strong><br>30. Für das Onlineangebot gilt:",
+      "correct_answer": "1",
+      "explanation": null,
+      "options": {
+        "type": "quiz",
+        "items": [
+          "a - Das Angebot ist zurzeit noch sehr begrenzt.",
+          "b - E-Books kann man sieben Tage ausleihen.",
+          "c - Man kann es auch nutzen, wenn man keinen Leseausweis hat."
+        ],
+        "context": {
+          "type": "text",
+          "title": "Lesen - Teil 5",
+          "content": "*Lesen Teil 5 · Arbeitszeit: 10 Min. Lesen Sie die Aufgaben 27 bis 30 und den Text dazu. Wählen Sie bei jeder Aufgabe die richtige Lösung a, b oder c. Sie informieren sich über die Nutzungsbedingungen Ihrer Stadtbücherei.*\n\n**Stadtbibliothek — Nutzungsbedingungen**\n\n**Leseausweis:** Für die Benutzung der Einrichtungen der Stadtbibliothek und das Ausleihen von Medien ist eine Gebühr zu zahlen. Die Jahresgebühr für den Leseausweis beträgt 20,00 € pro erwachsenem Nutzer. Studenten zahlen einen ermäßigten Beitrag, Kinder und Jugendliche unter 18 Jahren sind von der Jahresgebühr befreit.\n\n**Ausleihe und Leihfrist:** Zum Ausleihen brauchen Sie einen gültigen Leseausweis. Die Leihfrist für Bücher beträgt vier Wochen, für CDs und DVDs 14 Tage. Bestimmte Medien (Zeitungen, Zeitschriften, Nachschlagewerke) dürfen nicht ausgeliehen werden. Die Leihfrist kann höchstens zweimal verlängert werden. Ist ein Medium von einem anderen Nutzer vorbestellt, ist eine Verlängerung der Leihfrist nicht möglich.\n\n**Verhaltensregeln:** Es ist nicht erlaubt, Taschen und Ähnliches in die Bibliotheksräume mitzunehmen. Bitte benutzen Sie die Schließfächer am Haupteingang. An der Information können Sie auch durchsichtige Tragetaschen für 1,50 Euro kaufen, die in die Bibliothek mitgenommen werden dürfen. In der Bibliothek ist Essen streng verboten. Getränke dürfen mitgebracht werden, allerdings nicht in Papp- oder Plastikbechern, sondern nur in Flaschen, die fest geschlossen werden können.\n\n**Online-Angebote:** Die Stadtbibliothek bietet Ihnen sowohl im Haus wie auch online von zu Hause aus zahlreiche digitale Angebote. Sie können auch elektronische Medien (E-Books, E-Video, E-Music) für einen begrenzten Zeitraum (sieben Tage) auf Ihren Computer herunterladen. Nach sieben Tagen können Sie die Dateien nicht mehr verwenden und ein anderer Kunde kann sie herunterladen. Um dieses Angebot nutzen zu können, brauchen Sie ein Passwort, das Sie mit Ihrem Leseausweis erhalten."
+        }
+      }
+    },
+    {
+      "id": "cdf67928-1334-4d25-b4ec-ad2ecf10dd5d",
+      "question": "<strong>Lesen · Teil 2</strong><br>In diesem Text geht es um …",
+      "correct_answer": "2",
+      "explanation": null,
+      "options": {
+        "type": "quiz",
+        "items": [
+          "a - Firmen, bei denen Jugendliche eine Ausbildung machen.",
+          "b - verschiedene Schulen in Deutschland.",
+          "c - Unternehmen, die von Schülern geführt werden."
+        ],
+        "context": {
+          "type": "text",
+          "title": "Lesen - Teil 2",
+          "content": "*Lesen Teil 2 · Lesen Sie den Text aus der Presse und die Aufgaben 10 bis 12 dazu. Wählen Sie bei jeder Aufgabe die richtige Lösung a, b oder c.*\n\n**JUNIOR-Wettbewerb 2013 — Münchner Schülerfirma hat die Nase vorn**\n\nDie Schülerfirma „KraGü“ aus München hat den diesjährigen JUNIOR-Bundeswettbewerb gewonnen und darf sich nun „Bestes JUNIOR-Unternehmen 2013“ nennen. Die Münchner Jungunternehmer nähen aus recycelten Krawatten modische und originelle Designergürtel. Als Gewinner des Bundeswettbewerbes werden sie die Bundesrepublik im Juli beim Europawettbewerb der Schülerunternehmen in London vertreten. Platz zwei belegen Schüler des Dillinger Albert-Schweizer-Gymnasiums mit ihrer Firma „The Green Art of Cooking“. Sie haben ein Biokochbuch mit Rezepten aus der Region produziert und vermarktet. Mit etwa 565 Schülerfirmen gab es in diesem Jahr etwa gleich viele JUNIOR-Projekt-Teilnehmer wie im Vorjahr. Ein Jahr lang lernten die Jugendlichen, wie man einen Finanzplan entwickelt, ein Unternehmen aufbaut und organisiert, wie man Kunden gewinnt und einen Geschäftsbericht schreibt. Spielerisch wurden sie so zu Unternehmern. Auf dem Bundeswettbewerb in Mainz stellten gestern die vierzehn besten Schülerfirmen Deutschlands mit einem Messestand und einer Firmenpräsentation ihr Unternehmen vor. Den Sonderpreis für die beste Firmenwebsite gewann die Schülerfirma „Kashinea“ aus Kaiserslautern, die ein eigenes Kosmetikprodukt entwickelt hat.\n\n*aus einer deutschen Zeitung*"
+        }
+      }
+    },
+    {
+      "id": "468cfd9e-78bd-46b4-9c28-0f886f694c01",
+      "question": "<strong>Lesen · Teil 2</strong><br>Das beste JUNIOR-Unternehmen 2013 …",
+      "correct_answer": "2",
+      "explanation": null,
+      "options": {
+        "type": "quiz",
+        "items": [
+          "a - wurde von der Firma „KraGü“ gewählt.",
+          "b - stellt Krawatten her.",
+          "c - fährt im Sommer nach London."
+        ],
+        "context": {
+          "type": "text",
+          "title": "Lesen - Teil 2",
+          "content": "*Lesen Teil 2 · Lesen Sie den Text aus der Presse und die Aufgaben 10 bis 12 dazu. Wählen Sie bei jeder Aufgabe die richtige Lösung a, b oder c.*\n\n**JUNIOR-Wettbewerb 2013 — Münchner Schülerfirma hat die Nase vorn**\n\nDie Schülerfirma „KraGü“ aus München hat den diesjährigen JUNIOR-Bundeswettbewerb gewonnen und darf sich nun „Bestes JUNIOR-Unternehmen 2013“ nennen. Die Münchner Jungunternehmer nähen aus recycelten Krawatten modische und originelle Designergürtel. Als Gewinner des Bundeswettbewerbes werden sie die Bundesrepublik im Juli beim Europawettbewerb der Schülerunternehmen in London vertreten. Platz zwei belegen Schüler des Dillinger Albert-Schweizer-Gymnasiums mit ihrer Firma „The Green Art of Cooking“. Sie haben ein Biokochbuch mit Rezepten aus der Region produziert und vermarktet. Mit etwa 565 Schülerfirmen gab es in diesem Jahr etwa gleich viele JUNIOR-Projekt-Teilnehmer wie im Vorjahr. Ein Jahr lang lernten die Jugendlichen, wie man einen Finanzplan entwickelt, ein Unternehmen aufbaut und organisiert, wie man Kunden gewinnt und einen Geschäftsbericht schreibt. Spielerisch wurden sie so zu Unternehmern. Auf dem Bundeswettbewerb in Mainz stellten gestern die vierzehn besten Schülerfirmen Deutschlands mit einem Messestand und einer Firmenpräsentation ihr Unternehmen vor. Den Sonderpreis für die beste Firmenwebsite gewann die Schülerfirma „Kashinea“ aus Kaiserslautern, die ein eigenes Kosmetikprodukt entwickelt hat.\n\n*aus einer deutschen Zeitung*"
+        }
+      }
+    },
+    {
+      "id": "430f4bae-e19c-4bf3-90dc-3254d6fcdd94",
+      "question": "<strong>Lesen · Teil 2</strong><br>In diesem Jahr …",
+      "correct_answer": "1",
+      "explanation": null,
+      "options": {
+        "type": "quiz",
+        "items": [
+          "a - präsentierten sich alle Schülerfirmen auf einer Messe.",
+          "b - gab es auch einen Preis für die beste Internetseite.",
+          "c - nahmen besonders viele Schülerfirmen am JUNIOR-Wettbewerb teil."
+        ],
+        "context": {
+          "type": "text",
+          "title": "Lesen - Teil 2",
+          "content": "*Lesen Teil 2 · Lesen Sie den Text aus der Presse und die Aufgaben 10 bis 12 dazu. Wählen Sie bei jeder Aufgabe die richtige Lösung a, b oder c.*\n\n**JUNIOR-Wettbewerb 2013 — Münchner Schülerfirma hat die Nase vorn**\n\nDie Schülerfirma „KraGü“ aus München hat den diesjährigen JUNIOR-Bundeswettbewerb gewonnen und darf sich nun „Bestes JUNIOR-Unternehmen 2013“ nennen. Die Münchner Jungunternehmer nähen aus recycelten Krawatten modische und originelle Designergürtel. Als Gewinner des Bundeswettbewerbes werden sie die Bundesrepublik im Juli beim Europawettbewerb der Schülerunternehmen in London vertreten. Platz zwei belegen Schüler des Dillinger Albert-Schweizer-Gymnasiums mit ihrer Firma „The Green Art of Cooking“. Sie haben ein Biokochbuch mit Rezepten aus der Region produziert und vermarktet. Mit etwa 565 Schülerfirmen gab es in diesem Jahr etwa gleich viele JUNIOR-Projekt-Teilnehmer wie im Vorjahr. Ein Jahr lang lernten die Jugendlichen, wie man einen Finanzplan entwickelt, ein Unternehmen aufbaut und organisiert, wie man Kunden gewinnt und einen Geschäftsbericht schreibt. Spielerisch wurden sie so zu Unternehmern. Auf dem Bundeswettbewerb in Mainz stellten gestern die vierzehn besten Schülerfirmen Deutschlands mit einem Messestand und einer Firmenpräsentation ihr Unternehmen vor. Den Sonderpreis für die beste Firmenwebsite gewann die Schülerfirma „Kashinea“ aus Kaiserslautern, die ein eigenes Kosmetikprodukt entwickelt hat.\n\n*aus einer deutschen Zeitung*"
+        }
+      }
+    },
+    {
+      "id": "1d8a1091-5eba-4a17-acf2-4e0ff34d0699",
+      "question": "<strong>Lesen · Teil 5</strong><br>28. Die Besucher dürfen …",
+      "correct_answer": "0",
+      "explanation": null,
+      "options": {
+        "type": "quiz",
+        "items": [
+          "a - Zeitschriften nicht mitnehmen.",
+          "b - alle Medien vier Wochen ausleihen.",
+          "c - alle Medien zweimal ausleihen."
+        ],
+        "context": {
+          "type": "text",
+          "title": "Lesen - Teil 5",
+          "content": "*Lesen Teil 5 · Arbeitszeit: 10 Min. Lesen Sie die Aufgaben 27 bis 30 und den Text dazu. Wählen Sie bei jeder Aufgabe die richtige Lösung a, b oder c. Sie informieren sich über die Nutzungsbedingungen Ihrer Stadtbücherei.*\n\n**Stadtbibliothek — Nutzungsbedingungen**\n\n**Leseausweis:** Für die Benutzung der Einrichtungen der Stadtbibliothek und das Ausleihen von Medien ist eine Gebühr zu zahlen. Die Jahresgebühr für den Leseausweis beträgt 20,00 € pro erwachsenem Nutzer. Studenten zahlen einen ermäßigten Beitrag, Kinder und Jugendliche unter 18 Jahren sind von der Jahresgebühr befreit.\n\n**Ausleihe und Leihfrist:** Zum Ausleihen brauchen Sie einen gültigen Leseausweis. Die Leihfrist für Bücher beträgt vier Wochen, für CDs und DVDs 14 Tage. Bestimmte Medien (Zeitungen, Zeitschriften, Nachschlagewerke) dürfen nicht ausgeliehen werden. Die Leihfrist kann höchstens zweimal verlängert werden. Ist ein Medium von einem anderen Nutzer vorbestellt, ist eine Verlängerung der Leihfrist nicht möglich.\n\n**Verhaltensregeln:** Es ist nicht erlaubt, Taschen und Ähnliches in die Bibliotheksräume mitzunehmen. Bitte benutzen Sie die Schließfächer am Haupteingang. An der Information können Sie auch durchsichtige Tragetaschen für 1,50 Euro kaufen, die in die Bibliothek mitgenommen werden dürfen. In der Bibliothek ist Essen streng verboten. Getränke dürfen mitgebracht werden, allerdings nicht in Papp- oder Plastikbechern, sondern nur in Flaschen, die fest geschlossen werden können.\n\n**Online-Angebote:** Die Stadtbibliothek bietet Ihnen sowohl im Haus wie auch online von zu Hause aus zahlreiche digitale Angebote. Sie können auch elektronische Medien (E-Books, E-Video, E-Music) für einen begrenzten Zeitraum (sieben Tage) auf Ihren Computer herunterladen. Nach sieben Tagen können Sie die Dateien nicht mehr verwenden und ein anderer Kunde kann sie herunterladen. Um dieses Angebot nutzen zu können, brauchen Sie ein Passwort, das Sie mit Ihrem Leseausweis erhalten."
+        }
+      }
+    }
+  ]
+}
