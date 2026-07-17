@@ -11,8 +11,14 @@ import { legacyBlogSlugs } from "./src/lib/legacyBlogSlugs";
 const CSP_REPORT_ONLY = [
   "default-src 'self'",
   // GA4, Meta Pixel, Turnstile, Vimeo player API; blog kalkulator je inline (pokriven unsafe-inline)
+  // 17.07: Sentry prijava 5b282137 (wasm-eval na /naki, 1 posetilac) = browser ekstenzija;
+  // naš kod ne koristi WebAssembly, a Turnstile wasm vrti u svom iframe-u (challenges.cloudflare.com)
+  // pod svojim CSP-om - 'wasm-unsafe-eval' NAMERNO ne dodajemo.
   "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://connect.facebook.net https://challenges.cloudflare.com https://player.vimeo.com",
-  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  // 17.07: + www.gstatic.com po Sentry prijavi 46de38f2 - Chrome ugrađeni prevodilac stranice
+  // (translate_http) ubacuje CSS sa gstatic.com; legitimna funkcija (dijaspora prevodi blog),
+  // ponavljaće se kod raznih posetilaca - mora da radi i posle enforce-a
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://www.gstatic.com",
   "font-src 'self' data: https://fonts.gstatic.com",
   // slike dolaze sa mnogo strana (Supabase, vumbnail, ytimg, tracking pikseli) - https: je svesni kompromis
   "img-src 'self' data: blob: https:",
@@ -22,7 +28,10 @@ const CSP_REPORT_ONLY = [
   // Google signals ping, TLD zavisi od zemlje posetioca - dodate zemlje publike, ostale će u report)
   // 12.07 uveče: + ceo ex-Yu (ba po Sentry prijavi f4d9cdf1, me/hr/si/mk preventivno - ista publika)
   // 12.07 kasnije: + nl (Sentry prijava 919398bd, posetilac iz Holandije - dijaspora)
-  "connect-src 'self' https://rzmyglynjcygsbicssbt.supabase.co wss://rzmyglynjcygsbicssbt.supabase.co https://*.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://stats.g.doubleclick.net https://www.google.com https://www.google.rs https://www.google.de https://www.google.at https://www.google.ch https://www.google.ba https://www.google.me https://www.google.hr https://www.google.si https://www.google.mk https://www.google.nl https://www.googletagmanager.com https://*.ingest.de.sentry.io https://challenges.cloudflare.com https://connect.facebook.net https://graph.facebook.com https://www.facebook.com https://vumbnail.com",
+  // 17.07: + translate.googleapis.com i translate-pa.googleapis.com PREVENTIVNO - deo istog
+  // Chrome-prevodilac toka kao gstatic CSS gore (prevod ide fetch-om iz konteksta stranice);
+  // sam skript prevodioca ubacuje browser privilegovano pa script-src ne treba menjati
+  "connect-src 'self' https://rzmyglynjcygsbicssbt.supabase.co wss://rzmyglynjcygsbicssbt.supabase.co https://translate.googleapis.com https://translate-pa.googleapis.com https://*.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://stats.g.doubleclick.net https://www.google.com https://www.google.rs https://www.google.de https://www.google.at https://www.google.ch https://www.google.ba https://www.google.me https://www.google.hr https://www.google.si https://www.google.mk https://www.google.nl https://www.googletagmanager.com https://*.ingest.de.sentry.io https://challenges.cloudflare.com https://connect.facebook.net https://graph.facebook.com https://www.facebook.com https://vumbnail.com",
   // lekcijski embedovi + Turnstile + YouTube/Vimeo + Google mape na kontaktu.
   // 'self' + supabase + drive po Sentry prijavama 12.07: PdfBlock/LekcijaContent iframe-uju
   // PDF-ove sa Supabase Storage (117 lekcija) i Google Drive embede (6 lekcija)
