@@ -69,5 +69,19 @@ export const config = {
   // "/" namerno IZBAČEN: početna je javna i statička, ne treba joj auth provera.
   // Sa "/" u matcheru, svaki poseta početnoj je radila supabase.auth.getUser()
   // (mrežni round-trip) i izbacivala homepage iz CDN keša -> visok TTFB.
-  matcher: ["/dashboard/:path*", "/profil/:path*", "/admin/:path*", "/profesor/:path*"],
+  //
+  // /lekcija, /vezba i /kurs NISU protectedRoutes (free preview radi bez prijave),
+  // ali MORAJU biti u matcheru: samo proxy sme da upiše osvežene tokene u kolačiće.
+  // Bez toga RSC osveži istekli token samo u memoriji, refresh token se rotira,
+  // browser ostane sa starim → raziđu se sesije → tihi gubitak napretka i
+  // nasumične odjave (prijava Jovane M., jul 2026).
+  matcher: [
+    "/dashboard/:path*",
+    "/profil/:path*",
+    "/admin/:path*",
+    "/profesor/:path*",
+    "/lekcija/:path*",
+    "/vezba/:path*",
+    "/kurs/:path*",
+  ],
 };

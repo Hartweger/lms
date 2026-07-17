@@ -57,6 +57,8 @@ export default function GroupedExamExercise({ exercise, questions, nextLessonId,
   const [checked, setChecked] = useState<Record<number, boolean>>({});
   const [finished, setFinished] = useState(false);
   const [ctxOpen, setCtxOpen] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [saveFailed, setSaveFailed] = useState(false);
 
   const part = groups[partIdx];
   const ctx = ctxOf(part[0]);
@@ -68,6 +70,39 @@ export default function GroupedExamExercise({ exercise, questions, nextLessonId,
 
   const checkPart = () => setChecked({ ...checked, [partIdx]: true });
 
+  // Bez tihog preskakanja: ako sesija/upis padne, polaznik mora da vidi
+  // da rezultat nije sačuvan i da može da pokuša ponovo.
+  const saveAttempt = async () => {
+    setSaving(true);
+    setSaveFailed(false);
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      setSaveFailed(true);
+      setSaving(false);
+      return;
+    }
+    const { error } = await supabase.from("exercise_attempts").insert({
+      exercise_id: exercise.id, user_id: user.id,
+      score: totalCorrect(), total_questions: questions.length,
+    });
+    if (error) {
+      setSaveFailed(true);
+      setSaving(false);
+      return;
+    }
+    // Modelltest: na poslednjem modulu server proverava sve module (≥60%) i izdaje sertifikat.
+    if (isModelltest && courseId) {
+      try {
+        const res = await fetch("/api/certificate", {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ lessonId: exercise.lesson_id, courseId }),
+        });
+        if (res.ok) { const data = await res.json(); if (data.certificateId) setCertificateId(data.certificateId); }
+      } catch { /* tiho - sertifikat se može izdati na sledećem prolazu */ }
+    }
+    setSaving(false);
+  };
+
   const next = async () => {
     if (partIdx < groups.length - 1) {
       setPartIdx(partIdx + 1);
@@ -75,23 +110,7 @@ export default function GroupedExamExercise({ exercise, questions, nextLessonId,
       return;
     }
     // kraj - sačuvaj pokušaj
-    const { data: { user } } = await supabase.auth.getUser();
-    if (user) {
-      await supabase.from("exercise_attempts").insert({
-        exercise_id: exercise.id, user_id: user.id,
-        score: totalCorrect(), total_questions: questions.length,
-      });
-      // Modelltest: na poslednjem modulu server proverava sve module (≥60%) i izdaje sertifikat.
-      if (isModelltest && courseId) {
-        try {
-          const res = await fetch("/api/certificate", {
-            method: "POST", headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ lessonId: exercise.lesson_id, courseId }),
-          });
-          if (res.ok) { const data = await res.json(); if (data.certificateId) setCertificateId(data.certificateId); }
-        } catch { /* tiho - sertifikat se može izdati na sledećem prolazu */ }
-      }
-    }
+    await saveAttempt();
     setFinished(true);
   };
 
@@ -99,13 +118,24 @@ export default function GroupedExamExercise({ exercise, questions, nextLessonId,
     const sc = totalCorrect();
     const pct = Math.round((sc / questions.length) * 100);
     const msg = pct >= 80 ? "Odlično! Spreman/na si za ovaj deo ispita." : pct >= 60 ? "Dobar rezultat - još malo vežbe i ide!" : "Nastavi da vežbaš - proći ćeš tekst/audio još jednom i biće bolje.";
-    const restart = () => { setSelected({}); setChecked({}); setPartIdx(0); setCtxOpen(true); setFinished(false); };
+    const restart = () => { setSelected({}); setChecked({}); setPartIdx(0); setCtxOpen(true); setSaveFailed(false); setFinished(false); };
     return (
       <div className="mt-4 bg-plava-light rounded-2xl p-8 text-center">
         <div className="text-5xl mb-3">{pct >= 60 ? "🎉" : "💪"}</div>
         <p className="text-2xl font-bold text-gray-900 mb-1">{sc} / {questions.length} tačno</p>
         <p className="text-lg font-semibold text-plava mb-2">{pct}%</p>
-        <p className="text-sm text-gray-600 mb-3 max-w-md mx-auto">{msg} Rezultat je sačuvan u tvom napretku.</p>
+        <p className="text-sm text-gray-600 mb-3 max-w-md mx-auto">{msg}{!saveFailed && " Rezultat je sačuvan u tvom napretku."}</p>
+        {saveFailed && (
+          <div className="mb-4 max-w-md mx-auto">
+            <p className="text-sm text-koral-dark bg-koral-light rounded-lg px-4 py-2.5">
+              Rezultat nije sačuvan u tvom napretku. Pokušaj ponovo - ako se ponovi, odjavi se i prijavi ponovo.
+            </p>
+            <button onClick={saveAttempt} disabled={saving}
+              className="mt-2 bg-plava text-white px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-plava-dark transition-colors disabled:opacity-50">
+              {saving ? "Čuvam..." : "Sačuvaj ponovo"}
+            </button>
+          </div>
+        )}
         {isTest && (
           <p className="text-sm mb-6 max-w-md mx-auto">
             <span className={`inline-block px-3 py-1.5 rounded-lg font-medium ${pct >= 60 ? "bg-green-50 text-green-700" : "bg-amber-50 text-amber-700"}`}>
@@ -208,8 +238,8 @@ export default function GroupedExamExercise({ exercise, questions, nextLessonId,
             <span className="text-sm font-medium text-gray-700">
               {part.filter((q) => selected[q.id] === correctOf(q)).length} / {part.length} tačno u ovom delu
             </span>
-            <button onClick={next} className="px-6 py-3 rounded-lg font-bold bg-plava text-white hover:bg-plava-dark transition-colors ml-auto">
-              {partIdx < groups.length - 1 ? `Sledeći deo →` : "Završi test"}
+            <button onClick={next} disabled={saving} className="px-6 py-3 rounded-lg font-bold bg-plava text-white hover:bg-plava-dark transition-colors ml-auto disabled:opacity-50">
+              {partIdx < groups.length - 1 ? `Sledeći deo →` : saving ? "Čuvam..." : "Završi test"}
             </button>
           </div>
         )}

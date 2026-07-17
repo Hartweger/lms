@@ -48,6 +48,8 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
   const [certificateId, setCertificateId] = useState<string | null>(null);
   const [modelltestTotal, setModelltestTotal] = useState<{ score: number; total: number } | null>(null);
   const [contextOpen, setContextOpen] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [saveFailed, setSaveFailed] = useState(false);
 
   // Enter key advances to next question (delayed to avoid consuming the same Enter that submitted the answer)
   useEffect(() => {
@@ -169,100 +171,116 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
     setShowNext(true);
   };
 
+  // Bez tihog preskakanja: ako sesija/upis padne, polaznik mora da vidi
+  // da rezultat nije sačuvan i da može da pokuša ponovo.
+  const saveResults = async () => {
+    setSaving(true);
+    setSaveFailed(false);
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      setSaveFailed(true);
+      setSaving(false);
+      return;
+    }
+    const { error } = await supabase.from("exercise_attempts").insert({
+      exercise_id: exercise.id,
+      user_id: user.id,
+      score,
+      total_questions: questions.filter(
+        (q) => !q.question.toLowerCase().includes("beispiel") && !q.explanation?.includes("Beispiel")
+      ).length,
+    });
+    if (error) {
+      setSaveFailed(true);
+      setSaving(false);
+      return;
+    }
+
+    // dodela srca za vežbu (server računa iznos)
+    try {
+      await fetch("/api/hearts/award", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reason: "exercise", correct: score, hadStreak: maxStreak >= 3 }),
+      });
+    } catch {
+      /* tiho - srca su sekundarna */
+    }
+
+    // Modelltest: calculate total score across ALL exercises on this lesson
+    if (isModelltest && courseId) {
+      // Get all exercises on the same lesson
+      const { data: siblingExs } = await supabase
+        .from("exercises")
+        .select("id")
+        .eq("lesson_id", exercise.lesson_id);
+
+      const siblingIds = (siblingExs || []).map((e: { id: string }) => e.id);
+
+      // Get best attempt for each sibling exercise (except current - use live score)
+      let totalScore = score;
+      let totalQuestions = questions.length;
+
+      for (const sid of siblingIds) {
+        if (sid === exercise.id) continue;
+        const { data: bestAttempt } = await supabase
+          .from("exercise_attempts")
+          .select("score, total_questions")
+          .eq("exercise_id", sid)
+          .eq("user_id", user.id)
+          .order("score", { ascending: false })
+          .limit(1)
+          .single();
+
+        if (bestAttempt) {
+          totalScore += bestAttempt.score;
+          totalQuestions += bestAttempt.total_questions;
+        }
+      }
+
+      const overallPercent = Math.round((totalScore / totalQuestions) * 100);
+      setModelltestTotal({ score: totalScore, total: totalQuestions });
+
+      // Certificates are issued server-side only. The server independently
+      // recomputes the ≥60% threshold from stored attempts, so the client
+      // cannot self-issue or forge a certificate.
+      if (overallPercent >= 60) {
+        // bonus srca za položen test
+        try {
+          await fetch("/api/hearts/award", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ reason: "test_pass", percent: overallPercent }),
+          });
+        } catch {
+          /* tiho */
+        }
+
+        try {
+          const res = await fetch("/api/certificate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ lessonId: exercise.lesson_id, courseId }),
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (data.certificateId) setCertificateId(data.certificateId);
+          }
+        } catch {
+          // Network error - certificate can be re-issued on next completion.
+        }
+      }
+    }
+    setSaving(false);
+  };
+
   const handleNext = async () => {
     setShowNext(false);
     if (currentIndex < questions.length - 1) {
       setCurrentIndex(currentIndex + 1);
     } else {
       setFinished(true);
-      // Save attempt
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        await supabase.from("exercise_attempts").insert({
-          exercise_id: exercise.id,
-          user_id: user.id,
-          score,
-          total_questions: questions.filter(
-            (q) => !q.question.toLowerCase().includes("beispiel") && !q.explanation?.includes("Beispiel")
-          ).length,
-        });
-
-        // dodela srca za vežbu (server računa iznos)
-        try {
-          await fetch("/api/hearts/award", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ reason: "exercise", correct: score, hadStreak: maxStreak >= 3 }),
-          });
-        } catch {
-          /* tiho - srca su sekundarna */
-        }
-
-        // Modelltest: calculate total score across ALL exercises on this lesson
-        if (isModelltest && courseId) {
-          // Get all exercises on the same lesson
-          const { data: siblingExs } = await supabase
-            .from("exercises")
-            .select("id")
-            .eq("lesson_id", exercise.lesson_id);
-
-          const siblingIds = (siblingExs || []).map((e: { id: string }) => e.id);
-
-          // Get best attempt for each sibling exercise (except current - use live score)
-          let totalScore = score;
-          let totalQuestions = questions.length;
-
-          for (const sid of siblingIds) {
-            if (sid === exercise.id) continue;
-            const { data: bestAttempt } = await supabase
-              .from("exercise_attempts")
-              .select("score, total_questions")
-              .eq("exercise_id", sid)
-              .eq("user_id", user.id)
-              .order("score", { ascending: false })
-              .limit(1)
-              .single();
-
-            if (bestAttempt) {
-              totalScore += bestAttempt.score;
-              totalQuestions += bestAttempt.total_questions;
-            }
-          }
-
-          const overallPercent = Math.round((totalScore / totalQuestions) * 100);
-          setModelltestTotal({ score: totalScore, total: totalQuestions });
-
-          // Certificates are issued server-side only. The server independently
-          // recomputes the ≥60% threshold from stored attempts, so the client
-          // cannot self-issue or forge a certificate.
-          if (overallPercent >= 60) {
-            // bonus srca za položen test
-            try {
-              await fetch("/api/hearts/award", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ reason: "test_pass", percent: overallPercent }),
-              });
-            } catch {
-              /* tiho */
-            }
-
-            try {
-              const res = await fetch("/api/certificate", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ lessonId: exercise.lesson_id, courseId }),
-              });
-              if (res.ok) {
-                const data = await res.json();
-                if (data.certificateId) setCertificateId(data.certificateId);
-              }
-            } catch {
-              // Network error - certificate can be re-issued on next completion.
-            }
-          }
-        }
-      }
+      await saveResults();
     }
   };
 
@@ -345,6 +363,21 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
           </p>
         )}
 
+        {saveFailed && (
+          <div className="mt-4 max-w-md mx-auto">
+            <p className="text-sm text-koral-dark bg-koral-light rounded-lg px-4 py-2.5">
+              Rezultat nije sačuvan u tvom napretku. Pokušaj ponovo - ako se ponovi, odjavi se i prijavi ponovo.
+            </p>
+            <button
+              onClick={saveResults}
+              disabled={saving}
+              className="mt-2 bg-plava text-white px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-plava-dark transition-colors disabled:opacity-50"
+            >
+              {saving ? "Čuvam..." : "Sačuvaj ponovo"}
+            </button>
+          </div>
+        )}
+
         {/* Pregled odgovora */}
         {results.length > 0 && exercise.exercise_type !== "dialog" && (
           <div className="mt-8 text-left max-w-md mx-auto">
@@ -375,6 +408,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
             setMaxStreak(0);
             setXp(0);
             setResults([]);
+            setSaveFailed(false);
           }}
           className="mt-6 bg-plava text-white px-6 py-3 rounded-lg hover:bg-plava-dark transition-colors"
         >

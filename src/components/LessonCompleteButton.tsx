@@ -28,17 +28,29 @@ export default function LessonCompleteButton({
   const router = useRouter();
   const [completed, setCompleted] = useState(initialCompleted);
   const [saving, setSaving] = useState(false);
+  const [saveFailed, setSaveFailed] = useState(false);
   const [justFinishedLevel, setJustFinishedLevel] = useState(false);
 
   const markComplete = async () => {
     setSaving(true);
+    setSaveFailed(false);
     const supabase = createClient();
+    // Bez tihog preskakanja: ako sesija/upis padne, NE prikazuj „završeno"
+    // i NE navigiraj dalje - polaznik mora da vidi da napredak nije sačuvan.
     const { data: { user } } = await supabase.auth.getUser();
-    if (user) {
-      await supabase.from("lesson_progress").upsert(
-        { user_id: user.id, lesson_id: lessonId, completed: true, completed_at: new Date().toISOString() },
-        { onConflict: "user_id,lesson_id" }
-      );
+    if (!user) {
+      setSaveFailed(true);
+      setSaving(false);
+      return;
+    }
+    const { error } = await supabase.from("lesson_progress").upsert(
+      { user_id: user.id, lesson_id: lessonId, completed: true, completed_at: new Date().toISOString() },
+      { onConflict: "user_id,lesson_id" }
+    );
+    if (error) {
+      setSaveFailed(true);
+      setSaving(false);
+      return;
     }
     setCompleted(true);
     if (willCompleteLevel) {
@@ -112,15 +124,23 @@ export default function LessonCompleteButton({
 
   // Nije završena - jedno glavno dugme: „Završi i nastavi →" (ili „Završi lekciju" na kraju)
   return (
-    <div className="mt-8 flex gap-3 pt-6 border-t border-gray-100">
-      {PrevLink}
-      <button
-        onClick={markComplete}
-        disabled={saving}
-        className="flex-1 bg-plava text-white py-3 rounded-lg font-bold hover:bg-plava-dark transition-colors disabled:opacity-50"
-      >
-        {saving ? "Čuvam..." : nextLessonId ? (nextLabel || "Završi i nastavi →") : "Završi lekciju"}
-      </button>
+    <div className="mt-8 pt-6 border-t border-gray-100">
+      {saveFailed && (
+        <p className="mb-3 text-sm text-koral-dark bg-koral-light rounded-lg px-4 py-2.5 text-center">
+          Napredak nije sačuvan. Osveži stranicu pa pokušaj ponovo - ako se ponovi,
+          odjavi se i prijavi ponovo.
+        </p>
+      )}
+      <div className="flex gap-3">
+        {PrevLink}
+        <button
+          onClick={markComplete}
+          disabled={saving}
+          className="flex-1 bg-plava text-white py-3 rounded-lg font-bold hover:bg-plava-dark transition-colors disabled:opacity-50"
+        >
+          {saving ? "Čuvam..." : saveFailed ? "Pokušaj ponovo" : nextLessonId ? (nextLabel || "Završi i nastavi →") : "Završi lekciju"}
+        </button>
+      </div>
     </div>
   );
 }
