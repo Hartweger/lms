@@ -15,6 +15,7 @@ Novi tip vežbe u LMS-u: kviz igra u stilu "Ko želi da postane milioner". Polaz
 - **Džokeri:** 50:50 (sklanja dva pogrešna odgovora) i "Zameni pitanje" (vuče rezervno pitanje). Svaki jednom po igri. Bez AI džokera za sada.
 - **Lestvica:** poeni, 100 do 1.000.000, sa sigurnim stepenicima na 5. i 10. pitanju. Bez asocijacije na pravi novac.
 - **Nagrada:** završena igra = normalan progres; osvojen "milion" (tačno svih 15) nosi posebnu nagradu kroz postojeći hearts/meda sistem (`src/lib/hearts/`).
+  - DOPUNA 18.07 (Natašina odluka): bonus od 50 srca SAMO za PRVI milion po vežbi. Server proverava `exercise_attempts` (prva pobeda = tačno jedan red sa punim skorom za tog korisnika i tu vežbu); ponovljene pobede i dalje nose obična srca za tačne odgovore, ali ne i bonus.
 - **Pitanja:** Claude priprema predlog ~20 pitanja po modulu (15 + rezerve), Nataša pregleda i odobrava pre ubacivanja.
 - **Pilot:** A1.1, prvi modul. Ostali moduli se pune tek posle pregleda pilota.
 
