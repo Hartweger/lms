@@ -96,6 +96,7 @@ export default function MillionaireExercise({ exercise, questions }: Props) {
   };
 
   const finishWith = (next: MillionaireState) => {
+    if (game.status !== "playing") return;
     setGame(next);
     if (next.status !== "playing") void saveResult(next);
   };
