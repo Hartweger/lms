@@ -17,6 +17,7 @@ import ConversationExercise from "./ConversationExercise";
 import SpeakExercise from "./SpeakExercise";
 import SprechenExercise from "./SprechenExercise";
 import GroupedExamExercise from "./GroupedExamExercise";
+import MillionaireExercise from "./MillionaireExercise";
 import { canRenderGroupedExam } from "@/lib/grouped-exam";
 import type { Exercise, ExerciseQuestion } from "@/lib/types";
 
@@ -76,6 +77,11 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
         .then(({ count }: { count: number | null }) => { setDialogAttempts(count || 0); });
     });
   }, [exercise.id, exercise.exercise_type, supabase]);
+
+  // Milioner - vodi sopstveni tok (igra, džokeri, snimanje)
+  if (exercise.exercise_type === "millionaire") {
+    return <MillionaireExercise exercise={exercise} questions={questions} />;
+  }
 
   // Ispitni (grupni) prikaz: kad sva pitanja dele tekst (Lesen) ili audio (Hören) -
   // prikaži ceo deo odjednom, provera na kraju dela. Ostale vežbe → standardni prikaz.
