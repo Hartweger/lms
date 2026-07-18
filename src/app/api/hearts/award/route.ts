@@ -56,6 +56,32 @@ export async function POST(request: Request) {
   if (!input) return NextResponse.json({ error: "Bad request" }, { status: 400 });
 
   const admin = createAdminClient();
+
+  // millionaire_win: bonus SAMO za prvi milion po vežbi. Klijent prvo upiše
+  // pobednički pokušaj (score = total_questions) pa zove award - prva pobeda
+  // znači tačno JEDAN takav red. Bez reda (lažiran exerciseId) ili sa više
+  // (ponovljena pobeda) bonusa nema.
+  if (input.reason === "millionaire_win") {
+    const exerciseId = (rawBody as Record<string, unknown>).exerciseId;
+    if (typeof exerciseId !== "string" || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(exerciseId)) {
+      return NextResponse.json({ error: "Bad request" }, { status: 400 });
+    }
+    const { data: attempts, error: attErr } = await admin
+      .from("exercise_attempts")
+      .select("score, total_questions")
+      .eq("exercise_id", exerciseId)
+      .eq("user_id", user.id);
+    if (attErr) {
+      console.error("exercise_attempts read failed", attErr);
+      return NextResponse.json({ error: "Greška pri čitanju pokušaja" }, { status: 500 });
+    }
+    const wins = (attempts || []).filter(
+      (a: { score: number; total_questions: number }) => a.score === a.total_questions
+    ).length;
+    if (wins !== 1) {
+      return NextResponse.json({ awarded: 0, leveledUp: false, dailyGoalMet: false, progress: null });
+    }
+  }
   // NAPOMENA (v1): read-then-upsert nije atomičan; dve istovremene dodele mogu
   // izgubiti jednu. Prihvatljivo za v1 (gubi se par srca). TODO: RPC/optimistic lock.
   const { data: row, error: readErr } = await admin

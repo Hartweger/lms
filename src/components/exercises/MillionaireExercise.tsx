@@ -51,6 +51,8 @@ export default function MillionaireExercise({ exercise, questions }: Props) {
   const [saving, setSaving] = useState(false);
   const [saveFailed, setSaveFailed] = useState(false);
   const [saved, setSaved] = useState(false);
+  // bonus za milion se dodeljuje samo za PRVU pobedu po vežbi - server odlučuje
+  const [milionBonus, setMilionBonus] = useState(false);
 
   const ladder = ladderFor(main.length);
   const safeLevels = safeLevelsFor(main.length);
@@ -85,11 +87,15 @@ export default function MillionaireExercise({ exercise, questions }: Props) {
         body: JSON.stringify({ reason: "exercise", correct: finalGame.correctCount, hadStreak: finalGame.correctCount >= 3 }),
       });
       if (finalGame.status === "won") {
-        await fetch("/api/hearts/award", {
+        const res = await fetch("/api/hearts/award", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ reason: "millionaire_win" }),
+          body: JSON.stringify({ reason: "millionaire_win", exerciseId: exercise.id }),
         });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.awarded > 0) setMilionBonus(true);
+        }
       }
     } catch { /* tiho */ }
     setSaving(false);
@@ -129,6 +135,7 @@ export default function MillionaireExercise({ exercise, questions }: Props) {
     setRevealed(false);
     setSaved(false);
     setSaveFailed(false);
+    setMilionBonus(false);
   };
 
   // ----- Studio stilovi (TV izgled "Milionera") -----
@@ -185,7 +192,7 @@ export default function MillionaireExercise({ exercise, questions }: Props) {
               ? `Odustala/o si i nosiš osvojeno. Tačnih odgovora: ${game.correctCount} od ${main.length}.`
               : `Pogrešan odgovor. Tačnih odgovora: ${game.correctCount} od ${main.length}.`}
         </p>
-        {won && <p className="text-[#ffd257] font-bold mb-1">+50 ❤️ bonus za milion!</p>}
+        {won && milionBonus && <p className="text-[#ffd257] font-bold mb-1">+50 ❤️ bonus za prvi milion!</p>}
         {saveFailed && (
           <div className="mt-4 max-w-md mx-auto">
             <p className="text-sm text-koral-dark bg-koral-light rounded-lg px-4 py-2.5">
