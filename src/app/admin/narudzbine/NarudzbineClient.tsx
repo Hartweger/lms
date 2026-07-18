@@ -171,10 +171,13 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
   const pendingCount = orders.filter((o) => o.payment_status === "pending").length;
   const totals = orderTotals(filtered);
 
-  async function deleteOrder(orderId: string) {
+  async function deleteOrder(orderId: string, notify: boolean) {
     setDeleting(orderId);
     try {
-      const res = await fetch(`/api/admin/orders/${orderId}`, { method: "DELETE" });
+      const res = await fetch(
+        `/api/admin/orders/${orderId}${notify ? "?notify=1" : ""}`,
+        { method: "DELETE" }
+      );
       if (res.ok) {
         setOrders((prev) => prev.filter((o) => o.id !== orderId));
       }
@@ -623,14 +626,23 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
                             </button>
                           </span>
                         ) : isDeleting ? (
-                          <span className="flex items-center justify-end gap-1">
+                          <span className="flex items-center justify-end gap-2">
                             <span className="text-xs text-gray-500">Obrisati?</span>
                             <button
-                              onClick={() => deleteOrder(order.id)}
+                              onClick={() => deleteOrder(order.id, true)}
                               disabled={isBeingDeleted}
-                              className="text-xs text-koral font-medium hover:underline disabled:opacity-50"
+                              title="Briše porudžbinu i šalje polazniku mejl da je otkazana"
+                              className="text-xs text-koral font-medium hover:underline disabled:opacity-50 whitespace-nowrap"
                             >
-                              {isBeingDeleted ? "..." : "Da"}
+                              {isBeingDeleted ? "..." : "Da + mejl"}
+                            </button>
+                            <button
+                              onClick={() => deleteOrder(order.id, false)}
+                              disabled={isBeingDeleted}
+                              title="Briše porudžbinu bez obaveštenja (npr. test porudžbine)"
+                              className="text-xs text-koral/70 font-medium hover:underline disabled:opacity-50 whitespace-nowrap"
+                            >
+                              {isBeingDeleted ? "..." : "Bez mejla"}
                             </button>
                             <button
                               onClick={() => setDeleteId(null)}
