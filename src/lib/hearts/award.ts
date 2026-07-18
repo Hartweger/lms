@@ -16,7 +16,8 @@ export type AwardInput =
   | { reason: "lesson_complete" }
   | { reason: "daily_login" }
   | { reason: "test_pass"; percent: number }
-  | { reason: "exercise"; correct: number; hadStreak: boolean };
+  | { reason: "exercise"; correct: number; hadStreak: boolean }
+  | { reason: "millionaire_win" };
 
 export type AwardResult = {
   next: Progress;
@@ -33,6 +34,7 @@ function baseAmount(input: AwardInput): number {
       return HEART_REWARDS.test_pass + (input.percent >= 90 ? HEART_REWARDS.test_pass_high : 0);
     case "exercise":
       return input.correct * HEART_REWARDS.correct_answer + (input.hadStreak ? HEART_REWARDS.streak_bonus : 0);
+    case "millionaire_win": return HEART_REWARDS.millionaire_win;
   }
 }
 

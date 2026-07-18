@@ -64,4 +64,14 @@ describe("applyAward", () => {
     expect(r.awarded).toBe(0);
     expect(r.next.total_hearts).toBe(0);
   });
+
+  // hearts_today 60 = dnevni cilj vec presao, testiramo cistu baznu nagradu
+  it("millionaire_win nosi fiksnih 50 srca", () => {
+    const prev: Progress = {
+      total_hearts: 0, level: 1, current_streak: 0, longest_streak: 0,
+      last_active_date: "2026-07-18", hearts_today: 60,
+    };
+    const r = applyAward(prev, { reason: "millionaire_win" }, "2026-07-18");
+    expect(r.awarded).toBe(50);
+  });
 });

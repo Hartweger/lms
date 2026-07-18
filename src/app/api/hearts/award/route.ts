@@ -23,6 +23,7 @@ function parseInput(body: unknown): AwardInput | null {
   switch (b.reason) {
     case "lesson_complete":
     case "daily_login":
+    case "millionaire_win":
       return { reason: b.reason };
     case "test_pass": {
       const percent = b.percent;

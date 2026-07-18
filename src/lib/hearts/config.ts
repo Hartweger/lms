@@ -7,6 +7,7 @@ export const HEART_REWARDS = {
   test_pass_high: 25,     // dodatno za rezultat ≥90%
   daily_login: 10,
   daily_goal: 20,
+  millionaire_win: 50,    // osvojen milion u vežbi Milioner
 } as const;
 
 export const DAILY_GOAL_HEARTS = 50;
