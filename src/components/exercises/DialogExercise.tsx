@@ -25,11 +25,15 @@ interface DialogExerciseProps {
   config: DialogConfig;
   previousAttempts: number;
   onComplete: (score: number, total: number) => void;
+  // Čuvanje rezultata radi roditelj (ExerciseRunner); ovde se samo prikazuje status
+  saving?: boolean;
+  saveFailed?: boolean;
+  onRetrySave?: () => void;
 }
 
 const MAX_ATTEMPTS = 2;
 
-export default function DialogExercise({ exerciseId, config, previousAttempts, onComplete }: DialogExerciseProps) {
+export default function DialogExercise({ exerciseId, config, previousAttempts, onComplete, saving, saveFailed, onRetrySave }: DialogExerciseProps) {
   const [phase, setPhase] = useState<"intro" | "chat" | "summary">("intro");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
@@ -194,6 +198,24 @@ export default function DialogExercise({ exerciseId, config, previousAttempts, o
           <p className="text-gray-500">Ispunjeno ciljeva: {summary.score} od {summary.total}</p>
           <p className="text-plava font-bold">{earnedXp} XP</p>
         </div>
+
+        {/* Rezultat nije upisan u napredak - polaznik mora da vidi i može da ponovi upis */}
+        {saveFailed && (
+          <div className="mb-4 max-w-md mx-auto text-center">
+            <p className="text-sm text-koral-dark bg-koral-light rounded-lg px-4 py-2.5">
+              Rezultat nije sačuvan u tvom napretku. Pokušaj ponovo - ako se ponovi, odjavi se i prijavi ponovo.
+            </p>
+            {onRetrySave && (
+              <button
+                onClick={onRetrySave}
+                disabled={saving}
+                className="mt-2 bg-plava text-white px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-plava-dark transition-colors disabled:opacity-50"
+              >
+                {saving ? "Čuvam..." : "Sačuvaj ponovo"}
+              </button>
+            )}
+          </div>
+        )}
 
         {/* Goals checklist */}
         <div className="bg-gray-50 rounded-xl p-4 mb-4">

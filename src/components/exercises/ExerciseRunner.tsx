@@ -50,6 +50,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
   const [contextOpen, setContextOpen] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saveFailed, setSaveFailed] = useState(false);
+  const [dialogResult, setDialogResult] = useState<{ score: number; total: number } | null>(null);
 
   // Enter key advances to next question (delayed to avoid consuming the same Enter that submitted the answer)
   useEffect(() => {
@@ -270,6 +271,29 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
           // Network error - certificate can be re-issued on next completion.
         }
       }
+    }
+    setSaving(false);
+  };
+
+  // Dijalog: DialogExercise prikazuje sopstveni summary, pa se status čuvanja
+  // prosleđuje njoj umesto završnog ekrana vežbe.
+  const saveDialogResult = async (dialogScore: number, total: number) => {
+    setSaving(true);
+    setSaveFailed(false);
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      setSaveFailed(true);
+      setSaving(false);
+      return;
+    }
+    const { error } = await supabase.from("exercise_attempts").insert({
+      exercise_id: exercise.id,
+      user_id: user.id,
+      score: dialogScore,
+      total_questions: total,
+    });
+    if (error) {
+      setSaveFailed(true);
     }
     setSaving(false);
   };
@@ -578,17 +602,14 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
                 config={dialogConfig}
                 previousAttempts={dialogAttempts}
                 onComplete={(dialogScore, total) => {
-                  // Save attempt to DB, but don't set finished - DialogExercise shows its own summary
-                  supabase.auth.getUser().then(({ data: { user } }: { data: { user: { id: string } | null } }) => {
-                    if (user) {
-                      supabase.from("exercise_attempts").insert({
-                        exercise_id: exercise.id,
-                        user_id: user.id,
-                        score: dialogScore,
-                        total_questions: total,
-                      });
-                    }
-                  });
+                  // Ne postavljamo finished - DialogExercise prikazuje sopstveni summary
+                  setDialogResult({ score: dialogScore, total });
+                  void saveDialogResult(dialogScore, total);
+                }}
+                saving={saving}
+                saveFailed={saveFailed}
+                onRetrySave={() => {
+                  if (dialogResult) void saveDialogResult(dialogResult.score, dialogResult.total);
                 }}
               />
             );
