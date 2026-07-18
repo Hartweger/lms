@@ -30,6 +30,18 @@ export default function LearnModule({
   const [seen, setSeen] = useState(0);
   const [checkpoint, setCheckpoint] = useState<number | null>(null); // „Bravo, X naučeno" pauza (null = ne prikazuj)
 
+  // Ponovi ceo set (Quizlet-style): sve kartice promešane nazad u red, napredak u bazi ostaje.
+  const restart = () => {
+    const all = [...items];
+    for (let i = all.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [all[i], all[j]] = [all[j], all[i]];
+    }
+    setQueue(all.slice(0, BATCH));
+    setPool(all.slice(BATCH));
+    setSeen(0);
+  };
+
   const total = items.length;
   // Jeftino - računa se svaki render (nema potrebe za memoizacijom).
   const masteredCount = items.filter((c) => prog.get(idOf(c))?.status === "mastered").length;
@@ -58,8 +70,11 @@ export default function LearnModule({
       <div className="text-center py-10">
         <div className="text-5xl mb-3">🏆</div>
         <p className="text-lg font-bold mb-1">Set savladan! {total}/{total}</p>
-        <p className="text-sm text-gray-500 mb-5">Vrati se sutra da osvežiš.</p>
-        <button onClick={onExit} className="bg-emerald-600 text-white rounded-xl px-6 py-3 font-bold">Završi</button>
+        <p className="text-sm text-gray-500 mb-5">Možeš da ga ponoviš koliko god puta želiš - napredak ostaje sačuvan.</p>
+        <div className="flex justify-center gap-2">
+          <button onClick={restart} className="bg-ljubicasta text-white rounded-xl px-6 py-3 font-bold">🔁 Ponovi set</button>
+          <button onClick={onExit} className="bg-white border border-gray-200 text-gray-600 rounded-xl px-6 py-3 font-bold">Završi</button>
+        </div>
       </div>
     );
   }
