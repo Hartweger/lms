@@ -14,6 +14,7 @@ const typeLabels: Record<string, string> = {
   listen_write: "Slobodan odgovor (AI)",
   dialog: "Dijalog (AI)",
   speak: "Izgovori (mikrofon)",
+  millionaire: "Milioner",
 };
 
 export default function AdminVezbe() {
@@ -113,7 +114,7 @@ export default function AdminVezbe() {
       order_index: (questions[exerciseId] || []).length,
     };
 
-    if (exerciseType === "quiz") {
+    if (exerciseType === "quiz" || exerciseType === "millionaire") {
       defaultData.options = ["", "", "", ""];
       defaultData.correct_answer = "0";
     } else if (exerciseType === "fill_blank") {
@@ -245,7 +246,7 @@ export default function AdminVezbe() {
                     </div>
 
                     {/* Quiz question editor */}
-                    {ex.exercise_type === "quiz" && (
+                    {(ex.exercise_type === "quiz" || ex.exercise_type === "millionaire") && (
                       <div className="space-y-3">
                         <input
                           value={q.question}
