@@ -367,10 +367,12 @@ git commit -m "feat: logika igre Milioner (lestvica, stepenici, dzokeri)"
 Na kraj postojećeg describe bloka (pored postojećih testova, prati njihov stil - pogledaj fajl pre izmene):
 
 ```ts
+// hearts_today 60 = dnevni cilj vec presao, testiramo cistu baznu nagradu
+// (sa hearts_today 0 bi nagrada od 50 tacno presla prag dnevnog cilja i legao bi +20 bonus)
 it("millionaire_win nosi fiksnih 50 srca", () => {
   const prev: Progress = {
     total_hearts: 0, level: 1, current_streak: 0, longest_streak: 0,
-    last_active_date: "2026-07-18", hearts_today: 0,
+    last_active_date: "2026-07-18", hearts_today: 60,
   };
   const r = applyAward(prev, { reason: "millionaire_win" }, "2026-07-18");
   expect(r.awarded).toBe(50);
