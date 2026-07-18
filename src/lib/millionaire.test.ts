@@ -18,6 +18,9 @@ describe("ladderFor", () => {
   it("jedno pitanje = odmah milion", () => {
     expect(ladderFor(1)).toEqual([1_000_000]);
   });
+  it("nula pitanja se klampuje na jedno (milion)", () => {
+    expect(ladderFor(0)).toEqual([1_000_000]);
+  });
 });
 
 describe("safeLevelsFor", () => {
@@ -26,6 +29,16 @@ describe("safeLevelsFor", () => {
   });
   it("kratka igra bez stepenika", () => {
     expect(safeLevelsFor(4)).toEqual([]);
+  });
+  it("nula pitanja = bez stepenika", () => {
+    expect(safeLevelsFor(0)).toEqual([]);
+  });
+});
+
+describe("createGame", () => {
+  it("questionCount <= 0 se klampuje na 1", () => {
+    expect(createGame(0).questionCount).toBe(1);
+    expect(createGame(-3).questionCount).toBe(1);
   });
 });
 
@@ -50,6 +63,10 @@ describe("answer", () => {
     const next = answer(s, false);
     expect(next.status).toBe("lost");
     expect(next.correctCount).toBe(0);
+  });
+  it("posle završene igre answer vraća isto stanje", () => {
+    const lost = answer(createGame(15), false);
+    expect(answer(lost, true)).toBe(lost);
   });
 });
 
@@ -89,6 +106,16 @@ describe("wonPoints", () => {
     const s = walkAway(createGame(15));
     expect(wonPoints(s)).toBe(0);
   });
+  it("posle završene igre walkAway vraća isto stanje", () => {
+    const lost = answer(createGame(15), false);
+    expect(walkAway(lost)).toBe(lost);
+  });
+  it("tokom igre vraća trenutno osigurano (informativno)", () => {
+    let s = createGame(15);
+    for (let i = 0; i < 3; i++) s = answer(s, true);
+    expect(s.status).toBe("playing");
+    expect(wonPoints(s)).toBe(300); // LADDER[2]
+  });
 });
 
 describe("applyFiftyFifty", () => {
@@ -108,7 +135,15 @@ describe("applyFiftyFifty", () => {
   it("sa 3 opcije sklanja dve pogrešne (ostaje samo tačna)", () => {
     const s = createGame(15);
     const next = applyFiftyFifty(s, 1, 3, rngFirst);
-    expect(next.hiddenOptions.sort()).toEqual([0, 2]);
+    expect([...next.hiddenOptions].sort()).toEqual([0, 2]);
+  });
+  it("bez pogrešnih opcija ne troši džoker", () => {
+    const s = createGame(15);
+    expect(applyFiftyFifty(s, 0, 1, rngFirst)).toBe(s);
+  });
+  it("posle završene igre vraća isto stanje", () => {
+    const lost = answer(createGame(15), false);
+    expect(applyFiftyFifty(lost, 0, 4, rngFirst)).toBe(lost);
   });
 });
 

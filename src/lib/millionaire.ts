@@ -23,20 +23,22 @@ export type MillionaireState = {
   hiddenOptions: number[]; // indeksi opcija sklonjeni 50:50 (samo tekuće pitanje)
 };
 
-/** Lestvica za igru od n pitanja: za n<15 prvih n-1 suma + milion na vrhu. */
+/** Lestvica za igru od n pitanja: za n<15 prvih n-1 suma + milion na vrhu. n<1 se klampuje na 1. */
 export function ladderFor(n: number): number[] {
-  if (n >= LADDER.length) return [...LADDER];
-  return [...LADDER.slice(0, n - 1), LADDER[LADDER.length - 1]];
+  const safe = Math.max(1, n);
+  if (safe >= LADDER.length) return [...LADDER];
+  return [...LADDER.slice(0, safe - 1), LADDER[LADDER.length - 1]];
 }
 
 /** Sigurni stepenici koji postoje u igri od n pitanja (mora biti pre poslednjeg pitanja). */
 export function safeLevelsFor(n: number): number[] {
-  return SAFE_LEVELS.filter((l) => l < n - 1);
+  const safe = Math.max(1, n);
+  return SAFE_LEVELS.filter((l) => l < safe - 1);
 }
 
 export function createGame(questionCount: number): MillionaireState {
   return {
-    questionCount,
+    questionCount: Math.max(1, questionCount),
     level: 0,
     status: "playing",
     correctCount: 0,
@@ -65,7 +67,7 @@ export function walkAway(state: MillionaireState): MillionaireState {
   return { ...state, status: "walked", hiddenOptions: [] };
 }
 
-/** 50:50 - sakrij dve pogrešne opcije (ili sve pogrešne sem jedne ako ih je manje). */
+/** 50:50 - sakrij do dve pogrešne opcije (sa <=2 pogrešne sakrije sve, ostaje samo tačna). */
 export function applyFiftyFifty(
   state: MillionaireState,
   correctIndex: number,
@@ -74,6 +76,7 @@ export function applyFiftyFifty(
 ): MillionaireState {
   if (state.status !== "playing" || state.usedFiftyFifty) return state;
   const wrong = Array.from({ length: optionCount }, (_, i) => i).filter((i) => i !== correctIndex);
+  if (wrong.length === 0) return state; // nema šta da se sakrije - ne troši džoker
   // Fisher-Yates sa prosleđenim rng
   for (let i = wrong.length - 1; i > 0; i--) {
     const j = Math.floor(rng() * (i + 1));
