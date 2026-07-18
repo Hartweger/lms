@@ -35,7 +35,9 @@ const CSP_REPORT_ONLY = [
   // lekcijski embedovi + Turnstile + YouTube/Vimeo + Google mape na kontaktu.
   // 'self' + supabase + drive po Sentry prijavama 12.07: PdfBlock/LekcijaContent iframe-uju
   // PDF-ove sa Supabase Storage (117 lekcija) i Google Drive embede (6 lekcija)
-  "frame-src 'self' https://rzmyglynjcygsbicssbt.supabase.co https://drive.google.com https://player.vimeo.com https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com https://quizlet.com https://*.quizlet.com https://wordwall.net https://*.wordwall.net https://learningapps.org https://www.google.com",
+  // 18.07: + www.facebook.com po Sentry prijavama (55 kom) - Meta Pixel pravi skriveni iframe
+  // ka svom domenu; bez ovoga bi enforce lomio deo pixel merenja
+  "frame-src 'self' https://rzmyglynjcygsbicssbt.supabase.co https://drive.google.com https://player.vimeo.com https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com https://quizlet.com https://*.quizlet.com https://wordwall.net https://*.wordwall.net https://learningapps.org https://www.google.com https://www.facebook.com",
   "worker-src 'self' blob:",
   "object-src 'none'",
   "base-uri 'self'",
