@@ -1,6 +1,6 @@
 # Millionär - pitanja za A1.1 Modul 7 (NA PREGLEDU)
 
-Gradivo: modalni glagoli (kann/will/muss/darf/soll), perfekat pravilni + nepravilni + sa sein.
+Gradivo: modalni glagoli kann i will (samo ta dva su radjena), perfekat pravilni + nepravilni + sa sein.
 15 glavnih + 5 rezervi. Tačan odgovor PODEBLJAN.
 
 ## Glavna pitanja (1-15)
@@ -13,17 +13,17 @@ _Objašnjenje: können = moći/umeti._
 A) kann · B) **will** · C) darf · D) soll
 _Objašnjenje: wollen = hteti/želeti._
 
-**3.** Ich muss zum Arzt ___.
-A) gehe · B) geht · C) **gehen** · D) gegangen
-_Objašnjenje: uz modalni glagol drugi glagol ide u INFINITIVU na kraj rečenice._
+**3.** Ich will Deutsch ___.
+A) lerne · B) lernt · C) **lernen** · D) gelernt
+_Objašnjenje: uz modalni glagol (will/kann) drugi glagol ide u INFINITIVU na kraj rečenice._
 
-**4.** Hier ___ Sie nicht rauchen. (ne smete)
-A) **dürfen** · B) können · C) wollen · D) sollen
-_Objašnjenje: dürfen = smeti; nicht dürfen = ne smeti._
+**4.** ___ du Deutsch sprechen? (umeš li)
+A) **Kannst** · B) Kannt · C) Kann · D) Können
+_Objašnjenje: uz "du": kannst (ich kann, du kannst, er/sie kann)._
 
-**5.** ___ ich etwas mitbringen? (da li treba da donesem)
-A) Muss · B) Kann · C) Will · D) **Soll**
-_Objašnjenje: sollen za predlog/ponudu: Soll ich...? = da li da ja...?_
+**5.** Wir ___ heute lernen. (hoćemo)
+A) will · B) willst · C) wollt · D) **wollen**
+_Objašnjenje: uz "wir" modalni glagol je kao infinitiv: wir wollen._
 
 **6.** Ich habe Deutsch ___. (lernen)
 A) lernt · B) **gelernt** · C) gelernen · D) lernte
@@ -61,15 +61,15 @@ _Objašnjenje: schreiben je nepravilan: geschrieben (ei menja u ie)._
 A) haben · B) hat · C) **sind** · D) seid
 _Objašnjenje: fliegen = kretanje → sa sein: wir sind geflogen._
 
-**15.** "Pričali smo sa profesorom." na nemačkom je:
-A) Wir haben mit dem Lehrer gesprecht. · B) Wir sind mit dem Lehrer gesprochen. · C) Wir haben mit dem Lehrer sprechen. · D) **Wir haben mit dem Lehrer gesprochen.**
+**15.** "Mnogo smo pričali." na nemačkom je:
+A) Wir haben viel gesprecht. · B) Wir sind viel gesprochen. · C) Wir haben viel sprechen. · D) **Wir haben viel gesprochen.**
 _Objašnjenje: sprechen je nepravilan (gesprochen) i ide sa haben (nije kretanje)._
 
 ## Rezervna pitanja
 
 **16.** Er ___ gut kochen. (ume)
-A) **kann** · B) will · C) muss · D) darf
-_Objašnjenje: können = umeti: er kann gut kochen._
+A) **kann** · B) kannst · C) können · D) kannt
+_Objašnjenje: können = umeti; uz er/sie: er kann (kao ich kann)._
 
 **17.** Ich habe von zu Hause ___. (arbeiten)
 A) arbeitet · B) geärbeitet · C) **gearbeitet** · D) gearbeit
