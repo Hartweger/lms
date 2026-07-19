@@ -44,9 +44,9 @@ _Objašnjenje: persiranje: Haben Sie...?_
 A) **fünfzig** · B) fünfzehn · C) fünf · D) fünfundfünfzig
 _Objašnjenje: 3,50 € se kaže "drei Euro fünfzig"._
 
-**11.** ___ Tisch für zwei, bitte.
-A) Ein · B) Eine · C) **Einen** · D) Einem
-_Objašnjenje: der Tisch - kad nešto tražiš/naručuješ: Einen Tisch, bitte._
+**11.** "Jedan sto za dvoje, molim." (kako glasi fraza iz lekcije)
+A) Ein Tisch von zwei, bitte. · B) Der Tisch zu zwei, bitte. · C) **Einen Tisch für zwei, bitte.** · D) Eine Tisch für zwei, bitte.
+_Objašnjenje: fraza za restoran: Einen Tisch für zwei, bitte._
 
 **12.** "Želeo/la bih jednu picu." (učtivo naručivanje)
 A) Ich will eine Pizza haben. · B) **Ich hätte gern eine Pizza.** · C) Ich brauche sofort Pizza. · D) Ich esse gern Pizza.
@@ -56,9 +56,9 @@ _Objašnjenje: Ich hätte gern... je učtiva fraza za naručivanje. "Ich esse ge
 A) empfehle · B) empfiehlst · C) empfehlt · D) **empfehlen**
 _Objašnjenje: uz Sie (persiranje): Was empfehlen Sie?_
 
-**14.** Ein Wasser und ___ Kaffee, bitte.
-A) ein · B) eine · C) **einen** · D) einem
-_Objašnjenje: der Kaffee - pri naručivanju: einen Kaffee, bitte._
+**14.** "Jednu vodu i jednu kafu, molim." (kako glasi fraza iz lekcije)
+A) Ein Wasser und ein Kaffee, bitte. · B) Eine Wasser und eine Kaffee, bitte. · C) **Ein Wasser und einen Kaffee, bitte.** · D) Einem Wasser und einem Kaffee, bitte.
+_Objašnjenje: fraza za naručivanje: Ein Wasser und einen Kaffee, bitte._
 
 **15.** Ich esse ___ Suppe. (ne jedem supu)
 A) kein · B) nicht · C) **keine** · D) keinen
@@ -82,6 +82,6 @@ _Objašnjenje: Apfelsaft je sok od jabuke._
 A) **lecker** · B) teuer · C) kalt · D) langsam
 _Objašnjenje: lecker = ukusno._
 
-**20.** Ich nehme ___ Salat. (der Salat)
-A) ein · B) eine · C) einem · D) **einen**
-_Objašnjenje: der Salat - pri naručivanju: einen Salat._
+**20.** "Sok" - koji je član?
+A) die Saft · B) das Saft · C) den Saft · D) **der Saft**
+_Objašnjenje: Saft je muški rod: der Saft._

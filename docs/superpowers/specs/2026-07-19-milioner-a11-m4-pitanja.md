@@ -32,33 +32,33 @@ _Objašnjenje: die Wohnung (ona) → hat._
 A) die · B) das · C) **der** · D) den
 _Objašnjenje: Schrank je muški rod: der Schrank._
 
-**8.** Die Lampe ist ___ dem Tisch. (na stolu)
-A) **auf** · B) in · C) unter · D) an
-_Objašnjenje: auf = na (površini); unter bi bilo ispod._
+**8.** "Prozor" na nemačkom je:
+A) die Tür · B) **das Fenster** · C) die Wand · D) der Boden
+_Objašnjenje: Tür je vrata, Wand je zid, Boden je pod._
 
-**9.** Der Tisch ist ___ dem Fenster. (pored prozora)
-A) auf · B) hinter · C) **neben** · D) über
-_Objašnjenje: neben = pored; hinter = iza, über = iznad._
+**9.** "Krevet" na nemačkom je:
+A) der Tisch · B) das Sofa · C) **das Bett** · D) der Stuhl
+_Objašnjenje: das Bett = krevet._
 
-**10.** Ich suche eine Wohnung mit zwei ___.
-A) Zimmer · B) **Zimmern** · C) Zimmers · D) Zimmeren
-_Objašnjenje: posle "mit" množina dobija -n: mit zwei Zimmern._
+**10.** Die Wohnung hat zwei ___ und eine Küche. (sobe)
+A) Zimmern · B) **Zimmer** · C) Zimmers · D) Zimmeren
+_Objašnjenje: das Zimmer - množina je ista: die Zimmer (zwei Zimmer)._
 
 **11.** "Spavaća soba" na nemačkom je:
 A) das Wohnzimmer · B) das Badezimmer · C) die Küche · D) **das Schlafzimmer**
 _Objašnjenje: schlafen = spavati; Wohnzimmer je dnevna soba._
 
-**12.** Wir brauchen ___ neuen Tisch.
-A) ein · B) einem · C) **einen** · D) eine
-_Objašnjenje: der Tisch, brauchen traži akuzativ: einen neuen Tisch._
+**12.** "Tražim stan." na nemačkom je:
+A) Ich sehe eine Wohnung. · B) Ich habe eine Wohnung. · C) **Ich suche eine Wohnung.** · D) Ich brauche ein Haus.
+_Objašnjenje: suchen = tražiti._
 
 **13.** Stan je "im Erdgeschoss". Šta znači Erdgeschoss?
 A) potkrovlje · B) **prizemlje** · C) podrum · D) drugi sprat
 _Objašnjenje: Erde = zemlja; Erdgeschoss = prizemlje._
 
-**14.** Das Bett ist ___ Schlafzimmer.
-A) in · B) **im** · C) am · D) auf
-_Objašnjenje: in + dem = im (im Schlafzimmer)._
+**14.** Wie hoch ist ___ Miete?
+A) der · B) **die** · C) das · D) den
+_Objašnjenje: Miete je ženski rod: die Miete._
 
 **15.** Oglas kaže: "2-Zimmer-Wohnung, 500 € kalt". Šta znači "kalt"?
 A) stan je hladan · B) nema grejanja · C) **kirija bez troškova (režija)** · D) useljiv tek zimi
