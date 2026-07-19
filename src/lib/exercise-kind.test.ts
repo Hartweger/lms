@@ -11,6 +11,10 @@ describe("exerciseKindBadge", () => {
   it("Milioner daje Igra bedž iako naslov sadrži 'Modul'", () => {
     expect(exerciseKindBadge("Milioner: Modul 1")).toEqual({ test: false, label: "🎮 Igra" });
   });
+  it("nemački naziv Millionär takođe daje Igra bedž", () => {
+    expect(exerciseKindBadge("Millionär: Modul 2")).toEqual({ test: false, label: "🎮 Igra" });
+    expect(exerciseKindBadge("Millionar: Modul 3")).toEqual({ test: false, label: "🎮 Igra" });
+  });
   it("Milioner nije test ni u ispitnom kursu", () => {
     expect(isTestExercise("Milioner: Modul 1", "Goethe A1 priprema")).toBe(false);
   });

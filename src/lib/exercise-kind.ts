@@ -4,9 +4,9 @@
 const EXAM_COURSE = /polo[žz]i|fide|fsp|goethe|gramatik/i;
 const EXAM_TITLE = /\btest\b|modell?test|pr[üu]fung|zwischentest|lesen|h[öo]ren|hoeren|schreiben|sprechen|glagoli|\bmodul\b|vortrag|diskussion|modelltest|\bispit\b/i;
 
-// Milioner je igra, nikad test - naslov "Milioner: Modul N" bi inače upao
-// u EXAM_TITLE zbog reči "Modul".
-const GAME_TITLE = /milioner/i;
+// Milioner/Millionär je igra, nikad test - naslov "Millionär: Modul N" bi inače
+// upao u EXAM_TITLE zbog reči "Modul".
+const GAME_TITLE = /milioner|million[äa]r/i;
 
 /** true = TEST (ispitno), false = Vežba (praktična). */
 export function isTestExercise(exerciseTitle: string, courseTitleOrSlug?: string | null): boolean {
