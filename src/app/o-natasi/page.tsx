@@ -124,6 +124,10 @@ export default function ONatasiPage() {
           <p>
             Pored nastave, aktivno se bavim sportom - istrčala sam nekoliko polumaratona, a sledeći cilj je maraton. Praktikujem zdrav životni stil jer verujem da su telo i um podjednako važni za uspešno učenje.
           </p>
+          <p>
+            Iskustvo iz izgradnje škole danas prenosim i drugim stručnjakinjama — kroz mentoring i NH Academy na{" "}
+            <a href="https://natasahartweger.rs" target="_blank" rel="noopener">natasahartweger.rs</a>.
+          </p>
         </div>
       </section>
 

@@ -14,6 +14,12 @@ export default function Footer() {
               <p>Baš svako.</p>
               <p>Osim onih koji nisu nikada počeli.</p>
             </div>
+            <p className="mt-4 text-sm text-gray-400">
+              Osnivačica:{" "}
+              <a href="https://natasahartweger.rs" target="_blank" rel="noopener noreferrer" className="text-gray-300 underline underline-offset-2 hover:text-white transition-colors">
+                Nataša Hartweger
+              </a>
+            </p>
           </div>
 
           {/* Linkovi */}

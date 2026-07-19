@@ -130,6 +130,7 @@ try {
                   "@type": "Person",
                   name: "Nataša Hartweger",
                   url: "https://www.hartweger.rs/o-natasi",
+                  sameAs: ["https://natasahartweger.rs"],
                 },
                 address: {
                   "@type": "PostalAddress",
