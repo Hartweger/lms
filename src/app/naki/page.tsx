@@ -5,12 +5,12 @@ import { NakiAvatar } from "@/components/naki/NakiAvatar";
 export const metadata: Metadata = {
   title: "NaKI - prvi AI asistent za učenje nemačkog | Hartweger",
   description:
-    "Vežbaj razgovor i gramatiku na nemačkom sa NaKI, prvim AI asistentom na srpskom. Besplatno, dostupno 0-24, uz pravog profesora i ispitivača.",
+    "Vežbaj razgovor i gramatiku na nemačkom sa NaKI, prvim AI asistentom na našem jeziku. Besplatno, dostupno 0-24, uz pravog profesora i ispitivača.",
   openGraph: {
     images: [{ url: "/og/share.png", width: 1200, height: 630, alt: "Hartweger - Škola nemačkog jezika" }],
     title: "NaKI - prvi AI asistent za učenje nemačkog | Hartweger",
     description:
-      "Vežbaj razgovor i gramatiku na nemačkom sa NaKI, prvim AI asistentom na srpskom. Besplatno, 0-24, uz pravog profesora.",
+      "Vežbaj razgovor i gramatiku na nemačkom sa NaKI, prvim AI asistentom na našem jeziku. Besplatno, 0-24, uz pravog profesora.",
   },
 };
 
@@ -166,11 +166,15 @@ export default function NakiPage() {
           uz pravu školu nemačkog i profesora koji je licencirani ispitivač za Goethe i TELC ispite.
         </p>
         <ul>
-          <li><strong>Na srpskom</strong> - objašnjenja razumeš odmah, bez prevođenja.</li>
+          <li><strong>Na našem jeziku</strong> - objašnjenja razumeš odmah, bez prevođenja.</li>
           <li><strong>Uz pravog profesora</strong> - radi po VoKuM metodi Nataše Hartweger (vokabular, komunikacija, motivacija).</li>
           <li><strong>Sa kontekstom ispita</strong> - korisno ako se spremaš za Goethe, TELC ili FSP ispit.</li>
           <li><strong>Deo prave škole</strong> - kad budeš spreman za korak dalje, tu su video kursevi i individualni časovi.</li>
         </ul>
+        <p>
+          Zanima te kako se NaKI poredi sa Duolingom, Babbelom i ostalima? Pogledaj naš pregled{" "}
+          <a href="/magazin/aplikacije-za-ucenje-nemackog-jezika">najboljih aplikacija za učenje nemačkog jezika</a>.
+        </p>
       </section>
 
       {/* FAQ */}
