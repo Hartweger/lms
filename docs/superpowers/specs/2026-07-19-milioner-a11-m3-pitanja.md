@@ -44,9 +44,9 @@ _Objašnjenje: persiranje: Haben Sie...?_
 A) **fünfzig** · B) fünfzehn · C) fünf · D) fünfundfünfzig
 _Objašnjenje: 3,50 € se kaže "drei Euro fünfzig"._
 
-**11.** "Jedan sto za dvoje, molim." (kako glasi fraza iz lekcije)
-A) Ein Tisch von zwei, bitte. · B) Der Tisch zu zwei, bitte. · C) **Einen Tisch für zwei, bitte.** · D) Eine Tisch für zwei, bitte.
-_Objašnjenje: fraza za restoran: Einen Tisch für zwei, bitte._
+**11.** Was kostet ein ___ Äpfel? (kilogram)
+A) Liter · B) Stück · C) **Kilo** · D) Gramm
+_Objašnjenje: ein Kilo Äpfel = kilogram jabuka._
 
 **12.** "Želeo/la bih jednu picu." (učtivo naručivanje)
 A) Ich will eine Pizza haben. · B) **Ich hätte gern eine Pizza.** · C) Ich brauche sofort Pizza. · D) Ich esse gern Pizza.
@@ -56,9 +56,9 @@ _Objašnjenje: Ich hätte gern... je učtiva fraza za naručivanje. "Ich esse ge
 A) empfehle · B) empfiehlst · C) empfehlt · D) **empfehlen**
 _Objašnjenje: uz Sie (persiranje): Was empfehlen Sie?_
 
-**14.** "Jednu vodu i jednu kafu, molim." (kako glasi fraza iz lekcije)
-A) Ein Wasser und ein Kaffee, bitte. · B) Eine Wasser und eine Kaffee, bitte. · C) **Ein Wasser und einen Kaffee, bitte.** · D) Einem Wasser und einem Kaffee, bitte.
-_Objašnjenje: fraza za naručivanje: Ein Wasser und einen Kaffee, bitte._
+**14.** Šta kažeš pre jela?
+A) Guten Tag! · B) Guten Morgen! · C) **Guten Appetit!** · D) Gute Nacht!
+_Objašnjenje: pre jela: Guten Appetit! = prijatno._
 
 **15.** Ich esse ___ Suppe. (ne jedem supu)
 A) kein · B) nicht · C) **keine** · D) keinen
