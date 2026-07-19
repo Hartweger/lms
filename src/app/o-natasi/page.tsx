@@ -117,7 +117,7 @@ export default function ONatasiPage() {
             Hartweger Centar sam osnovala 2016. godine. Od marketinga, ljudskih resursa, finansija, IT odeljenja do menadžmenta - sve sam radila sama. Poslednjih 10 godina intenzivno se bavim digitalnim marketingom, što mi je pomoglo da školu podignem na novi nivo.
           </p>
           <p>
-            Danas Hartweger Centar ima oko 300 učenika, 20 profesora i preko 30.000 pratilaca na društvenim mrežama.
+            Danas Hartweger Centar ima više od 400 polaznika, tim od 6 profesora i preko 60.000 pratilaca na Instagramu.
           </p>
 
           <h2 className="font-montserrat font-bold text-2xl text-gray-900 mt-10">Više od škole</h2>
@@ -158,7 +158,7 @@ export default function ONatasiPage() {
             sizes="(max-width: 768px) 100vw, 800px"
           />
           <p className="text-gray-600 mt-6 max-w-xl mx-auto">
-            Hartweger Centar danas čini tim od 20 profesora koji sa istom strašću i posvećenošću pomažu polaznicima da progovore nemački. Upoznaj profesorke koje te vode kroz učenje.
+            Hartweger Centar danas čini tim od 6 profesora koji sa istom strašću i posvećenošću pomažu polaznicima da progovore nemački. Upoznaj profesorke koje te vode kroz učenje.
           </p>
         </div>
 
