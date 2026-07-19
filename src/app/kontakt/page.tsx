@@ -4,10 +4,10 @@ import KontaktForma from "@/components/KontaktForma";
 
 export const metadata: Metadata = {
   title: "Kontakt - Hartweger škola nemačkog jezika",
-  description: "Pošaljite nam poruku - pitanja o kursevima, plaćanju ili saradnji.",
+  description: "Imaš pitanje o kursevima nemačkog, plaćanju ili pristupu platformi? Piši nam - tu smo za tebe.",
   openGraph: {
     title: "Kontakt - Hartweger škola nemačkog jezika",
-    description: "Pošaljite nam poruku - pitanja o kursevima, plaćanju ili saradnji.",
+    description: "Imaš pitanje o kursevima nemačkog, plaćanju ili pristupu platformi? Piši nam - tu smo za tebe.",
     images: [{ url: "/og/kontakt.png", alt: "Hartweger kontakt" }],
   },
 };

@@ -39,7 +39,7 @@ export const viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.hartweger.rs"),
   title: "Hartweger - Škola nemačkog jezika",
-  description: "Naučite nemački jezik online - video kursevi, individualna i grupna nastava",
+  description: "Nauči nemački online - video kursevi, grupna i individualna nastava sa profesorkom Natašom Hartweger. Testiraj nivo besplatno i kreni odmah.",
   manifest: "/manifest.json",
   alternates: { canonical: "./" },
   robots: { index: true, follow: true },
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Hartweger - Škola nemačkog jezika",
-    description: "Naučite nemački jezik online - video kursevi, individualna i grupna nastava",
+    description: "Nauči nemački online - video kursevi, grupna i individualna nastava sa profesorkom Natašom Hartweger. Testiraj nivo besplatno i kreni odmah.",
     locale: "sr_RS",
     type: "website",
     images: [{ url: "/og/share.png", width: 1200, height: 630, alt: "Hartweger - Škola nemačkog jezika" }],
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Hartweger - Škola nemačkog jezika",
-    description: "Naučite nemački jezik online - video kursevi, individualna i grupna nastava",
+    description: "Nauči nemački online - video kursevi, grupna i individualna nastava sa profesorkom Natašom Hartweger. Testiraj nivo besplatno i kreni odmah.",
   },
 };
 

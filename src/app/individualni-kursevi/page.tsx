@@ -6,7 +6,7 @@ import { INDIVIDUALNI_CARDS } from "@/lib/individualni-cards";
 
 export const metadata: Metadata = {
   title: "Individualni kursevi nemačkog jezika - Hartweger",
-  description: "Individualna nastava nemačkog jezika sa sertifikovanim profesorima. Prilagođen tempo i program.",
+  description: "Individualni časovi nemačkog jezika 1:1 online - program i tempo prilagođeni tvom cilju, uz sertifikovane profesorke. Zakaži svoj termin.",
   openGraph: {
     images: [{ url: "/og/share.png", width: 1200, height: 630, alt: "Hartweger - Škola nemačkog jezika" }],
     title: "Individualni kursevi nemačkog jezika - Hartweger",

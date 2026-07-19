@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "VoKuM metoda - Hartweger škola nemačkog jezika",
-  description: "VoKuM metoda - Vokabular, Komunikacija i Motivacija. Saznajte kako učimo nemački u Hartweger školi.",
+  description: "VoKuM metoda - vokabular, komunikacija i motivacija. Saznaj kako u Hartweger školi učiš nemački koji stvarno koristiš, bez bubanja gramatike.",
   openGraph: {
     images: [{ url: "/og/share.png", width: 1200, height: 630, alt: "Hartweger - Škola nemačkog jezika" }],
     title: "VoKuM metoda - Hartweger škola nemačkog jezika",

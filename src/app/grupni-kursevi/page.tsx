@@ -9,11 +9,11 @@ export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "Grupni kursevi nemačkog jezika - Hartweger",
-  description: "Pogledajte raspored grupnih kurseva nemačkog jezika i prijavite se online.",
+  description: "Grupni online kursevi nemačkog jezika - male grupe do 6 polaznika, dva časa nedeljno uživo, beleške i video lekcije. Pogledaj raspored i prijavi se.",
   openGraph: {
     images: [{ url: "/og/share.png", width: 1200, height: 630, alt: "Hartweger - Škola nemačkog jezika" }],
     title: "Grupni kursevi nemačkog jezika - Hartweger",
-    description: "Pogledajte raspored grupnih kurseva nemačkog jezika i prijavite se online.",
+    description: "Grupni online kursevi nemačkog jezika - male grupe do 6 polaznika, dva časa nedeljno uživo, beleške i video lekcije. Pogledaj raspored i prijavi se.",
   },
 };
 
