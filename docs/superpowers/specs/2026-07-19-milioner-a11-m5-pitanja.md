@@ -37,7 +37,7 @@ _Objašnjenje: anrufen = pozvati telefonom: Er ruft... an._
 A) vor · B) **nach** · C) auf · D) über
 _Objašnjenje: Viertel nach neun = devet i petnaest._
 
-**9.** Ich kaufe im Supermarkt ___. (kupujem)
+**9.** Ich kaufe heute ___. (kupujem)
 A) an · B) auf · C) aus · D) **ein**
 _Objašnjenje: einkaufen = kupovati: Ich kaufe... ein._
 
@@ -83,6 +83,6 @@ _Objašnjenje: halb sieben = pola SEDAM = 6:30._
 A) Samstag · B) Am Samstags · C) **Samstags** · D) Im Samstag
 _Objašnjenje: samstags (malo slovo, sa -s) = subotom, svake subote._
 
-**20.** Nach der Arbeit gehe ich ___ Fitnessstudio.
-A) im · B) in · C) **ins** · D) auf
-_Objašnjenje: in + das = ins (idem U teretanu - pravac)._
+**20.** "Petak" na nemačkom je:
+A) Montag · B) Donnerstag · C) **Freitag** · D) Samstag
+_Objašnjenje: frei = slobodno; Freitag = petak. Donnerstag je četvrtak._

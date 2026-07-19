@@ -20,9 +20,9 @@ _Objašnjenje: za kiriju se pita sa "wie hoch" (kolika)._
 A) Bett · B) Schrank · C) Herd · D) **Sofa**
 _Objašnjenje: Bett je krevet, Schrank je orman, Herd je šporet._
 
-**5.** Ich wohne im zweiten ___. (sprat)
-A) **Stock** · B) Straße · C) Haus · D) Zimmer
-_Objašnjenje: im zweiten Stock = na drugom spratu._
+**5.** "Sprat" na nemačkom je:
+A) **der Stock** · B) die Straße · C) der Keller · D) das Dach
+_Objašnjenje: der Stock = sprat; Keller je podrum, Dach je krov._
 
 **6.** Die Wohnung ___ eine Küche und ein Bad.
 A) habe · B) **hat** · C) haben · D) hast
@@ -52,7 +52,7 @@ _Objašnjenje: schlafen = spavati; Wohnzimmer je dnevna soba._
 A) Ich sehe eine Wohnung. · B) Ich habe eine Wohnung. · C) **Ich suche eine Wohnung.** · D) Ich brauche ein Haus.
 _Objašnjenje: suchen = tražiti._
 
-**13.** Stan je "im Erdgeschoss". Šta znači Erdgeschoss?
+**13.** U oglasu piše "Erdgeschoss". Šta to znači?
 A) potkrovlje · B) **prizemlje** · C) podrum · D) drugi sprat
 _Objašnjenje: Erde = zemlja; Erdgeschoss = prizemlje._
 
