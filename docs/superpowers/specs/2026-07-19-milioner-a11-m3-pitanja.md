@@ -52,9 +52,9 @@ _Objašnjenje: ein Kilo Äpfel = kilogram jabuka._
 A) Ich will eine Pizza haben. · B) **Ich hätte gern eine Pizza.** · C) Ich brauche sofort Pizza. · D) Ich esse gern Pizza.
 _Objašnjenje: Ich hätte gern... je učtiva fraza za naručivanje. "Ich esse gern Pizza" znači "rado jedem picu"._
 
-**13.** Was ___ Sie? (šta preporučujete)
-A) empfehle · B) empfiehlst · C) empfehlt · D) **empfehlen**
-_Objašnjenje: uz Sie (persiranje): Was empfehlen Sie?_
+**13.** Was ___ Sie trinken? (šta želite da pijete, učtivo)
+A) möchte · B) möchtest · C) möchtet · D) **möchten**
+_Objašnjenje: uz Sie (persiranje): Was möchten Sie...?_
 
 **14.** Šta kažeš pre jela?
 A) Guten Tag! · B) Guten Morgen! · C) **Guten Appetit!** · D) Gute Nacht!
@@ -66,21 +66,21 @@ _Objašnjenje: die Suppe je ženski rod: keine Suppe._
 
 ## Rezervna pitanja
 
-**16.** "Povrće" na nemačkom je:
-A) das Obst · B) **das Gemüse** · C) das Fleisch · D) der Käse
-_Objašnjenje: Obst je voće, Käse je sir._
+**16.** Množina od "der Apfel" je:
+A) die Apfel · B) **die Äpfel** · C) die Äpfels · D) die Apfeln
+_Objašnjenje: množina sa umlautom: der Apfel → die Äpfel._
 
-**17.** Was möchten Sie ___? (piti)
-A) essen · B) kaufen · C) **trinken** · D) kochen
-_Objašnjenje: trinken = piti._
+**17.** Množina od "die Kartoffel" je:
+A) die Kartoffels · B) die Kartöffel · C) **die Kartoffeln** · D) die Kartoffel
+_Objašnjenje: die Kartoffel → die Kartoffeln (na -n, bez umlauta)._
 
 **18.** "Jabuka" na nemačkom je:
 A) die Banane · B) die Orange · C) der Apfelsaft · D) **der Apfel**
 _Objašnjenje: Apfelsaft je sok od jabuke._
 
-**19.** Das Essen ist sehr ___. (ukusno)
-A) **lecker** · B) teuer · C) kalt · D) langsam
-_Objašnjenje: lecker = ukusno._
+**19.** Das ___ sehr gut! (baš je ukusno)
+A) **schmeckt** · B) kostet · C) arbeitet · D) wohnt
+_Objašnjenje: schmecken = prijati / imati ukus: Das schmeckt gut!_
 
 **20.** "Sok" - koji je član?
 A) die Saft · B) das Saft · C) den Saft · D) **der Saft**
