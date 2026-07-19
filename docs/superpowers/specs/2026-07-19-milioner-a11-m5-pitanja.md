@@ -21,7 +21,7 @@ _Objašnjenje: aufstehen - razdvojni prefiks ide na kraj: Ich stehe... auf._
 A) Mittwoch · B) **Montag** · C) Sonntag · D) Dienstag
 _Objašnjenje: Mittwoch je sreda, Sonntag nedelja, Dienstag utorak._
 
-**5.** Ich habe ___ Montag einen Termin.
+**5.** Der Termin ist ___ Montag.
 A) **am** · B) im · C) um · D) in
 _Objašnjenje: uz dane ide am: am Montag._
 
