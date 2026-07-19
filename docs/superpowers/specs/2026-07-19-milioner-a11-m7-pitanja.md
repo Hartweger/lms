@@ -6,12 +6,12 @@ Gradivo: modalni glagoli kann i will (samo ta dva su radjena), perfekat pravilni
 ## Glavna pitanja (1-15)
 
 **1.** Ich ___ Deutsch sprechen. (mogu/umem)
-A) will · B) muss · C) **kann** · D) soll
-_Objašnjenje: können = moći/umeti._
+A) will · B) kannst · C) **kann** · D) können
+_Objašnjenje: können = moći/umeti; uz "ich": kann._
 
 **2.** Ich ___ Deutsch lernen. (želim/hoću)
-A) kann · B) **will** · C) darf · D) soll
-_Objašnjenje: wollen = hteti/želeti._
+A) kann · B) **will** · C) willst · D) wollen
+_Objašnjenje: wollen = hteti/želeti; uz "ich": will._
 
 **3.** Ich will Deutsch ___.
 A) lerne · B) lernt · C) **lernen** · D) gelernt
