@@ -28,7 +28,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   const ip = request.headers.get("x-forwarded-for") || "unknown";
-  if (!rateLimit(ip).allowed) {
+  if (!(await rateLimit(ip)).allowed) {
     return NextResponse.json({ error: "Previše zahteva. Sačekaj minut pa probaj ponovo." }, { status: 429 });
   }
   if (!process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_API_KEY === "placeholder_key") {

@@ -26,7 +26,7 @@ interface DialogConfig {
 export async function POST(request: Request) {
   // Auth check
   const ip = request.headers.get("x-forwarded-for") || "unknown";
-  const { allowed } = rateLimit(ip);
+  const { allowed } = await rateLimit(ip);
   if (!allowed) {
     return NextResponse.json({ error: "Previše zahteva. Pokušaj ponovo za minut." }, { status: 429 });
   }

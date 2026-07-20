@@ -10,7 +10,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export async function POST(request: Request) {
   try {
     const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
-    if (!rateLimit(`kontakt:${ip}`, { max: 3, windowMs: 10 * 60 * 1000 }).allowed) {
+    if (!(await rateLimit(`kontakt:${ip}`, { max: 3, windowMs: 10 * 60 * 1000 })).allowed) {
       return NextResponse.json(
         { error: "Previše poruka. Pokušajte ponovo za nekoliko minuta." },
         { status: 429 }

@@ -33,7 +33,7 @@ function detectLevel(text: string): string | null {
 export async function POST(request: Request) {
   // ── Rate limit po IP (10/min) ──
   const ip = request.headers.get("x-forwarded-for") || "unknown";
-  const { allowed } = rateLimit(ip);
+  const { allowed } = await rateLimit(ip);
   if (!allowed) {
     return NextResponse.json(
       { error: "Previše zahteva. Sačekaj minut pa probaj ponovo." },

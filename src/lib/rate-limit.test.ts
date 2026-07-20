@@ -1,40 +1,76 @@
-import { describe, it, expect, vi, afterEach } from "vitest";
-import { rateLimit } from "./rate-limit";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-afterEach(() => {
-  vi.useRealTimers();
-});
+const rpcMock = vi.fn();
 
-describe("rateLimit", () => {
-  it("podrazumevano: 10 zahteva u minuti po ključu", () => {
-    const key = `default-${Math.random()}`;
-    for (let i = 0; i < 10; i++) expect(rateLimit(key).allowed).toBe(true);
-    expect(rateLimit(key).allowed).toBe(false);
+vi.mock("@/lib/supabase/admin", () => ({
+  createAdminClient: () => ({
+    rpc: (...args: unknown[]) => ({ single: () => rpcMock(...args) }),
+  }),
+}));
+
+vi.mock("@sentry/nextjs", () => ({ captureException: vi.fn() }));
+
+describe("rateLimit (DB + in-memory fallback)", () => {
+  beforeEach(() => {
+    vi.resetModules();
+    rpcMock.mockReset();
   });
 
-  it("prima custom max i windowMs", () => {
-    const key = `custom-${Math.random()}`;
-    const opts = { max: 2, windowMs: 10 * 60 * 1000 };
-    expect(rateLimit(key, opts).allowed).toBe(true);
-    expect(rateLimit(key, opts).allowed).toBe(true);
-    expect(rateLimit(key, opts).allowed).toBe(false);
+  it("vraća odluku iz RPC-a kad baza radi", async () => {
+    rpcMock.mockResolvedValue({ data: { allowed: true, remaining: 4 }, error: null });
+    const { rateLimit } = await import("./rate-limit");
+
+    const res = await rateLimit("test:1.2.3.4", { max: 5, windowMs: 60000 });
+    expect(res).toEqual({ allowed: true, remaining: 4 });
+    expect(rpcMock).toHaveBeenCalledWith("rate_limit_hit", {
+      p_key: "test:1.2.3.4",
+      p_max: 5,
+      p_window_ms: 60000,
+    });
   });
 
-  it("custom prozor se resetuje posle isteka", () => {
-    vi.useFakeTimers();
-    const key = `window-${Math.random()}`;
-    const opts = { max: 1, windowMs: 10 * 60 * 1000 };
-    expect(rateLimit(key, opts).allowed).toBe(true);
-    expect(rateLimit(key, opts).allowed).toBe(false);
-    vi.advanceTimersByTime(10 * 60 * 1000 + 1);
-    expect(rateLimit(key, opts).allowed).toBe(true);
+  it("podrazumevano šalje 10 zahteva u minuti", async () => {
+    rpcMock.mockResolvedValue({ data: { allowed: true, remaining: 9 }, error: null });
+    const { rateLimit } = await import("./rate-limit");
+
+    await rateLimit("test:default");
+    expect(rpcMock).toHaveBeenCalledWith("rate_limit_hit", {
+      p_key: "test:default",
+      p_max: 10,
+      p_window_ms: 60000,
+    });
   });
 
-  it("različiti ključevi imaju odvojene brojače", () => {
-    const a = `a-${Math.random()}`;
-    const b = `b-${Math.random()}`;
-    const opts = { max: 1, windowMs: 60_000 };
-    expect(rateLimit(a, opts).allowed).toBe(true);
-    expect(rateLimit(b, opts).allowed).toBe(true);
+  it("blokira kad RPC kaže da je limit potrošen", async () => {
+    rpcMock.mockResolvedValue({ data: { allowed: false, remaining: 0 }, error: null });
+    const { rateLimit } = await import("./rate-limit");
+
+    const res = await rateLimit("test:1.2.3.4");
+    expect(res.allowed).toBe(false);
+  });
+
+  it("pada nazad na in-memory kad RPC vrati grešku i tamo broji", async () => {
+    rpcMock.mockResolvedValue({ data: null, error: new Error("db down") });
+    const { rateLimit } = await import("./rate-limit");
+
+    expect((await rateLimit("fb:ip", { max: 2, windowMs: 60000 })).allowed).toBe(true);
+    expect((await rateLimit("fb:ip", { max: 2, windowMs: 60000 })).allowed).toBe(true);
+    expect((await rateLimit("fb:ip", { max: 2, windowMs: 60000 })).allowed).toBe(false);
+  });
+
+  it("pada nazad na in-memory i kad RPC baci (mreža)", async () => {
+    rpcMock.mockRejectedValue(new Error("fetch failed"));
+    const { rateLimit } = await import("./rate-limit");
+
+    expect((await rateLimit("fb2:ip", { max: 1, windowMs: 60000 })).allowed).toBe(true);
+    expect((await rateLimit("fb2:ip", { max: 1, windowMs: 60000 })).allowed).toBe(false);
+  });
+
+  it("in-memory fallback: različiti ključevi imaju odvojene brojače", async () => {
+    rpcMock.mockRejectedValue(new Error("db down"));
+    const { rateLimit } = await import("./rate-limit");
+
+    expect((await rateLimit("a:ip", { max: 1, windowMs: 60000 })).allowed).toBe(true);
+    expect((await rateLimit("b:ip", { max: 1, windowMs: 60000 })).allowed).toBe(true);
   });
 });

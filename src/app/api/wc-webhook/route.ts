@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import crypto from "crypto";
+import { verifyWcSignature } from "@/lib/webhook-sig";
 import { grantAccess } from "@/lib/wc-sync";
 import { sendWelcomeEmail } from "@/lib/email";
 
@@ -9,13 +9,8 @@ export async function POST(request: NextRequest) {
     const signature = request.headers.get("x-wc-webhook-signature") || "";
     const secret = process.env.WC_WEBHOOK_SECRET || "";
 
-    // Validate HMAC signature
-    const expectedSig = crypto
-      .createHmac("sha256", secret)
-      .update(body)
-      .digest("base64");
-
-    if (signature !== expectedSig) {
+    // Validate HMAC signature (konstantno-vremenski)
+    if (!verifyWcSignature(body, signature, secret)) {
       console.log("[wc-webhook] Invalid signature");
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }

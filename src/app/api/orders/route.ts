@@ -13,7 +13,7 @@ export async function POST(request: Request) {
     // Ruta kreira naloge (auth.admin.createUser) i šalje mejlove na proizvoljan
     // mejl - bez kočnica je email-bomb/spam vektor.
     const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-    const ipLimit = rateLimit(`orders:${ip}`, { max: 5, windowMs: 10 * 60 * 1000 });
+    const ipLimit = await rateLimit(`orders:${ip}`, { max: 5, windowMs: 10 * 60 * 1000 });
     if (!ipLimit.allowed) {
       return NextResponse.json(
         { error: "Previše pokušaja. Sačekaj par minuta pa pokušaj ponovo." },
