@@ -19,6 +19,7 @@ export function buildRecurringTestFields(o: {
   amountRsd: number;
   okUrl: string;
   failUrl: string;
+  shopUrl: string;
   /** ukupan broj naplata u seriji (prva + ponovljene) */
   recurringPaymentNumber: number;
   /** D/W/M/Y */
@@ -39,6 +40,7 @@ export function buildRecurringTestFields(o: {
     amount,
     okUrl: o.okUrl,
     failUrl: o.failUrl,
+    shopurl: o.shopUrl,
     trantype: transactionType,
     currency: NESTPAY_TEST.currency,
     rnd,

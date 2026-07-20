@@ -26,6 +26,7 @@ export default async function NestpayRecurringTestPage() {
         amountRsd: 100,
         okUrl: callbackUrl,
         failUrl: callbackUrl,
+        shopUrl: SITE_URL,
         recurringPaymentNumber: 3,
         recurringFrequencyUnit: "D",
         recurringFrequency: 1,

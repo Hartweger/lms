@@ -13,6 +13,7 @@ describe("buildRecurringTestFields", () => {
     amountRsd: 100,
     okUrl: "https://x/cb",
     failUrl: "https://x/cb",
+    shopUrl: "https://x",
     recurringPaymentNumber: 3,
     recurringFrequencyUnit: "D" as const,
     recurringFrequency: 1,
