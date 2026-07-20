@@ -7,6 +7,7 @@ import { nivoForSlug } from "@/lib/course-nivo";
 import { emailOwnsCourse, emailOwnsAnyVideoCourse, emailUsedCoupon } from "@/lib/coupon-ownership";
 import { computeCouponDiscount, isTermPackage } from "@/lib/coupon-discount";
 import { computeSeats, pickOpenGroupForNivo } from "@/lib/groups";
+import { gaIdsFromCookieHeader } from "@/lib/ga-cookies";
 
 export async function POST(request: Request) {
   try {
@@ -24,6 +25,10 @@ export async function POST(request: Request) {
     const { fullName, email, country, courseSlug, paymentMethod, couponCode: rawCouponCode, professorId, packageType, pages: rawPages, attribution } =
       await request.json();
     const attr = (attribution && typeof attribution === "object") ? attribution as Record<string, string> : {};
+    // GA4 kolačići kupca (postoje samo uz saglasnost) - čuvaju se na porudžbini da
+    // server-side Measurement Protocol purchase dobije pravu atribuciju kanala
+    // umesto Unassigned. Vidi src/lib/ga4-mp.ts.
+    const { gaClientId, gaSessionId } = gaIdsFromCookieHeader(request.headers.get("cookie"));
 
     // Validate required fields
     if (!fullName || !email || !country || !courseSlug || !paymentMethod) {
@@ -287,6 +292,8 @@ export async function POST(request: Request) {
           coupon_code: validCouponCode,
           payment_method: paymentMethod,
           paypal_note: paypalNote,
+          ga_client_id: gaClientId,
+          ga_session_id: gaSessionId,
         })
         .eq("id", reusableOrder.id)
         .eq("payment_status", "pending")
@@ -364,6 +371,8 @@ export async function POST(request: Request) {
           utm_campaign: attr.utm_campaign ?? null,
           source_type: attr.source_type ?? null,
           paypal_note: paypalNote,
+          ga_client_id: gaClientId,
+          ga_session_id: gaSessionId,
         })
         .select("id, order_number")
         .single();
@@ -398,7 +407,7 @@ export async function POST(request: Request) {
     }
 
     // usage_count se NE uvećava ovde: kupon troši limit tek kad porudžbina postane
-    // completed (grantAccessForOrder) — odbijena kartica ne sme da pojede max_uses.
+    // completed (grantAccessForOrder) - odbijena kartica ne sme da pojede max_uses.
 
     // Kartice se naplaćaju instant na bankovnoj strani - bez mejla sa instrukcijama;
     // narudžbina ostaje 'pending' dok NestPay callback ne potvrdi.

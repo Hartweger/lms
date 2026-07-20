@@ -103,7 +103,9 @@ try {
       ad_personalization: 'granted'
     });
   }
-} catch (e) {}`,
+} catch (e) {}
+gtag('js', new Date());
+gtag('config', 'G-MB9DRXVVF6');`,
           }}
         />
         <PromoBar />
@@ -175,21 +177,15 @@ try {
         <SpeedInsights />
         {/* lazyOnload (kao Meta Pixel): gtag.js je 176KB i ne sme da se nadmeće
             sa prvim renderom na mobilnom; dataLayer stub iz consent skripta
-            baferuje evente dok se gtag.js ne učita, ništa se ne gubi. */}
+            baferuje evente dok se gtag.js ne učita.
+            PAŽNJA: gtag('js')/gtag('config') se REDAJU u consent-default skriptu
+            (beforeInteractive) - moraju u dataLayer PRE bilo kog eventa (npr.
+            purchase na hvala strani pri hidraciji), inače gtag.js odbacuje
+            evente bez konfigurisane destinacije. Ovde se samo učitava biblioteka. */}
         <Script
           id="ga4-gtag"
           strategy="lazyOnload"
           src="https://www.googletagmanager.com/gtag/js?id=G-MB9DRXVVF6"
-        />
-        <Script
-          id="ga4-config"
-          strategy="lazyOnload"
-          dangerouslySetInnerHTML={{
-            __html: `window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-MB9DRXVVF6');`,
-          }}
         />
       </body>
     </html>

@@ -2,7 +2,7 @@
 // Server-side GA4 purchase preko Measurement Protocol-a.
 // Klijentski purchase (PixelPurchase) se pali SAMO za karticu (status=ok); uplatnica i
 // PayPal se nikad ne broje, pa GA4 ne vidi prihod. Ovo šalje purchase za SVE načine
-// plaćanja iz jedne tačke — grantAccessForOrder (kad porudžbina postane plaćena).
+// plaćanja iz jedne tačke - grantAccessForOrder (kad porudžbina postane plaćena).
 
 interface OrderItemLike {
   course_id: string;
@@ -18,11 +18,13 @@ interface OrderLike {
   currency?: string | null;
   coupon_code?: string | null;
   items?: OrderItemLike[] | null;
+  ga_client_id?: string | null;
+  ga_session_id?: string | null;
 }
 
 /**
  * Šalje GA4 `purchase` event server-side. No-op ako env nije postavljen (bezbedno).
- * Nikad ne baca grešku — ne sme da obori dodelu pristupa.
+ * Nikad ne baca grešku - ne sme da obori dodelu pristupa.
  */
 export async function sendGa4Purchase(order: OrderLike): Promise<void> {
   const apiSecret = process.env.GA4_API_SECRET;
@@ -37,11 +39,13 @@ export async function sendGa4Purchase(order: OrderLike): Promise<void> {
       quantity: 1,
     }));
 
-    // client_id: nemamo _ga iz browsera ovde, pa koristimo id porudžbine kao stabilan
-    // identifikator (prihod se broji; kanal atribucije = "(direct)"). Dedup na GA strani
-    // ide po transaction_id, a grantAccessForOrder je i sam idempotentan.
+    // client_id: pravi GA client_id kupca (uhvaćen iz _ga kolačića pri kreiranju
+    // porudžbine, samo uz saglasnost) → purchase se vezuje za postojeću sesiju i kanal.
+    // Fallback: id porudžbine (prihod se broji, ali kanal = Unassigned - tako je za
+    // kupce bez saglasnosti). Dedup na GA strani ide po transaction_id, a
+    // grantAccessForOrder je i sam idempotentan.
     const body = {
-      client_id: order.id,
+      client_id: order.ga_client_id || order.id,
       events: [
         {
           name: "purchase",
@@ -50,6 +54,9 @@ export async function sendGa4Purchase(order: OrderLike): Promise<void> {
             value: Number(order.total) || 0,
             currency: order.currency || "RSD",
             ...(order.coupon_code ? { coupon: order.coupon_code } : {}),
+            // session_id + engagement vezuju event za sesiju kupovine (atribucija);
+            // bez njih MP event ne pripada nijednoj sesiji.
+            ...(order.ga_session_id ? { session_id: order.ga_session_id, engagement_time_msec: 100 } : {}),
             items,
           },
         },

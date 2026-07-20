@@ -183,6 +183,10 @@ export interface Order {
   order_number: string;
   granted: boolean;
   created_at: string;
+  /** GA4 client_id kupca iz _ga kolačića (samo uz saglasnost) - za MP atribuciju. */
+  ga_client_id?: string | null;
+  /** GA4 session_id iz _ga_<stream> kolačića - vezuje MP purchase za sesiju. */
+  ga_session_id?: string | null;
 }
 
 export interface Coupon {
