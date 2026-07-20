@@ -125,3 +125,33 @@ maskirano 4242 42** **** 4242) — tražiti od banke.
 
 Otvoreno posle ovoga: SAMO pitanje da li callback za naplate 2..N stiže na okUrl
 (empirijski test), i odakle tačno čitamo RECURRINGID (prvi test pokazuje).
+
+## PRVA RECURRING TRANSAKCIJA PROŠLA (20.07.2026, 14:39)
+
+Test u testnom okruženju: oid `RECTEST-1784551062868`, 100 RSD, Visa
+`4841878700002912` (testna kartica banke), 3D simulator → „Yes".
+
+Rezultat: **Approved, ProcReturnCode=00, Full 3DSecure**, vidljivo i u testnom
+Merchant Centeru (Sale / Successful, AuthCode 798667). Callback je **stigao na
+naš `/api/nestpay/test-callback` sa VALIDNIM potpisom** (`hash_valid=true`) —
+znači store key u portalu i `NESTPAY_TEST_STORE_KEY` u Vercelu se poklapaju.
+
+**Ključni nalaz — gde je RECURRINGID:** u callback parametrima stiže kao
+**`EXTRA.RECURRINGID`** (vrednost u testu: `26201OnlA13974`). To je ID cele
+serije — ulaz za `ORDERSTATUS=QUERY` (status svih naplata) i za
+`RECURRINGOPERATION=Cancel` (otkazivanje pretplate). **Za implementaciju: sačuvati
+`EXTRA.RECURRINGID` uz porudžbinu pri prvoj naplati.**
+
+Callback je vratio i sva tri poslata recurring polja (`RecurringPaymentNumber=3`
+itd.), `TransId` 26201OnlB13975, `ReturnOid` = naš oid, plus pun 3DS2 blok.
+
+Uzroci ranijih neuspeha (rešeni): ništa od naših pretpostavki o testnim karticama —
+`4242…` i `4355…` nisu u bazi njihovog simulatora; prave testne kartice je poslala
+banka (Visa 4841878700002912 12/26 003, MC 5443584545004639 12/26 002,
+Dina 9891007635312414 12/30 000, Amex 375987000169792 12/30 000; za neuspešnu
+naplatu CVC2 510 / 1234). Usput je dodat `shopurl` u test formu (kao u produkciji).
+
+**OSTAJE (21-22.07):** proveriti da li callbackovi za naplate 2 i 3 stižu sami
+(dnevna frekvencija) — pogledati tabelu `nestpay_test_callbacks`. To je poslednje
+otvoreno pitanje; ako ne stignu, backstop je `ORDERSTATUS=QUERY` sa RECURRINGID.
+Pa javiti banci da provere sa svoje strane pre aktivacije na produkciji.
