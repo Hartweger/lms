@@ -2,13 +2,13 @@ import type { NextConfig } from "next";
 import { withSentryConfig } from "@sentry/nextjs";
 import { legacyBlogSlugs } from "./src/lib/legacyBlogSlugs";
 
-// CSP u REPORT-ONLY režimu (audit jul 2026): ništa ne blokira, samo prijavljuje
-// prekršaje u Sentry (Security feed). Posle ~nedelju dana pregledati prijave pa
-// prebaciti na pravi Content-Security-Policy header (enforce).
+// CSP u ENFORCE režimu od 20.07 (audit jul 2026): posle 8 dana Report-Only perioda
+// i dva kruga dopuna po Sentry prijavama header je preimenovan u Content-Security-Policy.
+// report-uri OSTAJE i u enforce režimu - prekršaji i dalje stižu u Sentry (Security feed).
 // 'unsafe-inline' u script-src je nužan: Next App Router ubacuje inline skripte,
 // a statičke/ISR strane ne mogu nonce. CSP ovde pre svega ograničava SPOLJNE izvore.
-// NAPOMENA: novi spoljni servis = dodati domen ovde, inače će (posle enforce-a) biti blokiran.
-const CSP_REPORT_ONLY = [
+// NAPOMENA: novi spoljni servis = dodati domen ovde, inače će biti BLOKIRAN u produkciji.
+const CSP = [
   "default-src 'self'",
   // GA4, Meta Pixel, Turnstile, Vimeo player API; blog kalkulator je inline (pokriven unsafe-inline)
   // 17.07: Sentry prijava 5b282137 (wasm-eval na /naki, 1 posetilac) = browser ekstenzija;
@@ -28,16 +28,22 @@ const CSP_REPORT_ONLY = [
   // Google signals ping, TLD zavisi od zemlje posetioca - dodate zemlje publike, ostale će u report)
   // 12.07 uveče: + ceo ex-Yu (ba po Sentry prijavi f4d9cdf1, me/hr/si/mk preventivno - ista publika)
   // 12.07 kasnije: + nl (Sentry prijava 919398bd, posetilac iz Holandije - dijaspora)
+  // 20.07 (finalni pregled pred enforce): + es i com.tr (Sentry prijave) + se/no/dk/fr/it/be/co.uk
+  // preventivno (ista dijaspora publika; posetilac iz Stokholma već viđen u drugim prijavama);
+  // + natasahartweger.rs (oba oblika): RSC prefetch linka ka preseljenoj strani prati 301 redirect
+  // ka novom sajtu, a CSP proverava i odredište redirekta (Sentry prijava 89ecc726 sa /clanice)
   // 17.07: + translate.googleapis.com i translate-pa.googleapis.com PREVENTIVNO - deo istog
   // Chrome-prevodilac toka kao gstatic CSS gore (prevod ide fetch-om iz konteksta stranice);
   // sam skript prevodioca ubacuje browser privilegovano pa script-src ne treba menjati
-  "connect-src 'self' https://rzmyglynjcygsbicssbt.supabase.co wss://rzmyglynjcygsbicssbt.supabase.co https://translate.googleapis.com https://translate-pa.googleapis.com https://*.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://stats.g.doubleclick.net https://www.google.com https://www.google.rs https://www.google.de https://www.google.at https://www.google.ch https://www.google.ba https://www.google.me https://www.google.hr https://www.google.si https://www.google.mk https://www.google.nl https://www.googletagmanager.com https://*.ingest.de.sentry.io https://challenges.cloudflare.com https://connect.facebook.net https://graph.facebook.com https://www.facebook.com https://vumbnail.com",
+  "connect-src 'self' https://rzmyglynjcygsbicssbt.supabase.co wss://rzmyglynjcygsbicssbt.supabase.co https://translate.googleapis.com https://translate-pa.googleapis.com https://*.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://stats.g.doubleclick.net https://www.google.com https://www.google.rs https://www.google.de https://www.google.at https://www.google.ch https://www.google.ba https://www.google.me https://www.google.hr https://www.google.si https://www.google.mk https://www.google.nl https://www.google.es https://www.google.com.tr https://www.google.se https://www.google.no https://www.google.dk https://www.google.fr https://www.google.it https://www.google.be https://www.google.co.uk https://www.natasahartweger.rs https://natasahartweger.rs https://www.googletagmanager.com https://*.ingest.de.sentry.io https://challenges.cloudflare.com https://connect.facebook.net https://graph.facebook.com https://www.facebook.com https://vumbnail.com",
   // lekcijski embedovi + Turnstile + YouTube/Vimeo + Google mape na kontaktu.
   // 'self' + supabase + drive po Sentry prijavama 12.07: PdfBlock/LekcijaContent iframe-uju
   // PDF-ove sa Supabase Storage (117 lekcija) i Google Drive embede (6 lekcija)
   // 18.07: + www.facebook.com po Sentry prijavama (55 kom) - Meta Pixel pravi skriveni iframe
   // ka svom domenu; bez ovoga bi enforce lomio deo pixel merenja
-  "frame-src 'self' https://rzmyglynjcygsbicssbt.supabase.co https://drive.google.com https://player.vimeo.com https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com https://quizlet.com https://*.quizlet.com https://wordwall.net https://*.wordwall.net https://learningapps.org https://www.google.com https://www.facebook.com",
+  // 20.07: + accounts.google.com - Drive PDF embed u lekcijama preusmerava neulogovane u Google
+  // na prijavu UNUTAR iframe-a (13 korisnika/7 dana na /lekcija); bez ovoga enforce lomi te PDF-ove
+  "frame-src 'self' https://rzmyglynjcygsbicssbt.supabase.co https://drive.google.com https://accounts.google.com https://player.vimeo.com https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com https://quizlet.com https://*.quizlet.com https://wordwall.net https://*.wordwall.net https://learningapps.org https://www.google.com https://www.facebook.com",
   "worker-src 'self' blob:",
   "object-src 'none'",
   "base-uri 'self'",
@@ -283,7 +289,7 @@ const nextConfig: NextConfig = {
             key: "Strict-Transport-Security",
             value: "max-age=63072000; includeSubDomains; preload",
           },
-          { key: "Content-Security-Policy-Report-Only", value: CSP_REPORT_ONLY },
+          { key: "Content-Security-Policy", value: CSP },
         ],
       },
     ];
