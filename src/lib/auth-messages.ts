@@ -21,6 +21,30 @@ export function urlGreskaMessage(kod: string | null): string {
   return "";
 }
 
+// Poruka kad čuvanje nove lozinke (/profil) ne prođe.
+// Supabase odbija slabe/procurele lozinke i lozinku istu kao stara - bez konkretne
+// poruke korisnik kuca istu lozinku u krug ("pokušaj ponovo" ništa ne menja).
+export function passwordSaveErrorMessage(error: AuthErrorLike | null): string {
+  if (!error) return "";
+  const msg = (error.message ?? "").toLowerCase();
+  if (msg.includes("weak") || msg.includes("pwned") || msg.includes("easy to guess")) {
+    return "Ova lozinka je previše laka za pogađanje (nalazi se u poznatim listama procurelih lozinki). Izmisli nešto svoje - npr. dve-tri reči spojene i broj.";
+  }
+  if (msg.includes("should be different")) {
+    return "To je ista lozinka koju već imaš. Upiši neku drugu.";
+  }
+  if (msg.includes("at least") || msg.includes("characters")) {
+    return "Lozinka je prekratka - treba bar 6 karaktera.";
+  }
+  if (msg.includes("session") || error.status === 401) {
+    return "Prijava je istekla dok si kucao/la. Zatraži novi link na stranici za prijavu pa probaj opet.";
+  }
+  if (error.status === 429) {
+    return "Previše pokušaja. Sačekaj minut pa probaj ponovo.";
+  }
+  return "Lozinka nije sačuvana. Probaj drugu lozinku ili nam se javi na info@hartweger.rs.";
+}
+
 // Poruka koja se prikazuje kad prijava lozinkom ne uspe.
 export function loginErrorMessage(error: AuthErrorLike | null): string {
   if (!error) return "";

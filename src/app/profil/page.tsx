@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { passwordSaveErrorMessage } from "@/lib/auth-messages";
 
 export default function Profil() {
   const supabase = createClient();
@@ -51,7 +52,7 @@ export default function Profil() {
     const { error } = await supabase.auth.updateUser({ password: newPassword });
     setPwSaving(false);
     if (error) {
-      setPwError("Greška pri čuvanju lozinke. Pokušaj ponovo.");
+      setPwError(passwordSaveErrorMessage(error));
       return;
     }
     setNewPassword("");
