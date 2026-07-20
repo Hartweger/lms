@@ -90,3 +90,38 @@ Recurring ostaje IZOLOVAN, opcionalan dodatak na JEDAN proizvod — ne dira post
 
 Odlučiti KOJI proizvod (verovatno bez previše AI — npr. „1000 reči" vođen ili ispitna priprema),
 pa Faza 1 kao jednokratna uplata. Recurring tek posle jeftinog test-a sa bankom.
+
+## DOPUNA 20.07.2026 — odgovori iz NestPay API priručnika + mejla banke
+
+Test-harness LIVE: `/admin/nestpay-recurring-test` + `/api/nestpay/test-callback` →
+tabela `nestpay_test_callbacks` (migracija 066). Čeka `NESTPAY_TEST_STORE_KEY`.
+
+Banka (mejl 20.07): posle uspešne inicijalne recurring transakcije njihov sistem
+automatski kreira ponovljene transakcije; order ID šema po mejlu: `oid-1`, `oid-2`…
+(u API priručniku primer: `ORDER-<RecurringId>`; tačan format ćemo videti u testu).
+
+Iz „Merchant Integration API Manual" (prilog mejla banke; poglavlja 2.3, 6, 7):
+
+**1) Status cele serije** — CC5 upit na `/fim/api` sa `ORDERSTATUS=QUERY` +
+`Extra.RECURRINGID` → vraća `RECURRINGCOUNT` i po naplati sufiksirana polja:
+`ORD_ID_n`, `TRANS_STAT_n` (PN=pending), `CAPTURE_AMT_n`, `PLANNED_START_DTTM_n`,
+maskiran `PAN_n`. **Ovo je backstop za fiskalizaciju naplata 2..N čak i ako callback
+ne stiže** (uz poznati rizik: API sa Vercel-a bio IP-blokiran na produkciji).
+RECURRINGID najverovatnije stiže u response/callback parametrima inicijalne
+transakcije — logger hvata sve, videćemo u testu.
+
+**2) Otkazivanje serije** (pogl. 7, str. 45): CC5 request sa
+`Extra.RECURRINGOPERATION=Cancel` + `RECORDTYPE=Recurring` + `RECORDID=<RecurringId>`
+(cela serija) ili `RECORDTYPE=Order` + `RECORDID=<order id>` (pojedinačne buduće
+naplate; može više RECORDID odjednom). Postoji i `Update` za iznos
+(`AMOUNT`, obavezan `Currency`) i/ili datum (`STARTDATE`). Alternativa: ručno u
+Merchant Centeru.
+
+**3) Ograničenja recurring-a** (pogl. 6.3): samo `Auth` (Sale) transakcije; ne može
+u kombinaciji sa ratama; max 121 naplata; frekvencija D/W/M (u hosting docu i Y).
+
+**4) Testne kartice**: NEMA ih ni u jednom od dva dokumenta (u primerima se koristi
+maskirano 4242 42** **** 4242) — tražiti od banke.
+
+Otvoreno posle ovoga: SAMO pitanje da li callback za naplate 2..N stiže na okUrl
+(empirijski test), i odakle tačno čitamo RECURRINGID (prvi test pokazuje).
