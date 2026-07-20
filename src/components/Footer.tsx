@@ -65,6 +65,28 @@ export default function Footer() {
         </div>
       </div>
 
+      {/* Kartice + banka: obavezni logotipi po ugovoru sa Banca Intesa (NestPay).
+          Intesa logo mora biti LINK ka sajtu banke. */}
+      <div className="border-t border-gray-700">
+        <div className="max-w-6xl mx-auto px-4 py-5 flex flex-wrap items-center justify-center gap-x-3 gap-y-3">
+          <img src="/images/kartice/visa.jpg" alt="Visa" className="h-8 rounded bg-white" width={55} height={45} loading="lazy" />
+          <img src="/images/kartice/mastercard.jpg" alt="Mastercard" className="h-8 rounded bg-white" width={55} height={45} loading="lazy" />
+          <img src="/images/kartice/maestro.jpg" alt="Maestro" className="h-8 rounded bg-white" width={55} height={45} loading="lazy" />
+          <img src="/images/kartice/dina.jpg" alt="DinaCard" className="h-8 rounded bg-white" width={55} height={45} loading="lazy" />
+          <img src="/images/kartice/visa-secure.jpg" alt="Visa Secure" className="h-8 rounded bg-white" width={55} height={45} loading="lazy" />
+          <img src="/images/kartice/master-id-check.jpg" alt="Mastercard ID Check" className="h-8 rounded bg-white" width={55} height={45} loading="lazy" />
+          <a
+            href="https://www.bancaintesa.rs"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Banca Intesa"
+            className="bg-white rounded px-2 py-1 flex items-center"
+          >
+            <img src="/images/kartice/banca-intesa-1.svg" alt="Banca Intesa" className="h-5" loading="lazy" />
+          </a>
+        </div>
+      </div>
+
       {/* Copyright */}
       <div className="border-t border-gray-700">
         <div className="max-w-6xl mx-auto px-4 py-4 text-center text-xs text-gray-500">
