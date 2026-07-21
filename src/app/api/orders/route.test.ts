@@ -193,6 +193,58 @@ describe("POST /api/orders", () => {
     expect(h.adminEmail).toHaveBeenCalledOnce();
   });
 
+  // Grupni kurs se ne sme prodati bez termina: kupac bi platio pun iznos za kurs
+  // bez grupe, datuma i Meet linka (zatečeno 21.07.2026 na 6 objavljenih kurseva).
+  function seedGrupniCourse() {
+    return {
+      id: "g1", slug: "grupni-kurs-nemackog-jezika-a1-1", title: "Grupni kurs A1.1",
+      price: 19600, category: "grupni", course_type: "group",
+      included_lessons: null, is_purchasable: true,
+    };
+  }
+  const grupniRequest = () => orderRequest({ courseSlug: "grupni-kurs-nemackog-jezika-a1-1" });
+
+  it("grupni kurs bez ijedne otvorene grupe → 409, porudžbina se ne kreira", async () => {
+    h.fake = createFakeAdmin({ courses: [seedGrupniCourse()], groups: [] });
+
+    const res = await POST(grupniRequest());
+
+    expect(res.status).toBe(409);
+    expect((await res.json()).error).toMatch(/nema otvorenog termina/i);
+    expect(h.fake.tables.get("orders") ?? []).toHaveLength(0);
+    expect(h.adminEmail).not.toHaveBeenCalled();
+  });
+
+  it("grupni kurs čija je grupa otkazana → 409 (otkazana ne važi kao otvorena)", async () => {
+    h.fake = createFakeAdmin({
+      courses: [seedGrupniCourse()],
+      groups: [{
+        id: "grp-otkazana", level: "A1.1", status: "otkazana",
+        start_date: "2099-01-01", max_seats: 6, manual_enrolled: 0,
+      }],
+    });
+
+    const res = await POST(grupniRequest());
+
+    expect(res.status).toBe(409);
+    expect(h.fake.tables.get("orders") ?? []).toHaveLength(0);
+  });
+
+  it("grupni kurs sa otvorenom grupom i slobodnim mestom → 200", async () => {
+    h.fake = createFakeAdmin({
+      courses: [seedGrupniCourse()],
+      groups: [{
+        id: "grp-otvorena", level: "A1.1", status: "otvoren",
+        start_date: "2099-01-01", max_seats: 6, manual_enrolled: 0,
+      }],
+    });
+
+    const res = await POST(grupniRequest());
+
+    expect(res.status).toBe(200);
+    expect(h.fake.tables.get("orders")!.length).toBe(1);
+  });
+
   it("stare porudžbine (>1h) ne blokiraju novu", async () => {
     const old = { email: "ana@example.com" };
     h.fake = createFakeAdmin({

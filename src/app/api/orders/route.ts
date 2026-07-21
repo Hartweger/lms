@@ -105,7 +105,7 @@ export async function POST(request: Request) {
       }
     }
 
-    // Grupni kurs: ne dozvoli kupovinu ako je grupa popunjena.
+    // Grupni kurs: ne dozvoli kupovinu ako nema otvorenog termina ili je grupa popunjena.
     if (course.category === "grupni") {
       const nivo = nivoForSlug(course.slug);
       if (nivo) {
@@ -114,21 +114,29 @@ export async function POST(request: Request) {
           .from("groups").select("id, level, status, start_date, max_seats, manual_enrolled")
           .eq("level", nivo);
         const group = pickOpenGroupForNivo(groupsForNivo ?? [], nivo);
-        if (group) {
-          const { count } = await supabase
-            .from("group_enrollments").select("*", { count: "exact", head: true })
-            .eq("group_id", group.id).eq("status", "active");
-          const seats = computeSeats({
-            maxSeats: group.max_seats, manualEnrolled: group.manual_enrolled ?? null,
-            activeEnrollments: count ?? 0,
-          });
-          if (seats.full) {
-            console.log(`[orders] Grupna blokada (409): ${course.slug} / ${nivo} - grupa ${group.id} popunjena`);
-            return NextResponse.json(
-              { error: "Grupa je trenutno popunjena. Ostavi mejl da te obavestimo za sledeći termin." },
-              { status: 409 },
-            );
-          }
+        if (!group) {
+          // Ranije je ovde porudžbina prolazila: kupac bi platio pun iznos za kurs bez
+          // grupe, datuma i Meet linka. Zatečeno 21.07.2026 - 6 objavljenih grupnih kurseva
+          // (A1.1, A1.2, C1.1, C1.2, B1.1, konverzacijski) bilo je bez otvorenog termina.
+          console.log(`[orders] Grupna blokada (409): ${course.slug} / ${nivo} - nema otvorene grupe`);
+          return NextResponse.json(
+            { error: "Trenutno nema otvorenog termina za ovaj nivo. Ostavi mejl da te obavestimo čim otvorimo sledeći." },
+            { status: 409 },
+          );
+        }
+        const { count } = await supabase
+          .from("group_enrollments").select("*", { count: "exact", head: true })
+          .eq("group_id", group.id).eq("status", "active");
+        const seats = computeSeats({
+          maxSeats: group.max_seats, manualEnrolled: group.manual_enrolled ?? null,
+          activeEnrollments: count ?? 0,
+        });
+        if (seats.full) {
+          console.log(`[orders] Grupna blokada (409): ${course.slug} / ${nivo} - grupa ${group.id} popunjena`);
+          return NextResponse.json(
+            { error: "Grupa je trenutno popunjena. Ostavi mejl da te obavestimo za sledeći termin." },
+            { status: 409 },
+          );
         }
       }
     }

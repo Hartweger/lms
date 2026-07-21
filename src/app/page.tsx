@@ -50,7 +50,7 @@ export default function Pocetna() {
             {/* Stats */}
             <ul className="flex flex-wrap gap-x-6 gap-y-2 justify-center md:justify-start text-sm text-gray-500">
               <li className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 bg-plava rounded-full" />100% prolaznost na ispitima</li>
-              <li className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 bg-plava rounded-full" />3000+ polaznika</li>
+              <li className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 bg-plava rounded-full" />4.000+ polaznika</li>
               <li className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 bg-plava rounded-full" />20+ godina iskustva</li>
             </ul>
           </div>

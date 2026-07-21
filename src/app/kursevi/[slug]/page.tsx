@@ -292,6 +292,15 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
     }
   }
 
+  // Grupni kurs bez raspoloživog mesta: nema otvorenog termina ILI je grupa popunjena.
+  // U oba slučaja se ne prodaje, nego se hvata lid - isto pravilo čuva i /api/orders (409).
+  const nivoGrupe = category === "grupni" ? (slugToNivo[slug] ?? null) : null;
+  const bezMesta = Boolean(nivoGrupe) && (!grupa || grupa.full);
+  const bezMestaNaslov = grupa?.full ? "Popunjeno" : "Nema otvorenog termina";
+  const bezMestaTekst = grupa?.full
+    ? "Nema slobodnih mesta u trenutnom terminu. Ostavi mejl pa te obaveštavamo čim otvorimo sledeći."
+    : "Sledeći termin još nije objavljen. Ostavi mejl pa te obaveštavamo prvi čim ga zakažemo.";
+
   // Related products (same category, different slug)
   const { data: related } = await supabase
     .from("courses").select("title, slug, price, paypal_price_eur, category")
@@ -554,12 +563,12 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
 
             {/* Right - Price card (hidden on mobile, sticky bar instead) */}
             <div className="hidden lg:block lg:w-[360px] flex-shrink-0">
-              {category === "grupni" && grupa?.full ? (
+              {bezMesta ? (
                 <div className="border border-gray-200 rounded-xl p-6 text-center space-y-4">
-                  <p className="text-red-600 font-bold text-lg">Popunjeno</p>
-                  <p className="text-gray-600 text-sm">Nema slobodnih mesta u trenutnom terminu. Ostavi mejl pa te obaveštavamo čim otvorimo sledeći.</p>
+                  <p className="text-red-600 font-bold text-lg">{bezMestaNaslov}</p>
+                  <p className="text-gray-600 text-sm">{bezMestaTekst}</p>
                   <div className="flex justify-center">
-                    <InteresForm nivo={grupa.nivo} />
+                    <InteresForm nivo={nivoGrupe ?? ""} />
                   </div>
                 </div>
               ) : (
@@ -588,8 +597,8 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
             {t.bottomSubtitle}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            {category === "grupni" && grupa?.full ? (
-              <InteresForm nivo={grupa.nivo} />
+            {bezMesta ? (
+              <InteresForm nivo={nivoGrupe ?? ""} />
             ) : (
               <BuyButton
                 slug={course.slug}
@@ -635,10 +644,10 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
       )}
       {/* ─── Mobile sticky CTA bar ─── */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-3 flex items-center justify-between gap-3 lg:hidden z-50 safe-bottom">
-        {category === "grupni" && grupa?.full ? (
+        {bezMesta ? (
           <div className="flex items-center justify-between gap-3 w-full">
-            <p className="text-red-600 font-bold text-[15px]">Popunjeno</p>
-            <InteresForm nivo={grupa.nivo} />
+            <p className="text-red-600 font-bold text-[15px]">{bezMestaNaslov}</p>
+            <InteresForm nivo={nivoGrupe ?? ""} />
           </div>
         ) : (
           <>
