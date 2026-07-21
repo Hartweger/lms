@@ -86,7 +86,9 @@ export function buildOrderStatusXml(oid: string): string {
 }
 
 // Hardening: server-to-server provera statusa (CC5Request XML query)
-export async function queryTransaction(oid: string): Promise<{ procReturnCode: string; amount: string } | null> {
+export async function queryTransaction(
+  oid: string,
+): Promise<{ procReturnCode: string; amount: string; amountRsd: number | null; transStatus: string } | null> {
   if (!NESTPAY.apiUser || !NESTPAY.apiPassword) {
     console.error("[nestpay] queryTransaction: NESTPAY_API_USER/PASSWORD nisu podešeni - upit preskočen");
     return null;
@@ -109,12 +111,27 @@ export async function queryTransaction(oid: string): Promise<{ procReturnCode: s
  */
 export function parseOrderStatusResponse(
   text: string,
-): { procReturnCode: string; amount: string; transStatus: string } {
+): { procReturnCode: string; amount: string; amountRsd: number | null; transStatus: string } {
   const tag = (name: string) =>
     text.match(new RegExp(`<${name}>([^<]*)</${name}>`, "i"))?.[1]?.trim() ?? "";
+  const amount = tag("CAPTURE_AMT") || tag("ORIG_TRANS_AMT");
   return {
     procReturnCode: tag("ProcReturnCode"),
-    amount: tag("CAPTURE_AMT") || tag("ORIG_TRANS_AMT"),
+    amount,
+    amountRsd: minorUnitsToRsd(amount),
     transStatus: tag("TRANS_STAT"),
   };
+}
+
+/**
+ * Banka iznos u ORDERSTATUS odgovoru vraća U PARAMA (celobrojno): porudžbina
+ * 2026-210 od 27.500,00 RSD vratila je `2750000` (provereno na produkciji 21.07.2026).
+ * Ako vrednost ipak stigne sa decimalnom tačkom, uzima se kakva jeste.
+ */
+export function minorUnitsToRsd(raw: string): number | null {
+  if (!raw) return null;
+  const normalized = raw.replace(",", ".");
+  const n = Number(normalized);
+  if (!Number.isFinite(n)) return null;
+  return normalized.includes(".") ? n : n / 100;
 }

@@ -1,7 +1,7 @@
 // src/lib/nestpay.test.ts
 import { describe, it, expect } from "vitest";
 import crypto from "node:crypto";
-import { requestHash, verifyCallbackHash, buildPaymentFields, buildOrderStatusXml, parseOrderStatusResponse } from "./nestpay";
+import { requestHash, verifyCallbackHash, buildPaymentFields, buildOrderStatusXml, parseOrderStatusResponse, minorUnitsToRsd } from "./nestpay";
 
 const STORE_KEY = "TEST_STORE_KEY";
 
@@ -106,5 +106,22 @@ describe("parseOrderStatusResponse", () => {
     const bezCapture = `<CC5Response><ProcReturnCode>00</ProcReturnCode>
       <Extra><CHARGE_TYPE_CD>S</CHARGE_TYPE_CD><ORIG_TRANS_AMT>14000</ORIG_TRANS_AMT></Extra></CC5Response>`;
     expect(parseOrderStatusResponse(bezCapture).amount).toBe("14000");
+  });
+});
+
+describe("minorUnitsToRsd", () => {
+  it("celobrojnu vrednost tumači kao pare (provereno na produkciji 21.07.2026)", () => {
+    expect(minorUnitsToRsd("2750000")).toBe(27500);
+    expect(minorUnitsToRsd("319900")).toBe(3199);
+  });
+
+  it("vrednost sa decimalom uzima kakva jeste", () => {
+    expect(minorUnitsToRsd("27500.00")).toBe(27500);
+    expect(minorUnitsToRsd("3199,50")).toBe(3199.5);
+  });
+
+  it("prazno ili neispravno daje null", () => {
+    expect(minorUnitsToRsd("")).toBeNull();
+    expect(minorUnitsToRsd("S")).toBeNull();
   });
 });

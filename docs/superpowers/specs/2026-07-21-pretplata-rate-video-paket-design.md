@@ -99,6 +99,14 @@ Nov cron `/api/cron/subscriptions-poll` (dnevno, uz postojeće cronove):
 Parsiranje odgovora izdvojiti u čistu funkciju (`src/lib/nestpay-recurring.ts`) da bude
 testabilno bez mreže.
 
+**Dve zamke potvrđene na produkciji 21.07.2026** (vidi `parseOrderStatusResponse` i
+`minorUnitsToRsd` u `src/lib/nestpay.ts`):
+
+- iznos je u **`CAPTURE_AMT` / `ORIG_TRANS_AMT`**; `CHARGE_TYPE_CD` NIJE iznos nego tip
+  transakcije („S" = Sale) - prva verzija je čitala njega i vraćala „S";
+- iznos stiže **u parama** (porudžbina od 27.500,00 RSD → `2750000`), pa se pri poređenju
+  sa očekivanom ratom mora deliti sa 100.
+
 **Meta/GA4:** `Purchase` se šalje SAMO za `installment_no = 1`. Rate nisu nove konverzije
 i poslale bi 12 lažnih kupovina u atribuciju (vidi `project_meta_pixel_capi`).
 

@@ -37,6 +37,8 @@ export async function GET(request: Request) {
     ok: true,
     procReturnCode: result.procReturnCode,
     naplaceno: result.procReturnCode === "00",
-    iznos: result.amount,
+    iznosRsd: result.amountRsd,
+    iznosSirovo: result.amount, // banka vraća u parama
+    statusTransakcije: result.transStatus,
   });
 }
