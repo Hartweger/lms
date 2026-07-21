@@ -47,15 +47,29 @@ export interface RecurringCharge {
   /** null dok naplata nije realizovana */
   amountRsd: number | null;
   plannedAt: string;
+  /** novac je stvarno naplaćen - tek ovo sme da produži pristup i da se fiskalizuje */
   succeeded: boolean;
+  /** naplata je propala i neće se sama popraviti (odbijena, greška, otkazana) */
+  failed: boolean;
+  /** zapis je povraćaj novca, ne naplata */
+  refund: boolean;
 }
 
+/** Uspešno naplaćeno (priručnik, tabela statusa): C = odobreno, S = prosleđeno na obračun. */
+const USPELI_STATUSI = new Set(["C", "S"]);
+/** Konačno propalo: D = odbijeno, ERR = greška u seriji, CNCL = otkazano, V = poništeno. */
+const PALI_STATUSI = new Set(["D", "ERR", "CNCL", "V"]);
+
 /**
- * TRANS_STAT: dokumentacija pominje samo `PN` (na čekanju); jednokratna prodaja vraća
- * `S`, a uspela naplata U SERIJI vraća `C` (provereno na test seriji 21.07.2026).
- * Baš zato se uspeh ceni po tome da naplata NIJE na čekanju i da postoji naplaćen
- * iznos - a ne po spisku „dobrih" oznaka koji ne znamo ceo. Oznaka pale naplate
- * još nije viđena; kad je banka javi ili je izazovemo testom, dopuniti pravilo.
+ * TRANS_STAT po priručniku (Merchant Integration API Manual, tabela statusa):
+ * `C` odobreno, `S` obračunato, `A` samo rezervisano, `PN` na čekanju, `NW` još se
+ * obrađuje, `D` odbijeno, `ERR`/`CNCL` greška ili otkazana serija, `V` poništeno,
+ * `R` traži storniranje. Uspela naplata U SERIJI stiže kao `C` (provereno na test
+ * seriji 21.07.2026), a ne `S` kao jednokratna prodaja.
+ *
+ * Zamka: `CHARGE_TYPE_CD` = `C` znači POVRAĆAJ, i tada isti status `C`/`S` označava
+ * vraćen novac. Zato tip transakcije mora da se proveri - inače bi povraćaj produžio
+ * pristup polaznici koja je novac dobila nazad.
  */
 export function parseRecurringStatus(text: string): { count: number; charges: RecurringCharge[] } {
   const tag = (name: string) =>
@@ -69,13 +83,23 @@ export function parseRecurringStatus(text: string): { count: number; charges: Re
     if (!oid) continue;
     const transStat = tag(`TRANS_STAT_${n}`).toUpperCase();
     const amountRsd = minorUnitsToRsd(tag(`CAPTURE_AMT_${n}`));
+    // Isti podatak stiže i kao zasebna oznaka i unutar zbirnog ORDERSTATUS_n niza.
+    const chargeType = (
+      tag(`CHARGE_TYPE_CD_${n}`) ||
+      tag(`ORDERSTATUS_${n}`).match(/CHARGE_TYPE_CD:(\w+)/i)?.[1] ||
+      ""
+    ).toUpperCase();
+    const refund = chargeType === "C";
+
     charges.push({
       installmentNo: n,
       oid,
       transStat,
       amountRsd,
       plannedAt: tag(`PLANNED_START_DTTM_${n}`),
-      succeeded: transStat !== "PN" && amountRsd !== null && amountRsd > 0,
+      succeeded: !refund && USPELI_STATUSI.has(transStat) && amountRsd !== null && amountRsd > 0,
+      failed: PALI_STATUSI.has(transStat),
+      refund,
     });
   }
   return { count, charges };

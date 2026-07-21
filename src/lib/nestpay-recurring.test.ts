@@ -83,6 +83,50 @@ describe("parseRecurringStatus", () => {
     expect(c.plannedAt).toBe("2026-07-22 14:39:36.887");
   });
 
+  it("povraćaj NE broji kao uspelu naplatu (CHARGE_TYPE_CD=C)", () => {
+    // Priručnik, tabela statusa: TRANS_STAT `C`/`S` uz CHARGE_TYPE_CD `C` znači
+    // „Credited - payment refunded". Bez ove provere bi vraćen novac produžio pristup.
+    const odgovor = `<CC5Response><Extra><RECURRINGCOUNT>1</RECURRINGCOUNT>
+<ORD_ID_1>2026-300-2</ORD_ID_1><TRANS_STAT_1>C</TRANS_STAT_1>
+<CHARGE_TYPE_CD_1>C</CHARGE_TYPE_CD_1><CAPTURE_AMT_1>319900</CAPTURE_AMT_1></Extra></CC5Response>`;
+    const c = parseRecurringStatus(odgovor).charges[0];
+    expect(c.succeeded).toBe(false);
+    expect(c.refund).toBe(true);
+  });
+
+  it("odbijenu, pokvarenu i otkazanu naplatu prepoznaje kao palu", () => {
+    // D = Declined, ERR = Errorred Recurring Order, CNCL = Cancelled Recurring Order.
+    for (const stat of ["D", "ERR", "CNCL"]) {
+      const odgovor = `<CC5Response><Extra><RECURRINGCOUNT>1</RECURRINGCOUNT>
+<ORD_ID_1>2026-300-2</ORD_ID_1><TRANS_STAT_1>${stat}</TRANS_STAT_1>
+<CHARGE_TYPE_CD_1>S</CHARGE_TYPE_CD_1></Extra></CC5Response>`;
+      const c = parseRecurringStatus(odgovor).charges[0];
+      expect(c.succeeded, stat).toBe(false);
+      expect(c.failed, stat).toBe(true);
+    }
+  });
+
+  it("naplatu koja se još obrađuje (NW) ne proglašava ni uspelom ni palom", () => {
+    // NW = First Commit: prolazno stanje, sledeći prolaz crona daje konačan status.
+    const odgovor = `<CC5Response><Extra><RECURRINGCOUNT>1</RECURRINGCOUNT>
+<ORD_ID_1>2026-300-2</ORD_ID_1><TRANS_STAT_1>NW</TRANS_STAT_1></Extra></CC5Response>`;
+    const c = parseRecurringStatus(odgovor).charges[0];
+    expect(c.succeeded).toBe(false);
+    expect(c.failed).toBe(false);
+  });
+
+  it("tip transakcije čita i iz zbirnog ORDERSTATUS_n polja", () => {
+    // Banka isti podatak šalje i kao zasebnu oznaku i unutar ORDERSTATUS_n niza;
+    // ako zasebne nema, ne smemo da ostanemo bez tipa i propustimo povraćaj.
+    const odgovor = `<CC5Response><Extra><RECURRINGCOUNT>1</RECURRINGCOUNT>
+<ORD_ID_1>2026-300-2</ORD_ID_1><TRANS_STAT_1>S</TRANS_STAT_1>
+<ORDERSTATUS_1>ORD_ID:2026-300-2\tCHARGE_TYPE_CD:C\tCAPTURE_AMT:319900\tTRANS_STAT:S</ORDERSTATUS_1>
+<CAPTURE_AMT_1>319900</CAPTURE_AMT_1></Extra></CC5Response>`;
+    const c = parseRecurringStatus(odgovor).charges[0];
+    expect(c.refund).toBe(true);
+    expect(c.succeeded).toBe(false);
+  });
+
   it("prazan odgovor daje nula naplata umesto pucanja", () => {
     expect(parseRecurringStatus("<CC5Response></CC5Response>").charges).toEqual([]);
   });
