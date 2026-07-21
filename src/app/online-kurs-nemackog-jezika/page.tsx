@@ -4,12 +4,12 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Online kurs nemačkog jezika - A1 do C1 | Hartweger",
   description:
-    "Online kurs nemačkog jezika od A1 do C1 - video kursevi, male grupe uživo ili časovi 1:1. VoKuM metoda, 260+ Google recenzija 5.0. Kreni od besplatnog testa.",
+    "Online kurs nemačkog jezika od A1 do C1 - video kursevi, male grupe uživo ili časovi 1:1. VoKuM metoda, ocena 5.0 na Google-u. Kreni od besplatnog testa.",
   openGraph: {
     images: [{ url: "/og/share.png", width: 1200, height: 630, alt: "Hartweger - Škola nemačkog jezika" }],
     title: "Online kurs nemačkog jezika - A1 do C1 | Hartweger",
     description:
-      "Video kursevi, male grupe uživo ili individualni časovi. VoKuM metoda, 260+ Google recenzija 5.0.",
+      "Video kursevi, male grupe uživo ili individualni časovi. VoKuM metoda, ocena 5.0 na Google-u.",
     url: "https://www.hartweger.rs/online-kurs-nemackog-jezika",
     siteName: "Hartweger",
     type: "website",
