@@ -64,6 +64,18 @@ export default function UsloviPage() {
             <li>Cene su izražene u dinarima (RSD). Cene u evrima su informativnog karaktera.</li>
           </ul>
 
+          <h3>Mesečno plaćanje (pretplata):</h3>
+          <ul>
+            <li>Za pojedine kurseve moguće je mesečno plaćanje: kupac pokreće niz od 12 mesečnih naplata sa iste platne kartice, u jednakim iznosima, prema ceni istaknutoj pre potvrde porudžbine.</li>
+            <li>Prva naplata se vrši odmah, a svaka naredna istog dana u mesecu, dok se ne izvrši ukupno 12 naplata. Posle poslednje naplate niz prestaje sam i ništa se više ne naplaćuje.</li>
+            <li>Za svaku naplatu izdaje se fiskalni račun i šalje na email kupca.</li>
+            <li>Sadržaj kursa otvara se postepeno, srazmerno izvršenim naplatama: prvi nivo odmah po prvoj naplati, a poslednji najkasnije po osmoj, posle čega je ceo kurs dostupan do kraja pretplate. Redosled otvaranja istaknut je pre potvrde porudžbine.</li>
+            <li>Pristup već otvorenom sadržaju traje dok traju uredne naplate i produžava se sa svakom novom.</li>
+            <li><strong>Otkazivanje:</strong> kupac može da otkaže mesečno plaćanje u svakom trenutku, samostalno, u odeljku „Moj nalog" na platformi, opcijom „Otkaži mesečno plaćanje", ili slanjem zahteva na info@hartweger.rs. Otkazivanje zaustavlja sve buduće naplate. Već naplaćeni iznosi se ne vraćaju, a pristup ostaje do isteka poslednjeg plaćenog meseca.</li>
+            <li>Ako naplata ne uspe (nedovoljno sredstava, istekla ili blokirana kartica), pristup se ne produžava. Kupac o tome dobija obaveštenje na email.</li>
+            <li>Ukupan iznos plaćen kroz mesečno plaćanje veći je od jednokratne cene istog kursa; oba iznosa su istaknuta pre kupovine.</li>
+          </ul>
+
           <h2>5. Zaštita autorskih prava</h2>
           <p>
             Sav sadržaj na platformi (video lekcije, priručnici, vežbe, testovi) je intelektualna svojina HARTWEGER centra.

@@ -7,6 +7,7 @@ import { EUR_RATE } from "@/lib/order-utils";
 import { computeCouponDiscount } from "@/lib/coupon-discount";
 import { professorsFromVariants, packageTypesFromVariants, resolveVariant, type Variant } from "@/lib/individual-pricing";
 import { checkoutStrings } from "@/lib/product-i18n";
+import { planForSlug } from "@/lib/subscription-plans";
 
 interface Props {
   courseSlug: string;
@@ -90,9 +91,15 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
 
   const countryList = en ? COUNTRIES_EN : COUNTRIES;
   const isRS = country === "RS";
-  const [method, setMethod] = useState<"kartica" | "uplatnica" | "paypal">("kartica");
+  const [method, setMethod] = useState<"kartica" | "uplatnica" | "paypal" | "kartica_pretplata">("kartica");
+  const [pretplataPotvrda, setPretplataPotvrda] = useState(false);
   const paymentMethod = method;
-  const isCard = method === "kartica";
+  const jePretplata = method === "kartica_pretplata";
+  const isCard = method === "kartica" || jePretplata;
+
+  // Mesečno plaćanje postoji samo za proizvode iz plana (za sada Video paket A1+A2+B1)
+  // i samo na srpskoj ponudi - engleska ide isključivo jednokratnom karticom.
+  const pretplataPlan = en ? null : planForSlug(courseSlug);
 
   // Cena u opcijama dropdown-a: kupac vidi razliku odmah, bez menjanja izbora
   // (skrivene razlike su pravile duple porudžbine - vraćanje sa bankovne strane).
@@ -165,6 +172,12 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
       const c = document.cookie.split("; ").find((x) => x.startsWith("hw_attr="));
       if (c) attribution = JSON.parse(decodeURIComponent(c.split("=").slice(1).join("=")));
     } catch { /* ignore */ }
+
+    if (jePretplata && !pretplataPotvrda) {
+      setError("Potvrdi da razumeš da pokrećeš mesečno plaćanje.");
+      setLoading(false);
+      return;
+    }
 
     try {
       const res = await fetch("/api/orders", {
@@ -422,10 +435,24 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
             ? [
                 { v: "kartica", label: ct.methodCard, desc: "Visa, Mastercard, Maestro - sigurno preko Banca Intesa. Vlasnici Banca Intesa kartica mogu na rate - broj rata biraš u sledećem koraku (na strani banke)." },
                 { v: "uplatnica", label: ct.methodBank, desc: "Podaci za uplatu stižu na email; pristup po potvrdi uplate." },
+                ...(pretplataPlan
+                  ? [{
+                      v: "kartica_pretplata",
+                      label: `Mesečno plaćanje - ${formatPrice(pretplataPlan.monthlyRsd)} din mesečno`,
+                      desc: `Učiš nivo po nivo: A1.1 ti se otvara odmah, a ostali stižu redom. Kartica se automatski zadužuje svakog meseca, ukupno ${pretplataPlan.totalPayments} puta (${formatPrice(pretplataPlan.monthlyRsd * pretplataPlan.totalPayments)} din).`,
+                    }]
+                  : []),
               ]
             : [
                 { v: "kartica", label: ct.methodCard, desc: "Visa, Mastercard, Maestro - sigurno preko Banca Intesa. Naplata u dinarima (tvoja banka konvertuje u tvoju valutu)." },
                 { v: "paypal", label: ct.methodPaypal, desc: "PayPal link stiže na email. Naplata u evrima, uključuje 12% PayPal naknadu." },
+                ...(pretplataPlan
+                  ? [{
+                      v: "kartica_pretplata",
+                      label: `Mesečno plaćanje - ${formatPrice(pretplataPlan.monthlyRsd)} din mesečno`,
+                      desc: `Učiš nivo po nivo: A1.1 ti se otvara odmah, a ostali stižu redom. Kartica se automatski zadužuje svakog meseca, ukupno ${pretplataPlan.totalPayments} puta (${formatPrice(pretplataPlan.monthlyRsd * pretplataPlan.totalPayments)} din).`,
+                    }]
+                  : []),
               ]
           ).map((m) => (
             <label
@@ -449,6 +476,47 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
         </div>
       </div>
 
+      {/* Mesečno plaćanje: obaveštenje koje banka traži da bude nedvosmisleno istaknuto
+          pre potvrde - šta se pokreće, koliko, koliko puta i kako se otkazuje. */}
+      {jePretplata && pretplataPlan && (
+        <div className="bg-[#FFF8E7] border border-[#F0D48A] rounded-xl p-5">
+          <p className="font-bold text-gray-900 text-sm mb-2">Pokrećeš pretplatu, ne jednokratnu kupovinu.</p>
+          <ul className="text-sm text-gray-700 space-y-1 list-disc pl-5">
+            <li>Danas se naplaćuje <strong>{formatPrice(pretplataPlan.monthlyRsd)} din</strong>.</li>
+            <li>
+              Isti iznos banka će automatski naplatiti sa tvoje kartice <strong>svakog meseca</strong>, ukupno{" "}
+              <strong>{pretplataPlan.totalPayments} naplata</strong> - prva naredna za mesec dana, istog datuma.
+            </li>
+            <li>
+              Ukupno platiš <strong>{formatPrice(pretplataPlan.monthlyRsd * pretplataPlan.totalPayments)} din</strong>{" "}
+              (jednokratno je {formatPrice(priceRsd)} din).
+            </li>
+            <li>
+              Nivoi se otvaraju kako plaćaš: A1.1 odmah, A1.2 uz 2. naplatu, A2.1 uz 4, A2.2 uz 5, B1.1 uz 7, B1.2 uz 8.
+              Meseci 3, 6 i 9-12 su za obnavljanje i završni ispit nivoa.
+            </li>
+            <li>Pristup traje dok traju naplate. Ako plaćanje prekineš, ostaje ti do kraja plaćenog meseca.</li>
+            <li>
+              <strong>Otkazivanje:</strong> u svakom trenutku, sam(a), u odeljku „Moj nalog" na platformi. Ne moraš da
+              nam pišeš ni da obrazlažeš.
+            </li>
+          </ul>
+          <label className="flex items-start gap-2 mt-4 text-sm text-gray-800 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={pretplataPotvrda}
+              onChange={(e) => setPretplataPotvrda(e.target.checked)}
+              className="mt-1"
+            />
+            <span>
+              Razumem da pokrećem mesečno plaćanje od {formatPrice(pretplataPlan.monthlyRsd)} din ×{" "}
+              {pretplataPlan.totalPayments} i saglasan/na sam sa{" "}
+              <a href="/uslovi" target="_blank" rel="noreferrer" className="text-plava underline">uslovima korišćenja</a>.
+            </span>
+          </label>
+        </div>
+      )}
+
       {/* Error */}
       {error && (
         <p className="text-[#F78687] text-sm font-medium text-center">{error}</p>
@@ -457,7 +525,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
       {/* Submit */}
       <button
         type="submit"
-        disabled={loading}
+        disabled={loading || (jePretplata && !pretplataPotvrda)}
         className="w-full bg-[#F78687] hover:bg-[#E06566] disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold text-base py-4 rounded-xl transition-colors"
       >
         {loading ? (en ? "Sending..." : "Slanje...") : ct.payButton}
