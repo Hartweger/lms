@@ -163,7 +163,36 @@ napisala u mejlu, ne `ORDER-<RecurringId>` iz primera u priručniku).
 → U MC-u postoje i checkbox `Cancel` po naplati + „Select All" (ručno otkazivanje
 budućih naplata) i `refund` polje + „Click To Void" za inicijalnu transakciju.
 
-**OSTAJE (21-22.07):** proveriti da li callbackovi za naplate 2 i 3 stižu sami
-(dnevna frekvencija) — pogledati tabelu `nestpay_test_callbacks`. To je poslednje
-otvoreno pitanje; ako ne stignu, backstop je `ORDERSTATUS=QUERY` sa RECURRINGID.
-Pa javiti banci da provere sa svoje strane pre aktivacije na produkciji.
+## ODGOVOR NA GLAVNO PITANJE (21.07.2026): CALLBACKA ZA 2..N NEMA
+
+Naplata 2 (`RECTEST-1784551062868-2`, SALE, 100 RSD, 3D_FULL) **izvršena kod banke
+i vidljiva u MC-u**, a u `nestpay_test_callbacks` **nije stigao nijedan nov red** —
+tabela i dalje ima samo callback inicijalne naplate od 20.07. (Provera ponovljena
+posle zakazanog vremena 14:39.)
+
+→ **Banka NE šalje callback na okUrl za ponovljene naplate.** Kod vidi samo prvu.
+
+### Posledica za arhitekturu membershipa
+
+Fiskalizacija/produženje pristupa za naplate 2..N NE mogu se voditi callbackom.
+Rešenje = **dnevni cron koji poll-uje banku**: CC5 `ORDERSTATUS=QUERY` +
+`Extra.RECURRINGID` → response nosi po naplati `ORD_ID_n`, `TRANS_STAT_n`
+(PN=pending), `CAPTURE_AMT_n`, `PLANNED_START_DTTM_n`. Za svaku novo-uspelu
+naplatu: produži pristup + `fiscalizeOrder` + mejl (idempotentno, po `ORD_ID_n`).
+Uz `<oid>-2/-3` šemu, sparivanje sa porudžbinom je trivijalno.
+
+**PRE PRODUKCIJE tražiti od banke (blokira poll):**
+1. **API korisnika čija lozinka ne ističe** (portalska ističe na 3 meseca — pogl.
+   2.1.3 API priručnika). `NATadmin` nije dobar za automatiku.
+2. **Whitelist naše IP adrese** za `/fim/api` — na produkciji je server-to-server
+   `queryTransaction` padao (verovatno IP), zbog čega je uklonjen iz callbacka
+   (vidi [[project_placanja_bc_spec]], PR #9). Isti kanal, ista prepreka.
+   NAPOMENA: Vercel lambde nemaju statičku izlaznu IP bez dodatnog rešenja —
+   proveriti da li banka može whitelist po opsegu ili treba static-IP proxy.
+
+Alternativa ako IP whitelist ne prođe: naplate 2..N fiskalizovati iz MC izveštaja
+(ručni/polumanuelni Excel export) — lošije, ali izvodljivo za mali broj pretplata.
+
+**OSTAJE:** 22.07 potvrditi isto i za naplatu 3; javiti banci „testirano, molimo
+proveru" + tri pitanja (API korisnik, IP whitelist, potvrda da callbacka za 2..N
+zaista nema).
