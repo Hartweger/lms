@@ -1,7 +1,7 @@
 // src/lib/nestpay.test.ts
 import { describe, it, expect } from "vitest";
 import crypto from "node:crypto";
-import { requestHash, verifyCallbackHash, buildPaymentFields } from "./nestpay";
+import { requestHash, verifyCallbackHash, buildPaymentFields, buildOrderStatusXml } from "./nestpay";
 
 const STORE_KEY = "TEST_STORE_KEY";
 
@@ -64,5 +64,21 @@ describe("buildPaymentFields", () => {
     expect(f.oid).toBe("2026-001");
     expect(typeof f.hash).toBe("string");
     expect(f.hash.length).toBeGreaterThan(20);
+  });
+});
+
+describe("buildOrderStatusXml", () => {
+  it("pravi CC5 upit sa ORDERSTATUS=QUERY za dati oid", () => {
+    const xml = buildOrderStatusXml("2026-210");
+    expect(xml).toContain("<OrderId>2026-210</OrderId>");
+    expect(xml).toContain("<ORDERSTATUS>QUERY</ORDERSTATUS>");
+    expect(xml).toContain("<CC5Request>");
+  });
+
+  it("koristi API korisnika (Name/Password), ne store key", () => {
+    // U testu su env varijable prazne; bitno je da su to BAŠ ta dva polja,
+    // jer je slanje store key-a kao lozinke bio uzrok padova upita do 21.07.2026.
+    const xml = buildOrderStatusXml("X");
+    expect(xml).toMatch(/<Name>[^<]*<\/Name><Password>[^<]*<\/Password>/);
   });
 });

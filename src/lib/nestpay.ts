@@ -5,6 +5,12 @@ export const NESTPAY = {
   merchantId: process.env.NESTPAY_MERCHANT_ID ?? "",
   storeKey: process.env.NESTPAY_STORE_KEY ?? "",
   username: process.env.NESTPAY_USERNAME ?? "",
+  // API korisnik (MC → Add New User, Role = Api User). Ime MORA biti različito od
+  // Merchant Administratora, a lozinka mu ne ističe. Banka 21.07.2026: raniji padovi
+  // CC5 upita NISU bili IP blokada (NestPay nema IP filter) nego pogrešni kredencijali
+  // - za upite se koristi API user, ne merchant admin + store key.
+  apiUser: process.env.NESTPAY_API_USER ?? "",
+  apiPassword: process.env.NESTPAY_API_PASSWORD ?? "",
   paymentUrl: process.env.NESTPAY_PAYMENT_URL ?? "https://bib.eway2pay.com/fim/est3Dgate",
   apiUrl: process.env.NESTPAY_API_URL ?? "https://bib.eway2pay.com/fim/api",
   currency: process.env.NESTPAY_CURRENCY ?? "941",
@@ -74,9 +80,18 @@ export function buildPaymentFields(o: {
   };
 }
 
+/** XML za CC5 upit o statusu porudžbine. Izdvojeno da bude testabilno bez mreže. */
+export function buildOrderStatusXml(oid: string): string {
+  return `<?xml version="1.0" encoding="UTF-8"?><CC5Request><Name>${NESTPAY.apiUser}</Name><Password>${NESTPAY.apiPassword}</Password><ClientId>${NESTPAY.merchantId}</ClientId><OrderId>${oid}</OrderId><Extra><ORDERSTATUS>QUERY</ORDERSTATUS></Extra></CC5Request>`;
+}
+
 // Hardening: server-to-server provera statusa (CC5Request XML query)
 export async function queryTransaction(oid: string): Promise<{ procReturnCode: string; amount: string } | null> {
-  const xml = `<?xml version="1.0" encoding="UTF-8"?><CC5Request><Name>${NESTPAY.username}</Name><Password>${NESTPAY.storeKey}</Password><ClientId>${NESTPAY.merchantId}</ClientId><OrderId>${oid}</OrderId><Extra><ORDERSTATUS>QUERY</ORDERSTATUS></Extra></CC5Request>`;
+  if (!NESTPAY.apiUser || !NESTPAY.apiPassword) {
+    console.error("[nestpay] queryTransaction: NESTPAY_API_USER/PASSWORD nisu podešeni - upit preskočen");
+    return null;
+  }
+  const xml = buildOrderStatusXml(oid);
   const res = await fetch(NESTPAY.apiUrl, {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
