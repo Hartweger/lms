@@ -103,12 +103,13 @@ describe("findCronProblems", () => {
 });
 
 describe("EXPECTED_CRONS", () => {
-  it("pokriva svih 16 cron ruta iz vercel.json", () => {
+  it("pokriva svih 17 cron ruta iz vercel.json", () => {
     expect(EXPECTED_CRONS.map((c) => c.name).sort()).toEqual([
       "access-audit", "activation", "business-summary", "close-groups",
       "eseji-pregled", "expiry-reminder", "grupe-podsetnik", "honorari",
       "inactivity", "jutarnji-pregled", "naki-content-weekly", "nestpay-reconcile",
-      "prof-podsetnik", "review-recert", "review-request", "test-funnel",
+      "prof-podsetnik", "review-recert", "review-request", "subscriptions-poll",
+      "test-funnel",
     ]);
   });
 });

@@ -18,6 +18,7 @@ export const EXPECTED_CRONS: { name: string; maxAgeHours: number }[] = [
   { name: "jutarnji-pregled", maxAgeHours: 26 },
   { name: "grupe-podsetnik", maxAgeHours: 26 },
   { name: "test-funnel", maxAgeHours: 26 },
+  { name: "subscriptions-poll", maxAgeHours: 26 },
   // 3x dnevno (6,14,22 UTC → najviše 8h razmaka + zazor)
   { name: "nestpay-reconcile", maxAgeHours: 10 },
   // nedeljni (170h = 7 dana + zazor)
