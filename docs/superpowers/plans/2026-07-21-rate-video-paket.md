@@ -1,5 +1,24 @@
 # Mesečno plaćanje (12 rata) za Video paket A1+A2+B1 - plan implementacije
 
+> # ⛔ NE SPROVODITI - PLAN JE PREVAZIĐEN
+>
+> Funkcionalnost je **već implementirana i objavljena** 21.07.2026 uveče, u paralelnoj sesiji
+> (commitovi `6b45ab7`…`e351341`), dok je ovaj plan pisan. Sprovođenje bi napravilo duplikate
+> tabela, ruta i cronova.
+>
+> **Šta je uživo:** migracija 070 (`subscriptions` + kolone na `orders`),
+> `src/lib/subscription-plans.ts` (iznos rate + raspored otključavanja nivoa),
+> checkout sa obaveštenjem i saglasnošću, upis serije iz callbacka, cron
+> `/api/cron/subscriptions-poll`, otkazivanje iz „Moj nalog" (`/api/pretplata/otkazi`),
+> odeljak u `/uslovi`, prekidač `?pretplata=1` dok banka ne aktivira recurring na produkciji.
+>
+> **Razlike u odnosu na ovaj plan i odluke Nataše (21.07):** nivoi se otključavaju postepeno
+> (ostaje tako); inostranstvo je uključeno, isključena je samo engleska verzija stranice
+> (nijedan proizvod na engleskom za sada nema plan rata).
+>
+> Dokument ostaje kao zapis razmišljanja i kao izvor testnih scenarija. Za izmene ponašanja
+> polaziti od koda.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Omogućiti kupovinu Video paketa A1+A2+B1 kroz 12 mesečnih naplata kartice (3.199 RSD po rati) preko NestPay recurringa, sa automatskom obradom rata 2-12, fiskalizacijom svake rate i samouslužnim otkazivanjem.

@@ -1,8 +1,32 @@
 # Mesečno plaćanje (12 rata) za Video paket A1+A2+B1 - dizajn
 
 **Datum:** 2026-07-21
-**Status:** spec, odobren za planiranje
+**Status:** ⚠️ **PREVAZIĐEN - funkcionalnost je VEĆ IMPLEMENTIRANA I OBJAVLJENA.** Ne sprovoditi.
 **Kontekst:** [docs/ideje/2026-06-18-membership-pretplata-recurring.md](../../ideje/2026-06-18-membership-pretplata-recurring.md)
+
+> ## Pročitaj pre svega ostalog
+>
+> Ovaj spec (i prateći plan `docs/superpowers/plans/2026-07-21-rate-video-paket.md`) pisan je
+> uporedo sa implementacijom koja se odvijala u drugoj sesiji. **Mesečno plaćanje je uživo
+> od 21.07.2026 uveče** (commitovi `6b45ab7`…`e351341`): migracija 070, `src/lib/subscription-plans.ts`,
+> checkout sa saglasnošću, callback, cron `subscriptions-poll`, otkazivanje iz „Moj nalog",
+> odeljak u `/uslovi`, prekidač `?pretplata=1`.
+>
+> **Dokument zadrži samo kao zapis odluka i istraživanja.** Ako treba menjati ponašanje,
+> polazi od koda, ne od ovog teksta.
+>
+> ### Gde se implementirano razlikuje od ovog speca
+>
+> 1. **Pristup: postepeno otključavanje nivoa** (A1.1 odmah, A1.2 uz 2. naplatu, A2.1 uz 4,
+>    A2.2 uz 5, B1.1 uz 7, B1.2 uz 8; meseci 3, 6 i 9-12 za obnavljanje i završni ispit).
+>    Spec je predviđao pun pristup od prvog dana. **Nataša 21.07: ostaje postepeno** - štiti
+>    od „platim 6 rata pa odem" i tako već piše u uslovima korišćenja.
+> 2. **Inostranstvo je uključeno** (provereno uživo: izbor zemlje Nemačka → opcija ostaje).
+>    Isključena je samo engleska verzija stranice, a nijedan proizvod na engleskom za sada
+>    nema plan rata. Kad se doda, ukloniti uslov `en ||` u `CheckoutForm.tsx` i napisati
+>    engleski tekst obaveštenja.
+> 3. Provera „već ima pristup" je implementirana; sakrivanje kupona kod pretplate nije
+>    (kuponi ionako ne utiču na iznos rate, jer se naplaćuje cena iz plana).
 
 ## Cilj
 
