@@ -1,7 +1,7 @@
 // src/lib/nestpay.test.ts
 import { describe, it, expect } from "vitest";
 import crypto from "node:crypto";
-import { requestHash, verifyCallbackHash, buildPaymentFields, buildOrderStatusXml } from "./nestpay";
+import { requestHash, verifyCallbackHash, buildPaymentFields, buildOrderStatusXml, parseOrderStatusResponse } from "./nestpay";
 
 const STORE_KEY = "TEST_STORE_KEY";
 
@@ -80,5 +80,31 @@ describe("buildOrderStatusXml", () => {
     // jer je slanje store key-a kao lozinke bio uzrok padova upita do 21.07.2026.
     const xml = buildOrderStatusXml("X");
     expect(xml).toMatch(/<Name>[^<]*<\/Name><Password>[^<]*<\/Password>/);
+  });
+});
+
+describe("parseOrderStatusResponse", () => {
+  // Skraćen, ali veran uzorak odgovora banke (redosled tagova kao u priručniku).
+  const xml = `<?xml version="1.0" encoding="ISO-8859-9"?><CC5Response>
+    <ProcReturnCode>00</ProcReturnCode><Response>Approved</Response>
+    <OrderId>2026-210</OrderId><TransId>26201OnlB13975</TransId>
+    <Extra><CHARGE_TYPE_CD>S</CHARGE_TYPE_CD><ORIG_TRANS_AMT>27500</ORIG_TRANS_AMT>
+    <TRANS_STAT>C</TRANS_STAT><CAPTURE_AMT>27500</CAPTURE_AMT></Extra></CC5Response>`;
+
+  it("čita kod odgovora, iznos i status transakcije", () => {
+    const r = parseOrderStatusResponse(xml);
+    expect(r.procReturnCode).toBe("00");
+    expect(r.amount).toBe("27500");
+    expect(r.transStatus).toBe("C");
+  });
+
+  it("NE vraća CHARGE_TYPE_CD kao iznos (regresija od 21.07.2026: vraćalo 'S')", () => {
+    expect(parseOrderStatusResponse(xml).amount).not.toBe("S");
+  });
+
+  it("pada nazad na ORIG_TRANS_AMT kad CAPTURE_AMT ne postoji", () => {
+    const bezCapture = `<CC5Response><ProcReturnCode>00</ProcReturnCode>
+      <Extra><CHARGE_TYPE_CD>S</CHARGE_TYPE_CD><ORIG_TRANS_AMT>14000</ORIG_TRANS_AMT></Extra></CC5Response>`;
+    expect(parseOrderStatusResponse(bezCapture).amount).toBe("14000");
   });
 });

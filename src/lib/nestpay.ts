@@ -98,8 +98,23 @@ export async function queryTransaction(oid: string): Promise<{ procReturnCode: s
     body: new URLSearchParams({ DATA: xml }).toString(),
   });
   if (!res.ok) return null;
-  const text = await res.text();
-  const proc = text.match(/<ProcReturnCode>([^<]*)<\/ProcReturnCode>/)?.[1] ?? "";
-  const amt = text.match(/<(?:CHARGE_TYPE_CD|Total|amount)>([^<]*)<\//i)?.[1] ?? "";
-  return { procReturnCode: proc, amount: amt };
+  return parseOrderStatusResponse(await res.text());
+}
+
+/**
+ * Čita CC5 odgovor na ORDERSTATUS=QUERY.
+ * PAŽNJA: iznos je u `CAPTURE_AMT` (naplaćeno) odnosno `ORIG_TRANS_AMT` (prvobitno).
+ * `CHARGE_TYPE_CD` NIJE iznos nego tip transakcije („S" = Sale) - ranija verzija je
+ * čitala baš njega i vraćala „S" umesto iznosa (uočeno na produkciji 21.07.2026).
+ */
+export function parseOrderStatusResponse(
+  text: string,
+): { procReturnCode: string; amount: string; transStatus: string } {
+  const tag = (name: string) =>
+    text.match(new RegExp(`<${name}>([^<]*)</${name}>`, "i"))?.[1]?.trim() ?? "";
+  return {
+    procReturnCode: tag("ProcReturnCode"),
+    amount: tag("CAPTURE_AMT") || tag("ORIG_TRANS_AMT"),
+    transStatus: tag("TRANS_STAT"),
+  };
 }
