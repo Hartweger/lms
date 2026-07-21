@@ -21,21 +21,120 @@ interface IndivRow {
   calendarUrl: string | null;
 }
 
+interface SubRow {
+  id: string;
+  status: string;
+  title: string;
+  amount: number;
+  paidPayments: number;
+  totalPayments: number;
+  nextChargeAt: string | null;
+  accessUntil: string | null;
+  unlockedCount: number;
+  nextUnlockAt: number | null;
+}
+
+const PRAZNO = { groups: [], individual: [], subscriptions: [] };
+
+/** Mesečno plaćanje: stanje serije i samouslužno otkazivanje (uslov banke). */
+function Pretplata({ s, onCancel }: { s: SubRow; onCancel: (id: string) => void }) {
+  const [pita, setPita] = useState(false);
+  const [salje, setSalje] = useState(false);
+  const [greska, setGreska] = useState("");
+  const datum = (d: string | null) => (d ? new Date(d).toLocaleDateString("sr-RS") : "-");
+  const iznos = s.amount.toLocaleString("de-DE");
+
+  const otkazi = async () => {
+    setSalje(true);
+    setGreska("");
+    const r = await fetch("/api/pretplata/otkazi", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ subscriptionId: s.id }),
+    });
+    const j = await r.json().catch(() => ({}));
+    setSalje(false);
+    if (!r.ok) { setGreska(j.error ?? "Otkazivanje nije prošlo."); return; }
+    setPita(false);
+    onCancel(s.id);
+  };
+
+  return (
+    <div className="border border-gray-200 rounded-lg p-4 mb-2">
+      <p className="font-medium">{s.title} · mesečno plaćanje</p>
+      <p className="text-sm text-gray-600 mt-1">
+        Plaćeno {s.paidPayments} od {s.totalPayments} naplata · {iznos} din mesečno
+      </p>
+      <p className="text-sm text-gray-600">
+        Otvoreno ti je {s.unlockedCount} od 6 nivoa
+        {s.nextUnlockAt ? ` · sledeći stiže sa ${s.nextUnlockAt}. naplatom` : " · ceo kurs je otvoren"}
+      </p>
+      {s.status === "active" ? (
+        <>
+          <p className="text-sm text-gray-600">
+            Sledeća naplata: {datum(s.nextChargeAt)} · pristup važi do {datum(s.accessUntil)}
+          </p>
+          {!pita ? (
+            <button onClick={() => setPita(true)} className="mt-2 text-sm text-gray-500 underline hover:text-gray-700">
+              Otkaži mesečno plaćanje
+            </button>
+          ) : (
+            <div className="mt-3 bg-gray-50 rounded-lg p-3">
+              <p className="text-sm text-gray-700">
+                Otkazujemo sve buduće naplate. Pristup ti ostaje do {datum(s.accessUntil)}, a već naplaćeno se ne vraća.
+                Kurs kasnije možeš da nastaviš - napredak ti ostaje sačuvan.
+              </p>
+              <div className="flex gap-2 mt-3">
+                <button onClick={() => setPita(false)} className="text-sm border border-gray-300 px-3 py-2 rounded-lg hover:bg-white">
+                  Odustani
+                </button>
+                <button onClick={otkazi} disabled={salje} className="text-sm bg-gray-800 text-white px-3 py-2 rounded-lg disabled:opacity-60">
+                  {salje ? "Otkazujem…" : "Da, otkaži"}
+                </button>
+              </div>
+              {greska && <p className="text-sm text-red-600 mt-2">{greska}</p>}
+            </div>
+          )}
+        </>
+      ) : (
+        <p className="text-sm text-gray-600">
+          Otkazano - novih naplata nema. Pristup ti važi do {datum(s.accessUntil)}.
+        </p>
+      )}
+    </div>
+  );
+}
+
 export function GrupniIIndividualni() {
-  const [data, setData] = useState<{ groups: GroupRow[]; individual: IndivRow[] } | null>(null);
+  const [data, setData] = useState<{ groups: GroupRow[]; individual: IndivRow[]; subscriptions: SubRow[] } | null>(null);
 
   useEffect(() => {
     fetch("/api/student/account")
-      .then((r) => (r.ok ? r.json() : { groups: [], individual: [] }))
-      .then(setData)
-      .catch(() => setData({ groups: [], individual: [] }));
+      .then((r) => (r.ok ? r.json() : PRAZNO))
+      .then((d) => setData({ ...PRAZNO, ...d }))
+      .catch(() => setData(PRAZNO));
   }, []);
 
-  if (!data || (data.groups.length === 0 && data.individual.length === 0)) return null;
+  if (!data || (data.groups.length === 0 && data.individual.length === 0 && data.subscriptions.length === 0)) return null;
+
+  const oznaciOtkazanu = (id: string) =>
+    setData((d) =>
+      d ? { ...d, subscriptions: d.subscriptions.map((s) => (s.id === id ? { ...s, status: "cancelled" } : s)) } : d,
+    );
 
   return (
     <section className="mb-8">
-      <p className="text-sm font-medium text-gray-500 mb-2">Časovi uživo</p>
+      {data.subscriptions.length > 0 && (
+        <>
+          <p className="text-sm font-medium text-gray-500 mb-2">Mesečno plaćanje</p>
+          {data.subscriptions.map((s) => (
+            <Pretplata key={s.id} s={s} onCancel={oznaciOtkazanu} />
+          ))}
+        </>
+      )}
+      {(data.groups.length > 0 || data.individual.length > 0) && (
+        <p className="text-sm font-medium text-gray-500 mb-2 mt-6">Časovi uživo</p>
+      )}
       {data.groups.map((g) => (
         <div key={g.id} className="border border-gray-200 rounded-lg p-4 mb-2">
           <p className="font-medium">

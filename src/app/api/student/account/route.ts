@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { planForSlug, unlockedSlugsAfter } from "@/lib/subscription-plans";
 
 type ProfRef = { full_name: string | null; calendar_url?: string | null };
 type CourseRef = { title: string | null; slug: string | null };
@@ -84,5 +85,46 @@ export async function GET() {
     };
   });
 
-  return NextResponse.json({ groups, individual });
+  // Mesečno plaćanje: prikaz stanja serije i osnova za dugme „Otkaži".
+  const { data: subs } = await admin
+    .from("subscriptions")
+    .select("id, status, amount, paid_payments, total_payments, next_charge_at, course:course_id(title, slug)")
+    .eq("user_id", user.id)
+    .in("status", ["active", "cancelled"])
+    .order("created_at", { ascending: false });
+
+  const subscriptions = await Promise.all(
+    (subs ?? []).map(async (s) => {
+      const course = one<CourseRef>(s.course as CourseRef | CourseRef[] | null);
+      const plan = course?.slug ? planForSlug(course.slug) : null;
+      const otvoreni = plan ? unlockedSlugsAfter(plan, s.paid_payments as number) : [];
+      const sledeciNivo = plan?.unlocks.find((u) => u.installment > (s.paid_payments as number)) ?? null;
+
+      // Dokle važi pristup: najdalji istek među otvorenim kursevima te pretplate.
+      const { data: pristup } = await admin
+        .from("course_access")
+        .select("expires_at, course:course_id(slug)")
+        .eq("user_id", user.id);
+      const doKada = (pristup ?? [])
+        .filter((p) => otvoreni.includes(one<{ slug: string }>(p.course as never)?.slug ?? ""))
+        .map((p) => p.expires_at as string)
+        .sort()
+        .pop() ?? null;
+
+      return {
+        id: s.id as string,
+        status: s.status as string,
+        title: course?.title ?? "Kurs",
+        amount: Number(s.amount),
+        paidPayments: s.paid_payments as number,
+        totalPayments: s.total_payments as number,
+        nextChargeAt: (s.next_charge_at as string) ?? null,
+        accessUntil: doKada,
+        unlockedCount: otvoreni.length,
+        nextUnlockAt: sledeciNivo?.installment ?? null,
+      };
+    }),
+  );
+
+  return NextResponse.json({ groups, individual, subscriptions });
 }
