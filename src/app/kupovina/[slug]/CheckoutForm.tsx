@@ -99,7 +99,14 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
 
   // Mesečno plaćanje postoji samo za proizvode iz plana (za sada Video paket A1+A2+B1)
   // i samo na srpskoj ponudi - engleska ide isključivo jednokratnom karticom.
-  const pretplataPlan = en ? null : planForSlug(courseSlug);
+  // Dok banka ne odobri recurring na produkcionom merchantu, opcija je sakrivena od
+  // običnih kupaca i pojavljuje se samo uz ?pretplata=1 (link koji dobija banka).
+  // Kad odobrenje stigne, dovoljno je ukloniti uslov `pretplataOtkljucana`.
+  const [pretplataOtkljucana, setPretplataOtkljucana] = useState(false);
+  useEffect(() => {
+    setPretplataOtkljucana(new URLSearchParams(window.location.search).get("pretplata") === "1");
+  }, []);
+  const pretplataPlan = en || !pretplataOtkljucana ? null : planForSlug(courseSlug);
 
   // Cena u opcijama dropdown-a: kupac vidi razliku odmah, bez menjanja izbora
   // (skrivene razlike su pravile duple porudžbine - vraćanje sa bankovne strane).
