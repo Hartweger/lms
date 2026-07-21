@@ -143,10 +143,24 @@ testabilno bez mreže.
 - iznos stiže **u parama** (porudžbina od 27.500,00 RSD → `2750000`), pa se pri poređenju
   sa očekivanom ratom mora deliti sa 100.
 
-**Za proveru u testu:** vrednosti `TRANS_STAT`. Dokumentacija pominje samo `PN` (na
-čekanju); uspela produkcijska prodaja vratila je `S`. Tačan skup vrednosti (naročito
-oznaku pale naplate) utvrditi na test seriji, pa tek onda vezati logiku za njih. Do tada
-se uspešnost naplate ceni po `ProcReturnCode = 00` i postojanju `CAPTURE_AMT`.
+**REŠENO 21.07.2026** (test serija + tabela statusa iz `NestPay_Merchant Integration API
+Manual.pdf`, poglavlje o upitu statusa) - vrednosti `TRANS_STAT`:
+
+| Oznaka | Značenje | Kod nas |
+|---|---|---|
+| `C` | odobrena transakcija | **uspelo** (tako stiže naplata u seriji) |
+| `S` | prosleđena na obračun | **uspelo** |
+| `A` | samo rezervisano, bez naplate | čeka se sledeći prolaz |
+| `PN` | na čekanju (buduća naplata) | čeka se |
+| `NW` | još se obrađuje | čeka se |
+| `D` | odbijena | **palo** |
+| `ERR` / `CNCL` | greška / otkazana serija | **palo** |
+| `V` | poništena | **palo** |
+| `R` | traži storniranje | **palo** |
+
+**Zamka:** `CHARGE_TYPE_CD` = `C` znači **povraćaj** (`S` = naplata), a status pri tome
+ostaje `C`/`S`. Bez provere tipa bi vraćen novac bio protumačen kao uspela rata i produžio
+pristup. Zato `parseRecurringStatus` gleda i status i tip transakcije.
 
 **Meta/GA4:** `Purchase` se šalje SAMO za `installment_no = 1`. Rate nisu nove konverzije
 i poslale bi 12 lažnih kupovina u atribuciju (vidi `project_meta_pixel_capi`).

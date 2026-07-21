@@ -2008,7 +2008,7 @@ order by o.installment_no;
 ```
 Očekivano: red za ratu 2 sa `payment_status = 'completed'` i popunjenim `nestpay_oid`.
 
-- [ ] **Step 4: Provera vrednosti `TRANS_STAT` nad test serijom**
+- [x] **Step 4: Provera vrednosti `TRANS_STAT` nad test serijom** — URAĐENO 21.07.2026
 
 Otvori (ulogovan kao admin), sa `RECURRINGID` iz test serije:
 
@@ -2016,10 +2016,12 @@ Otvori (ulogovan kao admin), sa `RECURRINGID` iz test serije:
 https://www.hartweger.rs/api/admin/nestpay-recurring-status?env=test&recurringId=<RECURRINGID>
 ```
 
-Očekivano: `charges` sa po jednim redom za svaku naplatu, gde uspela ima `succeeded: true` i
-iznos u dinarima, a buduća `transStat: "PN"`. Zabeleži koju oznaku nosi **pala** naplata
-(izazvati je novom test serijom sa karticom `4841878700002912` i CVC **510**) i, ako je
-potrebno, dopuni pravilo u `parseRecurringStatus`.
+Rezultat nad serijom `26201OnlA13974`: sve tri naplate vraćene bez ijednog callbacka -
+naplate 1 i 2 kao `TRANS_STAT=C` sa iznosom i `AUTH_CODE`, naplata 3 kao `PN` sa
+`PLANNED_START_DTTM`. Pun spisak statusa preuzet iz priručnika i ugrađen u
+`parseRecurringStatus` (commit `5d2b69f`), zajedno sa proverom da `CHARGE_TYPE_CD=C`
+(povraćaj) ne broji kao naplata. Izazivanje pale naplate karticom `4841878700002912` +
+CVC `510` više nije uslov za produkciju, ali ostaje kao korisna provera.
 
 - [ ] **Step 5: Provera otkazivanja**
 
