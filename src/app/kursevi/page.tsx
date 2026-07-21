@@ -19,8 +19,16 @@ export default function KurseviPage() {
           Kursevi HARTWEGER centra
         </h1>
         <p className="text-[17px] text-gray-500 leading-relaxed">
-          Izaberite tip kursa, filtrirajte po nivou i odmah se prijavite.
+          Izaberi tip kursa, filtriraj po nivou i odmah se prijavi.
         </p>
+        {/* Traka poverenja - kredencijal se vezuje za PROGRAM, ne za izvodjenje:
+            Natasa licno vodi samo video kurseve, grupne i individualne drze profesorke iz tima. */}
+        <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-500 mt-4">
+          <li className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 bg-plava rounded-full" />Program licenciranog ispitivača Geteovih i TELC ispita</li>
+          <li className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 bg-plava rounded-full" />20+ godina iskustva</li>
+          <li className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 bg-plava rounded-full" />100% prolaznost na ispitima</li>
+          <li className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 bg-plava rounded-full" />4.000+ polaznika</li>
+        </ul>
       </div>
       <KurseviKatalog />
     </div>

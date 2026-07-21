@@ -41,6 +41,16 @@ export default function PaketA1B1Page() {
                 <p className="text-sm text-gray-400 mt-2">≈ 249€ · plaćanje na rate dostupno</p>
               </div>
 
+              {/* Kredencijal - VIDEO kurs vodi Natasa licno, pa sme direktna formulacija.
+                  Na grupnim/individualnim kursevima kredencijal ide na PROGRAM, ne na izvodjenje. */}
+              <div className="mb-8 rounded-xl border border-plava/20 bg-plava/5 px-5 py-4 text-left">
+                <p className="font-bold text-gray-900 mb-1">Uči kod osobe koja ocenjuje na ispitu.</p>
+                <p className="text-[15px] text-gray-600 leading-relaxed">
+                  Kurs vodi Nataša Hartweger, licencirani ispitivač Geteovih i TELC ispita. Ne spremaš se po tuđoj
+                  proceni šta je važno, nego kod nekoga ko zna kako se ti ispiti stvarno ocenjuju.
+                </p>
+              </div>
+
               {/* Stats */}
               <div className="flex flex-wrap justify-center lg:justify-start gap-6 text-sm">
                 <div className="text-center">
@@ -255,7 +265,7 @@ export default function PaketA1B1Page() {
             <div className="inline-flex items-center gap-3 bg-white rounded-full px-6 py-3 shadow-sm border border-gray-100">
               <span className="text-amber-400 text-lg">★★★★★</span>
               <span className="font-bold text-gray-900">5.0</span>
-              <span className="text-gray-400 text-sm">Google recenzije · 300+ ocena</span>
+              <span className="text-gray-400 text-sm">Ocena 5.0 na Google-u</span>
             </div>
           </div>
 

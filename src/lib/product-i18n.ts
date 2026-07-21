@@ -23,7 +23,7 @@ export interface ProductStrings {
 const SR_PRODUCT: ProductStrings = {
   categoryLabel: "Mesečni paket",
   featuresTitle: "Šta uključuje paket?",
-  ratingText: "5.0 - 300+ Google recenzija",
+  ratingText: "Ocena 5.0 na Google-u",
   oneOnOneInEnglish: "",
   chooseProfessorLine: "Profesorku biraš u sledećem koraku",
   bookYourTimeLine: "Ti biraš termin - dobijaš Google Calendar link i zakazuješ",
@@ -43,7 +43,7 @@ const SR_PRODUCT: ProductStrings = {
 const EN_PRODUCT: ProductStrings = {
   categoryLabel: "Monthly package",
   featuresTitle: "What's included",
-  ratingText: "5.0 - 300+ Google reviews",
+  ratingText: "5.0 rating on Google",
   oneOnOneInEnglish: "1-on-1 - you practice German, with explanations in English",
   chooseProfessorLine: "You choose your tutor in the next step",
   bookYourTimeLine: "You pick your times - you get a Google Calendar link and book yourself",

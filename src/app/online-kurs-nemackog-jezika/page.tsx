@@ -72,7 +72,7 @@ const ZASTO = [
   "VoKuM metoda: vokabular, komunikacija i motivacija umesto bubanja gramatike",
   "Sva objašnjenja na našem jeziku - razumeš odmah, bez prevođenja",
   "NaKI, besplatni AI asistent za vežbanje gramatike i razgovora, dostupan 0-24",
-  "4.000+ polaznika i 260+ Google recenzija sa prosekom 5.0",
+  "4.000+ polaznika i ocena 5.0 na Google-u",
   "Hartweger sertifikat sa online verifikacijom po završetku kursa",
 ];
 
@@ -105,7 +105,7 @@ export default function OnlineKursPage() {
             odgovara - video kurs svojim tempom, malu grupu uživo ili individualne časove 1:1.
           </p>
           <p className="text-sm text-gray-500 mb-8">
-            20+ godina iskustva · 4.000+ polaznika · 260+ Google recenzija (5.0)
+            20+ godina iskustva · 4.000+ polaznika · ocena 5.0 na Google-u
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
