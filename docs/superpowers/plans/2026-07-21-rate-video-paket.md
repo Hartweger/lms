@@ -210,7 +210,7 @@ git commit -m "Konfiguracija planova za rate + pravilo trajanja pristupa"
 - Create: `src/lib/nestpay-recurring.ts`
 - Test: `src/lib/nestpay-recurring.test.ts`
 
-- [ ] **Step 1: Napiši test koji pada**
+- [x] **Step 1: Napiši test koji pada**
 
 ```ts
 // src/lib/nestpay-recurring.test.ts
@@ -295,12 +295,12 @@ describe("isCancelApproved", () => {
 });
 ```
 
-- [ ] **Step 2: Pokreni test, mora da padne**
+- [x] **Step 2: Pokreni test, mora da padne**
 
 Run: `./node_modules/.bin/vitest run src/lib/nestpay-recurring.test.ts`
 Očekivano: FAIL, `Failed to resolve import "./nestpay-recurring"`.
 
-- [ ] **Step 3: Napiši implementaciju**
+- [x] **Step 3: Napiši implementaciju**
 
 ```ts
 // src/lib/nestpay-recurring.ts
@@ -407,12 +407,12 @@ export async function postCc5(xml: string, env: NestpayEnv = "prod"): Promise<st
 }
 ```
 
-- [ ] **Step 4: Pokreni test, mora da prođe**
+- [x] **Step 4: Pokreni test, mora da prođe**
 
 Run: `./node_modules/.bin/vitest run src/lib/nestpay-recurring.test.ts`
-Očekivano: PASS (9 testova).
+Očekivano: PASS (9 testova). — URAĐENO 21.07.2026, 9/9 prolazi.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit** — `24c00f6` (uz njega i admin alatka iz Taska 17)
 
 ```bash
 git add src/lib/nestpay-recurring.ts src/lib/nestpay-recurring.test.ts
@@ -1954,7 +1954,7 @@ git commit -m "Nastavak posle pauze: naplaćuje se samo preostali broj rata"
 > ```
 > Bez toga se dohvatanje rata ne može uvežbati nad test serijom.
 
-- [ ] **Step 1: Admin alatka za status serije**
+- [x] **Step 1: Admin alatka za status serije** — URAĐENO (`24c00f6`); dodata i provera da su env kredencijali podešeni, sa jasnom porukom umesto tihog 502.
 
 ```ts
 // src/app/api/admin/nestpay-recurring-status/route.ts
