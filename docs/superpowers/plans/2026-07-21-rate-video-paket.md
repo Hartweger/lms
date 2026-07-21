@@ -310,16 +310,39 @@ Očekivano: FAIL, `Failed to resolve import "./nestpay-recurring"`.
 // PLANNED_START_DTTM_n.
 import { NESTPAY, minorUnitsToRsd } from "@/lib/nestpay";
 
-function credentials(): string {
-  return `<Name>${NESTPAY.apiUser}</Name><Password>${NESTPAY.apiPassword}</Password><ClientId>${NESTPAY.merchantId}</ClientId>`;
+/**
+ * Okruženje banke. `test` postoji da bismo dohvatanje rata i otkazivanje uvežbali nad
+ * test serijom PRE puštanja uživo - produkcioni podaci se pri tome ne diraju.
+ */
+export type NestpayEnv = "prod" | "test";
+
+export function envConfig(env: NestpayEnv) {
+  return env === "test"
+    ? {
+        user: process.env.NESTPAY_TEST_API_USER ?? "",
+        password: process.env.NESTPAY_TEST_API_PASSWORD ?? "",
+        merchantId: process.env.NESTPAY_TEST_MERCHANT_ID ?? "",
+        apiUrl: process.env.NESTPAY_TEST_API_URL ?? "https://testsecurepay.eway2pay.com/fim/api",
+      }
+    : {
+        user: NESTPAY.apiUser,
+        password: NESTPAY.apiPassword,
+        merchantId: NESTPAY.merchantId,
+        apiUrl: NESTPAY.apiUrl,
+      };
 }
 
-export function buildRecurringStatusXml(recurringId: string): string {
-  return `<?xml version="1.0" encoding="UTF-8"?><CC5Request>${credentials()}<Extra><RECURRINGID>${recurringId}</RECURRINGID><ORDERSTATUS>QUERY</ORDERSTATUS></Extra></CC5Request>`;
+function credentials(env: NestpayEnv): string {
+  const c = envConfig(env);
+  return `<Name>${c.user}</Name><Password>${c.password}</Password><ClientId>${c.merchantId}</ClientId>`;
 }
 
-export function buildRecurringCancelXml(recurringId: string): string {
-  return `<?xml version="1.0" encoding="UTF-8"?><CC5Request>${credentials()}<Extra><RECURRINGOPERATION>Cancel</RECURRINGOPERATION><RECORDTYPE>Recurring</RECORDTYPE><RECORDID>${recurringId}</RECORDID></Extra></CC5Request>`;
+export function buildRecurringStatusXml(recurringId: string, env: NestpayEnv = "prod"): string {
+  return `<?xml version="1.0" encoding="UTF-8"?><CC5Request>${credentials(env)}<Extra><RECURRINGID>${recurringId}</RECURRINGID><ORDERSTATUS>QUERY</ORDERSTATUS></Extra></CC5Request>`;
+}
+
+export function buildRecurringCancelXml(recurringId: string, env: NestpayEnv = "prod"): string {
+  return `<?xml version="1.0" encoding="UTF-8"?><CC5Request>${credentials(env)}<Extra><RECURRINGOPERATION>Cancel</RECURRINGOPERATION><RECORDTYPE>Recurring</RECORDTYPE><RECORDID>${recurringId}</RECORDID></Extra></CC5Request>`;
 }
 
 export interface RecurringCharge {
@@ -368,12 +391,13 @@ export function isCancelApproved(text: string): boolean {
 }
 
 /** Šalje CC5 zahtev i vraća sirov odgovor (null na mrežnu grešku). */
-export async function postCc5(xml: string): Promise<string | null> {
-  if (!NESTPAY.apiUser || !NESTPAY.apiPassword) {
-    console.error("[nestpay-recurring] NESTPAY_API_USER/PASSWORD nisu podešeni");
+export async function postCc5(xml: string, env: NestpayEnv = "prod"): Promise<string | null> {
+  const c = envConfig(env);
+  if (!c.user || !c.password) {
+    console.error(`[nestpay-recurring] API kredencijali za okruženje ${env} nisu podešeni`);
     return null;
   }
-  const res = await fetch(NESTPAY.apiUrl, {
+  const res = await fetch(c.apiUrl, {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams({ DATA: xml }).toString(),
@@ -569,12 +593,36 @@ import { chargeAmountFor, planForSlug } from "@/lib/subscription-plans";
         { status: 400 }
       );
     }
+
+    // Ko već ima važeći pristup ovom kursu ne sme da pokrene rate - plaćao bi mesecima
+    // nešto što već ima, pa bi tražio povraćaj (odluka 21.07.2026).
+    if (paymentMethod === "kartica_pretplata") {
+      const { data: postojeciNalog } = await supabase
+        .from("user_profiles").select("id").ilike("email", email).maybeSingle();
+      if (postojeciNalog) {
+        const { data: aktivan } = await supabase
+          .from("course_access")
+          .select("expires_at")
+          .eq("user_id", postojeciNalog.id)
+          .eq("course_id", course.id)
+          .gt("expires_at", new Date().toISOString())
+          .maybeSingle();
+        if (aktivan) {
+          const doKada = new Date(aktivan.expires_at).toLocaleDateString("sr-RS");
+          return NextResponse.json(
+            { error: `Već imaš pristup ovom kursu do ${doKada}. Obnovu ti nudimo kad se istek približi.` },
+            { status: 400 }
+          );
+        }
+      }
+    }
 ```
 
 4. Nađi mesto gde se računa konačna cena (promenljiva `finalPrice`) i odmah posle nje dodaj:
 
 ```ts
-    // Kod pretplate se naplaćuje prva rata; kupon se na rate ne primenjuje.
+    // Kod pretplate se naplaćuje IZNOS RATE iz plana, pa eventualni kupon nema dejstva
+    // (odluka 21.07.2026: kuponi ne važe na rate - rate su već ustupak u ceni).
     const chargeNow = chargeAmountFor(paymentMethod, course.slug, finalPrice);
 ```
 
@@ -1448,7 +1496,9 @@ U `src/app/kupovina/[slug]/CheckoutForm.tsx`:
   const isCard = method === "kartica" || method === "kartica_pretplata";
 ```
 
-3. U listi metoda za `isRS` dodaj stavku (posle „kartica", pre „uplatnica"):
+3. Dodaj stavku u listu metoda - i za `isRS` (posle „kartica", pre „uplatnica") **i za
+   inostranstvo** (posle „kartica", pre „paypal"), jer se rate nude i stranim karticama
+   (odluka 21.07.2026):
 
 ```tsx
                 ...(subscriptionPlan
@@ -1458,6 +1508,27 @@ U `src/app/kupovina/[slug]/CheckoutForm.tsx`:
                       desc: "Kartica se naplaćuje automatski svakog meseca. Otkazuješ kad hoćeš u „Moj nalog\".",
                     }]
                   : []),
+```
+
+Za englesku listu (`en`) ista stavka, sa tekstom:
+
+```tsx
+                ...(subscriptionPlan
+                  ? [{
+                      v: "kartica_pretplata",
+                      label: `Monthly payment - ${subscriptionPlan.totalPayments} instalments of ${subscriptionPlan.monthlyRsd.toLocaleString("sr-RS")} RSD`,
+                      desc: "Your card is charged automatically once a month, in RSD (your bank converts). Cancel anytime in „My account\".",
+                    }]
+                  : []),
+```
+
+4. Kuponi ne važe na rate: sakrij odeljak za kupon kad je izabrana pretplata. Nađi blok
+   sa poljem za kupon i uslovi ga:
+
+```tsx
+      {method !== "kartica_pretplata" && (
+        /* ... postojeći blok sa kuponom ostaje ovde nepromenjen ... */
+      )}
 ```
 
 - [ ] **Step 3: Dodaj obavezno obaveštenje i saglasnost**
@@ -1560,12 +1631,17 @@ U `src/app/uslovi/page.tsx` dodaj nov odeljak (posle odeljka o video kursevima),
       </p>
 ```
 
-- [ ] **Step 2: Prikaži mesečnu cenu na stranici proizvoda**
+- [ ] **Step 2: Istakni mesečnu cenu ravnopravno sa punom**
 
 U `src/app/kursevi/paket-a1-a2-b1/page.tsx` nađi red sa cenom (`≈ 249€ · plaćanje na rate dostupno`) i zameni ga sa:
 
 ```tsx
-                <p className="text-sm text-gray-400 mt-2">≈ 249€ · ili 3.199 din mesečno kroz 12 rata</p>
+                <p className="text-sm text-gray-400 mt-2">≈ 249€</p>
+                {/* Rate su glavni adut za one kojima je pun iznos prevelik zalogaj,
+                    pa stoje ravnopravno uz cenu, a ne kao sitna napomena (odluka 21.07.2026). */}
+                <p className="mt-3 inline-block rounded-lg bg-plava/5 border border-plava/20 px-4 py-2 text-[15px] text-gray-800">
+                  ili <strong>3.199 din mesečno</strong> kroz 12 rata
+                </p>
 ```
 
 - [ ] **Step 3: Provera tipova i build**
@@ -1866,9 +1942,50 @@ git commit -m "Nastavak posle pauze: naplaćuje se samo preostali broj rata"
 
 ### Task 17: Provera u testnom okruženju banke (ubrzano)
 
-**Files:** nema izmena koda - ovo je provera pre puštanja uživo.
+**Files:**
+- Create: `src/app/api/admin/nestpay-recurring-status/route.ts`
 
-- [ ] **Step 1: Deploy na produkciju**
+> **Preduslov (Nataša):** u **testnom** Merchant Centeru napraviti API korisnika isto kao
+> na produkciji (Administration → Add New User, Role = Api User, ime različito od
+> `NATadmin`), pa dodati u Vercel:
+> ```
+> printf 'NATapi' | vercel env add NESTPAY_TEST_API_USER production --scope hartwegers-projects
+> printf 'LOZINKA' | vercel env add NESTPAY_TEST_API_PASSWORD production --scope hartwegers-projects
+> ```
+> Bez toga se dohvatanje rata ne može uvežbati nad test serijom.
+
+- [ ] **Step 1: Admin alatka za status serije**
+
+```ts
+// src/app/api/admin/nestpay-recurring-status/route.ts
+// Prikazuje sve naplate jedne recurring serije. Služi za uvežbavanje nad TEST serijom
+// pre puštanja uživo i za podršku na produkciji.
+import { NextResponse } from "next/server";
+import { requireAdmin } from "@/lib/api-auth";
+import { buildRecurringStatusXml, parseRecurringStatus, postCc5, type NestpayEnv } from "@/lib/nestpay-recurring";
+
+export const dynamic = "force-dynamic";
+
+export async function GET(request: Request) {
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
+
+  const url = new URL(request.url);
+  const recurringId = url.searchParams.get("recurringId")?.trim();
+  const env: NestpayEnv = url.searchParams.get("env") === "test" ? "test" : "prod";
+  if (!recurringId) {
+    return NextResponse.json({ error: "Nedostaje ?recurringId=" }, { status: 400 });
+  }
+
+  const xml = await postCc5(buildRecurringStatusXml(recurringId, env), env);
+  if (!xml) return NextResponse.json({ error: "Banka nije odgovorila." }, { status: 502 });
+
+  const parsed = parseRecurringStatus(xml);
+  return NextResponse.json({ env, recurringId, ...parsed, sirovo: xml.slice(0, 2000) });
+}
+```
+
+- [ ] **Step 2: Deploy na produkciju**
 
 ```bash
 ./node_modules/.bin/tsc --noEmit && ./node_modules/.bin/vitest run && vercel --prod --scope hartwegers-projects
@@ -1891,9 +2008,18 @@ order by o.installment_no;
 ```
 Očekivano: red za ratu 2 sa `payment_status = 'completed'` i popunjenim `nestpay_oid`.
 
-- [ ] **Step 4: Provera vrednosti `TRANS_STAT`**
+- [ ] **Step 4: Provera vrednosti `TRANS_STAT` nad test serijom**
 
-U logu crona (Vercel → Logs) ili privremenim ispisom proveri koje vrednosti `TRANS_STAT` vraća banka za uspelu i za palu naplatu. Ako uspela naplata ima oznaku različitu od očekivanog, dopuni komentar u `parseRecurringStatus`. Palu naplatu izazvati testnom karticom sa CVC 510.
+Otvori (ulogovan kao admin), sa `RECURRINGID` iz test serije:
+
+```
+https://www.hartweger.rs/api/admin/nestpay-recurring-status?env=test&recurringId=<RECURRINGID>
+```
+
+Očekivano: `charges` sa po jednim redom za svaku naplatu, gde uspela ima `succeeded: true` i
+iznos u dinarima, a buduća `transStat: "PN"`. Zabeleži koju oznaku nosi **pala** naplata
+(izazvati je novom test serijom sa karticom `4841878700002912` i CVC **510**) i, ako je
+potrebno, dopuni pravilo u `parseRecurringStatus`.
 
 - [ ] **Step 5: Provera otkazivanja**
 

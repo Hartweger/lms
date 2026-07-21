@@ -28,6 +28,12 @@ Dva razloga:
 | Izbor na checkoutu | Zaseban, jasno označen način plaćanja (ne štiklirano polje) |
 | Pristup kad plaćanje stane | Pristup traje dok traje plaćanje; otkazivanje ga pauzira |
 | Otkazivanje | Sama polaznica, dugmetom u „Moj nalog" |
+| Kuponi | NE važe na rate (rate su već ustupak; popust bi pojeo razliku zbog koje postoje) |
+| Inostranstvo | Nudi se ODMAH i stranim karticama (naplata u RSD, njihova banka konvertuje) |
+| Već ima pristup | Mesečno plaćanje se NE nudi dok pristup traje; prikazuje se do kad važi |
+| Isticanje cene | Mesečna cena ravnopravno uz punu, na stranici kursa |
+| Pauza | Jedna rata = jedan mesec pristupa; povratak plaća samo preostale rate |
+| Napredak | Otkazivanje ne briše ništa (napredak je vezan za nalog, ne za pristup) |
 
 ## Kupčev tok
 
@@ -182,6 +188,18 @@ Bez njega ne rade ni poll ni otkazivanje.
 **Uzgredna korist:** time se popravlja i `/api/cron/nestpay-reconcile`, koji zbog istih
 pogrešnih kredencijala trenutno ne radi - pa se pokriva i „kupac platio, callback se
 izgubio" za sve kartične uplate, ne samo za pretplate.
+
+## Testno okruženje (bez ovoga nema uvežbavanja)
+
+Pretplatni mehanizam gađa **produkcioni** NestPay, a test serija živi u **testnom**. Da bismo
+dohvatanje rata i otkazivanje uvežbali pre puštanja uživo, CC5 funkcije primaju izbor
+okruženja (`prod` | `test`), a za testno treba **API korisnik i u testnom Merchant Centeru**
+(`NESTPAY_TEST_API_USER`, `NESTPAY_TEST_API_PASSWORD`).
+
+Provera se radi kroz admin alatku nad postojećom test serijom (`/admin/nestpay-recurring-test`):
+upit po `RECURRINGID` prikazuje sve naplate sa vrednostima `TRANS_STAT`, uključujući i palu
+naplatu (testna kartica sa CVC 510). Tako se parser potvrđuje na stvarnim podacima banke, a ne
+na pretpostavci.
 
 ## Testiranje
 
