@@ -4,6 +4,15 @@
 
 **Goal:** Omogućiti kupovinu Video paketa A1+A2+B1 kroz 12 mesečnih naplata kartice (3.199 RSD po rati) preko NestPay recurringa, sa automatskom obradom rata 2-12, fiskalizacijom svake rate i samouslužnim otkazivanjem.
 
+> **IZMENA 21.07.2026 (Nataša):** mesečno plaćanje **NE otvara ceo paket odmah**. Paket ima
+> šest sadržajnih kurseva (`course_unlocks`: A1.1, A1.2, A2.1, A2.2, B1.1, B1.2), a naplata
+> dvanaest - otvara se po jedan podnivo na svake dve naplate (rata 1 → A1.1, 3 → A1.2,
+> 5 → A2.1, 7 → A2.2, 9 → B1.1, 11 → B1.2). Bez toga bi jedna rata od 3.199 din nosila ceo
+> paket od 29.133 din. Jednokratna kupovina i dalje otvara sve odmah. Traži dopunu Taska 8
+> (`grantAccessForOrder` mora da poštuje raspored) i prikaza u „Moj nalog"; tekst za kupca je
+> u nacrtu `tekst-mesecno-placanje-za-odobrenje.md`. Na otkazivanje pristup ostaje do kraja
+> plaćenog meseca - trenutno gašenje je odbijeno (reklamacije i storna kod banke).
+
 **Architecture:** Svaka naplata je obična porudžbina u `orders`, vezana za red u novoj tabeli `subscriptions`. Banka šalje callback samo za prvu naplatu; rate 2-12 dnevni cron dohvata CC5 upitom (`ORDERSTATUS=QUERY` + `RECURRINGID`) i za svaku novu uspelu naplatu pravi porudžbinu → `grantAccessForOrder` → `fiscalizeOrder` → mejl. Pristup se produžava iz meseca u mesec, pa prestanak plaćanja sam gasi pristup.
 
 **Tech Stack:** Next.js 16 (App Router), TypeScript, Supabase (Postgres, service-role), vitest, NestPay CC5 XML API, Fiscomm, Resend.
