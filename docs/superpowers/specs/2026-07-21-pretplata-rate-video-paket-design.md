@@ -203,6 +203,18 @@ Bez njega ne rade ni poll ni otkazivanje.
 pogrešnih kredencijala trenutno ne radi - pa se pokriva i „kupac platio, callback se
 izgubio" za sve kartične uplate, ne samo za pretplate.
 
+## Prekidač: opcija je skrivena dok banka ne aktivira recurring na produkciji
+
+Recurring je aktivan SAMO u testnom okruženju; produkciju banka otključava tek pošto pregleda
+kupčev tok. Zato se opcija „Mesečno plaćanje" (i oglašavanje mesečne cene na stranici kursa)
+prikazuje samo kad je `SUBSCRIPTIONS_ENABLED=1`, odnosno kad je u adresi `?pretplata=1` -
+taj link ide banci na pregled.
+
+Bez toga bi kupac mogao da izabere rate pre nego što je funkcionalnost aktivna: banka bi
+naplatila samo prvu ratu i tu stala, pa bi za 3.199 din dobio mesec dana pristupa umesto celog
+paketa. Server namerno NE blokira metodu dok je prekidač ugašen - banka mora da može da prođe
+ceo tok pri pregledu.
+
 ## Testno okruženje (bez ovoga nema uvežbavanja)
 
 Pretplatni mehanizam gađa **produkcioni** NestPay, a test serija živi u **testnom**. Da bismo

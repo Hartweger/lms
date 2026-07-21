@@ -1475,12 +1475,29 @@ git commit -m "Moj nalog: prikaz mesečnog plaćanja i dugme za otkazivanje"
 **Files:**
 - Modify: `src/app/kupovina/[slug]/CheckoutForm.tsx`, `src/app/kupovina/[slug]/page.tsx`
 
-- [ ] **Step 1: Prosledi podatak o planu u formu**
+> **Prekidač (obavezno):** na produkciji recurring JOŠ NIJE uključen - banka ga aktivira tek
+> pošto pregleda ovaj tok. Dok se to ne desi, opcija sme da postoji ali ne sme da bude vidljiva
+> kupcima: banka bi naplatila samo prvu ratu i tu stala, pa bi kupac platio 3.199 din i dobio
+> mesec dana pristupa umesto celog paketa. Zato se opcija prikazuje samo kad je upaljena
+> (`SUBSCRIPTIONS_ENABLED=1`) ili kad je u adresi `?pretplata=1` (link za banku).
+
+- [ ] **Step 1: Prosledi podatak o planu u formu, iza prekidača**
 
 U `src/app/kupovina/[slug]/page.tsx` nađi mesto gde se renderuje `<CheckoutForm ... />` i dodaj prop:
 
 ```tsx
-        subscriptionPlan={planForSlug(course.slug)}
+        subscriptionPlan={pokaziPretplatu ? planForSlug(course.slug) : null}
+```
+
+a iznad, u telu komponente (stranica već prima `searchParams`; ako ne, dodaj ga u potpis kao
+`searchParams: Promise<{ [k: string]: string | string[] | undefined }>` i `await`-uj):
+
+```tsx
+  // Vidljivo kupcima tek kad banka aktivira recurring na produkciji. Do tada samo
+  // preko ?pretplata=1 - taj link se šalje banci na pregled.
+  const sp = await searchParams;
+  const pokaziPretplatu =
+    process.env.SUBSCRIPTIONS_ENABLED === "1" || sp?.pretplata === "1";
 ```
 
 uz uvoz:
@@ -1642,7 +1659,16 @@ U `src/app/uslovi/page.tsx` dodaj nov odeljak (posle odeljka o video kursevima),
       </p>
 ```
 
-- [ ] **Step 2: Istakni mesečnu cenu ravnopravno sa punom**
+- [ ] **Step 2: Istakni mesečnu cenu ravnopravno sa punom (iza istog prekidača)**
+
+Cena na rate se oglašava tek kad opcija stvarno postoji - inače bismo obećavali nešto što
+kupac na checkoutu ne može da izabere. Zato blok ide u uslov:
+
+```tsx
+{process.env.SUBSCRIPTIONS_ENABLED === "1" && (
+  /* blok sa mesečnom cenom iz koraka ispod */
+)}
+```
 
 U `src/app/kursevi/paket-a1-a2-b1/page.tsx` nađi red sa cenom (`≈ 249€ · plaćanje na rate dostupno`) i zameni ga sa:
 
@@ -2038,9 +2064,29 @@ CVC `510` više nije uslov za produkciju, ali ostaje kao korisna provera.
 
 U „Moj nalog" klikni „Otkaži plaćanje" za test pretplatu, pa u Merchant Center-u proveri da su preostale naplate nestale iz sekcije `Recurrings`.
 
-- [ ] **Step 6: Javi banci**
+- [ ] **Step 6: Javi banci (prekidač je i dalje ugašen)**
 
-Pošalji banci link ka `/kupovina/paket-a1-a2-b1` (izbor „Mesečno plaćanje") i `/uslovi`, uz molbu za odobrenje aktivacije recurringa na produkciji.
+Pošalji banci:
+- `https://www.hartweger.rs/kupovina/paket-a1-a2-b1?pretplata=1` - tok sa izborom „Mesečno
+  plaćanje" i obaveznim obaveštenjem;
+- `https://www.hartweger.rs/uslovi` - odeljak „Mesečno plaćanje (rate)";
+
+uz molbu za odobrenje i aktivaciju recurringa na produkciji.
+
+**Napomena:** ako banka pri pregledu i pokrene stvarnu transakciju, to će na produkciji (dok
+recurring nije aktiviran) proći kao jednokratna naplata od 3.199 din - povratiti je kroz
+Merchant Center (`refund`) i obrisati nastalu porudžbinu.
+
+- [ ] **Step 7: Posle odobrenja banke - upali prekidač**
+
+```bash
+printf '1' | vercel env add SUBSCRIPTIONS_ENABLED production --scope hartwegers-projects
+cd ~/Documents/Claude/sajt/LMS/lms && vercel --prod --scope hartwegers-projects
+```
+
+Zatim proveri da se opcija „Mesečno plaćanje" vidi na `/kupovina/paket-a1-a2-b1` bez dodatka
+u adresi i da se mesečna cena pojavila na stranici kursa. Tek od ovog trenutka rate su u
+prodaji.
 
 ---
 
