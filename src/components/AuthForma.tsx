@@ -241,7 +241,7 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
         )}
 
         {uspeh && (
-          <div className="bg-plava-light text-plava-dark px-4 py-3 rounded-lg text-sm">
+          <div className="bg-plava-light text-plava-dark px-4 py-3 rounded-lg text-sm whitespace-pre-line text-left">
             {uspeh}
           </div>
         )}

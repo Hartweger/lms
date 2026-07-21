@@ -13,7 +13,12 @@ export default function ResetLozinke() {
       captchaToken,
     });
     if (error) return "Greška pri slanju linka. Pokušaj ponovo.";
-    return "OK:Link je poslat na tvoj email. Otvori ga i postavi lozinku.";
+    // Supabase namerno vraća uspeh i za nepostojeći mejl (da se baza korisnika
+    // ne može pecati), pa ne smemo da tvrdimo da je mejl sigurno poslat.
+    return (
+      "OK:Ako postoji nalog sa tim mejlom, link je upravo poslat. Otvori ga i postavi lozinku (proveri i spam)." +
+      "\n\nAko za par minuta ništa ne stigne, verovatno je nalog na drugoj adresi - probaj mejl kojim si kupio/la kurs ili nam piši na info@hartweger.rs."
+    );
   };
 
   return (

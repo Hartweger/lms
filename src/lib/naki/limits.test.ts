@@ -24,10 +24,11 @@ describe("personalDailyLimit", () => {
 describe("limitReachedMessage", () => {
   const course = { slug: "video-kurs-a2", title: "VIDEO kurs A2", price: 8900 };
 
-  it("anonimnom nudi mejl (plan učenja) i besplatan nalog", () => {
+  it("anonimnom nudi mejl (plan učenja), bez upućivanja na pravljenje naloga", () => {
     const msg = limitReachedMessage({ loggedIn: false, course: null });
     expect(msg).toContain("plan učenja");
-    expect(msg).toContain("hartweger.rs/prijava");
+    // /prijava nema registraciju - slanje anonimnih tamo je ćorsokak
+    expect(msg).not.toContain("/prijava");
   });
 
   it("anonimnom sa poznatim nivoom dodaje kurs sa kuponom NAKI10 i cenom sa popustom", () => {

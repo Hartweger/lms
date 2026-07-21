@@ -16,8 +16,12 @@ export function personalDailyLimit(id: LimitIdentity): number | null {
 
 /**
  * Poruka kad korisnik potroši lični dnevni limit - prodajni trenutak umesto
- * "vidimo se sutra". Anonimnima nudi plan učenja na mejl + besplatan nalog;
- * svima sa poznatim nivoom nudi odgovarajući video kurs uz kupon NAKI10.
+ * "vidimo se sutra". Anonimnima nudi plan učenja na mejl; svima sa poznatim
+ * nivoom nudi odgovarajući video kurs uz kupon NAKI10.
+ *
+ * NE upućujemo anonimne na pravljenje naloga: /prijava nema registraciju
+ * (nalog nastaje kupovinom ili preko Google dugmeta), pa je jedini efekat
+ * bio ćorsokak "poslali smo link" bez mejla. Vidi podršku 21.07.2026.
  */
 export function limitReachedMessage(opts: {
   loggedIn: boolean;
@@ -30,8 +34,7 @@ export function limitReachedMessage(opts: {
     );
   } else {
     parts.push(
-      "Za danas smo potrošili besplatne poruke 😊 Ostavi mi ime i mejl pa ti pošaljem besplatan plan učenja, a sutra nastavljamo.",
-      `Ako želiš više poruka svakog dana - napravi besplatan nalog na ${SITE_URL}/prijava.`
+      "Za danas smo potrošili besplatne poruke 😊 Ostavi mi ime i mejl pa ti pošaljem besplatan plan učenja, a sutra nastavljamo."
     );
   }
   if (opts.course) {
