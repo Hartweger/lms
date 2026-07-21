@@ -196,3 +196,38 @@ Alternativa ako IP whitelist ne prođe: naplate 2..N fiskalizovati iz MC izvešt
 **OSTAJE:** 22.07 potvrditi isto i za naplatu 3; javiti banci „testirano, molimo
 proveru" + tri pitanja (API korisnik, IP whitelist, potvrda da callbacka za 2..N
 zaista nema).
+
+## ODGOVOR BANKE (21.07.2026) — sve potvrđeno + jedno veliko otkriće
+
+- Potvrdili da se ponavljajuće transakcije ispravno prikazuju u MC.
+- **Callback se šalje samo za inicijalnu transakciju** — naš nalaz potvrđen.
+  Statusi narednih naplata se proveravaju API upitom.
+- **API korisnika kreiramo sami** u MC: Administration → Add New User. Username
+  MORA biti različit od Merchant Administratora (dakle ne `NATadmin`). Lozinka
+  API korisnika ne ističe; ima ovlašćenja za SVE funkcionalnosti iz dokumentacije,
+  uključujući `RECURRINGOPERATION=Cancel`.
+- **NestPay NEMA filtriranje po IP adresama.** Raniji padovi `queryTransaction`
+  na produkciji (zbog kojih je server-query uklonjen iz callbacka, PR #9) NISU
+  bili IP blokada nego **pogrešni kredencijali** — slali smo
+  `Name=NESTPAY_USERNAME` + `Password=NESTPAY_STORE_KEY`, a mora API korisnik sa
+  svojom lozinkom.
+
+### Posledica van membershipa: reconcile cron se može oživeti
+
+`/api/cron/nestpay-reconcile` koristi `queryTransaction` i zato efektivno ne radi.
+Fix: kreirati API usera (test + prod), dodati `NESTPAY_API_USER` /
+`NESTPAY_API_PASSWORD` u env, izmeniti `queryTransaction` da ih koristi. Time se
+pokriva dropped-callback edge case za SVE kartične uplate, ne samo pretplate.
+
+### Nov zahtev banke pred produkciju (blokira aktivaciju)
+
+Traže **link na kojem sami mogu da prođu proces iniciranja ponavljajuće
+transakcije**, uz uslove:
+1. kupcu **nedvosmisleno istaknuto kakvu transakciju pokreće** (pretplata, iznos,
+   učestalost, ukupan broj naplata, kada je prva a kada naredne);
+2. isto **ukratko opisano u uslovima korišćenja** koje prihvata u kupovini;
+3. u uslovima navedeno **kako kupac zahteva otkazivanje**.
+
+→ Admin test stranica NIJE dovoljna; potreban je stvaran kupčev tok. Dakle sledeći
+korak nije tehnički nego **odluka o proizvodu** (ili primena recurringa na neki
+postojeći mesečni proizvod, npr. mesečni individualni/engleska ponuda).
