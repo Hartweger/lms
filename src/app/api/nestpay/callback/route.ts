@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { verifyCallbackHash, NESTPAY } from "@/lib/nestpay";
 import { grantAccessForOrder } from "@/lib/grant-access";
+import { startSubscriptionForOrder } from "@/lib/subscription-start";
 import { fiscalizeOrder } from "@/lib/fiscomm";
 import { SITE_URL } from "@/lib/site-url";
 
@@ -54,6 +55,9 @@ export async function POST(request: Request) {
   // echo-vanog params.amount. Server-side query je UKLONJEN - obarao se na IP/whitelist i lažno
   // označavao uspele uplate kao neuspeh.
   await admin.from("orders").update({ nestpay_status: "charged" }).eq("id", order.id);
+  // Mesečno plaćanje: seriju upisujemo PRE dodele pristupa - grant čita subscription_id
+  // da bi znao da pristup traje do sledeće naplate i da otvara samo nivoe do ove rate.
+  await startSubscriptionForOrder(order, params);
   // Dodela pristupa + GA4 + Meta Purchase (CAPI) iz jedne tačke. Naplata je USPELA — ako grant
   // padne, kupac je platio bez pristupa: alarm odmah (Sentry), order ostaje pending pa ga
   // nestpay-reconcile cron ponavlja. Kupca svejedno vodimo na hvala (novac je prošao).

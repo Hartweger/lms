@@ -2051,3 +2051,41 @@ export async function sendWeeklyBusinessSummary(s: WeeklySummary) {
     console.error("[email] sendWeeklyBusinessSummary pao:", e);
   }
 }
+
+/**
+ * Potvrda naplaćene rate kod mesečnog plaćanja. Rate 2-12 ne dobijaju dobrodošlicu
+ * (polaznica je već na kursu), nego kratku potvrdu sa novim rokom pristupa.
+ */
+export async function sendSubscriptionChargeEmail(o: {
+  email: string;
+  name: string | null;
+  courseTitle: string;
+  installmentNo: number;
+  totalPayments: number;
+  amount: number;
+  accessUntil: string;
+}) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    const ime = o.name ? o.name.split(" ")[0] : "";
+    const fmt = (n: number) => n.toLocaleString("de-DE");
+    const doKada = new Date(o.accessUntil).toLocaleDateString("sr-RS");
+    await resend.emails.send({
+      from: FROM,
+      to: o.email,
+      replyTo: "info@hartweger.rs",
+      subject: `Naplaćena ${o.installmentNo}. rata od ${o.totalPayments} - ${o.courseTitle}`,
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:sans-serif;line-height:1.6;color:#222">
+<p>Zdravo${ime ? ", " + esc(ime) : ""}!</p>
+<p>Naplatili smo <strong>${fmt(o.amount)} din</strong> - to je ${o.installmentNo}. rata od ukupno ${o.totalPayments} za kurs <strong>${esc(o.courseTitle)}</strong>.</p>
+<p>Pristup ti važi do <strong>${doKada}</strong> i produžiće se sam sa narednom ratom. Fiskalni račun stiže zasebno.</p>
+<p style="font-size:13px;color:#666">Mesečno plaćanje možeš da otkažeš kad god hoćeš, u odeljku „Moj nalog" na platformi.</p>
+<p style="margin-top:20px">Hartweger tim</p>
+</body></html>`,
+    });
+  } catch (e) {
+    console.error("[email] sendSubscriptionChargeEmail pao:", e);
+  }
+}

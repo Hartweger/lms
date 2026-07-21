@@ -1,7 +1,7 @@
 // src/lib/grant-access.ts
 import * as Sentry from "@sentry/nextjs";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { sendWelcomeEmail, sendGrupniWelcomeEmail, sendProfNewStudentEmail, sendIndividualWelcomeEmail, sendProfNewIndividualStudentEmail } from "@/lib/email";
+import { sendWelcomeEmail, sendGrupniWelcomeEmail, sendProfNewStudentEmail, sendIndividualWelcomeEmail, sendProfNewIndividualStudentEmail, sendSubscriptionChargeEmail } from "@/lib/email";
 import { nivoForSlug } from "@/lib/course-nivo";
 import { computeSeats, pickOpenGroupForNivo } from "@/lib/groups";
 import { callGas } from "@/lib/gas";
@@ -10,6 +10,7 @@ import { sendPurchaseEvent } from "@/lib/meta-capi";
 import { SITE_URL } from "@/lib/site-url";
 import { createLoginLinkToken } from "@/lib/login-link";
 import { firstLessonForCourses } from "@/lib/first-lesson";
+import { accessUntilForCharge, planForSlug, unlockedSlugsAfter } from "@/lib/subscription-plans";
 
 interface OrderItem { course_id: string; course_slug: string; title: string; price: number; }
 
@@ -21,8 +22,14 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
   if (order.payment_status === "completed") return { ok: true }; // idempotentno
 
   const items: OrderItem[] = order.items ?? [];
-  const expiresAt = new Date();
-  expiresAt.setFullYear(expiresAt.getFullYear() + 1);
+  // Mesečno plaćanje: pristup važi do sledeće naplate + 7 dana zaliha, pa prestanak
+  // plaćanja sam gasi pristup - nema oduzimanja. Sve ostalo: godinu dana kao i do sada.
+  const jePretplata = !!order.subscription_id;
+  const rataBr: number = order.installment_no ?? 1;
+  const jePrvaNaplata = !jePretplata || rataBr === 1;
+  const expiresAt = jePretplata
+    ? accessUntilForCharge(new Date())
+    : (() => { const d = new Date(); d.setFullYear(d.getFullYear() + 1); return d; })();
 
   const purchasedIds = items.map((i) => i.course_id);
   const { data: unlocks } = await admin
@@ -35,6 +42,21 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
     const mapped = (unlocks ?? []).filter((u) => u.purchasable_course_id === item.course_id);
     if (mapped.length > 0) mapped.forEach((u) => contentCourseIds.add(u.content_course_id));
     else { console.warn(`[grant] No course_unlocks for ${item.course_slug} (${item.course_id}) - granting product itself`); contentCourseIds.add(item.course_id); }
+  }
+
+  // Kod mesečnog plaćanja sadržaj se otvara postepeno: rata otključava samo nivoe
+  // predviđene rasporedom (1 → A1.1, 2 → A1.2, 4 → A2.1 ...). Bez ovoga bi prva rata
+  // od 3.199 din nosila ceo paket od 29.133 din.
+  if (jePretplata) {
+    const plan = items[0]?.course_slug ? planForSlug(items[0].course_slug) : null;
+    if (plan) {
+      const dozvoljeniSlugovi = new Set(unlockedSlugsAfter(plan, rataBr));
+      const { data: sadrzaj } = await admin
+        .from("courses").select("id, slug").in("id", [...contentCourseIds]);
+      for (const kurs of sadrzaj ?? []) {
+        if (!dozvoljeniSlugovi.has(kurs.slug)) contentCourseIds.delete(kurs.id);
+      }
+    }
   }
 
   const grantFailures: string[] = [];
@@ -238,15 +260,33 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
     }
   }
   // GA4 prihod (server-side) za SVE načine plaćanja — klijentski purchase hvata samo karticu.
-  await sendGa4Purchase(order);
+  // Rate 2-12 NISU nove konverzije: slanje bi u Meta/GA4 prijavilo 12 kupovina po 3.199
+  // umesto jedne prodaje i pokvarilo merenje isplativosti oglasa.
+  if (jePrvaNaplata) await sendGa4Purchase(order);
   // Meta Purchase (CAPI) iz JEDNE tačke — pokriva SVE puteve do "completed" (kartica callback,
   // admin potvrda uplatnice/PayPala, recovery cron, ručna admin porudžbina). Dedup sa browser
   // pixel-om ide preko event_id (purchase_<order_number>). Rezultat pamtimo u meta_purchase_sent
   // (trajna evidencija + osnova za retry). Best-effort: ne ruši dodelu pristupa ako padne.
-  if (!order.meta_purchase_sent) {
+  if (jePrvaNaplata && !order.meta_purchase_sent) {
     const metaOk = await sendPurchaseEvent(order, { eventSourceUrl: `${SITE_URL}/kupovina/hvala/${order.id}` });
     if (metaOk) await admin.from("orders").update({ meta_purchase_sent: true }).eq("id", orderId);
   }
+  // Rate 2-12: kratka potvrda naplate umesto dvanaest puta ponovljene dobrodošlice.
+  if (!jePrvaNaplata) {
+    const { data: sub } = await admin
+      .from("subscriptions").select("total_payments").eq("id", order.subscription_id).maybeSingle();
+    await sendSubscriptionChargeEmail({
+      email: order.email,
+      name: order.full_name,
+      courseTitle: items[0]?.title ?? "kurs",
+      installmentNo: rataBr,
+      totalPayments: sub?.total_payments ?? 12,
+      amount: order.total,
+      accessUntil: expiresAt.toISOString(),
+    });
+    return { ok: true };
+  }
+
   // Generički welcome šaljemo samo ako nismo već poslali grupni/individualni (da polaznik dobije jedan mejl).
   if (!grupniWelcomeSent && !individualWelcomeSent) {
     // Direktan login-link do prve lekcije - kupac iz mejla ulazi bez /prijava zida.
