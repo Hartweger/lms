@@ -107,6 +107,11 @@ testabilno bez mreže.
 - iznos stiže **u parama** (porudžbina od 27.500,00 RSD → `2750000`), pa se pri poređenju
   sa očekivanom ratom mora deliti sa 100.
 
+**Za proveru u testu:** vrednosti `TRANS_STAT`. Dokumentacija pominje samo `PN` (na
+čekanju); uspela produkcijska prodaja vratila je `S`. Tačan skup vrednosti (naročito
+oznaku pale naplate) utvrditi na test seriji, pa tek onda vezati logiku za njih. Do tada
+se uspešnost naplate ceni po `ProcReturnCode = 00` i postojanju `CAPTURE_AMT`.
+
 **Meta/GA4:** `Purchase` se šalje SAMO za `installment_no = 1`. Rate nisu nove konverzije
 i poslale bi 12 lažnih kupovina u atribuciju (vidi `project_meta_pixel_capi`).
 
