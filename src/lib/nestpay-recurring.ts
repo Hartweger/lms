@@ -51,9 +51,11 @@ export interface RecurringCharge {
 }
 
 /**
- * TRANS_STAT: dokumentacija pominje samo `PN` (na čekanju); uspela produkcijska
- * prodaja vraća `S`. Zato se uspeh ceni po tome da naplata NIJE na čekanju i da
- * postoji naplaćen iznos - a ne po spisku „dobrih" oznaka koji ne znamo ceo.
+ * TRANS_STAT: dokumentacija pominje samo `PN` (na čekanju); jednokratna prodaja vraća
+ * `S`, a uspela naplata U SERIJI vraća `C` (provereno na test seriji 21.07.2026).
+ * Baš zato se uspeh ceni po tome da naplata NIJE na čekanju i da postoji naplaćen
+ * iznos - a ne po spisku „dobrih" oznaka koji ne znamo ceo. Oznaka pale naplate
+ * još nije viđena; kad je banka javi ili je izazovemo testom, dopuniti pravilo.
  */
 export function parseRecurringStatus(text: string): { count: number; charges: RecurringCharge[] } {
   const tag = (name: string) =>

@@ -61,6 +61,28 @@ describe("parseRecurringStatus", () => {
     expect(c.amountRsd).toBeNull();
   });
 
+  it("uspelu ponovljenu naplatu prepoznaje i kad je TRANS_STAT `C`", () => {
+    // Test serija 21.07.2026: uspela naplata u recurring seriji nosi `C` (Completed),
+    // a ne `S` kao jednokratna prodaja. Zato se uspeh ceni po „nije PN + ima iznos".
+    const odgovor = `<CC5Response><Extra><RECURRINGCOUNT>1</RECURRINGCOUNT>
+<ORD_ID_1>RECTEST-1784551062868-2</ORD_ID_1><TRANS_STAT_1>C</TRANS_STAT_1>
+<CAPTURE_AMT_1>10000</CAPTURE_AMT_1></Extra></CC5Response>`;
+    const c = parseRecurringStatus(odgovor).charges[0];
+    expect(c.transStat).toBe("C");
+    expect(c.succeeded).toBe(true);
+    expect(c.amountRsd).toBe(100);
+  });
+
+  it("naplata koja tek predstoji nema iznos ni kad joj je poznat termin", () => {
+    // Kod naplata na čekanju banka šalje PLANNED_START_DTTM, ali ne i CAPTURE_AMT.
+    const odgovor = `<CC5Response><Extra><RECURRINGCOUNT>1</RECURRINGCOUNT>
+<ORD_ID_1>RECTEST-1784551062868-3</ORD_ID_1><TRANS_STAT_1>PN</TRANS_STAT_1>
+<PLANNED_START_DTTM_1>2026-07-22 14:39:36.887</PLANNED_START_DTTM_1></Extra></CC5Response>`;
+    const c = parseRecurringStatus(odgovor).charges[0];
+    expect(c.succeeded).toBe(false);
+    expect(c.plannedAt).toBe("2026-07-22 14:39:36.887");
+  });
+
   it("prazan odgovor daje nula naplata umesto pucanja", () => {
     expect(parseRecurringStatus("<CC5Response></CC5Response>").charges).toEqual([]);
   });
