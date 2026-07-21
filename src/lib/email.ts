@@ -557,6 +557,81 @@ export async function sendGrupniWelcomeEmail(
   }
 }
 
+/**
+ * Podsetnik profesorki 14 dana pre kraja njene grupe: koga da pozove u sledeći nivo
+ * i šta tačno da im ponudi. Odluka 21.07.2026 - poziv je lični, od profesorke koja
+ * ih već vodi, jer ona zna ko od polaznika planira dalje (masovna slanja su konvertovala 0).
+ * Automatska ponuda polaznicima (sendNextLevelOffer) ide odvojeno, 7 dana pre kraja.
+ */
+export async function sendProfNextGroupReminder(
+  to: string,
+  opts: {
+    profIme: string;
+    nivo: string;
+    endDate: string;
+    polaznici: { email: string; ime: string }[];
+    sledeca: {
+      nivo: string;
+      startDate: string;
+      dani: string;
+      vreme: string;
+      profIme: string;
+      slobodno: number;
+    } | null;
+    nextNivo: string | null;
+    rasporedUrl: string;
+  },
+) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    const ime = opts.profIme ? opts.profIme.split(" ")[0] : "";
+    const dat = (d: string) =>
+      new Date(d).toLocaleDateString("sr-Latn-RS", { day: "numeric", month: "long", year: "numeric" });
+    const kraj = dat(opts.endDate);
+    const lista = opts.polaznici.length
+      ? `<ul style="margin:0 0 18px;padding-left:20px;font-size:15px;color:#444">${opts.polaznici
+          .map((p) => `<li>${esc(p.ime || p.email)}${p.ime ? ` - ${esc(p.email)}` : ""}</li>`)
+          .join("")}</ul>`
+      : `<p style="font-size:15px;color:#444;margin:0 0 18px">Ova grupa trenutno nema aktivnih polaznika.</p>`;
+
+    const ponuda = opts.sledeca
+      ? `<div style="background:#fff8f3;border-left:3px solid #e8915a;border-radius:6px;padding:16px 18px;margin:0 0 18px">
+<div style="font-size:15px;line-height:1.8;color:#1a1a2e"><strong>Šta im nudiš - ${esc(opts.sledeca.nivo)}:</strong><br>
+• početak: ${esc(dat(opts.sledeca.startDate))}<br>
+• termin: ${esc(opts.sledeca.dani)} ${esc(opts.sledeca.vreme)}<br>
+• profesorka: ${esc(opts.sledeca.profIme)}<br>
+• slobodno još ${opts.sledeca.slobodno} od 6 mesta<br>
+• prijava: <a href="${esc(opts.rasporedUrl)}" style="color:#4fb1d3">${esc(opts.rasporedUrl)}</a></div></div>`
+      : opts.nextNivo
+        ? `<p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 18px"><strong>Grupa za ${esc(opts.nextNivo)} još nije otvorena.</strong> Javi Nataši da je otvori pre nego što pozoveš polaznike - inače nemaju gde da se prijave.</p>`
+        : `<p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 18px">Ovo je poslednji nivo u nizu, pa nema direktnog nastavka. Ako neko od njih želi dalje, javi Nataši.</p>`;
+
+    await resend.emails.send({
+      from: FROM,
+      to,
+      replyTo: "info@hartweger.rs",
+      subject: `Tvoja ${opts.nivo} grupa se završava ${kraj} - pozovi ih u nastavak`,
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="margin:0;padding:0;background:#f8f9fa;font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a2e">
+<div style="max-width:560px;margin:0 auto;padding:24px">
+<div style="background:#fff;border-radius:12px;padding:32px;box-shadow:0 1px 3px rgba(0,0,0,0.08)">
+<h1 style="font-size:20px;margin:0 0 16px;color:#1a1a2e">Tvoja ${esc(opts.nivo)} grupa se završava ${esc(kraj)}</h1>
+<p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 16px">${ime ? `Ćao ${esc(ime)},` : "Ćao,"}</p>
+<p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 18px">Vreme je da ih pozoveš da nastave. Ti znaš ko od njih planira dalje, pa je tvoja poruka vrednija od naše opšte ponude.</p>
+<p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 8px"><strong>Koga da pozoveš:</strong></p>
+${lista}
+${ponuda}
+<p style="font-size:13px;line-height:1.6;color:#888;margin:0">Napomena: polaznici 7 dana pre kraja dobijaju i automatsku ponudu sa sajta. Tvoja poruka je dodatak tome, ne zamena - najbolje deluje ako je pošalješ pre nje ili je spomeneš uživo na času.</p>
+</div>
+<div style="text-align:center;font-size:12px;color:#bbb;padding:18px 0">Hartweger - automatski podsetnik pred kraj ciklusa</div>
+</div></body></html>`,
+    });
+  } catch (e) {
+    console.error("[email] sendProfNextGroupReminder pao:", e);
+  }
+}
+
 export async function sendNatasaNextTermReminder(
   opts: { nivo: string; nextNivo: string | null; endDate: string; profIme?: string },
 ) {
@@ -586,24 +661,48 @@ ${opts.profIme ? `<p><strong>Profesor/ka:</strong> ${esc(opts.profIme)}</p>` : "
 export async function sendNextLevelOffer(
   to: string,
   name: string,
-  opts: { currentNivo: string; nextNivo: string; courseUrl: string },
+  opts: {
+    currentNivo: string;
+    nextNivo: string;
+    courseUrl: string;
+    /** Konkretna otvorena grupa sledećeg nivoa, ako postoji - datum i termin prodaju bolje od gole prodajne strane. */
+    sledeca?: { startDate: string; dani: string; vreme: string; profIme: string; slobodno: number } | null;
+  },
 ) {
   try {
     const resend = getResend();
     if (!resend) return;
     const ime = name ? name.split(" ")[0] : "";
+    const s = opts.sledeca;
+    const datum = s
+      ? new Date(s.startDate).toLocaleDateString("sr-Latn-RS", { day: "numeric", month: "long", year: "numeric" })
+      : "";
+    const detalji = s
+      ? `<div style="background:#fff8f3;border-left:3px solid #e8915a;border-radius:6px;padding:16px 18px;margin:0 0 20px">
+<div style="font-size:15px;line-height:1.8;color:#1a1a2e"><strong>Nova ${esc(opts.nextNivo)} grupa:</strong><br>
+• kreće ${esc(datum)}<br>
+• ${esc(s.dani)}, ${esc(s.vreme)}<br>
+${s.profIme ? `• profesorka: ${esc(s.profIme)}<br>` : ""}
+• ostalo još ${s.slobodno} od 6 mesta</div></div>`
+      : "";
+    const zurba = s && s.slobodno > 0 && s.slobodno <= 3
+      ? `Ostalo je još samo ${s.slobodno} ${s.slobodno === 1 ? "mesto" : "mesta"}, pa nemoj da odlažeš.`
+      : "Mesta su ograničena (grupe do 6 polaznika), pa preporučujemo da rezervišeš na vreme.";
     await sendEmail(resend, {
       bulk: true,
       from: FROM,
       to,
       replyTo: "info@hartweger.rs",
-      subject: `Nastavi nemački - upiši ${opts.nextNivo}`,
+      subject: s
+        ? `Nastavi nemački - ${opts.nextNivo} kreće ${datum}`
+        : `Nastavi nemački - upiši ${opts.nextNivo}`,
       html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
 <body style="font-family:sans-serif;line-height:1.6;color:#222">
 <h2>Bravo${ime ? ", " + esc(ime) : ""}! 🎉</h2>
 <p>Tvoj grupni kurs <strong>${esc(opts.currentNivo)}</strong> se bliži kraju. Da ne praviš pauzu, upiši se na sledeći nivo i nastavi sa istim ritmom.</p>
+${detalji}
 <p style="margin:24px 0"><a href="${esc(opts.courseUrl)}" style="background:#F78687;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:bold;display:inline-block">Upiši ${esc(opts.nextNivo)}</a></p>
-<p style="font-size:13px;color:#666">Mesta su ograničena (grupe do 6 polaznika), pa preporučujemo da rezervišeš na vreme.</p>
+<p style="font-size:13px;color:#666">${esc(zurba)}</p>
 <p style="margin-top:20px">Vidimo se i dalje!<br>Hartweger tim</p>
 </body></html>`,
     });
