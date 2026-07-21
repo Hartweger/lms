@@ -151,6 +151,18 @@ banka (Visa 4841878700002912 12/26 003, MC 5443584545004639 12/26 002,
 Dina 9891007635312414 12/30 000, Amex 375987000169792 12/30 000; za neuspešnu
 naplatu CVC2 510 / 1234). Usput je dodat `shopurl` u test formu (kao u produkciji).
 
+**SERIJA POTVRĐENA U MERCHANT CENTERU (21.07, ekran „Order Detail - Recurring
+Payment"):** sekcija `Recurrings` prikazuje sve tri naplate — `RECTEST-…868`
+(Sale, br. 1), `RECTEST-…868-2` (21-July-2026 14:39, **Future Request**) i
+`RECTEST-…868-3` (22-July-2026 14:39, Future Request), sve sa istim
+Recurring ID `26201OnlA13974`, Recurring Total 3.
+
+→ **oid šema ponovljenih naplata POTVRĐENA: `<oid>-2`, `<oid>-3`** (kako je banka
+napisala u mejlu, ne `ORDER-<RecurringId>` iz primera u priručniku).
+→ Vreme obrade = isto kao vreme inicijalne transakcije (14:39), NE noćna obrada.
+→ U MC-u postoje i checkbox `Cancel` po naplati + „Select All" (ručno otkazivanje
+budućih naplata) i `refund` polje + „Click To Void" za inicijalnu transakciju.
+
 **OSTAJE (21-22.07):** proveriti da li callbackovi za naplate 2 i 3 stižu sami
 (dnevna frekvencija) — pogledati tabelu `nestpay_test_callbacks`. To je poslednje
 otvoreno pitanje; ako ne stignu, backstop je `ORDERSTATUS=QUERY` sa RECURRINGID.
