@@ -48,6 +48,8 @@ export function verifyCallbackHash(params: Record<string, string>, storeKey: str
 export function buildPaymentFields(o: {
   orderNumber: string; amountRsd: number; okUrl: string; failUrl: string;
   email?: string; fullName?: string; country?: string; shopUrl?: string;
+  /** Mesečno plaćanje: banka sama naplaćuje totalPayments puta, svakog meseca. */
+  recurring?: { totalPayments: number };
 }): Record<string, string> {
   const amount = o.amountRsd.toFixed(2); // 2 decimale, tačka
   const rnd = crypto.randomBytes(16).toString("hex");
@@ -77,6 +79,15 @@ export function buildPaymentFields(o: {
     BillToCompany: "",
     BillToCountry: o.country ?? "",
     email: o.email ?? "",
+    // Mesečno plaćanje: tri polja koja banci govore da pokreće seriju naplata.
+    // NE ulaze u hash (potvrda banke 20.07.2026) - potpis ostaje isti kao bez njih.
+    ...(o.recurring
+      ? {
+          RecurringPaymentNumber: String(o.recurring.totalPayments),
+          RecurringFrequencyUnit: "M",
+          RecurringFrequency: "1",
+        }
+      : {}),
   };
 }
 

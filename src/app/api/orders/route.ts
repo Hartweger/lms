@@ -8,6 +8,7 @@ import { emailOwnsCourse, emailOwnsAnyVideoCourse, emailUsedCoupon } from "@/lib
 import { computeCouponDiscount, isTermPackage } from "@/lib/coupon-discount";
 import { computeSeats, pickOpenGroupForNivo } from "@/lib/groups";
 import { gaIdsFromCookieHeader } from "@/lib/ga-cookies";
+import { chargeAmountFor, planForSlug } from "@/lib/subscription-plans";
 
 export async function POST(request: Request) {
   try {
@@ -38,7 +39,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const ALLOWED = ["uplatnica", "paypal", "kartica", "kartica_rate"];
+    const ALLOWED = ["uplatnica", "paypal", "kartica", "kartica_rate", "kartica_pretplata"];
     if (!ALLOWED.includes(paymentMethod)) {
       return NextResponse.json(
         { error: "Neispravna metoda plaćanja." },
@@ -247,6 +248,38 @@ export async function POST(request: Request) {
     }
 
     // Usluge (category="usluga", npr. prevod): cena po strani × broj strana.
+    // Mesečno plaćanje postoji samo za proizvode iz SUBSCRIPTION_PLANS. Bez ove
+    // kočnice bi se izmenom zahteva mogla pokrenuti pretplata na bilo šta.
+    if (paymentMethod === "kartica_pretplata" && !planForSlug(course.slug)) {
+      return NextResponse.json(
+        { error: "Mesečno plaćanje nije dostupno za ovaj kurs." },
+        { status: 400 }
+      );
+    }
+
+    // Ko već ima važeći pristup ovom kursu ne sme da pokrene mesečno plaćanje - plaćao bi
+    // mesecima nešto što već ima, pa bi tražio povraćaj (odluka 21.07.2026).
+    if (paymentMethod === "kartica_pretplata") {
+      const { data: postojeciNalog } = await supabase
+        .from("user_profiles").select("id").ilike("email", email).maybeSingle();
+      if (postojeciNalog) {
+        const { data: aktivan } = await supabase
+          .from("course_access")
+          .select("expires_at")
+          .eq("user_id", postojeciNalog.id)
+          .eq("course_id", course.id)
+          .gt("expires_at", new Date().toISOString())
+          .maybeSingle();
+        if (aktivan) {
+          const doKada = new Date(aktivan.expires_at).toLocaleDateString("sr-RS");
+          return NextResponse.json(
+            { error: `Već imaš pristup ovom kursu do ${doKada}. Obnovu ti nudimo kad se istek približi.` },
+            { status: 400 }
+          );
+        }
+      }
+    }
+
     // Server-side clamp - klijentu se ne veruje za iznos.
     const isService = course.category === "usluga";
     const pages = isService
@@ -257,6 +290,10 @@ export async function POST(request: Request) {
     const { discount, finalPrice } = couponForDiscount
       ? computeCouponDiscount(couponForDiscount.discount_type, couponForDiscount.amount, lineTotal)
       : { discount: 0, finalPrice: lineTotal };
+
+    // Kod mesečnog plaćanja se naplaćuje IZNOS RATE iz plana, pa eventualni kupon nema
+    // dejstva (odluka 21.07.2026: kuponi ne važe na rate - rate su već ustupak u ceni).
+    const chargeNow = chargeAmountFor(paymentMethod, course.slug, finalPrice);
 
     // Calculate PayPal EUR price if needed
     const paypalEur =
@@ -296,7 +333,7 @@ export async function POST(request: Request) {
           items,
           subtotal: lineTotal,
           discount,
-          total: finalPrice,
+          total: chargeNow,
           coupon_code: validCouponCode,
           payment_method: paymentMethod,
           paypal_note: paypalNote,
@@ -370,7 +407,7 @@ export async function POST(request: Request) {
           items,
           subtotal: lineTotal,
           discount,
-          total: finalPrice,
+          total: chargeNow,
           coupon_code: validCouponCode,
           payment_method: paymentMethod,
           order_number: orderNumber,
@@ -408,7 +445,7 @@ export async function POST(request: Request) {
         fullName,
         email,
         courseTitle: items[0].title,
-        total: finalPrice,
+        total: chargeNow,
         paymentMethod,
         country,
       });
@@ -419,7 +456,10 @@ export async function POST(request: Request) {
 
     // Kartice se naplaćaju instant na bankovnoj strani - bez mejla sa instrukcijama;
     // narudžbina ostaje 'pending' dok NestPay callback ne potvrdi.
-    const isCard = paymentMethod === "kartica" || paymentMethod === "kartica_rate";
+    const isCard =
+      paymentMethod === "kartica" ||
+      paymentMethod === "kartica_rate" ||
+      paymentMethod === "kartica_pretplata";
     if (!isCard) {
       let ipsQrUrl: string | null = null;
       if (paymentMethod === "uplatnica") {

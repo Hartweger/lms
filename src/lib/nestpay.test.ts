@@ -125,3 +125,37 @@ describe("minorUnitsToRsd", () => {
     expect(minorUnitsToRsd("S")).toBeNull();
   });
 });
+
+describe("buildPaymentFields - mesečno plaćanje", () => {
+  const osnovno = {
+    orderNumber: "2026-300",
+    amountRsd: 3199,
+    okUrl: "https://x/cb",
+    failUrl: "https://x/cb",
+  };
+
+  it("bez recurring parametra ne šalje recurring polja", () => {
+    const f = buildPaymentFields(osnovno);
+    expect(f.RecurringPaymentNumber).toBeUndefined();
+    expect(f.RecurringFrequencyUnit).toBeUndefined();
+  });
+
+  it("sa recurring parametrom šalje tri polja (mesečno, 12 naplata)", () => {
+    const f = buildPaymentFields({ ...osnovno, recurring: { totalPayments: 12 } });
+    expect(f.RecurringPaymentNumber).toBe("12");
+    expect(f.RecurringFrequencyUnit).toBe("M");
+    expect(f.RecurringFrequency).toBe("1");
+  });
+
+  it("potpis ostaje ispravan - recurring polja ne ulaze u hash", () => {
+    // Hash se računa iz osnovnih polja; recurring polja se samo dodaju uz formu
+    // (potvrda banke 20.07.2026), pa potpis mora da bude isti kao da ih nema.
+    const f = buildPaymentFields({ ...osnovno, recurring: { totalPayments: 12 } });
+    const ocekivan = requestHash({
+      merchantId: f.clientid, oid: f.oid, amount: f.amount,
+      okUrl: f.okUrl, failUrl: f.failUrl, transactionType: f.trantype,
+      rnd: f.rnd, currency: f.currency, storeKey: process.env.NESTPAY_STORE_KEY ?? "",
+    });
+    expect(f.hash).toBe(ocekivan);
+  });
+});
