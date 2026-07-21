@@ -81,6 +81,9 @@ export function buildPaymentFields(o: {
     email: o.email ?? "",
     // Mesečno plaćanje: tri polja koja banci govore da pokreće seriju naplata.
     // NE ulaze u hash (potvrda banke 20.07.2026) - potpis ostaje isti kao bez njih.
+    // PAŽNJA: polje `instalment` ostaje prazno i kod pretplate - priručnik, greška
+    // CORE-2034: ponavljajuća naplata ne sme da bude prodaja na rate. Kupca zato na
+    // checkoutu izričito upozoravamo da na strani banke ne bira „na rate".
     ...(o.recurring
       ? {
           RecurringPaymentNumber: String(o.recurring.totalPayments),

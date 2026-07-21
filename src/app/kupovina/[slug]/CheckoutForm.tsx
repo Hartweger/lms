@@ -446,7 +446,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
                   ? [{
                       v: "kartica_pretplata",
                       label: `Mesečno plaćanje - ${formatPrice(pretplataPlan.monthlyRsd)} din mesečno`,
-                      desc: `Učiš nivo po nivo: A1.1 ti se otvara odmah, a ostali stižu redom. Kartica se automatski zadužuje svakog meseca, ukupno ${pretplataPlan.totalPayments} puta (${formatPrice(pretplataPlan.monthlyRsd * pretplataPlan.totalPayments)} din).`,
+                      desc: `Učiš nivo po nivo: A1.1 ti se otvara odmah, a ostali stižu redom. Kartica se automatski zadužuje svakog meseca, ukupno ${pretplataPlan.totalPayments} puta (${formatPrice(pretplataPlan.monthlyRsd * pretplataPlan.totalPayments)} din). Nije isto što i rate Intesa kartice.`,
                     }]
                   : []),
               ]
@@ -457,7 +457,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
                   ? [{
                       v: "kartica_pretplata",
                       label: `Mesečno plaćanje - ${formatPrice(pretplataPlan.monthlyRsd)} din mesečno`,
-                      desc: `Učiš nivo po nivo: A1.1 ti se otvara odmah, a ostali stižu redom. Kartica se automatski zadužuje svakog meseca, ukupno ${pretplataPlan.totalPayments} puta (${formatPrice(pretplataPlan.monthlyRsd * pretplataPlan.totalPayments)} din).`,
+                      desc: `Učiš nivo po nivo: A1.1 ti se otvara odmah, a ostali stižu redom. Kartica se automatski zadužuje svakog meseca, ukupno ${pretplataPlan.totalPayments} puta (${formatPrice(pretplataPlan.monthlyRsd * pretplataPlan.totalPayments)} din). Nije isto što i rate Intesa kartice.`,
                     }]
                   : []),
               ]
@@ -503,6 +503,10 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
               Meseci 3, 6 i 9-12 su za obnavljanje i završni ispit nivoa.
             </li>
             <li>Pristup traje dok traju naplate. Ako plaćanje prekineš, ostaje ti do kraja plaćenog meseca.</li>
+            <li>
+              <strong>Na strani banke ne biraj „na rate"</strong> - mesečne naplate pokrećemo mi, a rate Banca Intesa
+              kartice su nešto drugo i ne mogu da idu zajedno sa mesečnim plaćanjem.
+            </li>
             <li>
               <strong>Otkazivanje:</strong> u svakom trenutku, sam(a), u odeljku „Moj nalog" na platformi. Ne moraš da
               nam pišeš ni da obrazlažeš.
