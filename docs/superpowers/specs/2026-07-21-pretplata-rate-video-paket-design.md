@@ -78,6 +78,36 @@ Posledica: ako naplata padne ili polaznica otkaže, **pristup istekne sam** u ro
 nekoliko dana. Ne postoji logika oduzimanja pristupa, pa nema ni rizika da nekome bude
 oduzet greškom. `grantAccessForOrder` dobija opcioni `accessUntil` za ovaj slučaj.
 
+## Pauza, nastavak i obnova (odluke 21.07.2026)
+
+**Osnovno pravilo: jedna rata = jedan mesec pristupa.** Dvanaest rata daje dvanaest meseci
+pristupa, ali ne moraju biti uzastopni.
+
+- **Pauza i nastavak.** Ako naplata padne (istekla kartica, odbijena transakcija) ili
+  polaznica otkaže, pristup istekne. Kad se vrati, na strani za kupovinu joj se nudi
+  **„Nastavi mesečno plaćanje - preostalo ti je N rata"**, gde je `N = total_payments −
+  paid_payments` iz njene prethodne serije za taj kurs. Pokreće se nova serija od N
+  naplata. Tako nikad ne plati više od 12 rata za godinu pristupa, niti plaća mesece koje
+  nije koristila. Bez ovoga bi svaka pala kartica značila kupovinu svih 12 rata iznova -
+  nepošteno i siguran izvor žalbi.
+- **Obnova posle 12. rate.** Ništa novo se ne gradi: posle poslednje naplate pristup
+  ističe kao i kod jednokratnih kupaca, pa polaznicu hvata **postojeći podsetnik o isteku**
+  sa kuponom OBNOVI50 (vidi `project_istek_pristupa_obnova`). Obnova u prvoj rundi ostaje
+  **jednokratna kupovina uz popust** - popust od 50% spušta cenu na nivo gde rate nemaju
+  mnogo smisla, a svaka dodatna varijanta je novo mesto koje može da zapne. Rate za obnovu
+  dodati kasnije kroz isti mehanizam ako se pokaže potreba.
+
+## Napredak se NE briše
+
+Otkazivanje i istek pristupa ne diraju napredak: `lesson_progress`, `exercise_attempts`,
+`certificates` i ostalo vezani su za **nalog** (`user_id`), a ne za `course_access`
+(provereno u bazi 21.07.2026 - nijedan strani ključ ne pokazuje na `course_access`, pa
+ništa ne kaskadira). Pristup je samo datum do kog se sadržaj sme gledati.
+
+Zato se to izričito kaže i polaznici: u poruci pri otkazivanju („napredak ti ostaje
+sačuvan") i u uslovima korišćenja. To smanjuje strah od otkazivanja, a ujedno je i razlog
+više da se vrati.
+
 ## Dnevni poll (jezgro rešenja)
 
 Banka šalje callback **samo za inicijalnu naplatu** (potvrđeno testom i mejlom banke

@@ -1330,7 +1330,9 @@ export function Pretplate() {
   }, []);
 
   async function otkazi(id: string) {
-    if (!confirm("Da otkažemo mesečno plaćanje? Naredne naplate se zaustavljaju, a pristup ti ostaje do kraja plaćenog meseca.")) return;
+    // Napredak se NE briše (vezan je za nalog, ne za pristup) - to se izričito kaže,
+    // jer je strah od gubitka rada glavni razlog oklevanja pri otkazivanju.
+    if (!confirm("Da otkažemo mesečno plaćanje?\n\nNaredne naplate se zaustavljaju, a pristup ti ostaje do kraja plaćenog meseca. Napredak, urađene vežbe i sertifikati ostaju sačuvani, a kad se vratiš plaćaš samo preostale rate.")) return;
     setRadi(id);
     setGreska(null);
     try {
@@ -1547,6 +1549,15 @@ U `src/app/uslovi/page.tsx` dodaj nov odeljak (posle odeljka o video kursevima),
         zaustavlja sve buduće naplate; pristup ostaje do isteka već plaćenog meseca. Već naplaćene
         rate se ne vraćaju, osim u slučajevima predviđenim Zakonom o zaštiti potrošača.
       </p>
+      <p>
+        Jedna rata odgovara jednom mesecu pristupa. Ako otkažeš ili naplata ne prođe, pa se kasnije
+        vratiš, plaćaš samo preostali broj rata - nikada ne plaćaš više od ukupnog broja rata za
+        kurs, niti mesece u kojima nisi imala pristup.
+      </p>
+      <p>
+        Otkazivanje ne briše tvoj rad na platformi: završene lekcije, urađene vežbe, rezultati
+        testova i stečeni sertifikati ostaju sačuvani uz tvoj nalog i čekaju te kad se vratiš.
+      </p>
 ```
 
 - [ ] **Step 2: Prikaži mesečnu cenu na stranici proizvoda**
@@ -1658,7 +1669,202 @@ git commit -m "Admin pregled pretplata"
 
 ---
 
-### Task 16: Provera u testnom okruženju banke (ubrzano)
+### Task 16: „Nastavi gde si stao" - nastavak posle pauze
+
+**Files:**
+- Modify: `src/lib/subscription-plans.ts`, `src/app/kupovina/[slug]/page.tsx`, `src/app/kupovina/[slug]/CheckoutForm.tsx`, `src/app/api/orders/route.ts`, `src/app/kupovina/kartica/[orderId]/page.tsx`
+- Test: `src/lib/subscription-plans.test.ts`
+
+> **Pravilo:** jedna rata = jedan mesec pristupa. Ko je platio 5 od 12 rata pa stao,
+> pri povratku plaća preostalih 7, a ne novih 12.
+
+- [ ] **Step 1: Napiši test koji pada**
+
+Dodaj u `src/lib/subscription-plans.test.ts`:
+
+```ts
+import { remainingPayments } from "./subscription-plans";
+
+describe("remainingPayments", () => {
+  it("računa preostale rate iz prethodne serije", () => {
+    expect(remainingPayments({ total_payments: 12, paid_payments: 5 })).toBe(7);
+  });
+
+  it("bez prethodne serije vraća null (kupovina je nova)", () => {
+    expect(remainingPayments(null)).toBeNull();
+  });
+
+  it("isplaćenu seriju ne nastavlja", () => {
+    expect(remainingPayments({ total_payments: 12, paid_payments: 12 })).toBeNull();
+  });
+
+  it("ne dozvoljava negativan ili nulti broj rata", () => {
+    expect(remainingPayments({ total_payments: 12, paid_payments: 13 })).toBeNull();
+  });
+});
+```
+
+- [ ] **Step 2: Pokreni test, mora da padne**
+
+Run: `./node_modules/.bin/vitest run src/lib/subscription-plans.test.ts`
+Očekivano: FAIL, `remainingPayments is not a function`.
+
+- [ ] **Step 3: Dodaj funkciju u `src/lib/subscription-plans.ts`**
+
+```ts
+/**
+ * Koliko rata je ostalo iz ranije, prekinute serije. `null` znači da nastavka nema
+ * (nema ranije serije ili je isplaćena) pa se prodaje pun broj rata.
+ */
+export function remainingPayments(
+  prethodna: { total_payments: number; paid_payments: number } | null,
+): number | null {
+  if (!prethodna) return null;
+  const ostalo = prethodna.total_payments - prethodna.paid_payments;
+  return ostalo > 0 ? ostalo : null;
+}
+```
+
+- [ ] **Step 4: Pokreni test, mora da prođe**
+
+Run: `./node_modules/.bin/vitest run src/lib/subscription-plans.test.ts`
+Očekivano: PASS (12 testova).
+
+- [ ] **Step 5: Nađi prekinutu seriju na strani za kupovinu**
+
+U `src/app/kupovina/[slug]/page.tsx`, pre renderovanja `<CheckoutForm />`, dodaj:
+
+```tsx
+  // Nastavak posle pauze: ako ulogovana polaznica ima prekinutu seriju za OVAJ kurs,
+  // nudi joj se samo preostali broj rata.
+  let nastavakRata: number | null = null;
+  if (planForSlug(course.slug)) {
+    const supabaseUser = await createClient();
+    const { data: { user } } = await supabaseUser.auth.getUser();
+    if (user) {
+      const admin = createAdminClient();
+      const { data: prethodna } = await admin
+        .from("subscriptions")
+        .select("total_payments, paid_payments")
+        .eq("user_id", user.id)
+        .eq("course_id", course.id)
+        .in("status", ["cancelled", "failed"])
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      nastavakRata = remainingPayments(prethodna ?? null);
+    }
+  }
+```
+
+uz uvoze:
+
+```tsx
+import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { planForSlug, remainingPayments } from "@/lib/subscription-plans";
+```
+
+i prosledi formi:
+
+```tsx
+        subscriptionPlan={
+          planForSlug(course.slug)
+            ? { ...planForSlug(course.slug)!, totalPayments: nastavakRata ?? planForSlug(course.slug)!.totalPayments }
+            : null
+        }
+        jeNastavak={nastavakRata !== null}
+```
+
+- [ ] **Step 6: Prikaži da je reč o nastavku**
+
+U `src/app/kupovina/[slug]/CheckoutForm.tsx` dodaj prop u tip:
+
+```ts
+  jeNastavak?: boolean;
+```
+
+i u obaveštenju o mesečnoj naplati, iznad postojećeg teksta, dodaj:
+
+```tsx
+          {jeNastavak && (
+            <p className="text-sm text-gray-700">
+              <strong>Nastavljaš gde si stala.</strong> Ranije plaćene rate su uračunate, pa ti je
+              ostalo još {subscriptionPlan.totalPayments} rata. Napredak na platformi te čeka
+              nedirnut.
+            </p>
+          )}
+```
+
+- [ ] **Step 7: Prenesi broj rata kroz porudžbinu**
+
+Broj naplata se do sada čitao iz plana. Da bi nastavak radio, mora da se zapamti na porudžbini.
+
+U `src/app/api/orders/route.ts`, u telu zahteva prihvati i `totalPayments`, pa ga uz kočnicu upiši:
+
+```ts
+    // Broj rata za nastavak posle pauze. Nikad veći od plana - inače bi izmenjen
+    // zahtev mogao da produži seriju preko dogovorenog.
+    const plan = planForSlug(course.slug);
+    const trazeneRate = Number(totalPayments) || 0;
+    const rateZaSeriju =
+      paymentMethod === "kartica_pretplata" && plan
+        ? Math.min(Math.max(trazeneRate, 1), plan.totalPayments)
+        : null;
+```
+
+i dodaj `total_payments_override: rateZaSeriju` u `insert` porudžbine (kolona se dodaje u sledećem koraku).
+
+- [ ] **Step 8: Dodaj kolonu i uveži je**
+
+Napravi `supabase/migrations/071_orders_total_payments_override.sql`:
+
+```sql
+-- Broj rata za ovu kupovinu; manji od plana kod nastavka posle pauze.
+alter table orders add column if not exists total_payments_override int;
+```
+
+Primeni je (`apply_migration`, name: `orders_total_payments_override`), pa u
+`src/app/kupovina/kartica/[orderId]/page.tsx` u `select` dodaj `total_payments_override` i
+izmeni prosleđivanje:
+
+```tsx
+    recurring: plan
+      ? { totalPayments: order.total_payments_override ?? plan.totalPayments }
+      : undefined,
+```
+
+a u `src/lib/subscription-start.ts` zameni `total_payments: plan.totalPayments` sa:
+
+```ts
+      total_payments: (order as { total_payments_override?: number | null }).total_payments_override ?? plan.totalPayments,
+```
+
+(uz dopunu `select`-a u callbacku da vraća i tu kolonu - on već čita `*`).
+
+- [ ] **Step 9: Pošalji broj rata iz forme**
+
+U `handleSubmit` u `CheckoutForm.tsx`, u telo `fetch("/api/orders")` dodaj:
+
+```ts
+          totalPayments: method === "kartica_pretplata" ? subscriptionPlan?.totalPayments ?? null : null,
+```
+
+- [ ] **Step 10: Provera tipova, testova i builda**
+
+Run: `./node_modules/.bin/tsc --noEmit && ./node_modules/.bin/vitest run && npm run build`
+Očekivano: sve prolazi.
+
+- [ ] **Step 11: Commit**
+
+```bash
+git add src/lib/subscription-plans.ts src/lib/subscription-plans.test.ts src/app/kupovina src/app/api/orders/route.ts src/lib/subscription-start.ts supabase/migrations/071_orders_total_payments_override.sql
+git commit -m "Nastavak posle pauze: naplaćuje se samo preostali broj rata"
+```
+
+---
+
+### Task 17: Provera u testnom okruženju banke (ubrzano)
 
 **Files:** nema izmena koda - ovo je provera pre puštanja uživo.
 
