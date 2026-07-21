@@ -6,8 +6,9 @@
 
 > **IZMENA 21.07.2026 (Nataša):** mesečno plaćanje **NE otvara ceo paket odmah**. Paket ima
 > šest sadržajnih kurseva (`course_unlocks`: A1.1, A1.2, A2.1, A2.2, B1.1, B1.2), a naplata
-> dvanaest - otvara se po jedan podnivo na svake dve naplate (rata 1 → A1.1, 3 → A1.2,
-> 5 → A2.1, 7 → A2.2, 9 → B1.1, 11 → B1.2). Bez toga bi jedna rata od 3.199 din nosila ceo
+> dvanaest - nivoi se otvaraju u parovima: rata 1 → A1.1, 2 → A1.2, 4 → A2.1, 5 → A2.2,
+> 7 → B1.1, 8 → B1.2. **Od 8. naplate je sve otključano**, a rate 9-12 su meseci obnavljanja
+> (ritam potvrdila Nataša 21.07.2026). Bez toga bi jedna rata od 3.199 din nosila ceo
 > paket od 29.133 din. Jednokratna kupovina i dalje otvara sve odmah. Traži dopunu Taska 8
 > (`grantAccessForOrder` mora da poštuje raspored) i prikaza u „Moj nalog"; tekst za kupca je
 > u nacrtu `tekst-mesecno-placanje-za-odobrenje.md`. Na otkazivanje pristup ostaje do kraja
