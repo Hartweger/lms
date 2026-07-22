@@ -170,6 +170,10 @@ export interface Order {
   nestpay_transaction_id: string | null;
   /** "charged" (uspeh), "failed" (banka odbila), ili null (kartica započeta a nije završena). */
   nestpay_status: string | null;
+  /** NestPay TransId iz callback-a (migracija 033). */
+  nestpay_trans_id?: string | null;
+  /** Raw NestPay callback parametri + naš `_receivedAt` - izvor za Potvrdu o plaćanju (EPM 2.7). */
+  nestpay_response?: Record<string, unknown> | null;
   /** Kad je poslat mejl za povraćaj neuspele kartične kupovine (da se ne šalje dvaput). */
   recovery_email_sent_at: string | null;
   paypal_note: string | null;
