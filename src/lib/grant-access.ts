@@ -305,7 +305,14 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
       console.error(`[grant] login-link za welcome pao (order ${orderId}):`, e);
       Sentry.captureException(e);
     }
-    await sendWelcomeEmail(order.email, order.full_name, items.map((i) => i.title), { startUrl, hasLesson });
+    // Mesečno plaćanje: banka traži da već prva (welcome) notifikacija kupcu jasno
+    // kaže da je pokrenuta pretplata - iznos, učestalost, broj naplata i otkazivanje.
+    const plan = jePretplata ? planForSlug(items[0]?.course_slug ?? "") : null;
+    await sendWelcomeEmail(order.email, order.full_name, items.map((i) => i.title), {
+      startUrl,
+      hasLesson,
+      subscription: plan ? { monthlyRsd: plan.monthlyRsd, totalPayments: plan.totalPayments } : undefined,
+    });
   }
   return { ok: true };
 }

@@ -72,8 +72,10 @@ export async function sendWelcomeEmail(
   /**
    * startUrl = direktan login-link (/auth/mejl token). Bez njega CTA vodi na /prijava (npr. wc-webhook).
    * hasLesson = login-link cilja prvu lekciju; false = /dashboard (kurs bez lekcija, ne obećavati lekciju).
+   * subscription = mesečno plaćanje: zahtev banke je da notifikacija za inicijalnu ponavljajuću
+   * transakciju kupcu JASNO kaže da je pokrenuta pretplata (iznos, učestalost, broj naplata, otkazivanje).
    */
-  opts?: { startUrl?: string; hasLesson?: boolean },
+  opts?: { startUrl?: string; hasLesson?: boolean; subscription?: { monthlyRsd: number; totalPayments: number } },
 ) {
   const courseList = courseTitles.map((t) => `• ${t}`).join("\n");
   const startUrl = opts?.startUrl || `${SITE_URL}/prijava`;
@@ -86,7 +88,9 @@ export async function sendWelcomeEmail(
       from: FROM,
       to,
       replyTo: "info@hartweger.rs",
-      subject: "Dobrodošli na Hartweger kurs!",
+      subject: opts?.subscription
+        ? "Dobrodošli! Pokrenuto je mesečno plaćanje (pretplata)"
+        : "Dobrodošli na Hartweger kurs!",
       html: `
 <!DOCTYPE html>
 <html lang="sr">
@@ -113,11 +117,32 @@ export async function sendWelcomeEmail(
         <div style="font-size: 14px; color: #1a1a2e; white-space: pre-line;">${courseList}</div>
       </div>
 
+      ${opts?.subscription
+        ? `
+      <div style="background: #fff8e7; border: 1px solid #f0d48a; border-radius: 8px; padding: 14px 16px; margin: 0 0 20px;">
+        <div style="font-size: 14px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px;">Pokrenuto je mesečno plaćanje (pretplata)</div>
+        <div style="font-size: 14px; color: #444; line-height: 1.6;">
+          Danas je naplaćena <strong>1. od ${opts.subscription.totalPayments} mesečnih naplata</strong> u iznosu od
+          <strong>${opts.subscription.monthlyRsd.toLocaleString("de-DE")} RSD</strong>. Isti iznos se automatski
+          naplaćuje sa tvoje platne kartice <strong>jednom mesečno</strong>, istog datuma u mesecu, dok se ne izvrši
+          ukupno ${opts.subscription.totalPayments} naplata. Za svaku naplatu dobijaš potvrdu i fiskalni račun na email.
+          <br /><br />
+          Mesečno plaćanje možeš da <strong>otkažeš u svakom trenutku</strong> u odeljku
+          <a href="${SITE_URL}/nalog" style="color: #4fb1d3;">„Moj nalog"</a> na platformi (opcija „Otkaži mesečno
+          plaćanje") ili slanjem zahteva na info@hartweger.rs. Otkazivanje zaustavlja sve buduće naplate.
+        </div>
+      </div>
+      <p style="font-size: 15px; line-height: 1.6; color: #444; margin: 0 0 20px;">
+        ${opts?.startUrl
+          ? `Klikni na dugme ispod i odmah ulaziš ${opts.hasLesson ? "u prvu lekciju" : "na platformu"}. Pristup važi dok traju mesečne naplate, a nivoi se otvaraju redom kako naplate teku.`
+          : "Prijavi se na platformu i započni prvu lekciju. Pristup važi dok traju mesečne naplate, a nivoi se otvaraju redom kako naplate teku."}
+      </p>`
+        : `
       <p style="font-size: 15px; line-height: 1.6; color: #444; margin: 0 0 20px;">
         ${opts?.startUrl
           ? `Klikni na dugme ispod i odmah ulaziš ${opts.hasLesson ? "u prvu lekciju" : "na platformu"}. Pristup kursu važi <strong>godinu dana</strong> od kupovine.`
           : "Prijavi se na platformu i započni prvu lekciju. Pristup kursu važi <strong>godinu dana</strong> od kupovine."}
-      </p>
+      </p>`}
 
       <div style="text-align: center; margin: 24px 0;">
         <a href="${startUrl}" style="display: inline-block; background: #4fb1d3; color: white; padding: 14px 32px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 15px;">
@@ -2079,7 +2104,7 @@ export async function sendSubscriptionChargeEmail(o: {
       html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
 <body style="font-family:sans-serif;line-height:1.6;color:#222">
 <p>Zdravo${ime ? ", " + esc(ime) : ""}!</p>
-<p>Naplatili smo <strong>${fmt(o.amount)} din</strong> - to je ${o.installmentNo}. rata od ukupno ${o.totalPayments} za kurs <strong>${esc(o.courseTitle)}</strong>.</p>
+<p>Naplatili smo <strong>${fmt(o.amount)} RSD</strong> - to je ${o.installmentNo}. rata od ukupno ${o.totalPayments} za kurs <strong>${esc(o.courseTitle)}</strong>.</p>
 <p>Pristup ti važi do <strong>${doKada}</strong> i produžiće se sam sa narednom ratom. Fiskalni račun stiže zasebno.</p>
 <p style="font-size:13px;color:#666">Mesečno plaćanje možeš da otkažeš kad god hoćeš, u odeljku „Moj nalog" na platformi.</p>
 <p style="margin-top:20px">Hartweger tim</p>
