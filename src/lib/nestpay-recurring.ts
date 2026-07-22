@@ -40,6 +40,17 @@ export function buildRecurringCancelXml(recurringId: string, env: NestpayEnv = "
   return `<?xml version="1.0" encoding="UTF-8"?><CC5Request>${credentials(env)}<Extra><RECURRINGOPERATION>Cancel</RECURRINGOPERATION><RECORDTYPE>Recurring</RECORDTYPE><RECORDID>${recurringId}</RECORDID></Extra></CC5Request>`;
 }
 
+/**
+ * Ponovno iniciranje JEDNE pale naplate pomeranjem njenog planiranog datuma
+ * (priručnik, pogl. 7 „Modification of Order Planned Start Date"). Banka je
+ * 22.07.2026 potvrdila da se pala naplata ovim ponovo pokreće - najviše jednom
+ * dnevno, ukupno do 30 puta - a serija posle nastavlja po svom rasporedu.
+ * `chargeOid` je ORD_ID_n te naplate (`<base_oid>-N`), `startDate` je YYYY-MM-DD.
+ */
+export function buildChargeRetryXml(chargeOid: string, startDate: string, env: NestpayEnv = "prod"): string {
+  return `<?xml version="1.0" encoding="UTF-8"?><CC5Request>${credentials(env)}<Extra><RECURRINGOPERATION>Update</RECURRINGOPERATION><RECORDTYPE>Order</RECORDTYPE><RECORDID>${chargeOid}</RECORDID><STARTDATE>${startDate}</STARTDATE></Extra></CC5Request>`;
+}
+
 export interface RecurringCharge {
   installmentNo: number;
   oid: string;
@@ -51,6 +62,8 @@ export interface RecurringCharge {
   succeeded: boolean;
   /** naplata je propala i neće se sama popraviti (odbijena, greška, otkazana) */
   failed: boolean;
+  /** pala naplata koja sme ponovo da se inicira (D/ERR; otkazanu i poništenu ne diramo) */
+  retryable: boolean;
   /** zapis je povraćaj novca, ne naplata */
   refund: boolean;
 }
@@ -59,6 +72,11 @@ export interface RecurringCharge {
 const USPELI_STATUSI = new Set(["C", "S"]);
 /** Konačno propalo: D = odbijeno, ERR = greška u seriji, CNCL = otkazano, V = poništeno. */
 const PALI_STATUSI = new Set(["D", "ERR", "CNCL", "V"]);
+/**
+ * Od palih se ponovo iniciraju samo odbijena (D) i greška (ERR) - potvrda banke
+ * 22.07.2026. CNCL/V su namerno prekinute (otkazivanje, void) i ne diraju se.
+ */
+const PONOVLJIVI_STATUSI = new Set(["D", "ERR"]);
 
 /**
  * TRANS_STAT po priručniku (Merchant Integration API Manual, tabela statusa):
@@ -99,13 +117,15 @@ export function parseRecurringStatus(text: string): { count: number; charges: Re
       plannedAt: tag(`PLANNED_START_DTTM_${n}`),
       succeeded: !refund && USPELI_STATUSI.has(transStat) && amountRsd !== null && amountRsd > 0,
       failed: PALI_STATUSI.has(transStat),
+      retryable: PONOVLJIVI_STATUSI.has(transStat),
       refund,
     });
   }
   return { count, charges };
 }
 
-export function isCancelApproved(text: string): boolean {
+/** Da li je banka prihvatila RECURRINGOPERATION zahtev (Cancel ili Update). */
+export function isRecurringOpApproved(text: string): boolean {
   const response = text.match(/<Response>([^<]*)<\/Response>/i)?.[1]?.trim() ?? "";
   const proc = text.match(/<ProcReturnCode>([^<]*)<\/ProcReturnCode>/i)?.[1]?.trim() ?? "";
   return response.toLowerCase() === "approved" || proc === "00";

@@ -2114,3 +2114,42 @@ export async function sendSubscriptionChargeEmail(o: {
     console.error("[email] sendSubscriptionChargeEmail pao:", e);
   }
 }
+
+/**
+ * Pala mesečna naplata - šalje se JEDNOM, kad je prvi put primetimo (posle toga
+ * banka na naš zahtev pokušava iznova danima, ne treba 30 mejlova). Istekla
+ * kartica se ne da spasiti pokušajima: banka traži da kupac autorizuje NOV plan.
+ */
+export async function sendSubscriptionRetryEmail(o: {
+  email: string;
+  name: string | null;
+  courseTitle: string;
+  installmentNo: number;
+  totalPayments: number;
+  amount: number;
+}) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    const ime = o.name ? o.name.split(" ")[0] : "";
+    const fmt = (n: number) => n.toLocaleString("de-DE");
+    await resend.emails.send({
+      from: FROM,
+      to: o.email,
+      replyTo: "info@hartweger.rs",
+      subject: `Mesečna naplata nije prošla - ${o.courseTitle}`,
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:sans-serif;line-height:1.6;color:#222">
+<p>Zdravo${ime ? ", " + esc(ime) : ""}!</p>
+<p>Pokušali smo da naplatimo <strong>${fmt(o.amount)} RSD</strong> - ${o.installmentNo}. mesečnu uplatu od ukupno ${o.totalPayments} za kurs <strong>${esc(o.courseTitle)}</strong> - ali naplata nije prošla (najčešće: nedovoljno sredstava na kartici).</p>
+<p><strong>Ništa ne moraš da radiš odmah</strong> - narednih dana ćemo automatski pokušati ponovo. Proveri samo da na kartici ima sredstava.</p>
+<p>Ako je kartica u međuvremenu <strong>istekla ili zamenjena</strong>, automatski pokušaji ne pomažu: odgovori nam na ovaj mejl, pa ćemo zajedno pokrenuti mesečno plaćanje novom karticom.</p>
+<p style="font-size:13px;color:#666">Dok uplata ne prođe, pristup kursu može privremeno da se pauzira. Mesečno plaćanje uvek možeš da otkažeš u odeljku „Moj nalog" na platformi.</p>
+<p style="margin-top:20px">Hartweger tim</p>
+</body></html>`,
+    });
+    console.log(`[email] Subscription-retry mejl poslat → ${o.email}`);
+  } catch (e) {
+    console.error("[email] sendSubscriptionRetryEmail pao:", e);
+  }
+}

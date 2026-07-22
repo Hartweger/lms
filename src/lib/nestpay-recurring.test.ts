@@ -2,8 +2,9 @@ import { describe, it, expect } from "vitest";
 import {
   buildRecurringStatusXml,
   buildRecurringCancelXml,
+  buildChargeRetryXml,
   parseRecurringStatus,
-  isCancelApproved,
+  isRecurringOpApproved,
 } from "./nestpay-recurring";
 
 // Uzorak po priručniku: naplata 1 uspela, naplata 2 na čekanju.
@@ -35,6 +36,16 @@ describe("buildRecurringCancelXml", () => {
     expect(xml).toContain("<RECURRINGOPERATION>Cancel</RECURRINGOPERATION>");
     expect(xml).toContain("<RECORDTYPE>Recurring</RECORDTYPE>");
     expect(xml).toContain("<RECORDID>26201OnlA13974</RECORDID>");
+  });
+});
+
+describe("buildChargeRetryXml", () => {
+  it("ponovo inicira JEDNU naplatu pomeranjem planiranog datuma (pogl. 7)", () => {
+    const xml = buildChargeRetryXml("2026-300-2", "2026-07-23");
+    expect(xml).toContain("<RECURRINGOPERATION>Update</RECURRINGOPERATION>");
+    expect(xml).toContain("<RECORDTYPE>Order</RECORDTYPE>");
+    expect(xml).toContain("<RECORDID>2026-300-2</RECORDID>");
+    expect(xml).toContain("<STARTDATE>2026-07-23</STARTDATE>");
   });
 });
 
@@ -106,6 +117,16 @@ describe("parseRecurringStatus", () => {
     }
   });
 
+  it("ponovo se iniciraju samo odbijena (D) i greška (ERR), ne i otkazana/poništena", () => {
+    // Banka 22.07.2026: pala naplata sme ponovo da se inicira (Update + STARTDATE).
+    // CNCL i V su NAMERNO prekinute (otkazivanje, void) - njih ne oživljavamo.
+    for (const [stat, ocekivano] of [["D", true], ["ERR", true], ["CNCL", false], ["V", false], ["PN", false]] as const) {
+      const odgovor = `<CC5Response><Extra><RECURRINGCOUNT>1</RECURRINGCOUNT>
+<ORD_ID_1>2026-300-2</ORD_ID_1><TRANS_STAT_1>${stat}</TRANS_STAT_1></Extra></CC5Response>`;
+      expect(parseRecurringStatus(odgovor).charges[0].retryable, stat).toBe(ocekivano);
+    }
+  });
+
   it("naplatu koja se još obrađuje (NW) ne proglašava ni uspelom ni palom", () => {
     // NW = First Commit: prolazno stanje, sledeći prolaz crona daje konačan status.
     const odgovor = `<CC5Response><Extra><RECURRINGCOUNT>1</RECURRINGCOUNT>
@@ -132,14 +153,14 @@ describe("parseRecurringStatus", () => {
   });
 });
 
-describe("isCancelApproved", () => {
+describe("isRecurringOpApproved", () => {
   it("prihvata Approved", () => {
-    expect(isCancelApproved("<CC5Response><Response>Approved</Response></CC5Response>")).toBe(true);
+    expect(isRecurringOpApproved("<CC5Response><Response>Approved</Response></CC5Response>")).toBe(true);
   });
   it("prihvata ProcReturnCode 00", () => {
-    expect(isCancelApproved("<CC5Response><ProcReturnCode>00</ProcReturnCode></CC5Response>")).toBe(true);
+    expect(isRecurringOpApproved("<CC5Response><ProcReturnCode>00</ProcReturnCode></CC5Response>")).toBe(true);
   });
   it("odbija grešku", () => {
-    expect(isCancelApproved("<CC5Response><Response>Error</Response><ErrMsg>CORE-5103</ErrMsg></CC5Response>")).toBe(false);
+    expect(isRecurringOpApproved("<CC5Response><Response>Error</Response><ErrMsg>CORE-5103</ErrMsg></CC5Response>")).toBe(false);
   });
 });
