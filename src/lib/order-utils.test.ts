@@ -1,5 +1,32 @@
 import { describe, it, expect } from "vitest";
-import { canDeleteOrder, orderTotals, orderFiscalStatus, pendingPaymentState, shouldSendRecovery, recoveryAction, uplataReminderAction, needsFiscalRetry } from "./order-utils";
+import { buildIpsString, canDeleteOrder, orderTotals, orderFiscalStatus, pendingPaymentState, shouldSendRecovery, recoveryAction, uplataReminderAction, needsFiscalRetry } from "./order-utils";
+
+describe("buildIpsString - NBS IPS QR format", () => {
+  const ips = buildIpsString({ total: 35000, order_number: "2026-216" });
+  const tags = Object.fromEntries(ips.split("|").map((t) => [t.slice(0, t.indexOf(":")), t.slice(t.indexOf(":") + 1)]));
+
+  it("tag R je tačno 18 cifara bez crtica (NBS greška 608 za '170-...')", () =>
+    expect(tags.R).toBe("170001055976700018"));
+
+  it("tag I koristi zarez kao decimalni separator, ne tačku", () =>
+    expect(tags.I).toBe("RSD35000,00"));
+
+  it("svrha plaćanja ide u tag S (P je platilac po NBS spec-u i ne šaljemo ga)", () => {
+    expect(tags.S).toBe("Placanje porudzbine #2026-216");
+    expect(tags.P).toBeUndefined();
+  });
+
+  it("tag RO počinje modelom 00 pa broj porudžbine", () =>
+    expect(tags.RO).toBe("002026-216"));
+
+  it("ceo string je identičan onom koji je prošao NBS validator (code 0)", () =>
+    expect(ips).toBe(
+      "K:PR|V:01|C:1|R:170001055976700018|N:Hartweger, Beograd, 11070 Beograd|I:RSD35000,00|S:Placanje porudzbine #2026-216|SF:189|RO:002026-216"
+    ));
+
+  it("iznos sa parama se formatira sa zarezom", () =>
+    expect(buildIpsString({ total: 3199.5, order_number: "2026-001" })).toContain("I:RSD3199,50"));
+});
 
 describe("canDeleteOrder", () => {
   it("dozvoljava brisanje pending narudžbine koja nije dodeljena", () =>
