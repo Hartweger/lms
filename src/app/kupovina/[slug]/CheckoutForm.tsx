@@ -93,6 +93,10 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
   const isRS = country === "RS";
   const [method, setMethod] = useState<"kartica" | "uplatnica" | "paypal" | "kartica_pretplata">("kartica");
   const [pretplataPotvrda, setPretplataPotvrda] = useState(false);
+  // Zahtev banke (EPM kontrola jul 2026): u proces unosa kartice ne sme da se uđe bez
+  // izričite saglasnosti sa uslovima. Važi za sve metode; pretplata ima svoju potvrdu
+  // koja već uključuje uslove, pa se tamo ovaj kvadratić ne prikazuje duplo.
+  const [usloviPotvrda, setUsloviPotvrda] = useState(false);
   const paymentMethod = method;
   const jePretplata = method === "kartica_pretplata";
   const isCard = method === "kartica" || jePretplata;
@@ -115,7 +119,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
     if (!v) return "";
     return en
       ? ` - ${v.paypal_price_eur ?? Math.round(v.price / EUR_RATE)}€`
-      : ` - ${formatPrice(v.price)} din`;
+      : ` - ${formatPrice(v.price)} RSD`;
   }
 
   const selectedVariant = isIndividual ? resolveVariant(variants, { professorId, packageType }) : null;
@@ -185,6 +189,11 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
       setLoading(false);
       return;
     }
+    if (!jePretplata && !usloviPotvrda) {
+      setError(en ? "Please accept the Terms of Use first." : "Potvrdi saglasnost sa uslovima korišćenja.");
+      setLoading(false);
+      return;
+    }
 
     try {
       const res = await fetch("/api/orders", {
@@ -232,20 +241,20 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
           <div>
             <p className="font-semibold text-gray-900 text-[15px] leading-snug">{courseTitle}</p>
             {isService && (
-              <p className="text-xs text-gray-400 mt-0.5">{pages} × {formatPrice(priceRsd)} din po strani</p>
+              <p className="text-xs text-gray-400 mt-0.5">{pages} × {formatPrice(priceRsd)} RSD po strani</p>
             )}
           </div>
           <div className="text-right flex-shrink-0">
             {appliedCoupon ? (
               <div>
-                <p className="text-sm text-gray-400 line-through">{formatPrice(basePrice)} din</p>
-                <p className="font-bold text-gray-900">{en ? `${eurDisplay} €` : `${formatPrice(discountedRsd)} din`}</p>
-                <p className="text-xs text-gray-400 mt-0.5">{en ? `≈ ${formatPrice(discountedRsd)} din` : `≈ ${eurApprox}€`}</p>
+                <p className="text-sm text-gray-400 line-through">{formatPrice(basePrice)} RSD</p>
+                <p className="font-bold text-gray-900">{en ? `${eurDisplay} €` : `${formatPrice(discountedRsd)} RSD`}</p>
+                <p className="text-xs text-gray-400 mt-0.5">{en ? `≈ ${formatPrice(discountedRsd)} RSD` : `≈ ${eurApprox}€`}</p>
               </div>
             ) : (
               <div>
-                <p className="font-bold text-gray-900">{en ? `${eurDisplay} €` : `${formatPrice(basePrice)} din`}</p>
-                <p className="text-xs text-gray-400 mt-0.5">{en ? `≈ ${formatPrice(discountedRsd)} din` : `≈ ${eurApprox}€`}</p>
+                <p className="font-bold text-gray-900">{en ? `${eurDisplay} €` : `${formatPrice(basePrice)} RSD`}</p>
+                <p className="text-xs text-gray-400 mt-0.5">{en ? `≈ ${formatPrice(discountedRsd)} RSD` : `≈ ${eurApprox}€`}</p>
               </div>
             )}
           </div>
@@ -309,7 +318,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
           <div className="flex items-center justify-between gap-3">
             <p className="text-sm font-medium text-green-600">
               {en ? "Coupon" : "Kupon"} {appliedCoupon.code} - {appliedCoupon.discountType === "fixed"
-                ? (en ? `${formatPrice(appliedCoupon.amount)} din off` : `${formatPrice(appliedCoupon.amount)} din popusta`)
+                ? (en ? `${formatPrice(appliedCoupon.amount)} RSD off` : `${formatPrice(appliedCoupon.amount)} RSD popusta`)
                 : (en ? `${appliedCoupon.amount}% off` : `${appliedCoupon.amount}% popusta`)}
             </p>
             <button
@@ -436,28 +445,31 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
                 // Engleska ponuda: samo kartica. Cena je EUR-primarno (npr. 140€); kartica
                 // se skida u RSD ekvivalentu pa kupac plati tačno oglašeno. PayPal je isključen
                 // jer bi sistem dodao 12% (→ 157€) i razlikovao se od oglašene cene.
-                { v: "kartica", label: ct.methodCard, desc: "Visa, Mastercard, Maestro - secure payment via Banca Intesa. Charged in RSD (your bank converts to your currency)." },
+                { v: "kartica", label: ct.methodCard, desc: "Visa, Mastercard, Maestro, DinaCard, American Express. Charged in RSD (your bank converts to your currency)." },
               ]
             : isRS
             ? [
-                { v: "kartica", label: ct.methodCard, desc: "Visa, Mastercard, Maestro - sigurno preko Banca Intesa. Vlasnici Banca Intesa kartica mogu na rate - broj rata biraš u sledećem koraku (na strani banke)." },
+                // Po nalazu kontrole banke (jul 2026): bez „preko Banca Intesa" (da kupac ne
+                // pomisli da prolaze samo Intesa kartice) i bez info o ratama na ovom koraku
+                // (za rate banka pravi zvaničan baner - e-commerce@bancaintesa.rs).
+                { v: "kartica", label: ct.methodCard, desc: "Visa, Mastercard, Maestro, DinaCard, American Express." },
                 { v: "uplatnica", label: ct.methodBank, desc: "Podaci za uplatu stižu na email; pristup po potvrdi uplate." },
                 ...(pretplataPlan
                   ? [{
                       v: "kartica_pretplata",
-                      label: `Mesečno plaćanje - ${formatPrice(pretplataPlan.monthlyRsd)} din mesečno`,
-                      desc: `Učiš nivo po nivo: A1.1 ti se otvara odmah, a ostali stižu redom. Kartica se automatski zadužuje svakog meseca, ukupno ${pretplataPlan.totalPayments} puta (${formatPrice(pretplataPlan.monthlyRsd * pretplataPlan.totalPayments)} din). Nije isto što i rate Intesa kartice.`,
+                      label: `Mesečno plaćanje - ${formatPrice(pretplataPlan.monthlyRsd)} RSD mesečno`,
+                      desc: `Učiš nivo po nivo: A1.1 ti se otvara odmah, a ostali stižu redom. Kartica se automatski zadužuje svakog meseca, ukupno ${pretplataPlan.totalPayments} puta (${formatPrice(pretplataPlan.monthlyRsd * pretplataPlan.totalPayments)} RSD). Nije isto što i rate Intesa kartice.`,
                     }]
                   : []),
               ]
             : [
-                { v: "kartica", label: ct.methodCard, desc: "Visa, Mastercard, Maestro - sigurno preko Banca Intesa. Naplata u dinarima (tvoja banka konvertuje u tvoju valutu)." },
+                { v: "kartica", label: ct.methodCard, desc: "Visa, Mastercard, Maestro, DinaCard, American Express. Naplata u dinarima (tvoja banka konvertuje u tvoju valutu)." },
                 { v: "paypal", label: ct.methodPaypal, desc: "PayPal link stiže na email. Naplata u evrima, uključuje 12% PayPal naknadu." },
                 ...(pretplataPlan
                   ? [{
                       v: "kartica_pretplata",
-                      label: `Mesečno plaćanje - ${formatPrice(pretplataPlan.monthlyRsd)} din mesečno`,
-                      desc: `Učiš nivo po nivo: A1.1 ti se otvara odmah, a ostali stižu redom. Kartica se automatski zadužuje svakog meseca, ukupno ${pretplataPlan.totalPayments} puta (${formatPrice(pretplataPlan.monthlyRsd * pretplataPlan.totalPayments)} din). Nije isto što i rate Intesa kartice.`,
+                      label: `Mesečno plaćanje - ${formatPrice(pretplataPlan.monthlyRsd)} RSD mesečno`,
+                      desc: `Učiš nivo po nivo: A1.1 ti se otvara odmah, a ostali stižu redom. Kartica se automatski zadužuje svakog meseca, ukupno ${pretplataPlan.totalPayments} puta (${formatPrice(pretplataPlan.monthlyRsd * pretplataPlan.totalPayments)} RSD). Nije isto što i rate Intesa kartice.`,
                     }]
                   : []),
               ]
@@ -489,14 +501,14 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
         <div className="bg-[#FFF8E7] border border-[#F0D48A] rounded-xl p-5">
           <p className="font-bold text-gray-900 text-sm mb-2">Pokrećeš pretplatu, ne jednokratnu kupovinu.</p>
           <ul className="text-sm text-gray-700 space-y-1 list-disc pl-5">
-            <li>Danas se naplaćuje <strong>{formatPrice(pretplataPlan.monthlyRsd)} din</strong>.</li>
+            <li>Danas se naplaćuje <strong>{formatPrice(pretplataPlan.monthlyRsd)} RSD</strong>.</li>
             <li>
               Isti iznos banka će automatski naplatiti sa tvoje kartice <strong>svakog meseca</strong>, ukupno{" "}
               <strong>{pretplataPlan.totalPayments} naplata</strong> - prva naredna za mesec dana, istog datuma.
             </li>
             <li>
-              Ukupno platiš <strong>{formatPrice(pretplataPlan.monthlyRsd * pretplataPlan.totalPayments)} din</strong>{" "}
-              (jednokratno je {formatPrice(priceRsd)} din).
+              Ukupno platiš <strong>{formatPrice(pretplataPlan.monthlyRsd * pretplataPlan.totalPayments)} RSD</strong>{" "}
+              (jednokratno je {formatPrice(priceRsd)} RSD).
             </li>
             <li>
               Nivoi se otvaraju kako plaćaš: A1.1 odmah, A1.2 uz 2. naplatu, A2.1 uz 4, A2.2 uz 5, B1.1 uz 7, B1.2 uz 8.
@@ -520,12 +532,42 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
               className="mt-1"
             />
             <span>
-              Razumem da pokrećem mesečno plaćanje od {formatPrice(pretplataPlan.monthlyRsd)} din ×{" "}
+              Razumem da pokrećem mesečno plaćanje od {formatPrice(pretplataPlan.monthlyRsd)} RSD ×{" "}
               {pretplataPlan.totalPayments} i saglasan/na sam sa{" "}
               <a href="/uslovi" target="_blank" rel="noreferrer" className="text-plava underline">uslovima korišćenja</a>.
             </span>
           </label>
         </div>
+      )}
+
+      {/* Saglasnost sa uslovima - obavezna pre nastavka (zahtev banke); kod pretplate
+          saglasnost je deo žutog okvira iznad, pa se ovde ne duplira. */}
+      {!jePretplata && (
+        <label className="flex items-start gap-2 text-sm text-gray-800 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={usloviPotvrda}
+            onChange={(e) => setUsloviPotvrda(e.target.checked)}
+            className="mt-1"
+          />
+          <span>
+            {en ? (
+              <>
+                I agree to the{" "}
+                <a href="/uslovi" target="_blank" rel="noreferrer" className="text-plava underline">Terms of Use</a>{" "}
+                and the{" "}
+                <a href="/politika-privatnosti" target="_blank" rel="noreferrer" className="text-plava underline">Privacy Policy</a>.
+              </>
+            ) : (
+              <>
+                Saglasan/na sam sa{" "}
+                <a href="/uslovi" target="_blank" rel="noreferrer" className="text-plava underline">uslovima korišćenja</a>{" "}
+                i{" "}
+                <a href="/politika-privatnosti" target="_blank" rel="noreferrer" className="text-plava underline">politikom privatnosti</a>.
+              </>
+            )}
+          </span>
+        </label>
       )}
 
       {/* Error */}
@@ -536,7 +578,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
       {/* Submit */}
       <button
         type="submit"
-        disabled={loading || (jePretplata && !pretplataPotvrda)}
+        disabled={loading || (jePretplata ? !pretplataPotvrda : !usloviPotvrda)}
         className="w-full bg-[#F78687] hover:bg-[#E06566] disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold text-base py-4 rounded-xl transition-colors"
       >
         {loading ? (en ? "Sending..." : "Slanje...") : ct.payButton}

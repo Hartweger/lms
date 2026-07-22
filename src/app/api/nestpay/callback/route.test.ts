@@ -16,11 +16,13 @@ vi.mock("@/lib/nestpay", () => ({
 }));
 vi.mock("@/lib/grant-access", () => ({ grantAccessForOrder: vi.fn(async () => h.grantResult) }));
 vi.mock("@/lib/fiscomm", () => ({ fiscalizeOrder: vi.fn(async () => ({ ok: true })) }));
+vi.mock("@/lib/email", () => ({ sendCardPaymentConfirmationEmail: vi.fn(async () => {}) }));
 vi.mock("@/lib/site-url", () => ({ SITE_URL: "https://test.local" }));
 
 import { POST } from "./route";
 import { grantAccessForOrder } from "@/lib/grant-access";
 import { fiscalizeOrder } from "@/lib/fiscomm";
+import { sendCardPaymentConfirmationEmail } from "@/lib/email";
 
 function callbackRequest(params: Record<string, string>): Request {
   const form = new FormData();
@@ -61,6 +63,10 @@ describe("POST /api/nestpay/callback", () => {
     expect(res.headers.get("location")).toBe("https://test.local/kupovina/hvala/o1?status=fail");
     expect(h.fake.row("orders", (r) => r.id === "o1")!.nestpay_status).toBe("failed");
     expect(grantAccessForOrder).not.toHaveBeenCalled();
+    // EPM 2.7: Potvrda o plaćanju mejlom obavezna i za NEUSPEŠNO plaćanje
+    expect(sendCardPaymentConfirmationEmail).toHaveBeenCalledWith(
+      expect.objectContaining({ success: false, email: "kupac@example.com" }),
+    );
   });
 
   it("uspešna naplata → charged, grant + fiskalizacija, redirect na hvala", async () => {
@@ -73,6 +79,13 @@ describe("POST /api/nestpay/callback", () => {
     expect(order.nestpay_trans_id).toBe("T123");
     expect(grantAccessForOrder).toHaveBeenCalledWith("o1");
     expect(fiscalizeOrder).toHaveBeenCalledWith("o1");
+    // EPM 2.7: Potvrda o plaćanju mejlom za uspešno plaćanje, sa transakcionim podacima
+    expect(sendCardPaymentConfirmationEmail).toHaveBeenCalledWith(
+      expect.objectContaining({
+        success: true,
+        tx: expect.objectContaining({ procReturnCode: "00" }),
+      }),
+    );
     // fake generateLink vraća grešku → fallback bez auto-logina
     expect(res.headers.get("location")).toBe("https://test.local/kupovina/hvala/o1?status=ok");
   });
@@ -84,6 +97,7 @@ describe("POST /api/nestpay/callback", () => {
 
     expect(res.headers.get("location")).toBe("https://test.local/kupovina/hvala/o1");
     expect(grantAccessForOrder).not.toHaveBeenCalled();
+    expect(sendCardPaymentConfirmationEmail).not.toHaveBeenCalled(); // replay ne šalje duplu potvrdu
   });
 
   it("plaćeno a grant pao → Sentry alarm, kupac ipak ide na hvala", async () => {

@@ -6,6 +6,8 @@ import { verifyCallbackHash, NESTPAY } from "@/lib/nestpay";
 import { grantAccessForOrder } from "@/lib/grant-access";
 import { startSubscriptionForOrder } from "@/lib/subscription-start";
 import { fiscalizeOrder } from "@/lib/fiscomm";
+import { sendCardPaymentConfirmationEmail } from "@/lib/email";
+import { nestpayTxData } from "@/lib/payment-confirmation";
 import { SITE_URL } from "@/lib/site-url";
 
 export const dynamic = "force-dynamic";
@@ -37,15 +39,36 @@ export async function POST(request: Request) {
     return NextResponse.redirect(`${base}/kupovina/hvala/${order.id}`, { status: 303 });
   }
 
+  // _receivedAt: vreme prijema callback-a - za "datum i vreme transakcije" u Potvrdi o
+  // plaćanju (EPM 2.7) kad banka ne pošalje EXTRA.TRXDATE.
+  const nestpayResponse = { ...params, _receivedAt: new Date().toISOString() };
   await admin.from("orders").update({
     nestpay_trans_id: params.TransId ?? null,
-    nestpay_response: params,
+    nestpay_response: nestpayResponse,
   }).eq("id", order.id);
 
   const approved = params.ProcReturnCode === "00";
 
+  // Potvrda o plaćanju mejlom - obavezna po EPM 2.7 za OBA ishoda (uspeh i neuspeh).
+  const potvrda = (success: boolean) =>
+    sendCardPaymentConfirmationEmail({
+      email: order.email,
+      fullName: order.full_name,
+      orderNumber: order.order_number,
+      items: ((order.items ?? []) as { title: string; price: number }[]).map((i) => ({
+        title: i.title,
+        price: i.price,
+      })),
+      discount: order.discount ?? 0,
+      total: order.total,
+      country: order.country,
+      success,
+      tx: nestpayTxData(nestpayResponse, order.created_at),
+    });
+
   if (!approved) {
     await admin.from("orders").update({ nestpay_status: "failed" }).eq("id", order.id);
+    await potvrda(false);
     return NextResponse.redirect(`${base}/kupovina/hvala/${order.id}?status=fail`, { status: 303 });
   }
 
@@ -66,6 +89,7 @@ export async function POST(request: Request) {
     Sentry.captureException(new Error(`[nestpay] PLAĆENO-A-NEMA-PRISTUP: grant pao za order ${oid}: ${grant.error}`));
   }
   await fiscalizeOrder(order.id); // fiskalni račun (kartica) - ne blokira pristup ako padne
+  await potvrda(true);
 
   // Auto-login: callback stiže KROZ KUPČEV BROWSER (303 lanac), pa sesiju postavljamo
   // u istom lancu: generateLink → /auth/confirm (verifyOtp + cookie) → hvala.

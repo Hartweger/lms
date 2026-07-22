@@ -10,16 +10,24 @@ export const BANK_DETAILS = {
 
 export const PAYPAL_ME_URL = "https://www.paypal.com/paypalme/natasahartweger1";
 
+// NBS IPS traži račun kao 18 cifara bez crtica: banka(3) + broj dopunjen nulama na 13 + kontrola(2).
+function racunZaIps(racun: string): string {
+  const [banka, broj, kontrola] = racun.split("-");
+  return banka + broj.padStart(13, "0") + kontrola;
+}
+
 // IPS QR string (NBS standard) za uplatnicu - isti format kao na hvala stranici. Pure string.
+// PAZI: I mora zarez (ne tačku), svrha ide u S (P je platilac), RO mora model prefiks (00).
+// Format potvrđen na NBS validatoru (nbs.rs/QRcode/api/qr/v1/validate, code 0).
 export function buildIpsString(o: { total: number; order_number: string }): string {
   return [
     "K:PR", "V:01", "C:1",
-    `R:${BANK_DETAILS.racun}`,
+    `R:${racunZaIps(BANK_DETAILS.racun)}`,
     `N:${BANK_DETAILS.primalac}`,
-    `I:RSD${Number(o.total).toFixed(2)}`,
-    `P:Placanje porudzbine #${o.order_number}`,
+    `I:RSD${Number(o.total).toFixed(2).replace(".", ",")}`,
+    `S:Placanje porudzbine #${o.order_number}`,
     `SF:${BANK_DETAILS.sifraPalcanja}`,
-    `RO:${o.order_number}`,
+    `RO:00${o.order_number}`,
   ].join("|");
 }
 

@@ -4,6 +4,8 @@
 // PayPal se nikad ne broje, pa GA4 ne vidi prihod. Ovo šalje purchase za SVE načine
 // plaćanja iz jedne tačke - grantAccessForOrder (kad porudžbina postane plaćena).
 
+import { ga4UserData } from "@/lib/ga4-user-data";
+
 interface OrderItemLike {
   course_id: string;
   course_slug?: string;
@@ -20,6 +22,7 @@ interface OrderLike {
   items?: OrderItemLike[] | null;
   ga_client_id?: string | null;
   ga_session_id?: string | null;
+  email?: string | null;
 }
 
 /**
@@ -44,8 +47,13 @@ export async function sendGa4Purchase(order: OrderLike): Promise<void> {
     // Fallback: id porudžbine (prihod se broji, ali kanal = Unassigned - tako je za
     // kupce bez saglasnosti). Dedup na GA strani ide po transaction_id, a
     // grantAccessForOrder je i sam idempotentan.
+    // user_data (Enhanced Conversions): heširan mejl SAMO uz saglasnost (ga_client_id
+    // postoji samo ako su _ga kolačići uhvaćeni, tj. kupac je prihvatio kolačiće).
+    const userData = order.ga_client_id ? ga4UserData(order.email) : null;
+
     const body = {
       client_id: order.ga_client_id || order.id,
+      ...(userData ? { user_data: userData } : {}),
       events: [
         {
           name: "purchase",
