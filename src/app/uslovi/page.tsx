@@ -88,6 +88,7 @@ export default function UsloviPage() {
             <li><strong>Matični broj:</strong> 63647357</li>
             <li><strong>Poreski broj (PIB):</strong> 108712117</li>
             <li><strong>Web adresa:</strong> www.hartweger.rs</li>
+            <li><strong>Kontakt telefon:</strong> +381 64 615 76 61</li>
             <li><strong>Kontakt e-mail:</strong> info@hartweger.rs</li>
           </ul>
 

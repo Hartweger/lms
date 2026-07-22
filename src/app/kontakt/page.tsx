@@ -36,9 +36,14 @@ export default function KontaktPage() {
 
           {/* Info sidebar */}
           <div className="lg:w-[300px] flex-shrink-0 space-y-6">
+            {/* EPM 2.1.4: korisnički servis mora da istakne adresu, telefon i e-mail. */}
             <div className="bg-gray-50 rounded-xl p-6">
-              <h3 className="font-bold text-gray-900 mb-3">Email</h3>
-              <p className="text-gray-600 text-[15px]">info@hartweger.rs</p>
+              <h3 className="font-bold text-gray-900 mb-3">Kontakt</h3>
+              <div className="space-y-2 text-gray-600 text-[15px]">
+                <p>info@hartweger.rs</p>
+                <p><a href="tel:+381646157661" className="hover:text-plava">+381 64 615 76 61</a></p>
+                <p>Jurija Gagarina 20, Beograd</p>
+              </div>
             </div>
 
             <div className="bg-gray-50 rounded-xl p-6">
