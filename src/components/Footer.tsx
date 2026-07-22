@@ -65,18 +65,19 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Kartice + banka: obavezni logotipi po Uputstvu za rad EPM (Banca Intesa/NestPay).
-          Grupisanje: brendovi kartica | sigurnosni programi (linkovani) | banka (link).
-          Bez fiksne širine - fiksna širina uz h-8 je sekla ispis brenda sa donje strane.
+      {/* Kartice + banka: obavezni logotipi po Uputstvu za rad EPM v3.5, pogl. 2.2.
+          Grupisanje: znaci PRIHVATANJA (kartice, 37-180px širine, svi isti) | znaci
+          PROGRAMA (linkovani, 60-155px širine, svi isti) | banka (link) - uz razmak
+          između grupa. Bez fiksne visine+širine zajedno - to je seklo ispis brenda.
           TODO (čeka ispravan pilot.zip od banke - poslati link je 404): amex.jpg,
           amex-safekey, dinacard-secure i NOVI logo banke (postojeći je zastareo). */}
       <div className="border-t border-gray-700">
-        <div className="max-w-6xl mx-auto px-4 py-5 flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
+        <div className="max-w-6xl mx-auto px-4 py-5 flex flex-wrap items-center justify-center gap-x-16 gap-y-3">
           <div className="flex items-center gap-x-2">
-            <img src="/images/kartice/visa.jpg" alt="Visa" className="h-8 w-auto rounded bg-white" loading="lazy" />
-            <img src="/images/kartice/mastercard.jpg" alt="Mastercard" className="h-8 w-auto rounded bg-white" loading="lazy" />
-            <img src="/images/kartice/maestro.jpg" alt="Maestro" className="h-8 w-auto rounded bg-white" loading="lazy" />
-            <img src="/images/kartice/dina.jpg" alt="DinaCard" className="h-8 w-auto rounded bg-white" loading="lazy" />
+            <img src="/images/kartice/visa.jpg" alt="Visa" className="w-[46px] h-auto rounded bg-white" loading="lazy" />
+            <img src="/images/kartice/mastercard.jpg" alt="Mastercard" className="w-[46px] h-auto rounded bg-white" loading="lazy" />
+            <img src="/images/kartice/maestro.jpg" alt="Maestro" className="w-[46px] h-auto rounded bg-white" loading="lazy" />
+            <img src="/images/kartice/dina.jpg" alt="DinaCard" className="w-[46px] h-auto rounded bg-white" loading="lazy" />
           </div>
           <div className="flex items-center gap-x-2">
             <a
@@ -85,7 +86,7 @@ export default function Footer() {
               rel="noopener noreferrer"
               aria-label="Visa Secure"
             >
-              <img src="/images/kartice/visa-secure.jpg" alt="Visa Secure" className="h-8 w-auto rounded bg-white" loading="lazy" />
+              <img src="/images/kartice/visa-secure.jpg" alt="Visa Secure" className="w-[66px] h-auto rounded bg-white" loading="lazy" />
             </a>
             <a
               href="https://www.mastercard.com/rs/sr/personal/find-a-card.html"
@@ -93,7 +94,7 @@ export default function Footer() {
               rel="noopener noreferrer"
               aria-label="Mastercard ID Check"
             >
-              <img src="/images/kartice/master-id-check.jpg" alt="Mastercard ID Check" className="h-8 w-auto rounded bg-white" loading="lazy" />
+              <img src="/images/kartice/master-id-check.jpg" alt="Mastercard ID Check" className="w-[66px] h-auto rounded bg-white" loading="lazy" />
             </a>
           </div>
           <a

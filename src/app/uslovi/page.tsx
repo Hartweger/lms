@@ -94,7 +94,7 @@ export default function UsloviPage() {
           <h2>6. Izjava o konverziji</h2>
           <p>
             Sva plaćanja biće izvršena u lokalnoj valuti Republike Srbije - dinar (RSD). Za informativni prikaz cena
-            u drugim valutama koristi se kurs (srednji kurs Narodne Banke Srbije). Iznos za koji će biti zadužena
+            u drugim valutama koristi se srednji kurs Narodne banke Srbije. Iznos za koji će biti zadužena
             Vaša platna kartica biće izražen u Vašoj lokalnoj valuti kroz konverziju u istu po kursu koji koriste
             kartičarske organizacije, a koji nama u trenutku transakcije ne može biti poznat. Kao rezultat ove
             konverzije postoji mogućnost neznatne razlike od originalne cene navedene na našem sajtu. Hvala Vam
@@ -140,8 +140,8 @@ export default function UsloviPage() {
             skladu sa dobrim poslovnim običajima i u cilju pružanja kvalitetne usluge. Dajemo kupcima mogućnost
             izbora uključujući mogućnost odluke da li žele ili ne da se izbrišu sa mailing lista koje se koriste
             za marketinške kampanje. Svi podaci o korisnicima/kupcima se strogo čuvaju i dostupni su samo
-            zaposlenima kojima su ti podaci nužni za obavljanje posla. Svi zaposleni odgovorni su za poštovanje
-            načela zaštite privatnosti. Više detalja u{" "}
+            zaposlenima kojima su ti podaci nužni za obavljanje posla. Svi zaposleni (i poslovni partneri)
+            odgovorni su za poštovanje načela zaštite privatnosti. Više detalja u{" "}
             <Link href="/politika-privatnosti" className="text-plava hover:underline">Politici privatnosti</Link>.
           </p>
 
@@ -156,10 +156,10 @@ export default function UsloviPage() {
 
           <h2>11. Povraćaj sredstava</h2>
           <p>
-            U slučaju povraćaja sredstava kupcu koji je prethodno platio nekom od platnih kartica, delimično ili
-            u celosti, a bez obzira na razlog vraćanja, HARTWEGER je u obavezi da povraćaj vrši isključivo preko
-            VISA, EC/MC, Maestro, Amex i DinaCard metoda plaćanja, što znači da će banka na zahtev prodavca
-            obaviti povraćaj sredstava na račun korisnika kartice.
+            U slučaju vraćanja robe i povraćaja sredstava kupcu koji je prethodno platio nekom od platnih
+            kartica, delimično ili u celosti, a bez obzira na razlog vraćanja, HARTWEGER je u obavezi da povraćaj
+            vrši isključivo preko VISA, Master, Maestro, Amex i Dina metoda plaćanja, što znači da će banka na
+            zahtev prodavca obaviti povraćaj sredstava na račun korisnika kartice.
           </p>
 
           <h2>12. Izjava o PDV-u</h2>
