@@ -65,22 +65,21 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Kartice + banka: obavezni logotipi po Uputstvu za rad EPM v3.5, pogl. 2.2.
-          Grupisanje: znaci PRIHVATANJA (kartice, 37-180px širine, svi isti) | znaci
-          PROGRAMA (linkovani, 60-155px širine, svi isti) | banka (link) - razmak između
-          grupa MIN 4 širine znaka programa (4×66=264px); na užim ekranima grupe se
-          slažu uspravno (sl.1 dozvoljava). Bez fiksne visine+širine zajedno - seklo je ispis brenda.
-          TODO (čeka ispravan paket logotipa od banke): amex.jpg, amex-safekey,
-          dinacard-secure i NOVI logo banke (postojeći je zastareo). Bankin link
-          www.bancaintesa.rs/document/documents/BIB/Retail/Trgovci/pilot.zip
-          preusmerava na njihov 404 (provereno 23.07.2026) - traženo od banke. */}
+      {/* Kartice + banka: obavezni logotipi po Uputstvu za rad EPM v3.5, pogl. 2.2,
+          iz bankinog paketa (pilot.zip → Desktop/"3D Pay Hosting"/logo). Grupisanje:
+          znaci PRIHVATANJA (kartice, 37-180px širine, svi isti) | znaci PROGRAMA
+          (60-155px širine, svi isti; Visa Secure i MC ID Check linkovani na adrese iz
+          Uputstva) | banka (link). Razmak između grupa MIN 4 širine znaka programa
+          (4×60=240px); na užim ekranima grupe se slažu uspravno (sl.1 dozvoljava).
+          DinaCard Secure NIJE u bankinom paketu - dodati kad ga banka dostavi. */}
       <div className="border-t border-gray-700">
-        <div className="max-w-6xl mx-auto px-4 py-5 flex flex-wrap items-center justify-center gap-x-[264px] gap-y-4">
+        <div className="max-w-6xl mx-auto px-4 py-5 flex flex-wrap items-center justify-center gap-x-[240px] gap-y-4">
           <div className="flex items-center gap-x-2">
-            <img src="/images/kartice/visa.jpg" alt="Visa" className="w-[46px] h-auto rounded bg-white" loading="lazy" />
-            <img src="/images/kartice/mastercard.jpg" alt="Mastercard" className="w-[46px] h-auto rounded bg-white" loading="lazy" />
-            <img src="/images/kartice/maestro.jpg" alt="Maestro" className="w-[46px] h-auto rounded bg-white" loading="lazy" />
-            <img src="/images/kartice/dina.jpg" alt="DinaCard" className="w-[46px] h-auto rounded bg-white" loading="lazy" />
+            <img src="/images/kartice/visa.jpg" alt="Visa" className="w-[40px] h-auto rounded bg-white" loading="lazy" />
+            <img src="/images/kartice/mastercard.jpg" alt="Mastercard" className="w-[40px] h-auto rounded bg-white" loading="lazy" />
+            <img src="/images/kartice/maestro.jpg" alt="Maestro" className="w-[40px] h-auto rounded bg-white" loading="lazy" />
+            <img src="/images/kartice/dina.jpg" alt="DinaCard" className="w-[40px] h-auto rounded bg-white" loading="lazy" />
+            <img src="/images/kartice/amex.png" alt="American Express" className="w-[40px] h-auto rounded bg-white" loading="lazy" />
           </div>
           <div className="flex items-center gap-x-2">
             <a
@@ -89,7 +88,7 @@ export default function Footer() {
               rel="noopener noreferrer"
               aria-label="Visa Secure"
             >
-              <img src="/images/kartice/visa-secure.jpg" alt="Visa Secure" className="w-[66px] h-auto rounded bg-white" loading="lazy" />
+              <img src="/images/kartice/visa-secure.jpg" alt="Visa Secure" className="w-[60px] h-auto rounded bg-white" loading="lazy" />
             </a>
             <a
               href="https://www.mastercard.rs/sr-rs/korisnici/pronadite-karticu.html"
@@ -97,8 +96,9 @@ export default function Footer() {
               rel="noopener noreferrer"
               aria-label="Mastercard ID Check"
             >
-              <img src="/images/kartice/master-id-check.jpg" alt="Mastercard ID Check" className="w-[66px] h-auto rounded bg-white" loading="lazy" />
+              <img src="/images/kartice/master-id-check.jpg" alt="Mastercard ID Check" className="w-[60px] h-auto rounded bg-white" loading="lazy" />
             </a>
+            <img src="/images/kartice/safekey.png" alt="American Express SafeKey" className="w-[60px] h-auto rounded bg-white" loading="lazy" />
           </div>
           <a
             href="https://www.bancaintesa.rs"
@@ -107,7 +107,7 @@ export default function Footer() {
             aria-label="Banca Intesa"
             className="bg-white rounded px-2 py-1 flex items-center"
           >
-            <img src="/images/kartice/banca-intesa-1.svg" alt="Banca Intesa" className="h-5" loading="lazy" />
+            <img src="/images/kartice/banca-intesa-color.png" alt="Banca Intesa" className="h-5" loading="lazy" />
           </a>
         </div>
       </div>
