@@ -50,16 +50,19 @@ export async function POST(request: Request) {
   const approved = params.ProcReturnCode === "00";
 
   // Potvrda o plaćanju mejlom - obavezna po EPM 2.7 za OBA ishoda (uspeh i neuspeh).
+  // Pretplata: naplaćena je mesečna rata (order.total), ne puna cena iz items[].price -
+  // stavka u potvrdi mora da se slaže sa ukupnim iznosom (popust ne utiče na ratu).
+  const isPretplata = order.payment_method === "kartica_pretplata";
   const potvrda = (success: boolean) =>
     sendCardPaymentConfirmationEmail({
       email: order.email,
       fullName: order.full_name,
       orderNumber: order.order_number,
       items: ((order.items ?? []) as { title: string; price: number }[]).map((i) => ({
-        title: i.title,
-        price: i.price,
+        title: isPretplata ? `${i.title} - mesečna naplata` : i.title,
+        price: isPretplata ? order.total : i.price,
       })),
-      discount: order.discount ?? 0,
+      discount: isPretplata ? 0 : (order.discount ?? 0),
       total: order.total,
       country: order.country,
       success,

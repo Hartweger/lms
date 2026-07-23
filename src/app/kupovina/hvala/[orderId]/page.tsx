@@ -48,7 +48,10 @@ export default async function HvalaPage({
   const ipsData = buildIpsString({ total: order.total, order_number: order.order_number });
 
   const paypalEur = order.paypal_note ? parseInt(order.paypal_note) : null;
-  const isCard = order.payment_method === "kartica" || order.payment_method === "kartica_rate";
+  // I inicijalna pretplatna transakcija (kartica_pretplata) je kartično plaćanje -
+  // EPM 2.7 potvrda i statusne poruke važe i za nju.
+  const isPretplata = order.payment_method === "kartica_pretplata";
+  const isCard = order.payment_method === "kartica" || order.payment_method === "kartica_rate" || isPretplata;
 
   // Posle kartičnog auto-logina kupac stiže ULOGOVAN - CTA vodi pravo u prvu lekciju
   // umesto na /prijava. Stranica ostaje landing zbog browser Pixel Purchase (dedup sa CAPI).
@@ -75,7 +78,9 @@ export default async function HvalaPage({
   // gotova i poklapa se sa server-side CAPI događajem iz nestpay callback-a (dedup po event_id).
   // Za uplatnicu/PayPal Purchase ide isključivo server-side (CAPI) tek kad admin potvrdi uplatu,
   // pa se ovde ništa ne šalje (porudžbina je kreirana ali još nije plaćena).
-  const shouldTrackPurchase = isCard && status === "ok";
+  // Pretplata NAMERNO isključena iz browser pixela - za nju CAPI tok nije upario
+  // event_id sa browser događajem, pa bi uključivanje napravilo dupli Purchase.
+  const shouldTrackPurchase = isCard && !isPretplata && status === "ok";
 
   return (
     <section className="bg-gradient-to-b from-plava-light/40 to-white min-h-screen">
@@ -161,15 +166,20 @@ export default async function HvalaPage({
             </h3>
             <table className="w-full mb-4">
               <tbody className="divide-y divide-gray-100">
+                {/* Pretplata: naplaćuje se mesečna rata (order.total), ne puna cena iz
+                    items[].price - stavka mora da se slaže sa ukupnim iznosom. */}
                 {(items ?? []).map((it) => (
                   <tr key={it.course_id}>
-                    <td className="py-1.5 pr-4 text-gray-700">{it.title} × 1</td>
+                    <td className="py-1.5 pr-4 text-gray-700">
+                      {it.title}
+                      {isPretplata ? " - mesečna naplata" : ""} × 1
+                    </td>
                     <td className="py-1.5 text-gray-900 text-right whitespace-nowrap">
-                      {it.price.toLocaleString("sr-RS")} RSD
+                      {(isPretplata ? order.total : it.price).toLocaleString("sr-RS")} RSD
                     </td>
                   </tr>
                 ))}
-                {order.discount > 0 && (
+                {!isPretplata && order.discount > 0 && (
                   <tr>
                     <td className="py-1.5 pr-4 text-gray-500">
                       Popust{order.coupon_code ? ` (${order.coupon_code})` : ""}
