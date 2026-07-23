@@ -218,6 +218,103 @@ export default function PaketA1B1Page() {
         </div>
       </section>
 
+      {/* ─── Zaviri u platformu ─── */}
+      <section className="py-16 px-4 bg-[#0e1735]">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="font-montserrat font-bold text-2xl md:text-3xl text-white text-center mb-3">
+            Zaviri u platformu
+          </h2>
+          <p className="text-white/60 text-center mb-10">Ovako izgledaju vežbe koje te čekaju unutra</p>
+
+          {/* Milioner - istaknuto */}
+          <div className="grid lg:grid-cols-5 gap-6 lg:gap-8 items-center bg-white/[.06] border border-white/10 rounded-2xl p-6 md:p-8 mb-6">
+            <div className="lg:col-span-2">
+              <span className="inline-block bg-amber-400/15 text-amber-300 text-xs font-bold px-3 py-1 rounded-full mb-3">
+                🎮 Igra
+              </span>
+              <h3 className="font-montserrat font-bold text-white text-xl md:text-2xl mb-3">
+                Milioner - kviz kao iz TV šoua
+              </h3>
+              <p className="text-white/70 text-[15px] leading-relaxed">
+                Proveri naučene reči kroz igru: 15 pitanja sve teže i teže, džokeri 50:50 i
+                zamena pitanja, sigurni stepenici. Stigneš li do miliona, čeka te i bonus nagrada.
+                Učenje koje ne liči na učenje.
+              </p>
+            </div>
+            <div className="lg:col-span-3">
+              <Image
+                src="/images/platforma/milioner.webp"
+                alt="Milioner kviz igra na Hartweger platformi - pitanje sa četiri ponuđena odgovora i lestvicom do milion poena"
+                className="rounded-xl w-full border border-white/10"
+                width={1644}
+                height={1044}
+                sizes="(max-width: 1024px) 100vw, 600px"
+              />
+            </div>
+          </div>
+
+          {/* 4 tipa vežbi */}
+          <div className="grid sm:grid-cols-2 gap-6">
+            {[
+              {
+                src: "/images/platforma/speak.webp",
+                w: 1400, h: 875,
+                alt: "Speak vežba - izgovori rečenicu naglas i klikni na mikrofon",
+                title: "🎤 Vežbe govora",
+                desc: "Klikneš na mikrofon, izgovoriš rečenicu i odmah dobiješ ocenu izgovora.",
+              },
+              {
+                src: "/images/platforma/dijalog.webp",
+                w: 1310, h: 990,
+                alt: "Dijalog sa AI sagovornikom - razgovor na nemačkom sa ponuđenim odgovorima",
+                title: "💬 Dijalog sa AI sagovornikom",
+                desc: "Vežbaš prave razgovore - upoznavanje, restoran, kupovina - svojim rečima ili uz ponuđene odgovore.",
+              },
+              {
+                src: "/images/platforma/pisanje.webp",
+                w: 1360, h: 1180,
+                alt: "Vežba pisanja - zadatak za pisanje SMS poruke na nemačkom sa poljem za odgovor",
+                title: "✍️ Vežbe pisanja",
+                desc: "Pišeš poruke i mejlove kao na pravom ispitu i dobijaš povratnu informaciju na svoj tekst.",
+              },
+              {
+                src: "/images/platforma/kartice.webp",
+                w: 1768, h: 1105,
+                alt: "Flashcard kartice za učenje reči - kartica sa rečju Guten Morgen",
+                title: "🃏 Flashcard kartice",
+                desc: "Reči učiš kroz kartice sa audio izgovorom, kviz, kucanje i igru memorije.",
+              },
+            ].map((c, i) => (
+              <div key={i} className="bg-white/[.06] border border-white/10 rounded-2xl overflow-hidden flex flex-col">
+                <div className="aspect-[16/10] overflow-hidden bg-white/5">
+                  <Image
+                    src={c.src}
+                    alt={c.alt}
+                    className="w-full h-full object-cover object-top"
+                    width={c.w}
+                    height={c.h}
+                    sizes="(max-width: 640px) 100vw, 480px"
+                  />
+                </div>
+                <div className="p-5">
+                  <h3 className="font-bold text-white text-[15px] mb-1">{c.title}</h3>
+                  <p className="text-white/60 text-sm">{c.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mt-10">
+            <Link
+              href="/kupovina/paket-a1-a2-b1"
+              className="inline-block bg-[#F78687] hover:bg-[#e06060] text-white font-bold py-3.5 px-8 rounded-xl transition-all"
+            >
+              Upiši se i probaj odmah
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* ─── Metoda poređenje ─── */}
       <section className="py-16 px-4 bg-white">
         <div className="max-w-4xl mx-auto">
@@ -325,7 +422,7 @@ export default function PaketA1B1Page() {
               {[
                 "150+ video lekcija (A1+A2+B1)",
                 "Priručnici sa dijalozima i vokabularom",
-                "11 tipova interaktivnih vežbi",
+                "11 tipova interaktivnih vežbi + igra Milioner",
                 "Flashcard kartice i speak vežbe",
                 "AI dijalog i AI prevod",
                 "WhatsApp podrška",
