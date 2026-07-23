@@ -71,7 +71,9 @@ export default function Footer() {
           (60-155px širine, svi isti; Visa Secure i MC ID Check linkovani na adrese iz
           Uputstva) | banka (link). Razmak između grupa MIN 4 širine znaka programa
           (4×60=240px); na užim ekranima grupe se slažu uspravno (sl.1 dozvoljava).
-          DinaCard Secure NIJE u bankinom paketu - dodati kad ga banka dostavi. */}
+          DinaCard Secure nije bio u bankinom paketu - preuzet zvaničan znak
+          programa (isti koji koriste veliki EPM, npr. ananas.rs); ako banka
+          dostavi svoju verziju, zameniti fajl dinacard-secure.png. */}
       <div className="border-t border-gray-700">
         <div className="max-w-6xl mx-auto px-4 py-5 flex flex-wrap items-center justify-center gap-x-[240px] gap-y-4">
           <div className="flex items-center gap-x-2">
@@ -99,6 +101,7 @@ export default function Footer() {
               <img src="/images/kartice/master-id-check.jpg" alt="Mastercard ID Check" className="w-[60px] h-auto rounded bg-white" loading="lazy" />
             </a>
             <img src="/images/kartice/safekey.png" alt="American Express SafeKey" className="w-[60px] h-auto rounded bg-white" loading="lazy" />
+            <img src="/images/kartice/dinacard-secure.png" alt="DinaCard Secure" className="w-[60px] h-auto rounded bg-white" loading="lazy" />
           </div>
           <a
             href="https://www.bancaintesa.rs"
