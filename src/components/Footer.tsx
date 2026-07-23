@@ -89,7 +89,7 @@ export default function Footer() {
               <img src="/images/kartice/visa-secure.jpg" alt="Visa Secure" className="w-[66px] h-auto rounded bg-white" loading="lazy" />
             </a>
             <a
-              href="https://www.mastercard.com/rs/sr/personal/find-a-card.html"
+              href="https://www.mastercard.rs/sr-rs/korisnici/pronadite-karticu.html"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Mastercard ID Check"
