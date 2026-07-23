@@ -70,8 +70,10 @@ export default function Footer() {
           PROGRAMA (linkovani, 60-155px širine, svi isti) | banka (link) - razmak između
           grupa MIN 4 širine znaka programa (4×66=264px); na užim ekranima grupe se
           slažu uspravno (sl.1 dozvoljava). Bez fiksne visine+širine zajedno - seklo je ispis brenda.
-          TODO (čeka ispravan pilot.zip od banke - poslati link je 404): amex.jpg,
-          amex-safekey, dinacard-secure i NOVI logo banke (postojeći je zastareo). */}
+          TODO (čeka ispravan paket logotipa od banke): amex.jpg, amex-safekey,
+          dinacard-secure i NOVI logo banke (postojeći je zastareo). Bankin link
+          www.bancaintesa.rs/document/documents/BIB/Retail/Trgovci/pilot.zip
+          preusmerava na njihov 404 (provereno 23.07.2026) - traženo od banke. */}
       <div className="border-t border-gray-700">
         <div className="max-w-6xl mx-auto px-4 py-5 flex flex-wrap items-center justify-center gap-x-[264px] gap-y-4">
           <div className="flex items-center gap-x-2">
