@@ -91,9 +91,11 @@ export default function PromoBar() {
       className="bg-[#FFD130] text-[#1a2332]"
     >
       <div className="max-w-6xl mx-auto pl-4 pr-2 py-2 flex items-center gap-3">
+        {/* -my-2/py-2 rasteže tap zonu preko paddinga trake - na telefonu prst
+            često promaši sam tekst (18px), ovako je klikabilna cela visina (~48px). */}
         <Link
           href="/kursevi/paket-a1-a2-b1"
-          className={`flex-1 min-w-0 text-center font-heading font-semibold text-[13px] sm:text-sm leading-snug transition-opacity duration-[400ms] ${
+          className={`flex-1 min-w-0 self-stretch -my-2 py-2 flex items-center justify-center text-center font-heading font-semibold text-[13px] sm:text-sm leading-snug transition-opacity duration-[400ms] ${
             fading ? "opacity-0" : "opacity-100"
           }`}
         >
