@@ -5,6 +5,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { firstLessonForOrder } from "@/lib/first-lesson";
 import { BANK_DETAILS, PAYPAL_ME_URL, buildIpsString } from "@/lib/order-utils";
+import { MERCHANT, CARD_OUTCOME, nestpayTxData, pdvBreakdown } from "@/lib/payment-confirmation";
 import type { Order } from "@/lib/types";
 import IpsQrCode from "./IpsQrCode";
 import PixelPurchase from "@/components/PixelPurchase";
@@ -61,6 +62,15 @@ export default async function HvalaPage({
     firstLessonId = (await firstLessonForOrder(supabase, items ?? []))?.id ?? null;
   }
 
+  // Potvrda o plaćanju na web formi - obavezna po Uputstvu za rad EPM (Banca Intesa) v3.5,
+  // tačka 2.7, za USPEŠNO i NEUSPEŠNO kartično plaćanje: ishod, kupac, narudžbina (sa PDV
+  // i Order ID), trgovac i parametri transakcije (AuthCode, Response, ProcReturnCode, mdStatus).
+  const showPotvrda = isCard && (status === "ok" || status === "fail");
+  const tx = showPotvrda
+    ? nestpayTxData(order.nestpay_response as Record<string, unknown> | null, order.created_at)
+    : null;
+  const pdv = pdvBreakdown(order.total, order.country);
+
   // Browser pixel Purchase šaljemo SAMO za potvrđenu karticu (status=ok) - tu je naplata
   // gotova i poklapa se sa server-side CAPI događajem iz nestpay callback-a (dedup po event_id).
   // Za uplatnicu/PayPal Purchase ide isključivo server-side (CAPI) tek kad admin potvrdi uplatu,
@@ -100,7 +110,7 @@ export default async function HvalaPage({
         {/* Kartica status */}
         {isCard && status === "ok" && (
           <div className="bg-green-50 border border-green-200 rounded-xl px-5 py-4 mb-6 text-sm text-green-800">
-            <p className="font-semibold">Plaćanje uspešno! 🎉</p>
+            <p className="font-semibold">{CARD_OUTCOME.success} 🎉</p>
             <p className="mt-1">
               {!firstLessonId
                 ? "Uplata je uspela. Sve detalje o tvojim časovima poslali smo ti na mejl."
@@ -112,8 +122,8 @@ export default async function HvalaPage({
         )}
         {isCard && status === "fail" && (
           <div className="bg-[#FFF3F3] border border-[#F78687]/40 rounded-xl px-5 py-4 mb-6 text-sm text-gray-700">
-            <p className="font-semibold text-[#E06566]">Plaćanje nije uspelo</p>
-            <p className="mt-1 mb-4">Tvoja kartica nije naplaćena. Pokušaj ponovo ili izaberi uplatnicu pri kupovini.</p>
+            <p className="font-semibold text-[#E06566]">{CARD_OUTCOME.fail}</p>
+            <p className="mt-1 mb-4">{CARD_OUTCOME.failHint}</p>
             {courseSlug && (
               <Link
                 href={`/kupovina/${courseSlug}`}
@@ -127,6 +137,101 @@ export default async function HvalaPage({
         {isCard && !status && (
           <div className="bg-plava-light/60 rounded-xl px-5 py-4 mb-6 text-sm text-gray-700">
             <p>Obrađujemo tvoje plaćanje… Ako si upravo platio/la, pristup se aktivira automatski.</p>
+          </div>
+        )}
+
+        {/* Potvrda o plaćanju (EPM 2.7) - svi obavezni elementi, za uspeh i neuspeh */}
+        {showPotvrda && tx && (
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6 text-sm">
+            <h2 className="font-montserrat font-semibold text-lg text-gray-900 mb-4">
+              Potvrda o plaćanju
+            </h2>
+
+            <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1">
+              Podaci o kupcu
+            </h3>
+            <p className="text-gray-700 mb-4">
+              {order.full_name}
+              <br />
+              {order.email}
+            </p>
+
+            <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1">
+              Podaci o narudžbini
+            </h3>
+            <table className="w-full mb-4">
+              <tbody className="divide-y divide-gray-100">
+                {(items ?? []).map((it) => (
+                  <tr key={it.course_id}>
+                    <td className="py-1.5 pr-4 text-gray-700">{it.title} × 1</td>
+                    <td className="py-1.5 text-gray-900 text-right whitespace-nowrap">
+                      {it.price.toLocaleString("sr-RS")} RSD
+                    </td>
+                  </tr>
+                ))}
+                {order.discount > 0 && (
+                  <tr>
+                    <td className="py-1.5 pr-4 text-gray-500">
+                      Popust{order.coupon_code ? ` (${order.coupon_code})` : ""}
+                    </td>
+                    <td className="py-1.5 text-gray-700 text-right whitespace-nowrap">
+                      −{order.discount.toLocaleString("sr-RS")} RSD
+                    </td>
+                  </tr>
+                )}
+                <tr>
+                  <td className="py-1.5 pr-4 text-gray-500">{pdv.label}</td>
+                  <td className="py-1.5 text-gray-700 text-right whitespace-nowrap">
+                    {pdv.amountRsd.toLocaleString("sr-RS")} RSD
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-1.5 pr-4 font-semibold text-gray-900">Ukupno</td>
+                  <td className="py-1.5 font-semibold text-gray-900 text-right whitespace-nowrap">
+                    {order.total.toLocaleString("sr-RS")} RSD
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-1.5 pr-4 text-gray-500">Broj porudžbenice (Order ID)</td>
+                  <td className="py-1.5 text-gray-900 text-right font-mono">{order.order_number}</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1">
+              Podaci o transakciji
+            </h3>
+            <table className="w-full mb-4">
+              <tbody className="divide-y divide-gray-100">
+                {[
+                  ["Datum i vreme", tx.dateTime],
+                  ["Order ID", order.order_number],
+                  ["AuthCode", tx.authCode],
+                  ["Response", tx.response],
+                  ["ProcReturnCode", tx.procReturnCode],
+                  ["mdStatus", tx.mdStatus],
+                ].map(([label, value]) => (
+                  <tr key={label}>
+                    <td className="py-1.5 pr-4 text-gray-500 whitespace-nowrap">{label}</td>
+                    <td className="py-1.5 text-gray-900 text-right font-mono">{value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1">
+              Podaci o trgovcu
+            </h3>
+            <p className="text-gray-700">
+              {MERCHANT.naziv}
+              <br />
+              PIB: {MERCHANT.pib}
+              <br />
+              {MERCHANT.adresa}
+            </p>
+            <p className="text-gray-400 text-xs mt-3">
+              Potvrdu o plaćanju poslali smo i na {order.email}.
+            </p>
           </div>
         )}
 
