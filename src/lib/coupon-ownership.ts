@@ -65,6 +65,36 @@ export async function emailUsedCoupon(
   return !!(data && data.length);
 }
 
+/**
+ * Poruke za `applies_to_course_id` / `requires_course_id` kupone - naziv kursa se
+ * čita iz baze, da poruka ne bude tvrdo vezana za jedan kupon (ranije uvek "FSP").
+ */
+export async function couponAppliesMessage(
+  admin: SupabaseClient,
+  courseId: string
+): Promise<string> {
+  const title = await courseTitle(admin, courseId);
+  return title
+    ? `Ovaj kod važi samo za kurs „${title}".`
+    : "Ovaj kod ne važi za ovaj kurs.";
+}
+
+export async function couponRequiresMessage(
+  admin: SupabaseClient,
+  courseId: string
+): Promise<string> {
+  const title = await courseTitle(admin, courseId);
+  return title
+    ? `Ovaj kod važi samo za polaznike koji već imaju kurs „${title}" (na taj mejl).`
+    : "Ovaj kod važi samo za polaznike koji već imaju odgovarajući kurs (na taj mejl).";
+}
+
+async function courseTitle(admin: SupabaseClient, courseId: string): Promise<string | null> {
+  if (!courseId) return null;
+  const { data } = await admin.from("courses").select("title").eq("id", courseId).maybeSingle();
+  return data?.title ?? null;
+}
+
 /** Isto kao gore, ali polazi od mejla (checkout pre logina, email capture). */
 export async function emailOwnsAnyVideoCourse(
   admin: SupabaseClient,

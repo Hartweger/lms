@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { emailOwnsCourse, emailOwnsAnyVideoCourse, emailUsedCoupon } from "@/lib/coupon-ownership";
+import { emailOwnsCourse, emailOwnsAnyVideoCourse, emailUsedCoupon, couponAppliesMessage, couponRequiresMessage } from "@/lib/coupon-ownership";
 import { isTermPackage } from "@/lib/coupon-discount";
 
 export async function GET(request: NextRequest) {
@@ -96,7 +96,7 @@ export async function GET(request: NextRequest) {
       .from("courses").select("id").eq("slug", courseSlug).maybeSingle();
     if (!course || course.id !== coupon.applies_to_course_id) {
       return NextResponse.json(
-        { error: "Ovaj kod važi samo za individualni FSP kurs." },
+        { error: await couponAppliesMessage(supabase, coupon.applies_to_course_id) },
         { status: 400 }
       );
     }
@@ -107,14 +107,14 @@ export async function GET(request: NextRequest) {
   if (coupon.requires_course_id) {
     if (!email) {
       return NextResponse.json(
-        { error: "Unesi svoj mejl iznad pa primeni kod - proveravamo da li imaš video FSP kurs." },
+        { error: "Unesi svoj mejl iznad pa primeni kod - proveravamo da li imaš kurs za koji ovaj kod važi." },
         { status: 400 }
       );
     }
     const owns = await emailOwnsCourse(supabase, email, coupon.requires_course_id);
     if (!owns) {
       return NextResponse.json(
-        { error: "Ovaj kod važi samo za polaznike koji su kupili video FSP kurs (na taj mejl)." },
+        { error: await couponRequiresMessage(supabase, coupon.requires_course_id) },
         { status: 400 }
       );
     }
