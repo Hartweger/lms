@@ -38,7 +38,7 @@ export default function PaketA1B1Page() {
                 >
                   Upiši se - 29.133 RSD
                 </Link>
-                <p className="text-sm text-gray-400 mt-2">≈ 249€ · ili 3.199 RSD mesečno</p>
+                <p className="text-sm text-gray-400 mt-2">≈ 249€ · ili kao pretplata - 3.199 RSD mesečno</p>
               </div>
 
               {/* Kredencijal - VIDEO kurs vodi Natasa licno, pa sme direktna formulacija.
@@ -459,7 +459,9 @@ export default function PaketA1B1Page() {
             >
               Upiši se - 29.133 RSD
             </Link>
-            <p className="text-sm text-gray-400 mt-2.5">≈ 249€ jednokratno · 3.199 RSD mesečno · rate preko Banca Intesa</p>
+            <p className="text-sm text-gray-400 mt-2.5">
+              ≈ 249€ jednokratno · do 6 rata samo Intesa karticom · ili kao pretplata - 3.199 RSD mesečno
+            </p>
             <div className="flex items-center justify-center gap-5 mt-4 text-xs text-gray-400">
               <span className="flex items-center gap-1">🔒 Sigurno plaćanje</span>
               <span>💳 Visa / MC / AmEx</span>
@@ -565,7 +567,7 @@ export default function PaketA1B1Page() {
           >
             Upiši se - 29.133 RSD
           </Link>
-          <p className="text-sm text-gray-400 mt-2.5">≈ 249€ · ili 3.199 RSD mesečno</p>
+          <p className="text-sm text-gray-400 mt-2.5">≈ 249€ · ili kao pretplata - 3.199 RSD mesečno</p>
           <div className="flex items-center justify-center gap-6 mt-4 text-sm text-gray-400">
             <span>✓ 150+ lekcija</span>
             <span>✓ Lična podrška</span>
