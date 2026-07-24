@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { nestpayTxData, pdvBreakdown, CARD_OUTCOME, MERCHANT } from "./payment-confirmation";
+import { nestpayTxData, recurringTxData, pdvBreakdown, CARD_OUTCOME, MERCHANT } from "./payment-confirmation";
 
 describe("nestpayTxData", () => {
   it("izvlači obavezna EPM polja iz sačuvanog callback-a", () => {
@@ -31,6 +31,31 @@ describe("nestpayTxData", () => {
     expect(tx.authCode).toBe("-");
     expect(tx.procReturnCode).toBe("99");
     expect(nestpayTxData(null).dateTime).toBe("-");
+  });
+});
+
+describe("recurringTxData (naknadne mesečne naplate - zahtev banke 24.07.2026)", () => {
+  it("izvlači podatke o transakciji iz odgovora statusnog upita (upis subscriptions-poll crona)", () => {
+    const tx = recurringTxData({
+      AUTH_CODE: "506791",
+      TRANS_ID: "26202OoAE14410",
+      AUTH_DTTM: "2026-08-21 14:39:01.12",
+      _source: "subscriptions-poll",
+    });
+    expect(tx.authCode).toBe("506791");
+    expect(tx.transId).toBe("26202OoAE14410");
+    // AUTH_DTTM je već beogradsko vreme - prikazuje se doslovno, bez tz konverzije
+    expect(tx.dateTime).toBe("21.08.2026. u 14:39");
+  });
+
+  it("bez AUTH_DTTM koristi _receivedAt, bez oba pada na fallback; odsutna polja su '-'", () => {
+    const withReceived = recurringTxData({ _receivedAt: "2026-07-01T10:00:00.000Z" });
+    expect(withReceived.dateTime).toContain("01.07.2026.");
+    expect(withReceived.authCode).toBe("-");
+    expect(withReceived.transId).toBe("-");
+
+    const withFallback = recurringTxData(null, "2026-06-15T08:00:00.000Z");
+    expect(withFallback.dateTime).toContain("15.06.2026.");
   });
 });
 

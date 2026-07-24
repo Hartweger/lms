@@ -118,5 +118,5 @@ export function checkoutStrings(lang: Lang): CheckoutStrings {
 
 export function formatMoney(amount: number, currency: "RSD" | "EUR"): string {
   const n = amount.toLocaleString("de-DE");
-  return currency === "EUR" ? `${n} €` : `${n} din`;
+  return currency === "EUR" ? `${n} €` : `${n} RSD`;
 }

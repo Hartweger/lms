@@ -44,7 +44,7 @@ export default function Footer() {
             <h3 className="text-white font-bold mb-4">Dokumenti</h3>
             <ul className="space-y-2.5 text-sm mb-6">
               <li><Link href="/uslovi" className="hover:text-white transition-colors">Uslovi korišćenja</Link></li>
-              <li><Link href="/politika-privatnosti" className="hover:text-white transition-colors">Politika privatnosti</Link></li>
+              <li><Link href="/uslovi#politika-privatnosti" className="hover:text-white transition-colors">Politika privatnosti</Link></li>
               <li><CookieSettingsLink className="hover:text-white transition-colors" /></li>
               <li><Link href="/kontakt" className="hover:text-white transition-colors">Kontakt</Link></li>
             </ul>
@@ -69,7 +69,8 @@ export default function Footer() {
           iz bankinog paketa (pilot.zip → Desktop/"3D Pay Hosting"/logo). Grupisanje:
           znaci PRIHVATANJA (kartice, 37-180px širine, svi isti) | znaci PROGRAMA
           (60-155px širine, svi isti; Visa Secure i MC ID Check linkovani na adrese iz
-          Uputstva) | banka (link). Razmak između grupa MIN 4 širine znaka programa
+          Uputstva), a banka (link) IZMEĐU te dve grupe - raspored po zahtevu banke iz
+          mejla 24.07.2026. Razmak između grupa MIN 4 širine znaka programa
           (4×60=240px); na užim ekranima grupe se slažu uspravno (sl.1 dozvoljava).
           DinaCard Secure nije bio u bankinom paketu - preuzet zvaničan znak
           programa (isti koji koriste veliki EPM, npr. ananas.rs); ako banka
@@ -83,6 +84,15 @@ export default function Footer() {
             <img src="/images/kartice/dina.jpg" alt="DinaCard" className="w-[40px] h-auto rounded bg-white" loading="lazy" />
             <img src="/images/kartice/amex.png" alt="American Express" className="w-[40px] h-auto rounded bg-white" loading="lazy" />
           </div>
+          <a
+            href="https://www.bancaintesa.rs"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Banca Intesa"
+            className="bg-white rounded px-2 py-1 flex items-center"
+          >
+            <img src="/images/kartice/banca-intesa-color.png" alt="Banca Intesa" className="h-5" loading="lazy" />
+          </a>
           <div className="flex items-center gap-x-2">
             <a
               href="https://rs.visa.com/pay-with-visa/security-and-assistance/protected-everywhere.html"
@@ -103,15 +113,6 @@ export default function Footer() {
             <img src="/images/kartice/safekey.png" alt="American Express SafeKey" className="w-[60px] h-auto rounded bg-white" loading="lazy" />
             <img src="/images/kartice/dinacard-secure.png" alt="DinaCard Secure" className="w-[60px] h-auto rounded bg-white" loading="lazy" />
           </div>
-          <a
-            href="https://www.bancaintesa.rs"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Banca Intesa"
-            className="bg-white rounded px-2 py-1 flex items-center"
-          >
-            <img src="/images/kartice/banca-intesa-color.png" alt="Banca Intesa" className="h-5" loading="lazy" />
-          </a>
         </div>
       </div>
 

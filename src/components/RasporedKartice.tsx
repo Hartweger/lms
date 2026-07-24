@@ -167,7 +167,7 @@ function Kartica({ g }: { g: GrupaRaspored }) {
           <div>
             {g.cena != null && (
               <p className="text-xl font-montserrat font-bold text-gray-900">
-                {formatPrice(g.cena)} din
+                {formatPrice(g.cena)} RSD
               </p>
             )}
             {eurPrice != null && <p className="text-xs text-gray-500">~ {eurPrice}€</p>}

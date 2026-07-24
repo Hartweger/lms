@@ -19,6 +19,9 @@ const naplata = (n: number, stanje: "ok" | "ceka" | "povracaj" | "pala"): Recurr
   failed: stanje === "pala",
   retryable: stanje === "pala",
   refund: stanje === "povracaj",
+  authCode: stanje === "ok" ? "798667" : null,
+  transId: stanje === "ok" ? `26202OoAE1441${n}` : null,
+  authDttm: stanje === "ok" ? "2026-08-21 14:39:01.12" : null,
 });
 
 describe("chargesToProcess", () => {

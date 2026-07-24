@@ -39,7 +39,7 @@ export default function ProizvodKartica({ course }: { course: Course }) {
           <div className="mt-4 flex items-center justify-between">
             <span className="font-bold text-gray-900">
               {isVariable && "od "}
-              {formatPrice(course.price)} din
+              {formatPrice(course.price)} RSD
             </span>
             <span className="text-sm text-plava font-medium group-hover:translate-x-1 transition-transform inline-block">
               Saznaj više →

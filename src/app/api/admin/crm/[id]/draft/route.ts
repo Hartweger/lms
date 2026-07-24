@@ -85,8 +85,8 @@ Zdravo [ime],
 vidim da si pričao/la sa našim NaKI asistentom o učenju nemačkog na A1 nivou - drago mi je što si se javio/la.
 
 Za sam početak najčešće preporučujem dve opcije:
-- VIDEO kurs A1 - učiš svojim tempom, 11.600 din (99 €). Kao NaKI korisnik imaš kod NAKI10 za 10% popusta na video kurseve.
-- Grupni kurs A1.1 - uživo sa profesorkom i malom grupom, 19.600 din (168 €), sa rasporedom i podrškom.
+- VIDEO kurs A1 - učiš svojim tempom, 11.600 RSD (99 €). Kao NaKI korisnik imaš kod NAKI10 za 10% popusta na video kurseve.
+- Grupni kurs A1.1 - uživo sa profesorkom i malom grupom, 19.600 RSD (168 €), sa rasporedom i podrškom.
 
 Ako nisi siguran/na odakle da kreneš, javi mi šta ti je cilj (posao, ispit, selidba) pa da ti predložim tačno ono što ti treba.
 
@@ -98,8 +98,8 @@ Zdravo [ime],
 pričao/la si sa našim NaKI asistentom o nemačkom na A2 nivou - to znači da već imaš osnovu i sad gradimo dalje.
 
 Predlažem:
-- VIDEO kurs A2 - svojim tempom, 11.600 din (99 €). Kao NaKI korisnik imaš kod NAKI10 za 10% popusta.
-- Grupni kurs A2.1 - uživo, mala grupa, 19.600 din (168 €).
+- VIDEO kurs A2 - svojim tempom, 11.600 RSD (99 €). Kao NaKI korisnik imaš kod NAKI10 za 10% popusta.
+- Grupni kurs A2.1 - uživo, mala grupa, 19.600 RSD (168 €).
 
 Ako nisi sigurna da je baš A2 tvoj nivo, imamo i besplatno testiranje - za par minuta dobiješ tačan nivo, pa ne plaćaš nešto što ti ne treba: https://www.hartweger.rs/besplatno-testiranje
 

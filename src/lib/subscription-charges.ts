@@ -66,6 +66,17 @@ export async function processCharge(sub: SubscriptionRow, charge: RecurringCharg
       subscription_id: sub.id,
       installment_no: charge.installmentNo,
       nestpay_oid: charge.oid,
+      // Podaci o transakciji iz bankinog statusnog odgovora - za rate callback ne postoji,
+      // a mejl kupcu mora da ih prikaže (EPM 2.7, zahtev banke 24.07.2026).
+      nestpay_trans_id: charge.transId,
+      nestpay_response: {
+        AUTH_CODE: charge.authCode,
+        TRANS_ID: charge.transId,
+        AUTH_DTTM: charge.authDttm,
+        TRANS_STAT: charge.transStat,
+        _source: "subscriptions-poll",
+        _receivedAt: new Date().toISOString(),
+      },
     })
     .select("id, order_number")
     .single();

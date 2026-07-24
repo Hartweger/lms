@@ -36,7 +36,7 @@ export default function PaketA1B1Page() {
                   href="/kupovina/paket-a1-a2-b1"
                   className="inline-block bg-[#F78687] hover:bg-[#e06060] text-white font-bold text-lg py-4 px-10 rounded-xl transition-all hover:-translate-y-0.5 shadow-lg shadow-[#F78687]/25"
                 >
-                  Upiši se - 29.133 din
+                  Upiši se - 29.133 RSD
                 </Link>
                 <p className="text-sm text-gray-400 mt-2">≈ 249€ · plaćanje na rate dostupno</p>
               </div>
@@ -443,7 +443,7 @@ export default function PaketA1B1Page() {
               href="/kupovina/paket-a1-a2-b1"
               className="inline-block bg-[#F78687] hover:bg-[#e06060] text-white font-bold text-lg py-4 px-10 rounded-xl transition-all hover:-translate-y-0.5 shadow-lg shadow-[#F78687]/25"
             >
-              Upiši se - 29.133 din
+              Upiši se - 29.133 RSD
             </Link>
             <p className="text-sm text-gray-400 mt-2.5">≈ 249€ · plaćanje na rate preko Banca Intesa</p>
             <div className="flex items-center justify-center gap-5 mt-4 text-xs text-gray-400">
@@ -549,7 +549,7 @@ export default function PaketA1B1Page() {
             href="/kupovina/paket-a1-a2-b1"
             className="inline-block bg-[#F78687] hover:bg-[#e06060] text-white font-bold text-lg py-4 px-10 rounded-xl transition-all hover:-translate-y-0.5 shadow-lg shadow-[#F78687]/25"
           >
-            Upiši se - 29.133 din
+            Upiši se - 29.133 RSD
           </Link>
           <p className="text-sm text-gray-400 mt-2.5">≈ 249€ · plaćanje na rate dostupno</p>
           <div className="flex items-center justify-center gap-6 mt-4 text-sm text-gray-400">
@@ -562,7 +562,7 @@ export default function PaketA1B1Page() {
       {/* ─── Mobile sticky CTA bar ─── */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-3 flex items-center justify-between gap-3 lg:hidden z-50 safe-bottom">
         <div>
-          <p className="font-bold text-gray-900 text-lg leading-tight">29.133 din</p>
+          <p className="font-bold text-gray-900 text-lg leading-tight">29.133 RSD</p>
           <p className="text-[#F78687] text-xs font-bold">≈ 249€</p>
         </div>
         <Link

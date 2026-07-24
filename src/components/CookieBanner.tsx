@@ -59,7 +59,7 @@ export default function CookieBanner() {
           Uz tvoju saglasnost pratimo kako se sajt koristi da bismo ti prikazali pravi sadržaj i
           stalno unapređivali časove i platformu. Neophodni kolačići rade uvek; analitičke i
           marketinške postavljamo samo ako prihvatiš. Detaljnije u{" "}
-          <Link href="/politika-privatnosti" className="underline text-plava hover:text-white">
+          <Link href="/uslovi#politika-privatnosti" className="underline text-plava hover:text-white">
             politici privatnosti
           </Link>
           .

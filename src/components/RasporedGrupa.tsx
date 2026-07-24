@@ -129,7 +129,7 @@ export default function RasporedGrupa({
                 {g.cena != null && (
                   <div className="border-t border-gray-100 pt-4 mb-4">
                     <p className="text-xl font-bold text-gray-900">
-                      {formatPrice(g.cena)} din
+                      {formatPrice(g.cena)} RSD
                     </p>
                     {eurPrice != null && (
                       <p className="text-xs text-gray-500">~ {eurPrice}€</p>

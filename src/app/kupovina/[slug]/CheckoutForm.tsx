@@ -551,19 +551,17 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
             className="mt-1"
           />
           <span>
+            {/* Uslovi i politika privatnosti su na JEDNOJ stranici (zahtev banke 24.07.2026:
+                kupac ne treba da otvara dva linka da bi se saglasio). */}
             {en ? (
               <>
                 I agree to the{" "}
-                <a href="/uslovi" target="_blank" rel="noreferrer" className="text-plava underline">Terms of Use</a>{" "}
-                and the{" "}
-                <a href="/politika-privatnosti" target="_blank" rel="noreferrer" className="text-plava underline">Privacy Policy</a>.
+                <a href="/uslovi" target="_blank" rel="noreferrer" className="text-plava underline">Terms of Use and Privacy Policy</a>.
               </>
             ) : (
               <>
                 Saglasan/na sam sa{" "}
-                <a href="/uslovi" target="_blank" rel="noreferrer" className="text-plava underline">uslovima korišćenja</a>{" "}
-                i{" "}
-                <a href="/politika-privatnosti" target="_blank" rel="noreferrer" className="text-plava underline">politikom privatnosti</a>.
+                <a href="/uslovi" target="_blank" rel="noreferrer" className="text-plava underline">uslovima korišćenja i politikom privatnosti</a>.
               </>
             )}
           </span>

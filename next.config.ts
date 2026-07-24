@@ -90,6 +90,8 @@ const nextConfig: NextConfig = {
       { source: "/magazin/strucno-usavrsavanje-kada-posao-preraste-vlasnika-i-zasto-je-podrska-kljucna", destination: "https://www.natasahartweger.rs/blog/strucno-usavrsavanje-kada-posao-preraste-vlasnika-i-zasto-je-podrska-kljucna", permanent: false },
       { source: "/cesto-postavljena-pitanja", destination: "/faq", permanent: true },
       { source: "/opsti-uslovi-poslovanja", destination: "/uslovi", permanent: true },
+      // Politika privatnosti objedinjena sa uslovima (zahtev banke EPM, 24.07.2026).
+      { source: "/politika-privatnosti", destination: "/uslovi#politika-privatnosti", permanent: true },
       { source: "/naki-ai-asistent-nemacki", destination: "/naki", permanent: true },
       { source: "/kurs/kako-uciti-reci", destination: "/masterclass-reci", permanent: true },
 

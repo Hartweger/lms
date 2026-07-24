@@ -11,6 +11,7 @@ import { SITE_URL } from "@/lib/site-url";
 import { createLoginLinkToken } from "@/lib/login-link";
 import { firstLessonForCourses } from "@/lib/first-lesson";
 import { accessUntilForCharge, planForSlug, unlockedSlugsAfter } from "@/lib/subscription-plans";
+import { recurringTxData } from "@/lib/payment-confirmation";
 
 interface OrderItem { course_id: string; course_slug: string; title: string; price: number; }
 
@@ -283,6 +284,10 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
       totalPayments: sub?.total_payments ?? 12,
       amount: order.total,
       accessUntil: expiresAt.toISOString(),
+      // Podaci o transakciji - obavezni u mejlu i za naknadne mesečne naplate
+      // (zahtev banke 24.07.2026, EPM 2.7). Upisao ih je subscriptions-poll cron.
+      orderNumber: order.order_number,
+      tx: recurringTxData(order.nestpay_response, order.created_at),
     });
     return { ok: true };
   }

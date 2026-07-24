@@ -4,7 +4,7 @@ import { SITE_URL } from "@/lib/site-url";
 import { odjavaUrl, listUnsubscribeHeaders } from "@/lib/optout";
 import { htmlToText } from "@/lib/html-to-text";
 import type { Ga4Weekly } from "@/lib/ga4-report";
-import { MERCHANT, CARD_OUTCOME, pdvBreakdown, type NestpayTx } from "@/lib/payment-confirmation";
+import { MERCHANT, CARD_OUTCOME, pdvBreakdown, type NestpayTx, type RecurringTx } from "@/lib/payment-confirmation";
 
 const FROM = "Hartweger <info@hartweger.rs>";
 
@@ -2185,6 +2185,8 @@ export async function sendWeeklyBusinessSummary(s: WeeklySummary) {
 /**
  * Potvrda naplaćene rate kod mesečnog plaćanja. Rate 2-12 ne dobijaju dobrodošlicu
  * (polaznica je već na kursu), nego kratku potvrdu sa novim rokom pristupa.
+ * Podaci o transakciji i trgovcu su OBAVEZNI i u ovim mejlovima (EPM 2.7 - zahtev
+ * banke 24.07.2026 za naknadne mesečne naplate).
  */
 export async function sendSubscriptionChargeEmail(o: {
   email: string;
@@ -2194,6 +2196,8 @@ export async function sendSubscriptionChargeEmail(o: {
   totalPayments: number;
   amount: number;
   accessUntil: string;
+  orderNumber: string;
+  tx: RecurringTx;
 }) {
   try {
     const resend = getResend();
@@ -2201,6 +2205,8 @@ export async function sendSubscriptionChargeEmail(o: {
     const ime = o.name ? o.name.split(" ")[0] : "";
     const fmt = (n: number) => n.toLocaleString("de-DE");
     const doKada = new Date(o.accessUntil).toLocaleDateString("sr-RS");
+    const txRow = (label: string, value: string) =>
+      `<tr><td style="padding:4px 8px;color:#888;">${label}</td><td style="padding:4px 8px;">${esc(value)}</td></tr>`;
     await resend.emails.send({
       from: FROM,
       to: o.email,
@@ -2210,7 +2216,24 @@ export async function sendSubscriptionChargeEmail(o: {
 <body style="font-family:sans-serif;line-height:1.6;color:#222">
 <p>Zdravo${ime ? ", " + esc(ime) : ""}!</p>
 <p>Naplatili smo <strong>${fmt(o.amount)} RSD</strong> - to je ${o.installmentNo}. rata od ukupno ${o.totalPayments} za kurs <strong>${esc(o.courseTitle)}</strong>.</p>
+<p style="font-size:14px;color:#1c7a34;font-weight:700">${CARD_OUTCOME.success}</p>
 <p>Pristup ti važi do <strong>${doKada}</strong> i produžiće se sam sa narednom ratom. Fiskalni račun stiže zasebno.</p>
+<h2 style="font-size:13px;color:#999;text-transform:uppercase;letter-spacing:0.5px;margin:18px 0 4px;">Podaci o transakciji</h2>
+<table style="border-collapse:collapse;font-size:13px;width:100%;max-width:420px;margin:0 0 12px;">
+  <tbody>
+    ${txRow("Datum i vreme", o.tx.dateTime)}
+    ${txRow("Broj porudžbine (Order ID)", o.orderNumber)}
+    ${txRow("Iznos", `${fmt(o.amount)} RSD`)}
+    ${txRow("AuthCode", o.tx.authCode)}
+    ${txRow("Broj transakcije (TransId)", o.tx.transId)}
+  </tbody>
+</table>
+<h2 style="font-size:13px;color:#999;text-transform:uppercase;letter-spacing:0.5px;margin:0 0 4px;">Podaci o trgovcu</h2>
+<p style="font-size:13px;color:#444;margin:0 0 12px">
+  ${esc(MERCHANT.naziv)}<br/>
+  PIB: ${MERCHANT.pib}<br/>
+  ${esc(MERCHANT.adresa)}
+</p>
 <p style="font-size:13px;color:#666">Mesečno plaćanje možeš da otkažeš kad god hoćeš, u odeljku „Moj nalog" na platformi.</p>
 <p style="margin-top:20px">Hartweger tim</p>
 </body></html>`,

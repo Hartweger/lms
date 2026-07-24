@@ -66,6 +66,12 @@ export interface RecurringCharge {
   retryable: boolean;
   /** zapis je povraćaj novca, ne naplata */
   refund: boolean;
+  /** Podaci o transakciji za mejl kupcu (EPM 2.7, zahtev banke 24.07.2026) -
+      naplate na čekanju ih još nemaju, zato null. */
+  authCode: string | null;
+  transId: string | null;
+  /** "YYYY-MM-DD HH:mm:ss.S", bankino (beogradsko) vreme. */
+  authDttm: string | null;
 }
 
 /** Uspešno naplaćeno (priručnik, tabela statusa): C = odobreno, S = prosleđeno na obračun. */
@@ -108,6 +114,13 @@ export function parseRecurringStatus(text: string): { count: number; charges: Re
       ""
     ).toUpperCase();
     const refund = chargeType === "C";
+    // I ovi podaci stižu i kao zasebne oznake i unutar zbirnog ORDERSTATUS_n niza.
+    const zbirno = tag(`ORDERSTATUS_${n}`);
+    const izZbirnog = (key: string, pattern = "\\S+") =>
+      zbirno.match(new RegExp(`${key}:(${pattern})`, "i"))?.[1] ?? null;
+    const authCode = tag(`AUTH_CODE_${n}`) || izZbirnog("AUTH_CODE");
+    const transId = tag(`TRANS_ID_${n}`) || izZbirnog("TRANS_ID");
+    const authDttm = tag(`AUTH_DTTM_${n}`) || izZbirnog("AUTH_DTTM", "[\\d-]+ [\\d:.]+");
 
     charges.push({
       installmentNo: n,
@@ -119,6 +132,9 @@ export function parseRecurringStatus(text: string): { count: number; charges: Re
       failed: PALI_STATUSI.has(transStat),
       retryable: PONOVLJIVI_STATUSI.has(transStat),
       refund,
+      authCode: authCode || null,
+      transId: transId || null,
+      authDttm: authDttm || null,
     });
   }
   return { count, charges };

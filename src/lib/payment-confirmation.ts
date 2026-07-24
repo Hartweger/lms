@@ -79,6 +79,44 @@ export function nestpayTxData(
   };
 }
 
+/** Podaci o transakciji za NAKNADNE mesečne naplate (rate 2..N) - zahtev banke 24.07.2026. */
+export interface RecurringTx {
+  dateTime: string;
+  authCode: string;
+  transId: string;
+}
+
+/**
+ * Iz sačuvanog `orders.nestpay_response` naplate 2..N (upisuje ga subscriptions-poll cron
+ * sa poljima AUTH_CODE / TRANS_ID / AUTH_DTTM iz bankinog statusnog odgovora - za rate
+ * callback ne postoji). AUTH_DTTM stiže kao "YYYY-MM-DD HH:mm:ss.S" i VEĆ JE u bankinom
+ * (beogradskom) vremenu, pa se formatira direktno; inače `_receivedAt`/`fallbackIso`.
+ */
+export function recurringTxData(
+  response: Record<string, unknown> | null | undefined,
+  fallbackIso?: string,
+): RecurringTx {
+  const r = response ?? {};
+  const s = (k: string) => {
+    const v = r[k];
+    return typeof v === "string" && v.trim() !== "" ? v : "-";
+  };
+
+  let dateTime: string | null = null;
+  const auth = r["AUTH_DTTM"];
+  if (typeof auth === "string") {
+    const m = auth.match(/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2})/);
+    if (m) dateTime = `${m[3]}.${m[2]}.${m[1]}. u ${m[4]}:${m[5]}`;
+  }
+  if (!dateTime) {
+    const iso = typeof r["_receivedAt"] === "string" ? (r["_receivedAt"] as string) : fallbackIso;
+    const when = iso ? new Date(iso) : null;
+    if (when && !isNaN(when.getTime())) dateTime = formatBelgrade(when);
+  }
+
+  return { dateTime: dateTime ?? "-", authCode: s("AUTH_CODE"), transId: s("TRANS_ID") };
+}
+
 /**
  * PDV prikaz za podatke o narudžbini (EPM 2.7 tačka 3). Cene su sa uračunatim PDV-om
  * (/uslovi odeljak 12); stopa prati fiskalizaciju: domaći kupci 20%, inostranstvo 0%.

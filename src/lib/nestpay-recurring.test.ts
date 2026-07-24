@@ -16,6 +16,9 @@ const ODGOVOR = `<?xml version="1.0" encoding="ISO-8859-9"?><CC5Response>
 <ORD_ID_1>RECTEST-1784551062868</ORD_ID_1>
 <TRANS_STAT_1>S</TRANS_STAT_1>
 <CAPTURE_AMT_1>319900</CAPTURE_AMT_1>
+<AUTH_CODE_1>798667</AUTH_CODE_1>
+<TRANS_ID_1>26201OnlB13975</TRANS_ID_1>
+<AUTH_DTTM_1>2026-07-20 14:39:36.887</AUTH_DTTM_1>
 <PLANNED_START_DTTM_1>2026-07-21 14:39:00.0</PLANNED_START_DTTM_1>
 <ORD_ID_2>RECTEST-1784551062868-2</ORD_ID_2>
 <TRANS_STAT_2>PN</TRANS_STAT_2>
@@ -62,6 +65,28 @@ describe("parseRecurringStatus", () => {
     expect(c.oid).toBe("RECTEST-1784551062868");
     expect(c.succeeded).toBe(true);
     expect(c.amountRsd).toBe(3199);
+  });
+
+  it("čita podatke o transakciji za mejl kupcu (EPM 2.7, zahtev banke 24.07.2026)", () => {
+    const c = parseRecurringStatus(ODGOVOR).charges[0];
+    expect(c.authCode).toBe("798667");
+    expect(c.transId).toBe("26201OnlB13975");
+    expect(c.authDttm).toBe("2026-07-20 14:39:36.887");
+    // Naplata na čekanju još nema transakciju.
+    const pn = parseRecurringStatus(ODGOVOR).charges[1];
+    expect(pn.authCode).toBeNull();
+    expect(pn.transId).toBeNull();
+  });
+
+  it("podatke o transakciji čita i iz zbirnog ORDERSTATUS_n polja", () => {
+    const odgovor = `<CC5Response><Extra><RECURRINGCOUNT>1</RECURRINGCOUNT>
+<ORD_ID_1>2026-300-2</ORD_ID_1><TRANS_STAT_1>C</TRANS_STAT_1>
+<ORDERSTATUS_1>ORD_ID:2026-300-2\tCHARGE_TYPE_CD:S\tCAPTURE_AMT:319900\tTRANS_STAT:C\tAUTH_DTTM:2026-08-21 14:39:01.12\tAUTH_CODE:P53293\tTRANS_ID:15210MfAA180146</ORDERSTATUS_1>
+<CAPTURE_AMT_1>319900</CAPTURE_AMT_1></Extra></CC5Response>`;
+    const c = parseRecurringStatus(odgovor).charges[0];
+    expect(c.authCode).toBe("P53293");
+    expect(c.transId).toBe("15210MfAA180146");
+    expect(c.authDttm).toBe("2026-08-21 14:39:01.12");
   });
 
   it("naplatu na čekanju (PN) NE prepoznaje kao uspelu", () => {

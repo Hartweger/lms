@@ -23,7 +23,7 @@ describe("product-i18n", () => {
 
   it("formatMoney EUR i RSD", () => {
     expect(formatMoney(150, "EUR")).toBe("150 €");
-    expect(formatMoney(17500, "RSD")).toBe("17.500 din");
+    expect(formatMoney(17500, "RSD")).toBe("17.500 RSD");
   });
 
   it("nepoznat lang pada na sr", () => {

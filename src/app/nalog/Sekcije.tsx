@@ -63,7 +63,7 @@ function Pretplata({ s, onCancel }: { s: SubRow; onCancel: (id: string) => void 
     <div className="border border-gray-200 rounded-lg p-4 mb-2">
       <p className="font-medium">{s.title} · mesečno plaćanje</p>
       <p className="text-sm text-gray-600 mt-1">
-        Plaćeno {s.paidPayments} od {s.totalPayments} naplata · {iznos} din mesečno
+        Plaćeno {s.paidPayments} od {s.totalPayments} naplata · {iznos} RSD mesečno
       </p>
       <p className="text-sm text-gray-600">
         Otvoreno ti je {s.unlockedCount} od 6 nivoa

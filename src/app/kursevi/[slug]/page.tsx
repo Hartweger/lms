@@ -480,7 +480,7 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
                           <p className="text-gray-700 font-medium">Profesorku biraš pri kupovini - cena zavisi od izbora:</p>
                           {priceTiers.map((tier) => (
                             <p key={tier.price} className="text-gray-600">
-                              {tier.names.length > 2 ? "Profesorke iz našeg tima" : tier.names.join(" / ")} - <strong>{formatPrice(tier.price)} din</strong>
+                              {tier.names.length > 2 ? "Profesorke iz našeg tima" : tier.names.join(" / ")} - <strong>{formatPrice(tier.price)} RSD</strong>
                             </p>
                           ))}
                         </div>
