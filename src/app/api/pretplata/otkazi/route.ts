@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 import * as Sentry from "@sentry/nextjs";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { buildRecurringCancelXml, isCancelApproved, postCc5 } from "@/lib/nestpay-recurring";
+import { buildRecurringCancelXml, isRecurringOpApproved, postCc5 } from "@/lib/nestpay-recurring";
 
 export const dynamic = "force-dynamic";
 
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
   if (sub.status !== "active") return NextResponse.json({ ok: true, vecOtkazana: true });
 
   const odgovor = await postCc5(buildRecurringCancelXml(sub.recurring_id));
-  if (!odgovor || !isCancelApproved(odgovor)) {
+  if (!odgovor || !isRecurringOpApproved(odgovor)) {
     Sentry.captureException(
       new Error(
         `[pretplata] otkazivanje serije ${sub.recurring_id} nije prošlo: ${odgovor?.slice(0, 300) ?? "bez odgovora"}`,

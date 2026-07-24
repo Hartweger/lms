@@ -3,10 +3,17 @@
 // porudžbina, pa se nasleđuje fiskalizacija, dodela pristupa i mejlovi.
 import * as Sentry from "@sentry/nextjs";
 import { createAdminClient } from "@/lib/supabase/admin";
-import type { RecurringCharge } from "@/lib/nestpay-recurring";
+import {
+  buildChargeRetryXml,
+  isRecurringOpApproved,
+  postCc5,
+  type NestpayEnv,
+  type RecurringCharge,
+} from "@/lib/nestpay-recurring";
 import { grantAccessForOrder } from "@/lib/grant-access";
 import { fiscalizeOrder } from "@/lib/fiscomm";
 import { generateOrderNumber } from "@/lib/order-utils";
+import { sendSubscriptionRetryEmail } from "@/lib/email";
 
 /** Uspele naplate kojima još nemamo porudžbinu (poredi se po broju kod banke). */
 export function chargesToProcess(charges: RecurringCharge[], vecObradjeni: string[]): RecurringCharge[] {
@@ -84,4 +91,109 @@ export async function processCharge(sub: SubscriptionRow, charge: RecurringCharg
     .eq("id", sub.id);
 
   return true;
+}
+
+/**
+ * Bankina granica (potvrda 22.07.2026): pala naplata sme ponovo da se inicira
+ * najviše jednom dnevno, ukupno do 30 puta. Brojač važi po naplati.
+ */
+export const MAX_RETRIES = 30;
+
+/** Kalendarski datum u Beogradu (YYYY-MM-DD) - banka radi po lokalnom vremenu. */
+export function belgradeDate(d: Date): string {
+  return d.toLocaleDateString("sv-SE", { timeZone: "Europe/Belgrade" });
+}
+
+/**
+ * Pokušaj se zakazuje za SUTRA: današnji termin serije je možda već prošao
+ * (cron ide u 5h, a serija se obrađuje u satu inicijalne kupovine).
+ */
+export function retryStartDate(now: Date): string {
+  return belgradeDate(new Date(now.getTime() + 24 * 60 * 60 * 1000));
+}
+
+export interface RetryState {
+  retry_oid: string | null;
+  retry_count: number;
+  retry_planned_for: string | null;
+}
+
+export type RetryAction = "none" | "wait" | "exhausted" | "retry";
+
+/**
+ * Da li danas šaljemo Update za palu naplatu. „wait" dok zakazani datum ne prođe:
+ * ne znamo da li banka posle Update-a odmah vrati TRANS_STAT na PN, pa bi slanje
+ * pre toga svakog dana iznova pomeralo STARTDATE i naplata se nikad ne bi ni
+ * pokušala. Nova pala naplata (drugi oid) kreće sa brojačem od nule.
+ */
+export function retryDecision(state: RetryState, pala: RecurringCharge | undefined, danasBeograd: string): RetryAction {
+  if (!pala) return "none";
+  if (state.retry_oid === pala.oid) {
+    if (state.retry_count >= MAX_RETRIES) return "exhausted";
+    if (state.retry_planned_for && danasBeograd <= state.retry_planned_for) return "wait";
+  }
+  return "retry";
+}
+
+/**
+ * Ponovo inicira prvu palu naplatu serije (RECURRINGOPERATION=Update + STARTDATE,
+ * priručnik pogl. 7). Kupcu se javlja mejlom samo kod PRVOG pokušaja - ne 30 puta.
+ * Kad uspe, sledeći poll je pokupi kao običnu uspelu naplatu (processCharge).
+ */
+export async function maybeRetryFailedCharge(
+  sub: SubscriptionRow & RetryState,
+  charges: RecurringCharge[],
+  env: NestpayEnv = "prod",
+  now: Date = new Date(),
+): Promise<RetryAction | "error"> {
+  const pala = charges.find((c) => c.retryable);
+  const odluka = retryDecision(sub, pala, belgradeDate(now));
+  if (odluka !== "retry" || !pala) return odluka;
+
+  const startDate = retryStartDate(now);
+  const odgovor = await postCc5(buildChargeRetryXml(pala.oid, startDate, env), env);
+  if (!odgovor || !isRecurringOpApproved(odgovor)) {
+    Sentry.captureException(
+      new Error(`[pretplata] ponovno iniciranje ${pala.oid} nije prošlo: ${odgovor?.slice(0, 300) ?? "banka nije odgovorila"}`),
+    );
+    return "error";
+  }
+
+  const prviPut = sub.retry_oid !== pala.oid;
+  const noviBroj = prviPut ? 1 : sub.retry_count + 1;
+  const admin = createAdminClient();
+  await admin
+    .from("subscriptions")
+    .update({
+      retry_oid: pala.oid,
+      retry_count: noviBroj,
+      last_retry_at: now.toISOString(),
+      retry_planned_for: startDate,
+    })
+    .eq("id", sub.id);
+
+  if (prviPut) {
+    const { data: prva } = await admin
+      .from("orders")
+      .select("email, full_name, items")
+      .eq("id", sub.initial_order_id)
+      .single();
+    if (prva) {
+      const items = prva.items as { title?: string }[] | null;
+      await sendSubscriptionRetryEmail({
+        email: prva.email,
+        name: prva.full_name,
+        courseTitle: items?.[0]?.title ?? "kurs",
+        installmentNo: pala.installmentNo,
+        totalPayments: sub.total_payments,
+        amount: sub.amount,
+      });
+    }
+  }
+  if (noviBroj >= MAX_RETRIES) {
+    Sentry.captureException(
+      new Error(`[pretplata] zakazan poslednji (${MAX_RETRIES}.) pokušaj naplate ${pala.oid} - ako ne prođe, javiti se kupcu ručno`),
+    );
+  }
+  return "retry";
 }
