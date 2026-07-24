@@ -6,15 +6,18 @@ import { usePathname } from "next/navigation";
 
 // Promo traka za Video paket A1+A2+B1: poruke se smenjuju uz blagi fade,
 // stalno CTA dugme desno. Prikazuje se samo na javnim stranama.
-const DISMISS_KEY = "promo-paket-a1b1-2026-07";
+// Kampanja jul 2026: mesečno plaćanje (recurring aktiviran 24.07) - nov ključ
+// da traku vide i oni koji su prethodnu zatvorili.
+const DISMISS_KEY = "promo-mesecno-2026-07";
 const INTERVAL_MS = 5000;
 const FADE_MS = 400;
 
 // Puna poruka za desktop, kratka za mobilni (da traka uvek stane u jedan red).
+// Prema kupcu je uvek „mesečno plaćanje", nikad „rate" (rate su nešto drugo - Intesa kartica).
 const PORUKE = [
-  { puna: "🇩🇪 Od nule do B1 - kompletna putanja na jednom mestu", kratka: "🇩🇪 Od nule do B1" },
-  { puna: "🎬 150+ video lekcija, 11 tipova vežbi i 3 sertifikata", kratka: "🎬 150+ video lekcija" },
-  { puna: "📦 Video paket A1+A2+B1 - sve u jednom paketu", kratka: "📦 Sve u jednom paketu" },
+  { puna: "🆕 Novo: plaćaj mesečno - 3.199 RSD (manje od 30€), učiš odmah", kratka: "🆕 Mesečno - 3.199 RSD" },
+  { puna: "📺 Kao Netflix pretplata - samo što te ova vodi do B1 nivoa", kratka: "📺 Kao Netflix - do B1" },
+  { puna: "📦 Video paket A1+A2+B1 - od nule do B1 na jednom mestu", kratka: "📦 Od nule do B1" },
 ];
 
 // Rute na kojima traka NE treba da smeta (aplikacija, učenje, checkout, auth).
@@ -87,7 +90,7 @@ export default function PromoBar() {
   return (
     <div
       role="region"
-      aria-label="Ponuda: Video paket A1 + A2 + B1"
+      aria-label="Ponuda: Video paket A1 + A2 + B1 - od sada i na mesečno plaćanje"
       className="bg-[#FFD130] text-[#1a2332]"
     >
       <div className="max-w-6xl mx-auto pl-4 pr-2 py-2 flex items-center gap-3">

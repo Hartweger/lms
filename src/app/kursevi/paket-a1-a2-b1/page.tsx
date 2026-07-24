@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Video paket A1 + A2 + B1 - Hartweger",
-  description: "Kompletna putanja od nule do B1. 150+ video lekcija, testovi, PDF materijali, WhatsApp podrška i 3 sertifikata - sve u jednom paketu za 249€.",
+  description: "Kompletna putanja od nule do B1. 150+ video lekcija, testovi, PDF materijali, WhatsApp podrška i 3 sertifikata - sve u jednom paketu za 249€ ili na mesečno plaćanje od 3.199 RSD.",
   openGraph: {
     images: [{ url: "/og/share.png", width: 1200, height: 630, alt: "Hartweger - Škola nemačkog jezika" }],
     title: "Video paket A1 + A2 + B1 - Hartweger",
@@ -38,7 +38,7 @@ export default function PaketA1B1Page() {
                 >
                   Upiši se - 29.133 RSD
                 </Link>
-                <p className="text-sm text-gray-400 mt-2">≈ 249€ · plaćanje na rate dostupno</p>
+                <p className="text-sm text-gray-400 mt-2">≈ 249€ · ili 3.199 RSD mesečno</p>
               </div>
 
               {/* Kredencijal - VIDEO kurs vodi Natasa licno, pa sme direktna formulacija.
@@ -411,7 +411,21 @@ export default function PaketA1B1Page() {
                 <p className="font-bold text-gray-900 text-[17px]">Hartweger paket A1-B1</p>
                 <p className="text-[#0AB3D7] text-sm font-medium">Sve uključeno + podrška</p>
               </div>
-              <p className="font-bold text-2xl text-[#0AB3D7]">249€</p>
+              <div className="text-right">
+                <p className="font-bold text-2xl text-[#0AB3D7]">249€</p>
+                <p className="text-gray-500 text-xs font-medium">ili 3.199 RSD mesečno</p>
+              </div>
+            </div>
+
+            {/* Mesečno plaćanje - javno od 24.07.2026 (banka aktivirala recurring).
+                Prema kupcu nikad „rate" - to su rate Intesa kartice, druga stvar. */}
+            <div className="rounded-xl bg-[#FFD130]/15 border border-[#FFD130] px-5 py-4">
+              <p className="font-bold text-gray-900 mb-1">📺 Novo: plaćaj kao pretplatu - manje od 30€ mesečno</p>
+              <p className="text-gray-600 text-[15px] leading-relaxed">
+                Ne moraš sve odjednom: 3.199 RSD mesečno, ukupno 12 naplata (38.388 RSD). A1.1 ti
+                se otvara odmah, a ostali nivoi stižu redom kako napreduješ - kao serija koju
+                otključavaš epizodu po epizodu.
+              </p>
             </div>
           </div>
 
@@ -445,7 +459,7 @@ export default function PaketA1B1Page() {
             >
               Upiši se - 29.133 RSD
             </Link>
-            <p className="text-sm text-gray-400 mt-2.5">≈ 249€ · plaćanje na rate preko Banca Intesa</p>
+            <p className="text-sm text-gray-400 mt-2.5">≈ 249€ jednokratno · 3.199 RSD mesečno · rate preko Banca Intesa</p>
             <div className="flex items-center justify-center gap-5 mt-4 text-xs text-gray-400">
               <span className="flex items-center gap-1">🔒 Sigurno plaćanje</span>
               <span>💳 Visa / MC / AmEx</span>
@@ -551,7 +565,7 @@ export default function PaketA1B1Page() {
           >
             Upiši se - 29.133 RSD
           </Link>
-          <p className="text-sm text-gray-400 mt-2.5">≈ 249€ · plaćanje na rate dostupno</p>
+          <p className="text-sm text-gray-400 mt-2.5">≈ 249€ · ili 3.199 RSD mesečno</p>
           <div className="flex items-center justify-center gap-6 mt-4 text-sm text-gray-400">
             <span>✓ 150+ lekcija</span>
             <span>✓ Lična podrška</span>
@@ -563,7 +577,7 @@ export default function PaketA1B1Page() {
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-3 flex items-center justify-between gap-3 lg:hidden z-50 safe-bottom">
         <div>
           <p className="font-bold text-gray-900 text-lg leading-tight">29.133 RSD</p>
-          <p className="text-[#F78687] text-xs font-bold">≈ 249€</p>
+          <p className="text-[#F78687] text-xs font-bold">ili 3.199 RSD mesečno</p>
         </div>
         <Link
           href="/kupovina/paket-a1-a2-b1"
