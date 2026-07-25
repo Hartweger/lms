@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import {
   LADDER, ladderFor, safeLevelsFor, createGame, answer, walkAway,
-  applyFiftyFifty, useSwap, wonPoints, type MillionaireState,
+  applyFiftyFifty, applySwap, wonPoints, type MillionaireState,
 } from "./millionaire";
 
 const rngFirst = () => 0; // deterministički rng za testove
@@ -147,17 +147,17 @@ describe("applyFiftyFifty", () => {
   });
 });
 
-describe("useSwap", () => {
+describe("applySwap", () => {
   it("troši džoker i resetuje 50:50 sakrivanje za novo pitanje", () => {
     let s = createGame(15);
     s = applyFiftyFifty(s, 0, 4, rngFirst);
-    const next = useSwap(s);
+    const next = applySwap(s);
     expect(next.usedSwap).toBe(true);
     expect(next.hiddenOptions).toEqual([]);
     expect(next.usedFiftyFifty).toBe(true); // 50:50 ostaje potrošen
   });
   it("ne može dvaput", () => {
-    let s = useSwap(createGame(15));
-    expect(useSwap(s)).toBe(s);
+    const s = applySwap(createGame(15));
+    expect(applySwap(s)).toBe(s);
   });
 });

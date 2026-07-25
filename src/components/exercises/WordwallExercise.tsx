@@ -38,7 +38,7 @@ export default function WordwallExercise({ url, onAnswer }: WordwallProps) {
           </button>
         ) : (
           <div className="bg-green-50 border-l-4 border-green-500 rounded-lg p-4 text-sm text-green-700">
-            Odlično! Klikni "Sledeće pitanje" da nastaviš.
+            Odlično! Klikni „Sledeće pitanje“ da nastaviš.
           </div>
         )}
       </div>

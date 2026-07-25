@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import EinstufungQuiz from "./EinstufungQuiz";
 
 export const metadata: Metadata = {
@@ -78,9 +79,9 @@ export default function TestNivoaPage() {
         </ul>
         <p className="mb-4">
           Ako se spremaš za zvanični ispit, pogledaj i naš vodič kroz{" "}
-          <a href="/magazin/testovi-za-ispit-b1-iz-nemackog-jezika" className="text-cyan-600 underline hover:text-cyan-800">
+          <Link href="/magazin/testovi-za-ispit-b1-iz-nemackog-jezika" className="text-cyan-600 underline hover:text-cyan-800">
             testove za ispit B1 iz nemačkog jezika
-          </a>
+          </Link>
           .
         </p>
 
@@ -89,14 +90,14 @@ export default function TestNivoaPage() {
         </h2>
         <p className="mb-4">
           Kada saznaš svoj nivo, možeš odmah da izabereš{" "}
-          <a href="/kursevi" className="text-cyan-600 underline hover:text-cyan-800">
+          <Link href="/kursevi" className="text-cyan-600 underline hover:text-cyan-800">
             kurs nemačkog jezika
-          </a>{" "}
+          </Link>{" "}
           koji mu odgovara - video kurs, grupnu nastavu ili individualne časove sa
           Natašom Hartweger. A ako želiš prvo malo da vežbaš, tu je{" "}
-          <a href="/naki" className="text-cyan-600 underline hover:text-cyan-800">
+          <Link href="/naki" className="text-cyan-600 underline hover:text-cyan-800">
             NaKI, besplatni AI asistent za nemački
-          </a>{" "}
+          </Link>{" "}
           sa kojim možeš da vežbaš gramatiku i razgovor na našem jeziku, 0-24.
         </p>
       </section>

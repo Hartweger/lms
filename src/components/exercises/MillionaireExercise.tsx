@@ -7,7 +7,7 @@ import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { sanitizeHtml } from "@/lib/sanitize";
 import {
-  createGame, answer, walkAway, applyFiftyFifty, useSwap, wonPoints,
+  createGame, answer, walkAway, applyFiftyFifty, applySwap, wonPoints,
   ladderFor, safeLevelsFor, type MillionaireState,
 } from "@/lib/millionaire";
 import type { Exercise, ExerciseQuestion } from "@/lib/types";
@@ -124,7 +124,7 @@ export default function MillionaireExercise({ exercise, questions }: Props) {
     setOverrides({ ...overrides, [game.level]: replacement });
     setReserves(rest);
     setSelected(null);
-    setGame(useSwap(game));
+    setGame(applySwap(game));
   };
 
   const playAgain = () => {

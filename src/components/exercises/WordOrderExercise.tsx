@@ -23,7 +23,7 @@ function shuffleTokens(
 ): { id: number; word: string }[] {
   if (tokens.length < 2) return [...tokens];
   const target = normalize(correctAnswer);
-  let shuffled = [...tokens];
+  const shuffled = [...tokens];
   for (let attempt = 0; attempt < 20; attempt++) {
     for (let i = shuffled.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));

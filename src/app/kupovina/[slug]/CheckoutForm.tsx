@@ -510,11 +510,11 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
             </li>
             <li>Pristup traje dok traju naplate. Ako plaćanje prekineš, ostaje ti do kraja plaćenog meseca.</li>
             <li>
-              <strong>Na strani banke ne biraj „na rate"</strong> - mesečne naplate pokrećemo mi, a rate Banca Intesa
+              <strong>Na strani banke ne biraj „na rate“</strong> - mesečne naplate pokrećemo mi, a rate Banca Intesa
               kartice su nešto drugo i ne mogu da idu zajedno sa mesečnim plaćanjem.
             </li>
             <li>
-              <strong>Otkazivanje:</strong> u svakom trenutku, sam(a), u odeljku „Moj nalog" na platformi. Ne moraš da
+              <strong>Otkazivanje:</strong> u svakom trenutku, sam(a), u odeljku „Moj nalog“ na platformi. Ne moraš da
               nam pišeš ni da obrazlažeš.
             </li>
           </ul>

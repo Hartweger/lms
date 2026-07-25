@@ -13,7 +13,7 @@ function formatContent(text: string): string {
   if (text.includes("<p>") || text.includes("<h") || text.includes("<div") || text.includes("<iframe") || text.includes("<audio") || text.includes("<mark")) {
     return text;
   }
-  let html = text
+  const html = text
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")

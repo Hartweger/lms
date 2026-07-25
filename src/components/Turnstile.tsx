@@ -54,7 +54,10 @@ const Turnstile = forwardRef<TurnstileHandle, TurnstileProps>(function Turnstile
   const containerRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | null>(null);
   const onTokenRef = useRef(onToken);
-  onTokenRef.current = onToken;
+  // Upis u ref ide kroz efekat - tokom rendera se refovi ne diraju.
+  useEffect(() => {
+    onTokenRef.current = onToken;
+  }, [onToken]);
 
   useImperativeHandle(ref, () => ({
     reset: () => {
