@@ -76,6 +76,7 @@ export default function UsloviPage() {
             <li>Pristup već otvorenom sadržaju traje dok traju uredne naplate i produžava se sa svakom novom.</li>
             <li><strong>Otkazivanje:</strong> kupac može da otkaže mesečno plaćanje u svakom trenutku, samostalno, u odeljku „Moj nalog" na platformi, opcijom „Otkaži mesečno plaćanje", ili slanjem zahteva na info@hartweger.rs. Otkazivanje zaustavlja sve buduće naplate. Već naplaćeni iznosi se ne vraćaju, a pristup ostaje do isteka poslednjeg plaćenog meseca.</li>
             <li>Ako naplata ne uspe (nedovoljno sredstava, istekla ili blokirana kartica), pristup se ne produžava. Kupac o tome dobija obaveštenje na email.</li>
+            <li>Otkazani niz naplata se ne nastavlja. Ako kupac kasnije ponovo pokrene mesečno plaćanje za isti kurs, pokreće se nov niz od prve naplate i prvog nivoa, po ceni koja tada važi. Ostvaren napredak na platformi ostaje sačuvan.</li>
             <li>Ukupan iznos plaćen kroz mesečno plaćanje veći je od jednokratne cene istog kursa; oba iznosa su istaknuta pre kupovine.</li>
           </ul>
 

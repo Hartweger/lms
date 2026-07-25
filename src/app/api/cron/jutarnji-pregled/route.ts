@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { withCronLog, must } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendDailyAdminBrief, type DailyBrief } from "@/lib/email";
+import { buildSubscriptionBrief } from "@/lib/subscription-brief";
 
 // Dnevni cron (7:00): jutarnji pregled stanja adminu (Nataši).
 // Zamenjuje stari Apps Script "jutarnjeUpozorenjeV2". Zaštita: Bearer CRON_SECRET.
@@ -154,8 +155,56 @@ async function cronHandler(request: NextRequest) {
     razlog: b.reason ?? "",
   }));
 
+  // 8) Pretplate: naplate 2..N nemaju callback ni admin mejl, a otkazivanje i pala
+  // naplata se do sada nisu videli nigde. Ovo je jedino mesto gde ih Nataša vidi.
+  const { data: rateJuce } = await admin
+    .from("orders")
+    // Eksplicitno ime veze: između orders i subscriptions postoje DVA strana ključa
+    // (orders.subscription_id i subscriptions.initial_order_id), pa je embed bez
+    // imena dvosmislen i tiho vrati prazno.
+    .select("full_name, installment_no, total, subscriptions!orders_subscription_id_fkey(total_payments)")
+    .not("subscription_id", "is", null)
+    .gt("installment_no", 1)
+    .gte("created_at", startYday.toISOString())
+    .lt("created_at", startToday.toISOString());
+
+  const { data: aktivnePretplate } = await admin
+    .from("subscriptions")
+    .select("amount, base_oid, retry_oid, retry_count, orders!subscriptions_initial_order_id_fkey(full_name)")
+    .eq("status", "active");
+
+  const { data: otkazaneJuce } = await admin
+    .from("subscriptions")
+    .select("paid_payments, total_payments, cancel_reason, orders!subscriptions_initial_order_id_fkey(full_name)")
+    .eq("status", "cancelled")
+    .gte("cancelled_at", startYday.toISOString())
+    .lt("cancelled_at", startToday.toISOString());
+
+  const pretplate = buildSubscriptionBrief({
+    naplaceneRate: (rateJuce ?? []).map((o) => ({
+      ime: o.full_name,
+      rata: o.installment_no ?? 0,
+      ukupno: one(o.subscriptions)?.total_payments ?? 0,
+      iznos: o.total ?? 0,
+    })),
+    aktivne: (aktivnePretplate ?? []).map((s) => ({
+      ime: one(s.orders)?.full_name ?? null,
+      amount: Number(s.amount),
+      baseOid: s.base_oid,
+      retryOid: s.retry_oid,
+      retryCount: s.retry_count ?? 0,
+    })),
+    otkazane: (otkazaneJuce ?? []).map((s) => ({
+      ime: one(s.orders)?.full_name ?? null,
+      paidPayments: s.paid_payments ?? 0,
+      totalPayments: s.total_payments ?? 0,
+      cancelReason: s.cancel_reason,
+    })),
+  });
+
   const brief: DailyBrief = {
     datum: fmtDate(startToday),
+    pretplate,
     noveNarudzbine,
     neaktivnostPoslato: neaktivnostPoslato ?? 0,
     neplacene,

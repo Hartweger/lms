@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { CANCEL_REASONS } from "@/lib/subscription-cancel-reason";
 
 interface GroupRow {
   id: string;
@@ -41,6 +42,7 @@ function Pretplata({ s, onCancel }: { s: SubRow; onCancel: (id: string) => void 
   const [pita, setPita] = useState(false);
   const [salje, setSalje] = useState(false);
   const [greska, setGreska] = useState("");
+  const [razlog, setRazlog] = useState<string | null>(null);
   const datum = (d: string | null) => (d ? new Date(d).toLocaleDateString("sr-RS") : "-");
   const iznos = s.amount.toLocaleString("de-DE");
 
@@ -50,7 +52,7 @@ function Pretplata({ s, onCancel }: { s: SubRow; onCancel: (id: string) => void 
     const r = await fetch("/api/pretplata/otkazi", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ subscriptionId: s.id }),
+      body: JSON.stringify({ subscriptionId: s.id, razlog }),
     });
     const j = await r.json().catch(() => ({}));
     setSalje(false);
@@ -82,8 +84,32 @@ function Pretplata({ s, onCancel }: { s: SubRow; onCancel: (id: string) => void 
             <div className="mt-3 bg-gray-50 rounded-lg p-3">
               <p className="text-sm text-gray-700">
                 Otkazujemo sve buduće naplate. Pristup ti ostaje do {datum(s.accessUntil)}, a već naplaćeno se ne vraća.
-                Kurs kasnije možeš da nastaviš - napredak ti ostaje sačuvan.
+                Napredak i beleške ostaju sačuvani.
               </p>
+              {/* Stvaran gubitak, bez pretnji: serija se ne nastavlja, nego kreće iz početka.
+                  Napredak se NE briše - i ne sme se tvrditi da se briše (uslovi + banka). */}
+              <p className="text-sm text-gray-700 mt-2">
+                Ali mesečno plaćanje se ne nastavlja od mesta gde je stalo - ako se kasnije vratiš, kreće od prve
+                naplate i prvog nivoa, po ceni koja tada važi.
+              </p>
+              {/* Razlog nam pomaže da popravimo kurs; dobrovoljno, otkazivanje ide i bez njega. */}
+              <p className="text-sm text-gray-700 mt-3">Ako ti nije teško - zašto odustaješ?</p>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {CANCEL_REASONS.map((r) => (
+                  <button
+                    key={r.key}
+                    type="button"
+                    onClick={() => setRazlog(razlog === r.key ? null : r.key)}
+                    className={`text-sm px-3 py-1.5 rounded-full border ${
+                      razlog === r.key
+                        ? "bg-plava text-white border-plava"
+                        : "bg-white text-gray-600 border-gray-300 hover:border-gray-400"
+                    }`}
+                  >
+                    {r.label}
+                  </button>
+                ))}
+              </div>
               <div className="flex gap-2 mt-3">
                 <button onClick={() => setPita(false)} className="text-sm border border-gray-300 px-3 py-2 rounded-lg hover:bg-white">
                   Odustani

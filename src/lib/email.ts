@@ -5,6 +5,7 @@ import { odjavaUrl, listUnsubscribeHeaders } from "@/lib/optout";
 import { htmlToText } from "@/lib/html-to-text";
 import type { Ga4Weekly } from "@/lib/ga4-report";
 import { MERCHANT, CARD_OUTCOME, pdvBreakdown, type NestpayTx, type RecurringTx } from "@/lib/payment-confirmation";
+import type { SubscriptionBrief } from "@/lib/subscription-brief";
 
 const FROM = "Hartweger <info@hartweger.rs>";
 
@@ -1495,6 +1496,8 @@ export async function sendReviewRequest(o: { email: string; name: string }) {
 // Jutarnji pregled adminu (Nataši) - dnevni snapshot stanja iz Supabase.
 export type DailyBrief = {
   datum: string;
+  /** Mesečno plaćanje: naplate 2..N, pale naplate i otkazivanja se ne vide nigde drugde. */
+  pretplate?: SubscriptionBrief;
   noveNarudzbine: { broj: number; iznos: number };
   neaktivnostPoslato: number;
   neplacene: { orderNumber: string; ime: string; total: number; metod: string; danaStaro: number }[];
@@ -1538,6 +1541,26 @@ export async function sendDailyAdminBrief(d: DailyBrief) {
 <tbody>${d.grupeKraj.map((r) => `<tr><td style="padding:4px 8px">${esc(r.nivo)}</td><td style="padding:4px 8px">${esc(r.profesorka)}</td><td style="padding:4px 8px;text-align:right">${esc(r.endDate)}</td><td style="padding:4px 8px;text-align:right">${r.brojPolaznika}</td></tr>`).join("")}</tbody></table>`
       : "";
 
+    // Pretplate: sve tri stvari (naplaćeno, palo, otkazano) inače prolaze tiho.
+    const p = d.pretplate;
+    const redoviPretplata = [
+      ...(p?.naplaceno ?? []).map(
+        (r) => `✅ <strong>${esc(r.ime)}</strong> - ${r.rata}. naplata od ${r.ukupno}, ${fmt(r.iznos)} din`,
+      ),
+      ...(p?.pale ?? []).map(
+        (r) =>
+          `⚠️ <strong>${esc(r.ime)}</strong> - ${r.rata ? `${r.rata}. naplata` : "naplata"} nije prošla, ` +
+          `${r.pokusaj}. pokušaj od 30 (banka pokušava sama)`,
+      ),
+      ...(p?.otkazano ?? []).map(
+        (r) => `🚪 <strong>${esc(r.ime)}</strong> - otkazano posle ${r.placeno}/${r.ukupno} naplata · ${esc(r.razlog)}`,
+      ),
+    ];
+    const pretplateHtml = p
+      ? `${redoviPretplata.length ? `<ul style="margin:0 0 8px;padding-left:20px;font-size:13px">${redoviPretplata.map((r) => `<li style="margin:2px 0">${r}</li>`).join("")}</ul>` : `<p style="margin:0 0 8px;color:#999;font-size:13px">Juče se nije promenilo ništa.</p>`}
+<p style="margin:0;font-size:13px;color:#555">Ukupno: <strong>${p.aktivnih}</strong> ${p.aktivnih === 1 ? "aktivna pretplata" : "aktivnih pretplata"} · <strong>${fmt(p.mesecno)} din</strong> mesečno</p>`
+      : "";
+
     await resend.emails.send({
       from: FROM,
       to: ["info@hartweger.rs", "natasa@hartweger.rs"],
@@ -1549,6 +1572,7 @@ export async function sendDailyAdminBrief(d: DailyBrief) {
 <div style="background:#f8fcfd;border-radius:8px;padding:12px 16px;margin:14px 0;font-size:14px">
   <strong>Juče:</strong> ${d.noveNarudzbine.broj} ${d.noveNarudzbine.broj === 1 ? "nova narudžbina" : "novih narudžbina"} (${fmt(d.noveNarudzbine.iznos)} din naplaćeno) · ${d.neaktivnostPoslato} podsetnika za neaktivnost
 </div>
+${p ? sekcija(`Mesečno plaćanje (${p.aktivnih})`, pretplateHtml, "") : ""}
 ${sekcija(`Neplaćene narudžbine (${d.neplacene.length})`, neplaceneHtml, "Nema neplaćenih narudžbina.")}
 ${sekcija(`Ističe pristup - narednih 7 dana (${d.isticePristup.length})`, isteknHtml, "Niko ne ističe ove nedelje.")}
 ${sekcija(`Individualni - ostao 1 čas (${d.indOstao1.length})`, indHtml, "Nema paketa pri kraju.")}
