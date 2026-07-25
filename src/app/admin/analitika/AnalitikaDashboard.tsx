@@ -37,6 +37,19 @@ function channelOf(src: string | null | undefined): string {
   return "Ostalo";
 }
 
+// Normalizuje način plaćanja (WC naslovi + interni kodovi novog checkouta) u čist naziv.
+// Porudžbine od 0 din bez metode (besplatni upisi, ručne migracije) idu u "Besplatno".
+function paymentLabelOf(order: WcOrder): string {
+  const raw = (order.payment_method_title || order.payment_method || "").toLowerCase();
+  if (!raw) return Number(order.total) === 0 ? "Besplatno" : "Nepoznato";
+  if (raw === "kartica_pretplata") return "Kartica (pretplata)";
+  if (raw.includes("kartic")) return "Kartica";
+  if (raw.includes("paypal")) return "PayPal";
+  if (raw.includes("uplatnica") || raw.includes("tekući račun") || raw.includes("tekuci racun"))
+    return "Uplatnica / tekući račun";
+  return order.payment_method_title || order.payment_method;
+}
+
 type Period =
   | "ovaj-mesec"
   | "prosli-mesec"
@@ -389,7 +402,7 @@ export default function AnalitikaDashboard({
     // Payment methods - from all filtered orders (not just completed)
     const paymentMap: Record<string, number> = {};
     for (const order of filteredOrders) {
-      const pm = order.payment_method_title || order.payment_method || "Nepoznato";
+      const pm = paymentLabelOf(order);
       paymentMap[pm] = (paymentMap[pm] ?? 0) + 1;
     }
     const totalOrderCount = filteredOrders.length;
@@ -773,7 +786,7 @@ export default function AnalitikaDashboard({
                       {fmt(Number(order.total))}
                     </td>
                     <td className="px-4 py-3 text-gray-500 text-xs">
-                      {order.payment_method_title || order.payment_method || "-"}
+                      {paymentLabelOf(order)}
                     </td>
                     <td className="px-4 py-3">
                       <span className={`text-xs px-2 py-1 rounded-full ${badge.cls}`}>
