@@ -33,6 +33,8 @@ export default function AdminEseji() {
   const [editCorrections, setEditCorrections] = useState<{ original: string; corrected: string; explanation: string }[]>([]);
   const [saving, setSaving] = useState(false);
   const [maxByEx, setMaxByEx] = useState<Record<string, number>>({});
+  const [taskByEx, setTaskByEx] = useState<Record<string, string>>({});
+  const [openTasks, setOpenTasks] = useState<Set<string>>(new Set());
   const [assignees, setAssignees] = useState<Record<string, { professorName: string }>>({});
 
   useEffect(() => {
@@ -88,21 +90,33 @@ export default function AdminEseji() {
         }
       }
 
-      // Max bodovi po eseju (options.maxPoints, default 5).
+      // Max bodovi po eseju (options.maxPoints, default 5) + tekst zadatka za pregled.
       const exIds = [...new Set(rows.map((e) => e.exercise_id))];
       if (exIds.length) {
-        const { data: eqs } = await supabase.from("exercise_questions").select("exercise_id, options").in("exercise_id", exIds);
+        const { data: eqs } = await supabase.from("exercise_questions").select("exercise_id, question, options").in("exercise_id", exIds);
         const m: Record<string, number> = {};
+        const t: Record<string, string> = {};
         for (const q of eqs || []) {
           const mp = (q.options as { maxPoints?: number } | null)?.maxPoints;
           if (m[q.exercise_id] === undefined) m[q.exercise_id] = typeof mp === "number" ? mp : 5;
+          if (t[q.exercise_id] === undefined && q.question) t[q.exercise_id] = q.question;
         }
         setMaxByEx(m);
+        setTaskByEx(t);
       }
       setLoading(false);
     };
     load();
   }, [filter, supabase]);
+
+  const toggleTask = (essayId: string) => {
+    setOpenTasks((prev) => {
+      const next = new Set(prev);
+      if (next.has(essayId)) next.delete(essayId);
+      else next.add(essayId);
+      return next;
+    });
+  };
 
   const startReview = (essay: EssayRow) => {
     setEditingId(essay.id);
@@ -219,6 +233,24 @@ export default function AdminEseji() {
             <p className="text-xs text-gray-400 mb-3">
               {essay.lessons?.title} - {essay.exercises?.title}
             </p>
+
+            {taskByEx[essay.exercise_id] && (
+              <div className="mb-4">
+                <button
+                  type="button"
+                  onClick={() => toggleTask(essay.id)}
+                  className="text-sm text-plava hover:underline"
+                >
+                  {openTasks.has(essay.id) ? "Sakrij zadatak ▲" : "Prikaži zadatak ▼"}
+                </button>
+                {openTasks.has(essay.id) && (
+                  <div className="bg-amber-50 rounded-lg p-4 mt-2">
+                    <p className="text-xs font-semibold text-amber-700 mb-1">Zadatak:</p>
+                    <p className="text-sm text-gray-700 whitespace-pre-wrap">{taskByEx[essay.exercise_id]}</p>
+                  </div>
+                )}
+              </div>
+            )}
 
             <div className="bg-gray-50 rounded-lg p-4 mb-4">
               <p className="text-xs font-semibold text-gray-500 mb-1">Tekst studenta:</p>

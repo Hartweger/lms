@@ -39,6 +39,8 @@ export default function ProfesorEseji() {
   const [profScore, setProfScore] = useState(3);
   const [editCorrections, setEditCorrections] = useState<{ original: string; corrected: string; explanation: string }[]>([]);
   const [saving, setSaving] = useState(false);
+  const [taskByEx, setTaskByEx] = useState<Record<string, string>>({});
+  const [openTasks, setOpenTasks] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     const load = async () => {
@@ -99,10 +101,33 @@ export default function ProfesorEseji() {
       }
 
       setEssays(rows.map((r) => ({ ...r, user_profiles: profById.get(r.user_id) })));
+
+      // Tekst zadatka (uputstvo koje polaznik vidi) - da profesor zna šta je traženo.
+      const exIds = [...new Set(rows.map((e) => e.exercise_id))];
+      if (exIds.length > 0) {
+        const { data: eqs } = await supabase
+          .from("exercise_questions")
+          .select("exercise_id, question")
+          .in("exercise_id", exIds);
+        const t: Record<string, string> = {};
+        for (const q of eqs || []) {
+          if (t[q.exercise_id] === undefined && q.question) t[q.exercise_id] = q.question;
+        }
+        setTaskByEx(t);
+      }
       setLoading(false);
     };
     load();
   }, [filter, supabase, prof]);
+
+  const toggleTask = (essayId: string) => {
+    setOpenTasks((prev) => {
+      const next = new Set(prev);
+      if (next.has(essayId)) next.delete(essayId);
+      else next.add(essayId);
+      return next;
+    });
+  };
 
   const startReview = (essay: EssayRow) => {
     setEditingId(essay.id);
@@ -205,6 +230,24 @@ export default function ProfesorEseji() {
             <p className="text-xs text-gray-400 mb-3">
               {essay.lessons?.title} - {essay.exercises?.title}
             </p>
+
+            {taskByEx[essay.exercise_id] && (
+              <div className="mb-4">
+                <button
+                  type="button"
+                  onClick={() => toggleTask(essay.id)}
+                  className="text-sm text-plava hover:underline"
+                >
+                  {openTasks.has(essay.id) ? "Sakrij zadatak ▲" : "Prikaži zadatak ▼"}
+                </button>
+                {openTasks.has(essay.id) && (
+                  <div className="bg-amber-50 rounded-lg p-4 mt-2">
+                    <p className="text-xs font-semibold text-amber-700 mb-1">Zadatak:</p>
+                    <p className="text-sm text-gray-700 whitespace-pre-wrap">{taskByEx[essay.exercise_id]}</p>
+                  </div>
+                )}
+              </div>
+            )}
 
             <div className="bg-gray-50 rounded-lg p-4 mb-4">
               {essay.audio_url ? (
