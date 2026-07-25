@@ -59,7 +59,7 @@ export default async function AdminNapredak({
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Napredak po kursevima</h1>
         <p className="text-sm text-gray-500 mt-1">
-          Stopa završavanja i odustajanja. „Nije počeo" = upisan ali nije uradio nijednu lekciju.
+          Stopa završavanja i odustajanja. „Nije počeo“ = upisan ali nije uradio nijednu lekciju.
         </p>
         <div className="flex gap-2 mt-3">
           <Link

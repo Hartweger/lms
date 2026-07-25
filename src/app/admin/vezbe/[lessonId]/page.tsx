@@ -107,7 +107,7 @@ export default function AdminVezbe() {
   };
 
   const addQuestion = async (exerciseId: string, exerciseType: string) => {
-    let defaultData: Record<string, unknown> = {
+    const defaultData: Record<string, unknown> = {
       exercise_id: exerciseId,
       question: "",
       correct_answer: "",

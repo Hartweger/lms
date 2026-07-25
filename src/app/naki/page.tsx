@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import NakiChat from "@/components/naki/NakiChat";
 import { NakiAvatar } from "@/components/naki/NakiAvatar";
 
@@ -173,7 +174,7 @@ export default function NakiPage() {
         </ul>
         <p>
           Zanima te kako se NaKI poredi sa Duolingom, Babbelom i ostalima? Pogledaj naš pregled{" "}
-          <a href="/magazin/aplikacije-za-ucenje-nemackog-jezika">najboljih aplikacija za učenje nemačkog jezika</a>.
+          <Link href="/magazin/aplikacije-za-ucenje-nemackog-jezika">najboljih aplikacija za učenje nemačkog jezika</Link>.
         </p>
       </section>
 

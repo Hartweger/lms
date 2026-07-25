@@ -637,7 +637,7 @@ export default function AnalitikaDashboard({
           <h2 className="text-lg font-semibold text-gray-900 mb-2">
             Prihod po izvoru (kanalu)
           </h2>
-          <p className="text-xs text-gray-400 mb-2">Instagram, Google, Newsletter, Direktno… (iz WooCommerce atribucije; nove narudžbine = „Nepoznato" dok se ne uvede hvatanje)</p>
+          <p className="text-xs text-gray-400 mb-2">Instagram, Google, Newsletter, Direktno… (iz WooCommerce atribucije; nove narudžbine = „Nepoznato“ dok se ne uvede hvatanje)</p>
           <CountryChart data={metrics.sourceData} />
         </div>
       </div>

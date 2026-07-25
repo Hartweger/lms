@@ -71,7 +71,7 @@ export async function POST(request: Request) {
   for (const e of essays) {
     const courseId = courseByLesson.get(e.lesson_id as string);
     // 1) precizno: profesor dodeljen baš za kurs ove lekcije.
-    let profId = courseId ? byKey.get(linkKey(e.user_id as string, courseId)) : undefined;
+    const profId = courseId ? byKey.get(linkKey(e.user_id as string, courseId)) : undefined;
     if (profId) {
       assignees[e.id as string] = { professorName: profName.get(profId) || "Profesor" };
       continue;

@@ -21,7 +21,7 @@ function formatContent(text: string): string {
   if (text.includes("<p>") || text.includes("<h") || text.includes("<div")) {
     return text;
   }
-  let html = text
+  const html = text
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")

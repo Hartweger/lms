@@ -87,7 +87,7 @@ export function applyFiftyFifty(
 }
 
 /** Zameni pitanje - logika samo troši džoker; novo pitanje bira komponenta. */
-export function useSwap(state: MillionaireState): MillionaireState {
+export function applySwap(state: MillionaireState): MillionaireState {
   if (state.status !== "playing" || state.usedSwap) return state;
   return { ...state, usedSwap: true, hiddenOptions: [] };
 }
