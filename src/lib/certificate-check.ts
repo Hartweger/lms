@@ -1,8 +1,10 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { sendCourseCompletedEmail } from "@/lib/email";
+import { passesThreshold } from "@/lib/certificate-threshold";
 
 /**
- * Per-modul provera Modelltest sertifikata: SVAKI modul mora ≥60%.
+ * Per-modul provera Modelltest sertifikata: SVAKI modul mora ≥60%
+ * (kod kurseva iz certificate-threshold: strogo >60%).
  * - quiz/grouped vežbe (Lesen, Hören): najbolji exercise_attempt → score/total.
  * - essay vežbe (Schreiben): sve moraju biti ocenjene (professor_score 1-5);
  *   modul = prosek professor_score / 5 (≥0.6 = ≥3/5).
@@ -33,9 +35,14 @@ export async function checkAndIssueCertificate(
   const { data: exercises } = await admin.from("exercises").select("id, exercise_type").eq("lesson_id", lessonId);
   if (!exercises || exercises.length === 0) return { eligible: false, percent: 0 };
 
+  // Prag zavisi od kursa (podrazumevano ≥60%, za neke strogo >60%).
+  const { data: courseRow } = await admin.from("courses").select("slug").eq("id", courseId).single();
+  const courseSlug = (courseRow?.slug as string | undefined) ?? null;
+
   const quizEx = exercises.filter((e) => e.exercise_type !== "essay");
   const essayEx = exercises.filter((e) => e.exercise_type === "essay");
-  const modulePcts: number[] = [];
+  // Po modulu čuvamo (score, total) - prag se poredi celobrojno, bez zaokruživanja.
+  const moduleScores: { score: number; total: number }[] = [];
 
   // quiz moduli (Lesen, Hören, ...)
   const quizIds = quizEx.map((e) => e.id);
@@ -52,7 +59,7 @@ export async function checkAndIssueCertificate(
   for (const e of quizEx) {
     const b = bestByEx.get(e.id);
     if (!b || !b.total) return { eligible: false, percent: 0, reason: "incomplete" };
-    modulePcts.push(b.score / b.total);
+    moduleScores.push({ score: b.score, total: b.total });
   }
 
   // Schreiben modul (eseji) - svi moraju biti ocenjeni; težinski po maxPoints (40/40/20), default 5.
@@ -83,11 +90,13 @@ export async function checkAndIssueCertificate(
     if (gradedByEx.size < essayEx.length) return { eligible: false, percent: 0, reason: "schreiben-incomplete" };
     let score = 0, max = 0;
     for (const [exId, s] of gradedByEx) { score += s.professor_score; max += maxByEx.get(exId) ?? 5; }
-    modulePcts.push(max > 0 ? score / max : 0);
+    moduleScores.push({ score, total: max });
   }
 
-  const overall = Math.round((modulePcts.reduce((a, b) => a + b, 0) / modulePcts.length) * 100);
-  const allPass = modulePcts.every((p) => p >= 0.6);
+  const overall = Math.round(
+    (moduleScores.reduce((a, m) => a + (m.total > 0 ? m.score / m.total : 0), 0) / moduleScores.length) * 100,
+  );
+  const allPass = moduleScores.every((m) => passesThreshold(m.score, m.total, courseSlug));
   if (!allPass) return { eligible: false, percent: overall };
 
   // Idempotentno izdavanje

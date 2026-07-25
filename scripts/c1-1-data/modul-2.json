@@ -1,0 +1,471 @@
+{
+  "module": "Modul 2",
+  "moduleTheme": "Was verbinden Sie mit Mobilität?",
+  "lessons": [
+    {
+      "title": "Mobilität - Eine Frage der Gerechtigkeit?",
+      "sections": [
+        { "type": "badge", "module": "Modul 2", "category": "grammatik" },
+        {
+          "type": "text",
+          "style": "info",
+          "content": "## 🎯 Lernziele\n\n- einen Radiobeitrag über Mobilität verstehen\n- ein Zukunftsszenario entwerfen\n- Nomen-Verb-Verbindungen\n- Präpositionen der Redewiedergabe; indirekte Rede mit Konjunktiv I und II: Passiv"
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## 📘 Grammatik: Präpositionen der Redewiedergabe\n\nWenn wir wiedergeben, was jemand gesagt oder geschrieben hat, können wir die Informationsquelle mit einer Präposition angeben. Die Präpositionen **gemäß, laut, nach** und **zufolge** (alle **+ Dativ**) nennen die Quelle einer Aussage und drücken dabei **Neutralität oder Distanz** aus: Die Sprecherin / Der Sprecher übernimmt keine Verantwortung für den Inhalt, sondern verweist auf die Quelle."
+        },
+        {
+          "type": "text",
+          "style": "info",
+          "content": "Wichtig: Das Verb steht bei diesen Präpositionen immer im **Indikativ** (nicht im Konjunktiv)."
+        },
+        {
+          "type": "table",
+          "headers": ["Präposition", "Kasus", "Position", "Beispiel"],
+          "rows": [
+            ["laut", "+ Dativ", "vorangestellt", "**Laut** der Definition einer Berliner Stiftung geht es bei Mobilität um die Möglichkeit, von A nach B zu kommen."],
+            ["nach", "+ Dativ", "voran- oder nachgestellt", "**Nach** dieser Definition ist Mobilität eine Voraussetzung dafür, am gesellschaftlichen Leben teilzunehmen."],
+            ["gemäß", "+ Dativ", "voran- oder nachgestellt", "**Gemäß** einer Erhebung von 2015 werden 92 % des öffentlichen Raums für Parkflächen benötigt."],
+            ["zufolge", "+ Dativ", "immer nachgestellt", "Einer aktuellen Studie **zufolge** sind 85 % aller Menschen in Deutschland tagtäglich unterwegs."]
+          ]
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "Weiteres Beispiel mit nachgestelltem *zufolge*: Ersten Schätzungen **zufolge** landen Leihroller schon nach wenigen Monaten auf dem Müll.\n\nTypische Quellen sind: eine Studie, eine Umfrage, eine Erhebung, eine Statistik, eine Definition, eine Schätzung, eine Expertin / ein Experte, ein Bericht."
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## 📘 Grammatik: Indirekte Rede mit Konjunktiv I und II: Passiv\n\nMit der indirekten Rede geben wir Aussagen anderer Personen distanziert wieder, z. B. in Nachrichten, Berichten oder wissenschaftlichen Texten. Dafür verwendet man den **Konjunktiv I**. Wenn die Form des Konjunktivs I mit dem Indikativ identisch ist (vor allem im Plural), weicht man auf den **Konjunktiv II** aus.\n\nAuch Passivsätze können in der indirekten Rede stehen. Dabei wird nur das Hilfsverb (*werden* bzw. *sein*) in den Konjunktiv gesetzt:"
+        },
+        {
+          "type": "table",
+          "headers": ["Zeit", "Bildung", "Beispiel (indirekte Rede)"],
+          "rows": [
+            ["Passiv Gegenwart, Singular", "**werde** + Partizip Perfekt", "Ein kommunaler Shuttle-Bus **werde** nächstes Jahr **eingerichtet**, heißt es aus der Gemeinde."],
+            ["Passiv Gegenwart, Plural", "**würden** + Partizip Perfekt (Konjunktiv II)*", "Birte Arnolds findet, die Bedürfnisse der Menschen auf dem Land **würden** oft **übersehen**."],
+            ["Passiv Vergangenheit, Singular", "**sei** + Partizip Perfekt + **worden**", "Das Netz der Fahrradwege **sei** bis Ende des Jahres **ausgebaut worden**."],
+            ["Passiv Vergangenheit, Plural", "**seien** + Partizip Perfekt + **worden**", "Mit solchen Maßnahmen **seien** schon gute Erfahrungen **gemacht worden**, sagt Serkan Kaya."]
+          ]
+        },
+        {
+          "type": "text",
+          "style": "info",
+          "content": "* Da die Form des Konjunktivs I im Plural mit der Form des Indikativs identisch ist (*sie werden* = Indikativ und Konjunktiv I), verwendet man hier den Konjunktiv II (*sie würden*)."
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## Von der direkten zur indirekten Rede"
+        },
+        {
+          "type": "table",
+          "headers": ["Direkte Rede (Indikativ)", "Indirekte Rede (Konjunktiv I / II)"],
+          "rows": [
+            ["„Die Bedürfnisse der Menschen auf dem Land **werden** oft **übersehen**.“", "Die Bedürfnisse der Menschen auf dem Land **würden** oft **übersehen**."],
+            ["„Ein kommunaler Shuttle-Bus **wird** nächstes Jahr **eingerichtet**.“", "Ein kommunaler Shuttle-Bus **werde** nächstes Jahr **eingerichtet**."],
+            ["„Bis Ende des Jahres **wird** das Netz der Fahrradwege **ausgebaut**.“", "Bis Ende des Jahres **werde** das Netz der Fahrradwege **ausgebaut**."],
+            ["„Die Geschwindigkeitsbegrenzungen **sind** bisher viel zu selten **eingehalten worden**.“", "Die Geschwindigkeitsbegrenzungen **seien** bisher viel zu selten **eingehalten worden**."],
+            ["„In den nächsten Jahren **werden** 80 % der Leihwagen mit Strom **betrieben**.“", "In den nächsten Jahren **würden** 80 % der Leihwagen mit Strom **betrieben**."]
+          ]
+        },
+        {
+          "type": "text",
+          "style": "info",
+          "content": "Tipp: In Meldungen und Berichten kombiniert man beide Mittel: Die erste Aussage gibt man mit einer Präposition der Redewiedergabe wieder (*Neuen Umfrageergebnissen zufolge wünschen sich 60 % der Leipziger mehr Fahrradwege.*), die zweite mit der indirekten Rede (*Die Bürgermeisterin sagt, bis Ende des Jahres werde das Netz der Fahrradwege ausgebaut.*)."
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## 📚 Wörter: Nomen-Verb-Verbindungen\n\nNomen-Verb-Verbindungen bestehen aus einem Nomen und einem Verb. Nicht das Verb, sondern das **Nomen** trägt hier die Hauptbedeutung. Manchmal kommt ein Artikel (z. B. *der Ansicht sein*) oder eine Präposition (z. B. *in Angst versetzen*) dazu. Oft gibt es ein einfaches Verb mit ähnlicher Bedeutung (z. B. *eine Entscheidung treffen* = *entscheiden*). Nomen-Verb-Verbindungen sind typisch für formelle und geschriebene Sprache."
+        },
+        {
+          "type": "table",
+          "headers": ["Nomen-Verb-Verbindung", "Bedeutung", "Beispiel"],
+          "rows": [
+            ["außer Frage stehen", "zweifellos so sein", "Mobilität - das steht außer Frage - spielt in vielen Lebensbereichen eine zentrale Rolle."],
+            ["etw. in Anspruch nehmen", "nutzen", "Als Rollstuhlfahrer kann er etliche Angebote des öffentlichen Nahverkehrs gar nicht in Anspruch nehmen."],
+            ["in Frage kommen", "möglich sein", "Birte Arnolds würde gern auf ihr Auto verzichten. Im Moment kommt das nicht in Frage."],
+            ["zur Verfügung stehen", "da sein, vorhanden sein", "Nur 8 % der Flächen stehen für Haltestellen, Fahrradabstellplätze oder Sitzbänke zur Verfügung."],
+            ["an jdn. / etw. Anforderungen stellen", "Ansprüche haben", "Die Menschen stellen viele unterschiedliche Anforderungen an Mobilität."],
+            ["auf eine Idee kommen", "eine Idee haben", "Die Leute im Dorf sind auf die Idee gekommen, eine Fahrgemeinschaft zu gründen."],
+            ["etw. (Dat.) auf den Grund gehen", "etw. genauer untersuchen", "Um diesen Fragen auf den Grund zu gehen, hat Nora Gerber Eindrücke gesammelt."],
+            ["eine Rolle spielen", "relevant sein", "Mobilität spielt im Berufsleben eine entscheidende Rolle."],
+            ["eine Entscheidung treffen", "entscheiden", "Bei der Verkehrsplanung müssen wichtige Entscheidungen getroffen werden."],
+            ["etw. in Frage stellen", "etw. kritisch hinterfragen", "Viele stellen das Konzept der autogerechten Stadt in Frage."]
+          ]
+        },
+        {
+          "type": "text",
+          "style": "beispiele",
+          "content": "## 💬 Kommunikation\n\n**Zusammenhänge erläutern**\n\n- Für mich besteht ein Zusammenhang zwischen ... und ..., weil ...\n- ... hat auf jeden Fall etwas mit ... zu tun. Das sieht man an ...\n- Daran sieht man, dass ... mit ... direkt / eng / unmittelbar zusammenhängt.\n- ... geht / gehen oft mit ... einher. Ein Beispiel wäre ... / Das zeigt sich z. B. daran, dass ...\n\n**Eine Prognose aufstellen**\n\n- Ich erwarte / vermute, dass ...\n- Es ist anzunehmen / zu erwarten, dass ...\n- Gewiss / Sicher / Zweifellos ...\n- Aller Wahrscheinlichkeit nach ...\n- Alles deutet darauf hin, dass ...\n- Es ist denkbar / vorstellbar, dass ...\n- ... lässt vermuten, dass ...\n- Es könnte / dürfte / wird ... geben."
+        }
+      ]
+    },
+    {
+      "title": "Körper und Geist - Mit Schwung in den Alltag!",
+      "sections": [
+        { "type": "badge", "module": "Modul 2", "category": "grammatik" },
+        {
+          "type": "text",
+          "style": "info",
+          "content": "## 🎯 Lernziele\n\n- einen Vortrag über das Zusammenspiel von Bewegung und Hirnleistung verstehen\n- ein Poster zu einer wissenschaftlichen Frage erstellen und präsentieren\n- Wortfeld Körperteile und Bewegung\n- Nominalstil I"
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## 📘 Grammatik: Nominalstil I\n\nIm Nominalstil benutzt man **Nominalgruppen** statt ganzer Sätze. Eine Nominalgruppe enthält immer ein Nomen, das meistens von einem Verb abgeleitet ist (z. B. *anregen* -> *die Anregung*, *verarbeiten* -> *die Verarbeitung*, *abbauen* -> *der Abbau*).\n\nMit dem Nominalstil werden Informationen **kürzer und prägnanter** dargestellt. Man findet ihn vor allem in **formellen Kontexten**, z. B. in der Behörden- und in der Fachsprache. Auch **Notizen, Überschriften, Poster und Stichpunkte** werden häufig im Nominalstil formuliert."
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## Vom Verbalstil zum Nominalstil: die wichtigsten Regeln"
+        },
+        {
+          "type": "table",
+          "headers": ["Regel", "Verbalstil (Satz)", "Nominalstil (Nominalgruppe)"],
+          "rows": [
+            ["Subjekt (Nominativ) im Aktivsatz -> Genitiv", "Die Gehirnzellen vernetzen sich.", "(die) Vernetzung **der Gehirnzellen**"],
+            ["Personalpronomen -> Possessivartikel", "Sie vernetzen sich.", "**ihre** Vernetzung"],
+            ["Akkusativ im Aktivsatz -> Genitiv", "Bewegung regt die Durchblutung an.", "(die) Anregung **der Durchblutung**"],
+            ["Subjekt (Nominativ) im Passivsatz -> Genitiv", "Die Durchblutung wird angeregt.", "(die) Anregung **der Durchblutung**"],
+            ["Adverb -> dekliniertes Adjektiv", "Informationen werden schneller verarbeitet.", "**schnellere** Verarbeitung von Informationen"],
+            ["Nomen ohne Artikel -> von + Dativ", "Der Körper schüttet Glückshormone aus und baut Stress ab.", "(die) Ausschüttung **von Glückshormonen**; (der) Abbau **von Stress**"]
+          ]
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## Weitere Beispiele aus der Lektion"
+        },
+        {
+          "type": "table",
+          "headers": ["Verbalstil", "Nominalstil"],
+          "rows": [
+            ["Sie trainieren den gesamten Körper optimal.", "optimales Training des gesamten Körpers"],
+            ["Die Gelenke werden nicht belastet.", "keine Belastung der Gelenke"],
+            ["Die Beweglichkeit verbessert sich.", "Verbesserung der Beweglichkeit"],
+            ["Sie trainieren effektiv Gleichgewicht und Koordination.", "effektives Training von Gleichgewicht und Koordination"],
+            ["Die Muskelaktivität wird deutlich gesteigert.", "deutliche Steigerung der Muskelaktivität"],
+            ["Der Stoffwechsel wird angeregt.", "Anregung des Stoffwechsels"],
+            ["Der Sauerstoffgehalt erhöht sich / wird erhöht.", "Erhöhung des Sauerstoffgehalts"],
+            ["Neue Verbindungen im Gehirn werden aufgebaut.", "Aufbau neuer Verbindungen im Gehirn"],
+            ["Die Leistungsfähigkeit verbessert sich.", "Verbesserung der Leistungsfähigkeit"],
+            ["Die Konzentrationsfähigkeit wird gefördert.", "Förderung der Konzentrationsfähigkeit"]
+          ]
+        },
+        {
+          "type": "text",
+          "style": "info",
+          "content": "Merke: Ob der Aktivsatz oder der Passivsatz zugrunde liegt, ist im Nominalstil oft nicht mehr erkennbar - *die Anregung der Durchblutung* kann sowohl „Bewegung regt die Durchblutung an“ als auch „Die Durchblutung wird angeregt“ bedeuten."
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## 📚 Wörter: Wortfeld Körperteile und Bewegung\n\nIn dieser Lektion geht es um Körperteile und um Verben, mit denen man Bewegungen und Übungen beschreibt - z. B. in Übungsanweisungen (*Beugen Sie den Oberkörper nach vorn.*).\n\n**Körperteile:** der Arm, der Ellbogen, die Hand, die Handfläche, das Knie, der Kopf, der Nacken, der Oberkörper, der Oberschenkel, der Unterschenkel, die Schulter, das Schulterblatt, der Brustkorb, der Hals, der Rücken, das Gelenk, der Muskel"
+        },
+        {
+          "type": "table",
+          "headers": ["Verb", "Bedeutung / typische Kombination", "Beispiel aus den Übungsanweisungen"],
+          "rows": [
+            ["beugen", "nach vorn / zur Seite biegen", "Beugen Sie den Oberkörper nach vorn."],
+            ["sinken lassen", "langsam nach unten bewegen", "Lassen Sie den Oberkörper auf die Oberschenkel sinken."],
+            ["kreisen", "eine Kreisbewegung machen", "Kreisen Sie die Schultern vorwärts und rückwärts."],
+            ["neigen", "schräg halten, kippen", "Neigen Sie den Kopf zur Seite."],
+            ["dehnen", "lang ziehen, strecken", "Dehnen Sie den Hals- und den Nackenbereich."],
+            ["ausschütteln", "locker schütteln", "Schütteln Sie den ganzen Körper aus."],
+            ["lockern", "locker machen, entspannen", "Lockern Sie Muskeln und Gelenke."],
+            ["strecken", "gerade und lang machen", "Strecken Sie die Arme über den Kopf."],
+            ["aufeinanderlegen", "eins auf das andere legen", "Legen Sie die Handflächen aufeinander."],
+            ["verschränken", "kreuzen, ineinanderlegen", "Verschränken Sie die Hände hinter dem unteren Rücken."]
+          ]
+        },
+        {
+          "type": "text",
+          "style": "info",
+          "content": "Tipp zur Wortbildung: Aus Adjektiven kann man Verben bilden, z. B. *locker* -> *lockern* (= locker machen / locker werden). Und aus den Bewegungsverben entstehen die Nomen für den Nominalstil: *dehnen* -> *die Dehnung*, *entspannen* -> *die Entspannung*, *anregen* -> *die Anregung*."
+        },
+        {
+          "type": "text",
+          "style": "beispiele",
+          "content": "## 💬 Kommunikation\n\n**Über persönliche Erfahrungen berichten**\n\n- Also, ich habe die Erfahrung gemacht, dass ...\n- Ich habe festgestellt / beobachtet, dass ...\n- Mir ist aufgefallen, dass ...\n\n**Sich auf die Erfahrungen einer Person beziehen**\n\n- ... entspricht auch / nicht meiner Erfahrung.\n- Es ist bei mir auch / nicht so, dass ...\n- Ich kann (nur) bestätigen, dass ...\n- Mir geht es genauso / nicht so: Wenn ich ...\n\n**Auswirkungen beschreiben**\n\n- Wenn man ..., dann führt das dazu, dass ...\n- ... bewirkt / hat zur Folge, dass ...\n- ... hat folgende Auswirkungen / Effekte: ...\n- ... wirkt sich folgendermaßen auf ... aus: ..."
+        }
+      ]
+    },
+    {
+      "title": "Ausbildungswege - Offene Türen und gläserne Decken",
+      "sections": [
+        { "type": "badge", "module": "Modul 2", "category": "grammatik" },
+        {
+          "type": "text",
+          "style": "info",
+          "content": "## 🎯 Lernziele\n\n- Erfahrungsberichte über Entscheidungen nach dem Schulabschluss verstehen\n- eine Grafik zum Thema Ausbildung und Studium beschreiben\n- Wortbildung: das Verb *fallen*\n- konzessive Zusammenhänge: Gegengründe angeben und Widersprüche ausdrücken"
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## 📘 Grammatik: Konzessive Zusammenhänge\n\nMit konzessiven Konnektoren und Präpositionen drückt man **Gegengründe und Widersprüche** aus: Etwas passiert, **obwohl** ein Grund dagegen spricht - die erwartete Folge tritt nicht ein. (*Ungeachtet meiner guten Noten fühle ich mich manchmal unsicher.* -> Man würde erwarten, dass sie sich mit guten Noten sicher fühlt, aber das Gegenteil ist der Fall.)\n\nEs gibt drei Möglichkeiten, konzessive Zusammenhänge auszudrücken:"
+        },
+        {
+          "type": "table",
+          "headers": ["Typ", "Konnektor / Präposition", "Beispiel"],
+          "rows": [
+            ["Nebensatz-Konnektoren", "wenn ... auch", "Heute komme ich mit meinem Gehalt gut aus, **wenn** ich **auch** niemals so viel verdienen werde wie meine Eltern."],
+            ["", "wobei", "Ich hatte dieses Problem nicht, **wobei** meine Abiturnoten eher mittelmäßig waren."],
+            ["", "obwohl (Wiederholung)", "**Obwohl** ich nie in ihre Fußstapfen treten wollte, bin ich sehr dankbar für die Chancen."],
+            ["Hauptsatz-Konnektoren", "nichtsdestotrotz", "Meine Eltern hatten immer einen sicheren Arbeitsplatz. **Nichtsdestotrotz** war das Geld bei uns oftmals knapp."],
+            ["", "allerdings", "Ich hatte ein ausgezeichnetes Abitur. Unsere Vorstellungen über meine berufliche Zukunft gingen **allerdings** weit auseinander."],
+            ["", "trotzdem / dennoch (Wiederholung)", "Die Vergütung ist nicht hoch. **Trotzdem** entscheiden sich viele für eine Ausbildung."],
+            ["Präposition + Genitiv", "ungeachtet", "**Ungeachtet** meiner guten Noten fühle ich mich manchmal unsicher an der Universität."],
+            ["", "trotz (Wiederholung)", "**Trotz** guter Abschlussnoten war es schwierig, einen Ausbildungsplatz zu bekommen."]
+          ]
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## Besonderheiten\n\n- **wenn ... auch** ist ein zweiteiliger Konnektor: Das Subjekt steht **zwischen beiden Teilen** (*..., wenn ich auch niemals so viel verdienen werde wie meine Eltern.*). Der Konnektor leitet einen Nebensatz ein, das Verb steht am Ende.\n- **wobei** ist immer **nachgestellt**: Es schränkt eine vorher gemachte Aussage nachträglich ein oder relativiert sie (*Ich hatte dieses Problem nicht, wobei meine Abiturnoten eher mittelmäßig waren.*).\n- **nichtsdestotrotz** bedeutet dasselbe wie *trotzdem*, ist aber formeller. Es steht meist auf Position 1, danach folgt das Verb.\n- **allerdings** steht auf Position 1 oder im Mittelfeld des Satzes (*Unsere Vorstellungen gingen allerdings weit auseinander.*).\n- **ungeachtet + Genitiv** ist formell und typisch für die geschriebene Sprache (*ungeachtet des früheren Berufseinstiegs, ungeachtet meiner guten Noten*)."
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## Umformungen (aus der Lektion)"
+        },
+        {
+          "type": "table",
+          "headers": ["Ausgangssätze", "Konzessive Verbindung"],
+          "rows": [
+            ["Eine Ausbildung kannst du in zwei oder drei Jahren abschließen. Du kannst dich auch ein Leben lang weiterentwickeln.", "**Ungeachtet des früheren Berufseinstiegs** kannst du dich in vielen Ausbildungsberufen ein Leben lang weiterentwickeln."],
+            ["Eine Ausbildung ist praktischer angelegt als ein Studium. Es gibt auch theoretische Lernphasen.", "Eine Ausbildung ist praktischer angelegt als ein Studium, **wobei** es auch theoretische Lernphasen gibt."],
+            ["In der Ausbildung bist du stärker in einen vorgegebenen Tagesrhythmus eingebunden. Du musst dich gut selbst organisieren können.", "In der Ausbildung bist du stärker in einen vorgegebenen Tagesrhythmus eingebunden. **Nichtsdestotrotz** musst du dich gut selbst organisieren können."],
+            ["Bei einer Ausbildung hast du einen ziemlich festen Ausbildungsplan. Du kannst auch Wahlmodule auswählen.", "Bei einer Ausbildung hast du einen ziemlich festen Ausbildungsplan. Du kannst **allerdings** auch Wahlmodule auswählen."],
+            ["Die Ausbildung wird bezahlt. Die Vergütung ist oft nicht sehr hoch.", "Die Ausbildung wird bezahlt, **wenn** die Vergütung **auch** oft nicht sehr hoch ist."]
+          ]
+        },
+        {
+          "type": "text",
+          "style": "default",
+          "content": "## 📚 Wörter: Wortbildung - das Verb *fallen*\n\nDas Verb *fallen* kann besonders viele Bedeutungen annehmen, je nachdem, mit welchem Präfix es auftritt. Einige Verben sind trennbar (*abfallen, auffallen, durchfallen, umfallen, zufallen, zurückfallen*), andere nicht (*entfallen, missfallen, überfallen, verfallen, zerfallen*)."
+        },
+        {
+          "type": "table",
+          "headers": ["Verb", "Bedeutung", "Beispiel"],
+          "rows": [
+            ["abfallen", "herunterfallen", "Im Herbst fallen die Blätter von den Bäumen ab."],
+            ["", "jemandem als Anteil zukommen", "Beim Abendessen fällt immer auch ein bisschen Essen für unseren Hund ab."],
+            ["anfallen", "entstehen, sich ergeben", "Wenn ich koche, fällt immer viel Abwasch an."],
+            ["", "plötzlich angreifen", "Als Kind wurde ich mal von einem Hund angefallen."],
+            ["auffallen", "besonders deutlich werden", "In der Berufsschule fiel mir auf, dass viele meiner Mitschüler jünger waren als ich."],
+            ["durchfallen", "nicht bestehen", "Ich habe oft Angst, in Prüfungen durchzufallen."],
+            ["entfallen", "vergessen", "Mir ist leider sein Name entfallen."],
+            ["", "nicht stattfinden, ausfallen", "Der Kurs entfällt heute wegen Krankheit der Dozentin."],
+            ["", "als Anteil auf jemanden kommen", "Auf jeden Kollegen entfallen im Jahr 360 Euro mehr."],
+            ["missfallen", "nicht gefallen", "Anfangs missfiel meinen Eltern meine Entscheidung."],
+            ["schwerfallen", "Schwierigkeiten machen", "Das Stillsitzen in der Schule fiel mir schwer."],
+            ["überfallen", "plötzlich angreifen", "Die Bank wurde überfallen, aber die Polizei hat die Täter gefasst."],
+            ["umfallen", "fallen, hinfallen", "Die Vase ist umgefallen."],
+            ["verfallen", "wertlos oder ungültig werden", "Die Tickets verfallen nach sechs Monaten."],
+            ["zerfallen", "auseinanderfallen", "Die alte Mauer ist zerfallen."],
+            ["zufallen", "sich plötzlich (von selbst) schließen", "Mir sind die Augen vor Müdigkeit zugefallen."],
+            ["", "eine Aufgabe bekommen", "In der neuen Firma fällt mir die Aufgabe der Projektleitung zu."],
+            ["zurückfallen", "im Wettkampf hinter dem Gegner zurückbleiben", "Das Team ist auf Platz 3 zurückgefallen."]
+          ]
+        },
+        {
+          "type": "text",
+          "style": "beispiele",
+          "content": "## 💬 Kommunikation\n\n**Relevanz einschätzen**\n\n- Was für ... meines Erachtens ausschlaggebend ist, ist / sind ...\n- Ich denke, von zentraler Bedeutung dürfte ... sein.\n- Wenn sich jemand für / gegen ... entscheidet, dürfte es vor allem daran liegen, dass ...\n\n**Thema und Quelle einer Grafik nennen**\n\n- Die Grafik liefert Informationen zu ...\n- Die Grafik / Das Liniendiagramm / Das Tortendiagramm zeigt, wie ...\n- Die Grafik stellt die Entwicklung / die prozentuale Verteilung von ... dar.\n- Die Quelle ist ... Die Daten wurden ... [Jahr] erhoben.\n- Die Daten / Zahlen stammen aus einer Studie / Umfrage von ...\n\n**Wichtige Informationen einer Grafik wiedergeben**\n\n- Die Grafik zeigt die Entwicklung der ... in den Jahren ...\n- Zu Beginn dieses Zeitraums lässt sich beobachten, dass ...\n- Im Laufe der Jahre ... zeigt sich allerdings, dass ...\n- Diese Entwicklung wird im Jahr ... besonders deutlich, denn hier ...\n- Die Grafik gibt die Zahlen / den Anteil der ... in Prozent wieder.\n- An erster / zweiter / dritter Stelle steht / stehen ... mit ... Prozent.\n- Danach / Auf dem zweiten / dritten Platz folgt / folgen ...\n- Weniger beliebt ist / sind dagegen ... mit ... Prozent und ... mit ... Prozent.\n\n**Informationen zusammenfassen**\n\n- Im Allgemeinen lässt sich also einerseits ... und andererseits ... beobachten.\n- Zusammenfassend lässt sich also feststellen, dass ..."
+        }
+      ]
+    }
+  ],
+  "wordsets": [
+    {
+      "lektion": 4,
+      "title": "Lektion 4 - Mobilität",
+      "setKey": "c1-1-lektion-4",
+      "items": [
+        { "front": "Hindernis", "back": "prepreka", "article": "das", "plural": "die Hindernisse" },
+        { "front": "auftreten", "back": "pojaviti se|nastupiti", "hint": "tritt auf, trat auf, ist aufgetreten" },
+        { "front": "Verfügung", "back": "raspolaganje", "article": "die" },
+        { "front": "Gerechtigkeit", "back": "pravednost|pravda", "article": "die" },
+        { "front": "Grund", "back": "dno|suština (nečega)", "article": "der" },
+        { "front": "einer Sache auf den Grund gehen", "back": "ući u suštinu nečega|detaljno istražiti nešto" },
+        { "front": "unmittelbar", "back": "neposredan|direktan" },
+        { "front": "einhergehen mit + Dat.", "back": "ići ruku pod ruku sa nečim|biti praćen nečim", "hint": "geht einher, ging einher, ist einhergegangen" },
+        { "front": "Berufsleben", "back": "poslovni život|radni vek", "article": "das" },
+        { "front": "angewiesen sein auf + Akk.", "back": "biti upućen na|zavisiti od" },
+        { "front": "ÖPNV / öffentliche Personennahverkehr", "back": "javni gradski prevoz", "article": "der" },
+        { "front": "Belastung", "back": "opterećenje", "article": "die", "plural": "die Belastungen" },
+        { "front": "Anbindung", "back": "povezanost|veza", "article": "die", "plural": "die Anbindungen" },
+        { "front": "Verkehrsanbindung", "back": "saobraćajna povezanost", "article": "die", "plural": "die Verkehrsanbindungen" },
+        { "front": "Verkehrsnetz", "back": "saobraćajna mreža", "article": "das", "plural": "die Verkehrsnetze" },
+        { "front": "ausbauen", "back": "proširiti|izgraditi" },
+        { "front": "Berufsverkehr", "back": "saobraćaj u špicu", "article": "der" },
+        { "front": "überfüllt", "back": "pretrpan|prepun" },
+        { "front": "Rollstuhl", "back": "invalidska kolica", "article": "der", "plural": "die Rollstühle" },
+        { "front": "barrierefrei", "back": "bez barijera|pristupačan" },
+        { "front": "Fahrgemeinschaft", "back": "grupa koja zajedno koristi auto|zajednička vožnja", "article": "die", "plural": "die Fahrgemeinschaften" },
+        { "front": "herumstehen", "back": "stajati neiskorišćen|stajati okolo", "hint": "steht herum, stand herum, hat herumgestanden" },
+        { "front": "Leihroller", "back": "trotinet za iznajmljivanje", "article": "der", "plural": "die Leihroller" },
+        { "front": "Lebensdauer", "back": "vek trajanja", "article": "die" },
+        { "front": "Ansatz", "back": "začetak|prvi znak nečega", "article": "der", "plural": "die Ansätze" },
+        { "front": "Lösungsansatz", "back": "korak ka rešenju|pristup rešenju", "article": "der", "plural": "die Lösungsansätze" },
+        { "front": "stoßen auf + Akk.", "back": "naići na|naleteti na", "hint": "stößt, stieß, hat gestoßen" },
+        { "front": "Parkhaus", "back": "parking garaža", "article": "das", "plural": "die Parkhäuser" },
+        { "front": "tagtäglich", "back": "svakodnevno|iz dana u dan" },
+        { "front": "Stiftung", "back": "fondacija|zadužbina", "article": "die", "plural": "die Stiftungen" },
+        { "front": "Erhebung", "back": "istraživanje|anketa", "article": "die", "plural": "die Erhebungen" },
+        { "front": "Quelle", "back": "izvor", "article": "die", "plural": "die Quellen" },
+        { "front": "übersehen", "back": "prevideti", "hint": "übersieht, übersah, hat übersehen" },
+        { "front": "kommunal", "back": "opštinski|komunalni" },
+        { "front": "Fahrradweg", "back": "biciklistička staza", "article": "der", "plural": "die Fahrradwege" },
+        { "front": "Begrenzung", "back": "ograničenje", "article": "die", "plural": "die Begrenzungen" },
+        { "front": "Geschwindigkeitsbegrenzung", "back": "ograničenje brzine", "article": "die", "plural": "die Geschwindigkeitsbegrenzungen" },
+        { "front": "Prognose", "back": "prognoza", "article": "die", "plural": "die Prognosen" },
+        { "front": "Elektroauto", "back": "električni automobil", "article": "das", "plural": "die Elektroautos" },
+        { "front": "Leihwagen", "back": "iznajmljeni automobil", "article": "der", "plural": "die Leihwagen" },
+        { "front": "Anspruch", "back": "zahtev|pravo na nešto", "article": "der", "plural": "die Ansprüche" },
+        { "front": "außer Frage stehen", "back": "biti van svake sumnje" },
+        { "front": "in Frage kommen", "back": "dolaziti u obzir" },
+        { "front": "Anforderung", "back": "zahtev", "article": "die", "plural": "die Anforderungen" },
+        { "front": "zweifellos", "back": "nesumnjivo" },
+        { "front": "hindeuten auf + Akk.", "back": "ukazivati na" },
+        { "front": "Wahrscheinlichkeit", "back": "verovatnoća", "article": "die", "plural": "die Wahrscheinlichkeiten" },
+        { "front": "denkbar", "back": "moguć|zamisliv" },
+        { "front": "vorstellbar", "back": "zamisliv" }
+      ]
+    },
+    {
+      "lektion": 5,
+      "title": "Lektion 5 - Körper und Geist",
+      "setKey": "c1-1-lektion-5",
+      "items": [
+        { "front": "Zusammenspiel", "back": "sadejstvo|međusobno delovanje", "article": "das" },
+        { "front": "effektiv", "back": "efikasan|delotvoran" },
+        { "front": "zwischendurch", "back": "usput|u međuvremenu|nakratko" },
+        { "front": "beugen", "back": "saviti" },
+        { "front": "Schulterblatt", "back": "lopatica", "article": "das", "plural": "die Schulterblätter" },
+        { "front": "dehnen", "back": "istegnuti|rastegnuti" },
+        { "front": "Gelenk", "back": "zglob", "article": "das", "plural": "die Gelenke" },
+        { "front": "Dehnung", "back": "istezanje", "article": "die", "plural": "die Dehnungen" },
+        { "front": "Brustkorb", "back": "grudni koš", "article": "der", "plural": "die Brustkörbe" },
+        { "front": "Körperteil", "back": "deo tela", "article": "der", "plural": "die Körperteile" },
+        { "front": "Ellbogen", "back": "lakat", "article": "der", "plural": "die Ellbogen" },
+        { "front": "Handfläche", "back": "dlan", "article": "die", "plural": "die Handflächen" },
+        { "front": "Nacken", "back": "potiljak|vrat", "article": "der", "plural": "die Nacken" },
+        { "front": "Oberkörper", "back": "gornji deo tela|trup", "article": "der", "plural": "die Oberkörper" },
+        { "front": "Oberschenkel", "back": "butina", "article": "der", "plural": "die Oberschenkel" },
+        { "front": "Unterschenkel", "back": "potkolenica", "article": "der", "plural": "die Unterschenkel" },
+        { "front": "ausschütteln", "back": "istresti|protresti" },
+        { "front": "kreisen", "back": "kružiti" },
+        { "front": "lockern", "back": "opustiti|olabaviti" },
+        { "front": "neigen", "back": "nagnuti" },
+        { "front": "strecken", "back": "ispružiti|istegnuti" },
+        { "front": "verschränken", "back": "prekrstiti|ukrstiti" },
+        { "front": "Entspannung", "back": "opuštanje", "article": "die" },
+        { "front": "Konzentration", "back": "koncentracija", "article": "die" },
+        { "front": "existenziell", "back": "egzistencijalan|od životne važnosti" },
+        { "front": "Verknüpfung", "back": "povezivanje|veza", "article": "die", "plural": "die Verknüpfungen" },
+        { "front": "Hormon", "back": "hormon", "article": "das", "plural": "die Hormone" },
+        { "front": "Anregung", "back": "podsticanje|stimulacija", "article": "die", "plural": "die Anregungen" },
+        { "front": "Durchblutung", "back": "cirkulacija krvi|prokrvljenost", "article": "die" },
+        { "front": "Erhöhung", "back": "povećanje|povišenje", "article": "die", "plural": "die Erhöhungen" },
+        { "front": "Gehalt", "back": "sadržaj (nečega)", "article": "der" },
+        { "front": "Vernetzung", "back": "umrežavanje|povezivanje", "article": "die", "plural": "die Vernetzungen" },
+        { "front": "Zelle", "back": "ćelija", "article": "die", "plural": "die Zellen" },
+        { "front": "Aufbau", "back": "izgradnja|stvaranje", "article": "der" },
+        { "front": "Ausschüttung", "back": "lučenje|oslobađanje", "article": "die", "plural": "die Ausschüttungen" },
+        { "front": "Abbau", "back": "razgradnja|smanjenje", "article": "der" },
+        { "front": "Effekt", "back": "efekat", "article": "der", "plural": "die Effekte" },
+        { "front": "Verbesserung", "back": "poboljšanje", "article": "die", "plural": "die Verbesserungen" },
+        { "front": "Leistungsfähigkeit", "back": "radna sposobnost|učinak", "article": "die" },
+        { "front": "Verarbeitung", "back": "obrada", "article": "die", "plural": "die Verarbeitungen" },
+        { "front": "beziehen (sich) auf + Akk.", "back": "odnositi se na|pozivati se na", "hint": "bezieht, bezog, hat bezogen" },
+        { "front": "anregen", "back": "podstaći|stimulisati" },
+        { "front": "ausschütten", "back": "izlučiti|osloboditi (hormone)" },
+        { "front": "hüpfen", "back": "skakutati" },
+        { "front": "Beweglichkeit", "back": "pokretljivost|gipkost", "article": "die" },
+        { "front": "Gleichgewicht", "back": "ravnoteža", "article": "das", "plural": "die Gleichgewichte" },
+        { "front": "Koordination", "back": "koordinacija", "article": "die", "plural": "die Koordinationen" },
+        { "front": "steigern", "back": "povećati|pojačati" },
+        { "front": "Stoffwechsel", "back": "metabolizam", "article": "der" },
+        { "front": "Umarmung", "back": "zagrljaj", "article": "die", "plural": "die Umarmungen" },
+        { "front": "Sonnenlicht", "back": "sunčeva svetlost", "article": "das" },
+        { "front": "Stärkung", "back": "jačanje", "article": "die" },
+        { "front": "Aktivierung", "back": "aktiviranje", "article": "die", "plural": "die Aktivierungen" },
+        { "front": "führen zu + Dat.", "back": "voditi ka|dovesti do" },
+        { "front": "bewirken", "back": "prouzrokovati|izazvati" },
+        { "front": "zur Folge haben", "back": "imati za posledicu" },
+        { "front": "folgendermaßen", "back": "na sledeći način" }
+      ]
+    },
+    {
+      "lektion": 6,
+      "title": "Lektion 6 - Ausbildungswege",
+      "setKey": "c1-1-lektion-6",
+      "items": [
+        { "front": "Note", "back": "ocena", "article": "die", "plural": "die Noten" },
+        { "front": "Abschlusszeugnis", "back": "svedočanstvo o završenoj školi|diploma", "article": "das", "plural": "die Abschlusszeugnisse" },
+        { "front": "Berufswunsch", "back": "željeno zanimanje", "article": "der", "plural": "die Berufswünsche" },
+        { "front": "Berufsausbildung", "back": "stručno obrazovanje|stručna obuka", "article": "die", "plural": "die Berufsausbildungen" },
+        { "front": "Relevanz", "back": "relevantnost|značaj", "article": "die" },
+        { "front": "Umfeld", "back": "okruženje", "article": "das", "plural": "die Umfelder" },
+        { "front": "Haltung", "back": "stav|držanje", "article": "die", "plural": "die Haltungen" },
+        { "front": "bezüglich", "back": "u vezi sa|u pogledu" },
+        { "front": "Mitschüler / Mitschülerin", "back": "drug iz razreda|drugarica iz razreda", "article": "der / die", "plural": "die Mitschüler / die Mitschülerinnen" },
+        { "front": "Auszubildende", "back": "učenik na stručnoj obuci|pripravnik", "article": "der/die", "plural": "die Auszubildenden" },
+        { "front": "missfallen", "back": "ne dopadati se", "hint": "missfällt, missfiel, hat missfallen" },
+        { "front": "pädagogisch", "back": "pedagoški" },
+        { "front": "Klassenraum", "back": "učionica", "article": "der", "plural": "die Klassenräume" },
+        { "front": "ratlos", "back": "zbunjen|ne zna šta bi dalje" },
+        { "front": "ausgeschlossen", "back": "isključen|nemoguć" },
+        { "front": "wobei", "back": "pri čemu|mada" },
+        { "front": "mittelmäßig", "back": "osrednji|prosečan" },
+        { "front": "Hinsicht", "back": "pogled|aspekt", "article": "die", "plural": "die Hinsichten" },
+        { "front": "aufkommen für + Akk.", "back": "snositi troškove za|platiti", "hint": "kommt auf, kam auf, ist aufgekommen" },
+        { "front": "wenn ... auch", "back": "iako|mada" },
+        { "front": "auftun (sich)", "back": "otvoriti se|ukazati se", "hint": "tut auf, tat auf, hat aufgetan" },
+        { "front": "nichtsdestotrotz", "back": "uprkos tome|ipak" },
+        { "front": "oftmals", "back": "često" },
+        { "front": "gönnen", "back": "rado priuštiti (nekome nešto)|ne zavideti" },
+        { "front": "ausgezeichnet", "back": "odličan|izvrstan" },
+        { "front": "erfüllen mit + Dat.", "back": "ispuniti (nečim)" },
+        { "front": "einschreiben (sich) an + Dat., für + Akk.", "back": "upisati se (na fakultet, na studije)", "hint": "schreibt ein, schrieb ein, hat eingeschrieben" },
+        { "front": "Spannung", "back": "napetost|tenzija", "article": "die", "plural": "die Spannungen" },
+        { "front": "entfremden von + Dat.", "back": "otuđiti (se) od" },
+        { "front": "ungeachtet + Gen.", "back": "uprkos|bez obzira na" },
+        { "front": "gering", "back": "mali|neznatan" },
+        { "front": "antrainieren (sich)", "back": "steći vežbanjem|uvežbati" },
+        { "front": "abgesehen von + Dat.", "back": "osim|izuzev|ne računajući" },
+        { "front": "Bekanntenkreis", "back": "krug poznanika", "article": "der", "plural": "die Bekanntenkreise" },
+        { "front": "Praktikumsplatz", "back": "mesto za praksu", "article": "der", "plural": "die Praktikumsplätze" },
+        { "front": "Hindernis", "back": "prepreka", "article": "das", "plural": "die Hindernisse" },
+        { "front": "weiterhin", "back": "i dalje" },
+        { "front": "interdisziplinär", "back": "interdisciplinaran" },
+        { "front": "Habitus", "back": "habitus|način ponašanja i nastupanja", "article": "der" },
+        { "front": "durchfallen", "back": "pasti (na ispitu)", "hint": "fällt durch, fiel durch, ist durchgefallen" },
+        { "front": "einbinden", "back": "uključiti|integrisati", "hint": "bindet ein, band ein, hat eingebunden" },
+        { "front": "Modul", "back": "modul", "article": "das", "plural": "die Module" },
+        { "front": "Vergütung", "back": "naknada|nadoknada za rad", "article": "die", "plural": "die Vergütungen" },
+        { "front": "abfallen", "back": "otpasti|pasti|pripasti (kao deo)", "hint": "fällt ab, fiel ab, ist abgefallen" },
+        { "front": "anfallen", "back": "nastati|pojaviti se (posao, troškovi)" },
+        { "front": "entfallen", "back": "izostati|otpasti|zaboraviti se (kome nešto)" },
+        { "front": "überfallen", "back": "napasti (iznenada)|prepasti" },
+        { "front": "umfallen", "back": "pasti|prevrnuti se" },
+        { "front": "verfallen", "back": "propadati|isteći (važenje)" },
+        { "front": "zerfallen", "back": "raspasti se" },
+        { "front": "zufallen", "back": "zatvoriti se (sam od sebe)|pripasti (kome zadatak)" },
+        { "front": "zurückfallen", "back": "zaostati|pasti unazad" },
+        { "front": "Verteilung", "back": "raspodela|distribucija", "article": "die", "plural": "die Verteilungen" },
+        { "front": "Diagramm", "back": "dijagram", "article": "das", "plural": "die Diagramme" },
+        { "front": "Liniendiagramm", "back": "linijski dijagram", "article": "das", "plural": "die Liniendiagramme" },
+        { "front": "Tortendiagramm", "back": "kružni dijagram", "article": "das", "plural": "die Tortendiagramme" },
+        { "front": "prozentual", "back": "procentualni|u procentima" },
+        { "front": "erheben", "back": "prikupiti (podatke)|utvrditi", "hint": "erhebt, erhob, hat erhoben" }
+      ]
+    }
+  ]
+}

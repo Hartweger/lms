@@ -77,7 +77,7 @@ export default async function LekcijaStranica({ params }: PageProps) {
     ? (exercises as Exercise[]).filter((e) => inlineTitles.has(e.title)).map((e) => e.id)
     : [];
 
-  const [progressRes, inlineQuestionsRes] = await Promise.all([
+  const [progressRes, inlineQuestionsRes, drawerExercisesRes] = await Promise.all([
     user && allLessons
       ? supabase
           .from("lesson_progress")
@@ -89,11 +89,25 @@ export default async function LekcijaStranica({ params }: PageProps) {
     inlineIds.length > 0
       ? supabase.from("exercise_questions").select("*").in("exercise_id", inlineIds).order("order_index")
       : Promise.resolve({ data: null }),
+    // Vežbe SVIH lekcija kursa - drawer ih prikazuje ispod svoje lekcije, da se
+    // test ne mora tražiti otvaranjem lekcije i skrolovanjem do dna.
+    allLessons && allLessons.length > 0
+      ? supabase
+          .from("exercises")
+          .select("id, lesson_id, title, order_index")
+          .in("lesson_id", allLessons.map((l) => l.id))
+          .order("order_index")
+      : Promise.resolve({ data: null }),
   ]);
 
   const completedLessonIds = new Set(progressRes.data?.map((p) => p.lesson_id) ?? []);
 
-  const drawerLessons = buildDrawerLessons(allLessons ?? [], completedLessonIds);
+  const drawerLessons = buildDrawerLessons(
+    allLessons ?? [],
+    completedLessonIds,
+    drawerExercisesRes.data ?? [],
+    course?.title || course?.slug,
+  );
   const completedCount = drawerLessons.filter((l) => l.completed).length;
 
   // Nivo iz naslova kursa (npr. „Nemački B2.2“ → „B2“)
@@ -159,7 +173,7 @@ export default async function LekcijaStranica({ params }: PageProps) {
       </h1>
 
       {/* Lesson content */}
-      <LekcijaContent lesson={typedLesson} inlineExercises={inlineExercises} level={courseLevel} isModelltest={isExamLesson} courseId={course?.id ?? null} />
+      <LekcijaContent lesson={typedLesson} inlineExercises={inlineExercises} level={courseLevel} isModelltest={isExamLesson} courseId={course?.id ?? null} courseSlug={course?.slug ?? null} />
 
       {/* Exercises (samo one koje nisu inline u sadržaju) */}
       {bottomExercises.length > 0 && (

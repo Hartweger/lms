@@ -1,0 +1,544 @@
+{
+  "module": "Modul 4",
+  "moduleTheme": "Was hat Sie in Ihrem Leben besonders beeinflusst?",
+  "lessons": [
+    {
+      "title": "Fehlerkultur - Entschuldigung!",
+      "sections": [
+        { "type": "badge", "module": "Modul 4", "category": "grammatik" },
+        {
+          "type": "text",
+          "content": "## 🎯 Lernziele\n\n- einen Magazinartikel zum Thema Entschuldigungen verstehen\n- eine (halb-)formelle E-Mail zu einem Missgeschick verfassen\n- Wortfeld Umgang mit Fehlern\n- modale Zusammenhänge: Art und Weise sowie Mittel beschreiben",
+          "style": "info"
+        },
+        {
+          "type": "text",
+          "content": "## 📘 Grammatik: Modale Zusammenhänge - Art und Weise sowie Mittel beschreiben\n\nMit modalen Sätzen und Angaben kann man die **Art und Weise** und das **Mittel** angeben sowie **Umstände** beschreiben. Modale Zusammenhänge antworten auf die Fragen: *Wie? Auf welche Weise? Womit? Mit welchen Mitteln?*\n\nWie bei anderen Satzverbindungen gibt es drei sprachliche Mittel: **Nebensatz-Konnektoren** (auch: Subjunktionen), **Hauptsatz-Konnektoren** (auch: Verbindungsadverbien) und **Präpositionen**. Ein Nebensatz-Konnektor leitet einen Nebensatz ein. Ein Hauptsatz-Konnektor verbindet zwei Hauptsätze miteinander und kann im Vorfeld (Position 1) oder im Mittelfeld stehen. Präpositionen stehen vor Nominalgruppen.\n\n### Übersicht",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Mittel", "Konnektor / Präposition", "Beispiel (aus dem Magazinartikel)"],
+          "rows": [
+            ["Nebensatz-Konnektor", "**wodurch**", "Die Bitte um Entschuldigung konfrontiert das Gegenüber mit Gefühlen von Unsicherheit, **wodurch** oft eine peinliche Situation entsteht."],
+            ["Nebensatz-Konnektor", "**womit**", "Ein solches Verhalten stellt menschliche Größe unter Beweis, **womit** man die Hochachtung seiner Mitmenschen gewinnt."],
+            ["Hauptsatz-Konnektor", "**auf diese Weise**", "Auch einen bestehenden Konflikt kann eine Entschuldigung lösen. **Auf diese Weise** können beide Seiten wieder zueinander finden."],
+            ["Hauptsatz-Konnektor", "**damit**", "Selbst in heiklen Situationen besänftigt eine aufrichtige Entschuldigung das Gegenüber. **Damit** kann man eine Menge Ärger vermeiden."],
+            ["Präposition + Genitiv", "**mithilfe**", "Man möchte **mithilfe einer Entschuldigung** erreichen, zu einer Gemeinschaft dazuzugehören."],
+            ["Präposition + Genitiv", "**mittels**", "**Mittels einer Entschuldigung** sammelt man aber noch weitere Pluspunkte."]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "### Regeln zur Position",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Regel", "Beispiel"],
+          "rows": [
+            ["Der Nebensatz mit **wodurch** und **womit** steht immer **nach** dem Hauptsatz.", "Man kann eine Entschuldigungsmail schreiben, **wodurch** man zeigt, dass man für seinen Fehler geradesteht."],
+            ["Die Hauptsatz-Konnektoren **auf diese Weise** und **damit** stehen immer im **zweiten** Satz bzw. im zweiten Teil des Satzes.", "Auch einen bestehenden Konflikt kann eine Entschuldigung lösen, **auf diese Weise** können beide Seiten wieder zueinander finden."]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "### Besonderheiten von mithilfe und mittels",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Fall", "Regel", "Beispiel"],
+          "rows": [
+            ["mithilfe + Nomen im Plural ohne Artikelwort / Adjektiv", "**mithilfe von + Dativ**", "mithilfe **von Entschuldigungen**"],
+            ["mittels: Stil", "fast ausschließlich **Schriftsprache** (Zeitungsartikel, Verträge, Schreiben von Behörden)", "Mittels einer Entschuldigung sammelt man weitere Pluspunkte."],
+            ["mittels + Nomen im Singular ohne Artikelwort / Adjektiv", "das Nomen wird **nicht dekliniert**", "mittels **Telefon**"],
+            ["mittels + Nomen im Plural ohne Artikelwort / Adjektiv", "**Dativ**", "mittels **Schuldeingeständnissen**"]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "### Weitere modale Präpositionen (Wiederholung)\n\nNeben *mithilfe* und *mittels* (+ Genitiv) haben auch diese Präpositionen modale Bedeutung: **auf, aus, außer, durch, in, mit, ohne, statt** (z. B. *auf diese Weise, aus Versehen, mit einem Lob, durch eine Entschuldigung, ohne Absicht*).",
+          "style": "info"
+        },
+        {
+          "type": "text",
+          "content": "### Anwendungsbeispiele: etwas wiedergutmachen\n\n- Man kann eine Entschuldigungsmail schreiben, **wodurch** man zeigt, dass man für seinen Fehler geradesteht.\n- Man kann einen selbst gebackenen Kuchen mitbringen. **Auf diese Weise** sorgt man für gute Stimmung.\n- **Mithilfe** eines Lobs kann man zeigen, dass man die Kolleginnen und Kollegen schätzt.\n- Man kann in schwierigen Diskussionen einen Witz machen, **womit** man die Stimmung auflockert.\n- **Mittels** bestimmter Emojis kann man in einer E-Mail zeigen, dass es einem leidtut.\n- Man kann Kaffee kochen. **Damit** tut man den anderen etwas Gutes.",
+          "style": "beispiele"
+        },
+        {
+          "type": "text",
+          "content": "## 📚 Wörter: Wortfeld Umgang mit Fehlern\n\nIm Magazinartikel gibt es viele Ausdrücke, mit denen man über Fehler, Schuld und Entschuldigungen spricht. Viele davon sind typisch für die formelle bzw. geschriebene Sprache. Lernen Sie sie zusammen mit einer einfacheren Umschreibung.",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Ausdruck", "Umschreibung"],
+          "rows": [
+            ["Konventionen missachten", "gegen Regeln verstoßen, Regeln nicht beachten"],
+            ["jemandem unterläuft ein Fehler", "jemandem passiert ein Versehen oder Irrtum"],
+            ["eine Angelegenheit bereinigen", "etwas in Ordnung bringen, etwas wiedergutmachen"],
+            ["für etwas geradestehen", "für etwas die Verantwortung übernehmen"],
+            ["sein Bedauern ausdrücken", "sagen, dass einem etwas leidtut"],
+            ["Reue zeigen", "deutlich machen, dass man etwas bereut"],
+            ["etwas verschulden", "an etwas Schuld haben"]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "Weitere wichtige Wörter aus dem Wortfeld: *das Missgeschick* (eine kleine Panne, die aus Versehen passiert), *das Versehen* (ein unbeabsichtigter Fehler), *das Schuldeingeständnis* (man gibt zu, dass man Schuld hat), *einen Fehler eingestehen* (zugeben), *einen Schaden ausgleichen* (wiedergutmachen), *jemanden um Verzeihung bitten* (sich höflich entschuldigen), *die Versöhnung* (man verträgt sich wieder).",
+          "style": "info"
+        },
+        {
+          "type": "text",
+          "content": "## 💬 Kommunikation\n\n### Um Entschuldigung bitten\n\n- Sorry! / Tschuldigung! (informell)\n- Entschuldigung! / Oh, Verzeihung!\n- Entschuldige (bitte)! / Entschuldigen Sie (bitte)!\n- Tut mir (wirklich / sehr / aufrichtig) leid.\n- Das bedauere ich sehr.\n- Bitte verzeih mir!\n\n### Eine Entschuldigung annehmen\n\n- Schwamm drüber! / Halb so wild! / Kein Thema! (informell)\n- Schon gut! / Macht nichts! / Ist schon in Ordnung! (informell)\n- Danke, dass du das sagst. / Danke, dass Sie das sagen.\n- Das ist in Ordnung. Lass uns / Lassen Sie uns weitermachen und vergessen, was passiert ist.\n\n### Ein eigenes Missgeschick beschreiben\n\n- Ich habe aus Versehen ...\n- Ich habe / bin versehentlich ...\n- Mir ist leider folgendes Missgeschick unterlaufen: ...\n\n### Ein eigenes Missgeschick begründen\n\n- Ich war unaufmerksam / abgelenkt / erschöpft / ...\n- Ich bin ausgerutscht / gestolpert / gestürzt / ...\n- ... da ich in Eile / im Stress war. Ich wollte ...\n\n### Eine Lösung ankündigen\n\n- Ich werde nun (so schnell wie möglich) ...\n- Selbstverständlich werde ich ...\n- Sie können sicher sein, dass ...\n\n### Um Entschuldigung bitten (formelle E-Mail)\n\n- Bitte entschuldigen Sie, dass ...\n- Ich bitte Sie, ... zu entschuldigen.\n- Ich möchte mich (nochmals) für ... entschuldigen.",
+          "style": "beispiele"
+        }
+      ]
+    },
+    {
+      "title": "Wendepunkte - Geschichte und Geschichten",
+      "sections": [
+        { "type": "badge", "module": "Modul 4", "category": "grammatik" },
+        {
+          "type": "text",
+          "content": "## 🎯 Lernziele\n\n- Beiträge über die deutsche Wiedervereinigung und die Wahrnehmung von Ost und West verstehen\n- einen Kommentar über einen persönlichen Wendepunkt verfassen\n- feste Adverb-Partizip-Verbindungen\n- Konjunktiv II der Vergangenheit mit Modalverb",
+          "style": "info"
+        },
+        {
+          "type": "text",
+          "content": "## 📘 Grammatik: Konjunktiv II der Vergangenheit mit Modalverb\n\nMit dem Konjunktiv II der Vergangenheit spricht man über **irreale Situationen in der Vergangenheit**: Man äußert Vermutungen darüber, wie etwas hätte anders laufen können, oder beschreibt Bedingungen, die nicht erfüllt wurden (z. B. *Wie hätte sich mein Leben ohne diesen Wendepunkt entwickelt?*).\n\n### Wiederholung: Konjunktiv II der Vergangenheit (ohne Modalverb)",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Bildung", "Beispiel"],
+          "rows": [
+            ["**haben / sein im Konjunktiv II** (hätte / wäre) + **Partizip Perfekt**", "Hätten meine Eltern ihren Blumenladen nicht eröffnet, **wäre** ich sicherlich nicht in Deutschland **geboren**."]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "### Bildung mit Modalverb\n\nKommt ein Modalverb dazu, verwendet man immer **haben** im Konjunktiv II. Das Hauptverb und das Modalverb stehen beide im **Infinitiv** (das Modalverb als sogenannter Ersatzinfinitiv, nicht als Partizip):",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Element", "Form", "Beispiel"],
+          "rows": [
+            ["1. Hilfsverb", "**haben** im Konjunktiv II (hätte, hättest, hätte, hätten, hättet, hätten)", "Mein Vater **hätte** ..."],
+            ["2. Hauptverb", "Infinitiv", "... noch mal eine Ausbildung **machen** ..."],
+            ["3. Modalverb", "Infinitiv", "... **müssen**."]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "**Beispiele aus den Beiträgen:**",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Satz", "Struktur"],
+          "rows": [
+            ["Trotz seiner zwanzigjährigen Berufserfahrung **hätte** mein Vater noch mal eine Ausbildung **machen müssen**, um in seinem Beruf weiterzuarbeiten.", "hätte + machen + müssen"],
+            ["Hätten meine Eltern ihren Blumenladen nicht eröffnet, **hätten** sie wahrscheinlich nicht in Deutschland **bleiben können**.", "hätten + bleiben + können"]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "### Position im Nebensatz\n\nIm Nebensatz (z. B. nach *wenn*, *dass*, *obwohl*) steht das konjugierte **haben** ausnahmsweise **vor** den beiden Infinitiven. Die drei Verben stehen normalerweise in dieser Reihenfolge am Satzende: **haben - Hauptverb - Modalverb**.",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Satzart", "Wortstellung am Satzende", "Beispiel"],
+          "rows": [
+            ["Hauptsatz", "hätte ... + Hauptverb + Modalverb", "Mein Vater **hätte** eine Ausbildung **machen müssen**."],
+            ["Nebensatz", "... **hätte(n) + Hauptverb + Modalverb**", "Wenn damals nicht so viele Industrien **hätten schließen müssen**, würde es der ostdeutschen Wirtschaft heute vielleicht besser gehen."]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "### Typische Verwendung: irreale Bedingungen und Folgen\n\n- Wenn die Mieten in der Innenstadt nicht so stark gestiegen wären, **hätte** ich nicht in einen anderen Bezirk **umziehen müssen**.\n- Ohne die Wiedervereinigung **hätte** ich meine Cousine nicht wieder **besuchen können**.\n- Hätte es die Wende nicht gegeben, **hätte** ich mich beruflich nicht komplett neu orientieren **müssen**.\n- Die Wiedervereinigung war ein großer Wendepunkt. Sonst **hätte** ich nicht reisen **dürfen**, wohin ich wollte.",
+          "style": "beispiele"
+        },
+        {
+          "type": "text",
+          "content": "**Merke:** Bei den Modalverben *können*, *müssen*, *dürfen*, *sollen* und *wollen* funktioniert die Struktur gleich. Der Kontrast zum Konjunktiv II der Gegenwart: *Ich müsste umziehen* (jetzt / hypothetisch) gegenüber *Ich hätte umziehen müssen* (Vergangenheit, irreal).",
+          "style": "info"
+        },
+        {
+          "type": "text",
+          "content": "## 📚 Wörter: Feste Adverb-Partizip-Verbindungen\n\nBestimmte Adverbien und Partizipien treten häufig zusammen auf und bilden feste Verbindungen. Das Adverb verstärkt oder präzisiert dabei das Partizip. Solche Kollokationen sollte man **auswendig lernen**, denn sie klingen nur in genau dieser Kombination natürlich.",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Feste Verbindung", "Bedeutung"],
+          "rows": [
+            ["deutlich unterrepräsentiert", "viel zu wenig vertreten"],
+            ["erheblich benachteiligt", "sehr ungerecht behandelt"],
+            ["potenziell gefährdet", "nicht sicher"],
+            ["weit verbreitet", "üblich"],
+            ["absolut überzeugt", "sich ganz sicher sein"],
+            ["bestens geeignet", "perfekt passend"],
+            ["frisch verliebt", "seit Kurzem verliebt"],
+            ["glücklich verheiratet", "in einer guten Ehe lebend"],
+            ["rundum gelungen", "in jeder Hinsicht erfolgreich"],
+            ["schwer verletzt", "mit schweren Verletzungen"],
+            ["sichtlich erleichtert", "erkennbar erleichtert"],
+            ["tief erschüttert", "emotional stark getroffen"],
+            ["zutiefst enttäuscht", "sehr stark enttäuscht"]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "**Beispiele:**\n\n- Menschen aus dem ehemaligen Osten sind in wichtigen gesellschaftlichen Positionen bis heute **deutlich unterrepräsentiert**.\n- Manche Ostdeutsche haben das Gefühl, dass Ostdeutschland im vereinigten Deutschland **erheblich benachteiligt** wurde.\n- Der Aufenthalt der Familie in Deutschland war **potenziell gefährdet**.\n- Vorurteile und Klischees gegenüber Ostdeutschland sind immer noch **weit verbreitet**.",
+          "style": "beispiele"
+        },
+        {
+          "type": "text",
+          "content": "## 💬 Kommunikation\n\n### Über ein historisches Ereignis berichten\n\n- Im Jahr ... / Nach ... / ... Jahre später kam es zu ...\n- Damals war es so, dass ...\n- Die Folge (davon) war ...\n- ..., was dazu führte, dass ...\n- Diese Ereignisse führten / Das führte dazu, dass ...\n- ... blieb nicht ohne Folgen für ...\n- Von da an ...\n- Dank / Aufgrund ... kam es dazu, dass ...\n\n### Aussagen wiedergeben\n\n- ... schildert ihre / seine Wahrnehmung / Erfahrung folgendermaßen: ...\n- ... behauptet / betont / merkt an / fügt hinzu, dass ...\n- ... erläutert, dass / wie ...\n- ... bedauert / beklagt / wünscht sich, dass ...\n- ... warnt davor / fordert, dass ...\n\n### Einen Wendepunkt beschreiben\n\n- Ein wichtiger Wendepunkt meines Lebens war im Jahr ...\n- Es gab ein Ereignis in meinem Leben, das ich als Wendepunkt bezeichnen würde, und zwar ...\n- Im Jahr ... hat sich in meinem Leben eine ganz entscheidende Wendung vollzogen. Damals ...\n\n### Veränderungen beschreiben\n\n- Das hat mein Leben auf den Kopf gestellt, denn bis dahin / von da an ...\n- Während ich früher ..., war es nun so, dass ...\n- Bis dahin war es immer so gewesen, dass ... Das änderte sich nun grundlegend, denn dann / von da an ...\n\n### Vermutungen über die Vergangenheit äußern\n\n- Wäre das nicht passiert, dann hätte / wäre / würde ich ...\n- Wenn ... damals nicht ... wäre / hätte, dann glaube ich nicht, dass ich heute ...\n- Ohne ... wäre ich heute sicherlich nicht da, wo ich bin, denn ...",
+          "style": "beispiele"
+        }
+      ]
+    },
+    {
+      "title": "Datenlücken - Alle Menschen im Blick",
+      "sections": [
+        { "type": "badge", "module": "Modul 4", "category": "grammatik" },
+        {
+          "type": "text",
+          "content": "## 🎯 Lernziele\n\n- ein Interview über gendersensible Technologie- und Produktentwicklung verstehen\n- eine Kurzpräsentation über ein Produkt oder eine Dienstleistung halten\n- Wortfeld Produktentwicklung\n- konsekutive Zusammenhänge: Folgen nennen",
+          "style": "info"
+        },
+        {
+          "type": "text",
+          "content": "## 📘 Grammatik: Konsekutive Zusammenhänge - Folgen nennen\n\nMit konsekutiven Sätzen und Angaben kann man **Folgen** nennen: Ein Sachverhalt im ersten Satz(teil) hat eine Konsequenz, die im zweiten Satz(teil) genannt wird. Konsekutive Zusammenhänge antworten auf die Frage: *Was ist die Folge davon?*\n\nAuch hier gibt es drei sprachliche Mittel: **Nebensatz-Konnektoren**, **Hauptsatz-Konnektoren** und **Präpositionen**.\n\n### Übersicht",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Mittel", "Konnektor / Präposition", "Beispiel (aus dem Interview)"],
+          "rows": [
+            ["Nebensatz-Konnektor", "**weshalb** (= weswegen)", "Technische Errungenschaften von Frauen sind insgesamt weniger bekannt, **weshalb** wir auch auf unserer Webseite und in einem monatlichen Podcast innovativ denkende Frauen vorstellen."],
+            ["Hauptsatz-Konnektor", "**demzufolge**", "Die Ingenieurwissenschaften sind traditionell noch immer männlich geprägt. **Demzufolge** fehlen weibliche Perspektiven."],
+            ["Hauptsatz-Konnektor", "**folglich**", "Das heißt, der „Durchschnittsmann\" wird zum allgemeinen Standard erhoben. **Folglich** sind diese Produkte dann für Frauen nicht oder weniger gut geeignet."],
+            ["Hauptsatz-Konnektor", "**infolgedessen**", "Viele Produkte sind für „Männerhände\" gemacht. **Infolgedessen** sind sie für die meisten Frauen zu groß und zu schwer."],
+            ["Präposition + Genitiv", "**infolge**", "**Infolge des geringeren Frauenanteils** fehlen wichtige Perspektiven und Erfahrungen im Fach."]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "### Regeln zur Position",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Regel", "Beispiel"],
+          "rows": [
+            ["Der Nebensatz mit **weshalb / weswegen** steht immer **nach** dem Hauptsatz.", "Algorithmen lernen aus vorhandenen Daten, **weshalb** sie bestehende Vorurteile reproduzieren und verstärken können."],
+            ["Der Hauptsatz mit **demzufolge** steht immer **nach** dem ersten Hauptsatz.", "Die Nachfrage nach barrierefreien Smartphones steigt. **Demzufolge** setzen Hersteller immer mehr auf inklusive Technologien."],
+            ["Die Hauptsatz-Konnektoren können im **Vorfeld** (Position 1) oder im **Mittelfeld** stehen.", "**Folglich** passen viele Smartphones nicht hinein. / Viele Smartphones passen **folglich** nicht hinein."]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "### Die Präposition infolge\n\n*Infolge* steht mit dem **Genitiv**: *infolge des geringeren Frauenanteils, infolge der Verbesserung der Spracherkennungstechnologie*. Wenn nach der Präposition ein Nomen ohne Artikel und ohne Adjektiv folgt, verwendet man **infolge von + Dativ** (z. B. *infolge von Datenlücken*).",
+          "style": "info"
+        },
+        {
+          "type": "text",
+          "content": "### Anwendungsbeispiele\n\n- **Infolge** der Verbesserung der Spracherkennungstechnologie werden Frauenstimmen inzwischen besser verstanden.\n- Die Nachfrage nach barrierefreien Smartphones steigt. **Demzufolge** setzen Hersteller immer mehr auf inklusive Technologien.\n- Kleidungsstücke für Frauen haben oft kleinere Taschen. **Folglich** passen viele Smartphones nicht hinein.\n- Algorithmen lernen aus vorhandenen Daten, **weshalb** sie bestehende Vorurteile reproduzieren und verstärken können.\n- Je diverser ein Entwicklungsteam ist, desto mehr Perspektiven fließen ein. **Infolgedessen** sind ihre Produkte für mehr Menschen geeignet.",
+          "style": "beispiele"
+        },
+        {
+          "type": "text",
+          "content": "**Tipp:** Konsekutive Konnektoren nennen die **Folge**, kausale Konnektoren (*weil, da, aufgrund*) den **Grund**. Vergleichen Sie: *Weil viele Produkte für „Männerhände\" gemacht sind* (Grund), *sind sie für viele Menschen zu groß* gegenüber *Viele Produkte sind für „Männerhände\" gemacht, infolgedessen sind sie für viele Menschen zu groß* (Folge).",
+          "style": "info"
+        },
+        {
+          "type": "text",
+          "content": "## 📚 Wörter: Wortfeld Produktentwicklung\n\nIm Interview über gendersensible Produktentwicklung gibt es typische Verben und Ausdrücke aus der Fach- und Wissenschaftssprache. Lernen Sie sie zusammen mit einer einfacheren Umschreibung.",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Ausdruck", "Umschreibung", "Beispiel"],
+          "rows": [
+            ["etwas / jemanden im Blick haben", "berücksichtigen, in seine Überlegungen miteinbeziehen", "Wir müssen die Bedürfnisse und Perspektiven aller Menschen im Blick haben."],
+            ["etwas (in etwas) einbeziehen", "integrieren", "Die Gender Studies in die Ingenieurwissenschaften einzubeziehen, hilft uns, inklusivere Produkte zu entwickeln."],
+            ["für etwas sensibilisieren", "aufmerksam machen auf", "In der Lehre geht es darum, für Gender- und Diversitätsaspekte zu sensibilisieren."],
+            ["etwas identifizieren", "erkennen", "Wir beschäftigen uns damit, Lücken und Schwachstellen in der Produktentwicklung zu identifizieren."],
+            ["Meinungen einholen", "sich (Meinungen / Feedback) geben lassen", "Über Umfragen holen wir die Meinungen der Nutzerinnen und Nutzer bestimmter Produkte ein."]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "Weitere wichtige Wörter aus dem Wortfeld: *die Norm* und *der Standard* (festgelegte Regeln, an denen sich die Entwicklung orientiert), *die Zielgruppe* (die Menschen, für die ein Produkt gedacht ist), *die Nachfrage nach + Dativ* (der Bedarf am Markt), *zugeschnitten auf + Akkusativ* (genau angepasst an), *die Schwachstelle* (schwacher Punkt eines Produkts), *vernachlässigen* (nicht genug beachten), *die Nutzung* (der Gebrauch), *etwas ermöglichen / vereinfachen / beschleunigen / optimieren* (typische Verben für Produktvorteile).",
+          "style": "info"
+        },
+        {
+          "type": "text",
+          "content": "## 💬 Kommunikation\n\n### Mengenverhältnisse angeben und vergleichen\n\n- Der ...anteil liegt bei (etwa) ... Prozent, ... sind (dagegen) mit (ca.) ... Prozent vertreten.\n- Während ... mit ... Prozent (etwa / knapp / über) ein Viertel / Drittel / die Hälfte ... ausmachen, liegt der Anteil ...\n- Die Zahl / Der Anteil der ..., die ..., ist (wesentlich / deutlich / kaum) höher / niedriger / größer / kleiner als ...\n- Was ... angeht / anbelangt, sind ... gegenüber ... deutlich in der Unterzahl / Überzahl.\n- Bei der Frage ... ist der Unterschied zwischen ... und ... beträchtlich.\n\n### Ein Problem darstellen\n\n- Vielen ... bereitet es (erhebliche) Schwierigkeiten, dass / wenn ...\n- ... stellt für ... ein (großes) Problem dar.\n- Für diese Zielgruppe gibt es derzeit noch keine Möglichkeit, ... zu ...\n- ... sind (bisher) nicht in der Lage, ... zu ...\n\n### Bedürfnisse / Bedarfe beschreiben\n\n- Unter ... besteht eine hohe Nachfrage nach / ein großer Bedarf an ...\n- ... hat / haben einen (großen) Bedarf an ...\n- Trotz großer Nachfrage gibt es kaum / nur wenige Angebote für ...\n- Bisher gibt es nur wenige Produkte / Dienstleistungen, die auf die Bedürfnisse von ... zugeschnitten sind.\n\n### Ein Produkt / eine Dienstleistung beschreiben\n\n- Bei ... handelt es sich um ...\n- ... ist dafür gedacht, ... zu ...\n- ... eignet sich (hervorragend) für / als / zur / zum ...\n- ... stellt eine (ausgezeichnete) Lösung für ... dar.\n- ... ermöglicht / verbessert / vereinfacht / erleichtert / beschleunigt / optimiert / fördert ...\n- ... funktioniert so, dass ... / Dazu muss man ...\n- Außerdem ist hervorzuheben / zu unterstreichen, dass ...",
+          "style": "beispiele"
+        }
+      ]
+    }
+  ],
+  "wordsets": [
+    {
+      "lektion": 10,
+      "title": "Lektion 10 - Fehlerkultur",
+      "setKey": "c1-1-lektion-10",
+      "items": [
+        { "front": "einschleichen (sich)", "back": "potkrasti se (greška)", "hint": "schleicht ein, schlich ein, hat eingeschlichen" },
+        { "front": "Geschäftsführer / Geschäftsführerin", "back": "direktor / direktorka|poslovođa", "article": "der / die", "plural": "die Geschäftsführer / die Geschäftsführerinnen" },
+        { "front": "Versehen", "back": "previd|omaška", "article": "das", "plural": "die Versehen" },
+        { "front": "Hafermilch", "back": "ovseno mleko", "article": "die" },
+        { "front": "wiedergutmachen", "back": "ispraviti|nadoknaditi (grešku)" },
+        { "front": "nachholen", "back": "nadoknaditi (propušteno)" },
+        { "front": "Anhang", "back": "prilog (u mejlu)", "article": "der", "plural": "die Anhänge" },
+        { "front": "anschreien", "back": "izvikati se na nekoga", "hint": "schreit an, schrie an, hat angeschrien" },
+        { "front": "überzogen", "back": "preteran" },
+        { "front": "Verzeihung", "back": "oproštaj|izvinjenje", "article": "die" },
+        { "front": "angemessen", "back": "primeren|prikladan" },
+        { "front": "verschütten", "back": "prosuti|proliti" },
+        { "front": "aufrichtig", "back": "iskren" },
+        { "front": "bedauern", "back": "žaliti (zbog nečega)" },
+        { "front": "Schwamm drüber!", "back": "Zaboravimo to! Pređimo preko toga!" },
+        { "front": "wild", "back": "divlji" },
+        { "front": "halb so wild", "back": "nije strašno|nije velika stvar" },
+        { "front": "Konvention", "back": "konvencija|društveno pravilo", "article": "die", "plural": "die Konventionen" },
+        { "front": "missachten", "back": "ne poštovati|oglušiti se o" },
+        { "front": "unterlaufen", "back": "potkrasti se (nekome greška)", "hint": "unterläuft, unterlief, ist unterlaufen" },
+        { "front": "bereinigen", "back": "raščistiti|izgladiti (situaciju)" },
+        { "front": "Schuldeingeständnis", "back": "priznanje krivice", "article": "das", "plural": "die Schuldeingeständnisse" },
+        { "front": "Beteiligte", "back": "učesnik / učesnica|uključena osoba", "article": "der/die", "plural": "die Beteiligten" },
+        { "front": "Fülle", "back": "obilje|mnoštvo", "article": "die" },
+        { "front": "Balsam", "back": "balzam|melem", "article": "der", "plural": "die Balsame" },
+        { "front": "Miteinander", "back": "međusobni odnosi|zajednički život", "article": "das" },
+        { "front": "zwischenmenschlich", "back": "međuljudski" },
+        { "front": "Betriebsklima", "back": "radna atmosfera", "article": "das" },
+        { "front": "besänftigen", "back": "umiriti|ublažiti" },
+        { "front": "Gegenüber", "back": "sagovornik|osoba preko puta", "article": "das", "plural": "die Gegenüber" },
+        { "front": "Versöhnung", "back": "pomirenje", "article": "die", "plural": "die Versöhnungen" },
+        { "front": "Mitmensch", "back": "bližnji|drugi čovek", "article": "der", "plural": "die Mitmenschen" },
+        { "front": "Lichtblick", "back": "zračak nade", "article": "der", "plural": "die Lichtblicke" },
+        { "front": "gnadenlos", "back": "nemilosrdan" },
+        { "front": "Perfektionismus", "back": "perfekcionizam", "article": "der" },
+        { "front": "erweisen", "back": "ukazati|iskazati (poštovanje)", "hint": "erweist, erwies, hat erwiesen" },
+        { "front": "wertschätzen", "back": "ceniti|uvažavati" },
+        { "front": "bewusst sein (sich)", "back": "biti svestan" },
+        { "front": "Maß", "back": "mera", "article": "das", "plural": "die Maße" },
+        { "front": "Selbstreflexion", "back": "samorefleksija|samopreispitivanje", "article": "die", "plural": "die Selbstreflexionen" },
+        { "front": "somit", "back": "time|prema tome" },
+        { "front": "Einfühlungsvermögen", "back": "sposobnost uživljavanja|empatija", "article": "das" },
+        { "front": "mittels + Gen.", "back": "pomoću|putem" },
+        { "front": "geradestehen für + Akk.", "back": "snositi odgovornost za|odgovarati za", "hint": "steht gerade, stand gerade, hat geradegestanden" },
+        { "front": "ausgleichen", "back": "izravnati|nadoknaditi (štetu)", "hint": "gleicht aus, glich aus, hat ausgeglichen" },
+        { "front": "eingestehen", "back": "priznati", "hint": "gesteht ein, gestand ein, hat eingestanden" },
+        { "front": "Bedauern", "back": "žaljenje", "article": "das" },
+        { "front": "Reue", "back": "kajanje", "article": "die" },
+        { "front": "womit", "back": "čime" },
+        { "front": "Hochachtung", "back": "duboko poštovanje|uvažavanje", "article": "die" },
+        { "front": "Zeichen für + Akk.", "back": "znak (nečega)", "article": "das", "plural": "die Zeichen" },
+        { "front": "Vordergrund", "back": "prvi plan", "article": "der" },
+        { "front": "im Vordergrund stehen", "back": "biti u prvom planu" },
+        { "front": "übermäßig", "back": "prekomeran|preteran" },
+        { "front": "schwerwiegend", "back": "ozbiljan|težak" },
+        { "front": "verschulden", "back": "skriviti|prouzrokovati svojom krivicom" },
+        { "front": "Floskel", "back": "floskula|isprazna fraza", "article": "die", "plural": "die Floskeln" },
+        { "front": "deuten", "back": "tumačiti" },
+        { "front": "defensiv", "back": "defanzivan|odbrambeni" },
+        { "front": "zeugen von + Dat.", "back": "svedočiti o" },
+        { "front": "mangeln an + Dat.", "back": "nedostajati|oskudevati u" },
+        { "front": "mangelnd", "back": "nedovoljan|manjkav" },
+        { "front": "Minderwertigkeitsgefühl", "back": "osećaj manje vrednosti", "article": "das", "plural": "die Minderwertigkeitsgefühle" },
+        { "front": "erniedrigend", "back": "ponižavajući" },
+        { "front": "Erniedrigende", "back": "ono što ponižava", "article": "das" },
+        { "front": "sich anklagen", "back": "optuživati samog sebe" },
+        { "front": "Urangst", "back": "praiskonski strah", "article": "die", "plural": "die Urängste" },
+        { "front": "zurückweisen", "back": "odbiti|odbaciti", "hint": "weist zurück, wies zurück, hat zurückgewiesen" },
+        { "front": "Zeichen von + Dat.", "back": "znak (nečega)", "article": "das", "plural": "die Zeichen" },
+        { "front": "stimmen", "back": "raspoložiti (nekoga)|uticati na raspoloženje" },
+        { "front": "Konfliktfähigkeit", "back": "sposobnost nošenja sa konfliktima", "article": "die", "plural": "die Konfliktfähigkeiten" },
+        { "front": "Durchsetzungsvermögen", "back": "probojnost|sposobnost da se izborimo za svoje", "article": "das" },
+        { "front": "konfrontieren", "back": "suočiti" },
+        { "front": "letztlich", "back": "na kraju krajeva|konačno" },
+        { "front": "wodurch", "back": "čime|usled čega" },
+        { "front": "konstruktiv", "back": "konstruktivan" },
+        { "front": "ratsam", "back": "preporučljiv|uputan" },
+        { "front": "Lob", "back": "pohvala", "article": "das", "plural": "die Lobe" },
+        { "front": "auflockern", "back": "opustiti|razvedriti (atmosferu)" },
+        { "front": "Missgeschick", "back": "nezgoda|peh", "article": "das", "plural": "die Missgeschicke" },
+        { "front": "versehentlich", "back": "nehotice|greškom" },
+        { "front": "ausrutschen", "back": "okliznuti se" },
+        { "front": "stolpern", "back": "spotaći se" }
+      ]
+    },
+    {
+      "lektion": 11,
+      "title": "Lektion 11 - Wendepunkte",
+      "setKey": "c1-1-lektion-11",
+      "items": [
+        { "front": "Mauerfall", "back": "pad Berlinskog zida", "article": "der" },
+        { "front": "Teilung", "back": "podela", "article": "die", "plural": "die Teilungen" },
+        { "front": "Wiedervereinigung", "back": "ponovno ujedinjenje (Nemačke)", "article": "die" },
+        { "front": "Verbündete", "back": "saveznik / saveznica", "article": "der / die", "plural": "die Verbündeten" },
+        { "front": "kapitalistisch", "back": "kapitalistički" },
+        { "front": "zuwenden (sich)", "back": "okrenuti se ka|prikloniti se", "hint": "wendet zu, wandte zu, hat zugewandt" },
+        { "front": "sozialistisch", "back": "socijalistički" },
+        { "front": "Ostblock", "back": "Istočni blok", "article": "der" },
+        { "front": "geografisch", "back": "geografski" },
+        { "front": "Ostdeutschland", "back": "Istočna Nemačka" },
+        { "front": "Lebensstandard", "back": "životni standard", "article": "der", "plural": "die Lebensstandards" },
+        { "front": "innerdeutsch", "back": "unutarnemački" },
+        { "front": "Stacheldraht", "back": "bodljikava žica", "article": "der", "plural": "die Stacheldrähte" },
+        { "front": "Mine", "back": "mina", "article": "die", "plural": "die Minen" },
+        { "front": "abriegeln", "back": "zatvoriti|blokirati (granicu)" },
+        { "front": "Lebensgefahr", "back": "životna opasnost", "article": "die", "plural": "die Lebensgefahren" },
+        { "front": "massiv", "back": "masovan|ogroman" },
+        { "front": "Auswanderung", "back": "iseljavanje", "article": "die", "plural": "die Auswanderungen" },
+        { "front": "konkurrierend", "back": "suparnički|konkurentski" },
+        { "front": "andauernd", "back": "trajan|neprekidan" },
+        { "front": "militärisch", "back": "vojni" },
+        { "front": "Konfrontation", "back": "konfrontacija|sukob", "article": "die", "plural": "die Konfrontationen" },
+        { "front": "Wettkampf", "back": "nadmetanje|takmičenje", "article": "der", "plural": "die Wettkämpfe" },
+        { "front": "Zusammenbruch", "back": "slom|raspad", "article": "der", "plural": "die Zusammenbrüche" },
+        { "front": "Westdeutschland", "back": "Zapadna Nemačka" },
+        { "front": "informell", "back": "neformalan" },
+        { "front": "Bezeichnung", "back": "naziv|oznaka", "article": "die", "plural": "die Bezeichnungen" },
+        { "front": "teilweise", "back": "delimično" },
+        { "front": "Grundrecht", "back": "osnovno pravo", "article": "das", "plural": "die Grundrechte" },
+        { "front": "verabschieden", "back": "usvojiti|doneti (zakon)" },
+        { "front": "Ausreise", "back": "izlazak iz zemlje", "article": "die", "plural": "die Ausreisen" },
+        { "front": "Pressekonferenz", "back": "konferencija za štampu", "article": "die", "plural": "die Pressekonferenzen" },
+        { "front": "verkünden", "back": "objaviti|proglasiti" },
+        { "front": "Grenze zu + Dat.", "back": "granica sa", "article": "die" },
+        { "front": "einreißen", "back": "srušiti (zid)", "hint": "reißt ein, riss ein, hat eingerissen" },
+        { "front": "Wende", "back": "preokret (period nemačkog ujedinjenja)", "article": "die" },
+        { "front": "Wandel", "back": "(temeljna) promena", "article": "der" },
+        { "front": "vereinigen", "back": "ujediniti" },
+        { "front": "spürbar", "back": "osetan|primetan" },
+        { "front": "im Hinblick auf + Akk.", "back": "u pogledu|s obzirom na" },
+        { "front": "Wirtschaftskraft", "back": "privredna snaga", "article": "die", "plural": "die Wirtschaftskräfte" },
+        { "front": "Wohlstand", "back": "blagostanje", "article": "der" },
+        { "front": "Zeitraum", "back": "(vremenski) period", "article": "der", "plural": "die Zeiträume" },
+        { "front": "abfällig", "back": "omalovažavajući|pogrdan" },
+        { "front": "Selbstbezeichnung", "back": "naziv za samog sebe", "article": "die", "plural": "die Selbstbezeichnungen" },
+        { "front": "wohnhaft", "back": "nastanjen|sa prebivalištem" },
+        { "front": "ansteigen", "back": "porasti", "hint": "steigt an, stieg an, ist angestiegen" },
+        { "front": "repräsentieren", "back": "predstavljati" },
+        { "front": "unterrepräsentiert", "back": "nedovoljno zastupljen" },
+        { "front": "Aussicht auf + Akk.", "back": "izgledi za", "article": "die" },
+        { "front": "Ungleichheit", "back": "nejednakost", "article": "die", "plural": "die Ungleichheiten" },
+        { "front": "Debatte über + Akk.", "back": "debata o", "article": "die", "plural": "die Debatten" },
+        { "front": "Zugewanderte", "back": "doseljenik / doseljenica", "article": "der / die", "plural": "die Zugewanderten" },
+        { "front": "Herausforderung", "back": "izazov", "article": "die", "plural": "die Herausforderungen" },
+        { "front": "Verfassungsgericht", "back": "ustavni sud", "article": "das", "plural": "die Verfassungsgerichte" },
+        { "front": "die Lebenshaltungskosten (nur Pl.)", "back": "troškovi života" },
+        { "front": "schildern", "back": "opisati|prikazati" },
+        { "front": "beklagen", "back": "žaliti (zbog nečega)|oplakivati" },
+        { "front": "erheblich", "back": "znatan|znatno" },
+        { "front": "rundum", "back": "potpuno|u svakom pogledu" },
+        { "front": "sichtlich", "back": "vidno|očigledno" },
+        { "front": "erschüttern", "back": "potresti" },
+        { "front": "gefährden", "back": "ugroziti" },
+        { "front": "potenziell", "back": "potencijalan|potencijalno" },
+        { "front": "Pandemie", "back": "pandemija", "article": "die", "plural": "die Pandemien" },
+        { "front": "verbreiten", "back": "širiti|raširiti" },
+        { "front": "Berufswechsel", "back": "promena zanimanja", "article": "der", "plural": "die Berufswechsel" },
+        { "front": "Auslandssemester", "back": "semestar u inostranstvu", "article": "das", "plural": "die Auslandssemester" },
+        { "front": "schicksalhaft", "back": "sudbonosan" },
+        { "front": "sich vollziehen", "back": "odigrati se|dogoditi se", "hint": "vollzieht, vollzog, hat vollzogen" },
+        { "front": "wenden", "back": "okrenuti" },
+        { "front": "Wendung", "back": "obrt|preokret", "article": "die", "plural": "die Wendungen" },
+        { "front": "etwas auf den Kopf stellen", "back": "okrenuti nešto naglavačke|izokrenuti iz temelja" },
+        { "front": "grundlegend", "back": "temeljan|iz temelja" }
+      ]
+    },
+    {
+      "lektion": 12,
+      "title": "Lektion 12 - Datenlücken",
+      "setKey": "c1-1-lektion-12",
+      "items": [
+        { "front": "Vegetarier / Vegetarierin", "back": "vegetarijanac / vegetarijanka", "article": "der / die", "plural": "die Vegetarier / die Vegetarierinnen" },
+        { "front": "Repräsentant / Repräsentantin", "back": "predstavnik / predstavnica", "article": "der / die", "plural": "die Repräsentanten / die Repräsentantinnen" },
+        { "front": "Abgeordnete", "back": "poslanik / poslanica (u parlamentu)", "article": "der / die", "plural": "die Abgeordneten" },
+        { "front": "Oberstufe", "back": "viši razredi srednje škole", "article": "die", "plural": "die Oberstufen" },
+        { "front": "Abiturient / Abiturientin", "back": "maturant / maturantkinja", "article": "der / die", "plural": "die Abiturienten / die Abiturientinnen" },
+        { "front": "anbelangen", "back": "ticati se (was ... anbelangt = što se tiče)" },
+        { "front": "Unterzahl", "back": "manjina", "article": "die" },
+        { "front": "Überzahl", "back": "većina", "article": "die" },
+        { "front": "beträchtlich", "back": "znatan|pozamašan" },
+        { "front": "Sorgearbeit", "back": "rad na nezi i staranju o drugima", "article": "die" },
+        { "front": "Teilhabe", "back": "učešće|participacija", "article": "die" },
+        { "front": "Rollenbild", "back": "predstava o (rodnim) ulogama", "article": "das", "plural": "die Rollenbilder" },
+        { "front": "Wickeltisch", "back": "sto za previjanje beba", "article": "der", "plural": "die Wickeltische" },
+        { "front": "Arbeitskreis", "back": "radna grupa", "article": "der", "plural": "die Arbeitskreise" },
+        { "front": "lehren", "back": "predavati|podučavati" },
+        { "front": "Fakultät", "back": "fakultet", "article": "die", "plural": "die Fakultäten" },
+        { "front": "Gender", "back": "rod (društveni pol)", "article": "das", "plural": "die Gender" },
+        { "front": "dementsprechend", "back": "u skladu s tim|shodno tome" },
+        { "front": "etwas im Blick haben", "back": "imati u vidu|voditi računa o" },
+        { "front": "demzufolge", "back": "usled toga|shodno tome" },
+        { "front": "einbeziehen", "back": "uključiti|obuhvatiti", "hint": "bezieht ein, bezog ein, hat einbezogen" },
+        { "front": "inklusiv", "back": "inkluzivan" },
+        { "front": "Norm", "back": "norma", "article": "die", "plural": "die Normen" },
+        { "front": "stets", "back": "uvek|stalno" },
+        { "front": "Standard", "back": "standard", "article": "der", "plural": "die Standards" },
+        { "front": "die Körpermaße (nur Pl.)", "back": "telesne mere" },
+        { "front": "infolgedessen", "back": "usled toga" },
+        { "front": "Nutzung", "back": "korišćenje|upotreba", "article": "die", "plural": "die Nutzungen" },
+        { "front": "komfortabel", "back": "komforan|udoban" },
+        { "front": "Lehne", "back": "naslon (za ruke)", "article": "die", "plural": "die Lehnen" },
+        { "front": "Airbag", "back": "vazdušni jastuk", "article": "der", "plural": "die Airbags" },
+        { "front": "lebensgefährlich", "back": "opasan po život" },
+        { "front": "vernachlässigen", "back": "zanemariti" },
+        { "front": "Lehre", "back": "nastava|obrazovanje", "article": "die", "plural": "die Lehren" },
+        { "front": "sensibilisieren", "back": "senzibilisati|podići svest o" },
+        { "front": "Curriculum", "back": "kurikulum|nastavni plan", "article": "das", "plural": "die Curricula" },
+        { "front": "Lehrveranstaltung", "back": "oblik nastave (predavanje, kurs)", "article": "die", "plural": "die Lehrveranstaltungen" },
+        { "front": "Wahlfach", "back": "izborni predmet", "article": "das", "plural": "die Wahlfächer" },
+        { "front": "Bestandteil", "back": "sastavni deo", "article": "der", "plural": "die Bestandteile" },
+        { "front": "Schwachstelle", "back": "slaba tačka", "article": "die", "plural": "die Schwachstellen" },
+        { "front": "identifizieren", "back": "identifikovati|prepoznati" },
+        { "front": "einholen", "back": "pribaviti (mišljenja, informacije)" },
+        { "front": "Dozent / Dozentin", "back": "univerzitetski predavač / predavačica", "article": "der / die", "plural": "die Dozenten / die Dozentinnen" },
+        { "front": "infolge + Gen.", "back": "usled" },
+        { "front": "familienfreundlich", "back": "prilagođen porodici" },
+        { "front": "Kinderbetreuung", "back": "čuvanje dece|briga o deci", "article": "die", "plural": "die Kinderbetreuungen" },
+        { "front": "Teilzeitregelung", "back": "pravila o radu sa nepunim radnim vremenom", "article": "die", "plural": "die Teilzeitregelungen" },
+        { "front": "Sichtbarkeit", "back": "vidljivost", "article": "die", "plural": "die Sichtbarkeiten" },
+        { "front": "Scheibenwischer", "back": "brisač (na automobilu)", "article": "der", "plural": "die Scheibenwischer" },
+        { "front": "Errungenschaft", "back": "dostignuće|tekovina", "article": "die", "plural": "die Errungenschaften" },
+        { "front": "abbauen", "back": "razgraditi|smanjiti (predrasude)" },
+        { "front": "Gestaltung", "back": "oblikovanje|dizajn", "article": "die", "plural": "die Gestaltungen" },
+        { "front": "Gefahr", "back": "opasnost", "article": "die", "plural": "die Gefahren" },
+        { "front": "Initiative", "back": "inicijativa", "article": "die", "plural": "die Initiativen" },
+        { "front": "Sortiment", "back": "asortiman", "article": "das", "plural": "die Sortimente" },
+        { "front": "weswegen", "back": "zbog čega" },
+        { "front": "Spracherkennungstechnologie", "back": "tehnologija prepoznavanja govora", "article": "die", "plural": "die Spracherkennungstechnologien" },
+        { "front": "Sehbehinderung", "back": "oštećenje vida", "article": "die", "plural": "die Sehbehinderungen" },
+        { "front": "hineinpassen", "back": "stati (unutra)|uklopiti se" },
+        { "front": "Algorithmus", "back": "algoritam", "article": "der", "plural": "die Algorithmen" },
+        { "front": "vorhanden", "back": "postojeći|raspoloživ" },
+        { "front": "reproduzieren", "back": "reprodukovati" },
+        { "front": "divers", "back": "raznolik|raznovrstan" },
+        { "front": "einfließen", "back": "ući|biti uključen (u nešto)", "hint": "fließt ein, floss ein, ist eingeflossen" },
+        { "front": "linkshändig", "back": "levoruk" },
+        { "front": "alleinstehend", "back": "koji živi sam|bez porodice" },
+        { "front": "Zielgruppe", "back": "ciljna grupa", "article": "die", "plural": "die Zielgruppen" },
+        { "front": "bereiten", "back": "zadavati|pričinjavati (teškoće)" },
+        { "front": "derzeit", "back": "trenutno|u ovom času" },
+        { "front": "Nachfrage nach + Dat.", "back": "potražnja za", "article": "die" },
+        { "front": "zugeschnitten auf + Akk.", "back": "skrojen po meri|prilagođen" },
+        { "front": "ermöglichen", "back": "omogućiti" },
+        { "front": "beschleunigen", "back": "ubrzati" },
+        { "front": "optimieren", "back": "optimizovati" },
+        { "front": "Farbsehschwäche", "back": "daltonizam|slabost raspoznavanja boja", "article": "die" }
+      ]
+    }
+  ]
+}

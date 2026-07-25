@@ -1,0 +1,1086 @@
+{
+  "lessons": [
+    {
+      "lessonTitle": "Nachhaltigkeit - Alles im grünen Bereich",
+      "exercises": [
+        {
+          "title": "Vežba: Artikelwörter und Adjektivdeklination II",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Die Firma hat in ... investiert. Welche Form ist richtig? (investieren in + Akk.)",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["mehrere nachhaltige Projekte", "mehreren nachhaltigen Projekten", "mehrerer nachhaltiger Projekte", "mehrere nachhaltigen Projekte"]
+              },
+              "correct_answer": "0",
+              "explanation": "Nach „investieren in“ steht der Akkusativ. Im Plural werden Artikelwort und Adjektiv parallel dekliniert: mehrere nachhaltige Projekte."
+            },
+            {
+              "question": "Mithilfe ... konnten wir den Energieverbrauch senken. Welche Form ist richtig?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["mehrere moderne Verfahren", "mehreren modernen Verfahren", "mehrerer moderner Verfahren", "mehrerer modernen Verfahren"]
+              },
+              "correct_answer": "2",
+              "explanation": "„Mithilfe“ verlangt den Genitiv: mithilfe mehrerer moderner Verfahren - beide Endungen sind parallel."
+            },
+            {
+              "question": "Ich beschäftige mich mit ... Themen. Welche Form ist richtig?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["viele unterschiedliche", "vielen unterschiedlichen", "vieler unterschiedlicher", "vielen unterschiedliche"]
+              },
+              "correct_answer": "1",
+              "explanation": "Nach „mit“ steht der Dativ: mit vielen unterschiedlichen Themen."
+            },
+            {
+              "question": "Bis eine Maßnahme umgesetzt wird, diskutiert man in ... Sitzungen. Welche Form ist richtig?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["etlichen interne", "etliche interne", "etlichen internen", "etlicher interner"]
+              },
+              "correct_answer": "2",
+              "explanation": "„In“ mit lokaler Bedeutung (wo?) verlangt hier den Dativ: in etlichen internen Sitzungen."
+            },
+            {
+              "question": "Man hat jeden Tag mit ... Themen zu tun. Welche Form ist richtig?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["lauter verschiedenen", "lautere verschiedene", "lautern verschiedenen", "lauter verschiedene"]
+              },
+              "correct_answer": "0",
+              "explanation": "Das Artikelwort „lauter“ wird nie dekliniert. Das Adjektiv steht im Dativ Plural: mit lauter verschiedenen Themen."
+            },
+            {
+              "question": "Ich habe bisher nur ... Situationen erlebt. Welche Form ist richtig?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["wenige schwierigen", "wenigen schwierigen", "wenige schwierige", "weniger schwieriger"]
+              },
+              "correct_answer": "2",
+              "explanation": "Akkusativ Plural: wenige schwierige Situationen - Artikelwort und Adjektiv haben dieselbe Endung."
+            }
+          ]
+        },
+        {
+          "title": "Vežba: Adjektive mit fester Präposition im Kontext",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Als Nachhaltigkeitsmanagerin bin ich ______ allen wichtigen Entscheidungen beteiligt.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["an", "auf", "für", "mit"]
+              },
+              "correct_answer": "an",
+              "explanation": "beteiligt an + Dativ: an allen wichtigen Entscheidungen beteiligt."
+            },
+            {
+              "question": "In meinem Job bin ich ______ viele verschiedene Fragen zuständig.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["für", "an", "gegenüber", "von"]
+              },
+              "correct_answer": "für",
+              "explanation": "zuständig für + Akkusativ."
+            },
+            {
+              "question": "Man ist ______ die Kooperation der Kolleginnen und Kollegen angewiesen.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["auf", "an", "für", "nach"]
+              },
+              "correct_answer": "auf",
+              "explanation": "angewiesen auf + Akkusativ."
+            },
+            {
+              "question": "Die meisten Kolleginnen und Kollegen sind ______ meiner Arbeit aufgeschlossen.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["gegenüber", "mit", "von", "zu"]
+              },
+              "correct_answer": "gegenüber",
+              "explanation": "aufgeschlossen gegenüber + Dativ."
+            },
+            {
+              "question": "Die Geschäftsführung ist ______ den Ergebnissen der Kampagne überzeugt.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["von", "über", "an", "auf"]
+              },
+              "correct_answer": "von",
+              "explanation": "überzeugt von + Dativ."
+            },
+            {
+              "question": "Ich bin schon sehr gespannt ______ das neue Projekt.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["auf", "für", "über", "von"]
+              },
+              "correct_answer": "auf",
+              "explanation": "gespannt auf + Akkusativ."
+            }
+          ]
+        },
+        {
+          "title": "Vežba: Wortschatz - Nachhaltigkeit",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Verbinden Sie die deutschen Wörter mit der Übersetzung.",
+              "question_type": "match_pairs",
+              "options": {
+                "type": "match_pairs",
+                "items": [
+                  {"de": "schonen", "sr": "štedeti, čuvati (npr. resurse)"},
+                  {"de": "erzielen", "sr": "postići, ostvariti (npr. dobit)"},
+                  {"de": "hochwertig", "sr": "visokokvalitetan"},
+                  {"de": "nachwachsend", "sr": "obnovljiv, koji ponovo raste"},
+                  {"de": "abbaubar", "sr": "razgradiv"},
+                  {"de": "die Geschäftsführung", "sr": "uprava, rukovodstvo firme"},
+                  {"de": "vielversprechend", "sr": "mnogoobećavajući"}
+                ]
+              },
+              "correct_answer": "all",
+              "explanation": "Wichtige Wörter aus dem Wortfeld Nachhaltigkeit."
+            }
+          ]
+        },
+        {
+          "title": "Test: Selbstkontrolle - Lektion 7",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Welches Adjektiv passt in (1)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["aufgeschlossen", "hochwertig"],
+                "context": {
+                  "type": "text",
+                  "title": "Mein Stuhl ist echt cool!",
+                  "content": "Nachhaltig hat mit „lange halten“ zu tun, aber niemand merkt, dass viele Produkte heutzutage nicht mehr aufgeschlossen / hochwertig (1) sind. Mich erschreckt zum Beispiel die Qualität der Möbel: Viele Geschäfte haben zwar günstige und gespannte / vielversprechende (2) Angebote, aber was nutzt mir ein Tisch, der billig gemacht ist? Man sollte beim Einkauf nicht nur auf die Kosten achten und in erster Linie abbaubar / ökonomisch (3) denken, sondern sollte auch in Dinge von guter Qualität investieren. Das geht, indem man lokale Produzenten unterstützt, bei denen die Herstellung zwar länger dauert und aufwendiger / konzeptioneller (4) ist als in einem Großbetrieb. Dafür passt die Qualität, das Möbelstück hält lange und ich bin mit gutem Gewissen an einem nachhaltigen Produktionskreislauf beteiligt / nachwachsend (5)."
+                }
+              },
+              "correct_answer": "1",
+              "explanation": "„hochwertig“ = von guter Qualität. Viele Produkte sind heutzutage nicht mehr hochwertig."
+            },
+            {
+              "question": "Welches Adjektiv passt in (2)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["gespannte", "vielversprechende"],
+                "context": {
+                  "type": "text",
+                  "title": "Mein Stuhl ist echt cool!",
+                  "content": "Nachhaltig hat mit „lange halten“ zu tun, aber niemand merkt, dass viele Produkte heutzutage nicht mehr aufgeschlossen / hochwertig (1) sind. Mich erschreckt zum Beispiel die Qualität der Möbel: Viele Geschäfte haben zwar günstige und gespannte / vielversprechende (2) Angebote, aber was nutzt mir ein Tisch, der billig gemacht ist? Man sollte beim Einkauf nicht nur auf die Kosten achten und in erster Linie abbaubar / ökonomisch (3) denken, sondern sollte auch in Dinge von guter Qualität investieren. Das geht, indem man lokale Produzenten unterstützt, bei denen die Herstellung zwar länger dauert und aufwendiger / konzeptioneller (4) ist als in einem Großbetrieb. Dafür passt die Qualität, das Möbelstück hält lange und ich bin mit gutem Gewissen an einem nachhaltigen Produktionskreislauf beteiligt / nachwachsend (5)."
+                }
+              },
+              "correct_answer": "1",
+              "explanation": "„vielversprechende Angebote“ = Angebote, die viel versprechen. „gespannt“ beschreibt Personen, nicht Angebote."
+            },
+            {
+              "question": "Welches Adjektiv passt in (3)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["abbaubar", "ökonomisch"],
+                "context": {
+                  "type": "text",
+                  "title": "Mein Stuhl ist echt cool!",
+                  "content": "Nachhaltig hat mit „lange halten“ zu tun, aber niemand merkt, dass viele Produkte heutzutage nicht mehr aufgeschlossen / hochwertig (1) sind. Mich erschreckt zum Beispiel die Qualität der Möbel: Viele Geschäfte haben zwar günstige und gespannte / vielversprechende (2) Angebote, aber was nutzt mir ein Tisch, der billig gemacht ist? Man sollte beim Einkauf nicht nur auf die Kosten achten und in erster Linie abbaubar / ökonomisch (3) denken, sondern sollte auch in Dinge von guter Qualität investieren. Das geht, indem man lokale Produzenten unterstützt, bei denen die Herstellung zwar länger dauert und aufwendiger / konzeptioneller (4) ist als in einem Großbetrieb. Dafür passt die Qualität, das Möbelstück hält lange und ich bin mit gutem Gewissen an einem nachhaltigen Produktionskreislauf beteiligt / nachwachsend (5)."
+                }
+              },
+              "correct_answer": "1",
+              "explanation": "„ökonomisch denken“ = ans Geld / an die Kosten denken."
+            },
+            {
+              "question": "Welches Adjektiv passt in (4)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["aufwendiger", "konzeptioneller"],
+                "context": {
+                  "type": "text",
+                  "title": "Mein Stuhl ist echt cool!",
+                  "content": "Nachhaltig hat mit „lange halten“ zu tun, aber niemand merkt, dass viele Produkte heutzutage nicht mehr aufgeschlossen / hochwertig (1) sind. Mich erschreckt zum Beispiel die Qualität der Möbel: Viele Geschäfte haben zwar günstige und gespannte / vielversprechende (2) Angebote, aber was nutzt mir ein Tisch, der billig gemacht ist? Man sollte beim Einkauf nicht nur auf die Kosten achten und in erster Linie abbaubar / ökonomisch (3) denken, sondern sollte auch in Dinge von guter Qualität investieren. Das geht, indem man lokale Produzenten unterstützt, bei denen die Herstellung zwar länger dauert und aufwendiger / konzeptioneller (4) ist als in einem Großbetrieb. Dafür passt die Qualität, das Möbelstück hält lange und ich bin mit gutem Gewissen an einem nachhaltigen Produktionskreislauf beteiligt / nachwachsend (5)."
+                }
+              },
+              "correct_answer": "0",
+              "explanation": "„aufwendig“ = mit viel Arbeit und Mühe verbunden. Die Herstellung dauert länger und ist aufwendiger."
+            },
+            {
+              "question": "Welches Adjektiv passt in (5)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["beteiligt", "nachwachsend"],
+                "context": {
+                  "type": "text",
+                  "title": "Mein Stuhl ist echt cool!",
+                  "content": "Nachhaltig hat mit „lange halten“ zu tun, aber niemand merkt, dass viele Produkte heutzutage nicht mehr aufgeschlossen / hochwertig (1) sind. Mich erschreckt zum Beispiel die Qualität der Möbel: Viele Geschäfte haben zwar günstige und gespannte / vielversprechende (2) Angebote, aber was nutzt mir ein Tisch, der billig gemacht ist? Man sollte beim Einkauf nicht nur auf die Kosten achten und in erster Linie abbaubar / ökonomisch (3) denken, sondern sollte auch in Dinge von guter Qualität investieren. Das geht, indem man lokale Produzenten unterstützt, bei denen die Herstellung zwar länger dauert und aufwendiger / konzeptioneller (4) ist als in einem Großbetrieb. Dafür passt die Qualität, das Möbelstück hält lange und ich bin mit gutem Gewissen an einem nachhaltigen Produktionskreislauf beteiligt / nachwachsend (5)."
+                }
+              },
+              "correct_answer": "0",
+              "explanation": "beteiligt an + Dativ: an einem nachhaltigen Produktionskreislauf beteiligt sein."
+            },
+            {
+              "question": "Lesen Sie den Beitrag und ergänzen Sie die passenden Formen (Teil 1): In den letzten Jahren haben wir als Geschäftsführung unserer Firma bereits in ______ ______ (1) Konzepte investiert. So achten wir beim Anschaffen neuer Geräte auf das Energiekennzeichen. Dank ______ ______ (2) Überlegungen im Team haben wir es zudem geschafft, ______ ______ (3) Ideen tatsächlich umzusetzen. Natürlich hat Corona für ______ ______ (4) Veränderungen gesorgt.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["mehrere", "nachhaltige", "vieler", "kreativer", "etliche", "vielversprechende", "einige", "ungeplante"]
+              },
+              "correct_answer": "mehrere, nachhaltige, vieler, kreativer, etliche, vielversprechende, einige, ungeplante",
+              "explanation": "investieren in + Akk. (mehrere nachhaltige), dank + Gen. (vieler kreativer), Akk. (etliche vielversprechende), für + Akk. (einige ungeplante). Artikelwort und Adjektiv werden parallel dekliniert."
+            },
+            {
+              "question": "Lesen Sie den Beitrag und ergänzen Sie die passenden Formen (Teil 2): Doch trotz ______ ______ (5) Herausforderungen haben wir die Krise gut gemeistert. Es kam nur zu ______ ______ (6) Problemen. Und egal, ob nun jemand im Büro oder zu Hause arbeitet: Bei regelmäßigen „Daten-Putztagen“ löschen wir beispielsweise von unseren Rechnern ______ ______ (7) Ordner und Dateien, die Speicherplatz und somit viel Energie brauchen. (Silke Hönig, Firmenchefin)",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["mehrerer", "unerwarteter", "wenigen", "kleineren", "lauter", "unnötige"]
+              },
+              "correct_answer": "mehrerer, unerwarteter, wenigen, kleineren, lauter, unnötige",
+              "explanation": "trotz + Gen. (mehrerer unerwarteter), zu + Dat. (wenigen kleineren), „lauter“ bleibt undekliniert, danach Akk. Pl. (unnötige)."
+            },
+            {
+              "question": "Schreiben Sie das Redemittel richtig. Antwort auf: „Wir haben neulich diskutiert, ob wir im Büro auf Plastik verzichten.“",
+              "question_type": "word_order",
+              "options": {
+                "type": "word_order",
+                "items": ["das", "umsetzen", "denke,", "könnte", "Ich", "man"]
+              },
+              "correct_answer": "Ich denke, das könnte man umsetzen",
+              "explanation": "Redemittel: „Ich denke, das könnte man umsetzen.“ - einen Vorschlag annehmen. Auch die Variante „Ich denke, man könnte das umsetzen“ ist richtig."
+            },
+            {
+              "question": "Schreiben Sie das Redemittel richtig: „Ganz verzichten? Vielleicht ... im ersten Schritt versuchen, es zu reduzieren.“",
+              "question_type": "word_order",
+              "options": {
+                "type": "word_order",
+                "items": ["Sie", "lassen", "lieber", "uns"]
+              },
+              "correct_answer": "lassen Sie uns lieber",
+              "explanation": "Gegenvorschlag: „Lassen Sie uns lieber ...“ - nach „Vielleicht“ steht das Verb an zweiter Position."
+            },
+            {
+              "question": "Schreiben Sie das Redemittel richtig: „... wir beispielsweise statt Kugelschreibern Bleistifte benutzen?“",
+              "question_type": "word_order",
+              "options": {
+                "type": "word_order",
+                "items": ["denkbar,", "für", "dass", "Wäre", "Sie", "es"]
+              },
+              "correct_answer": "Wäre es für Sie denkbar, dass",
+              "explanation": "Vorschlag als Frage: „Wäre es für Sie auch denkbar, dass ...?“"
+            },
+            {
+              "question": "Schreiben Sie das Redemittel richtig: „... Kugelschreiber sind für uns ein wichtiges Werbemittel.“",
+              "question_type": "word_order",
+              "options": {
+                "type": "word_order",
+                "items": ["kann", "denn", "Vorschlag", "nicht so richtig", "Ich", "diesen", "nachvollziehen,"]
+              },
+              "correct_answer": "Ich kann diesen Vorschlag nicht so richtig nachvollziehen, denn",
+              "explanation": "Einen Vorschlag ablehnen: „Ich kann diesen Vorschlag nicht so richtig nachvollziehen, denn ...“"
+            },
+            {
+              "question": "Schreiben Sie das Redemittel richtig: „...: Als Werbemittel bleiben die Kulis vorläufig, langfristig überlegen wir uns etwas Nachhaltigeres.“",
+              "question_type": "word_order",
+              "options": {
+                "type": "word_order",
+                "items": ["wir", "Folgendes", "also", "Dann", "machen"]
+              },
+              "correct_answer": "Dann machen wir also Folgendes",
+              "explanation": "Sich einigen: „Dann machen wir also Folgendes: ...“"
+            }
+          ]
+        }
+      ],
+      "uncertainties": [
+        "Test, zadatak 2: PROVERENO uz zvanični ključ (Vielfalt C1.1 AB Lösungen, Selbstkontrolle S. 59). Praznina (2) „vieler kreativer“ i praznina (6) „wenigen kleineren“ potvrđene su - naša rešenja se poklapaju sa knjigom.",
+        "Test, zadatak 3: ciljne rečenice su sastavljene isključivo od segmenata zadatih u knjizi; završna tačka nije deo segmenata pa nije uključena u correct_answer. Ključ za (1) navodi dve varijante: „Ich denke, das könnte man umsetzen / man könnte das umsetzen“ - obe su tačne, u correct_answer je prva."
+      ],
+      "skipped": []
+    },
+    {
+      "lessonTitle": "Altern - Ewig leben?",
+      "exercises": [
+        {
+          "title": "Vežba: Adversative Konnektoren",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Welcher Konnektor leitet einen Nebensatz ein (Verb am Ende)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["dagegen", "wohingegen", "demgegenüber", "im Gegensatz dazu"]
+              },
+              "correct_answer": "1",
+              "explanation": "„wohingegen“ ist (wie „während“ und „anders als“) ein Nebensatz-Konnektor: Das konjugierte Verb steht am Satzende."
+            },
+            {
+              "question": "„... meinen Erwartungen war das Buch sehr spannend.“ Was passt?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["Entgegen", "Während", "Jedoch", "Wohingegen"]
+              },
+              "correct_answer": "0",
+              "explanation": "„entgegen“ ist eine Präposition mit Dativ und steht vor einer Nominalgruppe: entgegen meinen Erwartungen."
+            },
+            {
+              "question": "„Viele sehnen sich nach einem ewigen Leben. ... finde ich die Idee beängstigend.“ Was passt?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["Wohingegen", "Anders als", "Demgegenüber", "Entgegen"]
+              },
+              "correct_answer": "2",
+              "explanation": "„Demgegenüber“ ist ein Hauptsatz-Konnektor im Vorfeld, danach folgt sofort das konjugierte Verb."
+            },
+            {
+              "question": "Welcher Kasus steht nach der Präposition „entgegen“?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["der Akkusativ", "der Genitiv", "der Dativ", "der Nominativ"]
+              },
+              "correct_answer": "2",
+              "explanation": "entgegen + Dativ: entgegen deiner Vorstellung, entgegen meinen Erwartungen."
+            },
+            {
+              "question": "Wo steht das konjugierte Verb nach „während“ und „wohingegen“?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["auf Position 2", "am Satzende", "direkt nach dem Konnektor", "im Vorfeld"]
+              },
+              "correct_answer": "1",
+              "explanation": "Beide sind Nebensatz-Konnektoren, deshalb steht das konjugierte Verb am Ende des Nebensatzes."
+            },
+            {
+              "question": "Welcher Satz ist korrekt?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Die Zellen der Hydra bleiben aktiv, wohingegen unsere Zellen werden träger.",
+                  "Die Zellen der Hydra bleiben aktiv, wohingegen unsere Zellen träger werden.",
+                  "Die Zellen der Hydra bleiben aktiv, demgegenüber unsere Zellen träger werden.",
+                  "Die Zellen der Hydra bleiben aktiv, entgegen unsere Zellen träger werden."
+                ]
+              },
+              "correct_answer": "1",
+              "explanation": "Nach „wohingegen“ steht das konjugierte Verb am Satzende: ..., wohingegen unsere Zellen träger werden."
+            }
+          ]
+        },
+        {
+          "title": "Vežba: Gegensätze im Kontext",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Als Kind wollte ich schnell älter werden, ______ ich mir heute wünsche, die Zeit anzuhalten.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["während", "dagegen", "entgegen"]
+              },
+              "correct_answer": "während",
+              "explanation": "Nebensatz mit Verb am Ende („... wünsche“), also passt der Nebensatz-Konnektor „während“."
+            },
+            {
+              "question": "______ der Meinung vieler Menschen beginnt das Alter nicht automatisch mit 65.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["Entgegen", "Während", "Jedoch"]
+              },
+              "correct_answer": "Entgegen",
+              "explanation": "Vor der Nominalgruppe „der Meinung vieler Menschen“ steht die Präposition „entgegen“ + Dativ."
+            },
+            {
+              "question": "Meine Großmutter ist 82, sie fühlt sich ______ überhaupt nicht alt.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["jedoch", "wohingegen", "entgegen"]
+              },
+              "correct_answer": "jedoch",
+              "explanation": "„jedoch“ kann als einziger Hauptsatz-Konnektor auch im Mittelfeld stehen."
+            },
+            {
+              "question": "______ meinem Großvater treibt sie noch jeden Tag Sport.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["Im Gegensatz zu", "Im Gegensatz dazu", "Wohingegen"]
+              },
+              "correct_answer": "Im Gegensatz zu",
+              "explanation": "Vor einer Nominalgruppe im Dativ („meinem Großvater“) steht die Präposition „im Gegensatz zu“."
+            },
+            {
+              "question": "Mein Großvater bleibt lieber zu Hause. ______ ist meine Großmutter ständig unterwegs.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["Dagegen", "Während", "Entgegen"]
+              },
+              "correct_answer": "Dagegen",
+              "explanation": "„Dagegen“ verbindet als Hauptsatz-Konnektor zwei Hauptsätze; nach dem Vorfeld folgt das konjugierte Verb."
+            },
+            {
+              "question": "Für viele ist Unsterblichkeit ein Traum, ______ ich Sorge hätte, mich zu langweilen.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["wohingegen", "dagegen", "im Gegensatz zu"]
+              },
+              "correct_answer": "wohingegen",
+              "explanation": "Nebensatz mit Verb am Ende („... hätte“), deshalb „wohingegen“."
+            }
+          ]
+        },
+        {
+          "title": "Vežba: Wortschatz - Altern",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Verbinden Sie die deutschen Wörter mit der Übersetzung.",
+              "question_type": "match_pairs",
+              "options": {
+                "type": "match_pairs",
+                "items": [
+                  {"de": "gebrechlich", "sr": "nemoćan, krhak (od starosti)"},
+                  {"de": "die Lebenserwartung", "sr": "očekivani životni vek"},
+                  {"de": "die Unsterblichkeit", "sr": "besmrtnost"},
+                  {"de": "verjüngen", "sr": "podmladiti"},
+                  {"de": "strittig", "sr": "sporan"},
+                  {"de": "verlockend", "sr": "primamljiv"},
+                  {"de": "weitreichend", "sr": "dalekosežan"}
+                ]
+              },
+              "correct_answer": "all",
+              "explanation": "Wichtige Wörter aus dem Wortfeld Altern."
+            }
+          ]
+        },
+        {
+          "title": "Test: Selbstkontrolle - Lektion 8",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Was passt in (1)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["Auszeichnungen", "Konsequenzen"],
+                "context": {
+                  "type": "text",
+                  "title": "Sich jung denken",
+                  "content": "Unsere Gedanken haben Einfluss darauf, wie alt wir uns fühlen! Negative Bilder vom Altern können weitreichende Auszeichnungen / Konsequenzen (1) haben. Eine pessimistische Einstellung, die Altsein in erster Linie mit gesundheitlichen Einschränkungen wie Gebrechlichkeit / Reife (2) und Vergesslichkeit verbindet, hat Einfluss auf unser Selbstbild und unser Lebensgefühl. Genauso kann uns eine positive Gentechnik / Manipulation (3) unserer Gedanken helfen, länger jung zu bleiben. Positive Vorstellungen vom Älterwerden beeinflussen sogar unsere Langsamkeit / Lebenserwartung (4). Welchen Einfluss Gefühle auf das Altersempfinden haben, hat Ende der 1970er-Jahre schon die US-amerikanische Psychologin Ellen Langer gezeigt. In einem Desinteresse / Experiment (5) lebten acht Männer (ca. 80 Jahre alt) eine Woche lang in einem Gebäude zusammen. Dort herrschten Lebensbedingungen wie zu der Zeit, als die Versuchspersonen 20 Jahre jünger waren, und es gab keine Spiegel. Das Ergebnis: Die geistige Verjüngung / Weisheit (6) zeigte sich deutlich im Körper! Die Männer sahen nicht nur jünger aus, sie konnten auch besser sehen und hören und waren beweglicher."
+                }
+              },
+              "correct_answer": "1",
+              "explanation": "„weitreichende Konsequenzen haben“ ist eine feste Adjektiv-Nomen-Verbindung (= weitreichende Folgen)."
+            },
+            {
+              "question": "Was passt in (2)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["Gebrechlichkeit", "Reife"],
+                "context": {
+                  "type": "text",
+                  "title": "Sich jung denken",
+                  "content": "Unsere Gedanken haben Einfluss darauf, wie alt wir uns fühlen! Negative Bilder vom Altern können weitreichende Auszeichnungen / Konsequenzen (1) haben. Eine pessimistische Einstellung, die Altsein in erster Linie mit gesundheitlichen Einschränkungen wie Gebrechlichkeit / Reife (2) und Vergesslichkeit verbindet, hat Einfluss auf unser Selbstbild und unser Lebensgefühl. Genauso kann uns eine positive Gentechnik / Manipulation (3) unserer Gedanken helfen, länger jung zu bleiben. Positive Vorstellungen vom Älterwerden beeinflussen sogar unsere Langsamkeit / Lebenserwartung (4). Welchen Einfluss Gefühle auf das Altersempfinden haben, hat Ende der 1970er-Jahre schon die US-amerikanische Psychologin Ellen Langer gezeigt. In einem Desinteresse / Experiment (5) lebten acht Männer (ca. 80 Jahre alt) eine Woche lang in einem Gebäude zusammen. Dort herrschten Lebensbedingungen wie zu der Zeit, als die Versuchspersonen 20 Jahre jünger waren, und es gab keine Spiegel. Das Ergebnis: Die geistige Verjüngung / Weisheit (6) zeigte sich deutlich im Körper! Die Männer sahen nicht nur jünger aus, sie konnten auch besser sehen und hören und waren beweglicher."
+                }
+              },
+              "correct_answer": "0",
+              "explanation": "„Gebrechlichkeit“ ist eine gesundheitliche Einschränkung; „Reife“ ist positiv besetzt."
+            },
+            {
+              "question": "Was passt in (3)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["Gentechnik", "Manipulation"],
+                "context": {
+                  "type": "text",
+                  "title": "Sich jung denken",
+                  "content": "Unsere Gedanken haben Einfluss darauf, wie alt wir uns fühlen! Negative Bilder vom Altern können weitreichende Auszeichnungen / Konsequenzen (1) haben. Eine pessimistische Einstellung, die Altsein in erster Linie mit gesundheitlichen Einschränkungen wie Gebrechlichkeit / Reife (2) und Vergesslichkeit verbindet, hat Einfluss auf unser Selbstbild und unser Lebensgefühl. Genauso kann uns eine positive Gentechnik / Manipulation (3) unserer Gedanken helfen, länger jung zu bleiben. Positive Vorstellungen vom Älterwerden beeinflussen sogar unsere Langsamkeit / Lebenserwartung (4). Welchen Einfluss Gefühle auf das Altersempfinden haben, hat Ende der 1970er-Jahre schon die US-amerikanische Psychologin Ellen Langer gezeigt. In einem Desinteresse / Experiment (5) lebten acht Männer (ca. 80 Jahre alt) eine Woche lang in einem Gebäude zusammen. Dort herrschten Lebensbedingungen wie zu der Zeit, als die Versuchspersonen 20 Jahre jünger waren, und es gab keine Spiegel. Das Ergebnis: Die geistige Verjüngung / Weisheit (6) zeigte sich deutlich im Körper! Die Männer sahen nicht nur jünger aus, sie konnten auch besser sehen und hören und waren beweglicher."
+                }
+              },
+              "correct_answer": "1",
+              "explanation": "Eine „positive Manipulation unserer Gedanken“ - es geht um Gedanken, nicht um Gene."
+            },
+            {
+              "question": "Was passt in (4)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["Langsamkeit", "Lebenserwartung"],
+                "context": {
+                  "type": "text",
+                  "title": "Sich jung denken",
+                  "content": "Unsere Gedanken haben Einfluss darauf, wie alt wir uns fühlen! Negative Bilder vom Altern können weitreichende Auszeichnungen / Konsequenzen (1) haben. Eine pessimistische Einstellung, die Altsein in erster Linie mit gesundheitlichen Einschränkungen wie Gebrechlichkeit / Reife (2) und Vergesslichkeit verbindet, hat Einfluss auf unser Selbstbild und unser Lebensgefühl. Genauso kann uns eine positive Gentechnik / Manipulation (3) unserer Gedanken helfen, länger jung zu bleiben. Positive Vorstellungen vom Älterwerden beeinflussen sogar unsere Langsamkeit / Lebenserwartung (4). Welchen Einfluss Gefühle auf das Altersempfinden haben, hat Ende der 1970er-Jahre schon die US-amerikanische Psychologin Ellen Langer gezeigt. In einem Desinteresse / Experiment (5) lebten acht Männer (ca. 80 Jahre alt) eine Woche lang in einem Gebäude zusammen. Dort herrschten Lebensbedingungen wie zu der Zeit, als die Versuchspersonen 20 Jahre jünger waren, und es gab keine Spiegel. Das Ergebnis: Die geistige Verjüngung / Weisheit (6) zeigte sich deutlich im Körper! Die Männer sahen nicht nur jünger aus, sie konnten auch besser sehen und hören und waren beweglicher."
+                }
+              },
+              "correct_answer": "1",
+              "explanation": "Positive Vorstellungen beeinflussen die „Lebenserwartung“ (= wie lange man voraussichtlich lebt)."
+            },
+            {
+              "question": "Was passt in (5)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["Desinteresse", "Experiment"],
+                "context": {
+                  "type": "text",
+                  "title": "Sich jung denken",
+                  "content": "Unsere Gedanken haben Einfluss darauf, wie alt wir uns fühlen! Negative Bilder vom Altern können weitreichende Auszeichnungen / Konsequenzen (1) haben. Eine pessimistische Einstellung, die Altsein in erster Linie mit gesundheitlichen Einschränkungen wie Gebrechlichkeit / Reife (2) und Vergesslichkeit verbindet, hat Einfluss auf unser Selbstbild und unser Lebensgefühl. Genauso kann uns eine positive Gentechnik / Manipulation (3) unserer Gedanken helfen, länger jung zu bleiben. Positive Vorstellungen vom Älterwerden beeinflussen sogar unsere Langsamkeit / Lebenserwartung (4). Welchen Einfluss Gefühle auf das Altersempfinden haben, hat Ende der 1970er-Jahre schon die US-amerikanische Psychologin Ellen Langer gezeigt. In einem Desinteresse / Experiment (5) lebten acht Männer (ca. 80 Jahre alt) eine Woche lang in einem Gebäude zusammen. Dort herrschten Lebensbedingungen wie zu der Zeit, als die Versuchspersonen 20 Jahre jünger waren, und es gab keine Spiegel. Das Ergebnis: Die geistige Verjüngung / Weisheit (6) zeigte sich deutlich im Körper! Die Männer sahen nicht nur jünger aus, sie konnten auch besser sehen und hören und waren beweglicher."
+                }
+              },
+              "correct_answer": "1",
+              "explanation": "Ellen Langer führte ein „Experiment“ (einen wissenschaftlichen Versuch) durch."
+            },
+            {
+              "question": "Was passt in (6)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["Verjüngung", "Weisheit"],
+                "context": {
+                  "type": "text",
+                  "title": "Sich jung denken",
+                  "content": "Unsere Gedanken haben Einfluss darauf, wie alt wir uns fühlen! Negative Bilder vom Altern können weitreichende Auszeichnungen / Konsequenzen (1) haben. Eine pessimistische Einstellung, die Altsein in erster Linie mit gesundheitlichen Einschränkungen wie Gebrechlichkeit / Reife (2) und Vergesslichkeit verbindet, hat Einfluss auf unser Selbstbild und unser Lebensgefühl. Genauso kann uns eine positive Gentechnik / Manipulation (3) unserer Gedanken helfen, länger jung zu bleiben. Positive Vorstellungen vom Älterwerden beeinflussen sogar unsere Langsamkeit / Lebenserwartung (4). Welchen Einfluss Gefühle auf das Altersempfinden haben, hat Ende der 1970er-Jahre schon die US-amerikanische Psychologin Ellen Langer gezeigt. In einem Desinteresse / Experiment (5) lebten acht Männer (ca. 80 Jahre alt) eine Woche lang in einem Gebäude zusammen. Dort herrschten Lebensbedingungen wie zu der Zeit, als die Versuchspersonen 20 Jahre jünger waren, und es gab keine Spiegel. Das Ergebnis: Die geistige Verjüngung / Weisheit (6) zeigte sich deutlich im Körper! Die Männer sahen nicht nur jünger aus, sie konnten auch besser sehen und hören und waren beweglicher."
+                }
+              },
+              "correct_answer": "0",
+              "explanation": "Die geistige „Verjüngung“ (= das Jüngerwerden) zeigte sich im Körper: Die Männer sahen jünger aus."
+            },
+            {
+              "question": "Lesen Sie den Beitrag. Was passt? Ergänzen Sie: Was unterscheidet die Generation Z (Geburtsjahre 1995-2010) von den beiden Generationen davor? Ich habe mir mal die Merkmale der Generationen X, Y und Z angeschaut. Ich bin bei solchen Beschreibungen immer skeptisch. ______ (1) meinen Erwartungen sind sie aber ziemlich spannend. Ein sehr großer Unterschied liegt darin, mit welcher Technik man aufgewachsen ist. Die Generation Z kennt keine Welt ohne Internet. ______ (2) haben die Generationen davor die Geburt der digitalen Medien erlebt. Auch bei den Werten gibt es Unterschiede: Die Generation X ist mit Wirtschaftskrisen aufgewachsen. Für sie ist finanzielle Sicherheit ein wichtiges Thema, ______ (3) sich die Generation Y eher mit Themen wie „persönliche Freiheit“ und „Sinn des Lebens“ beschäftigt. ______ (4) stehen für die Generation Z die soziale Gerechtigkeit und Diversität im Fokus.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["Entgegen", "Im Gegensatz dazu", "wohingegen", "Demgegenüber"]
+              },
+              "correct_answer": "Entgegen, Im Gegensatz dazu, wohingegen, Demgegenüber",
+              "explanation": "(1) Präposition + Dativ vor „meinen Erwartungen“; (2) und (4) Hauptsatz-Konnektoren im Vorfeld - „Im Gegensatz dazu“ und „Demgegenüber“ sind hier frei austauschbar, beide Reihenfolgen sind richtig; (3) Nebensatz-Konnektor, das Verb „beschäftigt“ steht am Ende."
+            },
+            {
+              "question": "Was passt in Lücke (1)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "(a) Angesichts ... ist das Thema sehr aktuell.",
+                  "(b) Aus diesen Gründen bin ich der Meinung, dass",
+                  "(c) Dadurch würde beispielsweise",
+                  "(d) Vermutlich hätte das folgende Konsequenz:"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "Kommentare: Fortbildung zum Thema Altersdiskriminierung",
+                  "content": "Ich denke, wir sollten in der Firma eine Fortbildung zum Thema „Altersdiskriminierung“ anbieten. ... der Kommentare einiger Kolleg*innen gestern in der Teamsitzung ... (1)\n\n- Was soll das bringen?\n\n... (2) Die herrschenden Vorurteile gegenüber den älteren und den sehr jungen Kolleg*innen würden bewusst gemacht, und das führt dann hoffentlich zu mehr Verständnis. ... (3) auch die Arbeit in den neuen Teams leichter. Dort läuft es gerade überhaupt nicht gut. Wir brauchen unbedingt mehr gegenseitige Wertschätzung, wenn wir erfolgreich sein wollen. ... (4) wir möglichst bald eine Fortbildung organisieren sollten."
+                }
+              },
+              "correct_answer": "0",
+              "explanation": "Relevanz begründen: „Angesichts der Kommentare einiger Kolleg*innen gestern in der Teamsitzung ist das Thema sehr aktuell.“"
+            },
+            {
+              "question": "Was passt in Lücke (2)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "(a) Angesichts ... ist das Thema sehr aktuell.",
+                  "(b) Aus diesen Gründen bin ich der Meinung, dass",
+                  "(c) Dadurch würde beispielsweise",
+                  "(d) Vermutlich hätte das folgende Konsequenz:"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "Kommentare: Fortbildung zum Thema Altersdiskriminierung",
+                  "content": "Ich denke, wir sollten in der Firma eine Fortbildung zum Thema „Altersdiskriminierung“ anbieten. ... der Kommentare einiger Kolleg*innen gestern in der Teamsitzung ... (1)\n\n- Was soll das bringen?\n\n... (2) Die herrschenden Vorurteile gegenüber den älteren und den sehr jungen Kolleg*innen würden bewusst gemacht, und das führt dann hoffentlich zu mehr Verständnis. ... (3) auch die Arbeit in den neuen Teams leichter. Dort läuft es gerade überhaupt nicht gut. Wir brauchen unbedingt mehr gegenseitige Wertschätzung, wenn wir erfolgreich sein wollen. ... (4) wir möglichst bald eine Fortbildung organisieren sollten."
+                }
+              },
+              "correct_answer": "3",
+              "explanation": "Mögliche Folgen nennen: „Vermutlich hätte das folgende Konsequenz:“ - danach wird die Folge beschrieben."
+            },
+            {
+              "question": "Was passt in Lücke (3)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "(a) Angesichts ... ist das Thema sehr aktuell.",
+                  "(b) Aus diesen Gründen bin ich der Meinung, dass",
+                  "(c) Dadurch würde beispielsweise",
+                  "(d) Vermutlich hätte das folgende Konsequenz:"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "Kommentare: Fortbildung zum Thema Altersdiskriminierung",
+                  "content": "Ich denke, wir sollten in der Firma eine Fortbildung zum Thema „Altersdiskriminierung“ anbieten. ... der Kommentare einiger Kolleg*innen gestern in der Teamsitzung ... (1)\n\n- Was soll das bringen?\n\n... (2) Die herrschenden Vorurteile gegenüber den älteren und den sehr jungen Kolleg*innen würden bewusst gemacht, und das führt dann hoffentlich zu mehr Verständnis. ... (3) auch die Arbeit in den neuen Teams leichter. Dort läuft es gerade überhaupt nicht gut. Wir brauchen unbedingt mehr gegenseitige Wertschätzung, wenn wir erfolgreich sein wollen. ... (4) wir möglichst bald eine Fortbildung organisieren sollten."
+                }
+              },
+              "correct_answer": "2",
+              "explanation": "Ein Beispiel nennen: „Dadurch würde beispielsweise auch die Arbeit in den neuen Teams leichter.“"
+            },
+            {
+              "question": "Was passt in Lücke (4)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "(a) Angesichts ... ist das Thema sehr aktuell.",
+                  "(b) Aus diesen Gründen bin ich der Meinung, dass",
+                  "(c) Dadurch würde beispielsweise",
+                  "(d) Vermutlich hätte das folgende Konsequenz:"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "Kommentare: Fortbildung zum Thema Altersdiskriminierung",
+                  "content": "Ich denke, wir sollten in der Firma eine Fortbildung zum Thema „Altersdiskriminierung“ anbieten. ... der Kommentare einiger Kolleg*innen gestern in der Teamsitzung ... (1)\n\n- Was soll das bringen?\n\n... (2) Die herrschenden Vorurteile gegenüber den älteren und den sehr jungen Kolleg*innen würden bewusst gemacht, und das führt dann hoffentlich zu mehr Verständnis. ... (3) auch die Arbeit in den neuen Teams leichter. Dort läuft es gerade überhaupt nicht gut. Wir brauchen unbedingt mehr gegenseitige Wertschätzung, wenn wir erfolgreich sein wollen. ... (4) wir möglichst bald eine Fortbildung organisieren sollten."
+                }
+              },
+              "correct_answer": "1",
+              "explanation": "Ein Fazit ziehen: „Aus diesen Gründen bin ich der Meinung, dass wir möglichst bald eine Fortbildung organisieren sollten.“"
+            }
+          ]
+        }
+      ],
+      "uncertainties": [
+        "Test, zadatak 2: PROVERENO uz zvanični ključ (Selbstkontrolle S. 66). Ključ za (2) i (4) navodi „Demgegenüber / Im Gegensatz dazu“, tj. oba su tačna na obe pozicije. Fiksiran je jedan redosled: (2) Im Gegensatz dazu, (4) Demgegenüber; polaznik sa obrnutim redosledom takođe je u pravu (napomenuto u explanation). Praznine (1) Entgegen i (3) wohingegen potvrđene su ključem."
+      ],
+      "skipped": []
+    },
+    {
+      "lessonTitle": "Licht - Von allen Seiten beleuchtet",
+      "exercises": [
+        {
+          "title": "Vežba: Nominalstil II",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "„Die EU hat die Glühlampe verboten.“ - Wie heißt der Satz im Nominalstil?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Verbot der EU durch die Glühlampe",
+                  "Verbot der Glühlampe durch die EU",
+                  "Verbieten der Glühlampe von der EU",
+                  "Verbot für die Glühlampe der EU"
+                ]
+              },
+              "correct_answer": "1",
+              "explanation": "Akkusativobjekt wird Genitiv (der Glühlampe), die verursachende Person / Institution steht mit „durch“ (durch die EU)."
+            },
+            {
+              "question": "„Ich vertraue der Technik.“ - Wie heißt die Nominalgruppe?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Vertrauen der Technik",
+                  "Vertrauen an die Technik",
+                  "Vertrauen in die Technik",
+                  "Vertrauen für die Technik"
+                ]
+              },
+              "correct_answer": "2",
+              "explanation": "Bei Verben mit Dativ kommt zum Nomen eine Präposition hinzu: vertrauen + Dat. wird „das Vertrauen in + Akk.“."
+            },
+            {
+              "question": "„Das Lagerfeuer schützt vor wilden Tieren.“ - Wie heißt die Nominalgruppe?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Schutz von wilden Tieren durch das Lagerfeuer",
+                  "Schutz des Lagerfeuers vor wilden Tieren",
+                  "Schutz vor wilden Tieren durch das Lagerfeuer",
+                  "Schutz gegen das Lagerfeuer vor wilden Tieren"
+                ]
+              },
+              "correct_answer": "2",
+              "explanation": "Bei Verben mit fester Präposition bleibt die Präposition dieselbe (schützen vor - der Schutz vor); der Verursacher steht mit „durch“."
+            },
+            {
+              "question": "„sich interessieren für“ - Wie heißt das Nomen mit Präposition?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["das Interesse für", "das Interesse an", "das Interesse in", "das Interesse auf"]
+              },
+              "correct_answer": "1",
+              "explanation": "Ausnahme: sich interessieren für, aber „das Interesse an + Dat.“."
+            },
+            {
+              "question": "„LEDs reduzieren den Stromverbrauch stark.“ - Wie heißt die Nominalgruppe?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Reduzierung starken Stromverbrauchs von LEDs",
+                  "starke Reduzierung der LEDs durch den Stromverbrauch",
+                  "stark Reduzierung des Stromverbrauchs mit LEDs",
+                  "starke Reduzierung des Stromverbrauchs durch LEDs"
+                ]
+              },
+              "correct_answer": "3",
+              "explanation": "Adverb wird dekliniertes Adjektiv (starke), Akkusativ wird Genitiv (des Stromverbrauchs), Verursacher mit „durch“ (durch LEDs)."
+            },
+            {
+              "question": "„erwarten von“ - Wie heißt das Nomen mit Präposition?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["die Erwartung von", "die Erwartung über", "die Erwartung an", "die Erwartung zu"]
+              },
+              "correct_answer": "2",
+              "explanation": "Ausnahme: erwarten von, aber „die Erwartung an + Akk.“."
+            }
+          ]
+        },
+        {
+          "title": "Vežba: Nominalstil im Kontext",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Die ______ des Feuers war ein Meilenstein in der Geschichte der Menschheit.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["Entdeckung", "Erwartung", "Eignung"]
+              },
+              "correct_answer": "Entdeckung",
+              "explanation": "entdecken - die Entdeckung: die Entdeckung des Feuers."
+            },
+            {
+              "question": "Das Lagerfeuer bot den Menschen ______ vor wilden Tieren.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["Schutz", "Vertrauen", "Verzicht"]
+              },
+              "correct_answer": "Schutz",
+              "explanation": "schützen vor - der Schutz vor: Die feste Präposition bleibt erhalten."
+            },
+            {
+              "question": "Die ______ der Glühlampe durch Thomas Alva Edison veränderte den Alltag.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["Erfindung", "Eröffnung", "Erwartung"]
+              },
+              "correct_answer": "Erfindung",
+              "explanation": "erfinden - die Erfindung; der Erfinder steht mit „durch“: die Erfindung der Glühlampe durch Edison."
+            },
+            {
+              "question": "Viele Menschen hatten anfangs kein ______ in die neue Technologie.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["Vertrauen", "Interesse", "Erlebnis"]
+              },
+              "correct_answer": "Vertrauen",
+              "explanation": "vertrauen + Dat. - das Vertrauen in + Akk. („das Interesse“ stünde mit „an“)."
+            },
+            {
+              "question": "Der ______ auf giftige Stoffe bei der Produktion macht LED-Lampen nachhaltiger.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["Verzicht", "Schutz", "Nutzen"]
+              },
+              "correct_answer": "Verzicht",
+              "explanation": "verzichten auf - der Verzicht auf: der Verzicht auf giftige Stoffe."
+            },
+            {
+              "question": "Die starke ______ des Stromverbrauchs ist ein großer Vorteil der LEDs.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["Reduzierung", "Vernetzung", "Verlängerung"]
+              },
+              "correct_answer": "Reduzierung",
+              "explanation": "reduzieren - die Reduzierung: die starke Reduzierung des Stromverbrauchs."
+            }
+          ]
+        },
+        {
+          "title": "Vežba: Wortschatz - Licht",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Verbinden Sie die deutschen Wörter mit der Übersetzung.",
+              "question_type": "match_pairs",
+              "options": {
+                "type": "match_pairs",
+                "items": [
+                  {"de": "die Beleuchtung", "sr": "osvetljenje, rasveta"},
+                  {"de": "die Dunkelheit", "sr": "mrak, tama"},
+                  {"de": "der Strahl", "sr": "zrak"},
+                  {"de": "flackern", "sr": "treperiti (o plamenu)"},
+                  {"de": "funkeln", "sr": "svetlucati, iskriti"},
+                  {"de": "die Fackel", "sr": "baklja"},
+                  {"de": "der Sonnenuntergang", "sr": "zalazak sunca"}
+                ]
+              },
+              "correct_answer": "all",
+              "explanation": "Wichtige Wörter aus dem Wortfeld Licht."
+            }
+          ]
+        },
+        {
+          "title": "Test: Selbstkontrolle - Lektion 9",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Was passt in (1)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["Bedrohung", "Beleuchtung"],
+                "context": {
+                  "type": "text",
+                  "title": "Das richtige Licht am Fahrrad",
+                  "content": "Wer gern das ganze Jahr über mit dem Fahrrad unterwegs ist, sollte unbedingt auf eine gute Bedrohung / Beleuchtung (1) an seinem Bike achten. Abends in der Dunkelheit / Zeitrechnung (2) ohne Licht zu fahren, ist gefährlich und in den meisten Ländern verboten. Aber nicht nur nach dem Reichtum / Sonnenuntergang (3) sind funktionierende Fahrradlampen wichtig. Bei Nebel oder Regen kann man auch tagsüber schwierige Innenräume / Lichtverhältnisse (4) antreffen. Eine Lampe am Helm ist hier die beste Option, denn ihr Scanner / Strahl (5) folgt der Richtung, in die man schaut. Wer auf ländlichen Gängen / Routen (6) mit schlechter oder fehlender Straßenbeleuchtung fährt, sollte zusätzlich leuchtende Kleidung tragen, um gut sichtbar zu sein."
+                }
+              },
+              "correct_answer": "1",
+              "explanation": "Die „Beleuchtung“ = das Licht am Fahrrad; eine „Bedrohung“ ist eine Gefahr."
+            },
+            {
+              "question": "Was passt in (2)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["Dunkelheit", "Zeitrechnung"],
+                "context": {
+                  "type": "text",
+                  "title": "Das richtige Licht am Fahrrad",
+                  "content": "Wer gern das ganze Jahr über mit dem Fahrrad unterwegs ist, sollte unbedingt auf eine gute Bedrohung / Beleuchtung (1) an seinem Bike achten. Abends in der Dunkelheit / Zeitrechnung (2) ohne Licht zu fahren, ist gefährlich und in den meisten Ländern verboten. Aber nicht nur nach dem Reichtum / Sonnenuntergang (3) sind funktionierende Fahrradlampen wichtig. Bei Nebel oder Regen kann man auch tagsüber schwierige Innenräume / Lichtverhältnisse (4) antreffen. Eine Lampe am Helm ist hier die beste Option, denn ihr Scanner / Strahl (5) folgt der Richtung, in die man schaut. Wer auf ländlichen Gängen / Routen (6) mit schlechter oder fehlender Straßenbeleuchtung fährt, sollte zusätzlich leuchtende Kleidung tragen, um gut sichtbar zu sein."
+                }
+              },
+              "correct_answer": "0",
+              "explanation": "Abends fährt man „in der Dunkelheit“; die „Zeitrechnung“ ist ein System zur Zählung der Jahre."
+            },
+            {
+              "question": "Was passt in (3)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["Reichtum", "Sonnenuntergang"],
+                "context": {
+                  "type": "text",
+                  "title": "Das richtige Licht am Fahrrad",
+                  "content": "Wer gern das ganze Jahr über mit dem Fahrrad unterwegs ist, sollte unbedingt auf eine gute Bedrohung / Beleuchtung (1) an seinem Bike achten. Abends in der Dunkelheit / Zeitrechnung (2) ohne Licht zu fahren, ist gefährlich und in den meisten Ländern verboten. Aber nicht nur nach dem Reichtum / Sonnenuntergang (3) sind funktionierende Fahrradlampen wichtig. Bei Nebel oder Regen kann man auch tagsüber schwierige Innenräume / Lichtverhältnisse (4) antreffen. Eine Lampe am Helm ist hier die beste Option, denn ihr Scanner / Strahl (5) folgt der Richtung, in die man schaut. Wer auf ländlichen Gängen / Routen (6) mit schlechter oder fehlender Straßenbeleuchtung fährt, sollte zusätzlich leuchtende Kleidung tragen, um gut sichtbar zu sein."
+                }
+              },
+              "correct_answer": "1",
+              "explanation": "Nach dem „Sonnenuntergang“ wird es dunkel, deshalb braucht man dann funktionierende Lampen."
+            },
+            {
+              "question": "Was passt in (4)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["Innenräume", "Lichtverhältnisse"],
+                "context": {
+                  "type": "text",
+                  "title": "Das richtige Licht am Fahrrad",
+                  "content": "Wer gern das ganze Jahr über mit dem Fahrrad unterwegs ist, sollte unbedingt auf eine gute Bedrohung / Beleuchtung (1) an seinem Bike achten. Abends in der Dunkelheit / Zeitrechnung (2) ohne Licht zu fahren, ist gefährlich und in den meisten Ländern verboten. Aber nicht nur nach dem Reichtum / Sonnenuntergang (3) sind funktionierende Fahrradlampen wichtig. Bei Nebel oder Regen kann man auch tagsüber schwierige Innenräume / Lichtverhältnisse (4) antreffen. Eine Lampe am Helm ist hier die beste Option, denn ihr Scanner / Strahl (5) folgt der Richtung, in die man schaut. Wer auf ländlichen Gängen / Routen (6) mit schlechter oder fehlender Straßenbeleuchtung fährt, sollte zusätzlich leuchtende Kleidung tragen, um gut sichtbar zu sein."
+                }
+              },
+              "correct_answer": "1",
+              "explanation": "Bei Nebel oder Regen herrschen schwierige „Lichtverhältnisse“ (= Bedingungen des Lichts)."
+            },
+            {
+              "question": "Was passt in (5)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["Scanner", "Strahl"],
+                "context": {
+                  "type": "text",
+                  "title": "Das richtige Licht am Fahrrad",
+                  "content": "Wer gern das ganze Jahr über mit dem Fahrrad unterwegs ist, sollte unbedingt auf eine gute Bedrohung / Beleuchtung (1) an seinem Bike achten. Abends in der Dunkelheit / Zeitrechnung (2) ohne Licht zu fahren, ist gefährlich und in den meisten Ländern verboten. Aber nicht nur nach dem Reichtum / Sonnenuntergang (3) sind funktionierende Fahrradlampen wichtig. Bei Nebel oder Regen kann man auch tagsüber schwierige Innenräume / Lichtverhältnisse (4) antreffen. Eine Lampe am Helm ist hier die beste Option, denn ihr Scanner / Strahl (5) folgt der Richtung, in die man schaut. Wer auf ländlichen Gängen / Routen (6) mit schlechter oder fehlender Straßenbeleuchtung fährt, sollte zusätzlich leuchtende Kleidung tragen, um gut sichtbar zu sein."
+                }
+              },
+              "correct_answer": "1",
+              "explanation": "Der „Strahl“ der Helmlampe folgt der Blickrichtung; ein „Scanner“ liest Daten ein."
+            },
+            {
+              "question": "Was passt in (6)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["Gängen", "Routen"],
+                "context": {
+                  "type": "text",
+                  "title": "Das richtige Licht am Fahrrad",
+                  "content": "Wer gern das ganze Jahr über mit dem Fahrrad unterwegs ist, sollte unbedingt auf eine gute Bedrohung / Beleuchtung (1) an seinem Bike achten. Abends in der Dunkelheit / Zeitrechnung (2) ohne Licht zu fahren, ist gefährlich und in den meisten Ländern verboten. Aber nicht nur nach dem Reichtum / Sonnenuntergang (3) sind funktionierende Fahrradlampen wichtig. Bei Nebel oder Regen kann man auch tagsüber schwierige Innenräume / Lichtverhältnisse (4) antreffen. Eine Lampe am Helm ist hier die beste Option, denn ihr Scanner / Strahl (5) folgt der Richtung, in die man schaut. Wer auf ländlichen Gängen / Routen (6) mit schlechter oder fehlender Straßenbeleuchtung fährt, sollte zusätzlich leuchtende Kleidung tragen, um gut sichtbar zu sein."
+                }
+              },
+              "correct_answer": "1",
+              "explanation": "Man fährt auf ländlichen „Routen“ (= Wegen, Strecken); „Gänge“ sind Flure oder unterirdische Wege."
+            },
+            {
+              "question": "Formulieren Sie um: „Um 18:00 Uhr eröffnet die Museumsleiterin die Ausstellung und begrüßt die Gäste.“ (Nominalstil)",
+              "question_type": "word_order",
+              "options": {
+                "type": "word_order",
+                "items": ["der Gäste", "18:00:", "und", "Eröffnung", "durch die", "Begrüßung", "der Ausstellung", "Museumsleiterin"]
+              },
+              "correct_answer": "18:00: Eröffnung der Ausstellung und Begrüßung der Gäste durch die Museumsleiterin",
+              "explanation": "Akkusativobjekte werden Genitive (der Ausstellung, der Gäste), das Subjekt steht mit „durch“."
+            },
+            {
+              "question": "Formulieren Sie um: „Um 18:30 Uhr wird den Kooperationspartnern gedankt.“ (Nominalstil)",
+              "question_type": "word_order",
+              "options": {
+                "type": "word_order",
+                "items": ["die", "18:30:", "an", "Kooperationspartner", "Dank"]
+              },
+              "correct_answer": "18:30: Dank an die Kooperationspartner",
+              "explanation": "danken + Dat. wird Nomen mit Präposition: der Dank an + Akk."
+            },
+            {
+              "question": "Formulieren Sie um: „Um 19:00 Uhr werden die Gäste in die Ausstellung eingeführt.“ (Nominalstil)",
+              "question_type": "word_order",
+              "options": {
+                "type": "word_order",
+                "items": ["die Ausstellung", "Einführung", "19:00:", "in", "der Gäste"]
+              },
+              "correct_answer": "19:00: Einführung der Gäste in die Ausstellung",
+              "explanation": "Das Subjekt des Passivsatzes wird Genitiv (der Gäste), die feste Präposition bleibt (einführen in - Einführung in)."
+            },
+            {
+              "question": "Formulieren Sie um: „Um 19:30 Uhr kann man mit den Künstler:innen sprechen und diskutieren.“ (Nominalstil)",
+              "question_type": "word_order",
+              "options": {
+                "type": "word_order",
+                "items": ["Diskussionen", "19:30:", "mit den", "Gespräche", "und", "Künstler:innen"]
+              },
+              "correct_answer": "19:30: Gespräche und Diskussionen mit den Künstler:innen",
+              "explanation": "sprechen mit - das Gespräch mit, diskutieren mit - die Diskussion mit: Die Präposition bleibt erhalten. Der Plural passt hier, weil mehrere Gespräche gemeint sind. Auch „19:30: mögliche Gespräche und Diskussionen mit den Künstler:innen“ ist richtig - so wird „kann man“ nominal ausgedrückt."
+            },
+            {
+              "question": "Was passt in Lücke (1)? Zwei Redemittel passen insgesamt nicht.",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "(a) Die Entdeckung fiel in die Zeit",
+                  "(b) Die Entdeckung leistete einen wichtigen Beitrag",
+                  "(c) Mit Albert Einstein verbinde ich in erster Linie",
+                  "(d) Wenn ich über Albert Einstein nachdenke",
+                  "(e) Die Entdeckung war revolutionär",
+                  "(f) Bei Albert Einstein denke ich spontan daran, dass"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "Hörerumfrage: Albert Einstein",
+                  "content": "„Und hier wieder unsere Hörerumfrage: Woran denken Sie, wenn Sie den Namen Albert Einstein hören? Schicken Sie uns eine Textnachricht!“\n\n... (1), fällt mir zuerst seine Relativitätstheorie ein. ... (2), weil sie unsere Vorstellung von Raum und Zeit verändert hat.\n\n... (3) den Begriff Licht. Denn Einstein fand heraus, dass Licht nicht nur aus Wellen, sondern auch aus Teilchen besteht. ... (4) zur Physik. Dafür erhielt er 1922 den Nobelpreis."
+                }
+              },
+              "correct_answer": "3",
+              "explanation": "„Wenn ich über Albert Einstein nachdenke, fällt mir zuerst seine Relativitätstheorie ein.“ - Assoziationen beschreiben."
+            },
+            {
+              "question": "Was passt in Lücke (2)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "(a) Die Entdeckung fiel in die Zeit",
+                  "(b) Die Entdeckung leistete einen wichtigen Beitrag",
+                  "(c) Mit Albert Einstein verbinde ich in erster Linie",
+                  "(d) Wenn ich über Albert Einstein nachdenke",
+                  "(e) Die Entdeckung war revolutionär",
+                  "(f) Bei Albert Einstein denke ich spontan daran, dass"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "Hörerumfrage: Albert Einstein",
+                  "content": "„Und hier wieder unsere Hörerumfrage: Woran denken Sie, wenn Sie den Namen Albert Einstein hören? Schicken Sie uns eine Textnachricht!“\n\n... (1), fällt mir zuerst seine Relativitätstheorie ein. ... (2), weil sie unsere Vorstellung von Raum und Zeit verändert hat.\n\n... (3) den Begriff Licht. Denn Einstein fand heraus, dass Licht nicht nur aus Wellen, sondern auch aus Teilchen besteht. ... (4) zur Physik. Dafür erhielt er 1922 den Nobelpreis."
+                }
+              },
+              "correct_answer": "4",
+              "explanation": "„Die Entdeckung war revolutionär, weil sie unsere Vorstellung von Raum und Zeit verändert hat.“ - über Fortschritt berichten."
+            },
+            {
+              "question": "Was passt in Lücke (3)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "(a) Die Entdeckung fiel in die Zeit",
+                  "(b) Die Entdeckung leistete einen wichtigen Beitrag",
+                  "(c) Mit Albert Einstein verbinde ich in erster Linie",
+                  "(d) Wenn ich über Albert Einstein nachdenke",
+                  "(e) Die Entdeckung war revolutionär",
+                  "(f) Bei Albert Einstein denke ich spontan daran, dass"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "Hörerumfrage: Albert Einstein",
+                  "content": "„Und hier wieder unsere Hörerumfrage: Woran denken Sie, wenn Sie den Namen Albert Einstein hören? Schicken Sie uns eine Textnachricht!“\n\n... (1), fällt mir zuerst seine Relativitätstheorie ein. ... (2), weil sie unsere Vorstellung von Raum und Zeit verändert hat.\n\n... (3) den Begriff Licht. Denn Einstein fand heraus, dass Licht nicht nur aus Wellen, sondern auch aus Teilchen besteht. ... (4) zur Physik. Dafür erhielt er 1922 den Nobelpreis."
+                }
+              },
+              "correct_answer": "2",
+              "explanation": "„Mit Albert Einstein verbinde ich in erster Linie den Begriff Licht.“ - danach folgt ein Akkusativobjekt."
+            },
+            {
+              "question": "Was passt in Lücke (4)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "(a) Die Entdeckung fiel in die Zeit",
+                  "(b) Die Entdeckung leistete einen wichtigen Beitrag",
+                  "(c) Mit Albert Einstein verbinde ich in erster Linie",
+                  "(d) Wenn ich über Albert Einstein nachdenke",
+                  "(e) Die Entdeckung war revolutionär",
+                  "(f) Bei Albert Einstein denke ich spontan daran, dass"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "Hörerumfrage: Albert Einstein",
+                  "content": "„Und hier wieder unsere Hörerumfrage: Woran denken Sie, wenn Sie den Namen Albert Einstein hören? Schicken Sie uns eine Textnachricht!“\n\n... (1), fällt mir zuerst seine Relativitätstheorie ein. ... (2), weil sie unsere Vorstellung von Raum und Zeit verändert hat.\n\n... (3) den Begriff Licht. Denn Einstein fand heraus, dass Licht nicht nur aus Wellen, sondern auch aus Teilchen besteht. ... (4) zur Physik. Dafür erhielt er 1922 den Nobelpreis."
+                }
+              },
+              "correct_answer": "1",
+              "explanation": "„Die Entdeckung leistete einen wichtigen Beitrag zur Physik.“ - Redemittel mit fester Präposition „zu“. Die Redemittel (a) und (f) passen in keine Lücke."
+            }
+          ]
+        }
+      ],
+      "uncertainties": [
+        "Test, zadatak 2 (Nominalstil): ISPRAVLJENO po zvaničnom ključu (Selbstkontrolle S. 73). Za 19:30 ključ daje množinu „(mögliche) Gespräche und Diskussionen mit den Künstler:innen“ - bilo je jednina „Gespräch und Diskussion“. „mögliche“ je u ključu u zagradi, pa je opciono; napomenuto u explanation. Rešenja za 18:00, 18:30 („Dank an die Kooperationspartner“) i 19:00 potvrđena su ključem."
+      ],
+      "skipped": []
+    }
+  ]
+}

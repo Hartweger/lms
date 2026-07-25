@@ -33,10 +33,23 @@ const faqByCategory: Record<string, { q: string; a: string }[]> = {
   ],
 };
 
-/* Grupni C1 kursevi NEMAJU prateći sadržaj na platformi (video lekcije, vežbe,
-   aplikaciju) - nastava je uživo, uz beleške i materijal od profesorke. Generički
-   grupni FAQ zato ovde ne sme da se koristi. */
-const grupniC1Faq: { q: string; a: string }[] = [
+/* C1.1 ima prateći materijal na platformi (gramatika, kartice, vežbe, testovi),
+   ali NEMA video lekcije - one postoje samo za A1-B2. Generički grupni FAQ zato
+   ovde ne sme da se koristi. */
+const grupniC11Faq: { q: string; a: string }[] = [
+  { q: "Šta se dešava nakon uplate?", a: "Odmah dobijaš pristup pratećem materijalu za C1.1 na platformi, a pre prvog časa i link za Google Meet poziv. Potrebna ti je samo dobra volja i bilo koji uređaj sa internet konekcijom." },
+  { q: "Šta dobijam na platformi?", a: "Za svaku od 12 lekcija: objašnjenja gramatike sa tabelama, kartice za učenje reči, mini vežbe i test posle lekcije, a na kraju i završni test celog nivoa. Video lekcije za C1 nemamo - na ovom nivou je fokus na živoj nastavi i vežbanju sa profesorkom." },
+  { q: "Da li moram da kupujem udžbenike?", a: "Ne. Sav materijal dobijaš od nas - tekstove, vežbe i materijal za pripremu ispita. Program je rađen po uzoru na Vielfalt (B2-C1), ali je modifikovan i prilagođen sadašnjem trenutku. Ne treba ti ništa drugo." },
+  { q: "Šta ako propustim čas?", a: "Beleške sa svakog časa su ti dostupne, a gramatiku i vežbe sa platforme prolaziš kad god ti odgovara. Čas u grupi je za vežbanje - ako jedan propustiš, nadoknadićeš na sledećem." },
+  { q: "Koliko vremena treba nedeljno?", a: "Oko 3 sata: dva časa po 60 minuta u grupi + vreme za vežbe na platformi i domaće zadatke, svojim tempom." },
+  { q: "Koliko polaznika je u grupi?", a: "Grupa broji najviše 6 polaznika. Za formiranje grupe potrebno je minimum 3 polaznika. Ukoliko se ne prijavi dovoljan broj, termin se pomera i ostaješ na listi." },
+  { q: "Mogu li da učim sa telefona?", a: "Da! Imamo aplikaciju - šaljemo ti link, instaliraš za sekund, bez Google ili Apple prodavnice. Radi i na tabletu i računaru." },
+  { q: "Kako se plaća?", a: "Plaćanje je moguće karticom (Visa, MasterCard), uplatom na dinarski račun ili putem PayPal-a. Plaćanje na rate moguće je karticama Banca Intesa." },
+];
+
+/* Grupni C1.2 NEMA prateći sadržaj na platformi - nastava je uživo, uz beleške
+   i materijal od profesorke. */
+const grupniC12Faq: { q: string; a: string }[] = [
   { q: "Šta se dešava nakon uplate?", a: "Odmah dobijaš potvrdu sa svim informacijama, a pre prvog časa i link za Google Meet poziv i materijal za rad. Potrebna ti je samo dobra volja i bilo koji uređaj sa internet konekcijom." },
   { q: "Da li moram da kupujem udžbenike?", a: "Ne. Sav materijal dobijaš od nas - tekstove, vežbe i materijal za pripremu ispita. Program je rađen po uzoru na Vielfalt (B2-C1), ali je modifikovan i prilagođen sadašnjem trenutku. Ne treba ti ništa drugo." },
   { q: "Šta ako propustim čas?", a: "Beleške sa svakog časa su ti dostupne, pa lako nadoknadiš propušteno. Čas u grupi je za vežbanje - ako jedan propustiš, nadoknadićeš na sledećem." },
@@ -47,8 +60,8 @@ const grupniC1Faq: { q: string; a: string }[] = [
 
 /* Slug-specific FAQ overrides */
 const faqBySlug: Record<string, { q: string; a: string }[]> = {
-  "grupni-kurs-c1-1": grupniC1Faq,
-  "grupni-kurs-c1-2": grupniC1Faq,
+  "grupni-kurs-c1-1": grupniC11Faq,
+  "grupni-kurs-c1-2": grupniC12Faq,
   "grupni-konverzacijski-kurs-nemackog-b1": [
     { q: "Šta se dešava nakon prijave?", a: "Odmah dobijaš potvrdu sa svim informacijama, a pre prvog časa i link za Google Meet poziv. Potreban ti je samo uređaj sa internet konekcijom - ništa se ne instalira i ne pripremaš posebno." },
     { q: "Koji nivo treba da imam?", a: "Kurs je namenjen onima koji su završili B1 i žele konverzacijsku praksu. Razumeš nemački, ali ti govor blokira - tu ti pomažemo." },

@@ -1,0 +1,862 @@
+{
+  "lessons": [
+    {
+      "lessonTitle": "Freundschaft - Was bedeutet das eigentlich?",
+      "exercises": [
+        {
+          "title": "Vežba: Konditionale Zusammenhänge",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Welcher Konnektor drückt eine unbedingt notwendige Bedingung aus?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["angenommen, dass", "vorausgesetzt, dass", "sonst", "im Falle"]
+              },
+              "correct_answer": "1",
+              "explanation": "Mit 'vorausgesetzt, dass' drückt man eine unbedingt notwendige Bedingung aus."
+            },
+            {
+              "question": "Man muss seine Erwartungen an eine Freundschaft reduzieren. ... gibt es nur Ärger und Streit.",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["Falls", "Vorausgesetzt, dass", "Andernfalls", "Angenommen, dass"]
+              },
+              "correct_answer": "2",
+              "explanation": "'Andernfalls' drückt den gegenteiligen Fall aus: Wenn man die Erwartungen nicht reduziert, gibt es Ärger und Streit."
+            },
+            {
+              "question": "Angenommen, dass ein Freund keine Wohnung findet, ... - Wie geht der Satz korrekt weiter?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["ich würde ihn bei mir wohnen lassen.", "würde ich ihn bei mir wohnen lassen.", "ich ihn bei mir wohnen lassen würde.", "ihn ich würde bei mir wohnen lassen."]
+              },
+              "correct_answer": "1",
+              "explanation": "Nach dem vorangestellten Nebensatz mit 'angenommen, dass' steht das Verb im Hauptsatz direkt an erster Stelle: '..., würde ich ihn bei mir wohnen lassen.'"
+            },
+            {
+              "question": "Welcher Satz ist korrekt?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["Sonst man wird enttäuscht, das muss man akzeptieren.", "Das muss man akzeptieren, sonst man wird enttäuscht.", "Das muss man akzeptieren, sonst wird man enttäuscht.", "Das muss man akzeptieren, wird sonst man enttäuscht."]
+              },
+              "correct_answer": "2",
+              "explanation": "'Sonst' steht immer im zweiten Teil des Satzes, direkt danach folgt das Verb: '..., sonst wird man enttäuscht.'"
+            },
+            {
+              "question": "Was bedeutet 'sonst' in dem Satz: 'Wir brauchen Stühle, sonst haben nicht alle Platz.'?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["wenn wir Stühle haben", "weil wir Stühle brauchen", "damit alle Platz haben", "wenn wir keine Stühle haben"]
+              },
+              "correct_answer": "3",
+              "explanation": "'Sonst' enthält eine verneinte Bedingung: Wenn wir keine Stühle haben, haben nicht alle Platz."
+            },
+            {
+              "question": "Welche Variante ist typisch für die formelle Schriftsprache?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["Mal angenommen, du übernimmst eine Patenschaft, ...", "Im Falle einer Patenschaft ...", "Wenn du eine Patenschaft übernimmst, ...", "Angenommen, du übernimmst eine Patenschaft, ..."]
+              },
+              "correct_answer": "1",
+              "explanation": "Die nominale Variante 'im Falle + Genitiv' ist typisch für die Schriftsprache und den formellen Stil."
+            }
+          ]
+        },
+        {
+          "title": "Vežba: Modalpartikeln im Kontext",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Wie geht's dir ______? Wir haben uns ewig nicht gesehen!",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["denn", "eben", "ja", "mal", "schon"]
+              },
+              "correct_answer": "denn",
+              "explanation": "'Denn' steht nur in Fragen und drückt hier Neugier und Interesse aus."
+            },
+            {
+              "question": "Daran können wir nichts ändern, das ist ______ leider so.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["denn", "eben", "ja", "mal", "schon"]
+              },
+              "correct_answer": "eben",
+              "explanation": "'Eben' (oder 'halt') drückt aus, dass man eine nicht-veränderbare Situation akzeptiert."
+            },
+            {
+              "question": "Du hast ______ selbst gesagt, dass du diese Woche keine Zeit hast.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["denn", "eben", "ja", "mal", "schon"]
+              },
+              "correct_answer": "ja",
+              "explanation": "'Ja' verweist auf eine Information, die schon bekannt ist."
+            },
+            {
+              "question": "Hör dir doch ______ diesen Podcast über Freundschaft an!",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["denn", "eben", "ja", "mal", "schon"]
+              },
+              "correct_answer": "mal",
+              "explanation": "'Mal' macht Imperative höflicher; 'doch mal' drückt einen freundlichen Vorschlag aus."
+            },
+            {
+              "question": "Mach dir keine Sorgen, das geht ______.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["denn", "eben", "ja", "mal", "schon"]
+              },
+              "correct_answer": "schon",
+              "explanation": "'Schon' drückt hier Optimismus aus: Es wird gut gehen."
+            }
+          ]
+        },
+        {
+          "title": "Vežba: Wortschatz - Freundschaft",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Verbinden Sie die deutschen Wörter mit der passenden Übersetzung.",
+              "question_type": "match_pairs",
+              "options": {
+                "type": "match_pairs",
+                "items": [
+                  {"de": "der Freundeskreis", "sr": "krug prijatelja"},
+                  {"de": "der Umbruch", "sr": "korenita promena, prelom"},
+                  {"de": "die Gemeinsamkeit", "sr": "zajednička osobina, zajednička crta"},
+                  {"de": "die Kompromissbereitschaft", "sr": "spremnost na kompromis"},
+                  {"de": "aushandeln", "sr": "dogovoriti pregovorima, ispregovarati"},
+                  {"de": "vererben", "sr": "ostaviti u nasledstvo, zaveštati"},
+                  {"de": "sich zurückziehen", "sr": "povući se"}
+                ]
+              },
+              "correct_answer": "all",
+              "explanation": "Wichtige Wörter aus der Lektion zum Thema Freundschaft."
+            }
+          ]
+        },
+        {
+          "title": "Test: Selbstkontrolle - Lektion 1",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "WÖRTER: Finden Sie sieben Nomen und ergänzen Sie den Chat (Teil 1).\n\nSKGHOBESORGUNGENGDFKKOPTIMISMUSRTGKJPHASEDFGHLKUMPELDFGJFREUNDESKREISTROIJUMBRUCHSDFKOMGEMEINSAMKEITEN\n\nJoy: Konstantin, wir vermissen dich! Wie geht es dir in deiner neuen Heimat?\nKonstantin: Hey Mama! Der Job ist toll, aber gleichzeitig ist es natürlich auch ein totaler ______ (1). So ganz ohne meine ______ (2) ist das schon ein bisschen einsam.\nJoy: Ach Konsti, das ist normal. Wenn eine ganz neue ______ (3) im Leben beginnt, braucht man ein bisschen Zeit, bis man neue Leute kennenlernt. Ich bin sicher, dass du schnell auch in München einen neuen ______ (4) finden wirst.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["Umbruch", "Kumpel", "Phase", "Freundeskreis", "Optimismus", "Gemeinsamkeiten", "Besorgungen"]
+              },
+              "correct_answer": "Umbruch, Kumpel, Phase, Freundeskreis",
+              "explanation": "Ein Umzug ist ein totaler Umbruch; ohne seine Kumpel ist man einsam; eine neue Phase im Leben beginnt; in München findet er einen neuen Freundeskreis."
+            },
+            {
+              "question": "WÖRTER: Ergänzen Sie den Chat (Teil 2) mit den Nomen aus dem Buchstabenband.\n\nKonstantin: Danke für deinen ______ (5). Du hast bestimmt recht. Ich hab auch schon einen meiner Nachbarn kennengelernt. Wir haben uns neulich nett unterhalten. Ich glaube, dass wir viele ______ (6) haben.\nJoy: Das klingt super! Ich muss mal los, muss noch ein paar ______ (7) fürs Abendessen machen.\nKonstantin: Grüß Papa und lasst's euch schmecken!",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["Umbruch", "Kumpel", "Phase", "Freundeskreis", "Optimismus", "Gemeinsamkeiten", "Besorgungen"]
+              },
+              "correct_answer": "Optimismus, Gemeinsamkeiten, Besorgungen",
+              "explanation": "Konstantin dankt für den Optimismus; mit dem Nachbarn hat er viele Gemeinsamkeiten; Joy macht Besorgungen fürs Abendessen."
+            },
+            {
+              "question": "Formulieren Sie um: Angenommen, alle kommen zum Hoffest, dann sind wir 32 Leute. (für den Fall, dass)",
+              "question_type": "word_order",
+              "options": {
+                "type": "word_order",
+                "items": ["zum Hoffest", "sind wir", "Für den Fall,", "32 Leute.", "dass alle", "kommen,"]
+              },
+              "correct_answer": "Für den Fall, dass alle zum Hoffest kommen, sind wir 32 Leute.",
+              "explanation": "'Für den Fall, dass' leitet einen Nebensatz ein (Verb am Ende); im Hauptsatz danach steht das Verb an erster Stelle."
+            },
+            {
+              "question": "Formulieren Sie um: Für den Fall, dass das Wetter gut ist, können wir im Garten feiern. (vorausgesetzt, dass)",
+              "question_type": "word_order",
+              "options": {
+                "type": "word_order",
+                "items": ["im Garten", "gut ist,", "Vorausgesetzt,", "feiern.", "können wir", "dass das Wetter"]
+              },
+              "correct_answer": "Vorausgesetzt, dass das Wetter gut ist, können wir im Garten feiern.",
+              "explanation": "'Vorausgesetzt, dass' leitet einen Nebensatz mit dem Verb am Ende ein. Laut offiziellem Lösungsschlüssel ist auch die Variante 'Wir können im Garten feiern, vorausgesetzt, dass das Wetter gut ist.' richtig."
+            },
+            {
+              "question": "Formulieren Sie um: Angenommen, dass es ein Gewitter gibt, gehen wir einfach rein. (im Falle)",
+              "question_type": "word_order",
+              "options": {
+                "type": "word_order",
+                "items": ["gehen", "rein.", "eines Gewitters", "Im Falle", "einfach", "wir"]
+              },
+              "correct_answer": "Im Falle eines Gewitters gehen wir einfach rein.",
+              "explanation": "Nach 'im Falle' steht der Genitiv: im Falle eines Gewitters. Danach folgt das Verb an zweiter Position."
+            },
+            {
+              "question": "Formulieren Sie um: Wir brauchen Stühle. Andernfalls haben nicht alle Platz. (sonst)",
+              "question_type": "word_order",
+              "options": {
+                "type": "word_order",
+                "items": ["sonst", "Platz.", "Wir brauchen", "nicht alle", "Stühle,", "haben"]
+              },
+              "correct_answer": "Wir brauchen Stühle, sonst haben nicht alle Platz.",
+              "explanation": "'Sonst' steht im zweiten Teil des Satzes, danach folgt direkt das Verb. Laut offiziellem Lösungsschlüssel sind auch die Varianten 'Wir brauchen Stühle. Sonst haben nicht alle Platz.' und 'Wir brauchen Stühle. Es haben sonst nicht alle Platz.' richtig."
+            },
+            {
+              "question": "Formulieren Sie um: Die Stühle müssten eigentlich reichen. Wenn nicht, dann nehmen wir einfach Getränkekisten. (andernfalls)",
+              "question_type": "word_order",
+              "options": {
+                "type": "word_order",
+                "items": ["nehmen wir", "reichen.", "Getränkekisten.", "Die Stühle", "Andernfalls", "einfach", "müssten eigentlich"]
+              },
+              "correct_answer": "Die Stühle müssten eigentlich reichen. Andernfalls nehmen wir einfach Getränkekisten.",
+              "explanation": "'Andernfalls' steht am Anfang des zweiten Satzes, danach folgt direkt das Verb. Der offizielle Lösungsschlüssel trennt hier in zwei Sätze; die Variante mit Komma ('..., andernfalls nehmen wir ...') ist ebenfalls richtig."
+            },
+            {
+              "question": "Was passt in Lücke (1)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["In den letzten Jahrzehnten hat sich", "Im Vergleich zu damals würde man heute", "Das hat vermutlich damit zu tun, dass", "Ich habe volles Verständnis dafür, wenn", "Für mich ist es absolut normal, dass"],
+                "context": {
+                  "type": "text",
+                  "title": "Beitrag: Heiraten - ja oder nein?",
+                  "content": "Mein Opa fragt mich regelmäßig, wann ich endlich heirate. Ich muss dann immer lachen und antworte: „Noch nicht, Opi. Mal schauen, ob ich überhaupt heirate.\" (1) es Paare gibt, die weder verheiratet sind noch zusammenleben. Aber für meinen Opa gehört Heiraten zum Leben dazu. (2) die Ehe in seiner Generation auch eine Absicherung war. Deshalb wollten die Eltern, dass ihre Kinder heiraten. (3) die eigenen Kinder selbstständiger entscheiden lassen. (4) mein Opa mich fragt. Aber: (5) die Lebensweise der Menschen sehr verändert. Und ich muss sagen: Ich bin sehr froh darüber."
+                }
+              },
+              "correct_answer": "4",
+              "explanation": "'Für mich ist es absolut normal, dass es Paare gibt, die weder verheiratet sind noch zusammenleben.' - eine Einschätzung mit dass-Satz."
+            },
+            {
+              "question": "Was passt in Lücke (2)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["In den letzten Jahrzehnten hat sich", "Im Vergleich zu damals würde man heute", "Das hat vermutlich damit zu tun, dass", "Ich habe volles Verständnis dafür, wenn", "Für mich ist es absolut normal, dass"],
+                "context": {
+                  "type": "text",
+                  "title": "Beitrag: Heiraten - ja oder nein?",
+                  "content": "Mein Opa fragt mich regelmäßig, wann ich endlich heirate. Ich muss dann immer lachen und antworte: „Noch nicht, Opi. Mal schauen, ob ich überhaupt heirate.\" (1) es Paare gibt, die weder verheiratet sind noch zusammenleben. Aber für meinen Opa gehört Heiraten zum Leben dazu. (2) die Ehe in seiner Generation auch eine Absicherung war. Deshalb wollten die Eltern, dass ihre Kinder heiraten. (3) die eigenen Kinder selbstständiger entscheiden lassen. (4) mein Opa mich fragt. Aber: (5) die Lebensweise der Menschen sehr verändert. Und ich muss sagen: Ich bin sehr froh darüber."
+                }
+              },
+              "correct_answer": "2",
+              "explanation": "'Das hat vermutlich damit zu tun, dass die Ehe in seiner Generation auch eine Absicherung war.' - eine Vermutung über den Grund."
+            },
+            {
+              "question": "Was passt in Lücke (3)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["In den letzten Jahrzehnten hat sich", "Im Vergleich zu damals würde man heute", "Das hat vermutlich damit zu tun, dass", "Ich habe volles Verständnis dafür, wenn", "Für mich ist es absolut normal, dass"],
+                "context": {
+                  "type": "text",
+                  "title": "Beitrag: Heiraten - ja oder nein?",
+                  "content": "Mein Opa fragt mich regelmäßig, wann ich endlich heirate. Ich muss dann immer lachen und antworte: „Noch nicht, Opi. Mal schauen, ob ich überhaupt heirate.\" (1) es Paare gibt, die weder verheiratet sind noch zusammenleben. Aber für meinen Opa gehört Heiraten zum Leben dazu. (2) die Ehe in seiner Generation auch eine Absicherung war. Deshalb wollten die Eltern, dass ihre Kinder heiraten. (3) die eigenen Kinder selbstständiger entscheiden lassen. (4) mein Opa mich fragt. Aber: (5) die Lebensweise der Menschen sehr verändert. Und ich muss sagen: Ich bin sehr froh darüber."
+                }
+              },
+              "correct_answer": "1",
+              "explanation": "'Im Vergleich zu damals würde man heute die eigenen Kinder selbstständiger entscheiden lassen.' - ein Vergleich zwischen früher und heute."
+            },
+            {
+              "question": "Was passt in Lücke (4)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["In den letzten Jahrzehnten hat sich", "Im Vergleich zu damals würde man heute", "Das hat vermutlich damit zu tun, dass", "Ich habe volles Verständnis dafür, wenn", "Für mich ist es absolut normal, dass"],
+                "context": {
+                  "type": "text",
+                  "title": "Beitrag: Heiraten - ja oder nein?",
+                  "content": "Mein Opa fragt mich regelmäßig, wann ich endlich heirate. Ich muss dann immer lachen und antworte: „Noch nicht, Opi. Mal schauen, ob ich überhaupt heirate.\" (1) es Paare gibt, die weder verheiratet sind noch zusammenleben. Aber für meinen Opa gehört Heiraten zum Leben dazu. (2) die Ehe in seiner Generation auch eine Absicherung war. Deshalb wollten die Eltern, dass ihre Kinder heiraten. (3) die eigenen Kinder selbstständiger entscheiden lassen. (4) mein Opa mich fragt. Aber: (5) die Lebensweise der Menschen sehr verändert. Und ich muss sagen: Ich bin sehr froh darüber."
+                }
+              },
+              "correct_answer": "3",
+              "explanation": "'Ich habe volles Verständnis dafür, wenn mein Opa mich fragt.' - Verständnis mit wenn-Satz."
+            },
+            {
+              "question": "Was passt in Lücke (5)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["In den letzten Jahrzehnten hat sich", "Im Vergleich zu damals würde man heute", "Das hat vermutlich damit zu tun, dass", "Ich habe volles Verständnis dafür, wenn", "Für mich ist es absolut normal, dass"],
+                "context": {
+                  "type": "text",
+                  "title": "Beitrag: Heiraten - ja oder nein?",
+                  "content": "Mein Opa fragt mich regelmäßig, wann ich endlich heirate. Ich muss dann immer lachen und antworte: „Noch nicht, Opi. Mal schauen, ob ich überhaupt heirate.\" (1) es Paare gibt, die weder verheiratet sind noch zusammenleben. Aber für meinen Opa gehört Heiraten zum Leben dazu. (2) die Ehe in seiner Generation auch eine Absicherung war. Deshalb wollten die Eltern, dass ihre Kinder heiraten. (3) die eigenen Kinder selbstständiger entscheiden lassen. (4) mein Opa mich fragt. Aber: (5) die Lebensweise der Menschen sehr verändert. Und ich muss sagen: Ich bin sehr froh darüber."
+                }
+              },
+              "correct_answer": "0",
+              "explanation": "'In den letzten Jahrzehnten hat sich die Lebensweise der Menschen sehr verändert.' - 'hat sich ... verändert' passt nur hier."
+            }
+          ]
+        }
+      ],
+      "uncertainties": [
+        "Selbstkontrolle, zadatak 2: PROVERENO uz zvanični Hueber ključ (Lösungen, Lektion 1, Selbstkontrolle S. 7). Rečenica 1 potvrđena. Rečenica 4 potvrđena, ključ dopušta i 'Wir brauchen Stühle. Sonst haben nicht alle Platz.' i 'Wir brauchen Stühle. Es haben sonst nicht alle Platz.' Rečenica 5 ISPRAVLJENA na dve rečenice ('... reichen. Andernfalls nehmen wir ...') prema ključu.",
+        "Selbstkontrolle, zadatak 3: potvrđeno uz ključ (1. e, 2. c, 3. b, 4. d, 5. a) - naši indeksi odgovaraju."
+      ],
+      "skipped": []
+    },
+    {
+      "lessonTitle": "Selbstbilder - Hoch- und Tiefstapeln",
+      "exercises": [
+        {
+          "title": "Vežba: Artikelwörter und Adjektivdeklination",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Mit Leichtigkeit meistert er ... Situation.",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["jeden schwierigen", "jede schwierigen", "jede schwierige", "jeder schwierige"]
+              },
+              "correct_answer": "2",
+              "explanation": "Akkusativ feminin: jede (wie 'die') + Adjektiv mit -e: jede schwierige Situation."
+            },
+            {
+              "question": "Wie an ... Abend sitzen wir auch heute zusammen in der Beachbar.",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["manchen milden", "manchem milden", "mancher milder", "manchem mildem"]
+              },
+              "correct_answer": "1",
+              "explanation": "Dativ maskulin: manchem (wie 'dem') + Adjektiv mit -en: an manchem milden Abend."
+            },
+            {
+              "question": "Er weiß immer Rat, egal um ... Problem es sich handelt.",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["welches unlösbare", "welchem unlösbaren", "welches unlösbares", "welchen unlösbaren"]
+              },
+              "correct_answer": "0",
+              "explanation": "Akkusativ neutral: welches (wie 'das') + Adjektiv mit -e: um welches unlösbare Problem."
+            },
+            {
+              "question": "Man fragt ihn bei ... Angelegenheiten um Rat.",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["sämtliche berufliche", "sämtlicher beruflicher", "sämtlichen beruflichem", "sämtlichen beruflichen"]
+              },
+              "correct_answer": "3",
+              "explanation": "Dativ Plural: sämtlichen (wie 'den') + Adjektiv mit -en: bei sämtlichen beruflichen Angelegenheiten."
+            },
+            {
+              "question": "Du hast ... Zweifel? Das kann ich nicht glauben!",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["solchen absurden", "solche absurden", "solche absurde", "solcher absurder"]
+              },
+              "correct_answer": "1",
+              "explanation": "Akkusativ Plural: solche (wie 'die') + Adjektiv mit -en: solche absurden Zweifel."
+            },
+            {
+              "question": "Trotz ... Erfolgs zweifelt er an seinen Fähigkeiten.",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["diesem ganzen", "dieses ganzes", "dieses ganzen", "diesen ganzen"]
+              },
+              "correct_answer": "2",
+              "explanation": "Nach 'trotz' steht der Genitiv: dieses (wie 'des') + Adjektiv mit -en: trotz dieses ganzen Erfolgs."
+            }
+          ]
+        },
+        {
+          "title": "Vežba: Adjektivdeklination im Kontext",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Und dann diese ______ Ruhe und Selbstsicherheit, die er ausstrahlt!",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["innere", "inneren", "innerer"]
+              },
+              "correct_answer": "innere",
+              "explanation": "Nominativ feminin nach 'diese': Adjektiv mit -e (diese innere Ruhe)."
+            },
+            {
+              "question": "Auch nach Feierabend wird er wegen aller ______ Fragen angerufen.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["mögliche", "möglichen", "möglicher"]
+              },
+              "correct_answer": "möglichen",
+              "explanation": "Genitiv Plural nach 'aller': Adjektiv mit -en (wegen aller möglichen Fragen)."
+            },
+            {
+              "question": "In ______ schwierigen Situation bleibt sie gelassen.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["jeder", "jede", "jedem"]
+              },
+              "correct_answer": "jeder",
+              "explanation": "Dativ feminin: in jeder schwierigen Situation (jeder wie 'der')."
+            },
+            {
+              "question": "Sie hat auf ______ kritische Frage eine passende Antwort.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["jede", "jeder", "jeden"]
+              },
+              "correct_answer": "jede",
+              "explanation": "'Auf' steht hier mit Akkusativ, feminin: auf jede kritische Frage."
+            },
+            {
+              "question": "Solche ______ Zweifel kennt fast jeder Mensch.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["absurde", "absurden", "absurder"]
+              },
+              "correct_answer": "absurden",
+              "explanation": "Nach 'solche' (Plural) bekommt das Adjektiv die Endung -en: solche absurden Zweifel."
+            }
+          ]
+        },
+        {
+          "title": "Vežba: Wortschatz - Eigenschaften",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Verbinden Sie die deutschen Wörter mit der passenden Übersetzung.",
+              "question_type": "match_pairs",
+              "options": {
+                "type": "match_pairs",
+                "items": [
+                  {"de": "die Bescheidenheit", "sr": "skromnost"},
+                  {"de": "der Ehrgeiz", "sr": "ambicija, ambicioznost"},
+                  {"de": "die Gelassenheit", "sr": "staloženost, smirenost"},
+                  {"de": "die Zuverlässigkeit", "sr": "pouzdanost"},
+                  {"de": "die Entschlossenheit", "sr": "odlučnost"},
+                  {"de": "die Hilfsbereitschaft", "sr": "spremnost da se pomogne, predusretljivost"},
+                  {"de": "entlarven", "sr": "raskrinkati, razotkriti"},
+                  {"de": "unterschätzen", "sr": "potceniti"}
+                ]
+              },
+              "correct_answer": "all",
+              "explanation": "Wichtige Wörter aus dem Wortfeld Eigenschaften und aus der Lektion."
+            }
+          ]
+        },
+        {
+          "title": "Test: Selbstkontrolle - Lektion 2",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Was ist richtig an Stelle (1)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["Konzept", "Überblick"],
+                "context": {
+                  "type": "text",
+                  "title": "Online-Lexikon: www.einfach-erklaert.de",
+                  "content": "Soft Skills im Konzept / Überblick (1)\n\nZu Soft Skills zählen unter anderem die sozialen Kompetenzen. Das sind Verhaltensweisen und Anweisungen / Eigenschaften (2), die den Umgang mit anderen Menschen erleichtern. Man unterscheidet dabei drei Bereiche:\n1. Umgang mit sich selbst: Fähigkeiten wie Selbstbewusstsein und Selbstvertrauen / Fremdwahrnehmung (3), aber auch Eigenverantwortung und Ignoranz / Selbstdisziplin (4)\n2. Umgang mit anderen Menschen: Merkmale wie Toleranz und Wertschätzung, aber auch Empathie und Hilfsbereitschaft / Selbstsicherheit (5)\n3. Zusammenarbeit: etwa Teamfähigkeit, Kooperationsbereitschaft, Motivation und Leistungsbereitschaft / Arroganz (6)"
+                }
+              },
+              "correct_answer": "1",
+              "explanation": "'Soft Skills im Überblick' - ein Überblick ist eine zusammenfassende Darstellung eines Themas."
+            },
+            {
+              "question": "Was ist richtig an Stelle (2)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["Anweisungen", "Eigenschaften"],
+                "context": {
+                  "type": "text",
+                  "title": "Online-Lexikon: www.einfach-erklaert.de",
+                  "content": "Soft Skills im Konzept / Überblick (1)\n\nZu Soft Skills zählen unter anderem die sozialen Kompetenzen. Das sind Verhaltensweisen und Anweisungen / Eigenschaften (2), die den Umgang mit anderen Menschen erleichtern. Man unterscheidet dabei drei Bereiche:\n1. Umgang mit sich selbst: Fähigkeiten wie Selbstbewusstsein und Selbstvertrauen / Fremdwahrnehmung (3), aber auch Eigenverantwortung und Ignoranz / Selbstdisziplin (4)\n2. Umgang mit anderen Menschen: Merkmale wie Toleranz und Wertschätzung, aber auch Empathie und Hilfsbereitschaft / Selbstsicherheit (5)\n3. Zusammenarbeit: etwa Teamfähigkeit, Kooperationsbereitschaft, Motivation und Leistungsbereitschaft / Arroganz (6)"
+                }
+              },
+              "correct_answer": "1",
+              "explanation": "Soziale Kompetenzen sind Verhaltensweisen und Eigenschaften, keine Anweisungen."
+            },
+            {
+              "question": "Was ist richtig an Stelle (3)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["Selbstvertrauen", "Fremdwahrnehmung"],
+                "context": {
+                  "type": "text",
+                  "title": "Online-Lexikon: www.einfach-erklaert.de",
+                  "content": "Soft Skills im Konzept / Überblick (1)\n\nZu Soft Skills zählen unter anderem die sozialen Kompetenzen. Das sind Verhaltensweisen und Anweisungen / Eigenschaften (2), die den Umgang mit anderen Menschen erleichtern. Man unterscheidet dabei drei Bereiche:\n1. Umgang mit sich selbst: Fähigkeiten wie Selbstbewusstsein und Selbstvertrauen / Fremdwahrnehmung (3), aber auch Eigenverantwortung und Ignoranz / Selbstdisziplin (4)\n2. Umgang mit anderen Menschen: Merkmale wie Toleranz und Wertschätzung, aber auch Empathie und Hilfsbereitschaft / Selbstsicherheit (5)\n3. Zusammenarbeit: etwa Teamfähigkeit, Kooperationsbereitschaft, Motivation und Leistungsbereitschaft / Arroganz (6)"
+                }
+              },
+              "correct_answer": "0",
+              "explanation": "Beim Umgang mit sich selbst passt 'Selbstvertrauen' - die Fremdwahrnehmung betrifft die Sicht der anderen."
+            },
+            {
+              "question": "Was ist richtig an Stelle (4)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["Ignoranz", "Selbstdisziplin"],
+                "context": {
+                  "type": "text",
+                  "title": "Online-Lexikon: www.einfach-erklaert.de",
+                  "content": "Soft Skills im Konzept / Überblick (1)\n\nZu Soft Skills zählen unter anderem die sozialen Kompetenzen. Das sind Verhaltensweisen und Anweisungen / Eigenschaften (2), die den Umgang mit anderen Menschen erleichtern. Man unterscheidet dabei drei Bereiche:\n1. Umgang mit sich selbst: Fähigkeiten wie Selbstbewusstsein und Selbstvertrauen / Fremdwahrnehmung (3), aber auch Eigenverantwortung und Ignoranz / Selbstdisziplin (4)\n2. Umgang mit anderen Menschen: Merkmale wie Toleranz und Wertschätzung, aber auch Empathie und Hilfsbereitschaft / Selbstsicherheit (5)\n3. Zusammenarbeit: etwa Teamfähigkeit, Kooperationsbereitschaft, Motivation und Leistungsbereitschaft / Arroganz (6)"
+                }
+              },
+              "correct_answer": "1",
+              "explanation": "'Selbstdisziplin' ist eine positive Soft Skill - Ignoranz ist eine negative Eigenschaft."
+            },
+            {
+              "question": "Was ist richtig an Stelle (5)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["Hilfsbereitschaft", "Selbstsicherheit"],
+                "context": {
+                  "type": "text",
+                  "title": "Online-Lexikon: www.einfach-erklaert.de",
+                  "content": "Soft Skills im Konzept / Überblick (1)\n\nZu Soft Skills zählen unter anderem die sozialen Kompetenzen. Das sind Verhaltensweisen und Anweisungen / Eigenschaften (2), die den Umgang mit anderen Menschen erleichtern. Man unterscheidet dabei drei Bereiche:\n1. Umgang mit sich selbst: Fähigkeiten wie Selbstbewusstsein und Selbstvertrauen / Fremdwahrnehmung (3), aber auch Eigenverantwortung und Ignoranz / Selbstdisziplin (4)\n2. Umgang mit anderen Menschen: Merkmale wie Toleranz und Wertschätzung, aber auch Empathie und Hilfsbereitschaft / Selbstsicherheit (5)\n3. Zusammenarbeit: etwa Teamfähigkeit, Kooperationsbereitschaft, Motivation und Leistungsbereitschaft / Arroganz (6)"
+                }
+              },
+              "correct_answer": "0",
+              "explanation": "Beim Umgang mit anderen Menschen passt 'Hilfsbereitschaft' - Selbstsicherheit gehört zum Umgang mit sich selbst."
+            },
+            {
+              "question": "Was ist richtig an Stelle (6)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["Leistungsbereitschaft", "Arroganz"],
+                "context": {
+                  "type": "text",
+                  "title": "Online-Lexikon: www.einfach-erklaert.de",
+                  "content": "Soft Skills im Konzept / Überblick (1)\n\nZu Soft Skills zählen unter anderem die sozialen Kompetenzen. Das sind Verhaltensweisen und Anweisungen / Eigenschaften (2), die den Umgang mit anderen Menschen erleichtern. Man unterscheidet dabei drei Bereiche:\n1. Umgang mit sich selbst: Fähigkeiten wie Selbstbewusstsein und Selbstvertrauen / Fremdwahrnehmung (3), aber auch Eigenverantwortung und Ignoranz / Selbstdisziplin (4)\n2. Umgang mit anderen Menschen: Merkmale wie Toleranz und Wertschätzung, aber auch Empathie und Hilfsbereitschaft / Selbstsicherheit (5)\n3. Zusammenarbeit: etwa Teamfähigkeit, Kooperationsbereitschaft, Motivation und Leistungsbereitschaft / Arroganz (6)"
+                }
+              },
+              "correct_answer": "0",
+              "explanation": "Bei der Zusammenarbeit passt 'Leistungsbereitschaft' - Arroganz ist eine negative Eigenschaft."
+            },
+            {
+              "question": "GRAMMATIK: Ergänzen Sie die Artikelwörter und Adjektive in der richtigen Form (Teil 1).\n\nMAURICE: ______ ______ Buch (1) vom österreichischen Psychologen und Kommunikationsforscher Paul Watzlawick (1921-2007) ist zwar nicht mehr ganz neu, aber immer noch sehr lesenswert. Es liefert meiner Meinung nach die Erklärung für ______ ______ Probleme (2) und ______ ______ Missverständnisse (3), die oft zum Streit führen. Watzlawick legt dar, ______ ______ Einfluss (4) unsere subjektive Wahrnehmung hat.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["Dieses", "spannende", "sämtliche", "kommunikativen", "jene", "kleinen", "welchen", "großen"]
+              },
+              "correct_answer": "Dieses, spannende, sämtliche, kommunikativen, jene, kleinen, welchen, großen",
+              "explanation": "Nach Artikelwörtern vom Typ I (dies-, sämtlich-, jen-, welch-) wird das Adjektiv schwach dekliniert: Dieses spannende Buch (Nom. n.), sämtliche kommunikativen Probleme (Akk. Pl.), jene kleinen Missverständnisse (Akk. Pl.), welchen großen Einfluss (Akk. m.)."
+            },
+            {
+              "question": "GRAMMATIK: Ergänzen Sie die Artikelwörter und Adjektive in der richtigen Form (Teil 2).\n\nIch muss sagen, dass ich mich leider in so ______ ______ Beispiel (5) selbst wiedererkannt habe. Übrigens: Auch Watzlawicks „Anleitung zum Unglücklichsein\" kann ich empfehlen - auch zum Verschenken. Mit ______ extrem ______ Büchern (6) kann man ______ ______ und ______ Menschen (7) eine Freude machen. Es sollte mehr von ______ ______ und ______ Büchern (8) geben!",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["manchem", "erklärenden", "beiden", "unterhaltsamen", "jedem", "humorvollen", "nachdenklichen", "solchen", "witzigen", "klugen"]
+              },
+              "correct_answer": "manchem, erklärenden, beiden, unterhaltsamen, jedem, humorvollen, nachdenklichen, solchen, witzigen, klugen",
+              "explanation": "In so manchem erklärenden Beispiel (Dat. n.), mit beiden extrem unterhaltsamen Büchern (Dat. Pl.), jedem humorvollen und nachdenklichen Menschen (Dat. m.), von solchen witzigen und klugen Büchern (Dat. Pl.) - nach diesen Artikelwörtern steht die schwache Adjektivdeklination."
+            }
+          ]
+        }
+      ],
+      "uncertainties": [
+        "Selbstkontrolle, zadatak 2: u knjizi se dopunjavaju samo nastavci prideva i artikala; za LMS fill_blank format pretvoreno u banku celih reči (sadržaj rečenica je nepromenjen).",
+        "Selbstkontrolle, zadatak 2: PROVERENO uz zvanični Hueber ključ (Lösungen, Lektion 2, Selbstkontrolle S. 14) - sve stavke 1-8 se poklapaju, uključujući (4) 'welchen großen', (5) 'manchem erklärenden', (7) 'jedem humorvollen und nachdenklichen' i (8) 'solchen witzigen und klugen'. Nema izmena.",
+        "Selbstkontrolle, zadatak 1: potvrđeno uz ključ (Überblick, Eigenschaften, Selbstvertrauen, Selbstdisziplin, Hilfsbereitschaft, Leistungsbereitschaft)."
+      ],
+      "skipped": [
+        "Selbstkontrolle, zadatak 3 (Kommunikation: Peter-Pan-Syndrom): pisanje rečenica na osnovu beleški sa ponuđenim Redemittel - poluslobodno pisanje sa više ispravnih formulacija i nejasnim uparivanjem Redemittel-beleška, ne može se verno preneti u zatvoreni format."
+      ]
+    },
+    {
+      "lessonTitle": "Mehrsprachigkeit - Wie wir Sprachen (er)leben",
+      "exercises": [
+        {
+          "title": "Vežba: Kausale Zusammenhänge",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Was bedeutet 'zumal'?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["obwohl", "trotzdem", "besonders weil", "damit"]
+              },
+              "correct_answer": "2",
+              "explanation": "'Zumal' fügt einen besonders wichtigen Grund hinzu (= besonders weil / vor allem weil)."
+            },
+            {
+              "question": "Kindern fällt das Sprachenlernen leichter, ... sich ihr Gehirn schneller auf neue Strukturen einstellen kann.",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["deshalb", "zumal", "mangels", "anlässlich"]
+              },
+              "correct_answer": "1",
+              "explanation": "'Zumal' leitet einen Nebensatz ein, der immer nach dem Hauptsatz steht und einen besonders wichtigen Grund nennt."
+            },
+            {
+              "question": "... ausreichender Angebote an bilingualen Kitas lernen viele Kinder nur eine Sprache.",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["Mangels", "Anlässlich", "Aus diesem Grund", "Zumal"]
+              },
+              "correct_answer": "0",
+              "explanation": "'Mangels + Genitiv' gibt einen Mangel als Grund an: Weil ausreichende Angebote fehlen."
+            },
+            {
+              "question": "... des Europäischen Tags der Sprachen werfen wir einen Blick auf die Mehrsprachigkeitsforschung.",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["Angesichts", "Mangels", "Anlässlich", "Aufgrund"]
+              },
+              "correct_answer": "2",
+              "explanation": "'Anlässlich + Genitiv' gibt ein bestimmtes Ereignis als Anlass an - hier den Europäischen Tag der Sprachen."
+            },
+            {
+              "question": "Welcher Satz ist korrekt?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["Zumal meine Urgroßeltern aus Warschau stammen, lerne ich Polnisch.", "Ich lerne Polnisch, zumal stammen meine Urgroßeltern aus Warschau.", "Ich lerne Polnisch, zumal meine Urgroßeltern aus Warschau stammen.", "Zumal stammen meine Urgroßeltern aus Warschau, lerne ich Polnisch."]
+              },
+              "correct_answer": "2",
+              "explanation": "Der Nebensatz mit 'zumal' steht immer nach dem Hauptsatz, das Verb steht am Ende des Nebensatzes."
+            },
+            {
+              "question": "Wo verwendet man Ausdrücke wie 'angesichts', 'mangels' und 'anlässlich' vor allem?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": ["in der gesprochenen Umgangssprache", "in der Schriftsprache", "nur in Dialekten", "nur in der Werbung"]
+              },
+              "correct_answer": "1",
+              "explanation": "Diese Präpositionen mit Genitiv sind vor allem in der Schriftsprache und im formellen Stil üblich."
+            }
+          ]
+        },
+        {
+          "title": "Vežba: Kausale Ausdrücke im Kontext",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "______ der engen emotionalen Verbindung zur Erstsprache drücken viele Menschen Gefühle lieber in ihr aus.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["Aufgrund", "Zumal", "Deshalb"]
+              },
+              "correct_answer": "Aufgrund",
+              "explanation": "'Aufgrund + Genitiv' steht vor einer Nominalgruppe und gibt den Grund an."
+            },
+            {
+              "question": "In der Fremdsprache probiert man sich gern in neuen Rollen aus, ______ hier die Werte und Rollen aus der Erstsprache oft nicht gelten.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["zumal", "aufgrund", "anlässlich"]
+              },
+              "correct_answer": "zumal",
+              "explanation": "'Zumal' leitet einen Nebensatz ein und fügt einen besonders wichtigen Grund hinzu."
+            },
+            {
+              "question": "______ eines runden Jubiläums veranstaltet die Schule einen Tag der deutschen Sprache.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["Anlässlich", "Mangels", "Zumal"]
+              },
+              "correct_answer": "Anlässlich",
+              "explanation": "'Anlässlich + Genitiv' gibt ein Ereignis (das Jubiläum) als Anlass an."
+            },
+            {
+              "question": "______ passender Angebote in seiner Stadt konnte er keinen Sprachkurs besuchen.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["Mangels", "Anlässlich", "Zumal"]
+              },
+              "correct_answer": "Mangels",
+              "explanation": "'Mangels + Genitiv' gibt einen Mangel als Grund an: Passende Angebote fehlten."
+            },
+            {
+              "question": "Die Vorteile von Mehrsprachigkeit sind offensichtlich. ______ fördern viele Schulen den mehrsprachigen Unterricht.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["Aus diesem Grund", "Aufgrund", "Zumal"]
+              },
+              "correct_answer": "Aus diesem Grund",
+              "explanation": "'Aus diesem Grund' verweist auf einen schon genannten Grund und verbindet zwei Hauptsätze (= deshalb)."
+            }
+          ]
+        },
+        {
+          "title": "Vežba: Wortschatz - Sprachen",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Verbinden Sie die deutschen Wörter mit der passenden Übersetzung.",
+              "question_type": "match_pairs",
+              "options": {
+                "type": "match_pairs",
+                "items": [
+                  {"de": "die Amtssprache", "sr": "službeni jezik"},
+                  {"de": "die Gebärdensprache", "sr": "znakovni jezik"},
+                  {"de": "die Kunstsprache", "sr": "veštački jezik"},
+                  {"de": "die Erstsprache", "sr": "prvi (maternji) jezik"},
+                  {"de": "das Fernweh", "sr": "čežnja za dalekim krajevima"},
+                  {"de": "die Vorfreude", "sr": "radost iščekivanja"},
+                  {"de": "das Fingerspitzengefühl", "sr": "istančan osećaj, takt"},
+                  {"de": "die Schnapsidee", "sr": "suluda ideja, blesava zamisao"}
+                ]
+              },
+              "correct_answer": "all",
+              "explanation": "Wichtige Wörter aus dem Wortfeld Sprache(n) und schwer übersetzbare deutsche Wörter."
+            }
+          ]
+        },
+        {
+          "title": "Test: Selbstkontrolle - Lektion 3",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "WÖRTER: Finden Sie vier Nomen im Buchstabenband und ergänzen Sie den Artikel.\n\nROCHTHESEWUNGHANORMPELVERUGIVERWENDUNGÜNSERSTSPRACHEBEU\n\nMEHRSPRACHIGKEIT BRINGT'S!\nIn vielen Teilen der Welt ist Mehrsprachigkeit längst die ______ (1). Auch im deutschsprachigen Raum wird die ______ (2) von zwei oder mehreren Sprachen - sei es in der Familie, im Alltag oder im Beruf - immer wichtiger. Im Rahmen einer Studie konnte aber die ______ (3) belegt werden, dass es für den Erwerb einer zweiten Sprache eine wichtige Voraussetzung gibt: das Beherrschen der ______ (4). Denn wer im Umgang mit der Muttersprache sicher ist, dem fällt auch der Gebrauch der ersten und zweiten Fremdsprache leichter. In unserer globalisierten Welt ist es wohl keine neue Erkenntnis, dass Mehrsprachigkeit von großem Vorteil ist.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": ["Norm", "Verwendung", "These", "Erstsprache"]
+              },
+              "correct_answer": "Norm, Verwendung, These, Erstsprache",
+              "explanation": "Mehrsprachigkeit ist die Norm; die Verwendung von zwei oder mehreren Sprachen; die These konnte belegt werden; das Beherrschen der Erstsprache ist die Voraussetzung."
+            },
+            {
+              "question": "Formulieren Sie um: Die Mobilität in der Gesellschaft wächst. Auch sprachlich muss man Grenzen überwinden. (angesichts)",
+              "question_type": "word_order",
+              "options": {
+                "type": "word_order",
+                "items": ["muss man", "Grenzen", "Angesichts", "überwinden.", "in der Gesellschaft", "der wachsenden Mobilität", "auch sprachlich"]
+              },
+              "correct_answer": "Angesichts der wachsenden Mobilität in der Gesellschaft muss man auch sprachlich Grenzen überwinden.",
+              "explanation": "'Angesichts + Genitiv': Der erste Satz wird nominalisiert (die wachsende Mobilität), danach folgt das Verb an zweiter Position. Laut offiziellem Lösungsschlüssel ist auch die Variante ohne Artikel richtig: 'Angesichts wachsender Mobilität in der Gesellschaft ...'."
+            },
+            {
+              "question": "Formulieren Sie um: Meine Motivation, Polnisch zu lernen, war sehr groß. Meine Urgroßeltern stammen aus Warschau. (zumal)",
+              "question_type": "word_order",
+              "options": {
+                "type": "word_order",
+                "items": ["zumal", "aus Warschau", "Meine Motivation,", "stammen.", "war sehr groß,", "Polnisch zu lernen,", "meine Urgroßeltern"]
+              },
+              "correct_answer": "Meine Motivation, Polnisch zu lernen, war sehr groß, zumal meine Urgroßeltern aus Warschau stammen.",
+              "explanation": "Der Nebensatz mit 'zumal' steht immer nach dem Hauptsatz, das Verb am Ende."
+            },
+            {
+              "question": "Formulieren Sie um: Die Vorteile von Mehrsprachigkeit sind offensichtlich. Wir setzen uns für ein Förderprogramm von Mehrsprachigkeit an Grundschulen ein. (aus diesem Grund)",
+              "question_type": "word_order",
+              "options": {
+                "type": "word_order",
+                "items": ["Aus diesem Grund", "an Grundschulen", "Die Vorteile von Mehrsprachigkeit", "ein.", "für ein Förderprogramm", "sind offensichtlich.", "setzen wir uns", "von Mehrsprachigkeit"]
+              },
+              "correct_answer": "Die Vorteile von Mehrsprachigkeit sind offensichtlich. Aus diesem Grund setzen wir uns für ein Förderprogramm von Mehrsprachigkeit an Grundschulen ein.",
+              "explanation": "'Aus diesem Grund' steht im Vorfeld des zweiten Satzes, danach folgt direkt das Verb (setzen). Laut offiziellem Lösungsschlüssel ist auch die Variante mit 'aus diesem Grund' im Mittelfeld richtig: 'Wir setzen uns aus diesem Grund für ein Förderprogramm ... ein.'"
+            },
+            {
+              "question": "Formulieren Sie um: In meiner Schulzeit haben engagierte Englischlehrkräfte gefehlt. Meine Sprachkompetenz ist heute nicht sehr gut. (mangels)",
+              "question_type": "word_order",
+              "options": {
+                "type": "word_order",
+                "items": ["ist", "heute", "Mangels", "nicht sehr gut.", "in meiner Schulzeit", "engagierter Englischlehrkräfte", "meine Sprachkompetenz"]
+              },
+              "correct_answer": "Mangels engagierter Englischlehrkräfte in meiner Schulzeit ist meine Sprachkompetenz heute nicht sehr gut.",
+              "explanation": "'Mangels + Genitiv' ersetzt den Satz mit 'fehlen': Mangels engagierter Englischlehrkräfte (= weil sie gefehlt haben)."
+            },
+            {
+              "question": "Formulieren Sie um: Am 3. Mai ist das 10-jährige Jubiläum unserer Partnerschaft. Wir veranstalten mit unserer Partnerschule in Bayern einen Tag der deutschen Sprache. (anlässlich)",
+              "question_type": "word_order",
+              "options": {
+                "type": "word_order",
+                "items": ["veranstalten wir", "einen Tag", "Anlässlich", "der deutschen Sprache.", "am 3. Mai", "des 10-jährigen Jubiläums", "mit unserer Partnerschule in Bayern", "unserer Partnerschaft"]
+              },
+              "correct_answer": "Anlässlich des 10-jährigen Jubiläums unserer Partnerschaft am 3. Mai veranstalten wir mit unserer Partnerschule in Bayern einen Tag der deutschen Sprache.",
+              "explanation": "'Anlässlich + Genitiv' gibt das Ereignis als Anlass an; danach folgt das Verb an zweiter Position. Die Zeitangabe 'am 3. Mai' gehört zum Anlass und steht direkt hinter 'unserer Partnerschaft', also noch im Vorfeld."
+            },
+            {
+              "question": "Erklären Sie den Begriff: Tohuwabohu (n.): Chaos und komplettes Durcheinander (Unter ... versteht man ...)",
+              "question_type": "word_order",
+              "options": {
+                "type": "word_order",
+                "items": ["versteht man", "und", "Unter", "komplettes Durcheinander.", "Tohuwabohu", "Chaos"]
+              },
+              "correct_answer": "Unter Tohuwabohu versteht man Chaos und komplettes Durcheinander.",
+              "explanation": "Redemittel zum Erklären eines Begriffs: 'Unter ... versteht man ...'"
+            },
+            {
+              "question": "Erklären Sie den Begriff: Bungalow (m.): ein Haus, das meist nur ein Geschoss und eine geringe Fläche hat (... wird als ... definiert.)",
+              "question_type": "word_order",
+              "options": {
+                "type": "word_order",
+                "items": ["definiert.", "und eine geringe Fläche", "Ein Bungalow", "hat,", "nur ein Geschoss", "wird als ein Haus,", "das meist"]
+              },
+              "correct_answer": "Ein Bungalow wird als ein Haus, das meist nur ein Geschoss und eine geringe Fläche hat, definiert.",
+              "explanation": "Redemittel zum Erklären eines Begriffs: '... wird als ... definiert.' Der Relativsatz steht direkt hinter 'als ein Haus', also innerhalb der Verbklammer - das Partizip 'definiert' bleibt am Satzende."
+            },
+            {
+              "question": "Erklären Sie den Begriff: Garçonnière (f.): in Österreich eine Einzimmerwohnung (Als ... bezeichnet man ...)",
+              "question_type": "word_order",
+              "options": {
+                "type": "word_order",
+                "items": ["bezeichnet man", "eine", "Als", "Einzimmerwohnung.", "Garçonnière", "in Österreich"]
+              },
+              "correct_answer": "Als Garçonnière bezeichnet man in Österreich eine Einzimmerwohnung.",
+              "explanation": "Redemittel zum Erklären eines Begriffs: 'Als ... bezeichnet man ...'"
+            },
+            {
+              "question": "Erklären Sie den Begriff: Fisimatenten (Pl.): jemand unnötigen Unsinn oder Probleme verursacht (Von ... spricht man, wenn ...)",
+              "question_type": "word_order",
+              "options": {
+                "type": "word_order",
+                "items": ["wenn", "oder Probleme", "Von Fisimatenten", "verursacht.", "unnötigen Unsinn", "spricht man,", "jemand"]
+              },
+              "correct_answer": "Von Fisimatenten spricht man, wenn jemand unnötigen Unsinn oder Probleme verursacht.",
+              "explanation": "Redemittel zum Erklären eines Begriffs: 'Von ... spricht man, wenn ...' - im wenn-Satz steht das Verb am Ende."
+            },
+            {
+              "question": "Erklären Sie den Begriff: Gift (n.): ein Wort, das ursprünglich eine positive Bedeutung (z. B. im Englischen) hatte (Ein Beispiel für ... wäre ...)",
+              "question_type": "word_order",
+              "options": {
+                "type": "word_order",
+                "items": ["das ursprünglich", "wäre", "Ein Beispiel", "„Gift“.", "hatte,", "für ein Wort,", "(z. B. im Englischen)", "eine positive Bedeutung"]
+              },
+              "correct_answer": "Ein Beispiel für ein Wort, das ursprünglich eine positive Bedeutung (z. B. im Englischen) hatte, wäre „Gift“.",
+              "explanation": "Redemittel: 'Ein Beispiel für ... wäre ...' - der Relativsatz beschreibt das Wort, „Gift“ ist das Beispiel. Die Ergänzung '(z. B. im Englischen)' steht vor dem Verb 'hatte' am Ende des Relativsatzes."
+            }
+          ]
+        }
+      ],
+      "uncertainties": [
+        "Selbstkontrolle, zadatak 2: PROVERENO uz zvanični Hueber ključ (Lösungen, Lektion 3, Selbstkontrolle S. 21). Rečenice 1, 2, 3 i 4 potvrđene; ključ dopušta i 'Angesichts wachsender Mobilität ...' (rečenica 1) i 'Wir setzen uns aus diesem Grund für ein Förderprogramm ... ein.' (rečenica 3).",
+        "Selbstkontrolle, zadatak 2, rečenica 5: ISPRAVLJENO - 'am 3. Mai' ide odmah posle 'unserer Partnerschaft' (deo je Vorfelda), a ne posle 'veranstalten wir'.",
+        "Selbstkontrolle, zadatak 3, stavka 2: ISPRAVLJENO prema ključu - relativna klauza je unutar glagolske zagrade: 'Ein Bungalow wird als ein Haus, das meist nur ein Geschoss und eine geringe Fläche hat, definiert.' Član 'ein' uz 'Haus' potvrđen.",
+        "Selbstkontrolle, zadatak 3, stavka 5 (Gift): ISPRAVLJENO prema ključu - dodato '(z. B. im Englischen)' i navodnici oko „Gift“."
+      ],
+      "skipped": []
+    }
+  ]
+}

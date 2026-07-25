@@ -72,3 +72,6 @@ scripts/*-audit.json
 # jednokratni backup/scratch fajlovi skripti (sadrže lične podatke / snimke — ne u repo)
 scripts/_backup_*.json
 scripts/_ld_recipients.json
+# svi radni artefakti skripti sa podvlakom (spiskovi primalaca, pregledi mejlova,
+# dedup guard fajlovi) - lični podaci polaznika, ostaju samo lokalno
+scripts/_*

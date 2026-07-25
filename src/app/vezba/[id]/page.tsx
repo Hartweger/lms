@@ -3,6 +3,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import ExerciseRunner from "@/components/exercises/ExerciseRunner";
 import { isTestExercise } from "@/lib/exercise-kind";
+import { isExamLessonTitle } from "@/lib/certificate-check";
 import type { Exercise, ExerciseQuestion } from "@/lib/types";
 
 interface PageProps {
@@ -34,7 +35,7 @@ export default async function VezbaStranica({ params }: PageProps) {
   // Get lesson + course info for breadcrumb and level
   const { data: lesson } = await supabase
     .from("lessons")
-    .select("id, title, course_id, courses(title)")
+    .select("id, title, course_id, courses(title, slug)")
     .eq("id", typedExercise.lesson_id)
     .single();
 
@@ -91,7 +92,9 @@ export default async function VezbaStranica({ params }: PageProps) {
   }
 
   // Extract level from course title (e.g. "Nemački A1.1" → "A1")
-  const courseTitle = (lesson?.courses as unknown as { title: string } | null)?.title || "";
+  const courseRow = lesson?.courses as unknown as { title: string; slug: string } | null;
+  const courseTitle = courseRow?.title || "";
+  const courseSlug = courseRow?.slug || null;
   const levelMatch = courseTitle.match(/(A1|A2|B1|B2|C1|C2)/i);
   const courseLevel = levelMatch ? levelMatch[1].toUpperCase() : "A1";
 
@@ -118,7 +121,10 @@ export default async function VezbaStranica({ params }: PageProps) {
           nextExerciseId={nextExerciseId}
           nextLessonId={nextLessonId}
           courseId={lesson?.course_id || null}
-          isModelltest={lesson?.title?.includes("Modelltest") && !nextExerciseId}
+          courseSlug={courseSlug}
+          // Isto pravilo kao na stranici lekcije i na serveru - ranije je ovde stajalo
+          // includes("Modelltest"), pa lekcija „Završni ispit ..." bez te reči nije izdavala sertifikat.
+          isModelltest={isExamLessonTitle(lesson?.title) && !nextExerciseId}
           isTest={isTestExercise(typedExercise.title, courseTitle)}
         />
       ) : (

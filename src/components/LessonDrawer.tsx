@@ -3,12 +3,21 @@
 import { useState } from "react";
 import Link from "next/link";
 
+interface DrawerExerciseItem {
+  id: string;
+  title: string;
+  test: boolean;
+  label: string;
+}
+
 interface LessonItem {
   id: string;
   title: string;
   order_index: number;
   completed: boolean;
   module?: string;
+  /** Vežbe i testovi te lekcije - prikazuju se ugnežđeno, sa direktnim linkom. */
+  exercises?: DrawerExerciseItem[];
 }
 
 interface LessonDrawerProps {
@@ -145,6 +154,30 @@ export default function LessonDrawer({
                       )}
                     </div>
                   </Link>
+
+                  {/* Vežbe i testovi lekcije - direktan link, bez otvaranja lekcije */}
+                  {lesson.exercises && lesson.exercises.length > 0 && (
+                    <ul className={isCurrent ? "bg-blue-50/40" : undefined}>
+                      {lesson.exercises.map((ex) => (
+                        <li key={ex.id}>
+                          <Link
+                            href={`/vezba/${ex.id}`}
+                            onClick={() => setIsOpen(false)}
+                            className="flex items-center gap-2 pl-11 pr-4 py-1.5 text-xs hover:bg-gray-50 transition-colors"
+                          >
+                            <span
+                              className={`shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-medium ${
+                                ex.test ? "bg-koral-light text-koral-dark" : "bg-gray-100 text-gray-500"
+                              }`}
+                            >
+                              {ex.label}
+                            </span>
+                            <span className="truncate text-gray-500">{ex.title}</span>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               );
             });

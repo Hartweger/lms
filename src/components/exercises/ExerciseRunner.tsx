@@ -19,6 +19,7 @@ import SprechenExercise from "./SprechenExercise";
 import GroupedExamExercise from "./GroupedExamExercise";
 import MillionaireExercise from "./MillionaireExercise";
 import { canRenderGroupedExam } from "@/lib/grouped-exam";
+import { passesThreshold, passLabel } from "@/lib/certificate-threshold";
 import type { Exercise, ExerciseQuestion } from "@/lib/types";
 
 interface ExerciseRunnerProps {
@@ -28,11 +29,13 @@ interface ExerciseRunnerProps {
   nextExerciseId?: string | null;
   nextLessonId?: string | null;
   courseId?: string | null;
+  /** Slug kursa - određuje prag za sertifikat (vidi lib/certificate-threshold). */
+  courseSlug?: string | null;
   isModelltest?: boolean;
   isTest?: boolean;
 }
 
-export default function ExerciseRunner({ exercise, questions, level = "A1", nextExerciseId, nextLessonId, courseId, isModelltest, isTest = false }: ExerciseRunnerProps) {
+export default function ExerciseRunner({ exercise, questions, level = "A1", nextExerciseId, nextLessonId, courseId, courseSlug = null, isModelltest, isTest = false }: ExerciseRunnerProps) {
   const supabase = createClient();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -249,9 +252,10 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
       setModelltestTotal({ score: totalScore, total: totalQuestions });
 
       // Certificates are issued server-side only. The server independently
-      // recomputes the ≥60% threshold from stored attempts, so the client
-      // cannot self-issue or forge a certificate.
-      if (overallPercent >= 60) {
+      // recomputes the threshold from stored attempts, so the client cannot
+      // self-issue or forge a certificate. Prag je zajednički (certificate-threshold),
+      // da klijent ne bi čestitao na rezultatu koji server odbije.
+      if (passesThreshold(totalScore, totalQuestions, courseSlug)) {
         // bonus srca za položen test
         try {
           await fetch("/api/hearts/award", {
@@ -362,13 +366,15 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
         <p className="text-plava font-bold mb-1">{xp} ❤️ srca zarađeno</p>
         {isModelltest && modelltestTotal ? (() => {
           const overallPercent = Math.round((modelltestTotal.score / modelltestTotal.total) * 100);
-          return overallPercent >= 60 ? (
+          const polozeno = passesThreshold(modelltestTotal.score, modelltestTotal.total, courseSlug);
+          const prag = passLabel(courseSlug);
+          return polozeno ? (
             <div className="mt-2">
               <p className="text-lg font-bold text-green-600">Položio/la! Čestitamo!</p>
               <p className="text-sm text-gray-500 mb-1">
                 Ukupan rezultat: {modelltestTotal.score} od {modelltestTotal.total} ({overallPercent}%)
               </p>
-              <p className="text-sm text-gray-400">Minimum za prolaz: 60%</p>
+              <p className="text-sm text-gray-400">Minimum za prolaz: {prag}</p>
               {certificateId && (
                 <a
                   href={`/sertifikat/${certificateId}`}
@@ -384,7 +390,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
               <p className="text-sm text-gray-500 mb-1">
                 Ukupan rezultat: {modelltestTotal.score} od {modelltestTotal.total} ({overallPercent}%)
               </p>
-              <p className="text-sm text-gray-400">Minimum za prolaz: 60%. Pokušaj ponovo!</p>
+              <p className="text-sm text-gray-400">Minimum za prolaz: {prag}. Pokušaj ponovo!</p>
             </div>
           );
         })() : (

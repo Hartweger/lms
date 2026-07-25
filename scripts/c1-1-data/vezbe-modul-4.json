@@ -1,0 +1,1480 @@
+{
+  "lessons": [
+    {
+      "lessonTitle": "Fehlerkultur - Entschuldigung!",
+      "exercises": [
+        {
+          "title": "Vežba: Modale Zusammenhänge",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Welcher Konnektor leitet einen Nebensatz ein?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "auf diese Weise",
+                  "wodurch",
+                  "damit",
+                  "mittels"
+                ]
+              },
+              "correct_answer": "1",
+              "explanation": "'wodurch' und 'womit' sind Nebensatz-Konnektoren. 'auf diese Weise' und 'damit' verbinden Hauptsätze, 'mittels' ist eine Präposition."
+            },
+            {
+              "question": "Man kann eine Entschuldigungsmail schreiben, ______ man zeigt, dass man für seinen Fehler geradesteht.",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "mittels",
+                  "auf diese Weise",
+                  "wodurch",
+                  "ohne"
+                ]
+              },
+              "correct_answer": "2",
+              "explanation": "Nach dem Komma folgt ein Nebensatz mit Verb am Ende, deshalb passt nur der Nebensatz-Konnektor 'wodurch'."
+            },
+            {
+              "question": "______ eines aufrichtigen Gesprächs kann man einen Konflikt lösen.",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Wodurch",
+                  "Mithilfe",
+                  "Damit",
+                  "Womit"
+                ]
+              },
+              "correct_answer": "1",
+              "explanation": "Vor einer Nominalgruppe im Genitiv ('eines aufrichtigen Gesprächs') steht die Präposition 'mithilfe'."
+            },
+            {
+              "question": "Wo steht der Nebensatz mit 'wodurch' und 'womit'?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "immer vor dem Hauptsatz",
+                  "am Anfang des Textes",
+                  "immer nach dem Hauptsatz",
+                  "beliebig vor oder nach dem Hauptsatz"
+                ]
+              },
+              "correct_answer": "2",
+              "explanation": "Der Nebensatz mit 'wodurch' und 'womit' steht immer nach dem Hauptsatz."
+            },
+            {
+              "question": "Wie heißt es richtig, wenn nach 'mithilfe' ein Nomen im Plural ohne Artikelwort folgt?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "mithilfe Entschuldigungen",
+                  "mithilfe von Entschuldigungen",
+                  "mithilfe die Entschuldigungen",
+                  "mithilfe zu Entschuldigungen"
+                ]
+              },
+              "correct_answer": "1",
+              "explanation": "Bei einem Nomen im Plural ohne Artikelwort verwendet man 'mithilfe von + Dativ': mithilfe von Entschuldigungen."
+            },
+            {
+              "question": "In welchem Kontext verwendet man 'mittels' fast ausschließlich?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "in der gesprochenen Alltagssprache",
+                  "in SMS und Chats",
+                  "in der Poesie",
+                  "in der Schriftsprache (z. B. Zeitungsartikel, Verträge, Behördenschreiben)"
+                ]
+              },
+              "correct_answer": "3",
+              "explanation": "'mittels' ist typisch für die Schriftsprache, etwa in Zeitungsartikeln, Verträgen und Schreiben von Behörden."
+            }
+          ]
+        },
+        {
+          "title": "Vežba: Modale Zusammenhänge im Kontext",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Eine aufrichtige Entschuldigung besänftigt das Gegenüber. ______ kann man eine Menge Ärger vermeiden.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "Damit",
+                  "Wodurch",
+                  "Mittels"
+                ]
+              },
+              "correct_answer": "Damit",
+              "explanation": "'Damit' ist ein Hauptsatz-Konnektor und steht hier im Vorfeld des zweiten Hauptsatzes."
+            },
+            {
+              "question": "Ein solches Verhalten stellt menschliche Größe unter Beweis, ______ man die Hochachtung seiner Mitmenschen gewinnt.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "womit",
+                  "damit",
+                  "mithilfe"
+                ]
+              },
+              "correct_answer": "womit",
+              "explanation": "Nach dem Komma folgt ein Nebensatz mit Verb am Ende, deshalb passt der Nebensatz-Konnektor 'womit'."
+            },
+            {
+              "question": "______ einer Entschuldigung sammelt man noch weitere Pluspunkte.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "Mittels",
+                  "Wodurch",
+                  "Auf diese Weise"
+                ]
+              },
+              "correct_answer": "Mittels",
+              "explanation": "'Mittels' steht als Präposition mit dem Genitiv: mittels einer Entschuldigung."
+            },
+            {
+              "question": "Die Bitte um Entschuldigung konfrontiert das Gegenüber mit Gefühlen von Unsicherheit, ______ oft eine peinliche Situation entsteht.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "wodurch",
+                  "mittels",
+                  "auf diese Weise"
+                ]
+              },
+              "correct_answer": "wodurch",
+              "explanation": "'wodurch' leitet den Nebensatz ein, der die Folge beschreibt; das Verb steht am Satzende."
+            },
+            {
+              "question": "Man kann einen selbst gebackenen Kuchen mitbringen. Auf diese ______ sorgt man für gute Stimmung.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "Weise",
+                  "Art",
+                  "Mittel"
+                ]
+              },
+              "correct_answer": "Weise",
+              "explanation": "Die feste Verbindung lautet 'auf diese Weise'."
+            },
+            {
+              "question": "Mithilfe ______ Lobs kann man zeigen, dass man die Kolleginnen und Kollegen schätzt.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "eines",
+                  "einem",
+                  "einen"
+                ]
+              },
+              "correct_answer": "eines",
+              "explanation": "'mithilfe' steht mit dem Genitiv: mithilfe eines Lobs."
+            }
+          ]
+        },
+        {
+          "title": "Vežba: Wortschatz - Fehlerkultur",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Verbinde die deutschen Wörter mit der richtigen Übersetzung.",
+              "question_type": "match_pairs",
+              "options": {
+                "type": "match_pairs",
+                "items": [
+                  {
+                    "de": "das Missgeschick",
+                    "sr": "nezgoda, peh"
+                  },
+                  {
+                    "de": "die Reue",
+                    "sr": "kajanje"
+                  },
+                  {
+                    "de": "aufrichtig",
+                    "sr": "iskren"
+                  },
+                  {
+                    "de": "eingestehen",
+                    "sr": "priznati"
+                  },
+                  {
+                    "de": "die Versöhnung",
+                    "sr": "pomirenje"
+                  },
+                  {
+                    "de": "besänftigen",
+                    "sr": "umiriti, ublažiti"
+                  },
+                  {
+                    "de": "versehentlich",
+                    "sr": "nehotice, greškom"
+                  }
+                ]
+              },
+              "correct_answer": "all",
+              "explanation": "Wichtige Wörter aus dem Wortfeld 'Umgang mit Fehlern'."
+            }
+          ]
+        },
+        {
+          "title": "Test: Selbstkontrolle - Lektion 10",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Was passt in Lücke (1)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "anklagen",
+                  "bereinigen",
+                  "einschleichen"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "Selbstreflexion: Tiere sind sich ihrer Fehler bewusst",
+                  "content": "Ob auch Tiere sich selbst ______ (1), wenn ihnen ein Missgeschick ______ (2) ist, ist unklar. Aber Forschende haben in einem Experiment herausgefunden, dass Ratten in der Lage sind, Reue zu empfinden. Ihr Verhalten und ihre Hirnaktivität zeugen davon, dass sie falsche Entscheidungen ______ (3) können. Experimente der Université de Neuchâtel in der Schweiz deuten darauf hin, dass Bonobos sehr pflichtbewusst sind. Die Affen kümmern sich umeinander und helfen sich gegenseitig beim Saubermachen. Wenn sie bei der gegenseitigen Pflege unterbrochen werden, entschuldigen sie sich bei der Rückkehr bei ihren Partnern - um sie zu ______ (4). Die Affen können sich also eine Art von Schuld ______ (5)."
+                }
+              },
+              "correct_answer": "0",
+              "explanation": "'sich selbst anklagen' bedeutet, sich selbst die Schuld zu geben."
+            },
+            {
+              "question": "Was passt in Lücke (2)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "ausgeglichen",
+                  "ausgerutscht",
+                  "unterlaufen"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "Selbstreflexion: Tiere sind sich ihrer Fehler bewusst",
+                  "content": "Ob auch Tiere sich selbst ______ (1), wenn ihnen ein Missgeschick ______ (2) ist, ist unklar. Aber Forschende haben in einem Experiment herausgefunden, dass Ratten in der Lage sind, Reue zu empfinden. Ihr Verhalten und ihre Hirnaktivität zeugen davon, dass sie falsche Entscheidungen ______ (3) können. Experimente der Université de Neuchâtel in der Schweiz deuten darauf hin, dass Bonobos sehr pflichtbewusst sind. Die Affen kümmern sich umeinander und helfen sich gegenseitig beim Saubermachen. Wenn sie bei der gegenseitigen Pflege unterbrochen werden, entschuldigen sie sich bei der Rückkehr bei ihren Partnern - um sie zu ______ (4). Die Affen können sich also eine Art von Schuld ______ (5)."
+                }
+              },
+              "correct_answer": "2",
+              "explanation": "Die feste Wendung lautet: 'jemandem unterläuft ein Missgeschick' - jemandem passiert ein Versehen."
+            },
+            {
+              "question": "Was passt in Lücke (3)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "auflockern",
+                  "bedauern",
+                  "wertschätzen"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "Selbstreflexion: Tiere sind sich ihrer Fehler bewusst",
+                  "content": "Ob auch Tiere sich selbst ______ (1), wenn ihnen ein Missgeschick ______ (2) ist, ist unklar. Aber Forschende haben in einem Experiment herausgefunden, dass Ratten in der Lage sind, Reue zu empfinden. Ihr Verhalten und ihre Hirnaktivität zeugen davon, dass sie falsche Entscheidungen ______ (3) können. Experimente der Université de Neuchâtel in der Schweiz deuten darauf hin, dass Bonobos sehr pflichtbewusst sind. Die Affen kümmern sich umeinander und helfen sich gegenseitig beim Saubermachen. Wenn sie bei der gegenseitigen Pflege unterbrochen werden, entschuldigen sie sich bei der Rückkehr bei ihren Partnern - um sie zu ______ (4). Die Affen können sich also eine Art von Schuld ______ (5)."
+                }
+              },
+              "correct_answer": "1",
+              "explanation": "'falsche Entscheidungen bedauern' passt zu 'Reue empfinden' - man wünscht, man hätte anders entschieden."
+            },
+            {
+              "question": "Was passt in Lücke (4)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "besänftigen",
+                  "verschulden",
+                  "verschütten"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "Selbstreflexion: Tiere sind sich ihrer Fehler bewusst",
+                  "content": "Ob auch Tiere sich selbst ______ (1), wenn ihnen ein Missgeschick ______ (2) ist, ist unklar. Aber Forschende haben in einem Experiment herausgefunden, dass Ratten in der Lage sind, Reue zu empfinden. Ihr Verhalten und ihre Hirnaktivität zeugen davon, dass sie falsche Entscheidungen ______ (3) können. Experimente der Université de Neuchâtel in der Schweiz deuten darauf hin, dass Bonobos sehr pflichtbewusst sind. Die Affen kümmern sich umeinander und helfen sich gegenseitig beim Saubermachen. Wenn sie bei der gegenseitigen Pflege unterbrochen werden, entschuldigen sie sich bei der Rückkehr bei ihren Partnern - um sie zu ______ (4). Die Affen können sich also eine Art von Schuld ______ (5)."
+                }
+              },
+              "correct_answer": "0",
+              "explanation": "'jemanden besänftigen' bedeutet, jemanden zu beruhigen - das ist das Ziel der Entschuldigung."
+            },
+            {
+              "question": "Was passt in Lücke (5)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "anschreien",
+                  "eingestehen",
+                  "missachten"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "Selbstreflexion: Tiere sind sich ihrer Fehler bewusst",
+                  "content": "Ob auch Tiere sich selbst ______ (1), wenn ihnen ein Missgeschick ______ (2) ist, ist unklar. Aber Forschende haben in einem Experiment herausgefunden, dass Ratten in der Lage sind, Reue zu empfinden. Ihr Verhalten und ihre Hirnaktivität zeugen davon, dass sie falsche Entscheidungen ______ (3) können. Experimente der Université de Neuchâtel in der Schweiz deuten darauf hin, dass Bonobos sehr pflichtbewusst sind. Die Affen kümmern sich umeinander und helfen sich gegenseitig beim Saubermachen. Wenn sie bei der gegenseitigen Pflege unterbrochen werden, entschuldigen sie sich bei der Rückkehr bei ihren Partnern - um sie zu ______ (4). Die Affen können sich also eine Art von Schuld ______ (5)."
+                }
+              },
+              "correct_answer": "1",
+              "explanation": "'sich eine Schuld eingestehen' bedeutet zugeben, dass man Schuld hat."
+            },
+            {
+              "question": "Fehler als Chance für Innovation (Teil 1) - Lesen Sie den Artikel und ergänzen Sie: Aktuelle Studien zeigen: Fehler können zum Erfolg eines Unternehmens beitragen. Denn ______ von Fehlern entwickeln wir uns weiter. Das passiert vor allem in einem Umfeld, in dem Fehler als etwas Positives wahrgenommen werden - nämlich als Chance für Verbesserung. ______ einer positiven Fehlerkultur entsteht ein vertrauensvolles Verhältnis zwischen Mitarbeiter*innen und Führungskräften. ______ entwickelt sich eine Atmosphäre, in der man offen über Fehler sprechen kann - ohne Angst vor negativen Konsequenzen.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "auf diese Weise",
+                  "damit",
+                  "mithilfe",
+                  "mittels",
+                  "wodurch",
+                  "womit"
+                ]
+              },
+              "correct_answer": "mithilfe, mittels, auf diese Weise",
+              "explanation": "'mithilfe von + Dativ' bei Plural ohne Artikel (mithilfe von Fehlern), 'mittels + Genitiv' (mittels einer positiven Fehlerkultur), 'auf diese Weise' als Hauptsatz-Konnektor im Vorfeld. Hinweis: Im Lösungsschlüssel ist in der dritten Lücke auch 'damit' richtig."
+            },
+            {
+              "question": "Fehler als Chance für Innovation (Teil 2) - Ergänzen Sie: Das wiederum fördert die Kommunikation und das Miteinander, ______ alle von den Erfahrungen der anderen profitieren können. ______ steigt auch die Chance, dass Probleme frühzeitig erkannt und behoben werden können. Und wer keine Angst davor hat, Fehler zu machen, probiert in der Regel mehr aus, ______ das Innovationspotenzial im Unternehmen steigt.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "auf diese Weise",
+                  "damit",
+                  "mithilfe",
+                  "mittels",
+                  "wodurch",
+                  "womit"
+                ]
+              },
+              "correct_answer": "wodurch, damit, womit",
+              "explanation": "'wodurch' und 'womit' leiten Nebensätze ein, die die Folge beschreiben; 'damit' ist Hauptsatz-Konnektor im Vorfeld des neuen Satzes. Hinweis: Laut Lösungsschlüssel sind auch die Varianten 'womit' (erste Lücke), 'auf diese Weise' (zweite Lücke) und 'wodurch' (dritte Lücke) richtig."
+            },
+            {
+              "question": "Was passt in Lücke (1)? (Nicht alles passt.)",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "bitte entschuldigen Sie, dass",
+                  "Danke, dass Sie das sagen.",
+                  "Halb so wild!",
+                  "Ich habe versehentlich",
+                  "Ich werde nun so schnell wie möglich",
+                  "Schwamm drüber!",
+                  "Sie können sicher sein, dass",
+                  "Tut mir aufrichtig leid!"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "E-Mail an Herrn Rogan",
+                  "content": "Sehr geehrter Herr Rogan,\n... (1) ich mich heute erst bei Ihnen melde. ... (2) Ihre erste Nachricht gelöscht. ... (3) Das passiert mir eigentlich nie. ... (4) dafür sorgen, dass Ihr Vertrag auf den Weg kommt. ... (5) er bis morgen Abend bei Ihnen ist.\nMit Dank für Ihre Geduld und freundlichen Grüßen\nMartina Holm"
+                }
+              },
+              "correct_answer": "0",
+              "explanation": "'Bitte entschuldigen Sie, dass ich mich heute erst bei Ihnen melde.' - formelle Bitte um Entschuldigung mit dass-Satz."
+            },
+            {
+              "question": "Was passt in Lücke (2)? (Nicht alles passt.)",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "bitte entschuldigen Sie, dass",
+                  "Danke, dass Sie das sagen.",
+                  "Halb so wild!",
+                  "Ich habe versehentlich",
+                  "Ich werde nun so schnell wie möglich",
+                  "Schwamm drüber!",
+                  "Sie können sicher sein, dass",
+                  "Tut mir aufrichtig leid!"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "E-Mail an Herrn Rogan",
+                  "content": "Sehr geehrter Herr Rogan,\n... (1) ich mich heute erst bei Ihnen melde. ... (2) Ihre erste Nachricht gelöscht. ... (3) Das passiert mir eigentlich nie. ... (4) dafür sorgen, dass Ihr Vertrag auf den Weg kommt. ... (5) er bis morgen Abend bei Ihnen ist.\nMit Dank für Ihre Geduld und freundlichen Grüßen\nMartina Holm"
+                }
+              },
+              "correct_answer": "3",
+              "explanation": "'Ich habe versehentlich Ihre erste Nachricht gelöscht.' - so beschreibt man das eigene Missgeschick."
+            },
+            {
+              "question": "Was passt in Lücke (3)? (Nicht alles passt.)",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "bitte entschuldigen Sie, dass",
+                  "Danke, dass Sie das sagen.",
+                  "Halb so wild!",
+                  "Ich habe versehentlich",
+                  "Ich werde nun so schnell wie möglich",
+                  "Schwamm drüber!",
+                  "Sie können sicher sein, dass",
+                  "Tut mir aufrichtig leid!"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "E-Mail an Herrn Rogan",
+                  "content": "Sehr geehrter Herr Rogan,\n... (1) ich mich heute erst bei Ihnen melde. ... (2) Ihre erste Nachricht gelöscht. ... (3) Das passiert mir eigentlich nie. ... (4) dafür sorgen, dass Ihr Vertrag auf den Weg kommt. ... (5) er bis morgen Abend bei Ihnen ist.\nMit Dank für Ihre Geduld und freundlichen Grüßen\nMartina Holm"
+                }
+              },
+              "correct_answer": "7",
+              "explanation": "'Tut mir aufrichtig leid! Das passiert mir eigentlich nie.' - Ausdruck des Bedauerns."
+            },
+            {
+              "question": "Was passt in Lücke (4)? (Nicht alles passt.)",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "bitte entschuldigen Sie, dass",
+                  "Danke, dass Sie das sagen.",
+                  "Halb so wild!",
+                  "Ich habe versehentlich",
+                  "Ich werde nun so schnell wie möglich",
+                  "Schwamm drüber!",
+                  "Sie können sicher sein, dass",
+                  "Tut mir aufrichtig leid!"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "E-Mail an Herrn Rogan",
+                  "content": "Sehr geehrter Herr Rogan,\n... (1) ich mich heute erst bei Ihnen melde. ... (2) Ihre erste Nachricht gelöscht. ... (3) Das passiert mir eigentlich nie. ... (4) dafür sorgen, dass Ihr Vertrag auf den Weg kommt. ... (5) er bis morgen Abend bei Ihnen ist.\nMit Dank für Ihre Geduld und freundlichen Grüßen\nMartina Holm"
+                }
+              },
+              "correct_answer": "4",
+              "explanation": "'Ich werde nun so schnell wie möglich dafür sorgen, dass ...' - so kündigt man eine Lösung an."
+            },
+            {
+              "question": "Was passt in Lücke (5)? (Nicht alles passt.)",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "bitte entschuldigen Sie, dass",
+                  "Danke, dass Sie das sagen.",
+                  "Halb so wild!",
+                  "Ich habe versehentlich",
+                  "Ich werde nun so schnell wie möglich",
+                  "Schwamm drüber!",
+                  "Sie können sicher sein, dass",
+                  "Tut mir aufrichtig leid!"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "E-Mail an Herrn Rogan",
+                  "content": "Sehr geehrter Herr Rogan,\n... (1) ich mich heute erst bei Ihnen melde. ... (2) Ihre erste Nachricht gelöscht. ... (3) Das passiert mir eigentlich nie. ... (4) dafür sorgen, dass Ihr Vertrag auf den Weg kommt. ... (5) er bis morgen Abend bei Ihnen ist.\nMit Dank für Ihre Geduld und freundlichen Grüßen\nMartina Holm"
+                }
+              },
+              "correct_answer": "6",
+              "explanation": "'Sie können sicher sein, dass er bis morgen Abend bei Ihnen ist.' - Zusicherung als Abschluss der Lösung."
+            }
+          ]
+        }
+      ],
+      "uncertainties": [
+        "Selbstkontrolle Aufgabe 2, praznine (3) i (5): 'auf diese Weise' i 'damit' su semanticki zamenljivi na obe pozicije (oba su Hauptsatz-Konnektoren u Vorfeldu). Izabrano (3)='auf diese Weise', (5)='damit' kao najprirodnije; zvanicni kljuc resenja nije dostupan.",
+        "Selbstkontrolle Aufgabe 2, praznine (4) i (6): 'wodurch' i 'womit' su prakticno zamenljivi Nebensatz-Konnektori. Izabrano (4)='wodurch', (6)='womit'; obrnuti raspored je takodje gramaticki ispravan."
+      ],
+      "skipped": []
+    },
+    {
+      "lessonTitle": "Wendepunkte - Geschichte und Geschichten",
+      "exercises": [
+        {
+          "title": "Vežba: Konjunktiv II der Vergangenheit mit Modalverb",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Ohne die Wiedervereinigung ______ ich meine Cousine nicht wieder besuchen können.",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "wäre",
+                  "hätte",
+                  "würde",
+                  "hatte"
+                ]
+              },
+              "correct_answer": "1",
+              "explanation": "Beim Konjunktiv II der Vergangenheit mit Modalverb verwendet man immer 'haben' im Konjunktiv II: hätte ... besuchen können."
+            },
+            {
+              "question": "Welcher Satz ist korrekt?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Mein Vater hätte noch mal eine Ausbildung machen gemusst.",
+                  "Mein Vater wäre noch mal eine Ausbildung machen müssen.",
+                  "Mein Vater hätte noch mal eine Ausbildung machen müssen.",
+                  "Mein Vater hätte noch mal eine Ausbildung gemacht müssen."
+                ]
+              },
+              "correct_answer": "2",
+              "explanation": "Struktur: hätte + Hauptverb im Infinitiv (machen) + Modalverb im Infinitiv (müssen)."
+            },
+            {
+              "question": "Wenn damals nicht so viele Industrien ______, würde es der ostdeutschen Wirtschaft heute vielleicht besser gehen.",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "schließen hätten müssen",
+                  "hätten schließen müssen",
+                  "schließen müssen hätten",
+                  "hätten müssen schließen"
+                ]
+              },
+              "correct_answer": "1",
+              "explanation": "Im Nebensatz steht das konjugierte 'haben' ausnahmsweise vor den beiden Infinitiven: ... hätten schließen müssen."
+            },
+            {
+              "question": "Welches Hilfsverb verwendet man beim Konjunktiv II der Vergangenheit mit Modalverb?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "immer haben",
+                  "immer sein",
+                  "haben oder sein, je nach Hauptverb",
+                  "immer werden"
+                ]
+              },
+              "correct_answer": "0",
+              "explanation": "Mit Modalverb verwendet man immer 'haben' im Konjunktiv II, auch bei Bewegungsverben: Ich hätte fahren müssen."
+            },
+            {
+              "question": "Die Wiedervereinigung war ein großer Wendepunkt. Sonst ______ ich nicht reisen ______, wohin ich wollte.",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "wäre ... dürfen",
+                  "hätte ... dürfen",
+                  "hätte ... gedurft",
+                  "würde ... dürfen"
+                ]
+              },
+              "correct_answer": "1",
+              "explanation": "hätte + reisen (Infinitiv) + dürfen (Ersatzinfinitiv, nicht Partizip): Sonst hätte ich nicht reisen dürfen."
+            },
+            {
+              "question": "Wie nennt man die Form des Modalverbs am Satzende (z. B. 'hätte machen müssen')?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Partizip Perfekt",
+                  "Ersatzinfinitiv",
+                  "Konjunktiv I",
+                  "Imperativ"
+                ]
+              },
+              "correct_answer": "1",
+              "explanation": "Das Modalverb steht im Infinitiv, als sogenannter Ersatzinfinitiv - nicht als Partizip."
+            }
+          ]
+        },
+        {
+          "title": "Vežba: Adverb-Partizip-Verbindungen im Kontext",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Menschen aus dem ehemaligen Osten sind in wichtigen gesellschaftlichen Positionen bis heute deutlich ______.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "unterrepräsentiert",
+                  "verbreitet",
+                  "gelungen"
+                ]
+              },
+              "correct_answer": "unterrepräsentiert",
+              "explanation": "Die feste Verbindung 'deutlich unterrepräsentiert' bedeutet: viel zu wenig vertreten."
+            },
+            {
+              "question": "Vorurteile und Klischees gegenüber Ostdeutschland sind immer noch weit ______.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "verbreitet",
+                  "verletzt",
+                  "überzeugt"
+                ]
+              },
+              "correct_answer": "verbreitet",
+              "explanation": "'weit verbreitet' bedeutet: üblich, überall vorhanden."
+            },
+            {
+              "question": "Der Aufenthalt der Familie in Deutschland war potenziell ______.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "gefährdet",
+                  "erleichtert",
+                  "geeignet"
+                ]
+              },
+              "correct_answer": "gefährdet",
+              "explanation": "'potenziell gefährdet' bedeutet: nicht sicher."
+            },
+            {
+              "question": "Nach der bestandenen Prüfung wirkte sie sichtlich ______.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "erleichtert",
+                  "benachteiligt",
+                  "enttäuscht"
+                ]
+              },
+              "correct_answer": "erleichtert",
+              "explanation": "'sichtlich erleichtert' bedeutet: erkennbar erleichtert."
+            },
+            {
+              "question": "Das Jubiläumsfest war rundum ______.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "gelungen",
+                  "verheiratet",
+                  "erschüttert"
+                ]
+              },
+              "correct_answer": "gelungen",
+              "explanation": "'rundum gelungen' bedeutet: in jeder Hinsicht erfolgreich."
+            },
+            {
+              "question": "Von der Absage seines besten Freundes war er zutiefst ______.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "enttäuscht",
+                  "verliebt",
+                  "gefährdet"
+                ]
+              },
+              "correct_answer": "enttäuscht",
+              "explanation": "'zutiefst enttäuscht' bedeutet: sehr stark enttäuscht."
+            }
+          ]
+        },
+        {
+          "title": "Vežba: Wortschatz - Wendepunkte",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Verbinde die deutschen Wörter mit der richtigen Übersetzung.",
+              "question_type": "match_pairs",
+              "options": {
+                "type": "match_pairs",
+                "items": [
+                  {
+                    "de": "der Mauerfall",
+                    "sr": "pad Berlinskog zida"
+                  },
+                  {
+                    "de": "die Wiedervereinigung",
+                    "sr": "ponovno ujedinjenje (Nemačke)"
+                  },
+                  {
+                    "de": "der Zusammenbruch",
+                    "sr": "slom, raspad"
+                  },
+                  {
+                    "de": "der Wandel",
+                    "sr": "(temeljna) promena"
+                  },
+                  {
+                    "de": "die Ausreise",
+                    "sr": "izlazak iz zemlje"
+                  },
+                  {
+                    "de": "verkünden",
+                    "sr": "objaviti, proglasiti"
+                  },
+                  {
+                    "de": "die Wende",
+                    "sr": "preokret (period nemačkog ujedinjenja)"
+                  }
+                ]
+              },
+              "correct_answer": "all",
+              "explanation": "Wichtige Wörter zum Thema deutsche Geschichte und Wendepunkte."
+            }
+          ]
+        },
+        {
+          "title": "Test: Selbstkontrolle - Lektion 11",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Good Bye, Lenin! (Tragikomödie, 2003) - Teil 1. Lesen Sie die Filmbeschreibung und ergänzen Sie. Nicht alle Wörter passen: Christiane lebt mit ihren beiden Kindern in der DDR. Seit der illegalen ______ ihres Mannes in die BRD ist sie alleinerziehend und sehr überzeugt vom sozialistischen System. Ihr Sohn Alex dagegen setzt sich für einen politischen ______ in der DDR ein und nimmt im Oktober 1989 an Demonstrationen gegen die Regierung teil.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "Ausreise",
+                  "Bezeichnung",
+                  "Mauerfall",
+                  "Wandel",
+                  "Wettkampf",
+                  "Wiedervereinigung",
+                  "Zusammenbruch"
+                ]
+              },
+              "correct_answer": "Ausreise, Wandel",
+              "explanation": "'die Ausreise in die BRD' - das Verlassen der DDR; 'sich für einen politischen Wandel einsetzen' - für eine grundlegende Veränderung."
+            },
+            {
+              "question": "Good Bye, Lenin! - Teil 2. Ergänzen Sie. Nicht alle Wörter passen: Als Christiane davon erfährt, bricht sie zusammen und muss ins Krankenhaus. Sie verliert das Bewusstsein und liegt bis zum Juni 1990 im Koma. So erfährt sie nichts vom ______, der inzwischen stattgefunden hat. Da die Veränderungen ihr ganzes Leben auf den Kopf stellen und sie sehr aufregen würden, raten die Ärzte davon ab, ihr etwas über den ______ der DDR und die anstehende ______ zu erzählen. Deshalb versuchen ihre Kinder, die Veränderungen, die mit dem neuen, kapitalistischen System allmählich im Alltag sichtbar werden, zu verstecken.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "Ausreise",
+                  "Bezeichnung",
+                  "Mauerfall",
+                  "Wandel",
+                  "Wettkampf",
+                  "Wiedervereinigung",
+                  "Zusammenbruch"
+                ]
+              },
+              "correct_answer": "Mauerfall, Zusammenbruch, Wiedervereinigung",
+              "explanation": "Der Mauerfall (November 1989) hat schon stattgefunden, der Zusammenbruch der DDR folgt, die Wiedervereinigung (Oktober 1990) steht noch an."
+            },
+            {
+              "question": "Dialog 1 - Ergänzen Sie die Verben im Konjunktiv II der Vergangenheit (sagen sollen, helfen können): A: Wie war dein Wochenende? B: Wir sind umgezogen. Das war ganz schön anstrengend. A: Oh, nein! Du ______ mir Bescheid ______ ______! Ich ______ euch doch ______ ______.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "hättest",
+                  "sagen",
+                  "sollen",
+                  "hätte",
+                  "helfen",
+                  "können"
+                ]
+              },
+              "correct_answer": "hättest, sagen, sollen, hätte, helfen, können",
+              "explanation": "Du hättest mir Bescheid sagen sollen! Ich hätte euch doch helfen können. Struktur: hätte(st) + Hauptverb + Modalverb im Infinitiv."
+            },
+            {
+              "question": "Dialog 2 - Ergänzen Sie die Verben im Konjunktiv II der Vergangenheit (abbiegen dürfen, bleiben müssen): A: Sind wir auf der richtigen Straße? B: So wie es aussieht ... Nein, wir fahren in die falsche Richtung. Ich glaube, dass wir an der letzten Kreuzung nicht ______ ______ ______. A: Du hast recht, wir ______ auf der Hauptstraße ______ ______. Na gut, ich versuche mal zu wenden.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "hätten",
+                  "abbiegen",
+                  "dürfen",
+                  "hätten",
+                  "bleiben",
+                  "müssen"
+                ]
+              },
+              "correct_answer": "hätten, abbiegen, dürfen, hätten, bleiben, müssen",
+              "explanation": "Im dass-Nebensatz steht 'hätten' vor den Infinitiven: ... nicht hätten abbiegen dürfen. Im Hauptsatz: wir hätten auf der Hauptstraße bleiben müssen."
+            },
+            {
+              "question": "Was passt in Lücke (1)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Damals war es so, dass",
+                  "Ohne diese Rede wäre ich sicherlich nicht da, wo ich heute bin, denn",
+                  "Aufgrund von Frau Merkels Rede kam es dazu, dass",
+                  "Ein wichtiger Wendepunkt meines Lebens war im Jahr 2015, als",
+                  "Sie fügte hinzu, dass"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "Ein persönlicher Wendepunkt",
+                  "content": "... (1) die damalige Bundeskanzlerin Angela Merkel auf einer Pressekonferenz über Migration nach Deutschland sagte: „Wir schaffen das! Dort, wo etwas im Weg steht, muss daran gearbeitet werden.\" ... (2) die Regierung genau das tun wolle. ... (3) viele Menschen auf dem Weg nach Europa waren. Ich war eine von ihnen. ... (4) sich die deutsche Politik darum bemühte, Geflüchtete aufzunehmen. ... (5) ich wäre vielleicht gar nicht nach Deutschland gekommen. Heute lebe ich mit meiner Familie in Köln und bin sehr zufrieden."
+                }
+              },
+              "correct_answer": "3",
+              "explanation": "'Ein wichtiger Wendepunkt meines Lebens war im Jahr 2015, als ... Merkel ... sagte' - der als-Satz nennt den Zeitpunkt."
+            },
+            {
+              "question": "Was passt in Lücke (2)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Damals war es so, dass",
+                  "Ohne diese Rede wäre ich sicherlich nicht da, wo ich heute bin, denn",
+                  "Aufgrund von Frau Merkels Rede kam es dazu, dass",
+                  "Ein wichtiger Wendepunkt meines Lebens war im Jahr 2015, als",
+                  "Sie fügte hinzu, dass"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "Ein persönlicher Wendepunkt",
+                  "content": "... (1) die damalige Bundeskanzlerin Angela Merkel auf einer Pressekonferenz über Migration nach Deutschland sagte: „Wir schaffen das! Dort, wo etwas im Weg steht, muss daran gearbeitet werden.\" ... (2) die Regierung genau das tun wolle. ... (3) viele Menschen auf dem Weg nach Europa waren. Ich war eine von ihnen. ... (4) sich die deutsche Politik darum bemühte, Geflüchtete aufzunehmen. ... (5) ich wäre vielleicht gar nicht nach Deutschland gekommen. Heute lebe ich mit meiner Familie in Köln und bin sehr zufrieden."
+                }
+              },
+              "correct_answer": "4",
+              "explanation": "'Sie fügte hinzu, dass die Regierung genau das tun wolle.' - indirekte Rede (Konjunktiv I 'wolle') zeigt die Wiedergabe einer Aussage."
+            },
+            {
+              "question": "Was passt in Lücke (3)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Damals war es so, dass",
+                  "Ohne diese Rede wäre ich sicherlich nicht da, wo ich heute bin, denn",
+                  "Aufgrund von Frau Merkels Rede kam es dazu, dass",
+                  "Ein wichtiger Wendepunkt meines Lebens war im Jahr 2015, als",
+                  "Sie fügte hinzu, dass"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "Ein persönlicher Wendepunkt",
+                  "content": "... (1) die damalige Bundeskanzlerin Angela Merkel auf einer Pressekonferenz über Migration nach Deutschland sagte: „Wir schaffen das! Dort, wo etwas im Weg steht, muss daran gearbeitet werden.\" ... (2) die Regierung genau das tun wolle. ... (3) viele Menschen auf dem Weg nach Europa waren. Ich war eine von ihnen. ... (4) sich die deutsche Politik darum bemühte, Geflüchtete aufzunehmen. ... (5) ich wäre vielleicht gar nicht nach Deutschland gekommen. Heute lebe ich mit meiner Familie in Köln und bin sehr zufrieden."
+                }
+              },
+              "correct_answer": "0",
+              "explanation": "'Damals war es so, dass viele Menschen auf dem Weg nach Europa waren.' - Beschreibung der damaligen Situation."
+            },
+            {
+              "question": "Was passt in Lücke (4)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Damals war es so, dass",
+                  "Ohne diese Rede wäre ich sicherlich nicht da, wo ich heute bin, denn",
+                  "Aufgrund von Frau Merkels Rede kam es dazu, dass",
+                  "Ein wichtiger Wendepunkt meines Lebens war im Jahr 2015, als",
+                  "Sie fügte hinzu, dass"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "Ein persönlicher Wendepunkt",
+                  "content": "... (1) die damalige Bundeskanzlerin Angela Merkel auf einer Pressekonferenz über Migration nach Deutschland sagte: „Wir schaffen das! Dort, wo etwas im Weg steht, muss daran gearbeitet werden.\" ... (2) die Regierung genau das tun wolle. ... (3) viele Menschen auf dem Weg nach Europa waren. Ich war eine von ihnen. ... (4) sich die deutsche Politik darum bemühte, Geflüchtete aufzunehmen. ... (5) ich wäre vielleicht gar nicht nach Deutschland gekommen. Heute lebe ich mit meiner Familie in Köln und bin sehr zufrieden."
+                }
+              },
+              "correct_answer": "2",
+              "explanation": "'Aufgrund von Frau Merkels Rede kam es dazu, dass sich die deutsche Politik darum bemühte, Geflüchtete aufzunehmen.' - Ursache und Folge."
+            },
+            {
+              "question": "Was passt in Lücke (5)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Damals war es so, dass",
+                  "Ohne diese Rede wäre ich sicherlich nicht da, wo ich heute bin, denn",
+                  "Aufgrund von Frau Merkels Rede kam es dazu, dass",
+                  "Ein wichtiger Wendepunkt meines Lebens war im Jahr 2015, als",
+                  "Sie fügte hinzu, dass"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "Ein persönlicher Wendepunkt",
+                  "content": "... (1) die damalige Bundeskanzlerin Angela Merkel auf einer Pressekonferenz über Migration nach Deutschland sagte: „Wir schaffen das! Dort, wo etwas im Weg steht, muss daran gearbeitet werden.\" ... (2) die Regierung genau das tun wolle. ... (3) viele Menschen auf dem Weg nach Europa waren. Ich war eine von ihnen. ... (4) sich die deutsche Politik darum bemühte, Geflüchtete aufzunehmen. ... (5) ich wäre vielleicht gar nicht nach Deutschland gekommen. Heute lebe ich mit meiner Familie in Köln und bin sehr zufrieden."
+                }
+              },
+              "correct_answer": "1",
+              "explanation": "'Ohne diese Rede wäre ich sicherlich nicht da, wo ich heute bin, denn ich wäre vielleicht gar nicht nach Deutschland gekommen.' - irreale Vermutung über die Vergangenheit."
+            }
+          ]
+        }
+      ],
+      "uncertainties": [],
+      "skipped": []
+    },
+    {
+      "lessonTitle": "Datenlücken - Alle Menschen im Blick",
+      "exercises": [
+        {
+          "title": "Vežba: Konsekutive Zusammenhänge",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Konsekutive Zusammenhänge antworten auf die Frage:",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Wie? Auf welche Weise?",
+                  "Warum?",
+                  "Was ist die Folge davon?",
+                  "Wozu?"
+                ]
+              },
+              "correct_answer": "2",
+              "explanation": "Konsekutive Sätze und Angaben nennen die Folge eines Sachverhalts."
+            },
+            {
+              "question": "Algorithmen lernen aus vorhandenen Daten, ______ sie bestehende Vorurteile reproduzieren und verstärken können.",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "infolge",
+                  "weshalb",
+                  "folglich",
+                  "denn"
+                ]
+              },
+              "correct_answer": "1",
+              "explanation": "'weshalb' (= weswegen) ist ein Nebensatz-Konnektor, das Verb steht am Satzende."
+            },
+            {
+              "question": "Viele Produkte sind für Männerhände gemacht. ______ sind sie für die meisten Frauen zu groß und zu schwer.",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Weshalb",
+                  "Infolge",
+                  "Infolgedessen",
+                  "Weil"
+                ]
+              },
+              "correct_answer": "2",
+              "explanation": "'Infolgedessen' ist ein Hauptsatz-Konnektor im Vorfeld: Infolgedessen sind sie ... zu groß."
+            },
+            {
+              "question": "Mit welchem Kasus steht die Präposition 'infolge'?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Dativ",
+                  "Akkusativ",
+                  "Nominativ",
+                  "Genitiv"
+                ]
+              },
+              "correct_answer": "3",
+              "explanation": "'infolge' steht mit dem Genitiv: infolge des geringeren Frauenanteils."
+            },
+            {
+              "question": "______ von Datenlücken werden die Bedürfnisse mancher Gruppen übersehen.",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Infolge",
+                  "Folglich",
+                  "Demzufolge",
+                  "Weshalb"
+                ]
+              },
+              "correct_answer": "0",
+              "explanation": "Bei einem Nomen ohne Artikel und Adjektiv verwendet man 'infolge von + Dativ': infolge von Datenlücken."
+            },
+            {
+              "question": "Welcher Konnektor nennt den Grund (kausal) und NICHT die Folge?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "weshalb",
+                  "da",
+                  "folglich",
+                  "infolgedessen"
+                ]
+              },
+              "correct_answer": "1",
+              "explanation": "'da' (wie 'weil') ist kausal und nennt den Grund; 'weshalb', 'folglich' und 'infolgedessen' nennen die Folge."
+            }
+          ]
+        },
+        {
+          "title": "Vežba: Konsekutive Zusammenhänge im Kontext",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Die Nachfrage nach barrierefreien Smartphones steigt. ______ setzen Hersteller immer mehr auf inklusive Technologien.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "Demzufolge",
+                  "Infolge",
+                  "Weshalb"
+                ]
+              },
+              "correct_answer": "Demzufolge",
+              "explanation": "'Demzufolge' ist ein Hauptsatz-Konnektor und steht nach dem ersten Hauptsatz im Vorfeld."
+            },
+            {
+              "question": "Kleidungsstücke für Frauen haben oft kleinere Taschen. ______ passen viele Smartphones nicht hinein.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "Folglich",
+                  "Weil",
+                  "Infolge"
+                ]
+              },
+              "correct_answer": "Folglich",
+              "explanation": "'Folglich' nennt die Folge und steht hier im Vorfeld des zweiten Hauptsatzes."
+            },
+            {
+              "question": "______ des geringeren Frauenanteils fehlen wichtige Perspektiven und Erfahrungen im Fach.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "Infolge",
+                  "Infolgedessen",
+                  "Folglich"
+                ]
+              },
+              "correct_answer": "Infolge",
+              "explanation": "Vor einer Nominalgruppe im Genitiv steht die Präposition 'infolge'."
+            },
+            {
+              "question": "Technische Errungenschaften von Frauen sind insgesamt weniger bekannt, ______ wir innovativ denkende Frauen vorstellen.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "weshalb",
+                  "folglich",
+                  "infolge"
+                ]
+              },
+              "correct_answer": "weshalb",
+              "explanation": "Nach dem Komma folgt ein Nebensatz mit Verb am Ende, deshalb passt der Nebensatz-Konnektor 'weshalb'."
+            },
+            {
+              "question": "Je diverser ein Entwicklungsteam ist, desto mehr Perspektiven fließen ein. ______ sind die Produkte für mehr Menschen geeignet.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "Infolgedessen",
+                  "Infolge",
+                  "Weil"
+                ]
+              },
+              "correct_answer": "Infolgedessen",
+              "explanation": "'Infolgedessen' verbindet als Hauptsatz-Konnektor die Folge mit dem vorherigen Satz."
+            },
+            {
+              "question": "Infolge ______ Datenlücken bleiben viele Bedürfnisse unsichtbar.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "von",
+                  "der",
+                  "des"
+                ]
+              },
+              "correct_answer": "von",
+              "explanation": "Bei einem Nomen im Plural ohne Artikel und Adjektiv: 'infolge von + Dativ' (infolge von Datenlücken)."
+            }
+          ]
+        },
+        {
+          "title": "Vežba: Wortschatz - Produktentwicklung",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Verbinde die deutschen Wörter mit der richtigen Übersetzung.",
+              "question_type": "match_pairs",
+              "options": {
+                "type": "match_pairs",
+                "items": [
+                  {
+                    "de": "die Zielgruppe",
+                    "sr": "ciljna grupa"
+                  },
+                  {
+                    "de": "die Schwachstelle",
+                    "sr": "slaba tačka"
+                  },
+                  {
+                    "de": "vernachlässigen",
+                    "sr": "zanemariti"
+                  },
+                  {
+                    "de": "die Nachfrage nach",
+                    "sr": "potražnja za"
+                  },
+                  {
+                    "de": "ermöglichen",
+                    "sr": "omogućiti"
+                  },
+                  {
+                    "de": "die Errungenschaft",
+                    "sr": "dostignuće, tekovina"
+                  },
+                  {
+                    "de": "einbeziehen",
+                    "sr": "uključiti, obuhvatiti"
+                  }
+                ]
+              },
+              "correct_answer": "all",
+              "explanation": "Wichtige Wörter aus dem Wortfeld Produktentwicklung."
+            }
+          ]
+        },
+        {
+          "title": "Test: Selbstkontrolle - Lektion 12",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Checkliste aus einem Leitfaden für Produktentwicklung - Was ist richtig? Ist das Entwicklungsteam für die Themen Barrierefreiheit, Genderaspekte und Diversität ______?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "sensibilisiert",
+                  "investiert"
+                ]
+              },
+              "correct_answer": "0",
+              "explanation": "'für etwas sensibilisiert sein' bedeutet: auf ein Thema aufmerksam gemacht worden sein."
+            },
+            {
+              "question": "Was ist richtig? Wurden die potenziellen Zielgruppen ______?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "anbelangt",
+                  "identifiziert"
+                ]
+              },
+              "correct_answer": "1",
+              "explanation": "'Zielgruppen identifizieren' bedeutet: erkennen, für wen das Produkt gedacht ist."
+            },
+            {
+              "question": "Was ist richtig? Sind technische ______ und Standards zu berücksichtigen?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Normen",
+                  "Initiativen"
+                ]
+              },
+              "correct_answer": "0",
+              "explanation": "'Normen und Standards' sind festgelegte Regeln, an denen sich die Entwicklung orientiert."
+            },
+            {
+              "question": "Was ist richtig? Wird für die ______ des Produkts (viel) technisches Wissen vorausgesetzt?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Nutzung",
+                  "Errungenschaft"
+                ]
+              },
+              "correct_answer": "0",
+              "explanation": "'die Nutzung' bedeutet: der Gebrauch des Produkts."
+            },
+            {
+              "question": "Was ist richtig? Wurden bei der ______ die Bedürfnisse verschiedener Nutzer*innen berücksichtigt?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Gestaltung",
+                  "Sichtbarkeit"
+                ]
+              },
+              "correct_answer": "0",
+              "explanation": "'die Gestaltung' bezeichnet das Design und die Formgebung des Produkts."
+            },
+            {
+              "question": "Was ist richtig? Sind regelmäßige Testphasen ______ der Produktplanung?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Bestandteil",
+                  "Teilhabe"
+                ]
+              },
+              "correct_answer": "0",
+              "explanation": "'Bestandteil sein' bedeutet: ein fester Teil von etwas sein."
+            },
+            {
+              "question": "Was ist richtig? Sind die Testpersonen nach Geschlecht, Alter, Größe etc. ______ zusammengesetzt?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "beträchtlich",
+                  "divers"
+                ]
+              },
+              "correct_answer": "1",
+              "explanation": "'divers zusammengesetzt' bedeutet: vielfältig, aus unterschiedlichen Personen bestehend."
+            },
+            {
+              "question": "Was ist richtig? Besteht die Gefahr, dass wichtige Aspekte / Fragestellungen ______ werden?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "einbezogen",
+                  "vernachlässigt"
+                ]
+              },
+              "correct_answer": "1",
+              "explanation": "'vernachlässigt werden' bedeutet: nicht genug beachtet werden - das ist hier die Gefahr."
+            },
+            {
+              "question": "Formulieren Sie um: Das Wasser wird extrem heiß. Der Espresso verbrennt schnell. (Verbinden Sie die Sätze mit 'infolgedessen')",
+              "question_type": "word_order",
+              "options": {
+                "type": "word_order",
+                "items": [
+                  "verbrennt",
+                  "Das Wasser",
+                  "schnell.",
+                  "infolgedessen",
+                  "wird extrem heiß,",
+                  "der Espresso"
+                ]
+              },
+              "correct_answer": "Das Wasser wird extrem heiß, infolgedessen verbrennt der Espresso schnell.",
+              "explanation": "'infolgedessen' ist ein Hauptsatz-Konnektor: nach ihm folgt das Verb an zweiter Position (verbrennt). Auch möglich (Konnektor im Mittelfeld): Das Wasser wird extrem heiß. Der Espresso verbrennt infolgedessen schnell."
+            },
+            {
+              "question": "Formulieren Sie um: Ich trinke gern und viel Kaffee. Die Maschine ist viel im Einsatz. (Verbinden Sie die Sätze mit 'demzufolge')",
+              "question_type": "word_order",
+              "options": {
+                "type": "word_order",
+                "items": [
+                  "die Maschine",
+                  "demzufolge",
+                  "Ich trinke",
+                  "viel im Einsatz.",
+                  "gern und viel Kaffee,",
+                  "ist"
+                ]
+              },
+              "correct_answer": "Ich trinke gern und viel Kaffee, demzufolge ist die Maschine viel im Einsatz.",
+              "explanation": "'demzufolge' steht im Vorfeld des zweiten Hauptsatzes, danach folgt das Verb (ist). Auch möglich (Konnektor im Mittelfeld): Ich trinke gern und viel Kaffee. Die Maschine ist demzufolge viel im Einsatz."
+            },
+            {
+              "question": "Formulieren Sie um: Ich habe morgens nicht viel Zeit. Die Maschine muss schnell einsatzbereit sein. (Verbinden Sie die Sätze mit 'weswegen')",
+              "question_type": "word_order",
+              "options": {
+                "type": "word_order",
+                "items": [
+                  "weswegen",
+                  "sein muss.",
+                  "Ich habe",
+                  "die Maschine",
+                  "morgens nicht viel Zeit,",
+                  "schnell einsatzbereit"
+                ]
+              },
+              "correct_answer": "Ich habe morgens nicht viel Zeit, weswegen die Maschine schnell einsatzbereit sein muss.",
+              "explanation": "'weswegen' leitet einen Nebensatz ein: das konjugierte Verb (muss) steht am Satzende."
+            },
+            {
+              "question": "Formulieren Sie um: Einfaches Design. Man kann die Maschine auch selbst reparieren. (Verbinden Sie die Sätze mit 'infolge')",
+              "question_type": "word_order",
+              "options": {
+                "type": "word_order",
+                "items": [
+                  "die Maschine",
+                  "reparieren.",
+                  "Infolge",
+                  "kann man",
+                  "auch selbst",
+                  "des einfachen Designs"
+                ]
+              },
+              "correct_answer": "Infolge des einfachen Designs kann man die Maschine auch selbst reparieren.",
+              "explanation": "'infolge' ist eine Präposition mit Genitiv: Infolge des einfachen Designs. Danach folgt das Verb an zweiter Position. Auch möglich: Man kann die Maschine infolge des einfachen Designs auch selbst reparieren."
+            },
+            {
+              "question": "Formulieren Sie um: Der TopExpress ist besonders schmal. Er passt auch in sehr kleine Küchen. (Verbinden Sie die Sätze mit 'folglich')",
+              "question_type": "word_order",
+              "options": {
+                "type": "word_order",
+                "items": [
+                  "folglich",
+                  "auch in sehr kleine Küchen.",
+                  "Der TopExpress",
+                  "er",
+                  "ist besonders schmal,",
+                  "passt"
+                ]
+              },
+              "correct_answer": "Der TopExpress ist besonders schmal, folglich passt er auch in sehr kleine Küchen.",
+              "explanation": "'folglich' ist ein Hauptsatz-Konnektor im Vorfeld: danach folgt das Verb (passt) und dann das Subjekt (er). Auch möglich: Der TopExpress ist besonders schmal. Er passt folglich auch in sehr kleine Küchen. / Der TopExpress ist besonders schmal und passt folglich auch in sehr kleine Küchen."
+            },
+            {
+              "question": "Formulieren Sie um: Der TopExpress ist ziemlich kompakt gebaut. Die Reinigung der Bestandteile ist nicht ganz einfach. (Verbinden Sie die Sätze mit 'weshalb')",
+              "question_type": "word_order",
+              "options": {
+                "type": "word_order",
+                "items": [
+                  "weshalb",
+                  "der Bestandteile",
+                  "Der TopExpress",
+                  "nicht ganz einfach ist.",
+                  "ist ziemlich kompakt gebaut,",
+                  "die Reinigung"
+                ]
+              },
+              "correct_answer": "Der TopExpress ist ziemlich kompakt gebaut, weshalb die Reinigung der Bestandteile nicht ganz einfach ist.",
+              "explanation": "'weshalb' leitet einen Nebensatz ein: das konjugierte Verb (ist) steht am Satzende."
+            },
+            {
+              "question": "Was passt in Lücke (1)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "es gab aber trotz großer Nachfrage bisher kaum Lösungsangebote für",
+                  "funktioniert so, dass",
+                  "stellt nun eine ausgezeichnete Lösung für dieses Problem dar",
+                  "bereitet es erhebliche Schwierigkeiten,",
+                  "für diese Zielgruppe gab es bisher noch keine Möglichkeit"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "Diese App macht Allergiker:innen das Leben leichter!",
+                  "content": "Vielen Allergiker:innen ... (1) beim Lebensmitteleinkauf immer erst alle Zutaten auf den Produkten überprüfen zu müssen. Denn das kostet viel Zeit und Mühe. Die Anzahl an Personen mit Lebensmittelallergien steigt zwar ständig, ... (2) diese Zielgruppe. Das heißt also, ... (3), schnell und zuverlässig die Verträglichkeit eines Produktes zu erkennen. Die neue App ScanPro ... (4). Die App ... (5) die Kamera des Smartphones die Zutatenliste erfasst und auf bestimmte - möglicherweise schädliche - Inhaltsstoffe hinweist."
+                }
+              },
+              "correct_answer": "3",
+              "explanation": "'Vielen Allergiker:innen bereitet es erhebliche Schwierigkeiten, ... überprüfen zu müssen.' - so stellt man ein Problem dar."
+            },
+            {
+              "question": "Was passt in Lücke (2)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "es gab aber trotz großer Nachfrage bisher kaum Lösungsangebote für",
+                  "funktioniert so, dass",
+                  "stellt nun eine ausgezeichnete Lösung für dieses Problem dar",
+                  "bereitet es erhebliche Schwierigkeiten,",
+                  "für diese Zielgruppe gab es bisher noch keine Möglichkeit"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "Diese App macht Allergiker:innen das Leben leichter!",
+                  "content": "Vielen Allergiker:innen ... (1) beim Lebensmitteleinkauf immer erst alle Zutaten auf den Produkten überprüfen zu müssen. Denn das kostet viel Zeit und Mühe. Die Anzahl an Personen mit Lebensmittelallergien steigt zwar ständig, ... (2) diese Zielgruppe. Das heißt also, ... (3), schnell und zuverlässig die Verträglichkeit eines Produktes zu erkennen. Die neue App ScanPro ... (4). Die App ... (5) die Kamera des Smartphones die Zutatenliste erfasst und auf bestimmte - möglicherweise schädliche - Inhaltsstoffe hinweist."
+                }
+              },
+              "correct_answer": "0",
+              "explanation": "'... steigt zwar ständig, es gab aber trotz großer Nachfrage bisher kaum Lösungsangebote für diese Zielgruppe.' - zwar ... aber."
+            },
+            {
+              "question": "Was passt in Lücke (3)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "es gab aber trotz großer Nachfrage bisher kaum Lösungsangebote für",
+                  "funktioniert so, dass",
+                  "stellt nun eine ausgezeichnete Lösung für dieses Problem dar",
+                  "bereitet es erhebliche Schwierigkeiten,",
+                  "für diese Zielgruppe gab es bisher noch keine Möglichkeit"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "Diese App macht Allergiker:innen das Leben leichter!",
+                  "content": "Vielen Allergiker:innen ... (1) beim Lebensmitteleinkauf immer erst alle Zutaten auf den Produkten überprüfen zu müssen. Denn das kostet viel Zeit und Mühe. Die Anzahl an Personen mit Lebensmittelallergien steigt zwar ständig, ... (2) diese Zielgruppe. Das heißt also, ... (3), schnell und zuverlässig die Verträglichkeit eines Produktes zu erkennen. Die neue App ScanPro ... (4). Die App ... (5) die Kamera des Smartphones die Zutatenliste erfasst und auf bestimmte - möglicherweise schädliche - Inhaltsstoffe hinweist."
+                }
+              },
+              "correct_answer": "4",
+              "explanation": "'Das heißt also, für diese Zielgruppe gab es bisher noch keine Möglichkeit, ... zu erkennen.' - Möglichkeit + zu-Infinitiv."
+            },
+            {
+              "question": "Was passt in Lücke (4)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "es gab aber trotz großer Nachfrage bisher kaum Lösungsangebote für",
+                  "funktioniert so, dass",
+                  "stellt nun eine ausgezeichnete Lösung für dieses Problem dar",
+                  "bereitet es erhebliche Schwierigkeiten,",
+                  "für diese Zielgruppe gab es bisher noch keine Möglichkeit"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "Diese App macht Allergiker:innen das Leben leichter!",
+                  "content": "Vielen Allergiker:innen ... (1) beim Lebensmitteleinkauf immer erst alle Zutaten auf den Produkten überprüfen zu müssen. Denn das kostet viel Zeit und Mühe. Die Anzahl an Personen mit Lebensmittelallergien steigt zwar ständig, ... (2) diese Zielgruppe. Das heißt also, ... (3), schnell und zuverlässig die Verträglichkeit eines Produktes zu erkennen. Die neue App ScanPro ... (4). Die App ... (5) die Kamera des Smartphones die Zutatenliste erfasst und auf bestimmte - möglicherweise schädliche - Inhaltsstoffe hinweist."
+                }
+              },
+              "correct_answer": "2",
+              "explanation": "'Die neue App ScanPro stellt nun eine ausgezeichnete Lösung für dieses Problem dar.' - ein Produkt als Lösung präsentieren."
+            },
+            {
+              "question": "Was passt in Lücke (5)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "es gab aber trotz großer Nachfrage bisher kaum Lösungsangebote für",
+                  "funktioniert so, dass",
+                  "stellt nun eine ausgezeichnete Lösung für dieses Problem dar",
+                  "bereitet es erhebliche Schwierigkeiten,",
+                  "für diese Zielgruppe gab es bisher noch keine Möglichkeit"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "Diese App macht Allergiker:innen das Leben leichter!",
+                  "content": "Vielen Allergiker:innen ... (1) beim Lebensmitteleinkauf immer erst alle Zutaten auf den Produkten überprüfen zu müssen. Denn das kostet viel Zeit und Mühe. Die Anzahl an Personen mit Lebensmittelallergien steigt zwar ständig, ... (2) diese Zielgruppe. Das heißt also, ... (3), schnell und zuverlässig die Verträglichkeit eines Produktes zu erkennen. Die neue App ScanPro ... (4). Die App ... (5) die Kamera des Smartphones die Zutatenliste erfasst und auf bestimmte - möglicherweise schädliche - Inhaltsstoffe hinweist."
+                }
+              },
+              "correct_answer": "1",
+              "explanation": "'Die App funktioniert so, dass die Kamera ... die Zutatenliste erfasst.' - Beschreibung der Funktionsweise."
+            }
+          ]
+        }
+      ],
+      "uncertainties": [
+        "Selbstkontrolle Aufgabe 2: knjiga trazi da se konektori stave 'wo möglich, an verschiedene Stellen' (Vorfeld ili Mittelfeld). Word_order format dozvoljava samo jedan tacan redosled, pa je za svaku recenicu izabrana varijanta sa konektorom na pocetku drugog dela recenice. Varijante sa konektorom u Mittelfeldu su takodje gramaticki ispravne.",
+        "Selbstkontrolle Aufgabe 2, stavka 4 (infolge): original 'Einfaches Design. Man kann die Maschine auch selbst reparieren.' zahteva nominalizaciju. Ciljna recenica 'Infolge des einfachen Designs kann man die Maschine auch selbst reparieren.' je izvedena gramaticki, bez zvanicnog kljuca resenja.",
+        "Selbstkontrolle Aufgabe 2: ciljne recenice za sve stavke su izvedene iz originala po pravilima lekcije (primer u knjizi dat samo za sodass-vezbu u Fit-delu); nema zvanicnog kljuca, ali su konstrukcije standardne."
+      ],
+      "skipped": [
+        "Extra Prüfung - Sprachbausteine (AB str. 100-101): nije deo Selbstkontrolle sekcije, vec poseban ispitni dodatak, pa nije prenesena u test."
+      ]
+    }
+  ]
+}

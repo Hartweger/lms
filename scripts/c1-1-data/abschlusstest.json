@@ -1,0 +1,161 @@
+{
+  "lessonTitle": "Završni ispit C1.1",
+  "exerciseTitle": "Test: Abschlusstest C1.1",
+  "questions": [
+    {
+      "question": "____ du dich regelmäßig meldest, bleibt eine Freundschaft auch über große Entfernungen bestehen. Gemeinsame Zeit kann man ____ durch nichts ersetzen.",
+      "items": ["Zumal ... denn", "Obgleich ... mal", "Sofern ... eben", "Indem ... ja"],
+      "correct": 2,
+      "explanation": "Sofern = konditional (unter der Bedingung, dass); die Modalpartikel eben drückt aus, dass etwas nicht zu ändern ist. (Lektion 1)"
+    },
+    {
+      "question": "Warum ist Lena nicht gekommen? - Du kennst sie ____ - sie sagt oft in letzter Minute ab. Sei ihr nicht böse, sie hat ____ gerade viel um die Ohren.",
+      "items": ["denn ... ja", "ja ... halt", "mal ... schon", "schon ... denn"],
+      "correct": 1,
+      "explanation": "ja = gemeinsames Wissen (das weißt du doch); halt = das ist nun mal so. (Lektion 1)"
+    },
+    {
+      "question": "Meine neue Kollegin ist eine äußerst zuverlässig____ Person: Auf sämtlich____ schwierig____ Fragen weiß sie eine Antwort, und ihre ruhig____ Art beeindruckt alle.",
+      "items": ["e ... e ... e ... en", "e ... en ... en ... e", "en ... en ... e ... e", "e ... en ... e ... en"],
+      "correct": 1,
+      "explanation": "eine zuverlässige (Typ I Nominativ), sämtlichen schwierigen (Dativ Plural nach sämtlich- = Typ I), ihre ruhige (Typ I). (Lektion 2)"
+    },
+    {
+      "question": "Er spricht nie über seine eigenen Erfolge, obwohl er so viel erreicht hat. Diese ____ schätzen alle an ihm.",
+      "items": ["Faulheit", "Ungeduld", "Inkompetenz", "Bescheidenheit"],
+      "correct": 3,
+      "explanation": "bescheiden = nicht über eigene Erfolge sprechen; die Bescheidenheit. (Lektion 2)"
+    },
+    {
+      "question": "____ der vielen Lehnwörter verändert sich die deutsche Alltagssprache ständig. Puristen kritisieren das, ____ Sprachwissenschaftler darin einen normalen Prozess sehen.",
+      "items": ["Aufgrund ... während", "Trotz ... weil", "Anhand ... sodass", "Mangels ... zumal"],
+      "correct": 0,
+      "explanation": "aufgrund + Genitiv = kausal (Grund); während = adversativ (Gegensatz zwischen Puristen und Sprachwissenschaftlern). (Lektion 3)"
+    },
+    {
+      "question": "Das Wort \"Fernweh\" lässt sich nur schwer ins Englische ____, ____ es dort keine direkte Entsprechung gibt.",
+      "items": ["verweisen ... denn", "ausdrücken ... obwohl", "übertragen ... da", "erklären ... damit"],
+      "correct": 2,
+      "explanation": "etwas in eine Sprache übertragen = übersetzen; da = kausal (Grund). (Lektion 3)"
+    },
+    {
+      "question": "____ der Verkehrsministerin ____ der Ausbau des öffentlichen Nahverkehrs bereits beschlossen worden. Die ersten Strecken sollen nächstes Jahr eröffnet werden.",
+      "items": ["Wegen ... wäre", "Laut ... sei", "Anlässlich ... wurde", "Mangels ... sei"],
+      "correct": 1,
+      "explanation": "laut + Dativ = Redewiedergabe; indirekte Rede im Passiv Vergangenheit: sei ... beschlossen worden (Konjunktiv I). (Lektion 4)"
+    },
+    {
+      "question": "Die Debatte über kostenlosen Nahverkehr hat in den letzten Jahren wieder an Bedeutung ____. Viele Städte ziehen ein solches Modell ernsthaft in ____.",
+      "items": ["gewonnen ... Betracht", "genommen ... Frage", "gestellt ... Erwägung", "geführt ... Anspruch"],
+      "correct": 0,
+      "explanation": "Nomen-Verb-Verbindungen: an Bedeutung gewinnen, etwas in Betracht ziehen. (Lektion 4)"
+    },
+    {
+      "question": "Durch regelmäßige Bewegung verbessert sich das Gedächtnis. - Okay, ich notiere: regelmäßige Bewegung = Verbesserung ____ Gedächtnisses und ____ neuer Nervenzellen.",
+      "items": ["der ... Bau", "dem ... Aufbauen", "von ... Aufbau", "des ... Aufbau"],
+      "correct": 3,
+      "explanation": "Nominalstil: die Verbesserung des Gedächtnisses (Genitiv) und der Aufbau neuer Nervenzellen. (Lektion 5)"
+    },
+    {
+      "question": "Schon ein kurzer Spaziergang am Morgen bringt den Kreislauf ____ und versorgt das Gehirn mit Sauerstoff.",
+      "items": ["zum Schwung", "im Schwung", "auf Schwung", "in Schwung"],
+      "correct": 3,
+      "explanation": "Nomen-Verb-Verbindung: etwas in Schwung bringen. (Lektion 5)"
+    },
+    {
+      "question": "____ ihres sehr guten Schulabschlusses fand sie zunächst keinen Ausbildungsplatz, ____ sie sich frühzeitig beworben hatte.",
+      "items": ["Wegen ... obwohl", "Infolge ... zumal", "Ungeachtet ... obwohl", "Ungeachtet ... weil"],
+      "correct": 2,
+      "explanation": "ungeachtet + Genitiv und obwohl = konzessiv (Gegengrund: trotz guter Voraussetzungen kein Erfolg). (Lektion 6)"
+    },
+    {
+      "question": "In dieser Grafik wird die Entwicklung der Studierendenzahlen in den letzten zwanzig Jahren ____. Die Daten wurden 2023 ____.",
+      "items": ["ausgestellt ... verwendet", "dargestellt ... erhoben", "aufgestellt ... entnommen", "vorgestellt ... gesammelt"],
+      "correct": 1,
+      "explanation": "Grafikbeschreibung: In der Grafik wird ... dargestellt; Daten werden erhoben. (Lektion 6)"
+    },
+    {
+      "question": "Als Nachhaltigkeitsmanagerin beschäftigt sie sich mit sämtlich____ aktuell____ Entwicklungen im Umweltschutz und kennt lauter____ interessant____ Projekte.",
+      "items": ["en ... en ... - ... e", "e ... en ... e ... en", "en ... e ... - ... en", "en ... en ... e ... e"],
+      "correct": 0,
+      "explanation": "sämtlichen aktuellen (Dativ Plural, Typ I); lauter ist unveränderlich (keine Endung), danach starke Endung: lauter interessante Projekte. (Lektion 7)"
+    },
+    {
+      "question": "Immer mehr Unternehmen sind ____ nachhaltigen Lösungen interessiert und fühlen sich ____ ihre Klimabilanz verantwortlich.",
+      "items": ["für ... an", "von ... über", "an ... für", "mit ... um"],
+      "correct": 2,
+      "explanation": "Adjektive mit fester Präposition: interessiert an + Dativ, verantwortlich für + Akkusativ. (Lektion 7)"
+    },
+    {
+      "question": "Ich habe den Bericht über die Sitzung gelesen und mich etwas gewundert: Herr Krämer ist ____ meiner Erwartung gar nicht auf die wirtschaftlichen Folgen eingegangen.",
+      "items": ["demgegenüber", "wohingegen", "im Gegensatz", "entgegen"],
+      "correct": 3,
+      "explanation": "entgegen + Dativ = adversativ (anders als erwartet); im Gegensatz braucht zu. (Lektion 8)"
+    },
+    {
+      "question": "Das Thema Unsterblichkeit gewinnt zunehmend ____ Bedeutung, ____ die Gentechnik in den letzten Jahren enorme Fortschritte gemacht hat.",
+      "items": ["an ... zumal", "in ... indem", "auf ... sodass", "an ... wohingegen"],
+      "correct": 0,
+      "explanation": "an Bedeutung gewinnen; zumal = kausal mit verstärkendem Grund. (Lektion 8)"
+    },
+    {
+      "question": "Die neue Beleuchtungstechnik senkt die Energiekosten deutlich. - Könnten Sie noch etwas mehr über die Reduktion ____ Energiekosten und den Verzicht ____ herkömmliche Glühbirnen berichten?",
+      "items": ["des ... von", "der ... auf", "den ... auf", "der ... von"],
+      "correct": 1,
+      "explanation": "Nominalstil: die Reduktion der Energiekosten (Genitiv Plural); der Verzicht auf + Akkusativ. (Lektion 9)"
+    },
+    {
+      "question": "Die ____ der Glühbirne im 19. Jahrhundert ____ den Alltag der Menschen grundlegend: Die Nacht wurde zum Tag.",
+      "items": ["Entdeckung ... leistete", "Entwicklung ... sorgte", "Erfindung ... veränderte", "Erforschung ... verbesserte"],
+      "correct": 2,
+      "explanation": "Technische Neuheiten werden erfunden (die Erfindung); etwas verändert den Alltag. (Lektion 9)"
+    },
+    {
+      "question": "____ du offen dein Bedauern ausdrückst, zeigst du, dass du für deine Fehler geradestehst. ____ einer ehrlichen Entschuldigung lassen sich Konflikte am schnellsten lösen.",
+      "items": ["Dadurch, dass ... Ungeachtet", "Weshalb ... Wegen", "Wodurch ... Mittels", "Indem ... Mithilfe"],
+      "correct": 3,
+      "explanation": "indem = modal (Art und Weise); mithilfe + Genitiv = Mittel. (Lektion 10)"
+    },
+    {
+      "question": "Du, das tut mir wirklich leid - ich habe deine Jacke aus ____ eingepackt. Selbstverständlich bringe ich sie dir morgen wieder mit.",
+      "items": ["Versehen", "Vergehen", "Verhalten", "Versäumnis"],
+      "correct": 0,
+      "explanation": "aus Versehen = nicht mit Absicht. (Lektion 10)"
+    },
+    {
+      "question": "Wenn die Mauer nicht gefallen wäre, ____ meine Eltern nie ins Ausland reisen ____ - und sie ____ sich wohl nie kennengelernt.",
+      "items": ["wären ... dürfen ... wären", "hätten ... gedurft ... hätten", "hätten ... dürfen ... hätten", "würden ... dürfen ... würden"],
+      "correct": 2,
+      "explanation": "Konjunktiv II der Vergangenheit mit Modalverb: hätten + reisen dürfen (Doppelinfinitiv); ohne Modalverb: hätten sich kennengelernt. (Lektion 11)"
+    },
+    {
+      "question": "Die ____ von 1989 war für viele Menschen auch ein persönlicher ____: Ihr Leben veränderte sich grundlegend.",
+      "items": ["Wende ... Wendepunkt", "Wendung ... Wandel", "Wende ... Wechsel", "Wandlung ... Umbruch"],
+      "correct": 0,
+      "explanation": "die Wende = die politische Wende 1989; der Wendepunkt = entscheidender Moment im Leben. (Lektion 11)"
+    },
+    {
+      "question": "Medizinische Studien wurden lange überwiegend mit männlichen Probanden durchgeführt. ____ sind Medikamente für Frauen bis heute oft schlechter dosiert.",
+      "items": ["Infolge", "Infolgedessen", "Sodass", "Zumal"],
+      "correct": 1,
+      "explanation": "infolgedessen = konsekutiv (Folge), steht allein im Vorfeld; infolge braucht ein Nomen im Genitiv. (Lektion 12)"
+    },
+    {
+      "question": "Unter älteren Menschen besteht eine hohe ____ nach einfach bedienbaren Geräten. Es gibt aber kaum Produkte, die auf ihre Bedürfnisse ____ sind.",
+      "items": ["Erkundigung ... angewiesen", "Frage ... eingespielt", "Suche ... angewandt", "Nachfrage ... zugeschnitten"],
+      "correct": 3,
+      "explanation": "die Nachfrage nach + Dativ; auf jemandes Bedürfnisse zugeschnitten sein. (Lektion 12)"
+    },
+    {
+      "question": "Ist diese Aussage richtig oder falsch? - Die Abteilung von Frau Vogel testet ihre Produkte erst nach der Markteinführung mit unterschiedlichen Nutzergruppen und passt sie dann an deren Rückmeldungen an.",
+      "items": ["richtig", "falsch"],
+      "correct": 1,
+      "explanation": "Falsch: Im Text steht, dass bereits die Prototypen getestet und die Produkte noch vor der Markteinführung angepasst werden.",
+      "context": {
+        "type": "text",
+        "title": "Produkte für alle - Was bedeutet inklusives Design?",
+        "content": "**Produkte für alle - Was bedeutet inklusives Design?**\n\nJana Vogel leitet die Abteilung für Produktentwicklung eines mittelständischen Unternehmens. Wir haben sie um ein kurzes Interview gebeten.\n\n*Frau Vogel, was genau bedeutet inklusives Design in Ihrer Abteilung?*\n\nJana Vogel: Wir entwickeln Produkte so, dass sie von möglichst vielen Menschen genutzt werden können - unabhängig von Alter, Geschlecht oder körperlichen Voraussetzungen. Dafür erheben wir Daten über sehr unterschiedliche Nutzergruppen und beziehen diese von Anfang an in die Entwicklung ein. Lange Zeit galt nämlich ein durchschnittlicher junger Mann als Maßstab, wodurch die Bedürfnisse vieler anderer Gruppen übersehen wurden. Unsere Aufgabe geht aber über das Sammeln von Daten hinaus: Wir testen bereits die Prototypen mit Menschen aus verschiedenen Altersgruppen und passen die Produkte noch vor der Markteinführung an deren Rückmeldungen an.\n\n*Und lohnt sich dieser Aufwand auch wirtschaftlich?*\n\nJana Vogel: Kurzfristig ist der Aufwand natürlich höher, zumal die Tests Zeit und Geld kosten. Langfristig zahlt es sich aber aus, denn Produkte, die mehr Menschen nutzen können, erreichen auch größere Märkte. Uns geht es allerdings nicht in erster Linie um höhere Gewinne, sondern darum, dass niemand von der Nutzung ausgeschlossen wird."
+      }
+    }
+  ]
+}

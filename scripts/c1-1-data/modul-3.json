@@ -1,0 +1,621 @@
+{
+  "module": "Modul 3",
+  "moduleTheme": "Wie können wir nachhaltig leben?",
+  "lessons": [
+    {
+      "title": "Nachhaltigkeit - Alles im grünen Bereich",
+      "sections": [
+        { "type": "badge", "module": "Modul 3", "category": "grammatik" },
+        {
+          "type": "text",
+          "content": "## 🎯 Lernziele\n\n• ein Interview mit einer Nachhaltigkeitsmanagerin verstehen\n• eine Diskussion zum Thema Homeoffice führen\n• Wortfeld Nachhaltigkeit\n• Adjektive mit fester Präposition\n• Artikelwörter und Adjektivdeklination II",
+          "style": "info"
+        },
+        {
+          "type": "text",
+          "content": "## 📘 Grammatik: Artikelwörter und Adjektivdeklination II\n\n### Was sind Artikelwörter?\n\nAls Artikelwort bezeichnet man bestimmte und unbestimmte Artikel sowie Wörter, die anstelle eines bestimmten oder unbestimmten Artikels stehen können.",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Artikelwort-Typ", "Beispiel"],
+          "rows": [
+            ["bestimmter Artikel", "das Auto"],
+            ["unbestimmter Artikel", "ein Auto"],
+            ["Demonstrativartikel", "dieses / jenes / solches Auto"],
+            ["Possessivartikel", "mein / dein / ihr / sein / unser / euer / ihr / Ihr Auto"],
+            ["Indefinitartikel", "irgendein / jedes / kein (auch: Negativartikel) / manches Auto; wenige Autos"],
+            ["Interrogativartikel", "was für ein / welches Auto"]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "**Wichtige Regeln:**\n\n• Das Artikelwort **jed-** kommt nur im Singular vor. Die Artikelwörter **dies-**, **jen-**, **manch-**, **solch-** und **welch-** kommen im Singular und Plural vor. Sie werden wie der bestimmte Artikel dekliniert (z. B. der Abend - mancher Abend).\n• Die Artikelwörter **irgendein-** und **was für ein-** kommen nur im Singular vor, Possessiv- und Negativartikel im Singular und Plural. Sie werden wie der unbestimmte Artikel dekliniert (z. B. ein Beispiel - irgendein Beispiel).\n• Artikelwörter im Plural (alle, beide, einige, etliche, keine, viele ...) haben die gleichen Endungen wie der bestimmte Artikel (z. B. die Beispiele - keine Beispiele, mit den Beispielen - mit einigen Beispielen).\n• Das Artikelwort **lauter** kann nicht dekliniert werden (z. B. lauter Beispiele).",
+          "style": "info"
+        },
+        {
+          "type": "text",
+          "content": "### Adjektivdeklination: Singular Typ I (nach bestimmtem Artikel)\n\nAuch nach: *jed-, jen-, manch-, solch-, welch-*",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Kasus", "maskulin", "neutral", "feminin"],
+          "rows": [
+            ["Nominativ", "dieser milde Abend", "dieses unlösbare Problem", "diese innere Ruhe"],
+            ["Akkusativ", "diesen milden Abend", "dieses unlösbare Problem", "diese innere Ruhe"],
+            ["Dativ", "diesem milden Abend", "diesem unlösbaren Problem", "dieser inneren Ruhe"],
+            ["Genitiv", "dieses milden Abends", "dieses unlösbaren Problems", "dieser inneren Ruhe"]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "### Adjektivdeklination: Singular Typ II (nach unbestimmtem Artikel / Negativartikel)\n\nAuch nach: *mein-, dein-, ihr-, sein-, unser-, eu(e)r-, ihr-, Ihr-, irgendein-*",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Kasus", "maskulin", "neutral", "feminin"],
+          "rows": [
+            ["Nominativ", "(k)ein neuer Beruf", "(k)ein konkretes Beispiel", "(k)eine interne Sitzung"],
+            ["Akkusativ", "(k)einen neuen Beruf", "(k)ein konkretes Beispiel", "(k)eine interne Sitzung"],
+            ["Dativ", "(k)einem neuen Beruf", "(k)einem konkreten Beispiel", "(k)einer internen Sitzung"],
+            ["Genitiv", "(k)eines neuen Berufs", "(k)eines konkreten Beispiels", "(k)einer internen Sitzung"]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "### Adjektivdeklination: Plural",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Kasus", "Typ I", "Typ II"],
+          "rows": [
+            ["Nominativ", "keine konkreten Beispiele", "einige konkrete Beispiele"],
+            ["Akkusativ", "keine konkreten Beispiele", "einige konkrete Beispiele"],
+            ["Dativ", "keinen konkreten Beispielen", "einigen konkreten Beispielen"],
+            ["Genitiv", "keiner konkreten Beispiele", "einiger konkreter Beispiele"],
+            ["auch nach:", "alle, beide, diese, jene, manche*, sämtliche*, solche, welche", "beide*, einige, etliche, lauter, manche*, mehrere, sämtliche*, viele, wenige und Zahlen"]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "\\* sowohl Typ I als auch Typ II möglich",
+          "style": "info"
+        },
+        {
+          "type": "text",
+          "content": "### Neu in dieser Lektion: einig-, etlich-, mehrer-, viel-, wenig- und lauter\n\nDie Artikelwörter im Plural **einige**, **etliche**, **mehrere**, **viele** und **wenige** haben die gleichen Endungen wie der bestimmte Artikel (z. B. die Beispiele - einige Beispiele).\n\nAdjektive nach **einig-**, **etlich-**, **mehrer-**, **viel-** und **wenig-** haben dieselben Endungen wie diese Artikelwörter - Artikelwort und Adjektiv werden also parallel dekliniert:",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Kasus", "Beispiel"],
+          "rows": [
+            ["Nominativ", "einige konkrete Beispiele"],
+            ["Akkusativ", "viele unterschiedliche Themen"],
+            ["Dativ", "mit mehreren modernen Verfahren / in etlichen internen Sitzungen"],
+            ["Genitiv", "mithilfe mehrerer moderner Verfahren"]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "Das Artikelwort **lauter** wird nicht dekliniert (z. B. lauter Beispiele, mit lauter verschiedenen Themen).",
+          "style": "info"
+        },
+        {
+          "type": "text",
+          "content": "**Beispiele aus dem Interview mit Nakema Sedlmayer:**\n\n1. Nakema, kannst du uns **einige konkrete** Beispiele vorstellen?\n2. Eine andere wichtige Maßnahme ist, mithilfe **mehrerer moderner** Verfahren den Energie- und Wasserverbrauch zu senken.\n3. Ich beschäftige mich mit **vielen unterschiedlichen** Themen.\n4. Bis eine neue Maßnahme umgesetzt wird, diskutiert man in **etlichen internen** Sitzungen.\n5. Ich habe zum Glück bisher nur **wenige schwierige** Situationen erlebt.\n6. Man hat jeden Tag mit **lauter verschiedenen** Themen und Menschen zu tun.",
+          "style": "beispiele"
+        },
+        {
+          "type": "text",
+          "content": "## 📚 Wörter: Wortfeld Nachhaltigkeit und Adjektive mit fester Präposition\n\n### Die drei Nachhaltigkeitsdimensionen",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Dimension", "Bedeutung"],
+          "rows": [
+            ["ökologische Nachhaltigkeit", "Es geht um Umweltschutz: den Schutz der Natur, des Klimas und der Ressourcen. Unternehmen sollen Ressourcen schonen, Emissionen senken und Abfall reduzieren."],
+            ["ökonomische Nachhaltigkeit", "Im Zentrum steht das langfristig erfolgreiche Wirtschaften. Auch nachhaltige Unternehmen müssen effizient arbeiten, um Gewinne zu erzielen."],
+            ["soziale Nachhaltigkeit", "Die Menschen stehen im Mittelpunkt: ihre Gesundheit, Sicherheit und Lebensqualität. Es geht z. B. darum, die Arbeitsbedingungen zu verbessern und eine faire Bezahlung sicherzustellen."]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "### Wichtige Ausdrücke",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Ausdruck", "Bedeutung"],
+          "rows": [
+            ["eine faire Bezahlung sicherstellen", "einen gerechten Lohn garantieren"],
+            ["Ressourcen schonen", "Ressourcen (wie z. B. Wasser oder Energie) rücksichtsvoll behandeln"],
+            ["Emissionen senken", "schädliche Stoffe reduzieren, die in die Atmosphäre abgegeben werden"],
+            ["Gewinne erzielen", "Geld verdienen"],
+            ["Innovationen fördern", "die Einführung von etwas Neuem unterstützen, von dem man sich wesentliche Verbesserungen verspricht"],
+            ["in Rohstoffe investieren", "Geld für unverarbeitete natürliche Ressourcen zur Verfügung stellen"]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "### Adjektive mit fester Präposition\n\nViele Adjektive stehen mit einer festen Präposition. Die Präposition bestimmt den Kasus. Diese Verbindungen lernt man am besten auswendig.\n\nDie Adjektive aus dem Interview:",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Adjektiv + Präposition", "Kasus", "Beispiel"],
+          "rows": [
+            ["beteiligt an", "Dativ", "Als Nachhaltigkeitsmanagerin bin ich an allen Entscheidungen über den Produktionskreislauf beteiligt."],
+            ["zuständig für", "Akkusativ", "Auch für solche Fragen bin ich in meinem Job zuständig."],
+            ["angewiesen auf", "Akkusativ", "Man ist auf die Kooperation der Geschäftsführung und der Kolleginnen und Kollegen angewiesen."],
+            ["aufgeschlossen gegenüber", "Dativ", "Die meisten Kolleginnen und Kollegen sind gegenüber meiner Arbeit aufgeschlossen."],
+            ["gespannt auf", "Akkusativ", "Auf dieses Projekt bin ich besonders gespannt."]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "**Weitere Adjektive mit fester Präposition (Anhang):**",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Adjektiv + Präposition", "Kasus", "Adjektiv + Präposition", "Kasus"],
+          "rows": [
+            ["abhängig von", "Dativ", "interessiert an", "Dativ"],
+            ["angebunden an", "Akkusativ", "neugierig auf", "Akkusativ"],
+            ["beeindruckt von", "Dativ", "offen für", "Akkusativ"],
+            ["befreit von", "Dativ", "sauer auf", "Akkusativ"],
+            ["begeistert von", "Dativ", "stolz auf", "Akkusativ"],
+            ["bekannt für", "Akkusativ", "süchtig nach", "Dativ"],
+            ["beliebt bei", "Dativ", "typisch für", "Akkusativ"],
+            ["bereit für", "Akkusativ", "überzeugt von", "Dativ"],
+            ["böse auf", "Akkusativ", "unempfindlich gegen", "Akkusativ"],
+            ["dankbar für", "Akkusativ", "verabredet mit", "Dativ"],
+            ["einverstanden mit", "Dativ", "verantwortlich für", "Akkusativ"],
+            ["enttäuscht von", "Dativ", "verbunden mit", "Dativ"],
+            ["erstaunt über", "Akkusativ", "verheiratet mit", "Dativ"],
+            ["fertig mit", "Dativ", "verliebt in", "Akkusativ"],
+            ["geeignet für", "Akkusativ", "vertraut mit", "Dativ"],
+            ["gewöhnt an", "Akkusativ", "verwandt mit", "Dativ"],
+            ["", "", "wichtig für", "Akkusativ"],
+            ["", "", "zufrieden mit", "Dativ"],
+            ["", "", "zugeschnitten auf", "Akkusativ"]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "## 💬 Kommunikation\n\n**Einen Beruf vorstellen**\n\n• Zu den Aufgaben einer / eines ... gehören in erster Linie ...\n• ... ist verantwortlich / zuständig für ... / ... fällt in den Verantwortungsbereich / in die Zuständigkeit einer / eines ...\n• Den Beruf der / des ... kann man im Rahmen einer Ausbildung / eines Studiums / ... erlernen.\n• Alternativ qualifiziert man sich für diesen Beruf, indem man ...\n• Für die Tätigkeit als ... sollte man folgende Fähigkeiten mitbringen: ...\n• ... gehört zum Anforderungsprofil einer / eines ...\n\n**Vorschläge machen**\n\n• Ein Vorschlag, um ... zu ..., wäre vielleicht ...\n• Aus diesem Grund würde ich vorschlagen, dass ...\n• Wäre es für euch / Sie auch denkbar, ...?\n\n**Gegenvorschläge machen**\n\n• Lasst / Lassen Sie uns lieber ...\n• Ich hätte einen anderen Vorschlag: ...\n• Anstatt ... zu ..., wäre es doch besser, ... zu ...\n\n**Vorschläge annehmen / ablehnen**\n\n• Dafür / Dagegen spricht, dass ...\n• Ich denke, das lässt sich (nicht) umsetzen.\n• Ich kann diesem Vorschlag nur zustimmen.\n• Ich kann diesen Vorschlag gut / nicht so richtig nachvollziehen, denn ...\n\n**Kompromisse anbieten und sich einigen**\n\n• Wie wäre es mit einem Kompromiss?\n• Dann machen wir also Folgendes: ...\n• Dann können wir also festhalten, dass ...\n• Eine gute Lösung / Ein guter Kompromiss wäre ...",
+          "style": "beispiele"
+        }
+      ]
+    },
+    {
+      "title": "Altern - Ewig leben?",
+      "sections": [
+        { "type": "badge", "module": "Modul 3", "category": "grammatik" },
+        {
+          "type": "text",
+          "content": "## 🎯 Lernziele\n\n• eine Buchbesprechung verstehen\n• einen Diskussionsbeitrag zum Thema Unsterblichkeit verfassen\n• Wortfeld Altern\n• Adjektiv-Nomen-Verbindungen\n• adversative Zusammenhänge: Gegensätze ausdrücken",
+          "style": "info"
+        },
+        {
+          "type": "text",
+          "content": "## 📘 Grammatik: Adversative Zusammenhänge (Gegensätze ausdrücken)\n\nMit adversativen Sätzen und Angaben kann man Gegensätze ausdrücken. Dafür gibt es drei Möglichkeiten:\n\n• Ein **Nebensatz-Konnektor** (auch: Subjunktion) leitet einen Nebensatz ein, der vor dem oder nach dem Hauptsatz stehen kann. Das konjugierte Verb steht am Ende des Nebensatzes.\n• Ein **Hauptsatz-Konnektor** (auch: Verbindungsadverb) verbindet zwei Hauptsätze miteinander. Er kann im Vorfeld (Position 1) oder im Mittelfeld stehen.\n• Eine **Präposition** steht vor einer Nominalgruppe. Angaben mit Präpositionen können im Vorfeld oder im Mittelfeld stehen.\n\n### Übersicht",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Typ", "Konnektor / Präposition", "Beispiel"],
+          "rows": [
+            ["Nebensatz-Konnektor", "während", "Die Wahrscheinlichkeit zu sterben, ist für die Hydra ihr ganzes Leben lang gleich groß, während das Sterberisiko beim Menschen mit dem Alter zunimmt."],
+            ["Nebensatz-Konnektor", "wohingegen", "Die Wahrscheinlichkeit zu sterben, ist für die Hydra ihr ganzes Leben lang gleich groß, wohingegen das Sterberisiko beim Menschen mit dem Alter zunimmt."],
+            ["Nebensatz-Konnektor", "anders als", "Anders als ich erwartet habe, geht Schroeder gar nicht auf solche ethischen Fragen ein."],
+            ["Hauptsatz-Konnektor", "dagegen", "Die Zellen der Hydra sind ihr ganzes Leben lang gleich aktiv. Dagegen werden unsere Zellen im Alter immer träger."],
+            ["Hauptsatz-Konnektor", "demgegenüber", "Die Zellen der Hydra sind ihr ganzes Leben lang gleich aktiv. Demgegenüber werden unsere Zellen im Alter immer träger."],
+            ["Hauptsatz-Konnektor", "im Gegensatz dazu", "Ich habe erwartet, dass Unsterblichkeit im Fokus steht. Im Gegensatz dazu spielt dieses Thema keine zentrale Rolle."],
+            ["Hauptsatz-Konnektor", "jedoch", "Ich habe erwartet, dass Unsterblichkeit im Fokus steht. Dieses Thema spielt jedoch keine zentrale Rolle."],
+            ["Präposition + Dativ", "entgegen", "Entgegen meinen Erwartungen geht Schroeder gar nicht auf solche ethischen Fragen ein."],
+            ["Präposition + Dativ", "im Gegensatz zu", "Im Gegensatz zu meinen Erwartungen geht Schroeder gar nicht auf solche ethischen Fragen ein."]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "### Systematische Zuordnung",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Nebensatz-Konnektoren", "Hauptsatz-Konnektoren", "Präposition + Dativ"],
+          "rows": [
+            ["während, wohingegen, anders als", "dagegen, demgegenüber, im Gegensatz dazu, jedoch", "entgegen, im Gegensatz zu"]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "**Hinweise zur Verwendung:**\n\n• Nach **während** und **wohingegen** steht das konjugierte Verb am Satzende: *..., wohingegen das Sterberisiko beim Menschen mit dem Alter zunimmt.*\n• Die Hauptsatz-Konnektoren **dagegen**, **demgegenüber** und **im Gegensatz dazu** stehen meistens im Vorfeld, danach folgt sofort das konjugierte Verb: *Demgegenüber werden unsere Zellen im Alter immer träger.*\n• Der Konnektor **jedoch** kann im Vorfeld oder im Mittelfeld stehen: *Dieses Thema spielt jedoch keine zentrale Rolle.*\n• Nach der Präposition **entgegen** steht der Dativ: *entgegen meinen Erwartungen, entgegen deiner Vorstellung.*\n• Der adversative Zusammenhang steht immer im zweiten Teil - dort, wo der Gegensatz zum vorher Gesagten formuliert wird.",
+          "style": "info"
+        },
+        {
+          "type": "text",
+          "content": "**Beispiele aus der Diskussion zum Thema Unsterblichkeit:**\n\n1. Geburt und Tod sind die natürlichen Grenzen des Lebens. **Im Gegensatz dazu** wäre Unsterblichkeit nur durch den Einsatz von Technologie möglich.\n2. Viele sehnen sich nach einem ewigen Leben. **Demgegenüber** finde ich die Idee beängstigend.\n3. Für viele ist Unsterblichkeit ein Traum, **wohingegen** ich Sorge hätte, mich zu langweilen.\n4. **Entgegen** deiner Vorstellung wäre das Leben mit Sicherheit deutlich entspannter.",
+          "style": "beispiele"
+        },
+        {
+          "type": "text",
+          "content": "## 📚 Wörter: Wortfeld Altern und Adjektiv-Nomen-Verbindungen\n\n### Wortfeld Altern\n\nWas verbindet man mit dem Älterwerden? Die Wörterwolke aus dem Kursbuch:",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["eher positiv", "eher negativ", "neutral"],
+          "rows": [
+            ["Freiheit, Gelassenheit, Weisheit, Unabhängigkeit, Reife, Ruhe, Zeit, Kreativität, Toleranz, Flexibilität, Aktivität", "Abschied, Einsamkeit, Einschränkungen, Vergesslichkeit, Desinteresse, Schwäche, Gebrechlichkeit", "Langsamkeit, Mobilität, Loslassen"]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "### Adjektiv-Nomen-Verbindungen\n\nEs gibt Adjektive, die sich nur mit wenigen bestimmten Nomen kombinieren lassen. Diese festen Adjektiv-Nomen-Verbindungen lernt man am besten auswendig.",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Adjektiv-Nomen-Verbindung", "Beispiel"],
+          "rows": [
+            ["eine strittige Frage", "Es ist eine ethisch und moralisch strittige Frage, ob und wie wir unsere Gene manipulieren dürfen."],
+            ["in greifbarer Nähe", "Die Möglichkeit, gesund und munter 120 Jahre alt zu werden, ist in greifbarer Nähe."],
+            ["weitreichende Folgen", "Der Gedanke, unsterblich zu sein, hätte weitreichende Folgen für unsere Lebensplanung."],
+            ["ein sehnlicher Wunsch", "Es gibt reale Chancen, länger gesund und fit zu bleiben. Das ist doch ein sehnlicher Wunsch von vielen."],
+            ["eine verlockende Aussicht", "Für alle, die Angst vor dem Altern haben, ist das auf jeden Fall eine verlockende Aussicht."]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "## 💬 Kommunikation\n\nRedemittel für den Diskussionsbeitrag zum Thema Unsterblichkeit:\n\n**Relevanz begründen**\n\n• Angesichts ... ist das Thema (durchaus) relevant / aktuell.\n• Wegen ... hat das Thema eine große Relevanz.\n• Das Thema ... gewinnt (zunehmend) an Bedeutung, weil ...\n\n**Mögliche Folgen nennen und bewerten**\n\n• Das könnte zur Folge haben, dass ... Und das hätte wiederum den Vorteil / Nachteil, dass ...\n• Eine mögliche (positive / negative) Folge wäre ...\n• Vermutlich hätte das folgende (wünschenswerte / fatale) Konsequenzen: ...\n\n**Ein Beispiel nennen**\n\n• Dadurch würde beispielsweise ...\n• Ein Beispiel wäre: ...\n• Dafür würde ich folgendes Beispiel anführen: ...\n\n**Ein Fazit ziehen**\n\n• Aus diesen Gründen bin ich (persönlich) der Meinung, dass ...\n• Mein Fazit ist ...\n• Ich möchte also abschließend festhalten, dass ...",
+          "style": "beispiele"
+        }
+      ]
+    },
+    {
+      "title": "Licht - Von allen Seiten beleuchtet",
+      "sections": [
+        { "type": "badge", "module": "Modul 3", "category": "grammatik" },
+        {
+          "type": "text",
+          "content": "## 🎯 Lernziele\n\n• einen Magazinartikel über die Kulturgeschichte des Lichts verstehen\n• eine Kurzpräsentation zum Thema Licht halten\n• Wortfeld Licht\n• Nominalstil II",
+          "style": "info"
+        },
+        {
+          "type": "text",
+          "content": "## 📘 Grammatik: Nominalstil II\n\n### Verbalstil und Nominalstil\n\nIm **Verbalstil** werden Informationen in Sätzen (Haupt- und Nebensätzen) mit Subjekt und Prädikat ausgedrückt. Der Verbalstil ist meist verständlicher und oft lebendiger. Man findet ihn sowohl in formellen als auch in informellen Kontexten, vor allem dann, wenn etwas erzählt wird.\n\nIm **Nominalstil** werden Informationen, die im Verbalstil in ganzen Sätzen ausgedrückt werden, in Nominalgruppen zusammengefasst. Die Informationen werden kürzer und prägnanter dargestellt. Den Nominalstil verwendet man, wenn viel Information auf wenig Raum (in knapper Form) transportiert werden soll. Man findet ihn vor allem in formellen Kontexten, z. B. in der Behörden- und in der Fachsprache. Auch Stichpunkte, Überschriften und Präsentationsfolien werden häufig im Nominalstil formuliert.\n\nEine Nominalgruppe enthält immer ein Hauptnomen als Kern, das häufig von einem Verb abgeleitet ist (z. B. sich vernetzen - die Vernetzung, reduzieren - die Reduzierung).\n\n### Transformationen: Verbalstil - Nominalstil (Übersicht)",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Regel", "Verbalstil (Satz)", "Nominalstil (Nominalgruppe)"],
+          "rows": [
+            ["Subjekt (Nominativ) im Aktivsatz - Genitiv", "Die Gehirnzellen vernetzen sich.", "(die) Vernetzung der Gehirnzellen"],
+            ["Personalpronomen - Possessivartikel", "Sie vernetzen sich.", "ihre Vernetzung"],
+            ["Akkusativ im Aktivsatz - Genitiv", "Bewegung regt die Durchblutung an.", "(die) Anregung der Durchblutung"],
+            ["Subjekt (Nominativ) im Passivsatz - Genitiv", "Die Durchblutung wird angeregt.", "(die) Anregung der Durchblutung"],
+            ["Adverb - dekliniertes Adjektiv", "Informationen werden schneller verarbeitet.", "schnellere Verarbeitung von Informationen"],
+            ["Nomen ohne Artikel - von + Dativ", "Der Körper schüttet Glückshormone aus und baut Stress ab.", "(die) Ausschüttung von Glückshormonen, (der) Abbau von Stress"]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "### Neu in dieser Lektion (Nominalstil II)",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Regel", "Verbalstil (Satz)", "Nominalstil (Nominalgruppe)"],
+          "rows": [
+            ["verursachende Sache / Person - durch + verursachende Sache / Person", "Der Ingenieur Thomas Alva Edison erfindet die Glühlampe.", "die Erfindung der Glühlampe durch den Ingenieur Thomas Alva Edison"],
+            ["Verb + Dativ - Nomen mit Präposition", "Man vertraut der neuen Technologie.", "(das) Vertrauen in die neue Technologie"],
+            ["Verb mit Präposition - Nomen mit Präposition", "Das Lagerfeuer schützt vor wilden Tieren.", "(der) Schutz vor wilden Tieren"]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "**Hinweise:**\n\n• Wenn man Verben mit Dativ in eine Nominalgruppe umformuliert, kommt zum Nomen eine Präposition hinzu (z. B. helfen - die Hilfe bei / für; vertrauen - das Vertrauen in / zu). Auch bei Verben mit Akkusativ kommt es vor, dass eine Präposition zum Nomen hinzukommt (z. B. beeinflussen - Einfluss auf).\n• Bei Verben mit fester Präposition bleibt die Präposition in der Regel dieselbe (z. B. schützen vor - der Schutz vor). Ausnahmen: erwarten von - die Erwartung an; sich interessieren für - das Interesse an.",
+          "style": "info"
+        },
+        {
+          "type": "text",
+          "content": "### Beispiele aus der Umfrage zum Umstieg auf LEDs",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Verbalstil", "Nominalstil"],
+          "rows": [
+            ["LEDs reduzieren den Stromverbrauch stark.", "starke Reduzierung des Stromverbrauchs durch LEDs"],
+            ["Energiesparen nützt der Umwelt.", "Nutzen des Energiesparens für die Umwelt"],
+            ["Die EU hat die Glühlampe verboten.", "Verbot der Glühlampe durch die EU"],
+            ["Ich vertraue der Technik.", "Vertrauen in die Technik"],
+            ["LED-Lampen eignen sich für alle Räume.", "Eignung der LED-Lampen für alle Räume"],
+            ["Bei der Produktion wird auf giftige Stoffe verzichtet.", "Verzicht auf giftige Stoffe bei der Produktion"]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "## 📚 Wörter: Wortfeld Licht\n\n### Verben des Leuchtens\n\nDiese Verben beschreiben, wie Licht aussieht oder wirkt. Sie lassen sich nur mit bestimmten Nomen kombinieren:",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Verb", "typische Kombinationen", "Beispiel"],
+          "rows": [
+            ["brennen", "Öllampe, Fackel, Kerze, Licht, Lagerfeuer", "Das Licht hat die ganze Nacht gebrannt. Ich hatte vergessen, es auszuschalten."],
+            ["flackern", "Kerze, Licht von Öllampen, Flamme", "Das schwache und flackernde Licht von Öllampen reichte in den Fabrikhallen nicht mehr aus."],
+            ["leuchten", "Lampe, Augen, Sterne", "Die Gaslampe leuchtete heller und konstanter als Öllampen oder Kerzen. Seine Augen haben geleuchtet, als er das Geschenk ausgepackt hat."],
+            ["scheinen", "Sonne, Lampe, Mond", "Die neue Glühlampe schien noch heller als Gaslampen."],
+            ["funkeln", "Lichter, Sterne, Diamanten", "Abends funkelten Lichter am Pariser Eiffelturm."],
+            ["strahlen", "Leuchtreklamen, Sonne, Gesicht", "Erste Leuchtreklamen strahlten an den Häuserfassaden in Berlin und London."]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "### Lichtquellen in der Kulturgeschichte",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Epoche", "Lichtquelle"],
+          "rows": [
+            ["die Steinzeit (ca. 2,5 Millionen bis 2000 Jahre v. Chr.)", "das Lagerfeuer, die Fackel"],
+            ["die Antike / das Altertum (ca. 750 v. Chr. bis 500 n. Chr.)", "die Öllampe"],
+            ["das Mittelalter (ca. 500 bis 1500 n. Chr.)", "die Kerze (aus Bienenwachs)"],
+            ["das Zeitalter der Industrialisierung (ca. 1800-1900)", "die Gaslampe, die Glühlampe"],
+            ["die Postmoderne (ca. ab Mitte des 20. Jahrhunderts)", "die Energiesparlampe und die LED-Lampe"]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "### Redewendungen und Lichtmetaphern\n\nLicht und Dunkelheit spielen in der bildhaften Sprache eine große Rolle:",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Redewendung", "Bedeutung"],
+          "rows": [
+            ["jemandem geht ein Licht auf (ugs.)", "jemand begreift plötzlich etwas, was er vorher nicht verstanden hat"],
+            ["eine Erleuchtung haben", "überraschend eine gute Idee haben"],
+            ["einen Geistesblitz haben", "überraschend eine gute Idee haben"],
+            ["keinen Schimmer haben", "keine Ahnung haben"],
+            ["im Dunkeln tappen", "etwas (noch) nicht wissen oder verstehen"]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "## 💬 Kommunikation\n\n**Assoziationen beschreiben**\n\n• Bei ... denke ich sofort / spontan an ...\n• Wenn ich über ... nachdenke, fällt / fallen mir ... ein.\n• Mit ... verbinde ich vor allem / in erster Linie / als Erstes / ...\n\n**Über Fortschritt berichten**\n\n• Die Erfindung / Entwicklung / Entdeckung von ...\n• ... fällt in die Zeit ... / kam ... auf.\n• ... war innovativ / revolutionär, denn ...\n• ... verbesserte / vereinfachte ... / leistete einen wichtigen Beitrag zu ... / sorgte dafür, dass ...",
+          "style": "beispiele"
+        }
+      ]
+    }
+  ],
+  "wordsets": [
+    {
+      "lektion": 7,
+      "title": "Lektion 7 - Nachhaltigkeit",
+      "setKey": "c1-1-lektion-7",
+      "items": [
+        { "front": "Orientierungsmesse", "back": "sajam za profesionalnu orijentaciju", "article": "die", "plural": "die Orientierungsmessen" },
+        { "front": "etwas in der Tasche haben", "back": "imati nešto u džepu (imati nešto sigurno, npr. diplomu)" },
+        { "front": "brennen für + Akk.", "back": "goreti (za nešto)|biti strastveno posvećen", "hint": "brennt, brannte, hat gebrannt" },
+        { "front": "bundesweit", "back": "na nivou cele Nemačke|širom Nemačke" },
+        { "front": "Studienangebot", "back": "ponuda studijskih programa", "article": "das", "plural": "die Studienangebote" },
+        { "front": "Arbeitsfeld", "back": "oblast rada|radno polje", "article": "das", "plural": "die Arbeitsfelder" },
+        { "front": "der Personalmanager / die Personalmanagerin", "back": "HR menadžer / HR menadžerka" },
+        { "front": "der Berufsanfänger / die Berufsanfängerin", "back": "početnik / početnica u struci" },
+        { "front": "ökonomisch", "back": "ekonomski" },
+        { "front": "sich richten an + Akk.", "back": "obraćati se (nekome)|biti namenjen (nekome)" },
+        { "front": "Karrieremesse", "back": "sajam karijere", "article": "die", "plural": "die Karrieremessen" },
+        { "front": "im Mittelpunkt stehen", "back": "biti u središtu pažnje" },
+        { "front": "schaffen", "back": "stvoriti|kreirati", "hint": "schafft, schuf, hat geschaffen" },
+        { "front": "schonen", "back": "štedeti|čuvati (npr. resurse)" },
+        { "front": "Emission", "back": "emisija (štetnih gasova)", "article": "die", "plural": "die Emissionen" },
+        { "front": "sicherstellen", "back": "obezbediti|garantovati" },
+        { "front": "im Zentrum stehen", "back": "biti u centru" },
+        { "front": "wirtschaften", "back": "privređivati|poslovati" },
+        { "front": "effizient", "back": "efikasan" },
+        { "front": "erzielen", "back": "postići|ostvariti (npr. dobit, cilj)" },
+        { "front": "Innovation", "back": "inovacija", "article": "die", "plural": "die Innovationen" },
+        { "front": "hochwertig", "back": "visokokvalitetan" },
+        { "front": "nachwachsend", "back": "obnovljiv|koji ponovo raste" },
+        { "front": "investieren in + Akk.", "back": "investirati u|ulagati u" },
+        { "front": "Verfahren", "back": "postupak|procedura", "article": "das", "plural": "die Verfahren" },
+        { "front": "der Förster / die Försterin", "back": "šumar / šumarka" },
+        { "front": "der Landwirt / die Landwirtin", "back": "poljoprivrednik / poljoprivrednica" },
+        { "front": "in erster Linie", "back": "u prvom redu|pre svega" },
+        { "front": "Zuständigkeit", "back": "nadležnost", "article": "die", "plural": "die Zuständigkeiten" },
+        { "front": "im Rahmen einer Ausbildung", "back": "u okviru stručne obuke" },
+        { "front": "sich qualifizieren", "back": "kvalifikovati (se)|steći kvalifikaciju" },
+        { "front": "Anforderungsprofil", "back": "profil zahteva (za radno mesto)", "article": "das", "plural": "die Anforderungsprofile" },
+        { "front": "Geschäftsführung", "back": "uprava|rukovodstvo firme", "article": "die", "plural": "die Geschäftsführungen" },
+        { "front": "Belegschaft", "back": "zaposleni|radni kolektiv", "article": "die", "plural": "die Belegschaften" },
+        { "front": "auswerten", "back": "analizirati|obraditi (podatke, rezultate)" },
+        { "front": "Personalabteilung", "back": "kadrovska služba|HR odeljenje", "article": "die", "plural": "die Personalabteilungen" },
+        { "front": "in die Praxis umsetzen", "back": "sprovesti u praksu" },
+        { "front": "erzeugen", "back": "proizvoditi" },
+        { "front": "Grundwasser", "back": "podzemna voda", "article": "das", "plural": "die Grundwasser" },
+        { "front": "Reduzierung", "back": "smanjenje|redukcija", "article": "die" },
+        { "front": "überwiegend", "back": "pretežno|uglavnom" },
+        { "front": "Inhaltsstoff", "back": "sastojak", "article": "der", "plural": "die Inhaltsstoffe" },
+        { "front": "pflanzlich", "back": "biljni" },
+        { "front": "tierisch", "back": "životinjski" },
+        { "front": "mineralisch", "back": "mineralni" },
+        { "front": "abbaubar", "back": "razgradiv" },
+        { "front": "Senkung", "back": "smanjenje|snižavanje", "article": "die", "plural": "die Senkungen" },
+        { "front": "verunreinigen", "back": "zagaditi|uprljati" },
+        { "front": "recycelbar", "back": "koji se može reciklirati" },
+        { "front": "Ausstattung", "back": "oprema|opremljenost", "article": "die", "plural": "die Ausstattungen" },
+        { "front": "Kampagne", "back": "kampanja", "article": "die", "plural": "die Kampagnen" },
+        { "front": "konzeptionell", "back": "konceptualan|konceptualno" },
+        { "front": "empathisch", "back": "empatičan" },
+        { "front": "aufgeschlossen gegenüber + Dat.", "back": "otvoren prema (nečemu)" },
+        { "front": "beteiligt an + Dat.", "back": "koji učestvuje u (nečemu)" },
+        { "front": "gespannt auf + Akk.", "back": "radoznao|koji nestrpljivo iščekuje (nešto)" },
+        { "front": "etlich-", "back": "poprilično|podosta (njih)" },
+        { "front": "Sitzung", "back": "sednica|sastanak", "article": "die", "plural": "die Sitzungen" },
+        { "front": "intern", "back": "interni|unutrašnji" },
+        { "front": "lauter", "back": "ovde: sve sami, sami (ne menja se po padežima)" },
+        { "front": "der Messebesucher / die Messebesucherin", "back": "posetilac / posetiteljka sajma" },
+        { "front": "aufwendig", "back": "zahtevan|koji iziskuje mnogo truda" },
+        { "front": "vielversprechend", "back": "mnogoobećavajući" },
+        { "front": "inspirierend", "back": "inspirativan" },
+        { "front": "erfahren von + Dat.", "back": "saznati za|saznati o", "hint": "erfährt, erfuhr, hat erfahren" },
+        { "front": "ausweisen", "back": "ovde: označiti, odrediti (namenu prostora)", "hint": "weist aus, wies aus, hat ausgewiesen" },
+        { "front": "Überlastung", "back": "preopterećenje", "article": "die", "plural": "die Überlastungen" },
+        { "front": "Quote", "back": "kvota|stopa", "article": "die", "plural": "die Quoten" },
+        { "front": "Krankheitsquote", "back": "stopa bolovanja", "article": "die", "plural": "die Krankheitsquoten" }
+      ]
+    },
+    {
+      "lektion": 8,
+      "title": "Lektion 8 - Altern",
+      "setKey": "c1-1-lektion-8",
+      "items": [
+        { "front": "gebrechlich", "back": "nemoćan|krhak (od starosti)" },
+        { "front": "Gebrechlichkeit", "back": "staračka nemoć|krhkost", "article": "die" },
+        { "front": "Desinteresse", "back": "nezainteresovanost", "article": "das" },
+        { "front": "Einschränkung", "back": "ograničenje", "article": "die", "plural": "die Einschränkungen" },
+        { "front": "Langsamkeit", "back": "sporost", "article": "die" },
+        { "front": "loslassen", "back": "pustiti|otpustiti", "hint": "lässt los, ließ los, hat losgelassen" },
+        { "front": "Reife", "back": "zrelost", "article": "die" },
+        { "front": "Vergesslichkeit", "back": "zaboravnost", "article": "die" },
+        { "front": "Weisheit", "back": "mudrost", "article": "die", "plural": "die Weisheiten" },
+        { "front": "Unsterblichkeit", "back": "besmrtnost", "article": "die" },
+        { "front": "erläutern", "back": "objasniti|razjasniti" },
+        { "front": "inwieweit", "back": "u kojoj meri" },
+        { "front": "Gentechnik", "back": "genetski inženjering|genetska tehnologija", "article": "die" },
+        { "front": "verlängern", "back": "produžiti" },
+        { "front": "altern", "back": "stariti" },
+        { "front": "aufhalten", "back": "zaustaviti|zadržati", "hint": "hält auf, hielt auf, hat aufgehalten" },
+        { "front": "Auszeichnung", "back": "priznanje|nagrada", "article": "die", "plural": "die Auszeichnungen" },
+        { "front": "heilen", "back": "lečiti|izlečiti" },
+        { "front": "Kräuter (Pl.) (hier: Heilkräuter)", "back": "bilje|trave (ovde: lekovito bilje)" },
+        { "front": "Lebenserwartung", "back": "očekivani životni vek", "article": "die", "plural": "die Lebenserwartungen" },
+        { "front": "hinauszögern", "back": "odlagati|odgađati" },
+        { "front": "gentechnisch", "back": "genetsko-tehnološki|putem genetskog inženjeringa" },
+        { "front": "Manipulation", "back": "manipulacija", "article": "die", "plural": "die Manipulationen" },
+        { "front": "Konsequenz", "back": "posledica", "article": "die", "plural": "die Konsequenzen" },
+        { "front": "nachfolgend", "back": "sledeći|koji dolazi posle" },
+        { "front": "absehbar", "back": "predvidiv|sagledljiv" },
+        { "front": "absehen", "back": "predvideti|sagledati unapred", "hint": "sieht ab, sah ab, hat abgesehen" },
+        { "front": "Experiment", "back": "eksperiment", "article": "das", "plural": "die Experimente" },
+        { "front": "regenerieren", "back": "regenerisati (se)" },
+        { "front": "einzigartig", "back": "jedinstven" },
+        { "front": "synthetisch", "back": "sintetički" },
+        { "front": "verjüngen", "back": "podmladiti" },
+        { "front": "Verjüngung", "back": "podmlađivanje", "article": "die" },
+        { "front": "zulassen", "back": "odobriti|dozvoliti", "hint": "lässt zu, ließ zu, hat zugelassen" },
+        { "front": "fasten", "back": "postiti" },
+        { "front": "unsterblich", "back": "besmrtan" },
+        { "front": "Lektüre", "back": "štivo|lektira|čitanje", "article": "die", "plural": "die Lektüren" },
+        { "front": "ethisch", "back": "etički" },
+        { "front": "strittig", "back": "sporan" },
+        { "front": "manipulieren", "back": "manipulisati" },
+        { "front": "munter", "back": "čio|svež|veseo" },
+        { "front": "greifbar", "back": "dostižan|nadohvat ruke" },
+        { "front": "weitreichend", "back": "dalekosežan" },
+        { "front": "real", "back": "realan|stvaran" },
+        { "front": "sehnlich", "back": "žarko željen" },
+        { "front": "verlockend", "back": "primamljiv" },
+        { "front": "entgegen + Dat.", "back": "nasuprot|suprotno (nečemu)" },
+        { "front": "wohingegen", "back": "dok (nasuprot tome)" },
+        { "front": "demgegenüber", "back": "nasuprot tome" },
+        { "front": "im Fokus stehen", "back": "biti u fokusu" },
+        { "front": "träge", "back": "trom|lenj" },
+        { "front": "relevant", "back": "relevantan" },
+        { "front": "zunehmend", "back": "sve više|rastući" },
+        { "front": "wünschenswert", "back": "poželjan" },
+        { "front": "fatal", "back": "koban|fatalan" },
+        { "front": "abschließend", "back": "na kraju|zaključno" },
+        { "front": "gelungen", "back": "uspešan|uspeo" },
+        { "front": "Anmerkung", "back": "napomena|primedba", "article": "die", "plural": "die Anmerkungen" }
+      ]
+    },
+    {
+      "lektion": 9,
+      "title": "Lektion 9 - Licht",
+      "setKey": "c1-1-lektion-9",
+      "items": [
+        { "front": "Organ", "back": "organ", "article": "das", "plural": "die Organe" },
+        { "front": "weitgehend", "back": "u velikoj meri|pretežno" },
+        { "front": "visuell", "back": "vizuelan" },
+        { "front": "Farbton", "back": "nijansa boje|ton boje", "article": "der", "plural": "die Farbtöne" },
+        { "front": "Strahl", "back": "zrak", "article": "der", "plural": "die Strahlen" },
+        { "front": "Scanner", "back": "skener", "article": "der", "plural": "die Scanner" },
+        { "front": "Herdplatte", "back": "ringla|ploča šporeta", "article": "die", "plural": "die Herdplatten" },
+        { "front": "Wasserhahn", "back": "slavina", "article": "der", "plural": "die Wasserhähne" },
+        { "front": "Föhn", "back": "fen (za kosu)", "article": "der", "plural": "die Föhne" },
+        { "front": "Beleuchtung", "back": "osvetljenje|rasveta", "article": "die", "plural": "die Beleuchtungen" },
+        { "front": "erhellen", "back": "osvetliti|rasvetliti" },
+        { "front": "gravierend", "back": "ozbiljan|težak (npr. posledice)" },
+        { "front": "sich verirren", "back": "izgubiti se|zalutati" },
+        { "front": "Route", "back": "ruta|maršruta", "article": "die", "plural": "die Routen" },
+        { "front": "Dunkelheit", "back": "mrak|tama", "article": "die" },
+        { "front": "Redewendung", "back": "ustaljeni izraz|fraza", "article": "die", "plural": "die Redewendungen" },
+        { "front": "umgangssprachlich", "back": "kolokvijalan|iz govornog jezika" },
+        { "front": "Metapher", "back": "metafora", "article": "die", "plural": "die Metaphern" },
+        { "front": "die Lichtverhältnisse (nur Pl.)", "back": "svetlosni uslovi" },
+        { "front": "Fackel", "back": "baklja", "article": "die", "plural": "die Fackeln" },
+        { "front": "Glühlampe", "back": "sijalica (sa žarnom niti)", "article": "die", "plural": "die Glühlampen" },
+        { "front": "Zeitrechnung", "back": "računanje vremena|era", "article": "die", "plural": "die Zeitrechnungen" },
+        { "front": "aufgehen", "back": "izlaziti (o suncu)", "hint": "geht auf, ging auf, ist aufgegangen" },
+        { "front": "untergehen", "back": "zalaziti (o suncu)", "hint": "geht unter, ging unter, ist untergegangen" },
+        { "front": "Bedrohung", "back": "pretnja", "article": "die", "plural": "die Bedrohungen" },
+        { "front": "Busch", "back": "žbun|grm", "article": "der", "plural": "die Büsche" },
+        { "front": "einschlagen in + Akk.", "back": "udariti u (o gromu)", "hint": "schlägt ein, schlug ein, hat eingeschlagen" },
+        { "front": "Vulkan", "back": "vulkan", "article": "der", "plural": "die Vulkane" },
+        { "front": "ausbrechen", "back": "izbiti|eruptirati", "hint": "bricht aus, brach aus, ist ausgebrochen" },
+        { "front": "Flamme", "back": "plamen", "article": "die", "plural": "die Flammen" },
+        { "front": "sich zunutze machen", "back": "iskoristiti (u svoju korist)" },
+        { "front": "Lagerfeuer", "back": "logorska vatra", "article": "das", "plural": "die Lagerfeuer" },
+        { "front": "Meilenstein", "back": "prekretnica|kamen međaš", "article": "der", "plural": "die Meilensteine" },
+        { "front": "Überlebenschance", "back": "šansa za preživljavanje", "article": "die", "plural": "die Überlebenschancen" },
+        { "front": "der Archäologe / die Archäologin", "back": "arheolog / arheološkinja" },
+        { "front": "Innenraum", "back": "unutrašnji prostor", "article": "der", "plural": "die Innenräume" },
+        { "front": "Höhle", "back": "pećina", "article": "die", "plural": "die Höhlen" },
+        { "front": "unterirdisch", "back": "podzeman" },
+        { "front": "Gang", "back": "hodnik|prolaz", "article": "der", "plural": "die Gänge" },
+        { "front": "beleuchten", "back": "osvetliti" },
+        { "front": "Lebensraum", "back": "životni prostor", "article": "der", "plural": "die Lebensräume" },
+        { "front": "Malerei", "back": "slikarstvo", "article": "die", "plural": "die Malereien" },
+        { "front": "Bestand haben", "back": "opstati|održati se" },
+        { "front": "Brennstoff", "back": "gorivo", "article": "der", "plural": "die Brennstoffe" },
+        { "front": "ausströmen", "back": "ispuštati|širiti (npr. miris)" },
+        { "front": "Geruch", "back": "miris", "article": "der", "plural": "die Gerüche" },
+        { "front": "kostbar", "back": "dragocen" },
+        { "front": "privilegiert", "back": "privilegovan" },
+        { "front": "Reichtum", "back": "bogatstvo", "article": "der", "plural": "die Reichtümer" },
+        { "front": "bringen", "back": "doneti" },
+        { "front": "flackern", "back": "treperiti (o plamenu)" },
+        { "front": "leistungsstark", "back": "snažan|velike snage" },
+        { "front": "konstant", "back": "konstantan|postojan" },
+        { "front": "kostengünstig", "back": "povoljan|jeftin" },
+        { "front": "Einzug", "back": "ulazak|uvođenje (nečega)", "article": "der", "plural": "die Einzüge" },
+        { "front": "Überfall", "back": "napad|prepad", "article": "der", "plural": "die Überfälle" },
+        { "front": "Sonnenuntergang", "back": "zalazak sunca", "article": "der", "plural": "die Sonnenuntergänge" },
+        { "front": "explodieren", "back": "eksplodirati" },
+        { "front": "Wettstreit", "back": "nadmetanje|takmičenje", "article": "der", "plural": "die Wettstreite" },
+        { "front": "funkeln", "back": "svetlucati|iskriti" },
+        { "front": "strahlen", "back": "sijati|zračiti" },
+        { "front": "Jahrtausendwende", "back": "smena milenijuma", "article": "die", "plural": "die Jahrtausendwenden" },
+        { "front": "umwandeln", "back": "pretvoriti|transformisati" },
+        { "front": "der Verbraucher / die Verbraucherin", "back": "potrošač / potrošačica" },
+        { "front": "Entdeckung", "back": "otkriće", "article": "die", "plural": "die Entdeckungen" },
+        { "front": "fallen in", "back": "padati u|spadati u (npr. vremenski period)", "hint": "fällt, fiel, ist gefallen" },
+        { "front": "aufkommen", "back": "pojaviti se|nastati", "hint": "kommt auf, kam auf, ist aufgekommen" },
+        { "front": "vereinfachen", "back": "pojednostaviti" },
+        { "front": "Stromverbrauch", "back": "potrošnja struje", "article": "der", "plural": "die Stromverbräuche" },
+        { "front": "Nutzen für + Akk.", "back": "korist za", "article": "der", "plural": "die Nutzen" }
+      ]
+    }
+  ]
+}

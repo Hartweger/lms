@@ -98,7 +98,8 @@ export async function GET(
   // === Course description ===
   const courseTitle = course?.title || "Kurs";
   // Extract level from title (e.g. "Nemački A2.1" → "A2.1")
-  const levelMatch = courseTitle.match(/(A1\.1|A1\.2|A2\.1|A2\.2|A1|A2|B1\.1|B1\.2|B1|B2)/i);
+  // C1.1/C1.2/C1 dodati 25.07.2026 - bez njih je nivo na C1 sertifikatu ostajao prazan.
+  const levelMatch = courseTitle.match(/(A1\.1|A1\.2|A2\.1|A2\.2|A1|A2|B1\.1|B1\.2|B1|B2|C1\.1|C1\.2|C1)/i);
   const level = levelMatch ? levelMatch[1] : "";
 
   doc.setFontSize(12);

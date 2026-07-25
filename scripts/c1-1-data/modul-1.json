@@ -1,0 +1,580 @@
+{
+  "module": "Modul 1",
+  "moduleTheme": "Wer bin ich?",
+  "lessons": [
+    {
+      "title": "Freundschaft - Was bedeutet das eigentlich?",
+      "sections": [
+        { "type": "badge", "module": "Modul 1", "category": "grammatik" },
+        {
+          "type": "text",
+          "content": "## 🎯 Lernziele\n\n- einen Podcast zum Thema Freundschaft verstehen\n- eine Online-Diskussion zum Thema Freundschaften führen\n- Modalpartikeln\n- konditionale Zusammenhänge: Bedingungen ausdrücken",
+          "style": "info"
+        },
+        {
+          "type": "text",
+          "content": "## 📘 Grammatik: Konditionale Zusammenhänge (Bedingungen ausdrücken)\n\nMit konditionalen Sätzen und Angaben kann man Bedingungen ausdrücken. Sie antworten auf die Frage: *Unter welcher Bedingung?* Dafür gibt es drei Möglichkeiten: Nebensatz-Konnektoren (auch: Subjunktionen), Hauptsatz-Konnektoren (auch: Verbindungsadverbien) und nominale Ausdrücke mit Genitiv bzw. Präpositionen.\n\nEin Nebensatz-Konnektor leitet einen Nebensatz ein, der vor dem oder nach dem Hauptsatz stehen kann. Ein Hauptsatz-Konnektor verbindet zwei Hauptsätze miteinander; er kann im Vorfeld (Position 1) oder im Mittelfeld stehen. Ausdrücke mit Präposition stehen vor Nominalgruppen.\n\n### Übersicht",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Typ", "Konnektor / Ausdruck", "Beispiel"],
+          "rows": [
+            ["Nebensatz-Konnektor", "wenn", "Wenn man das nicht akzeptiert, wird man enttäuscht."],
+            ["Nebensatz-Konnektor", "falls", "Falls ein Freund keine Wohnung findet, kann er bei mir wohnen."],
+            ["Nebensatz-Konnektor", "vorausgesetzt, dass", "Man kann in jeder Lebensphase gute Freunde haben, vorausgesetzt, dass man Interessen teilt."],
+            ["Nebensatz-Konnektor", "angenommen, dass", "Aber mal angenommen, dass meine Kinder Geld bräuchten, wäre das eine völlig andere Situation."],
+            ["Nebensatz-Konnektor", "für den Fall, dass", "Als Pate oder Patin übernimmt man die Verantwortung für ein Kind für den Fall, dass den Eltern etwas passiert."],
+            ["Hauptsatz-Konnektor", "sonst", "Das muss man akzeptieren. Sonst wird man enttäuscht."],
+            ["Hauptsatz-Konnektor", "andernfalls", "Man muss seine Erwartungen an eine Freundschaft reduzieren. Andernfalls gibt es nur Ärger und Streit."],
+            ["Ausdruck + Genitiv", "im Falle + Genitiv", "Im Falle einer Patenschaft verschwimmen die Grenzen zwischen Freundschaft und Familie."],
+            ["Präposition + Dativ", "bei + Dativ", "Bei einer Patenschaft verschwimmen die Grenzen zwischen Freundschaft und Familie."]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "### Bedeutungsnuancen",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Bedeutung", "Ausdrucksmittel", "Beispiel"],
+          "rows": [
+            ["eine unbedingt notwendige Bedingung", "vorausgesetzt, dass", "Man kann in jeder Lebensphase gute Freunde haben, vorausgesetzt, dass man Interessen teilt."],
+            ["eine angenommene (hypothetische) Bedingung", "angenommen, dass", "Angenommen, dass ein Freund keine Wohnung findet, würde ich ihn bei mir wohnen lassen."],
+            ["ein möglicher Fall in der Zukunft", "für den Fall, dass / im Falle + Genitiv", "Als Patin übernimmt man Verantwortung für den Fall, dass den Eltern etwas passiert."],
+            ["der gegenteilige Fall (= wenn ... nicht, dann ...)", "sonst / andernfalls", "Man muss seine Erwartungen reduzieren. Andernfalls gibt es nur Ärger und Streit."]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "### Wichtige Regeln\n\n- Man kann *angenommen* und *vorausgesetzt* auch **ohne dass** verwenden. Dann leiten sie einen Hauptsatz ein und das Verb steht auf Position 2: *Aber mal angenommen, meine Kinder bräuchten Geld, wäre das eine völlig andere Situation.* Das Komma nach *angenommen* bzw. *vorausgesetzt* dient hier der besseren Lesbarkeit und kann auch weggelassen werden.\n- Die Hauptsatz-Konnektoren *sonst* und *andernfalls* stehen immer im zweiten Satz bzw. im zweiten Teil des Satzes: *Das muss man akzeptieren, sonst wird man enttäuscht.*\n- *sonst* und *andernfalls* enthalten eine verneinte Bedingung: *Das muss man akzeptieren. Sonst (= wenn man das nicht akzeptiert) wird man enttäuscht.*\n- Die nominalen Varianten (*im Falle einer Patenschaft*, *bei einer Patenschaft*) sind typisch für die Schriftsprache und den formellen Stil.",
+          "style": "info"
+        },
+        {
+          "type": "text",
+          "content": "## 📚 Wörter: Modalpartikeln\n\nModalpartikeln gibt es vor allem in der gesprochenen bzw. informellen Sprache. Man kann mit ihnen sehr feine emotionale Unterschiede ausdrücken. Modalpartikeln stehen meistens im Mittelfeld des Satzes und werden normalerweise nicht betont.",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Modalpartikel", "Funktion", "Beispiel"],
+          "rows": [
+            ["denn (nur in Fragen)", "drückt oft Neugier, Intimität oder Interesse aus", "Wie geht's dir denn?"],
+            ["denn (nur in Fragen)", "kann - je nach Betonung - auch vorwurfsvoll klingen", "Was soll das denn?"],
+            ["eben / halt", "drückt aus, dass man eine nicht-veränderbare Situation akzeptiert; kann auch Gleichgültigkeit bedeuten", "Das ist eben / halt leider so. Kein Problem! Dann warte ich eben / halt noch."],
+            ["ja", "verweist auf eine Information, die offensichtlich oder allen schon bekannt ist", "Du hast ja vorhin gesagt: ..."],
+            ["ja", "drückt Überraschung aus (in Ausrufen)", "Da bist du ja!"],
+            ["ja", "drückt Freude oder Mitgefühl aus (in Ausrufen)", "Das ist ja toll! Das ist ja schrecklich!"],
+            ["mal / doch mal (nur in Imperativen)", "mal macht Imperative höflicher; in Kombination mit doch drückt es einen freundlichen Vorschlag aus", "Hör dir (doch) mal den Podcast an!"],
+            ["schon", "drückt Optimismus aus", "Das geht schon."],
+            ["schon", "drückt Ungeduld aus (in Imperativen)", "Jetzt komm schon!"],
+            ["schon", "drückt vorsichtige Zustimmung aus", "Du hast schon recht, aber ..."]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "## 💬 Kommunikation\n\n### Etwas einschätzen\n\n- Für mich ist es absolut normal, wenn / dass ...\n- Ich finde es vollkommen verständlich, wenn ...\n- Meiner Meinung nach gehört es sich nicht, ... zu ...\n- Ich habe kein / wenig / volles Verständnis dafür, wenn ...\n- Von ... würde ich schon erwarten, dass ...\n\n### Unterschiede zwischen früher und heute beschreiben\n\n- In den vergangenen Jahren / In den letzten Jahrzehnten hat / haben sich ... sehr / kaum verändert.\n- Während früher ..., ist es heute eher so, dass ...\n- Im Vergleich zu damals würde man heute ...\n\n### Vermutungen äußern\n\n- Das hat vermutlich damit zu tun, dass ...\n- Ich könnte mir vorstellen, dass das daran liegt, dass ...\n- Ich würde vermuten, dass ...\n\n### Informell online diskutieren (typische Merkmale des mündlichen Stils)\n\n- Weglassen von Personalpronomen: *Hab vorher nie drüber nachgedacht.*\n- Weglassen von Buchstaben und Verschmelzen von Wörtern: *drüber, hab, gibts*\n- Modalpartikeln: *denn, ja, mal*\n- Ausrufe: *Hm ...*\n- umgangssprachliche Ausdrücke: *das Ding; Macht voll Sinn!*\n- Abkürzungen: *OMG*",
+          "style": "beispiele"
+        }
+      ]
+    },
+    {
+      "title": "Selbstbilder - Hoch- und Tiefstapeln",
+      "sections": [
+        { "type": "badge", "module": "Modul 1", "category": "grammatik" },
+        {
+          "type": "text",
+          "content": "## 🎯 Lernziele\n\n- eine Kolumne und eine Sendung über das Imposter-Phänomen verstehen\n- ein psychologisches Phänomen vorstellen\n- Wortfeld Eigenschaften\n- Wortbildung: Komposita mit selbst-\n- Artikelwörter und Adjektivdeklination I",
+          "style": "info"
+        },
+        {
+          "type": "text",
+          "content": "## 📘 Grammatik: Artikelwörter und Adjektivdeklination I\n\n### Was sind Artikelwörter?\n\nAls Artikelwort bezeichnet man bestimmte und unbestimmte Artikel sowie Wörter, die anstelle eines bestimmten oder unbestimmten Artikels stehen können.",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Typ", "Beispiel"],
+          "rows": [
+            ["bestimmter Artikel", "das Auto"],
+            ["unbestimmter Artikel", "ein Auto"],
+            ["Demonstrativartikel", "dieses / jenes / solches Auto"],
+            ["Possessivartikel", "mein / dein / ihr / sein / unser / euer / ihr / Ihr Auto"],
+            ["Indefinitartikel", "irgendein / jedes / kein (auch: Negativartikel) / manches Auto; wenige Autos"],
+            ["Interrogativartikel", "was für ein / welches Auto"]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "### Die Regel\n\nDie Artikelwörter **all-, beid-, dies-, jed-, jen-, manch-, sämtlich-, solch- und welch-** werden wie bestimmte Artikel dekliniert. Adjektive nach diesen Artikelwörtern werden wie nach bestimmten Artikeln dekliniert (schwache Deklination: -e oder -en).\n\nDas Artikelwort *jed-* kommt nur im Singular vor. Die Artikelwörter *dies-, jen-, manch-, solch-* und *welch-* kommen im Singular und Plural vor.",
+          "style": "info"
+        },
+        {
+          "type": "text",
+          "content": "### Deklinationstabelle: Singular (Typ I: bestimmter Artikel)",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Kasus", "maskulin", "neutral", "feminin"],
+          "rows": [
+            ["Nominativ", "dieser milde Abend", "dieses unlösbare Problem", "diese innere Ruhe"],
+            ["Akkusativ", "diesen milden Abend", "dieses unlösbare Problem", "diese innere Ruhe"],
+            ["Dativ", "diesem milden Abend", "diesem unlösbaren Problem", "dieser inneren Ruhe"],
+            ["Genitiv", "dieses milden Abends", "dieses unlösbaren Problems", "dieser inneren Ruhe"]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "Auch nach: *jed-, jen-, manch-, solch-, welch-*",
+          "style": "info"
+        },
+        {
+          "type": "text",
+          "content": "### Deklinationstabelle: Plural (Typ I)",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Kasus", "Beispiel"],
+          "rows": [
+            ["Nominativ", "keine konkreten Beispiele"],
+            ["Akkusativ", "keine konkreten Beispiele"],
+            ["Dativ", "keinen konkreten Beispielen"],
+            ["Genitiv", "keiner konkreten Beispiele"]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "Auch nach: *alle, beide, diese, jene, manche, sämtliche, solche, welche*",
+          "style": "info"
+        },
+        {
+          "type": "text",
+          "content": "### Adjektivendungen nach Artikelwörtern vom Typ I (Übersicht)",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Kasus", "maskulin", "neutral", "feminin", "Plural"],
+          "rows": [
+            ["Nominativ", "-e", "-e", "-e", "-en"],
+            ["Akkusativ", "-en", "-e", "-e", "-en"],
+            ["Dativ", "-en", "-en", "-en", "-en"],
+            ["Genitiv", "-en", "-en", "-en", "-en"]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "### Beispiele aus der Kolumne „Ach, Mensch!“\n\n- Und dann **diese innere** Ruhe und Selbstsicherheit, die er ausstrahlt!\n- Mit Leichtigkeit meistert er **jede schwierige** Situation.\n- Wie an **manchem milden** Abend sitzen wir auch heute zusammen in der Beachbar.\n- Auch nach Feierabend wird er wegen **aller möglichen** Fragen angerufen.\n- Und er weiß selbstverständlich Rat, egal um **welches unlösbare** Problem es sich handelt.\n- Den man bei **sämtlichen beruflichen** wie **privaten** Angelegenheiten um Rat fragt?\n- Du hast **solche absurden** Zweifel?\n- Trotz **dieses ganzen** Erfolgs?",
+          "style": "beispiele"
+        },
+        {
+          "type": "text",
+          "content": "## 📚 Wörter: Wortfeld Eigenschaften und Komposita mit selbst-\n\n### Wortfeld Eigenschaften\n\nZu vielen Eigenschaften gibt es ein Nomen und ein passendes Adjektiv. Ob eine Eigenschaft positiv oder negativ ist, hängt oft von der persönlichen Einschätzung und vom Kontext ab.",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Nomen", "Adjektiv", "Wertung (meist)"],
+          "rows": [
+            ["die Bescheidenheit", "bescheiden", "positiv"],
+            ["die Disziplin", "diszipliniert", "positiv"],
+            ["die Ehrlichkeit", "ehrlich", "positiv"],
+            ["die Entschlossenheit", "entschlossen", "positiv"],
+            ["die Flexibilität", "flexibel", "positiv"],
+            ["die Gelassenheit", "gelassen", "positiv"],
+            ["die Geduld", "geduldig", "positiv"],
+            ["die Hilfsbereitschaft", "hilfsbereit", "positiv"],
+            ["der Humor", "humorvoll", "positiv"],
+            ["die Intelligenz", "intelligent", "positiv"],
+            ["die Kompetenz", "kompetent", "positiv"],
+            ["die Kreativität", "kreativ", "positiv"],
+            ["die Loyalität", "loyal", "positiv"],
+            ["der Mut", "mutig", "positiv"],
+            ["die Neugier", "neugierig", "positiv"],
+            ["die Schnelligkeit", "schnell", "positiv"],
+            ["das Selbstbewusstsein", "selbstbewusst", "positiv"],
+            ["die Souveränität", "souverän", "positiv"],
+            ["die Toleranz", "tolerant", "positiv"],
+            ["die Zuverlässigkeit", "zuverlässig", "positiv"],
+            ["der Ehrgeiz", "ehrgeizig", "positiv oder negativ"],
+            ["die Arroganz", "arrogant", "negativ"],
+            ["die Faulheit", "faul", "negativ"],
+            ["die Ignoranz", "ignorant", "negativ"],
+            ["die Inkompetenz", "inkompetent", "negativ"],
+            ["der Neid", "neidisch", "negativ"],
+            ["die Unsicherheit", "unsicher", "negativ"]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "### Wortbildung: Komposita mit selbst-\n\nMan kann Nomen mit dem Pronomen *selbst* kombinieren. *Selbst* ist dann meistens das Bestimmungswort:",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Bildung", "Beispiel"],
+          "rows": [
+            ["selbst + Nomen", "selbst + die Sicherheit → die Selbstsicherheit"]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "Auch mit Adjektiven kann man das Pronomen *selbst* kombinieren (z. B. selbstsicher).",
+          "style": "info"
+        },
+        {
+          "type": "table",
+          "headers": ["Kompositum", "Bedeutung"],
+          "rows": [
+            ["die Selbstsicherheit", "Sicherheit im Auftreten"],
+            ["das Selbstbewusstsein", "Vertrauen in die eigenen Fähigkeiten"],
+            ["das Selbstvertrauen", "Vertrauen in sich selbst"],
+            ["die Selbstwahrnehmung", "wie man sich selbst wahrnimmt (Gegenteil: die Fremdwahrnehmung)"],
+            ["das Selbstbild", "das Bild, das man von sich selbst hat"],
+            ["das Selbstkonzept", "die Gesamtheit der Vorstellungen über die eigene Person"],
+            ["selbstsicher", "sicher im Auftreten"],
+            ["selbstbewusst", "von den eigenen Fähigkeiten überzeugt"],
+            ["selbstkritisch", "kritisch gegenüber sich selbst"],
+            ["selbstständig", "unabhängig, ohne fremde Hilfe"],
+            ["selbstverständlich", "ganz natürlich, ohne Zweifel"]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "## 💬 Kommunikation\n\n### Gemeinsamkeiten und Unterschiede nennen\n\n- Wir sind beide / alle der Meinung, dass ...\n- Wir stimmen darin überein, dass ...\n- ... Das haben wir gemeinsam. / Das unterscheidet uns.\n- ... Darin stimmen wir überein. / Da unterscheiden wir uns.\n\n### Selbstwahrnehmung einer Person beschreiben\n\n- Sie / Er selbst kommt sich ... vor.\n- Sie / Er hat den Eindruck / das Gefühl, dass ... / ... zu ...\n- Sie / Er würde sich eher als ... bezeichnen.\n\n### Wirkung einer Person beschreiben\n\n- Von außen betrachtet wirkt sie / er ...\n- Sie / Er wirkt auf andere, als ob ...\n- Sie / Er macht den Eindruck, ... zu ...\n\n### Ein psychologisches Phänomen beschreiben\n\n- ... wurde zum ersten Mal ... [Jahr] von ... beschrieben.\n- ... zeichnet sich durch ... aus. / ... äußert sich folgendermaßen: ...\n- Betroffen sind vor allem Menschen, die ... / Wer von ... betroffen ist, ...\n- Es kennzeichnet diese Menschen, dass sie ... / Wichtige Kennzeichen sind ...\n- Ein weiteres Merkmal ist ... / Dazu kommt noch ...\n- Damit sind folgende (positive / negative) Auswirkungen verbunden: ...\n\n### Etwas vergleichen\n\n- Wenn man ... und ... miteinander vergleicht, fallen folgende Ähnlichkeiten / Unterschiede auf: ...\n- Genauso wie bei ... gibt es bei ...\n- Während bei ...\n- Im Gegensatz dazu ...",
+          "style": "beispiele"
+        }
+      ]
+    },
+    {
+      "title": "Mehrsprachigkeit - Wie wir Sprachen (er)leben",
+      "sections": [
+        { "type": "badge", "module": "Modul 1", "category": "grammatik" },
+        {
+          "type": "text",
+          "content": "## 🎯 Lernziele\n\n- einen Magazinartikel zum Thema Mehrsprachigkeit verstehen\n- schwer übersetzbare Wörter im Deutschen erklären\n- Wortfeld Sprache(n)\n- kausale Zusammenhänge: Gründe angeben",
+          "style": "info"
+        },
+        {
+          "type": "text",
+          "content": "## 📘 Grammatik: Kausale Zusammenhänge (Gründe angeben)\n\nMit kausalen Sätzen und Angaben kann man Gründe angeben. Man antwortet auf die Fragen: *Warum?, Wieso?, Weshalb?, Aus welchem Grund?* Neben den bekannten Konnektoren *weil, da* und *deshalb / deswegen / daher* gibt es auf dem Niveau C1 weitere, vor allem schriftsprachliche Mittel.\n\n### Übersicht",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Typ", "Konnektor / Präposition", "Beispiel"],
+          "rows": [
+            ["Nebensatz-Konnektor", "weil / da", "Wir denken distanzierter, weil die emotionale Nähe zur neuen Sprache fehlt."],
+            ["Nebensatz-Konnektor", "zumal", "In der Fremdsprache kann man sich in neuen Rollen ausprobieren, zumal hier die Konzepte, Werte und Rollen aus der Erstsprache oft nicht gelten."],
+            ["Hauptsatz-Konnektor", "deshalb / deswegen / daher", "Das ist auf Kantonesisch einfach zu stark. Deshalb würde ich diesen Satz immer auf Englisch sagen."],
+            ["Hauptsatz-Konnektor", "aus diesem Grund", "Aus diesem Grund können wir in einer Fremdsprache extrovertierter und mutiger sein."],
+            ["Präposition + Genitiv", "aufgrund", "Aufgrund der engen emotionalen Verbindung zur Erstsprache drücken viele Menschen Gefühle lieber in ihr aus."],
+            ["Präposition + Genitiv", "angesichts", "Angesichts solcher Beobachtungen wird in der Mehrsprachigkeitsforschung heute davon ausgegangen, dass die meisten Menschen zu ihrer Erstsprache eine engere emotionale Verbindung haben."],
+            ["Präposition + Genitiv", "anlässlich", "Anlässlich des Europäischen Tags der Sprachen werfen wir einen Blick auf die Mehrsprachigkeitsforschung."],
+            ["Präposition + Genitiv", "mangels", "Mangels der emotionalen Nähe zur neuen Sprache denken, sprechen und handeln wir distanzierter."],
+            ["Präposition + Genitiv", "wegen", "Wegen der kulturellen Werte, die eine Sprache transportiert, verhalten wir uns je nach Sprache anders."]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "### Bedeutungsnuancen",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Ausdrucksmittel", "Bedeutung"],
+          "rows": [
+            ["zumal", "ein besonders wichtiger Grund wird hinzugefügt (= besonders weil / vor allem weil)"],
+            ["aus diesem Grund", "verweist auf einen schon genannten Grund (= deshalb)"],
+            ["angesichts + Genitiv", "in Anbetracht von etwas (= aufgrund)"],
+            ["anlässlich + Genitiv", "ein bestimmtes Ereignis wird als Grund / Anlass angegeben (= wegen eines bestimmten Ereignisses)"],
+            ["mangels + Genitiv", "ein bestimmter Mangel wird als Grund angegeben (= weil ... fehlt)"]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "### Wichtige Regeln\n\n- Der Nebensatz mit *zumal* steht **immer nach dem Hauptsatz**: *Kindern fällt das Sprachenlernen leichter als Erwachsenen, zumal sich ihr Gehirn schneller auf neue Strukturen einstellen kann.*\n- Der Hauptsatz-Konnektor *aus diesem Grund* kann im Vorfeld (Position 1) oder im Mittelfeld stehen.\n- Die Präpositionen *angesichts, anlässlich, aufgrund* und *mangels* stehen mit dem **Genitiv**: *mangels ausreichender Angebote an bilingualen Kitas und Schulen*.\n- Wenn nach einer Präposition mit Genitiv ein Nomen ohne Artikel und ohne Adjektiv folgt, verwendet man die entsprechende Präposition zusammen mit *von* + Dativ (z. B. innerhalb der Städte, aber: innerhalb von Städten).\n- Diese Konnektoren und Präpositionen werden vor allem in der **Schriftsprache** verwendet.",
+          "style": "info"
+        },
+        {
+          "type": "text",
+          "content": "## 📚 Wörter: Wortfeld Sprache(n)\n\nRund um das Thema Sprache(n) gibt es viele Komposita mit dem Grundwort *-sprache*. Sie bezeichnen verschiedene Funktionen und Formen von Sprache.",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Begriff", "Erklärung"],
+          "rows": [
+            ["die Amtssprache", "die offizielle Sprache eines Staates, die in Behörden und offiziellen Dokumenten verwendet wird"],
+            ["die Erstsprache / Muttersprache", "die Sprache, die man als Kind zuerst erwirbt"],
+            ["die Familiensprache", "die Sprache, die innerhalb der Familie gesprochen wird"],
+            ["die Gebärdensprache", "eine visuelle Sprache, mit der vor allem gehörlose Menschen kommunizieren"],
+            ["die Hochsprache / Standardsprache", "die sprachliche Norm ohne Dialekt; „Hochdeutsch“ ist z. B. das Deutsch, das man im Sprachkurs lernt"],
+            ["die Kunstsprache", "eine künstlich geschaffene Sprache (z. B. Esperanto)"],
+            ["die Landessprache", "die Sprache, die in einem Land (von der Mehrheit) gesprochen wird"],
+            ["die Regionalsprache", "eine Sprache oder Mundart, die nur in einer bestimmten Region gesprochen wird"],
+            ["die Wissenschaftssprache", "die Sprache, die in Forschung und Wissenschaft verwendet wird"]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "Weitere wichtige Begriffe: **bilingual** (zweisprachig), **plurilingual / mehrsprachig** (mit mehreren Sprachen im Alltag), **die Mundart** (der Dialekt), **gebärden** (in Gebärdensprache kommunizieren).",
+          "style": "info"
+        },
+        {
+          "type": "text",
+          "content": "### Schwer übersetzbare Wörter im Deutschen",
+          "style": "default"
+        },
+        {
+          "type": "table",
+          "headers": ["Wort", "Erklärung"],
+          "rows": [
+            ["der Brückentag", "ein Arbeitstag zwischen einem Feiertag und dem Wochenende, den man oft freinimmt"],
+            ["das Fernweh", "die Sehnsucht nach fernen Ländern (Gegenteil: das Heimweh)"],
+            ["das Fingerspitzengefühl", "ein feines Gespür im Umgang mit Menschen oder schwierigen Situationen"],
+            ["die Fremdscham", "das Gefühl, sich für das peinliche Verhalten anderer zu schämen"],
+            ["der Kabelsalat", "ein Durcheinander von vielen Kabeln"],
+            ["das Kopfkino", "Bilder und Szenen, die nur in der Fantasie ablaufen"],
+            ["die Schnapsidee", "eine verrückte, unüberlegte Idee"],
+            ["die Vorfreude", "die Freude auf etwas, das in der Zukunft liegt"]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "## 💬 Kommunikation\n\n### Einen Begriff erklären\n\n- ... wird als ... definiert. / Unter ... versteht man ...\n- Als ... bezeichnet man ... / Von ... spricht man, wenn ...\n- Ein Beispiel für ... wäre ...\n\n### Über Forschungsergebnisse berichten\n\n- Wissenschaftlerinnen und Wissenschaftler gehen davon aus / stellten die These auf, dass ...\n- In der Forschung wird die These vertreten, dass ...\n- Studien konnten belegen / beweisen, dass ...\n- Mithilfe von Studien / Umfragen / ... konnte man die Annahme bestätigen, dass ...\n- Ein Forschungsergebnis ist: ... Das zeigt sich daran, dass ... / Das sieht man daran, dass ...",
+          "style": "beispiele"
+        }
+      ]
+    }
+  ],
+  "wordsets": [
+    {
+      "lektion": 1,
+      "title": "Lektion 1 - Freundschaft",
+      "setKey": "c1-1-lektion-1",
+      "items": [
+        { "front": "anvertrauen", "back": "poveriti (nekome nešto)" },
+        { "front": "Besorgung", "back": "nabavka|kupovina (koju treba obaviti)", "article": "die", "plural": "die Besorgungen" },
+        { "front": "Erledigung", "back": "obavljanje poslova|obaveza (koju treba obaviti)", "article": "die", "plural": "die Erledigungen" },
+        { "front": "sich gehören", "back": "priličiti se|biti red (das gehört sich nicht - to se ne radi)" },
+        { "front": "spontan", "back": "spontan" },
+        { "front": "vererben", "back": "ostaviti u nasledstvo|zaveštati" },
+        { "front": "vollkommen", "back": "potpun; potpuno|sasvim" },
+        { "front": "sich zurückziehen", "back": "povući se", "hint": "zieht sich zurück, zog sich zurück, hat sich zurückgezogen" },
+        { "front": "Phase", "back": "faza", "article": "die", "plural": "die Phasen" },
+        { "front": "Umbruch", "back": "korenita promena|prelom", "article": "der", "plural": "die Umbrüche" },
+        { "front": "Umbruchphase", "back": "faza velikih promena|prelomni period", "article": "die", "plural": "die Umbruchphasen" },
+        { "front": "Freundeskreis", "back": "krug prijatelja", "article": "der", "plural": "die Freundeskreise" },
+        { "front": "Kompromissbereitschaft", "back": "spremnost na kompromis", "article": "die" },
+        { "front": "aushandeln", "back": "dogovoriti pregovorima|ispregovarati" },
+        { "front": "Konstellation", "back": "konstelacija|sklop okolnosti (ovde: porodična konstelacija)", "article": "die", "plural": "die Konstellationen", "hint": "hier: Familienkonstellation" },
+        { "front": "der Pate / die Patin", "back": "kum / kuma (na krštenju)" },
+        { "front": "zu tun haben mit + Dat.", "back": "imati veze sa" },
+        { "front": "vergangen", "back": "prošli|protekli" },
+        { "front": "angenommen", "back": "pod pretpostavkom (da)|pretpostavimo" },
+        { "front": "vorausgesetzt", "back": "pod uslovom (da)" },
+        { "front": "Lebensphase", "back": "životna faza", "article": "die", "plural": "die Lebensphasen" },
+        { "front": "Gemeinsamkeit", "back": "zajednička osobina|zajednička crta", "article": "die", "plural": "die Gemeinsamkeiten" },
+        { "front": "verschwimmen", "back": "postati nejasan|zamagliti se (o granicama)", "hint": "verschwimmt, verschwamm, ist verschwommen" },
+        { "front": "Neugier", "back": "radoznalost", "article": "die" },
+        { "front": "ausdrücken", "back": "izraziti" },
+        { "front": "Betonung", "back": "naglasak|naglašavanje", "article": "die", "plural": "die Betonungen" },
+        { "front": "vorwurfsvoll", "back": "prekoran|pun prekora" },
+        { "front": "veränderbar", "back": "promenljiv|koji se može promeniti" },
+        { "front": "verweisen auf + Akk.", "back": "uputiti na|ukazati na", "hint": "verweist, verwies, hat verwiesen" },
+        { "front": "offensichtlich", "back": "očigledan; očigledno" },
+        { "front": "Optimismus", "back": "optimizam", "article": "der" },
+        { "front": "Ungeduld", "back": "nestrpljenje", "article": "die" },
+        { "front": "emotional", "back": "emotivan|emocionalan" },
+        { "front": "Kombination", "back": "kombinacija", "article": "die", "plural": "die Kombinationen" },
+        { "front": "ansprechen", "back": "pomenuti|načeti (temu)", "hint": "spricht an, sprach an, hat angesprochen" },
+        { "front": "bestimmt", "back": "određen; sigurno" },
+        { "front": "Streit um + Akk.", "back": "svađa oko", "article": "der" },
+        { "front": "Quatsch", "back": "glupost|budalaština", "article": "der" },
+        { "front": "Klischee", "back": "kliše", "article": "das", "plural": "die Klischees" },
+        { "front": "Kumpel", "back": "drugar|ortak", "article": "der", "plural": "die Kumpel" },
+        { "front": "hetero", "back": "hetero(seksualan)" },
+        { "front": "Blödsinn", "back": "besmislica|glupost", "article": "der" }
+      ]
+    },
+    {
+      "lektion": 2,
+      "title": "Lektion 2 - Selbstbilder",
+      "setKey": "c1-1-lektion-2",
+      "items": [
+        { "front": "Eigenschaft", "back": "osobina", "article": "die", "plural": "die Eigenschaften" },
+        { "front": "bewundern an + Dat.", "back": "diviti se (nečemu kod nekoga)" },
+        { "front": "Kontext", "back": "kontekst", "article": "der", "plural": "die Kontexte" },
+        { "front": "jemanden auf die Palme bringen", "back": "razbesneti nekoga|izbaciti nekoga iz takta" },
+        { "front": "humorvoll", "back": "duhovit" },
+        { "front": "arrogant", "back": "arogantan" },
+        { "front": "Arroganz", "back": "arogancija", "article": "die" },
+        { "front": "diszipliniert", "back": "disciplinovan" },
+        { "front": "Disziplin", "back": "disciplina", "article": "die" },
+        { "front": "Ehrlichkeit", "back": "iskrenost", "article": "die" },
+        { "front": "Faulheit", "back": "lenjost", "article": "die" },
+        { "front": "hilfsbereit", "back": "spreman da pomogne|predusretljiv" },
+        { "front": "Hilfsbereitschaft", "back": "spremnost da se pomogne|predusretljivost", "article": "die" },
+        { "front": "inkompetent", "back": "nekompetentan" },
+        { "front": "Inkompetenz", "back": "nekompetentnost", "article": "die" },
+        { "front": "Unsicherheit", "back": "nesigurnost", "article": "die", "plural": "die Unsicherheiten" },
+        { "front": "Zuverlässigkeit", "back": "pouzdanost", "article": "die" },
+        { "front": "geduldig", "back": "strpljiv" },
+        { "front": "bescheiden", "back": "skroman" },
+        { "front": "Bescheidenheit", "back": "skromnost", "article": "die" },
+        { "front": "ehrgeizig", "back": "ambiciozan" },
+        { "front": "Ehrgeiz", "back": "ambicija|ambicioznost", "article": "der" },
+        { "front": "loyal", "back": "lojalan|veran" },
+        { "front": "Loyalität", "back": "lojalnost", "article": "die", "plural": "die Loyalitäten" },
+        { "front": "entschlossen", "back": "odlučan" },
+        { "front": "Entschlossenheit", "back": "odlučnost", "article": "die" },
+        { "front": "gelassen", "back": "staložen|smiren" },
+        { "front": "Gelassenheit", "back": "staloženost|smirenost", "article": "die" },
+        { "front": "ignorant", "back": "neupućen|ignorantski" },
+        { "front": "Ignoranz", "back": "neznanje|ignorancija", "article": "die" },
+        { "front": "Kreativität", "back": "kreativnost", "article": "die" },
+        { "front": "souverän", "back": "suveren|samouveren" },
+        { "front": "Souveränität", "back": "suverenost|samouverenost", "article": "die" },
+        { "front": "Selbstbewusstsein", "back": "samopouzdanje|samosvest", "article": "das" },
+        { "front": "Schnelligkeit", "back": "brzina", "article": "die" },
+        { "front": "übereinstimmen in + Dat.", "back": "slagati se u" },
+        { "front": "Selbstsicherheit", "back": "sigurnost u sebe|samouverenost", "article": "die" },
+        { "front": "ausstrahlen", "back": "zračiti|odisati (nečim)" },
+        { "front": "hektisch", "back": "hektičan|užurban" },
+        { "front": "Überblick", "back": "pregled (nad situacijom)", "article": "der" },
+        { "front": "schlau", "back": "pametan|promućuran" },
+        { "front": "enorm", "back": "enorman; izuzetno" },
+        { "front": "meistern", "back": "savladati|izaći na kraj (sa nečim)" },
+        { "front": "manch-", "back": "poneki|neki" },
+        { "front": "mehrmals", "back": "više puta" },
+        { "front": "welch-", "back": "koji" },
+        { "front": "all-", "back": "sav|svi" },
+        { "front": "Rat", "back": "savet", "article": "der" },
+        { "front": "Rat wissen", "back": "znati šta treba činiti|znati rešenje" },
+        { "front": "Klarheit", "back": "jasnoća", "article": "die" },
+        { "front": "Anweisung", "back": "uputstvo|instrukcija", "article": "die", "plural": "die Anweisungen" },
+        { "front": "lässig", "back": "ležeran|opušten" },
+        { "front": "Hirn", "back": "mozak", "article": "das", "plural": "die Hirne" },
+        { "front": "der Betrüger / die Betrügerin", "back": "prevarant / prevarantkinja" },
+        { "front": "der Hochstapler / die Hochstaplerin", "back": "hohštapler|varalica / hohštaplerka" },
+        { "front": "staunen", "back": "čuditi se|biti zadivljen" },
+        { "front": "wert", "back": "vredan" },
+        { "front": "begreifen", "back": "shvatiti|pojmiti", "hint": "begreift, begriff, hat begriffen" },
+        { "front": "Selbstwahrnehmung", "back": "slika o samom sebi|samoopažanje", "article": "die" },
+        { "front": "Fremdwahrnehmung", "back": "slika koju drugi imaju o nekome", "article": "die" },
+        { "front": "befördern", "back": "unaprediti (na poslu)" },
+        { "front": "sämtlich-", "back": "svi|celokupni" },
+        { "front": "talentiert", "back": "talentovan" },
+        { "front": "zucken", "back": "trgnuti se (mit den Schultern zucken - slegnuti ramenima)" },
+        { "front": "vibrieren", "back": "vibrirati" },
+        { "front": "hinsetzen (sich)", "back": "sesti" },
+        { "front": "aufrecht", "back": "uspravan; uspravno" },
+        { "front": "Phänomen", "back": "fenomen|pojava", "article": "das", "plural": "die Phänomene" },
+        { "front": "bezeichnen als + Akk.", "back": "označiti kao|nazvati (nekim/nečim)" },
+        { "front": "betrachten", "back": "posmatrati" },
+        { "front": "verdeutlichen", "back": "pojasniti|razjasniti" },
+        { "front": "beid-", "back": "oba" },
+        { "front": "jen-", "back": "onaj" },
+        { "front": "Auftreten", "back": "nastup|držanje", "article": "das" },
+        { "front": "Natur", "back": "priroda (von Natur aus - po prirodi)", "article": "die" },
+        { "front": "Konzept", "back": "koncept|zamisao", "article": "das", "plural": "die Konzepte" },
+        { "front": "Selbstkonzept", "back": "slika o sebi|samokoncept", "article": "das" },
+        { "front": "unterschätzen", "back": "potceniti" },
+        { "front": "erstmals", "back": "prvi put" },
+        { "front": "zurückführen auf + Akk.", "back": "pripisati (nečemu)|objasniti (nečim)" },
+        { "front": "entlarven", "back": "raskrinkati|razotkriti" },
+        { "front": "selbstkritisch", "back": "samokritičan" },
+        { "front": "Selbstvertrauen", "back": "samopouzdanje|vera u sebe", "article": "das" },
+        { "front": "Selbstbild", "back": "slika o sebi", "article": "das" },
+        { "front": "Leistungsbereitschaft", "back": "spremnost na zalaganje|motivisanost za rad", "article": "die" },
+        { "front": "psychologisch", "back": "psihološki" },
+        { "front": "kennzeichnen", "back": "odlikovati|karakterisati" },
+        { "front": "Kennzeichen", "back": "obeležje|karakteristika", "article": "das", "plural": "die Kennzeichen" },
+        { "front": "Ähnlichkeit", "back": "sličnost", "article": "die", "plural": "die Ähnlichkeiten" }
+      ]
+    },
+    {
+      "lektion": 3,
+      "title": "Lektion 3 - Mehrsprachigkeit",
+      "setKey": "c1-1-lektion-3",
+      "items": [
+        { "front": "Mehrsprachigkeit", "back": "višejezičnost", "article": "die" },
+        { "front": "befragen", "back": "anketirati|ispitati" },
+        { "front": "gebärden", "back": "sporazumevati se znakovnim jezikom" },
+        { "front": "extrovertiert", "back": "ekstrovertan" },
+        { "front": "rüberkommen", "back": "delovati|ostavljati utisak (na druge)" },
+        { "front": "Hochdeutsch", "back": "standardni (književni) nemački jezik", "article": "das" },
+        { "front": "Regionalsprache", "back": "regionalni jezik", "article": "die", "plural": "die Regionalsprachen" },
+        { "front": "lehren", "back": "predavati|podučavati" },
+        { "front": "Amtssprache", "back": "službeni jezik", "article": "die", "plural": "die Amtssprachen" },
+        { "front": "definieren", "back": "definisati" },
+        { "front": "Erstsprache", "back": "prvi (maternji) jezik", "article": "die", "plural": "die Erstsprachen" },
+        { "front": "Familiensprache", "back": "porodični jezik (jezik koji se govori u porodici)", "article": "die", "plural": "die Familiensprachen" },
+        { "front": "Gebärdensprache", "back": "znakovni jezik", "article": "die", "plural": "die Gebärdensprachen" },
+        { "front": "Hochsprache", "back": "književni jezik", "article": "die", "plural": "die Hochsprachen" },
+        { "front": "Standardsprache", "back": "standardni jezik", "article": "die", "plural": "die Standardsprachen" },
+        { "front": "Kunstsprache", "back": "veštački jezik", "article": "die", "plural": "die Kunstsprachen" },
+        { "front": "Landessprache", "back": "jezik zemlje", "article": "die", "plural": "die Landessprachen" },
+        { "front": "Wissenschaftssprache", "back": "jezik nauke", "article": "die", "plural": "die Wissenschaftssprachen" },
+        { "front": "verstehen unter + Dat.", "back": "podrazumevati pod", "hint": "versteht, verstand, hat verstanden" },
+        { "front": "Norm", "back": "norma", "article": "die", "plural": "die Normen" },
+        { "front": "Persönlichkeit", "back": "ličnost", "article": "die", "plural": "die Persönlichkeiten" },
+        { "front": "anlässlich", "back": "povodom" },
+        { "front": "Blick", "back": "pogled", "article": "der", "plural": "die Blicke" },
+        { "front": "These", "back": "teza", "article": "die", "plural": "die Thesen" },
+        { "front": "verknüpfen mit + Dat.", "back": "povezati sa" },
+        { "front": "angesichts", "back": "s obzirom na|imajući u vidu" },
+        { "front": "ausgehen von + Dat.", "back": "polaziti od", "hint": "geht aus, ging aus, ist ausgegangen" },
+        { "front": "erlernen", "back": "naučiti|savladati" },
+        { "front": "Kontext", "back": "kontekst", "article": "der", "plural": "die Kontexte" },
+        { "front": "formal", "back": "formalan" },
+        { "front": "mangels", "back": "u nedostatku|zbog nedostatka" },
+        { "front": "distanziert", "back": "distanciran|uzdržan" },
+        { "front": "Ergebnis", "back": "rezultat", "article": "das", "plural": "die Ergebnisse" },
+        { "front": "die/der Befragte", "back": "ispitanica / ispitanik", "plural": "die Befragten" },
+        { "front": "tendenziell", "back": "po pravilu|uglavnom (kao tendencija)" },
+        { "front": "authentisch", "back": "autentičan" },
+        { "front": "involvieren", "back": "uključiti" },
+        { "front": "involviert", "back": "uključen" },
+        { "front": "unbewusst", "back": "nesvestan; nesvesno" },
+        { "front": "der Studienteilnehmer / die Studienteilnehmerin", "back": "učesnik / učesnica studije" },
+        { "front": "pflichtbewusst", "back": "odgovoran|svestan svojih dužnosti" },
+        { "front": "gewissenhaft", "back": "savestan" },
+        { "front": "Wurzel", "back": "koren", "article": "die", "plural": "die Wurzeln" },
+        { "front": "entsprechen", "back": "odgovarati (nečemu)", "hint": "entspricht, entsprach, hat entsprochen" },
+        { "front": "anpassen an + Akk.", "back": "prilagoditi (se) (nečemu)" },
+        { "front": "der Studienleiter / die Studienleiterin", "back": "rukovodilac / rukovoditeljka studije" },
+        { "front": "aktivieren", "back": "aktivirati" },
+        { "front": "Verwendung", "back": "upotreba|korišćenje", "article": "die", "plural": "die Verwendungen" },
+        { "front": "Version", "back": "verzija", "article": "die", "plural": "die Versionen" },
+        { "front": "Rolle", "back": "uloga", "article": "die", "plural": "die Rollen" },
+        { "front": "zumal", "back": "tim pre što|pogotovo jer" },
+        { "front": "trauen (sich)", "back": "usuditi se" },
+        { "front": "Lippe", "back": "usna", "article": "die", "plural": "die Lippen" },
+        { "front": "zurückhaltend", "back": "uzdržan" },
+        { "front": "Zorn", "back": "gnev|bes", "article": "der" },
+        { "front": "aufstellen", "back": "postaviti (tezu)" },
+        { "front": "ausleben", "back": "izživeti|u potpunosti ispoljiti" },
+        { "front": "untermauern", "back": "potkrepiti" },
+        { "front": "vertreten", "back": "zastupati", "hint": "vertritt, vertrat, hat vertreten" },
+        { "front": "zeigen (sich) an + Dat.", "back": "pokazivati se u|videti se po" },
+        { "front": "bilingual", "back": "bilingvalan|dvojezičan" },
+        { "front": "mehrsprachig", "back": "višejezičan" },
+        { "front": "kognitiv", "back": "kognitivan" },
+        { "front": "einstellen (sich) auf + Akk.", "back": "prilagoditi se|podesiti se (na nešto)" },
+        { "front": "Schnapsidee", "back": "suluda ideja|blesava zamisao", "article": "die", "plural": "die Schnapsideen" },
+        { "front": "Brückentag", "back": "radni dan između praznika i vikenda (koji se obično uzima slobodan)", "article": "der", "plural": "die Brückentage" },
+        { "front": "Fernweh", "back": "čežnja za dalekim krajevima", "article": "das" },
+        { "front": "Fingerspitzengefühl", "back": "istančan osećaj|takt", "article": "das" },
+        { "front": "Fremdscham", "back": "stid zbog tuđeg (neprijatnog) ponašanja", "article": "die" },
+        { "front": "Kabelsalat", "back": "zamršeni kablovi|„salata od kablova“", "article": "der" },
+        { "front": "Kopfkino", "back": "„film u glavi“|slike koje se odvijaju u mislima", "article": "das" },
+        { "front": "Vorfreude", "back": "radost iščekivanja|unapred osećana radost", "article": "die" }
+      ]
+    }
+  ]
+}

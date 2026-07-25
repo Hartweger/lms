@@ -1,0 +1,1344 @@
+{
+  "lessons": [
+    {
+      "lessonTitle": "Mobilität - Eine Frage der Gerechtigkeit?",
+      "exercises": [
+        {
+          "title": "Vežba: Redewiedergabe und Nomen-Verb-Verbindungen",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Was passt? - „Einer aktuellen Studie ______ sind 85 % aller Menschen in Deutschland tagtäglich unterwegs.\"",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "laut",
+                  "zufolge",
+                  "wegen",
+                  "trotz"
+                ]
+              },
+              "correct_answer": "1",
+              "explanation": "„Zufolge\" steht immer nach dem Nomen (nachgestellt) und regiert den Dativ: Einer Studie zufolge ..."
+            },
+            {
+              "question": "Was passt? - „______ der Definition einer Berliner Stiftung geht es bei Mobilität um die Möglichkeit, von A nach B zu kommen.\"",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Zufolge",
+                  "Anhand",
+                  "Laut",
+                  "Trotz"
+                ]
+              },
+              "correct_answer": "2",
+              "explanation": "„Laut\" steht vor dem Nomen und nennt neutral die Quelle einer Aussage. „Zufolge\" wäre hier falsch, weil es immer nachgestellt wird."
+            },
+            {
+              "question": "Welche Form ist richtig? - „Laut ______ ist die App weiterhin kostenlos.\"",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "dem Hersteller",
+                  "des Herstellers",
+                  "den Hersteller",
+                  "der Hersteller"
+                ]
+              },
+              "correct_answer": "0",
+              "explanation": "Die Präpositionen der Redewiedergabe (laut, nach, gemäß, zufolge) stehen mit dem Dativ: laut dem Hersteller."
+            },
+            {
+              "question": "Was passt? - „Gemäß einer Erhebung von 2015 ______ 92 % des öffentlichen Raums als Parkflächen genutzt.\"",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "würden",
+                  "werden",
+                  "seien",
+                  "worden"
+                ]
+              },
+              "correct_answer": "1",
+              "explanation": "Nach Präpositionen der Redewiedergabe steht das Verb immer im Indikativ, nicht im Konjunktiv: ... werden ... genutzt."
+            },
+            {
+              "question": "Welches Nomen passt? - „Als Rollstuhlfahrer kann er etliche Angebote des Nahverkehrs gar nicht in ______ nehmen.\"",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Frage",
+                  "Verfügung",
+                  "Anspruch",
+                  "Betracht"
+                ]
+              },
+              "correct_answer": "2",
+              "explanation": "Die Nomen-Verb-Verbindung „etwas in Anspruch nehmen\" bedeutet „etwas nutzen\"."
+            },
+            {
+              "question": "Welches Nomen passt? - „Nur wenige Flächen stehen für Haltestellen und Sitzbänke zur ______.\"",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Rolle",
+                  "Entscheidung",
+                  "Anforderung",
+                  "Verfügung"
+                ]
+              },
+              "correct_answer": "3",
+              "explanation": "„Zur Verfügung stehen\" bedeutet „da sein, vorhanden sein\"."
+            }
+          ]
+        },
+        {
+          "title": "Vežba: Indirekte Rede im Kontext",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Ergänzen Sie die passende Konjunktivform: „Die Bürgermeisterin sagt, bis Ende des Jahres ______ das Netz der Fahrradwege ausgebaut.\"",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "werde",
+                  "würde",
+                  "wird",
+                  "sei"
+                ]
+              },
+              "correct_answer": "werde",
+              "explanation": "Passiv Gegenwart, Singular, in der indirekten Rede: Konjunktiv I „werde\" + Partizip Perfekt."
+            },
+            {
+              "question": "Ergänzen Sie die passende Konjunktivform: „Birte Arnolds findet, die Bedürfnisse der Menschen auf dem Land ______ oft übersehen.\"",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "würden",
+                  "werden",
+                  "seien",
+                  "werde"
+                ]
+              },
+              "correct_answer": "würden",
+              "explanation": "Im Plural ist der Konjunktiv I mit dem Indikativ identisch (sie werden), deshalb weicht man auf den Konjunktiv II aus: würden."
+            },
+            {
+              "question": "Ergänzen Sie die passende Konjunktivform: „Aus der Gemeinde heißt es, ein kommunaler Shuttle-Bus ______ nächstes Jahr eingerichtet.\"",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "werde",
+                  "würden",
+                  "sei",
+                  "wird"
+                ]
+              },
+              "correct_answer": "werde",
+              "explanation": "Passiv Gegenwart im Singular: Konjunktiv I „werde\" + Partizip Perfekt (werde eingerichtet)."
+            },
+            {
+              "question": "Ergänzen Sie die passende Konjunktivform: „Serkan Kaya sagt, mit solchen Maßnahmen ______ schon gute Erfahrungen gemacht worden.\"",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "seien",
+                  "sei",
+                  "wären",
+                  "sind"
+                ]
+              },
+              "correct_answer": "seien",
+              "explanation": "Passiv Vergangenheit im Plural: „seien\" + Partizip Perfekt + „worden\" (seien gemacht worden)."
+            },
+            {
+              "question": "Ergänzen Sie die passende Konjunktivform: „Ein Experte kritisiert, die Geschwindigkeitsbegrenzung ______ bisher zu selten eingehalten worden.\"",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "sei",
+                  "seien",
+                  "ist",
+                  "werde"
+                ]
+              },
+              "correct_answer": "sei",
+              "explanation": "Passiv Vergangenheit im Singular: „sei\" + Partizip Perfekt + „worden\" (sei eingehalten worden)."
+            }
+          ]
+        },
+        {
+          "title": "Vežba: Wortschatz - Mobilität",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Spoji nemačke reči sa prevodom.",
+              "question_type": "match_pairs",
+              "options": {
+                "type": "match_pairs",
+                "items": [
+                  {
+                    "de": "das Hindernis",
+                    "sr": "prepreka"
+                  },
+                  {
+                    "de": "die Fahrgemeinschaft",
+                    "sr": "zajednička vožnja"
+                  },
+                  {
+                    "de": "barrierefrei",
+                    "sr": "bez barijera, pristupačan"
+                  },
+                  {
+                    "de": "der Lösungsansatz",
+                    "sr": "pristup rešenju"
+                  },
+                  {
+                    "de": "die Verkehrsanbindung",
+                    "sr": "saobraćajna povezanost"
+                  },
+                  {
+                    "de": "überfüllt",
+                    "sr": "pretrpan, prepun"
+                  },
+                  {
+                    "de": "die Geschwindigkeitsbegrenzung",
+                    "sr": "ograničenje brzine"
+                  }
+                ]
+              },
+              "correct_answer": "all",
+              "explanation": "Wichtige Wörter zum Thema Mobilität aus Lektion 4."
+            }
+          ]
+        },
+        {
+          "title": "Test: Selbstkontrolle - Lektion 4",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Lesen Sie den Flyer und schreiben Sie die Wörter in Klammern richtig. (Teil 1)\n\nNACHHALTIGE MOBILITÄT - MOBILITÄTSVEREIN\nWir verstehen uns als Förderer nachhaltiger Mobilität. Wir unterstützen die Entwicklung von ______ (tostroElekau) und setzen uns für Carsharing und ______ (tengeFahrschafmein) ein. Zu unseren Prioritäten gehört außerdem die Verbesserung des öffentlichen ______ (kehrsverNah). Bahnen und Busse sollen dazu besser mit anderen Mobilitätsformen wie Auto, Fahrrad und Fußverkehr vernetzt werden. ______ (derHinsenis), die die Mobilität für ältere und beeinträchtigte Personen erschweren, wollen wir abbauen.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "Elektroautos",
+                  "Fahrgemeinschaften",
+                  "Nahverkehrs",
+                  "Hindernisse"
+                ]
+              },
+              "correct_answer": "Elektroautos, Fahrgemeinschaften, Nahverkehrs, Hindernisse",
+              "explanation": "Elektroautos und Fahrgemeinschaften werden entwickelt bzw. unterstützt, der öffentliche Nahverkehr (Genitiv: des Nahverkehrs) wird verbessert und Hindernisse werden abgebaut."
+            },
+            {
+              "question": "Lesen Sie den Flyer und schreiben Sie die Wörter in Klammern richtig. (Teil 2)\n\nDie ______ (dungbinAn) des ländlichen Raums an das öffentliche ______ (kehrsVernetz) liegt uns besonders am Herzen. Ein ______ (sungsLösatzan) für die beobachteten Probleme im ______ (rufsBekehrver) könnte vermehrte Telearbeit sein. Dazu sind wir mit Firmen bereits im Gespräch.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "Anbindung",
+                  "Verkehrsnetz",
+                  "Lösungsansatz",
+                  "Berufsverkehr"
+                ]
+              },
+              "correct_answer": "Anbindung, Verkehrsnetz, Lösungsansatz, Berufsverkehr",
+              "explanation": "Die Anbindung an das Verkehrsnetz, ein Lösungsansatz für die Probleme im Berufsverkehr - alles zentrale Wörter der Lektion."
+            },
+            {
+              "question": "Welche Präposition der Redewiedergabe passt? - „Wer die Navigations-App Navigat nutzt, kann sich freuen, denn ______ Angaben des Herstellers wurden bei der letzten Aktualisierung umfangreiche Verbesserungen vorgenommen.\"",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "nach",
+                  "zufolge"
+                ]
+              },
+              "correct_answer": "0",
+              "explanation": "Vor dem Nomen passt nur „nach\" - „zufolge\" wird immer nachgestellt (den Angaben zufolge)."
+            },
+            {
+              "question": "Welche Präposition der Redewiedergabe passt? - „Den Erwartungen ______ kann die App auch weiterhin kostenlos heruntergeladen werden.\"",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "laut",
+                  "gemäß"
+                ]
+              },
+              "correct_answer": "1",
+              "explanation": "„Gemäß\" kann voran- oder nachgestellt werden (den Erwartungen gemäß). „Laut\" steht nur vor dem Nomen."
+            },
+            {
+              "question": "Welche Präposition der Redewiedergabe passt? - „Den Angaben des Sprechers ______ kann die App auch weiterhin nur mit Internetverbindung genutzt werden.\"",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "zufolge",
+                  "laut"
+                ]
+              },
+              "correct_answer": "0",
+              "explanation": "Nach dem Nomen steht „zufolge\": den Angaben zufolge. „Laut\" müsste vor dem Nomen stehen."
+            },
+            {
+              "question": "Welche Präposition der Redewiedergabe passt? - „______ ersten Testberichten liegt Navigat derzeit unter den fünf besten Navigations-Apps.\"",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Zufolge",
+                  "Laut"
+                ]
+              },
+              "correct_answer": "1",
+              "explanation": "Vor dem Nomen passt „laut\" - „zufolge\" wird immer nachgestellt (ersten Testberichten zufolge)."
+            },
+            {
+              "question": "Ergänzen Sie die Verben im Indikativ oder Konjunktiv. (Teil 1)\n\nWer die Navigations-App Navigat nutzt, kann sich freuen, denn nach Angaben des Herstellers ______ (werden) bei der letzten Aktualisierung umfangreiche Verbesserungen vorgenommen. Nicht nur das Design ______ (sein) optimiert worden, erklärte der Firmensprecher, sondern auch die Menüoptionen ______ (sein) überarbeitet worden. Den Erwartungen gemäß ______ (können) die App auch weiterhin kostenlos heruntergeladen werden.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "wurden",
+                  "sei",
+                  "seien",
+                  "kann",
+                  "wird",
+                  "waren"
+                ]
+              },
+              "correct_answer": "wurden, sei, seien, kann",
+              "explanation": "Nach Präpositionen der Redewiedergabe (nach Angaben, den Erwartungen gemäß) steht der Indikativ: wurden, kann. Nach „erklärte der Firmensprecher\" steht die indirekte Rede: das Design sei optimiert worden (Singular), die Menüoptionen seien überarbeitet worden (Plural)."
+            },
+            {
+              "question": "Ergänzen Sie die Verben im Indikativ oder Konjunktiv. (Teil 2)\n\nEs ______ (werden) aber kostenpflichtige Premiumfunktionen angeboten, ließ der Hersteller wissen. Den Angaben des Sprechers zufolge ______ (können) die App auch weiterhin nur mit Internetverbindung genutzt werden. Es ______ (werden) aber an einer Lösung gearbeitet, hieß es bei der Vorstellung der App. Laut ersten Testberichten ______ (liegen) Navigat derzeit unter den fünf besten Navigations-Apps.",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "würden",
+                  "könne",
+                  "werde",
+                  "liegt",
+                  "kann",
+                  "werden",
+                  "liege"
+                ]
+              },
+              "correct_answer": "würden, könne, werde, liegt",
+              "explanation": "„Ließ der Hersteller wissen\" und „hieß es\" signalisieren indirekte Rede: es würden Premiumfunktionen angeboten (Plural, Konjunktiv II), es werde an einer Lösung gearbeitet (Singular, Konjunktiv I). Der Satz mit „zufolge\" gehört noch zur Wiedergabe der Aussage des Sprechers, deshalb steht hier der Konjunktiv I: könne. Nach „laut ersten Testberichten\" steht dagegen der Indikativ: liegt."
+            },
+            {
+              "question": "Wie kann man den kursiven Satzteil (1) „Alle Anzeichen sprechen dafür\" anders sagen?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Aller Wahrscheinlichkeit nach",
+                  "Alles deutet darauf hin",
+                  "Es ist zu erwarten",
+                  "Zweifellos"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "Prognosen zur Mobilität",
+                  "content": "Bis zum Jahr 2050 sollen in Europa die CO2-Emissionen auf Null stehen und Klimaneutralität erreicht sein. Wie ist das zu schaffen?\n\nAlle Anzeichen sprechen dafür (1), dass dieses Ziel nicht leicht zu erreichen sein wird. Ganz bestimmt (3) muss die Nutzung des privaten Autos noch viel unattraktiver gemacht werden.\n\nEs ist damit zu rechnen (2), dass neue Technologien helfen werden, den Verkehr zu reduzieren. Höchstwahrscheinlich (4) werden neue Stadtkonzepte immer wichtiger, wie zum Beispiel die Stadt der kurzen Wege, in der alle Orte des Alltagslebens zu Fuß oder mit dem Rad erreicht werden können."
+                }
+              },
+              "correct_answer": "1",
+              "explanation": "„Alles deutet darauf hin, dass ...\" hat dieselbe Bedeutung wie „Alle Anzeichen sprechen dafür, dass ...\"."
+            },
+            {
+              "question": "Wie kann man den kursiven Satzteil (2) „Es ist damit zu rechnen\" anders sagen?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Aller Wahrscheinlichkeit nach",
+                  "Alles deutet darauf hin",
+                  "Es ist zu erwarten",
+                  "Zweifellos"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "Prognosen zur Mobilität",
+                  "content": "Bis zum Jahr 2050 sollen in Europa die CO2-Emissionen auf Null stehen und Klimaneutralität erreicht sein. Wie ist das zu schaffen?\n\nAlle Anzeichen sprechen dafür (1), dass dieses Ziel nicht leicht zu erreichen sein wird. Ganz bestimmt (3) muss die Nutzung des privaten Autos noch viel unattraktiver gemacht werden.\n\nEs ist damit zu rechnen (2), dass neue Technologien helfen werden, den Verkehr zu reduzieren. Höchstwahrscheinlich (4) werden neue Stadtkonzepte immer wichtiger, wie zum Beispiel die Stadt der kurzen Wege, in der alle Orte des Alltagslebens zu Fuß oder mit dem Rad erreicht werden können."
+                }
+              },
+              "correct_answer": "2",
+              "explanation": "„Es ist zu erwarten, dass ...\" entspricht „Es ist damit zu rechnen, dass ...\"."
+            },
+            {
+              "question": "Wie kann man den kursiven Satzteil (3) „Ganz bestimmt\" anders sagen?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Aller Wahrscheinlichkeit nach",
+                  "Alles deutet darauf hin",
+                  "Es ist zu erwarten",
+                  "Zweifellos"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "Prognosen zur Mobilität",
+                  "content": "Bis zum Jahr 2050 sollen in Europa die CO2-Emissionen auf Null stehen und Klimaneutralität erreicht sein. Wie ist das zu schaffen?\n\nAlle Anzeichen sprechen dafür (1), dass dieses Ziel nicht leicht zu erreichen sein wird. Ganz bestimmt (3) muss die Nutzung des privaten Autos noch viel unattraktiver gemacht werden.\n\nEs ist damit zu rechnen (2), dass neue Technologien helfen werden, den Verkehr zu reduzieren. Höchstwahrscheinlich (4) werden neue Stadtkonzepte immer wichtiger, wie zum Beispiel die Stadt der kurzen Wege, in der alle Orte des Alltagslebens zu Fuß oder mit dem Rad erreicht werden können."
+                }
+              },
+              "correct_answer": "3",
+              "explanation": "„Zweifellos\" drückt wie „ganz bestimmt\" völlige Sicherheit aus."
+            },
+            {
+              "question": "Wie kann man den kursiven Satzteil (4) „Höchstwahrscheinlich\" anders sagen?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Aller Wahrscheinlichkeit nach",
+                  "Alles deutet darauf hin",
+                  "Es ist zu erwarten",
+                  "Zweifellos"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "Prognosen zur Mobilität",
+                  "content": "Bis zum Jahr 2050 sollen in Europa die CO2-Emissionen auf Null stehen und Klimaneutralität erreicht sein. Wie ist das zu schaffen?\n\nAlle Anzeichen sprechen dafür (1), dass dieses Ziel nicht leicht zu erreichen sein wird. Ganz bestimmt (3) muss die Nutzung des privaten Autos noch viel unattraktiver gemacht werden.\n\nEs ist damit zu rechnen (2), dass neue Technologien helfen werden, den Verkehr zu reduzieren. Höchstwahrscheinlich (4) werden neue Stadtkonzepte immer wichtiger, wie zum Beispiel die Stadt der kurzen Wege, in der alle Orte des Alltagslebens zu Fuß oder mit dem Rad erreicht werden können."
+                }
+              },
+              "correct_answer": "0",
+              "explanation": "„Aller Wahrscheinlichkeit nach\" bedeutet dasselbe wie „höchstwahrscheinlich\"."
+            }
+          ]
+        }
+      ],
+      "uncertainties": [
+        "Zadatak 2 Selbstkontrolle, praznina (a): izabrano „wurden\" (Präteritum Passiv, Indikativ) jer prethodi predlog „nach Angaben\" i kontekst je prošlost („bei der letzten Aktualisierung\"). Teoretski bi bio moguć i Perfekt „sind ... vorgenommen worden\", ali sa jednom prazninom i naznakom (werden) Präteritum je jedino prirodno rešenje. Zvanični ključ rešenja nije dostupan u ekstraktu.",
+        "Zadatak 2 Selbstkontrolle, praznina (e): izabrano „würden\" (Konjunktiv II, množina) jer „ließ der Hersteller wissen\" signalizira indirektni govor, a subjekat „Premiumfunktionen\" je u množini. Alternativno čitanje sa indikativom „werden\" smatram pogrešnim po pravilu lekcije, ali ključ rešenja nije dostupan.",
+        "Sva rešenja Selbstkontrolle izvedena su iz gramatike lekcije i konteksta jer stranice sa rešenjima nisu u ekstraktu; za zadatke 1 i 3 rešenja su jednoznačna (anagrami, sparivanje 1:1)."
+      ],
+      "skipped": []
+    },
+    {
+      "lessonTitle": "Körper und Geist - Mit Schwung in den Alltag!",
+      "exercises": [
+        {
+          "title": "Vežba: Nominalstil",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "„Die Gehirnzellen vernetzen sich.\" - Wie lautet die passende Nominalgruppe?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "die Vernetzung den Gehirnzellen",
+                  "die Vernetzung der Gehirnzellen",
+                  "das Vernetzen sich der Gehirnzellen",
+                  "die Vernetzung von der Gehirnzellen"
+                ]
+              },
+              "correct_answer": "1",
+              "explanation": "Das Subjekt des Aktivsatzes wird im Nominalstil zum Genitiv: die Vernetzung der Gehirnzellen."
+            },
+            {
+              "question": "„Bewegung regt die Durchblutung an.\" - Wie lautet die passende Nominalgruppe?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "die Anregung der Durchblutung",
+                  "die Anregung die Durchblutung",
+                  "die Anregung von die Durchblutung",
+                  "der Anregung von Durchblutung"
+                ]
+              },
+              "correct_answer": "0",
+              "explanation": "Der Akkusativ des Aktivsatzes wird im Nominalstil zum Genitiv: die Anregung der Durchblutung."
+            },
+            {
+              "question": "„Informationen werden schneller verarbeitet.\" - Wie lautet die passende Nominalgruppe?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "schnelle Verarbeitung der Informationen",
+                  "schneller Verarbeitung von Informationen",
+                  "schnellere Verarbeitung von Informationen",
+                  "schnelleres Verarbeiten der Information"
+                ]
+              },
+              "correct_answer": "2",
+              "explanation": "Das Adverb wird zum deklinierten Adjektiv, der Komparativ bleibt erhalten: schnellere Verarbeitung von Informationen."
+            },
+            {
+              "question": "„Der Körper schüttet Glückshormone aus.\" - Wie lautet die passende Nominalgruppe?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "die Ausschüttung der Glückshormonen",
+                  "die Ausschüttung von Glückshormone",
+                  "die Ausschüttung des Glückshormons",
+                  "die Ausschüttung von Glückshormonen"
+                ]
+              },
+              "correct_answer": "3",
+              "explanation": "Nomen ohne Artikel werden im Nominalstil mit „von + Dativ\" angeschlossen: die Ausschüttung von Glückshormonen."
+            },
+            {
+              "question": "Welcher Satz passt zur Nominalgruppe „die Verbesserung der Beweglichkeit\"?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Die Beweglichkeit verbessert sich.",
+                  "Die Beweglichkeit verbessert etwas.",
+                  "Beweglich wird verbessert.",
+                  "Die Verbesserung ist beweglich."
+                ]
+              },
+              "correct_answer": "0",
+              "explanation": "„Die Verbesserung der Beweglichkeit\" entspricht „Die Beweglichkeit verbessert sich\" (oder „wird verbessert\") - Aktiv und Passiv sind im Nominalstil oft nicht mehr unterscheidbar."
+            },
+            {
+              "question": "„Sie vernetzen sich.\" - Wie lautet die passende Nominalgruppe?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "ihre Vernetzung",
+                  "seine Vernetzung",
+                  "die Vernetzung von sie",
+                  "sich ihre Vernetzung"
+                ]
+              },
+              "correct_answer": "0",
+              "explanation": "Personalpronomen werden im Nominalstil zu Possessivartikeln: sie -> ihre Vernetzung."
+            }
+          ]
+        },
+        {
+          "title": "Vežba: Nominalstil im Kontext",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Formen Sie um: „Der Stoffwechsel wird angeregt.\" -> ______ des Stoffwechsels",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "Anregung",
+                  "Anregen",
+                  "Aufregung",
+                  "Abregung"
+                ]
+              },
+              "correct_answer": "Anregung",
+              "explanation": "Aus „anregen\" wird das Nomen „die Anregung\": Anregung des Stoffwechsels."
+            },
+            {
+              "question": "Formen Sie um: „Der Sauerstoffgehalt erhöht sich.\" -> ______ des Sauerstoffgehalts",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "Erhöhung",
+                  "Erhebung",
+                  "Höhe",
+                  "Erhöhen"
+                ]
+              },
+              "correct_answer": "Erhöhung",
+              "explanation": "Aus „erhöhen\" wird „die Erhöhung\": Erhöhung des Sauerstoffgehalts."
+            },
+            {
+              "question": "Formen Sie um: „Neue Verbindungen im Gehirn werden aufgebaut.\" -> ______ neuer Verbindungen im Gehirn",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "Aufbau",
+                  "Abbau",
+                  "Ausbau",
+                  "Anbau"
+                ]
+              },
+              "correct_answer": "Aufbau",
+              "explanation": "Aus „aufbauen\" wird „der Aufbau\": Aufbau neuer Verbindungen im Gehirn."
+            },
+            {
+              "question": "Formen Sie um: „Die Muskelaktivität wird deutlich gesteigert.\" -> ______ Steigerung der Muskelaktivität",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "deutliche",
+                  "deutlich",
+                  "deutlichen",
+                  "deutlicher"
+                ]
+              },
+              "correct_answer": "deutliche",
+              "explanation": "Das Adverb wird zum deklinierten Adjektiv: (die) deutliche Steigerung der Muskelaktivität."
+            },
+            {
+              "question": "Formen Sie um: „Die Gelenke werden nicht belastet.\" -> keine ______ der Gelenke",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "Belastung",
+                  "Belastbarkeit",
+                  "Beladung",
+                  "Belästigung"
+                ]
+              },
+              "correct_answer": "Belastung",
+              "explanation": "Aus „belasten\" wird „die Belastung\", die Negation wird zu „keine\": keine Belastung der Gelenke."
+            }
+          ]
+        },
+        {
+          "title": "Vežba: Wortschatz - Körper und Geist",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Spoji nemačke reči sa prevodom.",
+              "question_type": "match_pairs",
+              "options": {
+                "type": "match_pairs",
+                "items": [
+                  {
+                    "de": "der Nacken",
+                    "sr": "potiljak, vrat"
+                  },
+                  {
+                    "de": "die Handfläche",
+                    "sr": "dlan"
+                  },
+                  {
+                    "de": "der Oberschenkel",
+                    "sr": "butina"
+                  },
+                  {
+                    "de": "das Gelenk",
+                    "sr": "zglob"
+                  },
+                  {
+                    "de": "dehnen",
+                    "sr": "istegnuti, rastegnuti"
+                  },
+                  {
+                    "de": "verschränken",
+                    "sr": "prekrstiti, ukrstiti"
+                  },
+                  {
+                    "de": "der Stoffwechsel",
+                    "sr": "metabolizam"
+                  }
+                ]
+              },
+              "correct_answer": "all",
+              "explanation": "Wichtige Wörter zum Wortfeld Körperteile und Bewegung aus Lektion 5."
+            }
+          ]
+        },
+        {
+          "title": "Test: Selbstkontrolle - Lektion 5",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Welches Nomen passt? - „______ (1) von Stress durch Bewegung macht den Kopf frei und gleichzeitig fit für neue Aufgaben.\"",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Abbau",
+                  "Effekt"
+                ]
+              },
+              "correct_answer": "0",
+              "explanation": "„Der Abbau von Stress\" bedeutet, dass Stress reduziert wird - „Effekt von Stress\" ergäbe hier keinen Sinn."
+            },
+            {
+              "question": "Welches Nomen passt? - „Viele denken bei ______ (2) nach einem anstrengenden Arbeitstag an ein gemütliches Sofa. Doch das Hirn kann sich bei Bewegung deutlich besser erholen.\"",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Beweglichkeit",
+                  "Entspannung"
+                ]
+              },
+              "correct_answer": "1",
+              "explanation": "Gemeint ist das Ausruhen nach der Arbeit - die Entspannung. „Beweglichkeit\" passt nicht zum Sofa-Kontext."
+            },
+            {
+              "question": "Welches Nomen passt? - „Koordinationsübungen und Ausdauertraining sorgen für eine ______ (3) anderer Hirnregionen und so bekommt das sogenannte Denkzentrum eine Pause.\"",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Aktivierung",
+                  "Ausschüttung"
+                ]
+              },
+              "correct_answer": "0",
+              "explanation": "Hirnregionen werden aktiviert - „Ausschüttung\" passt nur zu Hormonen."
+            },
+            {
+              "question": "Welches Nomen passt? - „Solche Erholungsphasen steigern die allgemeine ______ (4) des Gehirns.\"",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Erhöhung",
+                  "Leistungsfähigkeit"
+                ]
+              },
+              "correct_answer": "1",
+              "explanation": "Man steigert die Leistungsfähigkeit des Gehirns - „die Erhöhung steigern\" wäre doppelt."
+            },
+            {
+              "question": "Welches Nomen passt? - „Beispielsweise kommt es zu einer ______ (5) der Konzentrationsfähigkeit.\"",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Dehnung",
+                  "Verbesserung"
+                ]
+              },
+              "correct_answer": "1",
+              "explanation": "Die Konzentrationsfähigkeit wird besser - es kommt zu einer Verbesserung. „Dehnung\" gehört zu Muskeln."
+            },
+            {
+              "question": "Welches Nomen passt? - „Durch Bewegung wachsen Nervenzellen - und zwar in dem Teil des Gehirns, der für die ______ (6) und Speicherung von Informationen verantwortlich ist.\"",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Handfläche",
+                  "Verarbeitung"
+                ]
+              },
+              "correct_answer": "1",
+              "explanation": "Das Gehirn verarbeitet und speichert Informationen - die Verarbeitung von Informationen."
+            },
+            {
+              "question": "Lesen Sie den Infotext und ergänzen Sie die Notizen im Nominalstil.\n\nJONGLIEREN LERNEN UND SCHLAUER WERDEN!\nBälle in die Luft werfen und wieder auffangen: Durch diese einfache Bewegung trainieren Sie effektiv Körper und Geist (1). Beim Jonglieren aktivieren Sie beide Gehirnhälften (2). Das Zusammenspiel der Gehirnzellen wird optimiert (3). Studien haben gezeigt, dass man durch Jonglieren auch sprachliche Leistungen (z. B. die Ausdrucksfähigkeit) verbessern kann (4). Um von den zahlreichen positiven Effekten profitieren zu können, muss man allerdings regelmäßig üben (5)!\n\nNotizen:\n1. effektives ______ und Geist\n2. ______ Gehirnhälften\n3. Optimierung ______ der Gehirnzellen\n4. ______ Leistungen\n5. Wichtig: ______ Üben",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "Verbesserung sprachlicher",
+                  "Training von Körper",
+                  "regelmäßiges",
+                  "Aktivierung beider",
+                  "des Zusammenspiels"
+                ]
+              },
+              "correct_answer": "Training von Körper, Aktivierung beider, des Zusammenspiels, Verbesserung sprachlicher, regelmäßiges",
+              "explanation": "Verben werden zu Nomen (trainieren -> Training, aktivieren -> Aktivierung, verbessern -> Verbesserung), Akkusativobjekte zum Genitiv (des Zusammenspiels, beider Gehirnhälften), Adverbien zu deklinierten Adjektiven (regelmäßig -> regelmäßiges Üben). Bei Notiz 4 sind zwei Lösungen möglich: „Verbesserung sprachlicher Leistungen\" oder „Verbesserung von sprachlichen Leistungen\"."
+            },
+            {
+              "question": "Was passt in Lücke (1)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Also, ich habe die Erfahrung gemacht, dass",
+                  "bewirkt also, dass",
+                  "entspricht nicht meiner Erfahrung",
+                  "Wenn man ..., dann führt das dazu, dass",
+                  "Ich kann bestätigen, dass"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "Blogbeitrag: Tanzen? Bitte nicht mit mir!",
+                  "content": "Tanzen tut gut, heißt es. Und: … (1) Tanzen gute Laune macht - allerdings nur, wenn man allein tanzt. Kürzlich habe ich gelesen, dass Tanzen unsere Beziehungen verbessern soll: ... sich mit anderen im gleichen Rhythmus bewegt, … (2) man die eigenen Körpergrenzen vergisst. Als Paar gemeinsam zu tanzen … (3) man sich miteinander verbunden fühlt. Angeblich! Ehrlich gesagt: Das … (4). Aber vielleicht ist es mir auch noch nie gelungen, den richtigen Rhythmus zu finden. … (5) es mich eher stresst, mit anderen zu tanzen. Leider."
+                }
+              },
+              "correct_answer": "4",
+              "explanation": "„Ich kann bestätigen, dass Tanzen gute Laune macht\" - die Bloggerin bestätigt hier die allgemeine Aussage aus eigener Sicht."
+            },
+            {
+              "question": "Was passt in Lücke (2)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Also, ich habe die Erfahrung gemacht, dass",
+                  "bewirkt also, dass",
+                  "entspricht nicht meiner Erfahrung",
+                  "Wenn man ..., dann führt das dazu, dass",
+                  "Ich kann bestätigen, dass"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "Blogbeitrag: Tanzen? Bitte nicht mit mir!",
+                  "content": "Tanzen tut gut, heißt es. Und: … (1) Tanzen gute Laune macht - allerdings nur, wenn man allein tanzt. Kürzlich habe ich gelesen, dass Tanzen unsere Beziehungen verbessern soll: ... sich mit anderen im gleichen Rhythmus bewegt, … (2) man die eigenen Körpergrenzen vergisst. Als Paar gemeinsam zu tanzen … (3) man sich miteinander verbunden fühlt. Angeblich! Ehrlich gesagt: Das … (4). Aber vielleicht ist es mir auch noch nie gelungen, den richtigen Rhythmus zu finden. … (5) es mich eher stresst, mit anderen zu tanzen. Leider."
+                }
+              },
+              "correct_answer": "3",
+              "explanation": "Das zweiteilige Redemittel „Wenn man …, dann führt das dazu, dass\" umschließt den Satz: Wenn man sich mit anderen im gleichen Rhythmus bewegt, dann führt das dazu, dass man die eigenen Körpergrenzen vergisst."
+            },
+            {
+              "question": "Was passt in Lücke (3)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Also, ich habe die Erfahrung gemacht, dass",
+                  "bewirkt also, dass",
+                  "entspricht nicht meiner Erfahrung",
+                  "Wenn man ..., dann führt das dazu, dass",
+                  "Ich kann bestätigen, dass"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "Blogbeitrag: Tanzen? Bitte nicht mit mir!",
+                  "content": "Tanzen tut gut, heißt es. Und: … (1) Tanzen gute Laune macht - allerdings nur, wenn man allein tanzt. Kürzlich habe ich gelesen, dass Tanzen unsere Beziehungen verbessern soll: ... sich mit anderen im gleichen Rhythmus bewegt, … (2) man die eigenen Körpergrenzen vergisst. Als Paar gemeinsam zu tanzen … (3) man sich miteinander verbunden fühlt. Angeblich! Ehrlich gesagt: Das … (4). Aber vielleicht ist es mir auch noch nie gelungen, den richtigen Rhythmus zu finden. … (5) es mich eher stresst, mit anderen zu tanzen. Leider."
+                }
+              },
+              "correct_answer": "1",
+              "explanation": "„Als Paar gemeinsam zu tanzen bewirkt also, dass man sich miteinander verbunden fühlt\" - hier wird eine Auswirkung beschrieben."
+            },
+            {
+              "question": "Was passt in Lücke (4)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Also, ich habe die Erfahrung gemacht, dass",
+                  "bewirkt also, dass",
+                  "entspricht nicht meiner Erfahrung",
+                  "Wenn man ..., dann führt das dazu, dass",
+                  "Ich kann bestätigen, dass"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "Blogbeitrag: Tanzen? Bitte nicht mit mir!",
+                  "content": "Tanzen tut gut, heißt es. Und: … (1) Tanzen gute Laune macht - allerdings nur, wenn man allein tanzt. Kürzlich habe ich gelesen, dass Tanzen unsere Beziehungen verbessern soll: ... sich mit anderen im gleichen Rhythmus bewegt, … (2) man die eigenen Körpergrenzen vergisst. Als Paar gemeinsam zu tanzen … (3) man sich miteinander verbunden fühlt. Angeblich! Ehrlich gesagt: Das … (4). Aber vielleicht ist es mir auch noch nie gelungen, den richtigen Rhythmus zu finden. … (5) es mich eher stresst, mit anderen zu tanzen. Leider."
+                }
+              },
+              "correct_answer": "2",
+              "explanation": "„Ehrlich gesagt: Das entspricht nicht meiner Erfahrung.\" - die Bloggerin widerspricht der Behauptung."
+            },
+            {
+              "question": "Was passt in Lücke (5)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Also, ich habe die Erfahrung gemacht, dass",
+                  "bewirkt also, dass",
+                  "entspricht nicht meiner Erfahrung",
+                  "Wenn man ..., dann führt das dazu, dass",
+                  "Ich kann bestätigen, dass"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "Blogbeitrag: Tanzen? Bitte nicht mit mir!",
+                  "content": "Tanzen tut gut, heißt es. Und: … (1) Tanzen gute Laune macht - allerdings nur, wenn man allein tanzt. Kürzlich habe ich gelesen, dass Tanzen unsere Beziehungen verbessern soll: ... sich mit anderen im gleichen Rhythmus bewegt, … (2) man die eigenen Körpergrenzen vergisst. Als Paar gemeinsam zu tanzen … (3) man sich miteinander verbunden fühlt. Angeblich! Ehrlich gesagt: Das … (4). Aber vielleicht ist es mir auch noch nie gelungen, den richtigen Rhythmus zu finden. … (5) es mich eher stresst, mit anderen zu tanzen. Leider."
+                }
+              },
+              "correct_answer": "0",
+              "explanation": "„Also, ich habe die Erfahrung gemacht, dass es mich eher stresst, mit anderen zu tanzen\" - hier berichtet die Bloggerin von ihrer persönlichen Erfahrung."
+            }
+          ]
+        }
+      ],
+      "uncertainties": [
+        "Zadatak 2 Selbstkontrolle (Nominalstil beleške): praznine su višečlane fraze („Training von Körper\", „Aktivierung beider\", „des Zusammenspiels\", „Verbesserung sprachlicher\") jer okvir beleški u knjizi fiksira ostatak („effektives ______ und Geist\" itd.). Rešenja su izvedena po pravilima Nominalstila iz lekcije; zvanični ključ nije dostupan u ekstraktu, ali su rešenja jednoznačna.",
+        "Zadatak 3 Selbstkontrolle: raspored (1)=e, (2)=d, (3)=b, (4)=c, (5)=a izveden iz konteksta; svaka fraza se koristi tačno jednom i raspored je jednoznačan."
+      ],
+      "skipped": []
+    },
+    {
+      "lessonTitle": "Ausbildungswege - Offene Türen und gläserne Decken",
+      "exercises": [
+        {
+          "title": "Vežba: Konzessive Zusammenhänge",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Was passt? - „______ meiner guten Noten fühle ich mich an der Universität manchmal unsicher.\"",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Nichtsdestotrotz",
+                  "Ungeachtet",
+                  "Wobei",
+                  "Allerdings"
+                ]
+              },
+              "correct_answer": "1",
+              "explanation": "Vor einer Nomengruppe im Genitiv steht die konzessive Präposition „ungeachtet\": ungeachtet meiner guten Noten."
+            },
+            {
+              "question": "Was passt? - „Die Vergütung ist nicht hoch. ______ entscheiden sich viele für eine Ausbildung.\"",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Wobei",
+                  "Ungeachtet",
+                  "Nichtsdestotrotz",
+                  "Obwohl"
+                ]
+              },
+              "correct_answer": "2",
+              "explanation": "„Nichtsdestotrotz\" ist ein Hauptsatz-Konnektor auf Position 1, danach folgt das Verb. Es bedeutet dasselbe wie „trotzdem\", ist aber formeller."
+            },
+            {
+              "question": "Was passt? - „Ich hatte dieses Problem nicht, ______ meine Abiturnoten eher mittelmäßig waren.\"",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "allerdings",
+                  "wobei",
+                  "dennoch",
+                  "nichtsdestotrotz"
+                ]
+              },
+              "correct_answer": "1",
+              "explanation": "„Wobei\" leitet einen nachgestellten Nebensatz ein (Verb am Ende) und relativiert die vorherige Aussage."
+            },
+            {
+              "question": "Welcher zweiteilige Konnektor passt in die Lücken? - „Heute komme ich mit meinem Gehalt gut aus, ... ich ... niemals so viel verdienen werde wie meine Eltern.\"",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "wenn ... auch",
+                  "sowohl ... als auch",
+                  "je ... desto",
+                  "entweder ... oder"
+                ]
+              },
+              "correct_answer": "0",
+              "explanation": "„Wenn ... auch\" ist ein zweiteiliger konzessiver Konnektor: Das Subjekt steht zwischen beiden Teilen, das Verb am Ende des Nebensatzes."
+            },
+            {
+              "question": "Welche Form ist richtig? - „Ungeachtet ______ fand das Sommerfest draußen statt.\"",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "des schlechten Wetters",
+                  "dem schlechten Wetter",
+                  "das schlechte Wetter",
+                  "der schlechten Wetter"
+                ]
+              },
+              "correct_answer": "0",
+              "explanation": "„Ungeachtet\" steht mit dem Genitiv: ungeachtet des schlechten Wetters."
+            },
+            {
+              "question": "Was passt? - „Ich hatte ein ausgezeichnetes Abitur. Unsere Vorstellungen über meine berufliche Zukunft gingen ______ weit auseinander.\"",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "obwohl",
+                  "ungeachtet",
+                  "allerdings",
+                  "wobei"
+                ]
+              },
+              "correct_answer": "2",
+              "explanation": "„Allerdings\" steht auf Position 1 oder im Mittelfeld eines Hauptsatzes und drückt eine Einschränkung aus."
+            }
+          ]
+        },
+        {
+          "title": "Vežba: Verben mit -fallen im Kontext",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Ergänzen Sie das passende Verb: „Der Kurs ______ heute wegen Krankheit der Dozentin.\"",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "entfällt",
+                  "verfällt",
+                  "zerfällt",
+                  "missfällt"
+                ]
+              },
+              "correct_answer": "entfällt",
+              "explanation": "„Entfallen\" bedeutet hier „nicht stattfinden, ausfallen\"."
+            },
+            {
+              "question": "Ergänzen Sie das passende Verb: „Ich habe oft Angst, in Prüfungen ______.\"",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "durchzufallen",
+                  "umzufallen",
+                  "aufzufallen",
+                  "abzufallen"
+                ]
+              },
+              "correct_answer": "durchzufallen",
+              "explanation": "„Durchfallen\" bedeutet „eine Prüfung nicht bestehen\"."
+            },
+            {
+              "question": "Ergänzen Sie das passende Verb: „Die Tickets ______ nach sechs Monaten.\"",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "verfallen",
+                  "zerfallen",
+                  "entfallen",
+                  "auffallen"
+                ]
+              },
+              "correct_answer": "verfallen",
+              "explanation": "„Verfallen\" bedeutet „ungültig oder wertlos werden\"."
+            },
+            {
+              "question": "Ergänzen Sie das passende Verb: „Mir ist leider sein Name ______.\"",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "entfallen",
+                  "verfallen",
+                  "zugefallen",
+                  "umgefallen"
+                ]
+              },
+              "correct_answer": "entfallen",
+              "explanation": "„Jemandem entfallen\" bedeutet, dass man etwas vergessen hat: Der Name ist mir entfallen."
+            },
+            {
+              "question": "Ergänzen Sie das passende Verb: „Die Bank wurde ______, aber die Polizei hat die Täter gefasst.\"",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "überfallen",
+                  "angefallen",
+                  "zerfallen",
+                  "abgefallen"
+                ]
+              },
+              "correct_answer": "überfallen",
+              "explanation": "„Überfallen\" (untrennbar) bedeutet „plötzlich angreifen\", typisch bei einem Banküberfall."
+            },
+            {
+              "question": "Ergänzen Sie das passende Verb: „Mir sind die Augen vor Müdigkeit ______.\"",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "zugefallen",
+                  "aufgefallen",
+                  "eingefallen",
+                  "ausgefallen"
+                ]
+              },
+              "correct_answer": "zugefallen",
+              "explanation": "„Zufallen\" bedeutet „sich (von selbst) schließen\": Die Augen sind mir zugefallen."
+            }
+          ]
+        },
+        {
+          "title": "Vežba: Wortschatz - Ausbildungswege",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Spoji nemačke reči sa prevodom.",
+              "question_type": "match_pairs",
+              "options": {
+                "type": "match_pairs",
+                "items": [
+                  {
+                    "de": "die Note",
+                    "sr": "ocena"
+                  },
+                  {
+                    "de": "das Abschlusszeugnis",
+                    "sr": "svedočanstvo o završenoj školi"
+                  },
+                  {
+                    "de": "der/die Auszubildende",
+                    "sr": "učenik na stručnoj obuci, pripravnik"
+                  },
+                  {
+                    "de": "die Vergütung",
+                    "sr": "naknada za rad"
+                  },
+                  {
+                    "de": "ratlos",
+                    "sr": "zbunjen"
+                  },
+                  {
+                    "de": "der Bekanntenkreis",
+                    "sr": "krug poznanika"
+                  },
+                  {
+                    "de": "ungeachtet",
+                    "sr": "uprkos, bez obzira na"
+                  }
+                ]
+              },
+              "correct_answer": "all",
+              "explanation": "Wichtige Wörter zum Thema Ausbildungswege aus Lektion 6."
+            }
+          ]
+        },
+        {
+          "title": "Test: Selbstkontrolle - Lektion 6",
+          "exercise_type": "quiz",
+          "questions": [
+            {
+              "question": "Was ist richtig? - „Unsere Tochter kommt nächstes Jahr in die Schule, und wir denken über eine reformpädagogische Schule nach. Habt ihr da Erfahrungen? Oder jemand aus eurem ______ (1)?\"",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Bekanntenkreis",
+                  "Habitus"
+                ]
+              },
+              "correct_answer": "0",
+              "explanation": "Gemeint sind die Menschen, die man kennt - der Bekanntenkreis. „Habitus\" bezeichnet das Auftreten einer Person."
+            },
+            {
+              "question": "Was ist richtig? - „Wir kennen niemanden und sind ein bisschen ______ (2), ob das eine gute Idee ist …\"",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "ausgeschlossen",
+                  "ratlos"
+                ]
+              },
+              "correct_answer": "1",
+              "explanation": "„Ratlos\" bedeutet, dass man nicht weiß, was man tun soll. „Ausgeschlossen\" heißt „nicht dabei\" oder „unmöglich\"."
+            },
+            {
+              "question": "Was ist richtig? - „Während des Studiums hatte ich einen ______ (3) an einer reformpädagogischen Schule.\"",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Berufswunsch",
+                  "Praktikumsplatz"
+                ]
+              },
+              "correct_answer": "1",
+              "explanation": "Man hat einen Praktikumsplatz an einer Schule - dort macht man ein Praktikum. Ein „Berufswunsch an einer Schule\" ergäbe keinen Sinn."
+            },
+            {
+              "question": "Was ist richtig? - „Der Unterricht dort war praktischer als an anderen Schulen, und in die ______ (4) haben die Lehrkräfte individuelle Bewertungen über die Schülerinnen und Schüler geschrieben.\"",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Zeugnisse",
+                  "Hindernisse"
+                ]
+              },
+              "correct_answer": "0",
+              "explanation": "In die Zeugnisse schreiben Lehrkräfte Bewertungen. „Hindernisse\" sind Schwierigkeiten oder Barrieren."
+            },
+            {
+              "question": "Was ist richtig? - „... nicht bloß die ______ (5) von 1 bis 6.\"",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Auszubildenden",
+                  "Noten"
+                ]
+              },
+              "correct_answer": "1",
+              "explanation": "Die Noten von 1 bis 6 sind die Schulnoten in Deutschland."
+            },
+            {
+              "question": "Was ist richtig? - „Meine Klassenlehrerin hat mir zum Beispiel sehr geholfen, als ich nicht wusste, ob ich studieren oder lieber eine ______ (6) machen sollte.\"",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "Haltung",
+                  "Berufsausbildung"
+                ]
+              },
+              "correct_answer": "1",
+              "explanation": "Nach der Schule wählt man zwischen Studium und Berufsausbildung."
+            },
+            {
+              "question": "Was ist richtig? - „Überhaupt bin ich nicht sicher, ob ich an einer anderen Schule so gut ______ (7) wäre und überhaupt mein Abi gemacht hätte.\"",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "klargekommen",
+                  "entgegengekommen"
+                ]
+              },
+              "correct_answer": "0",
+              "explanation": "„Klarkommen\" bedeutet „zurechtkommen, keine Probleme haben\". „Entgegenkommen\" heißt, jemandem einen Schritt entgegenzugehen."
+            },
+            {
+              "question": "Lesen Sie den Tipp und ordnen Sie zu.\n\nNach der Schule ins Ausland? - Tipps für den Auslandsaufenthalt\nMit einem Auslandsaufenthalt kannst du deine Fremdsprachenkenntnisse verbessern und neue Erfahrungen sammeln. Das funktioniert ______ nur, wenn du vor Ort Kontakte und Freundschaften aufbaust. Wenn du allein ins Ausland gehst, wirst du vermutlich noch mehr von deinem Aufenthalt profitieren - ______ vielleicht nicht immer einfach ist, allein in einem anderen Land zu leben. Auslandsaufenthalte sehen auf dem Lebenslauf gut aus, ______ muss das nicht deine Hauptmotivation sein. Eine neue Kultur kennenzulernen, ist immer sehr bereichernd, ______ es nicht immer ein weit entfernter Kontinent sein muss. Schon im Nachbarland gibt es viel zu entdecken. ______ aller Bücher, die du über ein Land gelesen, oder Dokus, die du vielleicht gesehen hast, wirst du unzählige Überraschungen erleben. Bereite dich also darauf vor, dass es Situationen gibt, auf die du dich nicht vorbereiten kannst!",
+              "question_type": "fill_blank",
+              "options": {
+                "type": "fill_blank",
+                "items": [
+                  "allerdings",
+                  "nichtsdestotrotz",
+                  "Ungeachtet",
+                  "wenn es auch",
+                  "wobei"
+                ]
+              },
+              "correct_answer": "allerdings, wenn es auch, nichtsdestotrotz, wobei, Ungeachtet",
+              "explanation": "„Allerdings\" steht im Mittelfeld des Hauptsatzes, „wenn es auch\" ist der zweiteilige Konnektor mit Verb am Ende, „nichtsdestotrotz\" steht auf Position 1 vor dem Verb, „wobei\" leitet den nachgestellten Nebensatz ein und „ungeachtet\" steht mit dem Genitiv (ungeachtet aller Bücher)."
+            },
+            {
+              "question": "Was passt in Lücke (1)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "An erster Stelle steht",
+                  "Danach folgen",
+                  "Was für diese Auswahl meines Erachtens ausschlaggebend ist, ist",
+                  "Ich denke, von zentraler Bedeutung dürfte",
+                  "Diese Grafik stellt die prozentuale Verteilung von"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "Vortrag: Die beliebtesten Ausbildungsberufe",
+                  "content": "Herzlich willkommen. Ich möchte Ihnen heute die beliebtesten Ausbildungsberufe der letzten Jahre vorstellen. … (1) abgeschlossenen Ausbildungsverträgen in verschiedenen Berufen dar. … (2) das Büromanagement mit über 23.000 neuen Ausbildungsverträgen im Jahr. … (3) der Verkauf und die Ausbildung zur Mechatronikerin oder zum Mechatroniker mit jeweils etwa 20.700 Verträgen. Warum gerade diese Berufe, werden Sie sich fragen. … (4) die Tatsache, dass viele Jugendliche von diesen Berufen eine klare Vorstellung haben. Ein anderer Punkt ist die berufliche Perspektive. … (5) für viele Jugendliche sein, dass sie mit diesen genannten Berufen gute Chancen auf dem Arbeitsmarkt haben."
+                }
+              },
+              "correct_answer": "4",
+              "explanation": "„Diese Grafik stellt die prozentuale Verteilung von abgeschlossenen Ausbildungsverträgen ... dar\" - das Redemittel gehört zum Verb „darstellen\" am Satzende."
+            },
+            {
+              "question": "Was passt in Lücke (2)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "An erster Stelle steht",
+                  "Danach folgen",
+                  "Was für diese Auswahl meines Erachtens ausschlaggebend ist, ist",
+                  "Ich denke, von zentraler Bedeutung dürfte",
+                  "Diese Grafik stellt die prozentuale Verteilung von"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "Vortrag: Die beliebtesten Ausbildungsberufe",
+                  "content": "Herzlich willkommen. Ich möchte Ihnen heute die beliebtesten Ausbildungsberufe der letzten Jahre vorstellen. … (1) abgeschlossenen Ausbildungsverträgen in verschiedenen Berufen dar. … (2) das Büromanagement mit über 23.000 neuen Ausbildungsverträgen im Jahr. … (3) der Verkauf und die Ausbildung zur Mechatronikerin oder zum Mechatroniker mit jeweils etwa 20.700 Verträgen. Warum gerade diese Berufe, werden Sie sich fragen. … (4) die Tatsache, dass viele Jugendliche von diesen Berufen eine klare Vorstellung haben. Ein anderer Punkt ist die berufliche Perspektive. … (5) für viele Jugendliche sein, dass sie mit diesen genannten Berufen gute Chancen auf dem Arbeitsmarkt haben."
+                }
+              },
+              "correct_answer": "0",
+              "explanation": "„An erster Stelle steht das Büromanagement\" - der wichtigste Wert der Grafik wird zuerst genannt (Singular: steht)."
+            },
+            {
+              "question": "Was passt in Lücke (3)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "An erster Stelle steht",
+                  "Danach folgen",
+                  "Was für diese Auswahl meines Erachtens ausschlaggebend ist, ist",
+                  "Ich denke, von zentraler Bedeutung dürfte",
+                  "Diese Grafik stellt die prozentuale Verteilung von"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "Vortrag: Die beliebtesten Ausbildungsberufe",
+                  "content": "Herzlich willkommen. Ich möchte Ihnen heute die beliebtesten Ausbildungsberufe der letzten Jahre vorstellen. … (1) abgeschlossenen Ausbildungsverträgen in verschiedenen Berufen dar. … (2) das Büromanagement mit über 23.000 neuen Ausbildungsverträgen im Jahr. … (3) der Verkauf und die Ausbildung zur Mechatronikerin oder zum Mechatroniker mit jeweils etwa 20.700 Verträgen. Warum gerade diese Berufe, werden Sie sich fragen. … (4) die Tatsache, dass viele Jugendliche von diesen Berufen eine klare Vorstellung haben. Ein anderer Punkt ist die berufliche Perspektive. … (5) für viele Jugendliche sein, dass sie mit diesen genannten Berufen gute Chancen auf dem Arbeitsmarkt haben."
+                }
+              },
+              "correct_answer": "1",
+              "explanation": "„Danach folgen der Verkauf und die Ausbildung zur Mechatronikerin ...\" - Plural (zwei Berufe), deshalb „folgen\"."
+            },
+            {
+              "question": "Was passt in Lücke (4)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "An erster Stelle steht",
+                  "Danach folgen",
+                  "Was für diese Auswahl meines Erachtens ausschlaggebend ist, ist",
+                  "Ich denke, von zentraler Bedeutung dürfte",
+                  "Diese Grafik stellt die prozentuale Verteilung von"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "Vortrag: Die beliebtesten Ausbildungsberufe",
+                  "content": "Herzlich willkommen. Ich möchte Ihnen heute die beliebtesten Ausbildungsberufe der letzten Jahre vorstellen. … (1) abgeschlossenen Ausbildungsverträgen in verschiedenen Berufen dar. … (2) das Büromanagement mit über 23.000 neuen Ausbildungsverträgen im Jahr. … (3) der Verkauf und die Ausbildung zur Mechatronikerin oder zum Mechatroniker mit jeweils etwa 20.700 Verträgen. Warum gerade diese Berufe, werden Sie sich fragen. … (4) die Tatsache, dass viele Jugendliche von diesen Berufen eine klare Vorstellung haben. Ein anderer Punkt ist die berufliche Perspektive. … (5) für viele Jugendliche sein, dass sie mit diesen genannten Berufen gute Chancen auf dem Arbeitsmarkt haben."
+                }
+              },
+              "correct_answer": "2",
+              "explanation": "„Was für diese Auswahl meines Erachtens ausschlaggebend ist, ist die Tatsache, dass ...\" - das Redemittel schätzt die Relevanz ein und führt „die Tatsache\" ein."
+            },
+            {
+              "question": "Was passt in Lücke (5)?",
+              "question_type": "quiz",
+              "options": {
+                "type": "quiz",
+                "items": [
+                  "An erster Stelle steht",
+                  "Danach folgen",
+                  "Was für diese Auswahl meines Erachtens ausschlaggebend ist, ist",
+                  "Ich denke, von zentraler Bedeutung dürfte",
+                  "Diese Grafik stellt die prozentuale Verteilung von"
+                ],
+                "context": {
+                  "type": "text",
+                  "title": "Vortrag: Die beliebtesten Ausbildungsberufe",
+                  "content": "Herzlich willkommen. Ich möchte Ihnen heute die beliebtesten Ausbildungsberufe der letzten Jahre vorstellen. … (1) abgeschlossenen Ausbildungsverträgen in verschiedenen Berufen dar. … (2) das Büromanagement mit über 23.000 neuen Ausbildungsverträgen im Jahr. … (3) der Verkauf und die Ausbildung zur Mechatronikerin oder zum Mechatroniker mit jeweils etwa 20.700 Verträgen. Warum gerade diese Berufe, werden Sie sich fragen. … (4) die Tatsache, dass viele Jugendliche von diesen Berufen eine klare Vorstellung haben. Ein anderer Punkt ist die berufliche Perspektive. … (5) für viele Jugendliche sein, dass sie mit diesen genannten Berufen gute Chancen auf dem Arbeitsmarkt haben."
+                }
+              },
+              "correct_answer": "3",
+              "explanation": "„Ich denke, von zentraler Bedeutung dürfte für viele Jugendliche sein, dass ...\" - das Redemittel gehört zum Verb „sein\" in der Lücke danach."
+            }
+          ]
+        }
+      ],
+      "uncertainties": [
+        "Zadatak 2 Selbstkontrolle: reč „ungeachtet\" iz banke reči je u banci i odgovoru napisana velikim slovom („Ungeachtet\") jer njena praznina stoji na početku rečenice; u knjizi je banka reči malim slovima.",
+        "Zadatak 2 Selbstkontrolle, praznina 2: izabrano „wenn es auch\" (a ne „wobei\") jer rečenica glasi „- ______ vielleicht nicht immer einfach ist ...\" bez subjekta „es\"; „wobei\" bi zahtevalo dodatno „es\", a ponuđena opcija već sadrži „es\". Praznina 4 ima sopstveno „es\", pa tamo ide „wobei\". Raspodela je time jednoznačna, ali zvanični ključ nije dostupan u ekstraktu."
+      ],
+      "skipped": [
+        "Extra Prüfung (Lesen: FSJ tekst sa grafikom; Hören: 8 govornika): Nije deo Selbstkontrolle sekcije, već posebna ispitna sekcija posle nje; Hören zahteva audio, a Lesen zadatak je vezan za vremensko ograničenje i grafiku iz knjige. Nije obuhvaćeno ovim testom."
+      ]
+    }
+  ]
+}
