@@ -68,6 +68,39 @@ function fmtDate(d: Date) {
 
 // ── Main component ───────────────────────────────────────────────────────────
 
+// Zaglavlje kolone koje sortira. Van komponente da React ne pravi novi tip pri
+// svakom renderu (to bi remountovalo ceo <thead>).
+function SortTh({
+  label,
+  col,
+  right = false,
+  sortKey,
+  sortAsc,
+  onSort,
+}: {
+  label: string;
+  col: SortKey;
+  right?: boolean;
+  sortKey: SortKey;
+  sortAsc: boolean;
+  onSort: (col: SortKey) => void;
+}) {
+  const active = sortKey === col;
+  return (
+    <th
+      className={`px-4 py-3 text-xs font-semibold uppercase tracking-wide cursor-pointer select-none whitespace-nowrap ${
+        right ? "text-right" : "text-left"
+      } ${active ? "text-plava" : "text-gray-500"} hover:text-plava`}
+      onClick={() => onSort(col)}
+    >
+      {label}
+      {active && (
+        <span className="ml-1 opacity-60">{sortAsc ? "↑" : "↓"}</span>
+      )}
+    </th>
+  );
+}
+
 export default function KupciDashboard({ orders }: { orders: WcOrder[] }) {
   const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
@@ -75,16 +108,24 @@ export default function KupciDashboard({ orders }: { orders: WcOrder[] }) {
   const [sortAsc, setSortAsc] = useState(false);
   const [visibleCount, setVisibleCount] = useState(50);
 
-  // Debounce search 300ms
+  // Debounce search 300ms. Nova pretraga vraća listu na prvih 50.
   useEffect(() => {
-    const timer = setTimeout(() => setSearch(searchInput), 300);
+    const timer = setTimeout(() => {
+      setSearch(searchInput);
+      setVisibleCount(50);
+    }, 300);
     return () => clearTimeout(timer);
   }, [searchInput]);
 
-  // Reset visible count when search changes
-  useEffect(() => {
+  const handleSort = (col: SortKey) => {
+    if (sortKey === col) {
+      setSortAsc((prev) => !prev);
+    } else {
+      setSortKey(col);
+      setSortAsc(false);
+    }
     setVisibleCount(50);
-  }, [search, sortKey, sortAsc]);
+  };
 
   // ── Build customer map ────────────────────────────────────────────────────
 
@@ -217,40 +258,7 @@ export default function KupciDashboard({ orders }: { orders: WcOrder[] }) {
   }, [allCustomers, search, sortKey, sortAsc]);
 
   const visible = sorted.slice(0, visibleCount);
-
-  // ── Sort header helper ────────────────────────────────────────────────────
-
-  function SortTh({
-    label,
-    col,
-    right = false,
-  }: {
-    label: string;
-    col: SortKey;
-    right?: boolean;
-  }) {
-    const active = sortKey === col;
-    return (
-      <th
-        className={`px-4 py-3 text-xs font-semibold uppercase tracking-wide cursor-pointer select-none whitespace-nowrap ${
-          right ? "text-right" : "text-left"
-        } ${active ? "text-plava" : "text-gray-500"} hover:text-plava`}
-        onClick={() => {
-          if (active) {
-            setSortAsc((prev) => !prev);
-          } else {
-            setSortKey(col);
-            setSortAsc(false);
-          }
-        }}
-      >
-        {label}
-        {active && (
-          <span className="ml-1 opacity-60">{sortAsc ? "↑" : "↓"}</span>
-        )}
-      </th>
-    );
-  }
+  const sortProps = { sortKey, sortAsc, onSort: handleSort };
 
   // ── Render ────────────────────────────────────────────────────────────────
 
@@ -327,13 +335,13 @@ export default function KupciDashboard({ orders }: { orders: WcOrder[] }) {
                 <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500 w-10">
                   #
                 </th>
-                <SortTh label="Kupac" col="name" />
-                <SortTh label="Zemlja" col="country" />
-                <SortTh label="Narudžbine" col="orderCount" right />
-                <SortTh label="Ukupno potrošeno" col="totalSpent" right />
-                <SortTh label="Prosečna" col="avgOrder" right />
-                <SortTh label="Prva kupovina" col="firstPurchase" />
-                <SortTh label="Poslednja" col="lastPurchase" />
+                <SortTh label="Kupac" col="name" {...sortProps} />
+                <SortTh label="Zemlja" col="country" {...sortProps} />
+                <SortTh label="Narudžbine" col="orderCount" right {...sortProps} />
+                <SortTh label="Ukupno potrošeno" col="totalSpent" right {...sortProps} />
+                <SortTh label="Prosečna" col="avgOrder" right {...sortProps} />
+                <SortTh label="Prva kupovina" col="firstPurchase" {...sortProps} />
+                <SortTh label="Poslednja" col="lastPurchase" {...sortProps} />
                 <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500">
                   Kursevi
                 </th>

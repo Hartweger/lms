@@ -237,6 +237,9 @@ export default function AnalitikaDashboard({
   const [customTo, setCustomTo] = useState("");
   const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
+  // "Sada" se uzme jednom pri montiranju: sva tri poređenja (prethodni period,
+  // YoY, oznake) moraju da mere isti protekli interval.
+  const [now] = useState(() => Date.now());
 
   // Debounce search
   useEffect(() => {
@@ -318,14 +321,14 @@ export default function AnalitikaDashboard({
   // ISTI proteklim broj dana iz prethodnog/prošlogodišnjeg perioda (month-to-date), ne ceo.
   const previousOrders = useMemo(() => {
     if (!previousRange) return [];
-    const elapsed = Math.min(end.getTime(), Date.now()) - start.getTime();
+    const elapsed = Math.min(end.getTime(), now) - start.getTime();
     const pStart = previousRange.start.getTime();
     const pEnd = pStart + elapsed;
     return orders.filter((o) => {
       const t = new Date(o.date_created).getTime();
       return t >= pStart && t < pEnd;
     });
-  }, [orders, previousRange, start, end]);
+  }, [orders, previousRange, start, end, now]);
 
   // ── Computed metrics ───────────────────────────────────────────────────────
 
@@ -468,7 +471,7 @@ export default function AnalitikaDashboard({
   );
   const yoy = useMemo(() => {
     if (!yearAgoRange) return null;
-    const elapsed = Math.min(end.getTime(), Date.now()) - start.getTime();
+    const elapsed = Math.min(end.getTime(), now) - start.getTime();
     const yStart = yearAgoRange.start.getTime();
     const yEnd = yStart + elapsed;
     const completed = orders.filter((o) => {
@@ -476,12 +479,12 @@ export default function AnalitikaDashboard({
       return t >= yStart && t < yEnd && o.status === "completed" && Number(o.total) > 0;
     });
     return { revenue: completed.reduce((s, o) => s + Number(o.total), 0), count: completed.length };
-  }, [orders, yearAgoRange, start, end]);
+  }, [orders, yearAgoRange, start, end, now]);
   const pctRevenueYoY = yoy && yoy.revenue > 0 ? pct(metrics.totalRevenue, yoy.revenue) : null;
   const pctCountYoY = yoy && yoy.count > 0 ? pct(metrics.count, yoy.count) : null;
 
   // Eksplicitne oznake perioda poređenja (do istog dana) + sakrij YoY kad je isti kao "prethodni".
-  const elapsedMs = Math.min(end.getTime(), Date.now()) - start.getTime();
+  const elapsedMs = Math.min(end.getTime(), now) - start.getTime();
   const prevLabel = previousRange ? rangeLabel(previousRange.start, new Date(previousRange.start.getTime() + elapsedMs)) : null;
   const yoyLabel = yearAgoRange ? rangeLabel(yearAgoRange.start, new Date(yearAgoRange.start.getTime() + elapsedMs)) : null;
   const showYoY = !!yearAgoRange && (!previousRange || yearAgoRange.start.getTime() !== previousRange.start.getTime());

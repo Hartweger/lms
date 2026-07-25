@@ -56,6 +56,16 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
   const [saveFailed, setSaveFailed] = useState(false);
   const [dialogResult, setDialogResult] = useState<{ score: number; total: number } | null>(null);
 
+  // Konfete za 100% - izračunaju se jednom, inače bi svaki render premestio čestice.
+  const [confetti] = useState(() =>
+    Array.from({ length: 50 }, (_, i) => ({
+      left: Math.random() * 100,
+      duration: 1.5 + Math.random() * 2,
+      delay: Math.random() * 0.5,
+      color: ["#4fb1d3", "#e57b78", "#fbbf24", "#34d399", "#a78bfa"][i % 5],
+    }))
+  );
+
   // Enter key advances to next question (delayed to avoid consuming the same Enter that submitted the answer)
   useEffect(() => {
     if (!showNext) return;
@@ -332,16 +342,16 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
         {/* Confetti for perfect score */}
         {isPerfect && (
           <div className="absolute inset-0 pointer-events-none">
-            {Array.from({ length: 50 }).map((_, i) => (
+            {confetti.map((c, i) => (
               <div
                 key={i}
                 className="absolute w-2 h-2 rounded-full"
                 style={{
-                  left: `${Math.random() * 100}%`,
+                  left: `${c.left}%`,
                   top: `-10px`,
-                  backgroundColor: ['#4fb1d3', '#e57b78', '#fbbf24', '#34d399', '#a78bfa'][i % 5],
-                  animation: `confetti-fall ${1.5 + Math.random() * 2}s ease-in forwards`,
-                  animationDelay: `${Math.random() * 0.5}s`,
+                  backgroundColor: c.color,
+                  animation: `confetti-fall ${c.duration}s ease-in forwards`,
+                  animationDelay: `${c.delay}s`,
                 }}
               />
             ))}
