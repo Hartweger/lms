@@ -60,6 +60,18 @@ const grupniC12Faq: { q: string; a: string }[] = [
 
 /* Slug-specific FAQ overrides */
 const faqBySlug: Record<string, { q: string; a: string }[]> = {
+  /* Paket A1+A2+B1: jedini proizvod sa mesečnim plaćanjem, pa mu treba i FAQ o
+     rasporedu otključavanja. Prvi kupac (25.07.2026) je pitao može li unapred da
+     otvori ceo A1 - odgovor mora da stoji na stranici, ne samo u mejlu. */
+  "paket-a1-a2-b1": [
+    { q: "Šta se dešava nakon uplate?", a: "Ako plaćaš odjednom, odmah dobijaš pristup celom paketu - sva tri nivoa. Ako izabereš mesečno plaćanje, odmah ti se otvara A1.1, a ostali nivoi stižu redom, kako teku naplate." },
+    { q: "Mogu li kod mesečnog plaćanja da otvorim ceo nivo unapred?", a: "Ne. Kod mesečnog plaćanja nivoi se otvaraju po rasporedu i ne mogu se ubrzati: A1.1 odmah, A1.2 uz 2. naplatu, A2.1 uz 4, A2.2 uz 5, B1.1 uz 7, B1.2 uz 8. Meseci 3, 6 i 9-12 nisu prazni - to je vreme za obnavljanje i završni ispit nivoa. Ako ti je potreban ceo nivo odmah, možeš umesto paketa da kupiš pojedinačan video kurs (A1, A2 ili B1) - njega plaćaš odjednom i pristup je odmah otvoren, ceo nivo." },
+    { q: "Da li moram da kupujem udžbenike?", a: "Ne. Sav materijal dobijaš od nas - priručnike, vežbe, testove i materijal za pripremu ispita. Plan i program je rađen po uzoru na Schritte (A1-B1), ali je naš program modifikovan i prilagođen sadašnjem trenutku. Ne treba ti ništa drugo." },
+    { q: "Koliko vremena treba nedeljno?", a: "To zavisi od tebe. Preporučujemo 3-4 sata nedeljno za optimalan napredak, ali učiš sopstvenim tempom." },
+    { q: "Koliko dugo imam pristup?", a: "Kod jednokratne kupovine pristup imaš godinu dana od dana kupovine. Kod mesečnog plaćanja pristup traje dok traju naplate i produžava se sa svakom novom." },
+    { q: "Mogu li da učim sa telefona?", a: "Da! Imamo aplikaciju - šaljemo ti link, instaliraš za sekund, bez Google ili Apple prodavnice. Radi i na tabletu i računaru." },
+    { q: "Kako se plaća?", a: "Odjednom ili mesečno. Odjednom: karticom, uplatom na dinarski račun ili PayPal-om. Mesečno: 3.199 RSD se automatski naplaćuje sa tvoje kartice svakog meseca, ukupno 12 puta, a otkazuješ sam u odeljku „Moj nalog\" kad god poželiš." },
+  ],
   "grupni-kurs-c1-1": grupniC11Faq,
   "grupni-kurs-c1-2": grupniC12Faq,
   "grupni-konverzacijski-kurs-nemackog-b1": [
