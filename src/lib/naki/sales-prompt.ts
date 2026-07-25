@@ -85,11 +85,46 @@ KUPON:
 - Ponudi ga TEK kada posetilac pita za cenu ili pokaže nameru kupovine. NE nudi kupon automatski uz preporuku kursa, dok osoba još bira ili samo pita za informacije.
 - Ponudi ga najviše jednom po razgovoru.`;
 
+// Aktivno hvatanje lida. Do 25.07.2026 Smile je tražio mejl samo kad ne zna odgovor,
+// pa je od 199 sesija mejl ostavilo njih 6 (3%) - iako je namera posetilaca ovde najviša.
+const LEAD_CAPTURE_BLOCK = `
+
+HVATANJE MEJLA:
+- Kada posetilac pokaže ozbiljnu nameru - pita za cenu, traži preporuku kursa, pominje ispit, rok ili selidbu, ili razgovor traje duže od par poruka - zamoli ga JEDNOM da ti ostavi mejl ovde u razgovoru.
+- Traži ga tek pošto si odgovorio na njegovo pitanje, nikad umesto odgovora i nikad u prvoj poruci.
+- Razlog navedi kao korist za njega, ne kao našu potrebu: da mu tim pošalje detalje kursa, slobodne termine i odgovori na sve što ga zanima.
+- Ne traži mejl više od jednom po razgovoru. Ako ga posetilac ne ostavi ili kaže ne, ne insistiraj - nastavi normalno da pomažeš.
+- Ako je mejl već dao, ne traži ga ponovo, samo potvrdi da si prosledila timu.`;
+
 const FOOTER = `
 
 Sajt: ${SITE_HOST} | Kursevi: ${SITE_HOST}/kursevi | Kontakt: info@hartweger.rs`;
 
-export function buildSalesSystemPrompt(catalogText: string, opts: { coupon: boolean }): string {
+// Fraze kojima Smile traži mejl - njima prepoznajemo da je već pitao.
+const ASKED_FOR_EMAIL_RE = /ostavi(š|s)? (mi )?(svoj )?mejl|tvoj mejl|na koji mejl|mejl adresu/i;
+const EMAIL_IN_TEXT_RE = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/;
+
+/**
+ * Statični LEAD_CAPTURE_BLOCK model u praksi preskoči - u testu 25.07.2026 posetilac je
+ * kroz tri poruke pokazao jasnu nameru (nivo, cilj, rok) i mejl nije zatražen nijednom.
+ * Zato se od druge korisničke poruke ubacuje izričit, nekeširan nalog za baš taj odgovor.
+ * Ćuti ako je mejl već dat ili već tražen, da se posetilac ne davi.
+ */
+export function leadNudgeAddon(
+  messages: { role: "user" | "assistant"; content: string }[],
+  leadCapture: boolean
+): string {
+  if (!leadCapture) return "";
+  if (messages.filter((m) => m.role === "user").length < 2) return "";
+  if (messages.some((m) => m.role === "user" && EMAIL_IN_TEXT_RE.test(m.content))) return "";
+  if (messages.some((m) => m.role === "assistant" && ASKED_FOR_EMAIL_RE.test(m.content))) return "";
+  return `\n\nZA OVAJ ODGOVOR: posetilac je već razmenio nekoliko poruka i pokazao nameru, a mejl još nije ostavio. Prvo mu normalno odgovori na pitanje, pa ZAVRŠI ovaj odgovor jednom kratkom rečenicom u kojoj ga zamoliš da ti ostavi mejl ovde u razgovoru - da mu tim pošalje detalje, slobodne termine i odgovori na sve što ga zanima. Traži ga toplo i bez pritiska, samo ovaj put.`;
+}
+
+export function buildSalesSystemPrompt(
+  catalogText: string,
+  opts: { coupon: boolean; leadCapture?: boolean }
+): string {
   const base = SMILE_STATIC.replace("{{KATALOG}}", catalogText || "(katalog trenutno nedostupan - uputi na " + SITE_HOST + "/kursevi)");
-  return base + (opts.coupon ? COUPON_BLOCK : "") + FOOTER;
+  return base + (opts.coupon ? COUPON_BLOCK : "") + (opts.leadCapture ? LEAD_CAPTURE_BLOCK : "") + FOOTER;
 }

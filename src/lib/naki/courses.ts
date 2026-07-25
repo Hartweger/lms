@@ -27,7 +27,7 @@ export function stickyLevel(userMessages: string[]): string | null {
 // Nekeširan dodatak za chat system prompt. Bez kupona (kupon ide samo na pitanje o ceni).
 export function courseUpsellAddon(course: LevelCourse | null): string {
   if (!course) return "";
-  return `\n\nKad ovom korisniku preporučuješ kurs (jednom po razgovoru, prirodno posle vežbe), uputi ga baš na: ${course.title} — ${course.price} RSD — ${SITE_URL}/kursevi/${course.slug}. Ne ponavljaj preporuku u istom razgovoru.`;
+  return `\n\nKad ovom korisniku preporučuješ kurs (jednom po razgovoru, prirodno posle vežbe), uputi ga baš na: ${course.title} - ${course.price} RSD - ${SITE_URL}/kursevi/${course.slug}. Ne ponavljaj preporuku u istom razgovoru.`;
 }
 
 export async function getLevelCourse(

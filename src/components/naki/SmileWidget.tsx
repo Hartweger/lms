@@ -71,9 +71,6 @@ export default function SmileWidget() {
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
-  const [showLead, setShowLead] = useState(false);
-  const [leadEmail, setLeadEmail] = useState("");
-  const [leadDone, setLeadDone] = useState(false);
   const [dismissed, setDismissed] = useState(false);
   const sessionId = useRef<string>(genId());
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -87,7 +84,6 @@ export default function SmileWidget() {
         const s = JSON.parse(raw);
         if (Array.isArray(s.msgs) && s.msgs.length) { setMsgs(s.msgs); setInited(true); }
         if (typeof s.sessionId === "string" && s.sessionId) sessionId.current = s.sessionId;
-        if (s.leadDone) setLeadDone(true);
       } catch { /* ignore */ }
     }
     if (ssGet("smile_dismissed") === "1") setDismissed(true);
@@ -97,8 +93,8 @@ export default function SmileWidget() {
   // Sačuvaj razgovor pri svakoj promeni (tek posle hidracije, da ne pregazi sačuvano)
   useEffect(() => {
     if (!hydrated.current) return;
-    ssSet(STORAGE_KEY, JSON.stringify({ sessionId: sessionId.current, msgs, inited, leadDone }));
-  }, [msgs, inited, leadDone]);
+    ssSet(STORAGE_KEY, JSON.stringify({ sessionId: sessionId.current, msgs, inited }));
+  }, [msgs, inited]);
 
   // Učitaj konfiguraciju jednom (samo na dozvoljenim stranama)
   useEffect(() => {
@@ -170,26 +166,14 @@ export default function SmileWidget() {
       }
       const reply = d.reply || "Ups, pokušaj ponovo!";
       setMsgs((m) => [...m, { role: "assistant", content: reply }]);
-      if (cfg.leadCapture && next.filter((m) => m.role === "user").length >= 2 && !leadDone) setShowLead(true);
+      // Mejl više ne tražimo obrascem posle fiksne 2 poruke - Smile ga traži u razgovoru,
+      // kad posetilac pokaže nameru (vidi LEAD_CAPTURE_BLOCK u sales-prompt.ts).
+      // Odgovor korisnika sa mejlom hvata extractEmail u /api/naki/sales.
     } catch {
       setMsgs((m) => [...m, { role: "assistant", content: "Greška u konekciji - pokušaj ponovo!" }]);
     } finally {
       setBusy(false);
     }
-  };
-
-  const submitLead = async () => {
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(leadEmail)) return;
-    try {
-      await fetch("/api/naki/sales/lead", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: leadEmail, history: msgs }),
-      });
-    } catch {}
-    setLeadDone(true);
-    setShowLead(false);
-    setMsgs((m) => [...m, { role: "assistant", content: "Super, poslala sam ti na mejl! 😊" }]);
   };
 
   return (
@@ -251,13 +235,6 @@ export default function SmileWidget() {
               {QUICK.map((q) => (
                 <button key={q} onClick={() => send(q)} style={{ fontSize: 11.5, padding: "5px 11px", borderRadius: 20, border: `1.5px solid ${CORAL}`, background: CORAL, color: "#fff", cursor: "pointer" }}>{q}</button>
               ))}
-            </div>
-          )}
-
-          {showLead && !leadDone && (
-            <div style={{ padding: "10px 13px", background: "#fdf6f6", borderTop: "1px solid #f0e0e0", display: "flex", gap: 6 }}>
-              <input value={leadEmail} onChange={(e) => setLeadEmail(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") submitLead(); }} placeholder="Tvoj mejl - šaljem ti preporuku" style={{ flex: 1, border: "1.5px solid #dde0e4", borderRadius: 22, padding: "8px 12px", fontSize: 12.5, outline: "none" }} />
-              <button onClick={submitLead} style={{ background: CORAL, color: "#fff", border: "none", borderRadius: 22, padding: "0 14px", cursor: "pointer", fontSize: 12.5 }}>Pošalji</button>
             </div>
           )}
 

@@ -4,9 +4,10 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { rateLimit } from "@/lib/rate-limit";
 import { Resend } from "resend";
-import { buildSalesSystemPrompt, SMILE_MAX_TOKENS, SMILE_MAX_REQUESTS_PER_DAY } from "@/lib/naki/sales-prompt";
+import { buildSalesSystemPrompt, leadNudgeAddon, SMILE_MAX_TOKENS, SMILE_MAX_REQUESTS_PER_DAY } from "@/lib/naki/sales-prompt";
 import { getCatalogText } from "@/lib/naki/catalog";
 import { getSmileConfig, isPurchaseSignal, extractEmail } from "@/lib/naki/smile-config";
+import { sanitizeReply } from "@/lib/naki/sanitize";
 import { upsertContact, logInteraction } from "@/lib/crm/contacts";
 import { userOwnsAnyVideoCourse } from "@/lib/coupon-ownership";
 import { createHash } from "crypto";
@@ -90,18 +91,28 @@ export async function POST(request: Request) {
   // Kupon samo ne-kupcima i ako je prekidač uključen
   const offerCoupon = cfg.coupon && !(userId && (await userOwnsAnyVideoCourse(admin, userId)));
   const catalogText = await getCatalogText(admin);
-  const systemPrompt = buildSalesSystemPrompt(catalogText, { coupon: offerCoupon });
+  const systemPrompt = buildSalesSystemPrompt(catalogText, {
+    coupon: offerCoupon,
+    leadCapture: cfg.leadCapture,
+  });
 
   let reply: string;
   try {
+    // Statični prompt se kešira; nalog za traženje mejla je promenljiv pa ide
+    // kao odvojen nekeširan blok da ne obara keš.
+    const leadNudge = leadNudgeAddon(messages, cfg.leadCapture);
     const completion = await anthropic.messages.create({
       model: cfg.model,
       max_tokens: SMILE_MAX_TOKENS,
-      system: [{ type: "text", text: systemPrompt, cache_control: { type: "ephemeral" } }],
+      system: [
+        { type: "text", text: systemPrompt, cache_control: { type: "ephemeral" } },
+        ...(leadNudge ? [{ type: "text" as const, text: leadNudge }] : []),
+      ],
       messages: history,
     });
     const block = completion.content[0];
-    reply = block && block.type === "text" ? block.text : "";
+    // Ista post-obrada kao kod tutora: obična crtica i latinica.
+    reply = block && block.type === "text" ? sanitizeReply(block.text) : "";
   } catch {
     return NextResponse.json({ error: "AI servis trenutno nije dostupan. Pokušaj ponovo." }, { status: 502 });
   }

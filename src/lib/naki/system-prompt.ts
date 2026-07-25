@@ -44,6 +44,7 @@ FORMATIRANJE:
 - Maksimalno 1 emoji po odgovoru, a najčešće nijedan. Nikad 3+ emojia.
 - ZABRANJENI emoji - NIKAD, bez izuzetka: ✅ ❌ 📸 💪 🎉 📚 🔑 💡 🎯 📖 ✍️ 🚀 🔥. Ako baš staviš emoji, isključivo 😊.
 - UVEK piši LATINICOM - bez izuzetaka, bez ćirilice, nigde. Proveri svaku reč. Ako nisi siguran - latinica.
+- Crtica je uvek obična crtica sa tastature (-), nikada — ni –. Ovo važi i za pauzu u rečenici, i za nabrajanje, i za raspon (A1 - A2).
 - Ne koristi markdown headere (#, ##, ###) ni "naslove" - strukturu praviš običnim rečenicama i dvotačkama.
 
 POHVALE I POČETAK ODGOVORA:
@@ -236,6 +237,39 @@ export function conversationMemoryAddon(userTexts: string[], level: string | nul
     );
   }
   return parts.length ? "\n\n" + parts.join(" ") : "";
+}
+
+// Fraze kojima NaKI pita za nivo - njima prepoznajemo da je pitanje već postavljeno.
+const LEVEL_ASK_RE = /koji nivo u[čc]i[šs]|koji je tvoj nivo|A1, A2 ili B1/i;
+
+/**
+ * Kad je NaKI već pitao za nivo a korisnik nije odgovorio, model u dugim sesijama
+ * pita iznova (u analizi: 145 sesija 2+ puta, rekord 7 puta). Ovaj dodatak ga zaustavlja.
+ * Prazno kad je nivo poznat - to već pokriva conversationMemoryAddon.
+ */
+export function levelAskGuardAddon(assistantTexts: string[], level: string | null): string {
+  if (level) return "";
+  if (!assistantTexts.some((t) => LEVEL_ASK_RE.test(t))) return "";
+  return `\n\nVeć si pitao za nivo u ovom razgovoru i korisnik ga nije rekao. NE pitaj ponovo - proceni nivo iz njegovih poruka (rečnik, dužina rečenica, greške) i nastavi da radiš. Ako baš moraš da pretpostaviš, kreni od A2.`;
+}
+
+// Pitanja za podršku koja stižu tutoru umesto na info@ - uplata, pristup, nalog, grupe.
+// Traži se sprega "problem + naš proizvod", da se ne pali na vežbu tipa
+// "kako se kaže lozinka na nemačkom".
+// Samo pomen kupovine nije dovoljan ("kupila sam kurs b1.1 vec" je kontekst, ne problem) -
+// traži se kupovina PLUS izražena nemoć, ili nezavisan signal problema sa pristupom.
+const SUPPORT_RE =
+  /(uplat(i|io|ila)|kupi(o|la) sam|plati(o|la) sam)[^.?!]{0,80}(ne zna(m|s) (kako|gde|da)|nisam siguran|nisam sigurna|ne mogu|kako da (ga |je |ih |mu )?(otvorim|pristupim|po[čc]nem|na[đd]em|vidim))|(kurs|pristup|platform|nalog|lekcij|video)[^.?!]{0,60}(ne mogu da (otvorim|pristupim|u[đd]em|pokrenem)|ne otvara|ne radi)|gde su (moje )?lekcij|gde je moj kurs|kako da (otvorim|pristupim) kurs|ne mogu da se (ulogujem|prijavim)|zaboravi(o|la) sam (lozinku|[šs]ifru)|(pridru[žz]im|u[đd]em u)[^.?!]{0,30}(what.?s ?app|whatsapp|viber|grupi)|promen(a|iti|im) mejl/i;
+
+/**
+ * Pitanja za podršku (uplata, pristup kursu, lozinka, WhatsApp grupa) stižu tutoru
+ * umesto na info@ - 33 poruke u periodu 05.06-25.07.2026. NaKI na njih nema podatke,
+ * pa ga ovde eksplicitno usmeravamo umesto da nagađa. Gleda se samo poslednja poruka.
+ */
+export function supportAddon(recentUserMessages: string[]): string {
+  const last = recentUserMessages[recentUserMessages.length - 1];
+  if (!last || !SUPPORT_RE.test(last)) return "";
+  return `\n\nKorisnik ima pitanje za podršku (uplata, pristup kursu, nalog, grupa), ne za nemački. Ti nemaš uvid u njegovu kupovinu ni nalog - NE nagađaj i ne izmišljaj korake. Kratko i toplo ga uputi: prijava je na ${SITE_HOST}/prijava, a za sve oko uplate, pristupa i naloga neka piše na info@hartweger.rs - tim odgovara brzo. Zatim ponudi da u međuvremenu nastavite sa nemačkim.`;
 }
 
 export const NAKI_MODEL = "claude-sonnet-4-6";

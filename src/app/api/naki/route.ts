@@ -10,7 +10,10 @@ import {
   NAKI_MAX_REQUESTS_PER_DAY,
   blogLinkAddon,
   conversationMemoryAddon,
+  levelAskGuardAddon,
+  supportAddon,
 } from "@/lib/naki/system-prompt";
+import { sanitizeReply } from "@/lib/naki/sanitize";
 import { createHash } from "crypto";
 import { userOwnsAnyVideoCourse } from "@/lib/coupon-ownership";
 import { stickyLevel, getLevelCourse, courseUpsellAddon } from "@/lib/naki/courses";
@@ -160,8 +163,13 @@ export async function POST(request: Request) {
   // Konkretan kurs za detektovani nivo (cena uživo). Prazno ako nivo nije A1/A2/B1.
   const levelCourse = await getLevelCourse(admin, knownLevel);
   const upsellAddon = courseUpsellAddon(levelCourse);
+  // Ako je NaKI već pitao za nivo a odgovor nije stigao, ne sme da pita iznova.
+  const allAssistantTexts = messages.filter((m) => m.role === "assistant").map((m) => m.content);
+  const levelGuard = levelAskGuardAddon(allAssistantTexts, knownLevel);
+  // Pitanja za podršku (uplata, pristup, nalog) preusmeravamo na info@ umesto da NaKI nagađa.
+  const support = supportAddon(userTexts);
   // Statični prompt se kešira; promenljivi dodaci idu kao odvojen nekeširan blok da ne kvare keš.
-  const dynamic = memoryAddon + linkAddon + couponAddon + upsellAddon;
+  const dynamic = memoryAddon + levelGuard + support + linkAddon + couponAddon + upsellAddon;
   const system: Anthropic.TextBlockParam[] = [
     { type: "text", text: NAKI_SYSTEM_PROMPT, cache_control: { type: "ephemeral" } },
     ...(dynamic ? [{ type: "text" as const, text: dynamic }] : []),
@@ -177,7 +185,8 @@ export async function POST(request: Request) {
       messages: history,
     });
     const block = completion.content[0];
-    reply = block && block.type === "text" ? block.text : "";
+    // Post-obrada: duga crtica u običnu, ćirilica u latinicu (prompt to ne izdrži sam).
+    reply = block && block.type === "text" ? sanitizeReply(block.text) : "";
   } catch {
     return NextResponse.json(
       { error: "AI servis trenutno nije dostupan. Pokušaj ponovo." },

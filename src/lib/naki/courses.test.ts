@@ -47,6 +47,10 @@ describe("courseUpsellAddon", () => {
   it("vrati prazan string za null", () => {
     expect(courseUpsellAddon(null)).toBe("");
   });
+  it("koristi običnu crticu, nikad — ni –", () => {
+    const out = courseUpsellAddon({ slug: "video-kurs-a1", title: "VIDEO kurs A1", price: 11600 });
+    expect(out).not.toMatch(/[—–]/);
+  });
 });
 
 describe("getLevelCourse", () => {
