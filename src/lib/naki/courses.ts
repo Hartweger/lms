@@ -24,10 +24,33 @@ export function stickyLevel(userMessages: string[]): string | null {
   return null;
 }
 
-// Nekeširan dodatak za chat system prompt. Bez kupona (kupon ide samo na pitanje o ceni).
-export function courseUpsellAddon(course: LevelCourse | null): string {
-  if (!course) return "";
-  return `\n\nKad ovom korisniku preporučuješ kurs (jednom po razgovoru, prirodno posle vežbe), uputi ga baš na: ${course.title} - ${course.price} RSD - ${SITE_URL}/kursevi/${course.slug}. Ne ponavljaj preporuku u istom razgovoru.`;
+/**
+ * Nekeširan dodatak za chat system prompt. Bez kupona (kupon ide samo na pitanje o ceni).
+ *
+ * Formulacija je NAMERNO zapovest, ne uslov. Ranije je stajalo "Kad ovom korisniku
+ * preporučuješ kurs, uputi ga baš na X" - to kaže KOJI kurs, ali nikad DA preporuči, pa
+ * je kurs pomenut u 4% sesija, dok je blog (formulisan kao zapovest) išao u 38%.
+ * Mereno 26.07.2026: nivo prepoznat u 52 od 106 sesija, kurs preporučen u 4.
+ *
+ * `alreadyRecommended` dolazi iz istorije sesije u bazi, pa se "jednom po razgovoru"
+ * ne oslanja na model - kad je preporuka već otišla, dodatka nema.
+ */
+/** Pre ovoliko korisničkih poruka ne nudimo ništa - prvo neka oseti korist od rada. */
+const MIN_PORUKA_ZA_PREPORUKU = 4;
+
+export function courseUpsellAddon(
+  course: LevelCourse | null,
+  opts: { level: string | null; alreadyRecommended: boolean; userTurns: number }
+): string {
+  if (opts.alreadyRecommended || !opts.level) return "";
+  if (opts.userTurns < MIN_PORUKA_ZA_PREPORUKU) return "";
+  // "U ovom odgovoru" umesto "kad se ukaže prilika": opšti nalog model odloži unedogled
+  // (mereno 26.07: nivo poznat u 52 sesije, preporuka data u 4).
+  const kada = `ZAVRŠI ovaj odgovor jednom kratkom rečenicom u kojoj to preporučiš - toplo, bez pritiska, posle pohvale ako je ima. Prvo normalno odgovori na ono što korisnik radi, pa tek onda preporuka. Samo ovaj put; posle se ne ponavlja.`;
+  if (course) {
+    return `\n\nPREPORUČI ovom korisniku Natašin kurs: ${course.title} - ${course.price} RSD - ${SITE_URL}/kursevi/${course.slug}. ${kada}`;
+  }
+  return `\n\nPREPORUČI ovom korisniku Natašinu ponudu kurseva za njegov nivo: ${SITE_URL}/kursevi. ${kada}`;
 }
 
 export async function getLevelCourse(

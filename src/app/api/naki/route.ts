@@ -167,7 +167,15 @@ export async function POST(request: Request) {
       : "";
   // Konkretan kurs za detektovani nivo (cena uživo). Prazno ako nivo nije A1/A2/B1.
   const levelCourse = await getLevelCourse(admin, knownLevel);
-  const upsellAddon = courseUpsellAddon(levelCourse);
+  // "Jednom po razgovoru" se proverava u istoriji sesije, ne prepušta modelu.
+  const vecPreporucio = memory.some(
+    (m) => m.role === "assistant" && m.content.includes("/kursevi")
+  );
+  const upsellAddon = courseUpsellAddon(levelCourse, {
+    level: knownLevel,
+    alreadyRecommended: vecPreporucio,
+    userTurns: allUserTexts.length,
+  });
   // Ako je NaKI već pitao za nivo a odgovor nije stigao, ne sme da pita iznova.
   const allAssistantTexts = memory.filter((m) => m.role === "assistant").map((m) => m.content);
   const levelGuard = levelAskGuardAddon(allAssistantTexts, knownLevel);

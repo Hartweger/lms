@@ -37,18 +37,58 @@ describe("stickyLevel", () => {
 });
 
 describe("courseUpsellAddon", () => {
+  const B1 = { slug: "video-kurs-b1", title: "VIDEO kurs B1", price: 11600 };
+  const svez = { level: "B1", alreadyRecommended: false, userTurns: 6 };
+
   it("ubaci slug, cenu i /kursevi, bez kupona", () => {
-    const out = courseUpsellAddon({ slug: "video-kurs-b1", title: "VIDEO kurs B1", price: 11600 });
+    const out = courseUpsellAddon(B1, svez);
     expect(out).toContain("video-kurs-b1");
     expect(out).toContain("11600");
     expect(out).toContain("/kursevi/");
     expect(out).not.toContain("NAKI10");
   });
-  it("vrati prazan string za null", () => {
-    expect(courseUpsellAddon(null)).toBe("");
+
+  // Uslovna formulacija ("kad preporučuješ") davala je 4% sesija naspram 38% za blog,
+  // koji je formulisan kao zapovest. Zato mora izričito.
+  it("izričito NALAŽE preporuku, ne samo koji kurs", () => {
+    const out = courseUpsellAddon(B1, svez);
+    expect(out).toMatch(/PREPORU[ČC]I/);
+    expect(out).toMatch(/jednom/i);
+    expect(out).not.toMatch(/Kad ovom korisniku preporučuješ/);
   });
+
+  it("ćuti kad je kurs već preporučen u ovoj sesiji", () => {
+    expect(courseUpsellAddon(B1, { ...svez, alreadyRecommended: true })).toBe("");
+  });
+
+  it("za nivo bez svog video kursa (B2, C1) upućuje na opštu ponudu", () => {
+    const out = courseUpsellAddon(null, { ...svez, level: "B2" });
+    expect(out).toMatch(/PREPORU[ČC]I/);
+    expect(out).toContain("/kursevi");
+    expect(out).not.toMatch(/RSD/);
+  });
+
+  it("ćuti kad nivo uopšte nije poznat - nema šta da preporuči", () => {
+    expect(courseUpsellAddon(null, { ...svez, level: null })).toBe("");
+  });
+
+  // Nalog "u ovom odgovoru" radi tamo gde opšte pravilo ne radi (isto kao kod mejla),
+  // ali ne sme prerano - prvo neka korisnik oseti korist od rada.
+  it("ćuti na početku razgovora", () => {
+    expect(courseUpsellAddon(B1, { ...svez, userTurns: 1 })).toBe("");
+    expect(courseUpsellAddon(B1, { ...svez, userTurns: 3 })).toBe("");
+  });
+
+  it("od četvrte korisničke poruke traži preporuku u TOM odgovoru", () => {
+    const out = courseUpsellAddon(B1, { ...svez, userTurns: 4 });
+    expect(out).toMatch(/ovaj odgovor|ovom odgovoru/i);
+  });
+
   it("koristi običnu crticu, nikad — ni –", () => {
-    const out = courseUpsellAddon({ slug: "video-kurs-a1", title: "VIDEO kurs A1", price: 11600 });
+    const out = courseUpsellAddon(
+      { slug: "video-kurs-a1", title: "VIDEO kurs A1", price: 11600 },
+      { level: "A1", alreadyRecommended: false, userTurns: 6 }
+    );
     expect(out).not.toMatch(/[—–]/);
   });
 });
