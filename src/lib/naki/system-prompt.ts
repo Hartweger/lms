@@ -1,6 +1,7 @@
 // NaKI system prompt + blog mapa - portovano sa starog WP/PHP backenda (naki-chat-api.php)
 // Natašin pečat zadržan; identity-guard pravilo obavezno.
 import { SITE_HOST } from "@/lib/site-url";
+import type { HistoryMessage } from "./session-history";
 
 export const NAKI_SYSTEM_PROMPT = `Ti si NaKI, AI asistent Nataše Hartweger, profesorke nemačkog jezika i osnivačice Hartweger centra. Pomažeš svima koji uče nemački - od početnika do naprednih - Natašinim stilom predavanja.
 
@@ -249,16 +250,25 @@ const GENDER_SIGNAL_RE = new RegExp(
   "i"
 );
 
-// Direktan odgovor na naše pitanje ("žensko", "muško sam"). Namerno usko, da se ne
-// pomeša sa gramatičkom temom - "ženski rod imenica" je lekcija, ne odgovor o sebi.
-const GENDER_ANSWER_RE =
-  /^\s*(u\s+)?([žz]ensk|mu[šs]k)\w*\s*[.!]?\s*$|\b([žz]ensko|mu[šs]ko)\s+sam\b|\bja\s+sam\s+([žz]ensko|mu[šs]ko|[žz]ena|mu[šs]karac)\b|obra[ćc]aj\s+mi\s+se\s+u\s+(mu[šs]kom|[žz]enskom)/i;
+// Pomen roda kao ODGOVORA prepoznajemo po položaju: ako je NaKI upravo pitao, onda
+// je "ženski" odgovor o sebi. Ista reč bez pitanja ispred je gramatička tema
+// ("ženski rod imenica") i ne sme da se čita kao odgovor.
+const GENDER_WORD_RE = /([žz]ensk|mu[šs]k)\w*/i;
 
 // Fraza kojom NaKI pita za rod - njome prepoznajemo da je pitanje već postavljeno.
 const GENDER_ASK_RE = /kako da ti se obra[ćc]am|u mu[šs]kom ili [žz]enskom/i;
 
-function genderKnown(userTexts: string[]): boolean {
-  return userTexts.some((t) => GENDER_SIGNAL_RE.test(t) || GENDER_ANSWER_RE.test(t.trim()));
+function genderKnown(history: HistoryMessage[]): boolean {
+  const userTexts = history.filter((m) => m.role === "user").map((m) => m.content);
+  if (detectName(userTexts) || userTexts.some((t) => GENDER_SIGNAL_RE.test(t))) return true;
+  // Odgovor na pitanje: bilo koja korisnička poruka POSLE našeg pitanja koja pomene rod.
+  const prvoPitanje = history.findIndex(
+    (m) => m.role === "assistant" && GENDER_ASK_RE.test(m.content)
+  );
+  if (prvoPitanje === -1) return false;
+  return history
+    .slice(prvoPitanje + 1)
+    .some((m) => m.role === "user" && GENDER_WORD_RE.test(m.content));
 }
 
 /**
@@ -266,10 +276,12 @@ function genderKnown(userTexts: string[]): boolean {
  * pa ga sama uputstva o neutralnom pisanju ne zaustave - probano tri puta 26.07.2026 i
  * svaki put je procurelo na novom mestu. Zato NaKI rod PITA, jednom, uz pitanje o nivou.
  * Dok odgovor ne stigne piše neutralno; kad je rod poznat, ovaj dodatak ćuti.
+ *
+ * Prima CELU istoriju sesije (iz baze, ne od klijenta) - vidi session-history.ts.
  */
-export function genderAddon(userTexts: string[], assistantTexts: string[]): string {
-  if (detectName(userTexts) || genderKnown(userTexts)) return "";
-  const vecPitao = assistantTexts.some((t) => GENDER_ASK_RE.test(t));
+export function genderAddon(history: HistoryMessage[]): string {
+  if (genderKnown(history)) return "";
+  const vecPitao = history.some((m) => m.role === "assistant" && GENDER_ASK_RE.test(m.content));
   const neutralno = `Rod korisnika NIJE poznat. Dok ga ne saznaš, preoblikuj rečenicu tako da particip ne treba: "odlično rešeno" umesto "uradio si", "kako to glasi" umesto "kako bi rekao", "dodaj da ostaješ tri dana" umesto "da si ostao".`;
   if (vecPitao) {
     return `\n\n${neutralno} Za rod si već pitao i odgovor nije stigao - NE pitaj ponovo.`;

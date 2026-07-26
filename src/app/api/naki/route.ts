@@ -15,6 +15,7 @@ import {
   supportAddon,
 } from "@/lib/naki/system-prompt";
 import { sanitizeReply } from "@/lib/naki/sanitize";
+import { loadSessionHistory } from "@/lib/naki/session-history";
 import { createHash } from "crypto";
 import { userOwnsAnyVideoCourse } from "@/lib/coupon-ownership";
 import { stickyLevel, getLevelCourse, courseUpsellAddon } from "@/lib/naki/courses";
@@ -150,10 +151,13 @@ export async function POST(request: Request) {
   // Tema se detektuje iz cele skorašnje istorije (lepljiva tema), ne samo poslednje poruke.
   const userTexts = history.filter((m) => m.role === "user").map((m) => m.content);
   const linkAddon = blogLinkAddon(userTexts); // tema se gleda iz skorašnje istorije
-  // Nivo i ime se pamte iz CELE istorije (ne samo poslednjih 12 poruka) i ubacuju
-  // u nekeširani blok - inače u dugim sesijama model izgubi nivo pa iznova pita
-  // "koji nivo" i menja rod oslovljavanja.
-  const allUserTexts = messages.filter((m) => m.role === "user").map((m) => m.content);
+  // Pamćenje (nivo, ime, rod, već postavljena pitanja) ide iz CELE sesije u bazi.
+  // Klijent šalje samo poslednjih 12 poruka, pa je server ranije "zaboravljao" sve
+  // starije - zbog toga je NaKI iznova pitao za nivo i rod. Ako reda u bazi nema
+  // (npr. sesija bez id-a), padamo nazad na ono što je klijent poslao.
+  const sessionHistory = await loadSessionHistory(admin, sessionId);
+  const memory = sessionHistory.length ? sessionHistory : messages;
+  const allUserTexts = memory.filter((m) => m.role === "user").map((m) => m.content);
   const knownLevel = stickyLevel(allUserTexts);
   const memoryAddon = conversationMemoryAddon(allUserTexts, knownLevel);
   // Ulogovani koji već imaju video kurs ne dobijaju NAKI10 (kupon je za nove kupce).
@@ -165,10 +169,10 @@ export async function POST(request: Request) {
   const levelCourse = await getLevelCourse(admin, knownLevel);
   const upsellAddon = courseUpsellAddon(levelCourse);
   // Ako je NaKI već pitao za nivo a odgovor nije stigao, ne sme da pita iznova.
-  const allAssistantTexts = messages.filter((m) => m.role === "assistant").map((m) => m.content);
+  const allAssistantTexts = memory.filter((m) => m.role === "assistant").map((m) => m.content);
   const levelGuard = levelAskGuardAddon(allAssistantTexts, knownLevel);
   // Rod se pita jednom (najbolje uz nivo); dok odgovor ne stigne piše se neutralno.
-  const gender = genderAddon(allUserTexts, allAssistantTexts);
+  const gender = genderAddon(memory);
   // Pitanja za podršku (uplata, pristup, nalog) preusmeravamo na info@ umesto da NaKI nagađa.
   const support = supportAddon(userTexts);
   // Statični prompt se kešira; promenljivi dodaci idu kao odvojen nekeširan blok da ne kvare keš.

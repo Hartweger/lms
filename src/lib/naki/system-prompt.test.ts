@@ -66,35 +66,62 @@ describe("genderAddon", () => {
     "bio sam u Berlinu",
     "Ich heiße Marija",
   ])("ćuti kad je rod poznat iz: %s", (t) => {
-    expect(genderAddon([t], [])).toBe("");
+    expect(genderAddon([{ role: "user", content: t }])).toBe("");
   });
 
-  it.each(["žensko", "muško sam", "ja sam žensko", "obraćaj mi se u ženskom rodu"])(
-    "prepoznaje direktan odgovor na pitanje o rodu: %s",
-    (t) => {
-      expect(genderAddon([t], ["Koji nivo učiš?"])).toBe("");
-    }
-  );
+  const PITANJE = "Koji nivo učiš? I kako da ti se obraćam - u muškom ili ženskom rodu?";
+  const posle = (odgovor: string) => [
+    { role: "user" as const, content: "Vežbajmo razgovor" },
+    { role: "assistant" as const, content: PITANJE },
+    { role: "user" as const, content: odgovor },
+  ];
+
+  // Stvarni odgovori korisnika - ne stižu u obliku koji smo zamislili.
+  it.each([
+    "žensko",
+    "muško sam",
+    "ja sam žensko",
+    "obraćaj mi se u ženskom rodu",
+    "Zelim A2 da zenski rodom",
+    "B1, muški",
+    "u zenskom rodu molim",
+  ])("prepoznaje odgovor na pitanje o rodu: %s", (t) => {
+    expect(genderAddon(posle(t))).toBe("");
+  });
 
   it("ne meša gramatički ženski rod imenice sa rodom korisnika", () => {
-    const out = genderAddon(["objasni mi ženski rod imenica u nemačkom"], []);
+    const out = genderAddon([
+      { role: "user", content: "objasni mi ženski rod imenica u nemačkom" },
+    ]);
     expect(out).toMatch(/Rod korisnika NIJE poznat/);
   });
 
   it("kad rod nije poznat a nije ni pitao - traži da pita jednom", () => {
-    const out = genderAddon(["daj mi vežbu"], []);
+    const out = genderAddon([{ role: "user", content: "daj mi vežbu" }]);
     expect(out).toMatch(/Rod korisnika NIJE poznat/);
-    expect(out).toMatch(/pitaj/i);
+    expect(out).toMatch(/Pitaj ga jednom/);
   });
 
-  it("kad je već pitao a odgovor nije stigao - NE pita ponovo, samo piše neutralno", () => {
-    const out = genderAddon(
-      ["daj mi vežbu"],
-      ["Koji nivo učiš? I kako da ti se obraćam - u muškom ili ženskom rodu?"]
-    );
-    expect(out).toMatch(/Rod korisnika NIJE poznat/);
+  it("kad je već pitao a odgovor nije stigao - NE pita ponovo", () => {
+    const out = genderAddon([
+      { role: "user", content: "Vežbajmo razgovor" },
+      { role: "assistant", content: PITANJE },
+      { role: "user", content: "ne bih rekao" },
+    ]);
     expect(out).toMatch(/NE pitaj ponovo/);
     expect(out).not.toMatch(/Pitaj ga jednom/);
+  });
+
+  it("ne pita ponovo ni kad je pitanje daleko iza (uzrok ponavljanja 26.07)", () => {
+    const dugacka = [
+      { role: "user" as const, content: "Vežbajmo razgovor" },
+      { role: "assistant" as const, content: PITANJE },
+      ...Array.from({ length: 40 }, (_, i) => ({
+        role: (i % 2 === 0 ? "user" : "assistant") as "user" | "assistant",
+        content: `poruka ${i}`,
+      })),
+    ];
+    expect(genderAddon(dugacka)).toMatch(/NE pitaj ponovo/);
   });
 });
 
