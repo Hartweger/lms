@@ -92,4 +92,48 @@ describe("buildSalesSystemPrompt", () => {
     const out = buildSalesSystemPrompt("katalog", { coupon: false });
     expect(out).not.toContain("HVATANJE MEJLA");
   });
+
+  describe("mesečno plaćanje (pretplata)", () => {
+    const out = () => buildSalesSystemPrompt("katalog", { coupon: true });
+
+    it("zna tačnu ratu, broj naplata i ukupan iznos", () => {
+      expect(out()).toContain("3.199");
+      expect(out()).toContain("12");
+      expect(out()).toContain("38.388");
+    });
+
+    it("kaže da je ukupno skuplje od jednokratne cene", () => {
+      expect(out()).toContain("29.133");
+      expect(out()).toMatch(/skuplje/i);
+    });
+
+    it("vezuje pretplatu SAMO za Video paket A1+A2+B1", () => {
+      expect(out()).toContain("paket-a1-a2-b1");
+      expect(out()).toMatch(/samo za Video paket/i);
+    });
+
+    it("objašnjava postepeno otvaranje nivoa", () => {
+      expect(out()).toMatch(/postepeno|otvara/i);
+      expect(out()).toContain("osme");
+    });
+
+    it("kaže da je otkazivanje samostalno i bez kazne", () => {
+      expect(out()).toContain("Moj nalog");
+      expect(out()).toMatch(/u svakom trenutku/i);
+      expect(out()).toMatch(/napredak.*(ostaje|sa[čc]uvan)/i);
+    });
+
+    it("ne obećava kupon NAKI10 na mesečnu ratu", () => {
+      expect(out()).toMatch(/NAKI10 ne (važi|umanjuje)/i);
+    });
+
+    it("kaže da kupon ipak važi za jednokratnu kupovinu i za Intesa rate", () => {
+      expect(out()).toMatch(/važi.{0,80}jednokratn/i);
+      expect(out()).toMatch(/rat[ae].{0,40}Intesa|Intesa.{0,40}rat[ae]/i);
+    });
+
+    it("kaže da mesečno plaćanje ide samo karticom", () => {
+      expect(out()).toMatch(/samo.{0,30}kartic/i);
+    });
+  });
 });

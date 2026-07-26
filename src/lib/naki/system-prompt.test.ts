@@ -6,6 +6,21 @@ import {
   supportAddon,
 } from "./system-prompt";
 
+describe("NAKI_SYSTEM_PROMPT - mesečno plaćanje", () => {
+  it("zna da postoji mesečno plaćanje i za koji paket", () => {
+    expect(NAKI_SYSTEM_PROMPT).toContain("3.199");
+    expect(NAKI_SYSTEM_PROMPT).toContain("paket-a1-a2-b1");
+  });
+
+  it("ne obećava NAKI10 na mesečnu ratu", () => {
+    expect(NAKI_SYSTEM_PROMPT).toMatch(/NAKI10 ne (važi|umanjuje)/i);
+  });
+
+  it("razdvaja pretplatu od Intesa rata - za rate kupon važi", () => {
+    expect(NAKI_SYSTEM_PROMPT).toMatch(/rat[ae].{0,60}Intesa|Intesa.{0,60}rat[ae]/i);
+  });
+});
+
 describe("NAKI_SYSTEM_PROMPT", () => {
   it("izričito zabranjuje dugu crticu", () => {
     expect(NAKI_SYSTEM_PROMPT).toContain("obična crtica");
