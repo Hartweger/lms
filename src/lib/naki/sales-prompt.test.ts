@@ -93,6 +93,12 @@ describe("buildSalesSystemPrompt", () => {
     expect(out).not.toContain("HVATANJE MEJLA");
   });
 
+  it("prati varijantu posetioca i ne pogađa mu rod", () => {
+    const out = buildSalesSystemPrompt("katalog", { coupon: false });
+    expect(out).toMatch(/ijekav/i);
+    expect(out).toMatch(/ne poga[đd]aj|rod uop[šs]te ne treba/i);
+  });
+
   describe("mesečno plaćanje (pretplata)", () => {
     const out = () => buildSalesSystemPrompt("katalog", { coupon: true });
 

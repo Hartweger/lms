@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import {
   NAKI_SYSTEM_PROMPT,
   conversationMemoryAddon,
+  genderAddon,
   levelAskGuardAddon,
   supportAddon,
 } from "./system-prompt";
@@ -21,12 +22,79 @@ describe("NAKI_SYSTEM_PROMPT - mesečno plaćanje", () => {
   });
 });
 
+describe("NAKI_SYSTEM_PROMPT - rod, nivo, varijanta jezika", () => {
+  it("ne postavlja muški rod kao pretpostavku", () => {
+    expect(NAKI_SYSTEM_PROMPT).not.toMatch(/mu[šs]ki kao default/i);
+  });
+
+  it("traži rodno neutralnu formulaciju dok rod nije poznat", () => {
+    expect(NAKI_SYSTEM_PROMPT).toMatch(/dok rod .{0,20}(ne zna[šs]|nije poznat)/i);
+    expect(NAKI_SYSTEM_PROMPT).toMatch(/ne poga[đd]aj|rod uop[šs]te ne treba/i);
+  });
+
+  it("ne nabraja samo A1, A2 i B1 kad pita za nivo", () => {
+    expect(NAKI_SYSTEM_PROMPT).not.toContain('"Koji nivo učiš - A1, A2 ili B1?"');
+  });
+
+  it("prati varijantu kojom korisnik piše (ijekavica ostaje ijekavica)", () => {
+    expect(NAKI_SYSTEM_PROMPT).toMatch(/ijekav/i);
+    expect(NAKI_SYSTEM_PROMPT).not.toMatch(/Uvek odgovaraj na srpskom/);
+  });
+});
+
 describe("NAKI_SYSTEM_PROMPT", () => {
   it("izričito zabranjuje dugu crticu", () => {
     expect(NAKI_SYSTEM_PROMPT).toContain("obična crtica");
   });
   it("sam ne sadrži dugu crticu koju bi model imitirao", () => {
     expect(NAKI_SYSTEM_PROMPT.replace(/nikada — ni –/, "")).not.toMatch(/[—–]/);
+  });
+});
+
+describe("genderAddon", () => {
+  // Rod se najčešće otkrije participom, ne imenom. Redosled reči varira, a "č/š/ž"
+  // ruše \w u JavaScriptu - zato ovoliko slučajeva.
+  it.each([
+    "ja sam umorna danas",
+    "juče sam učila cele večeri",
+    "radila sam ceo dan",
+    "sam samo htela da pitam",
+    "nisam sigurna da li je tacno",
+    "ja sam umoran",
+    "juče sam učio ceo dan",
+    "juče sam malo vežbao",
+    "bio sam u Berlinu",
+    "Ich heiße Marija",
+  ])("ćuti kad je rod poznat iz: %s", (t) => {
+    expect(genderAddon([t], [])).toBe("");
+  });
+
+  it.each(["žensko", "muško sam", "ja sam žensko", "obraćaj mi se u ženskom rodu"])(
+    "prepoznaje direktan odgovor na pitanje o rodu: %s",
+    (t) => {
+      expect(genderAddon([t], ["Koji nivo učiš?"])).toBe("");
+    }
+  );
+
+  it("ne meša gramatički ženski rod imenice sa rodom korisnika", () => {
+    const out = genderAddon(["objasni mi ženski rod imenica u nemačkom"], []);
+    expect(out).toMatch(/Rod korisnika NIJE poznat/);
+  });
+
+  it("kad rod nije poznat a nije ni pitao - traži da pita jednom", () => {
+    const out = genderAddon(["daj mi vežbu"], []);
+    expect(out).toMatch(/Rod korisnika NIJE poznat/);
+    expect(out).toMatch(/pitaj/i);
+  });
+
+  it("kad je već pitao a odgovor nije stigao - NE pita ponovo, samo piše neutralno", () => {
+    const out = genderAddon(
+      ["daj mi vežbu"],
+      ["Koji nivo učiš? I kako da ti se obraćam - u muškom ili ženskom rodu?"]
+    );
+    expect(out).toMatch(/Rod korisnika NIJE poznat/);
+    expect(out).toMatch(/NE pitaj ponovo/);
+    expect(out).not.toMatch(/Pitaj ga jednom/);
   });
 });
 
@@ -107,10 +175,6 @@ describe("conversationMemoryAddon", () => {
     expect(out).toContain('NE pitaj ponovo "koji nivo"');
   });
 
-  it("prazno kad nema ni nivoa ni imena", () => {
-    expect(conversationMemoryAddon(["daj mi vežbu"], null)).toBe("");
-  });
-
   it("hvata ime iz 'ich heiße' i normalizuje veliko slovo", () => {
     const out = conversationMemoryAddon(["Ich heiße marija"], null);
     expect(out).toContain("Korisnik se zove Marija");
@@ -123,6 +187,10 @@ describe("conversationMemoryAddon", () => {
 
   it("ne hvata lažno ime iz 'ja sam umorna'", () => {
     const out = conversationMemoryAddon(["ja sam umorna danas"], null);
-    expect(out).toBe("");
+    expect(out).not.toMatch(/Korisnik se zove/);
+  });
+
+  it("ne bavi se rodom - to je posao genderAddon", () => {
+    expect(conversationMemoryAddon(["daj mi vežbu"], null)).toBe("");
   });
 });

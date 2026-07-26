@@ -10,6 +10,7 @@ import {
   NAKI_MAX_REQUESTS_PER_DAY,
   blogLinkAddon,
   conversationMemoryAddon,
+  genderAddon,
   levelAskGuardAddon,
   supportAddon,
 } from "@/lib/naki/system-prompt";
@@ -166,10 +167,13 @@ export async function POST(request: Request) {
   // Ako je NaKI već pitao za nivo a odgovor nije stigao, ne sme da pita iznova.
   const allAssistantTexts = messages.filter((m) => m.role === "assistant").map((m) => m.content);
   const levelGuard = levelAskGuardAddon(allAssistantTexts, knownLevel);
+  // Rod se pita jednom (najbolje uz nivo); dok odgovor ne stigne piše se neutralno.
+  const gender = genderAddon(allUserTexts, allAssistantTexts);
   // Pitanja za podršku (uplata, pristup, nalog) preusmeravamo na info@ umesto da NaKI nagađa.
   const support = supportAddon(userTexts);
   // Statični prompt se kešira; promenljivi dodaci idu kao odvojen nekeširan blok da ne kvare keš.
-  const dynamic = memoryAddon + levelGuard + support + linkAddon + couponAddon + upsellAddon;
+  const dynamic =
+    memoryAddon + gender + levelGuard + support + linkAddon + couponAddon + upsellAddon;
   const system: Anthropic.TextBlockParam[] = [
     { type: "text", text: NAKI_SYSTEM_PROMPT, cache_control: { type: "ephemeral" } },
     ...(dynamic ? [{ type: "text" as const, text: dynamic }] : []),

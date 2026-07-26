@@ -29,13 +29,15 @@ NIVO KORISNIKA:
 - Kada polaznik napiše nivo (A1, A2, B1, B2, C1), zapamti ga za ceo razgovor.
 - Ako polaznik traži vežbu a nivo je već pomenut BILO GDE u razgovoru (čak i usput) - koristi taj nivo. NIKAD ne pitaj ponovo.
 - Ako korisnik kaže "za moj nivo" ili "daj mi vežbu" a nivo je poznat - daj vežbu za taj nivo. Ne pitaj koji nivo.
-- Ako nivo ZAISTA nije pomenut nigde u razgovoru, pitaj jednom: "Koji nivo učiš - A1, A2 ili B1?" Ne pitaj ponovo.
+- Ako nivo ZAISTA nije pomenut nigde u razgovoru, pitaj jednom, otvoreno: "Koji nivo učiš? I kako da ti se obraćam - u muškom ili ženskom rodu?" NE nabrajaj "A1, A2 ili B1" - time bi poručio da viši nivoi nisu u ponudi, a jesu. Ne pitaj ponovo.
 - Ako korisnik piše na nemačkom, procene nivo iz njegovih rečenica umesto da pitaš.
 
 ROD KORISNIKA:
 - Ako korisnik kaže ime (Ich heiße Marija), koristi ženski oblik (radila, napisala, rekla) - ODMAH, ne čekaj potvrdu.
 - Ako korisnik kaže "muškarac sam", "muško" ili koristi muški oblik, zapamti i koristi muški oblik.
-- NIKAD ne koristi "radio/la", "rekao/la", "napisao/la" - uvek izaberi jedan oblik. Ako ne znaš rod, koristi muški kao default.
+- NIKAD ne koristi "radio/la", "rekao/la", "napisao/la" - uvek izaberi jedan oblik.
+- Rod PITAJ, jednom, spojeno sa pitanjem o nivou: "Koji nivo učiš? I kako da ti se obraćam - u muškom ili ženskom rodu?" To je jedno pitanje više, a rešava ceo razgovor. Ne pitaj drugi put ako odgovor ne stigne.
+- Dok rod NE ZNAŠ, ne pogađaj ga. Preoblikuj rečenicu tako da rod uopšte ne treba: "Bravo, tačno je!" umesto "Bravo, uspeo si!", "Odlično rešeno!" umesto "Odlično si uradio!", "kako to glasi" umesto "kako bi rekao".
 
 FORMATIRANJE:
 - **Bold** koristi SAMO kada je sama reč nemačka (npr. **weil**, **der Tisch**), za nemačke gramatičke termine i za ispravke. To je JEDINI slučaj za bold.
@@ -77,7 +79,8 @@ NATAŠINI TRIKOVI (koristi u objašnjenjima):
 - Imperativ du-forma: skloni -ST i DU + bitte (Komm bitte!)
 
 JEZIK:
-- Uvek odgovaraj na srpskom
+- Objašnjavaj na jeziku i varijanti kojom ti korisnik piše. Ako piše ijekavski (vježbam, riječi, gdje, htio, mlijeko), odgovaraj ijekavski; ako piše ekavski, ekavski. Njegova varijanta NIJE greška - ne prevodi je i ne ispravljaj je. Ovo se tiče samo našeg jezika; greške u nemačkom ispravljaš normalno.
+- Ako iz poruke ne vidiš varijantu, koristi ekavicu.
 - Nemački primeri ostaju na nemačkom
 - Ako polaznik piše na nemačkom, odgovori na oba jezika i nežno ispravi greške
 
@@ -220,6 +223,58 @@ function detectName(userTexts: string[]): string | null {
     if (m) return m[1].charAt(0).toUpperCase() + m[1].slice(1).toLowerCase();
   }
   return null;
+}
+
+// Rod se često otkrije bez imena ("umorna sam", "juče sam učio"). Odsustvo imena NIJE
+// isto što i nepoznat rod - bez ove provere bismo NaKI-ju tvrdili da ne zna rod i onda
+// kad mu ga je korisnik upravo rekao.
+// Hvata particip uz "sam" u OBA reda reči (i "učila sam" i "sam učila"), plus
+// pridev kojim se korisnik sam opisuje. Namerno je uzdržan: lažno "rod je poznat"
+// vraća NaKI-ja na pogađanje, dok lažno "nije poznat" samo dâ neutralnu rečenicu.
+// PAZI: \w i \b u JavaScriptu su ASCII - "učila" im puca na "č", pa se granica reči
+// pravi eksplicitnom klasom naših slova i lookaround-ima.
+const SLOVA = "A-Za-zČĆŽŠĐčćžšđ";
+const NE_PRE = `(?<![${SLOVA}])`;
+const NE_POSLE = `(?![${SLOVA}])`;
+// Particip radni: bio/bila/išao/išla ili bilo šta na -la/-ao/-io/-eo.
+const PARTICIP = `(bio|bila|i[šs]ao|i[šs]la|[${SLOVA}]{2,}(la|ao|io|eo))`;
+// Između "sam" i participa staju do dve kratke reči: "sam malo vežbao", "sam samo htela".
+const UMETNUTO = `(\\s+[${SLOVA}]{1,6}){0,2}`;
+const GENDER_SIGNAL_RE = new RegExp(
+  [
+    `${NE_PRE}sam${UMETNUTO}\\s+${PARTICIP}${NE_POSLE}`,
+    `${NE_PRE}${PARTICIP}\\s+sam${NE_POSLE}`,
+    `${NE_PRE}(umorna|umoran|spremna|spreman|trudna|sigurna|siguran|zadovoljna|zadovoljan|ponosna|ponosan|nervozna|nervozan)${NE_POSLE}`,
+  ].join("|"),
+  "i"
+);
+
+// Direktan odgovor na naše pitanje ("žensko", "muško sam"). Namerno usko, da se ne
+// pomeša sa gramatičkom temom - "ženski rod imenica" je lekcija, ne odgovor o sebi.
+const GENDER_ANSWER_RE =
+  /^\s*(u\s+)?([žz]ensk|mu[šs]k)\w*\s*[.!]?\s*$|\b([žz]ensko|mu[šs]ko)\s+sam\b|\bja\s+sam\s+([žz]ensko|mu[šs]ko|[žz]ena|mu[šs]karac)\b|obra[ćc]aj\s+mi\s+se\s+u\s+(mu[šs]kom|[žz]enskom)/i;
+
+// Fraza kojom NaKI pita za rod - njome prepoznajemo da je pitanje već postavljeno.
+const GENDER_ASK_RE = /kako da ti se obra[ćc]am|u mu[šs]kom ili [žz]enskom/i;
+
+function genderKnown(userTexts: string[]): boolean {
+  return userTexts.some((t) => GENDER_SIGNAL_RE.test(t) || GENDER_ANSWER_RE.test(t.trim()));
+}
+
+/**
+ * Rod se u našem jeziku provlači kroz svaki particip ("napisao si", "kako bi rekao"),
+ * pa ga sama uputstva o neutralnom pisanju ne zaustave - probano tri puta 26.07.2026 i
+ * svaki put je procurelo na novom mestu. Zato NaKI rod PITA, jednom, uz pitanje o nivou.
+ * Dok odgovor ne stigne piše neutralno; kad je rod poznat, ovaj dodatak ćuti.
+ */
+export function genderAddon(userTexts: string[], assistantTexts: string[]): string {
+  if (detectName(userTexts) || genderKnown(userTexts)) return "";
+  const vecPitao = assistantTexts.some((t) => GENDER_ASK_RE.test(t));
+  const neutralno = `Rod korisnika NIJE poznat. Dok ga ne saznaš, preoblikuj rečenicu tako da particip ne treba: "odlično rešeno" umesto "uradio si", "kako to glasi" umesto "kako bi rekao", "dodaj da ostaješ tri dana" umesto "da si ostao".`;
+  if (vecPitao) {
+    return `\n\n${neutralno} Za rod si već pitao i odgovor nije stigao - NE pitaj ponovo.`;
+  }
+  return `\n\n${neutralno} Pitaj ga jednom, usput i toplo: ako tek postavljaš pitanje o nivou, spoji ih ("Koji nivo učiš? I kako da ti se obraćam - u muškom ili ženskom rodu?"). Ako je nivo već poznat, pitaj samo za oslovljavanje. Kad dobiješ odgovor, koristi taj rod dosledno i slobodno.`;
 }
 
 // Nekeširan dodatak: ubacuje zapamćeni nivo i ime iz CELE istorije razgovora.
