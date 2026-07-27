@@ -53,6 +53,46 @@ export function courseUpsellAddon(
   return `\n\nPREPORUČI ovom korisniku Natašinu ponudu kurseva za njegov nivo: ${SITE_URL}/kursevi. ${kada}`;
 }
 
+// Tri formulacije, da se ista rečenica ne ponavlja svima. Sve poštuju kućna pravila:
+// obična crtica, latinica, bez emojija, jedna rečenica.
+const PONUDE: ((naziv: string, cena: string, link: string) => string)[] = [
+  (n, c, l) => `Usput - ako želiš ovo isto, ali složeno po redu i sa video lekcijama, tu je Natašin ${n}: ${c} RSD, ${l}`,
+  (n, c, l) => `Nataša je celo ovo gradivo složila u ${n} - ako ti prija ovakav tempo, pogledaj: ${l} (${c} RSD)`,
+  (n, c, l) => `Ako hoćeš da nastaviš sistematski, ${n} pokriva sve ovo korak po korak: ${l} - ${c} RSD`,
+];
+
+const PONUDA_BEZ_KURSA = (l: string) =>
+  `Ako hoćeš da nastaviš sistematski, pogledaj Natašinu ponudu kurseva za tvoj nivo: ${l}`;
+
+/**
+ * Dopisuje jednu rečenicu sa ponudom kursa na kraj odgovora.
+ *
+ * Zašto u kodu, a ne samo u promptu: nalog u promptu model posluša neredovno - provera
+ * 26.07.2026 dala je 1 od 3 pokušaja, a u prometu 4 preporuke na 106 sesija. Prompt
+ * OSTAJE (kad posluša, rečenica je lepša jer je u kontekstu), a ovo je dopuna za slučaj
+ * kad ne posluša. Ako je model već ponudio kurs, ovde se ništa ne dodaje.
+ *
+ * Poziva se samo kad je preporuka i inače dozvoljena (nivo poznat, još nije bilo
+ * preporuke u sesiji, razgovor dovoljno odmakao) - o tome odlučuje ruta.
+ */
+export function appendCourseOffer(
+  reply: string,
+  course: LevelCourse | null,
+  level: string | null,
+  variant: number
+): string {
+  if (!level) return reply;
+  if (reply.includes("/kursevi")) return reply;
+  const recenica = course
+    ? PONUDE[variant % PONUDE.length](
+        course.title,
+        course.price.toLocaleString("sr-RS"),
+        `${SITE_URL}/kursevi/${course.slug}`
+      )
+    : PONUDA_BEZ_KURSA(`${SITE_URL}/kursevi`);
+  return `${reply.trimEnd()}\n\n${recenica}`;
+}
+
 export async function getLevelCourse(
   admin: SupabaseClient,
   level: string | null

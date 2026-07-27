@@ -1,5 +1,12 @@
 import { describe, it, expect } from "vitest";
-import { couponPrice, LEVEL_VIDEO_COURSE, stickyLevel, courseUpsellAddon, getLevelCourse } from "./courses";
+import {
+  couponPrice,
+  LEVEL_VIDEO_COURSE,
+  stickyLevel,
+  courseUpsellAddon,
+  appendCourseOffer,
+  getLevelCourse,
+} from "./courses";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 function fakeAdmin(result: { data: unknown; error: unknown }): SupabaseClient {
@@ -90,6 +97,49 @@ describe("courseUpsellAddon", () => {
       { level: "A1", alreadyRecommended: false, userTurns: 6 }
     );
     expect(out).not.toMatch(/[—–]/);
+  });
+});
+
+describe("appendCourseOffer", () => {
+  const A2 = { slug: "video-kurs-a2", title: "VIDEO kurs A2", price: 11600 };
+  const odgovor = "Tačno! **den Mann** je savršeno.";
+
+  it("dopisuje ponudu sa nazivom, cenom i linkom", () => {
+    const out = appendCourseOffer(odgovor, A2, "A2", 0);
+    expect(out.startsWith(odgovor)).toBe(true);
+    expect(out).toContain("VIDEO kurs A2");
+    expect(out).toContain("11.600");
+    expect(out).toContain("/kursevi/video-kurs-a2");
+  });
+
+  // Ako je model sam preporučio (a to ume lepše, u kontekstu), ne dupliramo.
+  it("ne dira odgovor u kom je kurs već ponuđen", () => {
+    const sa = odgovor + "\n\nPogledaj https://www.hartweger.rs/kursevi/video-kurs-a2";
+    expect(appendCourseOffer(sa, A2, "A2", 0)).toBe(sa);
+  });
+
+  it("za nivo bez svog video kursa nudi opštu ponudu, bez cene", () => {
+    const out = appendCourseOffer(odgovor, null, "B2", 0);
+    expect(out).toContain("/kursevi");
+    expect(out).not.toMatch(/RSD/);
+  });
+
+  it("ne dira odgovor kad nivo nije poznat", () => {
+    expect(appendCourseOffer(odgovor, null, null, 0)).toBe(odgovor);
+  });
+
+  it("varira formulaciju da se ne ponavlja ista rečenica svima", () => {
+    const varijante = new Set([0, 1, 2].map((i) => appendCourseOffer(odgovor, A2, "A2", i)));
+    expect(varijante.size).toBe(3);
+  });
+
+  it("poštuje kućna pravila - obična crtica, bez emojija, latinica", () => {
+    for (const i of [0, 1, 2]) {
+      const out = appendCourseOffer(odgovor, A2, "A2", i);
+      expect(out).not.toMatch(/[—–]/);
+      expect(out).not.toMatch(/[\u{1F300}-\u{1FAFF}]/u);
+      expect(out).not.toMatch(/[а-яА-Я]/);
+    }
   });
 });
 

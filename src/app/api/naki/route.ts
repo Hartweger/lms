@@ -18,7 +18,12 @@ import { sanitizeReply } from "@/lib/naki/sanitize";
 import { loadSessionHistory } from "@/lib/naki/session-history";
 import { createHash } from "crypto";
 import { userOwnsAnyVideoCourse } from "@/lib/coupon-ownership";
-import { stickyLevel, getLevelCourse, courseUpsellAddon } from "@/lib/naki/courses";
+import {
+  stickyLevel,
+  getLevelCourse,
+  courseUpsellAddon,
+  appendCourseOffer,
+} from "@/lib/naki/courses";
 import {
   personalDailyLimit,
   limitReachedMessage,
@@ -171,11 +176,14 @@ export async function POST(request: Request) {
   const vecPreporucio = memory.some(
     (m) => m.role === "assistant" && m.content.includes("/kursevi")
   );
-  const upsellAddon = courseUpsellAddon(levelCourse, {
+  const upsellOpts = {
     level: knownLevel,
     alreadyRecommended: vecPreporucio,
     userTurns: allUserTexts.length,
-  });
+  };
+  const upsellAddon = courseUpsellAddon(levelCourse, upsellOpts);
+  // Ako je preporuka dozvoljena a model je ne napiše sam, dopisujemo je posle odgovora.
+  const trebaPonuda = upsellAddon !== "";
   // Ako je NaKI već pitao za nivo a odgovor nije stigao, ne sme da pita iznova.
   const allAssistantTexts = memory.filter((m) => m.role === "assistant").map((m) => m.content);
   const levelGuard = levelAskGuardAddon(allAssistantTexts, knownLevel);
@@ -212,6 +220,11 @@ export async function POST(request: Request) {
 
   if (!reply) {
     return NextResponse.json({ error: "Neočekivan odgovor od AI servisa." }, { status: 502 });
+  }
+
+  // Varijanta se bira po dužini razgovora, da svi ne dobiju istu rečenicu.
+  if (trebaPonuda) {
+    reply = appendCourseOffer(reply, levelCourse, knownLevel, allUserTexts.length);
   }
 
   // ── Ažuriraj dnevni brojač + loguj NaKI odgovor (paralelno) ──
