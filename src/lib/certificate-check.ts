@@ -6,11 +6,31 @@ import { passesThreshold } from "@/lib/certificate-threshold";
  * Per-modul provera Modelltest sertifikata: SVAKI modul mora ≥60%
  * (kod kurseva iz certificate-threshold: strogo >60%).
  * - quiz/grouped vežbe (Lesen, Hören): najbolji exercise_attempt → score/total.
- * - essay vežbe (Schreiben): sve moraju biti ocenjene (professor_score 1-5);
- *   modul = prosek professor_score / 5 (≥0.6 = ≥3/5).
+ * - essay vežbe (Schreiben) i sprechen vežbe (Sprechen): ZASEBNI moduli, oba ocenjuje
+ *   profesorka (professor_score 1-5); modul = zbir ocena / zbir maxPoints (default 5).
  * Sertifikat se izdaje samo kad su svi moduli urađeni I svaki ≥60%. Idempotentno (unique user+course).
  */
 const NIL = "00000000-0000-0000-0000-000000000000";
+
+/**
+ * Podela vežbi na module ispita.
+ *
+ * Sprechen se snima i šalje profesorki na pregled kroz isti tok kao esej
+ * (essay_submissions + audio_url, status „pending" → professor_score), pa se i boduje isto.
+ * Ali je ZASEBAN modul, a ne slepljen sa Schreibenom: pravilo je da svaki modul mora ≥60%,
+ * pa spojen modul ne sme da dozvoli da odličan Schreiben pokrije pao Sprechen.
+ *
+ * Ranije je sprechen upadao u quiz grupu i lomio se na dve strane: ko preskoči vežbu -
+ * sertifikat se tiho blokira („incomplete"), ko je uradi - dobija automatskih 100%,
+ * jer SprechenExercise javlja tačan odgovor čim se snimak otpremi, pre nego što ga je iko preslušao.
+ */
+export function groupExercisesForCertificate<T extends { exercise_type: string | null }>(exercises: T[]) {
+  return {
+    quiz: exercises.filter((e) => e.exercise_type !== "essay" && e.exercise_type !== "sprechen"),
+    essay: exercises.filter((e) => e.exercise_type === "essay"),
+    sprechen: exercises.filter((e) => e.exercise_type === "sprechen"),
+  };
+}
 
 /**
  * Da li je lekcija ZAVRŠNI ispit (Modelltest) - jedini kontekst u kom se sme izdati
@@ -39,8 +59,7 @@ export async function checkAndIssueCertificate(
   const { data: courseRow } = await admin.from("courses").select("slug").eq("id", courseId).single();
   const courseSlug = (courseRow?.slug as string | undefined) ?? null;
 
-  const quizEx = exercises.filter((e) => e.exercise_type !== "essay");
-  const essayEx = exercises.filter((e) => e.exercise_type === "essay");
+  const { quiz: quizEx, essay: essayEx, sprechen: sprechenEx } = groupExercisesForCertificate(exercises);
   // Po modulu čuvamo (score, total) - prag se poredi celobrojno, bez zaokruživanja.
   const moduleScores: { score: number; total: number }[] = [];
 
@@ -62,18 +81,19 @@ export async function checkAndIssueCertificate(
     moduleScores.push({ score: b.score, total: b.total });
   }
 
-  // Schreiben modul (eseji) - svi moraju biti ocenjeni; težinski po maxPoints (40/40/20), default 5.
-  if (essayEx.length > 0) {
-    const essayIds = essayEx.map((e) => e.id);
+  // Moduli koje ocenjuje profesorka (Schreiben = eseji, Sprechen = snimci). Oba idu kroz
+  // essay_submissions i moraju biti ocenjena; težinski po maxPoints (40/40/20), default 5.
+  const gradedModule = async (exs: { id: string }[]) => {
+    const ids = exs.map((e) => e.id);
     const { data: subs } = await admin
       .from("essay_submissions")
       .select("exercise_id, professor_score, reviewed_at")
       .eq("user_id", userId)
-      .in("exercise_id", essayIds);
+      .in("exercise_id", ids);
     const { data: eqs } = await admin
       .from("exercise_questions")
       .select("exercise_id, options")
-      .in("exercise_id", essayIds);
+      .in("exercise_id", ids);
     const maxByEx = new Map<string, number>();
     for (const q of eqs ?? []) {
       const mp = (q.options as { maxPoints?: number } | null)?.maxPoints;
@@ -87,10 +107,24 @@ export async function checkAndIssueCertificate(
         gradedByEx.set(s.exercise_id, { professor_score: s.professor_score, reviewed_at: s.reviewed_at });
       }
     }
-    if (gradedByEx.size < essayEx.length) return { eligible: false, percent: 0, reason: "schreiben-incomplete" };
+    if (gradedByEx.size < exs.length) return null; // nije sve ocenjeno
     let score = 0, max = 0;
     for (const [exId, s] of gradedByEx) { score += s.professor_score; max += maxByEx.get(exId) ?? 5; }
-    moduleScores.push({ score, total: max });
+    return { score, total: max };
+  };
+
+  // Schreiben modul
+  if (essayEx.length > 0) {
+    const m = await gradedModule(essayEx);
+    if (!m) return { eligible: false, percent: 0, reason: "schreiben-incomplete" };
+    moduleScores.push(m);
+  }
+
+  // Sprechen modul - zaseban, da odličan Schreiben ne pokrije pao Sprechen.
+  if (sprechenEx.length > 0) {
+    const m = await gradedModule(sprechenEx);
+    if (!m) return { eligible: false, percent: 0, reason: "sprechen-incomplete" };
+    moduleScores.push(m);
   }
 
   const overall = Math.round(

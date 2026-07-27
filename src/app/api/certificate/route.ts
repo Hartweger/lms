@@ -5,7 +5,8 @@ import { checkAndIssueCertificate } from "@/lib/certificate-check";
 
 /**
  * Izdavanje sertifikata za Modelltest - server-side. Per-modul: SVAKI modul (Lesen, Hören,
- * Schreiben) mora ≥60%. Schreiben (eseji) mora prvo da oceni profesorka. Idempotentno (user+course).
+ * Schreiben) mora ≥60%. Schreiben (eseji) mora prvo da oceni profesorka. Sprechen se ne broji.
+ * Idempotentno (user+course).
  */
 export async function POST(request: Request) {
   const supabase = await createClient();
