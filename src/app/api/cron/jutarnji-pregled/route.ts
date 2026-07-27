@@ -205,20 +205,29 @@ async function cronHandler(request: NextRequest) {
 
   // NaKI: da li prepravke promptova (rod, nivo, ponuda kursa) rade i da li smetaju.
   // Poruke jednog dana su reda hiljadu, pa se čitaju u celini i broje u kodu.
-  const { data: nakiPoruke } = await admin
-    .from("naki_messages")
-    .select("session_id, role, message")
-    .eq("kind", "tutor")
-    .gte("created_at", startYday.toISOString())
-    .lt("created_at", startToday.toISOString())
-    .limit(5000);
+  // PostgREST seče odgovor na 1000 redova bez obzira na .limit(), pa se čita u stranicama.
+  // Bez ovoga bi jak dan tiho bio prepolovljen (26.07: 69 od 134 sesije).
+  const nakiPoruke: { session_id: string | null; role: string | null; message: string | null }[] = [];
+  for (let od = 0; od < 20000; od += 1000) {
+    const { data } = await admin
+      .from("naki_messages")
+      .select("session_id, role, message")
+      .eq("kind", "tutor")
+      .gte("created_at", startYday.toISOString())
+      .lt("created_at", startToday.toISOString())
+      .order("id", { ascending: true })
+      .range(od, od + 999);
+    if (!data?.length) break;
+    nakiPoruke.push(...data);
+    if (data.length < 1000) break;
+  }
   const { count: nakiMejlovi } = await admin
     .from("naki_profiles")
     .select("*", { count: "exact", head: true })
     .gte("created_at", startYday.toISOString())
     .lt("created_at", startToday.toISOString());
   const naki = buildNakiBrief({
-    poruke: (nakiPoruke ?? []).map((m) => ({
+    poruke: nakiPoruke.map((m) => ({
       sessionId: m.session_id ?? "",
       role: m.role ?? "",
       message: m.message ?? "",

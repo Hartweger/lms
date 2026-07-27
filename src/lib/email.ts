@@ -1514,6 +1514,20 @@ export async function sendDailyAdminBrief(d: DailyBrief) {
   try {
     const resend = getResend();
     if (!resend) return;
+    await resend.emails.send({
+      from: FROM,
+      to: ["info@hartweger.rs", "natasa@hartweger.rs"],
+      subject: `Jutarnji pregled - ${d.datum}`,
+      html: buildDailyBriefHtml(d),
+    });
+  } catch (e) {
+    console.error("[email] sendDailyAdminBrief pao:", e);
+  }
+}
+
+/** HTML jutarnjeg pregleda. Izdvojeno iz slanja da se izgled može proveriti bez slanja mejla. */
+export function buildDailyBriefHtml(d: DailyBrief): string {
+  {
     const fmt = (n: number) => n.toLocaleString("de-DE");
 
     const sekcija = (naslov: string, telo: string, prazno: string) =>
@@ -1580,11 +1594,7 @@ export async function sendDailyAdminBrief(d: DailyBrief) {
 </tbody></table>`
       : "";
 
-    await resend.emails.send({
-      from: FROM,
-      to: ["info@hartweger.rs", "natasa@hartweger.rs"],
-      subject: `Jutarnji pregled - ${d.datum}`,
-      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+    return `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
 <body style="font-family:sans-serif;line-height:1.6;color:#222;max-width:640px;margin:0 auto;padding:16px">
 <h2 style="margin:0 0 4px">Dobro jutro ☀️</h2>
 <p style="margin:0 0 4px;color:#666;font-size:13px">Pregled za ${esc(d.datum)}</p>
@@ -1606,10 +1616,7 @@ ${(d.bounces?.length ?? 0) > 0 ? sekcija(
   "",
 ) : ""}
 <p style="margin-top:24px;font-size:12px;color:#aaa">Automatski izveštaj iz LMS-a. Detalji na <a href="https://www.hartweger.rs/admin" style="color:#4fb1d3;text-decoration:none">/admin</a>.</p>
-</body></html>`,
-    });
-  } catch (e) {
-    console.error("[email] sendDailyAdminBrief pao:", e);
+</body></html>`;
   }
 }
 
