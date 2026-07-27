@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import {
   NAKI_SYSTEM_PROMPT,
   conversationMemoryAddon,
+  examinerAddon,
   genderAddon,
   levelAskGuardAddon,
   supportAddon,
@@ -65,6 +66,10 @@ describe("genderAddon", () => {
     "juče sam malo vežbao",
     "bio sam u Berlinu",
     "Ich heiße Marija",
+    // Korisnik rod često kaže sam od sebe, bez našeg pitanja.
+    "Zensko sam. Spremam Goethe B1.",
+    "muško sam, učim A2",
+    "ja sam žensko",
   ])("ćuti kad je rod poznat iz: %s", (t) => {
     expect(genderAddon([{ role: "user", content: t }])).toBe("");
   });
@@ -122,6 +127,45 @@ describe("genderAddon", () => {
       })),
     ];
     expect(genderAddon(dugacka)).toMatch(/NE pitaj ponovo/);
+  });
+});
+
+describe("examinerAddon", () => {
+  it.each(["Spremam Goethe B1", "kako izgleda telc ispit", "vezbam za ÖSD A1", "treba mi FIDE", "koji sertifikat vredi"])(
+    "javi kredencijal kad se pomene ispit: %s",
+    (t) => {
+      const out = examinerAddon([t], []);
+      expect(out).toMatch(/ispitiva[čc]/i);
+      expect(out).toMatch(/program/i);
+    }
+  );
+
+  it("ćuti kad ispit nije u priči", () => {
+    expect(examinerAddon(["Kako se gradi Perfekt?"], [])).toBe("");
+  });
+
+  it("ne pali se na testove na platformi", () => {
+    expect(examinerAddon(["uradio sam test iz lekcije 3"], [])).toBe("");
+  });
+
+  // Nataša je ispitivač za Goethe i TELC - NE za ÖSD ni FIDE. Kredencijal se ne sme proširiti.
+  it("izričito zabranjuje da se kredencijal pripiše ÖSD-u ili FIDE", () => {
+    const out = examinerAddon(["Spremam ÖSD B1"], []);
+    expect(out).toContain("Goethe");
+    expect(out).toContain("telc");
+    expect(out).toMatch(/NE.{0,60}(ÖSD|OSD)/);
+  });
+
+  // Kredencijal se vezuje za PROGRAM, ne za to ko drži čas - Nataša ne vodi
+  // grupne ni individualne kurseve.
+  it("vezuje kredencijal za program, ne za izvođenje nastave", () => {
+    const out = examinerAddon(["Spremam Goethe B1"], []);
+    expect(out).toMatch(/ne (tvrdi|obe[ćc]avaj)/i);
+  });
+
+  it("ćuti kad je već pomenut u razgovoru", () => {
+    const out = examinerAddon(["Spremam Goethe B1"], ["Program je pravila Nataša, licencirani ispitivač."]);
+    expect(out).toBe("");
   });
 });
 

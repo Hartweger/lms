@@ -10,11 +10,13 @@ import {
   NAKI_MAX_REQUESTS_PER_DAY,
   blogLinkAddon,
   conversationMemoryAddon,
+  examinerAddon,
   genderAddon,
   levelAskGuardAddon,
   supportAddon,
 } from "@/lib/naki/system-prompt";
 import { sanitizeReply } from "@/lib/naki/sanitize";
+import { pickExtraAsk } from "@/lib/naki/extra-ask";
 import { loadSessionHistory } from "@/lib/naki/session-history";
 import { createHash } from "crypto";
 import { userOwnsAnyVideoCourse } from "@/lib/coupon-ownership";
@@ -182,8 +184,6 @@ export async function POST(request: Request) {
     userTurns: allUserTexts.length,
   };
   const upsellAddon = courseUpsellAddon(levelCourse, upsellOpts);
-  // Ako je preporuka dozvoljena a model je ne napiše sam, dopisujemo je posle odgovora.
-  const trebaPonuda = upsellAddon !== "";
   // Ako je NaKI već pitao za nivo a odgovor nije stigao, ne sme da pita iznova.
   const allAssistantTexts = memory.filter((m) => m.role === "assistant").map((m) => m.content);
   const levelGuard = levelAskGuardAddon(allAssistantTexts, knownLevel);
@@ -191,9 +191,20 @@ export async function POST(request: Request) {
   const gender = genderAddon(memory);
   // Pitanja za podršku (uplata, pristup, nalog) preusmeravamo na info@ umesto da NaKI nagađa.
   const support = supportAddon(userTexts);
+  // Ko sprema zvaničan ispit treba da zna čiji je program - jednom po razgovoru.
+  const examiner = examinerAddon(allUserTexts, allAssistantTexts);
   // Statični prompt se kešira; promenljivi dodaci idu kao odvojen nekeširan blok da ne kvare keš.
-  const dynamic =
-    memoryAddon + gender + levelGuard + support + linkAddon + couponAddon + upsellAddon;
+  // Ograničenja idu uvek; od NALOGA prolazi tačno jedan, po prioritetu (vidi extra-ask.ts).
+  // Bez ovoga se u istom odgovoru otimaju pitanje o rodu, kredencijal, ponuda i blog -
+  // model odradi jedno, nasumično, pa nijedan nije pouzdan.
+  const ask = pickExtraAsk({
+    support,
+    gender,
+    examiner,
+    upsell: upsellAddon,
+    blogLink: linkAddon,
+  });
+  const dynamic = memoryAddon + levelGuard + couponAddon + ask.text;
   const system: Anthropic.TextBlockParam[] = [
     { type: "text", text: NAKI_SYSTEM_PROMPT, cache_control: { type: "ephemeral" } },
     ...(dynamic ? [{ type: "text" as const, text: dynamic }] : []),
@@ -222,8 +233,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Neočekivan odgovor od AI servisa." }, { status: 502 });
   }
 
-  // Varijanta se bira po dužini razgovora, da svi ne dobiju istu rečenicu.
-  if (trebaPonuda) {
+  // Dopisujemo ponudu samo ako je i dobila slot - inače bi korisnik u istom odgovoru
+  // dobio i pitanje o rodu i ponudu kursa. Varijanta se bira po dužini razgovora.
+  if (ask.upsellWon) {
     reply = appendCourseOffer(reply, levelCourse, knownLevel, allUserTexts.length);
   }
 

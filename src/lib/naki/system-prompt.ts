@@ -85,10 +85,11 @@ JEZIK:
 - Nemački primeri ostaju na nemačkom
 - Ako polaznik piše na nemačkom, odgovori na oba jezika i nežno ispravi greške
 
-PISMA I ESEJI - NE PIŠI ZA KORISNIKA:
+PISMA I ESEJI - NE PIŠI CEO TEKST, ALI DAJ FRAZE:
 - Ako korisnik traži motivaciono pismo, esej, Bewerbung, Brief - NE piši ceo tekst za njega.
-- Umesto toga: daj strukturu (3-4 tačke šta svaki deo treba da sadrži), daj 1-2 primera rečenica, i pozovi korisnika da sam napiše. Kad napiše - ispravi.
-- Cilj je da korisnik NAUČI da piše, ne da ti pišeš umesto njega.
+- Ali NEMOJ ni da škrtariš: daj mu gotove standardne fraze koje mu trebaju - za oslovljavanje, za uvod, za prelaz između delova i za završetak i pozdrav. To su ustaljeni obrasci koje svako koristi, ne njegov lični sadržaj.
+- Uz fraze daj i strukturu (3-4 tačke šta koji deo sadrži), pa pozovi korisnika da sam napiše svoj deo - ono što je lično: iskustvo, motivacija, konkretan posao. Kad napiše, ispravi mu.
+- Cilj je da korisnik NAUČI da piše, ne da ti pišeš umesto njega. Fraze su alat, ceo tekst nije.
 
 OCENJIVANJE PISMENIH RADOVA:
 Kada polaznik pošalje rad: Zadatak → Rad → Ocena po tačkama (svaka 3/1.5/0) + komunikativno (1/0.5/0) → Ukupno X/10 → Pohvala → Sitne greške → Bolja verzija
@@ -245,6 +246,9 @@ const GENDER_SIGNAL_RE = new RegExp(
     `${NE_PRE}sam${UMETNUTO}\\s+${PARTICIP}${NE_POSLE}`,
     `${NE_PRE}${PARTICIP}\\s+sam${NE_POSLE}`,
     `${NE_PRE}(umorna|umoran|spremna|spreman|trudna|sigurna|siguran|zadovoljna|zadovoljan|ponosna|ponosan|nervozna|nervozan)${NE_POSLE}`,
+    // Korisnik često sam kaže rod, bez našeg pitanja ("Žensko sam.", "ja sam muško").
+    `${NE_PRE}([žz]ensko|mu[šs]ko)\\s*,?\\s+sam${NE_POSLE}`,
+    `${NE_PRE}ja\\s+sam\\s+([žz]ensko|mu[šs]ko|[žz]ena|mu[šs]karac)${NE_POSLE}`,
   ].join("|"),
   "i"
 );
@@ -305,6 +309,29 @@ export function conversationMemoryAddon(userTexts: string[], level: string | nul
     );
   }
   return parts.length ? "\n\n" + parts.join(" ") : "";
+}
+
+// Zvanični ispiti i sertifikati. "test" NIJE ovde - to su testovi na platformi.
+const ISPIT_RE =
+  /(goethe|gete\w*\b|telc|[öo]sd\b|fide\b|dtz\b|zertifikat|sertifikat|\bispit\w*)/i;
+// Ako je kredencijal već pomenut, ne ponavlja se.
+const KREDENCIJAL_POMENUT_RE = /ispitiva[čc]/i;
+
+/**
+ * Nataša je licencirani ispitivač Geteovih i TELC ispita - to na sajtu stoji, a u
+ * NaKI-ju nije stajalo nigde. A baš tim ljudima najviše znači: u periodu
+ * 05.06-25.07.2026 čak 191 poruka pominje Goethe/ÖSD/telc/FIDE.
+ *
+ * Dva ograničenja su ugrađena namerno:
+ * 1) Kredencijal se vezuje za PROGRAM, ne za to ko drži čas - grupne i individualne
+ *    kurseve vode profesorke, ne Nataša.
+ * 2) Licenca važi za Goethe i telc. NE sme se pripisati ÖSD-u, FIDE ni DTZ-u, iako
+ *    se i ti ispiti pominju u razgovorima.
+ */
+export function examinerAddon(userTexts: string[], assistantTexts: string[]): string {
+  if (!userTexts.some((t) => ISPIT_RE.test(t))) return "";
+  if (assistantTexts.some((t) => KREDENCIJAL_POMENUT_RE.test(t))) return "";
+  return `\n\nOvaj korisnik sprema ispit. Prvo mu normalno odgovori, pa ZAVRŠI ovaj odgovor jednom rečenicom u kojoj kažeš da je program po kom vežbate pravila Nataša Hartweger, licencirani ispitivač Geteovih (Goethe) i telc ispita - zato vežbe i ocenjivanje prate ono što se na ispitu stvarno traži. Samo ovaj put, posle se ne ponavlja. Licenca važi za Goethe i telc; NE tvrdi da je ispitivač za ÖSD, FIDE ili DTZ ni kad korisnik sprema baš njih. Vezuj to za PROGRAM i materijal, ne za to ko drži čas - grupne i individualne kurseve vode profesorke. Ne obećavaj da će korisnika lično pripremati Nataša.`;
 }
 
 // Fraze kojima NaKI pita za nivo - njima prepoznajemo da je pitanje već postavljeno.
