@@ -3,6 +3,7 @@ import { withCronLog, must } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendDailyAdminBrief, type DailyBrief } from "@/lib/email";
 import { buildSubscriptionBrief } from "@/lib/subscription-brief";
+import { buildNakiBrief } from "@/lib/naki-brief";
 
 // Dnevni cron (7:00): jutarnji pregled stanja adminu (Nataši).
 // Zamenjuje stari Apps Script "jutarnjeUpozorenjeV2". Zaštita: Bearer CRON_SECRET.
@@ -202,8 +203,32 @@ async function cronHandler(request: NextRequest) {
     })),
   });
 
+  // NaKI: da li prepravke promptova (rod, nivo, ponuda kursa) rade i da li smetaju.
+  // Poruke jednog dana su reda hiljadu, pa se čitaju u celini i broje u kodu.
+  const { data: nakiPoruke } = await admin
+    .from("naki_messages")
+    .select("session_id, role, message")
+    .eq("kind", "tutor")
+    .gte("created_at", startYday.toISOString())
+    .lt("created_at", startToday.toISOString())
+    .limit(5000);
+  const { count: nakiMejlovi } = await admin
+    .from("naki_profiles")
+    .select("*", { count: "exact", head: true })
+    .gte("created_at", startYday.toISOString())
+    .lt("created_at", startToday.toISOString());
+  const naki = buildNakiBrief({
+    poruke: (nakiPoruke ?? []).map((m) => ({
+      sessionId: m.session_id ?? "",
+      role: m.role ?? "",
+      message: m.message ?? "",
+    })),
+    noviMejlovi: nakiMejlovi ?? 0,
+  });
+
   const brief: DailyBrief = {
     datum: fmtDate(startToday),
+    naki,
     pretplate,
     noveNarudzbine,
     neaktivnostPoslato: neaktivnostPoslato ?? 0,

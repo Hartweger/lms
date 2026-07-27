@@ -6,6 +6,7 @@ import { htmlToText } from "@/lib/html-to-text";
 import type { Ga4Weekly } from "@/lib/ga4-report";
 import { MERCHANT, CARD_OUTCOME, pdvBreakdown, type NestpayTx, type RecurringTx } from "@/lib/payment-confirmation";
 import type { SubscriptionBrief } from "@/lib/subscription-brief";
+import type { NakiBrief } from "@/lib/naki-brief";
 
 const FROM = "Hartweger <info@hartweger.rs>";
 
@@ -1498,6 +1499,8 @@ export type DailyBrief = {
   datum: string;
   /** Mesečno plaćanje: naplate 2..N, pale naplate i otkazivanja se ne vide nigde drugde. */
   pretplate?: SubscriptionBrief;
+  /** NaKI: efekat prepravki promptova od 27.07.2026 (ponuda kursa, ponovljena pitanja, ton). */
+  naki?: NakiBrief;
   noveNarudzbine: { broj: number; iznos: number };
   neaktivnostPoslato: number;
   neplacene: { orderNumber: string; ime: string; total: number; metod: string; danaStaro: number }[];
@@ -1561,6 +1564,22 @@ export async function sendDailyAdminBrief(d: DailyBrief) {
 <p style="margin:0;font-size:13px;color:#555">Ukupno: <strong>${p.aktivnih}</strong> ${p.aktivnih === 1 ? "aktivna pretplata" : "aktivnih pretplata"} · <strong>${fmt(p.mesecno)} din</strong> mesečno</p>`
       : "";
 
+    // NaKI: prati efekat prepravki promptova (27.07.2026). Osnovice za poređenje su
+    // upisane u sam mejl, da se brojka ne gleda bez konteksta.
+    const n = d.naki;
+    const alarm = (uslov: boolean) => (uslov ? ' style="color:#b45309;font-weight:bold"' : "");
+    const nakiHtml = n
+      ? `<table style="border-collapse:collapse;font-size:13px;width:100%">
+<tbody>
+<tr><td style="padding:3px 8px">Sesije / poruke</td><td style="padding:3px 8px;text-align:right">${n.sesija} / ${n.porukaKorisnika}</td><td style="padding:3px 8px;color:#999">&nbsp;</td></tr>
+<tr><td style="padding:3px 8px">Ponuda kursa</td><td style="padding:3px 8px;text-align:right"${alarm(n.ponudaProcenat < 20)}>${n.ponudaKursa} sesija (${n.ponudaProcenat}%)</td><td style="padding:3px 8px;color:#999">cilj ~43%, pre izmene 3%</td></tr>
+<tr><td style="padding:3px 8px">Ponovljeno pitanje (nivo/rod)</td><td style="padding:3px 8px;text-align:right"${alarm(n.ponovljenoPitanje > 0)}>${n.ponovljenoPitanje}</td><td style="padding:3px 8px;color:#999">mora biti 0</td></tr>
+<tr><td style="padding:3px 8px">Pohvale : žalbe</td><td style="padding:3px 8px;text-align:right"${alarm(n.odnos !== null && n.odnos < 3)}>${n.odnos === null ? `${n.pohvale} : 0` : `${n.odnos} : 1`}</td><td style="padding:3px 8px;color:#999">osnovica 4,6 - ako padne, ponuda smeta</td></tr>
+<tr><td style="padding:3px 8px">Novi mejlovi</td><td style="padding:3px 8px;text-align:right">${n.noviMejlovi} (${n.stopaHvatanja}%)</td><td style="padding:3px 8px;color:#999">ranije 7-16%</td></tr>
+<tr><td style="padding:3px 8px">Potrošen dnevni limit</td><td style="padding:3px 8px;text-align:right">${n.limitDogadjaja}</td><td style="padding:3px 8px;color:#999">&nbsp;</td></tr>
+</tbody></table>`
+      : "";
+
     await resend.emails.send({
       from: FROM,
       to: ["info@hartweger.rs", "natasa@hartweger.rs"],
@@ -1573,6 +1592,7 @@ export async function sendDailyAdminBrief(d: DailyBrief) {
   <strong>Juče:</strong> ${d.noveNarudzbine.broj} ${d.noveNarudzbine.broj === 1 ? "nova narudžbina" : "novih narudžbina"} (${fmt(d.noveNarudzbine.iznos)} din naplaćeno) · ${d.neaktivnostPoslato} podsetnika za neaktivnost
 </div>
 ${p ? sekcija(`Mesečno plaćanje (${p.aktivnih})`, pretplateHtml, "") : ""}
+${n ? sekcija("NaKI juče", nakiHtml, "") : ""}
 ${sekcija(`Neplaćene narudžbine (${d.neplacene.length})`, neplaceneHtml, "Nema neplaćenih narudžbina.")}
 ${sekcija(`Ističe pristup - narednih 7 dana (${d.isticePristup.length})`, isteknHtml, "Niko ne ističe ove nedelje.")}
 ${sekcija(`Individualni - ostao 1 čas (${d.indOstao1.length})`, indHtml, "Nema paketa pri kraju.")}
