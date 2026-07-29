@@ -111,25 +111,41 @@ async function cronHandler(request: Request) {
   }[];
   const sentSet = new Set(already.map((s) => `${s.user_id}|${s.course_id}|${s.expires_at}`));
 
-  const eligible = access.filter((a) => {
+  const kandidati = access.filter((a) => {
     const c = courseMap.get(a.course_id);
     if (!c || !c.slug) return false;          // bez kursa/slug-a nema linka
     if (excluded.has(a.course_id)) return false; // ind mesečni paketi 4/8/12
     return !sentSet.has(`${a.user_id}|${a.course_id}|${a.expires_at}`);
   });
 
-  if (dryRun) return NextResponse.json({ dry: true, totalEligible: eligible.length, wouldSend: Math.min(eligible.length, MAX_PER_RUN) });
+  // Dugme „Obnovi pristup" mora da vodi na PROIZVOD - sadržajni slug („nemacki-a1-1")
+  // nije u prodaji i /kupovina/{slug} na njega vraća 404.
+  const renewSlugs = await renewalProductSlugs(admin, kandidati.map((a) => a.course_id));
+
+  // Kurs bez proizvoda za samostalnu obnovu (konverzacijski, „Položi Goethe B2", C1.1)
+  // NE dobija podsetnik uopšte - nema šta da se ponudi, a mejl o isteku bez izlaza samo
+  // uznemirava. Odluka Natašina, 29.07.2026. Grupni/individualni ovo ne pogađa: njihov
+  // sadržajni kurs ima video proizvod, pa i dalje dobijaju info-verziju bez kupona.
+  const bezObnove = kandidati.filter((a) => !renewSlugs.has(a.course_id));
+  const eligible = kandidati.filter((a) => renewSlugs.has(a.course_id));
+  if (bezObnove.length > 0) {
+    console.log(`[expiry] preskočeno ${bezObnove.length} - kurs nema proizvod za obnovu: ${[...new Set(bezObnove.map((a) => courseMap.get(a.course_id)?.slug))].join(", ")}`);
+  }
+
+  if (dryRun) {
+    return NextResponse.json({
+      dry: true, totalEligible: eligible.length,
+      wouldSend: Math.min(eligible.length, MAX_PER_RUN),
+      skippedNoProduct: bezObnove.length,
+    });
+  }
 
   const batch = eligible.slice(0, MAX_PER_RUN);
-  if (batch.length === 0) return NextResponse.json({ candidates: 0, sent: 0 });
+  if (batch.length === 0) return NextResponse.json({ candidates: 0, sent: 0, skippedNoProduct: bezObnove.length });
 
   const ids = [...new Set(batch.map((a) => a.user_id))];
   const profiles = must(await admin.from("user_profiles").select("id, email, full_name").in("id", ids), "user_profiles");
   const profMap = new Map((profiles ?? []).map((p) => [p.id, p]));
-
-  // Dugme „Obnovi pristup" mora da vodi na PROIZVOD - sadržajni slug („nemacki-a1-1")
-  // nije u prodaji i /kupovina/{slug} na njega vraća 404. Bez proizvoda ide info-verzija.
-  const renewSlugs = await renewalProductSlugs(admin, batch.map((a) => a.course_id));
 
   let sent = 0;
   for (const a of batch) {
@@ -153,7 +169,7 @@ async function cronHandler(request: Request) {
     sent++;
   }
 
-  return NextResponse.json({ candidates: batch.length, sent });
+  return NextResponse.json({ candidates: batch.length, sent, skippedNoProduct: bezObnove.length });
 }
 
 export const GET = withCronLog("expiry-reminder", cronHandler);
