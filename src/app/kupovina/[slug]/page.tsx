@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { renewalProductSlug } from "@/lib/renewal-product";
 import { checkoutStrings } from "@/lib/product-i18n";
 import CheckoutForm from "./CheckoutForm";
 
@@ -42,7 +43,24 @@ export default async function KupovinaPage({
     .eq("is_purchasable", true)
     .single();
 
-  if (!course) notFound();
+  if (!course) {
+    // Sadržajni kurs („nemacki-a1-1") nije u prodaji - prodaje se proizvod koji ga
+    // otključava. Stari linkovi „Obnovi pristup" (127 poslatih mejlova od 10.06.2026)
+    // gađaju sadržajni slug; preusmeri ih umesto da polaznik dobije 404.
+    // Admin klijent: neki sadržajni kursevi su nevidljivi za anon (RLS, nepublikovani),
+    // pa bi student svejedno dobio 404 umesto preusmerenja.
+    const admin = createAdminClient();
+    const { data: content } = await admin
+      .from("courses").select("id").eq("slug", slug).maybeSingle();
+    if (content) {
+      const product = await renewalProductSlug(admin, content.id);
+      // Postojeći kurs bez samoposlužnog proizvoda (npr. grupni C1.1) vodi na ponudu,
+      // ne na 404 - polaznik je došao sa namerom da kupi, ne sme da udari u zid.
+      if (!product || product === slug) redirect("/kursevi");
+      redirect(`/kupovina/${product}${kupon ? `?kupon=${encodeURIComponent(kupon)}` : ""}`);
+    }
+    notFound();
+  }
 
   const lang = course.lang === "en" ? "en" : "sr";
   const ct = checkoutStrings(lang);

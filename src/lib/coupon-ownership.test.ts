@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { emailUsedCoupon } from "./coupon-ownership";
+import { createFakeAdmin } from "@/lib/test/fake-admin";
+import { emailUsedCoupon, emailOwnsCourse } from "./coupon-ownership";
 
 type Row = Record<string, unknown>;
 
@@ -42,5 +43,44 @@ describe("emailUsedCoupon", () => {
     const admin = fakeAdmin([{ ...base, payment_status: "completed" }]);
     expect(await emailUsedCoupon(admin, "NAKI10", "petar@example.com")).toBe(false);
     expect(await emailUsedCoupon(admin, "OBNOVI50", "ana@example.com")).toBe(false);
+  });
+});
+
+// OBNOVI50 je renewal_only: važi samo za obnovu kursa koji mejl već ima. Pristup se
+// vodi na SADRŽAJNI kurs, a kupuje se PROIZVOD - bez mapiranja preko course_unlocks
+// kupon je odbijao baš one kojima je namenjen.
+function ownershipAdmin(over: Record<string, Record<string, unknown>[]> = {}) {
+  return createFakeAdmin({
+    user_profiles: [{ id: "u1", email: "ana@example.com" }],
+    course_unlocks: [
+      { purchasable_course_id: "v-a1", content_course_id: "a11" },
+      { purchasable_course_id: "v-a1", content_course_id: "a12" },
+    ],
+    course_access: [{ user_id: "u1", course_id: "a11" }],
+    individual_enrollments: [],
+    ...over,
+  }).admin as unknown as SupabaseClient;
+}
+
+describe("emailOwnsCourse", () => {
+  it("true za proizvod čiji sadržajni kurs polaznik ima (video-kurs-a1 ← nemacki-a1-1)", async () => {
+    expect(await emailOwnsCourse(ownershipAdmin(), "ana@example.com", "v-a1")).toBe(true);
+  });
+
+  it("true kad je pristup upisan direktno na sam kurs", async () => {
+    expect(await emailOwnsCourse(ownershipAdmin(), "ana@example.com", "a11")).toBe(true);
+  });
+
+  it("false za proizvod koji nema veze sa onim što polaznik ima", async () => {
+    expect(await emailOwnsCourse(ownershipAdmin(), "ana@example.com", "v-b2")).toBe(false);
+  });
+
+  it("false kad polaznik nema nijedan sadržajni kurs tog proizvoda", async () => {
+    const admin = ownershipAdmin({ course_access: [{ user_id: "u1", course_id: "b11" }] });
+    expect(await emailOwnsCourse(admin, "ana@example.com", "v-a1")).toBe(false);
+  });
+
+  it("false za nepoznat mejl", async () => {
+    expect(await emailOwnsCourse(ownershipAdmin(), "niko@example.com", "v-a1")).toBe(false);
   });
 });

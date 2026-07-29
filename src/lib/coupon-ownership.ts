@@ -22,7 +22,23 @@ export async function emailOwnsCourse(
 
   const { data: ie } = await admin
     .from("individual_enrollments").select("id").eq("user_id", prof.id).eq("course_id", courseId).limit(1);
-  return !!(ie && ie.length);
+  if (ie && ie.length) return true;
+
+  // Proizvod ≠ sadržaj: pristup se upisuje na SADRŽAJNE kurseve iz `course_unlocks`
+  // („video-kurs-a1" → „nemacki-a1-1"/-2), pa vlasnik nikad nema red na sam proizvod.
+  // Bez ovoga bi renewal_only kupon (OBNOVI50) odbijao baš one kojima je namenjen.
+  const { data: unlocks } = await admin
+    .from("course_unlocks").select("content_course_id").eq("purchasable_course_id", courseId);
+  const contentIds = (unlocks ?? []).map((u) => u.content_course_id).filter((id: string) => id !== courseId);
+  if (contentIds.length === 0) return false;
+
+  const { data: caContent } = await admin
+    .from("course_access").select("id").eq("user_id", prof.id).in("course_id", contentIds).limit(1);
+  if (caContent && caContent.length) return true;
+
+  const { data: ieContent } = await admin
+    .from("individual_enrollments").select("id").eq("user_id", prof.id).in("course_id", contentIds).limit(1);
+  return !!(ieContent && ieContent.length);
 }
 
 /**

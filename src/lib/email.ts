@@ -1361,12 +1361,18 @@ export async function sendExpiryReminder(o: {
   email: string; name: string; courseTitle: string; courseSlug: string; expiresAt: string;
   /** true (default) = video kupci, mejl SA kuponom OBNOVI50. false = ind/grupni, samo info bez kupona. */
   withCoupon?: boolean;
+  /**
+   * Slug PROIZVODA za obnovu (npr. „video-kurs-a1"). Sadržajni kurs („nemacki-a1-1")
+   * nije u prodaji, pa link na njega daje 404. Bez proizvoda nema kupon-verzije mejla.
+   */
+  renewSlug?: string | null;
 }) {
   try {
     const resend = getResend();
     if (!resend) return;
-    const withCoupon = o.withCoupon !== false;
-    const renewUrl = `${SITE_URL}/kupovina/${o.courseSlug}`;
+    const renewSlug = o.renewSlug ?? null;
+    const withCoupon = o.withCoupon !== false && !!renewSlug;
+    const renewUrl = `${SITE_URL}/kupovina/${renewSlug}`;
     const datum = new Date(o.expiresAt).toLocaleDateString("sr-Latn-RS", { day: "numeric", month: "long", year: "numeric" });
     const daysLeft = Math.max(1, Math.round((new Date(o.expiresAt).getTime() - Date.now()) / 86400000));
 

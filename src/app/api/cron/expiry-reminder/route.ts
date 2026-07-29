@@ -7,6 +7,7 @@ import { NextResponse } from "next/server";
 import { withCronLog, must } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendExpiryReminder } from "@/lib/email";
+import { renewalProductSlugs } from "@/lib/renewal-product";
 
 export const dynamic = "force-dynamic";
 
@@ -60,12 +61,14 @@ async function cronHandler(request: Request) {
 
   // TEST režim: pošalji jedan probni na dati mejl
   if (testEmail) {
-    const sample = (courses ?? []).find((c) => c.slug === "kurs-nemackog-jezika-a1-1") ?? (courses ?? [])[0];
+    const sample = (courses ?? []).find((c) => c.slug === "nemacki-a1-1") ?? (courses ?? [])[0];
+    const testRenew = sample ? (await renewalProductSlugs(admin, [sample.id])).get(sample.id) ?? null : null;
     await sendExpiryReminder({
       email: testEmail,
       name: "Test",
       courseTitle: sample?.title ?? "Nemački A1.1",
-      courseSlug: sample?.slug ?? "kurs-nemackog-jezika-a1-1",
+      courseSlug: sample?.slug ?? "nemacki-a1-1",
+      renewSlug: testRenew,
       expiresAt: windowIso,
       withCoupon: searchParams.get("nocoupon") !== "1",
     });
@@ -124,6 +127,10 @@ async function cronHandler(request: Request) {
   const profiles = must(await admin.from("user_profiles").select("id, email, full_name").in("id", ids), "user_profiles");
   const profMap = new Map((profiles ?? []).map((p) => [p.id, p]));
 
+  // Dugme „Obnovi pristup" mora da vodi na PROIZVOD - sadržajni slug („nemacki-a1-1")
+  // nije u prodaji i /kupovina/{slug} na njega vraća 404. Bez proizvoda ide info-verzija.
+  const renewSlugs = await renewalProductSlugs(admin, batch.map((a) => a.course_id));
+
   let sent = 0;
   for (const a of batch) {
     const prof = profMap.get(a.user_id);
@@ -134,6 +141,7 @@ async function cronHandler(request: Request) {
       name: prof.full_name ?? "",
       courseTitle: course.title,
       courseSlug: course.slug,
+      renewSlug: renewSlugs.get(a.course_id) ?? null,
       expiresAt: a.expires_at,
       withCoupon: !noCouponUsers.has(a.user_id),
     });

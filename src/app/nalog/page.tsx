@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { redirect } from "next/navigation";
 import { accessStatus, shouldShowRenew, isRenewable } from "@/lib/account";
+import { renewalProductSlugs } from "@/lib/renewal-product";
 import { GrupniIIndividualni, ProfilSekcija } from "./Sekcije";
 
 export const metadata = { title: "Moj nalog - Hartweger", robots: { index: false } };
@@ -38,6 +40,9 @@ export default async function NalogPage() {
     return { ...c, status: accessStatus(acc?.expires_at ?? null, now) };
   });
 
+  // Obnova ide na PROIZVOD, ne na sadržajni kurs - sadržajni slug nije u prodaji i daje 404.
+  const renewSlugs = await renewalProductSlugs(createAdminClient(), courseIds);
+
   const { data: orders } = await supabase
     .from("orders")
     .select("id, items, total, payment_method, created_at, fiscal_pdf_url")
@@ -53,7 +58,8 @@ export default async function NalogPage() {
         <p className="text-sm font-medium text-gray-500 mb-2">Pristup i kursevi</p>
         {kursevi.map((c) => {
           const expired = c.status.state === "expired";
-          const renew = shouldShowRenew(c.status) && isRenewable(c.category, c.slug);
+          const renewSlug = renewSlugs.get(c.id);
+          const renew = shouldShowRenew(c.status) && isRenewable(c.category, c.slug) && !!renewSlug;
           return (
             <div
               key={c.id}
@@ -69,7 +75,7 @@ export default async function NalogPage() {
               {expired && <p className="text-sm text-koral-dark mt-1">Pristup je istekao</p>}
               {renew && (
                 <Link
-                  href={`/kupovina/${c.slug}?kupon=OBNOVI50`}
+                  href={`/kupovina/${renewSlug}?kupon=OBNOVI50`}
                   className="inline-block mt-2 text-sm bg-koral-light text-koral-dark px-3 py-1.5 rounded-lg hover:bg-koral hover:text-white transition-colors"
                 >
                   Obnovi −50%
