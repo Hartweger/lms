@@ -65,7 +65,7 @@ const faqBySlug: Record<string, { q: string; a: string }[]> = {
   "grupni-konverzacijski-kurs-nemackog-b1": [
     { q: "Šta se dešava nakon prijave?", a: "Odmah dobijaš potvrdu sa svim informacijama, a pre prvog časa i link za Google Meet poziv. Potreban ti je samo uređaj sa internet konekcijom - ništa se ne instalira i ne pripremaš posebno." },
     { q: "Koji nivo treba da imam?", a: "Kurs je namenjen onima koji su završili B1 i žele konverzacijsku praksu. Razumeš nemački, ali ti govor blokira - tu ti pomažemo." },
-    { q: "Koliko vremena treba nedeljno?", a: "Oko 2 sata: jedan čas petkom od 60 minuta + 30-45 minuta za vežbanje reči na platformi pre časa." },
+    { q: "Koliko vremena treba nedeljno?", a: "Oko 2 sata: jedan čas od 60 minuta nedeljno + 30-45 minuta za vežbanje reči na platformi pre časa." },
     { q: "Da li moram nešto da kupujem ili pripremam?", a: "Ne. Pre svakog časa dobijaš set reči (naše kartice za vežbanje) na platformi. Sve ostalo radimo zajedno na času - bez udžbenika i bez dodatnih materijala." },
     { q: "Koliko polaznika je u grupi?", a: "Najviše 6 polaznika, da svako stigne da priča. Za formiranje grupe potrebno je minimum 3 polaznika - ako se ne prijavi dovoljno, termin se pomera i ostaješ na listi." },
     { q: "Šta ako propustim čas?", a: "Čas u grupi je za vežbanje govora - ako jedan propustiš, nadoknadiš na sledećem. Raspored tema i setove reči imaš na platformi u svom tempu." },

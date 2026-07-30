@@ -115,7 +115,7 @@ const tabs: TabConfig[] = [
     levels: [],
     defaultLevel: "sve",
     cards: [
-      { badges: [{ label: "Konverzacija", color: "novo" }, { label: "B1+", color: "b1" }], title: "Konverzacijski kurs nemačkog (B1+)", meta: "max 6 polaznika · petkom", desc: "Praksa govora za one koji razumeju nemački, ali im govor blokira. Žive teme iz svakodnevnog života na DACH području, u maloj grupi.", price: "17.550 RSD", priceEur: "≈ 150€", href: "/kursevi/grupni-konverzacijski-kurs-nemackog-b1", cta: "Prijavi se", level: "sve" },
+      { badges: [{ label: "Konverzacija", color: "novo" }, { label: "B1+", color: "b1" }], title: "Konverzacijski kurs nemačkog (B1+)", meta: "max 6 polaznika · 1x nedeljno", desc: "Praksa govora za one koji razumeju nemački, ali im govor blokira. Žive teme iz svakodnevnog života na DACH području, u maloj grupi.", price: "17.550 RSD", priceEur: "≈ 150€", href: "/kursevi/grupni-konverzacijski-kurs-nemackog-b1", cta: "Prijavi se", level: "sve" },
     ],
   },
   {
