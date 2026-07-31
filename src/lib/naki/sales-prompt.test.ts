@@ -58,6 +58,12 @@ describe("buildSalesSystemPrompt", () => {
     expect(SMILE_MODEL).toBe("claude-sonnet-4-6");
   });
 
+  it("video kursevi samo celi nivoi - ne nudi izmišljeni 'video kurs A1.2'", () => {
+    const out = buildSalesSystemPrompt("katalog", { coupon: false });
+    expect(out).toContain("SAMO za cele nivoe");
+    expect(out).toContain("video kurs A1.2");
+  });
+
   it("za visoke nivoe (C1) upucuje na mesecne pakete umesto 'nemamo u ponudi'", () => {
     const out = buildSalesSystemPrompt("katalog", { coupon: false });
     expect(out).toContain("IZUZETAK - visoki nivoi");
