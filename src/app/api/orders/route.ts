@@ -250,11 +250,44 @@ export async function POST(request: Request) {
     // Usluge (category="usluga", npr. prevod): cena po strani × broj strana.
     // Mesečno plaćanje postoji samo za proizvode iz SUBSCRIPTION_PLANS. Bez ove
     // kočnice bi se izmenom zahteva mogla pokrenuti pretplata na bilo šta.
-    if (paymentMethod === "kartica_pretplata" && !planForSlug(course.slug)) {
+    const plan = planForSlug(course.slug);
+    if (paymentMethod === "kartica_pretplata" && !plan) {
       return NextResponse.json(
         { error: "Mesečno plaćanje nije dostupno za ovaj kurs." },
         { status: 400 }
       );
+    }
+
+    // Članstvo (tip "clanstvo") se plaća isključivo pretplatom - jednokratna
+    // kupovina bi dala mesec dana pristupa po ceni rate, bez obnavljanja.
+    if (plan?.tip === "clanstvo" && paymentMethod !== "kartica_pretplata") {
+      return NextResponse.json(
+        { error: "Ovaj proizvod se plaća mesečnom pretplatom." },
+        { status: 400 }
+      );
+    }
+
+    // Dupla pretplata: za članstvo (i pakete) course_access pokazuje na sadržajni
+    // kurs, pa provera ispod (na PRODUKT kursu) ne hvata slučaj kad neko već ima
+    // aktivnu pretplatu na isti proizvod i pokuša da pokrene drugu paralelno.
+    if (paymentMethod === "kartica_pretplata" && plan) {
+      const { data: postojeciZaPretplatu } = await supabase
+        .from("user_profiles").select("id").ilike("email", email).maybeSingle();
+      if (postojeciZaPretplatu) {
+        const { data: aktivnaPretplata } = await supabase
+          .from("subscriptions")
+          .select("id")
+          .eq("user_id", postojeciZaPretplatu.id)
+          .eq("course_id", course.id)
+          .eq("status", "active")
+          .maybeSingle();
+        if (aktivnaPretplata) {
+          return NextResponse.json(
+            { error: "Već imaš aktivnu mesečnu pretplatu na ovaj proizvod. Proveri stranicu Moj nalog." },
+            { status: 400 }
+          );
+        }
+      }
     }
 
     // Ko već ima važeći pristup ovom kursu ne sme da pokrene mesečno plaćanje - plaćao bi
