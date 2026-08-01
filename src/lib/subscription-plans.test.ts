@@ -96,3 +96,23 @@ describe("unlockedSlugsAfter", () => {
     expect(unlockedSlugsAfter(plan, 7)).not.toContain("nemacki-b1-2");
   });
 });
+
+describe("nh-clanstvo plan", () => {
+  it("nh-clanstvo postoji, tip je clanstvo, 121 naplata (maksimum banke)", () => {
+    const plan = planForSlug("nh-clanstvo");
+    expect(plan).not.toBeNull();
+    expect(plan!.tip).toBe("clanstvo");
+    expect(plan!.totalPayments).toBe(121);
+    expect(plan!.monthlyRsd).toBe(2290);
+  });
+
+  it("svaka rata članstva otključava celu biblioteku (installment 1)", () => {
+    const plan = planForSlug("nh-clanstvo")!;
+    expect(unlockedSlugsAfter(plan, 1)).toEqual(["nh-clanstvo-sadrzaj"]);
+    expect(unlockedSlugsAfter(plan, 57)).toEqual(["nh-clanstvo-sadrzaj"]);
+  });
+
+  it("postojeći paket nema tip, podrazumeva se paket", () => {
+    expect(planForSlug("paket-a1-a2-b1")!.tip).toBeUndefined();
+  });
+});
