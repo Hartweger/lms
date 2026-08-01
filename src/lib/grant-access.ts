@@ -276,6 +276,9 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
   if (!jePrvaNaplata) {
     const { data: sub } = await admin
       .from("subscriptions").select("total_payments").eq("id", order.subscription_id).maybeSingle();
+    // tip određuje samo naslov/uvod mejla (bez "od N" za članstvo) - transakcioni podaci
+    // ostaju isti za oba tipa (EPM 2.7, vidi komentar iznad sendSubscriptionChargeEmail).
+    const chargePlan = planForSlug(items[0]?.course_slug ?? "");
     await sendSubscriptionChargeEmail({
       email: order.email,
       name: order.full_name,
@@ -288,6 +291,7 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
       // (zahtev banke 24.07.2026, EPM 2.7). Upisao ih je subscriptions-poll cron.
       orderNumber: order.order_number,
       tx: recurringTxData(order.nestpay_response, order.created_at),
+      tip: chargePlan?.tip,
     });
     return { ok: true };
   }
@@ -316,7 +320,7 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
     await sendWelcomeEmail(order.email, order.full_name, items.map((i) => i.title), {
       startUrl,
       hasLesson,
-      subscription: plan ? { monthlyRsd: plan.monthlyRsd, totalPayments: plan.totalPayments } : undefined,
+      subscription: plan ? { monthlyRsd: plan.monthlyRsd, totalPayments: plan.totalPayments, tip: plan.tip } : undefined,
     });
   }
   return { ok: true };

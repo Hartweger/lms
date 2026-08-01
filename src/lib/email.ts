@@ -77,8 +77,14 @@ export async function sendWelcomeEmail(
    * hasLesson = login-link cilja prvu lekciju; false = /dashboard (kurs bez lekcija, ne obećavati lekciju).
    * subscription = mesečno plaćanje: zahtev banke je da notifikacija za inicijalnu ponavljajuću
    * transakciju kupcu JASNO kaže da je pokrenuta pretplata (iznos, učestalost, broj naplata, otkazivanje).
+   * subscription.tip = "clanstvo" (nh-clanstvo) menja narativ: 121 je bankin tehnički maksimum
+   * naplata u seriji, ne obećanje - pa se "od 121" ovde NE prikazuje (vidi subscription-plans.ts).
    */
-  opts?: { startUrl?: string; hasLesson?: boolean; subscription?: { monthlyRsd: number; totalPayments: number } },
+  opts?: {
+    startUrl?: string;
+    hasLesson?: boolean;
+    subscription?: { monthlyRsd: number; totalPayments: number; tip?: "paket" | "clanstvo" };
+  },
 ) {
   const courseList = courseTitles.map((t) => `• ${t}`).join("\n");
   const startUrl = opts?.startUrl || `${SITE_URL}/prijava`;
@@ -92,7 +98,9 @@ export async function sendWelcomeEmail(
       to,
       replyTo: "info@hartweger.rs",
       subject: opts?.subscription
-        ? "Dobrodošli! Pokrenuto je mesečno plaćanje (pretplata)"
+        ? (opts.subscription.tip === "clanstvo"
+          ? "Dobrodošli! Pokrenuto je mesečno članstvo"
+          : "Dobrodošli! Pokrenuto je mesečno plaćanje (pretplata)")
         : "Dobrodošli na Hartweger kurs!",
       html: `
 <!DOCTYPE html>
@@ -121,7 +129,27 @@ export async function sendWelcomeEmail(
       </div>
 
       ${opts?.subscription
-        ? `
+        ? (opts.subscription.tip === "clanstvo"
+          ? `
+      <div style="background: #fff8e7; border: 1px solid #f0d48a; border-radius: 8px; padding: 14px 16px; margin: 0 0 20px;">
+        <div style="font-size: 14px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px;">Pokrenuto je mesečno članstvo</div>
+        <div style="font-size: 14px; color: #444; line-height: 1.6;">
+          Danas je naplaćen prvi mesec članstva u iznosu od
+          <strong>${opts.subscription.monthlyRsd.toLocaleString("de-DE")} RSD</strong>. Isti iznos se automatski
+          naplaćuje sa tvoje platne kartice <strong>jednom mesečno</strong>, istog datuma u mesecu - mesečno članstvo
+          se obnavlja svakog meseca dok ga ne otkažeš. Za svaku naplatu dobijaš potvrdu i fiskalni račun na email.
+          <br /><br />
+          Mesečno članstvo možeš da <strong>otkažeš u svakom trenutku</strong> u odeljku
+          <a href="${SITE_URL}/nalog" style="color: #4fb1d3;">„Moj nalog"</a> na platformi (opcija „Otkaži mesečno
+          članstvo") ili slanjem zahteva na info@hartweger.rs. Otkazivanje zaustavlja sve buduće naplate.
+        </div>
+      </div>
+      <p style="font-size: 15px; line-height: 1.6; color: #444; margin: 0 0 20px;">
+        ${opts?.startUrl
+          ? `Klikni na dugme ispod i odmah ulaziš ${opts.hasLesson ? "u prvu lekciju" : "na platformu"}. Pristup važi dok je članstvo aktivno.`
+          : "Prijavi se na platformu i započni prvu lekciju. Pristup važi dok je članstvo aktivno."}
+      </p>`
+          : `
       <div style="background: #fff8e7; border: 1px solid #f0d48a; border-radius: 8px; padding: 14px 16px; margin: 0 0 20px;">
         <div style="font-size: 14px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px;">Pokrenuto je mesečno plaćanje (pretplata)</div>
         <div style="font-size: 14px; color: #444; line-height: 1.6;">
@@ -139,7 +167,7 @@ export async function sendWelcomeEmail(
         ${opts?.startUrl
           ? `Klikni na dugme ispod i odmah ulaziš ${opts.hasLesson ? "u prvu lekciju" : "na platformu"}. Pristup važi dok traju mesečne naplate, a nivoi se otvaraju redom kako naplate teku.`
           : "Prijavi se na platformu i započni prvu lekciju. Pristup važi dok traju mesečne naplate, a nivoi se otvaraju redom kako naplate teku."}
-      </p>`
+      </p>`)
         : `
       <p style="font-size: 15px; line-height: 1.6; color: #444; margin: 0 0 20px;">
         ${opts?.startUrl
@@ -2243,7 +2271,9 @@ export async function sendWeeklyBusinessSummary(s: WeeklySummary) {
  * Potvrda naplaćene rate kod mesečnog plaćanja. Rate 2-12 ne dobijaju dobrodošlicu
  * (polaznica je već na kursu), nego kratku potvrdu sa novim rokom pristupa.
  * Podaci o transakciji i trgovcu su OBAVEZNI i u ovim mejlovima (EPM 2.7 - zahtev
- * banke 24.07.2026 za naknadne mesečne naplate).
+ * banke 24.07.2026 za naknadne mesečne naplate) - ostaju identični za oba tipa plana.
+ * o.tip === "clanstvo" (nh-clanstvo) menja samo naslov/uvod: nema fiksnog broja rata,
+ * pa se "od N" ovde ne prikazuje (vidi subscription-plans.ts).
  */
 export async function sendSubscriptionChargeEmail(o: {
   email: string;
@@ -2255,6 +2285,7 @@ export async function sendSubscriptionChargeEmail(o: {
   accessUntil: string;
   orderNumber: string;
   tx: RecurringTx;
+  tip?: "paket" | "clanstvo";
 }) {
   try {
     const resend = getResend();
@@ -2262,19 +2293,22 @@ export async function sendSubscriptionChargeEmail(o: {
     const ime = o.name ? o.name.split(" ")[0] : "";
     const fmt = (n: number) => n.toLocaleString("de-DE");
     const doKada = new Date(o.accessUntil).toLocaleDateString("sr-RS");
+    const jeClanstvo = o.tip === "clanstvo";
     const txRow = (label: string, value: string) =>
       `<tr><td style="padding:4px 8px;color:#888;">${label}</td><td style="padding:4px 8px;">${esc(value)}</td></tr>`;
     await resend.emails.send({
       from: FROM,
       to: o.email,
       replyTo: "info@hartweger.rs",
-      subject: `Naplaćena ${o.installmentNo}. rata od ${o.totalPayments} - ${o.courseTitle}`,
+      subject: jeClanstvo
+        ? `Naplaćeno mesečno članstvo - ${o.courseTitle}`
+        : `Naplaćena ${o.installmentNo}. rata od ${o.totalPayments} - ${o.courseTitle}`,
       html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
 <body style="font-family:sans-serif;line-height:1.6;color:#222">
 <p>Zdravo${ime ? ", " + esc(ime) : ""}!</p>
-<p>Naplatili smo <strong>${fmt(o.amount)} RSD</strong> - to je ${o.installmentNo}. rata od ukupno ${o.totalPayments} za kurs <strong>${esc(o.courseTitle)}</strong>.</p>
+<p>Naplatili smo <strong>${fmt(o.amount)} RSD</strong> - ${jeClanstvo ? "to je redovna mesečna naplata mesečnog članstva" : `to je ${o.installmentNo}. rata od ukupno ${o.totalPayments}`} za kurs <strong>${esc(o.courseTitle)}</strong>.</p>
 <p style="font-size:14px;color:#1c7a34;font-weight:700">${CARD_OUTCOME.success}</p>
-<p>Pristup ti važi do <strong>${doKada}</strong> i produžiće se sam sa narednom ratom. Fiskalni račun stiže zasebno.</p>
+<p>Pristup ti važi do <strong>${doKada}</strong> i produžiće se sam sa ${jeClanstvo ? "sledećom naplatom" : "narednom ratom"}. Fiskalni račun stiže zasebno.</p>
 <h2 style="font-size:13px;color:#999;text-transform:uppercase;letter-spacing:0.5px;margin:18px 0 4px;">Podaci o transakciji</h2>
 <table style="border-collapse:collapse;font-size:13px;width:100%;max-width:420px;margin:0 0 12px;">
   <tbody>
@@ -2291,7 +2325,7 @@ export async function sendSubscriptionChargeEmail(o: {
   PIB: ${MERCHANT.pib}<br/>
   ${esc(MERCHANT.adresa)}
 </p>
-<p style="font-size:13px;color:#666">Mesečno plaćanje možeš da otkažeš kad god hoćeš, u odeljku „Moj nalog" na platformi.</p>
+<p style="font-size:13px;color:#666">${jeClanstvo ? `Mesečno članstvo možeš da otkažeš kad god hoćeš, u odeljku „Moj nalog" na platformi.` : `Mesečno plaćanje možeš da otkažeš kad god hoćeš, u odeljku „Moj nalog" na platformi.`}</p>
 <p style="margin-top:20px">Hartweger tim</p>
 </body></html>`,
     });

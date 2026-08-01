@@ -19,6 +19,12 @@ export interface SubscriptionPlan {
    * Jednokratna kupovina i dalje otvara sve odmah.
    */
   unlocks: PlanUnlock[];
+  /**
+   * "paket" (podrazumevano) = fiksan broj rata, postepeno otključavanje nivoa.
+   * "clanstvo" = traje do otkazivanja; totalPayments je bankin maksimum (121),
+   * ne obećanje broja naplata - checkout tekst se razlikuje (pretplata-opis.ts).
+   */
+  tip?: "paket" | "clanstvo";
 }
 
 export const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
@@ -38,6 +44,15 @@ export const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
       { installment: 7, slug: "nemacki-b1-1" },
       { installment: 8, slug: "nemacki-b1-2" },
     ],
+  },
+  // NH Membership (odluka 1.8.2026): članstvo do otkazivanja. 121 = bankin
+  // maksimum naplata u seriji, svaka rata produžava pristup celoj biblioteci.
+  {
+    slug: "nh-clanstvo",
+    monthlyRsd: 2290,
+    totalPayments: 121,
+    tip: "clanstvo",
+    unlocks: [{ installment: 1, slug: "nh-clanstvo-sadrzaj" }],
   },
 ];
 

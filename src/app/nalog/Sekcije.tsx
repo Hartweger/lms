@@ -33,6 +33,9 @@ interface SubRow {
   accessUntil: string | null;
   unlockedCount: number;
   nextUnlockAt: number | null;
+  /** "clanstvo" (nh-clanstvo): traje do otkazivanja, 121 je bankin tehnički maksimum
+   * naplata, ne obećanje - prikaz ispod zato NE piše "X od 121 naplata" za ovaj tip. */
+  tip?: "paket" | "clanstvo";
 }
 
 const PRAZNO = { groups: [], individual: [], subscriptions: [] };
@@ -65,12 +68,16 @@ function Pretplata({ s, onCancel }: { s: SubRow; onCancel: (id: string) => void 
     <div className="border border-gray-200 rounded-lg p-4 mb-2">
       <p className="font-medium">{s.title} · mesečno plaćanje</p>
       <p className="text-sm text-gray-600 mt-1">
-        Plaćeno {s.paidPayments} od {s.totalPayments} naplata · {iznos} RSD mesečno
+        {s.tip === "clanstvo" ? "Aktivno mesečno članstvo" : `Plaćeno ${s.paidPayments} od ${s.totalPayments} naplata`} · {iznos} RSD mesečno
       </p>
-      <p className="text-sm text-gray-600">
-        Otvoreno ti je {s.unlockedCount} od 6 nivoa
-        {s.nextUnlockAt ? ` · sledeći stiže sa ${s.nextUnlockAt}. naplatom` : " · ceo kurs je otvoren"}
-      </p>
+      {s.tip === "clanstvo" ? (
+        <p className="text-sm text-gray-600">Pristup celoj biblioteci i zajednici je otvoren.</p>
+      ) : (
+        <p className="text-sm text-gray-600">
+          Otvoreno ti je {s.unlockedCount} od 6 nivoa
+          {s.nextUnlockAt ? ` · sledeći stiže sa ${s.nextUnlockAt}. naplatom` : " · ceo kurs je otvoren"}
+        </p>
+      )}
       {s.status === "active" ? (
         <>
           <p className="text-sm text-gray-600">

@@ -122,6 +122,9 @@ export async function GET() {
         accessUntil: doKada,
         unlockedCount: otvoreni.length,
         nextUnlockAt: sledeciNivo?.installment ?? null,
+        // "clanstvo" (nh-clanstvo): 121 je bankin tehnički maksimum, ne obećanje - /nalog
+        // ovo ne prikazuje kao "X od 121" (vidi subscription-plans.ts).
+        tip: plan?.tip,
       };
     }),
   );

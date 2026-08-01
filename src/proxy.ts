@@ -1,7 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-const protectedRoutes = ["/dashboard", "/profil"];
+const protectedRoutes = ["/dashboard", "/profil", "/clanstvo"];
 const adminRoutes = ["/admin"];
 const professorRoutes = ["/profesor"];
 
@@ -83,5 +83,7 @@ export const config = {
     "/lekcija/:path*",
     "/vezba/:path*",
     "/kurs/:path*",
+    "/clanstvo",
+    "/clanstvo/:path*",
   ],
 };

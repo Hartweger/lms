@@ -8,6 +8,7 @@ import { computeCouponDiscount } from "@/lib/coupon-discount";
 import { professorsFromVariants, packageTypesFromVariants, resolveVariant, type Variant } from "@/lib/individual-pricing";
 import { checkoutStrings } from "@/lib/product-i18n";
 import { planForSlug } from "@/lib/subscription-plans";
+import { pretplataOpis } from "@/lib/pretplata-opis";
 
 interface Props {
   courseSlug: string;
@@ -91,7 +92,18 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
 
   const countryList = en ? COUNTRIES_EN : COUNTRIES;
   const isRS = country === "RS";
-  const [method, setMethod] = useState<"kartica" | "uplatnica" | "paypal" | "kartica_pretplata">("kartica");
+
+  // Mesečno plaćanje postoji samo za proizvode iz plana (Video paket A1+A2+B1,
+  // NH Membership) i samo na srpskoj ponudi - engleska ide isključivo
+  // jednokratnom karticom. Banka je 24.07.2026. aktivirala recurring na
+  // produkcionom merchantu 13IN002739. Mora biti definisano PRE `method`
+  // state-a ispod - inicijalni metod za članstvo je odmah pretplata.
+  const pretplataPlan = en ? null : planForSlug(courseSlug);
+  // Članstvo (tip "clanstvo") nema jednokratnu kupovinu - jedini metod je
+  // mesečna pretplata, pa se ostale opcije ni ne nude (vidi listu metoda ispod).
+  const jeClanstvo = pretplataPlan?.tip === "clanstvo";
+
+  const [method, setMethod] = useState<"kartica" | "uplatnica" | "paypal" | "kartica_pretplata">(jeClanstvo ? "kartica_pretplata" : "kartica");
   const [pretplataPotvrda, setPretplataPotvrda] = useState(false);
   // Zahtev banke (EPM kontrola jul 2026): u proces unosa kartice ne sme da se uđe bez
   // izričite saglasnosti sa uslovima. Važi za sve metode; pretplata ima svoju potvrdu
@@ -100,11 +112,6 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
   const paymentMethod = method;
   const jePretplata = method === "kartica_pretplata";
   const isCard = method === "kartica" || jePretplata;
-
-  // Mesečno plaćanje postoji samo za proizvode iz plana (za sada Video paket A1+A2+B1)
-  // i samo na srpskoj ponudi - engleska ide isključivo jednokratnom karticom.
-  // Banka je 24.07.2026. aktivirala recurring na produkcionom merchantu 13IN002739.
-  const pretplataPlan = en ? null : planForSlug(courseSlug);
 
   // Cena u opcijama dropdown-a: kupac vidi razliku odmah, bez menjanja izbora
   // (skrivene razlike su pravile duple porudžbine - vraćanje sa bankovne strane).
@@ -418,7 +425,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
           <select
             id="country"
             value={country}
-            onChange={(e) => { setCountry(e.target.value); setMethod("kartica"); }}
+            onChange={(e) => { setCountry(e.target.value); setMethod(jeClanstvo ? "kartica_pretplata" : "kartica"); }}
             className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#0AB3D7] focus:border-transparent transition bg-white"
           >
             {countryList.map((c) => (
@@ -440,6 +447,16 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
                 // se skida u RSD ekvivalentu pa kupac plati tačno oglašeno. PayPal je isključen
                 // jer bi sistem dodao 12% (→ 157€) i razlikovao se od oglašene cene.
                 { v: "kartica", label: ct.methodCard, desc: "Visa, Mastercard, Maestro, DinaCard, American Express. Charged in RSD (your bank converts to your currency)." },
+              ]
+            : jeClanstvo && pretplataPlan
+            ? [
+                // Članstvo = samo mesečna pretplata, nema jednokratne kupovine
+                // (bez A1.1/nivo-po-nivo teksta - to je specifično za jezički paket).
+                {
+                  v: "kartica_pretplata",
+                  label: `Mesečno plaćanje - ${formatPrice(pretplataPlan.monthlyRsd)} RSD mesečno`,
+                  desc: `Kartica se automatski zadužuje svakog meseca dok je pretplata aktivna (tehnički maksimum banke je ${pretplataPlan.totalPayments} naplata u seriji). Otkazuješ kad želiš, u odeljku „Moj nalog“.`,
+                },
               ]
             : isRS
             ? [
@@ -490,49 +507,33 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
       </div>
 
       {/* Mesečno plaćanje: obaveštenje koje banka traži da bude nedvosmisleno istaknuto
-          pre potvrde - šta se pokreće, koliko, koliko puta i kako se otkazuje. */}
-      {jePretplata && pretplataPlan && (
-        <div className="bg-[#FFF8E7] border border-[#F0D48A] rounded-xl p-5">
-          <p className="font-bold text-gray-900 text-sm mb-2">Pokrećeš pretplatu, ne jednokratnu kupovinu.</p>
-          <ul className="text-sm text-gray-700 space-y-1 list-disc pl-5">
-            <li>Danas se naplaćuje <strong>{formatPrice(pretplataPlan.monthlyRsd)} RSD</strong>.</li>
-            <li>
-              Isti iznos banka će automatski naplatiti sa tvoje kartice <strong>svakog meseca</strong>, ukupno{" "}
-              <strong>{pretplataPlan.totalPayments} naplata</strong> - prva naredna za mesec dana, istog datuma.
-            </li>
-            <li>
-              Ukupno platiš <strong>{formatPrice(pretplataPlan.monthlyRsd * pretplataPlan.totalPayments)} RSD</strong>{" "}
-              (jednokratno je {formatPrice(priceRsd)} RSD).
-            </li>
-            <li>
-              Nivoi se otvaraju kako plaćaš: A1.1 odmah, A1.2 uz 2. naplatu, A2.1 uz 4, A2.2 uz 5, B1.1 uz 7, B1.2 uz 8.
-              Meseci 3, 6 i 9-12 su za obnavljanje i završni ispit nivoa.
-            </li>
-            <li>Pristup traje dok traju naplate. Ako plaćanje prekineš, ostaje ti do kraja plaćenog meseca.</li>
-            <li>
-              <strong>Na strani banke ne biraj „na rate“</strong> - mesečne naplate pokrećemo mi, a rate Banca Intesa
-              kartice su nešto drugo i ne mogu da idu zajedno sa mesečnim plaćanjem.
-            </li>
-            <li>
-              <strong>Otkazivanje:</strong> u svakom trenutku, sam(a), u odeljku „Moj nalog“ na platformi. Ne moraš da
-              nam pišeš ni da obrazlažeš.
-            </li>
-          </ul>
-          <label className="flex items-start gap-2 mt-4 text-sm text-gray-800 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={pretplataPotvrda}
-              onChange={(e) => setPretplataPotvrda(e.target.checked)}
-              className="mt-1"
-            />
-            <span>
-              Razumem da pokrećem mesečno plaćanje od {formatPrice(pretplataPlan.monthlyRsd)} RSD ×{" "}
-              {pretplataPlan.totalPayments} i saglasan/na sam sa{" "}
-              <a href="/uslovi" target="_blank" rel="noreferrer" className="text-plava underline">uslovima korišćenja</a>.
-            </span>
-          </label>
-        </div>
-      )}
+          pre potvrde - šta se pokreće, koliko, koliko puta i kako se otkazuje. Tekst
+          zavisi od plan.tip (paket vs. clanstvo) - vidi src/lib/pretplata-opis.ts. */}
+      {jePretplata && pretplataPlan && (() => {
+        const opis = pretplataOpis(pretplataPlan, priceRsd);
+        return (
+          <div className="bg-[#FFF8E7] border border-[#F0D48A] rounded-xl p-5">
+            <p className="font-bold text-gray-900 text-sm mb-2">{opis.naslov}</p>
+            <ul className="text-sm text-gray-700 space-y-1 list-disc pl-5">
+              {opis.stavke.map((stavka, i) => (
+                <li key={i} dangerouslySetInnerHTML={{ __html: stavka }} />
+              ))}
+            </ul>
+            <label className="flex items-start gap-2 mt-4 text-sm text-gray-800 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={pretplataPotvrda}
+                onChange={(e) => setPretplataPotvrda(e.target.checked)}
+                className="mt-1"
+              />
+              <span>
+                {opis.potvrda}{" "}
+                <a href="/uslovi" target="_blank" rel="noreferrer" className="text-plava underline">uslovima korišćenja</a>.
+              </span>
+            </label>
+          </div>
+        );
+      })()}
 
       {/* Saglasnost sa uslovima - obavezna pre nastavka (zahtev banke); kod pretplate
           saglasnost je deo žutog okvira iznad, pa se ovde ne duplira. */}
