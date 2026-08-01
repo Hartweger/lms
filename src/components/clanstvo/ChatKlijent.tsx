@@ -58,11 +58,16 @@ export default function ChatKlijent({
   const [poruke, setPoruke] = useState<Poruka[]>([]);
   const [tekst, setTekst] = useState("");
   const [salje, setSalje] = useState(false);
+  const [greska, setGreska] = useState("");
   const kraj = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!aktivni) return;
     let aktivan = true;
+    // useEffect ne može biti async, a setAuth() MORA biti sačekan pre subscribe-a
+    // (vidi komentar na vrhu fajla) - zato kanal pravimo unutar iste async IIFE koja
+    // već čeka fetch istorije, i čuvamo referencu za cleanup u spoljnoj promenljivoj.
+    let kanal: ReturnType<typeof supabase.channel> | null = null;
 
     (async () => {
       const { data } = await supabase
@@ -72,28 +77,29 @@ export default function ChatKlijent({
         .order("created_at", { ascending: false })
         .limit(50);
       if (aktivan) setPoruke((data ?? []).reverse());
+
+      // Vidi komentar na vrhu fajla - bez ovoga postgres_changes tiho ne
+      // isporučuje ništa jer realtime socket ostaje anon.
+      await supabase.realtime.setAuth();
+      if (!aktivan) return;
+
+      kanal = supabase
+        .channel(`chat-${aktivni.id}`)
+        .on(
+          "postgres_changes",
+          { event: "INSERT", schema: "public", table: "chat_poruke", filter: `kanal_id=eq.${aktivni.id}` },
+          // Napomena: supabase.channel(...) je tipiziran kao `any` (postojeći
+          // propust u lib/supabase/client.ts - ReturnType<typeof createBrowserClient>
+          // se ne razrešava kroz preklopljenu generičku funkciju), pa .on<T>()
+          // ovde ne bi radio (TS2347). Zato ručno tipiziramo parametar callback-a.
+          (payload: RealtimePostgresInsertPayload<Poruka>) => setPoruke((p) => dodajPoruku(p, payload.new))
+        )
+        .subscribe();
     })();
-
-    // Vidi komentar na vrhu fajla - bez ovoga postgres_changes tiho ne
-    // isporučuje ništa jer realtime socket ostaje anon.
-    supabase.realtime.setAuth();
-
-    const kanal = supabase
-      .channel(`chat-${aktivni.id}`)
-      .on(
-        "postgres_changes",
-        { event: "INSERT", schema: "public", table: "chat_poruke", filter: `kanal_id=eq.${aktivni.id}` },
-        // Napomena: supabase.channel(...) je tipiziran kao `any` (postojeći
-        // propust u lib/supabase/client.ts - ReturnType<typeof createBrowserClient>
-        // se ne razrešava kroz preklopljenu generičku funkciju), pa .on<T>()
-        // ovde ne bi radio (TS2347). Zato ručno tipiziramo parametar callback-a.
-        (payload: RealtimePostgresInsertPayload<Poruka>) => setPoruke((p) => dodajPoruku(p, payload.new))
-      )
-      .subscribe();
 
     return () => {
       aktivan = false;
-      supabase.removeChannel(kanal);
+      if (kanal) supabase.removeChannel(kanal);
     };
   }, [supabase, aktivni]);
 
@@ -106,6 +112,7 @@ export default function ChatKlijent({
     const t = tekst.trim();
     if (!t || !aktivni || salje) return;
     setSalje(true);
+    setGreska("");
     const { data, error } = await supabase
       .from("chat_poruke")
       .insert({
@@ -123,6 +130,8 @@ export default function ChatKlijent({
       // dodajPoruku sprečava duplikat kad isti red kasnije stigne i preko
       // postgres_changes.
       if (data) setPoruke((p) => dodajPoruku(p, data as Poruka));
+    } else {
+      setGreska("Poruka nije poslata. Pokušaj ponovo.");
     }
     setSalje(false);
   }
@@ -183,7 +192,9 @@ export default function ChatKlijent({
             Pošalji
           </button>
         </form>
-      ) : (
+      ) : null}
+      {greska && <p className="mt-2 text-sm text-red-600">{greska}</p>}
+      {!pise && (
         <p className="mt-3 text-sm text-nh-dark/50">U ovom kanalu objavljuje samo Nataša.</p>
       )}
     </div>
