@@ -1,5 +1,5 @@
 import { createAdminClient } from "@/lib/supabase/admin";
-import { buildFinansije, fillGroupCourseIds, monthKey, type ExpenseRow, type FinOrder, type FinMonthlyRevenue, type FinMonthlyHonorar, type Kategorija } from "@/lib/finansije";
+import { buildFinansije, fillGroupCourseIds, monthKey, type ExpenseRow, type FinOrder, type FinOrderItem, type FinMonthlyRevenue, type FinMonthlyHonorar, type Kategorija } from "@/lib/finansije";
 import { loadPayables } from "@/lib/professor-payable";
 import wcRevenueHistory from "@/lib/wc-revenue-history.json";
 import honorariHistory from "@/lib/honorari-history.json";
@@ -59,7 +59,7 @@ export default async function AdminFinansijePage({
   const allOrders = ordersRes.data ?? [];
   const completed: FinOrder[] = allOrders
     .filter((o) => o.payment_status === "completed")
-    .map((o) => ({ id: o.id, user_id: o.user_id, created_at: o.created_at, total: Number(o.total) || 0, items: o.items ?? [] }));
+    .map((o) => ({ id: o.id, user_id: o.user_id, created_at: o.created_at, total: Number(o.total) || 0, items: (o.items ?? []) as unknown as FinOrderItem[] }));
   const pendingPeriodKey = mesec ? `${year}-${String(mesec).padStart(2, "0")}` : null;
   const pendingTotal = allOrders
     .filter((o) => {

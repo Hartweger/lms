@@ -2,6 +2,7 @@
 import * as Sentry from "@sentry/nextjs";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { SITE_URL } from "@/lib/site-url";
+import type { Json } from "@/lib/supabase/database.types";
 
 const FISCOMM = {
   // v0.1.0 API (Google Cloud Functions) - isti koji stari WP plugin koristi; ključ je važeći ovde
@@ -40,7 +41,7 @@ export async function fiscalizeOrder(orderId: string): Promise<{ ok: boolean; er
   const isForeign = order.country !== "RS";
   const label = isForeign ? FISCOMM.labelForeign : FISCOMM.labelDomestic;
   const total = Number(order.total);
-  const items = (order.items ?? []) as OrderItem[];
+  const items = (order.items ?? []) as unknown as OrderItem[];
   const name = items[0]?.title ?? "Kurs";
 
   const siteUrl = SITE_URL;
@@ -64,7 +65,7 @@ export async function fiscalizeOrder(orderId: string): Promise<{ ok: boolean; er
     });
 
     const text = await res.text();
-    let data: Record<string, unknown> = {};
+    let data: Record<string, Json> = {};
     try { data = JSON.parse(text); } catch { /* ostavi prazno */ }
 
     if (!res.ok) {

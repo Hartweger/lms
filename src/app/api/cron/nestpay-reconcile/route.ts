@@ -38,6 +38,7 @@ async function cronHandler(request: Request) {
 
   let reconciled = 0;
   for (const o of pending ?? []) {
+    if (!o.order_number) continue; // kartične porudžbine uvek imaju broj; bez njega nema upita banci
     const q = await queryTransaction(o.order_number);
     if (q?.procReturnCode === "00") {
       await admin.from("orders").update({ nestpay_status: "charged" }).eq("id", o.id);
@@ -61,7 +62,7 @@ async function cronHandler(request: Request) {
   for (const o of candidates ?? []) {
     const courseSlug = slugOf(o.items);
     const courseTitle = titleOf(o.items);
-    if (!courseSlug || !o.email) continue; // bez slug-a/mejla nema korisnog linka
+    if (!courseSlug || !o.email || !o.order_number) continue; // bez slug-a/mejla/broja nema korisnog linka
 
     const { data: others } = await admin
       .from("orders")
@@ -115,7 +116,7 @@ async function cronHandler(request: Request) {
   for (const o of uplate ?? []) {
     const courseSlug = slugOf(o.items);
     const courseTitle = titleOf(o.items);
-    if (!courseSlug || !o.email) continue;
+    if (!courseSlug || !o.email || !o.order_number) continue;
 
     const { data: others } = await admin
       .from("orders")

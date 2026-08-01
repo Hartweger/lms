@@ -5,10 +5,12 @@ import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import type { Course, Lesson } from "@/lib/types";
+import type { TablesUpdate } from "@/lib/supabase/database.types";
 
 export default function IzmeniKurs() {
   const router = useRouter();
   const params = useParams();
+  const courseId = params.id as string;
   const supabase = createClient();
   const [course, setCourse] = useState<Course | null>(null);
   const [lessons, setLessons] = useState<Lesson[]>([]);
@@ -20,21 +22,21 @@ export default function IzmeniKurs() {
       const { data: courseData } = await supabase
         .from("courses")
         .select("*")
-        .eq("id", params.id)
+        .eq("id", courseId)
         .single();
       if (courseData) setCourse(courseData as Course);
 
       const { data: lessonData } = await supabase
         .from("lessons")
         .select("*")
-        .eq("course_id", params.id)
+        .eq("course_id", courseId)
         .order("order_index");
       if (lessonData) setLessons(lessonData as Lesson[]);
 
       setLoading(false);
     };
     load();
-  }, [params.id, supabase]);
+  }, [courseId, supabase]);
 
   const handleSaveCourse = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -50,7 +52,7 @@ export default function IzmeniKurs() {
         price: parseFloat(form.get("price") as string) || 0,
         is_published: form.get("is_published") === "on",
       })
-      .eq("id", params.id);
+      .eq("id", courseId);
 
     setSaving(false);
     router.refresh();
@@ -60,7 +62,7 @@ export default function IzmeniKurs() {
     const { data } = await supabase
       .from("lessons")
       .insert({
-        course_id: params.id,
+        course_id: courseId,
         title: "Nova lekcija",
         lesson_type: "text",
         content: "",
@@ -75,7 +77,7 @@ export default function IzmeniKurs() {
   const handleUpdateLesson = async (lessonId: string, field: string, value: string | boolean) => {
     await supabase
       .from("lessons")
-      .update({ [field]: value })
+      .update({ [field]: value } as unknown as TablesUpdate<"lessons">)
       .eq("id", lessonId);
 
     setLessons(

@@ -56,9 +56,9 @@ export default async function ProfesorHonorar({ searchParams }: { searchParams: 
     const profNameMap = new Map((allProfs ?? []).map((p) => [p.id, p.full_name ?? "?"]));
     const groupLabel = (gid: string) => {
       const g = (allGroups ?? []).find((x) => x.id === gid);
-      return g ? `${g.level} (prof: ${profNameMap.get(g.professor_id) ?? "?"})` : "grupa";
+      return g ? `${g.level} (prof: ${profNameMap.get(g.professor_id ?? "") ?? "?"})` : "grupa";
     };
-    const groupOptions = (allGroups ?? []).map((g) => ({ id: g.id, label: `${g.level} (prof: ${profNameMap.get(g.professor_id) ?? "?"})` }));
+    const groupOptions = (allGroups ?? []).map((g) => ({ id: g.id, label: `${g.level} (prof: ${profNameMap.get(g.professor_id ?? "") ?? "?"})` }));
     const { data: myReq } = await admin.from("substitution_requests")
       .select("id, group_id, session_date, status, reject_reason")
       .eq("requested_by", ctx.profId).order("created_at", { ascending: false });

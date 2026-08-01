@@ -84,7 +84,7 @@ export async function POST(request: Request) {
           (o) =>
             o.payment_status === "pending" &&
             Array.isArray(o.items) &&
-            o.items[0]?.course_id === course.id
+            (o.items[0] as { course_id?: string } | undefined)?.course_id === course.id
         )
         .sort((a, b) => String(b.created_at).localeCompare(String(a.created_at)))[0] ?? null;
 
@@ -304,7 +304,8 @@ export async function POST(request: Request) {
           .gt("expires_at", new Date().toISOString())
           .maybeSingle();
         if (aktivan) {
-          const doKada = new Date(aktivan.expires_at).toLocaleDateString("sr-RS");
+          // expires_at je non-null: upit filtrira .gt("expires_at", ...)
+          const doKada = new Date(aktivan.expires_at!).toLocaleDateString("sr-RS");
           return NextResponse.json(
             { error: `Već imaš pristup ovom kursu do ${doKada}. Obnovu ti nudimo kad se istek približi.` },
             { status: 400 }
@@ -379,7 +380,7 @@ export async function POST(request: Request) {
         .maybeSingle();
 
       if (updated) {
-        order = updated;
+        order = { id: updated.id, order_number: updated.order_number ?? "" };
         reusedOrder = true;
         console.log(
           `[orders] Reused pending order ${updated.order_number} for ${email} - ${courseSlug} via ${paymentMethod}`
@@ -463,7 +464,7 @@ export async function POST(request: Request) {
         );
       }
 
-      order = inserted;
+      order = { id: inserted.id, order_number: inserted.order_number ?? "" };
       console.log(
         `[orders] Created order ${inserted.order_number} for ${email} - ${courseSlug} via ${paymentMethod}`
       );

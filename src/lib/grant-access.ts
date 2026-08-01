@@ -22,7 +22,7 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
   if (error || !order) return { ok: false, error: "Order not found" };
   if (order.payment_status === "completed") return { ok: true }; // idempotentno
 
-  const items: OrderItem[] = order.items ?? [];
+  const items = (order.items ?? []) as unknown as OrderItem[];
   // Mesečno plaćanje: pristup važi do sledeće naplate + 7 dana zaliha, pa prestanak
   // plaćanja sam gasi pristup - nema oduzimanja. Sve ostalo: godinu dana kao i do sada.
   const jePretplata = !!order.subscription_id;
@@ -144,7 +144,7 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
 
       // Jedan mejl polazniku: platforma + Meet + beleške.
       await sendGrupniWelcomeEmail(order.email, order.full_name, {
-        nivo, profIme, meetLink: group.meet_link, notesUrl: group.notes_url,
+        nivo, profIme, meetLink: group.meet_link ?? undefined, notesUrl: group.notes_url ?? undefined,
       });
       grupniWelcomeSent = true;
 
@@ -275,7 +275,7 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
   // Rate 2-12: kratka potvrda naplate umesto dvanaest puta ponovljene dobrodošlice.
   if (!jePrvaNaplata) {
     const { data: sub } = await admin
-      .from("subscriptions").select("total_payments").eq("id", order.subscription_id).maybeSingle();
+      .from("subscriptions").select("total_payments").eq("id", order.subscription_id!).maybeSingle();
     // tip određuje samo naslov/uvod mejla (bez "od N" za članstvo) - transakcioni podaci
     // ostaju isti za oba tipa (EPM 2.7, vidi komentar iznad sendSubscriptionChargeEmail).
     const chargePlan = planForSlug(items[0]?.course_slug ?? "");
@@ -289,8 +289,8 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
       accessUntil: expiresAt.toISOString(),
       // Podaci o transakciji - obavezni u mejlu i za naknadne mesečne naplate
       // (zahtev banke 24.07.2026, EPM 2.7). Upisao ih je subscriptions-poll cron.
-      orderNumber: order.order_number,
-      tx: recurringTxData(order.nestpay_response, order.created_at),
+      orderNumber: order.order_number ?? "",
+      tx: recurringTxData(order.nestpay_response as Record<string, unknown> | null, order.created_at),
       tip: chargePlan?.tip,
     });
     return { ok: true };

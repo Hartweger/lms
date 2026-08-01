@@ -19,7 +19,7 @@ interface OrderItemLike {
 }
 
 interface OrderLike {
-  order_number: string;
+  order_number: string | null;
   total: number; // celi dinari (RSD)
   email: string | null;
   items: unknown; // JSONB niz OrderItemLike

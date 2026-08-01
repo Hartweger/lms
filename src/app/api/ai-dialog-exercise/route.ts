@@ -59,7 +59,7 @@ export async function POST(request: Request) {
   const level = levelMatch ? levelMatch[0].toUpperCase() : "A1";
 
   // Extract vocabulary from flashcard sections
-  const sections = (lesson.sections ?? []) as Section[];
+  const sections = (lesson.sections ?? []) as unknown as Section[];
   const flashcardSections = sections.filter((s) => s.type === "flashcard");
   const vocabList = flashcardSections
     .flatMap((s) => s.type === "flashcard" ? s.items : [])
