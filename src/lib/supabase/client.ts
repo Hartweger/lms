@@ -1,8 +1,11 @@
 import { createBrowserClient } from "@supabase/ssr";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
-let client: ReturnType<typeof createBrowserClient> | null = null;
+// Eksplicitni SupabaseClient tip — ReturnType<typeof createBrowserClient> se
+// zbog generika degradira u any, pa klijentski kod ostaje bez provere tipova.
+let client: SupabaseClient | null = null;
 
-export function createClient() {
+export function createClient(): SupabaseClient {
   if (!client) {
     client = createBrowserClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
