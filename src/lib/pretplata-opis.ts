@@ -31,7 +31,7 @@ export function pretplataOpis(plan: SubscriptionPlan, fullPrice: number): Pretpl
         `Danas se naplaćuje <strong>${rsd(plan.monthlyRsd)} RSD</strong>.`,
         `Isti iznos banka će automatski naplaćivati sa tvoje kartice <strong>svakog meseca</strong>, dok je pretplata aktivna - prva naredna naplata za mesec dana, istog datuma.`,
         `Pristup celoj biblioteci i zajednici važi dok je pretplata aktivna. Ne prikazujemo ukupan zbir kao obavezu - ovo nije paket sa fiksnim brojem rata, već članstvo do otkazivanja.`,
-        `Tehnički maksimum banke je <strong>121 naplata</strong> u jednoj seriji (posle toga banka traži novu seriju) - to nije obećanje trajanja, pretplata prestaje ranije čim je otkažeš.`,
+        `Tehnički maksimum banke je <strong>${plan.totalPayments} naplata</strong> u jednoj seriji (posle toga banka traži novu seriju) - to nije obećanje trajanja, pretplata prestaje ranije čim je otkažeš.`,
         `<strong>Na strani banke ne biraj „na rate“</strong> - mesečne naplate pokrećemo mi, a rate Banca Intesa kartice su nešto drugo i ne mogu da idu zajedno sa mesečnim plaćanjem.`,
         `<strong>Otkazivanje:</strong> u svakom trenutku, sam(a), u odeljku „Moj nalog“ na platformi. Ne moraš da nam pišeš ni da obrazlažeš. Posle otkazivanja pristup traje do kraja plaćenog meseca.`,
       ],
