@@ -2372,3 +2372,31 @@ export async function sendSubscriptionRetryEmail(o: {
     console.error("[email] sendSubscriptionRetryEmail pao:", e);
   }
 }
+
+// Kratka notifikacija adminu (Nataši) kad NH članica napravi novu karticu za javni
+// imenik iz opt-in toka u /clanstvo/profil - čeka odobrenje u admin/clanice.
+export async function sendNhKarticaAdminEmail(o: { ime: string; email: string }) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    await resend.emails.send({
+      from: FROM,
+      to: ["info@hartweger.rs", "natasa@hartweger.rs"],
+      replyTo: o.email,
+      subject: `Nova NH kartica čeka odobrenje - ${o.ime}`,
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:sans-serif;line-height:1.6;color:#222">
+<h2>Nova kartica za javni imenik</h2>
+<p><strong>Ime:</strong> ${esc(o.ime)}</p>
+<p><strong>Mejl:</strong> ${esc(o.email)}</p>
+<p>NH članica je iz svog profila zatražila da njena kartica bude vidljiva na javnom imeniku (natasahartweger.rs/clanice). Kartica čeka odobrenje.</p>
+<p style="margin-top:18px">
+  <a href="https://www.hartweger.rs/admin/clanice" style="display:inline-block;background:#4fb1d3;color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px">Otvori odobravanje</a>
+</p>
+</body></html>`,
+    });
+    console.log(`[email] Admin obavešten o novoj NH kartici (${o.email})`);
+  } catch (e) {
+    console.error("[email] sendNhKarticaAdminEmail pao:", e);
+  }
+}

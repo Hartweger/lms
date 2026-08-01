@@ -272,10 +272,12 @@ export type Database = {
           ime: string
           instagram: string | null
           linkedin: string | null
+          nh_membership: boolean
           opis: string
           sort_order: number
           status: string
           telefon: string | null
+          user_id: string | null
           usluge: string[]
           web: string | null
         }
@@ -289,10 +291,12 @@ export type Database = {
           ime: string
           instagram?: string | null
           linkedin?: string | null
+          nh_membership?: boolean
           opis: string
           sort_order?: number
           status?: string
           telefon?: string | null
+          user_id?: string | null
           usluge?: string[]
           web?: string | null
         }
@@ -306,10 +310,12 @@ export type Database = {
           ime?: string
           instagram?: string | null
           linkedin?: string | null
+          nh_membership?: boolean
           opis?: string
           sort_order?: number
           status?: string
           telefon?: string | null
+          user_id?: string | null
           usluge?: string[]
           web?: string | null
         }
@@ -2503,7 +2509,57 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      javne_clanice: {
+        Row: {
+          brend: string | null
+          created_at: string | null
+          email: string | null
+          foto_url: string | null
+          id: string | null
+          ime: string | null
+          instagram: string | null
+          linkedin: string | null
+          nh_aktivna: boolean | null
+          opis: string | null
+          sort_order: number | null
+          telefon: string | null
+          usluge: string[] | null
+          web: string | null
+        }
+        Insert: {
+          brend?: string | null
+          created_at?: string | null
+          email?: string | null
+          foto_url?: string | null
+          id?: string | null
+          ime?: string | null
+          instagram?: string | null
+          linkedin?: string | null
+          nh_aktivna?: never
+          opis?: string | null
+          sort_order?: number | null
+          telefon?: string | null
+          usluge?: string[] | null
+          web?: string | null
+        }
+        Update: {
+          brend?: string | null
+          created_at?: string | null
+          email?: string | null
+          foto_url?: string | null
+          id?: string | null
+          ime?: string | null
+          instagram?: string | null
+          linkedin?: string | null
+          nh_aktivna?: never
+          opis?: string | null
+          sort_order?: number | null
+          telefon?: string | null
+          usluge?: string[] | null
+          web?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       get_course_dropoff: {
