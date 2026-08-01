@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import type { Exercise, ExerciseQuestion } from "@/lib/types";
+import type { Json, TablesInsert, TablesUpdate } from "@/lib/supabase/database.types";
 
 const typeLabels: Record<string, string> = {
   quiz: "Kviz",
@@ -136,7 +137,7 @@ export default function AdminVezbe() {
     }
 
     const { data } = await supabase
-      .from("exercise_questions").insert(defaultData).select().single();
+      .from("exercise_questions").insert(defaultData as unknown as TablesInsert<"exercise_questions">).select().single();
     if (data) {
       setQuestions({
         ...questions,
@@ -146,7 +147,7 @@ export default function AdminVezbe() {
   };
 
   const updateQuestion = async (questionId: string, exerciseId: string, field: string, value: unknown) => {
-    await supabase.from("exercise_questions").update({ [field]: value }).eq("id", questionId);
+    await supabase.from("exercise_questions").update({ [field]: value } as unknown as TablesUpdate<"exercise_questions">).eq("id", questionId);
     setQuestions({
       ...questions,
       [exerciseId]: questions[exerciseId].map((q) =>
@@ -173,7 +174,7 @@ export default function AdminVezbe() {
   const saveDialogToDB = async (questionId: string, exerciseId: string) => {
     const q = questions[exerciseId]?.find((q) => q.id === questionId);
     if (!q) return;
-    const { error } = await supabase.from("exercise_questions").update({ options: q.options }).eq("id", questionId);
+    const { error } = await supabase.from("exercise_questions").update({ options: q.options as Json }).eq("id", questionId);
     if (error) {
       alert("Greška pri čuvanju: " + error.message);
     } else {

@@ -80,6 +80,7 @@ async function cronHandler(request: NextRequest) {
   let profReminders = 0;
 
   for (const g of groups ?? []) {
+    if (!g.end_date) continue; // bez datuma kraja nijedan podsetnik nema smisla
     const prof = Array.isArray(g.professor) ? g.professor[0] : g.professor;
     const profIme: string = prof?.full_name || "";
     const nextNivo = nextNivoFor(g.level);

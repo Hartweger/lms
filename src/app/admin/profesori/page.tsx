@@ -107,7 +107,7 @@ export default function AdminProfesori() {
           id: data.id,
           student_id: data.student_id,
           course_id: data.course_id,
-          assigned_via: data.assigned_via,
+          assigned_via: data.assigned_via as AssignmentRow["assigned_via"],
           student_name: student?.full_name ?? "",
           student_email: student?.email ?? "",
           course_title: course?.title ?? "",

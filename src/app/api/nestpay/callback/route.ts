@@ -57,7 +57,7 @@ export async function POST(request: Request) {
     sendCardPaymentConfirmationEmail({
       email: order.email,
       fullName: order.full_name,
-      orderNumber: order.order_number,
+      orderNumber: order.order_number ?? "",
       items: ((order.items ?? []) as { title: string; price: number }[]).map((i) => ({
         title: isPretplata ? `${i.title} - mesečna naplata` : i.title,
         price: isPretplata ? order.total : i.price,

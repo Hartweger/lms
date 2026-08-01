@@ -33,7 +33,7 @@ export default function NavClient() {
           .select("*")
           .eq("id", authUser.id)
           .single();
-        if (data) setUser(data);
+        if (data) setUser(data as UserProfile);
       }
     };
     getUser();

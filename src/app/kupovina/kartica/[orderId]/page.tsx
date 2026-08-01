@@ -15,7 +15,8 @@ export default async function KarticaPage({ params }: { params: Promise<{ orderI
     .eq("id", orderId).single();
 
   const KARTICNE = ["kartica", "kartica_rate", "kartica_pretplata"];
-  if (!order || !KARTICNE.includes(order.payment_method)) notFound();
+  // Bez order_number banci ne možemo da pošaljemo oid - takva porudžbina ne postoji legitimno.
+  if (!order || !order.order_number || !KARTICNE.includes(order.payment_method)) notFound();
 
   // Mesečno plaćanje: banci se uz uobičajena polja šalje i broj naplata iz plana,
   // pa ona sama pokreće seriju. Kod ostalih metoda plan ostaje null.

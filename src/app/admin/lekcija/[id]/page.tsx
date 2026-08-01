@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import type { Section } from "@/lib/section-types";
+import type { Json } from "@/lib/supabase/database.types";
 
 interface LessonData {
   id: string;
@@ -15,6 +16,7 @@ interface LessonData {
 
 export default function EditLessonSections() {
   const params = useParams();
+  const lessonId = params.id as string;
   const supabase = useMemo(() => createClient(), []);
   const [lesson, setLesson] = useState<LessonData | null>(null);
   const [sections, setSections] = useState<Section[]>([]);
@@ -29,16 +31,16 @@ export default function EditLessonSections() {
       const { data } = await supabase
         .from("lessons")
         .select("id, title, sections, course_id")
-        .eq("id", params.id)
+        .eq("id", lessonId)
         .single();
       if (data) {
         setLesson(data as LessonData);
-        setSections((data.sections as Section[]) || []);
+        setSections((data.sections as unknown as Section[]) || []);
       }
       setLoading(false);
     };
     load();
-  }, [params.id, supabase]);
+  }, [lessonId, supabase]);
 
   const [saveError, setSaveError] = useState<string | null>(null);
 
@@ -47,8 +49,8 @@ export default function EditLessonSections() {
     setSaveError(null);
     const { error } = await supabase
       .from("lessons")
-      .update({ sections: newSections as unknown as Record<string, unknown>[] })
-      .eq("id", params.id);
+      .update({ sections: newSections as unknown as Json })
+      .eq("id", lessonId);
     setSaving(false);
     if (error) {
       setSaveError(error.message);
@@ -56,7 +58,7 @@ export default function EditLessonSections() {
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
     }
-  }, [params.id, supabase]);
+  }, [lessonId, supabase]);
 
   const updateSection = (index: number, updated: Section) => {
     const newSections = [...sections];

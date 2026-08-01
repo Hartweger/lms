@@ -21,8 +21,8 @@ interface Correction {
 interface PublishedResult {
   text: string | null;
   audio_url: string | null;
-  professor_feedback: string;
-  professor_score: number;
+  professor_feedback: string | null;
+  professor_score: number | null;
   ai_feedback: string | null;
   ai_corrections: Correction[] | null;
 }

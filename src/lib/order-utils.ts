@@ -124,7 +124,7 @@ export function pendingPaymentState(
   return ageMin >= CARD_INCOMPLETE_MINUTES ? "incomplete" : "waiting";
 }
 
-type RecoveryOrder = { order_number: string; created_at: string; payment_status: string; courseSlug: string };
+type RecoveryOrder = { order_number: string | null; created_at: string; payment_status: string; courseSlug: string };
 
 /**
  * Da li slati recovery ("pokušaj ponovo") mejl za neuspelu kartičnu narudžbinu.

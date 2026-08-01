@@ -46,7 +46,7 @@ export default async function AdminKupci() {
         customer_email: o.email,
         customer_name: o.full_name ?? "",
         country: o.country ?? "",
-        items: (o.items ?? []).map((i: { title?: string; price?: number }) => ({
+        items: ((o.items ?? []) as unknown as { title?: string; price?: number }[]).map((i) => ({
           name: i.title ?? "",
           quantity: 1,
           total: String(i.price ?? 0),

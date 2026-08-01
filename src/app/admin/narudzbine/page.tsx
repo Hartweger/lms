@@ -45,7 +45,7 @@ export default async function AdminNarudzbinePage() {
     .from("individual_enrollments")
     .select("order_id, professor_id")
     .in("order_id", orderIds.length ? orderIds : ["00000000-0000-0000-0000-000000000000"]);
-  const profIds = [...new Set((enrs ?? []).map((e) => e.professor_id).filter(Boolean))];
+  const profIds = [...new Set((enrs ?? []).map((e) => e.professor_id).filter((x): x is string => Boolean(x)))];
   const { data: profs } = await supabase
     .from("user_profiles")
     .select("id, full_name")

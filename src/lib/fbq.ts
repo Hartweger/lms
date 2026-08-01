@@ -10,7 +10,7 @@ export const META_PIXEL_ID = process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID;
  * pa Meta deduplikuje dva izvora u jedan događaj. Bazira se na broju porudžbine
  * (jedan Purchase po porudžbini). Mora biti identičan na obe strane.
  */
-export function purchaseEventId(orderNumber: string): string {
+export function purchaseEventId(orderNumber: string | null): string {
   return `purchase_${orderNumber}`;
 }
 

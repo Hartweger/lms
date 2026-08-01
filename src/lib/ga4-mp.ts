@@ -19,7 +19,7 @@ interface OrderLike {
   total: number;
   currency?: string | null;
   coupon_code?: string | null;
-  items?: OrderItemLike[] | null;
+  items?: unknown; // JSONB niz OrderItemLike
   ga_client_id?: string | null;
   ga_session_id?: string | null;
   email?: string | null;
@@ -35,7 +35,8 @@ export async function sendGa4Purchase(order: OrderLike): Promise<void> {
   if (!apiSecret) return; // tiho preskoči dok secret nije postavljen
 
   try {
-    const items = (order.items ?? []).map((it) => ({
+    const rawItems = Array.isArray(order.items) ? (order.items as OrderItemLike[]) : [];
+    const items = rawItems.map((it) => ({
       item_id: it.course_id,
       item_name: it.title,
       price: it.price,

@@ -71,7 +71,7 @@ export async function GET() {
     .in("status", ["active", "completed"]);
 
   const individual = (indiv ?? []).map((e) => {
-    const prof = one<ProfRef>(e.professor as ProfRef | ProfRef[] | null);
+    const prof = one<ProfRef>(e.professor as unknown as ProfRef | ProfRef[] | null);
     const course = one<CourseRef>(e.course as CourseRef | CourseRef[] | null);
     return {
       id: e.id as string,

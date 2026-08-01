@@ -61,7 +61,7 @@ export async function POST(request: Request) {
 
   const { error } = await staff.admin.from("individual_lessons").insert({
     enrollment_id: enrollmentId,
-    professor_id: owned.enr.professor_id,
+    professor_id: owned.enr.professor_id!,
     lesson_date: lessonDate,
   });
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });

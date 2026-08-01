@@ -172,8 +172,8 @@ export interface Order {
   nestpay_status: string | null;
   /** NestPay TransId iz callback-a (migracija 033). */
   nestpay_trans_id?: string | null;
-  /** Raw NestPay callback parametri + naš `_receivedAt` - izvor za Potvrdu o plaćanju (EPM 2.7). */
-  nestpay_response?: Record<string, unknown> | null;
+  /** Raw NestPay callback parametri + naš `_receivedAt` - izvor za Potvrdu o plaćanju (EPM 2.7). U bazi je JSONB. */
+  nestpay_response?: unknown;
   /** Kad je poslat mejl za povraćaj neuspele kartične kupovine (da se ne šalje dvaput). */
   recovery_email_sent_at: string | null;
   paypal_note: string | null;
@@ -184,7 +184,7 @@ export interface Order {
   fiscal_verification_url: string | null;
   fiscal_pdf_url: string | null;
   fiscalized_at: string | null;
-  order_number: string;
+  order_number: string | null;
   granted: boolean;
   created_at: string;
   /** GA4 client_id kupca iz _ga kolačića (samo uz saglasnost) - za MP atribuciju. */

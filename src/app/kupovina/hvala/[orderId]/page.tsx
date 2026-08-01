@@ -45,7 +45,7 @@ export default async function HvalaPage({
   const courseTitle = items?.[0]?.title ?? "";
   const courseSlug = items?.[0]?.course_slug ?? "";
 
-  const ipsData = buildIpsString({ total: order.total, order_number: order.order_number });
+  const ipsData = buildIpsString({ total: order.total, order_number: order.order_number ?? "" });
 
   const paypalEur = order.paypal_note ? parseInt(order.paypal_note) : null;
   // I inicijalna pretplatna transakcija (kartica_pretplata) je kartično plaćanje -
@@ -86,7 +86,7 @@ export default async function HvalaPage({
     <section className="bg-gradient-to-b from-plava-light/40 to-white min-h-screen">
       {shouldTrackPurchase && (
         <PixelPurchase
-          orderId={order.order_number}
+          orderId={order.order_number ?? ""}
           value={order.total}
           contentId={courseSlug || undefined}
           contentName={courseTitle || undefined}

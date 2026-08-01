@@ -14,7 +14,7 @@ export function recurringIdFromCallback(params: Record<string, string>): string 
 interface OrderRow {
   id: string;
   user_id: string;
-  order_number: string;
+  order_number: string | null;
   total: number;
   payment_method: string;
   items: unknown;
@@ -34,11 +34,11 @@ export async function startSubscriptionForOrder(
   const plan = item?.course_slug ? planForSlug(item.course_slug) : null;
   const recurringId = recurringIdFromCallback(params);
 
-  if (!plan || !item?.course_id || !recurringId) {
+  if (!plan || !item?.course_id || !recurringId || !order.order_number) {
     // Naplata je prošla, a seriju ne možemo da pratimo - to mora da vidi čovek.
     Sentry.captureException(
       new Error(
-        `[pretplata] Ne mogu da upišem pretplatu za ${order.order_number}: ` +
+        `[pretplata] Ne mogu da upišem pretplatu za ${order.order_number ?? order.id}: ` +
           `plan=${!!plan} course=${!!item?.course_id} recurringId=${recurringId ?? "null"}`,
       ),
     );

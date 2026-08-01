@@ -19,7 +19,8 @@ export default async function SertifikatStranica({ params }: PageProps) {
   // C1.1/C1.2/C1 dodati 25.07.2026 - bez njih je C1 sertifikat na LinkedIn-u padao na fallback „B1".
   const level = (courseTitle.match(/(A1\.1|A1\.2|A2\.1|A2\.2|B1\.1|B1\.2|C1\.1|C1\.2|A1|A2|B1|B2|C1)/i)?.[1] ?? "B1").toUpperCase();
 
-  const issuedDate = new Date(cert.issued_at || cert.created_at);
+  // certificates nema created_at kolonu; issued_at je NOT NULL
+  const issuedDate = new Date(cert.issued_at);
   const pdfUrl = `/api/sertifikat/${cert.id}`;
   const certUrl = `https://www.hartweger.rs/sertifikat/${cert.id}`;
 

@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import type { Course, UserProfile } from "@/lib/types";
+import type { TablesInsert } from "@/lib/supabase/database.types";
 
 interface AccessRow {
   id: string;
@@ -111,8 +112,8 @@ export default function AdminStudentDetalji() {
   async function addAccess() {
     if (!selectedCourseId) return;
 
-    const insertData: Record<string, unknown> = {
-      user_id: params.id,
+    const insertData: TablesInsert<"course_access"> = {
+      user_id: params.id as string,
       course_id: selectedCourseId,
     };
     if (expiresAt) {
