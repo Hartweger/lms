@@ -33,6 +33,7 @@ const SKRIVENA_NA = [
   "/prijava",
   "/auth",
   "/kupovina",
+  "/clanstvo",
 ];
 
 function shouldShow(): boolean {
