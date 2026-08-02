@@ -261,6 +261,32 @@ export type Database = {
           },
         ]
       }
+      chat_procitano: {
+        Row: {
+          kanal_id: string
+          last_read_at: string
+          user_id: string
+        }
+        Insert: {
+          kanal_id: string
+          last_read_at?: string
+          user_id: string
+        }
+        Update: {
+          kanal_id?: string
+          last_read_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_procitano_kanal_id_fkey"
+            columns: ["kanal_id"]
+            isOneToOne: false
+            referencedRelation: "chat_kanali"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       clanice: {
         Row: {
           approved_at: string | null
@@ -2562,6 +2588,13 @@ export type Database = {
       }
     }
     Functions: {
+      chat_neprocitano: {
+        Args: never
+        Returns: {
+          broj: number
+          kanal_id: string
+        }[]
+      }
       get_course_dropoff: {
         Args: never
         Returns: {

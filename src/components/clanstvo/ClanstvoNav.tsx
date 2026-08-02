@@ -1,8 +1,13 @@
 "use client";
 // Navigacija NH Membership sekcije. Aktivan link = pun pink; NH paleta iz
 // globals.css @theme (nh-pink, nh-cream, nh-dark).
+// Tačkica na "Zajednica" = ima nepročitanih poruka (RPC chat_neprocitano,
+// 079); proverava se pri svakoj promeni rute unutar sekcije, a na samoj
+// zajednici je bedž po kanalu pa se tačkica ne prikazuje.
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase/client";
 
 const LINKOVI = [
   { href: "/clanstvo", label: "Početna" },
@@ -14,6 +19,19 @@ const LINKOVI = [
 
 export default function ClanstvoNav() {
   const pathname = usePathname();
+  const [imaNovih, setImaNovih] = useState(false);
+
+  useEffect(() => {
+    let aktivan = true;
+    (async () => {
+      const { data } = await createClient().rpc("chat_neprocitano");
+      if (aktivan) setImaNovih((data ?? []).some((r) => r.broj > 0));
+    })();
+    return () => {
+      aktivan = false;
+    };
+  }, [pathname]);
+
   return (
     <header className="sticky top-0 z-40 border-b border-nh-pink-light bg-white/90 backdrop-blur">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
@@ -25,6 +43,7 @@ export default function ClanstvoNav() {
             const aktivan =
               pathname === l.href ||
               (l.href !== "/clanstvo" && pathname?.startsWith(l.href + "/"));
+            const tackica = l.href === "/clanstvo/zajednica" && imaNovih && !aktivan;
             return (
               <Link
                 key={l.href}
@@ -36,6 +55,12 @@ export default function ClanstvoNav() {
                 }`}
               >
                 {l.label}
+                {tackica && (
+                  <span
+                    className="ml-1 inline-block h-2 w-2 rounded-full bg-nh-pink align-middle"
+                    aria-label="Nove poruke u zajednici"
+                  />
+                )}
               </Link>
             );
           })}
