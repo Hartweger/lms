@@ -1,36 +1,12 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useJeInstalirano, useUredjaj } from "@/lib/uredjaj";
 
 // Prepoznaje uređaj i prikazuje samo relevantno uputstvo za "Dodaj na početni
 // ekran". Ako je aplikacija već instalirana (standalone), sekcija se ne prikazuje.
-type Uredjaj = "ios" | "android" | "ostalo";
-
-// Vrednosti se ne menjaju tokom života stranice, pa je subscribe no-op.
-const bezPretplate = () => () => {};
-
-function detektujUredjaj(): Uredjaj {
-  const ua = navigator.userAgent;
-  // iPadOS se predstavlja kao Macintosh, ali ima touch ekran
-  const ios =
-    /iPhone|iPad|iPod/.test(ua) ||
-    (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
-  if (ios) return "ios";
-  if (/Android/.test(ua)) return "android";
-  return "ostalo";
-}
-
-function jeInstalirano(): boolean {
-  return (
-    window.matchMedia("(display-mode: standalone)").matches ||
-    ("standalone" in navigator &&
-      (navigator as { standalone?: boolean }).standalone === true)
-  );
-}
-
 export default function DodajNaEkran() {
-  const uredjaj = useSyncExternalStore<Uredjaj>(bezPretplate, detektujUredjaj, () => "ostalo");
-  const instalirano = useSyncExternalStore(bezPretplate, jeInstalirano, () => false);
+  const uredjaj = useUredjaj();
+  const instalirano = useJeInstalirano();
 
   if (instalirano) return null;
 

@@ -1,19 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useJeInstalirano, useUredjaj } from "@/lib/uredjaj";
 
 export default function Instaliraj() {
-  const [isIOS, setIsIOS] = useState(false);
-  const [isAndroid, setIsAndroid] = useState(false);
-  const [isInstalled, setIsInstalled] = useState(false);
+  const uredjaj = useUredjaj();
+  const isInstalled = useJeInstalirano();
   const [deferredPrompt, setDeferredPrompt] = useState<(Event & { prompt: () => void }) | null>(null);
 
   useEffect(() => {
-    const ua = navigator.userAgent;
-    setIsIOS(/iPad|iPhone|iPod/.test(ua));
-    setIsAndroid(/Android/.test(ua));
-    setIsInstalled(window.matchMedia("(display-mode: standalone)").matches);
-
     const handler = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as Event & { prompt: () => void });
@@ -70,7 +65,7 @@ export default function Instaliraj() {
         )}
 
         {/* iOS instructions */}
-        {isIOS && !deferredPrompt && (
+        {uredjaj === "ios" && !deferredPrompt && (
           <div className="bg-white rounded-xl border border-gray-100 p-5 mb-6">
             <h2 className="font-bold text-gray-900 mb-4">iPhone / iPad</h2>
             <ol className="space-y-4 text-sm text-gray-600">
@@ -103,7 +98,7 @@ export default function Instaliraj() {
         )}
 
         {/* Android instructions (fallback if prompt didn't fire) */}
-        {isAndroid && !deferredPrompt && (
+        {uredjaj === "android" && !deferredPrompt && (
           <div className="bg-white rounded-xl border border-gray-100 p-5 mb-6">
             <h2 className="font-bold text-gray-900 mb-4">Android</h2>
             <ol className="space-y-4 text-sm text-gray-600">
@@ -130,7 +125,7 @@ export default function Instaliraj() {
         )}
 
         {/* Desktop instructions */}
-        {!isIOS && !isAndroid && !deferredPrompt && (
+        {uredjaj === "ostalo" && !deferredPrompt && (
           <div className="bg-white rounded-xl border border-gray-100 p-5 mb-6">
             <h2 className="font-bold text-gray-900 mb-4">Desktop (Chrome)</h2>
             <ol className="space-y-4 text-sm text-gray-600">
