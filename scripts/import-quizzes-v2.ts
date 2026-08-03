@@ -273,7 +273,7 @@ async function importQuizzes() {
 
   let exercisesCreated = 0;
   let questionsCreated = 0;
-  let typeCounts: Record<string, number> = {};
+  const typeCounts: Record<string, number> = {};
 
   for (const quiz of data.quizzes) {
     const mapping = QUIZ_LESSON_MAP[quiz.name];
@@ -284,7 +284,7 @@ async function importQuizzes() {
 
     // Fuzzy match lesson
     const courseLessons = lessons.filter((l: any) => l.course_id === courseId);
-    let lesson = courseLessons.find((l: any) =>
+    const lesson = courseLessons.find((l: any) =>
       l.title.toLowerCase().includes(mapping.lesson.toLowerCase())
     );
     if (!lesson) continue;

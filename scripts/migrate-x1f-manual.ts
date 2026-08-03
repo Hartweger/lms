@@ -34,7 +34,7 @@ async function main() {
 
   for (const u of USERS) {
     const email = u.email.toLowerCase().trim();
-    let { data: prof } = await sb.from("user_profiles").select("id").eq("email", email).maybeSingle();
+    const { data: prof } = await sb.from("user_profiles").select("id").eq("email", email).maybeSingle();
     let uid = prof?.id as string | undefined;
     console.log(`\n${email} — ${uid ? "postoji" : "NEMA naloga"}`);
     if (!WRITE) { console.log(`  [DRY] kreirao bih nalog (ako treba) + A1.1/A1.2 do ${EXPIRES}`); continue; }

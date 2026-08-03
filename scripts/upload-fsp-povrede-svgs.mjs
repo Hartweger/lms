@@ -41,7 +41,7 @@ function buildIcons(html) {
   // Brend boje: T/R remapovani; G/L kao u izvoru; ostale hardkodirane (#ffd34d, #7fb98f, #f6e0d0, #dfe6ea...) ostaju.
   const svg = (i) => `<svg viewBox="0 0 100 70" xmlns="http://www.w3.org/2000/svg">${i}</svg>`;
   const T = "#4fb1d3", R = "#F78687", G = "#6b7b84", L = "#cdd6db";
-  // eslint-disable-next-line no-new-func
+  // new Function: objLiteral je izvorni JS objekat iz WP stranice, ne korisnički unos.
   const fn = new Function("svg", "T", "R", "G", "L", `return (${objLiteral});`);
   return fn(svg, T, R, G, L);
 }
