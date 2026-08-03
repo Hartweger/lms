@@ -53,7 +53,6 @@ async function main() {
 
   const statuses = ["completed", "processing", "refunded"];
   let totalInserted = 0;
-  let totalSkipped = 0;
   let totalErrors = 0;
 
   for (const status of statuses) {
