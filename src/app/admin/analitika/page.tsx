@@ -1,13 +1,18 @@
+import type { ComponentProps } from "react";
 import { createAdminClient } from "@/lib/supabase/admin";
 import AnalitikaDashboard from "./AnalitikaDashboard";
 
 export const dynamic = "force-dynamic";
 
+// Oblik koji dashboard stvarno očekuje - vezujemo se za njegov prop umesto da
+// držimo drugu kopiju tipa koja može da odluta.
+type Porudzbina = ComponentProps<typeof AnalitikaDashboard>["orders"][number];
+
 export default async function AdminAnalitika() {
   const supabase = createAdminClient();
 
   // Supabase returns max 1000 rows per query - paginate to get all
-  const allOrders: any[] = [];
+  const allOrders: Porudzbina[] = [];
   const PAGE_SIZE = 1000;
   let offset = 0;
 
@@ -19,7 +24,10 @@ export default async function AdminAnalitika() {
       .range(offset, offset + PAGE_SIZE - 1);
 
     if (!data || data.length === 0) break;
-    allOrders.push(...data);
+    // items je u bazi Json; oblik {name, quantity, total, product_id} postavlja
+    // uvoz iz WooCommerce-a (scripts/migrate-wc-orders.ts). Svođenje na taj tip
+    // je jedan ciljani cast na granici podataka, umesto any nad celim redom.
+    allOrders.push(...data.map((o) => ({ ...o, items: o.items as Porudzbina["items"] })));
     if (data.length < PAGE_SIZE) break;
     offset += PAGE_SIZE;
   }
@@ -38,7 +46,7 @@ export default async function AdminAnalitika() {
       customer_name: o.full_name,
       customer_email: o.email,
       country: o.country ?? null,
-      items: Array.isArray(o.items) ? o.items : [],
+      items: (Array.isArray(o.items) ? o.items : []) as Porudzbina["items"],
       utm_source: o.utm_source ?? null,
       payment_method: o.payment_method ?? null,
     });

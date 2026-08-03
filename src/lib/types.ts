@@ -151,6 +151,9 @@ export interface BlogPost {
   published_at: string | null;
   created_at: string;
   updated_at: string;
+  // Kolona postoji u bazi (vidi blog_posts u database.types.ts) i ima default,
+  // pa nije nullable. Ranije je falila ovde, pa se čitala preko (post as any).
+  category: string;
 }
 
 export interface Order {
