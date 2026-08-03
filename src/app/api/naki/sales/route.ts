@@ -5,7 +5,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { rateLimit } from "@/lib/rate-limit";
 import { Resend } from "resend";
 import { buildSalesSystemPrompt, leadNudgeAddon, SMILE_MAX_TOKENS, SMILE_MAX_REQUESTS_PER_DAY } from "@/lib/naki/sales-prompt";
-import { getCatalogText } from "@/lib/naki/catalog";
+import { getCatalogText, getPreviewLessonsText } from "@/lib/naki/catalog";
 import { getSmileConfig, isPurchaseSignal, extractEmail } from "@/lib/naki/smile-config";
 import { sanitizeReply } from "@/lib/naki/sanitize";
 import { upsertContact, logInteraction } from "@/lib/crm/contacts";
@@ -90,10 +90,14 @@ export async function POST(request: Request) {
 
   // Kupon samo ne-kupcima i ako je prekidač uključen
   const offerCoupon = cfg.coupon && !(userId && (await userOwnsAnyVideoCourse(admin, userId)));
-  const catalogText = await getCatalogText(admin);
+  const [catalogText, previewText] = await Promise.all([
+    getCatalogText(admin),
+    getPreviewLessonsText(admin),
+  ]);
   const systemPrompt = buildSalesSystemPrompt(catalogText, {
     coupon: offerCoupon,
     leadCapture: cfg.leadCapture,
+    previews: previewText,
   });
 
   let reply: string;

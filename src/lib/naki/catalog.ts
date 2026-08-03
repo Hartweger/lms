@@ -34,6 +34,53 @@ export function renderCatalog(courses: CatalogCourse[]): string {
   return blocks.join("\n\n");
 }
 
+export type PreviewLesson = {
+  lessonTitle: string;
+  courseTitle: string;
+  courseSlug: string;
+};
+
+/**
+ * Spisak besplatnih probnih lekcija za Smile - da na pitanje „može li da se vidi
+ * kako izgleda kurs" daje link umesto da traži mejl. Grupiše se po kursu jer je
+ * javna stranica `/kurs/<slug>` ulaz za sve probne lekcije tog kursa.
+ */
+export function renderPreviewLessons(rows: PreviewLesson[]): string {
+  if (rows.length === 0) return "";
+  const groups = new Map<string, { title: string; lessons: string[] }>();
+  for (const r of rows) {
+    const g = groups.get(r.courseSlug) ?? { title: r.courseTitle, lessons: [] };
+    g.lessons.push(r.lessonTitle);
+    groups.set(r.courseSlug, g);
+  }
+  return [...groups.entries()]
+    .sort((a, b) => a[1].title.localeCompare(b[1].title, "sr"))
+    .map(([slug, g]) => `- ${g.title} (${g.lessons.map((l) => `„${l}"`).join(", ")}) | ${SITE_URL}/kurs/${slug}`)
+    .join("\n");
+}
+
+export async function getPreviewLessonsText(admin: SupabaseClient): Promise<string> {
+  // Samo objavljeni kursevi - `/kurs/<slug>` neobjavljenog kursa vraća 404
+  // (npr. „kurs-konverzacije"), pa bi Smile davao mrtav link.
+  const { data } = await admin
+    .from("lessons")
+    .select("title, order_index, courses!inner(title, slug, is_published)")
+    .eq("is_free_preview", true)
+    .eq("courses.is_published", true)
+    .order("order_index");
+  const rows = ((data ?? []) as unknown as {
+    title: string;
+    courses: { title: string; slug: string } | null;
+  }[])
+    .filter((r) => r.courses)
+    .map((r) => ({
+      lessonTitle: r.title,
+      courseTitle: r.courses!.title,
+      courseSlug: r.courses!.slug,
+    }));
+  return renderPreviewLessons(rows);
+}
+
 export async function getCatalogText(admin: SupabaseClient): Promise<string> {
   const { data } = await admin
     .from("courses")

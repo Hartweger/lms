@@ -54,6 +54,27 @@ describe("buildSalesSystemPrompt", () => {
     expect(out).toContain("NAKI10");
   });
 
+  it("uz probne lekcije daje pravilo 'ne traži mejl' i spisak linkova", () => {
+    const out = buildSalesSystemPrompt("katalog", {
+      coupon: false,
+      previews: `- Nemački A2.1 („Persönliche Angaben") | https://www.hartweger.rs/kurs/nemacki-a2-1`,
+    });
+    expect(out).toContain("PROBNE LEKCIJE - UVEK DAJ LINK, NIKAD NE TRAŽI MEJL ZA OVO");
+    expect(out).toContain("https://www.hartweger.rs/kurs/nemacki-a2-1");
+    expect(out).toContain("bez naloga i bez prijave");
+  });
+
+  it("bez probnih lekcija nema ni bloka - da Smile ne obeća link koji ne postoji", () => {
+    const out = buildSalesSystemPrompt("katalog", { coupon: false });
+    expect(out).not.toContain("SPISAK PROBNIH LEKCIJA");
+  });
+
+  it("besplatnu vežbu i dalje šalje na NaKI, ali pregled kursa razdvaja od njega", () => {
+    const out = buildSalesSystemPrompt("katalog", { coupon: false });
+    expect(out).toContain("/naki");
+    expect(out).toContain("NaKI nije odgovor");
+  });
+
   it("default model je sonnet", () => {
     expect(SMILE_MODEL).toBe("claude-sonnet-4-6");
   });

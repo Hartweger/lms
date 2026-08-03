@@ -31,7 +31,7 @@ TVOJ ZADATAK:
 - VIDEO kursevi postoje SAMO za cele nivoe (A1, A2, B1, B2) i svaki pokriva oba podnivoa (A1 = A1.1 + A1.2). NIKAD ne nudi video kurs za podnivo („video kurs A1.2" ne postoji) - podnivoi postoje samo kod grupnih i individualnih kurseva. Ko već zna deo gradiva, u video kursu taj deo samo brže pređe.
 - Kada preporučuješ kurs UVEK daj direktan link i cenu u oba oblika (RSD i EUR).
 - Za grupne termine ili slobodna mesta: uputi posetioca da klikne na link kursa gde vidi aktuelne termine i dostupnost.
-- Ako pitaju za besplatno učenje, besplatnu vežbu ili besplatno da probaju, uputi ih na NaKI - besplatnog AI asistenta za vežbanje nemačkog: ${SITE_HOST}/naki
+- Ako pitaju za besplatno učenje ili besplatnu vežbu nemačkog, uputi ih na NaKI - besplatnog AI asistenta za vežbanje nemačkog: ${SITE_HOST}/naki. ALI ako pitaju kako izgleda kurs, platforma ili lekcija, NaKI nije odgovor - tada daj besplatnu probnu lekciju (vidi odeljak PROBNE LEKCIJE).
 - Ako ne znaju svoj nivo nemačkog ili pitaju kako da ga saznaju, uputi ih na besplatni test nivoa: ${SITE_HOST}/besplatno-testiranje (daj direktan link).
 - Ako ne znaš odgovor, nisi siguran, ili je za rešenje potreban ljudski tim (problem sa plaćanjem, kuponom, nalogom, poseban zahtev): NE upućuj posetioca da sam piše na info@hartweger.rs. Umesto toga ga zamoli da ti ostavi svoj mejl ovde u razgovoru i obećaj da mu se tim brzo javlja sa odgovorom. Kad ostavi mejl, toplo potvrdi da si prosledila timu i da odgovor stiže uskoro (npr. "Super, prosledila sam timu - javljamo ti se uskoro na mejl!"). Ako je mejl već dao u razgovoru, ne traži ga ponovo.
 
@@ -96,6 +96,24 @@ SERTIFIKAT:
 KATALOG KURSEVA (koristi tačne cene i linkove odavde):
 {{KATALOG}}`;
 
+// Probne lekcije. Do 03.08.2026 Smile na pitanje „mogu li negde videti kako izgleda
+// kurs" nije znao da postoje - upućivao je na NaKI (asistent za vežbanje, ne kurs) i
+// tražio mejl. Spisak se gradi iz baze, pa prati stvarno stanje `is_free_preview`.
+export function buildPreviewBlock(previewText: string): string {
+  if (!previewText.trim()) return "";
+  return `
+
+PROBNE LEKCIJE - UVEK DAJ LINK, NIKAD NE TRAŽI MEJL ZA OVO:
+- Ako posetilac pita može li da vidi kako izgleda kurs, platforma, lekcija ili materijal, može li da proba ili da pogleda pre kupovine - ODMAH mu daj link probne lekcije za nivo koji ga zanima, iz spiska ispod.
+- Za ovo NIKAD ne traži mejl i nikad ne odgovaraj da će mu tim poslati detalje. Mejl smeš da zatražiš tek posle datog linka i samo kao dodatak, nikad umesto njega.
+- Probne lekcije su otvorene svima, bez naloga i bez prijave - tako mu i reci.
+- Ako za traženi nivo u spisku nema probne lekcije, ponudi probnu lekciju najbližeg nivoa.
+- Daj samo linkove iz spiska, ne izmišljaj adrese.
+
+SPISAK PROBNIH LEKCIJA:
+${previewText}`;
+}
+
 const COUPON_BLOCK = `
 
 KUPON:
@@ -144,8 +162,14 @@ export function leadNudgeAddon(
 
 export function buildSalesSystemPrompt(
   catalogText: string,
-  opts: { coupon: boolean; leadCapture?: boolean }
+  opts: { coupon: boolean; leadCapture?: boolean; previews?: string }
 ): string {
   const base = SMILE_STATIC.replace("{{KATALOG}}", catalogText || "(katalog trenutno nedostupan - uputi na " + SITE_HOST + "/kursevi)");
-  return base + (opts.coupon ? COUPON_BLOCK : "") + (opts.leadCapture ? LEAD_CAPTURE_BLOCK : "") + FOOTER;
+  return (
+    base +
+    buildPreviewBlock(opts.previews ?? "") +
+    (opts.coupon ? COUPON_BLOCK : "") +
+    (opts.leadCapture ? LEAD_CAPTURE_BLOCK : "") +
+    FOOTER
+  );
 }

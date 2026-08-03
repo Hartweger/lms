@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { renderCatalog, type CatalogCourse } from "./catalog";
+import { renderCatalog, renderPreviewLessons, type CatalogCourse, type PreviewLesson } from "./catalog";
 
 const SAMPLE: CatalogCourse[] = [
   { title: "Video kurs A1", slug: "video-kurs-a1", price: 11600, paypal_price_eur: 99, category: "Video kursevi", course_type: "video" },
@@ -28,5 +28,24 @@ describe("renderCatalog", () => {
 
   it("prazna lista vraća prazan string", () => {
     expect(renderCatalog([])).toBe("");
+  });
+});
+
+const PREVIEWS: PreviewLesson[] = [
+  { lessonTitle: "Pozdravi", courseTitle: "Nemački A1.1", courseSlug: "nemacki-a1-1" },
+  { lessonTitle: "Die ersten Fragen", courseTitle: "Nemački A1.1", courseSlug: "nemacki-a1-1" },
+  { lessonTitle: "Persönliche Angaben", courseTitle: "Nemački A2.1", courseSlug: "nemacki-a2-1" },
+];
+
+describe("renderPreviewLessons", () => {
+  it("grupiše lekcije istog kursa u jedan red sa linkom na /kurs/<slug>", () => {
+    const out = renderPreviewLessons(PREVIEWS);
+    expect(out.split("\n")).toHaveLength(2);
+    expect(out).toContain(`Nemački A1.1 („Pozdravi", „Die ersten Fragen") | https://www.hartweger.rs/kurs/nemacki-a1-1`);
+    expect(out).toContain("https://www.hartweger.rs/kurs/nemacki-a2-1");
+  });
+
+  it("prazna lista vraća prazan string - bez spiska nema ni bloka u promptu", () => {
+    expect(renderPreviewLessons([])).toBe("");
   });
 });
