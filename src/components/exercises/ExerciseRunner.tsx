@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { sanitizeHtml } from "@/lib/sanitize";
 import QuizExercise from "./QuizExercise";
@@ -65,18 +65,6 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
       color: ["#4fb1d3", "#e57b78", "#fbbf24", "#34d399", "#a78bfa"][i % 5],
     }))
   );
-
-  // Enter key advances to next question (delayed to avoid consuming the same Enter that submitted the answer)
-  useEffect(() => {
-    if (!showNext) return;
-    let active = false;
-    const timer = setTimeout(() => { active = true; }, 300);
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (active && e.key === "Enter") handleNext();
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => { clearTimeout(timer); window.removeEventListener("keydown", handleKeyDown); };
-  }, [showNext]);
 
   // Fetch previous dialog attempts count
   useEffect(() => {
@@ -832,6 +820,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
       {/* Next button */}
       {showNext && (
         <div className="mt-4 text-right">
+          <EnterZaSledece onNext={handleNext} />
           <button
             onClick={handleNext}
             className="bg-plava text-white px-6 py-3 rounded-lg hover:bg-plava-dark transition-colors"
@@ -842,4 +831,33 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
       )}
     </div>
   );
+}
+
+// Enter vodi na sledeće pitanje. Kao zasebna komponenta jer handleNext u
+// ExerciseRunner-u nastaje tek posle ranijih return-a (millionaire, grupni
+// ispit), pa efekat ne sme da stoji gore uz ostale hook-ove. Montira se kad se
+// dugme pojavi, pa 300ms kašnjenje kreće tačno tada - da isti Enter kojim je
+// poslat odgovor ne preskoči i pitanje.
+function EnterZaSledece({ onNext }: { onNext: () => void }) {
+  const najnovijiOnNext = useRef(onNext);
+  useEffect(() => {
+    najnovijiOnNext.current = onNext;
+  });
+
+  useEffect(() => {
+    let aktivno = false;
+    const timer = setTimeout(() => {
+      aktivno = true;
+    }, 300);
+    const naTaster = (e: KeyboardEvent) => {
+      if (aktivno && e.key === "Enter") najnovijiOnNext.current();
+    };
+    window.addEventListener("keydown", naTaster);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("keydown", naTaster);
+    };
+  }, []);
+
+  return null;
 }

@@ -19,6 +19,11 @@ export default async function NestpayRecurringTestPage() {
 
   const configured = Boolean(NESTPAY_TEST.merchantId && NESTPAY_TEST.storeKey);
   const callbackUrl = `${SITE_URL}/api/nestpay/test-callback`;
+  // react-hooks/purity cilja nestabilne vrednosti između klijentskih re-rendera.
+  // Ovo je Server Component sa force-dynamic: renderuje se jednom po zahtevu, na
+  // serveru, i oid MORA da nastane ovde jer ide u hidden input forme koja se
+  // POST-uje pravo banci. Svaki test mora da dobije svoj oid.
+  // eslint-disable-next-line react-hooks/purity
   const oid = `RECTEST-${Date.now()}`;
   const fields = configured
     ? buildRecurringTestFields({

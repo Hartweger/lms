@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { CONSENT_EVENT, CONSENT_KEY, type ConsentValue, consentParams, parseConsent } from "@/lib/consent";
 import { setPixelConsent } from "@/lib/fbq";
@@ -20,14 +20,22 @@ function shouldShowBanner(): boolean {
   }
 }
 
+// Saglasnost živi u localStorage-u, van Reacta. Vrednost se ne menja sama od
+// sebe (samo kroz choose() ispod), pa je subscribe no-op; serverski snapshot je
+// false da SSR HTML ne sadrži banner i da nema hydration mismatch-a.
+const bezPretplate = () => () => {};
+
 export default function CookieBanner() {
-  const [visible, setVisible] = useState(false);
+  const nemaSaglasnosti = useSyncExternalStore(bezPretplate, shouldShowBanner, () => false);
+  // Korisnička akcija nadjačava localStorage: null = nije bilo akcije,
+  // true = footer je ponovo otvorio banner, false = upravo je izabrano.
+  const [rucno, setRucno] = useState<boolean | null>(null);
+  const visible = rucno ?? nemaSaglasnosti;
 
   useEffect(() => {
-    setVisible(shouldShowBanner());
     // Footer "Podešavanja kolačića" ponovo otvara banner
     function reopen() {
-      setVisible(true);
+      setRucno(true);
     }
     window.addEventListener(CONSENT_EVENT, reopen);
     return () => window.removeEventListener(CONSENT_EVENT, reopen);
@@ -43,7 +51,7 @@ export default function CookieBanner() {
     window.gtag?.("consent", "update", consentParams(value));
     // Isto i za Meta Pixel - grant odmršava queue (PageView i sl.), revoke ga zaustavlja
     setPixelConsent(value === "granted");
-    setVisible(false);
+    setRucno(false);
   }
 
   if (!visible) return null;
