@@ -7,19 +7,21 @@ import CountryChart from "./CountryChart";
 
 // ── Types ───────────────────────────────────────────────────────────────────
 
+// Nullable polja su nullable i u bazi (wc_orders u database.types.ts). Kod
+// ispod ih je oduvek tako i tretirao (`?? ""`, `|| "-"`, `if (!order.items)`) -
+// samo je tip tvrdio suprotno, što je krio `any` na strani stranice.
 type WcOrder = {
-  wc_order_id: number;
+  // Postoji samo na WooCommerce istoriji; nove uplate (orders tabela) ga nemaju.
+  wc_order_id?: number;
   status: string;
-  currency: string;
   total: number;
-  payment_method: string;
-  payment_method_title: string;
-  customer_email: string;
-  customer_name: string;
-  country: string;
-  items: Array<{ name: string; quantity: number; total: string; product_id: number }>;
+  payment_method: string | null;
+  payment_method_title?: string | null;
+  customer_email: string | null;
+  customer_name: string | null;
+  country: string | null;
+  items: Array<{ name: string; quantity: number; total: string; product_id: number }> | null;
   date_created: string;
-  date_completed: string | null;
   utm_source?: string | null;
 };
 
@@ -47,7 +49,9 @@ function paymentLabelOf(order: WcOrder): string {
   if (raw.includes("paypal")) return "PayPal";
   if (raw.includes("uplatnica") || raw.includes("tekući račun") || raw.includes("tekuci racun"))
     return "Uplatnica / tekući račun";
-  return order.payment_method_title || order.payment_method;
+  // Ovde je raw sigurno neprazan (proveren gore), pa je bar jedno od ova dva
+  // popunjeno; poslednji fallback postoji samo da tip bude string.
+  return order.payment_method_title || order.payment_method || "Nepoznato";
 }
 
 type Period =
@@ -771,7 +775,12 @@ export default function AnalitikaDashboard({
               {last20.map((order) => {
                 const badge = statusBadge(order.status);
                 return (
-                  <tr key={order.wc_order_id} className="hover:bg-gray-50">
+                  // Nove uplate nemaju wc_order_id, pa im key pada na
+                  // datum+mejl (do sad je bio undefined za sve posle flipa).
+                  <tr
+                    key={order.wc_order_id ?? `${order.date_created}-${order.customer_email ?? ""}`}
+                    className="hover:bg-gray-50"
+                  >
                     <td className="px-4 py-3 text-gray-500 whitespace-nowrap">
                       {new Date(order.date_created).toLocaleDateString("sr-Latn-RS", {
                         day: "numeric",

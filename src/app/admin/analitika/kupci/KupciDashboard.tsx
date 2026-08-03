@@ -4,17 +4,20 @@ import { useState, useEffect, useMemo } from "react";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
+// Nullable polja su nullable i u bazi (wc_orders u database.types.ts). Kod
+// ispod ih je oduvek tako i tretirao (`?? ""`, `|| "-"`, `if (order.items)`) -
+// samo je tip tvrdio suprotno, što je krio `any` na strani stranice.
 type WcOrder = {
   wc_order_id: number;
   status: string;
   currency: string;
   total: number;
-  payment_method: string;
-  payment_method_title: string;
-  customer_email: string;
-  customer_name: string;
-  country: string;
-  items: Array<{ name: string; quantity: number; total: string; product_id: number }>;
+  payment_method: string | null;
+  payment_method_title: string | null;
+  customer_email: string | null;
+  customer_name: string | null;
+  country: string | null;
+  items: Array<{ name: string; quantity: number; total: string; product_id: number }> | null;
   date_created: string;
   date_completed: string | null;
 };
