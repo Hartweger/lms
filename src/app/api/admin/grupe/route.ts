@@ -1,18 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/api-auth";
+import { ucitajGrupeSaBrojem } from "@/lib/admin/grupe";
 
 export async function GET() {
   const auth = await requireAdmin();
   if (!auth.ok) return auth.response;
-  const admin = auth.admin;
-  const { data: groups } = await admin.from("groups")
-    .select("*, professor:professor_id(full_name), content_course:content_course_id(slug,title)")
-    .order("start_date", { ascending: false });
-  const { data: enr } = await admin.from("group_enrollments").select("group_id").eq("status", "active");
-  const counts: Record<string, number> = {};
-  (enr || []).forEach((e) => { counts[e.group_id] = (counts[e.group_id] || 0) + 1; });
-  const withCounts = (groups || []).map((g) => ({ ...g, enrolled: counts[g.id] || 0 }));
-  return NextResponse.json({ groups: withCounts });
+  return NextResponse.json({ groups: await ucitajGrupeSaBrojem(auth.admin) });
 }
 
 export async function POST(req: NextRequest) {

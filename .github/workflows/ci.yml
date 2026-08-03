@@ -1,0 +1,33 @@
+name: CI
+
+# Vercel već radi build na svakom PR-u; ovde ide ono što build ne pokriva.
+# Od Next.js-a 16 `next build` više ne pokreće lint, pa bez ovoga lint i testovi
+# ne bi trčali nigde automatski (tako je set-state-in-effect i stigao na main).
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  provera:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      # Pada na greškama, ne i na upozorenjima - upozorenja su zatečena (55) i
+      # čiste se usput. Kad ih ponestane, dodaj --max-warnings 0.
+      - name: Lint
+        run: npx eslint .
+
+      - name: Tipovi
+        run: npx tsc --noEmit
+
+      - name: Testovi
+        run: npm test
