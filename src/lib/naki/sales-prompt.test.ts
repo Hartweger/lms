@@ -75,6 +75,14 @@ describe("buildSalesSystemPrompt", () => {
     expect(out).toContain("NaKI nije odgovor");
   });
 
+  it("zna šta je uključeno u video kurs i razdvaja PDF od interaktivnih vežbi", () => {
+    const out = buildSalesSystemPrompt("katalog", { coupon: false });
+    expect(out).toContain("ŠTA JE UKLJUČENO U VIDEO KURS");
+    expect(out).toContain("Ana u Nemačkoj");
+    expect(out).toContain("PDF VEŽBE");
+    expect(out).toContain("NE obećavaj PDF radnu svesku");
+  });
+
   it("default model je sonnet", () => {
     expect(SMILE_MODEL).toBe("claude-sonnet-4-6");
   });
