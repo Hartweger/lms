@@ -2,7 +2,7 @@
 // (Banca Intesa) v3.5, tačka 2.7: obavezni elementi na web formi I u mejlu kupcu, za
 // uspešno I neuspešno plaćanje. Deli se između hvala stranice i email.ts.
 
-/** Podaci o Trgovcu (EPM 2.7 tačka 4) - isti kao odeljak 5 na /uslovi. */
+/** Podaci o Trgovcu (EPM 2.7 tačka 4) - isti kao odeljak 6 na /uslovi. */
 export const MERCHANT = {
   naziv:
     "NATAŠA HARTWEGER PR STUDIO ZA UČENJE NEMAČKOG JEZIKA I PREVOĐENJE HARTWEGER BEOGRAD (NOVI BEOGRAD)",

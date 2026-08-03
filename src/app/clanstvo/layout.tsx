@@ -8,6 +8,8 @@ import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/server";
 import { jeAktivnaClanica, CLANSTVO_PRODUCT_SLUG } from "@/lib/clanstvo";
 import ClanstvoNav from "@/components/clanstvo/ClanstvoNav";
+import ClanstvoFooter from "@/components/clanstvo/ClanstvoFooter";
+import SakrijNa from "@/components/SakrijNa";
 
 export const dynamic = "force-dynamic";
 
@@ -37,11 +39,17 @@ export default async function ClanstvoLayout({
   if (!clanica) redirect(`/kupovina/${CLANSTVO_PRODUCT_SLUG}`);
 
   return (
-    <div className="min-h-screen bg-nh-cream">
+    <div className="flex min-h-screen flex-col bg-nh-cream">
       <Suspense>
         <ClanstvoNav />
       </Suspense>
-      <div className="mx-auto max-w-5xl px-4 py-8">{children}</div>
+      <div className="mx-auto w-full max-w-5xl flex-1 px-4 py-8">{children}</div>
+      {/* Na zajednici footer izostaje - chat zauzima ceo ekran
+          (h-[calc(100vh-9rem)] u ChatKlijent), a link ka pravilima
+          stoji ispod forme za slanje poruke. */}
+      <SakrijNa prefiksi={["/clanstvo/zajednica"]}>
+        <ClanstvoFooter />
+      </SakrijNa>
     </div>
   );
 }

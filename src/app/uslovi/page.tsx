@@ -22,7 +22,7 @@ export default function UsloviPage() {
           <h1 className="font-montserrat font-bold text-3xl md:text-4xl text-gray-900 mb-4">
             Opšti uslovi poslovanja i politika privatnosti
           </h1>
-          <p className="text-gray-500">Poslednja izmena: jul 2026.</p>
+          <p className="text-gray-500">Poslednja izmena: avgust 2026.</p>
         </div>
       </section>
 
@@ -60,7 +60,22 @@ export default function UsloviPage() {
             <li>Pristup video lekcijama i materijalima na platformi traje godinu dana.</li>
           </ul>
 
-          <h2>4. Plaćanje</h2>
+          {/* Uslovi članstva usklađeni sa žutim okvirom na checkoutu
+              (src/lib/pretplata-opis.ts, tip "clanstvo") - ako se tamo nešto
+              menja, uskladiti i ovde. Pravila zajednice: /clanstvo/pravila. */}
+          <h2>4. NH Membership (mesečno članstvo)</h2>
+          <ul>
+            <li>NH Membership je mesečno članstvo koje uključuje pristup biblioteci video lekcija, novu lekciju svakog meseca, chat zajednicu i imenik članica na platformi.</li>
+            <li>Članarina se naplaćuje mesečno: kupac pokreće niz automatskih naplata sa iste platne kartice, u jednakim iznosima, prema ceni istaknutoj pre potvrde porudžbine. Prva naplata se vrši odmah, a svaka naredna istog dana u mesecu, dok kupac ne otkaže. Tehnički maksimum jedne serije je 121 naplata - to nije obećanje trajanja niti ukupna obaveza kupca.</li>
+            <li>Za svaku naplatu izdaje se fiskalni račun i šalje na email kupca.</li>
+            <li>Pristup sadržaju i zajednici važi dok je članstvo aktivno, odnosno do kraja poslednjeg plaćenog meseca.</li>
+            <li><strong>Otkazivanje:</strong> kupac može da otkaže članstvo u svakom trenutku, samostalno, u odeljku „Moj nalog“ na platformi, ili slanjem zahteva na info@hartweger.rs. Otkazivanje zaustavlja sve buduće naplate. Već naplaćeni iznosi se ne vraćaju, a pristup ostaje do kraja plaćenog meseca.</li>
+            <li>Ako naplata ne uspe (nedovoljno sredstava, istekla ili blokirana kartica), pristup se ne produžava. Kupac o tome dobija obaveštenje na email.</li>
+            <li>Promotivna cena („prvih 50“) važi dok traje pokrenuta serija naplata. Posle otkazivanja ponovno učlanjenje ide po ceni koja u tom trenutku važi.</li>
+            <li>U okviru zajednice važe Pravila zajednice istaknuta na platformi. HARTWEGER zadržava pravo da ukloni sadržaj koji krši pravila i da, kod težih ili ponovljenih kršenja, privremeno ili trajno ukine pristup zajednici.</li>
+          </ul>
+
+          <h2>5. Plaćanje</h2>
           <ul>
             <li>Plaćanje je moguće platnom karticom (Visa, Mastercard, Maestro, DinaCard, American Express), uplatom na dinarski račun ili putem PayPal-a.</li>
             <li>Plaćanje na rate moguće je isključivo karticama Banca Intesa banke (do 6 rata).</li>
@@ -80,10 +95,10 @@ export default function UsloviPage() {
             <li>Ukupan iznos plaćen kroz mesečno plaćanje veći je od jednokratne cene istog kursa; oba iznosa su istaknuta pre kupovine.</li>
           </ul>
 
-          {/* Odeljci 5-12: obavezne izjave po Uputstvu za rad EPM (Banca Intesa), poglavlje 2.1.
+          {/* Odeljci 6-13: obavezne izjave po Uputstvu za rad EPM (Banca Intesa), poglavlje 2.1.
               Tekstovi izjava su standardni bankini tekstovi (konverzija, poverljivi podaci,
               povraćaj, privatnost) - ne menjati ih bez provere sa bankom. */}
-          <h2>5. Osnovni podaci o firmi</h2>
+          <h2>6. Osnovni podaci o firmi</h2>
           <ul>
             <li><strong>Poslovno ime:</strong> NATAŠA HARTWEGER PR STUDIO ZA UČENJE NEMAČKOG JEZIKA I PREVOĐENJE HARTWEGER BEOGRAD (NOVI BEOGRAD)</li>
             <li><strong>Adresa sedišta:</strong> Jurija Gagarina 20, Beograd (Novi Beograd)</li>
@@ -95,7 +110,7 @@ export default function UsloviPage() {
             <li><strong>Kontakt e-mail:</strong> info@hartweger.rs</li>
           </ul>
 
-          <h2>6. Izjava o konverziji</h2>
+          <h2>7. Izjava o konverziji</h2>
           <p>
             Sva plaćanja biće izvršena u lokalnoj valuti Republike Srbije - dinar (RSD). Za informativni prikaz cena
             u drugim valutama koristi se srednji kurs Narodne banke Srbije. Iznos za koji će biti zadužena
@@ -105,7 +120,7 @@ export default function UsloviPage() {
             na razumevanju.
           </p>
 
-          <h2>7. Dostava - pristup kupljenom sadržaju</h2>
+          <h2>8. Dostava - pristup kupljenom sadržaju</h2>
           <p>
             Svi proizvodi na sajtu www.hartweger.rs su digitalni sadržaji i usluge (online kursevi i časovi), pa
             fizička isporuka i troškovi dostave ne postoje. Nakon uspešnog plaćanja karticom pristup kursu se
@@ -117,7 +132,7 @@ export default function UsloviPage() {
             info@hartweger.rs.
           </p>
 
-          <h2>8. Politika reklamacija</h2>
+          <h2>9. Politika reklamacija</h2>
           <p>
             Ukoliko kupac nije zadovoljan proizvodom koji je poručio (koji mu je omogućen na korišćenje), može
             uložiti žalbu, odnosno reklamirati proizvod najkasnije 15 dana od dana početka korišćenja. Da bi se
@@ -136,7 +151,7 @@ export default function UsloviPage() {
             koji je izvršena uplata, u celosti iznosa koliko je proizvod plaćen.
           </p>
 
-          <h2>9. Zaštita privatnosti korisnika</h2>
+          <h2>10. Zaštita privatnosti korisnika</h2>
           <p>
             U ime NATAŠA HARTWEGER PR STUDIO ZA UČENJE NEMAČKOG JEZIKA I PREVOĐENJE HARTWEGER BEOGRAD (NOVI
             BEOGRAD) obavezujemo se da ćemo čuvati privatnost svih naših kupaca. Prikupljamo samo neophodne,
@@ -146,10 +161,10 @@ export default function UsloviPage() {
             za marketinške kampanje. Svi podaci o korisnicima/kupcima se strogo čuvaju i dostupni su samo
             zaposlenima kojima su ti podaci nužni za obavljanje posla. Svi zaposleni (i poslovni partneri)
             odgovorni su za poštovanje načela zaštite privatnosti. Više detalja u{" "}
-            <a href="#politika-privatnosti" className="text-plava hover:underline">odeljku 14 - Politika privatnosti</a>.
+            <a href="#politika-privatnosti" className="text-plava hover:underline">odeljku 15 - Politika privatnosti</a>.
           </p>
 
-          <h2>10. Zaštita poverljivih podataka o transakciji</h2>
+          <h2>11. Zaštita poverljivih podataka o transakciji</h2>
           <p>
             Prilikom unošenja podataka o platnoj kartici, poverljive informacije se prenose putem javne mreže u
             zaštićenoj (kriptovanoj) formi upotrebom SSL protokola i PKI sistema, kao trenutno najsavremenije
@@ -158,7 +173,7 @@ export default function UsloviPage() {
             trenutka podaci o platnoj kartici nisu dostupni našem sistemu.
           </p>
 
-          <h2>11. Povraćaj sredstava</h2>
+          <h2>12. Povraćaj sredstava</h2>
           <p>
             U slučaju vraćanja robe i povraćaja sredstava kupcu koji je prethodno platio nekom od platnih
             kartica, delimično ili u celosti, a bez obzira na razlog vraćanja, HARTWEGER je u obavezi da povraćaj
@@ -166,14 +181,14 @@ export default function UsloviPage() {
             zahtev prodavca obaviti povraćaj sredstava na račun korisnika kartice.
           </p>
 
-          <h2>12. Izjava o PDV-u</h2>
+          <h2>13. Izjava o PDV-u</h2>
           <p>
             Trgovac NATAŠA HARTWEGER PR STUDIO ZA UČENJE NEMAČKOG JEZIKA I PREVOĐENJE HARTWEGER BEOGRAD (NOVI
             BEOGRAD) je u sistemu PDV-a. Sve cene na sajtu su izražene sa uračunatim PDV-om i nema skrivenih
             troškova.
           </p>
 
-          <h2>13. Zaštita autorskih prava</h2>
+          <h2>14. Zaštita autorskih prava</h2>
           <p>
             Sav sadržaj na platformi (video lekcije, priručnici, vežbe, testovi) je intelektualna svojina HARTWEGER centra.
             Zabranjena je redistribucija, snimanje, kopiranje i deljenje materijala sa trećim licima.
@@ -182,7 +197,7 @@ export default function UsloviPage() {
 
           {/* Politika privatnosti - prenesena sa nekadašnje stranice /politika-privatnosti
               (objedinjeno 24.07.2026 na zahtev banke). Stari URL trajno preusmerava ovamo. */}
-          <h2 id="politika-privatnosti">14. Politika privatnosti</h2>
+          <h2 id="politika-privatnosti">15. Politika privatnosti</h2>
           <p>
             Tvoja privatnost nam je važna. Ovaj odeljak objašnjava koje podatke prikupljamo kada
             koristiš sajt hartweger.rs, zašto ih prikupljamo, sa kim ih delimo i koja su tvoja
@@ -202,6 +217,11 @@ export default function UsloviPage() {
             <li>
               <strong>Tehnički podaci:</strong> anonimni podaci o korišćenju sajta (posete, učinak),
               radi poboljšanja sadržaja.
+            </li>
+            <li>
+              <strong>Sadržaj u zajednici (NH Membership):</strong> poruke u chatu i podaci profila
+              članice (ime, predstavljanje, linkovi) - vidljivi su ostalim članicama i čuvaju se na
+              platformi dok traje članstvo.
             </li>
           </ul>
 
@@ -254,7 +274,7 @@ export default function UsloviPage() {
             <a href="mailto:info@hartweger.rs">info@hartweger.rs</a>.
           </p>
 
-          <h2>15. Kontakt</h2>
+          <h2>16. Kontakt</h2>
           <p>
             Za sva pitanja, reklamacije i žalbe obratite nam se na{" "}
             <Link href="/kontakt" className="text-plava hover:underline">kontakt formu</Link>{" "}

@@ -171,7 +171,11 @@ gtag('config', 'G-MB9DRXVVF6');`,
           }}
         />
         <main id="glavni" className="flex-1">{children}</main>
-        <Footer />
+        {/* Članstvo ima svoj ClanstvoFooter (clanstvo/layout.tsx) - školski
+            footer sa kursevima i bankarskim logotipima tamo nema smisla. */}
+        <SakrijNa prefiksi={["/clanstvo"]}>
+          <Footer />
+        </SakrijNa>
         <SmileWidget />
         <CookieBanner />
         <AttributionTracker />

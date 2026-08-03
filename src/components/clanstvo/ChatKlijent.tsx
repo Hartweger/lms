@@ -19,6 +19,7 @@
 // postgres_changes redove. Zato OBAVEZNO ručno zovemo setAuth() pre
 // subscribe-a (bez argumenta - povlači trenutni access_token iz sesije).
 import { useCallback, useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import type {
   RealtimePostgresDeletePayload,
   RealtimePostgresInsertPayload,
@@ -265,18 +266,27 @@ export default function ChatKlijent({
       </div>
 
       {pise ? (
-        <form onSubmit={posalji} className="mt-3 flex gap-2">
-          <input
-            className="flex-1 rounded-full border border-nh-pink-light bg-white px-4 py-2"
-            placeholder={`Poruka u ${aktivni?.naziv}…`}
-            value={tekst}
-            maxLength={2000}
-            onChange={(e) => setTekst(e.target.value)}
-          />
-          <button disabled={salje} className="rounded-full bg-nh-pink px-6 py-2 font-semibold text-white disabled:opacity-50">
-            Pošalji
-          </button>
-        </form>
+        <>
+          <form onSubmit={posalji} className="mt-3 flex gap-2">
+            <input
+              className="flex-1 rounded-full border border-nh-pink-light bg-white px-4 py-2"
+              placeholder={`Poruka u ${aktivni?.naziv}…`}
+              value={tekst}
+              maxLength={2000}
+              onChange={(e) => setTekst(e.target.value)}
+            />
+            <button disabled={salje} className="rounded-full bg-nh-pink px-6 py-2 font-semibold text-white disabled:opacity-50">
+              Pošalji
+            </button>
+          </form>
+          <p className="mt-2 text-center text-xs text-nh-dark/40">
+            Slanjem poruke prihvataš{" "}
+            <Link href="/clanstvo/pravila" className="underline hover:text-nh-pink">
+              pravila zajednice
+            </Link>
+            .
+          </p>
+        </>
       ) : null}
       {greska && <p className="mt-2 text-sm text-red-600">{greska}</p>}
       {!pise && (
