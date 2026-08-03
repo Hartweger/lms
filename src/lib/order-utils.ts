@@ -124,6 +124,46 @@ export function pendingPaymentState(
   return ageMin >= CARD_INCOMPLETE_MINUTES ? "incomplete" : "waiting";
 }
 
+/**
+ * 3D Secure ishod (mdStatus iz odgovora banke) preveden na ljudski.
+ * Nepoznate vrednosti NE izmišljamo - vraća se sirov broj, da admin ima šta da citira banci.
+ */
+const MD_STATUS_LABEL: Record<string, string> = {
+  "0": "3DS nije potvrđen",
+  "1": "3DS potpuno potvrđen",
+  "2": "kartica nije u 3DS programu",
+  "3": "banka izdavalac nije u 3DS programu",
+  "4": "3DS samo pokušan, bez pune potvrde",
+  "5": "3DS nije bio moguć",
+  "6": "greška 3DS sistema",
+  "7": "sistemska greška",
+};
+
+export type CardDecline = { kod: string | null; poruka: string | null; autentikacija: string | null };
+
+/**
+ * Šta je banka odgovorila na kartičnu transakciju. Podaci odavno stoje u
+ * `orders.nestpay_response`, ali ih panel nije prikazivao - bez njih sve otkazane
+ * porudžbine izgledaju isto, pa se odustajanje kupca ne razlikuje od pada na banci.
+ *
+ * Vraća null kad odgovora nema - kupac nikad nije završio na strani banke.
+ */
+export function cardDeclineReason(order: { nestpay_response?: unknown }): CardDecline | null {
+  const r = order.nestpay_response;
+  if (!r || typeof r !== "object") return null;
+  const f = r as Record<string, unknown>;
+  const str = (k: string) => (typeof f[k] === "string" && f[k] ? (f[k] as string) : null);
+
+  const kod = str("ProcReturnCode");
+  // ErrMsg je poruka banke o naplati; mdErrorMsg je poruka 3DS sloja - uzimamo prvu koja postoji.
+  const poruka = str("ErrMsg") ?? str("mdErrorMsg");
+  const md = str("mdStatus");
+  const autentikacija = md ? (MD_STATUS_LABEL[md] ?? `3DS status ${md}`) : null;
+
+  if (!kod && !poruka && !autentikacija) return null;
+  return { kod, poruka, autentikacija };
+}
+
 type RecoveryOrder = { order_number: string | null; created_at: string; payment_status: string; courseSlug: string };
 
 /**

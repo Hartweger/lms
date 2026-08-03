@@ -100,15 +100,26 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
         .from("groups")
         .select("id, level, status, start_date, max_seats, manual_enrolled, gcal_event_id, meet_link, notes_url, professor_id, content_course_id, professor:professor_id(full_name, email)")
         .eq("level", nivo);
+      // PAŽNJA: oba slučaja ispod su PLAĆENO-A-NEMA-MESTO. Kupac dobije pristup sadržaju, ali
+      // ostane van grupe - i to mu niko ne kaže. Ranije se samo logovalo, pa je jedna polaznica
+      // (jun 2026) zaključila da plaćanje nije prošlo i platila ista kurs tri puta. Zato Sentry.
+      const oznaka = order.order_number ?? orderId;
       const group = pickOpenGroupForNivo(groupsForNivo ?? [], nivo);
-      if (!group) { console.warn(`[grant] Nema otvorene grupe za nivo ${nivo} (order ${orderId})`); continue; }
+      if (!group) {
+        const msg = `[grant] PLAĆENO-A-NEMA-MESTO: nema otvorene grupe za nivo ${nivo} (order ${oznaka}, user ${order.user_id}) - kupac ima sadržaj ali nije ni u jednoj grupi, upisati ručno`;
+        console.error(msg);
+        Sentry.captureException(new Error(msg));
+        continue;
+      }
 
       const { count } = await admin.from("group_enrollments").select("*", { count: "exact", head: true })
         .eq("group_id", group.id).eq("status", "active");
 
       const seats = computeSeats({ maxSeats: group.max_seats, manualEnrolled: group.manual_enrolled, activeEnrollments: count ?? 0 });
       if (seats.full) {
-        console.error(`[grant][oversell] Grupa ${group.id} (${nivo}) je puna - preskačem auto-upis za order ${orderId} (user ${order.user_id}). Rešiti ručno.`);
+        const msg = `[grant][oversell] PLAĆENO-A-NEMA-MESTO: grupa ${group.id} (${nivo}) je puna - preskočen auto-upis za order ${oznaka} (user ${order.user_id}), rešiti ručno`;
+        console.error(msg);
+        Sentry.captureException(new Error(msg));
         continue;
       }
       await admin.from("group_enrollments").upsert(

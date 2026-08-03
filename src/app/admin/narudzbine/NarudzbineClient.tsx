@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import type { Order } from "@/lib/types";
-import { orderTotals, orderFiscalStatus, canDeleteOrder, pendingPaymentState } from "@/lib/order-utils";
+import type { CardDecline } from "@/lib/order-utils";
+import { orderTotals, orderFiscalStatus, canDeleteOrder, pendingPaymentState, cardDeclineReason } from "@/lib/order-utils";
 import { professorsFromVariants, packageTypesFromVariants, resolveVariant, type Variant } from "@/lib/individual-pricing";
 
 type Filter = "sve" | "na-cekanju" | "potvrdjene";
@@ -21,6 +22,37 @@ interface Props {
 }
 
 const PAKET_LABEL: Record<string, string> = { paket4: "4 termina", paket8: "8 termina", paket12: "12 termina" };
+
+/**
+ * Sitan red ispod statusa: šta je tačno banka odgovorila.
+ * Tooltip nosi sirove kodove (ProcReturnCode, 3DS) - to je ono što se citira banci u reklamaciji.
+ */
+function RazlogBanke({ decline, kartica }: { decline: CardDecline | null; kartica: boolean }) {
+  if (decline) {
+    const vidljivo = [decline.poruka, decline.autentikacija].filter(Boolean).join(" · ");
+    const tooltip = [
+      decline.kod ? `ProcReturnCode: ${decline.kod}` : null,
+      decline.poruka ? `poruka banke: ${decline.poruka}` : null,
+      decline.autentikacija ? `3DS: ${decline.autentikacija}` : null,
+    ]
+      .filter(Boolean)
+      .join(" · ");
+    return (
+      <span className="text-xs text-koral max-w-[190px]" title={tooltip}>
+        {vidljivo || "banka odbila"}
+      </span>
+    );
+  }
+  if (!kartica) return null;
+  return (
+    <span
+      className="text-xs text-gray-400"
+      title="Banka nikad nije odgovorila - kupac nije završio plaćanje na strani banke"
+    >
+      bez odgovora banke
+    </span>
+  );
+}
 
 export default function NarudzbineClient({ initialOrders, courses, variantsByCourse = {} }: Props) {
   const [orders, setOrders] = useState<Order[]>(initialOrders);
@@ -530,6 +562,9 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
                 const isLoading = loading === order.id;
                 const isPending = order.payment_status === "pending";
                 const cardState = isPending ? pendingPaymentState(order, Date.now()) : null;
+                // Razlog odbijanja ima smisla samo za kartice - uplatnica/PayPal nemaju odgovor banke.
+                const isCardOrder = order.payment_method.startsWith("kartica");
+                const decline = isCardOrder ? cardDeclineReason(order) : null;
                 const isDeleting = deleteId === order.id;
                 const isBeingDeleted = deleting === order.id;
                 const fiscalState = orderFiscalStatus(order);
@@ -573,14 +608,20 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
                     </td>
                     <td className="px-6 py-4">
                       {order.payment_status === "cancelled" ? (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-500" title="Neplaćena porudžbina - automatski otkazana posle 7 dana">
-                          Otkazano
-                        </span>
+                        <div className="flex flex-col gap-1">
+                          <span className="inline-flex w-fit items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-500" title="Neplaćena porudžbina - automatski otkazana posle 7 dana">
+                            Otkazano
+                          </span>
+                          <RazlogBanke decline={decline} kartica={isCardOrder} />
+                        </div>
                       ) : isPending ? (
                         cardState === "declined" ? (
-                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-600" title="Banka je odbila karticu - kupovina nije prošla">
-                            Kartica odbijena
-                          </span>
+                          <div className="flex flex-col gap-1">
+                            <span className="inline-flex w-fit items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-600" title="Banka je odbila karticu - kupovina nije prošla">
+                              Kartica odbijena
+                            </span>
+                            <RazlogBanke decline={decline} kartica={false} />
+                          </div>
                         ) : cardState === "incomplete" ? (
                           <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-orange-50 text-orange-600" title="Kartica započeta ali nije završena - nije naplaćeno">
                             Nije završeno

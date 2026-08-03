@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { buildIpsString, canDeleteOrder, orderTotals, orderFiscalStatus, pendingPaymentState, shouldSendRecovery, recoveryAction, uplataReminderAction, needsFiscalRetry } from "./order-utils";
+import { buildIpsString, canDeleteOrder, orderTotals, orderFiscalStatus, pendingPaymentState, cardDeclineReason, shouldSendRecovery, recoveryAction, uplataReminderAction, needsFiscalRetry } from "./order-utils";
 
 describe("buildIpsString - NBS IPS QR format", () => {
   const ips = buildIpsString({ total: 35000, order_number: "2026-216" });
@@ -251,5 +251,45 @@ describe("needsFiscalRetry - uspela naplata + pala fiskalizacija", () => {
   });
   it("kartica_rate → retry (rate su isto NestPay naplata)", () => {
     expect(needsFiscalRetry({ ...base, payment_method: "kartica_rate" }, NOW)).toBe(true);
+  });
+});
+
+// Oblici odgovora su prepisani sa produkcije (porudžbine 2026-076, 2026-143, 2026-154).
+describe("cardDeclineReason", () => {
+  it("bez callback-a → null (kupac nije završio na strani banke)", () => {
+    expect(cardDeclineReason({ nestpay_response: null })).toBe(null);
+    expect(cardDeclineReason({})).toBe(null);
+  });
+
+  it("odbijena strana kartica: uzima ErrMsg i prevodi mdStatus", () => {
+    expect(
+      cardDeclineReason({
+        nestpay_response: { Response: "Declined", ProcReturnCode: "P9", mdStatus: "4", ErrMsg: "Unesite manji iznos", mdErrorMsg: "Valid authentication attempt" },
+      }),
+    ).toEqual({ kod: "P9", poruka: "Unesite manji iznos", autentikacija: "3DS samo pokušan, bez pune potvrde" });
+  });
+
+  it("kad nema ErrMsg, pada na mdErrorMsg", () => {
+    expect(cardDeclineReason({ nestpay_response: { mdStatus: "0", mdErrorMsg: "Not authenticated" } })).toEqual({
+      kod: null,
+      poruka: "Not authenticated",
+      autentikacija: "3DS nije potvrđen",
+    });
+  });
+
+  it("nepoznat mdStatus se ne izmišlja nego prikazuje sirov", () => {
+    expect(cardDeclineReason({ nestpay_response: { mdStatus: "42" } })?.autentikacija).toBe("3DS status 42");
+  });
+
+  it("uspela naplata takođe ima odgovor (panel ga prikazuje samo kod otkazanih)", () => {
+    expect(cardDeclineReason({ nestpay_response: { ProcReturnCode: "00", mdStatus: "1", ErrMsg: "" } })).toEqual({
+      kod: "00",
+      poruka: null,
+      autentikacija: "3DS potpuno potvrđen",
+    });
+  });
+
+  it("prazan objekat bez ijednog korisnog polja → null", () => {
+    expect(cardDeclineReason({ nestpay_response: { _receivedAt: "2026-06-16T10:00:00Z" } })).toBe(null);
   });
 });
