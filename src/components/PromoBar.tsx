@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -44,20 +44,23 @@ function shouldShow(): boolean {
   }
 }
 
+// Zatvorenost trake živi u localStorage-u, van Reacta; menja se samo kroz
+// dismiss() ispod, pa je subscribe no-op.
+const bezPretplate = () => () => {};
+
 export default function PromoBar() {
   const pathname = usePathname();
-  // Kreće vidljiva (renderuje se i u SSR HTML-u - instant, bez flash-a za većinu);
-  // sakriva se posle hydracije samo ako ju je korisnik već zatvorio.
-  const [visible, setVisible] = useState(true);
+  // Serverski snapshot je true: traka se renderuje i u SSR HTML-u (instant, bez
+  // flash-a za većinu), a posle hidracije se sakriva ako ju je korisnik zatvorio.
+  const nijeZatvorena = useSyncExternalStore(bezPretplate, shouldShow, () => true);
+  const [zatvorenaSad, setZatvorenaSad] = useState(false);
+  const visible = nijeZatvorena && !zatvorenaSad;
   const [poruka, setPoruka] = useState(0);
   const [fading, setFading] = useState(false);
   const fadeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    if (!shouldShow()) {
-      setVisible(false);
-      return;
-    }
+    if (!visible) return;
     // Uz smanjene animacije (prefers-reduced-motion) poruka se ne smenjuje.
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
@@ -73,7 +76,7 @@ export default function PromoBar() {
       clearInterval(interval);
       if (fadeTimer.current) clearTimeout(fadeTimer.current);
     };
-  }, []);
+  }, [visible]);
 
   if (!visible) return null;
   // Poredi po granici segmenta da "/kurs" ne uhvati i javni katalog "/kursevi".
@@ -85,7 +88,7 @@ export default function PromoBar() {
     } catch {
       /* ignoriši ako pisanje nije moguće */
     }
-    setVisible(false);
+    setZatvorenaSad(true);
   }
 
   return (
