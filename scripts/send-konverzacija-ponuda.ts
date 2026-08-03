@@ -10,12 +10,29 @@
 import * as fs from "fs";
 import * as path from "path";
 
-const envPath = path.resolve(__dirname, "../.env.local");
-for (const line of fs.readFileSync(envPath, "utf-8").split("\n")) {
-  const [k, ...v] = line.split("=");
-  if (k && v.length && !process.env[k.trim()]) process.env[k.trim()] = v.join("=").trim();
+// RESEND_API_KEY je 19.07.2026. nestao iz .env.local i sada živi u .env.production,
+// pa se čitaju oba - prvi fajl koji ima ključ pobeđuje.
+for (const file of [".env.local", ".env.production"]) {
+  const envPath = path.resolve(__dirname, "..", file);
+  if (!fs.existsSync(envPath)) continue;
+  for (const line of fs.readFileSync(envPath, "utf-8").split("\n")) {
+    const [k, ...v] = line.split("=");
+    // Navodnici se skidaju - .env.production drži RESEND_API_KEY="" (prazan
+    // placeholder), a bez skidanja to prolazi kao truthy string od dva znaka.
+    const val = v.join("=").trim().replace(/^["']|["']$/g, "");
+    if (k && val && !process.env[k.trim()]) process.env[k.trim()] = val;
+  }
 }
-const RESEND_KEY = process.env.RESEND_API_KEY!;
+const RESEND_KEY = process.env.RESEND_API_KEY;
+// Bez ove provere se slalo `Bearer undefined` i svaka od 32 adrese je padala na
+// 401 - greška se videla tek po primaocu, umesto odmah.
+if (!RESEND_KEY?.startsWith("re_")) {
+  console.error(
+    "RESEND_API_KEY nedostaje ili nije validan (očekuje se prefiks `re_`).\n" +
+      "Pravi ključ je samo u Vercel okruženju - povuci ga u .env.local pre slanja."
+  );
+  process.exit(1);
+}
 const FROM = "Hartweger <info@hartweger.rs>";
 const SUBJECT = "Otvoren je termin za Konverzacijski kurs (B1+) - od 15. avgusta";
 const KURS_URL = "https://www.hartweger.rs/kursevi/grupni-konverzacijski-kurs-nemackog-b1";
