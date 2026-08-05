@@ -5,6 +5,7 @@ import { generateOrderNumber, calculatePaypalEur } from "@/lib/order-utils";
 import { sendPaymentInstructionsEmail, sendNewOrderAdminEmail } from "@/lib/email";
 import { nivoForSlug } from "@/lib/course-nivo";
 import { emailOwnsCourse, emailOwnsAnyVideoCourse, emailUsedCoupon, couponAppliesMessage, couponRequiresMessage } from "@/lib/coupon-ownership";
+import { emailCanRenewWithCoupon } from "@/lib/renewal-eligibility";
 import { computeCouponDiscount, isTermPackage } from "@/lib/coupon-discount";
 import { computeSeats, pickOpenGroupForNivo } from "@/lib/groups";
 import { gaIdsFromCookieHeader } from "@/lib/ga-cookies";
@@ -192,6 +193,15 @@ export async function POST(request: Request) {
         if (coupon.renewal_only && !renewalOk) {
           return NextResponse.json(
             { error: "Ovaj kod važi samo za obnovu kursa koji već imaš (na isti mejl)." },
+            { status: 400 }
+          );
+        }
+        // Grupni/individualni pristup nije samoposlužna obnova: grupni proizvod je POLUNIVO
+        // (19.600), a video proizvod ceo nivo (11.600) - sa −50% bi dobio i neplaćeni
+        // polunivo za 5.800. Odluka Natašina, 04.08.2026.
+        if (coupon.renewal_only && !(await emailCanRenewWithCoupon(supabase, email, course.id))) {
+          return NextResponse.json(
+            { error: "Za grupne i individualne kurseve obnova ide preko profesorke - javi nam se na info@hartweger.rs." },
             { status: 400 }
           );
         }

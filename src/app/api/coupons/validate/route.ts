@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { emailOwnsCourse, emailOwnsAnyVideoCourse, emailUsedCoupon, couponAppliesMessage, couponRequiresMessage } from "@/lib/coupon-ownership";
+import { emailCanRenewWithCoupon } from "@/lib/renewal-eligibility";
 import { isTermPackage } from "@/lib/coupon-discount";
 
 export async function GET(request: NextRequest) {
@@ -84,6 +85,14 @@ export async function GET(request: NextRequest) {
     if (!owns) {
       return NextResponse.json(
         { error: "Ovaj kod važi samo za obnovu kursa koji već imaš (na mejl na koji je stigao podsetnik)." },
+        { status: 400 }
+      );
+    }
+    // Grupni/individualni polaznik ne obnavlja kuponom: platio je POLUNIVO, a video
+    // proizvod pokriva ceo nivo - vidi lib/renewal-eligibility.ts.
+    if (!(await emailCanRenewWithCoupon(supabase, email, course!.id))) {
+      return NextResponse.json(
+        { error: "Za grupne i individualne kurseve obnova ide preko profesorke - javi nam se na info@hartweger.rs." },
         { status: 400 }
       );
     }

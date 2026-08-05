@@ -14,6 +14,7 @@ import { DAILY_GOAL_HEARTS } from "@/lib/hearts/config";
 import { isRenewable } from "@/lib/account";
 import { renewalProductSlugs } from "@/lib/renewal-product";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { enrollmentDerivedCourseIds } from "@/lib/renewal-eligibility";
 import { computeCoursesProgress } from "@/lib/course-progress";
 
 export const dynamic = "force-dynamic";
@@ -115,9 +116,14 @@ export default async function Dashboard() {
 
   // Obnova vodi na PROIZVOD („video-kurs-a1"), ne na sadržajni kurs („nemacki-a1-1") -
   // sadržajni slug nije u prodaji, pa je /kupovina/{slug} davao 404.
-  const renewSlugs = expiredSet.size
-    ? await renewalProductSlugs(createAdminClient(), [...expiredSet])
-    : new Map<string, string>();
+  // Grupni/individualni pristup nema samoposlužnu obnovu −50%: grupni se prodaje po
+  // polunivou, a video proizvod pokriva ceo nivo (vidi lib/renewal-eligibility.ts).
+  const [renewSlugs, upisom] = expiredSet.size
+    ? await Promise.all([
+        renewalProductSlugs(createAdminClient(), [...expiredSet]),
+        enrollmentDerivedCourseIds(createAdminClient(), user.id),
+      ])
+    : [new Map<string, string>(), new Set<string>()];
 
   const quote = getRandomQuote();
   const primaryCourse = courses[0] ?? null;
@@ -257,7 +263,7 @@ export default async function Dashboard() {
               )}
 
               {primaryCourse.expired ? (
-                isRenewable(primaryCourse.category, primaryCourse.slug) && renewSlugs.has(primaryCourse.id) ? (
+                isRenewable(primaryCourse.category, primaryCourse.slug) && renewSlugs.has(primaryCourse.id) && !upisom.has(primaryCourse.id) ? (
                   <Link
                     href={`/kupovina/${renewSlugs.get(primaryCourse.id)}?kupon=OBNOVI50`}
                     className="flex items-center justify-center gap-2 w-full bg-koral text-white py-3 rounded-xl font-bold text-sm hover:bg-koral-dark transition-colors"
@@ -293,7 +299,7 @@ export default async function Dashboard() {
               </p>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {secondaryCourses.map((course) => {
-                  const renewExpired = course.expired && isRenewable(course.category, course.slug) && renewSlugs.has(course.id);
+                  const renewExpired = course.expired && isRenewable(course.category, course.slug) && renewSlugs.has(course.id) && !upisom.has(course.id);
                   const href = course.expired
                     ? (renewExpired ? `/kupovina/${renewSlugs.get(course.id)}?kupon=OBNOVI50` : `/kurs/${course.slug}`)
                     : (course.currentLessonId ? `/lekcija/${course.currentLessonId}` : `/kurs/${course.slug}`);

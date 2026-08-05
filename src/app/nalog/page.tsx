@@ -4,6 +4,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { redirect } from "next/navigation";
 import { accessStatus, shouldShowRenew, isRenewable } from "@/lib/account";
 import { renewalProductSlugs } from "@/lib/renewal-product";
+import { enrollmentDerivedCourseIds } from "@/lib/renewal-eligibility";
 import { GrupniIIndividualni, ProfilSekcija } from "./Sekcije";
 
 export const metadata = { title: "Moj nalog - Hartweger", robots: { index: false } };
@@ -41,7 +42,10 @@ export default async function NalogPage() {
   });
 
   // Obnova ide na PROIZVOD, ne na sadržajni kurs - sadržajni slug nije u prodaji i daje 404.
-  const renewSlugs = await renewalProductSlugs(createAdminClient(), courseIds);
+  const admin = createAdminClient();
+  const renewSlugs = await renewalProductSlugs(admin, courseIds);
+  // Grupni/individualni pristup nema samoposlužnu obnovu −50% (polunivo vs ceo nivo).
+  const upisom = await enrollmentDerivedCourseIds(admin, user.id);
 
   const { data: orders } = await supabase
     .from("orders")
@@ -59,7 +63,8 @@ export default async function NalogPage() {
         {kursevi.map((c) => {
           const expired = c.status.state === "expired";
           const renewSlug = renewSlugs.get(c.id);
-          const renew = shouldShowRenew(c.status) && isRenewable(c.category, c.slug) && !!renewSlug;
+          const renew =
+            shouldShowRenew(c.status) && isRenewable(c.category, c.slug) && !!renewSlug && !upisom.has(c.id);
           return (
             <div
               key={c.id}
