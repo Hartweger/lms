@@ -18,6 +18,7 @@ interface OrderLike {
   order_number?: string | null;
   total: number;
   currency?: string | null;
+  payment_method?: string | null;
   coupon_code?: string | null;
   items?: unknown; // JSONB niz OrderItemLike
   ga_client_id?: string | null;
@@ -35,11 +36,15 @@ export async function sendGa4Purchase(order: OrderLike): Promise<void> {
   if (!apiSecret) return; // tiho preskoči dok secret nije postavljen
 
   try {
+    // Pretplata: items[].price u bazi nosi PUNU cenu paketa, a naplaćena je rata
+    // (order.total). GA4 "prihod od artikla" se računa iz items, pa bi puna cena
+    // svaku pretplatu prikazala kao prodat ceo paket - ista logika kao na hvala strani.
+    const jePretplata = order.payment_method === "kartica_pretplata";
     const rawItems = Array.isArray(order.items) ? (order.items as OrderItemLike[]) : [];
     const items = rawItems.map((it) => ({
       item_id: it.course_id,
       item_name: it.title,
-      price: it.price,
+      price: jePretplata ? Number(order.total) || 0 : it.price,
       quantity: 1,
     }));
 
