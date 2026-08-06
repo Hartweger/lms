@@ -15,12 +15,46 @@ import { recurringTxData } from "@/lib/payment-confirmation";
 
 interface OrderItem { course_id: string; course_slug: string; title: string; price: number; }
 
+/** Paralelni poziv već radi grant za ovaj order — ništa nije poslato ni upisano. */
+export const GRANT_IN_PROGRESS = "grant-in-progress";
+
+// Posle ovoliko minuta lock se smatra bajatim (crash usred granta) i sme da se preuzme,
+// da reconcile cron ne ostane zauvek blokiran na zaglavljenom orderu.
+const GRANT_LOCK_TTL_MS = 10 * 60_000;
+
 /** Dodeljuje pristup za narudžbinu (course_unlocks → course_access), označava completed+granted, šalje welcome mejl. Idempotentno. */
 export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolean; error?: string }> {
   const admin = createAdminClient();
   const { data: order, error } = await admin.from("orders").select("*").eq("id", orderId).single();
   if (error || !order) return { ok: false, error: "Order not found" };
   if (order.payment_status === "completed") return { ok: true }; // idempotentno
+
+  // completed-provera iznad nije dovoljna sama: dupli klik na „Potvrdi uplatu" napravi dva
+  // zahteva koja OBA pročitaju pending pre nego što prvi stigne do update-a na dnu, pa mejlovi
+  // odu 2x (order 2026-268, 06.08.2026). Zato atomični claim: UPDATE ... WHERE je u Postgresu
+  // atomičan po redu, pa lock uzme tačno jedan poziv; drugi dobije GRANT_IN_PROGRESS.
+  const claim = { grant_lock_at: new Date().toISOString() };
+  const first = await admin.from("orders").update(claim)
+    .eq("id", orderId).neq("payment_status", "completed").is("grant_lock_at", null)
+    .select("id").maybeSingle();
+  let claimed = !!first.data;
+  if (!claimed && !first.error) {
+    const staleIso = new Date(Date.now() - GRANT_LOCK_TTL_MS).toISOString();
+    const retry = await admin.from("orders").update(claim)
+      .eq("id", orderId).neq("payment_status", "completed").lt("grant_lock_at", staleIso)
+      .select("id").maybeSingle();
+    claimed = !!retry.data;
+  }
+  if (first.error) {
+    // Fail-open: bez locka smo na starom (ranjivom na trku) ponašanju, ali grant NE sme da
+    // stane zbog npr. kolone koja još nije u bazi. Sentry da se vidi.
+    console.error(`[grant] lock claim pao za order ${orderId}:`, first.error.message);
+    Sentry.captureException(new Error(`[grant] lock claim pao: ${first.error.message}`));
+  } else if (!claimed) {
+    const { data: fresh } = await admin.from("orders").select("payment_status").eq("id", orderId).single();
+    if (fresh?.payment_status === "completed") return { ok: true }; // paralelni poziv upravo završio
+    return { ok: false, error: GRANT_IN_PROGRESS };
+  }
 
   const items = (order.items ?? []) as unknown as OrderItem[];
   // Mesečno plaćanje: pristup važi do sledeće naplate + 7 dana zaliha, pa prestanak
@@ -85,6 +119,8 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
     const msg = `[grant] course_access insert pao za order ${order.order_number ?? orderId}: ${grantFailures.join("; ")}`;
     console.error(msg);
     Sentry.captureException(new Error(msg));
+    // Oslobodi lock da reconcile cron može odmah da ponovi grant (ne čeka TTL).
+    await admin.from("orders").update({ grant_lock_at: null }).eq("id", orderId);
     return { ok: false, error: msg };
   }
 
@@ -256,7 +292,7 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
     }
   }
 
-  await admin.from("orders").update({ payment_status: "completed", granted: true }).eq("id", orderId);
+  await admin.from("orders").update({ payment_status: "completed", granted: true, grant_lock_at: null }).eq("id", orderId);
   // Kupon troši max_uses tek na NAPLATU (jedina tačka gde order postaje completed) —
   // odbijena kartica / otkazana uplatnica ne sme da pojede limit. Idempotentno preko
   // completed-guarda na vrhu. Best-effort: brojač ne sme da obori dodelu pristupa.

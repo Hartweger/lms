@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/api-auth";
-import { grantAccessForOrder } from "@/lib/grant-access";
+import { grantAccessForOrder, GRANT_IN_PROGRESS } from "@/lib/grant-access";
 
 export async function POST(
   _request: Request,
@@ -28,7 +28,13 @@ export async function POST(
   // grantAccessForOrder daje pristup + šalje GA4 i Meta Purchase (CAPI) iz jedne tačke
   // (kad je uplata stvarno potvrđena). Browser pixel za uplatnicu/PayPal ništa ne šalje.
   const result = await grantAccessForOrder(id);
-  if (!result.ok) return NextResponse.json({ error: result.error }, { status: 400 });
+  if (!result.ok) {
+    // Dupli klik: prvi zahtev drži lock i šalje mejlove, drugi ne sme ništa da ponovi.
+    if (result.error === GRANT_IN_PROGRESS) {
+      return NextResponse.json({ error: "Potvrda je već u toku - sačekaj par sekundi i osveži." }, { status: 409 });
+    }
+    return NextResponse.json({ error: result.error }, { status: 400 });
+  }
 
   // NAPOMENA: potvrda uplatnice/PayPal samo daje pristup - fiskalizacija je RUČNA (dugme
   // „Fiskalizuj" u adminu), po odluci 09.06.2026. Kartice se i dalje fiskalizuju automatski

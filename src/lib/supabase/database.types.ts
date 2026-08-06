@@ -1716,6 +1716,7 @@ export type Database = {
           full_name: string
           ga_client_id: string | null
           ga_session_id: string | null
+          grant_lock_at: string | null
           granted: boolean
           id: string
           installment_no: number | null
@@ -1759,6 +1760,7 @@ export type Database = {
           full_name: string
           ga_client_id?: string | null
           ga_session_id?: string | null
+          grant_lock_at?: string | null
           granted?: boolean
           id?: string
           installment_no?: number | null
@@ -1802,6 +1804,7 @@ export type Database = {
           full_name?: string
           ga_client_id?: string | null
           ga_session_id?: string | null
+          grant_lock_at?: string | null
           granted?: boolean
           id?: string
           installment_no?: number | null

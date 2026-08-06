@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type { Order } from "@/lib/types";
 import type { CardDecline } from "@/lib/order-utils";
 import { orderTotals, orderFiscalStatus, canDeleteOrder, pendingPaymentState, cardDeclineReason } from "@/lib/order-utils";
@@ -219,7 +219,13 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
     }
   }
 
+  // Sinhroni guard: disabled={isLoading} ne stigne da se primeni kod brzog duplog klika
+  // (state update čeka re-render), pa su za order 2026-268 mejlovi otišli 2x. Ref je odmah true.
+  const confirmInFlight = useRef(false);
+
   async function confirmPayment(orderId: string) {
+    if (confirmInFlight.current) return;
+    confirmInFlight.current = true;
     setLoading(orderId);
     try {
       const res = await fetch(`/api/admin/orders/${orderId}/confirm`, {
@@ -231,8 +237,12 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
             o.id === orderId ? { ...o, payment_status: "completed", granted: true } : o
           )
         );
+      } else {
+        const { error } = await res.json().catch(() => ({ error: res.statusText }));
+        alert(`Potvrda nije uspela: ${error}`);
       }
     } finally {
+      confirmInFlight.current = false;
       setLoading(null);
       setConfirmId(null);
     }

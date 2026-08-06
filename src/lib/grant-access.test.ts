@@ -148,6 +148,60 @@ describe("grantAccessForOrder", () => {
     expect(sendWelcomeEmail).not.toHaveBeenCalled();
   });
 
+  it("trka (dupli klik na Potvrdi uplatu): dva istovremena poziva šalju welcome samo JEDNOM", async () => {
+    h.fake = createFakeAdmin({
+      orders: [videoOrder()],
+      course_unlocks: [{ purchasable_course_id: "c-prod", content_course_id: "c-content" }],
+    });
+
+    const [r1, r2] = await Promise.all([grantAccessForOrder("o1"), grantAccessForOrder("o1")]);
+
+    expect(sendWelcomeEmail).toHaveBeenCalledTimes(1);
+    expect([r1, r2].filter((r) => r.ok)).toHaveLength(1);
+    expect([r1, r2].find((r) => !r.ok)!.error).toBe("grant-in-progress");
+    expect(h.fake.row("orders", (r) => r.id === "o1")!.payment_status).toBe("completed");
+  });
+
+  it("svež lock (paralelni grant u toku): poziv ne šalje ništa i vraća grant-in-progress", async () => {
+    h.fake = createFakeAdmin({
+      orders: [videoOrder({ grant_lock_at: new Date().toISOString() })],
+      course_unlocks: [{ purchasable_course_id: "c-prod", content_course_id: "c-content" }],
+    });
+
+    const res = await grantAccessForOrder("o1");
+
+    expect(res.ok).toBe(false);
+    expect(res.error).toBe("grant-in-progress");
+    expect(sendWelcomeEmail).not.toHaveBeenCalled();
+    expect(h.fake.row("course_access", () => true)).toBeUndefined();
+  });
+
+  it("bajat lock (crash usred granta) NE blokira retry: grant prolazi normalno", async () => {
+    h.fake = createFakeAdmin({
+      orders: [videoOrder({ grant_lock_at: new Date(Date.now() - 20 * 60_000).toISOString() })],
+      course_unlocks: [{ purchasable_course_id: "c-prod", content_course_id: "c-content" }],
+    });
+
+    const res = await grantAccessForOrder("o1");
+
+    expect(res.ok).toBe(true);
+    expect(sendWelcomeEmail).toHaveBeenCalledTimes(1);
+    expect(h.fake.row("orders", (r) => r.id === "o1")!.payment_status).toBe("completed");
+  });
+
+  it("pao grant (course_access insert) ČISTI lock, da reconcile cron može odmah da ponovi", async () => {
+    h.fake = createFakeAdmin({
+      orders: [videoOrder()],
+      course_unlocks: [{ purchasable_course_id: "c-prod", content_course_id: "c-content" }],
+    });
+    h.fake.failInsert("course_access", "RLS: nije dozvoljeno");
+
+    const res = await grantAccessForOrder("o1");
+
+    expect(res.ok).toBe(false);
+    expect(h.fake.row("orders", (r) => r.id === "o1")!.grant_lock_at).toBeNull();
+  });
+
   it("kupon: usage_count se uvećava kad porudžbina postane completed", async () => {
     h.fake = createFakeAdmin({
       orders: [videoOrder({ coupon_code: "NAKI10" })],
