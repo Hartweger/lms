@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { pickSubmissionQuestions } from "@/lib/essay-task";
 
 interface EssayRow {
   id: string;
@@ -93,16 +94,14 @@ export default function AdminEseji() {
       // Max bodovi po eseju (options.maxPoints, default 5) + tekst zadatka za pregled.
       const exIds = [...new Set(rows.map((e) => e.exercise_id))];
       if (exIds.length) {
-        const { data: eqs } = await supabase.from("exercise_questions").select("exercise_id, question, options").in("exercise_id", exIds);
-        const m: Record<string, number> = {};
-        const t: Record<string, string> = {};
-        for (const q of eqs || []) {
-          const mp = (q.options as { maxPoints?: number } | null)?.maxPoints;
-          if (m[q.exercise_id] === undefined) m[q.exercise_id] = typeof mp === "number" ? mp : 5;
-          if (t[q.exercise_id] === undefined && q.question) t[q.exercise_id] = q.question;
-        }
-        setMaxByEx(m);
-        setTaskByEx(t);
+        const { data: eqs } = await supabase
+          .from("exercise_questions")
+          .select("exercise_id, question, options")
+          .in("exercise_id", exIds)
+          .order("order_index", { ascending: true });
+        const { taskByEx, maxByEx } = pickSubmissionQuestions(eqs || []);
+        setMaxByEx(maxByEx);
+        setTaskByEx(taskByEx);
       }
       setLoading(false);
     };

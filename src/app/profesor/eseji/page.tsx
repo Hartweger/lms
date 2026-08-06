@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { pickSubmissionQuestions } from "@/lib/essay-task";
 
 interface EssayRow {
   id: string;
@@ -107,13 +108,10 @@ export default function ProfesorEseji() {
       if (exIds.length > 0) {
         const { data: eqs } = await supabase
           .from("exercise_questions")
-          .select("exercise_id, question")
-          .in("exercise_id", exIds);
-        const t: Record<string, string> = {};
-        for (const q of eqs || []) {
-          if (t[q.exercise_id] === undefined && q.question) t[q.exercise_id] = q.question;
-        }
-        setTaskByEx(t);
+          .select("exercise_id, question, options")
+          .in("exercise_id", exIds)
+          .order("order_index", { ascending: true });
+        setTaskByEx(pickSubmissionQuestions(eqs || []).taskByEx);
       }
       setLoading(false);
     };
