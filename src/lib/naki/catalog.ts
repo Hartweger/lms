@@ -1,5 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { SITE_URL } from "@/lib/site-url";
+import { fetchRaspored, type GrupaRaspored } from "@/lib/raspored";
 
 export type CatalogCourse = {
   title: string;
@@ -79,6 +80,47 @@ export async function getPreviewLessonsText(admin: SupabaseClient): Promise<stri
       courseSlug: r.courses!.slug,
     }));
   return renderPreviewLessons(rows);
+}
+
+/**
+ * Otvoreni grupni termini za Smile. Do 07.08.2026 katalog je imao samo kurseve i
+ * cene, pa Smile nije znao da grupa uopšte postoji - posetiocu koji pita „koliko
+ * košta kurs za početnike" tri dana pre starta A1.1 grupe nudio je video kurs.
+ * Uzima se isti izvor kao javna /raspored stranica, pa se prikazano i izgovoreno
+ * ne razilaze.
+ *
+ * Ulaze SAMO grupe na koje se sad može upisati: „Otvoren za upis" i sa slobodnim
+ * mestom. Popunjena ili tek najavljena grupa nije ponuda - vidi pravilo da se bez
+ * otvorenog termina ne prodaje.
+ */
+export function renderOpenGroups(rows: GrupaRaspored[]): string {
+  const open = rows.filter((g) => !g.full && g.status.toLowerCase().startsWith("otvoren"));
+  if (open.length === 0) return "";
+  return open
+    .map((g) => {
+      const termin = [g.daniPuni.toLowerCase(), g.sat].filter(Boolean).join(" ");
+      const cena =
+        g.cena != null
+          ? `${g.cena.toLocaleString("sr-RS")} RSD${g.cenaEur != null ? ` / ${g.cenaEur} EUR` : ""}`
+          : null;
+      // Ime profesora bez titule - rod se ne pripisuje.
+      const parts = [
+        g.nivo,
+        g.pocetak ? `početak ${g.pocetak}` : null,
+        termin || null,
+        g.trajanje ? `${g.trajanje} nedelja` : null,
+        g.prof || null,
+        `${g.slobodnih} od ${g.maks} mesta slobodno`,
+        cena,
+        g.checkoutSlug ? `${SITE_URL}/kursevi/${g.checkoutSlug}` : null,
+      ].filter(Boolean);
+      return `- ${parts.join(" | ")}`;
+    })
+    .join("\n");
+}
+
+export async function getOpenGroupsText(): Promise<string> {
+  return renderOpenGroups(await fetchRaspored());
 }
 
 export async function getCatalogText(admin: SupabaseClient): Promise<string> {

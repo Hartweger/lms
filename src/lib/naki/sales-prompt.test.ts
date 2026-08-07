@@ -69,6 +69,33 @@ describe("buildSalesSystemPrompt", () => {
     expect(out).not.toContain("SPISAK PROBNIH LEKCIJA");
   });
 
+  it("uz otvorene termine daje spisak i nalog da termin kaže sam od sebe", () => {
+    const out = buildSalesSystemPrompt("katalog", {
+      coupon: false,
+      groups: "- A1.1 | početak 11.08.2026 | utorak, četvrtak 20:00-21:00 | 19.600 RSD / 168 EUR",
+    });
+    expect(out).toContain("OTVORENI GRUPNI TERMINI");
+    expect(out).toContain("početak 11.08.2026");
+    expect(out).toContain("www.hartweger.rs/raspored");
+  });
+
+  it("kad nema nijednog otvorenog termina zabranjuje izmišljanje datuma", () => {
+    const out = buildSalesSystemPrompt("katalog", { coupon: false, groups: "" });
+    expect(out).toContain("NEMA nijednog otvorenog grupnog termina");
+    expect(out).toContain("Ne izmišljaj datume");
+  });
+
+  it("bez podataka o grupama (undefined) nema bloka - ne tvrdi ni da ima ni da nema", () => {
+    const out = buildSalesSystemPrompt("katalog", { coupon: false });
+    expect(out).not.toContain("SPISAK OTVORENIH GRUPA");
+    expect(out).not.toContain("NEMA nijednog otvorenog grupnog termina");
+  });
+
+  it("za termine više ne upućuje posetioca da sam pogleda stranicu kursa", () => {
+    const out = buildSalesSystemPrompt("katalog", { coupon: false });
+    expect(out).not.toContain("uputi posetioca da klikne na link kursa gde vidi aktuelne termine");
+  });
+
   it("besplatnu vežbu i dalje šalje na NaKI, ali pregled kursa razdvaja od njega", () => {
     const out = buildSalesSystemPrompt("katalog", { coupon: false });
     expect(out).toContain("/naki");

@@ -30,7 +30,7 @@ TVOJ ZADATAK:
 - Postoje tri formata: video (samostalno, najjeftinije), grupni (uživo u maloj grupi) i individualni (1-na-1, najbrži rezultat). Kada te pitaju koji format ili koji kurs, NE nabrajaj sva tri odjednom - prvo kratko pitaj šta mu je važno (budžet, koliko brzo mu treba, voli li rad u grupi ili 1-na-1), pa preporuči JEDAN koji mu najviše odgovara i u jednoj rečenici reci zašto baš taj. Alternativu pomeni kratko samo ako ima smisla.
 - VIDEO kursevi postoje SAMO za cele nivoe (A1, A2, B1, B2) i svaki pokriva oba podnivoa (A1 = A1.1 + A1.2). NIKAD ne nudi video kurs za podnivo („video kurs A1.2" ne postoji) - podnivoi postoje samo kod grupnih i individualnih kurseva. Ko već zna deo gradiva, u video kursu taj deo samo brže pređe.
 - Kada preporučuješ kurs UVEK daj direktan link i cenu u oba oblika (RSD i EUR).
-- Za grupne termine ili slobodna mesta: uputi posetioca da klikne na link kursa gde vidi aktuelne termine i dostupnost.
+- Za grupne termine, datum početka i slobodna mesta koristi odeljak OTVORENI GRUPNI TERMINI - tamo je stvarno stanje iz baze. Ne odlaži odgovor na „pogledaj na stranici kursa" pre nego što mu kažeš termin ako postoji.
 - Ako pitaju za besplatno učenje ili besplatnu vežbu nemačkog, uputi ih na NaKI - besplatnog AI asistenta za vežbanje nemačkog: ${SITE_HOST}/naki. ALI ako pitaju kako izgleda kurs, platforma ili lekcija, NaKI nije odgovor - tada daj besplatnu probnu lekciju (vidi odeljak PROBNE LEKCIJE).
 - Ako ne znaju svoj nivo nemačkog ili pitaju kako da ga saznaju, uputi ih na besplatni test nivoa: ${SITE_HOST}/besplatno-testiranje (daj direktan link).
 - Ako ne znaš odgovor, nisi siguran, ili je za rešenje potreban ljudski tim (problem sa plaćanjem, kuponom, nalogom, poseban zahtev): NE upućuj posetioca da sam piše na info@hartweger.rs. Umesto toga ga zamoli da ti ostavi svoj mejl ovde u razgovoru i obećaj da mu se tim brzo javlja sa odgovorom. Kad ostavi mejl, toplo potvrdi da si prosledila timu i da odgovor stiže uskoro (npr. "Super, prosledila sam timu - javljamo ti se uskoro na mejl!"). Ako je mejl već dao u razgovoru, ne traži ga ponovo.
@@ -125,6 +125,38 @@ SPISAK PROBNIH LEKCIJA:
 ${previewText}`;
 }
 
+/**
+ * Otvoreni grupni termini. Do 07.08.2026 Smile nije imao nijedan podatak o grupama -
+ * na pitanje „koliko košta kurs za početnike" (07.08, tri dana pre starta A1.1 grupe
+ * sa 5 slobodnih mesta) preporučio je video paket i mesečno plaćanje, a termin nije
+ * ni pomenuo. Spisak se gradi iz baze, isti izvor kao javna /raspored stranica.
+ *
+ * Prazan string znači „nema nijedne otvorene grupe" i tada blok izričito zabranjuje
+ * izmišljanje datuma. Kad podatak uopšte nije prosleđen (undefined), bloka nema -
+ * Smile tada ne tvrdi ni da ima ni da nema termina.
+ */
+export function buildOpenGroupsBlock(groupsText: string | undefined): string {
+  if (groupsText === undefined) return "";
+  if (!groupsText.trim()) {
+    return `
+
+OTVORENI GRUPNI TERMINI:
+- Trenutno NEMA nijednog otvorenog grupnog termina. Ne izmišljaj datume i ne obećavaj početak grupe.
+- Umesto toga ponudi video ili individualni kurs, ili zamoli posetioca za mejl pa mu javljamo čim se otvori termin za njegov nivo.`;
+  }
+  return `
+
+OTVORENI GRUPNI TERMINI (stvarno stanje iz baze - jedini izvor za datume grupa):
+- Ako posetioca zanima nivo koji POSTOJI u spisku ispod, sam od sebe mu reci termin: datum početka, dane i sat, cenu i link. To je najjači razlog da se odluči sada.
+- Termin pomeni i kada te pita samo za cenu, čim iz razgovora znaš nivo („krećem od nule" i „za početnike" znače A1.1). Dodaj ga kao jednu rečenicu uz cenu; ne čekaj da posetilac prvo izabere format.
+- Ako njegov nivo NIJE u spisku, ne izmišljaj datum: reci da za taj nivo trenutno nema otvorenog termina, pa ponudi video ili individualni kurs ili zamoli za mejl da mu javimo kad se otvori.
+- Broj slobodnih mesta pomeni samo ako posetilac pita ili ako je ostalo 2 ili manje mesta - tada ga reci, ali bez pritiska.
+- Ceo raspored grupa: ${SITE_HOST}/raspored
+
+SPISAK OTVORENIH GRUPA:
+${groupsText}`;
+}
+
 const COUPON_BLOCK = `
 
 KUPON:
@@ -173,11 +205,12 @@ export function leadNudgeAddon(
 
 export function buildSalesSystemPrompt(
   catalogText: string,
-  opts: { coupon: boolean; leadCapture?: boolean; previews?: string }
+  opts: { coupon: boolean; leadCapture?: boolean; previews?: string; groups?: string }
 ): string {
   const base = SMILE_STATIC.replace("{{KATALOG}}", catalogText || "(katalog trenutno nedostupan - uputi na " + SITE_HOST + "/kursevi)");
   return (
     base +
+    buildOpenGroupsBlock(opts.groups) +
     buildPreviewBlock(opts.previews ?? "") +
     (opts.coupon ? COUPON_BLOCK : "") +
     (opts.leadCapture ? LEAD_CAPTURE_BLOCK : "") +
