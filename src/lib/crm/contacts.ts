@@ -1,6 +1,10 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { normalizeEmail, pickMatch } from "./match";
+import { suggestEmailFix } from "./email-typos";
 import type { CrmSource, CrmChannel, CrmDirection } from "./types";
+
+/** Tag na kontaktu čija adresa ima sumnjiv domen. Postavlja se automatski, skida se ručno. */
+export const TAG_PROVERI_ADRESU = "proveri-adresu";
 
 export interface UpsertInput {
   email?: string | null;
@@ -65,6 +69,12 @@ export async function upsertContact(
 
   const now = new Date().toISOString();
 
+  // Domen liči na grešku ili je homograf? Adresu NE diramo - upisujemo je kako
+  // je data - ali kontakt označavamo i jednom upisujemo upozorenje u istoriju.
+  // Povod: lid od 07.08.2026 upisan na gmai.com (registrovan typosquat domen,
+  // mejl ne bounce-uje nego tiho ode trećem licu).
+  const typo = suggestEmailFix(email);
+
   if (existingId) {
     // Popuni samo prazna polja, uvek osveži last_interaction_at
     const patch: Record<string, unknown> = { last_interaction_at: now };
@@ -77,14 +87,20 @@ export async function upsertContact(
     if (isActiveCustomer) patch.stage = "upisan";
     const { data: cur } = await admin
       .from("crm_contacts")
-      .select("name,phone,level,user_id")
+      .select("name,phone,level,user_id,tags")
       .eq("id", existingId)
       .single();
     if (cur?.name) delete patch.name;
     if (cur?.phone) delete patch.phone;
     if (cur?.level) delete patch.level;
     if (cur?.user_id) delete patch.user_id;
+
+    const tags: string[] = cur?.tags ?? [];
+    const vecOznacen = tags.includes(TAG_PROVERI_ADRESU);
+    if (typo && !vecOznacen) patch.tags = [...tags, TAG_PROVERI_ADRESU];
+
     await admin.from("crm_contacts").update(patch).eq("id", existingId);
+    if (typo && !vecOznacen) await logEmailWarning(admin, existingId, typo);
     return existingId;
   }
 
@@ -98,6 +114,7 @@ export async function upsertContact(
       user_id: userId,
       source: input.source,
       level: input.level || null,
+      tags: typo ? [TAG_PROVERI_ADRESU] : [],
       stage: isActiveCustomer ? "upisan" : "nov",
       last_interaction_at: now,
     })
@@ -108,7 +125,32 @@ export async function upsertContact(
     console.error("[crm] upsertContact insert failed", error);
     return null;
   }
+  if (typo) await logEmailWarning(admin, data.id, typo);
   return data.id;
+}
+
+/** Jednokratan zapis u istoriji kontakta - vidi se u timeline-u na /admin/crm/<id>. */
+async function logEmailWarning(
+  admin: SupabaseClient,
+  contactId: string,
+  typo: NonNullable<ReturnType<typeof suggestEmailFix>>,
+): Promise<void> {
+  const predlog = typo.suggestion ? ` Verovatno je "${typo.suggestion}".` : "";
+  const punycode =
+    typo.reason === "punycode"
+      ? " Domen je pisan punycode-om (xn--), što je skoro uvek adresa koja samo liči na pravu."
+      : "";
+  await logInteraction(admin, {
+    contactId,
+    channel: "sistem",
+    direction: "interna",
+    summary: `PROVERI ADRESU - domen "${typo.domain}" je sumnjiv`,
+    body:
+      `Adresa je upisana kako je data: ${typo.original}.${predlog}${punycode}` +
+      ` Ovakvi domeni su često registrovani, pa mejl ne bounce-uje nego tiho ode trećem licu.` +
+      ` Proveri adresu pre slanja bilo čega, pa skini tag "${TAG_PROVERI_ADRESU}".`,
+    meta: { email_typo: typo },
+  });
 }
 
 export interface LogInput {

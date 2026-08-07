@@ -9,6 +9,7 @@ import { getCatalogText, getPreviewLessonsText, getOpenGroupsText } from "@/lib/
 import { getSmileConfig, isPurchaseSignal, extractEmail } from "@/lib/naki/smile-config";
 import { sanitizeReply } from "@/lib/naki/sanitize";
 import { upsertContact, logInteraction } from "@/lib/crm/contacts";
+import { suggestEmailFix } from "@/lib/crm/email-typos";
 import { userOwnsAnyVideoCourse } from "@/lib/coupon-ownership";
 import { createHash } from "crypto";
 
@@ -135,6 +136,9 @@ export async function POST(request: Request) {
 
   // Lid: posetilac ostavio mejl u razgovoru → CRM + notify za ljudski odgovor (ne ruši chat ako padne)
   const leadEmail = last.role === "user" ? extractEmail(last.content) : null;
+  // Domen liči na grešku (npr. gmai.com)? Označavanje kontakta radi upsertContact;
+  // ovde samo menjamo admin-notifikaciju da se ne odgovori na pogrešnu adresu.
+  const emailTypo = suggestEmailFix(leadEmail);
   if (leadEmail) {
     const convo = history
       .map((m) => `${m.role === "user" ? "Korisnik" : "Smile"}: ${m.content}`)
@@ -157,12 +161,29 @@ export async function POST(request: Request) {
     if (process.env.RESEND_API_KEY) {
       try {
         const resend = new Resend(process.env.RESEND_API_KEY);
+        const warning = emailTypo
+          ? `PAŽNJA: domen "${emailTypo.domain}" je sumnjiv${
+              emailTypo.reason === "punycode"
+                ? " - pisan je punycode-om (xn--), što je skoro uvek domen koji samo liči na pravi"
+                : ""
+            }.${emailTypo.suggestion ? `\nVerovatno je trebalo "${emailTypo.suggestion}".` : ""}\nTakvi domeni su često registrovani, pa mejl ne bounce-uje nego tiho ode trećem licu.\nProveri adresu pre slanja - reply na ovu poruku NE ide posetiocu, upiši primaoca ručno.\n\n`
+          : "";
         await resend.emails.send({
           from: "Smile <info@hartweger.rs>",
           to: "info@hartweger.rs",
-          replyTo: leadEmail,
-          subject: `Smile · Posetilac čeka odgovor: ${leadEmail}`,
-          text: `Posetilac je ostavio mejl u razgovoru i obećan mu je brz odgovor.\nOdgovori mu direktno (reply ide na ${leadEmail}).\n\nRazgovor:\n${convo}\n\nSmile je upravo odgovorio:\n${reply}\n\n---\nSmile · Hartweger sajt`,
+          // Kod sumnjive adrese namerno ne postavljamo replyTo, da nepažljiv
+          // „Reply" ne ode na pogrešan (možda tuđi) domen.
+          ...(emailTypo ? {} : { replyTo: leadEmail }),
+          subject: emailTypo
+            ? `Smile · PROVERI ADRESU · Posetilac čeka odgovor: ${leadEmail}`
+            : `Smile · Posetilac čeka odgovor: ${leadEmail}`,
+          text: `${warning}Posetilac je ostavio mejl u razgovoru i obećan mu je brz odgovor.\n${
+            emailTypo
+              ? `Odgovori mu direktno na proverenu adresu (ukucano: ${leadEmail}${
+                  emailTypo.suggestion ? `, predlog: ${emailTypo.suggestion}` : ""
+                }).`
+              : `Odgovori mu direktno (reply ide na ${leadEmail}).`
+          }\n\nRazgovor:\n${convo}\n\nSmile je upravo odgovorio:\n${reply}\n\n---\nSmile · Hartweger sajt`,
         });
       } catch (e) {
         console.error("[smile] lead-notify failed", e);

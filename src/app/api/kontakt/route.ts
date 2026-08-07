@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { upsertContact, logInteraction } from "@/lib/crm/contacts";
+import { suggestEmailFix } from "@/lib/crm/email-typos";
 import { rateLimit } from "@/lib/rate-limit";
 
 const VALID_CATEGORIES = ["video", "grupni", "individualni", "usluge", "placanje", "ostalo"];
@@ -54,12 +55,27 @@ export async function POST(request: Request) {
 
     const resend = new Resend(apiKey);
 
+    // Sumnjiv domen (npr. gmai.com)? Ne postavljamo replyTo, da nepažljiv
+    // „Reply" ne ode na domen koji samo liči na pravi.
+    const emailTypo = suggestEmailFix(email);
+
     await resend.emails.send({
       from: "Hartweger <info@hartweger.rs>",
       to: "info@hartweger.rs",
-      replyTo: email,
-      subject: `Kontakt forma: ${category} - ${name}`,
+      ...(emailTypo ? {} : { replyTo: email }),
+      subject: emailTypo
+        ? `Kontakt forma · PROVERI ADRESU: ${category} - ${name}`
+        : `Kontakt forma: ${category} - ${name}`,
       text: [
+        ...(emailTypo
+          ? [
+              `PAŽNJA: domen "${emailTypo.domain}" je sumnjiv.${
+                emailTypo.suggestion ? ` Verovatno je "${emailTypo.suggestion}".` : ""
+              }`,
+              `Reply na ovu poruku NE ide pošiljaocu - proveri adresu i upiši primaoca ručno.`,
+              ``,
+            ]
+          : []),
         `Ime: ${name}`,
         `Email: ${email}`,
         `Kategorija: ${category}`,
