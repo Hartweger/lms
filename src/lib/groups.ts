@@ -121,6 +121,16 @@ export function computeEndDate(startDate: string | null, days: number[] | null, 
   return dates.length ? dates[dates.length - 1] : null;
 }
 
+/**
+ * Datum PRVOG ČASA (yyyy-mm-dd) - ono što polaznik vidi kao „Sledeći termin".
+ * start_date je početak nedelje u kojoj grupa kreće i ne mora da padne na dan nastave:
+ * A1.1 (avgust 2026) ima start_date pon 10.08, a nastavu uto+čet - prvi čas je 11.08.
+ * Fallback na start_date kad nemamo dane/trajanje (grupe iz Sheet migracije).
+ */
+export function computeFirstSessionDate(startDate: string | null, days: number[] | null, weeks: number | null, sessionsCount?: number | null): string | null {
+  return computeSessionDates(startDate, days, weeks, sessionsCount)[0] ?? startDate;
+}
+
 export function mapGroupToRaspored(
   g: GroupRowForDisplay,
   profName: string,
@@ -132,7 +142,7 @@ export function mapGroupToRaspored(
     nivo: g.level,
     prof: profName,
     status: STATUS_LABEL[g.status] ?? g.status,
-    pocetak: formatPocetak(g.start_date),
+    pocetak: formatPocetak(computeFirstSessionDate(g.start_date, g.days, g.duration_weeks)),
     trajanje: g.duration_weeks != null ? String(g.duration_weeks) : "",
     dani: formatDays(g.days),
     daniPuni: formatDaysFull(g.days),

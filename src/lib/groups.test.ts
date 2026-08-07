@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { computeSeats, computeEndDate, computeSessionDates, formatDays, formatDaysFull, formatPocetak, mapGroupToRaspored, nextExpiry, pickOpenGroupForNivo, resolveGroupCourse } from "./groups";
+import { computeSeats, computeEndDate, computeFirstSessionDate, computeSessionDates, formatDays, formatDaysFull, formatPocetak, mapGroupToRaspored, nextExpiry, pickOpenGroupForNivo, resolveGroupCourse } from "./groups";
 
 describe("formatDays", () => {
   it("mapira brojeve dana u srpske skraćenice", () => {
@@ -35,6 +35,26 @@ describe("mapGroupToRaspored", () => {
       pocetak: "15.06.2026", trajanje: "8", dani: "pon, sre", sat: "18:00",
       maks: "6", upisanih: "2", slobodnih: "4", full: false,
     });
+  });
+
+  it("pocetak je prvi ČAS, ne start_date (A1.1 avg 2026: pon 10.08 → uto 11.08)", () => {
+    const r = mapGroupToRaspored(
+      { level: "A1.1", status: "otvoren", start_date: "2026-08-10", duration_weeks: 7, days: [2, 4], session_time: "20:00-21:00", max_seats: 6, manual_enrolled: null },
+      "Milica Vučić", 1,
+    );
+    expect(r.pocetak).toBe("11.08.2026");
+  });
+});
+
+describe("computeFirstSessionDate (start_date nije uvek prvi čas)", () => {
+  it("A1.1 avg 2026: start_date pon 10.08, nastava uto+čet → prvi čas 11.08", () =>
+    expect(computeFirstSessionDate("2026-08-10", [2, 4], 7)).toBe("2026-08-11"));
+  it("start_date pada na dan nastave → ostaje isti", () =>
+    expect(computeFirstSessionDate("2026-08-10", [1, 3], 7)).toBe("2026-08-10"));
+  it("bez dana/trajanja → fallback na start_date", () => {
+    expect(computeFirstSessionDate("2026-08-10", null, 7)).toBe("2026-08-10");
+    expect(computeFirstSessionDate("2026-08-10", [2, 4], null)).toBe("2026-08-10");
+    expect(computeFirstSessionDate(null, [2, 4], 7)).toBeNull();
   });
 });
 
