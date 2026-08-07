@@ -63,6 +63,8 @@ async function cronHandler(request: Request) {
   if (testEmail) {
     const sample = (courses ?? []).find((c) => c.slug === "nemacki-a1-1") ?? (courses ?? [])[0];
     const testRenew = sample ? (await renewalProductSlugs(admin, [sample.id])).get(sample.id) ?? null : null;
+    const { data: testKupon } = await admin
+      .from("coupons").select("renewal_days_after").eq("code", "OBNOVI50").maybeSingle();
     await sendExpiryReminder({
       email: testEmail,
       name: "Test",
@@ -71,6 +73,7 @@ async function cronHandler(request: Request) {
       renewSlug: testRenew,
       expiresAt: windowIso,
       withCoupon: searchParams.get("nocoupon") !== "1",
+      couponDaysAfter: testKupon?.renewal_days_after ?? null,
     });
     return NextResponse.json({ test: testEmail, withCoupon: searchParams.get("nocoupon") !== "1", sent: 1 });
   }
@@ -143,6 +146,12 @@ async function cronHandler(request: Request) {
   const batch = eligible.slice(0, MAX_PER_RUN);
   if (batch.length === 0) return NextResponse.json({ candidates: 0, sent: 0, skippedNoProduct: bezObnove.length });
 
+  // Rok kupona se čita iz baze, ne prepisuje u mejl - da tekst ne odluta od pravila
+  // koje checkout stvarno primenjuje (lib/renewal-window.ts).
+  const { data: obnoviKupon } = await admin
+    .from("coupons").select("renewal_days_after").eq("code", "OBNOVI50").maybeSingle();
+  const couponDaysAfter = obnoviKupon?.renewal_days_after ?? null;
+
   const ids = [...new Set(batch.map((a) => a.user_id))];
   const profiles = must(await admin.from("user_profiles").select("id, email, full_name").in("id", ids), "user_profiles");
   const profMap = new Map((profiles ?? []).map((p) => [p.id, p]));
@@ -160,6 +169,7 @@ async function cronHandler(request: Request) {
       renewSlug: renewSlugs.get(a.course_id) ?? null,
       expiresAt: a.expires_at,
       withCoupon: !noCouponUsers.has(a.user_id),
+      couponDaysAfter,
     });
     // Pad upisa mora da obori cron: bez dedup zapisa bi isti čovek sutra dobio dupli podsetnik.
     must(

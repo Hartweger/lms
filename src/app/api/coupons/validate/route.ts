@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { emailOwnsCourse, emailOwnsAnyVideoCourse, emailUsedCoupon, couponAppliesMessage, couponRequiresMessage } from "@/lib/coupon-ownership";
-import { emailCanRenewWithCoupon } from "@/lib/renewal-eligibility";
+import { emailCanRenewWithCoupon, renewalAccessExpiry } from "@/lib/renewal-eligibility";
+import { renewalWindowStatus, renewalWindowMessage } from "@/lib/renewal-window";
 import { isTermPackage } from "@/lib/coupon-discount";
 
 export async function GET(request: NextRequest) {
@@ -93,6 +94,17 @@ export async function GET(request: NextRequest) {
     if (!(await emailCanRenewWithCoupon(supabase, email, course!.id))) {
       return NextResponse.json(
         { error: "Za grupne i individualne kurseve obnova ide preko profesorke - javi nam se na info@hartweger.rs." },
+        { status: 400 }
+      );
+    }
+    // Popust važi oko trenutka obnove, ne zauvek - vidi lib/renewal-window.ts.
+    const { expiresAt } = await renewalAccessExpiry(supabase, email, course!.id);
+    const prozor = renewalWindowStatus(
+      expiresAt, new Date(), coupon.renewal_days_before ?? null, coupon.renewal_days_after ?? null
+    );
+    if (!prozor.ok) {
+      return NextResponse.json(
+        { error: renewalWindowMessage(prozor, coupon.renewal_days_before ?? null, coupon.renewal_days_after ?? null) },
         { status: 400 }
       );
     }

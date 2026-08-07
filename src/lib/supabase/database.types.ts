@@ -361,6 +361,8 @@ export type Database = {
           min_order: number | null
           new_customers_only: boolean
           once_per_email: boolean
+          renewal_days_after: number | null
+          renewal_days_before: number | null
           renewal_only: boolean
           requires_course_id: string | null
           term_packages_only: boolean
@@ -380,6 +382,8 @@ export type Database = {
           min_order?: number | null
           new_customers_only?: boolean
           once_per_email?: boolean
+          renewal_days_after?: number | null
+          renewal_days_before?: number | null
           renewal_only?: boolean
           requires_course_id?: string | null
           term_packages_only?: boolean
@@ -399,6 +403,8 @@ export type Database = {
           min_order?: number | null
           new_customers_only?: boolean
           once_per_email?: boolean
+          renewal_days_after?: number | null
+          renewal_days_before?: number | null
           renewal_only?: boolean
           requires_course_id?: string | null
           term_packages_only?: boolean

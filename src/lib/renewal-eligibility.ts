@@ -82,6 +82,41 @@ export async function enrollmentDerivedCourseIds(
 }
 
 /**
+ * Do kada mejlu važi pristup sadržaju PROIZVODA `productCourseId` - ulaz za vremenski
+ * prozor kupona obnove (`lib/renewal-window.ts`).
+ *
+ * `expiresAt: null` uz `owns: true` znači TRAJAN pristup (nijedan red nema istek), ne
+ * „ne zna se": takav polaznik nema šta da obnavlja. Kad proizvod pokriva više sadržajnih
+ * kurseva (paket A1+A2+B1), meritoran je NAJDALJI istek - obnova ionako produžava sve.
+ */
+export async function renewalAccessExpiry(
+  admin: SupabaseClient,
+  email: string,
+  productCourseId: string
+): Promise<{ owns: boolean; expiresAt: string | null }> {
+  const e = (email ?? "").trim().toLowerCase();
+  if (!e || !productCourseId) return { owns: false, expiresAt: null };
+
+  const { data: prof } = await admin.from("user_profiles").select("id").eq("email", e).maybeSingle();
+  if (!prof) return { owns: false, expiresAt: null };
+
+  const { data: unlocks } = await admin
+    .from("course_unlocks").select("content_course_id").eq("purchasable_course_id", productCourseId);
+  const ids = [...new Set([productCourseId, ...(unlocks ?? []).map((u) => u.content_course_id as string)])];
+
+  const { data: access } = await admin
+    .from("course_access").select("expires_at").eq("user_id", prof.id).in("course_id", ids);
+  const rows = (access ?? []) as { expires_at: string | null }[];
+  if (rows.length === 0) return { owns: false, expiresAt: null };
+  if (rows.some((r) => r.expires_at == null)) return { owns: true, expiresAt: null };
+
+  const najdalji = rows
+    .map((r) => r.expires_at as string)
+    .reduce((a, b) => (new Date(a) > new Date(b) ? a : b));
+  return { owns: true, expiresAt: najdalji };
+}
+
+/**
  * Sme li mejl da obnovi PROIZVOD `productCourseId` kuponom (renewal_only, npr. OBNOVI50).
  *
  * Traži bar jedan sadržajni kurs tog proizvoda do kog polaznik NIJE došao kupovinom

@@ -1394,6 +1394,11 @@ export async function sendExpiryReminder(o: {
    * nije u prodaji, pa link na njega daje 404. Bez proizvoda nema kupon-verzije mejla.
    */
   renewSlug?: string | null;
+  /**
+   * Koliko dana posle isteka kupon još važi (`coupons.renewal_days_after`). Rok se
+   * mora videti u mejlu - kod sa ćutljivim rokom je isto što i kod koji ne radi.
+   */
+  couponDaysAfter?: number | null;
 }) {
   try {
     const resend = getResend();
@@ -1403,6 +1408,10 @@ export async function sendExpiryReminder(o: {
     const renewUrl = `${SITE_URL}/kupovina/${renewSlug}`;
     const datum = new Date(o.expiresAt).toLocaleDateString("sr-Latn-RS", { day: "numeric", month: "long", year: "numeric" });
     const daysLeft = Math.max(1, Math.round((new Date(o.expiresAt).getTime() - Date.now()) / 86400000));
+    const kodDo = o.couponDaysAfter == null
+      ? null
+      : new Date(new Date(o.expiresAt).getTime() + o.couponDaysAfter * 86400000)
+          .toLocaleDateString("sr-Latn-RS", { day: "numeric", month: "long", year: "numeric" });
 
     const couponBlock = `
       <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 16px;">
@@ -1415,7 +1424,7 @@ export async function sendExpiryReminder(o: {
         <a href="${renewUrl}" style="display:inline-block;background:#4fb1d3;color:white;padding:14px 32px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;">Obnovi pristup</a>
       </div>
       <p style="font-size:13px;line-height:1.6;color:#888;margin:0 0 8px;">
-        Kod uneseš u polju za kupon prilikom kupovine. Ako ti treba pomoć, samo odgovori na ovaj mejl.
+        Kod uneseš u polju za kupon prilikom kupovine.${kodDo ? ` Važi do <strong>${kodDo}</strong> - i posle isteka pristupa imaš vremena da se predomisliš.` : ""} Ako ti treba pomoć, samo odgovori na ovaj mejl.
       </p>`;
 
     const noCouponBlock = `

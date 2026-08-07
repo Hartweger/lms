@@ -5,7 +5,8 @@ import { generateOrderNumber, calculatePaypalEur } from "@/lib/order-utils";
 import { sendPaymentInstructionsEmail, sendNewOrderAdminEmail } from "@/lib/email";
 import { nivoForSlug } from "@/lib/course-nivo";
 import { emailOwnsCourse, emailOwnsAnyVideoCourse, emailUsedCoupon, couponAppliesMessage, couponRequiresMessage } from "@/lib/coupon-ownership";
-import { emailCanRenewWithCoupon } from "@/lib/renewal-eligibility";
+import { emailCanRenewWithCoupon, renewalAccessExpiry } from "@/lib/renewal-eligibility";
+import { renewalWindowStatus, renewalWindowMessage } from "@/lib/renewal-window";
 import { computeCouponDiscount, isTermPackage } from "@/lib/coupon-discount";
 import { computeSeats, pickOpenGroupForNivo } from "@/lib/groups";
 import { gaIdsFromCookieHeader } from "@/lib/ga-cookies";
@@ -204,6 +205,19 @@ export async function POST(request: Request) {
             { error: "Za grupne i individualne kurseve obnova ide preko profesorke - javi nam se na info@hartweger.rs." },
             { status: 400 }
           );
+        }
+        // Prozor obnove: popust važi oko isteka pristupa, ne trajno (lib/renewal-window.ts).
+        if (coupon.renewal_only) {
+          const { expiresAt } = await renewalAccessExpiry(supabase, email, course.id);
+          const prozor = renewalWindowStatus(
+            expiresAt, new Date(), coupon.renewal_days_before ?? null, coupon.renewal_days_after ?? null
+          );
+          if (!prozor.ok) {
+            return NextResponse.json(
+              { error: renewalWindowMessage(prozor, coupon.renewal_days_before ?? null, coupon.renewal_days_after ?? null) },
+              { status: 400 }
+            );
+          }
         }
         // new_customers_only: samo za mejlove koji još nemaju nijedan video kurs
         if (coupon.new_customers_only && (await emailOwnsAnyVideoCourse(supabase, email))) {
