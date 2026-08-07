@@ -37,6 +37,19 @@ interface Course {
   category: string | null;
 }
 
+// Polja od kojih zavise termini časova, end_date i gcal serija. Kad se bilo koje promeni
+// na grupi koja VEĆ ima termin, sam PATCH ne dira ni sesije ni kalendar - to radi samo
+// „Napravi / osveži termin". Bez toga grupa tiho ostane na starom rasporedu (B2.1/B2.2,
+// avgust 2026: sesije i gcal ostali 2 odnosno 4 nedelje ranije, honorar brojao fantome).
+const RASPORED_POLJA = ["start_date", "days", "session_time", "duration_weeks", "sessions_count"] as const;
+
+export function rasporedPomeren(pre: Partial<Group> | null, sad: Partial<Group> | null): boolean {
+  if (!pre || !sad) return false;
+  return RASPORED_POLJA.some((f) => JSON.stringify(pre[f] ?? null) !== JSON.stringify(sad[f] ?? null));
+}
+
+export const imaTermin = (g: Partial<Group> | null) => !!(g?.gcal_event_id || g?.meet_link);
+
 const STATUSI = ["planiran", "uskoro", "otvoren", "u_toku", "zavrsena", "otkazana"];
 const AKTIVNI_STATUSI = ["planiran", "uskoro", "otvoren", "u_toku"];
 const STATUS_BOJA: Record<string, string> = {
@@ -77,6 +90,8 @@ export default function GrupeAdmin({ initial }: { initial: Group[] }) {
   const [profs, setProfs] = useState<Prof[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
   const [form, setForm] = useState<Partial<Group> | null>(null);
+  // Stanje grupe pre izmene - da znamo je li raspored pomeren (vidi rasporedPomeren).
+  const [polazno, setPolazno] = useState<Partial<Group> | null>(null);
   const [saving, setSaving] = useState(false);
   const [savedAt, setSavedAt] = useState(0);
   const [enrollEmail, setEnrollEmail] = useState("");
@@ -105,17 +120,20 @@ export default function GrupeAdmin({ initial }: { initial: Group[] }) {
 
   function startNew() {
     setForm({ ...emptyForm });
+    setPolazno(null);
     setMembers([]);
     setSavedAt(0);
   }
   function startEdit(g: Group) {
     setForm({ ...g });
+    setPolazno({ ...g });
     setMembers([]);
     setSavedAt(0);
     if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
   }
   function cancelEdit() {
     setForm(null);
+    setPolazno(null);
     setMembers([]);
     setEnrollEmail("");
     setSavedAt(0);
@@ -153,8 +171,21 @@ export default function GrupeAdmin({ initial }: { initial: Group[] }) {
     }
     // Ostani u formi posle čuvanja (da možeš da nastaviš - npr. „Napravi/osveži termin").
     if (!form.id && j.id) setForm({ ...form, id: j.id }); // nova grupa → pređi u režim izmene
-    setSavedAt(Date.now());
+    setSavedAt((n) => n + 1); // koristi se samo kao „ima li sačuvanog" (savedAt > 0), ne kao vreme
     fetchGroups();
+
+    // Raspored pomeren na grupi koja već ima termin: PATCH je promenio samo `groups`.
+    // Sesije (honorar!), end_date i Google serija ostaju na starom dok se ne osveži termin.
+    if (form.id && imaTermin(polazno) && rasporedPomeren(polazno, form)) {
+      const ok = confirm(
+        "⚠ Termin je pomeren, a grupa već ima Google termin.\n\n" +
+        "Sačuvan je samo novi raspored. Termini časova, datum kraja i Google serija su i dalje na STAROM rasporedu - " +
+        "to znači pogrešan honorar i pogrešan Meet termin u kalendaru profesorke.\n\n" +
+        "Osvežiti termin sada? (isti Meet link, prijave ostaju)",
+      );
+      if (ok) await pokreniOsveziTermin(form.id);
+      else setPolazno({ ...form }); // ne dosađuj ponovo za istu izmenu
+    }
   }
 
   async function cancelGroup(id: string) {
@@ -164,17 +195,22 @@ export default function GrupeAdmin({ initial }: { initial: Group[] }) {
   }
 
   // Napravi termin (ako ga nema) ili pomeri postojeći na nove datume - ISTI Meet, BEZ reseta prijava.
-  async function osveziTermin() {
-    if (!form?.id) return;
-    if (!confirm("Napravi/osveži termin?\n\nNapravi Google event+Meet (ako ne postoji) ili pomeri postojeći na nove datume - ISTI Meet link. Prijave OSTAJU. Sačuvaj izmene pre ovoga ako si menjala datum.")) return;
+  // Sam poziv, bez potvrde - dele ga dugme i upozorenje posle čuvanja pomerenog termina.
+  async function pokreniOsveziTermin(id: string) {
     setSaving(true);
-    const r = await fetch(`/api/admin/grupe/${form.id}/osvezi-termin`, { method: "POST" });
-    const j = await r.json();
+    const r = await fetch(`/api/admin/grupe/${id}/osvezi-termin`, { method: "POST" });
+    const j = await r.json().catch(() => ({}));
     setSaving(false);
-    if (!r.ok) { alert("Greška: " + j.error); return; }
+    if (!r.ok) { alert("Greška: " + (j.error || "nešto nije u redu")); return; }
     alert("Termin osvežen! ✅\n\nMeet: " + (j.meetLink || "-") + "\nBeleške: " + (j.notesUrl || "(zadržane postojeće)"));
     cancelEdit();
     fetchGroups();
+  }
+
+  async function osveziTermin() {
+    if (!form?.id) return;
+    if (!confirm("Napravi/osveži termin?\n\nNapravi Google event+Meet (ako ne postoji) ili pomeri postojeći na nove datume - ISTI Meet link. Prijave OSTAJU. Sačuvaj izmene pre ovoga ako si menjala datum.")) return;
+    await pokreniOsveziTermin(form.id);
   }
 
   // Napravi/osveži termin direktno iz reda (bez ulaska u Izmeni).
@@ -198,6 +234,7 @@ export default function GrupeAdmin({ initial }: { initial: Group[] }) {
       sessions_count: g.sessions_count,
       min_seats: g.min_seats, max_seats: g.max_seats, start_date: null,
     });
+    setPolazno(null); // duplikat je NOVA grupa - nema svoj termin, nema šta da se pomera
     setMembers([]); setSavedAt(0);
     if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -460,6 +497,17 @@ export default function GrupeAdmin({ initial }: { initial: Group[] }) {
               ))}
             </div>
           </div>
+
+          {imaTermin(polazno) && rasporedPomeren(polazno, form) && (
+            <div className="mb-3 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+              <strong>⚠ Menjaš raspored grupi koja već ima termin.</strong>
+              <p className="mt-1 text-amber-800">
+                {'„Sačuvaj izmene” upisuje samo novi raspored. Termini časova (honorar), datum kraja i Google serija ostaju na starom dok ne klikneš '}
+                <strong>{'„Napravi / osveži termin”'}</strong>
+                {' - isti Meet link, prijave ostaju.'}
+              </p>
+            </div>
+          )}
 
           <div className="flex gap-2">
             <button
