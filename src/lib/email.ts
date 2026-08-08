@@ -68,6 +68,26 @@ async function sendEmail(
   });
 }
 
+/** NH Academy Gen II - isti Meet link za svih 12 susreta. */
+const ACADEMY_MEET_URL = "https://meet.google.com/kks-ebzg-gob";
+const ACADEMY_MEET_PHONE = "+381 11 4250145";
+const ACADEMY_MEET_PIN = "575 421 818 2660";
+
+/**
+ * „Dodaj u kalendar" za svih 12 termina odjednom (RRULE, 12 sreda od 30.9.).
+ * Vreme se NAMERNO šalje kao lokalno uz ctz=Europe/Belgrade, a ne u UTC: letnje
+ * računanje vremena prestaje 25.10.2026, pa bi UTC serija od 28.10. pomerila
+ * susrete na 20:30.
+ */
+const ACADEMY_CALENDAR_URL =
+  "https://calendar.google.com/calendar/render?action=TEMPLATE" +
+  "&text=" + encodeURIComponent("NH Academy - Generacija II") +
+  "&dates=20260930T193000/20260930T210000" +
+  "&ctz=Europe/Belgrade" +
+  "&recur=RRULE:FREQ=WEEKLY;COUNT=12" +
+  "&location=" + encodeURIComponent(ACADEMY_MEET_URL) +
+  "&details=" + encodeURIComponent(`Susreti su sredom u 19:30.\nLink: ${ACADEMY_MEET_URL}`);
+
 /**
  * NH Academy nije kurs na platformi nego program uživo. Generički welcome mejl bi
  * polaznicu poslao na kontrolnu tablu gde je ne čeka nikakav sadržaj, uz brendiranje
@@ -105,14 +125,27 @@ export async function sendAcademyWelcomeEmail(to: string, name: string) {
         <div style="font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">Kad počinjemo</div>
         <div style="font-size: 15px; color: #1a1a1a; line-height: 1.7;">
           <strong>Sreda, 30. septembar u 19:30</strong><br>
-          12 susreta, sredom, preko Google Meet-a<br>
-          Poslednji susret: 16. decembar
+          12 susreta, sredom, do 16. decembra<br>
+          Preko Google Meet-a, link je isti svaki put:<br>
+          <a href="${ACADEMY_MEET_URL}" style="color: #c94f6d; font-weight: 600;">${ACADEMY_MEET_URL.replace("https://", "")}</a>
         </div>
       </div>
 
+      <div style="text-align: center; margin: 0 0 22px;">
+        <a href="${ACADEMY_CALENDAR_URL}"
+           style="display: inline-block; background: #c94f6d; color: #ffffff; text-decoration: none;
+                  font-size: 15px; font-weight: 600; padding: 13px 26px; border-radius: 8px;">
+          Dodaj svih 12 termina u kalendar
+        </a>
+      </div>
+
       <p style="font-size: 15px; line-height: 1.7; color: #444; margin: 0 0 18px;">
-        <strong>Ne moraš ništa da radiš sada.</strong> Nekoliko dana pred početak stiže ti mejl sa
-        linkom za susrete, pristupom zajednici i kratkom pripremom za prvo veče.
+        <strong>Sačuvaj ovaj mejl</strong> — u njemu ti je link za sve susrete. Pred prvo veče stiže
+        poruka sa pripremom i pristupom zajednici. Do tada ne moraš ništa.
+      </p>
+
+      <p style="font-size: 13px; line-height: 1.6; color: #888; margin: 0 0 22px;">
+        Ako ti nekad zataji internet, možeš i telefonom: ${ACADEMY_MEET_PHONE}, PIN ${ACADEMY_MEET_PIN}#
       </p>
 
       <p style="font-size: 15px; line-height: 1.7; color: #444; margin: 0 0 22px;">
