@@ -1,7 +1,7 @@
 // src/lib/grant-access.ts
 import * as Sentry from "@sentry/nextjs";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { sendWelcomeEmail, sendGrupniWelcomeEmail, sendProfNewStudentEmail, sendIndividualWelcomeEmail, sendProfNewIndividualStudentEmail, sendSubscriptionChargeEmail } from "@/lib/email";
+import { sendWelcomeEmail, sendGrupniWelcomeEmail, sendProfNewStudentEmail, sendIndividualWelcomeEmail, sendProfNewIndividualStudentEmail, sendSubscriptionChargeEmail, sendAcademyWelcomeEmail } from "@/lib/email";
 import { nivoForSlug } from "@/lib/course-nivo";
 import { computeSeats, pickOpenGroupForNivo } from "@/lib/groups";
 import { callGas } from "@/lib/gas";
@@ -14,6 +14,9 @@ import { accessUntilForCharge, planForSlug, unlockedSlugsAfter } from "@/lib/sub
 import { recurringTxData } from "@/lib/payment-confirmation";
 
 interface OrderItem { course_id: string; course_slug: string; title: string; price: number; }
+
+/** NH Academy Gen II (migracija 081) - program uživo, ima svoj mejl potvrde. */
+const ACADEMY_SLUG = "nh-academy-gen2";
 
 /** Paralelni poziv već radi grant za ovaj order — ništa nije poslato ni upisano. */
 export const GRANT_IN_PROGRESS = "grant-in-progress";
@@ -340,6 +343,14 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
       tx: recurringTxData(order.nestpay_response as Record<string, unknown> | null, order.created_at),
       tip: chargePlan?.tip,
     });
+    return { ok: true };
+  }
+
+  // NH Academy je program uživo, ne kurs na platformi: generički mejl bi polaznicu
+  // poslao na kontrolnu tablu gde je ne čeka nikakav sadržaj. Zato svoj mejl sa
+  // datumom početka i sledećim korakom.
+  if (!grupniWelcomeSent && !individualWelcomeSent && items.some((i) => i.course_slug === ACADEMY_SLUG)) {
+    await sendAcademyWelcomeEmail(order.email, order.full_name);
     return { ok: true };
   }
 

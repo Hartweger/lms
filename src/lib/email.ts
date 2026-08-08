@@ -68,6 +68,69 @@ async function sendEmail(
   });
 }
 
+/**
+ * NH Academy nije kurs na platformi nego program uživo. Generički welcome mejl bi
+ * polaznicu poslao na kontrolnu tablu gde je ne čeka nikakav sadržaj, uz brendiranje
+ * škole nemačkog - posle uplate od 57.300 RSD to izgleda kao da nešto nije prošlo.
+ * Zato svoj mejl: NH brend, datum početka i jasno šta sledi.
+ */
+export async function sendAcademyWelcomeEmail(to: string, name: string) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    await sendEmail(resend, {
+      to,
+      from: "Nataša Hartweger <info@hartweger.rs>",
+      subject: "Tvoje mesto u NH Academy je rezervisano",
+      html: `
+<!DOCTYPE html>
+<html lang="sr">
+<head><meta charset="utf-8"></head>
+<body style="font-family: 'Helvetica Neue', Arial, sans-serif; color: #1a1a1a; background: #fdf5f7; margin: 0; padding: 0;">
+  <div style="max-width: 520px; margin: 0 auto; padding: 40px 20px;">
+    <div style="background: #ffffff; border-radius: 12px; padding: 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.08);">
+
+      <div style="text-align: center; margin-bottom: 26px;">
+        <div style="font-family: Georgia, serif; font-size: 24px; font-weight: 700; color: #c94f6d;">NH Academy</div>
+        <div style="font-size: 13px; color: #999; margin-top: 4px;">Generacija II</div>
+      </div>
+
+      <h1 style="font-size: 20px; color: #1a1a1a; margin: 0 0 16px;">Zdravo, ${esc(name) || "draga"}!</h1>
+
+      <p style="font-size: 15px; line-height: 1.7; color: #444; margin: 0 0 18px;">
+        Tvoje mesto u drugoj generaciji je rezervisano. Drago mi je što si tu.
+      </p>
+
+      <div style="background: #fdf5f7; border-left: 3px solid #c94f6d; border-radius: 6px; padding: 16px 18px; margin: 0 0 20px;">
+        <div style="font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">Kad počinjemo</div>
+        <div style="font-size: 15px; color: #1a1a1a; line-height: 1.7;">
+          <strong>Sreda, 30. septembar u 19:30</strong><br>
+          12 susreta, sredom, preko Google Meet-a<br>
+          Poslednji susret: 16. decembar
+        </div>
+      </div>
+
+      <p style="font-size: 15px; line-height: 1.7; color: #444; margin: 0 0 18px;">
+        <strong>Ne moraš ništa da radiš sada.</strong> Nekoliko dana pred početak stiže ti mejl sa
+        linkom za susrete, pristupom zajednici i kratkom pripremom za prvo veče.
+      </p>
+
+      <p style="font-size: 15px; line-height: 1.7; color: #444; margin: 0 0 22px;">
+        Ako imaš bilo kakvo pitanje, samo odgovori na ovaj mejl. Čitam ga ja.
+      </p>
+
+      <p style="font-family: Georgia, serif; font-size: 15px; color: #c94f6d; margin: 0;">— Nataša</p>
+    </div>
+  </div>
+</body>
+</html>`,
+    });
+  } catch (e) {
+    console.error("[email] Academy welcome pao:", e);
+    Sentry.captureException(e);
+  }
+}
+
 export async function sendWelcomeEmail(
   to: string,
   name: string,

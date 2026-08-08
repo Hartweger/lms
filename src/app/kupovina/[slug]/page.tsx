@@ -110,6 +110,23 @@ export default async function KupovinaPage({
           {course.title}
         </p>
 
+        {/* Program uživo (NH Academy): pred unos kartice kupac treba da vidi šta tačno
+            kupuje - datume i sadržaj. Opis je oduvek bio u bazi, ali se nigde nije
+            prikazivao, pa je stranica za 57.300 RSD nudila samo naziv i cenu. */}
+        {course.category === "program" && course.description && (
+          <div className="mb-8 rounded-xl border border-gray-200 bg-white p-5 md:p-6">
+            <p className="text-xs uppercase tracking-wide text-gray-400 mb-2">Šta kupuješ</p>
+            <p className="text-[15px] leading-relaxed text-gray-700">{course.description}</p>
+            <p className="text-sm text-gray-500 mt-4">
+              Ne možeš odjednom?{" "}
+              <a href="mailto:info@hartweger.rs" className="text-plava underline">
+                Piši nam
+              </a>{" "}
+              i dogovaramo rate.
+            </p>
+          </div>
+        )}
+
         <CheckoutForm
           courseSlug={course.slug}
           courseTitle={course.title}
