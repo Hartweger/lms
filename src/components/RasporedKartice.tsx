@@ -6,9 +6,10 @@ import type { GrupaRaspored } from "@/lib/raspored";
 import {
   EUR_RATE,
   LEVEL_ORDER,
+  SPECIAL_LEVELS,
   formatPrice,
-  getNivoKey,
-  nivoColors,
+  getFilterKey,
+  getLevelColors,
 } from "@/lib/raspored-prikaz";
 
 export default function RasporedKartice({
@@ -18,9 +19,10 @@ export default function RasporedKartice({
 }) {
   const [level, setLevel] = useState<string>("sve");
 
-  // Samo CEFR nivoi - posebni kursevi (npr. "Konverzacija B1+") imaju svoju
-  // stranicu/checkout (isti filter kao RasporedGrupa).
-  const grupe = grupeProp.filter((g) => LEVEL_ORDER.includes(getNivoKey(g.nivo)));
+  // Prikazuju se SVE otvorene grupe - i CEFR nivoi i posebni kursevi
+  // (npr. „Konverzacija B1+"). RasporedGrupa (/grupni-kursevi) i dalje filtrira
+  // na CEFR jer tamo cene idu iz hardkodirane mape po nivou.
+  const grupe = grupeProp;
 
   if (grupe.length === 0) {
     return (
@@ -30,11 +32,14 @@ export default function RasporedKartice({
     );
   }
 
-  const available = LEVEL_ORDER.filter((l) =>
-    grupe.some((g) => getNivoKey(g.nivo) === l)
-  );
+  // Čipovi: prvo CEFR nivoi po redu, pa posebni kursevi redom kako stižu iz baze.
+  const kljucevi = grupe.map((g) => getFilterKey(g.nivo));
+  const available = [
+    ...LEVEL_ORDER.filter((l) => kljucevi.includes(l)),
+    ...kljucevi.filter((k, i) => !LEVEL_ORDER.includes(k) && kljucevi.indexOf(k) === i),
+  ];
   const filtered =
-    level === "sve" ? grupe : grupe.filter((g) => getNivoKey(g.nivo) === level);
+    level === "sve" ? grupe : grupe.filter((g) => getFilterKey(g.nivo) === level);
 
   const chip = (active: boolean) =>
     `px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
@@ -52,7 +57,7 @@ export default function RasporedKartice({
         </button>
         {available.map((l) => (
           <button key={l} onClick={() => setLevel(l)} className={chip(level === l)}>
-            {l}
+            {SPECIAL_LEVELS[l]?.label ?? l}
           </button>
         ))}
       </div>
@@ -73,8 +78,7 @@ export default function RasporedKartice({
 }
 
 function Kartica({ g }: { g: GrupaRaspored }) {
-  const nivoKey = getNivoKey(g.nivo);
-  const colors = nivoColors[nivoKey] ?? { bg: "#f3f4f6", text: "#374151" };
+  const colors = getLevelColors(g.nivo);
   const eurPrice = g.cenaEur ?? (g.cena != null ? Math.round(g.cena / EUR_RATE) : null);
   const maks = parseInt(g.maks, 10) || 0;
   const upisanih = parseInt(g.upisanih, 10) || 0;
