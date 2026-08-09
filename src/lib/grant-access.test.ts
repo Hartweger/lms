@@ -14,6 +14,8 @@ vi.mock("@/lib/email", () => ({
   sendProfNewStudentEmail: vi.fn(async () => {}),
   sendIndividualWelcomeEmail: vi.fn(async () => {}),
   sendProfNewIndividualStudentEmail: vi.fn(async () => {}),
+  sendAcademyWelcomeEmail: vi.fn(async () => {}),
+  sendSubscriptionChargeEmail: vi.fn(async () => {}),
 }));
 vi.mock("@/lib/gas", () => ({ callGas: vi.fn(async () => ({})) }));
 vi.mock("@/lib/ga4-mp", () => ({ sendGa4Purchase: vi.fn(async () => {}) }));
@@ -253,5 +255,60 @@ describe("grantAccessForOrder", () => {
 
     expect(res.ok).toBe(true);
     expect(h.fake.calls.some((c) => c.table === "coupons")).toBe(false);
+  });
+
+  // NH Academy Gen II poklanja članstvo, ali samo do kraja programa (16.12.2026).
+  // Podrazumevana godina dana bi polaznici koja kupi u septembru dala biblioteku
+  // do septembra 2027 - devet meseci preko dogovorenog.
+  describe("Academy Gen II → rok članstva", () => {
+    function academyOrder(over: Record<string, unknown> = {}) {
+      return videoOrder({
+        items: [{ course_id: "c-academy", course_slug: "nh-academy-gen2", title: "NH Academy - Generacija II", price: 57300 }],
+        ...over,
+      });
+    }
+    const academySetup = {
+      course_unlocks: [{ purchasable_course_id: "c-academy", content_course_id: "c-clanstvo" }],
+      courses: [{ id: "c-clanstvo", slug: "nh-clanstvo-sadrzaj" }],
+    };
+
+    it("biblioteka članstva ističe 16.12.2026, a ne godinu dana od kupovine", async () => {
+      h.fake = createFakeAdmin({ orders: [academyOrder()], ...academySetup });
+
+      const res = await grantAccessForOrder("o1");
+
+      expect(res.ok).toBe(true);
+      const access = h.fake.row("course_access", (r) => r.course_id === "c-clanstvo")!;
+      expect(new Date(access.expires_at as string).toISOString()).toBe("2026-12-16T22:59:59.000Z");
+    });
+
+    it("ne skraćuje rok polaznici koja već plaća članstvo duže od 16.12.", async () => {
+      h.fake = createFakeAdmin({
+        orders: [academyOrder()],
+        ...academySetup,
+        course_access: [{ id: "ca1", user_id: "u1", course_id: "c-clanstvo", expires_at: "2027-06-01T00:00:00.000Z" }],
+      });
+
+      const res = await grantAccessForOrder("o1");
+
+      expect(res.ok).toBe(true);
+      expect(h.fake.row("course_access", (r) => r.id === "ca1")!.expires_at).toBe("2027-06-01T00:00:00.000Z");
+    });
+
+    it("porudžbina bez Academy stavke i dalje dobija podrazumevanu godinu dana", async () => {
+      h.fake = createFakeAdmin({
+        orders: [videoOrder()],
+        course_unlocks: [{ purchasable_course_id: "c-prod", content_course_id: "c-clanstvo" }],
+        courses: [{ id: "c-clanstvo", slug: "nh-clanstvo-sadrzaj" }],
+      });
+
+      const res = await grantAccessForOrder("o1");
+
+      expect(res.ok).toBe(true);
+      const access = h.fake.row("course_access", (r) => r.course_id === "c-clanstvo")!;
+      const zaGodinu = new Date(); zaGodinu.setFullYear(zaGodinu.getFullYear() + 1);
+      // Tolerancija od minut: rok se računa od new Date() u trenutku granta.
+      expect(Math.abs(new Date(access.expires_at as string).getTime() - zaGodinu.getTime())).toBeLessThan(60_000);
+    });
   });
 });

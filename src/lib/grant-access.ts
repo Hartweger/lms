@@ -12,11 +12,19 @@ import { createLoginLinkToken } from "@/lib/login-link";
 import { firstLessonForCourses } from "@/lib/first-lesson";
 import { accessUntilForCharge, planForSlug, unlockedSlugsAfter } from "@/lib/subscription-plans";
 import { recurringTxData } from "@/lib/payment-confirmation";
+import { CLANSTVO_CONTENT_SLUG } from "@/lib/clanstvo";
 
 interface OrderItem { course_id: string; course_slug: string; title: string; price: number; }
 
 /** NH Academy Gen II (migracija 081) - program uživo, ima svoj mejl potvrde. */
 const ACADEMY_SLUG = "nh-academy-gen2";
+
+/**
+ * Do kada Academy Gen II poklanja članstvo: do kraja programa, ne godinu dana koliko
+ * traje podrazumevani pristup. Bez ovoga polaznica koja kupi 15.09. dobija biblioteku
+ * do 15.09.2027 - devet meseci preko dogovorenog. Posle roka ide redovnih 2.290 RSD/mes.
+ */
+const ACADEMY_CLANSTVO_DO = "2026-12-16T23:59:59+01:00";
 
 /** Paralelni poziv već radi grant za ovaj order — ništa nije poslato ni upisano. */
 export const GRANT_IN_PROGRESS = "grant-in-progress";
@@ -97,21 +105,38 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
     }
   }
 
+  // Academy Gen II poklanja članstvo samo do kraja programa, a ne godinu dana koliko
+  // traje podrazumevani pristup. Rok važi SAMO za biblioteku članstva - ostale kurseve
+  // iz iste porudžbine ne dira.
+  const rokPoKursu = new Map<string, Date>();
+  if (items.some((i) => i.course_slug === ACADEMY_SLUG)) {
+    const krajPrograma = new Date(ACADEMY_CLANSTVO_DO);
+    // Kupovina posle roka (zakasnela uplatnica, slug ponovo upotrebljen za sledeću
+    // generaciju): ne upisuj već istekao pristup, pusti podrazumevani rok.
+    if (krajPrograma > new Date()) {
+      const { data: biblioteka } = await admin
+        .from("courses").select("id").eq("slug", CLANSTVO_CONTENT_SLUG).maybeSingle();
+      if (biblioteka && contentCourseIds.has(biblioteka.id)) rokPoKursu.set(biblioteka.id, krajPrograma);
+    }
+  }
+
   const grantFailures: string[] = [];
   for (const courseId of contentCourseIds) {
+    const rok = rokPoKursu.get(courseId) ?? expiresAt;
     const { data: existing } = await admin
       .from("course_access").select("id, expires_at")
       .eq("user_id", order.user_id).eq("course_id", courseId).single();
     if (!existing) {
       const { error: insertError } = await admin.from("course_access").insert({
-        user_id: order.user_id, course_id: courseId, expires_at: expiresAt.toISOString(),
+        user_id: order.user_id, course_id: courseId, expires_at: rok.toISOString(),
         source: `order:${order.order_number ?? orderId}`,
       });
       if (insertError) grantFailures.push(`${courseId}: ${insertError.message}`);
-    } else if (existing.expires_at && new Date(existing.expires_at) < expiresAt) {
+    } else if (existing.expires_at && new Date(existing.expires_at) < rok) {
       // Obnova: postojeći red (npr. wp-migracija) se produžava, nikad ne skraćuje.
+      // Zato polaznica koja već plaća članstvo ne gubi rok zbog Academy poklona.
       const { error: updateError } = await admin.from("course_access")
-        .update({ expires_at: expiresAt.toISOString(), source: `order:${order.order_number ?? orderId}` })
+        .update({ expires_at: rok.toISOString(), source: `order:${order.order_number ?? orderId}` })
         .eq("id", existing.id);
       if (updateError) grantFailures.push(`${courseId}: ${updateError.message}`);
     }
