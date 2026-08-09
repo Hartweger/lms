@@ -202,3 +202,25 @@ export function mapGroupToRaspored(
     cenaEur: course?.paypal_price_eur ?? null,
   };
 }
+
+/**
+ * Naknadni upis: grupa koja je već počela, a namerno je vraćena na "otvoren"
+ * da bi primala nove polaznike u toku.
+ *
+ * Bez ovoga bi je noćni cron close-groups sledeće jutro vratio na "u_toku"
+ * (jer joj je start_date u prošlosti), pa bi nestala sa /raspored i stranice
+ * kursa - usred kampanje koja na nju šalje ljude.
+ *
+ * Vraća true kad zastavicu treba upaliti, false kad je treba ugasiti,
+ * null kad status ne dira upis (npr. menja se samo termin).
+ */
+export function naknadniUpisZaStatus(
+  status: string | undefined,
+  startDate: string | null | undefined,
+  today: string,
+): boolean | null {
+  if (!status) return null;
+  if (status === "otvoren") return Boolean(startDate) && startDate! < today;
+  // svaki drugi status (u_toku, zavrsena, otkazana, planiran, uskoro) gasi zastavicu
+  return false;
+}

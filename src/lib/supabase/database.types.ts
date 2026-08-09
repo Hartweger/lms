@@ -1190,6 +1190,7 @@ export type Database = {
           id: string
           level: string
           manual_enrolled: number | null
+          naknadni_upis: boolean
           max_seats: number
           meet_link: string | null
           min_seats: number
@@ -1223,6 +1224,7 @@ export type Database = {
           id?: string
           level: string
           manual_enrolled?: number | null
+          naknadni_upis?: boolean
           max_seats?: number
           meet_link?: string | null
           min_seats?: number
@@ -1256,6 +1258,7 @@ export type Database = {
           id?: string
           level?: string
           manual_enrolled?: number | null
+          naknadni_upis?: boolean
           max_seats?: number
           meet_link?: string | null
           min_seats?: number

@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { requireAdmin } from "@/lib/api-auth";
+import { naknadniUpisZaStatus } from "@/lib/groups";
 
-const FIELDS = ["content_course_id","purchasable_course_id","level","type","professor_id","status","start_date","end_date","duration_weeks","sessions_count","days","session_time","min_seats","max_seats","price","notes","manual_enrolled"];
+const FIELDS = ["content_course_id","purchasable_course_id","level","type","professor_id","status","start_date","end_date","duration_weeks","sessions_count","days","session_time","min_seats","max_seats","price","notes","manual_enrolled","naknadni_upis"];
 
 // Otkazana grupa ne sme da ostavi "žive" sesije - ulaze u obračun honorara
 // (honorar-report broji sve necancelovane group_sessions, bez obzira na status grupe).
@@ -51,6 +52,18 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   if (body.status === "otkazana") {
     const { data: g } = await admin.from("groups").select("status").eq("id", id).maybeSingle();
     prethodniStatus = g?.status ?? null;
+  }
+  // Grupa koja je već počela, a vraćena je na "otvoren", prima polaznike u toku -
+  // označi je da je noćni cron ne vrati na "u_toku" (vidi close-groups).
+  if (body.status !== undefined && body.naknadni_upis === undefined) {
+    let startDate: string | null | undefined = body.start_date;
+    if (startDate === undefined) {
+      const { data: g } = await admin.from("groups").select("start_date").eq("id", id).maybeSingle();
+      startDate = g?.start_date ?? null;
+    }
+    const danas = new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Belgrade" }).format(new Date());
+    const zastavica = naknadniUpisZaStatus(body.status, startDate, danas);
+    if (zastavica !== null) patch.naknadni_upis = zastavica;
   }
   const { error } = await admin.from("groups").update(patch).eq("id", id);
   if (error) return NextResponse.json({ error: error.message }, { status: 400 });

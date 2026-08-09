@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { computeGrupaProgres, computeSeats, computeEndDate, computeFirstSessionDate, computeSessionDates, formatDays, formatDaysFull, formatPocetak, mapGroupToRaspored, nextExpiry, pickOpenGroupForNivo, resolveGroupCourse } from "./groups";
+import { naknadniUpisZaStatus, computeGrupaProgres, computeSeats, computeEndDate, computeFirstSessionDate, computeSessionDates, formatDays, formatDaysFull, formatPocetak, mapGroupToRaspored, nextExpiry, pickOpenGroupForNivo, resolveGroupCourse } from "./groups";
 
 describe("formatDays", () => {
   it("mapira brojeve dana u srpske skraćenice", () => {
@@ -235,4 +235,31 @@ describe("computeSeats (osnova + nove uplate)", () => {
   it("preko kapaciteta → slobodnih 0, full true", () =>
     expect(computeSeats({ maxSeats: 6, manualEnrolled: 5, activeEnrollments: 3 }))
       .toEqual({ enrolled: 8, slobodnih: 0, full: true }));
+});
+
+describe("naknadniUpisZaStatus", () => {
+  const danas = "2026-08-09";
+
+  it("pali se kad se grupa koja je počela vrati na otvoren", () => {
+    expect(naknadniUpisZaStatus("otvoren", "2026-08-05", danas)).toBe(true);
+  });
+
+  it("ne pali se za grupu koja tek počinje", () => {
+    expect(naknadniUpisZaStatus("otvoren", "2026-08-11", danas)).toBe(false);
+    expect(naknadniUpisZaStatus("otvoren", danas, danas)).toBe(false);
+  });
+
+  it("ne pali se bez datuma početka", () => {
+    expect(naknadniUpisZaStatus("otvoren", null, danas)).toBe(false);
+  });
+
+  it("gasi se čim grupa ode iz otvorenog", () => {
+    for (const s of ["u_toku", "zavrsena", "otkazana", "planiran", "uskoro"]) {
+      expect(naknadniUpisZaStatus(s, "2026-08-05", danas)).toBe(false);
+    }
+  });
+
+  it("ne dira zastavicu kad se status uopšte ne menja", () => {
+    expect(naknadniUpisZaStatus(undefined, "2026-08-05", danas)).toBeNull();
+  });
 });

@@ -22,10 +22,15 @@ async function cronHandler(request: NextRequest) {
   // 2) POKRENI: počela, nije se završila → u_toku. Namerno lt, ne lte:
   // na sam dan početka grupa ostaje "otvoren" da bi termin još bio vidljiv
   // na sajtu (raspored prikazuje samo otvoren/uskoro).
+  //
+  // Izuzetak: grupa sa naknadni_upis = true je namerno vraćena na "otvoren" da
+  // bi primala polaznike u toku. Nju ne diramo, inače bi nestala sa sajta usred
+  // kampanje koja na nju šalje ljude. Korak 1 je i dalje zatvara kad prođe kraj.
   const { data: started, error: e2 } = await admin.from("groups")
     .update({ status: "u_toku", updated_at: now })
     .lt("start_date", today)
     .in("status", ["planiran", "uskoro", "otvoren"])
+    .eq("naknadni_upis", false)
     .or(`end_date.gte.${today},end_date.is.null`)
     .select("id");
   if (e2) return NextResponse.json({ error: e2.message }, { status: 500 });
