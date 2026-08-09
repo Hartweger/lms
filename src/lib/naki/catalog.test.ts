@@ -67,6 +67,10 @@ const grupa = (o: Partial<GrupaRaspored> = {}): GrupaRaspored => ({
   checkoutSlug: "grupni-kurs-nemackog-jezika-a1-1",
   cena: 19600,
   cenaEur: 168,
+  uToku: false,
+  sledeciCas: "",
+  ukupnoCasova: 14,
+  preostaloCasova: 14,
   ...o,
 });
 
@@ -80,6 +84,15 @@ describe("renderOpenGroups", () => {
     expect(out).toContain("5 od 6 mesta slobodno");
     expect(out).toContain("19.600 RSD / 168 EUR");
     expect(out).toContain("https://www.hartweger.rs/kursevi/grupni-kurs-nemackog-jezika-a1-1");
+  });
+
+  it("grupa u toku: ne pominje prošli početak, nego sledeći čas i preostalo", () => {
+    const out = renderOpenGroups([
+      grupa({ uToku: true, sledeciCas: "10.08.2026", preostaloCasova: 13 }),
+    ]);
+    expect(out).toContain("u toku, sledeći čas 10.08.2026");
+    expect(out).toContain("ostalo 13 od 14 časova");
+    expect(out).not.toContain("početak");
   });
 
   it("izostavlja popunjene grupe - na njih se ne može upisati", () => {

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { computeSeats, computeEndDate, computeFirstSessionDate, computeSessionDates, formatDays, formatDaysFull, formatPocetak, mapGroupToRaspored, nextExpiry, pickOpenGroupForNivo, resolveGroupCourse } from "./groups";
+import { computeGrupaProgres, computeSeats, computeEndDate, computeFirstSessionDate, computeSessionDates, formatDays, formatDaysFull, formatPocetak, mapGroupToRaspored, nextExpiry, pickOpenGroupForNivo, resolveGroupCourse } from "./groups";
 
 describe("formatDays", () => {
   it("mapira brojeve dana u srpske skraćenice", () => {
@@ -161,6 +161,64 @@ describe("mapGroupToRaspored nova polja", () => {
     expect(r.checkoutSlug).toBeNull();
     expect(r.cena).toBeNull();
     expect(r.cenaEur).toBeNull();
+  });
+});
+
+describe("computeGrupaProgres (grupa otvorena za naknadni upis)", () => {
+  // A2.1 avg 2026: 14 časova pon+sre od 05.08, danas 09.08 → prošao samo prvi čas.
+  const a21 = [
+    "2026-08-05", "2026-08-10", "2026-08-12", "2026-08-17", "2026-08-19",
+    "2026-08-24", "2026-08-26", "2026-08-31", "2026-09-02", "2026-09-07",
+    "2026-09-09", "2026-09-14", "2026-09-16", "2026-09-21",
+  ];
+  it("grupa u toku: sledeći čas je prvi naredni, ostalo 13 od 14", () =>
+    expect(computeGrupaProgres(a21, "2026-08-09")).toEqual({
+      uToku: true, sledeciCas: "2026-08-10", ukupno: 14, preostalo: 13,
+    }));
+  it("današnji čas se broji kao preostao i kao sledeći", () =>
+    expect(computeGrupaProgres(a21, "2026-08-10")).toMatchObject({
+      sledeciCas: "2026-08-10", preostalo: 13,
+    }));
+  it("pre prvog časa grupa NIJE u toku", () =>
+    expect(computeGrupaProgres(a21, "2026-08-01")).toEqual({
+      uToku: false, sledeciCas: "2026-08-05", ukupno: 14, preostalo: 14,
+    }));
+  it("posle poslednjeg časa: u toku, ali nema sledećeg", () =>
+    expect(computeGrupaProgres(a21, "2026-09-22")).toEqual({
+      uToku: true, sledeciCas: null, ukupno: 14, preostalo: 0,
+    }));
+  it("bez sesija: prazan napredak, ništa se ne tvrdi", () =>
+    expect(computeGrupaProgres([], "2026-08-09")).toEqual({
+      uToku: false, sledeciCas: null, ukupno: 0, preostalo: 0,
+    }));
+  it("nesortiran ulaz svejedno daje najraniji naredni čas", () =>
+    expect(computeGrupaProgres(["2026-08-12", "2026-08-05", "2026-08-10"], "2026-08-09").sledeciCas)
+      .toBe("2026-08-10"));
+});
+
+describe("mapGroupToRaspored napredak grupe", () => {
+  const row = {
+    level: "A2.1", status: "otvoren", start_date: "2026-08-05",
+    duration_weeks: 7, days: [1, 3], session_time: "18:00-19:00",
+    max_seats: 6, manual_enrolled: 2,
+  };
+  it("sa datumima iz group_sessions: uToku + sledeći čas + preostalo", () => {
+    const r = mapGroupToRaspored(row, "Milica", 0, null, {
+      sessionDates: ["2026-08-05", "2026-08-10", "2026-08-12"],
+      today: "2026-08-09",
+    });
+    expect(r).toMatchObject({
+      uToku: true, sledeciCas: "10.08.2026", ukupnoCasova: 3, preostaloCasova: 2,
+    });
+  });
+  it("bez datuma iz baze: izvodi ih iz rasporeda (start_date + dani + nedelje)", () => {
+    const r = mapGroupToRaspored(row, "Milica", 0, null, { today: "2026-08-09" });
+    expect(r).toMatchObject({ uToku: true, sledeciCas: "10.08.2026", ukupnoCasova: 14, preostaloCasova: 13 });
+  });
+  it("grupa koja tek počinje: uToku false, pocetak ostaje prvi čas", () => {
+    const r = mapGroupToRaspored(row, "Milica", 0, null, { today: "2026-07-20" });
+    expect(r.uToku).toBe(false);
+    expect(r.pocetak).toBe("05.08.2026");
   });
 });
 

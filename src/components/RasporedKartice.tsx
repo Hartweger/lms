@@ -10,6 +10,7 @@ import {
   formatPrice,
   getFilterKey,
   getLevelColors,
+  terminPrikaz,
 } from "@/lib/raspored-prikaz";
 
 export default function RasporedKartice({
@@ -83,6 +84,7 @@ function Kartica({ g }: { g: GrupaRaspored }) {
   const maks = parseInt(g.maks, 10) || 0;
   const upisanih = parseInt(g.upisanih, 10) || 0;
   const isOpen = g.status?.toLowerCase().includes("otvoren");
+  const termin = terminPrikaz(g);
 
   return (
     <div className="relative overflow-hidden bg-white border border-gray-200 rounded-2xl hover:shadow-lg transition-all">
@@ -126,13 +128,19 @@ function Kartica({ g }: { g: GrupaRaspored }) {
               {g.sat && <span className="text-gray-500"> · {g.sat}</span>}
             </p>
           </div>
-          {g.pocetak && (
+          {termin && (
             <div className="flex items-start gap-2.5">
               <IkonicaSat />
               <p>
-                Početak <span className="font-semibold text-gray-900">{g.pocetak}</span>
-                {g.trajanje && (
-                  <span className="text-gray-500"> · {g.trajanje} nedelja</span>
+                {termin.labela}
+                {termin.datum && (
+                  <>
+                    {" "}
+                    <span className="font-semibold text-gray-900">{termin.datum}</span>
+                  </>
+                )}
+                {termin.napomena && (
+                  <span className="text-gray-500"> · {termin.napomena}</span>
                 )}
               </p>
             </div>

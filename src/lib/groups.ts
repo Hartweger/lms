@@ -79,6 +79,7 @@ export interface GroupRowForDisplay {
   session_time: string | null;
   max_seats: number;
   manual_enrolled: number | null;
+  sessions_count?: number | null;
 }
 
 export interface OpenGroupRow { id: string; level: string; status: string; start_date: string | null; }
@@ -131,18 +132,63 @@ export function computeFirstSessionDate(startDate: string | null, days: number[]
   return computeSessionDates(startDate, days, weeks, sessionsCount)[0] ?? startDate;
 }
 
+/** Današnji datum u Beogradu (yyyy-mm-dd) - „u toku" se meri po lokalnom danu, ne po UTC. */
+export function danasBeograd(now: Date = new Date()): string {
+  return new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Belgrade" }).format(now);
+}
+
+export interface GrupaProgres {
+  /** Bar jedan čas je iza nas - grupa više ne „počinje", nego traje. */
+  uToku: boolean;
+  /** Prvi čas od danas naviše (yyyy-mm-dd), null kad ih više nema. */
+  sledeciCas: string | null;
+  ukupno: number;
+  preostalo: number;
+}
+
+/**
+ * Napredak grupe iz datuma časova. Današnji čas se broji kao preostao (još nije
+ * održan), pa je i on „sledeći". Grupa otvorena za naknadni upis ima start_date u
+ * prošlosti - tada se polazniku prikazuje sledeći čas, ne datum početka.
+ */
+export function computeGrupaProgres(sessionDates: string[], today: string): GrupaProgres {
+  const sorted = [...sessionDates].sort();
+  const preostali = sorted.filter((d) => d >= today);
+  return {
+    uToku: sorted.length > 0 && preostali.length < sorted.length,
+    sledeciCas: preostali[0] ?? null,
+    ukupno: sorted.length,
+    preostalo: preostali.length,
+  };
+}
+
+export interface RasporedProgresInput {
+  /** Datumi ne-otkazanih časova iz group_sessions. Bez njih se izvode iz rasporeda. */
+  sessionDates?: string[] | null;
+  today?: string;
+}
+
 export function mapGroupToRaspored(
   g: GroupRowForDisplay,
   profName: string,
   activeEnrollments: number,
   course?: PurchasableCourseLite | null,
+  progresInput?: RasporedProgresInput,
 ): GrupaRaspored {
   const seats = computeSeats({ maxSeats: g.max_seats, manualEnrolled: g.manual_enrolled, activeEnrollments });
+  const sessionDates = progresInput?.sessionDates?.length
+    ? progresInput.sessionDates
+    : computeSessionDates(g.start_date, g.days, g.duration_weeks, g.sessions_count);
+  const progres = computeGrupaProgres(sessionDates, progresInput?.today ?? danasBeograd());
   return {
     nivo: g.level,
     prof: profName,
     status: STATUS_LABEL[g.status] ?? g.status,
-    pocetak: formatPocetak(computeFirstSessionDate(g.start_date, g.days, g.duration_weeks)),
+    pocetak: formatPocetak(computeFirstSessionDate(g.start_date, g.days, g.duration_weeks, g.sessions_count)),
+    uToku: progres.uToku,
+    sledeciCas: formatPocetak(progres.sledeciCas),
+    ukupnoCasova: progres.ukupno,
+    preostaloCasova: progres.preostalo,
     trajanje: g.duration_weeks != null ? String(g.duration_weeks) : "",
     dani: formatDays(g.days),
     daniPuni: formatDaysFull(g.days),

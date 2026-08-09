@@ -1,3 +1,5 @@
+import type { GrupaRaspored } from "@/lib/raspored";
+
 // Zajedničke display konstante za raspored grupa.
 // Koriste ih RasporedGrupa (/grupni-kursevi) i RasporedKartice (/raspored).
 // Cene NISU ovde - dolaze iz baze kurseva (GrupaRaspored.cena/cenaEur).
@@ -46,4 +48,42 @@ export function getLevelColors(nivo: string): { bg: string; text: string } {
 
 export function formatPrice(price: number): string {
   return price.toLocaleString("de-DE");
+}
+
+export interface TerminPrikaz {
+  uToku: boolean;
+  labela: string;
+  /** Prazno samo kad je grupa u toku, a nema više zakazanih časova. */
+  datum: string;
+  napomena: string | null;
+}
+
+/**
+ * Šta piše u redu sa terminom. Grupa otvorena za naknadni upis ima start_date u
+ * prošlosti - prikazati ga kao „Sledeći termin" izgleda kao istekla ponuda, pa se
+ * tada prikazuje prvi naredni čas i koliko ih je ostalo. Jedno mesto za sve tri
+ * površine (stranica kursa, /raspored, /grupni-kursevi).
+ */
+export function terminPrikaz(g: GrupaRaspored, pocetakLabela = "Početak"): TerminPrikaz | null {
+  if (g.uToku) {
+    if (!g.sledeciCas) {
+      return { uToku: true, labela: "Grupa je u toku", datum: "", napomena: null };
+    }
+    return {
+      uToku: true,
+      labela: "Grupa je u toku - sledeći čas",
+      datum: g.sledeciCas,
+      napomena:
+        g.preostaloCasova > 0 && g.ukupnoCasova > 0
+          ? `ostalo ${g.preostaloCasova} od ${g.ukupnoCasova} časova`
+          : null,
+    };
+  }
+  if (!g.pocetak) return null;
+  return {
+    uToku: false,
+    labela: pocetakLabela,
+    datum: g.pocetak,
+    napomena: g.trajanje ? `${g.trajanje} nedelja` : null,
+  };
 }

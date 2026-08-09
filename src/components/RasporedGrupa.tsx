@@ -10,6 +10,7 @@ import {
   formatPrice,
   getNivoKey,
   nivoColors,
+  terminPrikaz,
 } from "@/lib/raspored-prikaz";
 
 export default function RasporedGrupa({
@@ -73,6 +74,7 @@ export default function RasporedGrupa({
             const slobodnih = parseInt(g.slobodnih, 10);
             const isFull = slobodnih <= 0;
             const isOpen = g.status?.toLowerCase().includes("otvoren");
+            const termin = terminPrikaz(g);
 
             return (
               <div
@@ -108,10 +110,12 @@ export default function RasporedGrupa({
                   <p>
                     <span className="font-medium">Dani:</span> {g.daniPuni}, {g.sat}
                   </p>
-                  <p>
-                    <span className="font-medium">Početak:</span> {g.pocetak}
-                    {g.trajanje && ` · ${g.trajanje}`}
-                  </p>
+                  {termin && (
+                    <p>
+                      <span className="font-medium">{termin.labela}:</span> {termin.datum}
+                      {termin.napomena && ` · ${termin.napomena}`}
+                    </p>
+                  )}
                   <p>
                     <span className="font-medium">Profesor:</span> {g.prof}
                   </p>

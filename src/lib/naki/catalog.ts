@@ -104,9 +104,21 @@ export function renderOpenGroups(rows: GrupaRaspored[]): string {
           ? `${g.cena.toLocaleString("sr-RS")} RSD${g.cenaEur != null ? ` / ${g.cenaEur} EUR` : ""}`
           : null;
       // Ime profesora bez titule - rod se ne pripisuje.
+      // Grupa koja je već krenula, a i dalje prima polaznike: „početak 05.08." bi
+      // zvučao kao promašen rok. Ide sledeći čas i koliko ih je ostalo.
+      const kada = g.uToku
+        ? [
+            g.sledeciCas ? `u toku, sledeći čas ${g.sledeciCas}` : "u toku",
+            g.preostaloCasova > 0 && g.ukupnoCasova > 0
+              ? `ostalo ${g.preostaloCasova} od ${g.ukupnoCasova} časova`
+              : null,
+          ].filter(Boolean).join(", ")
+        : g.pocetak
+          ? `početak ${g.pocetak}`
+          : null;
       const parts = [
         g.nivo,
-        g.pocetak ? `početak ${g.pocetak}` : null,
+        kada,
         termin || null,
         g.trajanje ? `${g.trajanje} nedelja` : null,
         g.prof || null,

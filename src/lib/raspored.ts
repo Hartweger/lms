@@ -1,11 +1,18 @@
 import { createAdminClient } from "@/lib/supabase/admin";
-import { mapGroupToRaspored, resolveGroupCourse } from "@/lib/groups";
+import { danasBeograd, mapGroupToRaspored, resolveGroupCourse } from "@/lib/groups";
 
 export interface GrupaRaspored {
   nivo: string;
   prof: string;
   status: string;
+  /** Datum prvog časa (dd.mm.yyyy). Kad je grupa u toku, on je u prošlosti - vidi uToku. */
   pocetak: string;
+  /** Grupa je već krenula, a i dalje prima polaznike (status ostaje „otvoren"). */
+  uToku: boolean;
+  /** Prvi naredni čas (dd.mm.yyyy), prazno kad ih više nema. */
+  sledeciCas: string;
+  ukupnoCasova: number;
+  preostaloCasova: number;
   trajanje: string;
   dani: string;
   daniPuni: string;
@@ -29,7 +36,7 @@ export async function fetchRaspored(): Promise<GrupaRaspored[]> {
   const { data: groups } = await admin
     .from("groups")
     .select(
-      "id, level, status, start_date, duration_weeks, days, session_time, max_seats, manual_enrolled, purchasable_course_id, professor:professor_id(full_name)",
+      "id, level, status, start_date, duration_weeks, sessions_count, days, session_time, max_seats, manual_enrolled, purchasable_course_id, professor:professor_id(full_name)",
     )
     .in("status", ["otvoren", "uskoro"]);
   if (!groups?.length) return [];
@@ -44,6 +51,20 @@ export async function fetchRaspored(): Promise<GrupaRaspored[]> {
   (enr || []).forEach((e) => {
     counts[e.group_id] = (counts[e.group_id] || 0) + 1;
   });
+
+  // Stvarni termini časova - iz njih se vidi da li je grupa već krenula i koji je
+  // sledeći čas. Otkazani časovi ne ulaze ni u „sledeći" ni u „ostalo X od Y".
+  // Grupe bez redova u group_sessions padaju na izvedeni raspored (mapGroupToRaspored).
+  const { data: sessions } = await admin
+    .from("group_sessions")
+    .select("group_id, session_date")
+    .in("group_id", ids)
+    .eq("cancelled", false);
+  const sessionDates: Record<string, string[]> = {};
+  (sessions || []).forEach((s) => {
+    (sessionDates[s.group_id] ||= []).push(s.session_date);
+  });
+  const today = danasBeograd();
 
   // Kupovni grupni kursevi - cena i checkout slug idu iz baze, ne iz koda.
   // Odvojen upit, ne embed (groups→courses veza bez oslanjanja na PostgREST FK).
@@ -65,7 +86,10 @@ export async function fetchRaspored(): Promise<GrupaRaspored[]> {
     const prof = Array.isArray(g.professor) ? g.professor[0] : g.professor;
     const activeEnrollments = counts[g.id] || 0;
     const course = resolveGroupCourse(g, courses ?? []);
-    return mapGroupToRaspored(g, prof?.full_name || "", activeEnrollments, course);
+    return mapGroupToRaspored(g, prof?.full_name || "", activeEnrollments, course, {
+      sessionDates: sessionDates[g.id],
+      today,
+    });
   });
   return rows;
 }

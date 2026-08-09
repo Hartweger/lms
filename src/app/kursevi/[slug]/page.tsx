@@ -8,6 +8,7 @@ import PriceCard from "@/components/product/PriceCard";
 import ProductFeatures from "@/components/product/ProductFeatures";
 import ProductFaq from "@/components/product/ProductFaq";
 import { fetchRaspored, type GrupaRaspored } from "@/lib/raspored";
+import { terminPrikaz } from "@/lib/raspored-prikaz";
 import { SLUG_TO_NIVO as slugToNivo } from "@/lib/course-nivo";
 import InteresForm from "./InteresForm";
 import BuyButton from "@/components/BuyButton";
@@ -412,10 +413,25 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
               {/* ─── GRUPNI: Live info block from Google Sheets ─── */}
               {category === "grupni" && grupa && (
                 <div className="bg-white border border-gray-200 rounded-xl p-5 mb-8 space-y-2.5">
-                  <div className="flex items-center gap-3 text-[15px]">
-                    <span className="text-green-500">🟢</span>
-                    <span className="text-gray-700"><strong>Sledeći termin:</strong> {grupa.pocetak}</span>
-                  </div>
+                  {(() => {
+                    // Grupa otvorena za naknadni upis ima početak u prošlosti - tada
+                    // ide sledeći čas, jer prošli datum izgleda kao istekla ponuda.
+                    const termin = terminPrikaz(grupa, "Sledeći termin");
+                    if (!termin) return null;
+                    return (
+                      <div className="flex items-center gap-3 text-[15px]">
+                        <span className={termin.uToku ? "text-amber-500" : "text-green-500"}>
+                          {termin.uToku ? "🟡" : "🟢"}
+                        </span>
+                        <span className="text-gray-700">
+                          <strong>{termin.labela}:</strong> {termin.datum}
+                          {termin.napomena && termin.uToku && (
+                            <span className="text-gray-500"> · {termin.napomena}</span>
+                          )}
+                        </span>
+                      </div>
+                    );
+                  })()}
                   <div className="flex items-center gap-3 text-[15px]">
                     <span>👩‍🏫</span>
                     <span className="text-gray-600"><strong>Profesorka:</strong> {grupa.prof}</span>
