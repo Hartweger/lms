@@ -52,19 +52,20 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Kurs nije pronađen." }, { status: 404 });
     }
 
-    // Individualni: cena, profesorka i broj časova dolaze iz product_variants
-    // (kao na javnom checkout-u) - ne veruj iznosu s klijenta. professor_id +
-    // package_lessons se upisuju u items[0] da grantAccessForOrder kreira
-    // individual_enrollments i professor_students vezu.
+    // Individualni: profesorka i broj časova dolaze iz product_variants.
+    // professor_id + package_lessons se upisuju u items[0] da grantAccessForOrder
+    // kreira individual_enrollments i professor_students vezu.
+    // Cena NE dolazi iz varijacije - forma je prepuni cenom varijacije, ali admin
+    // sme da je koriguje (popust, dogovorena cena) i ta korekcija mora da prođe
+    // i u narudžbinu i u mejl. Ruta je iza requireAdmin(), nije javni checkout.
     const isIndividual = course.course_type === "individual" ||
       ["individualni", "mesecni"].includes(course.category ?? "");
     let chosenProfessorId: string | null = null;
     let packageLessons: number | null = null;
-    let variantPrice: number | null = null;
     if (isIndividual) {
       let q = admin
         .from("product_variants")
-        .select("id, professor_id, package_type, price")
+        .select("id, professor_id, package_type")
         .eq("course_id", course.id)
         .eq("is_active", true);
       q = professorId ? q.eq("professor_id", professorId) : q.is("professor_id", null);
@@ -77,13 +78,11 @@ export async function POST(request: Request) {
         );
       }
       chosenProfessorId = variant.professor_id;
-      variantPrice = variant.price;
       packageLessons = variant.package_type
         ? parseInt(variant.package_type.replace(/\D/g, ""), 10)
         : (course.included_lessons ?? null);
     }
-    // Za individualne cena je autoritativna iz varijacije; inače uneti iznos.
-    const finalAmount = variantPrice ?? amount;
+    const finalAmount = amount;
 
     // Find or create user by email
     let userId: string;
