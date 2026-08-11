@@ -122,6 +122,8 @@ const nextConfig: NextConfig = {
         })),
       // Stari emoji URL ovog teksta (slug očišćen u bazi) → nova čista adresa
       { source: "/zenski-rod-u-nemackom-jeziku-sta-je-sve-die-%f0%9f%8c%b8", destination: "/magazin/zenski-rod-u-nemackom-jeziku-sta-je-sve-die", permanent: true },
+      // Objavljeni WP URL je imao sufiks "-hartweger", magazin slug ga nema — bez ovoga top post pada na 404
+      { source: "/najcesce-greske-u-nemackom-jeziku-hartweger", destination: "/magazin/najcesce-greske-u-nemackom-jeziku", permanent: true },
       { source: "/o-nama", destination: "/o-natasi", permanent: true },
       { source: "/moja-metodologija", destination: "/metodologija", permanent: true },
       { source: "/o-metodi", destination: "/metodologija", permanent: true },
