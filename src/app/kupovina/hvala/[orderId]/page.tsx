@@ -90,6 +90,7 @@ export default async function HvalaPage({
           value={order.total}
           contentId={courseSlug || undefined}
           contentName={courseTitle || undefined}
+          email={order.email || undefined}
           items={(items ?? []).map((it) => ({
             id: it.course_slug || it.course_id,
             name: it.title,

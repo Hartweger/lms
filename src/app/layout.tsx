@@ -14,6 +14,12 @@ import PromoBar from "@/components/PromoBar";
 import AttributionTracker from "@/components/AttributionTracker";
 import MetaPixel from "@/components/MetaPixel";
 
+// Google Ads konverzije. Bez ovoga Ads nema sopstveni signal - konverzije stižu
+// samo uvezene iz GA4, koji zbog Consent Mode-a ne vidi posetioce bez saglasnosti
+// (mereno 11.08.2026: 271 klik -> 113 sesija). Sa AW tagom Google modeluje i te.
+// Prazno = tag se ne emituje, ponašanje ostaje kao pre.
+const ADS_ID = process.env.NEXT_PUBLIC_ADS_ID ?? "";
+
 const lato = Lato({
   subsets: ["latin", "latin-ext"],
   weight: ["400", "700"],
@@ -106,7 +112,8 @@ try {
   }
 } catch (e) {}
 gtag('js', new Date());
-gtag('config', 'G-MB9DRXVVF6');`,
+gtag('config', 'G-MB9DRXVVF6');${ADS_ID ? `
+gtag('config', '${ADS_ID}', { allow_enhanced_conversions: true });` : ""}`,
           }}
         />
         <PromoBar />
