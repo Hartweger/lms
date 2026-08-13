@@ -8,7 +8,12 @@ import * as Sentry from "@sentry/nextjs";
 import { withCronLog } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { buildRecurringStatusXml, parseRecurringStatus, postCc5 } from "@/lib/nestpay-recurring";
-import { chargesToProcess, maybeRetryFailedCharge, processCharge } from "@/lib/subscription-charges";
+import {
+  chargesToProcess,
+  maybeRetryFailedCharge,
+  processCharge,
+  subscriptionStateFromCharges,
+} from "@/lib/subscription-charges";
 
 export const dynamic = "force-dynamic";
 
@@ -30,6 +35,7 @@ async function cronHandler(request: Request) {
   let obradjeno = 0;
   let zavrsenih = 0;
   let ponovoInicirano = 0;
+  let otkazanihNadjeno = 0;
 
   for (const sub of subs ?? []) {
     const xml = await postCc5(buildRecurringStatusXml(sub.recurring_id));
@@ -56,17 +62,27 @@ async function cronHandler(request: Request) {
     // Pala naplata (D/ERR): zakaži ponovni pokušaj za sutra (banka: max 30, 1x dnevno).
     if ((await maybeRetryFailedCharge(sub, charges)) === "retry") ponovoInicirano++;
 
-    const uspelih = charges.filter((c) => c.succeeded).length;
-    const sledeca = charges.find((c) => !c.succeeded && !c.failed)?.plannedAt ?? null;
-    const gotova = uspelih >= sub.total_payments;
-    if (gotova) zavrsenih++;
+    const { status, nextChargeAt } = subscriptionStateFromCharges(charges, sub.total_payments);
+    if (status === "completed") zavrsenih++;
+
+    // Serija je otkazana kod banke, a kod nas je pisalo da je aktivna: kupčev zahtev
+    // za otkazivanje je prošao kod banke ali nije stigao da se upiše (13.08.2026).
+    // Ispravljamo tiho, ali ostavljamo trag - to je i dalje znak da nešto puca.
+    if (status === "cancelled") {
+      otkazanihNadjeno++;
+      Sentry.captureMessage(
+        `[pretplata] serija ${sub.recurring_id} je otkazana kod banke, a kod nas je bila aktivna - status ispravljen`,
+        "warning",
+      );
+    }
 
     await admin
       .from("subscriptions")
       .update({
         last_polled_at: new Date().toISOString(),
-        next_charge_at: sledeca ? new Date(sledeca.replace(" ", "T")).toISOString() : null,
-        status: gotova ? "completed" : "active",
+        next_charge_at: nextChargeAt ? new Date(nextChargeAt.replace(" ", "T")).toISOString() : null,
+        status,
+        ...(status === "cancelled" ? { cancelled_at: new Date().toISOString() } : {}),
       })
       .eq("id", sub.id);
   }
@@ -77,6 +93,7 @@ async function cronHandler(request: Request) {
     obradjenoRata: obradjeno,
     ponovoInicirano,
     zavrsenih,
+    otkazanihNadjeno,
   });
 }
 

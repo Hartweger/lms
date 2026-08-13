@@ -6,7 +6,14 @@ import { NextResponse } from "next/server";
 import * as Sentry from "@sentry/nextjs";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { buildRecurringCancelXml, isRecurringOpApproved, postCc5 } from "@/lib/nestpay-recurring";
+import {
+  buildRecurringCancelXml,
+  buildRecurringStatusXml,
+  isRecurringOpApproved,
+  isSeriesCancelled,
+  parseRecurringStatus,
+  postCc5,
+} from "@/lib/nestpay-recurring";
 import { cancelReasonLabel, parseCancelReason } from "@/lib/subscription-cancel-reason";
 import { logInteraction, upsertContact } from "@/lib/crm/contacts";
 
@@ -37,15 +44,31 @@ export async function POST(request: Request) {
   if (sub.status !== "active") return NextResponse.json({ ok: true, vecOtkazana: true });
 
   const odgovor = await postCc5(buildRecurringCancelXml(sub.recurring_id));
+  const sirovo = odgovor?.slice(0, 300) ?? "bez odgovora";
+
+  // Odgovor na Cancel nije jedini izvor istine: 13.08.2026 je banka seriju
+  // 26206OfSB24222 stvarno otkazala, a mi smo njen odgovor pročitali kao neuspeh -
+  // kupac je dobio poruku „ne prolazi" i pisao podršci, dok je serija već bila mrtva.
+  // Zato pre nego što ikome javimo neuspeh, pitamo kako serija STVARNO stoji.
   if (!odgovor || !isRecurringOpApproved(odgovor)) {
-    Sentry.captureException(
-      new Error(
-        `[pretplata] otkazivanje serije ${sub.recurring_id} nije prošlo: ${odgovor?.slice(0, 300) ?? "bez odgovora"}`,
-      ),
-    );
-    return NextResponse.json(
-      { error: "Otkazivanje trenutno ne prolazi. Piši nam na info@hartweger.rs i mi ćemo ga odmah rešiti." },
-      { status: 502 },
+    const stanje = await postCc5(buildRecurringStatusXml(sub.recurring_id));
+    const charges = stanje ? parseRecurringStatus(stanje).charges : [];
+
+    if (!isSeriesCancelled(charges)) {
+      Sentry.captureException(
+        new Error(`[pretplata] otkazivanje serije ${sub.recurring_id} nije prošlo: ${sirovo}`),
+      );
+      return NextResponse.json(
+        { error: "Otkazivanje trenutno ne prolazi. Piši nam na info@hartweger.rs i mi ćemo ga odmah rešiti." },
+        { status: 502 },
+      );
+    }
+
+    // Otkazivanje je prošlo uprkos neprepoznatom odgovoru - nastavljamo kao da jeste,
+    // ali ostavljamo trag, jer je odgovor banke očigledno oblik koji ne umemo da pročitamo.
+    Sentry.captureMessage(
+      `[pretplata] serija ${sub.recurring_id} JESTE otkazana, ali odgovor banke nije prepoznat kao odobren: ${sirovo}`,
+      "warning",
     );
   }
 

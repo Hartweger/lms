@@ -5,6 +5,7 @@ import {
   MAX_RETRIES,
   retryDecision,
   retryStartDate,
+  subscriptionStateFromCharges,
   type RetryState,
 } from "./subscription-charges";
 import type { RecurringCharge } from "./nestpay-recurring";
@@ -97,5 +98,39 @@ describe("retryStartDate", () => {
 describe("belgradeDate", () => {
   it("kasno veče po UTC je već sutra u Beogradu", () => {
     expect(belgradeDate(new Date("2026-07-22T22:30:00Z"))).toBe("2026-07-23");
+  });
+});
+
+describe("subscriptionStateFromCharges", () => {
+  // Rupa iz 13.08.2026: ako kupčev zahtev pukne na mreži POSLE što je banka
+  // otkazala seriju, baza ostaje „active" iako naplata više nema. Dnevni prolaz
+  // to sad sam ispravlja - ali samo uz izričit dokaz (CNCL), nikad na osnovu
+  // izostanka podataka.
+  const otkazana = (n: number): RecurringCharge => ({ ...naplata(n, "ceka"), transStat: "CNCL", failed: true });
+
+  it("serija sa ratom na čekanju ostaje aktivna", () => {
+    const { status, nextChargeAt } = subscriptionStateFromCharges([naplata(1, "ok"), naplata(2, "ceka")], 12);
+    expect(status).toBe("active");
+    expect(nextChargeAt).toBe("2026-08-21 14:39:00.0");
+  });
+
+  it("otkazanu seriju prepoznaje i bez uspešnog Cancel odgovora", () => {
+    const { status, nextChargeAt } = subscriptionStateFromCharges([naplata(1, "ok"), otkazana(2), otkazana(3)], 12);
+    expect(status).toBe("cancelled");
+    expect(nextChargeAt).toBeNull();
+  });
+
+  it("odrađenu seriju označava kao završenu, ne otkazanu", () => {
+    const sve = Array.from({ length: 12 }, (_, i) => naplata(i + 1, "ok"));
+    expect(subscriptionStateFromCharges(sve, 12).status).toBe("completed");
+  });
+
+  it("pala rata (D) ne sme da prođe kao otkazivanje - čeka je ponovni pokušaj", () => {
+    expect(subscriptionStateFromCharges([naplata(1, "ok"), naplata(2, "pala")], 12).status).toBe("active");
+  });
+
+  it("prazan odgovor banke ostavlja pretplatu aktivnom", () => {
+    // Bez ovoga bi jedan loš upit ugasio tuđu pretplatu.
+    expect(subscriptionStateFromCharges([], 12).status).toBe("active");
   });
 });

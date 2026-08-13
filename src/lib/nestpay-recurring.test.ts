@@ -5,6 +5,7 @@ import {
   buildChargeRetryXml,
   parseRecurringStatus,
   isRecurringOpApproved,
+  isSeriesCancelled,
 } from "./nestpay-recurring";
 
 // Uzorak po priručniku: naplata 1 uspela, naplata 2 na čekanju.
@@ -187,5 +188,40 @@ describe("isRecurringOpApproved", () => {
   });
   it("odbija grešku", () => {
     expect(isRecurringOpApproved("<CC5Response><Response>Error</Response><ErrMsg>CORE-5103</ErrMsg></CC5Response>")).toBe(false);
+  });
+});
+
+describe("isSeriesCancelled", () => {
+  // 13.08.2026: banka je seriju 26206OfSB24222 stvarno otkazala, ali njen odgovor
+  // na Cancel nismo prepoznali kao odobren - kupac je dobio grešku, a baza ostala
+  // „active". Zato posle neprepoznatog odgovora pitamo kako serija STVARNO stoji.
+  const naplate = (spisak: Array<[string, number | null]>) =>
+    parseRecurringStatus(
+      `<CC5Response><Extra><RECURRINGCOUNT>${spisak.length}</RECURRINGCOUNT>` +
+        spisak
+          .map(
+            ([stat, iznos], i) =>
+              `<ORD_ID_${i + 1}>2026-232-${i + 1}</ORD_ID_${i + 1}><TRANS_STAT_${i + 1}>${stat}</TRANS_STAT_${i + 1}>` +
+              (iznos === null ? "" : `<CAPTURE_AMT_${i + 1}>${iznos}</CAPTURE_AMT_${i + 1}>`),
+          )
+          .join("") +
+        `</Extra></CC5Response>`,
+    ).charges;
+
+  it("potvrđuje otkazivanje kad su sve nenaplaćene rate CNCL", () => {
+    expect(isSeriesCancelled(naplate([["S", 319900], ["CNCL", null], ["CNCL", null]]))).toBe(true);
+  });
+
+  it("ne potvrđuje dok ijedna rata čeka naplatu (PN)", () => {
+    expect(isSeriesCancelled(naplate([["S", 319900], ["PN", null], ["PN", null]]))).toBe(false);
+  });
+
+  it("palu ratu (D) ne broji kao otkazivanje - nju ponovni pokušaj još može da oživi", () => {
+    expect(isSeriesCancelled(naplate([["S", 319900], ["D", null], ["CNCL", null]]))).toBe(false);
+  });
+
+  it("prazan odgovor banke ne sme da prođe kao potvrda", () => {
+    // Bez ovoga bi svaki neuspeo upit tiho značio „otkazano" i naplate bi tekle dalje.
+    expect(isSeriesCancelled([])).toBe(false);
   });
 });

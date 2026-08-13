@@ -6,6 +6,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import {
   buildChargeRetryXml,
   isRecurringOpApproved,
+  isSeriesCancelled,
   postCc5,
   type NestpayEnv,
   type RecurringCharge,
@@ -14,6 +15,28 @@ import { grantAccessForOrder } from "@/lib/grant-access";
 import { fiscalizeOrder } from "@/lib/fiscomm";
 import { generateOrderNumber } from "@/lib/order-utils";
 import { sendSubscriptionRetryEmail } from "@/lib/email";
+
+/**
+ * Stanje pretplate izvedeno iz naplata kod banke - jedini izvor istine je banka,
+ * ne naš zapis.
+ *
+ * `cancelled` postoji zbog rupe iz 13.08.2026: ako kupčev zahtev za otkazivanje
+ * pukne na mreži POSLE što ga je banka izvršila, pretplata ostaje „active" iako
+ * naplata više neće biti - kupac u „Moj nalog" i dalje vidi datum sledeće naplate.
+ * Dnevni prolaz to sad sam ispravlja, ali samo uz izričit dokaz (CNCL na svakoj
+ * nenaplaćenoj rati). Prazan ili nerazumljiv odgovor NIKAD ne gasi pretplatu -
+ * jedan loš upit ne sme nikome da prekine članstvo.
+ */
+export function subscriptionStateFromCharges(
+  charges: RecurringCharge[],
+  totalPayments: number,
+): { status: "active" | "completed" | "cancelled"; nextChargeAt: string | null } {
+  const uspelih = charges.filter((c) => c.succeeded).length;
+  const naCekanju = charges.find((c) => !c.succeeded && !c.failed) ?? null;
+
+  const status = uspelih >= totalPayments ? "completed" : isSeriesCancelled(charges) ? "cancelled" : "active";
+  return { status, nextChargeAt: naCekanju?.plannedAt ?? null };
+}
 
 /** Uspele naplate kojima još nemamo porudžbinu (poredi se po broju kod banke). */
 export function chargesToProcess(charges: RecurringCharge[], vecObradjeni: string[]): RecurringCharge[] {

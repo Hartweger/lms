@@ -140,6 +140,23 @@ export function parseRecurringStatus(text: string): { count: number; charges: Re
   return { count, charges };
 }
 
+/**
+ * Da li je serija stvarno zaustavljena kod banke - provera po naplatama, ne po
+ * odgovoru na Cancel.
+ *
+ * Postoji zato što je 13.08.2026 banka seriju `26206OfSB24222` otkazala (sve rate
+ * 2-12 u Merchant Centru su CNCL), a njen odgovor na Cancel nismo prepoznali kao
+ * odobren: kupac je dobio poruku da otkazivanje ne prolazi, a pretplata je u bazi
+ * ostala „active". Zato posle neprepoznatog odgovora pitamo status serije.
+ *
+ * Traži se izričit dokaz - CNCL na svakoj nenaplaćenoj rati. Prazan odgovor ili
+ * pala rata (D, koju ponovni pokušaj još može da oživi) NISU potvrda otkazivanja.
+ */
+export function isSeriesCancelled(charges: RecurringCharge[]): boolean {
+  const nenaplacene = charges.filter((c) => !c.succeeded);
+  return nenaplacene.length > 0 && nenaplacene.every((c) => c.transStat === "CNCL");
+}
+
 /** Da li je banka prihvatila RECURRINGOPERATION zahtev (Cancel ili Update). */
 export function isRecurringOpApproved(text: string): boolean {
   const response = text.match(/<Response>([^<]*)<\/Response>/i)?.[1]?.trim() ?? "";
