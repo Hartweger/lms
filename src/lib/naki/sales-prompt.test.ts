@@ -64,6 +64,23 @@ describe("buildSalesSystemPrompt", () => {
     expect(out).toContain("bez naloga i bez prijave");
   });
 
+  // 14.08.2026: Smile je posetiocu rekao da grupni časovi idu preko Zoom-a. U promptu
+  // nije pisalo NIŠTA o platformi, pa je izmislio. Radimo isključivo preko Google Meet-a.
+  it("kaže Google Meet i izričito zabranjuje Zoom", () => {
+    const out = buildSalesSystemPrompt("katalog", { coupon: false });
+    expect(out).toContain("ISKLJUČIVO preko Google Meet-a");
+    expect(out).toContain("NIKAD ne reci Zoom");
+  });
+
+  // 14.08.2026: na pitanje „dve drugarice, biramo termine i profesora" Smile je rekao da
+  // svako mora svoj kurs posebno - opcija „u paru" nije ni postojala u promptu.
+  it("zna individualni kurs u paru: 30% za drugu osobu i mejl za ponudu", () => {
+    const out = buildSalesSystemPrompt("katalog", { coupon: false });
+    expect(out).toContain("INDIVIDUALNI ČASOVI U PARU");
+    expect(out).toContain("30% popusta");
+    expect(out).toContain("Cenu za par NE računaj");
+  });
+
   it("bez probnih lekcija nema ni bloka - da Smile ne obeća link koji ne postoji", () => {
     const out = buildSalesSystemPrompt("katalog", { coupon: false });
     expect(out).not.toContain("SPISAK PROBNIH LEKCIJA");
