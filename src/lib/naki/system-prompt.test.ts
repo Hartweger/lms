@@ -23,6 +23,20 @@ describe("NAKI_SYSTEM_PROMPT - mesečno plaćanje", () => {
   });
 });
 
+// 14.08.2026: Smile je izmislio Zoom jer platforma nigde nije pisala u promptu.
+// Ista rupa je bila i kod NaKI-ja, pa je popravljeno na oba mesta.
+describe("NAKI_SYSTEM_PROMPT - platforma i par", () => {
+  it("kaže Google Meet i izričito zabranjuje Zoom", () => {
+    expect(NAKI_SYSTEM_PROMPT).toContain("ISKLJUČIVO preko Google Meet-a");
+    expect(NAKI_SYSTEM_PROMPT).toContain("NIKAD ne reci Zoom");
+  });
+
+  it("zna individualni kurs u paru sa 30% za drugu osobu", () => {
+    expect(NAKI_SYSTEM_PROMPT).toContain("individualni kurs u paru");
+    expect(NAKI_SYSTEM_PROMPT).toContain("30% popusta");
+  });
+});
+
 describe("NAKI_SYSTEM_PROMPT - rod, nivo, varijanta jezika", () => {
   it("ne postavlja muški rod kao pretpostavku", () => {
     expect(NAKI_SYSTEM_PROMPT).not.toMatch(/mu[šs]ki kao default/i);
