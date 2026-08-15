@@ -175,10 +175,20 @@ export default async function KursStranica({ params }: PageProps) {
           </Link>
         ) : (
           <a
-            href={user ? "https://www.hartweger.rs/prodavnica/" : "/prijava"}
+            href={
+              !user
+                ? "/prijava"
+                // Stari WP put /prodavnica/ je ostao od migracije - vodi na 308 pa na
+                // katalog. Šalji kupca pravo na prodajnu stranicu kursa, a ako kurs
+                // nije u prodaji (is_purchasable = false), /kursevi/[slug] je 404 -
+                // onda na katalog.
+                : typedCourse.is_purchasable
+                  ? `/kursevi/${typedCourse.slug}`
+                  : "/kursevi"
+            }
             className="bg-koral text-white px-8 py-3 rounded-lg font-medium hover:bg-koral-dark transition-colors"
           >
-            {user ? "Kupi na hartweger.rs →" : "Prijavi se"}
+            {user ? "Kupi kurs →" : "Prijavi se"}
           </a>
         )}
       </div>
