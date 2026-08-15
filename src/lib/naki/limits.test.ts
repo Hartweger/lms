@@ -35,7 +35,7 @@ describe("limitReachedMessage", () => {
     const msg = limitReachedMessage({ loggedIn: false, course });
     expect(msg).toContain("VIDEO kurs A2");
     expect(msg).toContain("NAKI10");
-    expect(msg).toContain("8010"); // 10% popusta na 8900
+    expect(msg).toContain("8.010"); // 10% popusta na 8.900
     expect(msg).toContain("/kursevi/video-kurs-a2");
   });
 
@@ -43,6 +43,39 @@ describe("limitReachedMessage", () => {
     const msg = limitReachedMessage({ loggedIn: true, course });
     expect(msg).not.toContain("/prijava");
     expect(msg).toContain("NAKI10");
+  });
+
+  // Ovo je jedini pravi argument u tom trenutku: čovek traži još razgovora.
+  it("uvek kaže da polaznici nemaju dnevni limit", () => {
+    for (const loggedIn of [true, false]) {
+      for (const c of [course, null]) {
+        expect(limitReachedMessage({ loggedIn, course: c })).toContain("bez dnevnog limita");
+      }
+    }
+  });
+
+  // 89% limit-događaja nema poznat nivo - bez ovoga ponude nema ni u jednom.
+  it("bez poznatog nivoa i dalje nudi katalog i besplatan test nivoa", () => {
+    for (const loggedIn of [true, false]) {
+      const msg = limitReachedMessage({ loggedIn, course: null });
+      expect(msg).toContain("/kursevi");
+      expect(msg).toContain("/besplatno-testiranje");
+    }
+  });
+
+  it("kaže koliko poruka je potrošeno i da sutra stižu nove", () => {
+    expect(limitReachedMessage({ loggedIn: false, course: null })).toContain(
+      String(NAKI_ANON_DAILY_LIMIT)
+    );
+    expect(limitReachedMessage({ loggedIn: true, course: null })).toContain(
+      String(NAKI_FREE_USER_DAILY_LIMIT)
+    );
+  });
+
+  it("cene su formatirane sa tačkom, nikad sa zarezom", () => {
+    const msg = limitReachedMessage({ loggedIn: false, course: { ...course, price: 11600 } });
+    expect(msg).toContain("11.600");
+    expect(msg).not.toMatch(/\d,\d/);
   });
 
   it("ne koristi dugačke crte", () => {

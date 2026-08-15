@@ -14,10 +14,26 @@ export function personalDailyLimit(id: LimitIdentity): number | null {
   return id.loggedIn ? NAKI_FREE_USER_DAILY_LIMIT : NAKI_ANON_DAILY_LIMIT;
 }
 
+/** 11600 → "11.600", da cena izgleda kao svuda na sajtu. */
+function fmt(n: number): string {
+  // Namerno bez toLocaleString: uz okrnjen ICU vrati "11,600", a zarez je kod
+  // nas decimalni znak, pa bi cena delovala 1000x manja.
+  return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
 /**
  * Poruka kad korisnik potroši lični dnevni limit - prodajni trenutak umesto
- * "vidimo se sutra". Anonimnima nudi plan učenja na mejl; svima sa poznatim
- * nivoom nudi odgovarajući video kurs uz kupon NAKI10.
+ * "vidimo se sutra". Redosled je namerno: prvo koliko poruka i kad se vraćaju
+ * (bez krivice), pa ponuda, pa tek onda mejl.
+ *
+ * Jedini pravi argument je da POLAZNICI NEMAJU dnevni limit - to je odgovor na
+ * ono što čovek u tom trenutku i traži (još razgovora), a ne opšta reklama.
+ * Do 15.08.2026 se to nije pominjalo nigde.
+ *
+ * Ponuda mora da postoji i kad nivo NIJE poznat: mereno 15.08.2026, od 264
+ * limit-događaja nivo je bio nepoznat u 237 (89%), pa je stara poruka u skoro
+ * svim slučajevima ostajala bez ijednog prodajnog elementa. Bez nivoa vodimo na
+ * katalog i na besplatan test nivoa.
  *
  * NE upućujemo anonimne na pravljenje naloga: /prijava nema registraciju
  * (nalog nastaje kupovinom ili preko Google dugmeta), pa je jedini efekat
@@ -28,20 +44,31 @@ export function limitReachedMessage(opts: {
   course: LevelCourse | null;
 }): string {
   const parts: string[] = [];
+
   if (opts.loggedIn) {
     parts.push(
-      "Za danas smo potrošili sve poruke 😊 Sutra nastavljamo sa novom energijom! Do tada možeš vežbati kroz lekcije na platformi."
+      `Potrošili smo današnjih ${NAKI_FREE_USER_DAILY_LIMIT} poruka 😊 Sutra nas čeka novih ${NAKI_FREE_USER_DAILY_LIMIT}, a do tada možeš vežbati kroz lekcije na platformi.`
     );
   } else {
     parts.push(
-      "Za danas smo potrošili besplatne poruke 😊 Ostavi mi ime i mejl pa ti pošaljem besplatan plan učenja, a sutra nastavljamo."
+      `Potrošili smo današnjih ${NAKI_ANON_DAILY_LIMIT} besplatnih poruka 😊 Sutra kreće novih ${NAKI_ANON_DAILY_LIMIT}.`
     );
   }
+
   if (opts.course) {
     parts.push(
-      `P.S. Ako želiš da učiš svojim tempom, tu je ${opts.course.title} - sa kuponom NAKI10 košta ${couponPrice(opts.course.price)} umesto ${opts.course.price} RSD: ${SITE_URL}/kursevi/${opts.course.slug}`
+      `Ako ti je to premalo: polaznici naših kurseva pišu sa mnom bez dnevnog limita. Za tvoj nivo to je ${opts.course.title}, sa kuponom NAKI10 ${fmt(couponPrice(opts.course.price))} umesto ${fmt(opts.course.price)} RSD: ${SITE_URL}/kursevi/${opts.course.slug}`
+    );
+  } else {
+    parts.push(
+      `Ako ti je to premalo: polaznici naših kurseva pišu sa mnom bez dnevnog limita, uz video lekcije, vežbe i sertifikat: ${SITE_URL}/kursevi (ako ne znaš svoj nivo, test je besplatan: ${SITE_URL}/besplatno-testiranje)`
     );
   }
+
+  if (!opts.loggedIn) {
+    parts.push("Ostavi mi ime i mejl pa ti pošaljem besplatan plan učenja za tvoj nivo.");
+  }
+
   return parts.join("\n\n");
 }
 
