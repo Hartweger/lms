@@ -7,6 +7,7 @@ import {
   levelAskGuardAddon,
   supportAddon,
 } from "./system-prompt";
+import { NAKI_ANON_DAILY_LIMIT, NAKI_FREE_USER_DAILY_LIMIT } from "./limits";
 
 describe("NAKI_SYSTEM_PROMPT - mesečno plaćanje", () => {
   it("zna da postoji mesečno plaćanje i za koji paket", () => {
@@ -34,6 +35,45 @@ describe("NAKI_SYSTEM_PROMPT - platforma i par", () => {
   it("zna individualni kurs u paru sa 30% za drugu osobu", () => {
     expect(NAKI_SYSTEM_PROMPT).toContain("individualni kurs u paru");
     expect(NAKI_SYSTEM_PROMPT).toContain("30% popusta");
+  });
+});
+
+// 15.08.2026: presek 32.309 poruka iz naki_messages pokazao je 7 pitanja na koja je
+// NaKI upućivao na info@ ili improvizovao, a Smile ih odavno zna. Testovi čuvaju
+// odgovore koje je izmišljao (TestDaF za posao, procena „2-3 godine" napamet).
+describe("NAKI_SYSTEM_PROMPT - poslovni podaci koje je ranije improvizovao", () => {
+  it("zna dnevni limit i ne šalje na info@ zbog njega", () => {
+    expect(NAKI_SYSTEM_PROMPT).toContain(`bez naloga ${NAKI_ANON_DAILY_LIMIT} poruka dnevno`);
+    expect(NAKI_SYSTEM_PROMPT).toContain(`ulogovanima ${NAKI_FREE_USER_DAILY_LIMIT}`);
+    expect(NAKI_SYSTEM_PROMPT).toMatch(/NE obe[ćc]avaj pla[ćc]eni NaKI paket/i);
+  });
+
+  it("ne šalje na registraciju koje nema", () => {
+    expect(NAKI_SYSTEM_PROMPT).toMatch(/obi[čc]na registracija ne postoji/i);
+    expect(NAKI_SYSTEM_PROMPT).toContain("/prijava");
+  });
+
+  it("zna plaćanje iz inostranstva i rate", () => {
+    expect(NAKI_SYSTEM_PROMPT).toContain("PayPal");
+    expect(NAKI_SYSTEM_PROMPT).toContain("11%");
+    expect(NAKI_SYSTEM_PROMPT).toMatch(/rate.{0,60}Intesa|Intesa.{0,60}rat[ae]/i);
+  });
+
+  it("zna da pristup traje godinu dana i nije doživotan", () => {
+    expect(NAKI_SYSTEM_PROMPT).toMatch(/godinu dana od kupovine, NIJE do[žz]ivotan/i);
+  });
+
+  it("zna sadržaj video kursa i ne obećava štampanu svesku", () => {
+    expect(NAKI_SYSTEM_PROMPT).toContain("Ana u Nemačkoj");
+    expect(NAKI_SYSTEM_PROMPT).toMatch(/NE obe[ćc]avaj PDF radnu svesku/i);
+  });
+
+  it("ne nudi TestDaF kao sertifikat za posao", () => {
+    expect(NAKI_SYSTEM_PROMPT).toMatch(/NIKAD ne pominji TestDaF kao sertifikat za posao/i);
+  });
+
+  it("za procenu vremena šalje na kalkulator umesto da nagađa", () => {
+    expect(NAKI_SYSTEM_PROMPT).toContain("kalkulator-nemackog-a1-b1");
   });
 });
 
