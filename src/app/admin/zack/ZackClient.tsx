@@ -1,6 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+
+import { normalizujDe } from "@/lib/zack/lekcija-upis";
 
 // Ekran kroz koji Nataša unosi jednu lekciju zack-a. Reči se ne kucaju jedna po
 // jedna, nego se nalepe iz tabele, jedan red po reči, kolone razdvojene
@@ -19,6 +21,17 @@ import { useMemo, useState } from "react";
 // Iz istog razloga se ni razbijanje nalepljenog spiska ne oslanja na tiho
 // preskakanje. Red koji ne izgleda kako treba zaustavlja čuvanje i kaže šta mu
 // fali, umesto da se pretvori u nešto približno tačno.
+//
+// Zato ruta ni ne briše na prvi poziv: kad bi upis nešto odneo, vraća 409 i ne
+// dira bazu, a ovaj ekran tu pauzu koristi da ispiše koje bi reči nestale, pa
+// Nataša odmah vidi da li je posredi njena kucaća greška u nemačkom obliku.
+// Brisanje se izvršava tek na izričitu potvrdu.
+//
+// Poređenje reči ide kroz `normalizujDe`, ISTU funkciju koju ruta koristi kao
+// ključ. Da ekran poredi po golom tekstu, „der  Hund“ sa dva razmaka i
+// „der Hund“ prošli bi pregled kao dve reči, pa bi ih ruta odbila greškom koju
+// pregled nije najavio. Normalizuje se samo za poređenje - ruti se šalje ono
+// što je Nataša otkucala, ona sama normalizuje pri upisu.
 
 interface Udzbenik {
   id: string;
@@ -61,6 +74,12 @@ const UPUTSTVO = `nemački → naš → der/die/das → množina → izuzetak (u
 /** Koliko se pokvarenih redova ispisuje pojedinačno pre nego što se sabiju u broj. */
 const PRIKAZANIH_PROBLEMA = 12;
 
+/**
+ * Koliko se reči koje nestaju ispisuje poimence. Više nego problema, jer je ovo
+ * spisak po kome se odlučuje o brisanju, pa se isplati da se vidi ceo.
+ */
+const PRIKAZANIH_BRISANJA = 40;
+
 function parsirajSpisak(tekst: string): Pregled {
   const redovi: Red[] = [];
   const problemi: Problem[] = [];
@@ -93,7 +112,10 @@ function parsirajSpisak(tekst: string): Pregled {
       continue;
     }
 
-    const vecViden = videno.get(de);
+    // Duplikat se traži po normalizovanom obliku, jer je to ono što ruta vidi
+    // kao ključ. U poruci stoji ono što je stvarno otkucano, da bi Nataša
+    // videla razliku u zapisu koju poređenje namerno ne vidi.
+    const vecViden = videno.get(normalizujDe(de));
     if (vecViden !== undefined) {
       problemi.push({
         broj,
@@ -139,7 +161,7 @@ function parsirajSpisak(tekst: string): Pregled {
       continue;
     }
 
-    videno.set(de, broj);
+    videno.set(normalizujDe(de), broj);
     redovi.push({ de, sr, rod, mnozina: d[3] ?? "", izuzetak });
   }
 
@@ -148,6 +170,26 @@ function parsirajSpisak(tekst: string): Pregled {
 
 function reciOblik(n: number): string {
   return n === 1 ? "reč" : "reči";
+}
+
+/**
+ * „nestaje i 1 sličica", „nestaju i 2 sličice", „nestaje i 5 sličica".
+ * Odlučuju poslednje dve cifre, jer 11-14 idu kao mnogo, a 21 i 22 kao 1 i 2.
+ */
+function slicicePosle(n: number): string {
+  const dve = n % 100;
+  const jedna = n % 10;
+  if (dve < 11 || dve > 14) {
+    if (jedna === 1) return `nestaje i ${n} sličica`;
+    if (jedna >= 2 && jedna <= 4) return `nestaju i ${n} sličice`;
+  }
+  return `nestaje i ${n} sličica`;
+}
+
+/** Spisak reči iz odgovora rute. Sve što nije niz tekstova se odbacuje. */
+function citajSpisakReci(v: unknown): string[] {
+  if (!Array.isArray(v)) return [];
+  return v.filter((x): x is string => typeof x === "string");
 }
 
 export default function ZackClient({ udzbenici }: Props) {
@@ -162,8 +204,19 @@ export default function ZackClient({ udzbenici }: Props) {
   const [cuvanje, setCuvanje] = useState(false);
   const [greska, setGreska] = useState<string | null>(null);
   const [rezultat, setRezultat] = useState<
-    { upisanoReci: number; obrisanoReci: number } | null
+    { upisanoReci: number; obrisanoReci: number; obrisaneReci: string[] } | null
   >(null);
+  const [potvrda, setPotvrda] = useState<{
+    obrisaceSe: string[];
+    brojSlicica: number;
+    /** Zahtev na koji se potvrda odnosi, doslovno onakav kakav je poslat. */
+    teloJson: string;
+  } | null>(null);
+
+  // `disabled` na dugmetu se oslanja na stanje, a stanje stiže tek sa sledećim
+  // iscrtavanjem. Ovo je brava koja se zaključava odmah, da dva brza klika ne
+  // pošalju dva zahteva.
+  const slanjeUToku = useRef(false);
 
   const pregled = useMemo(() => parsirajSpisak(tekst), [tekst]);
   const izuzetaka = pregled.redovi.filter((r) => r.izuzetak).length;
@@ -184,41 +237,83 @@ export default function ZackClient({ udzbenici }: Props) {
     pregled.problemi.length === 0 &&
     !pregled.bezTabulatora;
 
-  async function sacuvaj() {
+  // Telo zahteva se gradi iz onoga što trenutno stoji na ekranu, pa je zato i
+  // merilo da li se od kad je stigao 409 nešto promenilo. Nemački oblik ide
+  // onako kako je otkucan, bez `normalizujDe` - ruta ga normalizuje pri upisu,
+  // a ovde bi to značilo da se šalje nešto što Nataša nije napisala.
+  //
+  // Polja pravila se šalju samo ako su popunjena. Ruta prazno polje upisuje kao
+  // null, pa bi ponovni unos spiska reči bez prekucanog pravila obrisao pravilo
+  // koje već stoji u bazi.
+  const telo = useMemo<Record<string, unknown>>(() => {
+    const t: Record<string, unknown> = {
+      udzbenikId,
+      broj: brojLekcije,
+      naziv: naziv.trim(),
+      reci: pregled.redovi.map((r) => ({
+        de: r.de,
+        sr: r.sr,
+        rod: r.rod,
+        mnozina: r.mnozina.trim() === "" ? null : r.mnozina.trim(),
+        vrsta: r.rod === "nema" ? "ostalo" : "imenica",
+        izuzetak: r.izuzetak,
+      })),
+    };
+    if (praviloNaslov.trim() !== "") t.praviloNaslov = praviloNaslov.trim();
+    if (praviloTekst.trim() !== "") t.praviloTekst = praviloTekst.trim();
+    if (praviloPrimer.trim() !== "") t.praviloPrimer = praviloPrimer.trim();
+    return t;
+  }, [
+    udzbenikId,
+    brojLekcije,
+    naziv,
+    pregled.redovi,
+    praviloNaslov,
+    praviloTekst,
+    praviloPrimer,
+  ]);
+
+  const teloJson = useMemo(() => JSON.stringify(telo), [telo]);
+
+  // Potvrda važi samo za zahtev koji ju je i izazvao. Ovo se izvodi iz
+  // trenutnog stanja, a ne pamti kao zasebna zastavica, pa nema ni trenutka u
+  // kome bi na ekranu stajao stari spisak reči a poslao se novi.
+  const potvrdaVazi = potvrda !== null && potvrda.teloJson === teloJson;
+
+  async function posalji(saPotvrdom: boolean) {
+    if (slanjeUToku.current) return;
+    slanjeUToku.current = true;
     setCuvanje(true);
     setGreska(null);
     setRezultat(null);
+    // Telo se čita iz ovog iscrtavanja, pa `teloJson` ispod tačno opisuje ono
+    // što je zaista otišlo na server.
+    const poslato = teloJson;
     try {
-      // Polja pravila se šalju samo ako su popunjena. Ruta prazno polje upisuje
-      // kao null, pa bi ponovni unos spiska reči bez prekucanog pravila obrisao
-      // pravilo koje već stoji u bazi.
-      const telo: Record<string, unknown> = {
-        udzbenikId,
-        broj: brojLekcije,
-        naziv: naziv.trim(),
-        reci: pregled.redovi.map((r) => ({
-          de: r.de,
-          sr: r.sr,
-          rod: r.rod,
-          mnozina: r.mnozina.trim() === "" ? null : r.mnozina.trim(),
-          vrsta: r.rod === "nema" ? "ostalo" : "imenica",
-          izuzetak: r.izuzetak,
-        })),
-      };
-      if (praviloNaslov.trim() !== "") telo.praviloNaslov = praviloNaslov.trim();
-      if (praviloTekst.trim() !== "") telo.praviloTekst = praviloTekst.trim();
-      if (praviloPrimer.trim() !== "") telo.praviloPrimer = praviloPrimer.trim();
-
       const res = await fetch("/api/admin/zack/lekcija", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(telo),
+        body: JSON.stringify(saPotvrdom ? { ...telo, potvrdaBrisanja: true } : telo),
       });
       const podaci: unknown = await res.json().catch(() => null);
       const odgovor =
         typeof podaci === "object" && podaci !== null
           ? (podaci as Record<string, unknown>)
           : {};
+
+      // Ruta je stala pred brisanjem i ništa nije dirala u bazi. Ovo nije
+      // greška, nego pitanje, pa se i prikazuje kao pitanje.
+      if (res.status === 409 && odgovor.potrebnaPotvrda === true) {
+        setPotvrda({
+          obrisaceSe: citajSpisakReci(odgovor.obrisaceSe),
+          brojSlicica:
+            typeof odgovor.brojSlicica === "number" ? odgovor.brojSlicica : 0,
+          teloJson: poslato,
+        });
+        return;
+      }
+
+      setPotvrda(null);
 
       if (!res.ok) {
         setGreska(
@@ -234,12 +329,24 @@ export default function ZackClient({ udzbenici }: Props) {
           typeof odgovor.upisanoReci === "number" ? odgovor.upisanoReci : 0,
         obrisanoReci:
           typeof odgovor.obrisanoReci === "number" ? odgovor.obrisanoReci : 0,
+        obrisaneReci: citajSpisakReci(odgovor.obrisaneReci),
       });
     } catch {
       setGreska("Lekcija nije upisana, veza sa serverom je pukla.");
     } finally {
       setCuvanje(false);
+      slanjeUToku.current = false;
     }
+  }
+
+  function potvrdiBrisanje() {
+    // Poslednja provera pred slanje. Ako je spisak u međuvremenu promenjen,
+    // potvrda se odnosila na nešto drugo, pa se poništava umesto da se pošalje.
+    if (potvrda === null || potvrda.teloJson !== teloJson) {
+      setPotvrda(null);
+      return;
+    }
+    void posalji(true);
   }
 
   const poljeKlase =
@@ -420,14 +527,100 @@ export default function ZackClient({ udzbenici }: Props) {
         )}
       </div>
 
-      <button
-        type="button"
-        onClick={sacuvaj}
-        disabled={!mozeDaSacuva}
-        className="px-5 py-2.5 rounded-lg text-sm font-semibold bg-[#0B54C9] text-white hover:bg-[#093f97] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-      >
-        {cuvanje ? "Čuvanje..." : "Sačuvaj lekciju"}
-      </button>
+      {/* Dok stoji pitanje o brisanju, običnog dugmeta za čuvanje nema. Odluka
+          se donosi na dva dugmeta ispod, da se ne bi zaobišla klikom pored. */}
+      {!potvrdaVazi && (
+        <button
+          type="button"
+          onClick={() => void posalji(false)}
+          disabled={!mozeDaSacuva}
+          className="px-5 py-2.5 rounded-lg text-sm font-semibold bg-[#0B54C9] text-white hover:bg-[#093f97] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          {cuvanje ? "Čuvanje..." : "Sačuvaj lekciju"}
+        </button>
+      )}
+
+      {potvrda !== null && !potvrdaVazi && (
+        <p className="mt-4 rounded-lg bg-[#FFC400]/20 p-3 text-sm text-[#16161A]">
+          Promenila si spisak, pa je ranije pitanje o brisanju poništeno. Sačuvaj
+          ponovo, pa ćeš dobiti novo pitanje za ovaj spisak.
+        </p>
+      )}
+
+      {potvrdaVazi && potvrda !== null && (
+        // Ista crvena kao kod obrisanih reči, jer je ovo isti događaj, samo
+        // sekund pre nego što se desi. U bazi za sada nije pomereno ništa.
+        <div className="mt-4 rounded-xl border-4 border-[#E5342A] bg-[#E5342A]/10 p-6">
+          <p className="text-2xl sm:text-3xl font-extrabold leading-snug text-[#E5342A]">
+            {`Ovaj upis briše ${potvrda.obrisaceSe.length} ${reciOblik(
+              potvrda.obrisaceSe.length
+            )} iz lekcije ${broj}.`}
+          </p>
+
+          <p className="mt-3 text-base text-[#16161A]">
+            Nijedna reč još nije obrisana. Pogledaj spisak: ako u njemu vidiš reč
+            koju nisi htela da izbaciš, znači da si joj promenila nemački oblik
+            ili da si pogrešila broj lekcije.
+          </p>
+
+          <ul className="mt-3 space-y-1">
+            {potvrda.obrisaceSe.slice(0, PRIKAZANIH_BRISANJA).map((rec, i) => (
+              <li
+                key={`${i}-${rec}`}
+                className="font-mono text-base font-semibold text-[#E5342A]"
+              >
+                {rec}
+              </li>
+            ))}
+          </ul>
+          {potvrda.obrisaceSe.length > PRIKAZANIH_BRISANJA && (
+            <p className="mt-1 text-base text-[#E5342A]">
+              {`... i još ${potvrda.obrisaceSe.length - PRIKAZANIH_BRISANJA}.`}
+            </p>
+          )}
+
+          <p className="mt-3 text-base text-[#16161A]">
+            {potvrda.brojSlicica > 0
+              ? `Sa njima ${slicicePosle(potvrda.brojSlicica)} koje su deca već zaradila.`
+              : "Nijedno dete još nema nijednu sličicu za te reči."}
+          </p>
+          {potvrda.brojSlicica > 0 && (
+            <p className="mt-2 text-base font-semibold text-[#16161A]">
+              Ono što su deca skupila za te reči ne može da se vrati ni ako
+              kasnije ponovo upišeš istu reč. Dete kreće od nule.
+            </p>
+          )}
+
+          <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center">
+            {/* Mirnije i prvo po redu, jer je odustajanje ono što se najčešće
+                stvarno želi kad se ovaj blok pojavi. */}
+            <button
+              type="button"
+              onClick={() => setPotvrda(null)}
+              disabled={cuvanje}
+              className="px-5 py-2.5 rounded-lg border border-gray-400 bg-white text-sm font-semibold text-[#16161A] hover:bg-gray-50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              Odustani, vraćam se na spisak
+            </button>
+            <button
+              type="button"
+              onClick={potvrdiBrisanje}
+              disabled={cuvanje}
+              className="px-5 py-2.5 rounded-lg bg-[#E5342A] text-sm font-bold text-white hover:bg-[#b82820] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              {cuvanje
+                ? "Brisanje..."
+                : potvrda.brojSlicica > 0
+                  ? `Da, obriši ${potvrda.obrisaceSe.length} ${reciOblik(
+                      potvrda.obrisaceSe.length
+                    )} i njihove sličice`
+                  : `Da, obriši ${potvrda.obrisaceSe.length} ${reciOblik(
+                      potvrda.obrisaceSe.length
+                    )}`}
+            </button>
+          </div>
+        </div>
+      )}
 
       {greska && (
         <p className="mt-4 rounded-lg border border-[#E5342A] bg-[#E5342A]/10 p-3 text-sm font-medium text-[#E5342A]">
@@ -450,6 +643,25 @@ export default function ZackClient({ udzbenici }: Props) {
                 rezultat.upisanoReci
               )}. Reč se prepoznaje po nemačkom obliku, pa i najmanja ispravka tog oblika briše staru reč. Ako ovo nisi htela, proveri da nisi promenila nemačku reč nekoj od starih reči.`}
             </p>
+            {rezultat.obrisaneReci.length > 0 && (
+              <ul className="mt-3 space-y-1">
+                {rezultat.obrisaneReci
+                  .slice(0, PRIKAZANIH_BRISANJA)
+                  .map((rec, i) => (
+                    <li
+                      key={`${i}-${rec}`}
+                      className="font-mono text-base font-semibold text-[#E5342A]"
+                    >
+                      {rec}
+                    </li>
+                  ))}
+              </ul>
+            )}
+            {rezultat.obrisaneReci.length > PRIKAZANIH_BRISANJA && (
+              <p className="mt-1 text-base text-[#E5342A]">
+                {`... i još ${rezultat.obrisaneReci.length - PRIKAZANIH_BRISANJA}.`}
+              </p>
+            )}
             <p className="mt-2 text-base font-semibold text-[#16161A]">
               Sličice koje su deca imala za obrisane reči ne mogu da se vrate ni
               ako ponovo upišeš isti spisak.
