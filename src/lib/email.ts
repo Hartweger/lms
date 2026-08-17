@@ -2,6 +2,7 @@ import { Resend } from "resend";
 import * as Sentry from "@sentry/nextjs";
 import { SITE_URL } from "@/lib/site-url";
 import { odjavaUrl, listUnsubscribeHeaders } from "@/lib/optout";
+import { isSuppressed } from "@/lib/email-suppression";
 import { htmlToText } from "@/lib/html-to-text";
 import type { Ga4Weekly } from "@/lib/ga4-report";
 import { MERCHANT, CARD_OUTCOME, pdvBreakdown, type NestpayTx, type RecurringTx } from "@/lib/payment-confirmation";
@@ -57,6 +58,13 @@ async function sendEmail(
   resend: Resend,
   p: { to: string | string[]; subject: string; html: string; from?: string; replyTo?: string; bulk?: boolean },
 ) {
+  // Odjavljeni i trajno neisporučivi ne dobijaju masovnu poštu. Provera stoji OVDE, a ne
+  // u svakom cron-u, da bi je i budući sender dobio sam od sebe. Transakcijske mejlove
+  // (potvrde, magic link, pristup) ne dodiruje - oni nisu `bulk`.
+  if (p.bulk && typeof p.to === "string" && (await isSuppressed(p.to))) {
+    console.log(`[email] preskočeno (odjava/bounce) → ${p.to}: ${p.subject}`);
+    return null;
+  }
   return resend.emails.send({
     from: p.from ?? FROM,
     to: p.to,

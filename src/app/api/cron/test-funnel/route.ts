@@ -3,13 +3,14 @@
 // Mejl #1 (rezultat) šalje LMS odmah po testu (sendTestResultEmail u /api/besplatno-testiranje) -
 // ovde idu samo #2 (15 dana), #3 (30 dana) i #4 (45 dana posle testa).
 // Stop: čim osoba kupi bilo šta (orders completed, WC istorija u poslednjih godinu dana, ima pristup
-// kursu) ili se odjavi preko linka u mejlu (email_optouts).
+// kursu), odjavi se preko linka u mejlu (email_optouts) ili joj se adresa trajno odbija (email_bounces).
 import { NextRequest, NextResponse } from "next/server";
 import { withCronLog, must } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendTestFunnelEmail } from "@/lib/email";
 import { funnelUrlsForNivo } from "@/lib/course-nivo";
 import { isDeliverableEmail } from "@/lib/email-valid";
+import { suppressedEmails } from "@/lib/email-suppression";
 
 export const dynamic = "force-dynamic";
 
@@ -65,15 +66,10 @@ async function cronHandler(request: NextRequest) {
 
   const emails = [...latest.keys()];
 
-  // Odjavljeni preko linka u mejlu - ne dobijaju ništa.
-  const optouts = must(
-    await admin
-      .from("email_optouts")
-      .select("email")
-      .in("email", emails),
-    "email_optouts"
-  );
-  const odjavljeni = new Set((optouts ?? []).map((o) => String(o.email).toLowerCase()));
+  // Odjavljeni preko linka u mejlu + adrese koje se trajno odbijaju - ne dobijaju ništa.
+  // Bez ovog drugog dela adresa sa odbačajem trošila je kvotu po pokretanju i upisivala se
+  // kao „poslato", pa je levak nastavljao da je gađa mesecima.
+  const odjavljeni = await suppressedEmails(emails);
 
   // Već poslati funnel mejlovi.
   const sentRows = must(
