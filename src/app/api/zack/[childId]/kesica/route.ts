@@ -9,7 +9,7 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { otvoriKesicu } from "@/lib/zack/kesica";
-import { jeUuid, nadjiDete, reciLekcije } from "@/lib/zack/upiti";
+import { jeUuid, lekcijaUUdzbeniku, nadjiDete, reciLekcije } from "@/lib/zack/upiti";
 
 const greska = (poruka: string, status: number) =>
   NextResponse.json({ error: poruka }, { status });
@@ -32,6 +32,13 @@ export async function POST(request: Request, { params }: { params: Promise<{ chi
   const lekcijaId = (telo as Record<string, unknown>).lekcijaId;
   if (typeof lekcijaId !== "string" || !jeUuid(lekcijaId)) {
     return greska("Nedostaje ispravan lekcijaId", 400);
+  }
+
+  // Lekcija mora da bude iz udžbenika ovog deteta. Bez ove provere se ključem
+  // tuđe lekcije otvara kesica po tuđem spisku reči, a isporuka je korak posle
+  // kog sličica ulazi u album.
+  if (!(await lekcijaUUdzbeniku(lekcijaId, dete.udzbenik_id))) {
+    return greska("Nema takve lekcije", 404);
   }
 
   const reci = await reciLekcije(lekcijaId);

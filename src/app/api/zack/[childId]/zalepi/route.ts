@@ -7,9 +7,13 @@
 //
 // Vraća se spisak onoga što je STVARNO zalepljeno, ne onoga što je traženo, da
 // se tiho preskočen red ne bi u igri prikazao kao uspeh.
+//
+// Kao i u `zaradi`, ključ mora da pripada udžbeniku ovog deteta. Ovde je to
+// blaža provera nego tamo, jer uslovi upita ionako ne daju da se zalepi red koji
+// dete nema, ali ista granica na oba mesta znači jedno pravilo umesto dva.
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { jeUuid, nadjiDete } from "@/lib/zack/upiti";
+import { jeUuid, nadjiDete, reciUUdzbeniku, NAJVISE_RECI } from "@/lib/zack/upiti";
 
 const greska = (poruka: string, status: number) =>
   NextResponse.json({ error: poruka }, { status });
@@ -41,9 +45,18 @@ export async function POST(request: Request, { params }: { params: Promise<{ chi
 
   const procitano = citajRecIdove(telo);
   if (!procitano.ok) return greska("recIdovi mora biti spisak ključeva reči", 400);
-  const recIdovi = procitano.idovi;
+  if (procitano.idovi.length > NAJVISE_RECI) {
+    return greska(`Najviše ${NAJVISE_RECI} reči odjednom`, 400);
+  }
+
+  const nase = await reciUUdzbeniku(procitano.idovi, dete.udzbenik_id);
+  const recIdovi = procitano.idovi.filter((id) => nase.has(id));
+  const odbijeno = procitano.idovi.length - recIdovi.length;
+  if (odbijeno > 0) {
+    console.warn(`[zack/zalepi] odbijeno ${odbijeno} reči van udžbenika deteta ${dete.id}`);
+  }
   if (recIdovi.length === 0) {
-    return NextResponse.json({ ok: true, zalepljeno: [] });
+    return NextResponse.json({ ok: true, zalepljeno: [], odbijeno });
   }
 
   const sb = createAdminClient();
@@ -60,5 +73,9 @@ export async function POST(request: Request, { params }: { params: Promise<{ chi
     return greska("Sličice nisu zalepljene", 500);
   }
 
-  return NextResponse.json({ ok: true, zalepljeno: (data ?? []).map((r) => r.rec_id) });
+  return NextResponse.json({
+    ok: true,
+    zalepljeno: (data ?? []).map((r) => r.rec_id),
+    odbijeno,
+  });
 }

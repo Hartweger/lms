@@ -29,6 +29,64 @@ export async function nadjiDete(childId: string): Promise<Dete | null> {
   return data;
 }
 
+/**
+ * Najviše reči u jednom pozivu ka `zaradi` ili `zalepi`. Najduža partija pokriva
+ * osam pitanja, a Parovi šest reči odjednom, pa je pedeset daleko iznad svega što
+ * igra ume da pošalje. Granica postoji da telo zahteva ne može da bude
+ * proizvoljno veliko, ne da bi merila igru.
+ */
+export const NAJVISE_RECI = 50;
+
+/**
+ * Od poslatih ključeva zadržava SAMO one koji pripadaju udžbeniku ovog deteta.
+ *
+ * Bez ovoga je dovoljno videti adresu deteta pa poslati tuđe ključeve i napuniti
+ * mu album bez ijedne odigrane igre - a album vredi tačno onoliko koliko je
+ * teško bio zarađen.
+ *
+ * Namerno se ne oslanja na ugnježdeni upit kroz strani ključ: takav upit ume da
+ * tiho vrati prazno kad veza između tabela nije onakva kakvom je smatramo, a
+ * ovde prazno znači „ništa ne upisuj". Dva jasna upita ne mogu tako da otkažu.
+ */
+export async function reciUUdzbeniku(
+  recIdovi: readonly string[],
+  udzbenikId: string
+): Promise<Set<string>> {
+  if (recIdovi.length === 0) return new Set();
+
+  const sb = createAdminClient();
+  const { data: reci, error } = await sb
+    .from("zack_reci")
+    .select("id, lekcija_id")
+    .in("id", recIdovi);
+  if (error) throw new Error(`Ne mogu da proverim reči: ${error.message}`);
+  if (!reci || reci.length === 0) return new Set();
+
+  const lekcijaIdovi = [...new Set(reci.map((r) => r.lekcija_id))];
+  const { data: lekcije, error: greskaLekcija } = await sb
+    .from("zack_lekcije")
+    .select("id")
+    .in("id", lekcijaIdovi)
+    .eq("udzbenik_id", udzbenikId);
+  if (greskaLekcija) throw new Error(`Ne mogu da proverim lekcije: ${greskaLekcija.message}`);
+
+  const nase = new Set((lekcije ?? []).map((l) => l.id));
+  return new Set(reci.filter((r) => nase.has(r.lekcija_id)).map((r) => r.id));
+}
+
+/** Da li lekcija uopšte pripada udžbeniku ovog deteta. */
+export async function lekcijaUUdzbeniku(lekcijaId: string, udzbenikId: string): Promise<boolean> {
+  const sb = createAdminClient();
+  const { data, error } = await sb
+    .from("zack_lekcije")
+    .select("id")
+    .eq("id", lekcijaId)
+    .eq("udzbenik_id", udzbenikId)
+    .maybeSingle();
+  if (error) throw new Error(`Ne mogu da proverim lekciju: ${error.message}`);
+  return data !== null;
+}
+
 export async function reciLekcije(lekcijaId: string): Promise<Rec[]> {
   const sb = createAdminClient();
   const { data, error } = await sb

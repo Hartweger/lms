@@ -16,10 +16,20 @@
 // se radi u dva jasna koraka: postojećim redovima se osvežava isključivo
 // `poslednje_tacno_at` (time izbledela sličica vraća boju), a novi se ubacuju
 // sa `ON CONFLICT DO NOTHING`, da dva brza poziva ne pucaju o UNIQUE.
+//
+// ŠTA SE SME ZARADITI
+// -------------------
+// Samo reč iz udžbenika ovog deteta. Ispravan oblik ključa nije dovoljan: ko
+// vidi adresu deteta, video bi i kako da mu pošalje tuđe ključeve i napuni album
+// bez ijedne odigrane igre. Reči koje ne prođu proveru se TIHO ispuštaju, a ne
+// ruše ceo poziv sa 400. Razlog je vrhovno pravilo: u istom spisku sa jednim
+// nevažećim ključem (reč obrisana iz lekcije usred partije) stoje i pošteno
+// zarađene reči, i one moraju da prođu. Odbijene se prebroje i vrate u odgovoru,
+// da se gubitak vidi u logu umesto da nestane.
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { noviNiz } from "@/lib/zack/niz";
-import { jeUuid, nadjiDete } from "@/lib/zack/upiti";
+import { jeUuid, nadjiDete, reciUUdzbeniku, NAJVISE_RECI } from "@/lib/zack/upiti";
 
 const greska = (poruka: string, status: number) =>
   NextResponse.json({ error: poruka }, { status });
@@ -121,7 +131,17 @@ export async function POST(request: Request, { params }: { params: Promise<{ chi
 
   const procitano = citajRecIdove(telo);
   if (!procitano.ok) return greska("recIdovi mora biti spisak ključeva reči", 400);
-  const recIdovi = procitano.idovi;
+  if (procitano.idovi.length > NAJVISE_RECI) {
+    return greska(`Najviše ${NAJVISE_RECI} reči odjednom`, 400);
+  }
+
+  // Sve što nije iz udžbenika ovog deteta otpada ovde, pre ijednog upisa.
+  const nase = await reciUUdzbeniku(procitano.idovi, dete.udzbenik_id);
+  const recIdovi = procitano.idovi.filter((id) => nase.has(id));
+  const odbijeno = procitano.idovi.length - recIdovi.length;
+  if (odbijeno > 0) {
+    console.warn(`[zack/zaradi] odbijeno ${odbijeno} reči van udžbenika deteta ${dete.id}`);
+  }
 
   const sb = createAdminClient();
 
@@ -129,7 +149,13 @@ export async function POST(request: Request, { params }: { params: Promise<{ chi
     // Nije bilo nijednog tačnog odgovora, pa se niz ne dira, samo se javlja
     // kakav jeste.
     const stanje = await procitajNiz(sb, dete.id);
-    return NextResponse.json({ ok: true, zaradjeno: 0, osvezeno: 0, niz: stanje?.niz ?? 0 });
+    return NextResponse.json({
+      ok: true,
+      zaradjeno: 0,
+      osvezeno: 0,
+      odbijeno,
+      niz: stanje?.niz ?? 0,
+    });
   }
 
   const sada = new Date().toISOString();
@@ -192,5 +218,5 @@ export async function POST(request: Request, { params }: { params: Promise<{ chi
   // upisane i dete ih dobija kao da je sve u redu.
   const niz = await osveziNiz(sb, dete.id);
 
-  return NextResponse.json({ ok: true, zaradjeno, osvezeno, niz });
+  return NextResponse.json({ ok: true, zaradjeno, osvezeno, odbijeno, niz });
 }
