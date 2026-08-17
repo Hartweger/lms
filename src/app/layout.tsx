@@ -230,7 +230,13 @@ gtag('config', '${ADS_ID}', { allow_enhanced_conversions: true });` : ""}
         <SakrijNa prefiksi={["/zack"]}>
           <CookieBanner />
         </SakrijNa>
-        <AttributionTracker />
+        {/* Praćenje izvora posete piše kolačić hw_attr sa rokom od 90 dana.
+            Detetu se ne piše: ono ništa ne kupuje, pa nema ni porudžbine kojoj
+            bi se izvor pripisao, a marketinški kolačić na dečjem delu nema kome
+            da se opravda. */}
+        <SakrijNa prefiksi={["/zack"]}>
+          <AttributionTracker />
+        </SakrijNa>
         <SakrijNa prefiksi={["/zack"]}>
           <MetaPixel />
         </SakrijNa>
