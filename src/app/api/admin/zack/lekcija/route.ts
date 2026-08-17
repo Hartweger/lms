@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/api-auth";
+import { izracunajBrisanje, normalizujDe, pripremiReci } from "@/lib/zack/lekcija-upis";
 
 // Upis jedne lekcije sa spiskom reči. Namerno je sve u jednom pozivu, jer je
 // lekcija najmanja celina koju Nataša unosi i nema smisla da se pola upiše.
@@ -16,26 +17,22 @@ import { requireAdmin } from "@/lib/api-auth";
 // `upsert` na tom ključu, pa reč koja ostaje u spisku zadržava svoj `id` i
 // sličice dece prežive i ispravku prevoda, i promenu roda, i premeštanje reči
 // gore-dole. Briše se isključivo ono što je Nataša stvarno izbacila iz spiska,
-// i to se vraća u odgovoru kao `obrisanoReci`, da brisanje ne bude nevidljivo.
+// i to se vraća u odgovoru kao `obrisaneReci`, da brisanje ne bude nevidljivo.
+// Pazi: pošto je `de` ključ, ispravka samog nemačkog oblika JESTE brisanje -
+// stara reč nestaje sa svim sličicama, a nova ulazi prazna.
 //
 // NE VRAĆAJ `delete` nad celom lekcijom. To nije čišćenje spiska, to je
 // oduzimanje detetu onoga što je zaradilo.
+//
+// ZAŠTO SE PRVO PITA, PA TEK ONDA PIŠE
+// ------------------------------------
+// Lekcija se pogađa po (udzbenik_id, broj). Omaška u broju - spisak za lekciju
+// 7 poslat pod brojem 1 - gađa tuđu lekciju i briše njene reči. Zato se ovde
+// prvo samo ČITA šta bi nestalo, pa ako bi nešto nestalo a potvrda nije stigla,
+// vraća se 409 i baza se ne dira ni na koji način. Piše se tek kad je jasno da
+// se ništa ne gubi ili da je gubitak potvrđen.
 
-const RODOVI = ["der", "die", "das", "nema"] as const;
-const VRSTE = ["imenica", "glagol", "pridev", "ostalo"] as const;
-
-type Rod = (typeof RODOVI)[number];
-type Vrsta = (typeof VRSTE)[number];
-
-type PripremljenaRec = {
-  redni_broj: number;
-  de: string;
-  sr: string;
-  rod: Rod;
-  mnozina: string | null;
-  vrsta: Vrsta;
-  izuzetak: boolean;
-};
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 type PostojecaRec = { id: string; de: string };
 
@@ -46,16 +43,12 @@ function jeNeprazanTekst(v: unknown): v is string {
   return typeof v === "string" && v.trim().length > 0;
 }
 
-function jeRod(v: unknown): v is Rod {
-  return typeof v === "string" && (RODOVI as readonly string[]).includes(v);
-}
-
-function jeVrsta(v: unknown): v is Vrsta {
-  return typeof v === "string" && (VRSTE as readonly string[]).includes(v);
-}
-
-/** Polje pravila: sme da se ne pošalje, a ako se pošalje mora biti tekst ili null. */
+/**
+ * Polje pravila: sme da se ne pošalje, sme da bude null, a ako se pošalje kao
+ * nešto treće mora biti tekst. Neposlato polje je najčešći slučaj i nije greška.
+ */
 function citajPravilo(v: unknown): { ok: true; vrednost: string | null } | { ok: false } {
+  if (v === undefined) return { ok: true, vrednost: null };
   if (v === null) return { ok: true, vrednost: null };
   if (typeof v === "string") return { ok: true, vrednost: v.trim() || null };
   return { ok: false };
@@ -75,7 +68,7 @@ export async function POST(request: Request) {
     return greska("Telo zahteva nije ispravan JSON", 400);
   }
   if (typeof telo !== "object" || telo === null || Array.isArray(telo)) {
-    return greska("Telo zahteva nije ispravan JSON", 400);
+    return greska("Telo zahteva mora biti objekat", 400);
   }
   const body = telo as Record<string, unknown>;
 
@@ -87,6 +80,9 @@ export async function POST(request: Request) {
 
   if (!jeNeprazanTekst(udzbenikId)) {
     return greska("Nedostaje udzbenikId", 400);
+  }
+  if (!UUID.test(udzbenikId.trim())) {
+    return greska("udzbenikId nije ispravan", 400);
   }
   if (!jeNeprazanTekst(naziv)) {
     return greska("Nedostaje naziv lekcije", 400);
@@ -102,78 +98,81 @@ export async function POST(request: Request) {
     return greska("Polja pravila moraju biti tekst", 400);
   }
 
-  if (!Array.isArray(body.reci) || body.reci.length === 0) {
-    return greska("Lekcija mora imati bar jednu reč", 400);
+  const priprema = pripremiReci(body.reci);
+  if (!priprema.ok) {
+    return greska(priprema.greska, 400);
   }
-  const ulazneReci: unknown[] = body.reci;
+  const pripremljene = priprema.reci;
 
-  const pripremljene: PripremljenaRec[] = [];
-  const videnoDe = new Map<string, number>();
+  // 3. Da li lekcija sa tim brojem već postoji. Ovo je samo čitanje.
+  const { data: postojecaLekcija, error: greskaTrazenja } = await admin
+    .from("zack_lekcije")
+    .select("id")
+    .eq("udzbenik_id", udzbenikId.trim())
+    .eq("broj", broj)
+    .maybeSingle();
 
-  for (let i = 0; i < ulazneReci.length; i++) {
-    const red = i + 1;
-    const sirova = ulazneReci[i];
-    if (typeof sirova !== "object" || sirova === null || Array.isArray(sirova)) {
-      return greska(`Reč broj ${red}: red nije ispravno popunjen`, 400);
-    }
-    const r = sirova as Record<string, unknown>;
-
-    if (!jeNeprazanTekst(r.de)) {
-      return greska(`Reč broj ${red}: nedostaje nemačka reč`, 400);
-    }
-    if (!jeNeprazanTekst(r.sr)) {
-      return greska(`Reč broj ${red}: nedostaje prevod na naš jezik`, 400);
-    }
-
-    const de = r.de.trim();
-    const vecViden = videnoDe.get(de);
-    if (vecViden !== undefined) {
-      return greska(
-        `Reč broj ${red}: nemačka reč „${de}" već postoji u spisku, pod brojem ${vecViden}`,
-        400
-      );
-    }
-    videnoDe.set(de, red);
-
-    let rod: Rod = "nema";
-    if (r.rod !== undefined && r.rod !== null) {
-      if (!jeRod(r.rod)) {
-        return greska(
-          `Reč broj ${red}: rod „${String(r.rod)}" nije dozvoljen, koristi der, die, das ili nema`,
-          400
-        );
-      }
-      rod = r.rod;
-    }
-
-    let vrsta: Vrsta = "ostalo";
-    if (r.vrsta !== undefined && r.vrsta !== null) {
-      if (!jeVrsta(r.vrsta)) {
-        return greska(
-          `Reč broj ${red}: vrsta „${String(r.vrsta)}" nije dozvoljena, koristi imenica, glagol, pridev ili ostalo`,
-          400
-        );
-      }
-      vrsta = r.vrsta;
-    }
-
-    const mnozina = typeof r.mnozina === "string" ? r.mnozina.trim() || null : null;
-
-    pripremljene.push({
-      redni_broj: red,
-      de,
-      sr: r.sr.trim(),
-      rod,
-      mnozina,
-      vrsta,
-      izuzetak: Boolean(r.izuzetak),
-    });
+  if (greskaTrazenja) {
+    console.error("[zack/lekcija] traženje lekcije:", greskaTrazenja);
+    return greska("Lekcija nije pročitana", 500);
   }
 
-  // 3. Lekcija. Polja pravila se upisuju samo ako su stvarno poslata, da
-  // ponovni unos spiska reči bez pravila ne obriše pravilo koje već stoji.
+  // 4. Šta bi nestalo. Isto tako, samo čitanje.
+  let postojece: PostojecaRec[] = [];
+  if (postojecaLekcija) {
+    const { data, error: greskaCitanja } = await admin
+      .from("zack_reci")
+      .select("id, de")
+      .eq("lekcija_id", postojecaLekcija.id);
+
+    if (greskaCitanja) {
+      console.error("[zack/lekcija] čitanje postojećih reči:", greskaCitanja);
+      return greska("Postojeće reči lekcije nisu pročitane", 500);
+    }
+    postojece = (data ?? []) as PostojecaRec[];
+  }
+
+  const zaBrisanje = izracunajBrisanje(
+    postojece,
+    pripremljene.map((r) => r.de)
+  );
+  const zaBrisanjeSet = new Set(zaBrisanje);
+  const obrisaceSe = postojece.filter((r) => zaBrisanjeSet.has(r.id)).map((r) => normalizujDe(r.de));
+
+  // 5. Ako bi se nešto brisalo a potvrda nije stigla, stajemo ovde. Do sada nije
+  // upisano ništa, pa Nataša koja je pogrešila broj lekcije vidi tuđe reči u
+  // odgovoru i može da odustane, a u bazi je sve ostalo netaknuto.
+  if (zaBrisanje.length > 0 && body.potvrdaBrisanja !== true) {
+    const { count, error: greskaBrojanja } = await admin
+      .from("zack_slicice")
+      .select("id", { count: "exact", head: true })
+      .in("rec_id", zaBrisanje);
+
+    if (greskaBrojanja) {
+      console.error("[zack/lekcija] brojanje sličica:", greskaBrojanja);
+      return greska("Sličice nisu prebrojane", 500);
+    }
+
+    const brojSlicica = count ?? 0;
+    return NextResponse.json(
+      {
+        potrebnaPotvrda: true,
+        obrisaceSe,
+        brojSlicica,
+        poruka:
+          `Ovaj upis briše ${obrisaceSe.length} reči iz lekcije ${broj}, a sa njima i ` +
+          `${brojSlicica} već zarađenih sličica dece. Ako ovo nije lekcija koju si htela, ` +
+          `proveri broj lekcije. Ako jeste, pošalji ponovo sa potvrdaBrisanja: true.`,
+      },
+      { status: 409 }
+    );
+  }
+
+  // 6. Od ovog reda počinje upis. Polja pravila se upisuju samo ako su stvarno
+  // poslata, da ponovni unos spiska reči bez pravila ne obriše pravilo koje već
+  // stoji.
   const zaUpisLekcije: Record<string, unknown> = {
-    udzbenik_id: udzbenikId,
+    udzbenik_id: udzbenikId.trim(),
     broj,
     naziv: naziv.trim(),
   };
@@ -189,32 +188,20 @@ export async function POST(request: Request) {
 
   if (greskaLekcije || !lekcija) {
     console.error("[zack/lekcija] upis lekcije:", greskaLekcije);
+    if (greskaLekcije?.code === "23503") {
+      return greska("Udžbenik sa tim id-jem ne postoji", 400);
+    }
     return greska("Lekcija nije upisana", 500);
   }
   const lekcijaId: string = lekcija.id;
 
-  // 4. Šta je izbačeno iz spiska. Čita se pre upisa reči, i to namerno: reč
-  // koja se briše i dalje drži svoj redni_broj, pa bi nova reč koja dobija taj
-  // isti redni_broj pukla o UNIQUE (lekcija_id, redni_broj). Odloženo
-  // ograničenje pomaže samo unutar jednog upisa, a ovo su dva odvojena poziva.
-  const { data: postojece, error: greskaCitanja } = await admin
-    .from("zack_reci")
-    .select("id, de")
-    .eq("lekcija_id", lekcijaId);
-
-  if (greskaCitanja) {
-    console.error("[zack/lekcija] čitanje postojećih reči:", greskaCitanja);
-    return greska("Postojeće reči lekcije nisu pročitane", 500);
-  }
-
-  const noviDe = new Set(pripremljene.map((r) => r.de));
-  const zaBrisanje: string[] = (postojece ?? [])
-    .filter((r: PostojecaRec) => !noviDe.has(r.de))
-    .map((r: PostojecaRec) => r.id);
-
+  // 7. Brisanje ide PRE upisa reči i taj redosled se ne menja: reč koja se briše
+  // i dalje drži svoj redni_broj, pa bi nova reč koja dobija taj isti redni_broj
+  // pukla o UNIQUE (lekcija_id, redni_broj). Odloženo ograničenje pomaže samo
+  // unutar jednog upisa, a ovo su dva odvojena poziva.
   if (zaBrisanje.length > 0) {
     // Jedini put na kome sličice i dalje nestaju. Ispravno je, jer je Nataša
-    // reč stvarno izbacila, ali se broj vraća u odgovoru da se to vidi.
+    // reč stvarno izbacila i potvrdila brisanje, ali se spisak vraća u odgovoru.
     const { error: greskaBrisanja } = await admin
       .from("zack_reci")
       .delete()
@@ -225,7 +212,7 @@ export async function POST(request: Request) {
     }
   }
 
-  // 5. Upis reči bez brisanja. Reč koja ostaje zadržava svoj id, pa sličice
+  // 8. Upis reči bez brisanja. Reč koja ostaje zadržava svoj id, pa sličice
   // dece prežive.
   const { error: greskaReci } = await admin.from("zack_reci").upsert(
     pripremljene.map((r) => ({ lekcija_id: lekcijaId, ...r })),
@@ -242,5 +229,6 @@ export async function POST(request: Request) {
     lekcijaId,
     upisanoReci: pripremljene.length,
     obrisanoReci: zaBrisanje.length,
+    obrisaneReci: obrisaceSe,
   });
 }
