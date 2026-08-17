@@ -16,12 +16,20 @@
 // kasnije razišla. Lokalno stanje ovde je samo ono što sesija ne zna: šta je
 // dete upravo kliknulo i šta trenutno piše u odzivu.
 //
-// NAPREDAK SE ŠALJE ODMAH
-// -----------------------
+// NAPREDAK SE ŠALJE ODMAH, PA SE NA KRAJU ŠALJE JOŠ JEDNOM
+// --------------------------------------------------------
 // Posle SVAKOG tačnog odgovora ide poziv ka /api/zack/<childId>/zaradi. Ne na
 // kraju igre. Dete koje zatvori karticu nasred igre ne sme ništa da izgubi.
-// Poziv ide u pozadini i njegov pad ne ruši igru: sličica se u najgorem slučaju
-// zaradi ponovo, a igra se ne prekida zbog mreže.
+// Taj poziv ide u pozadini i njegov pad ne ruši igru.
+//
+// Ali poziv u pozadini sme da padne u tišini, pa on sam NIJE dokaz da je reč
+// stigla. Zato se ceo spisak tačnih na kraju partije predaje roditelju kroz
+// `onKraj`, koji ga šalje ponovo i ovog puta ČEKA odgovor. Ruta je idempotentna,
+// pa ponovljeno slanje ne može ništa da pokvari ni da duplira.
+//
+// Iz istog razloga izlaz iz igre („Dosta za sad") stoji OVDE, a ne u ekranu
+// lekcije: samo ovde se zna šta je dete do tog trenutka zaradilo. Izlaz koji
+// ekran lekcije sam odradi ne bi imao šta da ponovo pošalje.
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { napraviPitanja, type Igra as VrstaIgre, type Pitanje } from "@/lib/zack/pitanja";
 import { bojaZaRod, promesaj, type Rec, type Rod } from "@/lib/zack/rec";
@@ -144,7 +152,11 @@ export default function Igra({
     if (tajmer.current) clearTimeout(tajmer.current);
   }, []);
 
-  /** Poziv ide u pozadini. Ne čeka se, i njegov pad se namerno guta. */
+  /**
+   * Slanje u toku igre. Ide u pozadini, ne čeka se i njegov pad se namerno guta,
+   * jer se igra ne sme prekidati zbog mreže. Ono što ovde ne stigne, hvata
+   * ponovno slanje na kraju partije (vidi `onKraj`).
+   */
   const posaljiZaradjeno = useCallback(
     (recIdovi: string[]) => {
       if (recIdovi.length === 0) return;
@@ -203,8 +215,12 @@ export default function Igra({
     [javi]
   );
 
-  /** Parovi se završavaju sami kad nestane pločica, i dugmetom za izlaz. */
-  const naKrajParova = useCallback(() => {
+  /**
+   * Izlaz na zahtev deteta. Ne prekida ništa nasilno: `odustani` samo zatvara
+   * sesiju, pa kraj prođe istim putem kao i odigrana partija i sve što je dete
+   * zabeležilo ode na ponovno slanje. Parovi koriste isto ovo.
+   */
+  const izadji = useCallback(() => {
     setSesija((s) => (s ? odustani(s) : s));
   }, []);
 
@@ -265,7 +281,7 @@ export default function Igra({
           pitanje={p}
           naSpojen={naSpojen}
           naPromasaj={naPromasaj}
-          naKraj={naKrajParova}
+          naKraj={izadji}
         />
       ) : p.igra === "rod" ? (
         <IgraRod key={korak} pitanje={p} zakljucano={zakljucano} naOdgovor={naOdgovor} />
@@ -279,6 +295,22 @@ export default function Igra({
         />
       ) : (
         <IgraBiranje key={korak} pitanje={p} zakljucano={zakljucano} naOdgovor={naOdgovor} />
+      )}
+
+      {/* Bez ovoga dete koje se zaglavi nema izlaz osim dugmeta „nazad" u
+          pretraživaču, a tim putem se kraj partije nikad ne javi i ponovno
+          slanje izostane. Parovi imaju svoje „Dosta za sad" unutar table, pa im
+          ovo ne treba: dva ista dugmeta jedno ispod drugog detetu izgledaju kao
+          izbor koji mora da razume, a nije. */}
+      {p.igra !== "parovi" && (
+        <button
+          type="button"
+          onClick={izadji}
+          className={`${DUGME} font-heading mt-6 block min-h-[52px] w-full border-2 text-[17px] font-bold`}
+          style={{ background: "transparent", borderColor: IVICA, color: PRIGUSEN }}
+        >
+          Dosta za sad
+        </button>
       )}
     </Okvir>
   );

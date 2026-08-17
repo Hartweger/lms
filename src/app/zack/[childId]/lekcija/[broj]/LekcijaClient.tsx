@@ -5,15 +5,21 @@
 //
 // VRHOVNO PRAVILO
 // ---------------
-// Detetu se NIKAD ne oduzima ono što je zaradilo. Iz toga slede tri stvari koje
-// se ne smeju „pojednostaviti":
+// Detetu se NIKAD ne oduzima ono što je zaradilo. Iz toga slede četiri stvari
+// koje se ne smeju „pojednostaviti":
 //
-// 1. Napredak NE ide odavde. Posle svakog tačnog odgovora ga šalje sama
-//    komponenta igre, red po red. Ovaj ekran samo otvara kesicu na kraju.
-// 2. Lepljenje se vidi ODMAH, a poziv ide u pozadini i njegov pad se guta.
+// 1. Napredak se u toku igre šalje iz same igre, red po red, posle svakog
+//    tačnog odgovora. To slanje ide u pozadini i sme tiho da padne, pa NIJE
+//    dokaz da je reč stigla.
+// 2. Zato se na kraju partije ceo spisak tačnih šalje JOŠ JEDNOM, odavde, i to
+//    se čeka i proverava. Ruta je idempotentna, pa ponovljeno slanje ne može
+//    ništa da pokvari. Ako ni to ne prođe, spisak ostaje u ruci (`neposlato`) i
+//    ide uz prvi sledeći pokušaj, a detetu se kaže istina - nikad da je sve u
+//    redu kad nije.
+// 3. Lepljenje se vidi ODMAH, a poziv ide u pozadini i njegov pad se guta.
 //    Sličica je već zarađena i isporučena u bazi, pa pad mreže ne može da je
 //    odnese: najgore što se desi je da ostane „u ruci" do sledećeg otvaranja.
-// 3. Sličice koje su ostale u ruci od prošlog puta se pri učitavanju vraćaju u
+// 4. Sličice koje su ostale u ruci od prošlog puta se pri učitavanju vraćaju u
 //    ruku. Bez toga bi dete koje je zatvorilo karticu pre lepljenja zateklo
 //    prazna mesta koja nema čime da popuni.
 //
@@ -156,7 +162,7 @@ function Strelica({ nazad }: { nazad?: boolean }) {
 
 // ── Ekran ───────────────────────────────────────────────────────────────────
 
-type Poruka = "prazna-kesica" | "greska-kesice" | null;
+type Poruka = "prazna-kesica" | "greska-kesice" | "nije-stiglo" | null;
 
 export default function LekcijaClient({
   childId,
@@ -182,6 +188,10 @@ export default function LekcijaClient({
 
   const [ceka, setCeka] = useState(neotvorenaKesica);
   const [otvaram, setOtvaram] = useState(false);
+  // Slanje zarađenog i otvaranje kesice su dva različita posla i detetu se tako
+  // i kažu. Jedno stanje za oba bi značilo da mu piše „Otvaram kesicu..." dok se
+  // kesica još ni ne dodiruje.
+  const [saljem, setSaljem] = useState(false);
   const [poruka, setPoruka] = useState<Poruka>(null);
   // Zaseban tekst za čitač ekrana. Ono što se vidi kao sličica mora i da se čuje.
   const [najava, setNajava] = useState("");
@@ -189,6 +199,14 @@ export default function LekcijaClient({
   // Dva brza tapa na „Otvori kesicu" ne smeju da pošalju dva poziva. Stanje
   // `otvaram` stiže tek u sledećem renderu, pa se čuva i u referenci.
   const uToku = useRef(false);
+
+  // Ono što ni na kraju partije nije uspelo da se pošalje. Stoji ovde i ide uz
+  // prvi sledeći pokušaj, da odigrana igra posle koje je mreža pukla ne bi
+  // propala kad dete odigra sledeću. Referenca, ne stanje: čita se unutar
+  // asinhronog toka, gde bi zatvorena vrednost stanja bila zastarela.
+  const neposlato = useRef<string[]>([]);
+  // Isto: drugi tap na „Probaj ponovo" ne sme da pokrene drugi tok.
+  const krajUToku = useRef(false);
 
   const otvoriKesicu = useCallback(async () => {
     if (uToku.current) return;
@@ -233,15 +251,77 @@ export default function LekcijaClient({
   }, [childId, lekcija.id]);
 
   /**
-   * Kraj igre. `tacniRecIdovi` se namerno NE prosleđuje ruti: ruta sama zna šta
-   * je dete zaradilo a nije videlo, jer je to već upisano posle svakog tačnog
-   * odgovora. Isto se zove i kad dete izađe iz igre pre kraja, da mu ono što je
-   * do tada zaradilo ne ostane zaključano iza nedovršene partije.
+   * Ponovno slanje zarađenog, sa ČEKANJEM i proverom odgovora, za razliku od
+   * slanja u toku igre koje sme da padne u tišini. Ruta je idempotentna
+   * (ON CONFLICT DO NOTHING), pa reč koja je već stigla ne može da se duplira.
+   * Vraća da li je zaista stiglo, jer se na tome zasniva šta se detetu kaže.
    */
-  const naKrajIgre = useCallback(() => {
-    setIgra(null);
-    void otvoriKesicu();
-  }, [otvoriKesicu]);
+  const posaljiZaradjeno = useCallback(
+    async (recIdovi: string[]): Promise<boolean> => {
+      if (recIdovi.length === 0) return true;
+      try {
+        const odgovor = await fetch(`/api/zack/${childId}/zaradi`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ recIdovi }),
+        });
+        return odgovor.ok;
+      } catch {
+        return false;
+      }
+    },
+    [childId]
+  );
+
+  /**
+   * Kraj partije: prvo se osigura zarađeno, pa tek onda otvara kesica. Spisak
+   * tačnih dolazi iz same igre, jer samo ona zna šta je dete stvarno uradilo -
+   * ruta zna samo ono što je do nje stiglo.
+   *
+   * Ako ponovno slanje ne prođe, kesica se NE otvara: bila bi to poruka o
+   * uspehu preko toka koji nije uspeo. Umesto toga se kaže istina i spisak se
+   * čuva za sledeći pokušaj.
+   */
+  const zavrsiIgru = useCallback(
+    async (tacniRecIdovi: string[]) => {
+      if (krajUToku.current) return;
+      krajUToku.current = true;
+      setSaljem(true);
+      setPoruka(null);
+
+      // Uz svež spisak ide i sve što je zaostalo od ranijih partija.
+      const zaSlanje = [...new Set([...neposlato.current, ...tacniRecIdovi])];
+      // `posaljiZaradjeno` ne baca, pa ovde nema šta da se hvata.
+      const stiglo = await posaljiZaradjeno(zaSlanje);
+      neposlato.current = stiglo ? [] : zaSlanje;
+      krajUToku.current = false;
+      setSaljem(false);
+
+      if (!stiglo) {
+        setPoruka("nije-stiglo");
+        setNajava(
+          "Internet trenutno ne radi kako treba, pa neke sličice iz ove igre možda nisu stigle. Probaj ponovo kad veza proradi."
+        );
+        return;
+      }
+
+      await otvoriKesicu();
+    },
+    [otvoriKesicu, posaljiZaradjeno]
+  );
+
+  /**
+   * Kraj igre, kako ga javlja sama igra. Zove se i kad dete izađe pre kraja
+   * („Dosta za sad"), da mu ono što je do tada zaradilo ne ostane zaključano
+   * iza nedovršene partije.
+   */
+  const naKrajIgre = useCallback(
+    (tacniRecIdovi: string[]) => {
+      setIgra(null);
+      void zavrsiIgru(tacniRecIdovi);
+    },
+    [zavrsiIgru]
+  );
 
   /** Poziv ide u pozadini. Ne čeka se, i njegov pad se namerno guta. */
   const posaljiLepljenje = useCallback(
@@ -280,27 +360,10 @@ export default function LekcijaClient({
 
   // ── Igra zauzima ceo ekran ────────────────────────────────────────────────
   if (igra) {
-    return (
-      <div>
-        <Igra childId={childId} reci={reci} vrsta={igra} onKraj={naKrajIgre} />
-        {/* Bez ovoga dete koje se zaglavi u igri nema izlaz osim dugmeta „nazad"
-            u pretraživaču. Izlaz radi isto što i kraj partije, pa se zarađeno
-            odmah pretvori u kesicu umesto da ostane da čeka.
-            Parovi imaju svoje „Dosta za sad", pa im ovo ne treba: dva ista
-            dugmeta jedno ispod drugog detetu izgledaju kao izbor koji mora da
-            razume, a nije. */}
-        {igra !== "parovi" && (
-          <button
-            type="button"
-            onClick={naKrajIgre}
-            className={`${FOKUS} font-heading mt-6 block min-h-[52px] w-full rounded-2xl border-2 text-[17px] font-bold`}
-            style={{ background: "transparent", borderColor: IVICA, color: PRIGUSEN }}
-          >
-            Dosta za sad
-          </button>
-        )}
-      </div>
-    );
+    // Izlaz iz igre („Dosta za sad") stoji unutar same igre, jer samo ona zna
+    // šta je dete do tog trenutka zaradilo. Izlaz odavde bi ugasio igru bez
+    // spiska tačnih, pa bi ponovno slanje ostalo bez ičega da pošalje.
+    return <Igra childId={childId} reci={reci} vrsta={igra} onKraj={naKrajIgre} />;
   }
 
   const imaPravilo = Boolean(lekcija.pravilo_tekst ?? lekcija.pravilo_naslov);
@@ -309,6 +372,8 @@ export default function LekcijaClient({
   // inače dete posle odigrane igre nakratko gleda ekran na kom se ništa ne
   // dešava i pomisli da mu je trud propao.
   const bedzKesice = ceka > 0 && uRuci.length === 0;
+  const zauzeto = otvaram || saljem;
+  const natpisZauzeto = saljem ? "Šaljem..." : "Otvaram...";
 
   return (
     <div>
@@ -353,21 +418,21 @@ export default function LekcijaClient({
           <button
             type="button"
             onClick={() => void otvoriKesicu()}
-            disabled={otvaram}
+            disabled={zauzeto}
             className={`${FOKUS} font-heading mt-3.5 block min-h-[60px] w-full rounded-2xl text-[19px] font-bold disabled:opacity-60 motion-safe:transition-transform motion-safe:duration-100 motion-safe:active:scale-[0.985]`}
             style={{ background: MASTILO, color: "#FFFFFF" }}
           >
-            {otvaram ? "Otvaram..." : "Otvori kesicu"}
+            {zauzeto ? natpisZauzeto : "Otvori kesicu"}
           </button>
         </section>
       )}
 
-      {otvaram && !bedzKesice && (
+      {zauzeto && !bedzKesice && (
         <p
           className="font-heading mb-6 rounded-2xl border-[3px] p-4 text-center text-[18px] font-bold"
           style={{ background: PAPIR, borderColor: ZUTA, color: MASTILO }}
         >
-          Otvaram kesicu...
+          {saljem ? "Samo trenutak..." : "Otvaram kesicu..."}
         </p>
       )}
 
@@ -427,11 +492,39 @@ export default function LekcijaClient({
         </p>
       )}
 
+      {/* Ponovno slanje nije prošlo. Ovde se NE sme reći da je sve na broju,
+          jer nije: deo iz ove partije možda nije stigao do baze. Kaže se
+          mirno, bez uzvičnika i bez prebacivanja, i ponudi se pokušaj ponovo -
+          spisak stoji sačuvan i ide uz njega. */}
+      {poruka === "nije-stiglo" && (
+        <section
+          className="mb-6 rounded-2xl border-2 p-4"
+          style={{ background: PAPIR, borderColor: IVICA }}
+        >
+          <p className="text-[16px] leading-relaxed" style={{ color: MASTILO }}>
+            Internet trenutno ne radi kako treba, pa neke sličice iz ove igre možda nisu stigle.
+            Probaj ponovo kad veza proradi.
+          </p>
+          <button
+            type="button"
+            onClick={() => void zavrsiIgru([])}
+            disabled={zauzeto}
+            className={`${FOKUS} font-heading mt-3 block min-h-[52px] w-full rounded-2xl border-2 text-[17px] font-bold disabled:opacity-60`}
+            style={{ background: "transparent", borderColor: MASTILO, color: MASTILO }}
+          >
+            {zauzeto ? natpisZauzeto : "Probaj ponovo"}
+          </button>
+        </section>
+      )}
+
       {poruka === "greska-kesice" && (
         <section
           className="mb-6 rounded-2xl border-2 p-4"
           style={{ background: PAPIR, borderColor: IVICA }}
         >
+          {/* Ovde se sme reći da ništa nije izgubljeno: do ove poruke se stiže
+              tek pošto je zarađeno potvrđeno upisano, pa sličice zaista čekaju
+              u bazi. Pala je samo isporuka iz kesice. */}
           <p className="text-[16px] leading-relaxed" style={{ color: MASTILO }}>
             Kesica se sad nije otvorila. Ništa nije izgubljeno, sve tvoje sličice te i dalje čekaju.
           </p>
@@ -441,11 +534,11 @@ export default function LekcijaClient({
             <button
               type="button"
               onClick={() => void otvoriKesicu()}
-              disabled={otvaram}
+              disabled={zauzeto}
               className={`${FOKUS} font-heading mt-3 block min-h-[52px] w-full rounded-2xl border-2 text-[17px] font-bold disabled:opacity-60`}
               style={{ background: "transparent", borderColor: MASTILO, color: MASTILO }}
             >
-              {otvaram ? "Otvaram..." : "Probaj ponovo"}
+              {zauzeto ? natpisZauzeto : "Probaj ponovo"}
             </button>
           )}
         </section>
