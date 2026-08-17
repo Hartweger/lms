@@ -1895,6 +1895,18 @@ git commit -m "feat(zack): staza lekcija sa brojačem sličica"
 
 Sve igre dele isto stanje iz `sesija.ts`, pa je razlika samo u tome šta se crta i kako se javlja tačno ili netačno.
 
+Dve stvari koje je isplivalo pri izradi Taska 3 i na koje ovde moraš da paziš:
+
+- **Ne pretpostavljaj tačno četiri ponuđena odgovora.** Na lekciji od tri reči
+  brzo-biranje daje tri opcije, a ako dve reči imaju isti naš prevod, i manje.
+  Kod ispod zato mapira preko `pitanje.opcije` umesto da crta četiri fiksna
+  dugmeta. Isto važi za množinu, gde je skup kandidata još manji jer otpadaju
+  reči bez upisane množine.
+- **Tip `tacan` kod igre `rod` je `Rod`, što uključuje i `"nema"`.** Filter u
+  `napraviPitanja` čini taj slučaj nemogućim, ali TypeScript to ne zna. Pošto se
+  ovde crtaju tri fiksna dugmeta (der, die, das), reč sa rodom `"nema"` bi
+  značila pitanje bez tačnog odgovora. Ako ikad promeniš filter, promeni i ovo.
+
 ```tsx
 "use client";
 
