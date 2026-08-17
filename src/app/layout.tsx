@@ -20,6 +20,16 @@ import MetaPixel from "@/components/MetaPixel";
 // Prazno = tag se ne emituje, ponašanje ostaje kao pre.
 const ADS_ID = process.env.NEXT_PUBLIC_ADS_ID ?? "";
 
+/**
+ * Jedno pravilo za oba Google skripta: na dečjem delu se merenje ne pali.
+ * Provera je u samom skriptu, a ne kroz `SakrijNa`, jer se oba izvršavaju pre
+ * nego što React zna rutu - za `beforeInteractive` klijentska komponenta stiže
+ * prekasno. Ista provera i za `lazyOnload`, da ne postoje dva pravila.
+ *
+ * Poklapa i „/zack" i „/zack/...", a ne „/zackara".
+ */
+const ZACK_PUTANJA = `(location.pathname === '/zack' || location.pathname.indexOf('/zack/') === 0)`;
+
 const lato = Lato({
   subsets: ["latin", "latin-ext"],
   weight: ["400", "700"],
@@ -87,12 +97,26 @@ export default function RootLayout({
           Preskoči na sadržaj
         </a>
         {/* Google Consent Mode v2 - mora pre GTM-a. Inline skript ne može da importuje TS,
-            pa je ključ 'cookie-consent' hardkodiran: mora ostati u sinhronizaciji sa CONSENT_KEY iz src/lib/consent.ts */}
+            pa je ključ 'cookie-consent' hardkodiran: mora ostati u sinhronizaciji sa CONSENT_KEY iz src/lib/consent.ts
+
+            DEČJI DEO: na /zack se NE konfiguriše nijedna destinacija (nema
+            gtag('js') ni gtag('config')), pa gtag.js nema kome da šalje, i
+            window.gtag se uopšte ne postavlja - da ni jedan budući ubačen
+            isečak nema odakle da pošalje događaj sa dečjeg dela. Provera je u
+            samom skriptu, a ne kroz SakrijNa: ovaj skript ide
+            beforeInteractive, dakle pre nego što React uopšte zna koja je ruta,
+            pa ga klijentska komponenta ne bi stigla da spreči.
+            Sam gtag('consent','default') sme da ostane i tamo - on ništa ne
+            šalje, samo upisuje podrazumevano „odbijeno" u dataLayer.
+            Zbog toga je sve u IIFE: bez njega bi `function gtag` sam po sebi
+            postao window.gtag, ma gde stajao. Van /zack ponašanje je isto kao
+            pre, uključujući redosled upisa u dataLayer. */}
         <Script
           id="consent-default"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
-            __html: `window.dataLayer = window.dataLayer || [];
+            __html: `(function () {
+window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('consent', 'default', {
   ad_storage: 'denied',
@@ -111,9 +135,12 @@ try {
     });
   }
 } catch (e) {}
+if (${ZACK_PUTANJA}) return;
+window.gtag = gtag;
 gtag('js', new Date());
 gtag('config', 'G-MB9DRXVVF6');${ADS_ID ? `
-gtag('config', '${ADS_ID}', { allow_enhanced_conversions: true });` : ""}`,
+gtag('config', '${ADS_ID}', { allow_enhanced_conversions: true });` : ""}
+})();`,
           }}
         />
         {/* Dečji deo (/zack) je zaseban brend i namerno nema ništa od školskog
@@ -194,11 +221,12 @@ gtag('config', '${ADS_ID}', { allow_enhanced_conversions: true });` : ""}`,
           <SmileWidget />
         </SakrijNa>
         {/* Dete pravno ne može da da saglasnost za kolačiće, pa mu se traka ne
-            pokazuje, a reklamni piksel se na /zack uopšte ne pali. Google merenje
-            time ostaje na podrazumevanom „odbijeno" i radi samo bez kolačića.
-            To je namerno: koliko se deca vraćaju meri se iz naših tabela
-            (zaradjena_at, poslednje_tacno_at, niz dana), bez ijednog trećeg lica.
-            Kad roditeljski nalog sa pristankom bude gotov, ovo se preispituje. */}
+            pokazuje. Iz istog razloga se na /zack ne pali ni reklamni piksel ni
+            Google merenje: gtag.js se ne učita i nijedna destinacija se ne
+            konfiguriše (vidi provere putanje uz oba gtag skripta).
+            Koliko se deca vraćaju meri se iz naših tabela (zaradjena_at,
+            poslednje_tacno_at, niz dana). Kad roditeljski nalog sa pristankom
+            bude gotov, ovo se preispituje. */}
         <SakrijNa prefiksi={["/zack"]}>
           <CookieBanner />
         </SakrijNa>
@@ -214,11 +242,23 @@ gtag('config', '${ADS_ID}', { allow_enhanced_conversions: true });` : ""}`,
             PAŽNJA: gtag('js')/gtag('config') se REDAJU u consent-default skriptu
             (beforeInteractive) - moraju u dataLayer PRE bilo kog eventa (npr.
             purchase na hvala strani pri hidraciji), inače gtag.js odbacuje
-            evente bez konfigurisane destinacije. Ovde se samo učitava biblioteka. */}
+            evente bez konfigurisane destinacije. Ovde se samo učitava biblioteka.
+
+            Biblioteka se na /zack ne učitava uopšte. Zato ovde stoji inline
+            skript koji sam ubacuje <script src>, umesto `src` na Script
+            komponenti: `src` bi krenuo bez obzira na rutu, a provera putanje
+            mora da bude ista kao u consent skriptu - jedno pravilo, ne dva. */}
         <Script
           id="ga4-gtag"
           strategy="lazyOnload"
-          src="https://www.googletagmanager.com/gtag/js?id=G-MB9DRXVVF6"
+          dangerouslySetInnerHTML={{
+            __html: `if (!${ZACK_PUTANJA}) {
+  var s = document.createElement('script');
+  s.async = true;
+  s.src = 'https://www.googletagmanager.com/gtag/js?id=G-MB9DRXVVF6';
+  document.head.appendChild(s);
+}`,
+          }}
         />
       </body>
     </html>
