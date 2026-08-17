@@ -11,6 +11,26 @@ import StazaClient from "./StazaClient";
 // manje od ničega: dete bi videlo stari broj i mislilo da mu se rad izgubio.
 export const dynamic = "force-dynamic";
 
+/**
+ * Niz dana. Ako čitanje padne, staza samo ne prikaže niz. Niz je konstatacija
+ * uz pozdrav, a ne razlog da ekran pukne, pa se greška ovde ne diže dalje.
+ */
+async function nizDeteta(
+  sb: ReturnType<typeof createAdminClient>,
+  deteId: string
+): Promise<number> {
+  const { data, error } = await sb
+    .from("zack_deca")
+    .select("niz")
+    .eq("id", deteId)
+    .maybeSingle();
+  if (error || !data) {
+    console.error("[zack/staza] čitanje niza:", error);
+    return 0;
+  }
+  return data.niz;
+}
+
 export default async function StazaPage({
   params,
 }: {
@@ -34,9 +54,10 @@ export default async function StazaPage({
     .order("broj");
   if (error) throw new Error(`Ne mogu da pročitam lekcije: ${error.message}`);
 
-  const [zapisi, kesice] = await Promise.all([
+  const [zapisi, kesice, niz] = await Promise.all([
     zapisiSlicica(dete.id),
     neotvoreneKesice(dete.id),
+    nizDeteta(sb, dete.id),
   ]);
   const sada = new Date();
 
@@ -44,6 +65,7 @@ export default async function StazaPage({
     <StazaClient
       childId={dete.id}
       ime={dete.ime}
+      niz={niz}
       lekcije={(lekcije ?? []).map((lekcija) => {
         // zapisi su sve isporučene sličice deteta, a stanjeAlbuma uzima u
         // obzir samo one koje odgovaraju rečima ove lekcije.

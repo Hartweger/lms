@@ -59,6 +59,23 @@ function porukaKesice(n: number): string {
   return `${n} ${KESICA[oblikBroja(n)]}`;
 }
 
+const DAN: Record<Oblik, string> = {
+  jedna: "dan",
+  dve: "dana",
+  pet: "dana",
+};
+
+/** Sama imenica, bez broja: „1 dan", „2 dana", „11 dana", „21 dan". */
+function recDan(n: number): string {
+  return DAN[oblikBroja(n)];
+}
+
+/**
+ * Niz se prikazuje tek od 2 dana naviše. „1 dan zaredom" nije dostignuće nego
+ * šum, a niz od 0 je stanje koje dete uopšte ne treba da vidi.
+ */
+const NIZ_OD = 2;
+
 function Zvezdica() {
   return (
     <svg aria-hidden="true" viewBox="0 0 24 24" className="h-[18px] w-[18px] flex-none" fill="currentColor">
@@ -201,10 +218,12 @@ function Kartica({ childId, lekcija }: { childId: string; lekcija: StavkaStaze }
 export default function StazaClient({
   childId,
   ime,
+  niz,
   lekcije,
 }: {
   childId: string;
   ime: string;
+  niz: number;
   lekcije: StavkaStaze[];
 }) {
   return (
@@ -222,6 +241,16 @@ export default function StazaClient({
         >
           Zdravo, {ime}
         </h1>
+        {/* Niz stoji uz pozdrav, prigušeno, u istom redu misli kao i ime. To je
+            konstatacija, ne trofej: bez plamena, bez crvene, bez uzvičnika.
+            Kad se niz prekine, ovaj red prosto nestane i vrati se kad opet bude
+            imao šta da kaže. Nigde nema traga da je nečega bilo pa nema, jer se
+            niz kvari sam od sebe, bez ijedne detetove greške. */}
+        {niz >= NIZ_OD && (
+          <p className="mt-1.5 text-[15px]" style={{ color: PRIGUSEN }}>
+            {`${niz} ${recDan(niz)} zaredom`}
+          </p>
+        )}
       </header>
 
       {lekcije.length === 0 ? (

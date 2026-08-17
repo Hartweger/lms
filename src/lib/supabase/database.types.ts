@@ -2609,18 +2609,24 @@ export type Database = {
           created_at: string
           id: string
           ime: string
+          niz: number
+          poslednji_dan: string | null
           udzbenik_id: string
         }
         Insert: {
           created_at?: string
           id?: string
           ime: string
+          niz?: number
+          poslednji_dan?: string | null
           udzbenik_id: string
         }
         Update: {
           created_at?: string
           id?: string
           ime?: string
+          niz?: number
+          poslednji_dan?: string | null
           udzbenik_id?: string
         }
         Relationships: [
