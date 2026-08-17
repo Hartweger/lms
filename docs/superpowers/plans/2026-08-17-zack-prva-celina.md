@@ -2543,6 +2543,35 @@ reč koju dete još nije videlo. Čista logika se ne dira, filtrira se u upitu.
 - Create: `src/app/zack/[childId]/lekcija/[broj]/page.tsx`
 - Create: `src/app/zack/[childId]/lekcija/[broj]/LekcijaClient.tsx`
 
+### Važeći tok posle odluke B
+
+Kod u koracima ispod je iz prvobitne verzije. Ovo je važeće.
+
+1. Dete otvori lekciju. Vidi naziv, brojač sličica, podsetnik na pravilo (ako ga
+   ima), spisak igara i album te lekcije.
+2. **Ako ga čeka neotvorena kesica, to je prvo što vidi**, iznad svega ostalog, sa
+   dugmetom da je otvori. To je ono što ga vraća u aplikaciju sutradan.
+3. Igra igru. Napredak se šalje posle svakog tačnog odgovora, **iz same komponente
+   igre (Task 13)**. Ekran lekcije se time ne bavi.
+4. Kad se igra završi, ekran zove `POST /api/zack/<childId>/kesica` sa
+   `{ lekcijaId }`. Ruta sama zna šta dete ima a nije videlo, ne prima ništa iz
+   igre.
+5. Sličice iz kesice stoje „u ruci". Dete ih lepi tapkanjem, jednu po jednu, ili
+   dugmetom **„zalepi sve"**, koje mora da postoji: ono što je zabavno prve
+   nedelje je teret u petoj.
+6. Zalepljene se pojavljuju u albumu ispod, brojač raste.
+
+**Rute:**
+
+| Ruta | Telo | Vraća |
+|---|---|---|
+| `POST /api/zack/<childId>/kesica` | `{ lekcijaId }` | `{ kesica: Rec[], ostaloNeisporuceno: number }` |
+| `POST /api/zack/<childId>/zalepi` | `{ recIdovi }` | `{ ok, zalepljeno: string[] }` |
+
+**Ekran ne sme da čeka odgovor mreže da bi dete moglo dalje.** Lepljenje se vidi
+odmah, poziv ide u pozadini. Ako padne, dete ne gubi ništa, jer je sličica već
+zarađena u bazi.
+
 - [ ] **Step 1: Napiši serversku stranicu**
 
 ```tsx
