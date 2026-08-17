@@ -1398,6 +1398,23 @@ export default async function AdminZackPage() {
 }
 ```
 
+> **MORA DA UĐE U OVAJ EKRAN, nađeno u Tasku 7b.**
+>
+> Reč se unutar lekcije prepoznaje po **nemačkom obliku**. To znači da ispravka
+> prevoda, roda, množine ili redosleda ne dira sličice dece, ali **ispravka samog
+> nemačkog oblika jeste brisanje**: `Hund` ispravljen u `der Hund` je po ključu
+> nova reč, stara nestaje zajedno sa sličicama sve dece.
+>
+> To ne može drugačije, jer nešto mora da bude ključ. Ali Nataša mora da vidi
+> šta se sprema, pre nego što se desi.
+>
+> Zato ekran mora da:
+> 1. Posle uspešnog upisa prikaže `obrisanoReci` ako je veći od nule, i to
+>    **upadljivo**, ne kao sitan tekst: „Obrisano je N reči i sve sličice koje su
+>    deca imala za njih."
+> 2. Kad `obrisanoReci > 0`, ponudi da se vidi koje su reči nestale, da bi se
+>    prepoznala kucaća greška u nemačkom obliku.
+
 - [ ] **Step 2: Napiši klijentsku komponentu**
 
 Unos ide nalepljivanjem iz tabele, jer je to način na koji Nataša stvarno radi: jedna reč po redu, kolone razdvojene tabulatorom.
@@ -1780,7 +1797,31 @@ git commit -m "feat(zack): dečje rute za stazu lekcija i pojedinačnu lekciju"
 
 ---
 
-## Task 10: Rute za odgovor, kesicu i lepljenje
+## Task 10: Rute za zarađivanje, kesicu i lepljenje
+
+> **PREPISANO POSLE ODLUKE B.** Kod niže u ovom tasku je iz prvobitne verzije i
+> više ne važi. Ovo je važeći opis.
+>
+> Prvobitno su postojale rute `odgovor` (osvežava `poslednje_tacno_at`) i
+> `kesica` (prima `tacniRecIdovi` iz sesije). Po odluci B te dve se spajaju
+> drugačije:
+>
+> **Ruta `zaradi` zamenjuje `odgovor`.** Zove se posle **svakog tačnog odgovora**,
+> ne na kraju igre. Prima `recIdovi` i radi upsert redova u `zack_slicice` sa
+> `isporucena_at = NULL`. Ako red već postoji, samo osvežava `poslednje_tacno_at`,
+> čime izbledela sličica vraća boju. Time dete koje zatvori karticu nasred igre ne
+> gubi ništa.
+>
+> **Ruta `kesica` više ne prima ništa iz sesije.** Prima samo `lekcijaId`, sama
+> čita neisporučene redove za tu lekciju (`isporucena_at IS NULL`), propušta ih
+> kroz `otvoriKesicu` iz `kesica.ts` i izabranima upisuje `isporucena_at = NOW()`.
+> Reči koje ne stanu u kesicu ostaju neisporučene i dolaze u sledećoj.
+>
+> **Ruta `zalepi` ostaje kakva je bila**, upisuje `zalepljena_at`, ali mora da
+> odbije red koji još nije isporučen (`isporucena_at IS NULL`), jer dete ne može
+> da zalepi sličicu koju nije ni izvuklo iz kesice.
+>
+> Sve tri koriste `nadjiDete` iz `src/lib/zack/upiti.ts` (Task 9).
 
 **Files:**
 - Create: `src/app/api/zack/[childId]/odgovor/route.ts`

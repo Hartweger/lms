@@ -315,17 +315,23 @@ jer se ovde radi o maloletnicima.
 
 ## 13. Odluke koje se donose pre početka izrade
 
-**Koji izdavač prvi.** Treba utvrditi koji se udžbenik stvarno najviše koristi u
-osnovnim školama. Ovo se rešava preko Natašinih kontakata u struci, ne pretragom.
-Odluka je potrebna pre nego što se unese prva lekcija, ali ne blokira izradu
-motora za igre.
+**Koji izdavač prvi. ODLUČENO 17.08.2026: Maximal.** Nataša je pisala priručnik
+za taj komplet, pa poznaje redosled gradiva iz prve ruke. To je prednost koju
+konkurencija ne može da kupi i glavni razlog zašto ovaj proizvod ima smisla.
 
-**Žig za „Zack".** Pretragom nije nađen nijedan nemački komplet za decu sa tim
-imenom, ali pretraga ne zamenjuje registar. Nijedan registar žigova nije bio
-dostupan pri proveri 17.08.2026 (TMview blokiran, švajcarski registar vraća 404,
-naš e-registar ima neispravan sertifikat). **Pravu proveru mora da uradi advokat
-ili plaćena pretraga kod Zavoda za intelektualnu svojinu**, pre nego što se
-napravi bilo šta vidljivo korisniku. Ovo je jedini nezatvoren rizik u projektu.
+U bazi je zaveden „Maximal 1" za 5. razred. **Podelu na tomove po razredima treba
+potvrditi pre unosa druge lekcije** (da li 5. razred stvarno ide uz Maximal 1),
+ali to ne blokira ništa, jer se prva verzija ionako radi samo za jedan razred.
+
+**Žig za „Zack". ZATVORENO 17.08.2026: Nataša je proverila, ime je slobodno.**
+
+Napomena o poreklu nalaza: moja pretraga tog dana nije našla nijedan nemački
+komplet za decu sa tim imenom, ali nijedan registar žigova mi nije bio dostupan
+(TMview blokiran, švajcarski registar vraća 404, naš e-registar ima neispravan
+sertifikat), pa je moj deo bio samo odsustvo nalaza. Potvrdu je dala Nataša.
+
+Ranije odbačeno ime Hoppla je palo baš na ovoj proveri, pa je ona i uvedena kao
+korak. Vidi odeljak o imenu.
 
 ## 14. Ime i identitet
 
