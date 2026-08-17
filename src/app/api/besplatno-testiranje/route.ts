@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { rateLimit } from "@/lib/rate-limit";
 import { sendTestResultEmail } from "@/lib/email";
 import { funnelUrlsForNivo } from "@/lib/course-nivo";
-import { isDeliverableEmail } from "@/lib/email-valid";
+import { isDeliverableEmail, domainTypoHint } from "@/lib/email-valid";
 
 export async function POST(request: Request) {
   const ip = request.headers.get("x-forwarded-for") || "unknown";
@@ -27,7 +27,13 @@ export async function POST(request: Request) {
 
   const trimmedEmail = String(email).trim().toLowerCase();
   if (!isDeliverableEmail(trimmedEmail)) {
-    return NextResponse.json({ error: "Neispravna email adresa." }, { status: 400 });
+    // Kod tipfelera u domenu kaži ŠTA nije u redu - „neispravna adresa" čovek pročita
+    // kao kvar sajta i ode, a rezultat testa mu onda nikad ne stigne.
+    const predlog = domainTypoHint(trimmedEmail);
+    return NextResponse.json(
+      { error: predlog ? `Proveri domen - da li si mislio/la @${predlog}?` : "Neispravna email adresa." },
+      { status: 400 }
+    );
   }
 
   const validLevels = ["A1.1","A1.2","A2.1","A2.2","B1.1","B1.2","B2.1","B2.2","C1+"];

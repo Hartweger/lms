@@ -4,6 +4,7 @@
 
 import { useState } from "react";
 import type { HalfLevel } from "../lib/questions";
+import { isDeliverableEmail, domainTypoHint } from "@/lib/email-valid";
 
 interface QuizEmailGateProps {
   recommendedLevel: HalfLevel | "C1+";
@@ -18,9 +19,13 @@ export default function QuizEmailGate({ recommendedLevel, onSubmit, onSkip, isLo
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const trimmed = email.trim();
-    if (!trimmed || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
-      setError("Unesi ispravnu email adresu.");
+    const trimmed = email.trim().toLowerCase();
+    if (!trimmed || !isDeliverableEmail(trimmed)) {
+      // Tipfeler u domenu se hvata OVDE, dok je čovek još na strani i može da ispravi.
+      // Server istu adresu odbija, a ovaj ekran ne čita njegov odgovor - bez ove provere
+      // rezultat bi se prikazao, a mejl ne bi stigao nikad.
+      const predlog = domainTypoHint(trimmed);
+      setError(predlog ? `Proveri domen - da li si mislio/la @${predlog}?` : "Unesi ispravnu email adresu.");
       return;
     }
     setError("");
