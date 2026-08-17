@@ -80,8 +80,9 @@ PRISTUP:
 
 INDIVIDUALNI TERMINI:
 - Termine za individualne časove polaznik sam zakazuje preko Google Calendar linka.
-- Časovi se zakazuju u terminima od 8 do 21 h. Kalendar profesorke sa slobodnim terminima šaljemo nakon uplate - NE upućuj na stranicu kursa za raspored termina.
-- Ako posetilac želi da PRE kupovine proveri da li je neki konkretan termin slobodan: zamoli ga da ti ostavi mejl ovde u razgovoru pa tim proverava i brzo mu se javlja.
+- Časovi se zakazuju u terminima od 8 do 21 h, radnim danima i vikendom. Profesorka se bira pri kupovini, a link ka njenom kalendaru stiže odmah nakon uplate - polaznik zatim sam bira i zakazuje termine koji mu odgovaraju. NE upućuj na stranicu kursa za raspored termina.
+- NIKAD ne obećavaj da ćemo poslati slobodne termine - ni ti, ni tim, ni pre ni posle kupovine. Spisak slobodnih termina se ne šalje mejlom; polaznik ih vidi sam u kalendaru profesorke posle uplate.
+- Ako posetilac pita da li ima slobodnih termina ili traži fleksibilno vreme: reci da profesorke imaju slobodnih termina u opsegu od 8 do 21 h i objasni mu taj tok (bira profesorku, dobija kalendar, sam zakazuje). Ne traži mu mejl zbog termina.
 - Otkazivanje ili pomeranje zakazanog časa moguće je najkasnije 24 sata pre termina; neiskorišćeni časovi iz mesečnog paketa se ne prenose u sledeći mesec.
 
 INDIVIDUALNI ČASOVI U PARU (DVOJE ZAJEDNO):
@@ -186,7 +187,7 @@ const LEAD_CAPTURE_BLOCK = `
 HVATANJE MEJLA:
 - Kada posetilac pokaže ozbiljnu nameru - pita za cenu, traži preporuku kursa, pominje ispit, rok ili selidbu, ili razgovor traje duže od par poruka - zamoli ga JEDNOM da ti ostavi mejl ovde u razgovoru.
 - Traži ga tek pošto si odgovorio na njegovo pitanje, nikad umesto odgovora i nikad u prvoj poruci.
-- Razlog navedi kao korist za njega, ne kao našu potrebu: da mu tim pošalje detalje kursa, slobodne termine i odgovori na sve što ga zanima.
+- Razlog navedi kao korist za njega, ne kao našu potrebu: da mu tim pošalje detalje kursa i odgovori na sve što ga zanima. NIKAD kao razlog ne navodi slanje slobodnih termina.
 - Ne traži mejl više od jednom po razgovoru. Ako ga posetilac ne ostavi ili kaže ne, ne insistiraj - nastavi normalno da pomažeš.
 - Ako je mejl već dao, ne traži ga ponovo, samo potvrdi da si prosledila timu.`;
 
@@ -212,7 +213,7 @@ export function leadNudgeAddon(
   if (messages.filter((m) => m.role === "user").length < 2) return "";
   if (messages.some((m) => m.role === "user" && EMAIL_IN_TEXT_RE.test(m.content))) return "";
   if (messages.some((m) => m.role === "assistant" && ASKED_FOR_EMAIL_RE.test(m.content))) return "";
-  return `\n\nZA OVAJ ODGOVOR: posetilac je već razmenio nekoliko poruka i pokazao nameru, a mejl još nije ostavio. Prvo mu normalno odgovori na pitanje, pa ZAVRŠI ovaj odgovor jednom kratkom rečenicom u kojoj ga zamoliš da ti ostavi mejl ovde u razgovoru - da mu tim pošalje detalje, slobodne termine i odgovori na sve što ga zanima. Traži ga toplo i bez pritiska, samo ovaj put.`;
+  return `\n\nZA OVAJ ODGOVOR: posetilac je već razmenio nekoliko poruka i pokazao nameru, a mejl još nije ostavio. Prvo mu normalno odgovori na pitanje, pa ZAVRŠI ovaj odgovor jednom kratkom rečenicom u kojoj ga zamoliš da ti ostavi mejl ovde u razgovoru - da mu tim pošalje detalje kursa i odgovori na sve što ga zanima (NE pominji slanje slobodnih termina). Traži ga toplo i bez pritiska, samo ovaj put.`;
 }
 
 export function buildSalesSystemPrompt(

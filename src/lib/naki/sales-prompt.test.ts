@@ -143,11 +143,31 @@ describe("buildSalesSystemPrompt", () => {
     expect(out).toContain("C1.2");
   });
 
-  it("individualni termini: 8-21h, kalendar posle uplate, provera termina preko mejla", () => {
+  it("individualni termini: 8-21h, kalendar posle uplate, polaznik sam zakazuje", () => {
     const out = buildSalesSystemPrompt("katalog", { coupon: false });
     expect(out).toContain("od 8 do 21 h");
     expect(out).toContain("nakon uplate");
-    expect(out).toContain("PRE kupovine proveri");
+    expect(out).toContain("sam bira i zakazuje termine");
+  });
+
+  // 16.08.2026: Smile je lidu obećao „ostavi mejl pa ti tim pošalje slobodne termine" -
+  // to nije naš tok. Kalendar profesorke stiže posle uplate i polaznik zakazuje sam.
+  it("nikad ne obećava da tim šalje slobodne termine", () => {
+    const out = buildSalesSystemPrompt("katalog", { coupon: false, leadCapture: true });
+    expect(out).toContain("NIKAD ne obećavaj da ćemo poslati slobodne termine");
+    expect(out).not.toMatch(/tim pošalje[^.]*slobodne termine/);
+  });
+
+  it("ni nalog za baš taj odgovor ne pominje slanje slobodnih termina", () => {
+    const out = leadNudgeAddon(
+      [
+        { role: "user", content: "Koliko traje A1.1?" },
+        { role: "assistant", content: "Sedam nedelja." },
+        { role: "user", content: "Može li fleksibilno vreme?" },
+      ],
+      true
+    );
+    expect(out).not.toMatch(/pošalje[^.]*slobodne termine/);
   });
 
   it("ne traži mejl aktivno kad je leadCapture=false", () => {
