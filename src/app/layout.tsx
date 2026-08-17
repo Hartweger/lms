@@ -116,8 +116,14 @@ gtag('config', 'G-MB9DRXVVF6');${ADS_ID ? `
 gtag('config', '${ADS_ID}', { allow_enhanced_conversions: true });` : ""}`,
           }}
         />
-        <PromoBar />
-        <SakrijNa prefiksi={["/clanstvo"]}>
+        {/* Dečji deo (/zack) je zaseban brend i namerno nema ništa od školskog
+            okvira: ni promo traku, ni navigaciju sa Hartweger logotipom, ni
+            podnožje, ni prodajnog asistenta. Natašino ime stoji na roditeljskoj
+            strani, gde gradi poverenje, i nigde više. */}
+        <SakrijNa prefiksi={["/zack"]}>
+          <PromoBar />
+        </SakrijNa>
+        <SakrijNa prefiksi={["/clanstvo", "/zack"]}>
           <Navigacija />
         </SakrijNa>
         <script
@@ -180,10 +186,13 @@ gtag('config', '${ADS_ID}', { allow_enhanced_conversions: true });` : ""}`,
         <main id="glavni" className="flex-1">{children}</main>
         {/* Članstvo ima svoj ClanstvoFooter (clanstvo/layout.tsx) - školski
             footer sa kursevima i bankarskim logotipima tamo nema smisla. */}
-        <SakrijNa prefiksi={["/clanstvo"]}>
+        <SakrijNa prefiksi={["/clanstvo", "/zack"]}>
           <Footer />
         </SakrijNa>
-        <SmileWidget />
+        {/* Smile je prodajni asistent za odrasle. Detetu nema šta da ponudi. */}
+        <SakrijNa prefiksi={["/zack"]}>
+          <SmileWidget />
+        </SakrijNa>
         <CookieBanner />
         <AttributionTracker />
         <MetaPixel />
