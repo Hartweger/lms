@@ -23,7 +23,7 @@ vi.mock("@/lib/meta-capi", () => ({ sendPurchaseEvent: vi.fn(async () => false) 
 vi.mock("@/lib/login-link", () => ({ createLoginLinkToken: vi.fn(() => "tok") }));
 vi.mock("@/lib/first-lesson", () => ({ firstLessonForCourses: vi.fn(async () => null) }));
 
-import { grantAccessForOrder } from "./grant-access";
+import { grantAccessForOrder, revokeAccessForOrder } from "./grant-access";
 import { sendWelcomeEmail, sendIndividualWelcomeEmail } from "@/lib/email";
 
 function videoOrder(over: Record<string, unknown> = {}) {
@@ -310,5 +310,79 @@ describe("grantAccessForOrder", () => {
       // Tolerancija od minut: rok se računa od new Date() u trenutku granta.
       expect(Math.abs(new Date(access.expires_at as string).getTime() - zaGodinu.getTime())).toBeLessThan(60_000);
     });
+  });
+});
+
+describe("revokeAccessForOrder", () => {
+  it("briše pristup dodeljen tom narudžbinom i vraća potrošeni kupon", async () => {
+    h.fake = createFakeAdmin({
+      orders: [videoOrder({ payment_status: "completed", granted: true, coupon_code: "OBNOVI50" })],
+      course_access: [
+        { id: "ca1", user_id: "u1", course_id: "c-content", source: "order:1001" },
+        // Drugi kurs, druga narudžbina - storno ga ne sme dirati.
+        { id: "ca2", user_id: "u1", course_id: "c-drugi", source: "order:999" },
+      ],
+      coupons: [{ code: "OBNOVI50", usage_count: 3 }],
+    });
+
+    const res = await revokeAccessForOrder("o1");
+
+    expect(res.ok).toBe(true);
+    expect(res.skinuto.courseAccess).toBe(1);
+    expect(h.fake.row("course_access", (r) => r.id === "ca1")).toBeUndefined();
+    expect(h.fake.row("course_access", (r) => r.id === "ca2")).toBeTruthy();
+    expect(h.fake.row("coupons", (r) => r.code === "OBNOVI50")!.usage_count).toBe(2);
+  });
+
+  it("otkazuje individualni upis vezan za tu narudžbinu", async () => {
+    h.fake = createFakeAdmin({
+      orders: [videoOrder({ payment_status: "completed", granted: true })],
+      individual_enrollments: [
+        { id: "ie1", order_id: "o1", course_id: "c-prod", status: "active" },
+        { id: "ie2", order_id: "o2", course_id: "c-prod", status: "active" },
+      ],
+    });
+
+    const res = await revokeAccessForOrder("o1");
+
+    expect(res.ok).toBe(true);
+    expect(res.skinuto.individualni).toBe(1);
+    expect(h.fake.row("individual_enrollments", (r) => r.id === "ie1")!.status).toBe("cancelled");
+    expect(h.fake.row("individual_enrollments", (r) => r.id === "ie2")!.status).toBe("active");
+  });
+
+  it("otkazuje grupni upis po nivou i traži ručno skidanje sa kalendara", async () => {
+    h.fake = createFakeAdmin({
+      orders: [videoOrder({
+        payment_status: "completed",
+        granted: true,
+        items: [{ course_id: "c-grupni", course_slug: "grupni-kurs-nemackog-jezika-a1-1", title: "Grupni A1.1", price: 19600 }],
+      })],
+      groups: [{ id: "g1", level: "A1.1" }],
+      group_enrollments: [{ id: "ge1", group_id: "g1", user_id: "u1", status: "active" }],
+    });
+
+    const res = await revokeAccessForOrder("o1");
+
+    expect(res.ok).toBe(true);
+    expect(res.skinuto.grupni).toBe(1);
+    expect(h.fake.row("group_enrollments", (r) => r.id === "ge1")!.status).toBe("cancelled");
+    expect(res.napomene.some((n) => n.includes("kalendara"))).toBe(true);
+  });
+
+  it("idempotentan je - drugi poziv ne skida ništa i ne vraća kupon dvaput", async () => {
+    h.fake = createFakeAdmin({
+      orders: [videoOrder({ payment_status: "completed", granted: true, coupon_code: "OBNOVI50" })],
+      course_access: [{ id: "ca1", user_id: "u1", course_id: "c-content", source: "order:1001" }],
+      coupons: [{ code: "OBNOVI50", usage_count: 1 }],
+    });
+
+    await revokeAccessForOrder("o1");
+    const drugi = await revokeAccessForOrder("o1");
+
+    expect(drugi.ok).toBe(true);
+    expect(drugi.skinuto.courseAccess).toBe(0);
+    // Brojač je već na nuli - storno ga ne sme oterati u minus.
+    expect(h.fake.row("coupons", (r) => r.code === "OBNOVI50")!.usage_count).toBe(0);
   });
 });

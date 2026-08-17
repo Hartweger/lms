@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { buildIpsString, canDeleteOrder, orderTotals, orderFiscalStatus, pendingPaymentState, cardDeclineReason, shouldSendRecovery, recoveryAction, uplataReminderAction, needsFiscalRetry } from "./order-utils";
+import { buildIpsString, canDeleteOrder, canRefundOrder, orderTotals, orderFiscalStatus, pendingPaymentState, cardDeclineReason, shouldSendRecovery, recoveryAction, uplataReminderAction, needsFiscalRetry } from "./order-utils";
 
 describe("buildIpsString - NBS IPS QR format", () => {
   const ips = buildIpsString({ total: 35000, order_number: "2026-216" });
@@ -75,6 +75,39 @@ describe("orderFiscalStatus", () => {
 
   it("potvrđena bez fiskalizacije je missing (upozorenje)", () =>
     expect(orderFiscalStatus({ payment_status: "completed", fiscalized_at: null })).toBe("missing"));
+
+  it("otkazana (nikad plaćena) nema fiskalni status", () =>
+    expect(orderFiscalStatus({ payment_status: "cancelled", fiscalized_at: null })).toBe("na"));
+
+  it("stornirana pobeđuje sve ostalo - original i dalje ima fiskalni broj", () =>
+    expect(
+      orderFiscalStatus({
+        payment_status: "refunded",
+        fiscalized_at: "2026-08-16T11:48:24Z",
+        refunded_at: "2026-08-17T09:00:00Z",
+      })
+    ).toBe("stornirano"));
+
+  it("refunded bez storno računa (ručni povraćaj u bazi) i dalje ima važeći original", () =>
+    expect(
+      orderFiscalStatus({ payment_status: "refunded", fiscalized_at: "2026-08-16T11:48:24Z" })
+    ).toBe("ok"));
+});
+
+describe("canRefundOrder", () => {
+  it("naplaćena narudžbina sme da se stornira", () =>
+    expect(canRefundOrder({ payment_status: "completed" })).toBe(true));
+
+  it("neplaćena ne - takva se briše ili čeka uplatu", () =>
+    expect(canRefundOrder({ payment_status: "pending" })).toBe(false));
+
+  it("ručno vraćena u bazi (refunded bez storno računa) SME - račun joj i fali", () =>
+    expect(canRefundOrder({ payment_status: "refunded" })).toBe(true));
+
+  it("već stornirana ne sme dvaput (drugi protivračun kod PURS-a)", () =>
+    expect(
+      canRefundOrder({ payment_status: "refunded", refunded_at: "2026-08-17T09:00:00Z" })
+    ).toBe(false));
 });
 
 describe("pendingPaymentState", () => {

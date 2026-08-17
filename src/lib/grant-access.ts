@@ -33,6 +33,83 @@ export const GRANT_IN_PROGRESS = "grant-in-progress";
 // da reconcile cron ne ostane zauvek blokiran na zaglavljenom orderu.
 const GRANT_LOCK_TTL_MS = 10 * 60_000;
 
+export interface RevokeResult {
+  ok: boolean;
+  error?: string;
+  /** Šta je stvarno skinuto - admin vidi u odgovoru, jer se storno radi ručno i mora da se proveri. */
+  skinuto: { courseAccess: number; grupni: number; individualni: number };
+  /** Šta ostaje na ruke (npr. grupa koju nismo umeli pouzdano da pogodimo). */
+  napomene: string[];
+}
+
+/**
+ * Oduzima sve što je `grantAccessForOrder` dodelio: pristup sadržaju, upis u grupu,
+ * individualni upis, potrošeni kupon. NE dira novac ni fiskalni račun i NE šalje mejl -
+ * polazniku se javlja Nataša. Idempotentno (drugi poziv skida nulu redova).
+ *
+ * Namerno NE briše `professor_students`: ta veza je po (profesor, student, kurs) i deli se
+ * sa drugim upisima, pa bi brisanje umelo da sakrije polaznika koji i dalje ima drugi kurs.
+ */
+export async function revokeAccessForOrder(orderId: string): Promise<RevokeResult> {
+  const admin = createAdminClient();
+  const skinuto = { courseAccess: 0, grupni: 0, individualni: 0 };
+  const napomene: string[] = [];
+
+  const { data: order, error } = await admin.from("orders").select("*").eq("id", orderId).single();
+  if (error || !order) return { ok: false, error: "Order not found", skinuto, napomene };
+
+  const oznaka = `order:${order.order_number ?? orderId}`;
+  const items = (order.items ?? []) as unknown as OrderItem[];
+
+  // 1) Pristup sadržaju. Vezujemo se za `source`, jedini trag koji grant ostavlja na redu.
+  // PAŽNJA: kod obnove grant PREPIŠE source na postojećem redu (npr. wp-migracija), pa se
+  // tada briše i stariji pristup. Zato route vraća broj obrisanih redova na uvid.
+  const { data: obrisani, error: caError } = await admin
+    .from("course_access").delete()
+    .eq("user_id", order.user_id).eq("source", oznaka)
+    .select("id");
+  if (caError) return { ok: false, error: `course_access: ${caError.message}`, skinuto, napomene };
+  skinuto.courseAccess = (obrisani ?? []).length;
+
+  // 2) Individualni upisi - jedini imaju order_id, pa je pogodak tačan.
+  const { data: ind, error: indError } = await admin
+    .from("individual_enrollments").update({ status: "cancelled" })
+    .eq("order_id", orderId).eq("status", "active")
+    .select("id");
+  if (indError) napomene.push(`Individualni upis nije skinut: ${indError.message}`);
+  else skinuto.individualni = (ind ?? []).length;
+
+  // 3) Grupni upisi. `group_enrollments` NEMA order_id, pa gađamo isto kao grant: po nivou
+  // iz slug-a. Ako je polaznik u dve grupe istog nivoa, ovo ume da pogodi pogrešnu - zato
+  // se svaka otkazana grupa ispisuje u napomenama.
+  for (const item of items) {
+    if (!item.course_slug?.startsWith("grupni-")) continue;
+    const nivo = nivoForSlug(item.course_slug);
+    if (!nivo) continue;
+    const { data: grupe } = await admin.from("groups").select("id").eq("level", nivo);
+    const ids = (grupe ?? []).map((g) => g.id);
+    if (ids.length === 0) { napomene.push(`Nema grupe nivoa ${nivo} - grupni upis proveriti ručno.`); continue; }
+    const { data: otkazani, error: geError } = await admin
+      .from("group_enrollments").update({ status: "cancelled" })
+      .eq("user_id", order.user_id).in("group_id", ids).eq("status", "active")
+      .select("id, group_id");
+    if (geError) { napomene.push(`Grupni upis (${nivo}) nije skinut: ${geError.message}`); continue; }
+    skinuto.grupni += (otkazani ?? []).length;
+    for (const o of otkazani ?? []) napomene.push(`Otkazan upis u grupu ${o.group_id} (${nivo}) - proveri da je prava.`);
+    // Gost na Google kalendaru i red u profesorkinom Sheetu ostaju - GAS nema "unenroll".
+    if ((otkazani ?? []).length > 0) napomene.push(`Skini polaznika sa Google kalendara i iz tabele profesorke (${nivo}) ručno.`);
+  }
+
+  // 4) Kupon: grant je potrošio jedno mesto na naplati, storno ga vraća.
+  if (order.coupon_code) {
+    const { data: coupon } = await admin.from("coupons").select("usage_count").eq("code", order.coupon_code).single();
+    const trenutno = (coupon?.usage_count as number | undefined) ?? 0;
+    if (trenutno > 0) await admin.from("coupons").update({ usage_count: trenutno - 1 }).eq("code", order.coupon_code);
+  }
+
+  return { ok: true, skinuto, napomene };
+}
+
 /** Dodeljuje pristup za narudžbinu (course_unlocks → course_access), označava completed+granted, šalje welcome mejl. Idempotentno. */
 export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolean; error?: string }> {
   const admin = createAdminClient();

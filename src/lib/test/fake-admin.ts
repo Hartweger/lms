@@ -1,6 +1,6 @@
 // In-memory zamena za Supabase admin klijent u testovima novčanog puta.
 // Podržava lance koje koriste grant-access/callback/reconcile:
-// from().select().eq().in().lt().is().single()/maybeSingle()/limit(), insert/update/upsert
+// from().select().eq().in().lt().is().single()/maybeSingle()/limit(), insert/update/upsert/delete
 // (update vraća pogođene redove, pa radi i update().eq().select().maybeSingle()),
 // select sa {count:"exact", head:true}. Greške se ubrizgavaju preko failInsert/failUpdate.
 type Row = Record<string, unknown>;
@@ -9,6 +9,7 @@ export function createFakeAdmin(seed: Record<string, Row[]> = {}) {
   const tables = new Map<string, Row[]>(Object.entries(seed).map(([k, v]) => [k, v.map((r) => ({ ...r }))]));
   const insertErrors = new Map<string, string>();
   const updateErrors = new Map<string, string>();
+  const deleteErrors = new Map<string, string>();
   const calls: { table: string; op: string; payload?: unknown }[] = [];
 
   function rowsOf(name: string): Row[] {
@@ -41,6 +42,14 @@ export function createFakeAdmin(seed: Record<string, Row[]> = {}) {
         matched.forEach((r) => Object.assign(r, payload as Row));
         return { data: matched, error: null };
       }
+      if (op === "delete") {
+        const err = deleteErrors.get(name);
+        if (err) return { data: null, error: { message: err } };
+        const matched = rows.filter(match);
+        // Brišemo na mestu da `tables`/`row()` odmah vide novo stanje.
+        for (let i = rows.length - 1; i >= 0; i--) if (match(rows[i])) rows.splice(i, 1);
+        return { data: matched, error: null };
+      }
       const found = rows.filter(match);
       if (wantCount) return { data: null, count: found.length, error: null };
       return { data: found, error: null };
@@ -53,6 +62,7 @@ export function createFakeAdmin(seed: Record<string, Row[]> = {}) {
       },
       insert(p: Row | Row[]) { op = "insert"; payload = p; return api; },
       update(p: Row) { op = "update"; payload = p; return api; },
+      delete() { op = "delete"; return api; },
       upsert(p: Row | Row[], _o?: unknown) { op = "upsert"; payload = p; return api; },
       eq(col: string, val: unknown) { filters.push((r) => r[col] === val); return api; },
       ilike(col: string, val: unknown) {
@@ -106,5 +116,6 @@ export function createFakeAdmin(seed: Record<string, Row[]> = {}) {
     row(table: string, pred: (r: Row) => boolean) { return rowsOf(table).find(pred); },
     failInsert(table: string, message = "fake insert failure") { insertErrors.set(table, message); },
     failUpdate(table: string, message = "fake update failure") { updateErrors.set(table, message); },
+    failDelete(table: string, message = "fake delete failure") { deleteErrors.set(table, message); },
   };
 }

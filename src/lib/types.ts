@@ -187,6 +187,10 @@ export interface Order {
   fiscal_verification_url: string | null;
   fiscal_pdf_url: string | null;
   fiscalized_at: string | null;
+  /** Storno (refundacioni) račun - popunjava se tek na storno, original ostaje u fiscal_*. */
+  refund_referent_number?: string | null;
+  refund_pdf_url?: string | null;
+  refunded_at?: string | null;
   order_number: string | null;
   granted: boolean;
   created_at: string;

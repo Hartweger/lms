@@ -1743,6 +1743,12 @@ export type Database = {
           phone: string | null
           recovery_email_sent_at: string | null
           recovery_stage: number
+          refund_journal: string | null
+          refund_pdf_url: string | null
+          refund_referent_number: string | null
+          refund_response: Json | null
+          refund_verification_url: string | null
+          refunded_at: string | null
           source_type: string | null
           subscription_id: string | null
           subtotal: number
@@ -1787,6 +1793,12 @@ export type Database = {
           phone?: string | null
           recovery_email_sent_at?: string | null
           recovery_stage?: number
+          refund_journal?: string | null
+          refund_pdf_url?: string | null
+          refund_referent_number?: string | null
+          refund_response?: Json | null
+          refund_verification_url?: string | null
+          refunded_at?: string | null
           source_type?: string | null
           subscription_id?: string | null
           subtotal: number
@@ -1831,6 +1843,12 @@ export type Database = {
           phone?: string | null
           recovery_email_sent_at?: string | null
           recovery_stage?: number
+          refund_journal?: string | null
+          refund_pdf_url?: string | null
+          refund_referent_number?: string | null
+          refund_response?: Json | null
+          refund_verification_url?: string | null
+          refunded_at?: string | null
           source_type?: string | null
           subscription_id?: string | null
           subtotal?: number

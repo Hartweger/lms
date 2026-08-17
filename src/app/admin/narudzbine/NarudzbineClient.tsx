@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import type { Order } from "@/lib/types";
 import type { CardDecline } from "@/lib/order-utils";
-import { orderTotals, orderFiscalStatus, canDeleteOrder, pendingPaymentState, cardDeclineReason } from "@/lib/order-utils";
+import { orderTotals, orderFiscalStatus, canDeleteOrder, canRefundOrder, pendingPaymentState, cardDeclineReason } from "@/lib/order-utils";
 import { professorsFromVariants, packageTypesFromVariants, resolveVariant, type Variant } from "@/lib/individual-pricing";
 
 type Filter = "sve" | "na-cekanju" | "potvrdjene";
@@ -63,6 +63,7 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
   const [loading, setLoading] = useState<string | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<string | null>(null);
+  const [stornoId, setStornoId] = useState<string | null>(null);
 
   const [showNewForm, setShowNewForm] = useState(false);
   const [newEmail, setNewEmail] = useState("");
@@ -275,6 +276,41 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
       }
     } finally {
       setLoading(null);
+    }
+  }
+
+  // Storno: protivračun kod PURS-a + oduzimanje pristupa. Nepovratno, zato dvostepena potvrda
+  // (setStornoId → "Da"). Novac se NE vraća odavde - to ide kroz banku.
+  async function stornoOrder(orderId: string) {
+    setLoading(orderId);
+    try {
+      const res = await fetch(`/api/admin/orders/${orderId}/storno`, { method: "POST" });
+      const body = await res.json().catch(() => ({}));
+      if (res.ok) {
+        setOrders((prev) =>
+          prev.map((o) =>
+            o.id === orderId
+              ? {
+                  ...o,
+                  payment_status: "refunded",
+                  granted: false,
+                  refunded_at: body.order?.refunded_at ?? new Date().toISOString(),
+                  refund_referent_number: body.order?.refund_referent_number ?? null,
+                  refund_pdf_url: body.order?.refund_pdf_url ?? null,
+                }
+              : o
+          )
+        );
+        const s = body.skinuto;
+        const sazetak = s ? `Skinuto: ${s.courseAccess} pristup(a), ${s.grupni} grupni, ${s.individualni} individualni upis.` : "";
+        const napomene = (body.napomene ?? []).length ? `\n\n${(body.napomene as string[]).join("\n")}` : "";
+        alert(`Storno je prošao. ${sazetak}${napomene}\n\nNovac vrati kroz Merchant centar banke - to nije urađeno ovde.`);
+      } else {
+        alert(`Storno nije prošao: ${body.error ?? res.status}`);
+      }
+    } finally {
+      setLoading(null);
+      setStornoId(null);
     }
   }
 
@@ -578,6 +614,8 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
                 const isDeleting = deleteId === order.id;
                 const isBeingDeleted = deleting === order.id;
                 const fiscalState = orderFiscalStatus(order);
+                const isStorniranje = stornoId === order.id;
+                const jeStornirana = order.payment_status === "refunded";
 
                 return (
                   <tr key={order.id} className="hover:bg-gray-50">
@@ -617,7 +655,28 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
                       {formatPaymentMethod(order.payment_method)}
                     </td>
                     <td className="px-6 py-4">
-                      {order.payment_status === "cancelled" ? (
+                      {jeStornirana ? (
+                        <div className="flex flex-col gap-1">
+                          <span
+                            className="inline-flex w-fit items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600"
+                            title="Izdat je storno račun i pristup je oduzet. Povraćaj novca ide kroz banku - proveri odvojeno."
+                          >
+                            Stornirano
+                          </span>
+                          {order.refunded_at ? (
+                            <span className="text-xs text-gray-400">
+                              {new Date(order.refunded_at).toLocaleDateString("sr-RS")}
+                            </span>
+                          ) : (
+                            <span
+                              className="text-xs text-koral font-medium"
+                              title="Pristup je oduzet, ali protivračun kod PURS-a nije izdat - klikni „Storniraj"
+                            >
+                              bez storno računa
+                            </span>
+                          )}
+                        </div>
+                      ) : order.payment_status === "cancelled" ? (
                         <div className="flex flex-col gap-1">
                           <span className="inline-flex w-fit items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-500" title="Neplaćena porudžbina - automatski otkazana posle 7 dana">
                             Otkazano
@@ -726,26 +785,69 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
                             </button>
                           </span>
                         )
-                      ) : (
-                        fiscalState === "ok" && order.fiscal_pdf_url ? (
-                          <a
-                            href={order.fiscal_pdf_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-xs px-3 py-1.5 rounded-lg bg-plava-light text-plava font-medium hover:bg-plava hover:text-white transition-colors"
+                      ) : isStorniranje ? (
+                        <span className="flex items-center justify-end gap-2">
+                          <span
+                            className="text-xs text-gray-500"
+                            title="Izdaje protivračun kod PURS-a i oduzima pristup. Novac se vraća odvojeno, kroz banku."
                           >
-                            Račun
-                          </a>
-                        ) : fiscalState === "missing" ? (
+                            Stornirati?
+                          </span>
                           <button
-                            onClick={() => reFiscalize(order.id)}
-                            disabled={loading === order.id}
+                            onClick={() => stornoOrder(order.id)}
+                            disabled={isLoading}
                             className="text-xs text-koral font-medium hover:underline disabled:opacity-50"
-                            title="Narudžbina je potvrđena ali fiskalni račun nije izdat - klikni da fiskalizuješ"
                           >
-                            {loading === order.id ? "Fiskalizujem…" : "⚠ Fiskalizuj"}
+                            {isLoading ? "Storniram…" : "Da"}
                           </button>
-                        ) : null
+                          <button
+                            onClick={() => setStornoId(null)}
+                            className="text-xs text-gray-400 hover:underline"
+                          >
+                            Ne
+                          </button>
+                        </span>
+                      ) : (
+                        <span className="flex items-center justify-end gap-3">
+                          {fiscalState === "ok" && order.fiscal_pdf_url ? (
+                            <a
+                              href={order.fiscal_pdf_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-xs px-3 py-1.5 rounded-lg bg-plava-light text-plava font-medium hover:bg-plava hover:text-white transition-colors"
+                            >
+                              Račun
+                            </a>
+                          ) : fiscalState === "missing" ? (
+                            <button
+                              onClick={() => reFiscalize(order.id)}
+                              disabled={isLoading}
+                              className="text-xs text-koral font-medium hover:underline disabled:opacity-50"
+                              title="Narudžbina je potvrđena ali fiskalni račun nije izdat - klikni da fiskalizuješ"
+                            >
+                              {isLoading ? "Fiskalizujem…" : "⚠ Fiskalizuj"}
+                            </button>
+                          ) : null}
+                          {fiscalState === "stornirano" && order.refund_pdf_url && (
+                            <a
+                              href={order.refund_pdf_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-xs px-3 py-1.5 rounded-lg bg-gray-100 text-gray-600 font-medium hover:bg-gray-200 transition-colors"
+                            >
+                              Storno račun
+                            </a>
+                          )}
+                          {canRefundOrder(order) && (
+                            <button
+                              onClick={() => setStornoId(order.id)}
+                              className="text-xs text-gray-400 hover:text-koral hover:underline transition-colors"
+                              title="Storniraj: protivračun kod PURS-a + oduzimanje pristupa"
+                            >
+                              Storniraj
+                            </button>
+                          )}
+                        </span>
                       )}
                     </td>
                   </tr>

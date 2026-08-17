@@ -87,13 +87,31 @@ export function orderTotals(
   );
 }
 
-// "na" = nema računa (pending), "ok" = fiskalizovano, "missing" = potvrđeno ali račun nije izdat.
+// "na" = nema računa (nikad nije plaćeno), "ok" = fiskalizovano, "missing" = plaćeno ali račun
+// nije izdat, "stornirano" = izdat protivračun (original i dalje postoji, ali je poništen).
+// PAŽNJA: `refunded` bez `refunded_at` je narudžbina vraćena ručno u bazi, pre nego što je
+// storno postojao u kodu - njen originalni račun i dalje važi, pa se vodi kao "ok"/"missing".
 export function orderFiscalStatus(order: {
   payment_status: string;
   fiscalized_at: string | null;
-}): "na" | "ok" | "missing" {
-  if (order.payment_status !== "completed") return "na";
+  refunded_at?: string | null;
+}): "na" | "ok" | "missing" | "stornirano" {
+  if (order.refunded_at) return "stornirano";
+  if (order.payment_status === "pending" || order.payment_status === "cancelled") return "na";
   return order.fiscalized_at ? "ok" : "missing";
+}
+
+/**
+ * Storno se radi nad naplaćenom narudžbinom i samo jednom (drugi poziv bi dao drugi
+ * protivračun kod PURS-a). Narudžbina već obeležena kao `refunded` ali bez storno računa
+ * SME u storno - to je upravo ono što joj fali.
+ */
+export function canRefundOrder(order: {
+  payment_status: string;
+  refunded_at?: string | null;
+}): boolean {
+  if (order.refunded_at) return false;
+  return order.payment_status === "completed" || order.payment_status === "refunded";
 }
 
 // Posle koliko minuta započetu-a nezavršenu karticu tretiramo kao "nije prošlo".
