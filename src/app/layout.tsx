@@ -153,63 +153,67 @@ gtag('config', '${ADS_ID}', { allow_enhanced_conversions: true });` : ""}
         <SakrijNa prefiksi={["/clanstvo", "/zack"]}>
           <Navigacija />
         </SakrijNa>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify([
-              {
-                "@context": "https://schema.org",
-                "@type": "EducationalOrganization",
-                "@id": "https://www.hartweger.rs/#organization",
-                name: "Centar za nemački jezik Hartweger",
-                alternateName: "Hartweger - Škola nemačkog jezika",
-                description:
-                  "Online škola nemačkog jezika sa sertifikovanim profesorima. Video kursevi, grupna i individualna nastava od A1 do C1 nivoa po VoKuM metodi.",
-                url: "https://www.hartweger.rs",
-                logo: "https://www.hartweger.rs/logo.jpg",
-                image: "https://www.hartweger.rs/og/share.png",
-                email: "info@hartweger.rs",
-                knowsLanguage: ["de", "sr"],
-                areaServed: ["RS", "BA", "ME", "HR", "DE", "AT", "CH"],
-                founder: {
-                  "@type": "Person",
-                  name: "Nataša Hartweger",
-                  url: "https://www.hartweger.rs/o-natasi",
-                  sameAs: ["https://natasahartweger.rs"],
-                },
-                address: {
-                  "@type": "PostalAddress",
-                  streetAddress: "Jurija Gagarina 20",
-                  addressLocality: "Novi Beograd",
-                  postalCode: "11070",
-                  addressCountry: "RS",
-                },
-                contactPoint: {
-                  "@type": "ContactPoint",
+        {/* Strukturirani podaci o školi (adresa, mejl, osnivač, društvene mreže)
+            nemaju šta da traže na dečjoj stranici. Dva su brenda, ne jedan. */}
+        <SakrijNa prefiksi={["/zack"]}>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify([
+                {
+                  "@context": "https://schema.org",
+                  "@type": "EducationalOrganization",
+                  "@id": "https://www.hartweger.rs/#organization",
+                  name: "Centar za nemački jezik Hartweger",
+                  alternateName: "Hartweger - Škola nemačkog jezika",
+                  description:
+                    "Online škola nemačkog jezika sa sertifikovanim profesorima. Video kursevi, grupna i individualna nastava od A1 do C1 nivoa po VoKuM metodi.",
+                  url: "https://www.hartweger.rs",
+                  logo: "https://www.hartweger.rs/logo.jpg",
+                  image: "https://www.hartweger.rs/og/share.png",
                   email: "info@hartweger.rs",
-                  contactType: "customer support",
-                  availableLanguage: ["sr", "de"],
+                  knowsLanguage: ["de", "sr"],
+                  areaServed: ["RS", "BA", "ME", "HR", "DE", "AT", "CH"],
+                  founder: {
+                    "@type": "Person",
+                    name: "Nataša Hartweger",
+                    url: "https://www.hartweger.rs/o-natasi",
+                    sameAs: ["https://natasahartweger.rs"],
+                  },
+                  address: {
+                    "@type": "PostalAddress",
+                    streetAddress: "Jurija Gagarina 20",
+                    addressLocality: "Novi Beograd",
+                    postalCode: "11070",
+                    addressCountry: "RS",
+                  },
+                  contactPoint: {
+                    "@type": "ContactPoint",
+                    email: "info@hartweger.rs",
+                    contactType: "customer support",
+                    availableLanguage: ["sr", "de"],
+                  },
+                  sameAs: [
+                    "https://www.instagram.com/hartweger_centar/",
+                    "https://www.youtube.com/@NatasaHartweger",
+                    "https://www.facebook.com/hartwegercentar/",
+                    "https://rs.linkedin.com/in/natasahartweger",
+                    "https://x.com/nacapaun",
+                  ],
                 },
-                sameAs: [
-                  "https://www.instagram.com/hartweger_centar/",
-                  "https://www.youtube.com/@NatasaHartweger",
-                  "https://www.facebook.com/hartwegercentar/",
-                  "https://rs.linkedin.com/in/natasahartweger",
-                  "https://x.com/nacapaun",
-                ],
-              },
-              {
-                "@context": "https://schema.org",
-                "@type": "WebSite",
-                "@id": "https://www.hartweger.rs/#website",
-                name: "Hartweger - Škola nemačkog jezika",
-                url: "https://www.hartweger.rs",
-                inLanguage: "sr-RS",
-                publisher: { "@id": "https://www.hartweger.rs/#organization" },
-              },
-            ]),
-          }}
-        />
+                {
+                  "@context": "https://schema.org",
+                  "@type": "WebSite",
+                  "@id": "https://www.hartweger.rs/#website",
+                  name: "Hartweger - Škola nemačkog jezika",
+                  url: "https://www.hartweger.rs",
+                  inLanguage: "sr-RS",
+                  publisher: { "@id": "https://www.hartweger.rs/#organization" },
+                },
+              ]),
+            }}
+          />
+        </SakrijNa>
         <main id="glavni" className="flex-1">{children}</main>
         {/* Članstvo ima svoj ClanstvoFooter (clanstvo/layout.tsx) - školski
             footer sa kursevima i bankarskim logotipima tamo nema smisla. */}
