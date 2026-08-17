@@ -45,3 +45,38 @@ export function odgovori(s: Sesija, tacno: boolean): Sesija {
     gotovo: srca <= 0 || indeks >= s.pitanja.length,
   };
 }
+
+/**
+ * Beleži tačno rešene reči BEZ prelaska na sledeće pitanje.
+ * Postoji zbog igre Parovi, gde jedno pitanje pokriva više reči, pa dete mora da
+ * zadrži svaki spojen par i onda kad ne spoji sve.
+ */
+export function zabeleziTacne(s: Sesija, recIdovi: readonly string[]): Sesija {
+  if (s.gotovo) return s;
+  const novi = recIdovi.filter((id) => !s.tacni.includes(id));
+  return novi.length === 0 ? s : { ...s, tacni: [...s.tacni, ...novi] };
+}
+
+/**
+ * Uzima srce BEZ prelaska na sledeće pitanje. Koristi Parovi kod pogrešnog spoja,
+ * gde bi `odgovori(s, false)` odmah završio celu igru, jer je to jedno pitanje.
+ */
+export function oduzmiSrce(s: Sesija): Sesija {
+  if (s.gotovo) return s;
+  const srca = s.srca - 1;
+  return { ...s, srca, gotovo: srca <= 0 };
+}
+
+/** Završava igru na zahtev deteta. Sve zabeleženo ostaje zarađeno. */
+export function odustani(s: Sesija): Sesija {
+  return s.gotovo ? s : { ...s, gotovo: true };
+}
+
+/**
+ * Da li se igra završila zato što su nestala srca, za razliku od toga da je dete
+ * prešlo sva pitanja. Kesica se dodeljuje u oba slučaja, ali ekran kraja treba da
+ * kaže različitu stvar.
+ */
+export function palaZbogSrca(s: Sesija): boolean {
+  return s.gotovo && s.srca <= 0;
+}

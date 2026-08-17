@@ -1,6 +1,15 @@
 import { describe, it, expect } from "vitest";
 import type { Pitanje } from "./pitanja";
-import { novaSesija, odgovori, SRCA, tacniRecIdovi } from "./sesija";
+import {
+  novaSesija,
+  odgovori,
+  odustani,
+  oduzmiSrce,
+  palaZbogSrca,
+  SRCA,
+  tacniRecIdovi,
+  zabeleziTacne,
+} from "./sesija";
 
 const P = (i: number): Pitanje => ({
   igra: "diktat",
@@ -80,5 +89,68 @@ describe("tacniRecIdovi", () => {
 
   it("ostale igre daju jednu reč", () => {
     expect(tacniRecIdovi(P(7))).toEqual(["r7"]);
+  });
+});
+
+describe("zabeleziTacne", () => {
+  it("upisuje reči bez prelaska na sledeće pitanje", () => {
+    const s = zabeleziTacne(novaSesija([P(1), P(2)]), ["r1"]);
+    expect(s.tacni).toEqual(["r1"]);
+    expect(s.indeks).toBe(0);
+    expect(s.srca).toBe(SRCA);
+    expect(s.gotovo).toBe(false);
+  });
+
+  it("ne upisuje istu reč dvaput", () => {
+    let s = zabeleziTacne(novaSesija([P(1)]), ["r1"]);
+    s = zabeleziTacne(s, ["r1", "r2"]);
+    expect(s.tacni).toEqual(["r1", "r2"]);
+  });
+
+  it("na gotovoj igri ništa ne menja", () => {
+    const gotova = { ...novaSesija([P(1)]), gotovo: true };
+    expect(zabeleziTacne(gotova, ["r9"])).toEqual(gotova);
+  });
+});
+
+describe("oduzmiSrce", () => {
+  it("uzima srce bez prelaska na sledeće pitanje", () => {
+    const s = oduzmiSrce(novaSesija([P(1), P(2)]));
+    expect(s.srca).toBe(SRCA - 1);
+    expect(s.indeks).toBe(0);
+    expect(s.gotovo).toBe(false);
+  });
+
+  it("završava igru kad srca nestanu, ali čuva zarađene reči", () => {
+    let s = zabeleziTacne(novaSesija([P(1), P(2)]), ["r1"]);
+    for (let i = 0; i < SRCA; i++) s = oduzmiSrce(s);
+    expect(s.srca).toBe(0);
+    expect(s.gotovo).toBe(true);
+    expect(s.tacni).toEqual(["r1"]);
+  });
+});
+
+describe("odustani", () => {
+  it("završava igru na zahtev i čuva sve zabeleženo", () => {
+    const s = odustani(zabeleziTacne(novaSesija([P(1), P(2)]), ["r1", "r2"]));
+    expect(s.gotovo).toBe(true);
+    expect(s.tacni).toEqual(["r1", "r2"]);
+    expect(s.srca).toBe(SRCA);
+  });
+});
+
+describe("palaZbogSrca", () => {
+  it("razlikuje potrošena srca od pređenih svih pitanja", () => {
+    let pala = novaSesija([P(1), P(2), P(3), P(4), P(5)]);
+    for (let i = 0; i < SRCA; i++) pala = odgovori(pala, false);
+    expect(palaZbogSrca(pala)).toBe(true);
+
+    let presla = novaSesija([P(1)]);
+    presla = odgovori(presla, true);
+    expect(palaZbogSrca(presla)).toBe(false);
+  });
+
+  it("igra u toku nije pala", () => {
+    expect(palaZbogSrca(novaSesija([P(1)]))).toBe(false);
   });
 });
