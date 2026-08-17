@@ -160,6 +160,7 @@ export default async function KursStranica({ params }: PageProps) {
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
           {typedCourse.title}
         </h1>
+        {/* Predavač se ne ispisuje posebno - stoji u opisu kursa (courses.description). */}
         <p className="text-gray-500 mt-4 text-lg">{typedCourse.description}</p>
       </div>
 

@@ -10,6 +10,7 @@ import ProductFaq from "@/components/product/ProductFaq";
 import { fetchRaspored, type GrupaRaspored } from "@/lib/raspored";
 import { terminPrikaz } from "@/lib/raspored-prikaz";
 import { SLUG_TO_NIVO as slugToNivo } from "@/lib/course-nivo";
+import { SLUG_TO_PREDAVAC } from "@/lib/course-predavac";
 import InteresForm from "./InteresForm";
 import BuyButton from "@/components/BuyButton";
 import PixelViewContent from "@/components/PixelViewContent";
@@ -329,6 +330,9 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
               url: "https://www.hartweger.rs",
             },
             ...(slugToNivo[slug] && { educationalLevel: slugToNivo[slug] }),
+            ...(SLUG_TO_PREDAVAC[slug] && {
+              instructor: { "@type": "Person", name: SLUG_TO_PREDAVAC[slug] },
+            }),
             inLanguage: "de",
             offers: {
               "@type": "Offer",
@@ -531,6 +535,16 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
                   <span className="inline-flex items-center gap-2 bg-white border border-gray-200 rounded-full px-4 py-2 text-sm text-gray-600">
                     <svg className="w-4 h-4 text-plava" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                     Sertifikat
+                  </span>
+                </div>
+              )}
+
+              {/* ─── VIDEO: predavač (samo kad kurs nije snimila Nataša) ─── */}
+              {(category === "video" || category === "paket") && SLUG_TO_PREDAVAC[slug] && (
+                <div className="flex items-center gap-3 bg-white border border-gray-200 rounded-xl px-5 py-3.5 mb-8 text-[15px]">
+                  <span>👩‍🏫</span>
+                  <span className="text-gray-600">
+                    <strong>Profesorka na videu:</strong> {SLUG_TO_PREDAVAC[slug]}
                   </span>
                 </div>
               )}
