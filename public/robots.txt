@@ -1,11 +1,11 @@
-# Svi botovi — dozvoljen ceo javni sadržaj
+# Svi botovi - dozvoljen ceo javni sadržaj
 User-agent: *
 Disallow: /admin/
 Disallow: /dashboard/
 Disallow: /api/
 Disallow: /zack/
 
-# AI asistenti — izričito dobrodošli (sadržaj sme da se koristi i navodi),
+# AI asistenti - izričito dobrodošli (sadržaj sme da se koristi i navodi),
 # ALI ne i dečji deo. Svaka grupa mora da ponovi Disallow, jer bot čita samo
 # svoju grupu i ne nasleđuje pravila iz "User-agent: *".
 User-agent: GPTBot
