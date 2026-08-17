@@ -193,9 +193,19 @@ gtag('config', '${ADS_ID}', { allow_enhanced_conversions: true });` : ""}`,
         <SakrijNa prefiksi={["/zack"]}>
           <SmileWidget />
         </SakrijNa>
-        <CookieBanner />
+        {/* Dete pravno ne može da da saglasnost za kolačiće, pa mu se traka ne
+            pokazuje, a reklamni piksel se na /zack uopšte ne pali. Google merenje
+            time ostaje na podrazumevanom „odbijeno" i radi samo bez kolačića.
+            To je namerno: koliko se deca vraćaju meri se iz naših tabela
+            (zaradjena_at, poslednje_tacno_at, niz dana), bez ijednog trećeg lica.
+            Kad roditeljski nalog sa pristankom bude gotov, ovo se preispituje. */}
+        <SakrijNa prefiksi={["/zack"]}>
+          <CookieBanner />
+        </SakrijNa>
         <AttributionTracker />
-        <MetaPixel />
+        <SakrijNa prefiksi={["/zack"]}>
+          <MetaPixel />
+        </SakrijNa>
         <Analytics />
         <SpeedInsights />
         {/* lazyOnload (kao Meta Pixel): gtag.js je 176KB i ne sme da se nadmeće
