@@ -8,9 +8,11 @@ import { withCronLog, must } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendExpiryReminder } from "@/lib/email";
 import { renewalProductSlugs } from "@/lib/renewal-product";
+import { groupExpiryRows } from "@/lib/expiry-grouping";
 
 export const dynamic = "force-dynamic";
 
+/** Broj MEJLOVA po pokretanju (jedan mejl = jedan polaznik + jedan dan isteka). */
 const MAX_PER_RUN = 30;
 const WINDOW_DAYS = 15;
 
@@ -68,9 +70,7 @@ async function cronHandler(request: Request) {
     await sendExpiryReminder({
       email: testEmail,
       name: "Test",
-      courseTitle: sample?.title ?? "Nemački A1.1",
-      courseSlug: sample?.slug ?? "nemacki-a1-1",
-      renewSlug: testRenew,
+      items: [{ courseTitle: sample?.title ?? "Nemački A1.1", renewSlug: testRenew }],
       expiresAt: windowIso,
       withCoupon: searchParams.get("nocoupon") !== "1",
       couponDaysAfter: testKupon?.renewal_days_after ?? null,
@@ -135,15 +135,19 @@ async function cronHandler(request: Request) {
     console.log(`[expiry] preskočeno ${bezObnove.length} - kurs nema proizvod za obnovu: ${[...new Set(bezObnove.map((a) => courseMap.get(a.course_id)?.slug))].join(", ")}`);
   }
 
+  // Jedan mejl po polazniku i danu isteka: paket od 6 nivoa ima 6 redova sa istim
+  // `expires_at`, a slanje po redu je 13.08.2026. dalo 6 identičnih mejlova jednoj osobi.
+  const grupe = groupExpiryRows(eligible);
+
   if (dryRun) {
     return NextResponse.json({
-      dry: true, totalEligible: eligible.length,
-      wouldSend: Math.min(eligible.length, MAX_PER_RUN),
+      dry: true, totalEligible: eligible.length, totalGroups: grupe.length,
+      wouldSend: Math.min(grupe.length, MAX_PER_RUN),
       skippedNoProduct: bezObnove.length,
     });
   }
 
-  const batch = eligible.slice(0, MAX_PER_RUN);
+  const batch = grupe.slice(0, MAX_PER_RUN);
   if (batch.length === 0) return NextResponse.json({ candidates: 0, sent: 0, skippedNoProduct: bezObnove.length });
 
   // Rok kupona se čita iz baze, ne prepisuje u mejl - da tekst ne odluta od pravila
@@ -152,34 +156,51 @@ async function cronHandler(request: Request) {
     .from("coupons").select("renewal_days_after").eq("code", "OBNOVI50").maybeSingle();
   const couponDaysAfter = obnoviKupon?.renewal_days_after ?? null;
 
-  const ids = [...new Set(batch.map((a) => a.user_id))];
+  const ids = [...new Set(batch.map((g) => g.userId))];
   const profiles = must(await admin.from("user_profiles").select("id, email, full_name").in("id", ids), "user_profiles");
   const profMap = new Map((profiles ?? []).map((p) => [p.id, p]));
 
+  // Naziv proizvoda za obnovu - kad grupa ima više proizvoda, dugme mora da kaže koji je koji.
+  const titleBySlug = new Map((courses ?? []).map((c) => [c.slug, c.title]));
+
   let sent = 0;
-  for (const a of batch) {
-    const prof = profMap.get(a.user_id);
-    const course = courseMap.get(a.course_id);
-    if (!prof?.email || !course) continue;
+  let mejlovaneStavke = 0;
+  for (const g of batch) {
+    const prof = profMap.get(g.userId);
+    const stavke = g.rows
+      .map((a) => ({ row: a, course: courseMap.get(a.course_id) }))
+      .filter((x): x is { row: typeof x.row; course: NonNullable<typeof x.course> } => !!x.course);
+    if (!prof?.email || stavke.length === 0) continue;
     await sendExpiryReminder({
       email: prof.email,
       name: prof.full_name ?? "",
-      courseTitle: course.title,
-      courseSlug: course.slug,
-      renewSlug: renewSlugs.get(a.course_id) ?? null,
-      expiresAt: a.expires_at,
-      withCoupon: !noCouponUsers.has(a.user_id),
+      items: stavke.map(({ row, course }) => {
+        const renewSlug = renewSlugs.get(row.course_id) ?? null;
+        return {
+          courseTitle: course.title,
+          renewSlug,
+          renewTitle: renewSlug ? titleBySlug.get(renewSlug) ?? null : null,
+        };
+      }),
+      expiresAt: g.expiresAt,
+      withCoupon: !noCouponUsers.has(g.userId),
       couponDaysAfter,
     });
     // Pad upisa mora da obori cron: bez dedup zapisa bi isti čovek sutra dobio dupli podsetnik.
+    // Zapis ostaje po kursu (user+course+expires_at) - grupiše se slanje, ne evidencija.
     must(
-      await admin.from("expiry_reminders").insert({ user_id: a.user_id, course_id: a.course_id, expires_at: a.expires_at }),
+      await admin.from("expiry_reminders").insert(
+        stavke.map(({ row }) => ({ user_id: row.user_id, course_id: row.course_id, expires_at: row.expires_at }))
+      ),
       "expiry_reminders insert"
     );
     sent++;
+    mejlovaneStavke += stavke.length;
   }
 
-  return NextResponse.json({ candidates: batch.length, sent, skippedNoProduct: bezObnove.length });
+  return NextResponse.json({
+    candidates: batch.length, sent, courses: mejlovaneStavke, skippedNoProduct: bezObnove.length,
+  });
 }
 
 export const GET = withCronLog("expiry-reminder", cronHandler);

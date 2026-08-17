@@ -1481,33 +1481,61 @@ export async function sendActivationNudge(o: {
 }
 
 // Podsetnik 15 dana pre isteka pristupa + poziv na obnovu (kupon OBNOVI50).
-export async function sendExpiryReminder(o: {
-  email: string; name: string; courseTitle: string; courseSlug: string; expiresAt: string;
-  /** true (default) = video kupci, mejl SA kuponom OBNOVI50. false = ind/grupni, samo info bez kupona. */
-  withCoupon?: boolean;
+export interface ExpiryReminderItem {
+  courseTitle: string;
   /**
    * Slug PROIZVODA za obnovu (npr. „video-kurs-a1"). Sadržajni kurs („nemacki-a1-1")
    * nije u prodaji, pa link na njega daje 404. Bez proizvoda nema kupon-verzije mejla.
    */
   renewSlug?: string | null;
+  /** Naziv tog proizvoda - potreban samo kad grupa ima više različitih proizvoda za obnovu. */
+  renewTitle?: string | null;
+}
+
+export interface ExpiryReminderInput {
+  name: string;
+  expiresAt: string;
+  /**
+   * Svi kursevi istog polaznika koji ističu istog dana - JEDAN mejl za sve. Slanje po
+   * kursu je 13.08.2026. poslalo 6 identičnih mejlova vlasnici paketa od 6 nivoa.
+   */
+  items: ExpiryReminderItem[];
+  /** true (default) = video kupci, mejl SA kuponom OBNOVI50. false = ind/grupni, samo info bez kupona. */
+  withCoupon?: boolean;
   /**
    * Koliko dana posle isteka kupon još važi (`coupons.renewal_days_after`). Rok se
    * mora videti u mejlu - kod sa ćutljivim rokom je isto što i kod koji ne radi.
    */
   couponDaysAfter?: number | null;
-}) {
-  try {
-    const resend = getResend();
-    if (!resend) return;
-    const renewSlug = o.renewSlug ?? null;
-    const withCoupon = o.withCoupon !== false && !!renewSlug;
-    const renewUrl = `${SITE_URL}/kupovina/${renewSlug}`;
+  /** „Danas" za računanje preostalih dana - postoji zbog testova. */
+  now?: Date;
+}
+
+/** Naslov + HTML podsetnika. Odvojeno od slanja da bi sadržaj mogao da se testira. */
+export function expiryReminderContent(o: ExpiryReminderInput): { subject: string; html: string } | null {
+  {
+    const items = o.items.filter((i) => i.courseTitle);
+    if (items.length === 0) return null;
+    // Isti proizvod pokriva više nivoa (video-kurs-a1 → A1.1 i A1.2) - dugme se ne ponavlja.
+    const products = [...new Map(
+      items.filter((i) => i.renewSlug).map((i) => [i.renewSlug as string, i.renewTitle ?? null])
+    ).entries()];
+    const withCoupon = o.withCoupon !== false && products.length > 0;
     const datum = new Date(o.expiresAt).toLocaleDateString("sr-Latn-RS", { day: "numeric", month: "long", year: "numeric" });
-    const daysLeft = Math.max(1, Math.round((new Date(o.expiresAt).getTime() - Date.now()) / 86400000));
+    const daysLeft = Math.max(1, Math.round((new Date(o.expiresAt).getTime() - (o.now ?? new Date()).getTime()) / 86400000));
     const kodDo = o.couponDaysAfter == null
       ? null
       : new Date(new Date(o.expiresAt).getTime() + o.couponDaysAfter * 86400000)
           .toLocaleDateString("sr-Latn-RS", { day: "numeric", month: "long", year: "numeric" });
+
+    // Jedan proizvod → jedno dugme „Obnovi pristup". Više njih (paket od 6 nivoa se obnavlja
+    // kroz 3 video kursa) → dugme po proizvodu, da se vidi šta koje obnavlja.
+    const dugmad = products.map(([slug, naslov]) => `
+      <div style="text-align:center;margin:0 0 10px;">
+        <a href="${SITE_URL}/kupovina/${slug}" style="display:inline-block;background:#4fb1d3;color:white;padding:14px 32px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;">${
+          products.length === 1 ? "Obnovi pristup" : `Obnovi: ${esc(naslov ?? slug)}`
+        }</a>
+      </div>`).join("");
 
     const couponBlock = `
       <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 16px;">
@@ -1516,9 +1544,7 @@ export async function sendExpiryReminder(o: {
       <div style="text-align:center;margin:0 0 20px;">
         <span style="display:inline-block;background:#fff7ed;border:1px dashed #f59e0b;color:#b45309;font-weight:700;font-size:18px;letter-spacing:1px;padding:10px 20px;border-radius:8px;">OBNOVI50</span>
       </div>
-      <div style="text-align:center;margin:24px 0;">
-        <a href="${renewUrl}" style="display:inline-block;background:#4fb1d3;color:white;padding:14px 32px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;">Obnovi pristup</a>
-      </div>
+      <div style="margin:24px 0;">${dugmad}</div>
       <p style="font-size:13px;line-height:1.6;color:#888;margin:0 0 8px;">
         Kod uneseš u polju za kupon prilikom kupovine.${kodDo ? ` Važi do <strong>${kodDo}</strong> - i posle isteka pristupa imaš vremena da se predomisliš.` : ""} Ako ti treba pomoć, samo odgovori na ovaj mejl.
       </p>`;
@@ -1531,10 +1557,19 @@ export async function sendExpiryReminder(o: {
         <a href="mailto:info@hartweger.rs" style="display:inline-block;background:#4fb1d3;color:white;padding:14px 32px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;">Javi nam se</a>
       </div>`;
 
-    await resend.emails.send({
-      from: FROM, to: o.email, replyTo: "info@hartweger.rs",
+    const jedan = items.length === 1;
+    // Više kurseva → spisak, jedan → naziv u rečenici (dokazana kopija ostaje netaknuta).
+    const uvod = jedan
+      ? `Tvoj pristup materijalima na platformi za <strong>${esc(items[0].courseTitle)}</strong> ističe <strong>${datum}</strong> (za ${daysLeft} ${daysLeft === 1 ? "dan" : "dana"}). Posle toga lekcije više neće biti dostupne.`
+      : `Tvoj pristup materijalima na platformi ističe <strong>${datum}</strong> (za ${daysLeft} ${daysLeft === 1 ? "dan" : "dana"}) za ove kurseve:</p>
+      <ul style="font-size:15px;line-height:1.7;color:#444;margin:0 0 16px;padding-left:20px;">${
+        items.map((i) => `<li>${esc(i.courseTitle)}</li>`).join("")
+      }</ul>
+      <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 16px;">Posle toga lekcije više neće biti dostupne.`;
+
+    return {
       subject: withCoupon
-        ? `Tvoj pristup kursu ističe ${datum} - obnovi sa 50% popusta`
+        ? `Tvoj pristup ${jedan ? "kursu" : "kursevima"} ističe ${datum} - obnovi sa 50% popusta`
         : `Tvoj pristup materijalima ističe ${datum}`,
       html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
 <body style="font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a2e;background:#f8f9fa;margin:0;padding:0;">
@@ -1542,17 +1577,28 @@ export async function sendExpiryReminder(o: {
     <div style="background:white;border-radius:12px;padding:32px;box-shadow:0 1px 3px rgba(0,0,0,0.08);">
       <div style="text-align:center;margin-bottom:24px;"><img src="https://hartweger.rs/logo.jpg" alt="Hartweger" style="width:120px;height:auto;"/></div>
       <h1 style="font-size:20px;margin:0 0 16px;">Zdravo, ${esc(o.name || "")}!</h1>
-      <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 16px;">
-        Tvoj pristup materijalima na platformi za <strong>${esc(o.courseTitle)}</strong> ističe <strong>${datum}</strong> (za ${daysLeft} ${daysLeft === 1 ? "dan" : "dana"}). Posle toga lekcije više neće biti dostupne.
-      </p>
+      <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 16px;">${uvod}</p>
       ${withCoupon ? couponBlock : noCouponBlock}
       <p style="font-size:14px;color:#444;margin:0;">- Hartweger tim</p>
     </div>
     <div style="text-align:center;padding:20px;font-size:12px;color:#bbb;"><p style="margin:0;">Hartweger - Škola nemačkog jezika · hartweger.rs</p></div>
   </div>
 </body></html>`,
+    };
+  }
+}
+
+export async function sendExpiryReminder(o: ExpiryReminderInput & { email: string }) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    const sadrzaj = expiryReminderContent(o);
+    if (!sadrzaj) return;
+    await resend.emails.send({
+      from: FROM, to: o.email, replyTo: "info@hartweger.rs",
+      subject: sadrzaj.subject, html: sadrzaj.html,
     });
-    console.log(`[email] Podsetnik isteka (${withCoupon ? "kupon" : "bez kupona"}) → ${o.email} (${o.courseTitle})`);
+    console.log(`[email] Podsetnik isteka → ${o.email} (${o.items.map((i) => i.courseTitle).join(", ")})`);
   } catch (e) {
     console.error(`[email] sendExpiryReminder pao za ${o.email}:`, e);
   }
