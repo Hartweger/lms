@@ -76,7 +76,7 @@ export async function POST(request: Request) {
     const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
     const { data: recentOrders } = await supabase
       .from("orders")
-      .select("id, order_number, created_at, payment_status, items")
+      .select("id, order_number, created_at, payment_status, payment_method, items")
       .ilike("email", email)
       .gte("created_at", dayAgo);
 
@@ -380,8 +380,13 @@ export async function POST(request: Request) {
 
     let order: { id: string; order_number: string } | null = null;
     let reusedOrder = false;
+    // Metod sa kojim je porudžbina otišla u admin mejl - ako ga kupac promeni na
+    // reuse-u, Nataša mora da dobije ispravku (v. dole).
+    let previousPaymentMethod: string | null = null;
 
     if (reusableOrder) {
+      // Čita se PRE update-a - posle njega je vrednost već novi metod.
+      const metodPreUpdatea = reusableOrder.payment_method;
       // Guard .eq("payment_status", "pending") štiti od trke sa NestPay callbackom:
       // ako je porudžbina u međuvremenu naplaćena, ne diramo je nego pravimo novu.
       // order_number ostaje isti - NestPay retry ide preko istog broja.
@@ -406,6 +411,9 @@ export async function POST(request: Request) {
       if (updated) {
         order = { id: updated.id, order_number: updated.order_number ?? "" };
         reusedOrder = true;
+        if (metodPreUpdatea && metodPreUpdatea !== paymentMethod) {
+          previousPaymentMethod = metodPreUpdatea;
+        }
         console.log(
           `[orders] Reused pending order ${updated.order_number} for ${email} - ${courseSlug} via ${paymentMethod}`
         );
@@ -496,8 +504,11 @@ export async function POST(request: Request) {
 
     // Trenutna notifikacija adminu o svakoj novoj narudžbini (ne blokira odgovor ako mejl padne).
     // Reuse iste pending porudžbine NE šalje novi admin mejl - to je isti kupac
-    // koji ponavlja pokušaj plaćanja, ne nova narudžbina.
-    if (!reusedOrder) {
+    // koji ponavlja pokušaj plaćanja, ne nova narudžbina. IZUZETAK: ako je na reuse-u
+    // promenio način plaćanja, prvi mejl je sada netačan (npr. pisalo "Kartica", a
+    // porudžbina zapravo čeka PayPal koji Nataša potvrđuje ručno) - tada šaljemo
+    // ispravku sa starim i novim metodom.
+    if (!reusedOrder || previousPaymentMethod) {
       await sendNewOrderAdminEmail({
         orderNumber: order.order_number,
         fullName,
@@ -506,6 +517,7 @@ export async function POST(request: Request) {
         total: chargeNow,
         paymentMethod,
         country,
+        ...(previousPaymentMethod ? { previousPaymentMethod } : {}),
       });
     }
 

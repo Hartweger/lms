@@ -1164,6 +1164,22 @@ export async function sendInteresNotification(nivo: string, email: string, ime: 
   }
 }
 
+/**
+ * Način plaćanja za admin mejl. Nepoznat metod NE sme da se prikaže kao kartica -
+ * Nataša ručno potvrđuje uplatnicu i PayPal, a karticu ne, pa pogrešna oznaka znači
+ * da upis tiho stoji (zatečeno 17.08.2026 na narudžbini 2026-304).
+ */
+function metodPlacanjaLabel(metod: string): string {
+  const metodLabel: Record<string, string> = {
+    uplatnica: "Uplatnica (čeka uplatu)",
+    paypal: "PayPal (čeka potvrdu)",
+    kartica: "Kartica (instant)",
+    kartica_rate: "Kartica na rate (instant)",
+    kartica_pretplata: "Kartica - mesečna pretplata (instant)",
+  };
+  return metodLabel[metod] ?? `Nepoznat metod: ${metod || "(prazno)"} - proveri u adminu`;
+}
+
 // Trenutna notifikacija adminu (Nataši) čim stigne nova narudžbina - bez obzira na način plaćanja.
 export async function sendNewOrderAdminEmail(o: {
   orderNumber: string;
@@ -1173,25 +1189,32 @@ export async function sendNewOrderAdminEmail(o: {
   total: number;
   paymentMethod: string;
   country: string;
+  /**
+   * Popunjeno samo kad kupac naknadno promeni način plaćanja na već poslatoj
+   * porudžbini (reuse pending porudžbine u /api/orders) - tada je ovo prethodni metod.
+   */
+  previousPaymentMethod?: string;
 }) {
   try {
     const resend = getResend();
     if (!resend) return;
-    const metodLabel: Record<string, string> = {
-      uplatnica: "Uplatnica (čeka uplatu)",
-      paypal: "PayPal (čeka potvrdu)",
-      kartica: "Kartica (instant)",
-      kartica_rate: "Kartica na rate (instant)",
-    };
+    const promena = Boolean(o.previousPaymentMethod);
     const fmt = (n: number) => n.toLocaleString("de-DE");
+    const metodCell = promena
+      ? `<span style="color:#888;text-decoration:line-through">${esc(metodPlacanjaLabel(o.previousPaymentMethod!))}</span><br>` +
+        `<strong>${esc(metodPlacanjaLabel(o.paymentMethod))}</strong>`
+      : esc(metodPlacanjaLabel(o.paymentMethod));
     await resend.emails.send({
       from: FROM,
       to: ["info@hartweger.rs", "natasa@hartweger.rs"],
       replyTo: o.email,
-      subject: `Nova narudžbina - ${o.fullName} · ${fmt(o.total)} din`,
+      subject: promena
+        ? `Promenjen način plaćanja - ${o.fullName} · ${o.orderNumber}`
+        : `Nova narudžbina - ${o.fullName} · ${fmt(o.total)} din`,
       html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
 <body style="font-family:sans-serif;line-height:1.6;color:#222;max-width:560px;margin:0 auto;padding:16px">
-<h2 style="margin:0 0 12px">🛒 Nova narudžbina</h2>
+<h2 style="margin:0 0 12px">${promena ? "🔄 Promenjen način plaćanja" : "🛒 Nova narudžbina"}</h2>
+${promena ? `<p style="margin:0 0 12px;background:#fff6e5;border-left:3px solid #e6a23c;padding:8px 12px;font-size:14px">Kupac je na istoj narudžbini promenio način plaćanja. Važi novi metod ispod.</p>` : ""}
 <table style="border-collapse:collapse;font-size:14px;width:100%">
 <tbody>
 <tr><td style="padding:6px 8px;color:#888">Narudžbina</td><td style="padding:6px 8px;font-weight:600">${esc(o.orderNumber)}</td></tr>
@@ -1199,7 +1222,7 @@ export async function sendNewOrderAdminEmail(o: {
 <tr><td style="padding:6px 8px;color:#888">Mejl</td><td style="padding:6px 8px">${esc(o.email)}</td></tr>
 <tr><td style="padding:6px 8px;color:#888">Kurs</td><td style="padding:6px 8px">${esc(o.courseTitle)}</td></tr>
 <tr><td style="padding:6px 8px;color:#888">Iznos</td><td style="padding:6px 8px;font-weight:600">${fmt(o.total)} din</td></tr>
-<tr><td style="padding:6px 8px;color:#888">Plaćanje</td><td style="padding:6px 8px">${esc(metodLabel[o.paymentMethod] ?? o.paymentMethod)}</td></tr>
+<tr><td style="padding:6px 8px;color:#888">Plaćanje</td><td style="padding:6px 8px">${metodCell}</td></tr>
 <tr><td style="padding:6px 8px;color:#888">Zemlja</td><td style="padding:6px 8px">${esc(o.country)}</td></tr>
 </tbody>
 </table>
@@ -1208,7 +1231,11 @@ export async function sendNewOrderAdminEmail(o: {
 </p>
 </body></html>`,
     });
-    console.log(`[email] Admin obavešten o narudžbini ${o.orderNumber}`);
+    console.log(
+      promena
+        ? `[email] Admin obavešten o promeni metoda na ${o.orderNumber}: ${o.previousPaymentMethod} → ${o.paymentMethod}`
+        : `[email] Admin obavešten o narudžbini ${o.orderNumber}`
+    );
   } catch (e) {
     console.error("[email] sendNewOrderAdminEmail pao:", e);
   }

@@ -112,7 +112,7 @@ describe("POST /api/orders", () => {
     expect(h.instructionsEmail).not.toHaveBeenCalled();
   });
 
-  it("povratak sa NestPay: pending za isti mejl+kurs (<24h) se ažurira umesto nove, bez admin mejla", async () => {
+  it("povratak sa NestPay: pending za isti mejl+kurs (<24h) se ažurira umesto nove porudžbine", async () => {
     h.fake = createFakeAdmin({ courses: [seedCourse()], orders: [seedPendingOrder()] });
 
     const res = await POST(orderRequest({ paymentMethod: "uplatnica" }));
@@ -124,8 +124,10 @@ describe("POST /api/orders", () => {
     const row = h.fake.row("orders", (r) => r.id === "o-pending")!;
     expect(row.payment_method).toBe("uplatnica");
     expect(row.total).toBe(19600);
-    expect(h.adminEmail).not.toHaveBeenCalled();
     expect(h.instructionsEmail).toHaveBeenCalled(); // kupac ipak dobija instrukcije za uplatnicu
+    // Metod je promenjen (kartica → uplatnica), pa admin dobija ispravku - nije nova narudžbina.
+    expect(h.adminEmail).toHaveBeenCalledOnce();
+    expect(h.adminEmail.mock.calls[0][0]).toMatchObject({ previousPaymentMethod: "kartica" });
   });
 
   it("reuse zaobilazi email kočnicu: 3 pending pokušaja u satu ne daju 429 za isti kurs", async () => {
@@ -144,6 +146,40 @@ describe("POST /api/orders", () => {
     expect(res.status).toBe(200);
     expect(json.orderNumber).toBe("2026-1003"); // ažurira se najskorija pending
     expect(h.fake.tables.get("orders")!.length).toBe(3);
+    expect(h.adminEmail).not.toHaveBeenCalled();
+  });
+
+  // Zatečeno 17.08.2026 (narudžbina 2026-304): kupac krene karticom, vrati se i izabere
+  // PayPal - admin mejl je već otišao sa "Kartica (instant)", pa Nataša ne zna da treba
+  // ručno da potvrdi uplatu i upis tiho stoji.
+  it("reuse sa PROMENOM metoda → admin dobija ispravku sa starim i novim metodom", async () => {
+    h.fake = createFakeAdmin({
+      courses: [seedCourse()],
+      orders: [seedPendingOrder({ payment_method: "kartica" })],
+    });
+
+    const res = await POST(orderRequest({ paymentMethod: "paypal" }));
+
+    expect(res.status).toBe(200);
+    expect(h.fake.tables.get("orders")!.length).toBe(1);
+    expect(h.fake.row("orders", (r) => r.id === "o-pending")!.payment_method).toBe("paypal");
+    expect(h.adminEmail).toHaveBeenCalledOnce();
+    expect(h.adminEmail.mock.calls[0][0]).toMatchObject({
+      orderNumber: "2026-1000",
+      paymentMethod: "paypal",
+      previousPaymentMethod: "kartica",
+    });
+  });
+
+  it("reuse sa ISTIM metodom → nema admin mejla (običan ponovni pokušaj plaćanja)", async () => {
+    h.fake = createFakeAdmin({
+      courses: [seedCourse()],
+      orders: [seedPendingOrder({ payment_method: "kartica" })],
+    });
+
+    const res = await POST(orderRequest({ paymentMethod: "kartica" }));
+
+    expect(res.status).toBe(200);
     expect(h.adminEmail).not.toHaveBeenCalled();
   });
 
