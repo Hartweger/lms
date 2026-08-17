@@ -31,7 +31,18 @@ export function stanjeAlbuma(
       if (!z) return { rec, stanje: "prazno" as const };
       if (!z.zalepljena_at) return { rec, stanje: "u-ruci" as const };
 
-      const dana = (sada.getTime() - new Date(z.poslednje_tacno_at).getTime()) / DAN;
+      // Sat bledenja kreće od kasnijeg od dva datuma. Vreme koje je sličica
+      // provela u ruci se ne broji, jer tada nije ni bila u albumu.
+      const odKada = Math.max(
+        Date.parse(z.zalepljena_at),
+        Date.parse(z.poslednje_tacno_at)
+      );
+      // Pokvaren ili neprepoznat datum daje NaN. Namerno pada u korist deteta:
+      // Number.isFinite to hvata eksplicitno, da ponašanje ne zavisi od toga
+      // što je poređenje sa NaN slučajno false.
+      if (!Number.isFinite(odKada)) return { rec, stanje: "zalepljena" as const };
+
+      const dana = (sada.getTime() - odKada) / DAN;
       return { rec, stanje: dana > DANA_DO_BLEDENJA ? ("izbledela" as const) : ("zalepljena" as const) };
     });
 }

@@ -18,9 +18,12 @@ const SADA = new Date("2026-08-17T12:00:00Z");
 const preDana = (n: number) =>
   new Date(SADA.getTime() - n * 24 * 60 * 60 * 1000).toISOString();
 
+// Podrazumevano je sličica davno zalepljena, da bi sat bledenja vodio
+// `poslednje_tacno_at`, ono što ovi testovi zapravo ispituju. Kad je lepljenje
+// skoro, ono je kasniji datum pa bi progutalo prag i test bi prolazio uprazno.
 const Z = (recId: string, over: Partial<ZapisSlicice> = {}): ZapisSlicice => ({
   rec_id: recId,
-  zalepljena_at: preDana(1),
+  zalepljena_at: preDana(365),
   poslednje_tacno_at: preDana(1),
   ...over,
 });
@@ -96,5 +99,34 @@ describe("brojac", () => {
 
   it("prazan album je nula od nula", () => {
     expect(brojac([])).toEqual({ zalepljene: 0, ukupno: 0 });
+  });
+});
+
+describe("bledenje kreće od ulaska u album", () => {
+  it("sličica dugo držana u ruci ne ulazi u album već siva", () => {
+    const [s] = stanjeAlbuma(
+      [R(1)],
+      [Z("r1", { zalepljena_at: preDana(1), poslednje_tacno_at: preDana(90) })],
+      SADA
+    );
+    expect(s.stanje).toBe("zalepljena");
+  });
+
+  it("davno zalepljena i davno neponovljena i dalje bledi", () => {
+    const [s] = stanjeAlbuma(
+      [R(1)],
+      [Z("r1", { zalepljena_at: preDana(90), poslednje_tacno_at: preDana(90) })],
+      SADA
+    );
+    expect(s.stanje).toBe("izbledela");
+  });
+
+  it("pokvaren datum nikad ne bledi sličicu", () => {
+    const [s] = stanjeAlbuma(
+      [R(1)],
+      [Z("r1", { poslednje_tacno_at: "ovo-nije-datum" })],
+      SADA
+    );
+    expect(s.stanje).toBe("zalepljena");
   });
 });
