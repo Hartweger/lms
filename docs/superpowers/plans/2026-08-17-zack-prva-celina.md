@@ -1016,6 +1016,252 @@ git commit -m "feat(zack): sadržaj kesice, izuzeci najviše jedan po kesici"
 
 ---
 
+## Task 6b: Delimičan napredak u igri Parovi
+
+Ovaj task nije bio u prvobitnom planu. Dodat je pošto je pri izradi Taska 4 nađena
+prava rupa.
+
+**Problem.** Sve igre osim Parova imaju jedno pitanje po reči, pa je odgovor prosto
+tačan ili netačan. Parovi su jedno jedino pitanje koje pokriva do šest reči.
+Pošto `odgovori(s, tacno)` prima samo `boolean`, dete koje spoji pet od šest
+parova pa stane ne dobija ništa. Uz to, pošto pogrešan spoj ne sme da prekine
+igru (jedno pitanje, pa bi `odgovori(s, false)` odmah završio sve), dete koje se
+zaglavi **nema nikakav izlaz**: igra se ne završava, kesica se ne otvara, i jedini
+izlaz je zatvaranje stranice uz gubitak svega.
+
+Oboje krši isto pravilo zbog kog izbledela sličica ne nestaje: **detetu se ne
+oduzima ono što je zaradilo.**
+
+**Rešenje.** `sesija.ts` dobija tri funkcije koje menjaju stanje bez prelaska na
+sledeće pitanje, i jednu koja razlikuje dva načina završetka.
+
+**Files:**
+- Modify: `src/lib/zack/sesija.ts`
+- Modify: `src/lib/zack/sesija.test.ts`
+
+- [ ] **Step 1: Dopiši testove koji padaju**
+
+Dodaj na kraj `src/lib/zack/sesija.test.ts` (postojeće testove ne diraj), i dopuni
+uvoz na vrhu fajla tako da glasi:
+
+```ts
+import {
+  novaSesija,
+  odgovori,
+  odustani,
+  oduzmiSrce,
+  palaZbogSrca,
+  SRCA,
+  tacniRecIdovi,
+  zabeleziTacne,
+} from "./sesija";
+```
+
+pa dodaj:
+
+```ts
+describe("zabeleziTacne", () => {
+  it("upisuje reči bez prelaska na sledeće pitanje", () => {
+    const s = zabeleziTacne(novaSesija([P(1), P(2)]), ["r1"]);
+    expect(s.tacni).toEqual(["r1"]);
+    expect(s.indeks).toBe(0);
+    expect(s.srca).toBe(SRCA);
+    expect(s.gotovo).toBe(false);
+  });
+
+  it("ne upisuje istu reč dvaput", () => {
+    let s = zabeleziTacne(novaSesija([P(1)]), ["r1"]);
+    s = zabeleziTacne(s, ["r1", "r2"]);
+    expect(s.tacni).toEqual(["r1", "r2"]);
+  });
+
+  it("na gotovoj igri ništa ne menja", () => {
+    const gotova = { ...novaSesija([P(1)]), gotovo: true };
+    expect(zabeleziTacne(gotova, ["r9"])).toEqual(gotova);
+  });
+});
+
+describe("oduzmiSrce", () => {
+  it("uzima srce bez prelaska na sledeće pitanje", () => {
+    const s = oduzmiSrce(novaSesija([P(1), P(2)]));
+    expect(s.srca).toBe(SRCA - 1);
+    expect(s.indeks).toBe(0);
+    expect(s.gotovo).toBe(false);
+  });
+
+  it("završava igru kad srca nestanu, ali čuva zarađene reči", () => {
+    let s = zabeleziTacne(novaSesija([P(1), P(2)]), ["r1"]);
+    for (let i = 0; i < SRCA; i++) s = oduzmiSrce(s);
+    expect(s.srca).toBe(0);
+    expect(s.gotovo).toBe(true);
+    expect(s.tacni).toEqual(["r1"]);
+  });
+});
+
+describe("odustani", () => {
+  it("završava igru na zahtev i čuva sve zabeleženo", () => {
+    const s = odustani(zabeleziTacne(novaSesija([P(1), P(2)]), ["r1", "r2"]));
+    expect(s.gotovo).toBe(true);
+    expect(s.tacni).toEqual(["r1", "r2"]);
+    expect(s.srca).toBe(SRCA);
+  });
+});
+
+describe("palaZbogSrca", () => {
+  it("razlikuje potrošena srca od pređenih svih pitanja", () => {
+    let pala = novaSesija([P(1), P(2), P(3), P(4), P(5)]);
+    for (let i = 0; i < SRCA; i++) pala = odgovori(pala, false);
+    expect(palaZbogSrca(pala)).toBe(true);
+
+    let presla = novaSesija([P(1)]);
+    presla = odgovori(presla, true);
+    expect(palaZbogSrca(presla)).toBe(false);
+  });
+
+  it("igra u toku nije pala", () => {
+    expect(palaZbogSrca(novaSesija([P(1)]))).toBe(false);
+  });
+});
+```
+
+- [ ] **Step 2: Pokreni testove i potvrdi da padaju**
+
+Run: `npx vitest run src/lib/zack/sesija.test.ts`
+Expected: FAIL, `"zabeleziTacne" is not exported`
+
+- [ ] **Step 3: Dopiši implementaciju**
+
+Dodaj na kraj `src/lib/zack/sesija.ts` (postojeći kod ne diraj):
+
+```ts
+/**
+ * Beleži tačno rešene reči BEZ prelaska na sledeće pitanje.
+ * Postoji zbog igre Parovi, gde jedno pitanje pokriva više reči, pa dete mora da
+ * zadrži svaki spojen par i onda kad ne spoji sve.
+ */
+export function zabeleziTacne(s: Sesija, recIdovi: readonly string[]): Sesija {
+  if (s.gotovo) return s;
+  const novi = recIdovi.filter((id) => !s.tacni.includes(id));
+  return novi.length === 0 ? s : { ...s, tacni: [...s.tacni, ...novi] };
+}
+
+/**
+ * Uzima srce BEZ prelaska na sledeće pitanje. Koristi Parovi kod pogrešnog spoja,
+ * gde bi `odgovori(s, false)` odmah završio celu igru, jer je to jedno pitanje.
+ */
+export function oduzmiSrce(s: Sesija): Sesija {
+  if (s.gotovo) return s;
+  const srca = s.srca - 1;
+  return { ...s, srca, gotovo: srca <= 0 };
+}
+
+/** Završava igru na zahtev deteta. Sve zabeleženo ostaje zarađeno. */
+export function odustani(s: Sesija): Sesija {
+  return s.gotovo ? s : { ...s, gotovo: true };
+}
+
+/**
+ * Da li se igra završila zato što su nestala srca, za razliku od toga da je dete
+ * prešlo sva pitanja. Kesica se dodeljuje u oba slučaja, ali ekran kraja treba da
+ * kaže različitu stvar.
+ */
+export function palaZbogSrca(s: Sesija): boolean {
+  return s.gotovo && s.srca <= 0;
+}
+```
+
+- [ ] **Step 4: Pokreni testove i potvrdi da prolaze**
+
+Run: `npx vitest run src/lib/zack/sesija.test.ts`
+Expected: PASS, 18 testova (10 starih + 8 novih)
+
+- [ ] **Step 5: Proveri tipove i celu svitu**
+
+Run: `./node_modules/.bin/tsc --noEmit && npm test`
+Expected: bez greške
+
+- [ ] **Step 6: Commit**
+
+```bash
+git add src/lib/zack/sesija.ts src/lib/zack/sesija.test.ts
+git commit -m "fix(zack): Parovi čuvaju svaki spojen par i imaju izlaz"
+```
+
+- [ ] **Step 7: Sličica ne sme da uđe u album već siva**
+
+Druga rupa, nađena pri izradi Taska 5, ista principijelna greška.
+
+Ako dete zaradi sličicu, ostavi je u ruci duže od `DANA_DO_BLEDENJA`, pa je tek
+onda zalepi, bledenje se računa od poslednjeg tačnog odgovora, pa se sličica
+pojavi u albumu **odmah siva**. Detetu to izgleda kao da se nagrada pokvarila u
+sekundi kad ju je dobilo.
+
+Rešenje: sat bledenja kreće od **kasnijeg** od dva datuma. Vreme provedeno u ruci
+se ne broji, jer sličica tada nije ni bila u albumu.
+
+Dodaj u `src/lib/zack/album.test.ts`:
+
+```ts
+describe("bledenje kreće od ulaska u album", () => {
+  it("sličica dugo držana u ruci ne ulazi u album već siva", () => {
+    const [s] = stanjeAlbuma(
+      [R(1)],
+      [Z("r1", { zalepljena_at: preDana(1), poslednje_tacno_at: preDana(90) })],
+      SADA
+    );
+    expect(s.stanje).toBe("zalepljena");
+  });
+
+  it("davno zalepljena i davno neponovljena i dalje bledi", () => {
+    const [s] = stanjeAlbuma(
+      [R(1)],
+      [Z("r1", { zalepljena_at: preDana(90), poslednje_tacno_at: preDana(90) })],
+      SADA
+    );
+    expect(s.stanje).toBe("izbledela");
+  });
+
+  it("pokvaren datum nikad ne bledi sličicu", () => {
+    const [s] = stanjeAlbuma(
+      [R(1)],
+      [Z("r1", { poslednje_tacno_at: "ovo-nije-datum" })],
+      SADA
+    );
+    expect(s.stanje).toBe("zalepljena");
+  });
+});
+```
+
+U `src/lib/zack/album.ts` zameni telo koje računa `dana` ovim:
+
+```ts
+      // Sat bledenja kreće od kasnijeg od dva datuma. Vreme koje je sličica
+      // provela u ruci se ne broji, jer tada nije ni bila u albumu.
+      const odKada = Math.max(
+        Date.parse(z.zalepljena_at),
+        Date.parse(z.poslednje_tacno_at)
+      );
+      // Pokvaren ili neprepoznat datum daje NaN. Namerno pada u korist deteta:
+      // Number.isFinite hvata to eksplicitno, da ne zavisi od toga što je
+      // poređenje sa NaN slučajno false.
+      if (!Number.isFinite(odKada)) return { rec, stanje: "zalepljena" as const };
+
+      const dana = (sada.getTime() - odKada) / DAN;
+      return { rec, stanje: dana > DANA_DO_BLEDENJA ? ("izbledela" as const) : ("zalepljena" as const) };
+```
+
+- [ ] **Step 8: Pokreni i commit**
+
+Run: `npx vitest run src/lib/zack/album.test.ts && ./node_modules/.bin/tsc --noEmit && npm test`
+Expected: 13 testova u `album.test.ts`, cela svita prolazi
+
+```bash
+git add src/lib/zack/album.ts src/lib/zack/album.test.ts
+git commit -m "fix(zack): sličica ne ulazi u album već siva"
+```
+
+---
+
 ## Task 7: Admin ruta za upis lekcije
 
 **Files:**
@@ -2170,6 +2416,87 @@ git commit -m "feat(zack): ljuska igre sa srcima i pet igara iz spiska reči"
 ---
 
 ## Task 14: Ekran lekcije, kesica i lepljenje
+
+> **ODLUKA KOJA SE MORA DONETI PRE OVOG TASKA.**
+>
+> Nađeno pri izradi Taska 6b. `tacni` iz `sesija.ts` živi samo u memoriji do kraja
+> igre. Kod kako je dole napisan šalje napredak na server tek u `onKraj`. Znači
+> dete koje zatvori karticu, osveži stranicu ili ostane bez mreže nasred igre
+> **gubi sve što je do tada zaradilo.**
+>
+> To je isti prekršaj vrhovnog pravila zbog kog su rađene ispravke u Tasku 6b,
+> samo na drugom mestu. Ispravka unutar `sesija.ts` je zatvorila gubitak unutar
+> igre, ali ne i gubitak pri izlasku iz aplikacije.
+>
+> Dve mogućnosti, treba izabrati jednu:
+>
+> **A. Sličica se dodeljuje odmah po tačnom odgovoru.** Svaki tačan odgovor
+> upisuje red u `zack_slicice` sa `zalepljena_at = null`. Kesica na kraju je onda
+> samo svečano otkrivanje onoga što je već u bazi. Ako dete ispadne, sličice ga
+> čekaju sledeći put kao „u ruci". Potpuno uklanja gubitak. Mana: pravilo iz
+> `kesica.ts` da je najviše jedan izuzetak po kesici gubi smisao, jer kesice više
+> nema kao trenutka odlučivanja, pa se retkost sjajnih sličica mora rešiti
+> drugačije.
+>
+> **B. Ostaje kesica na kraju, ali se zarađene reči usput čuvaju.** Posle svakog
+> tačnog odgovora se šalje poziv koji pamti reč kao „zarađenu, još neisporučenu".
+> Pri sledećem otvaranju lekcije dete zatekne neotvorenu kesicu. Čuva svečanost i
+> pravilo o izuzecima, ali traži jednu kolonu ili tabelu više.
+>
+> **ODLUČENO 17.08.2026: ide B.** Kesica i jurenje sjajnih sličica su ono što tera
+> dete da odigra još jednu igru, a to je najvrednija mehanika u proizvodu. Jedna
+> kolona je jeftinija od njenog gubitka.
+>
+> Kako B izgleda konkretno, i šta menja u ostalim taskovima, opisano je odmah
+> ispod. Kod dalje u ovom tasku je pisan za staru varijantu i mora se prilagoditi.
+
+### Odluka B: zarađeno se pamti odmah, kesica se otvara kasnije
+
+**Šema.** Jedna nova kolona na `zack_slicice`:
+
+```sql
+ALTER TABLE public.zack_slicice ADD COLUMN isporucena_at TIMESTAMPTZ;
+```
+
+Time red u `zack_slicice` dobija četiri jasna stanja:
+
+| Stanje reda | Šta znači | Kako izgleda detetu |
+|---|---|---|
+| reda nema | reč nije zarađena | prazno mesto u albumu |
+| `isporucena_at IS NULL` | zarađena tačnim odgovorom, čeka u neotvorenoj kesici | prazno mesto, plus obaveštenje da ga čeka kesica |
+| `isporucena_at` upisan, `zalepljena_at IS NULL` | izašla iz kesice, u ruci | sličica u ruci, čeka lepljenje |
+| `zalepljena_at` upisan | zalepljena | sličica u albumu, siva ako je davno |
+
+**Tok.**
+
+1. **Posle svakog tačnog odgovora**, ne na kraju igre, klijent šalje reč na server.
+   Upisuje se red sa `isporucena_at = NULL`. Ako red već postoji, samo se osveži
+   `poslednje_tacno_at`. Time dete koje zatvori karticu nasred igre **ne gubi
+   ništa**, jer je sve već u bazi.
+2. **Na kraju igre ili pri sledećem otvaranju lekcije** dete otvara kesicu. Tek
+   tada se do pet reči označi sa `isporucena_at = NOW()`, po pravilima iz
+   `kesica.ts`, uključujući najviše jedan izuzetak.
+3. **Lepljenje** ostaje isto, upisuje `zalepljena_at`.
+
+**Šta se ovim rešava usput.** Reči koje preteknu preko pet ne nestaju nego ostaju
+neisporučene i dolaze u sledećoj kesici. Time otpada bojazan da kesica izbacuje
+zarađenu reč kad je puna a postoji i izuzetak.
+
+**Šta se NE menja.** `stanjeAlbuma` i `brojac` ostaju netaknuti. Upit koji ih
+hrani samo dodaje uslov `isporucena_at IS NOT NULL`, pa album nikad ne prikazuje
+reč koju dete još nije videlo. Čista logika se ne dira, filtrira se u upitu.
+
+**Šta se menja u ostalim taskovima:**
+
+- **Nova migracija `085_zack_isporucena.sql`** sa gornjim `ALTER TABLE`.
+- **Task 10** dobija novu rutu `POST /api/zack/[childId]/zaradi` koja prima
+  `recIdovi` i radi upsert redova sa `isporucena_at = NULL`.
+- **Task 10**, ruta `kesica` više ne prima `tacniRecIdovi` iz sesije, nego sama
+  čita neisporučene redove za tu lekciju, propušta ih kroz `otvoriKesicu` i
+  označava izabrane kao isporučene.
+- **Task 9**, upiti `zapisiSlicica` dobijaju `.not("isporucena_at", "is", null)`.
+- **Task 14**, klijent zove `zaradi` posle svakog tačnog odgovora, a `kesica` na
+  kraju. Ekran lekcije pri otvaranju proverava ima li neotvorenih kesica.
 
 **Files:**
 - Create: `src/app/zack/[childId]/lekcija/[broj]/page.tsx`

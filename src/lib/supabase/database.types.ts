@@ -2722,6 +2722,7 @@ export type Database = {
         Row: {
           dete_id: string
           id: string
+          isporucena_at: string | null
           poslednje_tacno_at: string
           rec_id: string
           zalepljena_at: string | null
@@ -2730,6 +2731,7 @@ export type Database = {
         Insert: {
           dete_id: string
           id?: string
+          isporucena_at?: string | null
           poslednje_tacno_at?: string
           rec_id: string
           zalepljena_at?: string | null
@@ -2738,6 +2740,7 @@ export type Database = {
         Update: {
           dete_id?: string
           id?: string
+          isporucena_at?: string | null
           poslednje_tacno_at?: string
           rec_id?: string
           zalepljena_at?: string | null
