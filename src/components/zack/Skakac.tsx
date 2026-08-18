@@ -25,6 +25,33 @@
 // vidi kako koza skače uvis, a tek onda prizor sklizne za njom. Pređeni sprat
 // ostaje ispod nje, delom vidljiv, da se vidi odakle je došla.
 //
+// KADAR NIKAD NIJE PRAZAN
+// -----------------------
+// Kamera se pomera CSS prelazom, dakle nju crta pretraživač, a mi ne znamo gde
+// je tačno u datom trenutku. Stena i police se crtaju samo oko kadra, i to je
+// jedina stvar koja ovde sme da pukne: ako se prozor crtanja računa po visini
+// ka kojoj kamera IDE, a pretraživač još crta onu odakle je pošla, dete gleda
+// prazan kadar. Nije teorija - dovoljno je da kartica ode u pozadinu usred
+// klizanja (prelazi tamo stanu, tajmeri se uspore) pa da se po povratku prizor
+// zatekne desetak spratova ispod onoga što je nacrtano.
+//
+// Zato ovde postoje DVE visine, i obe se poštuju:
+//
+//   `vidljivSprat`  - visina ka kojoj kamera ide (cilj).
+//   `nacrtanSprat`  - visina za koju je PRETRAŽIVAČ potvrdio da je nacrtana,
+//                     kroz `transitionend`. Nikad se ne pretpostavlja iz tajmera.
+//
+// Nacrtano je uvek niže ili jednako cilju, a stvarni položaj kamere je negde
+// između. Prozor crtanja ide od nacrtanog do cilja, pa je sve kroz šta se putuje
+// već na ekranu i nema tog rasporeda događaja u kom bi kadar ostao prazan.
+//
+// Uz to, kliza se samo kad je razmak tačno jedan sprat. Sve veće od toga je znak
+// da prelaz nije stigao da se odvrti (pozadinska kartica, spor uređaj), pa se
+// prelaz gasi i skače odmah. Time prozor nikad nije širi od jednog sprata: u
+// miru je scena tačno onolika kolika je i bila, a dok kamera kliza ima jedan
+// sprat viška, dakle desetak čvorova, i to samo tih pola sekunde. To je kočnica
+// za brzinu; za ispravnost je dovoljan sam prozor.
+//
 // ZAŠTO NIJE CANVAS
 // -----------------
 // Canvas bi bio glatkiji, ali police moraju da budu prava dugmad: sa vidljivim
@@ -230,9 +257,10 @@ function dnoPojasa(pojas: Pojas): number {
  * spratom. Ovako je svaki sloj kamena visok najviše koliko i ekran, ma da li je
  * koza na petom ili na šezdesetom spratu.
  *
- * Višak je namerno veći od jednog sprata: kamera kasni za skokom, pa se pojas
- * odseca po visini ka kojoj kamera IDE, a na ekranu je još stara. Dok je ta
- * razlika manja od viška, odsečena ivica se ne može videti.
+ * Ovo je SAMO margina oko puta kroz koji se putuje, da se odsečena ivica ne
+ * zatekne u kadru zbog zaokruživanja i delimičnog reda. Zaostajanje kamere se
+ * ovim viškom NE pokriva - za to služi to što prozor kreće od `nacrtanSprat`, a
+ * ne od cilja (vidi „KADAR NIKAD NIJE PRAZAN" gore).
  */
 const KADAR_VISAK = 400;
 /** Najviša scena koju `SCENA_VISINA` dopušta. Gornji kraj prozora. */
@@ -455,6 +483,13 @@ const POJAS_MS = 260;
 const KAMERA_MS = 420;
 const KAMERA_ZASTOJ = 140;
 
+/**
+ * Koliko sprata kamera sme da pređe klizanjem. Jedan: toliko je i skok. Sve
+ * veće od toga znači da prethodni prelaz nije stigao da se odvrti, pa se ne
+ * kliza nego skače - inače bi klizanje kroz pola stene bilo i sporo i ružno.
+ */
+const KAMERA_KLIZI_SPRATOVA = 1;
+
 // ── Lik ─────────────────────────────────────────────────────────────────────
 
 /**
@@ -653,6 +688,16 @@ export default function Skakac({
    * njom. Samo prikaz - zarađenu visinu nosi `istorija`.
    */
   const [vidljivSprat, setVidljivSprat] = useState(0);
+  /**
+   * Sprat za koji je PRETRAŽIVAČ potvrdio da ga je nacrtao. Ne pogađa se iz
+   * tajmera nego stiže iz `transitionend`, jer klizanje kamere crta pretraživač
+   * i on jedini zna da je stiglo do kraja. Sve između ovoga i `vidljivSprat` je
+   * put kroz koji kamera upravo prolazi - i baš zato se sve to i crta.
+   *
+   * Nikad nije veći od `vidljivSprat`: visina se ne gubi, pa se ni prizor ne
+   * spušta.
+   */
+  const [nacrtanSprat, setNacrtanSprat] = useState(0);
   const [faza, setFaza] = useState<Faza>("mirno");
   // Koja je polica dodirnuta. Ujedno i brava: dok stoji, drugi tap ne prolazi.
   const [meta, setMeta] = useState<number | null>(null);
@@ -809,15 +854,27 @@ export default function Skakac({
   const visinaLika = vidljivSprat * SPRAT_RAZMAK + VISINA_FAZE[faza];
   const kamera = vidljivSprat * SPRAT_RAZMAK;
 
+  /**
+   * Kamera se ne kliza, nego skače: ili je već stigla (nema šta da se kliza),
+   * ili je razmak veći od jednog sprata pa prethodni prelaz nije stigao da se
+   * odvrti, ili korisnik traži manje pokreta. U sva tri slučaja prelaza nema, pa
+   * pretraživač nacrta novi položaj istog trena.
+   */
+  const kameraSkace = manjePokreta || vidljivSprat - nacrtanSprat !== KAMERA_KLIZI_SPRATOVA;
+  // Kad se skače, nema `transitionend` koji bi javio da je stiglo, pa se upisuje
+  // ovde. Namerno u telu, ne u tajmeru ni u efektu: tako novi položaj i prozor
+  // crtanja odu na ekran u ISTOM kadru, pa ne postoji trenutak u kom se razilaze.
+  if (kameraSkace && nacrtanSprat !== vidljivSprat) setNacrtanSprat(vidljivSprat);
+
   const metaSprat = vidljivSprat + 1;
-  // Prozor spratova koji se uopšte crtaju. Donji je pređeni sprat, koji za vreme
-  // klizanja kamere još stoji na ekranu; gornja dva daju osećaj da stena ide
-  // dalje uvis. Sve van prozora je ionako iza ivice scene.
-  const predjeni = [vidljivSprat - 1, vidljivSprat].filter((s) => s >= 1);
+  // Prozor spratova koji se uopšte crtaju. Kreće od NACRTANOG sprata, ne od
+  // vidljivog: dok kamera kliza, na ekranu je još stari položaj, pa mora da bude
+  // nacrtano sve kroz šta se prolazi. Gornja dva daju osećaj da stena ide dalje
+  // uvis. Sve van prozora je ionako iza ivice scene.
+  const predjeni: number[] = [];
+  for (let s = Math.max(1, nacrtanSprat - 1); s <= vidljivSprat; s++) predjeni.push(s);
   const buduci = [metaSprat + 1, metaSprat + 2];
-  const oznake = [vidljivSprat - 1, vidljivSprat, metaSprat, metaSprat + 1, metaSprat + 2].filter(
-    (s) => s >= 1
-  );
+  const oznake = [...predjeni, metaSprat, metaSprat + 1, metaSprat + 2];
 
   const najava = sprat === 0 ? "" : `Koza je na ${sprat}. spratu.`;
 
@@ -826,7 +883,8 @@ export default function Skakac({
   // Kamen se crta samo u prozoru oko kadra, isto kao i police. U nizu je pet
   // pojaseva, u kadru ih je najviše dva-tri, i nijedan nije viši od ekrana - ni
   // na petom ni na šezdesetom spratu.
-  const kadarDno = kamera - KADAR_VISAK;
+  // Od nacrtanog do ciljnog, pa je pokriven ceo put kroz koji kamera prolazi.
+  const kadarDno = nacrtanSprat * SPRAT_RAZMAK - KADAR_VISAK;
   const kadarVrh = kamera + KADAR_NAJVISE + KADAR_VISAK;
   const slojevi = POJASEVI.map((pojas, i) => {
     const sledeci = POJASEVI[i + 1];
@@ -887,7 +945,19 @@ export default function Skakac({
           className="absolute inset-0"
           style={{
             transform: `translateY(${kamera}px)`,
-            transition: `transform ${trajanje(KAMERA_MS)}ms cubic-bezier(.33,1,.68,1) ${trajanje(KAMERA_ZASTOJ)}ms`,
+            transition: kameraSkace
+              ? "none"
+              : `transform ${KAMERA_MS}ms cubic-bezier(.33,1,.68,1) ${KAMERA_ZASTOJ}ms`,
+          }}
+          // Jedino mesto sa kog se saznaje da je prizor STVARNO stigao. Prelazi
+          // koze i pločica takođe stižu dovde, pa se propuštaju samo oni sa
+          // ovog sloja.
+          onTransitionEnd={(e) => {
+            if (e.target !== e.currentTarget || e.propertyName !== "transform") return;
+            // Odvrteo se tačno onoliko koliko se i klizalo, dakle jedan sprat.
+            // Ako je za to vreme zarađen još jedan, on još NIJE nacrtan, pa se
+            // ne sme upisati - zato korak, a ne skok na `vidljivSprat`.
+            setNacrtanSprat((s) => Math.min(vidljivSprat, s + KAMERA_KLIZI_SPRATOVA));
           }}
         >
           {/* Stena, pojas po pojas. Ide prvo, pa je iza svega ostalog. */}
