@@ -7,9 +7,10 @@ import type { GrupaRaspored } from "@/lib/raspored";
 import {
   EUR_RATE,
   LEVEL_ORDER,
+  SPECIAL_LEVELS,
   formatPrice,
-  getNivoKey,
-  nivoColors,
+  getFilterKey,
+  getLevelColors,
   terminPrikaz,
 } from "@/lib/raspored-prikaz";
 
@@ -20,10 +21,10 @@ export default function RasporedGrupa({
 }) {
   const [level, setLevel] = useState<string>("sve");
 
-  // Prikazuj samo CEFR nivoe (A1-C1). Posebni kursevi (npr. "Konverzacija B1+")
-  // imaju svoju cenu/checkout i prodaju se iz kataloga, pa ih ovde izostavljamo
-  // da ne dobiju pogrešnu cenu/pokvaren link (getNivoKey čita prva 2 slova).
-  const grupe = grupeProp.filter((g) => LEVEL_ORDER.includes(getNivoKey(g.nivo)));
+  // Sve otvorene grupe - i CEFR nivoi i posebni kursevi (npr. "Konverzacija B1+").
+  // Cena i „Prijavi se" idu iz baze (g.cena / g.checkoutSlug), pa poseban nivo
+  // više ne može da dobije tuđu cenu ni pokvaren link.
+  const grupe = grupeProp;
 
   if (grupe.length === 0) {
     return (
@@ -33,12 +34,14 @@ export default function RasporedGrupa({
     );
   }
 
-  // Samo nivoi koji stvarno postoje u rasporedu, po redosledu A1→C1
-  const available = LEVEL_ORDER.filter((l) =>
-    grupe.some((g) => getNivoKey(g.nivo) === l)
-  );
+  // Samo nivoi koji stvarno postoje u rasporedu: prvo A1→C1, pa posebni kursevi.
+  const kljucevi = grupe.map((g) => getFilterKey(g.nivo));
+  const available = [
+    ...LEVEL_ORDER.filter((l) => kljucevi.includes(l)),
+    ...kljucevi.filter((k, i) => !LEVEL_ORDER.includes(k) && kljucevi.indexOf(k) === i),
+  ];
   const filtered =
-    level === "sve" ? grupe : grupe.filter((g) => getNivoKey(g.nivo) === level);
+    level === "sve" ? grupe : grupe.filter((g) => getFilterKey(g.nivo) === level);
 
   const chip = (active: boolean) =>
     `px-4 py-1.5 rounded-full text-sm font-semibold transition-colors ${
@@ -56,7 +59,7 @@ export default function RasporedGrupa({
         </button>
         {available.map((l) => (
           <button key={l} onClick={() => setLevel(l)} className={chip(level === l)}>
-            {l}
+            {SPECIAL_LEVELS[l]?.label ?? l}
           </button>
         ))}
       </div>
@@ -68,8 +71,7 @@ export default function RasporedGrupa({
       ) : (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
           {filtered.map((g, i) => {
-            const nivoKey = getNivoKey(g.nivo);
-            const colors = nivoColors[nivoKey] ?? { bg: "#f3f4f6", text: "#374151" };
+            const colors = getLevelColors(g.nivo);
             const eurPrice = g.cenaEur ?? (g.cena != null ? Math.round(g.cena / EUR_RATE) : null);
             const slobodnih = parseInt(g.slobodnih, 10);
             const isFull = slobodnih <= 0;
