@@ -31,6 +31,7 @@ import Link from "next/link";
 import { useCallback, useRef, useState } from "react";
 import Igra, { NAZIVI } from "@/components/zack/Igra";
 import Isticanje from "@/components/zack/Isticanje";
+import Kesica, { CIK_CAK } from "@/components/zack/Kesica";
 import Milioner from "@/components/zack/Milioner";
 import Slicica from "@/components/zack/Slicica";
 import { brojac, type StavkaAlbuma } from "@/lib/zack/album";
@@ -95,17 +96,6 @@ const FOKUS = "outline-offset-2 focus-visible:outline-4 focus-visible:outline-[#
 /** Na crvenoj kesici plavi okvir fokusa se gubi, pa je tamo fokus beo. */
 const FOKUS_NA_CRVENOJ = "outline-offset-2 focus-visible:outline-4 focus-visible:outline-white";
 
-/**
- * Nazubljena gornja ivica kesice, kao na pravoj kesici sa sličicama koja se
- * otvara cepanjem. Trouglići idu celom širinom; crta se jednom, ovde, pa se u
- * SVG-u samo razvuče preko cele širine.
- */
-const CIK_CAK = (() => {
-  let d = "M0 0H100V2";
-  for (let x = 98; x >= 2; x -= 4) d += `L${x} 6L${x - 2} 2`;
-  return `${d}Z`;
-})();
-
 // ── Brojevi u našem jeziku ──────────────────────────────────────────────────
 
 /**
@@ -140,6 +130,34 @@ const STIGLO: Record<Oblik, string> = {
   dve: "Stigle su nove sličice",
   pet: "Stiglo je novih sličica",
 };
+
+const MESTO: Record<Oblik, string> = {
+  jedna: "prazno mesto",
+  dve: "prazna mesta",
+  pet: "praznih mesta",
+};
+
+/**
+ * Poruka prazne kesice govori iz stanja albuma, ne napamet. Savet „probaj
+ * neku drugu igru" ima smisla samo dok u albumu ima praznih mesta; kad je
+ * album pun, kaže se baš to - i ništa se dalje ne traži. Izbledele sličice se
+ * pomenu bez prekora: igranje im vraća boju, ali niko ništa nije izgubio.
+ */
+function recenicePrazneKesice(stavke: readonly StavkaAlbuma[]): string[] {
+  const praznih = stavke.filter((s) => s.stanje === "prazno").length;
+  if (praznih === 0) {
+    const recenice = ["Ceo album ove lekcije je pun. Svaka reč je tu."];
+    if (stavke.some((s) => s.stanje === "izbledela")) {
+      recenice.push("Neke sličice su izbledele - igraj da im vratiš boju.");
+    }
+    return recenice;
+  }
+  const oblik = oblikBroja(praznih);
+  return [
+    "U ovoj kesici nema novih sličica - reči iz te igre već imaš.",
+    `U albumu ${oblik === "dve" ? "čekaju" : "čeka"} još ${praznih} ${MESTO[oblik]}, probaj neku drugu igru.`,
+  ];
+}
 
 // ── Čitanje odgovora rute ───────────────────────────────────────────────────
 
@@ -482,9 +500,10 @@ export default function LekcijaClient({
 
       if (kesica.length === 0) {
         // Prazna kesica nije greška i ne sme da ostavi prazan ekran. Dete je
-        // sve reči iz ove igre već videlo, i to mu se kaže mirno.
+        // sve reči iz ove igre već videlo, i to mu se kaže mirno - istim
+        // rečima koje stoje i na ekranu, izvedenim iz stanja albuma.
         setPoruka("prazna-kesica");
-        setNajava("U kesici nema novih sličica, sve iz ove igre već imaš.");
+        setNajava(recenicePrazneKesice(stanje).join(" "));
         return;
       }
 
@@ -503,7 +522,9 @@ export default function LekcijaClient({
       uToku.current = false;
       setOtvaram(false);
     }
-  }, [childId, lekcija.id]);
+    // `stanje` je tu samo zbog najave prazne kesice; sme slobodno da obnavlja
+    // ovaj callback, jer od njega ne zavisi nijedan efekat.
+  }, [childId, lekcija.id, stanje]);
 
   /**
    * Ponovno slanje zarađenog, sa ČEKANJEM i proverom odgovora, za razliku od
@@ -757,20 +778,27 @@ export default function LekcijaClient({
             >
               <path d={CIK_CAK} fill={CRVENA_SENKA} />
             </svg>
-            <h2
-              className="flex items-center gap-2 text-[20px] leading-tight text-white"
-              style={{ fontFamily: DISPLAY }}
-            >
-              <span style={{ color: ZUTA }}>
-                <Zvezdica velika />
-              </span>
-              {`${ceka} ${CEKA[oblikBroja(ceka)]}`}
-            </h2>
-            <p className="mt-1.5 text-[15px] font-medium leading-snug text-white">
-              {/* Bez glagola u prošlom vremenu: „zaradio" i „zaradila" nisu isto,
-                  a ovo čitaju i devojčice i dečaci. */}
-              Otvori kesicu da vidiš šta je unutra.
-            </p>
+            <div className="flex items-center gap-3">
+              <div className="min-w-0 flex-1">
+                <h2
+                  className="flex items-center gap-2 text-[20px] leading-tight text-white"
+                  style={{ fontFamily: DISPLAY }}
+                >
+                  <span style={{ color: ZUTA }}>
+                    <Zvezdica velika />
+                  </span>
+                  {`${ceka} ${CEKA[oblikBroja(ceka)]}`}
+                </h2>
+                <p className="mt-1.5 text-[15px] font-medium leading-snug text-white">
+                  {/* Bez glagola u prošlom vremenu: „zaradio" i „zaradila" nisu isto,
+                      a ovo čitaju i devojčice i dečaci. */}
+                  Otvori kesicu da vidiš šta je unutra.
+                </p>
+              </div>
+              {/* Kesica kao lik: zatvorena čeka i mami, na tap puca pečat.
+                  Čist ukras - broj i poziv već piše levo od nje. */}
+              <Kesica stanje={otvaram ? "otvara-se" : "zatvorena"} />
+            </div>
             <button
               type="button"
               onClick={() => void otvoriKesicu()}
@@ -785,12 +813,21 @@ export default function LekcijaClient({
       )}
 
       {zauzeto && !bedzKesice && (
-        <p
-          className="font-heading mb-6 rounded-2xl border-[3px] p-4 text-center text-[18px] font-bold"
-          style={{ background: PAPIR, borderColor: ZUTA, color: MASTILO }}
+        <div
+          className="mb-6 flex items-center justify-center gap-4 rounded-2xl border-[3px] p-4"
+          style={{ background: PAPIR, borderColor: ZUTA }}
         >
-          {saljem ? "Samo trenutak..." : "Otvaram kesicu..."}
-        </p>
+          {/* Posle igre kesica najčešće puca baš ovde, bez bedža iznad: dok
+              se čeka odgovor, vidi se kako se cepa. Dok se tek šalje
+              zarađeno, kesica se još ne dira, pa je i nema. */}
+          {otvaram && <Kesica stanje="otvara-se" />}
+          <p
+            className="font-heading text-center text-[18px] font-bold"
+            style={{ color: MASTILO }}
+          >
+            {saljem ? "Samo trenutak..." : "Otvaram kesicu..."}
+          </p>
+        </div>
       )}
 
       {/* ── Sličice u ruci ──────────────────────────────────────────────────
@@ -813,8 +850,15 @@ export default function LekcijaClient({
           </p>
 
           <ul className="mt-4 grid grid-cols-3 gap-3">
-            {uRuci.map((rec) => (
-              <li key={rec.id}>
+            {/* Sličice iz pocepane kesice ispadaju jedna za drugom, istim
+                staggerom kao pločice igara. Ključ po reči čuva već završene
+                animacije: lepljenje susedne sličice ne pokreće ove ponovo. */}
+            {uRuci.map((rec, redni) => (
+              <li
+                key={rec.id}
+                className="zack-zalepi"
+                style={{ ["--zack-kasni" as string]: `${Math.min(redni * 60, 540)}ms` }}
+              >
                 <Slicica rec={rec} stanje="u-ruci" onClick={() => zalepi([rec.id])} />
               </li>
             ))}
@@ -840,13 +884,27 @@ export default function LekcijaClient({
       {/* Prazna kesica i pad mreže. Ni jedno ni drugo ne sme da ostavi prazan
           ekran posle odigrane igre. */}
       {poruka === "prazna-kesica" && (
-        <p
-          className="mb-6 rounded-2xl border p-4 text-[16px] leading-relaxed"
-          style={{ background: PAPIR, borderColor: IVICA, color: PRIGUSEN }}
+        <section
+          className="mb-6 rounded-2xl border p-4"
+          style={{ background: PAPIR, borderColor: IVICA }}
         >
-          U ovoj kesici nema novih sličica, sve reči iz te igre već imaš u albumu. Probaj neku
-          drugu igru, tamo te možda čeka nešto novo.
-        </p>
+          <div className="flex items-center gap-4">
+            {/* Otvoren, spljošten paketić: nije tuga, samo istina - unutra
+                trenutno nema ničega. */}
+            <Kesica stanje="prazna" />
+            <div className="min-w-0 flex-1 space-y-1">
+              {recenicePrazneKesice(stanje).map((recenica) => (
+                <p
+                  key={recenica}
+                  className="text-[16px] leading-relaxed"
+                  style={{ color: PRIGUSEN }}
+                >
+                  {recenica}
+                </p>
+              ))}
+            </div>
+          </div>
+        </section>
       )}
 
       {/* Ponovno slanje nije prošlo. Ovde se NE sme reći da je sve na broju,
