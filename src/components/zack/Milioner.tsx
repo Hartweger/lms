@@ -2,6 +2,19 @@
 
 // Milioner: provera celine, ne igra za sličice.
 //
+// ZAŠTO OVAJ EKRAN JEDINI NIJE PAPIR
+// ----------------------------------
+// Ceo zack! je namerno papirnog izgleda, jer je album sa sličicama glavna slika
+// proizvoda. Milioner je jedini ekran koji nije igra za sličice nego provera
+// celine, i jedini format koji dete prepoznaje sa televizije. Zato je ovde
+// studio: duboko plava podloga sa sjajem u sredini, šestougaone trake, zlatna
+// slova i lestvica napretka.
+//
+// IZUZETAK JE ZAKLJUČAN NA OVAJ JEDAN EKRAN. Ništa van ovog fajla ne sme da
+// potamni. Staza, lekcija, album i ostale igre ostaju papir. Zato ovde nema
+// nijedne globalne klase ni promene teme: tamno živi u `fixed` sloju koji
+// postoji samo dok je Milioner na ekranu i nestane sa njim.
+//
 // ŠTA OVDE NAMERNO NEMA
 // ---------------------
 // Nema srca, nema kesice, nema sličica i nema rekorda. Milioner ne dodiruje
@@ -14,19 +27,38 @@
 // bez „odlično" i bez „probaj ponovo, biće bolje". Slab rezultat se ne
 // komentariše nijednom rečju - to je pravilo, a ne ukras.
 //
+// NETAČAN ODGOVOR SE NE KAŽNJAVA IZGLEDOM. Promašaj dobije prigušeno crveno i
+// ništa više: nema drmanja, nema blicanja, nema zvuka. To je informacija, a ne
+// kazna, i tako mora i da izgleda.
+//
+// TELEFON JE USLOV, NE DODATAK
+// ----------------------------
+// Ekran je `fixed inset-0`, dakle tačno jedan vidokrug, i stranica se nikad ne
+// skroluje. Ono što ne stane skroluje UNUTAR svog dela (spisak tačaka u uvodu,
+// telo objašnjenja u pomoći), pa „Kreni" i odgovori nikad ne padnu ispod ivice.
+//
+// Odgovori idu jedan ispod drugog, preko cele širine. Nikad dva po dva: naši
+// odgovori su cele rečenice („Es regnet, deshalb bleibe ich zu Hause."), pa u
+// pola širine telefona prelome se u četiri reda i preklope se međusobno.
+//
+// Lestvica od petnaest stepenica uspravno pored ne staje na 375px, jer bi
+// pojela širinu koja odgovorima treba za drugi red. Zato leži vodoravno, ali
+// ostaje lestvica: pređene stepenice su prigušene, tekuća je zlatna i viša,
+// buduće su tamne, a svaka peta je viša kao međustanica.
+//
 // UVODNI EKRAN NOSI SAMO NAZIVE
 // -----------------------------
 // Prvi ekran je spisak naziva gramatičkih tačaka koje ulaze u partiju, i ništa
-// više. Ceo taj ekran, zajedno sa dugmetom „Kreni", staje na 375x812 bez
-// skrolovanja, i to je jedini razlog zašto objašnjenja tu ne stoje razmotana.
-// Ranije su stajala, pa je ekran bio visok jedan i po telefon: dete koje je
+// više. Tap na naziv otvori objašnjenje i primer, ponovni tap ih sklopi.
+// Razmotana objašnjenja bi gurnula „Kreni" ispod ivice ekrana, pa dete koje je
 // došlo da igra palcem stigne do dna za dve sekunde i ne pročita ništa.
 //
-// Ništa se time ne gubi. Objašnjenje i primer i dalje su tu, tap na naziv ih
-// otvori, ponovni tap ih sklopi. A isti taj tekst stiže i kao pomoć „pitaj
-// profesorku", u trenutku kad dete ne zna odgovor, dakle onda kad ga stvarno
-// čita. To je i ceo smisao te pomoći: ne pokazuje odgovor nego pravilo po kom
-// se do odgovora dolazi.
+// Spisak zna da bude dugačak: u partiju ume da uđe i petnaest tačaka. Zato on
+// skroluje unutar sebe, dok „Kreni" stoji zakucan na dnu vidokruga.
+//
+// Ništa se time ne gubi. Isti tekst stiže i kao pomoć „pitaj profesorku", u
+// trenutku kad dete ne zna odgovor, dakle onda kad ga stvarno čita. To je i ceo
+// smisao te pomoći: ne pokazuje odgovor nego pravilo po kom se do njega dolazi.
 //
 // GDE ŽIVI PRAVILO O OBRAĐENOM GRADIVU
 // ------------------------------------
@@ -43,24 +75,53 @@ import {
   type PitanjePartije,
 } from "@/lib/zack/milioner";
 
-// Papir, iste boje kao i ostatak zacka.
-const PODLOGA = "#F4F1E9";
-const PAPIR = "#FCFBF7";
-const IVICA = "#DED8C8";
-const MASTILO = "#16161A";
-const PRIGUSEN = "#6E6A5E";
-const PLAVA = "#0B54C9";
-const ZELENA = "#1E7A4B";
+// ── Studio ──────────────────────────────────────────────────────────────────
+//
+// Svi odnosi su izmereni, ne procenjeni (WCAG 2.1, relativna osvetljenost):
+//   bela na najsvetlijem delu podloge (SJAJ)   13.96:1
+//   bela na najtamnijem delu podloge (NOC)     18.48:1
+//   zlatna na SJAJ                              6.47:1
+//   zlatna na NOC                               8.57:1
+//   bela na PANEL (odgovor, pitanje)           14.35:1
+//   zlatna na PANEL                             6.65:1
+//   PRIGUSENA na SJAJ                           7.43:1
+//   TAMNO na ZLATNA (izabran odgovor)           8.13:1
+//   TAMNO na ZELENA (tačan odgovor)             5.11:1
+//   bela na CRVENA (promašaj)                   8.11:1
+// Bela na zelenoj daje samo 3.43:1, zato tačan odgovor nosi tamna slova, a ne
+// bela. Isto važi i za zlatnu podlogu. Ovo je aplikacija za decu i tu se ne
+// pogađa napamet.
+const NOC = "#08122E";
+const SJAJ = "#0E2A5C";
+const PANEL = "#12275A";
+const IVICA = "#5B8FE3";
+const IVICA_MRTVA = "#2B4A8A";
+const ZLATNA = "#E8A33D";
+const ZELENA = "#2E9E4F";
+const CRVENA = "#8E2F2A";
+const BELA = "#FFFFFF";
+const PRIGUSENA = "#A9BEE4";
+const TAMNO = "#0A1836";
 
-/** Koliko odziv stoji na ekranu. Greška duže, jer se uz nju čita i tačan odgovor. */
+const PODLOGA = `radial-gradient(115% 78% at 50% 34%, ${SJAJ} 0%, ${NOC} 72%)`;
+
+/** Šestougao sa televizije: ravan gore i dole, zašiljen levo i desno. */
+const HEX = "polygon(16px 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 16px 100%, 0 50%)";
+/** Isti oblik, sitniji šiljak - za stepenice lestvice. */
+const HEX_SITNO = "polygon(4px 0, calc(100% - 4px) 0, 100% 50%, calc(100% - 4px) 100%, 4px 100%, 0 50%)";
+
+/** Koliko izabran odgovor stoji zlatan pre nego što se otkrije. To je onaj tajac. */
+const ZAKLJUCAJ = 600;
+/** Koliko otkriven odgovor stoji na ekranu. Greška duže, jer se uz nju čita i tačan odgovor. */
 const ZADRZI_TACNO = 850;
 const ZADRZI_GRESKU = 1900;
 
-/** Vidljiv fokus, isti za sve što se klikće. Zaobljenje se dodaje uz njega. */
+/**
+ * Vidljiv fokus. Bela, jer se na tamnoplavoj podlozi tamna kontura izgubi, a
+ * bela se vidi i na zlatnoj i na zelenoj traci (odnos preko 3:1).
+ */
 const FOKUS =
-  "outline-offset-2 focus-visible:outline-4 focus-visible:outline-[#0B54C9] disabled:cursor-default";
-/** Zajednički izgled svega što se klikće, sa vidljivim fokusom. */
-const DUGME = `rounded-2xl ${FOKUS}`;
+  "outline-offset-2 focus-visible:outline-[3px] focus-visible:outline-white disabled:cursor-default";
 
 type Odziv = { tacno: boolean; tekst: string };
 type Pomoc = "pola" | "profesorka" | "zamena";
@@ -115,6 +176,8 @@ function citajGradivo(telo: unknown): Gradivo | null {
   };
 }
 
+const SLOVA = ["A", "B", "C", "D", "E", "F"];
+
 // ── Ekran ───────────────────────────────────────────────────────────────────
 
 export default function Milioner({
@@ -143,8 +206,8 @@ export default function Milioner({
   const [odziv, setOdziv] = useState<Odziv | null>(null);
   const [izabrano, setIzabrano] = useState<number | null>(null);
 
-  // Potrošene pomoći. Ostaju na ekranu i kad su potrošene, samo ugašene: dugme
-  // koje nestane dete traži i misli da je nešto pokvarilo.
+  // Potrošene pomoći. Ostaju na ekranu i kad su potrošene, samo ugašene i
+  // precrtane: krug koji nestane dete traži i misli da je nešto pokvarilo.
   const [potroseno, setPotroseno] = useState<Record<Pomoc, boolean>>({
     pola: false,
     profesorka: false,
@@ -156,6 +219,27 @@ export default function Milioner({
   const [savet, setSavet] = useState<string | null>(null);
   /** Šta se javlja čitaču ekrana kad se pomoć potroši. */
   const [najava, setNajava] = useState("");
+
+  /** Fokus se posle zatvaranja objašnjenja vraća na krug iz kog je otvoreno. */
+  const krugProfesorke = useRef<HTMLButtonElement | null>(null);
+
+  // Spisak tačaka u uvodu ume da bude duži od ekrana (u partiju ulazi i po
+  // petnaest tačaka), pa skroluje unutar sebe. Da li ispod ima još, NE pogađa se
+  // po broju tačaka - nazivi su različite dužine, pa se meri.
+  const spisak = useRef<HTMLUListElement | null>(null);
+  const [imaJos, setImaJos] = useState(false);
+  useEffect(() => {
+    const element = spisak.current;
+    if (element === null) return;
+    const meri = () => setImaJos(element.scrollTop + element.clientHeight < element.scrollHeight - 1);
+    meri();
+    element.addEventListener("scroll", meri);
+    window.addEventListener("resize", meri);
+    return () => {
+      element.removeEventListener("scroll", meri);
+      window.removeEventListener("resize", meri);
+    };
+  }, [tacke]);
 
   const tajmer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
@@ -212,54 +296,69 @@ export default function Milioner({
     return sveTacke.find((t) => t.id === pitanje.gramatikaId) ?? null;
   }, [pitanje, sveTacke]);
 
+  // Telo je zaključano od trenutka tapa, a ne od trenutka otkrivanja: između to
+  // dvoje stoji tajac u kom odgovor svetli zlatno, i tu ne sme da upadne drugi
+  // tap ni potrošena pomoć.
+  const zakljucano = izabrano !== null;
+  const otkriveno = odziv !== null;
+
   const naOdgovor = useCallback(
     (i: number) => {
-      // Dok odziv stoji, telo je zaključano, da drugi tap ne upadne u odgovor
-      // koji je već primljen.
-      if (!pitanje || odziv !== null) return;
+      if (!pitanje || izabrano !== null) return;
 
       const tacno = i === pitanje.tacan;
       if (tacno) setTacnih((t) => t + 1);
+      // Prvo samo zlatno, kao kad se odgovor zaključa u emisiji. Boja ishoda
+      // dolazi tek posle tajca.
       setIzabrano(i);
-      // Greška ne prekida partiju i ne nosi ime brenda: neutralno „Ups!" i ODMAH
-      // tačan odgovor, pa se ide dalje. Bez prekora i bez drugog pokušaja.
-      setOdziv({
-        tacno,
-        tekst: tacno ? "Zack!" : `Ups! ${pitanje.opcije[pitanje.tacan]}`,
-      });
 
-      tajmer.current = setTimeout(
-        () => {
-          setOdziv(null);
-          setIzabrano(null);
-          setVidljiva(null);
-          setSavet(null);
-          setIndeks((x) => x + 1);
-        },
-        tacno ? ZADRZI_TACNO : ZADRZI_GRESKU
-      );
+      tajmer.current = setTimeout(() => {
+        // Greška ne prekida partiju i ne nosi ime brenda: neutralno „Ups!" i
+        // ODMAH tačan odgovor, pa se ide dalje. Bez prekora i bez drugog
+        // pokušaja.
+        setOdziv({
+          tacno,
+          tekst: tacno ? "Zack!" : `Ups! ${pitanje.opcije[pitanje.tacan]}`,
+        });
+
+        tajmer.current = setTimeout(
+          () => {
+            setOdziv(null);
+            setIzabrano(null);
+            setVidljiva(null);
+            setSavet(null);
+            setIndeks((x) => x + 1);
+          },
+          tacno ? ZADRZI_TACNO : ZADRZI_GRESKU
+        );
+      }, ZAKLJUCAJ);
     },
-    [odziv, pitanje]
+    [izabrano, pitanje]
   );
 
   const naPolaPola = useCallback(() => {
-    if (!pitanje || odziv !== null || potroseno.pola) return;
+    if (!pitanje || zakljucano || potroseno.pola) return;
     setVidljiva(polaPola(pitanje, Math.random));
     setPotroseno((p) => ({ ...p, pola: true }));
     setNajava("Pola-pola: ostala su dva odgovora.");
-  }, [odziv, pitanje, potroseno.pola]);
+  }, [pitanje, potroseno.pola, zakljucano]);
 
   const naProfesorku = useCallback(() => {
-    if (!pitanje || odziv !== null || potroseno.profesorka) return;
+    if (!pitanje || zakljucano || potroseno.profesorka) return;
     // Objašnjenje tačke iz koje je BAŠ OVO pitanje. To je cela pomoć: pravilo,
     // nikad odgovor.
     setSavet(objasnjenje?.objasnjenje ?? "Podsetnik za ovo pitanje nije pri ruci.");
     setPotroseno((p) => ({ ...p, profesorka: true }));
-    setNajava(`Profesorka kaže: ${objasnjenje?.objasnjenje ?? ""}`);
-  }, [objasnjenje, odziv, pitanje, potroseno.profesorka]);
+    setNajava("Profesorka je otvorila objašnjenje.");
+  }, [objasnjenje, pitanje, potroseno.profesorka, zakljucano]);
+
+  const zatvoriSavet = useCallback(() => {
+    setSavet(null);
+    krugProfesorke.current?.focus();
+  }, []);
 
   const naZamenu = useCallback(() => {
-    if (!pitanje || odziv !== null || potroseno.zamena) return;
+    if (!pitanje || zakljucano || potroseno.zamena) return;
 
     const uPartiji = new Set(pitanja.map((p) => p.id));
     const nova = zameniPitanje(rezerva, pitanje, uPartiji);
@@ -275,80 +374,91 @@ export default function Milioner({
     setSavet(null);
     setPotroseno((p) => ({ ...p, zamena: true }));
     setNajava("Stiglo je drugo pitanje.");
-  }, [indeks, odziv, pitanje, pitanja, potroseno.zamena, rezerva]);
+  }, [indeks, pitanje, pitanja, potroseno.zamena, rezerva, zakljucano]);
 
   // ── Ekrani koji nisu partija ──────────────────────────────────────────────
 
   if (faza === "ucitavam") {
     return (
-      <Okvir>
-        <p className="py-16 text-center text-[17px]" style={{ color: PRIGUSEN }}>
+      <Studio>
+        <p className="flex flex-1 items-center justify-center text-[17px]" style={{ color: PRIGUSENA }}>
           Samo trenutak...
         </p>
-      </Okvir>
+      </Studio>
     );
   }
 
-  if (faza === "greska") {
+  if (faza === "greska" || faza === "prazno") {
     return (
-      <Okvir>
-        <p
-          className="rounded-2xl border p-4 text-[16px] leading-relaxed"
-          style={{ background: PAPIR, borderColor: IVICA, color: MASTILO }}
-        >
-          Pitanja sad nisu stigla. Ništa nije izgubljeno, probaj malo kasnije.
-        </p>
+      <Studio>
+        <div className="flex flex-1 items-center justify-center">
+          <p
+            className="rounded-2xl border px-5 py-4 text-center text-[16px] leading-relaxed"
+            style={{ background: PANEL, borderColor: IVICA, color: BELA }}
+          >
+            {faza === "greska"
+              ? "Pitanja sad nisu stigla. Ništa nije izgubljeno, probaj malo kasnije."
+              : "Za ovu lekciju još nema pitanja iz gramatike. Vrati se malo kasnije."}
+          </p>
+        </div>
         <Izlaz naKlik={onIzlaz} natpis="Nazad na lekciju" />
-      </Okvir>
-    );
-  }
-
-  if (faza === "prazno") {
-    return (
-      <Okvir>
-        <p
-          className="rounded-2xl border p-4 text-[16px] leading-relaxed"
-          style={{ background: PAPIR, borderColor: IVICA, color: PRIGUSEN }}
-        >
-          Za ovu lekciju još nema pitanja iz gramatike. Vrati se malo kasnije.
-        </p>
-        <Izlaz naKlik={onIzlaz} natpis="Nazad na lekciju" />
-      </Okvir>
+      </Studio>
     );
   }
 
   // ── Podsetnik pre partije ─────────────────────────────────────────────────
   if (faza === "podsetnik") {
     return (
-      <Okvir>
-        {/* Uvod je namerno kratak. Svaki red teksta ovde gura „Kreni" ka dnu, a
-            ceo ekran mora da stane bez skrolovanja i kad tačaka bude osam. */}
-        <p className="text-[15px] leading-normal" style={{ color: MASTILO }}>
+      <Studio>
+        {/* Uvod je namerno kratak: svaki red teksta ovde jede visinu spiska. */}
+        <p className="mt-1 text-[14px] leading-snug" style={{ color: PRIGUSENA }}>
           Nema srca i nema sličica, samo gradivo sa časa. Tapni naziv ako hoćeš da obnoviš.
         </p>
 
-        <ul className="mt-2 space-y-1.5">
-          {tacke.map((t) => (
-            <li key={t.id}>
-              <TackaUPodsetniku tacka={t} />
-            </li>
-          ))}
-        </ul>
+        {/* Spisak zna da bude dugačak, pa skroluje UNUTAR sebe. Stranica ne
+            skroluje nikad, a „Kreni" ostaje zakucan na dnu vidokruga. */}
+        <div className="relative mt-2 flex min-h-0 flex-1 flex-col justify-center">
+          {/* `max-h-full` drži spisak unutar okvira, pa ga `justify-center`
+              centrira kad je kratak, a nikad ga ne pomeri kad je dug: tada je
+              tačno visok koliko i okvir i skroluje unutar sebe. */}
+          <ul
+            ref={spisak}
+            className="max-h-full w-full space-y-1.5 overflow-y-auto overscroll-contain pr-0.5"
+          >
+            {tacke.map((t) => (
+              <li key={t.id}>
+                <TackaUPodsetniku tacka={t} />
+              </li>
+            ))}
+          </ul>
+          {/* Znak da spisak ide dalje nadole, i to samo kad stvarno ide. Čist
+              ukras, van stabla za čitač ekrana. */}
+          {imaJos && (
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-x-0 bottom-0 block h-7"
+              style={{ background: `linear-gradient(to top, ${NOC}, transparent)` }}
+            />
+          )}
+        </div>
 
-        <p className="mt-2 text-center text-[15px] leading-snug" style={{ color: PRIGUSEN }}>
+        <p className="mt-1 text-center text-[14px] leading-snug" style={{ color: PRIGUSENA }}>
           {`Pitanja: ${pitanja.length}. Imaš i tri pomoći.`}
         </p>
 
         <button
           type="button"
           onClick={() => setFaza("pitanja")}
-          className={`${DUGME} font-heading mt-2 block min-h-[60px] w-full text-[19px] font-bold motion-safe:transition-transform motion-safe:duration-100 motion-safe:active:scale-[0.985]`}
-          style={{ background: MASTILO, color: "#FFFFFF" }}
+          className={`${FOKUS} font-heading mt-2 block w-full text-[20px] font-bold motion-safe:transition-transform motion-safe:duration-100 motion-safe:active:scale-[0.985]`}
         >
-          Kreni
+          <Sestougao ivica={ZLATNA} ispuna={ZLATNA} visina="min-h-[58px]">
+            <span className="w-full text-center tracking-wide" style={{ color: TAMNO }}>
+              Kreni
+            </span>
+          </Sestougao>
         </button>
         <Izlaz naKlik={onIzlaz} natpis="Ipak ne sad" />
-      </Okvir>
+      </Studio>
     );
   }
 
@@ -359,197 +469,468 @@ export default function Milioner({
   // rečenica koja to potvrđuje.
   if (!pitanje) {
     return (
-      <Okvir>
-        <div
-          className="rounded-2xl border p-6 text-center"
-          style={{ background: PAPIR, borderColor: IVICA }}
-        >
-          <p
-            className="font-heading text-[12px] font-bold uppercase tracking-[.18em]"
-            style={{ color: PRIGUSEN }}
-          >
-            Kraj provere
-          </p>
-          <p className="mt-3" aria-live="polite">
-            <span className="sr-only">{`Tačnih odgovora: ${tacnih} od ${pitanja.length}`}</span>
-            <span
-              aria-hidden="true"
-              className="font-heading flex flex-wrap items-baseline justify-center gap-x-2 tabular-nums"
+      <Studio>
+        <div className="flex flex-1 items-center justify-center">
+          <div className="w-full">
+            <p
+              className="font-heading text-center text-[12px] font-bold uppercase tracking-[.22em]"
+              style={{ color: ZLATNA }}
             >
-              <span className="text-[40px] font-bold leading-none" style={{ color: MASTILO }}>
-                {tacnih}
-              </span>
-              <span className="text-[18px] font-bold" style={{ color: PRIGUSEN }}>
-                od
-              </span>
-              <span className="text-[40px] font-bold leading-none" style={{ color: MASTILO }}>
-                {pitanja.length}
-              </span>
-            </span>
-          </p>
+              Kraj provere
+            </p>
+            <div className="mt-3">
+              <Sestougao ivica={IVICA} ispuna={PANEL} visina="min-h-[104px]">
+                <p className="w-full text-center" aria-live="polite">
+                  <span className="sr-only">{`Tačnih odgovora: ${tacnih} od ${pitanja.length}`}</span>
+                  <span
+                    aria-hidden="true"
+                    className="font-heading flex flex-wrap items-baseline justify-center gap-x-2.5 tabular-nums"
+                  >
+                    <span className="text-[46px] font-bold leading-none" style={{ color: ZLATNA }}>
+                      {tacnih}
+                    </span>
+                    <span className="text-[18px] font-bold" style={{ color: PRIGUSENA }}>
+                      od
+                    </span>
+                    <span className="text-[46px] font-bold leading-none" style={{ color: BELA }}>
+                      {pitanja.length}
+                    </span>
+                  </span>
+                </p>
+              </Sestougao>
+            </div>
+          </div>
         </div>
         <Izlaz naKlik={onIzlaz} natpis="Nazad na lekciju" />
-      </Okvir>
+      </Studio>
     );
   }
 
   // ── Partija ───────────────────────────────────────────────────────────────
 
-  const zakljucano = odziv !== null;
-  const presao = indeks + (zakljucano ? 1 : 0);
-  const popunjeno = Math.round((indeks / pitanja.length) * 100);
-
   return (
-    <Okvir>
-      {/* Potrošene pomoći i savet profesorke stižu i do čitača ekrana. */}
+    <Studio>
+      {/* Potrošene pomoći i zamenjeno pitanje stižu i do čitača ekrana. */}
       <p aria-live="polite" className="sr-only">
         {najava}
       </p>
 
-      <div className="flex items-baseline justify-between gap-3">
-        <p
-          className="font-heading text-[12px] font-bold uppercase tracking-[.18em]"
-          style={{ color: PRIGUSEN }}
-        >
-          Provera celine
-        </p>
-        <p className="font-heading text-[15px] font-bold tabular-nums" style={{ color: PRIGUSEN }}>
-          <span className="sr-only">{`Pitanje ${indeks + 1} od ${pitanja.length}, prešao si ${presao}`}</span>
-          <span aria-hidden="true">{`${indeks + 1} / ${pitanja.length}`}</span>
-        </p>
-      </div>
+      <Lestvica indeks={indeks} ukupno={pitanja.length} />
 
-      <p className="mt-2">
-        <span
-          aria-hidden="true"
-          className="block h-2.5 w-full overflow-hidden rounded-full"
-          style={{ background: "#E7E1D1" }}
-        >
-          <span
-            className="block h-full rounded-full motion-safe:transition-[width] motion-safe:duration-300"
-            style={{ width: `${popunjeno}%`, background: MASTILO }}
-          />
-        </span>
-      </p>
+      <Pomoci
+        potroseno={potroseno}
+        zakljucano={zakljucano}
+        naPola={naPolaPola}
+        naProfesorku={naProfesorku}
+        naZamenu={naZamenu}
+        nosacProfesorke={krugProfesorke}
+      />
 
+      {/* Tabla (odziv, pitanje, odgovori) stoji pri dnu, kao u emisiji, a prazan
+          prostor ide iznad nje. `mt-auto` je taj potisak. Kad tabla na niskom
+          telefonu ne stane, ona se skuplja i skroluje unutar sebe, pa „Dosta za
+          sad" i lestvica gore ostaju na svom mestu. */}
+      <div className="mt-auto min-h-0 overflow-y-auto overscroll-contain">
       {/* Traka odziva stoji uvek, i kad je prazna, da se ekran ne pomeri kad se
           poruka pojavi - dete bi promašilo dugme koje je skočilo. */}
       <p
         aria-live="assertive"
-        className="font-heading mt-3 flex min-h-[2.75rem] items-center justify-center rounded-xl px-4 text-center text-[18px] font-bold leading-snug [overflow-wrap:anywhere]"
+        className="font-heading mt-2 flex min-h-[2.5rem] items-center justify-center rounded-lg px-3 text-center text-[17px] font-bold leading-snug [overflow-wrap:anywhere]"
         style={{
-          background: odziv ? (odziv.tacno ? "#E4F0E9" : "#FBE7E5") : "transparent",
-          color: odziv ? (odziv.tacno ? ZELENA : MASTILO) : "transparent",
+          background: odziv ? (odziv.tacno ? ZELENA : CRVENA) : "transparent",
+          color: odziv ? (odziv.tacno ? TAMNO : BELA) : "transparent",
         }}
+        lang={odziv && !odziv.tacno ? "de" : undefined}
       >
         {odziv ? odziv.tekst : ""}
       </p>
 
-      <div
-        className="mt-2 rounded-2xl border px-5 py-5 text-center"
-        style={{ background: PAPIR, borderColor: IVICA }}
-      >
-        <p
-          className="font-heading text-[21px] font-bold leading-snug tracking-tight [overflow-wrap:anywhere]"
-          style={{ color: MASTILO }}
-        >
-          {pitanje.pitanje}
-        </p>
+      <div className="mt-2">
+        <Sestougao ivica={IVICA} ispuna={PANEL} visina="min-h-[82px]">
+          <p
+            className="font-heading w-full text-center text-[17px] font-bold leading-snug tracking-tight [overflow-wrap:anywhere]"
+            style={{ color: BELA }}
+          >
+            {pitanje.pitanje}
+          </p>
+        </Sestougao>
       </div>
 
-      <ul className="mt-3 space-y-2.5">
+      {/* Odgovori idu JEDAN ISPOD DRUGOG, preko cele širine. Nikad dva po dva:
+          naši odgovori su cele nemačke rečenice i u pola širine se preklope. */}
+      <ul className="mt-2 flex flex-col gap-2">
         {pitanje.opcije.map((opcija, i) => {
           // „Pola-pola" ne izbacuje dugmad nego ih gasi. Mesto ostaje isto, pa
           // se ostali odgovori ne pomeraju pod prstom.
           const sklonjeno = vidljiva !== null && !vidljiva.includes(i);
-          const pokazi = zakljucano && i === pitanje.tacan;
-          const promasaj = zakljucano && i === izabrano && i !== pitanje.tacan;
+          const cekaOtkrivanje = !otkriveno && i === izabrano;
+          const pokazi = otkriveno && i === pitanje.tacan;
+          const promasaj = otkriveno && i === izabrano && i !== pitanje.tacan;
+
+          const ispuna = cekaOtkrivanje ? ZLATNA : pokazi ? ZELENA : promasaj ? CRVENA : PANEL;
+          const ivica = cekaOtkrivanje ? ZLATNA : pokazi ? ZELENA : promasaj ? CRVENA : IVICA;
+          const slovo = cekaOtkrivanje || pokazi ? TAMNO : promasaj ? BELA : ZLATNA;
+          const tekst = cekaOtkrivanje || pokazi ? TAMNO : BELA;
+
           return (
             <li key={`${pitanje.id}-${i}`} className={sklonjeno ? "invisible" : undefined}>
               <button
                 type="button"
                 onClick={() => naOdgovor(i)}
                 disabled={zakljucano || sklonjeno}
-                aria-hidden={sklonjeno}
+                aria-hidden={sklonjeno || undefined}
                 tabIndex={sklonjeno ? -1 : undefined}
-                lang="de"
-                className={`${DUGME} font-heading block min-h-[56px] w-full border-2 px-4 py-3 text-left text-[18px] font-bold leading-snug [overflow-wrap:anywhere] motion-safe:transition-transform motion-safe:duration-100 motion-safe:active:scale-[0.985]`}
-                style={{
-                  background: pokazi ? "#E4F0E9" : promasaj ? "#FBE7E5" : PAPIR,
-                  borderColor: pokazi ? ZELENA : promasaj ? "#E5342A" : IVICA,
-                  color: MASTILO,
-                }}
+                className={`${FOKUS} block w-full motion-safe:transition-transform motion-safe:duration-100 motion-safe:active:scale-[0.985]`}
               >
-                {opcija}
+                <Sestougao ivica={ivica} ispuna={ispuna} visina="min-h-[58px]">
+                  <span
+                    className="font-heading w-6 flex-none text-left text-[17px] font-bold tabular-nums"
+                    style={{ color: slovo }}
+                    aria-hidden="true"
+                  >
+                    {SLOVA[i] ?? ""}
+                  </span>
+                  <span
+                    lang="de"
+                    className="font-heading flex-1 text-left text-[16px] font-bold leading-snug [overflow-wrap:anywhere]"
+                    style={{ color: tekst }}
+                  >
+                    {opcija}
+                  </span>
+                </Sestougao>
               </button>
             </li>
           );
         })}
       </ul>
-
-      {/* Savet profesorke: pravilo, nikad odgovor. Stoji dok traje pitanje. */}
-      {savet && (
-        <p
-          className="mt-3 rounded-xl border border-l-4 px-4 py-3 text-[15px] leading-relaxed"
-          style={{
-            background: PAPIR,
-            borderColor: IVICA,
-            borderLeftColor: PLAVA,
-            color: PRIGUSEN,
-          }}
-        >
-          {savet}
-        </p>
-      )}
-
-      {/* ── Tri pomoći ────────────────────────────────────────────────────
-          Svaka po jednom u partiji. Potrošena ostaje na ekranu, ugašena i
-          precrtana, jer dete mora da vidi šta je potrošilo. */}
-      <ul className="mt-4 grid grid-cols-3 gap-2">
-        <li>
-          <DugmePomoci
-            natpis="Pola-pola"
-            potroseno={potroseno.pola}
-            zakljucano={zakljucano}
-            naKlik={naPolaPola}
-          />
-        </li>
-        <li>
-          <DugmePomoci
-            natpis="Pitaj profesorku"
-            potroseno={potroseno.profesorka}
-            zakljucano={zakljucano}
-            naKlik={naProfesorku}
-          />
-        </li>
-        <li>
-          <DugmePomoci
-            natpis="Zameni pitanje"
-            potroseno={potroseno.zamena}
-            zakljucano={zakljucano}
-            naKlik={naZamenu}
-          />
-        </li>
-      </ul>
+      </div>
 
       <Izlaz naKlik={onIzlaz} natpis="Dosta za sad" />
-    </Okvir>
+
+      {/* Savet profesorke: pravilo, nikad odgovor. Objašnjenja umeju da budu i
+          po tri stotine slova, pa stoje u sloju koji sme da skroluje, umesto da
+          guraju odgovore ispod ivice ekrana. */}
+      {savet !== null && (
+        <SavetProfesorke tekst={savet} primer={objasnjenje?.primer ?? null} naZatvori={zatvoriSavet} />
+      )}
+    </Studio>
   );
 }
 
 // ── Delovi ──────────────────────────────────────────────────────────────────
 
-function Okvir({ children }: { children: React.ReactNode }) {
+/**
+ * Studio: tačno jedan vidokrug, nikad više. `fixed inset-0` znači da stranica
+ * ispod ostaje netaknuta i da se nikad ne skroluje, pa `document.body` ostaje
+ * visok tačno koliko i prozor.
+ *
+ * Tamno počinje i završava se OVDE. Nema nijedne globalne klase, nijedne
+ * promene teme i nijednog stila koji bi procurio na papirni deo aplikacije.
+ */
+function Studio({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ background: PODLOGA }}>
+    <div
+      className="fixed inset-0 z-50 flex flex-col px-3 pb-2 pt-2"
+      style={{ background: PODLOGA }}
+    >
       <h1
-        className="font-heading text-[19px] font-bold leading-tight tracking-tight"
-        style={{ color: MASTILO }}
+        className="font-heading flex-none text-center text-[15px] font-bold uppercase leading-none tracking-[.34em]"
+        style={{ color: ZLATNA }}
       >
         Milioner
       </h1>
-      <div className="mt-4">{children}</div>
+      {children}
     </div>
+  );
+}
+
+/**
+ * Lestvica pitanja. Na televiziji stoji uspravno pored table, ali petnaest
+ * stepenica uspravno ne staje na telefon od 375px, a i da staje, pojela bi
+ * širinu koju odgovorima treba za drugi red teksta. Zato leži vodoravno.
+ *
+ * Ostaje lestvica, ne broj: pređene stepenice su prigušene, tekuća je zlatna i
+ * najviša, buduće su tamne, a svaka peta je viša kao međustanica u emisiji.
+ * Tačan broj ide čitaču ekrana, jer se iz oblika ne čita precizno.
+ */
+function Lestvica({ indeks, ukupno }: { indeks: number; ukupno: number }) {
+  return (
+    <div className="mt-2 flex-none">
+      <p className="sr-only" aria-live="off">
+        {`Pitanje ${indeks + 1} od ${ukupno}`}
+      </p>
+      <div aria-hidden="true" className="flex h-[32px] items-center gap-[3px]">
+        {Array.from({ length: ukupno }, (_, i) => {
+          const presao = i < indeks;
+          const tekuca = i === indeks;
+          // Svaka peta stepenica je viša, kao međustanica u emisiji. Bez toga se
+          // petnaest jednakih crtica slije u jednu traku i prestane da bude
+          // lestvica.
+          const medjustanica = (i + 1) % 5 === 0;
+          const visina = tekuca ? 32 : medjustanica ? 24 : 16;
+          return (
+            <span
+              key={i}
+              className="block flex-1 motion-safe:transition-all motion-safe:duration-200"
+              style={{
+                height: `${visina}px`,
+                clipPath: HEX_SITNO,
+                // Pređene su prigušeno zlatne (već ispenjano), tekuća puna
+                // zlatna, buduće plave. Buduće moraju da se vide: kad su boje
+                // podloge, lestvice nema, ostane samo jedna zlatna mrlja.
+                background: tekuca ? ZLATNA : presao ? ZLATNA : IVICA_MRTVA,
+                opacity: presao ? 0.42 : 1,
+              }}
+            />
+          );
+        })}
+      </div>
+      <p
+        className="font-heading mt-1 text-center text-[13px] font-bold tabular-nums leading-none"
+        style={{ color: ZLATNA }}
+        aria-hidden="true"
+      >
+        {`${indeks + 1} / ${ukupno}`}
+      </p>
+    </div>
+  );
+}
+
+/**
+ * Tri pomoći kao krugovi pri vrhu, kao u emisiji. Potrošena ostaje na ekranu,
+ * prigušena i precrtana zlatnom crtom, jer dete mora da vidi šta je potrošilo.
+ *
+ * Potrošen krug NIJE `disabled` nego `aria-disabled`. Razlog je pristupačnost:
+ * pravo `disabled` dugme ispada iz reda za tastaturu, pa dete koje ide tabom
+ * uopšte ne sazna da je ta pomoć postojala i da je potrošena.
+ */
+function Pomoci({
+  potroseno,
+  zakljucano,
+  naPola,
+  naProfesorku,
+  naZamenu,
+  nosacProfesorke,
+}: {
+  potroseno: Record<Pomoc, boolean>;
+  zakljucano: boolean;
+  naPola: () => void;
+  naProfesorku: () => void;
+  naZamenu: () => void;
+  nosacProfesorke: React.RefObject<HTMLButtonElement | null>;
+}) {
+  return (
+    <ul className="mt-1.5 flex flex-none items-start justify-center gap-6">
+      <li>
+        <KrugPomoci
+          natpis="Pola-pola"
+          opis="Ostaju dva odgovora"
+          potroseno={potroseno.pola}
+          zakljucano={zakljucano}
+          naKlik={naPola}
+        >
+          <span className="font-heading text-[13px] font-bold tabular-nums">50:50</span>
+        </KrugPomoci>
+      </li>
+      <li>
+        <KrugPomoci
+          natpis="Pitaj profesorku"
+          opis="Otvara objašnjenje pravila"
+          potroseno={potroseno.profesorka}
+          zakljucano={zakljucano}
+          naKlik={naProfesorku}
+          nosac={nosacProfesorke}
+        >
+          <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="8" r="3.4" />
+            <path d="M5 20c0-3.6 3.1-5.6 7-5.6s7 2 7 5.6" />
+          </svg>
+        </KrugPomoci>
+      </li>
+      <li>
+        <KrugPomoci
+          natpis="Zameni pitanje"
+          opis="Stiže drugo pitanje"
+          potroseno={potroseno.zamena}
+          zakljucano={zakljucano}
+          naKlik={naZamenu}
+        >
+          <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M3.5 9.5A8.5 8.5 0 0 1 18 6.4" />
+            <path d="M18 3v4h-4" />
+            <path d="M20.5 14.5A8.5 8.5 0 0 1 6 17.6" />
+            <path d="M6 21v-4h4" />
+          </svg>
+        </KrugPomoci>
+      </li>
+    </ul>
+  );
+}
+
+function KrugPomoci({
+  natpis,
+  opis,
+  potroseno,
+  zakljucano,
+  naKlik,
+  nosac,
+  children,
+}: {
+  natpis: string;
+  opis: string;
+  potroseno: boolean;
+  zakljucano: boolean;
+  naKlik: () => void;
+  nosac?: React.RefObject<HTMLButtonElement | null>;
+  children: React.ReactNode;
+}) {
+  const ugaseno = potroseno || zakljucano;
+  return (
+    <button
+      ref={nosac}
+      type="button"
+      onClick={naKlik}
+      aria-disabled={ugaseno}
+      className={`${FOKUS} flex w-[76px] flex-col items-center gap-1 rounded-xl py-0.5 motion-safe:transition-transform motion-safe:duration-100 motion-safe:active:scale-[0.94]`}
+    >
+      <span className="sr-only">{potroseno ? `${natpis}, potrošeno. ${opis}.` : `${natpis}. ${opis}.`}</span>
+      <span
+        aria-hidden="true"
+        className="relative flex h-[52px] w-[52px] flex-none items-center justify-center rounded-full border-2"
+        style={{
+          background: potroseno ? "transparent" : PANEL,
+          borderColor: potroseno ? IVICA_MRTVA : ZLATNA,
+          color: potroseno ? PRIGUSENA : ZLATNA,
+          opacity: zakljucano && !potroseno ? 0.5 : 1,
+        }}
+      >
+        {children}
+        {potroseno && (
+          <span
+            className="absolute left-1 right-1 top-1/2 block h-[2px] -translate-y-1/2 rotate-[-38deg] rounded-full"
+            style={{ background: ZLATNA }}
+          />
+        )}
+      </span>
+      <span
+        aria-hidden="true"
+        className="font-heading text-center text-[10px] font-bold leading-tight"
+        style={{
+          color: potroseno ? PRIGUSENA : BELA,
+          textDecoration: potroseno ? "line-through" : "none",
+        }}
+      >
+        {natpis}
+      </span>
+    </button>
+  );
+}
+
+/**
+ * Objašnjenje profesorke u sloju preko table.
+ *
+ * Zašto sloj, a ne red teksta ispod odgovora: objašnjenja iz baze umeju da budu
+ * i po tri stotine slova, pa bi ispod odgovora gurnula pola table ispod ivice
+ * telefona. Ovako tekst dobija svoje mesto, sme da skroluje unutar sebe, i
+ * zatvara se kad ga dete pročita.
+ *
+ * Fokus ulazi na dugme za zatvaranje i vraća se na krug iz kog je otvoren, a
+ * `Escape` zatvara, jer se sloj otvara i tastaturom.
+ */
+function SavetProfesorke({
+  tekst,
+  primer,
+  naZatvori,
+}: {
+  tekst: string;
+  primer: string | null;
+  naZatvori: () => void;
+}) {
+  const zatvori = useRef<HTMLButtonElement | null>(null);
+
+  useEffect(() => {
+    zatvori.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    const naTaster = (dogadjaj: KeyboardEvent) => {
+      if (dogadjaj.key === "Escape") naZatvori();
+    };
+    document.addEventListener("keydown", naTaster);
+    return () => document.removeEventListener("keydown", naTaster);
+  }, [naZatvori]);
+
+  return (
+    <div className="absolute inset-0 z-10 flex items-center justify-center p-4" style={{ background: "rgba(4, 9, 24, 0.78)" }}>
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="milioner-savet-naslov"
+        className="flex max-h-full w-full flex-col rounded-2xl border-2 p-4"
+        style={{ background: PANEL, borderColor: ZLATNA }}
+      >
+        <p
+          id="milioner-savet-naslov"
+          className="font-heading flex-none text-[12px] font-bold uppercase tracking-[.2em]"
+          style={{ color: ZLATNA }}
+        >
+          Profesorka kaže
+        </p>
+        <div className="mt-2 min-h-0 flex-1 overflow-y-auto overscroll-contain">
+          <p className="text-[15px] leading-relaxed" style={{ color: BELA }}>
+            {tekst}
+          </p>
+          {primer && (
+            <p lang="de" className="font-heading mt-2 text-[15px] font-bold leading-snug" style={{ color: ZLATNA }}>
+              {primer}
+            </p>
+          )}
+        </div>
+        <button
+          ref={zatvori}
+          type="button"
+          onClick={naZatvori}
+          className={`${FOKUS} font-heading mt-3 block min-h-[48px] w-full flex-none rounded-xl border-2 text-[16px] font-bold`}
+          style={{ borderColor: ZLATNA, color: ZLATNA }}
+        >
+          Razumem
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Šestougao sa televizije: ravan gore i dole, zašiljen levo i desno. Ivica je
+ * spoljni oblik, ispuna unutrašnji, dva piksela uži sa svake strane.
+ *
+ * Oblik NE stoji na samom dugmetu nego unutar njega. Da stoji na dugmetu,
+ * `clip-path` bi odsekao i konturu fokusa, pa dete koje ide tastaturom ne bi
+ * videlo gde se nalazi.
+ */
+function Sestougao({
+  ivica,
+  ispuna,
+  visina,
+  children,
+}: {
+  ivica: string;
+  ispuna: string;
+  visina: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <span
+      className="block w-full p-[2px] motion-safe:transition-colors motion-safe:duration-200"
+      style={{ background: ivica, clipPath: HEX }}
+    >
+      <span
+        className={`flex w-full items-center gap-1 py-2 pl-6 pr-5 motion-safe:transition-colors motion-safe:duration-200 ${visina}`}
+        style={{ background: ispuna, clipPath: HEX }}
+      >
+        {children}
+      </span>
+    </span>
   );
 }
 
@@ -565,7 +946,7 @@ function Okvir({ children }: { children: React.ReactNode }) {
  * Otvaranje radi i tastaturom, jer je naziv obično dugme, i nosi
  * `aria-expanded`, pa čitač ekrana zna da iza naziva ima još teksta. Dugme
  * stoji u `h2`, da spisak i dalje bude naslovna struktura kroz koju čitač
- * ekrana ume da skače, kao što je bio i pre nego što se sklopio.
+ * ekrana ume da skače.
  */
 function TackaUPodsetniku({ tacka }: { tacka: GramatickaTacka }) {
   const [otvoreno, setOtvoreno] = useState(false);
@@ -573,8 +954,8 @@ function TackaUPodsetniku({ tacka }: { tacka: GramatickaTacka }) {
 
   return (
     <div
-      className="rounded-xl border border-l-4"
-      style={{ background: PAPIR, borderColor: IVICA, borderLeftColor: PLAVA }}
+      className="rounded-lg border border-l-4"
+      style={{ background: PANEL, borderColor: IVICA_MRTVA, borderLeftColor: ZLATNA }}
     >
       <h2>
         <button
@@ -582,8 +963,8 @@ function TackaUPodsetniku({ tacka }: { tacka: GramatickaTacka }) {
           onClick={() => setOtvoreno((o) => !o)}
           aria-expanded={otvoreno}
           aria-controls={idTela}
-          className={`${FOKUS} font-heading flex min-h-[48px] w-full items-center justify-between gap-3 rounded-xl px-4 py-2.5 text-left text-[16px] font-bold leading-snug`}
-          style={{ color: MASTILO }}
+          className={`${FOKUS} font-heading flex min-h-[46px] w-full items-center justify-between gap-3 rounded-lg px-3 py-2 text-left text-[14px] font-bold leading-snug`}
+          style={{ color: BELA }}
         >
           <span>{tacka.naziv}</span>
           <Strelica otvoreno={otvoreno} />
@@ -592,16 +973,12 @@ function TackaUPodsetniku({ tacka }: { tacka: GramatickaTacka }) {
 
       {/* `hidden` umesto uklanjanja iz stabla: `aria-controls` gore mora da
           pokazuje na nešto što stvarno postoji i kad je sklopljeno. */}
-      <div id={idTela} hidden={!otvoreno} className="px-4 pb-3.5">
-        <p className="text-[15px] leading-relaxed" style={{ color: PRIGUSEN }}>
+      <div id={idTela} hidden={!otvoreno} className="px-3 pb-3">
+        <p className="text-[14px] leading-relaxed" style={{ color: PRIGUSENA }}>
           {tacka.objasnjenje}
         </p>
         {tacka.primer && (
-          <p
-            lang="de"
-            className="font-heading mt-2 text-[15px] font-bold leading-snug"
-            style={{ color: PLAVA }}
-          >
+          <p lang="de" className="font-heading mt-1.5 text-[14px] font-bold leading-snug" style={{ color: ZLATNA }}>
             {tacka.primer}
           </p>
         )}
@@ -621,7 +998,7 @@ function Strelica({ otvoreno }: { otvoreno: boolean }) {
         otvoreno ? "rotate-180" : ""
       }`}
       fill="none"
-      stroke={PLAVA}
+      stroke={ZLATNA}
       strokeWidth="2.5"
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -631,44 +1008,13 @@ function Strelica({ otvoreno }: { otvoreno: boolean }) {
   );
 }
 
-function DugmePomoci({
-  natpis,
-  potroseno,
-  zakljucano,
-  naKlik,
-}: {
-  natpis: string;
-  potroseno: boolean;
-  zakljucano: boolean;
-  naKlik: () => void;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={naKlik}
-      disabled={potroseno || zakljucano}
-      className={`${DUGME} font-heading flex min-h-[54px] w-full items-center justify-center border-2 px-1.5 py-2 text-center text-[13px] font-bold leading-tight [overflow-wrap:anywhere] motion-safe:transition-transform motion-safe:duration-100 motion-safe:active:scale-[0.97]`}
-      style={{
-        background: potroseno ? "transparent" : PAPIR,
-        borderColor: IVICA,
-        color: potroseno ? PRIGUSEN : MASTILO,
-        opacity: potroseno ? 0.55 : 1,
-        textDecoration: potroseno ? "line-through" : "none",
-      }}
-    >
-      <span className="sr-only">{potroseno ? `${natpis}, potrošeno` : natpis}</span>
-      <span aria-hidden="true">{natpis}</span>
-    </button>
-  );
-}
-
 function Izlaz({ naKlik, natpis }: { naKlik: () => void; natpis: string }) {
   return (
     <button
       type="button"
       onClick={naKlik}
-      className={`${DUGME} font-heading mt-4 block min-h-[52px] w-full border-2 text-[17px] font-bold`}
-      style={{ background: "transparent", borderColor: IVICA, color: PRIGUSEN }}
+      className={`${FOKUS} font-heading mt-2 block min-h-[46px] w-full flex-none rounded-xl border text-[15px] font-bold`}
+      style={{ background: "transparent", borderColor: IVICA_MRTVA, color: PRIGUSENA }}
     >
       {natpis}
     </button>
