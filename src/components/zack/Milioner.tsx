@@ -66,6 +66,7 @@
 // još jednom, ovde na strani deteta. Nijedno od ta dva mesta se ne oslanja na
 // ono drugo.
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import Isticanje from "@/components/zack/Isticanje";
 import {
   polaPola,
   sastaviPartiju,
@@ -878,11 +879,11 @@ function SavetProfesorke({
         </p>
         <div className="mt-2 min-h-0 flex-1 overflow-y-auto overscroll-contain">
           <p className="text-[15px] leading-relaxed" style={{ color: BELA }}>
-            {tekst}
+            <Isticanje tekst={tekst} tema="tamna" />
           </p>
           {primer && (
             <p lang="de" className="font-heading mt-2 text-[15px] font-bold leading-snug" style={{ color: ZLATNA }}>
-              {primer}
+              <Isticanje tekst={primer} tema="tamna" />
             </p>
           )}
         </div>
@@ -975,11 +976,11 @@ function TackaUPodsetniku({ tacka }: { tacka: GramatickaTacka }) {
           pokazuje na nešto što stvarno postoji i kad je sklopljeno. */}
       <div id={idTela} hidden={!otvoreno} className="px-3 pb-3">
         <p className="text-[14px] leading-relaxed" style={{ color: PRIGUSENA }}>
-          {tacka.objasnjenje}
+          <Isticanje tekst={tacka.objasnjenje} tema="tamna" />
         </p>
         {tacka.primer && (
           <p lang="de" className="font-heading mt-1.5 text-[14px] font-bold leading-snug" style={{ color: ZLATNA }}>
-            {tacka.primer}
+            <Isticanje tekst={tacka.primer} tema="tamna" />
           </p>
         )}
       </div>

@@ -30,6 +30,7 @@
 import Link from "next/link";
 import { useCallback, useRef, useState } from "react";
 import Igra, { NAZIVI } from "@/components/zack/Igra";
+import Isticanje from "@/components/zack/Isticanje";
 import Milioner from "@/components/zack/Milioner";
 import Slicica from "@/components/zack/Slicica";
 import { brojac, type StavkaAlbuma } from "@/lib/zack/album";
@@ -741,7 +742,7 @@ export default function LekcijaClient({
           )}
           {lekcija.pravilo_tekst && (
             <p className="mt-1 text-[15px] leading-relaxed" style={{ color: PRIGUSEN }}>
-              {lekcija.pravilo_tekst}
+              <Isticanje tekst={lekcija.pravilo_tekst} tema="svetla" />
             </p>
           )}
           {lekcija.pravilo_primer && (
@@ -750,7 +751,7 @@ export default function LekcijaClient({
               className="font-heading mt-2 text-[16px] font-bold leading-snug"
               style={{ color: PLAVA }}
             >
-              {lekcija.pravilo_primer}
+              <Isticanje tekst={lekcija.pravilo_primer} tema="svetla" />
             </p>
           )}
         </section>
