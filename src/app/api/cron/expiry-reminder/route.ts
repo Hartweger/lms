@@ -8,6 +8,7 @@ import { withCronLog, must } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendExpiryReminder } from "@/lib/email";
 import { renewalProductSlugs } from "@/lib/renewal-product";
+import { cancelledSubscriptionCourseIds } from "@/lib/renewal-eligibility";
 import { groupExpiryRows } from "@/lib/expiry-grouping";
 
 export const dynamic = "force-dynamic";
@@ -108,6 +109,20 @@ async function cronHandler(request: Request) {
   const grpUsers = await fetchAll("group_enrollments", () => admin.from("group_enrollments").select("user_id").eq("status", "active")) as { user_id: string }[];
   const noCouponUsers = new Set([...indUsers, ...grpUsers].map((u) => u.user_id));
 
+  // Ko je otkazao mesečno plaćanje pre kraja serije takođe ide BEZ kupona: pristup mu
+  // ističe zato što je prekinuo plaćanje, a ne zato što je godina istekla - podsetnik sa
+  // -50% bi mu isti sadržaj dao jeftinije nego što ga je platio (odluka Natašina, 18.08.2026).
+  // Njih je malo, pa se spisak samo prikupi ovde, a po kursu se odlučuje pred slanje
+  // (`cancelledSubscriptionCourseIds`) - da mejl i checkout kažu istu stvar.
+  const otkazanePretplate = await fetchAll("subscriptions cancelled", () =>
+    admin.from("subscriptions").select("user_id, paid_payments, total_payments").eq("status", "cancelled")
+  ) as { user_id: string; paid_payments: number | null; total_payments: number | null }[];
+  const prekinutiPretplatnici = new Set(
+    otkazanePretplate
+      .filter((s) => (s.paid_payments ?? 0) < (s.total_payments ?? 0))
+      .map((s) => s.user_id)
+  );
+
   // Već poslati (dedup po user+course+expires_at)
   const already = await fetchAll("expiry_reminders", () => admin.from("expiry_reminders").select("user_id, course_id, expires_at")) as {
     user_id: string; course_id: string; expires_at: string;
@@ -163,6 +178,20 @@ async function cronHandler(request: Request) {
   // Naziv proizvoda za obnovu - kad grupa ima više proizvoda, dugme mora da kaže koji je koji.
   const titleBySlug = new Map((courses ?? []).map((c) => [c.slug, c.title]));
 
+  // Kupon ide samo ako bar jedan kurs iz mejla stvarno sme da se obnovi - inače bi mejl
+  // nudio popust koji checkout odbija. Isti test kao `emailCanRenewWithCoupon`.
+  const blokiraniKesh = new Map<string, Set<string>>();
+  async function smeKupon(userId: string, courseIds: string[]): Promise<boolean> {
+    if (noCouponUsers.has(userId)) return false;
+    if (!prekinutiPretplatnici.has(userId)) return true;
+    let blokirani = blokiraniKesh.get(userId);
+    if (!blokirani) {
+      blokirani = await cancelledSubscriptionCourseIds(admin, userId);
+      blokiraniKesh.set(userId, blokirani);
+    }
+    return courseIds.some((id) => !blokirani!.has(id));
+  }
+
   let sent = 0;
   let mejlovaneStavke = 0;
   for (const g of batch) {
@@ -183,7 +212,7 @@ async function cronHandler(request: Request) {
         };
       }),
       expiresAt: g.expiresAt,
-      withCoupon: !noCouponUsers.has(g.userId),
+      withCoupon: await smeKupon(g.userId, stavke.map((x) => x.row.course_id)),
       couponDaysAfter,
     });
     // Pad upisa mora da obori cron: bez dedup zapisa bi isti čovek sutra dobio dupli podsetnik.

@@ -14,7 +14,7 @@ import { DAILY_GOAL_HEARTS } from "@/lib/hearts/config";
 import { isRenewable } from "@/lib/account";
 import { renewalProductSlugs } from "@/lib/renewal-product";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { enrollmentDerivedCourseIds } from "@/lib/renewal-eligibility";
+import { noCouponRenewalCourseIds } from "@/lib/renewal-eligibility";
 import { computeCoursesProgress } from "@/lib/course-progress";
 
 export const dynamic = "force-dynamic";
@@ -116,12 +116,13 @@ export default async function Dashboard() {
 
   // Obnova vodi na PROIZVOD („video-kurs-a1"), ne na sadržajni kurs („nemacki-a1-1") -
   // sadržajni slug nije u prodaji, pa je /kupovina/{slug} davao 404.
-  // Grupni/individualni pristup nema samoposlužnu obnovu −50%: grupni se prodaje po
-  // polunivou, a video proizvod pokriva ceo nivo (vidi lib/renewal-eligibility.ts).
+  // Grupni/individualni pristup i prekinuta pretplata nemaju samoposlužnu obnovu −50%:
+  // grupni se prodaje po polunivou a video proizvod pokriva ceo nivo, a otkazana pretplata
+  // nije odslušana godina nego prekinuto plaćanje (vidi lib/renewal-eligibility.ts).
   const [renewSlugs, upisom] = expiredSet.size
     ? await Promise.all([
         renewalProductSlugs(createAdminClient(), [...expiredSet]),
-        enrollmentDerivedCourseIds(createAdminClient(), user.id),
+        noCouponRenewalCourseIds(createAdminClient(), user.id),
       ])
     : [new Map<string, string>(), new Set<string>()];
 

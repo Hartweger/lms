@@ -4,7 +4,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { redirect } from "next/navigation";
 import { accessStatus, shouldShowRenew, isRenewable } from "@/lib/account";
 import { renewalProductSlugs } from "@/lib/renewal-product";
-import { enrollmentDerivedCourseIds } from "@/lib/renewal-eligibility";
+import { noCouponRenewalCourseIds } from "@/lib/renewal-eligibility";
 import { GrupniIIndividualni, ProfilSekcija } from "./Sekcije";
 
 export const metadata = { title: "Moj nalog - Hartweger", robots: { index: false } };
@@ -44,8 +44,9 @@ export default async function NalogPage() {
   // Obnova ide na PROIZVOD, ne na sadržajni kurs - sadržajni slug nije u prodaji i daje 404.
   const admin = createAdminClient();
   const renewSlugs = await renewalProductSlugs(admin, courseIds);
-  // Grupni/individualni pristup nema samoposlužnu obnovu −50% (polunivo vs ceo nivo).
-  const upisom = await enrollmentDerivedCourseIds(admin, user.id);
+  // Bez samoposlužne obnove −50%: grupni/individualni (polunivo vs ceo nivo) i
+  // prekinuta pretplata (pristup ističe zbog otkazivanja, ne zbog odslušane godine).
+  const upisom = await noCouponRenewalCourseIds(admin, user.id);
 
   const { data: orders } = await supabase
     .from("orders")

@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { createFakeAdmin } from "@/lib/test/fake-admin";
-import { enrollmentDerivedCourseIds, emailCanRenewWithCoupon } from "./renewal-eligibility";
+import { enrollmentDerivedCourseIds, cancelledSubscriptionCourseIds, emailCanRenewWithCoupon } from "./renewal-eligibility";
 
 type Row = Record<string, unknown>;
 
@@ -127,5 +127,104 @@ describe("emailCanRenewWithCoupon", () => {
 
   it("false za nepoznat mejl", async () => {
     expect(await emailCanRenewWithCoupon(admin(), "niko@example.com", "v-a1")).toBe(false);
+  });
+});
+
+// Otkazana pretplata: platio 1/12 rata pa prekinuo, pristup mu ističe zbog prekida, ne
+// zbog odslušane godine. Takav ne sme da dobije -50% na isti sadržaj (vidi lib komentar).
+describe("cancelledSubscriptionCourseIds", () => {
+  const prekinuta = { id: "s1", user_id: "u1", status: "cancelled", paid_payments: 1, total_payments: 12 };
+  const subOrder = { id: "id-2026-232", order_number: "2026-232", items: [{ course_slug: "v-a1" }], subscription_id: "s1" };
+
+  function sa(over: Record<string, Row[]> = {}) {
+    return admin({
+      subscriptions: [prekinuta],
+      orders: [subOrder],
+      course_access: [{ user_id: "u1", course_id: "a11", source: "order:2026-232" }],
+      ...over,
+    });
+  }
+
+  it("pristup iz prekinute pretplate se blokira", async () => {
+    expect([...(await cancelledSubscriptionCourseIds(sa(), "u1"))]).toEqual(["a11"]);
+  });
+
+  it("aktivna pretplata ne blokira ništa", async () => {
+    const a = sa({ subscriptions: [{ ...prekinuta, status: "active" }] });
+    expect((await cancelledSubscriptionCourseIds(a, "u1")).size).toBe(0);
+  });
+
+  it("otkazana posle svih 12 rata NIJE prekinuta - pun iznos je plaćen", async () => {
+    const a = sa({ subscriptions: [{ ...prekinuta, paid_payments: 12 }] });
+    expect((await cancelledSubscriptionCourseIds(a, "u1")).size).toBe(0);
+  });
+
+  it("naplata 2..N nosi svoj broj porudžbine, ali istu pretplatu", async () => {
+    const a = sa({
+      orders: [subOrder, { id: "id-r2", order_number: "2026-232-2", items: [{ course_slug: "v-a1" }], subscription_id: "s1" }],
+      course_access: [{ user_id: "u1", course_id: "a11", source: "order:2026-232-2" }],
+    });
+    expect((await cancelledSubscriptionCourseIds(a, "u1")).has("a11")).toBe(true);
+  });
+
+  it("sadržaj kupljen zasebno posle prekida OSTAJE obnovljiv", async () => {
+    const a = sa({
+      orders: [subOrder, { id: "id-321", order_number: "2026-321", items: [{ course_slug: "v-a1" }], subscription_id: null }],
+      course_access: [{ user_id: "u1", course_id: "a11", source: "order:2026-321" }],
+    });
+    expect((await cancelledSubscriptionCourseIds(a, "u1")).size).toBe(0);
+  });
+
+  it("stariji WP pristup se ne dira", async () => {
+    const a = sa({ course_access: [{ user_id: "u1", course_id: "a11", source: "wp-migration-2026-06" }] });
+    expect((await cancelledSubscriptionCourseIds(a, "u1")).size).toBe(0);
+  });
+
+  it("gleda se samo pristup ovog polaznika", async () => {
+    const a = sa({
+      course_access: [
+        { user_id: "u1", course_id: "a11", source: "wp-migration-2026-06" },
+        { user_id: "u2", course_id: "a12", source: "order:2026-232" },
+      ],
+    });
+    expect((await cancelledSubscriptionCourseIds(a, "u1")).size).toBe(0);
+  });
+});
+
+describe("emailCanRenewWithCoupon - otkazana pretplata", () => {
+  const prekinuta = { id: "s1", user_id: "u1", status: "cancelled", paid_payments: 1, total_payments: 12 };
+  const subOrder = { id: "id-2026-232", order_number: "2026-232", items: [{ course_slug: "v-a1" }], subscription_id: "s1" };
+
+  it("false kad pristup dolazi SAMO iz prekinute pretplate", async () => {
+    const a = admin({
+      subscriptions: [prekinuta],
+      orders: [subOrder],
+      course_access: [
+        { user_id: "u1", course_id: "a11", source: "order:2026-232" },
+        { user_id: "u1", course_id: "a12", source: "order:2026-232" },
+      ],
+    });
+    expect(await emailCanRenewWithCoupon(a, "ana@example.com", "v-a1")).toBe(false);
+  });
+
+  it("true kad je pretplata isplaćena do kraja", async () => {
+    const a = admin({
+      subscriptions: [{ ...prekinuta, paid_payments: 12 }],
+      orders: [subOrder],
+      course_access: [{ user_id: "u1", course_id: "a11", source: "order:2026-232" }],
+    });
+    expect(await emailCanRenewWithCoupon(a, "ana@example.com", "v-a1")).toBe(true);
+  });
+
+  it("true kad je posle prekida isti nivo kupljen zasebno (slučaj 18.08.2026)", async () => {
+    const a = admin({
+      subscriptions: [prekinuta],
+      orders: [subOrder, { id: "id-321", order_number: "2026-321", items: [{ course_slug: "v-a1" }], subscription_id: null }],
+      course_access: [
+        { user_id: "u1", course_id: "a11", source: "order:2026-321" },
+        { user_id: "u1", course_id: "a12", source: "order:2026-321" },
+      ],
+    });
+    expect(await emailCanRenewWithCoupon(a, "ana@example.com", "v-a1")).toBe(true);
   });
 });
