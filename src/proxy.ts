@@ -85,5 +85,10 @@ export const config = {
     "/kurs/:path*",
     "/clanstvo",
     "/clanstvo/:path*",
+    // Roditeljski deo dečje aplikacije čita sesiju na serveru, pa mora u
+    // matcher iz istog razloga kao /lekcija: samo proxy sme da upiše osvežene
+    // tokene u kolačiće. Detetov deo (/zack i /zack/<uuid>) nema sesiju i
+    // NAMERNO nije ovde.
+    "/zack/roditelj",
   ],
 };
