@@ -37,6 +37,18 @@ import { brojac, type StavkaAlbuma } from "@/lib/zack/album";
 import type { Igra as VrstaIgre } from "@/lib/zack/pitanja";
 import { dokleSePopela, opisSprata } from "@/lib/zack/pojas";
 import type { Rec } from "@/lib/zack/rec";
+import {
+  CRVENA,
+  CRVENA_SENKA,
+  CRVENA_ZNAK,
+  DISPLAY,
+  IVICA,
+  MASTILO,
+  PAPIR,
+  PLAVA,
+  PRIGUSEN,
+  ZUTA,
+} from "../../../Ukras";
 
 type Lekcija = {
   id: string;
@@ -64,18 +76,35 @@ const IGRE: readonly VrstaIgre[] = [
   "diktat",
 ];
 
-const PAPIR = "#FCFBF7";
-const IVICA = "#DED8C8";
-const PRIGUSEN = "#6E6A5E";
-const MASTILO = "#16161A";
-const PLAVA = "#0B54C9";
-const ZUTA = "#FFC400";
-const CRVENA = "#E5342A";
 /** Zelena uspeha, ista kao u odzivu igre. */
 const ZELENA = "#1E7A4B";
 
+// Mini najava Milionerovog TV izgleda: iste boje kao u samoj igri, da dete na
+// tamnoj kartici prepozna „to je ono sa zlatnim šestougaonicima".
+const NOC = "#08122E";
+const NOC_SJAJ = "#0E2A5C";
+const ZLATNA = "#E8A33D";
+/** Na zlatnoj podlozi tamna slova: bela na zlatnoj daje ispod 3.5:1. */
+const TAMNO = "#0A1836";
+const NOC_PRIGUSENA = "#A9BEE4";
+/** Šestougao sa televizije, sitniji šiljak nego u samoj igri. */
+const HEX_MALI = "polygon(12px 0, calc(100% - 12px) 0, 100% 50%, calc(100% - 12px) 100%, 12px 100%, 0 50%)";
+
 /** Zajednički izgled svega što se klikće, sa vidljivim fokusom. */
 const FOKUS = "outline-offset-2 focus-visible:outline-4 focus-visible:outline-[#0B54C9]";
+/** Na crvenoj kesici plavi okvir fokusa se gubi, pa je tamo fokus beo. */
+const FOKUS_NA_CRVENOJ = "outline-offset-2 focus-visible:outline-4 focus-visible:outline-white";
+
+/**
+ * Nazubljena gornja ivica kesice, kao na pravoj kesici sa sličicama koja se
+ * otvara cepanjem. Trouglići idu celom širinom; crta se jednom, ovde, pa se u
+ * SVG-u samo razvuče preko cele širine.
+ */
+const CIK_CAK = (() => {
+  let d = "M0 0H100V2";
+  for (let x = 98; x >= 2; x -= 4) d += `L${x} 6L${x - 2} 2`;
+  return `${d}Z`;
+})();
 
 // ── Brojevi u našem jeziku ──────────────────────────────────────────────────
 
@@ -184,6 +213,178 @@ function Strelica({ nazad }: { nazad?: boolean }) {
     >
       <path d="M9 5l7 7-7 7" />
     </svg>
+  );
+}
+
+// ── Vinjete igara ───────────────────────────────────────────────────────────
+// Svaka igra ima svoj mali crtež, nacrtan ovde u CSS-u i SVG-u, bez ijedne
+// slike sa strane. Sve su čist ukras i stoje iza aria-hidden u samoj pločici.
+// Boje roda (plava der, crvena die, žuta das) se i ovde drže pravila iz
+// Ukrasa: kao ukras idu SVE TRI zajedno, nikad jedna sama da ne slaže o rodu.
+
+/** Prazna poleđina sličice: isti karton kao u albumu, samo sitniji. */
+function KartonSlicice({ boja, ugao, sirina }: { boja: string; ugao: number; sirina: number }) {
+  return (
+    <span
+      className="block aspect-[3/4] rounded-[7px] border-2 shadow-[0_1px_3px_rgba(22,22,26,0.25)]"
+      style={{
+        width: `${sirina}px`,
+        background: boja,
+        borderColor: "#FFFFFF",
+        transform: `rotate(${ugao}deg)`,
+      }}
+    />
+  );
+}
+
+/** Parovi: dve iste poleđine, jedna preko druge - kao par koji se traži. */
+function VinjetaParovi() {
+  return (
+    <span className="relative block h-12 w-16">
+      <span className="absolute left-1 top-1">
+        <KartonSlicice boja={CRVENA_ZNAK} ugao={-8} sirina={26} />
+      </span>
+      <span className="absolute left-8 top-0">
+        <KartonSlicice boja={CRVENA_ZNAK} ugao={7} sirina={26} />
+      </span>
+    </span>
+  );
+}
+
+/** Brzo biranje: munja, jer se tu igra na vreme. */
+function VinjetaMunja() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-12 w-12 -rotate-6">
+      <path
+        d="M13 2 5 13.5h5L9.5 22 19 9.5h-5.5L13 2z"
+        fill={ZUTA}
+        stroke={MASTILO}
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/** Skakač: koza iz igre na tri stubića u bojama der, die i das. */
+function VinjetaSkakac() {
+  return (
+    <span className="relative block h-12 w-20">
+      <span className="absolute bottom-0 left-1 flex items-end gap-1">
+        <span className="block w-5 rounded-t-md" style={{ height: "10px", background: PLAVA }} />
+        <span className="block w-5 rounded-t-md" style={{ height: "16px", background: CRVENA_ZNAK }} />
+        <span className="block w-5 rounded-t-md" style={{ height: "22px", background: ZUTA }} />
+      </span>
+      {/* eslint-disable-next-line @next/next/no-img-element -- sitan lokalni
+          svg ukras; next/image bi mu samo dodao obradu koja ničemu ne služi */}
+      <img
+        src="/zack/ikonice/1f410.svg"
+        alt=""
+        className="absolute bottom-[20px] left-[46px] h-7 w-7 -rotate-3"
+      />
+    </span>
+  );
+}
+
+/** Der, die ili das: tri ponuđena odgovora, svaki u svojoj boji roda. */
+function VinjetaRod() {
+  return (
+    <span className="flex h-12 items-center gap-1.5">
+      <span
+        className="block h-6 w-6 -rotate-6 rounded-md border-2 shadow-[0_1px_3px_rgba(22,22,26,0.25)]"
+        style={{ background: PLAVA, borderColor: "#FFFFFF" }}
+      />
+      <span
+        className="block h-7 w-7 rotate-3 rounded-md border-2 shadow-[0_1px_3px_rgba(22,22,26,0.25)]"
+        style={{ background: CRVENA_ZNAK, borderColor: "#FFFFFF" }}
+      />
+      <span
+        className="block h-6 w-6 -rotate-2 rounded-md border-2 shadow-[0_1px_3px_rgba(22,22,26,0.25)]"
+        style={{ background: ZUTA, borderColor: "#FFFFFF" }}
+      />
+    </span>
+  );
+}
+
+/** Množina: jedna sličica postane tri. */
+function VinjetaMnozina() {
+  return (
+    <span className="flex h-12 items-center gap-1.5">
+      <KartonSlicice boja={ZUTA} ugao={-4} sirina={22} />
+      <svg
+        viewBox="0 0 24 24"
+        className="h-4 w-4 flex-none"
+        fill="none"
+        stroke={MASTILO}
+        strokeWidth="2.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M5 12h13M13 6l6 6-6 6" />
+      </svg>
+      <span className="relative block h-11 w-12">
+        <span className="absolute left-0 top-2">
+          <KartonSlicice boja={PLAVA} ugao={-8} sirina={22} />
+        </span>
+        <span className="absolute left-3 top-0">
+          <KartonSlicice boja={CRVENA_ZNAK} ugao={2} sirina={22} />
+        </span>
+        <span className="absolute left-6 top-2">
+          <KartonSlicice boja={ZUTA} ugao={9} sirina={22} />
+        </span>
+      </span>
+    </span>
+  );
+}
+
+/** Diktat: olovka i talasasta linija rukopisa. */
+function VinjetaOlovka() {
+  return (
+    <svg viewBox="0 0 48 48" className="h-12 w-12">
+      <g transform="rotate(45 24 24)">
+        <rect x="20" y="2" width="8" height="5" rx="1.5" fill={CRVENA_ZNAK} stroke={MASTILO} strokeWidth="1.6" />
+        <rect x="20" y="7" width="8" height="20" fill={ZUTA} stroke={MASTILO} strokeWidth="1.6" />
+        <path d="M20 27 24 35l4-8z" fill="#E8C79A" stroke={MASTILO} strokeWidth="1.6" strokeLinejoin="round" />
+        <path d="M22.7 30.6 24 35l1.3-4.4z" fill={MASTILO} />
+      </g>
+      <path
+        d="M6 43q5-6 10 0t10 0t10 0t10 0"
+        fill="none"
+        stroke={MASTILO}
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+/**
+ * Koja vinjeta ide uz koju igru. Redosled prikaza i dalje drži `IGRE`; ovde
+ * stoji samo crtež.
+ */
+const VINJETA: Record<VrstaIgre, React.ReactNode> = {
+  parovi: <VinjetaParovi />,
+  "brzo-biranje": <VinjetaMunja />,
+  skakac: <VinjetaSkakac />,
+  rod: <VinjetaRod />,
+  mnozina: <VinjetaMnozina />,
+  diktat: <VinjetaOlovka />,
+};
+
+/**
+ * Naslov sekcije kao nalepnica: žuta, bela ivica, blag nagib - ista gramatika
+ * kao ime na polici albuma. Tekst unutra ostaje običan naslov za čitač.
+ */
+function NaslovSekcije({ children }: { children: React.ReactNode }) {
+  return (
+    <h2 className="mb-3.5">
+      <span
+        className="inline-block -rotate-1 rounded-lg border-[3px] px-2.5 py-0.5 text-[15px] shadow-[0_2px_5px_rgba(22,22,26,0.15)]"
+        style={{ background: ZUTA, borderColor: "#FFFFFF", color: MASTILO, fontFamily: DISPLAY }}
+      >
+        {children}
+      </span>
+    </h2>
   );
 }
 
@@ -540,33 +741,46 @@ export default function LekcijaClient({
           Iznad naslova, iznad svega. To je jedini razlog zbog kog se dete vraća
           sutradan, pa ne sme da bude pri dnu ekrana. */}
       {bedzKesice && (
-        <section
-          className="mb-6 rounded-2xl border-[3px] p-4"
-          style={{ background: PAPIR, borderColor: ZUTA }}
-        >
-          <h2
-            className="font-heading flex items-center gap-2 text-[19px] font-bold leading-tight"
-            style={{ color: MASTILO }}
+        /* Prava kesica sa sličicama: crvena, debela bela ivica, blag nagib i
+           nazubljena gornja ivica po kojoj se cepa. Nagib nosi omotač, da se
+           dugme unutra ne bori sa zarotiranim fokusom. */
+        <section className="zack-zalepi mb-6 -rotate-1">
+          <div
+            className="relative overflow-hidden rounded-2xl border-[3px] p-4 pt-6 shadow-[0_5px_14px_rgba(22,22,26,0.28)]"
+            style={{ background: CRVENA, borderColor: "#FFFFFF" }}
           >
-            <span style={{ color: ZUTA }}>
-              <Zvezdica velika />
-            </span>
-            {`${ceka} ${CEKA[oblikBroja(ceka)]}`}
-          </h2>
-          <p className="mt-1.5 text-[15px] leading-snug" style={{ color: PRIGUSEN }}>
-            {/* Bez glagola u prošlom vremenu: „zaradio" i „zaradila" nisu isto,
-                a ovo čitaju i devojčice i dečaci. */}
-            Otvori kesicu da vidiš šta je unutra.
-          </p>
-          <button
-            type="button"
-            onClick={() => void otvoriKesicu()}
-            disabled={zauzeto}
-            className={`${FOKUS} font-heading mt-3.5 block min-h-[60px] w-full rounded-2xl text-[19px] font-bold disabled:opacity-60 motion-safe:transition-transform motion-safe:duration-100 motion-safe:active:scale-[0.985]`}
-            style={{ background: MASTILO, color: "#FFFFFF" }}
-          >
-            {zauzeto ? natpisZauzeto : "Otvori kesicu"}
-          </button>
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 100 6"
+              preserveAspectRatio="none"
+              className="absolute inset-x-0 top-0 h-2.5 w-full"
+            >
+              <path d={CIK_CAK} fill={CRVENA_SENKA} />
+            </svg>
+            <h2
+              className="flex items-center gap-2 text-[20px] leading-tight text-white"
+              style={{ fontFamily: DISPLAY }}
+            >
+              <span style={{ color: ZUTA }}>
+                <Zvezdica velika />
+              </span>
+              {`${ceka} ${CEKA[oblikBroja(ceka)]}`}
+            </h2>
+            <p className="mt-1.5 text-[15px] font-medium leading-snug text-white">
+              {/* Bez glagola u prošlom vremenu: „zaradio" i „zaradila" nisu isto,
+                  a ovo čitaju i devojčice i dečaci. */}
+              Otvori kesicu da vidiš šta je unutra.
+            </p>
+            <button
+              type="button"
+              onClick={() => void otvoriKesicu()}
+              disabled={zauzeto}
+              className={`${FOKUS_NA_CRVENOJ} mt-3.5 block min-h-[60px] w-full rounded-2xl border-[3px] text-[19px] shadow-[0_3px_0_0_#8F1B14] disabled:opacity-60 motion-safe:transition-transform motion-safe:duration-100 motion-safe:active:scale-[0.985]`}
+              style={{ background: ZUTA, borderColor: "#FFFFFF", color: MASTILO, fontFamily: DISPLAY }}
+            >
+              {zauzeto ? natpisZauzeto : "Otvori kesicu"}
+            </button>
+          </div>
         </section>
       )}
 
@@ -586,11 +800,11 @@ export default function LekcijaClient({
       {uRuci.length > 0 && (
         <section
           className="mb-6 rounded-2xl border-[3px] p-4"
-          style={{ background: PAPIR, borderColor: CRVENA }}
+          style={{ background: PAPIR, borderColor: CRVENA_ZNAK }}
         >
           <h2
-            className="font-heading text-[19px] font-bold leading-tight"
-            style={{ color: MASTILO }}
+            className="text-[19px] leading-tight"
+            style={{ color: MASTILO, fontFamily: DISPLAY }}
           >
             {`${uRuci.length} ${recSlicica(uRuci.length)} u ruci`}
           </h2>
@@ -687,40 +901,57 @@ export default function LekcijaClient({
         </section>
       )}
 
-      {/* ── Naslov i brojač ─────────────────────────────────────────────── */}
+      {/* ── Naslov i brojač ─────────────────────────────────────────────────
+          Ista korica kao na polici: broj lekcije je crvena nalepnica sa belom
+          ivicom i blagim nagibom, naziv je naslov korice u display slovu. Nagib
+          iz broja lekcije, nikad iz slučajnog, da ne poskakuje pri osvežavanju. */}
       <header className="mb-6">
-        <p
-          className="font-heading text-[12px] font-bold uppercase tracking-[.18em]"
-          style={{ color: PRIGUSEN }}
-        >
-          {`Lekcija ${lekcija.broj}`}
-        </p>
-        <h1
-          className="font-heading mt-1 text-[28px] font-bold leading-tight tracking-tight"
-          style={{ color: MASTILO }}
-        >
-          {lekcija.naziv}
-        </h1>
+        <div className="flex items-center gap-3.5">
+          <span
+            aria-hidden="true"
+            className="zack-zalepi flex h-14 w-14 flex-none items-center justify-center rounded-xl border-[3px] text-[24px] tabular-nums shadow-[0_2px_5px_rgba(22,22,26,0.2)]"
+            style={{
+              background: CRVENA,
+              borderColor: "#FFFFFF",
+              color: "#FFFFFF",
+              fontFamily: DISPLAY,
+              transform: `rotate(${lekcija.broj % 2 === 0 ? 2 : -2}deg)`,
+              ["--zack-r" as string]: `${lekcija.broj % 2 === 0 ? 2 : -2}deg`,
+            }}
+          >
+            {lekcija.broj}
+          </span>
+          <h1
+            className="min-w-0 flex-1 text-[26px] leading-tight tracking-tight"
+            style={{ color: MASTILO, fontFamily: DISPLAY }}
+          >
+            <span className="sr-only">{`Lekcija ${lekcija.broj}: `}</span>
+            {lekcija.naziv}
+          </h1>
+        </div>
 
         {/* Brojač je jedini broj na ekranu koji sme da bude ovako krupan, i
             jedini koji i dete i roditelj razumeju iz prve. Živ je, jer raste u
             trenutku lepljenja. */}
-        <p className="mt-3" aria-live="polite">
+        <p className="mt-3.5" aria-live="polite">
           <span className="sr-only">{`U albumu: ${zalepljene} od ${ukupno} ${recSlicica(ukupno)}`}</span>
-          <span
-            aria-hidden="true"
-            className="font-heading flex flex-wrap items-baseline gap-x-2 tabular-nums"
-          >
-            <span className="text-[34px] font-bold leading-none" style={{ color: MASTILO }}>
+          <span aria-hidden="true" className="flex flex-wrap items-baseline gap-x-2 tabular-nums">
+            <span
+              className="text-[34px] leading-none"
+              style={{ color: MASTILO, fontFamily: DISPLAY }}
+            >
               {zalepljene}
             </span>
-            <span className="text-[17px] font-bold" style={{ color: PRIGUSEN }}>
+            <span className="font-heading text-[17px] font-bold" style={{ color: PRIGUSEN }}>
               od
             </span>
-            <span className="text-[34px] font-bold leading-none" style={{ color: MASTILO }}>
+            <span
+              className="text-[34px] leading-none"
+              style={{ color: MASTILO, fontFamily: DISPLAY }}
+            >
               {ukupno}
             </span>
-            <span className="text-[17px] font-bold" style={{ color: PRIGUSEN }}>
+            <span className="font-heading text-[17px] font-bold" style={{ color: PRIGUSEN }}>
               {recSlicica(ukupno)}
             </span>
           </span>
@@ -728,13 +959,18 @@ export default function LekcijaClient({
       </header>
 
       {/* ── Podsetnik na pravilo ────────────────────────────────────────────
-          Mirna kartica sa plavom ivicom sa strane, nikad veliki blok. Dete je
-          došlo da igra, ne da čita. */}
+          Papirić iz sveske zalepljen trakom preko gornje ivice, nikad veliki
+          blok. Dete je došlo da igra, ne da čita. */}
       {imaPravilo && (
         <section
-          className="mb-6 rounded-xl border border-l-4 py-3.5 pl-4 pr-4"
-          style={{ background: PAPIR, borderColor: IVICA, borderLeftColor: PLAVA }}
+          className="relative mb-6 mt-2 -rotate-[0.6deg] rounded-lg border p-4 shadow-[0_3px_8px_rgba(22,22,26,0.12)]"
+          style={{ background: PAPIR, borderColor: IVICA }}
         >
+          <span
+            aria-hidden="true"
+            className="absolute -top-2.5 left-1/2 block h-5 w-24 -translate-x-1/2 -rotate-2 rounded-[2px]"
+            style={{ background: "rgba(255,196,0,0.42)", boxShadow: "0 1px 2px rgba(22,22,26,0.08)" }}
+          />
           {lekcija.pravilo_naslov && (
             <h2 className="font-heading text-[16px] font-bold leading-snug" style={{ color: MASTILO }}>
               {lekcija.pravilo_naslov}
@@ -757,14 +993,12 @@ export default function LekcijaClient({
         </section>
       )}
 
-      {/* ── Igre ─────────────────────────────────────────────────────────── */}
+      {/* ── Igre ─────────────────────────────────────────────────────────────
+          Pločice, ne spisak: svaka igra ima svoj crtež i display naslov, kao
+          sličice na tezgi. Podloga svake ostaje papir - boju nose crteži, da
+          ekran ne postane duga. */}
       <section className="mb-8">
-        <h2
-          className="font-heading mb-3 text-[12px] font-bold uppercase tracking-[.18em]"
-          style={{ color: PRIGUSEN }}
-        >
-          Igre
-        </h2>
+        <NaslovSekcije>Igre</NaslovSekcije>
         {reci.length === 0 ? (
           <p
             className="rounded-2xl border border-dashed p-5 text-center text-[15px] leading-relaxed"
@@ -773,8 +1007,8 @@ export default function LekcijaClient({
             U ovoj lekciji još nema reči, pa nema ni šta da se igra. Vrati se malo kasnije.
           </p>
         ) : (
-          <ul className="space-y-2.5">
-            {IGRE.map((vrsta) => (
+          <ul className="grid grid-cols-2 gap-3">
+            {IGRE.map((vrsta, redni) => (
               <li key={vrsta}>
                 <button
                   type="button"
@@ -787,12 +1021,21 @@ export default function LekcijaClient({
                     setNovRekord(false);
                     setIgra(vrsta);
                   }}
-                  className={`${FOKUS} font-heading flex min-h-[60px] w-full items-center justify-between gap-3 rounded-2xl border px-4 py-3.5 text-left text-[18px] font-bold shadow-[0_2px_0_0_#DED8C8] motion-safe:transition-transform motion-safe:duration-100 motion-safe:active:scale-[0.985]`}
-                  style={{ background: PAPIR, borderColor: IVICA, color: MASTILO }}
+                  className={`${FOKUS} flex min-h-[120px] w-full flex-col items-center justify-center gap-2.5 rounded-2xl border p-3 text-center shadow-[0_3px_0_0_#DED8C8] motion-safe:transition-transform motion-safe:duration-100 motion-safe:active:scale-[0.985]`}
+                  style={{ background: PAPIR, borderColor: IVICA }}
                 >
-                  {NAZIVI[vrsta]}
-                  <span style={{ color: PRIGUSEN }}>
-                    <Strelica />
+                  <span
+                    aria-hidden="true"
+                    className="zack-zalepi flex h-12 items-center justify-center"
+                    style={{ ["--zack-kasni" as string]: `${redni * 60}ms` }}
+                  >
+                    {VINJETA[vrsta]}
+                  </span>
+                  <span
+                    className="block text-[15px] leading-tight"
+                    style={{ color: MASTILO, fontFamily: DISPLAY }}
+                  >
+                    {NAZIVI[vrsta]}
                   </span>
                 </button>
               </li>
@@ -812,31 +1055,51 @@ export default function LekcijaClient({
       {imaGramatike && (
         <section className="mb-8">
           <h2
-            className="font-heading mb-3 text-[12px] font-bold uppercase tracking-[.18em]"
-            style={{ color: PRIGUSEN }}
+            className="mb-3 text-[12px] uppercase tracking-[.18em]"
+            style={{ color: PRIGUSEN, fontFamily: DISPLAY }}
           >
             Provera celine
           </h2>
+          {/* Tamna kartica: mini najava Milionerovog TV studija, plava noć sa
+              zlatnim šestougaonikom. Već po boji se vidi da OVO nije igra za
+              sličice. */}
           <button
             type="button"
             onClick={() => {
               setPoruka(null);
               setMilioner(true);
             }}
-            className={`${FOKUS} font-heading flex min-h-[60px] w-full items-center justify-between gap-3 rounded-2xl border-2 border-dashed px-4 py-3.5 text-left motion-safe:transition-transform motion-safe:duration-100 motion-safe:active:scale-[0.985]`}
-            style={{ background: PAPIR, borderColor: IVICA, color: MASTILO }}
+            className={`${FOKUS} flex min-h-[76px] w-full items-center gap-3.5 rounded-2xl border-[3px] px-4 py-4 text-left shadow-[0_4px_12px_rgba(8,18,46,0.35)] motion-safe:transition-transform motion-safe:duration-100 motion-safe:active:scale-[0.985]`}
+            style={{
+              background: `radial-gradient(120% 130% at 50% 0%, ${NOC_SJAJ} 0%, ${NOC} 72%)`,
+              borderColor: ZLATNA,
+            }}
           >
-            <span>
-              <span className="block text-[18px] font-bold leading-tight">Milioner</span>
+            <span
+              aria-hidden="true"
+              className="flex h-10 w-16 flex-none items-center justify-center"
+              style={{ background: ZLATNA, clipPath: HEX_MALI }}
+            >
+              <span className="text-[19px]" style={{ color: TAMNO, fontFamily: DISPLAY }}>
+                ?
+              </span>
+            </span>
+            <span className="min-w-0 flex-1">
+              <span
+                className="block text-[19px] leading-tight text-white"
+                style={{ fontFamily: DISPLAY }}
+              >
+                Milioner
+              </span>
               {/* Bez ovoga bi Milioner bio šesta igra koja „ne radi kako treba". */}
               <span
-                className="mt-0.5 block text-[14px] font-normal leading-snug"
-                style={{ color: PRIGUSEN }}
+                className="mt-1 block text-[14px] leading-snug"
+                style={{ color: NOC_PRIGUSENA }}
               >
                 Pitanja iz gramatike. Ovde nema sličica ni srca, samo provera.
               </span>
             </span>
-            <span style={{ color: PRIGUSEN }}>
+            <span style={{ color: ZLATNA }}>
               <Strelica />
             </span>
           </button>
@@ -845,12 +1108,7 @@ export default function LekcijaClient({
 
       {/* ── Album ────────────────────────────────────────────────────────── */}
       <section>
-        <h2
-          className="font-heading mb-3 text-[12px] font-bold uppercase tracking-[.18em]"
-          style={{ color: PRIGUSEN }}
-        >
-          Album
-        </h2>
+        <NaslovSekcije>Album</NaslovSekcije>
         {stanje.length === 0 ? (
           <p
             className="rounded-2xl border border-dashed p-5 text-center text-[15px] leading-relaxed"
