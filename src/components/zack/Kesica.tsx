@@ -14,6 +14,11 @@
 // Ćošak sličice koji viri je poleđina (karton), ne reč: žuta ovde ne sme da
 // slaže o rodu, jer nijedna reč na njoj ne piše - ista dozvola po kojoj i
 // vinjete igara koriste jednu boju za prazan karton.
+//
+// Telo nije ravna boja nego folija: dijagonalni odsjaj i presovane fabričke
+// ivice, sve unutar crvene porodice i bele providnosti. Duga-preliv (SJAJ)
+// je rezervisan za sjajne sličice i kesica ga NE nosi. Na praznoj je odsjaj
+// bledji i izlomljen - izgužvana folija ne sija u jednom potezu.
 
 import { CRVENA_SENKA, CRVENA_ZNAK, DISPLAY, ZUTA } from "@/app/zack/Ukras";
 
@@ -98,6 +103,38 @@ export default function Kesica({ stanje }: { stanje: StanjeKesice }) {
           className={`absolute inset-x-0 bottom-0 block overflow-hidden rounded-xl border-[3px] shadow-[0_3px_8px_rgba(22,22,26,0.28)] ${otvara ? "zkes-cepa" : ""}`}
           style={{ top: prazna ? 0 : 17, background: CRVENA_ZNAK, borderColor: "#FFFFFF" }}
         >
+          {/* Odsjaj folije: svetla traka seče telo, uz tamniji trag odmah
+              ispod nje - providna bela i providna tamna crvena, ništa van
+              crvene porodice. Preko tela ne ide nikakav tekst (pečat ima
+              svoju neprozirnu pozadinu), pa odsjaj ne dira čitljivost. */}
+          <span
+            className="absolute inset-0 block"
+            style={{
+              background: prazna
+                ? "linear-gradient(96deg, rgba(255,255,255,0) 16%, rgba(255,255,255,0.13) 26%, rgba(255,255,255,0) 36%, rgba(255,255,255,0) 52%, rgba(255,255,255,0.09) 63%, rgba(255,255,255,0) 74%)"
+                : "linear-gradient(112deg, rgba(255,255,255,0) 30%, rgba(255,255,255,0.30) 43%, rgba(255,255,255,0.12) 52%, rgba(255,255,255,0) 62%), linear-gradient(112deg, rgba(143,27,20,0) 60%, rgba(143,27,20,0.16) 74%, rgba(143,27,20,0) 88%)",
+            }}
+          />
+          {/* Presovana fabrička ivica: sitni zubi po istoj CIK_CAK putanji,
+              gore samo dok je kesica cela - pocepanoj vrh već nosi cepanje. */}
+          {!pocepana && (
+            <svg
+              viewBox="0 0 100 6"
+              preserveAspectRatio="none"
+              className="absolute inset-x-0 top-0 h-1 w-full"
+              style={{ opacity: 0.28 }}
+            >
+              <path d={CIK_CAK} fill={CRVENA_SENKA} />
+            </svg>
+          )}
+          <svg
+            viewBox="0 0 100 6"
+            preserveAspectRatio="none"
+            className="absolute inset-x-0 bottom-0 h-1 w-full"
+            style={{ opacity: 0.28, transform: "scaleY(-1)" }}
+          >
+            <path d={CIK_CAK} fill={CRVENA_SENKA} />
+          </svg>
           {pocepana && (
             <svg
               viewBox="0 0 100 6"
@@ -115,11 +152,13 @@ export default function Kesica({ stanje }: { stanje: StanjeKesice }) {
             />
           )}
         </span>
-        {/* Pečat: mini zack! nalepnica preko vrha. Kad kesica puca, pukne i
-            on; van animacije ga krije osnovno pravilo u STIL-u. */}
+        {/* Pečat: mini zack! nalepnica preko vrha, blago udesno - karta
+            koja viri drži levu stranu, pa svako diše na svojoj polovini.
+            Kad kesica puca, pukne i on; van animacije ga krije osnovno
+            pravilo u STIL-u. */}
         {!prazna && (
           <span
-            className={`absolute left-1/2 top-[7px] block rounded-md border-2 px-1.5 py-0.5 shadow-[0_2px_5px_rgba(22,22,26,0.3)] ${otvara ? "zkes-pecat-puca" : ""}`}
+            className={`absolute left-[60%] top-[7px] block rounded-md border-2 px-1.5 py-0.5 shadow-[0_2px_5px_rgba(22,22,26,0.3)] ${otvara ? "zkes-pecat-puca" : ""}`}
             style={{
               background: CRVENA_ZNAK,
               borderColor: "#FFFFFF",
