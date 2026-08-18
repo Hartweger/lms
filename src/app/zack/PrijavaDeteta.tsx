@@ -31,11 +31,11 @@ export default function PrijavaDeteta() {
     e.preventDefault();
     if (saljeSe) return;
     if (!kodJeIspravan(kod)) {
-      setPoruka("Upiši ceo kod, na primer ZK-4F7Q.");
+      setPoruka("Upiši ceo kod koji si dobio od roditelja, na primer ZK-4F7Q.");
       return;
     }
     if (!PIN_OBLIK.test(pin)) {
-      setPoruka("PIN ima tačno četiri cifre.");
+      setPoruka("Tajni broj ima tačno četiri cifre.");
       return;
     }
     setPoruka(null);
@@ -78,8 +78,11 @@ export default function PrijavaDeteta() {
           className="font-heading block text-[17px] font-bold"
           style={{ color: MASTILO }}
         >
-          Kod
+          Tvoj kod
         </label>
+        <p className="mt-0.5 text-[14px]" style={{ color: PRIGUSEN }}>
+          Dobio si ga od roditelja. On kaže ko si, i nije tajna.
+        </p>
         <input
           id="zack-kod"
           name="kod"
@@ -99,8 +102,11 @@ export default function PrijavaDeteta() {
           className="font-heading mt-5 block text-[17px] font-bold"
           style={{ color: MASTILO }}
         >
-          PIN
+          Tajni broj (PIN)
         </label>
+        <p className="mt-0.5 text-[14px]" style={{ color: PRIGUSEN }}>
+          Četiri cifre koje znaš samo ti.
+        </p>
         <input
           id="zack-pin"
           name="pin"

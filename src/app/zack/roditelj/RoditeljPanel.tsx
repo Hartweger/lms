@@ -68,7 +68,7 @@ function PinPolja(props: {
     <div className="grid grid-cols-2 gap-3">
       <div>
         <label htmlFor={`${props.idOsnova}-pin`} className={OZNAKA} style={{ color: MASTILO }}>
-          PIN (4 cifre)
+          Tajni broj (PIN, 4 cifre)
         </label>
         <input
           id={`${props.idOsnova}-pin`}
@@ -79,7 +79,7 @@ function PinPolja(props: {
       </div>
       <div>
         <label htmlFor={`${props.idOsnova}-ponovo`} className={OZNAKA} style={{ color: MASTILO }}>
-          Ponovi PIN
+          Ponovi tajni broj
         </label>
         <input
           id={`${props.idOsnova}-ponovo`}
@@ -273,6 +273,10 @@ function DeteKartica({ dete }: { dete: DeteStavka }) {
       >
         {dete.kod ?? "bez koda"}
       </p>
+      <p className="text-[13px]" style={{ color: PRIGUSEN }}>
+        Detetu za prijavu trebaju dve stvari: ovaj kod (on kaže ko je, nije
+        tajna) i tajni broj (PIN) koji si ti postavila.
+      </p>
 
       <NapredakDeteta deteId={dete.id} />
 
@@ -376,7 +380,7 @@ function DodajDete({ udzbenici }: { udzbenici: UdzbenikStavka[] }) {
         await odgovor.json();
       if (odgovor.ok && podaci.dete) {
         setUspeh(
-          `Profil za ${podaci.dete.ime} je napravljen. Kod je ${podaci.dete.kod} - prepiši ga detetu zajedno sa PIN-om.`
+          `Profil za ${podaci.dete.ime} je napravljen. Detetu prepiši kod ${podaci.dete.kod} i tajni broj (PIN) koji si upravo postavila.`
         );
         setIme("");
         setUdzbenikId("");
