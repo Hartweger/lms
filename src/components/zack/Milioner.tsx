@@ -14,12 +14,19 @@
 // bez „odlično" i bez „probaj ponovo, biće bolje". Slab rezultat se ne
 // komentariše nijednom rečju - to je pravilo, a ne ukras.
 //
-// PODSETNIK STOJI PRE, A NE POSLE
-// -------------------------------
-// Prvi ekran je spisak gramatičkih tačaka koje ulaze u partiju, sa kratkim
-// objašnjenjem i primerom. Dete kreće kad samo klikne „Kreni". Isti taj tekst
-// vraća se kao pomoć „pitaj profesorku", i to je ceo smisao te pomoći: ne
-// pokazuje odgovor nego pravilo po kom se do odgovora dolazi.
+// UVODNI EKRAN NOSI SAMO NAZIVE
+// -----------------------------
+// Prvi ekran je spisak naziva gramatičkih tačaka koje ulaze u partiju, i ništa
+// više. Ceo taj ekran, zajedno sa dugmetom „Kreni", staje na 375x812 bez
+// skrolovanja, i to je jedini razlog zašto objašnjenja tu ne stoje razmotana.
+// Ranije su stajala, pa je ekran bio visok jedan i po telefon: dete koje je
+// došlo da igra palcem stigne do dna za dve sekunde i ne pročita ništa.
+//
+// Ništa se time ne gubi. Objašnjenje i primer i dalje su tu, tap na naziv ih
+// otvori, ponovni tap ih sklopi. A isti taj tekst stiže i kao pomoć „pitaj
+// profesorku", u trenutku kad dete ne zna odgovor, dakle onda kad ga stvarno
+// čita. To je i ceo smisao te pomoći: ne pokazuje odgovor nego pravilo po kom
+// se do odgovora dolazi.
 //
 // GDE ŽIVI PRAVILO O OBRAĐENOM GRADIVU
 // ------------------------------------
@@ -49,9 +56,11 @@ const ZELENA = "#1E7A4B";
 const ZADRZI_TACNO = 850;
 const ZADRZI_GRESKU = 1900;
 
+/** Vidljiv fokus, isti za sve što se klikće. Zaobljenje se dodaje uz njega. */
+const FOKUS =
+  "outline-offset-2 focus-visible:outline-4 focus-visible:outline-[#0B54C9] disabled:cursor-default";
 /** Zajednički izgled svega što se klikće, sa vidljivim fokusom. */
-const DUGME =
-  "rounded-2xl outline-offset-2 focus-visible:outline-4 focus-visible:outline-[#0B54C9] disabled:cursor-default";
+const DUGME = `rounded-2xl ${FOKUS}`;
 
 type Odziv = { tacno: boolean; tekst: string };
 type Pomoc = "pola" | "profesorka" | "zamena";
@@ -312,48 +321,28 @@ export default function Milioner({
   if (faza === "podsetnik") {
     return (
       <Okvir>
-        <p className="text-[16px] leading-relaxed" style={{ color: MASTILO }}>
-          Ovo je provera celine. Nema srca i nema sličica, samo pitanja iz gradiva koje si već
-          radio na času. Pre nego što kreneš, evo kratkog podsetnika.
+        {/* Uvod je namerno kratak. Svaki red teksta ovde gura „Kreni" ka dnu, a
+            ceo ekran mora da stane bez skrolovanja i kad tačaka bude osam. */}
+        <p className="text-[15px] leading-normal" style={{ color: MASTILO }}>
+          Nema srca i nema sličica, samo gradivo sa časa. Tapni naziv ako hoćeš da obnoviš.
         </p>
 
-        <ul className="mt-5 space-y-3">
+        <ul className="mt-2 space-y-1.5">
           {tacke.map((t) => (
-            <li
-              key={t.id}
-              className="rounded-xl border border-l-4 py-3.5 pl-4 pr-4"
-              style={{ background: PAPIR, borderColor: IVICA, borderLeftColor: PLAVA }}
-            >
-              <h2
-                className="font-heading text-[16px] font-bold leading-snug"
-                style={{ color: MASTILO }}
-              >
-                {t.naziv}
-              </h2>
-              <p className="mt-1 text-[15px] leading-relaxed" style={{ color: PRIGUSEN }}>
-                {t.objasnjenje}
-              </p>
-              {t.primer && (
-                <p
-                  lang="de"
-                  className="font-heading mt-2 text-[15px] font-bold leading-snug"
-                  style={{ color: PLAVA }}
-                >
-                  {t.primer}
-                </p>
-              )}
+            <li key={t.id}>
+              <TackaUPodsetniku tacka={t} />
             </li>
           ))}
         </ul>
 
-        <p className="mt-5 text-center text-[15px] leading-snug" style={{ color: PRIGUSEN }}>
+        <p className="mt-2 text-center text-[15px] leading-snug" style={{ color: PRIGUSEN }}>
           {`Pitanja: ${pitanja.length}. Imaš i tri pomoći.`}
         </p>
 
         <button
           type="button"
           onClick={() => setFaza("pitanja")}
-          className={`${DUGME} font-heading mt-3 block min-h-[60px] w-full text-[19px] font-bold motion-safe:transition-transform motion-safe:duration-100 motion-safe:active:scale-[0.985]`}
+          className={`${DUGME} font-heading mt-2 block min-h-[60px] w-full text-[19px] font-bold motion-safe:transition-transform motion-safe:duration-100 motion-safe:active:scale-[0.985]`}
           style={{ background: MASTILO, color: "#FFFFFF" }}
         >
           Kreni
@@ -561,6 +550,84 @@ function Okvir({ children }: { children: React.ReactNode }) {
       </h1>
       <div className="mt-4">{children}</div>
     </div>
+  );
+}
+
+/**
+ * Jedan red uvodnog spiska: naziv gramatičke tačke, i ništa više dok dete samo
+ * ne zatraži. Tap na naziv otvori objašnjenje i primer, ponovni tap ih sklopi.
+ *
+ * Zatvoreno je podrazumevano stanje i to nije ušteda na prikazu nego cela
+ * poenta ekrana: kad su sva objašnjenja razmotana, „Kreni" padne ispod ivice
+ * ekrana i dete do njega skroluje ne čitajući. Isti tekst živi i u pomoći
+ * „pitaj profesorku", gde ga dete pročita jer mu baš tad treba.
+ *
+ * Otvaranje radi i tastaturom, jer je naziv obično dugme, i nosi
+ * `aria-expanded`, pa čitač ekrana zna da iza naziva ima još teksta. Dugme
+ * stoji u `h2`, da spisak i dalje bude naslovna struktura kroz koju čitač
+ * ekrana ume da skače, kao što je bio i pre nego što se sklopio.
+ */
+function TackaUPodsetniku({ tacka }: { tacka: GramatickaTacka }) {
+  const [otvoreno, setOtvoreno] = useState(false);
+  const idTela = `podsetnik-telo-${tacka.id}`;
+
+  return (
+    <div
+      className="rounded-xl border border-l-4"
+      style={{ background: PAPIR, borderColor: IVICA, borderLeftColor: PLAVA }}
+    >
+      <h2>
+        <button
+          type="button"
+          onClick={() => setOtvoreno((o) => !o)}
+          aria-expanded={otvoreno}
+          aria-controls={idTela}
+          className={`${FOKUS} font-heading flex min-h-[48px] w-full items-center justify-between gap-3 rounded-xl px-4 py-2.5 text-left text-[16px] font-bold leading-snug`}
+          style={{ color: MASTILO }}
+        >
+          <span>{tacka.naziv}</span>
+          <Strelica otvoreno={otvoreno} />
+        </button>
+      </h2>
+
+      {/* `hidden` umesto uklanjanja iz stabla: `aria-controls` gore mora da
+          pokazuje na nešto što stvarno postoji i kad je sklopljeno. */}
+      <div id={idTela} hidden={!otvoreno} className="px-4 pb-3.5">
+        <p className="text-[15px] leading-relaxed" style={{ color: PRIGUSEN }}>
+          {tacka.objasnjenje}
+        </p>
+        {tacka.primer && (
+          <p
+            lang="de"
+            className="font-heading mt-2 text-[15px] font-bold leading-snug"
+            style={{ color: PLAVA }}
+          >
+            {tacka.primer}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/** Znak da naziv ima šta da otvori. Okretanje staje uz `prefers-reduced-motion`. */
+function Strelica({ otvoreno }: { otvoreno: boolean }) {
+  return (
+    <svg
+      aria-hidden="true"
+      focusable="false"
+      viewBox="0 0 24 24"
+      className={`h-5 w-5 flex-none motion-safe:transition-transform motion-safe:duration-150 ${
+        otvoreno ? "rotate-180" : ""
+      }`}
+      fill="none"
+      stroke={PLAVA}
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M6 9.5 12 15.5 18 9.5" />
+    </svg>
   );
 }
 
