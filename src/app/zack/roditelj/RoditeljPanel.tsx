@@ -274,8 +274,9 @@ function DeteKartica({ dete }: { dete: DeteStavka }) {
         {dete.kod ?? "bez koda"}
       </p>
       <p className="text-[13px]" style={{ color: PRIGUSEN }}>
-        Detetu za prijavu trebaju dve stvari: ovaj kod (on kaže ko je, nije
-        tajna) i tajni broj (PIN) koji si ti postavila.
+        Detetu za prijavu trebaju dve stvari: ovaj kod i tajni broj (PIN) koji
+        si ti postavila. Kod je kao korisničko ime, samo što se ne bira nego ga
+        dete dobije, a tajni broj je kao šifra.
       </p>
 
       <NapredakDeteta deteId={dete.id} />
