@@ -2639,6 +2639,82 @@ export type Database = {
           },
         ]
       }
+      zack_gramatika: {
+        Row: {
+          id: string
+          naziv: string
+          objasnjenje: string
+          od_lekcije: number
+          primer: string | null
+          redni_broj: number
+          udzbenik_id: string
+        }
+        Insert: {
+          id?: string
+          naziv: string
+          objasnjenje: string
+          od_lekcije: number
+          primer?: string | null
+          redni_broj: number
+          udzbenik_id: string
+        }
+        Update: {
+          id?: string
+          naziv?: string
+          objasnjenje?: string
+          od_lekcije?: number
+          primer?: string | null
+          redni_broj?: number
+          udzbenik_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zack_gramatika_udzbenik_id_fkey"
+            columns: ["udzbenik_id"]
+            isOneToOne: false
+            referencedRelation: "zack_udzbenici"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      zack_gramatika_pitanja: {
+        Row: {
+          gramatika_id: string
+          id: string
+          opcije: Json
+          pitanje: string
+          redni_broj: number
+          tacan: number
+          tezina: number
+        }
+        Insert: {
+          gramatika_id: string
+          id?: string
+          opcije: Json
+          pitanje: string
+          redni_broj: number
+          tacan: number
+          tezina?: number
+        }
+        Update: {
+          gramatika_id?: string
+          id?: string
+          opcije?: Json
+          pitanje?: string
+          redni_broj?: number
+          tacan?: number
+          tezina?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zack_gramatika_pitanja_gramatika_id_fkey"
+            columns: ["gramatika_id"]
+            isOneToOne: false
+            referencedRelation: "zack_gramatika"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       zack_lekcije: {
         Row: {
           broj: number

@@ -4,6 +4,7 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import type { Rec } from "./rec";
 import type { ZapisSlicice } from "./album";
+import type { GramatickaTacka, GramatickoPitanje } from "./milioner";
 
 export type Dete = { id: string; ime: string; udzbenik_id: string };
 
@@ -72,6 +73,82 @@ export async function reciUUdzbeniku(
 
   const nase = new Set((lekcije ?? []).map((l) => l.id));
   return new Set(reci.filter((r) => nase.has(r.lekcija_id)).map((r) => r.id));
+}
+
+/**
+ * Broj lekcije, ali samo ako je lekcija iz udžbenika ovog deteta. `null` znači
+ * i „nema takve lekcije" i „nije njegova", i to je namerno isti odgovor: nema
+ * razloga da se sa strane sazna koja tuđa lekcija postoji.
+ *
+ * Milioneru broj lekcije NIJE ukras nego uslov: po njemu se odlučuje koje je
+ * gradivo obrađeno. Zato se ne uzima iz adrese nego iz baze.
+ */
+export async function brojLekcijeUUdzbeniku(
+  lekcijaId: string,
+  udzbenikId: string
+): Promise<number | null> {
+  const sb = createAdminClient();
+  const { data, error } = await sb
+    .from("zack_lekcije")
+    .select("broj")
+    .eq("id", lekcijaId)
+    .eq("udzbenik_id", udzbenikId)
+    .maybeSingle();
+  if (error) throw new Error(`Ne mogu da pročitam lekciju: ${error.message}`);
+  return data?.broj ?? null;
+}
+
+/**
+ * Gramatičke tačke udžbenika koje su obrađene do zadate lekcije.
+ *
+ * Uslov `od_lekcije <= brojLekcije` stoji U SAMOM UPITU, pa neobrađeno gradivo
+ * ne stigne ni do servera koji sastavlja partiju. Ista provera se ponavlja i u
+ * `lib/zack/milioner.ts`; to nije zaboravljeno dupliranje nego namera, jer je
+ * ovo pravilo koje se ne sme osloniti na jedno mesto.
+ */
+export async function dozvoljenaGramatika(
+  udzbenikId: string,
+  brojLekcije: number
+): Promise<GramatickaTacka[]> {
+  const sb = createAdminClient();
+  const { data, error } = await sb
+    .from("zack_gramatika")
+    .select("id, redni_broj, naziv, objasnjenje, primer, od_lekcije")
+    .eq("udzbenik_id", udzbenikId)
+    .lte("od_lekcije", brojLekcije)
+    .order("redni_broj");
+  if (error) throw new Error(`Ne mogu da pročitam gramatiku: ${error.message}`);
+  return data ?? [];
+}
+
+/**
+ * Pitanja zadatih gramatičkih tačaka.
+ *
+ * `opcije` je JSONB, dakle sve što je u bazu upisano, pa se ovde svodi na
+ * spisak stringova. Red koji to nije se ne popravlja nego se vraća sa praznim
+ * opcijama - `sastaviPartiju` takav red prepozna i tiho ga preskoči.
+ */
+export async function gramatickaPitanja(
+  tackaIdovi: readonly string[]
+): Promise<GramatickoPitanje[]> {
+  if (tackaIdovi.length === 0) return [];
+
+  const sb = createAdminClient();
+  const { data, error } = await sb
+    .from("zack_gramatika_pitanja")
+    .select("id, gramatika_id, pitanje, opcije, tacan, tezina")
+    .in("gramatika_id", [...tackaIdovi])
+    .order("redni_broj");
+  if (error) throw new Error(`Ne mogu da pročitam pitanja gramatike: ${error.message}`);
+
+  return (data ?? []).map((red) => ({
+    id: red.id,
+    gramatika_id: red.gramatika_id,
+    pitanje: red.pitanje,
+    opcije: Array.isArray(red.opcije) ? red.opcije.filter((o) => typeof o === "string") : [],
+    tacan: red.tacan,
+    tezina: red.tezina,
+  }));
 }
 
 /** Da li lekcija uopšte pripada udžbeniku ovog deteta. */

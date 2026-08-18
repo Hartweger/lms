@@ -30,6 +30,7 @@
 import Link from "next/link";
 import { useCallback, useRef, useState } from "react";
 import Igra, { NAZIVI } from "@/components/zack/Igra";
+import Milioner from "@/components/zack/Milioner";
 import Slicica from "@/components/zack/Slicica";
 import { brojac, type StavkaAlbuma } from "@/lib/zack/album";
 import type { Igra as VrstaIgre } from "@/lib/zack/pitanja";
@@ -196,6 +197,7 @@ export default function LekcijaClient({
   pocetnoStanje,
   neotvorenaKesica,
   pocetniRekord,
+  imaGramatike,
 }: {
   childId: string;
   lekcija: Lekcija;
@@ -204,9 +206,19 @@ export default function LekcijaClient({
   neotvorenaKesica: number;
   /** Lični rekord u skakaču na ovoj lekciji, ili ništa ako ga još nema. */
   pocetniRekord: number | null;
+  /**
+   * Da li iz ove lekcije uopšte ima obrađenog gradiva za Milionera. Kad nema,
+   * Milioner se NE prikazuje: dugme koje otvara prazan ekran je gore nego
+   * dugme kog nema.
+   */
+  imaGramatike: boolean;
 }) {
   const [stanje, setStanje] = useState<StavkaAlbuma[]>(pocetnoStanje);
   const [igra, setIgra] = useState<VrstaIgre | null>(null);
+  // Milioner stoji odvojeno od igara i ne dodiruje ništa od ovoga: ne troši
+  // srca, ne donosi sličice i ne javlja kraj partije. Zato mu je dovoljno jedno
+  // da-ne stanje, bez ijednog poziva u `zavrsiIgru`.
+  const [milioner, setMilioner] = useState(false);
 
   // Dokle se koza popela u poslednjem skakaču. Visina je drugi rezultat te igre,
   // pored sličica, pa se posle partije i kaže - inače bi penjanje postojalo samo
@@ -441,6 +453,13 @@ export default function LekcijaClient({
   );
 
   const { zalepljene, ukupno } = brojac(stanje);
+
+  // ── Milioner zauzima ceo ekran ────────────────────────────────────────────
+  // Stoji pre igara, jer je i sam sebi ceo ekran. Izlaz iz njega ništa ne
+  // predaje: nije bilo šta da se zaradi, pa nema ni šta da se sačuva.
+  if (milioner) {
+    return <Milioner childId={childId} lekcijaId={lekcija.id} onIzlaz={() => setMilioner(false)} />;
+  }
 
   // ── Igra zauzima ceo ekran ────────────────────────────────────────────────
   if (igra) {
@@ -780,6 +799,48 @@ export default function LekcijaClient({
           </ul>
         )}
       </section>
+
+      {/* ── Milioner ─────────────────────────────────────────────────────────
+          NAMERNO ODVOJEN OD IGARA, i naslovom i izgledom. Milioner ne donosi
+          sličice i ne troši srca, pa u spisku igara ne sme da stoji: dete bi ga
+          odigralo očekujući kesicu i doživelo bi izostanak nagrade kao kaznu za
+          slab rezultat. Ovako se unapred zna da je to provera, a ne igra.
+
+          Kad iz lekcije nema nijedne obrađene gramatičke tačke, ovog odeljka
+          nema uopšte. */}
+      {imaGramatike && (
+        <section className="mb-8">
+          <h2
+            className="font-heading mb-3 text-[12px] font-bold uppercase tracking-[.18em]"
+            style={{ color: PRIGUSEN }}
+          >
+            Provera celine
+          </h2>
+          <button
+            type="button"
+            onClick={() => {
+              setPoruka(null);
+              setMilioner(true);
+            }}
+            className={`${FOKUS} font-heading flex min-h-[60px] w-full items-center justify-between gap-3 rounded-2xl border-2 border-dashed px-4 py-3.5 text-left motion-safe:transition-transform motion-safe:duration-100 motion-safe:active:scale-[0.985]`}
+            style={{ background: PAPIR, borderColor: IVICA, color: MASTILO }}
+          >
+            <span>
+              <span className="block text-[18px] font-bold leading-tight">Milioner</span>
+              {/* Bez ovoga bi Milioner bio šesta igra koja „ne radi kako treba". */}
+              <span
+                className="mt-0.5 block text-[14px] font-normal leading-snug"
+                style={{ color: PRIGUSEN }}
+              >
+                Pitanja iz gramatike. Ovde nema sličica ni srca, samo provera.
+              </span>
+            </span>
+            <span style={{ color: PRIGUSEN }}>
+              <Strelica />
+            </span>
+          </button>
+        </section>
+      )}
 
       {/* ── Album ────────────────────────────────────────────────────────── */}
       <section>

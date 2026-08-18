@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { stanjeAlbuma } from "@/lib/zack/album";
 import {
+  dozvoljenaGramatika,
   nadjiDete,
   neotvoreneKesice,
   reciLekcije,
@@ -45,7 +46,7 @@ export default async function LekcijaPage({
   if (error) throw new Error(`Ne mogu da pročitam lekciju: ${error.message}`);
   if (!lekcija) notFound();
 
-  const [reci, zapisi, kesice, rekordSkakaca] = await Promise.all([
+  const [reci, zapisi, kesice, rekordSkakaca, gramatika] = await Promise.all([
     reciLekcije(lekcija.id),
     // zapisiSlicica vraća SAMO isporučene sličice, pa album ne može da oda reč
     // koja još čeka u neotvorenoj kesici.
@@ -55,6 +56,10 @@ export default async function LekcijaPage({
     // prvom kadru partije. Da se dovlači iz same igre, prvi skokovi bi prošli
     // bez nje.
     rekordZaIgru(dete.id, lekcija.id, "skakac"),
+    // Samo da bi se znalo DA LI Milioner uopšte ima šta da pita iz ove lekcije.
+    // Bez ijedne obrađene gramatičke tačke se ne prikazuje, jer bi otvarao
+    // prazan ekran. Sama pitanja dovlači ruta, kad dete uđe.
+    dozvoljenaGramatika(dete.udzbenik_id, lekcija.broj),
   ]);
 
   return (
@@ -65,6 +70,7 @@ export default async function LekcijaPage({
       pocetnoStanje={stanjeAlbuma(reci, zapisi, new Date())}
       neotvorenaKesica={kesice.get(lekcija.id) ?? 0}
       pocetniRekord={rekordSkakaca}
+      imaGramatike={gramatika.length > 0}
     />
   );
 }
