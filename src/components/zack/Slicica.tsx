@@ -237,26 +237,33 @@ function PunaSlicica({
                 />
               </span>
             )}
-            <span
-              lang="de"
-              className="font-heading w-full min-w-0 text-center font-bold leading-tight hyphens-auto [overflow-wrap:anywhere]"
-              style={{ color: bojaSlova, fontSize: REC_FONT }}
-            >
-              {oblik}
+            <span lang="de" className="flex w-full min-w-0 flex-col items-center">
+              {/* Član stoji uz nemačku reč, ne uz prevod - „die Mama", nikad
+                  „die mama". Zbog sjajnih sličica, gde preliv proguta boju
+                  roda, član mora da bude ispisan, i zato živi baš ovde. */}
+              {clan && (
+                <span
+                  className="font-bold leading-none"
+                  style={{ color: bojaSlova, fontSize: SITAN_FONT, opacity: 0.85 }}
+                >
+                  {clan}
+                </span>
+              )}
+              <span
+                className="font-heading w-full min-w-0 text-center font-bold leading-tight hyphens-auto [overflow-wrap:anywhere]"
+                style={{ color: bojaSlova, fontSize: REC_FONT }}
+              >
+                {oblik}
+              </span>
             </span>
           </span>
         </div>
-        {/* Prelama se po rečima, ne nasred reči: član pređe u svoj red pre nego
-            što se „nastavnica" pocepa na „nastavni" i „ca". */}
+        {/* Prelama se po rečima, ne nasred reči, da se „nastavnica" ne pocepa
+            na „nastavni" i „ca". */}
         <div
           className="flex shrink-0 flex-wrap items-baseline gap-x-1 px-[6%] py-[4%]"
           style={{ background: PAPIR, borderTop: `1px solid ${IVICA_PAPIRA}` }}
         >
-          {clan && (
-            <span className="font-bold" style={{ color: MASTILO, fontSize: SITAN_FONT }}>
-              {clan}
-            </span>
-          )}
           {/* Prevod se NE seče. On je jedino mesto gde piše šta reč znači, pa
               „nastavnica" odsečena u „nastav..." obesmišljava celu sličicu.
               Radije dva reda nego tri tačke. */}
