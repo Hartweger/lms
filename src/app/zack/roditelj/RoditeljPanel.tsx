@@ -275,7 +275,7 @@ function DeteKartica({ dete }: { dete: DeteStavka }) {
       </p>
       <p className="text-[13px]" style={{ color: PRIGUSEN }}>
         Detetu za prijavu trebaju dve stvari: ovaj kod i tajni broj (PIN) koji
-        si ti postavila. Kod je kao korisničko ime, samo što se ne bira nego ga
+        ti postaviš. Kod je kao korisničko ime, samo što se ne bira nego ga
         dete dobije, a tajni broj je kao šifra.
       </p>
 
@@ -381,7 +381,7 @@ function DodajDete({ udzbenici }: { udzbenici: UdzbenikStavka[] }) {
         await odgovor.json();
       if (odgovor.ok && podaci.dete) {
         setUspeh(
-          `Profil za ${podaci.dete.ime} je napravljen. Detetu prepiši kod ${podaci.dete.kod} i tajni broj (PIN) koji si upravo postavila.`
+          `Profil za ${podaci.dete.ime} je napravljen. Detetu prepiši kod ${podaci.dete.kod} i tajni broj (PIN).`
         );
         setIme("");
         setUdzbenikId("");

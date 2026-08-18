@@ -100,7 +100,7 @@
 //
 // Prelaz se primeti, ali bez fanfara: boja stene se promeni, na kamenu ostane
 // granična crta sa imenom pojasa, a iznad polica se na par sekundi javi mirna
-// pločica („Stigla si do grebena"). Nagrada koja stiže na svakih pet-šest
+// pločica („Koza je stigla do grebena"). Nagrada koja stiže na svakih pet-šest
 // spratova, između dva rekorda.
 //
 // Ime pojasa nigde ne postoji SAMO kao boja: stoji i kao tekst iznad polica,
@@ -930,7 +930,7 @@ export default function Skakac({
           ugasi. Bez ovoga bi cela promena stene za dete koje ne vidi ekran bila
           samo promena boje, dakle ništa. */}
       <p aria-live="polite" className="sr-only">
-        {stigla ? `Stigla si ${stigla.dokle}.` : ""}
+        {stigla ? `Koza je stigla ${stigla.dokle}.` : ""}
       </p>
 
       <div
@@ -1152,7 +1152,7 @@ export default function Skakac({
                 transition: `background-color ${trajanje(POJAS_MS)}ms linear, border-color ${trajanje(POJAS_MS)}ms linear`,
               }}
             >
-              {stigla ? `Stigla si ${stigla.dokle}` : pojasSad.imeMalo}
+              {stigla ? `Koza je stigla ${stigla.dokle}` : pojasSad.imeMalo}
             </span>
 
             {/* Obaranje rekorda, u zelenoj boji uspeha iz ljuske. Ume da se
