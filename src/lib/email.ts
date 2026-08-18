@@ -8,6 +8,7 @@ import type { Ga4Weekly } from "@/lib/ga4-report";
 import { MERCHANT, CARD_OUTCOME, pdvBreakdown, type NestpayTx, type RecurringTx } from "@/lib/payment-confirmation";
 import type { SubscriptionBrief } from "@/lib/subscription-brief";
 import type { NakiBrief } from "@/lib/naki-brief";
+import { naslovIzvestaja, receniceZaDete, type IzvestajDeteta } from "@/lib/zack/izvestaj";
 
 const FROM = "Hartweger <info@hartweger.rs>";
 
@@ -2584,5 +2585,109 @@ export async function sendNhKarticaAdminEmail(o: { ime: string; email: string })
     console.log(`[email] Admin obavešten o novoj NH kartici (${o.email})`);
   } catch (e) {
     console.error("[email] sendNhKarticaAdminEmail pao:", e);
+  }
+}
+
+// ── zack! dvonedeljni izveštaj roditelju ─────────────────────────────────────
+// Render je odvojen od slanja i vraća gotov HTML: tako se sadržaj mejla može
+// pogledati (i testirati) bez ijednog stvarnog slanja, a cron ga samo prosledi.
+// Sve rečenice sastavlja lib/zack/izvestaj.ts - ovde se samo prelamaju u HTML
+// koji radi u mejl klijentima: tabele i inline stilovi, bez flexa.
+
+/** Papir i mastilo dečje aplikacije; crvena iz „zack!" znaka, štedljivo. */
+const ZACK_PAPIR = "#FCFBF7";
+const ZACK_POZADINA = "#F4F1E9";
+const ZACK_IVICA = "#DED8C8";
+const ZACK_MASTILO = "#16161A";
+const ZACK_PRIGUSEN = "#6E6A5E";
+const ZACK_CRVENA = "#E5342A";
+
+function zackOmotac(sadrzaj: string): string {
+  return `<!DOCTYPE html>
+<html lang="sr">
+<head><meta charset="utf-8"></head>
+<body style="margin:0;padding:0;background:${ZACK_POZADINA};font-family:'Helvetica Neue',Arial,sans-serif;color:${ZACK_MASTILO};">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${ZACK_POZADINA};">
+    <tr><td align="center" style="padding:32px 16px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background:${ZACK_PAPIR};border:1px solid ${ZACK_IVICA};border-radius:14px;">
+        <tr><td style="padding:28px 28px 8px;">
+          <span style="font-size:26px;font-weight:800;color:${ZACK_CRVENA};letter-spacing:-0.5px;">zack!</span>
+        </td></tr>
+        ${sadrzaj}
+        <tr><td style="padding:20px 28px 26px;border-top:1px solid ${ZACK_IVICA};">
+          <p style="margin:0 0 8px;font-size:14px;line-height:1.6;color:${ZACK_MASTILO};">
+            <a href="${SITE_URL}/zack/roditelj" style="color:${ZACK_MASTILO};font-weight:700;">Roditeljski panel</a>
+          </p>
+          <p style="margin:0;font-size:12px;line-height:1.6;color:${ZACK_PRIGUSEN};">
+            Ovaj izveštaj stiže na dve nedelje. Gasi se i pali jednim klikom u roditeljskom panelu.
+          </p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`;
+}
+
+/**
+ * Dvonedeljni izveštaj: po jedan blok za svako dete. Vraća predmet i HTML,
+ * ne šalje ništa.
+ */
+export function renderZackIzvestajEmail(deca: readonly IzvestajDeteta[]): {
+  subject: string;
+  html: string;
+} {
+  const blokovi = deca
+    .map((dete) => {
+      const recenice = receniceZaDete(dete)
+        .map(
+          (r) =>
+            `<p style="margin:0 0 6px;font-size:15px;line-height:1.6;color:${ZACK_MASTILO};">${esc(r)}</p>`
+        )
+        .join("\n          ");
+      return `<tr><td style="padding:14px 28px 4px;">
+          <p style="margin:0 0 8px;font-size:17px;font-weight:800;color:${ZACK_MASTILO};">${esc(dete.ime)}</p>
+          ${recenice}
+        </td></tr>`;
+    })
+    .join("\n");
+
+  return {
+    subject: naslovIzvestaja(deca.map((d) => d.ime)),
+    html: zackOmotac(`<tr><td style="padding:6px 28px 0;">
+          <p style="margin:0;font-size:14px;color:${ZACK_PRIGUSEN};">Izveštaj za protekle dve nedelje</p>
+        </td></tr>
+        ${blokovi}
+        <tr><td style="padding:4px 28px 18px;"></td></tr>`),
+  };
+}
+
+/**
+ * Poslednji mejl pre gašenja: mirno kaže da izveštaji staju i kako se vraćaju.
+ * Bez podvlačenja i bez saveta - pravilo sa platforme: ne opominjati.
+ */
+export function renderZackOprostajEmail(): { subject: string; html: string } {
+  return {
+    subject: "zack! - izveštaji za sada staju",
+    html: zackOmotac(`<tr><td style="padding:14px 28px 18px;">
+          <p style="margin:0 0 10px;font-size:15px;line-height:1.6;color:${ZACK_MASTILO};">
+            U poslednjih mesec dana nije bilo vežbanja, pa dvonedeljni izveštaji za sada staju.
+          </p>
+          <p style="margin:0;font-size:15px;line-height:1.6;color:${ZACK_MASTILO};">
+            Kad god poželiš da ih vratiš, uključi ih jednim klikom u roditeljskom panelu.
+          </p>
+        </td></tr>`),
+  };
+}
+
+/** Slanje već renderovanog izveštaja (ili oproštajnog mejla) roditelju. */
+export async function sendZackIzvestajEmail(to: string, mejl: { subject: string; html: string }) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    await sendEmail(resend, { bulk: true, to, subject: mejl.subject, html: mejl.html });
+    console.log(`[email] zack izveštaj poslat → ${to}`);
+  } catch (e) {
+    console.error(`[email] sendZackIzvestajEmail pao → ${to}:`, e);
   }
 }

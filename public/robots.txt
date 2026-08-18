@@ -1,32 +1,43 @@
-# Svi botovi — dozvoljen ceo javni sadržaj
+# Svi botovi - dozvoljen ceo javni sadržaj
 User-agent: *
 Disallow: /admin/
 Disallow: /dashboard/
 Disallow: /api/
+Disallow: /zack/
 
-# AI asistenti — izričito dobrodošli (sadržaj sme da se koristi i navodi)
+# AI asistenti - izričito dobrodošli (sadržaj sme da se koristi i navodi),
+# ALI ne i dečji deo. Svaka grupa mora da ponovi Disallow, jer bot čita samo
+# svoju grupu i ne nasleđuje pravila iz "User-agent: *".
 User-agent: GPTBot
 Allow: /
+Disallow: /zack/
 
 User-agent: OAI-SearchBot
 Allow: /
+Disallow: /zack/
 
 User-agent: ChatGPT-User
 Allow: /
+Disallow: /zack/
 
 User-agent: ClaudeBot
 Allow: /
+Disallow: /zack/
 
 User-agent: Claude-Web
 Allow: /
+Disallow: /zack/
 
 User-agent: PerplexityBot
 Allow: /
+Disallow: /zack/
 
 User-agent: Google-Extended
 Allow: /
+Disallow: /zack/
 
 User-agent: Applebot-Extended
 Allow: /
+Disallow: /zack/
 
 Sitemap: https://www.hartweger.rs/sitemap.xml

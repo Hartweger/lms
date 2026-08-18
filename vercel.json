@@ -87,6 +87,10 @@
     {
       "path": "/api/cron/academy-cena",
       "schedule": "5 22 * * *"
+    },
+    {
+      "path": "/api/cron/zack-izvestaj",
+      "schedule": "30 8 * * *"
     }
   ]
 }

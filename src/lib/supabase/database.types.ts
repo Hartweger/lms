@@ -204,6 +204,7 @@ export type Database = {
           id: string
           naziv: string
           opis: string
+          pristup_slug: string
           samo_admin_pise: boolean
           slug: string
           sort: number
@@ -212,6 +213,7 @@ export type Database = {
           id?: string
           naziv: string
           opis?: string
+          pristup_slug?: string
           samo_admin_pise?: boolean
           slug: string
           sort?: number
@@ -220,11 +222,41 @@ export type Database = {
           id?: string
           naziv?: string
           opis?: string
+          pristup_slug?: string
           samo_admin_pise?: boolean
           slug?: string
           sort?: number
         }
         Relationships: []
+      }
+      chat_obavestenja: {
+        Row: {
+          kanal_id: string
+          mejl_do: string
+          push_do: string
+          user_id: string
+        }
+        Insert: {
+          kanal_id: string
+          mejl_do?: string
+          push_do?: string
+          user_id: string
+        }
+        Update: {
+          kanal_id?: string
+          mejl_do?: string
+          push_do?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_obavestenja_kanal_id_fkey"
+            columns: ["kanal_id"]
+            isOneToOne: false
+            referencedRelation: "chat_kanali"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       chat_poruke: {
         Row: {
@@ -1190,10 +1222,10 @@ export type Database = {
           id: string
           level: string
           manual_enrolled: number | null
-          naknadni_upis: boolean
           max_seats: number
           meet_link: string | null
           min_seats: number
+          naknadni_upis: boolean
           notes: string | null
           notes_doc_id: string | null
           notes_link: string | null
@@ -1224,10 +1256,10 @@ export type Database = {
           id?: string
           level: string
           manual_enrolled?: number | null
-          naknadni_upis?: boolean
           max_seats?: number
           meet_link?: string | null
           min_seats?: number
+          naknadni_upis?: boolean
           notes?: string | null
           notes_doc_id?: string | null
           notes_link?: string | null
@@ -1258,10 +1290,10 @@ export type Database = {
           id?: string
           level?: string
           manual_enrolled?: number | null
-          naknadni_upis?: boolean
           max_seats?: number
           meet_link?: string | null
           min_seats?: number
+          naknadni_upis?: boolean
           notes?: string | null
           notes_doc_id?: string | null
           notes_link?: string | null
@@ -2205,6 +2237,33 @@ export type Database = {
           },
         ]
       }
+      push_pretplate: {
+        Row: {
+          auth: string
+          created_at: string
+          endpoint: string
+          p256dh: string
+          poslednja_greska: string | null
+          user_id: string
+        }
+        Insert: {
+          auth: string
+          created_at?: string
+          endpoint: string
+          p256dh: string
+          poslednja_greska?: string | null
+          user_id: string
+        }
+        Update: {
+          auth?: string
+          created_at?: string
+          endpoint?: string
+          p256dh?: string
+          poslednja_greska?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       rate_limits: {
         Row: {
           count: number
@@ -2563,6 +2622,370 @@ export type Database = {
         }
         Relationships: []
       }
+      zack_deca: {
+        Row: {
+          created_at: string
+          id: string
+          ime: string
+          kod: string | null
+          niz: number
+          pin_hash: string | null
+          pin_pokusaji: number
+          poslednji_dan: string | null
+          roditelj_id: string | null
+          udzbenik_id: string
+          zakljucano_do: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          ime: string
+          kod?: string | null
+          niz?: number
+          pin_hash?: string | null
+          pin_pokusaji?: number
+          poslednji_dan?: string | null
+          roditelj_id?: string | null
+          udzbenik_id: string
+          zakljucano_do?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          ime?: string
+          kod?: string | null
+          niz?: number
+          pin_hash?: string | null
+          pin_pokusaji?: number
+          poslednji_dan?: string | null
+          roditelj_id?: string | null
+          udzbenik_id?: string
+          zakljucano_do?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zack_deca_udzbenik_id_fkey"
+            columns: ["udzbenik_id"]
+            isOneToOne: false
+            referencedRelation: "zack_udzbenici"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      zack_gramatika: {
+        Row: {
+          id: string
+          naziv: string
+          objasnjenje: string
+          od_lekcije: number
+          primer: string | null
+          redni_broj: number
+          udzbenik_id: string
+        }
+        Insert: {
+          id?: string
+          naziv: string
+          objasnjenje: string
+          od_lekcije: number
+          primer?: string | null
+          redni_broj: number
+          udzbenik_id: string
+        }
+        Update: {
+          id?: string
+          naziv?: string
+          objasnjenje?: string
+          od_lekcije?: number
+          primer?: string | null
+          redni_broj?: number
+          udzbenik_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zack_gramatika_udzbenik_id_fkey"
+            columns: ["udzbenik_id"]
+            isOneToOne: false
+            referencedRelation: "zack_udzbenici"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      zack_gramatika_pitanja: {
+        Row: {
+          gramatika_id: string
+          id: string
+          opcije: Json
+          pitanje: string
+          redni_broj: number
+          tacan: number
+          tezina: number
+        }
+        Insert: {
+          gramatika_id: string
+          id?: string
+          opcije: Json
+          pitanje: string
+          redni_broj: number
+          tacan: number
+          tezina?: number
+        }
+        Update: {
+          gramatika_id?: string
+          id?: string
+          opcije?: Json
+          pitanje?: string
+          redni_broj?: number
+          tacan?: number
+          tezina?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zack_gramatika_pitanja_gramatika_id_fkey"
+            columns: ["gramatika_id"]
+            isOneToOne: false
+            referencedRelation: "zack_gramatika"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      zack_lekcije: {
+        Row: {
+          broj: number
+          created_at: string
+          id: string
+          naziv: string
+          pravilo_naslov: string | null
+          pravilo_primer: string | null
+          pravilo_tekst: string | null
+          udzbenik_id: string
+        }
+        Insert: {
+          broj: number
+          created_at?: string
+          id?: string
+          naziv: string
+          pravilo_naslov?: string | null
+          pravilo_primer?: string | null
+          pravilo_tekst?: string | null
+          udzbenik_id: string
+        }
+        Update: {
+          broj?: number
+          created_at?: string
+          id?: string
+          naziv?: string
+          pravilo_naslov?: string | null
+          pravilo_primer?: string | null
+          pravilo_tekst?: string | null
+          udzbenik_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zack_lekcije_udzbenik_id_fkey"
+            columns: ["udzbenik_id"]
+            isOneToOne: false
+            referencedRelation: "zack_udzbenici"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      zack_reci: {
+        Row: {
+          de: string
+          id: string
+          ikonica: string | null
+          izuzetak: boolean
+          lekcija_id: string
+          mnozina: string | null
+          redni_broj: number
+          rod: Database["public"]["Enums"]["zack_rod"]
+          sr: string
+          vrsta: Database["public"]["Enums"]["zack_vrsta"]
+        }
+        Insert: {
+          de: string
+          id?: string
+          ikonica?: string | null
+          izuzetak?: boolean
+          lekcija_id: string
+          mnozina?: string | null
+          redni_broj: number
+          rod?: Database["public"]["Enums"]["zack_rod"]
+          sr: string
+          vrsta?: Database["public"]["Enums"]["zack_vrsta"]
+        }
+        Update: {
+          de?: string
+          id?: string
+          ikonica?: string | null
+          izuzetak?: boolean
+          lekcija_id?: string
+          mnozina?: string | null
+          redni_broj?: number
+          rod?: Database["public"]["Enums"]["zack_rod"]
+          sr?: string
+          vrsta?: Database["public"]["Enums"]["zack_vrsta"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zack_reci_lekcija_id_fkey"
+            columns: ["lekcija_id"]
+            isOneToOne: false
+            referencedRelation: "zack_lekcije"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      zack_rekordi: {
+        Row: {
+          dete_id: string
+          id: string
+          igra: string
+          lekcija_id: string
+          postavljen_at: string
+          sprat: number
+        }
+        Insert: {
+          dete_id: string
+          id?: string
+          igra: string
+          lekcija_id: string
+          postavljen_at?: string
+          sprat?: number
+        }
+        Update: {
+          dete_id?: string
+          id?: string
+          igra?: string
+          lekcija_id?: string
+          postavljen_at?: string
+          sprat?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zack_rekordi_dete_id_fkey"
+            columns: ["dete_id"]
+            isOneToOne: false
+            referencedRelation: "zack_deca"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "zack_rekordi_lekcija_id_fkey"
+            columns: ["lekcija_id"]
+            isOneToOne: false
+            referencedRelation: "zack_lekcije"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      zack_roditelji: {
+        Row: {
+          auth_user_id: string
+          created_at: string
+          email: string
+          id: string
+          izvestaj_ukljucen: boolean
+          poslednji_izvestaj_at: string | null
+          praznih_zaredom: number
+          pristanak_at: string
+          pristanak_tekst: string
+        }
+        Insert: {
+          auth_user_id: string
+          created_at?: string
+          email: string
+          id?: string
+          izvestaj_ukljucen?: boolean
+          poslednji_izvestaj_at?: string | null
+          praznih_zaredom?: number
+          pristanak_at?: string
+          pristanak_tekst: string
+        }
+        Update: {
+          auth_user_id?: string
+          created_at?: string
+          email?: string
+          id?: string
+          izvestaj_ukljucen?: boolean
+          poslednji_izvestaj_at?: string | null
+          praznih_zaredom?: number
+          pristanak_at?: string
+          pristanak_tekst?: string
+        }
+        Relationships: []
+      }
+      zack_slicice: {
+        Row: {
+          dete_id: string
+          id: string
+          isporucena_at: string | null
+          poslednje_tacno_at: string
+          rec_id: string
+          zalepljena_at: string | null
+          zaradjena_at: string
+        }
+        Insert: {
+          dete_id: string
+          id?: string
+          isporucena_at?: string | null
+          poslednje_tacno_at?: string
+          rec_id: string
+          zalepljena_at?: string | null
+          zaradjena_at?: string
+        }
+        Update: {
+          dete_id?: string
+          id?: string
+          isporucena_at?: string | null
+          poslednje_tacno_at?: string
+          rec_id?: string
+          zalepljena_at?: string | null
+          zaradjena_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zack_slicice_dete_id_fkey"
+            columns: ["dete_id"]
+            isOneToOne: false
+            referencedRelation: "zack_deca"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "zack_slicice_rec_id_fkey"
+            columns: ["rec_id"]
+            isOneToOne: false
+            referencedRelation: "zack_reci"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      zack_udzbenici: {
+        Row: {
+          created_at: string
+          id: string
+          izdavac: string
+          naziv: string
+          razred: number
+          slug: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          izdavac: string
+          naziv: string
+          razred: number
+          slug: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          izdavac?: string
+          naziv?: string
+          razred?: number
+          slug?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       javne_clanice: {
@@ -2637,6 +3060,10 @@ export type Database = {
           total_started: number
         }[]
       }
+      ima_pristup_kanalu: {
+        Args: { kanal: string; uid: string }
+        Returns: boolean
+      }
       je_aktivna_clanica: { Args: { uid: string }; Returns: boolean }
       rate_limit_hit: {
         Args: { p_key: string; p_max: number; p_window_ms: number }
@@ -2647,7 +3074,8 @@ export type Database = {
       }
     }
     Enums: {
-      [_ in never]: never
+      zack_rod: "der" | "die" | "das" | "nema"
+      zack_vrsta: "imenica" | "glagol" | "pridev" | "ostalo"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -2774,6 +3202,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      zack_rod: ["der", "die", "das", "nema"],
+      zack_vrsta: ["imenica", "glagol", "pridev", "ostalo"],
+    },
   },
 } as const
