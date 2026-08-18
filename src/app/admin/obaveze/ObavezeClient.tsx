@@ -77,20 +77,24 @@ export default function ObavezeClient({ payables, pending, groups, profs, pendin
           Mesečni pregled honorara →
         </a>
       </div>
-      <p className="text-xs text-gray-400 -mt-6">Ovde je ukupno stanje (sve vreme). Za pregled po mesecu - zarađeno, isplaćeno i saldo meseca - koristi mesečni pregled na Finansijama.</p>
+      <p className="text-xs text-gray-400 -mt-6">Saldo = koliko profesorki trenutno stoji nenaplaćeno; minus znači da je unapred plaćena. Za pregled po mesecu - zarađeno, isplaćeno i saldo meseca - koristi mesečni pregled na Finansijama.</p>
 
       <section className="bg-white rounded-xl shadow-sm overflow-hidden">
         <table className="w-full text-sm">
           <thead className="bg-gray-50 text-gray-500 uppercase text-xs">
-            <tr><th className="text-left px-4 py-3">Profesorka</th><th className="text-right px-4 py-3">Zarađeno</th><th className="text-right px-4 py-3">Isplaćeno</th><th className="text-right px-4 py-3">Saldo</th><th className="px-4 py-3"></th></tr>
+            {/* Zarađeno/Isplaćeno su namerno sklonjeni: zbirovi su od početka godine i
+                sadrže stavku „početno stanje" (evidencija van platforme do 31.05.2026),
+                pa deluju kao da je isplaćeno mnogo više nego što jeste. Saldo je tačan. */}
+            <tr><th className="text-left px-4 py-3">Profesorka</th><th className="text-right px-4 py-3">Saldo</th><th className="px-4 py-3"></th></tr>
           </thead>
           <tbody className="divide-y divide-gray-50">
             {payables.map((p) => (
               <tr key={p.professorId}>
                 <td className="px-4 py-3 text-gray-900">{p.name}</td>
-                <td className="px-4 py-3 text-right">{fmt(p.earned)} din</td>
-                <td className="px-4 py-3 text-right">{fmt(p.paid)} din</td>
-                <td className="px-4 py-3 text-right font-bold text-plava">{fmt(p.balance)} din</td>
+                <td className="px-4 py-3 text-right font-bold text-plava">
+                  {fmt(p.balance)} din
+                  {p.balance < 0 && <span className="block text-xs font-normal text-gray-400">preplata</span>}
+                </td>
                 <td className="px-4 py-3 text-right">
                   <button onClick={() => { setPayFor(payFor === p.professorId ? null : p.professorId); setAmount(String(Math.max(0, p.balance))); }}
                     className="text-sm px-3 py-1.5 rounded-lg bg-plava-light text-plava font-medium">Zabeleži isplatu</button>

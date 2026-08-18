@@ -91,11 +91,15 @@ export default async function ProfesorHonorar({ searchParams }: { searchParams: 
         </div>
         {payable && (
           <>
-          <h3 className="font-medium text-gray-900 mt-6 mb-2">Saldo (ukupno sve vreme)</h3>
-          <div className="bg-white rounded-xl shadow-sm p-4 grid grid-cols-3 gap-3 text-center">
-            <div><div className="text-xs text-gray-400 uppercase">Zarađeno</div><div className="font-bold text-gray-900">{fmt(payable.earned)} din</div></div>
-            <div><div className="text-xs text-gray-400 uppercase">Isplaćeno</div><div className="font-bold text-gray-900">{fmt(payable.paid)} din</div></div>
-            <div><div className="text-xs text-gray-400 uppercase">Saldo</div><div className="font-bold text-plava">{fmt(payable.balance)} din</div></div>
+          <h3 className="font-medium text-gray-900 mt-6 mb-2">Trenutni saldo</h3>
+          {/* Zarađeno/Isplaćeno se namerno NE prikazuju: to su zbirovi od početka godine
+              koji uključuju i evidenciju vođenu van platforme do 31.05.2026, pa zbunjuju.
+              Saldo je jedini broj koji je uvek tačan - vidi lib/professor-payable.ts. */}
+          <div className="bg-white rounded-xl shadow-sm p-4 text-center">
+            <div className="font-bold text-2xl text-plava">{fmt(payable.balance)} din</div>
+            <div className="text-xs text-gray-400 mt-1">
+              {payable.balance < 0 ? "preplata - ovoliko je unapred isplaćeno" : "nenaplaćeno do danas"}
+            </div>
           </div>
           </>
         )}
