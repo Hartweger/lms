@@ -33,6 +33,7 @@ import Igra, { NAZIVI } from "@/components/zack/Igra";
 import Slicica from "@/components/zack/Slicica";
 import { brojac, type StavkaAlbuma } from "@/lib/zack/album";
 import type { Igra as VrstaIgre } from "@/lib/zack/pitanja";
+import { dokleSePopela, opisSprata } from "@/lib/zack/pojas";
 import type { Rec } from "@/lib/zack/rec";
 
 type Lekcija = {
@@ -497,8 +498,10 @@ export default function LekcijaClient({
           className="mb-4 rounded-2xl border px-4 py-2.5 text-center"
           style={{ background: PAPIR, borderColor: IVICA }}
         >
+          {/* Uz broj ide i ime pojasa („do snega, 19. sprat"). Broj dete
+              zaboravi do sutra, ime ne, pa je ime ono što od partije ostane. */}
           <p className="font-heading text-[15px] font-bold" style={{ color: PRIGUSEN }}>
-            {`Koza se popela na ${domet}. sprat.`}
+            {`Koza se popela ${dokleSePopela(domet)}.`}
           </p>
           {novRekord && (
             <p className="font-heading mt-1 text-[15px] font-bold" style={{ color: ZELENA }}>
@@ -507,7 +510,7 @@ export default function LekcijaClient({
           )}
           {rekord > domet && (
             <p className="mt-1 text-[14px] leading-snug" style={{ color: PRIGUSEN }}>
-              {`Tvoj rekord: ${rekord}. sprat.`}
+              {`Tvoj rekord: ${opisSprata(rekord)}.`}
             </p>
           )}
         </section>

@@ -62,6 +62,27 @@
 // visinu, i nikad ne dobija prekor. Pre prve partije linije nema, da prvi
 // pokušaj ne počne poređenjem sa nečim.
 //
+// POJASEVI STENE
+// --------------
+// Stena se menja kako se koza penje: podnožje je toplo i zemljano, više gore je
+// siv kamen, pa hladan greben, pa sneg, pa nebo iznad oblaka. Bez toga je sprat
+// 7 izgledao isto kao sprat 1, pa je visina bila broj u uglu a ne prizor.
+//
+// Granice, imena i boje NISU ovde nego u `@/lib/zack/pojas`, u jednom nizu, jer
+// će se menjati. Ovde je samo crtež.
+//
+// Prelaz se primeti, ali bez fanfara: boja stene se promeni, na kamenu ostane
+// granična crta sa imenom pojasa, a iznad polica se na par sekundi javi mirna
+// pločica („Stigla si do grebena"). Nagrada koja stiže na svakih pet-šest
+// spratova, između dva rekorda.
+//
+// Ime pojasa nigde ne postoji SAMO kao boja: stoji i kao tekst iznad polica,
+// stoji uz liniju rekorda, javlja se kroz `aria-live` i ulazi u poruku na kraju
+// partije. Inače bi dete sa čitačem ekrana od cele ove izmene dobilo ništa.
+//
+// Pojas do kog se stiglo se imenuje; oni iznad se ne pominju. Nigde ne piše
+// dokle dete NIJE stiglo.
+//
 // SLUČAJNOST
 // ----------
 // U ishodu je nema. Sve što se ovde računa zavisi samo od toga koju je policu
@@ -69,6 +90,7 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import type { Pitanje } from "@/lib/zack/pitanja";
 import { bojaZaRod, type Rod } from "@/lib/zack/rec";
+import { POJASEVI, opisSprata, pocinjePojas, pojasZaSprat, type Pojas } from "@/lib/zack/pojas";
 
 // Papir, ne gejmerski ekran. Iste boje kao u ljusci; stoje ovde zato što ih
 // ljuska ne izvozi, a uvoz iz nje bi napravio krug (ljuska već uvozi ovaj fajl).
@@ -76,8 +98,8 @@ const PAPIR = "#FCFBF7";
 const IVICA = "#DED8C8";
 const MASTILO = "#16161A";
 const PRIGUSEN = "#6E6A5E";
-/** Tlo i leva traka stene: ista boja, jer su isti kamen. */
-const STENA = "#EFEADC";
+// Kamen NEMA svoju boju ovde: tlo, traka uz levu ivicu i vazduh dobijaju je od
+// pojasa u kom stoje (`@/lib/zack/pojas`), jer se stena menja po visini.
 /** Zelena uspeha, ista kao u odzivu ljuske, da „dobro je" svuda izgleda isto. */
 const ZELENA = "#1E7A4B";
 const ZELENA_PODLOGA = "#E4F0E9";
@@ -187,6 +209,185 @@ function visinaStajanja(sprat: number): number {
   return dnoSprata(sprat) + POLICA_VISINA;
 }
 
+// ── Pojasevi stene ──────────────────────────────────────────────────────────
+
+/**
+ * Donja ivica pojasa, dakle mesto gde se stena menja: donja ivica prve police
+ * tog pojasa. Koza koja stoji na spratu ispod je jasno ispod te crte, a čim
+ * osvoji prvi sprat pojasa, stoji jasno iznad nje.
+ *
+ * Podnožje kreće duboko ispod tla, da se ni pri prvom skoku ne vidi gde stena
+ * počinje.
+ */
+function dnoPojasa(pojas: Pojas): number {
+  return pojas.odSprata <= 1 ? SIDRO - TLO_DUBINA : dnoSprata(pojas.odSprata);
+}
+
+/**
+ * Prozor oko kadra. Pojasevi se crtaju SAMO unutar njega, odsečeni i odozdo i
+ * odozgo, jer poslednji pojas nema gornju ivicu: penjanje nema kraj, pa bi
+ * inače jedan element bio visok trideset hiljada piksela i rastao bi sa svakim
+ * spratom. Ovako je svaki sloj kamena visok najviše koliko i ekran, ma da li je
+ * koza na petom ili na šezdesetom spratu.
+ *
+ * Višak je namerno veći od jednog sprata: kamera kasni za skokom, pa se pojas
+ * odseca po visini ka kojoj kamera IDE, a na ekranu je još stara. Dok je ta
+ * razlika manja od viška, odsečena ivica se ne može videti.
+ */
+const KADAR_VISAK = 400;
+/** Najviša scena koju `SCENA_VISINA` dopušta. Gornji kraj prozora. */
+const KADAR_NAJVISE = 560;
+
+/** Visina šare u kamenu. Sedi NA polici svog sprata, ne ispod nje. */
+const MOTIV_VISINA = 26;
+
+/**
+ * Šara u kamenu, jedna po spratu. Crta se samo za spratove koji su u kadru, pa
+ * ih na ekranu nikad nema više od pet, bez obzira dokle se koza popela.
+ *
+ * Stoji tačno NA polici svog sprata, a ne ispod nje: granica pojasa je donja
+ * ivica prve police, pa bi šara ispod police upala u tuđi pojas i pukotine bi
+ * se videle u travi.
+ *
+ * Sve je jedna te ista tanka linija u boji ivice tog pojasa: papir, ne slika.
+ * Razlika među pojasevima je u tome ŠTA se crta, ne u tome koliko je šareno.
+ */
+function Motiv({ sprat }: { sprat: number }) {
+  const pojas = pojasZaSprat(sprat);
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 320 26"
+      preserveAspectRatio="xMidYMax meet"
+      className="pointer-events-none absolute"
+      style={{
+        left: TRAKA_SIRINA,
+        right: 0,
+        bottom: visinaStajanja(sprat),
+        height: MOTIV_VISINA,
+        opacity: 0.85,
+      }}
+      fill="none"
+      stroke={pojas.ivica}
+      strokeWidth="2"
+      strokeLinecap="round"
+    >
+      {/* Trava u podnožju: busenovi koji rastu uz kamen. */}
+      {pojas.motiv === "trava" && (
+        <>
+          <path d="M18 25c0-7-3-10-6-13M18 25c0-8 2-11 5-14M24 25c0-6 2-9 4-11" />
+          <path d="M104 25c0-7 3-10 6-13M110 25c0-8-2-11-5-14" />
+          <path d="M196 25c0-6-3-9-5-11M202 25c0-8 2-11 5-13" />
+          <path d="M290 25c0-7 3-10 6-13M296 25c0-6-2-8-4-10" />
+        </>
+      )}
+      {/* Siva stena: pukotine u kamenu, mirne i retke. */}
+      {pojas.motiv === "pukotina" && (
+        <>
+          <path d="M34 25l16-9 7 5 14-10" />
+          <path d="M150 24l11-7 10 4" />
+          <path d="M242 25l14-8 9 6" />
+        </>
+      )}
+      {/* Greben: police su ovde ređe, pa se i u kamenu vide samo kratki izdanci. */}
+      {pojas.motiv === "polica" && (
+        <>
+          <path d="M30 19h54" />
+          <path d="M154 11h40" />
+          <path d="M250 21h48" />
+        </>
+      )}
+      {/* Sneg: tragovi koji vode uvis. */}
+      {pojas.motiv === "trag" && (
+        <g fill={pojas.ivica} stroke="none">
+          <ellipse cx="46" cy="22" rx="4" ry="3" />
+          <ellipse cx="82" cy="16" rx="4" ry="3" />
+          <ellipse cx="118" cy="21" rx="4" ry="3" />
+          <ellipse cx="196" cy="15" rx="4" ry="3" />
+          <ellipse cx="232" cy="20" rx="4" ry="3" />
+          <ellipse cx="268" cy="14" rx="4" ry="3" />
+        </g>
+      )}
+      {/* Iznad oblaka: oblaci su ISPOD, pa se i crtaju kao da se gledaju odozgo. */}
+      {pojas.motiv === "oblak" && (
+        <g fill={pojas.ivica} stroke="none">
+          <ellipse cx="60" cy="21" rx="34" ry="7" />
+          <ellipse cx="44" cy="17" rx="16" ry="6" />
+          <ellipse cx="222" cy="22" rx="40" ry="7" />
+          <ellipse cx="244" cy="17" rx="18" ry="6" />
+        </g>
+      )}
+    </svg>
+  );
+}
+
+/**
+ * Jedan pojas stene: vazduh preko cele scene, kamena traka uz levu ivicu i, na
+ * donjoj ivici, granična crta sa imenom pojasa.
+ *
+ * Sve to klizi zajedno sa ostatkom sveta, pa se promena boje ne pretapa nego
+ * uklizi odozgo. Zato ovde nema nijednog prelaza koji bi `prefers-reduced-motion`
+ * morao da gasi: kad je kamera bez animacije, i stena se promeni istog trena.
+ *
+ * Ime na crti je ovde vezano za MESTO, a ne za stanje igre, pa ostaje na svojoj
+ * visini i izađe iz kadra kad koza odmakne. Ono što uvek mora da bude vidljivo
+ * stoji gore, uz imenicu.
+ *
+ * `dno` i `vrh` su već odsečeni na prozor oko kadra, pa je ovo uvek jedan
+ * komad kamena visok najviše kao ekran. `granica` kaže da li je u kadru i
+ * STVARNI početak pojasa; samo tada se crtaju crta i ime.
+ */
+function PojasStene({
+  pojas,
+  dno,
+  vrh,
+  granica,
+}: {
+  pojas: Pojas;
+  dno: number;
+  vrh: number;
+  granica: boolean;
+}) {
+  return (
+    <div
+      aria-hidden="true"
+      className="absolute inset-x-0"
+      style={{ bottom: dno, height: vrh - dno, background: pojas.nebo }}
+    >
+      {/* Kamena traka uz levu ivicu. Ona se ne pomera vodoravno, a brojevi
+          spratova klize kroz nju - po tome se vidi da se penje. */}
+      <span
+        className="absolute inset-y-0 left-0 border-r-2"
+        style={{ width: TRAKA_SIRINA, background: pojas.kamen, borderColor: pojas.ivica }}
+      />
+      {granica && (
+        <>
+          {/* Granična crta. Puna, ne isprekidana, da se ne pomeša sa linijom
+              rekorda, koja je jedina isprekidana stvar na steni. */}
+          <span
+            className="absolute inset-x-0 bottom-0 border-b-2"
+            style={{ borderColor: pojas.ivica }}
+          />
+          {/* Ime stoji ISPOD crte, u praznom zidu između dve police. Iznad crte
+              je odmah prva polica pojasa, a ona je dugme i ne sme da se pokriva.
+              `z-[5]` je iznad koze a ispod polica: kad se poklope, ime ostane
+              čitko, a nijedna meta se ne zaklanja. */}
+          <span
+            className="font-heading absolute bottom-[-46px] right-2 z-[5] rounded-full border px-2 py-[2px] text-[11px] font-bold"
+            style={{
+              borderColor: pojas.ivica,
+              background: pojas.kamen,
+              color: MASTILO,
+            }}
+          >
+            {pojas.ime}
+          </span>
+        </>
+      )}
+    </div>
+  );
+}
+
 // ── Tok jednog skoka ────────────────────────────────────────────────────────
 
 type Faza = "mirno" | "let" | "sleteo" | "promasaj" | "klizanje" | "ustao";
@@ -237,6 +438,14 @@ const LET_VODORAVNO = 340;
  * bez ijednog prelaza, pa `prefers-reduced-motion` nema šta da gasi.
  */
 const SLAVLJE_MS = 2200;
+
+/**
+ * Pretapanje boje pojasa na pločicama iznad polica. Sama stena se ne pretapa -
+ * ona uklizi odozdo zajedno sa kamerom - ali pločice stoje u mestu, pa bi im
+ * skok boje bio trzaj. Kratko i bez krive, da promena ne izgleda kao događaj.
+ * Kad je pokret ugašen, ovo prođe kroz `trajanje()` i padne na nulu.
+ */
+const POJAS_MS = 260;
 
 /**
  * Kamera namerno kasni za skokom. Bez zastoja bi se prizor spustio u istom
@@ -348,10 +557,15 @@ function BuduciSprat({ sprat }: { sprat: number }) {
  * kadra kad je koza prestigne. Iznad polica je namerno: kad se poklopi sa vrhom
  * police, mora da se vidi da linija tu jeste.
  *
+ * Uz liniju stoji i ime pojasa u kom je rekord („Rekord: greben, 14. sprat").
+ * Broj sam za sebe je bio jedini orijentir u praznoj steni; sa imenom se vidi
+ * NA KOJOJ VISINI rekord stoji, isto onako kako se vidi gde je koza.
+ *
  * `aria-hidden`, jer isto to piše u uputstvu za čitač ekrana gore. Podatak koji
  * postoji samo kao crta na ekranu ne bi bio dostupan.
  */
 function LinijaRekorda({ sprat }: { sprat: number }) {
+  const pojas = pojasZaSprat(sprat);
   return (
     <div
       aria-hidden="true"
@@ -360,10 +574,10 @@ function LinijaRekorda({ sprat }: { sprat: number }) {
     >
       {/* Oznaka stoji IZNAD linije, da ne pokrije policu koja je odmah ispod. */}
       <span
-        className="font-heading absolute bottom-[3px] right-2 rounded-full border px-2 py-[2px] text-[10px] font-bold uppercase tracking-[.12em]"
-        style={{ borderColor: IVICA, background: STENA, color: PRIGUSEN }}
+        className="font-heading absolute bottom-[3px] right-2 rounded-full border px-2 py-[2px] text-[11px] font-bold"
+        style={{ borderColor: pojas.ivica, background: pojas.kamen, color: PRIGUSEN }}
       >
-        rekord
+        {`Rekord: ${opisSprata(sprat)}`}
       </span>
     </div>
   );
@@ -444,6 +658,11 @@ export default function Skakac({
   const [meta, setMeta] = useState<number | null>(null);
   /** Stoji samo u trenutku kad se rekord obori, i to kratko. */
   const [slavlje, setSlavlje] = useState(false);
+  /**
+   * Pojas u koji je koza upravo ušla, i to samo prvih par sekundi. Posle toga
+   * pločica iznad polica vrati puko ime pojasa - promena je vest, sam pojas nije.
+   */
+  const [stigla, setStigla] = useState<Pojas | null>(null);
 
   /** Zarađena visina. Jedina istina o tome dokle se koza popela. */
   const sprat = istorija.length;
@@ -482,9 +701,12 @@ export default function Skakac({
    * ostala na ekranu do kraja partije.
    */
   const slavljeTajmer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  /** Isto važi i za javljanje o novom pojasu, iz istog razloga. */
+  const pojasTajmer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(
     () => () => {
       if (slavljeTajmer.current) clearTimeout(slavljeTajmer.current);
+      if (pojasTajmer.current) clearTimeout(pojasTajmer.current);
     },
     []
   );
@@ -519,6 +741,15 @@ export default function Skakac({
         setSlavlje(true);
         if (slavljeTajmer.current) clearTimeout(slavljeTajmer.current);
         slavljeTajmer.current = setTimeout(() => setSlavlje(false), SLAVLJE_MS);
+      }
+
+      // Nov pojas se javi tačno na svom prvom spratu, pa svakih pet-šest
+      // spratova. Mirno, jednom, i onda pločica vrati puko ime pojasa.
+      const nov = pocinjePojas(noviSprat);
+      if (nov) {
+        setStigla(nov);
+        if (pojasTajmer.current) clearTimeout(pojasTajmer.current);
+        pojasTajmer.current = setTimeout(() => setStigla(null), SLAVLJE_MS);
       }
 
       if (manjePokreta) {
@@ -590,6 +821,28 @@ export default function Skakac({
 
   const najava = sprat === 0 ? "" : `Koza je na ${sprat}. spratu.`;
 
+  /** Pojas se vodi po ZARAĐENOJ visini, isto kao i brojka u uglu. */
+  const pojasSad = pojasZaSprat(sprat);
+  // Kamen se crta samo u prozoru oko kadra, isto kao i police. U nizu je pet
+  // pojaseva, u kadru ih je najviše dva-tri, i nijedan nije viši od ekrana - ni
+  // na petom ni na šezdesetom spratu.
+  const kadarDno = kamera - KADAR_VISAK;
+  const kadarVrh = kamera + KADAR_NAJVISE + KADAR_VISAK;
+  const slojevi = POJASEVI.map((pojas, i) => {
+    const sledeci = POJASEVI[i + 1];
+    const dno = dnoPojasa(pojas);
+    // Poslednji pojas nema vrh: iznad njega se penje dokle god ima srca.
+    const vrh = sledeci ? dnoPojasa(sledeci) : Number.POSITIVE_INFINITY;
+    return {
+      pojas,
+      dno: Math.max(dno, kadarDno),
+      vrh: Math.min(vrh, kadarVrh),
+      // Podnožje počinje ispod tla, pa mu se početak nikad ne crta.
+      granica: pojas.odSprata > 1 && dno >= kadarDno,
+      uKadru: vrh > kadarDno && dno < kadarVrh,
+    };
+  }).filter((s) => s.uKadru);
+
   return (
     <div>
       <p className="sr-only">
@@ -598,7 +851,10 @@ export default function Skakac({
         skačeš.
         {/* Linija rekorda na steni je inače podatak koji postoji samo kao crta
             na ekranu. Kad rekorda nema, ovde se ne pominje ništa. */}
-        {rekordSprat !== null && ` Na steni je linija tvog rekorda, na ${rekordSprat}. spratu.`}
+        {rekordSprat !== null && ` Na steni je linija tvog rekorda: ${opisSprata(rekordSprat)}.`}
+        {/* Stena se penjanjem menja: ime pojasa je inače samo boja, a boja za
+            čitač ekrana ne postoji. */}
+        {` Stena se menja kako se penješ i svaki pojas ima svoje ime. Koza je u pojasu ${pojasSad.imeMalo}.`}
       </p>
       {/* Visina inače postoji samo kao pokret prizora, pa se svaki nov sprat i
           izgovori. „Uljudno", da ne preseca odziv ljuske („Zack!", „Ups!"), koji
@@ -611,21 +867,22 @@ export default function Skakac({
       <p aria-live="polite" className="sr-only">
         {slavlje ? `Nov rekord! ${sprat}. sprat.` : ""}
       </p>
+      {/* Ulazak u nov pojas ide kroz SVOJ `aria-live`, iz istog razloga: spojen
+          sa najavom sprata, čitač bi ponovo pročitao sprat kad se javljanje
+          ugasi. Bez ovoga bi cela promena stene za dete koje ne vidi ekran bila
+          samo promena boje, dakle ništa. */}
+      <p aria-live="polite" className="sr-only">
+        {stigla ? `Stigla si ${stigla.dokle}.` : ""}
+      </p>
 
       <div
         className="relative overflow-hidden rounded-2xl border"
         style={{ height: SCENA_VISINA, background: PAPIR, borderColor: IVICA }}
       >
-        {/* Traka stene uz levu ivicu. Ona MIRUJE, a brojevi spratova klize kroz
-            nju - po tome se vidi da se penje, a ne da police same rastu. */}
-        <span
-          aria-hidden="true"
-          className="absolute inset-y-0 left-0 border-r-2"
-          style={{ width: TRAKA_SIRINA, background: STENA, borderColor: IVICA }}
-        />
-
-        {/* Sve što se penje. Jedan sloj, jedan `translateY`: tlo, police, brojevi
-            i koza se pomeraju zajedno, pa se odnosi među njima ne mogu razići. */}
+        {/* Sve što se penje. Jedan sloj, jedan `translateY`: stena, tlo, police,
+            brojevi i koza se pomeraju zajedno, pa se odnosi među njima ne mogu
+            razići. Zato i pojasevi klize sa svime ostalim: granica između dva
+            pojasa je mesto na steni, a ne stanje igre. */}
         <div
           className="absolute inset-0"
           style={{
@@ -633,17 +890,28 @@ export default function Skakac({
             transition: `transform ${trajanje(KAMERA_MS)}ms cubic-bezier(.33,1,.68,1) ${trajanje(KAMERA_ZASTOJ)}ms`,
           }}
         >
-          {/* Tlo. Odavde koza kreće; ispod njega se nikad ne ide. */}
+          {/* Stena, pojas po pojas. Ide prvo, pa je iza svega ostalog. */}
+          {slojevi.map(({ pojas, dno, vrh, granica }) => (
+            <PojasStene key={pojas.odSprata} pojas={pojas} dno={dno} vrh={vrh} granica={granica} />
+          ))}
+
+          {/* Tlo. Odavde koza kreće; ispod njega se nikad ne ide. Uvek je u
+              prvom pojasu, pa nosi njegovu boju kamena. */}
           <span
             aria-hidden="true"
             className="absolute inset-x-0 border-t-2"
             style={{
               bottom: SIDRO - TLO_DUBINA,
               height: TLO_DUBINA,
-              background: STENA,
-              borderColor: IVICA,
+              background: pojasZaSprat(0).kamen,
+              borderColor: pojasZaSprat(0).ivica,
             }}
           />
+
+          {/* Šara u kamenu, po jedna uz svaki sprat u kadru. */}
+          {oznake.map((s) => (
+            <Motiv key={s} sprat={s} />
+          ))}
 
           {/* Brojevi spratova u traci. */}
           {oznake.map((s) => (
@@ -776,33 +1044,58 @@ export default function Skakac({
           >
             {imenica}
           </p>
-          {/* Brojka uz penjanje. Čitač ekrana istu stvar dobija kroz `aria-live`
-              gore, pa ovo ostaje samo slika. */}
+          {/* Brojka uz penjanje. Nosi boje pojasa u kom je koza, pa se i gore, u
+              mirnom delu ekrana, vidi da se stena promenila. Boja se pretapa,
+              jer se ovo ne pomera sa scenom nego stoji - a kad je pokret ugašen,
+              trajanje padne na nulu i promena je trenutna.
+              Čitač ekrana istu stvar dobija kroz `aria-live` gore. */}
           <span
             aria-hidden="true"
             className="font-heading absolute right-3 top-3 rounded-full border px-2 py-[3px] text-[11px] font-bold tabular-nums"
-            style={{ borderColor: IVICA, background: STENA, color: PRIGUSEN }}
+            style={{
+              borderColor: pojasSad.ivica,
+              background: pojasSad.kamen,
+              color: PRIGUSEN,
+              transition: `background-color ${trajanje(POJAS_MS)}ms linear, border-color ${trajanje(POJAS_MS)}ms linear`,
+            }}
           >
             {sprat === 0 ? "tlo" : `${sprat}. sprat`}
           </span>
 
-          {/* Obaranje rekorda: sitna pločica ispod imenice, u zelenoj boji uspeha
-              iz ljuske. U toku, a ne preko imenice: duga reč bi inače prošla
-              ispod nje. Nema animacije, pa izgleda isto i kad je pokret ugašen, i
-              nestaje sama posle par sekundi. Čitač ekrana isto dobija gore. */}
-          {slavlje && (
-            <p
-              aria-hidden="true"
-              className="font-heading mt-1.5 text-[12px] font-bold leading-none"
+          {/* Red pločica ispod imenice. Nema animacije, pa izgleda isto i kad je
+              pokret ugašen, a duga reč prolazi iznad njega umesto ispod. */}
+          <p
+            aria-hidden="true"
+            className="font-heading mt-1.5 flex flex-wrap justify-center gap-1.5 text-[12px] font-bold leading-none"
+          >
+            {/* Ime pojasa stoji STALNO, ne samo u trenutku prelaza: dete koje
+                uđe u igru na desetom spratu inače ne bi imalo odakle da sazna
+                gde je. Kad koza uđe u nov pojas, ista pločica na par sekundi
+                kaže da je stigla, pa se vrati na samo ime. Bez fanfara: boje su
+                boje tog kamena, ne zelena uspeha. */}
+            <span
+              className="inline-block rounded-full border-2 px-2.5 py-[4px]"
+              style={{
+                borderColor: pojasSad.ivica,
+                background: pojasSad.kamen,
+                color: stigla ? MASTILO : PRIGUSEN,
+                transition: `background-color ${trajanje(POJAS_MS)}ms linear, border-color ${trajanje(POJAS_MS)}ms linear`,
+              }}
             >
+              {stigla ? `Stigla si ${stigla.dokle}` : pojasSad.imeMalo}
+            </span>
+
+            {/* Obaranje rekorda, u zelenoj boji uspeha iz ljuske. Ume da se
+                poklopi sa ulaskom u nov pojas, pa stoje jedna uz drugu. */}
+            {slavlje && (
               <span
                 className="inline-block rounded-full border-2 px-2.5 py-[4px]"
                 style={{ borderColor: ZELENA, background: ZELENA_PODLOGA, color: ZELENA }}
               >
                 Nov rekord!
               </span>
-            </p>
-          )}
+            )}
+          </p>
         </div>
       </div>
     </div>
