@@ -125,7 +125,11 @@ export default function Igra({
   childId: string;
   reci: Rec[];
   vrsta: VrstaIgre;
-  onKraj: (tacniRecIdovi: string[]) => void;
+  /**
+   * Kraj partije. Uz spisak tačnih ide i dokle se koza popela u skakaču, jer je
+   * visina drugi rezultat te igre, pored sličica. Ostale igre javljaju nulu.
+   */
+  onKraj: (tacniRecIdovi: string[], sprat: number) => void;
 }) {
   // Sesija se pravi tek posle montiranja. Pitanja se mešaju preko Math.random,
   // pa bi računanje u prvom renderu dalo drugačiji redosled na serveru nego u
@@ -151,11 +155,22 @@ export default function Igra({
     reciRef.current = reci;
   }, [reci]);
 
+  /**
+   * Dokle se koza popela u skakaču. Ref, ne stanje: ljuska time ništa ne crta,
+   * samo prosleđuje broj dalje na kraju partije, pa bi stanje značilo render
+   * više posle svakog skoka. Ostale igre ga ostavljaju na nuli.
+   */
+  const visina = useRef(0);
+  const naVisinu = useCallback((sprat: number) => {
+    visina.current = sprat;
+  }, []);
+
   useEffect(() => {
     setSesija(novaSesija(napraviPitanja(reciRef.current, vrsta, PITANJA_PO_PARTIJI, Math.random)));
     setOdziv(null);
     setZamrznuto(null);
     setKorak((k) => k + 1);
+    visina.current = 0;
   }, [vrsta]);
 
   const tajmer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -246,7 +261,7 @@ export default function Igra({
   useEffect(() => {
     if (!sesija || !sesija.gotovo || odziv !== null || javljenKraj.current) return;
     javljenKraj.current = true;
-    onKrajRef.current(sesija.tacni);
+    onKrajRef.current(sesija.tacni, visina.current);
   }, [sesija, odziv]);
 
   if (!sesija) return <Cekanje />;
@@ -300,11 +315,18 @@ export default function Igra({
         // stiže, ali ako nekad stigne, dobija spisak umesto nemoguće partije.
         vrsta === "skakac" && jeClan(p.tacan) ? (
           <Skakac
-            key={korak}
+            // Stalan ključ, NIKAD `korak`. Skakač je jedno penjanje koje traje
+            // celu partiju: svaki tačan odgovor je sprat više i koza tu visinu
+            // zadržava do kraja. Ključ po koraku bi ga montirao iznova posle
+            // svakog pitanja, pa bi se visina svaki put vratila na tlo - a
+            // zarađeno se u ovoj igri ne oduzima. Stanje jednog pitanja skakač
+            // vraća sam, kad vidi da mu je stiglo novo.
+            key="skakac"
             pitanje={p}
             tacan={p.tacan}
             zakljucano={zakljucano}
             naOdgovor={naOdgovor}
+            naVisinu={naVisinu}
           />
         ) : (
           <IgraRod key={korak} pitanje={p} zakljucano={zakljucano} naOdgovor={naOdgovor} />

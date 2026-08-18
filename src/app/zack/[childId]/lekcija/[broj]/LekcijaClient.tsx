@@ -190,6 +190,11 @@ export default function LekcijaClient({
   const [stanje, setStanje] = useState<StavkaAlbuma[]>(pocetnoStanje);
   const [igra, setIgra] = useState<VrstaIgre | null>(null);
 
+  // Dokle se koza popela u poslednjem skakaču. Visina je drugi rezultat te igre,
+  // pored sličica, pa se posle partije i kaže - inače bi penjanje postojalo samo
+  // dok igra traje. Ostale igre javljaju nulu i ništa se ne ispisuje.
+  const [domet, setDomet] = useState(0);
+
   // Sličice koje su ostale u ruci od prošlog puta moraju da se vrate u ruku,
   // inače dete nema čime da popuni mesta koja u albumu stoje prazna.
   const [uRuci, setURuci] = useState<Rec[]>(() =>
@@ -326,8 +331,9 @@ export default function LekcijaClient({
    * iza nedovršene partije.
    */
   const naKrajIgre = useCallback(
-    (tacniRecIdovi: string[]) => {
+    (tacniRecIdovi: string[], sprat: number) => {
       setIgra(null);
+      setDomet(sprat);
       void zavrsiIgru(tacniRecIdovi);
     },
     [zavrsiIgru]
@@ -402,6 +408,18 @@ export default function LekcijaClient({
           Sve lekcije
         </Link>
       </p>
+
+      {/* Dokle se koza popela. Stoji iznad kesice, jer je i to rezultat upravo
+          odigrane partije, a ne podatak o lekciji. Bez glagola u prošlom vremenu
+          za dete: penje se koza, pa se rod slaže sa njom. */}
+      {domet > 0 && (
+        <p
+          className="font-heading mb-4 rounded-2xl border px-4 py-2.5 text-center text-[15px] font-bold"
+          style={{ background: PAPIR, borderColor: IVICA, color: PRIGUSEN }}
+        >
+          {`Koza se popela na ${domet}. sprat.`}
+        </p>
+      )}
 
       {/* ── Kesica je PRVO što dete vidi ────────────────────────────────────
           Iznad naslova, iznad svega. To je jedini razlog zbog kog se dete vraća
@@ -647,6 +665,9 @@ export default function LekcijaClient({
                   type="button"
                   onClick={() => {
                     setPoruka(null);
+                    // Domet je rezultat prethodne partije. Nova partija kreće od
+                    // tla, pa ostavljen broj ne sme da je dočeka.
+                    setDomet(0);
                     setIgra(vrsta);
                   }}
                   className={`${FOKUS} font-heading flex min-h-[60px] w-full items-center justify-between gap-3 rounded-2xl border px-4 py-3.5 text-left text-[18px] font-bold shadow-[0_2px_0_0_#DED8C8] motion-safe:transition-transform motion-safe:duration-100 motion-safe:active:scale-[0.985]`}

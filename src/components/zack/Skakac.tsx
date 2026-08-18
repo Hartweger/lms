@@ -1,35 +1,58 @@
 "use client";
 
 // Der-Die-Das skakač: telo igre u kojoj se rod ne bira sa spiska, nego se skače
-// na platformu. Ljuska (`Igra.tsx`) i dalje vodi srca, napredak, odziv, slanje
+// na policu. Ljuska (`Igra.tsx`) i dalje vodi srca, napredak, odziv, slanje
 // zarađenog i izlaz - ovde je samo ono što se crta i kreće.
+//
+// PENJANJE, NIKAD SPUŠTANJE
+// -------------------------
+// Cela partija je jedno penjanje uz stenu. Svaki tačan odgovor je nov sprat i
+// koza tu visinu zadržava do kraja. Sledeći sprat polica je IZNAD, ne na istom
+// mestu, pa visina sama postaje traka napretka: dete ne mora da čita broj da bi
+// videlo koliko je odmaklo.
+//
+// Greška NIKAD ne obara kozu naniže. Visina je zarađena isto kao sličica, a u
+// ovom proizvodu se zarađeno ne oduzima. Netačan odgovor uzme srce (to radi
+// ljuska), koza skoči, ne uhvati policu i sklizne nazad na SVOJ sprat. Sledeće
+// pitanje kreće odatle. Zato `istorija` samo raste i nigde nema koda koji je
+// skraćuje.
+//
+// KAKO SE SCENA POMERA
+// --------------------
+// Stranica se ne skroluje. Pomera se sam prizor: `svet` je sloj koji nosi tlo,
+// police i kozu, i spušta se za tačno jedan sprat pri svakom uspehu, pa koza
+// ostane na istom mestu na ekranu (`SIDRO`). Kamera kasni za skokom, pa se prvo
+// vidi kako koza skače uvis, a tek onda prizor sklizne za njom. Pređeni sprat
+// ostaje ispod nje, delom vidljiv, da se vidi odakle je došla.
 //
 // ZAŠTO NIJE CANVAS
 // -----------------
-// Canvas bi bio glatkiji, ali platforme moraju da budu prava dugmad: sa
-// vidljivim fokusom, dohvatljiva tastaturom i sa imenom koje čitač ekrana
-// pročita. Na canvasu ništa od toga ne postoji, a `prefers-reduced-motion` se
-// tamo ne gasi nego se ručno prepisuje ceo crtež. Zato DOM i CSS transformacije.
+// Canvas bi bio glatkiji, ali police moraju da budu prava dugmad: sa vidljivim
+// fokusom, dohvatljiva tastaturom i sa imenom koje čitač ekrana pročita. Na
+// canvasu ništa od toga ne postoji, a `prefers-reduced-motion` se tamo ne gasi
+// nego se ručno prepisuje ceo crtež. Zato DOM i CSS transformacije.
 //
 // MANJE POKRETA
 // -------------
 // Ovo je jedina igra sa stvarnim kretanjem, pa je ovde `prefers-reduced-motion`
 // najvažniji. Kad korisnik traži manje pokreta, trajanja prelaza padaju na nulu
-// i međukoraci se preskaču: lik se ODMAH nađe na platformi ili na tlu. Igra je
-// tada potpuno igriva, samo bez leta. Nijedna informacija ne postoji samo kao
-// pokret - ishod ide kroz odziv ljuske (`aria-live`), a tačna platforma se
-// oboji i dobije debeo okvir.
+// i međukoraci se preskaču: koza se ODMAH nađe na novom spratu, a prizor se
+// odmah namesti, bez klizanja. Visina i dalje raste, samo se ne animira. Igra je
+// tada potpuno igriva. Nijedna informacija ne postoji samo kao pokret - ishod
+// ide kroz odziv ljuske (`aria-live`), tačna polica se oboji i dobije debeo
+// okvir, a nova visina se javi kroz svoj `aria-live`, jer bi inače postojala
+// samo kao pomeranje prizora.
 //
 // PAD NIJE KAZNA
 // --------------
 // Dete pogreši desetine puta po partiji. Zato nema crvenog ekrana, drmanja ni
-// tužnog lika: lik se odbije od promašene platforme, spusti se na tlo i uspravi.
-// Poruka ostaje ista kao u ostalim igrama, neutralno „Ups!" i odmah tačan
-// odgovor.
+// tužnog lika: koza se odbije od promašene police, blago se nakrivi dok kliza i
+// uspravi se na svom spratu. Poruka ostaje ista kao u ostalim igrama, neutralno
+// „Ups!" i odmah tačan odgovor.
 //
 // SLUČAJNOST
 // ----------
-// U ishodu je nema. Sve što se ovde računa zavisi samo od toga koju je platformu
+// U ishodu je nema. Sve što se ovde računa zavisi samo od toga koju je policu
 // dete dodirnulo.
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import type { Pitanje } from "@/lib/zack/pitanja";
@@ -41,13 +64,15 @@ const PAPIR = "#FCFBF7";
 const IVICA = "#DED8C8";
 const MASTILO = "#16161A";
 const PRIGUSEN = "#6E6A5E";
+/** Tlo i leva traka stene: ista boja, jer su isti kamen. */
+const STENA = "#EFEADC";
 
 // ── Rod kao član ────────────────────────────────────────────────────────────
 
 /**
- * Tri člana, bez „nema". Skakač ima tačno tri platforme, pa mu tačan odgovor
- * mora biti jedan od ta tri. Ljuska to proverava pre nego što uopšte iscrta
- * skakač, umesto da se ovde krpi sa `as` ili `!`.
+ * Tri člana, bez „nema". Skakač ima tačno tri police, pa mu tačan odgovor mora
+ * biti jedan od ta tri. Ljuska to proverava pre nego što uopšte iscrta skakač,
+ * umesto da se ovde krpi sa `as` ili `!`.
  */
 export type Clan = "der" | "die" | "das";
 
@@ -86,17 +111,17 @@ export function bezClana(imenica: string): string {
 // Visina scene je ono što ostane od ekrana. Broj koji se oduzima je zbir svega
 // što stoji iznad i ispod scene: okvir stranice, naslov sa srcima, traka
 // napretka, traka odziva, dugme „Dosta za sad" i sitna licenca u podnožju
-// rasporeda. Tako scena sama popuni ekran,
-// pa platforme padnu u donju trećinu gde ih palac dohvata, umesto da igra stoji
-// u sredini sa praznim pojasom ispod. `dvh`, ne `vh`, jer na telefonu adresna
-// traka jede deo ekrana. `clamp` je kočnica na oba kraja: na niskom prozoru se
-// scena skupi umesto da napravi skrol, na širokom monitoru se ne razvuče.
+// rasporeda. Tako scena sama popuni ekran, pa police padnu u donju trećinu gde
+// ih palac dohvata, umesto da igra stoji u sredini sa praznim pojasom ispod.
+// `dvh`, ne `vh`, jer na telefonu adresna traka jede deo ekrana. `clamp` je
+// kočnica na oba kraja: na niskom prozoru se scena skupi umesto da napravi
+// skrol, na širokom monitoru se ne razvuče.
 const SCENA_VISINA = "clamp(330px, calc(100dvh - 304px), 560px)";
 
 /**
  * Lik je ikonica iz istog lokalnog skupa (Twemoji) kojim se crtaju sličice u
  * albumu, pa deluje kao da pripada igri, a ne kao nešto zalepljeno sa strane.
- * Koza skače po stenama, što je bukvalno mehanika ove igre, i jedina je od
+ * Koza se penje uz stenu, što je bukvalno mehanika ove igre, i jedina je od
  * kandidata vezana za nemačko govorno područje.
  *
  * Zamena lika je izmena SAMO ove jedne vrednosti. Ostali preuzeti kandidati:
@@ -104,63 +129,96 @@ const SCENA_VISINA = "clamp(330px, calc(100dvh - 304px), 560px)";
  */
 const LIK_IKONICA = "1f410";
 
-const TLO = 14; // koliko su noge lika iznad donje ivice scene
-const LIK_SIRINA = 72;
-// Platforme su namerno krupne: dete igra na telefonu jednom rukom, pa promašen
-// palac ne sme da bude deo igre.
-const PLATFORMA_DNO = 106;
-const PLATFORMA_VISINA = 124;
-const PLATFORMA_VRH = PLATFORMA_DNO + PLATFORMA_VISINA;
+const LIK_SIRINA = 68;
+/** Traka stene uz levu ivicu, sa brojem sprata. Miruje; brojevi klize kroz nju. */
+const TRAKA_SIRINA = 26;
+// Police su namerno krupne: dete igra na telefonu jednom rukom, pa promašen
+// palac ne sme da bude deo igre. I najniža je dvostruko viša od najmanje mete
+// koju pristupačnost traži.
+const POLICA_VISINA = 62;
+/**
+ * Razmak između dva sprata. Mora da bude veći od police plus lika, inače bi koza
+ * dok stoji glavom ulazila u policu iznad sebe.
+ */
+const SPRAT_RAZMAK = 152;
+/**
+ * Gde koza stoji na ekranu, mereno od dna scene. Ovo je jedina tačka koja se ne
+ * pomera: kamera se namešta tako da koza uvek bude tu. Dovoljno visoko da se
+ * ispod nazire sprat sa kog je došla, dovoljno nisko da nova polica stane iznad.
+ */
+const SIDRO = 112;
+/** Koliko iznad nove police ide teme skoka, da let bude luk a ne kosa linija. */
+const TEME_VISAK = 36;
+/** Dokle stigne skok koji ne uhvati policu. Namerno ispod ivice: nije uspeo. */
+const PROMASAJ_TEME = 96;
+/** Blok kamena ispod prvog sprata. Samo mora da bude viši od scene. */
+const TLO_DUBINA = 900;
 
-/** Koliko lik stoji više kad je na platformi nego kad je na tlu. */
-const NA_PLATFORMI = PLATFORMA_VRH - TLO;
-/** Teme skoka je iznad platforme, da let bude luk a ne kosa linija. */
-const TEME = NA_PLATFORMI + 44;
+/** Prva polica je sprat 1; sprat 0 je tlo i nema svoju policu. */
+function dnoSprata(sprat: number): number {
+  return SIDRO + sprat * SPRAT_RAZMAK - POLICA_VISINA;
+}
 
 // ── Tok jednog skoka ────────────────────────────────────────────────────────
 
-type Faza = "tlo" | "let" | "platforma" | "pad" | "ustao";
+type Faza = "mirno" | "let" | "sleteo" | "promasaj" | "klizanje" | "ustao";
 
+/**
+ * Visina lika U ODNOSU NA SVOJ SPRAT. Sprat nosi `istorija`, pa se ovde nikad ne
+ * pojavljuje negativan broj: nijedna faza ne spušta kozu ispod sopstvenog sprata.
+ */
 const VISINA_FAZE: Record<Faza, number> = {
-  tlo: 0,
-  let: TEME,
-  platforma: NA_PLATFORMI,
-  pad: 0,
+  mirno: 0,
+  let: SPRAT_RAZMAK + TEME_VISAK,
+  sleteo: 0,
+  promasaj: PROMASAJ_TEME,
+  klizanje: 0,
   ustao: 0,
 };
 
 /**
- * Blag nagib dok lik pada, da promašaj ima svoj izraz i bez menjanja crteža.
+ * Blag nagib dok koza kliza, da promašaj ima svoj izraz i bez menjanja crteža.
  * Namerno mali: prevrnut lik bi pad pretvorio u kaznu, a pada se desetine puta
- * po partiji. Kad je pokret ugašen, faza „pad" se preskače, pa nagiba i nema.
+ * po partiji. Kad je pokret ugašen, faza „klizanje" se preskače, pa nagiba nema.
  */
 const NAGIB_FAZE: Record<Faza, number> = {
-  tlo: 0,
+  mirno: 0,
   let: 0,
-  platforma: 0,
-  pad: -14,
+  sleteo: 0,
+  promasaj: 0,
+  klizanje: -12,
   ustao: 0,
 };
 
-/** Trajanje i kriva uspona, spuštanja i pada. Vodoravno kretanje ide zasebno. */
+/** Trajanje i kriva svake faze. Vodoravno kretanje ide zasebno. */
 const PRELAZ_FAZE: Record<Faza, { ms: number; kriva: string }> = {
-  tlo: { ms: 0, kriva: "linear" },
+  mirno: { ms: 0, kriva: "linear" },
   let: { ms: 190, kriva: "cubic-bezier(.16,.84,.44,1)" },
-  platforma: { ms: 190, kriva: "cubic-bezier(.55,0,.85,.35)" },
-  pad: { ms: 420, kriva: "cubic-bezier(.55,0,.85,.35)" },
-  ustao: { ms: 0, kriva: "linear" },
+  sleteo: { ms: 190, kriva: "cubic-bezier(.55,0,.85,.35)" },
+  promasaj: { ms: 190, kriva: "cubic-bezier(.16,.84,.44,1)" },
+  klizanje: { ms: 380, kriva: "cubic-bezier(.55,0,.85,.35)" },
+  ustao: { ms: 140, kriva: "linear" },
 };
 
-/** Vodoravno kretanje traje ceo let, pa se uspon i spuštanje slože u luk. */
-const LET_VODORAVNO = 380;
+/** Vodoravno kretanje traje ceo let, pa se uspon i doskok slože u luk. */
+const LET_VODORAVNO = 340;
+
+/**
+ * Kamera namerno kasni za skokom. Bez zastoja bi se prizor spustio u istom
+ * trenutku kad koza skoči, pa bi izgledalo kao da koza stoji u mestu a svet se
+ * pomera. Ovako se prvo vidi skok, pa onda penjanje.
+ */
+const KAMERA_MS = 420;
+const KAMERA_ZASTOJ = 140;
 
 // ── Lik ─────────────────────────────────────────────────────────────────────
 
 /**
- * Lik je ukras: sve što se mora znati stiže kroz odziv ljuske i kroz obojenu
- * tačnu platformu, pa `alt` ostaje prazan. Slika je lokalna, iz istog skupa kao
- * sličice u albumu, i ne ide kroz optimizator - fajl je sitan SVG, a ovde se
- * pomera na svaki kadar, pa mu ne treba ništa osim da bude tu.
+ * Lik je ukras: sve što se mora znati stiže kroz odziv ljuske, kroz obojenu
+ * tačnu policu i kroz javljanje sprata, pa `alt` ostaje prazan. Slika je
+ * lokalna, iz istog skupa kao sličice u albumu, i ne ide kroz optimizator - fajl
+ * je sitan SVG, a ovde se pomera na svaki kadar, pa mu ne treba ništa osim da
+ * bude tu.
  */
 function Lik() {
   // eslint-disable-next-line @next/next/no-img-element -- SVG ikonica, optimizator nema šta da uradi
@@ -186,6 +244,64 @@ function Iskre() {
       <path d="M22 10V3" />
       <path d="M38 14L41 8" />
     </svg>
+  );
+}
+
+/**
+ * Pređen sprat. Ostaje ispod koze kao trag: polica koju je osvojila zadržava
+ * boju svog roda i debeo okvir, druge dve su ugašene. Ista slika kao odgovorena
+ * meta, pa se u trenutku doskoka ništa ne trza - meta samo skoči na sledeći
+ * sprat, a ovo ostane na njenom mestu.
+ */
+function PredjenSprat({ sprat, osvojen }: { sprat: number; osvojen: Clan | undefined }) {
+  return (
+    <ul
+      aria-hidden="true"
+      className="absolute z-10 grid grid-cols-3"
+      style={{ left: TRAKA_SIRINA, right: 0, bottom: dnoSprata(sprat), height: POLICA_VISINA }}
+    >
+      {CLANOVI.map((clan) => {
+        const jeOsvojen = clan === osvojen;
+        return (
+          <li key={clan} className="h-full px-1">
+            <span
+              className="font-heading flex h-full w-full items-center justify-center rounded-xl border-4 text-[19px] font-bold"
+              style={{
+                background: jeOsvojen ? bojaZaRod(clan) : PAPIR,
+                borderColor: jeOsvojen ? MASTILO : IVICA,
+                color: jeOsvojen ? slovaNaRodu(clan) : PRIGUSEN,
+                opacity: jeOsvojen ? 1 : 0.5,
+              }}
+            >
+              {NATPIS_RODA[clan]}
+            </span>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
+/**
+ * Sprat do kog se još nije stiglo. Samo obris, bez slova i bez boje, da se vidi
+ * da stena ide dalje uvis a da ništa ne izgleda kao da se može dodirnuti.
+ */
+function BuduciSprat({ sprat }: { sprat: number }) {
+  return (
+    <ul
+      aria-hidden="true"
+      className="absolute z-10 grid grid-cols-3"
+      style={{ left: TRAKA_SIRINA, right: 0, bottom: dnoSprata(sprat), height: POLICA_VISINA }}
+    >
+      {CLANOVI.map((clan) => (
+        <li key={clan} className="h-full px-1">
+          <span
+            className="block h-full w-full rounded-xl border-2 border-dashed"
+            style={{ borderColor: IVICA, opacity: 0.7 }}
+          />
+        </li>
+      ))}
+    </ul>
   );
 }
 
@@ -220,27 +336,73 @@ export default function Skakac({
   tacan,
   zakljucano,
   naOdgovor,
+  naVisinu,
 }: {
   pitanje: Extract<Pitanje, { igra: "rod" }>;
   /** Tačan član. Stiže odvojeno, već proveren, da ovde nema neverovatnog slučaja. */
   tacan: Clan;
   zakljucano: boolean;
   naOdgovor: (tacno: boolean, tacanTekst: string, pitanje: Pitanje) => void;
+  /**
+   * Javlja dokle se koza popela. Ljuska to ne koristi u igri, samo prosleđuje
+   * dalje, da poruka na kraju partije može da kaže dokle se stiglo. Mora da bude
+   * stabilna funkcija, inače bi se javljalo na svaki render.
+   */
+  naVisinu?: (sprat: number) => void;
 }) {
   const manjePokreta = useManjePokreta();
   const imenica = bezClana(pitanje.imenica);
 
-  const [faza, setFaza] = useState<Faza>("tlo");
-  // Koja je platforma dodirnuta. Ujedno i brava: dok stoji, drugi tap ne prolazi.
+  /**
+   * Osvojene police, po spratovima: `istorija[0]` je prvi sprat. Ovo je i visina
+   * i trag. Niz SAMO raste - nema mesta u kodu koje ga skraćuje, jer greška ne
+   * sme da obori kozu naniže.
+   */
+  const [istorija, setIstorija] = useState<Clan[]>([]);
+  /**
+   * Sprat koji prizor TRENUTNO crta. Zaostaje za zarađenim tačno koliko traje
+   * skok, da se prvo vidi kako koza skače pa tek onda kako se prizor spušta za
+   * njom. Samo prikaz - zarađenu visinu nosi `istorija`.
+   */
+  const [vidljivSprat, setVidljivSprat] = useState(0);
+  const [faza, setFaza] = useState<Faza>("mirno");
+  // Koja je polica dodirnuta. Ujedno i brava: dok stoji, drugi tap ne prolazi.
   const [meta, setMeta] = useState<number | null>(null);
 
+  /** Zarađena visina. Jedina istina o tome dokle se koza popela. */
+  const sprat = istorija.length;
+
+  // Telo igre živi celu partiju (ljuska ga ne prekraja po pitanju), pa se stanje
+  // jednog pitanja mora ručno vratiti kad stigne novo. Visina se NE dira.
+  const [prethodno, setPrethodno] = useState<Pitanje>(pitanje);
+  if (prethodno !== pitanje) {
+    setPrethodno(pitanje);
+    setMeta(null);
+    setFaza("mirno");
+    // Ako je tajmer doskoka otkazan time što je stiglo novo pitanje, prizor
+    // ovde sustiže zarađenu visinu. Zarađeni sprat se ne može izgubiti ni u toj
+    // trci: `istorija` se upisuje odmah po tačnom odgovoru, a ovo je samo
+    // prikaz koji je za njom zaostao.
+    if (vidljivSprat !== sprat) setVidljivSprat(sprat);
+  }
+
+  const poslednji = istorija.at(-1);
+  const kolonaKuce = poslednji === undefined ? 1 : Math.max(0, CLANOVI.indexOf(poslednji));
+
   const tajmeri = useRef<ReturnType<typeof setTimeout>[]>([]);
+  // Čisti se i pri promeni pitanja, ne samo pri gašenju: zaostao tajmer bi
+  // postavio fazu preko upravo vraćenog stanja.
   useEffect(() => {
     const spisak = tajmeri.current;
     return () => {
       for (const t of spisak) clearTimeout(t);
+      tajmeri.current = [];
     };
-  }, []);
+  }, [pitanje]);
+
+  useEffect(() => {
+    naVisinu?.(sprat);
+  }, [sprat, naVisinu]);
 
   const dugmad = useRef<(HTMLButtonElement | null)[]>([]);
 
@@ -253,22 +415,47 @@ export default function Skakac({
     // ekrana bi ćutao pola sekunde, a dete bi videlo ishod pre nego što ga čuje.
     naOdgovor(tacno, `${NATPIS_RODA[tacan]} ${imenica}`, pitanje);
 
-    if (manjePokreta) {
-      // Bez međukoraka: lik je odmah tamo gde treba da završi.
-      setFaza(tacno ? "platforma" : "ustao");
+    if (tacno) {
+      // Zarađena visina se upisuje ODMAH, u istom potezu kao i odgovor, i to
+      // van svakog tajmera. Da čeka doskok, dovoljno bi bilo da tajmer nekad ne
+      // stigne (spor uređaj, kartica u pozadini) pa da dete ostane bez sprata
+      // koji je pošteno osvojilo. Tajmer ispod pomera samo prizor.
+      setIstorija((s) => [...s, clan]);
+      const noviSprat = sprat + 1;
+
+      if (manjePokreta) {
+        // Bez međukoraka: koza je odmah na novom spratu, prizor odmah namešten.
+        // Visina i dalje raste, samo se ne animira.
+        setVidljivSprat(noviSprat);
+        setFaza("sleteo");
+        return;
+      }
+
+      setFaza("let");
+      tajmeri.current.push(
+        setTimeout(() => {
+          setVidljivSprat(noviSprat);
+          setFaza("sleteo");
+        }, PRELAZ_FAZE.let.ms)
+      );
       return;
     }
 
-    setFaza("let");
-    tajmeri.current.push(
-      setTimeout(() => setFaza(tacno ? "platforma" : "pad"), PRELAZ_FAZE.let.ms)
-    );
-    if (!tacno) {
-      // Pao je, ustao je, ide dalje. Nema ležanja na tlu.
-      tajmeri.current.push(
-        setTimeout(() => setFaza("ustao"), PRELAZ_FAZE.let.ms + PRELAZ_FAZE.pad.ms)
-      );
+    if (manjePokreta) {
+      setFaza("ustao");
+      return;
     }
+
+    // Promašaj: skok kreće, ne uhvati ivicu i koza sklizne NA SVOJ sprat. Visina
+    // ostaje ista, menja se samo držanje.
+    setFaza("promasaj");
+    tajmeri.current.push(setTimeout(() => setFaza("klizanje"), PRELAZ_FAZE.promasaj.ms));
+    tajmeri.current.push(
+      setTimeout(
+        () => setFaza("ustao"),
+        PRELAZ_FAZE.promasaj.ms + PRELAZ_FAZE.klizanje.ms
+      )
+    );
   };
 
   const naTaster = (e: React.KeyboardEvent, kolona: number) => {
@@ -280,26 +467,194 @@ export default function Skakac({
 
   const trajanje = (ms: number) => (manjePokreta ? 0 : ms);
   const prelaz = PRELAZ_FAZE[faza];
-  // Kolone su tačno trećine scene, a nosač lika je širok koliko i scena, pa je
-  // pomak od jedne kolone tačno 100/3 odsto njegove širine.
-  const pomakX = meta === null ? 0 : (meta - 1) * (100 / 3);
+
+  // Dok skače ka meti, koza ide na dodirnutu kolonu; kad sklizne, vraća se na
+  // svoju. Posle uspešnog doskoka su to ista kolona, pa se ništa ne trza.
+  const uLetu = faza === "let" || faza === "promasaj";
+  const kolonaSad = uLetu && meta !== null ? meta : kolonaKuce;
+  // Kolone su tačno trećine pojasa sa policama, a nosač lika je širok koliko i
+  // taj pojas, pa je pomak od jedne kolone tačno 100/3 odsto njegove širine.
+  const pomakX = (kolonaSad - 1) * (100 / 3);
+  // Geometrija ide po vidljivom spratu, da se prizor ne trza pre nego što koza
+  // stigne do police. Brojka i javljanje idu po zarađenom, jer je to istina.
+  const visinaLika = vidljivSprat * SPRAT_RAZMAK + VISINA_FAZE[faza];
+  const kamera = vidljivSprat * SPRAT_RAZMAK;
+
+  const metaSprat = vidljivSprat + 1;
+  // Prozor spratova koji se uopšte crtaju. Donji je pređeni sprat, koji za vreme
+  // klizanja kamere još stoji na ekranu; gornja dva daju osećaj da stena ide
+  // dalje uvis. Sve van prozora je ionako iza ivice scene.
+  const predjeni = [vidljivSprat - 1, vidljivSprat].filter((s) => s >= 1);
+  const buduci = [metaSprat + 1, metaSprat + 2];
+  const oznake = [vidljivSprat - 1, vidljivSprat, metaSprat, metaSprat + 1, metaSprat + 2].filter(
+    (s) => s >= 1
+  );
+
+  const najava = sprat === 0 ? "" : `Koza je na ${sprat}. spratu.`;
 
   return (
     <div>
       <p className="sr-only">
-        Dodirni platformu sa tačnim članom i lik skače na nju. Strelicama levo i desno biraš
-        platformu, a Enterom skačeš.
+        Dodirni policu sa tačnim članom i koza skače na nju. Svaki tačan odgovor je sprat više i
+        koza se sa te visine nikad ne spušta. Strelicama levo i desno biraš policu, a Enterom
+        skačeš.
+      </p>
+      {/* Visina inače postoji samo kao pokret prizora, pa se svaki nov sprat i
+          izgovori. „Uljudno", da ne preseca odziv ljuske („Zack!", „Ups!"), koji
+          je hitniji i stiže u istom trenutku. */}
+      <p aria-live="polite" className="sr-only">
+        {najava}
       </p>
 
       <div
         className="relative overflow-hidden rounded-2xl border"
         style={{ height: SCENA_VISINA, background: PAPIR, borderColor: IVICA }}
       >
-        {/* Imenica stoji u samoj sceni, iznad platformi, a ne u zasebnoj kartici
+        {/* Traka stene uz levu ivicu. Ona MIRUJE, a brojevi spratova klize kroz
+            nju - po tome se vidi da se penje, a ne da police same rastu. */}
+        <span
+          aria-hidden="true"
+          className="absolute inset-y-0 left-0 border-r-2"
+          style={{ width: TRAKA_SIRINA, background: STENA, borderColor: IVICA }}
+        />
+
+        {/* Sve što se penje. Jedan sloj, jedan `translateY`: tlo, police, brojevi
+            i koza se pomeraju zajedno, pa se odnosi među njima ne mogu razići. */}
+        <div
+          className="absolute inset-0"
+          style={{
+            transform: `translateY(${kamera}px)`,
+            transition: `transform ${trajanje(KAMERA_MS)}ms cubic-bezier(.33,1,.68,1) ${trajanje(KAMERA_ZASTOJ)}ms`,
+          }}
+        >
+          {/* Tlo. Odavde koza kreće; ispod njega se nikad ne ide. */}
+          <span
+            aria-hidden="true"
+            className="absolute inset-x-0 border-t-2"
+            style={{
+              bottom: SIDRO - TLO_DUBINA,
+              height: TLO_DUBINA,
+              background: STENA,
+              borderColor: IVICA,
+            }}
+          />
+
+          {/* Brojevi spratova u traci. */}
+          {oznake.map((s) => (
+            <span
+              key={s}
+              aria-hidden="true"
+              className="font-heading absolute flex items-center justify-center text-[12px] font-bold tabular-nums"
+              style={{
+                left: 0,
+                width: TRAKA_SIRINA,
+                bottom: dnoSprata(s),
+                height: POLICA_VISINA,
+                color: s <= vidljivSprat ? MASTILO : PRIGUSEN,
+                opacity: s <= vidljivSprat ? 0.75 : 0.4,
+              }}
+            >
+              {s}
+            </span>
+          ))}
+
+          {/* Koza. Police su iznad nje namerno: promašen skok prođe iza njih,
+              umesto da lik prosečen stoji preko table. Nosač nosi vodoravni
+              pomak, unutrašnji sloj visinu, da uspon i vodoravno kretanje mogu
+              da imaju različite krive i da se slože u luk. */}
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute block"
+            style={{
+              left: TRAKA_SIRINA,
+              right: 0,
+              bottom: SIDRO,
+              transform: `translateX(${pomakX}%)`,
+              transition: `transform ${trajanje(LET_VODORAVNO)}ms linear`,
+            }}
+          >
+            <span
+              className="relative mx-auto block"
+              style={{
+                width: LIK_SIRINA,
+                transform: `translateY(${-visinaLika}px) rotate(${NAGIB_FAZE[faza]}deg)`,
+                transition: `transform ${trajanje(prelaz.ms)}ms ${prelaz.kriva}`,
+              }}
+            >
+              {faza === "sleteo" && <Iskre />}
+              <Lik />
+            </span>
+          </span>
+
+          {predjeni.map((s) => (
+            <PredjenSprat key={s} sprat={s} osvojen={istorija.at(s - 1)} />
+          ))}
+          {buduci.map((s) => (
+            <BuduciSprat key={s} sprat={s} />
+          ))}
+
+          {/* Meta. Jedan te isti `<ul>` celu partiju - samo mu se menja visina.
+              Zato fokus tastature preživi i odgovor i penjanje, umesto da posle
+              svakog skoka ispadne na početak stranice. */}
+          <ul
+            className="absolute z-10 grid grid-cols-3"
+            style={{
+              left: TRAKA_SIRINA,
+              right: 0,
+              bottom: dnoSprata(metaSprat),
+              height: POLICA_VISINA,
+            }}
+          >
+            {CLANOVI.map((clan, kolona) => {
+              const jeTacna = clan === tacan;
+              const boja = bojaZaRod(clan);
+              // Dok se ne odgovori, polica je u punoj boji svog roda. Posle
+              // odgovora se pogrešne gase, a tačna ostaje u boji i dobija okvir,
+              // da se razlika ne oslanja samo na boju.
+              const ugasena = meta !== null && !jeTacna;
+              // `aria-disabled`, ne `disabled`: pravo gašenje dugmeta izbaci
+              // fokus na telo stranice, pa dete koje igra tastaturom posle
+              // svakog odgovora mora tabom nazad. Sam skok je ionako zaključan
+              // u `skoci`.
+              const neaktivna = zakljucano || meta !== null;
+
+              return (
+                <li key={clan} className="h-full px-1">
+                  <button
+                    type="button"
+                    lang="de"
+                    ref={(el) => {
+                      dugmad.current[kolona] = el;
+                    }}
+                    aria-disabled={neaktivna}
+                    onClick={() => skoci(kolona, clan)}
+                    onKeyDown={(e) => naTaster(e, kolona)}
+                    className="font-heading block h-full w-full rounded-xl border-4 text-[21px] font-bold outline-offset-2 focus-visible:outline-4 focus-visible:outline-[#0B54C9]"
+                    style={{
+                      background: ugasena ? PAPIR : boja,
+                      borderColor: jeTacna && meta !== null ? MASTILO : ugasena ? IVICA : boja,
+                      color: ugasena ? PRIGUSEN : slovaNaRodu(clan),
+                      opacity: ugasena ? 0.55 : 1,
+                      boxShadow: ugasena ? "none" : "inset 0 -6px 0 rgba(0,0,0,.16)",
+                      cursor: neaktivna ? "default" : "pointer",
+                    }}
+                  >
+                    {NATPIS_RODA[clan]}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+
+        {/* Imenica stoji u samoj sceni, iznad polica, a ne u zasebnoj kartici
             iznad nje. Tako nebo nije prazan pojas, a scena sme da uzme ceo ekran
-            koji joj ostane. Podloga je puna i sloj je iznad lika, da se reč ne
-            izmeša sa likom u letu na niskom prozoru. */}
-        <div className="absolute inset-x-0 top-0 z-10 px-4 pb-2 pt-4 text-center" style={{ background: PAPIR }}>
+            koji joj ostane. Podloga je puna i sloj je iznad svega što se penje,
+            da se reč ne izmeša sa policama koje klize naviše. */}
+        <div
+          className="absolute inset-x-0 top-0 z-20 px-4 pb-2 pt-4 text-center"
+          style={{ background: PAPIR }}
+        >
           <p
             className="font-heading text-[11px] font-bold uppercase tracking-[.18em]"
             style={{ color: PRIGUSEN }}
@@ -313,80 +668,16 @@ export default function Skakac({
           >
             {imenica}
           </p>
-        </div>
-
-        {/* Tlo. Lik uvek polazi odavde i ovde se vraća kad promaši. */}
-        <span
-          aria-hidden="true"
-          className="absolute inset-x-0 bottom-0 border-t-2"
-          style={{ height: TLO, background: "#EFEADC", borderColor: IVICA }}
-        />
-
-        {/* Lik. Nosač je širok koliko scena, pa se vodoravni pomak meri u
-            trećinama scene; unutrašnji sloj nosi visinu, da uspon i vodoravno
-            kretanje mogu da imaju različite krive i da se slože u luk. */}
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 block"
-          style={{
-            bottom: TLO,
-            transform: `translateX(${pomakX}%)`,
-            transition: `transform ${trajanje(LET_VODORAVNO)}ms linear`,
-          }}
-        >
+          {/* Brojka uz penjanje. Čitač ekrana istu stvar dobija kroz `aria-live`
+              gore, pa ovo ostaje samo slika. */}
           <span
-            className="relative mx-auto block"
-            style={{
-              width: LIK_SIRINA,
-              transform: `translateY(${-VISINA_FAZE[faza]}px) rotate(${NAGIB_FAZE[faza]}deg)`,
-              transition: `transform ${trajanje(prelaz.ms)}ms ${prelaz.kriva}`,
-            }}
+            aria-hidden="true"
+            className="font-heading absolute right-3 top-3 rounded-full border px-2 py-[3px] text-[11px] font-bold tabular-nums"
+            style={{ borderColor: IVICA, background: STENA, color: PRIGUSEN }}
           >
-            {faza === "platforma" && <Iskre />}
-            <Lik />
+            {sprat === 0 ? "tlo" : `${sprat}. sprat`}
           </span>
-        </span>
-
-        {/* Platforme. Iznad lika su namerno: promašen skok prođe iza njih i
-            spusti se na tlo, umesto da lik prosečen stoji preko table. */}
-        <ul
-          className="absolute inset-x-0 z-10 grid grid-cols-3"
-          style={{ bottom: PLATFORMA_DNO, height: PLATFORMA_VISINA }}
-        >
-          {CLANOVI.map((clan, kolona) => {
-            const jeTacna = clan === tacan;
-            const boja = bojaZaRod(clan);
-            // Dok se ne odgovori, platforma je u punoj boji svog roda. Posle
-            // odgovora se pogrešne gase, a tačna ostaje u boji i dobija okvir,
-            // da se razlika ne oslanja samo na boju.
-            const ugasena = meta !== null && !jeTacna;
-
-            return (
-              <li key={clan} className="h-full px-1">
-                <button
-                  type="button"
-                  lang="de"
-                  ref={(el) => {
-                    dugmad.current[kolona] = el;
-                  }}
-                  disabled={zakljucano}
-                  onClick={() => skoci(kolona, clan)}
-                  onKeyDown={(e) => naTaster(e, kolona)}
-                  className="font-heading block h-full w-full rounded-xl border-4 text-[21px] font-bold outline-offset-2 focus-visible:outline-4 focus-visible:outline-[#0B54C9] disabled:cursor-default"
-                  style={{
-                    background: ugasena ? PAPIR : boja,
-                    borderColor: jeTacna && meta !== null ? MASTILO : ugasena ? IVICA : boja,
-                    color: ugasena ? PRIGUSEN : slovaNaRodu(clan),
-                    opacity: ugasena ? 0.55 : 1,
-                    boxShadow: ugasena ? "none" : "inset 0 -8px 0 rgba(0,0,0,.16)",
-                  }}
-                >
-                  {NATPIS_RODA[clan]}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
+        </div>
       </div>
     </div>
   );
