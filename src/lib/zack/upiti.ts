@@ -91,7 +91,7 @@ export async function reciLekcije(lekcijaId: string): Promise<Rec[]> {
   const sb = createAdminClient();
   const { data, error } = await sb
     .from("zack_reci")
-    .select("id, redni_broj, de, sr, rod, mnozina, vrsta, izuzetak")
+    .select("id, redni_broj, de, sr, rod, mnozina, vrsta, izuzetak, ikonica")
     .eq("lekcija_id", lekcijaId)
     .order("redni_broj");
   if (error) throw new Error(`Ne mogu da pročitam reči lekcije: ${error.message}`);

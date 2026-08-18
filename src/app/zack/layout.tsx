@@ -39,6 +39,11 @@ export default function ZackLayout({ children }: { children: React.ReactNode }) 
       {/* Uža kolona nego inače: ovo se čita na telefonu u ruci, a na širem
           ekranu ne sme da se razvuče u traku preko celog monitora. */}
       <div className="mx-auto max-w-2xl px-4 py-6 sm:px-6 sm:py-10">{children}</div>
+      {/* Licenca ikonica (CC BY 4.0) traži navođenje autora. Stoji sitno i
+          jednom, jer je namenjeno pravnoj obavezi, ne detetu. */}
+      <p className="pb-6 text-center text-[11px]" style={{ color: "#6E6A5E" }}>
+        Sličice koriste Twemoji, autor Twitter, licenca CC BY 4.0.
+      </p>
     </div>
   );
 }

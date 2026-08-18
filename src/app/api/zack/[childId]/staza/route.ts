@@ -15,7 +15,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ chi
   // Vezujemo se za udžbenik deteta, da staza nikad ne pokaže tuđe lekcije.
   const { data: lekcije, error } = await sb
     .from("zack_lekcije")
-    .select("id, broj, naziv, zack_reci(id, redni_broj, de, sr, rod, mnozina, vrsta, izuzetak)")
+    .select("id, broj, naziv, zack_reci(id, redni_broj, de, sr, rod, mnozina, vrsta, izuzetak, ikonica)")
     .eq("udzbenik_id", dete.udzbenik_id)
     .order("broj");
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });

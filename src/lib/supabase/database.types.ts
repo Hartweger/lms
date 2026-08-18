@@ -2684,6 +2684,7 @@ export type Database = {
         Row: {
           de: string
           id: string
+          ikonica: string | null
           izuzetak: boolean
           lekcija_id: string
           mnozina: string | null
@@ -2695,6 +2696,7 @@ export type Database = {
         Insert: {
           de: string
           id?: string
+          ikonica?: string | null
           izuzetak?: boolean
           lekcija_id: string
           mnozina?: string | null
@@ -2706,6 +2708,7 @@ export type Database = {
         Update: {
           de?: string
           id?: string
+          ikonica?: string | null
           izuzetak?: boolean
           lekcija_id?: string
           mnozina?: string | null

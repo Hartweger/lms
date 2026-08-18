@@ -196,7 +196,7 @@ function PunaSlicica({
     >
       <div className="flex h-full w-full flex-col overflow-hidden rounded-[10px]">
         <div
-          className="relative flex flex-1 items-center justify-center px-[6%] py-[6%]"
+          className="relative flex min-h-0 flex-1 items-center justify-center px-[6%] py-[6%]"
           style={{ background: pozadina }}
         >
           <span
@@ -213,16 +213,43 @@ function PunaSlicica({
               <Zvezdica />
             </span>
           )}
-          <span
-            lang="de"
-            className="font-heading w-full min-w-0 text-center font-bold leading-tight hyphens-auto [overflow-wrap:anywhere]"
-            style={{ color: bojaSlova, fontSize: REC_FONT }}
-          >
-            {oblik}
+          <span className="flex w-full min-w-0 flex-col items-center justify-center gap-[5%]">
+            {/* Slika stoji SAMO ovde, na sličici. Nikad u pitanju, jer bi dete
+                onda pokazivalo na sliku umesto da prevodi.
+                Papirni krug ispod nje je nužan: ikonice su šarene i na plavoj,
+                crvenoj i žutoj se gube. Reč koja nema sliku nije nedovršena,
+                nego prosto nema sliku - to je normalno stanje za glagole i
+                apstraktne reči, pa se ništa ne rezerviše unapred.
+                alt je prazan namerno: prevod već stoji ispod, pa bi čitač
+                ekrana inače dvaput rekao istu stvar. */}
+            {rec.ikonica && (
+              <span
+                className="flex items-center justify-center rounded-full"
+                style={{ background: PAPIR, padding: "5%", width: "44%", aspectRatio: "1" }}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`/zack/ikonice/${rec.ikonica}.svg`}
+                  alt=""
+                  className="h-full w-full"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </span>
+            )}
+            <span
+              lang="de"
+              className="font-heading w-full min-w-0 text-center font-bold leading-tight hyphens-auto [overflow-wrap:anywhere]"
+              style={{ color: bojaSlova, fontSize: REC_FONT }}
+            >
+              {oblik}
+            </span>
           </span>
         </div>
+        {/* Prelama se po rečima, ne nasred reči: član pređe u svoj red pre nego
+            što se „nastavnica" pocepa na „nastavni" i „ca". */}
         <div
-          className="flex items-baseline gap-1 px-[6%] py-[4%]"
+          className="flex shrink-0 flex-wrap items-baseline gap-x-1 px-[6%] py-[4%]"
           style={{ background: PAPIR, borderTop: `1px solid ${IVICA_PAPIRA}` }}
         >
           {clan && (
@@ -230,7 +257,13 @@ function PunaSlicica({
               {clan}
             </span>
           )}
-          <span className="truncate" style={{ color: PRIGUSEN, fontSize: SITAN_FONT }}>
+          {/* Prevod se NE seče. On je jedino mesto gde piše šta reč znači, pa
+              „nastavnica" odsečena u „nastav..." obesmišljava celu sličicu.
+              Radije dva reda nego tri tačke. */}
+          <span
+            className="leading-tight break-words"
+            style={{ color: PRIGUSEN, fontSize: SITAN_FONT }}
+          >
             {rec.sr}
           </span>
         </div>

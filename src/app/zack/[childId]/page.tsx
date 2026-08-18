@@ -49,7 +49,7 @@ export default async function StazaPage({
   // ikad počne da vraća prazan niz uz pune tabele, prvo proveri taj ključ.
   const { data: lekcije, error } = await sb
     .from("zack_lekcije")
-    .select("id, broj, naziv, zack_reci(id, redni_broj, de, sr, rod, mnozina, vrsta, izuzetak)")
+    .select("id, broj, naziv, zack_reci(id, redni_broj, de, sr, rod, mnozina, vrsta, izuzetak, ikonica)")
     .eq("udzbenik_id", dete.udzbenik_id)
     .order("broj");
   if (error) throw new Error(`Ne mogu da pročitam lekcije: ${error.message}`);

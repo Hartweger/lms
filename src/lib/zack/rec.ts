@@ -12,6 +12,13 @@ export type Rec = {
   mnozina: string | null;
   vrsta: Vrsta;
   izuzetak: boolean;
+  /**
+   * Oznaka slike iz lokalnog skupa (Twemoji), npr. „1fa91" za stolicu.
+   * NULL je normalno stanje: konkretne imenice se crtaju, glagoli i apstraktne
+   * reci ne. Slika stoji SAMO na slicici, nikad u pitanju, jer bi inace dete
+   * pokazivalo na sliku umesto da prevodi.
+   */
+  ikonica?: string | null;
 };
 
 /** Boja sličice po rodu. Iste tri boje se koriste u nemačkim učionicama. */
