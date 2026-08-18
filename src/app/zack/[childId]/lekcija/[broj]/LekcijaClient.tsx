@@ -48,8 +48,18 @@ type Lekcija = {
  * Redosled igara na ekranu. Diktat je ubedljivo najteži i namerno stoji
  * poslednji: dete koje prvo naleti na njega odustane pre nego što proba ostalo.
  * Parovi su najlakši ulaz, pa idu prvi.
+ *
+ * Skakač stoji ODMAH iznad spiskovne verzije istog pitanja. Isti rod, dva tela:
+ * ko hoće da igra bira skakač, ko hoće da brzo prođe reči bira spisak.
  */
-const IGRE: readonly VrstaIgre[] = ["parovi", "brzo-biranje", "rod", "mnozina", "diktat"];
+const IGRE: readonly VrstaIgre[] = [
+  "parovi",
+  "brzo-biranje",
+  "skakac",
+  "rod",
+  "mnozina",
+  "diktat",
+];
 
 const PAPIR = "#FCFBF7";
 const IVICA = "#DED8C8";

@@ -33,6 +33,16 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { napraviPitanja, type Igra as VrstaIgre, type Pitanje } from "@/lib/zack/pitanja";
 import { bojaZaRod, promesaj, type Rec, type Rod } from "@/lib/zack/rec";
+// Skakač je drugo telo za isto pitanje o rodu, pa im je i pomoć oko članova
+// zajednička. Živi u `Skakac.tsx` zato što ljuska već uvozi taj fajl, pa uvoz u
+// suprotnom smeru ne bi bio put nego krug.
+import Skakac, {
+  bezClana,
+  CLANOVI,
+  jeClan,
+  NATPIS_RODA,
+  slovaNaRodu,
+} from "@/components/zack/Skakac";
 import {
   novaSesija,
   odgovori,
@@ -47,6 +57,7 @@ import {
 export const NAZIVI: Record<VrstaIgre, string> = {
   "brzo-biranje": "Brzo biranje",
   rod: "Der, die ili das",
+  skakac: "Der-Die-Das skakač",
   mnozina: "Množina",
   diktat: "Diktat",
   parovi: "Parovi",
@@ -284,7 +295,20 @@ export default function Igra({
           naKraj={izadji}
         />
       ) : p.igra === "rod" ? (
-        <IgraRod key={korak} pitanje={p} zakljucano={zakljucano} naOdgovor={naOdgovor} />
+        // Isto pitanje, dva tela. Skakač ima tačno tri platforme, pa mu tačan
+        // odgovor mora biti jedan od tri člana; reč bez roda ovamo ionako ne
+        // stiže, ali ako nekad stigne, dobija spisak umesto nemoguće partije.
+        vrsta === "skakac" && jeClan(p.tacan) ? (
+          <Skakac
+            key={korak}
+            pitanje={p}
+            tacan={p.tacan}
+            zakljucano={zakljucano}
+            naOdgovor={naOdgovor}
+          />
+        ) : (
+          <IgraRod key={korak} pitanje={p} zakljucano={zakljucano} naOdgovor={naOdgovor} />
+        )
       ) : p.igra === "diktat" ? (
         <IgraDiktat
           key={korak}
@@ -476,29 +500,6 @@ function IgraBiranje({
 
 // ── Der, die ili das ────────────────────────────────────────────────────────
 
-const RODOVI: readonly Rod[] = ["der", "die", "das"];
-
-const NATPIS_RODA: Record<Rod, string> = {
-  der: "der",
-  die: "die",
-  das: "das",
-  nema: "bez člana",
-};
-
-/** Na žutoj i na crnoj podlozi bela slova ne rade isto. */
-function slovaNaRodu(rod: Rod): string {
-  return rod === "das" ? MASTILO : "#FFFFFF";
-}
-
-/**
- * Skida član sa imenice. Reči se u tabelu unose sa članom („die Katze"), pa bi
- * bez ovoga igra sa članovima pisala odgovor u samom pitanju. Traži se razmak
- * iza člana, da „Dienstag" i „Dasein" ostanu netaknuti.
- */
-export function bezClana(imenica: string): string {
-  return imenica.replace(/^(der|die|das)\s+/i, "");
-}
-
 function IgraRod({
   pitanje,
   zakljucano,
@@ -515,7 +516,7 @@ function IgraRod({
   // Ali tip to dozvoljava, a rešavati to sa `!` ili `as` znači nadati se. Ako
   // tačan odgovor ipak nije jedan od tri člana, dobija svoje dugme, pa igra
   // ostane rešiva umesto da tiho postane nemoguća.
-  const opcije: Rod[] = RODOVI.includes(pitanje.tacan) ? [...RODOVI] : [...RODOVI, pitanje.tacan];
+  const opcije: Rod[] = jeClan(pitanje.tacan) ? [...CLANOVI] : [...CLANOVI, pitanje.tacan];
 
   return (
     <div>

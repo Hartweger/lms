@@ -61,6 +61,25 @@ describe("napraviPitanja, rod", () => {
   });
 });
 
+describe("napraviPitanja, skakac", () => {
+  // Skakač je drugo telo za isto pitanje, pa mora da izađe pitanje `igra: "rod"`.
+  // Da dobije svoj tip pitanja, sesija i spisak tačnih bi morali da nauče još
+  // jedan slučaj bez ijednog razloga.
+  it("daje ista pitanja kao rod, red po red", () => {
+    const reci = [R(1, { rod: "der" }), R(2, { rod: "die" }), R(3, { rod: "das" })];
+    expect(napraviPitanja(reci, "skakac", 3, nula)).toEqual(napraviPitanja(reci, "rod", 3, nula));
+  });
+
+  it("uzima samo imenice koje imaju rod, isto kao rod", () => {
+    const reci = [R(1, { rod: "der" }), R(2, { rod: "nema", vrsta: "glagol" }), R(3, { rod: "das" })];
+    const p = napraviPitanja(reci, "skakac", 10, nula);
+    expect(p).toHaveLength(2);
+    expect(p.every((x) => x.igra === "rod")).toBe(true);
+    if (p[0].igra !== "rod") throw new Error("pogrešna igra");
+    expect(["der", "die", "das"]).toContain(p[0].tacan);
+  });
+});
+
 describe("napraviPitanja, mnozina", () => {
   it("preskače reči bez upisane množine", () => {
     const reci = [R(1, { mnozina: "Häuser" }), R(2, { mnozina: null }), R(3, { mnozina: "Bäume" })];

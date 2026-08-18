@@ -2,7 +2,16 @@
 // Ništa se ne unosi posebno po igri, sve izlazi iz iste tabele.
 import { promesaj, type Rec, type Rod } from "./rec";
 
-export type Igra = "brzo-biranje" | "rod" | "mnozina" | "diktat" | "parovi";
+// „skakac" NIJE nova vrsta pitanja, nego drugi način prikaza pitanja o rodu.
+// Zato ovde stoji među igrama, a dole se obrađuje isto kao „rod" i pravi pitanja
+// sa `igra: "rod"`. Da je dobio svoj tip pitanja, sve što zna da radi sa rodom
+// (sesija, spisak tačnih, telo igre) moralo bi da nauči još jedan slučaj.
+export type Igra = "brzo-biranje" | "rod" | "skakac" | "mnozina" | "diktat" | "parovi";
+
+/** Igre koje se hrane pitanjima o rodu, bez obzira na to kako izgledaju. */
+function jeIgraRoda(igra: Igra): boolean {
+  return igra === "rod" || igra === "skakac";
+}
 
 export type Pitanje =
   | { igra: "brzo-biranje"; recId: string; pitanje: string; opcije: string[]; tacan: string }
@@ -52,7 +61,7 @@ export function napraviPitanja(
   }
 
   const podobne = reci.filter((r) => {
-    if (igra === "rod") return r.rod !== "nema";
+    if (jeIgraRoda(igra)) return r.rod !== "nema";
     if (igra === "mnozina") return Boolean(r.mnozina);
     return true;
   });
@@ -70,7 +79,7 @@ export function napraviPitanja(
         tacan: r.sr,
       };
     }
-    if (igra === "rod") {
+    if (jeIgraRoda(igra)) {
       return { igra: "rod", recId: r.id, imenica: r.de, tacan: r.rod };
     }
     if (igra === "mnozina") {
