@@ -31,7 +31,12 @@
 // lekcije: samo ovde se zna šta je dete do tog trenutka zaradilo. Izlaz koji
 // ekran lekcije sam odradi ne bi imao šta da ponovo pošalje.
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { napraviPitanja, type Igra as VrstaIgre, type Pitanje } from "@/lib/zack/pitanja";
+import {
+  napraviPitanja,
+  SPRATOVA_NAJVISE,
+  type Igra as VrstaIgre,
+  type Pitanje,
+} from "@/lib/zack/pitanja";
 import { bojaZaRod, promesaj, type Rec, type Rod } from "@/lib/zack/rec";
 // Skakač je drugo telo za isto pitanje o rodu, pa im je i pomoć oko članova
 // zajednička. Živi u `Skakac.tsx` zato što ljuska već uvozi taj fajl, pa uvoz u
@@ -74,6 +79,17 @@ const CRVENA = "#E5342A";
 
 /** Koliko pitanja ima jedna partija. Parovi se unutar `napraviPitanja` sami sabiju na 6. */
 const PITANJA_PO_PARTIJI = 8;
+
+/**
+ * Skakač je izuzetak: njegova partija se ne završava na broju reči nego kad se
+ * potroše srca. Zato dobija tok pitanja koji se ponavlja (svaki krug u novom
+ * rasporedu) do gornje granice penjanja, a ta granica postoji samo da tok ne
+ * bude beskonačan. Bez ovoga bi svaka partija stala na broju imenica u lekciji,
+ * pa bi rekord bio taj isti broj zauvek i ne bi imao šta da se obori.
+ */
+function kolikoPitanja(vrsta: VrstaIgre): number {
+  return vrsta === "skakac" ? SPRATOVA_NAJVISE : PITANJA_PO_PARTIJI;
+}
 
 /** Koliko odziv stoji na ekranu. Greška duže, jer se uz nju čita i tačan odgovor. */
 const ZADRZI_TACNO = 850;
@@ -120,11 +136,17 @@ export default function Igra({
   childId,
   reci,
   vrsta,
+  rekord,
   onKraj,
 }: {
   childId: string;
   reci: Rec[];
   vrsta: VrstaIgre;
+  /**
+   * Lični rekord u skakaču na ovoj lekciji, ili ništa ako ga još nema. Ljuska ga
+   * samo prosleđuje telu igre; upisuje ga ekran lekcije na kraju partije.
+   */
+  rekord?: number | null;
   /**
    * Kraj partije. Uz spisak tačnih ide i dokle se koza popela u skakaču, jer je
    * visina drugi rezultat te igre, pored sličica. Ostale igre javljaju nulu.
@@ -166,7 +188,7 @@ export default function Igra({
   }, []);
 
   useEffect(() => {
-    setSesija(novaSesija(napraviPitanja(reciRef.current, vrsta, PITANJA_PO_PARTIJI, Math.random)));
+    setSesija(novaSesija(napraviPitanja(reciRef.current, vrsta, kolikoPitanja(vrsta), Math.random)));
     setOdziv(null);
     setZamrznuto(null);
     setKorak((k) => k + 1);
@@ -284,10 +306,14 @@ export default function Igra({
   const p = zamrznuto ?? sesija.pitanja[sesija.indeks];
   if (!p) return <Cekanje />;
 
+  // Skakač NEMA traku napretka i to je namerno: partija traje dok ima srca, pa
+  // traka ne bi imala prema čemu da raste. Napredak je sama visina koze.
   const popunjeno =
-    p.igra === "parovi"
-      ? Math.round((sesija.tacni.length / Math.max(1, p.parovi.length)) * 100)
-      : Math.round((sesija.indeks / sesija.pitanja.length) * 100);
+    vrsta === "skakac"
+      ? null
+      : p.igra === "parovi"
+        ? Math.round((sesija.tacni.length / Math.max(1, p.parovi.length)) * 100)
+        : Math.round((sesija.indeks / sesija.pitanja.length) * 100);
 
   // Dok se čita odziv, telo je zaključano, da drugi klik ne upadne u odgovor
   // koji je već poslat.
@@ -327,6 +353,7 @@ export default function Igra({
             zakljucano={zakljucano}
             naOdgovor={naOdgovor}
             naVisinu={naVisinu}
+            rekord={rekord}
           />
         ) : (
           <IgraRod key={korak} pitanje={p} zakljucano={zakljucano} naOdgovor={naOdgovor} />
@@ -378,7 +405,8 @@ function Okvir({
 }: {
   naslov: string;
   srca: number;
-  popunjeno: number;
+  /** `null` znači da partija nema unapred poznat kraj, pa se traka ne crta. */
+  popunjeno: number | null;
   children: React.ReactNode;
 }) {
   return (
@@ -393,19 +421,21 @@ function Okvir({
         <Srca srca={srca} />
       </header>
 
-      <p className="mt-3">
-        <span className="sr-only">{`Napredak: ${popunjeno} odsto`}</span>
-        <span
-          aria-hidden="true"
-          className="block h-2.5 w-full overflow-hidden rounded-full"
-          style={{ background: "#E7E1D1" }}
-        >
+      {popunjeno !== null && (
+        <p className="mt-3">
+          <span className="sr-only">{`Napredak: ${popunjeno} odsto`}</span>
           <span
-            className="block h-full rounded-full motion-safe:transition-[width] motion-safe:duration-300"
-            style={{ width: `${popunjeno}%`, background: MASTILO }}
-          />
-        </span>
-      </p>
+            aria-hidden="true"
+            className="block h-2.5 w-full overflow-hidden rounded-full"
+            style={{ background: "#E7E1D1" }}
+          >
+            <span
+              className="block h-full rounded-full motion-safe:transition-[width] motion-safe:duration-300"
+              style={{ width: `${popunjeno}%`, background: MASTILO }}
+            />
+          </span>
+        </p>
+      )}
 
       <div className="mt-5">{children}</div>
     </div>

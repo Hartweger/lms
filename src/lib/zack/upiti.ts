@@ -99,6 +99,29 @@ export async function reciLekcije(lekcijaId: string): Promise<Rec[]> {
 }
 
 /**
+ * Lični rekord u jednoj igri, na jednoj lekciji. `null` znači da rekorda još
+ * nema, i to je bitna razlika u odnosu na nulu: pre prve partije se linija
+ * rekorda uopšte ne crta i rekord se detetu ne pominje, da prvi pokušaj ne bi
+ * počeo poređenjem.
+ */
+export async function rekordZaIgru(
+  deteId: string,
+  lekcijaId: string,
+  igra: string
+): Promise<number | null> {
+  const sb = createAdminClient();
+  const { data, error } = await sb
+    .from("zack_rekordi")
+    .select("sprat")
+    .eq("dete_id", deteId)
+    .eq("lekcija_id", lekcijaId)
+    .eq("igra", igra)
+    .maybeSingle();
+  if (error) throw new Error(`Ne mogu da pročitam rekord: ${error.message}`);
+  return data?.sprat ?? null;
+}
+
+/**
  * Sličice koje je dete VEĆ VIDELO, dakle isporučene iz kesice.
  * Neisporučene se namerno ne vraćaju, da album ne oda šta čeka u kesici.
  */

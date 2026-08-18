@@ -8,10 +8,37 @@ import { promesaj, type Rec, type Rod } from "./rec";
 // (sesija, spisak tačnih, telo igre) moralo bi da nauči još jedan slučaj.
 export type Igra = "brzo-biranje" | "rod" | "skakac" | "mnozina" | "diktat" | "parovi";
 
+/**
+ * Iste igre, ali kao vrednosti. Tip `Igra` postoji samo dok se prevodi, a ruta
+ * koja prima ime igre iz tela zahteva mora da proveri šta joj je stvarno stiglo.
+ */
+export const SVE_IGRE: readonly Igra[] = [
+  "brzo-biranje",
+  "rod",
+  "skakac",
+  "mnozina",
+  "diktat",
+  "parovi",
+];
+
+export function jeIgra(vrednost: unknown): vrednost is Igra {
+  return typeof vrednost === "string" && (SVE_IGRE as readonly string[]).includes(vrednost);
+}
+
 /** Igre koje se hrane pitanjima o rodu, bez obzira na to kako izgledaju. */
 function jeIgraRoda(igra: Igra): boolean {
   return igra === "rod" || igra === "skakac";
 }
+
+/**
+ * Dokle skakač ume da se popne. NIJE dužina partije: partija se završava kad se
+ * potroše srca, a ovo je samo kočnica da tok pitanja ne bude beskonačna petlja.
+ * Namerno visoko - dete sa tri srca realno ne stiže dotle, pa granicu ne oseti.
+ *
+ * Stoji ovde, a ne u telu igre, jer istu vrednost mora da zna i ruta za rekord:
+ * sprat veći od ovoga nije mogao da bude odigran.
+ */
+export const SPRATOVA_NAJVISE = 60;
 
 export type Pitanje =
   | { igra: "brzo-biranje"; recId: string; pitanje: string; opcije: string[]; tacan: string }
@@ -42,6 +69,35 @@ export function ponudjeni(
 
 const PAROVA_NAJVISE = 6;
 
+/**
+ * Isti spisak, u krug, dok se ne skupi traženi broj stavki.
+ *
+ * ZAŠTO POSTOJI: skakač se penje dok ima srca, a ne dok ima reči. Sa običnim
+ * sečenjem na dužinu spiska partija bi stala na broju imenica u lekciji, pa bi
+ * rekord bio taj isti broj zauvek i ne bi imao šta da se obori.
+ *
+ * SVAKI KRUG SE MEŠA IZNOVA, da drugi prolaz ne bude isti redosled napamet.
+ * Dve iste reči jedna za drugom se ne puštaju: detetu to izgleda kao da se igra
+ * zaglavila. Kad novi krug počne rečju kojom se prethodni završio, ta reč menja
+ * mesto sa sledećom u tom krugu - time se ništa ne izbacuje ni ne duplira.
+ *
+ * Jedina reč sa kojom se to ne može izbeći je spisak od jedne stavke; tada
+ * ponavljanje jeste sve što postoji.
+ */
+export function uKrugovima<T>(stavke: readonly T[], koliko: number, rng: () => number): T[] {
+  if (stavke.length === 0 || koliko <= 0) return [];
+
+  const tok: T[] = [];
+  while (tok.length < koliko) {
+    const krug = promesaj(stavke, rng);
+    if (krug.length > 1 && krug[0] === tok.at(-1)) {
+      [krug[0], krug[1]] = [krug[1], krug[0]];
+    }
+    tok.push(...krug);
+  }
+  return tok.slice(0, koliko);
+}
+
 export function napraviPitanja(
   reci: readonly Rec[],
   igra: Igra,
@@ -66,7 +122,10 @@ export function napraviPitanja(
     return true;
   });
 
-  const izabrane = promesaj(podobne, rng).slice(0, koliko);
+  // Skakač jedini dobija tok koji se ponavlja: njegova partija ne staje na broju
+  // reči nego na srcima. Ostale igre prođu spisak jednom i tu je kraj.
+  const izabrane =
+    igra === "skakac" ? uKrugovima(podobne, koliko, rng) : promesaj(podobne, rng).slice(0, koliko);
 
   return izabrane.map((r): Pitanje => {
     if (igra === "brzo-biranje") {

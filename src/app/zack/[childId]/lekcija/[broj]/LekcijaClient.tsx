@@ -68,6 +68,8 @@ const MASTILO = "#16161A";
 const PLAVA = "#0B54C9";
 const ZUTA = "#FFC400";
 const CRVENA = "#E5342A";
+/** Zelena uspeha, ista kao u odzivu igre. */
+const ZELENA = "#1E7A4B";
 
 /** Zajednički izgled svega što se klikće, sa vidljivim fokusom. */
 const FOKUS = "outline-offset-2 focus-visible:outline-4 focus-visible:outline-[#0B54C9]";
@@ -129,6 +131,18 @@ function jeRec(v: unknown): v is Rec {
   );
 }
 
+/**
+ * Rekord iz odgovora rute. Vraća `null` kad odgovor nije onakav kakvom se nadamo
+ * - tada se na ekranu zadržava ono što je već stajalo, umesto da se upiše
+ * besmislica.
+ */
+function citajRekord(telo: unknown): number | null {
+  if (typeof telo !== "object" || telo === null) return null;
+  const sirovo = (telo as Record<string, unknown>).rekord;
+  if (typeof sirovo !== "number" || !Number.isInteger(sirovo) || sirovo < 0) return null;
+  return sirovo;
+}
+
 function citajKesicu(telo: unknown): { kesica: Rec[]; ostalo: number } {
   if (typeof telo !== "object" || telo === null) return { kesica: [], ostalo: 0 };
   const o = telo as Record<string, unknown>;
@@ -180,12 +194,15 @@ export default function LekcijaClient({
   reci,
   pocetnoStanje,
   neotvorenaKesica,
+  pocetniRekord,
 }: {
   childId: string;
   lekcija: Lekcija;
   reci: Rec[];
   pocetnoStanje: StavkaAlbuma[];
   neotvorenaKesica: number;
+  /** Lični rekord u skakaču na ovoj lekciji, ili ništa ako ga još nema. */
+  pocetniRekord: number | null;
 }) {
   const [stanje, setStanje] = useState<StavkaAlbuma[]>(pocetnoStanje);
   const [igra, setIgra] = useState<VrstaIgre | null>(null);
@@ -194,6 +211,14 @@ export default function LekcijaClient({
   // pored sličica, pa se posle partije i kaže - inače bi penjanje postojalo samo
   // dok igra traje. Ostale igre javljaju nulu i ništa se ne ispisuje.
   const [domet, setDomet] = useState(0);
+
+  // Rekord se drži OVDE, a ne u igri, da bi druga partija u istom otvaranju
+  // stranice već imala svež broj. Nula znači „još ga nema": tada se linija na
+  // steni ne crta i rekord se detetu ne pominje.
+  const [rekord, setRekord] = useState(pocetniRekord ?? 0);
+  // Da li je baš poslednja partija oborila rekord. Prva partija ikad se ne
+  // računa: tada rekorda nije ni bilo, pa nije bilo ni šta da se obori.
+  const [novRekord, setNovRekord] = useState(false);
 
   // Sličice koje su ostale u ruci od prošlog puta moraju da se vrate u ruku,
   // inače dete nema čime da popuni mesta koja u albumu stoje prazna.
@@ -326,17 +351,59 @@ export default function LekcijaClient({
   );
 
   /**
+   * Upis rekorda posle skakača. O tome da rekord SAMO raste brine ruta, pa se
+   * ovde ništa ne poredi pre slanja: prima se ono što u bazi zaista stoji, a ne
+   * ono što je poslato.
+   *
+   * Pad mreže se guta, kao i kod lepljenja. Sličice su ono što se ne sme
+   * izgubiti i njih čuva `zavrsiIgru`; ako upis rekorda ne prođe, na ekranu
+   * ostaje stari broj, jer je to ono što u bazi jeste. Detetu se ništa ne
+   * prebacuje ni ne traži da pokušava ponovo.
+   */
+  const upisiRekord = useCallback(
+    async (sprat: number) => {
+      // Sa tla se ne postavlja rekord. Nula bi u bazi značila „rekord postoji",
+      // pa bi se na steni pojavila linija na tlu.
+      if (sprat <= 0) return;
+      const prethodni = rekord;
+      try {
+        const odgovor = await fetch(`/api/zack/${childId}/rekord`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ lekcijaId: lekcija.id, igra: "skakac", sprat }),
+          // Dete često zatvori karticu čim vidi kraj partije.
+          keepalive: true,
+        });
+        if (!odgovor.ok) return;
+        const noviRekord = citajRekord(await odgovor.json());
+        if (noviRekord === null) return;
+        setRekord(noviRekord);
+        // „Nov rekord" samo ako je pre njega nešto stajalo. Prvi rezultat prosto
+        // postaje rekord i ne javlja se kao pobeda nad nečim.
+        setNovRekord(prethodni > 0 && noviRekord > prethodni);
+      } catch {
+        /* Rekord nije stigao. Na ekranu ostaje onaj iz baze. */
+      }
+    },
+    [childId, lekcija.id, rekord]
+  );
+
+  /**
    * Kraj igre, kako ga javlja sama igra. Zove se i kad dete izađe pre kraja
    * („Dosta za sad"), da mu ono što je do tada zaradilo ne ostane zaključano
    * iza nedovršene partije.
    */
   const naKrajIgre = useCallback(
     (tacniRecIdovi: string[], sprat: number) => {
+      // Koja se igra upravo završila mora da se zapamti pre gašenja, jer se
+      // rekord vodi po igri, a `sprat` veći od nule javlja samo skakač.
+      const odigrana = igra;
       setIgra(null);
       setDomet(sprat);
+      if (odigrana === "skakac") void upisiRekord(sprat);
       void zavrsiIgru(tacniRecIdovi);
     },
-    [zavrsiIgru]
+    [igra, upisiRekord, zavrsiIgru]
   );
 
   /** Poziv ide u pozadini. Ne čeka se, i njegov pad se namerno guta. */
@@ -379,7 +446,15 @@ export default function LekcijaClient({
     // Izlaz iz igre („Dosta za sad") stoji unutar same igre, jer samo ona zna
     // šta je dete do tog trenutka zaradilo. Izlaz odavde bi ugasio igru bez
     // spiska tačnih, pa bi ponovno slanje ostalo bez ičega da pošalje.
-    return <Igra childId={childId} reci={reci} vrsta={igra} onKraj={naKrajIgre} />;
+    return (
+      <Igra
+        childId={childId}
+        reci={reci}
+        vrsta={igra}
+        rekord={rekord > 0 ? rekord : null}
+        onKraj={naKrajIgre}
+      />
+    );
   }
 
   const imaPravilo = Boolean(lekcija.pravilo_tekst ?? lekcija.pravilo_naslov);
@@ -411,14 +486,31 @@ export default function LekcijaClient({
 
       {/* Dokle se koza popela. Stoji iznad kesice, jer je i to rezultat upravo
           odigrane partije, a ne podatak o lekciji. Bez glagola u prošlom vremenu
-          za dete: penje se koza, pa se rod slaže sa njom. */}
+          za dete: penje se koza, pa se rod slaže sa njom.
+
+          OVDE NEMA NIČEGA PREKORNOG. Kad rekord nije oboren, ne piše se ni „nisi
+          uspeo" ni koliko je falilo - rekord prosto stoji kao podatak, isto kao
+          i visina. Kad ga nema ili je jednak dometu (prva partija, oboren
+          rekord), ne pominje se uopšte, da se broj ne ponavlja dvaput. */}
       {domet > 0 && (
-        <p
-          className="font-heading mb-4 rounded-2xl border px-4 py-2.5 text-center text-[15px] font-bold"
-          style={{ background: PAPIR, borderColor: IVICA, color: PRIGUSEN }}
+        <section
+          className="mb-4 rounded-2xl border px-4 py-2.5 text-center"
+          style={{ background: PAPIR, borderColor: IVICA }}
         >
-          {`Koza se popela na ${domet}. sprat.`}
-        </p>
+          <p className="font-heading text-[15px] font-bold" style={{ color: PRIGUSEN }}>
+            {`Koza se popela na ${domet}. sprat.`}
+          </p>
+          {novRekord && (
+            <p className="font-heading mt-1 text-[15px] font-bold" style={{ color: ZELENA }}>
+              Nov rekord!
+            </p>
+          )}
+          {rekord > domet && (
+            <p className="mt-1 text-[14px] leading-snug" style={{ color: PRIGUSEN }}>
+              {`Tvoj rekord: ${rekord}. sprat.`}
+            </p>
+          )}
+        </section>
       )}
 
       {/* ── Kesica je PRVO što dete vidi ────────────────────────────────────
@@ -666,8 +758,10 @@ export default function LekcijaClient({
                   onClick={() => {
                     setPoruka(null);
                     // Domet je rezultat prethodne partije. Nova partija kreće od
-                    // tla, pa ostavljen broj ne sme da je dočeka.
+                    // tla, pa ostavljen broj ne sme da je dočeka. Isto i za
+                    // javljanje o rekordu; sam rekord OSTAJE, on se ne poništava.
                     setDomet(0);
+                    setNovRekord(false);
                     setIgra(vrsta);
                   }}
                   className={`${FOKUS} font-heading flex min-h-[60px] w-full items-center justify-between gap-3 rounded-2xl border px-4 py-3.5 text-left text-[18px] font-bold shadow-[0_2px_0_0_#DED8C8] motion-safe:transition-transform motion-safe:duration-100 motion-safe:active:scale-[0.985]`}

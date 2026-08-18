@@ -50,6 +50,18 @@
 // uspravi se na svom spratu. Poruka ostaje ista kao u ostalim igrama, neutralno
 // „Ups!" i odmah tačan odgovor.
 //
+// LIČNI REKORD
+// ------------
+// Na steni stoji tanka linija na visini najboljeg dosadašnjeg penjanja, sa
+// sitnom oznakom. To je jedini razlog da se krene ponovo: bez nje je svaka
+// partija sama sebi kraj. Kad je koza prestigne, javi se kratko i vedro, jednom,
+// i to je sve - bez fanfara preko celog ekrana.
+//
+// Kad se rekord NE obori, ne piše se ništa. Nema „nisi uspeo", nema koliko je
+// falilo. Isto pravilo kao i sve ostalo ovde: dete gubi srca, nikad reči i nikad
+// visinu, i nikad ne dobija prekor. Pre prve partije linije nema, da prvi
+// pokušaj ne počne poređenjem sa nečim.
+//
 // SLUČAJNOST
 // ----------
 // U ishodu je nema. Sve što se ovde računa zavisi samo od toga koju je policu
@@ -66,6 +78,9 @@ const MASTILO = "#16161A";
 const PRIGUSEN = "#6E6A5E";
 /** Tlo i leva traka stene: ista boja, jer su isti kamen. */
 const STENA = "#EFEADC";
+/** Zelena uspeha, ista kao u odzivu ljuske, da „dobro je" svuda izgleda isto. */
+const ZELENA = "#1E7A4B";
+const ZELENA_PODLOGA = "#E4F0E9";
 
 // ── Rod kao član ────────────────────────────────────────────────────────────
 
@@ -109,14 +124,17 @@ export function bezClana(imenica: string): string {
 // odnosi ne pomere.
 //
 // Visina scene je ono što ostane od ekrana. Broj koji se oduzima je zbir svega
-// što stoji iznad i ispod scene: okvir stranice, naslov sa srcima, traka
-// napretka, traka odziva, dugme „Dosta za sad" i sitna licenca u podnožju
-// rasporeda. Tako scena sama popuni ekran, pa police padnu u donju trećinu gde
-// ih palac dohvata, umesto da igra stoji u sredini sa praznim pojasom ispod.
+// što stoji iznad i ispod scene: okvir stranice, naslov sa srcima, traka odziva,
+// dugme „Dosta za sad" i sitna licenca u podnožju rasporeda. Tako scena sama
+// popuni ekran, pa police padnu u donju trećinu gde ih palac dohvata, umesto da
+// igra stoji u sredini sa praznim pojasom ispod.
 // `dvh`, ne `vh`, jer na telefonu adresna traka jede deo ekrana. `clamp` je
 // kočnica na oba kraja: na niskom prozoru se scena skupi umesto da napravi
 // skrol, na širokom monitoru se ne razvuče.
-const SCENA_VISINA = "clamp(330px, calc(100dvh - 304px), 560px)";
+//
+// Traka napretka se u ovoj igri ne crta (partija nema unapred poznat kraj), pa
+// je ovaj broj za njenu visinu manji nego dok je stajala.
+const SCENA_VISINA = "clamp(330px, calc(100dvh - 282px), 560px)";
 
 /**
  * Lik je ikonica iz istog lokalnog skupa (Twemoji) kojim se crtaju sličice u
@@ -157,6 +175,16 @@ const TLO_DUBINA = 900;
 /** Prva polica je sprat 1; sprat 0 je tlo i nema svoju policu. */
 function dnoSprata(sprat: number): number {
   return SIDRO + sprat * SPRAT_RAZMAK - POLICA_VISINA;
+}
+
+/**
+ * Visina na kojoj koza STOJI kad osvoji sprat, dakle vrh te police. Linija
+ * rekorda ide baš tu: kad koza stane na taj sprat, dodirne je, a sledeći skok je
+ * prestiže. Da je linija bilo gde drugde, „dokle treba da stigneš" ne bi se
+ * poklapalo sa tim gde koza stane.
+ */
+function visinaStajanja(sprat: number): number {
+  return dnoSprata(sprat) + POLICA_VISINA;
 }
 
 // ── Tok jednog skoka ────────────────────────────────────────────────────────
@@ -202,6 +230,13 @@ const PRELAZ_FAZE: Record<Faza, { ms: number; kriva: string }> = {
 
 /** Vodoravno kretanje traje ceo let, pa se uspon i doskok slože u luk. */
 const LET_VODORAVNO = 340;
+
+/**
+ * Koliko javljanje o oborenom rekordu stoji na ekranu. Kratko, jer se posle toga
+ * penjanje nastavlja. Ovo je tajmer, ne animacija: pločica se pojavi i nestane
+ * bez ijednog prelaza, pa `prefers-reduced-motion` nema šta da gasi.
+ */
+const SLAVLJE_MS = 2200;
 
 /**
  * Kamera namerno kasni za skokom. Bez zastoja bi se prizor spustio u istom
@@ -305,6 +340,35 @@ function BuduciSprat({ sprat }: { sprat: number }) {
   );
 }
 
+/**
+ * Linija najboljeg dosadašnjeg penjanja. Ide preko cele scene, i preko trake sa
+ * brojevima, jer je to visina a ne polica - ništa se na nju ne skače.
+ *
+ * Crta se u sloju koji se penje, pa klizi zajedno sa stenom i sama izađe iz
+ * kadra kad je koza prestigne. Iznad polica je namerno: kad se poklopi sa vrhom
+ * police, mora da se vidi da linija tu jeste.
+ *
+ * `aria-hidden`, jer isto to piše u uputstvu za čitač ekrana gore. Podatak koji
+ * postoji samo kao crta na ekranu ne bi bio dostupan.
+ */
+function LinijaRekorda({ sprat }: { sprat: number }) {
+  return (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-x-0 z-[15] border-t-2 border-dashed"
+      style={{ bottom: visinaStajanja(sprat), borderColor: PRIGUSEN }}
+    >
+      {/* Oznaka stoji IZNAD linije, da ne pokrije policu koja je odmah ispod. */}
+      <span
+        className="font-heading absolute bottom-[3px] right-2 rounded-full border px-2 py-[2px] text-[10px] font-bold uppercase tracking-[.12em]"
+        style={{ borderColor: IVICA, background: STENA, color: PRIGUSEN }}
+      >
+        rekord
+      </span>
+    </div>
+  );
+}
+
 // ── Manje pokreta ───────────────────────────────────────────────────────────
 
 const UPIT_POKRETA = "(prefers-reduced-motion: reduce)";
@@ -337,6 +401,7 @@ export default function Skakac({
   zakljucano,
   naOdgovor,
   naVisinu,
+  rekord,
 }: {
   pitanje: Extract<Pitanje, { igra: "rod" }>;
   /** Tačan član. Stiže odvojeno, već proveren, da ovde nema neverovatnog slučaja. */
@@ -349,9 +414,18 @@ export default function Skakac({
    * stabilna funkcija, inače bi se javljalo na svaki render.
    */
   naVisinu?: (sprat: number) => void;
+  /**
+   * Najbolje dosadašnje penjanje na ovoj lekciji, ili ništa ako rekorda još
+   * nema. Rekord se ovde samo prikazuje - upisuje ga ekran lekcije na kraju
+   * partije, jer samo on ima pristup rutama.
+   */
+  rekord?: number | null;
 }) {
   const manjePokreta = useManjePokreta();
   const imenica = bezClana(pitanje.imenica);
+  // Nula i ništa su ovde ista stvar: rekord na tlu nije rekord, pa se linija ne
+  // crta i detetu se ne pominje.
+  const rekordSprat = typeof rekord === "number" && rekord > 0 ? rekord : null;
 
   /**
    * Osvojene police, po spratovima: `istorija[0]` je prvi sprat. Ovo je i visina
@@ -368,6 +442,8 @@ export default function Skakac({
   const [faza, setFaza] = useState<Faza>("mirno");
   // Koja je polica dodirnuta. Ujedno i brava: dok stoji, drugi tap ne prolazi.
   const [meta, setMeta] = useState<number | null>(null);
+  /** Stoji samo u trenutku kad se rekord obori, i to kratko. */
+  const [slavlje, setSlavlje] = useState(false);
 
   /** Zarađena visina. Jedina istina o tome dokle se koza popela. */
   const sprat = istorija.length;
@@ -400,6 +476,19 @@ export default function Skakac({
     };
   }, [pitanje]);
 
+  /**
+   * Tajmer slavlja stoji ODVOJENO od tajmera skoka, jer se oni čiste na svako
+   * novo pitanje. Gašenje javljanja mora da preživi taj prelaz, inače bi pločica
+   * ostala na ekranu do kraja partije.
+   */
+  const slavljeTajmer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(
+    () => () => {
+      if (slavljeTajmer.current) clearTimeout(slavljeTajmer.current);
+    },
+    []
+  );
+
   useEffect(() => {
     naVisinu?.(sprat);
   }, [sprat, naVisinu]);
@@ -422,6 +511,15 @@ export default function Skakac({
       // koji je pošteno osvojilo. Tajmer ispod pomera samo prizor.
       setIstorija((s) => [...s, clan]);
       const noviSprat = sprat + 1;
+
+      // Rekord se obara tačno jednom po partiji: na spratu odmah iznad njega.
+      // Sve iznad toga je i dalje novi rekord, ali se više ne javlja - jednom je
+      // vedro, na svakom spratu bi bilo galama.
+      if (rekordSprat !== null && noviSprat === rekordSprat + 1) {
+        setSlavlje(true);
+        if (slavljeTajmer.current) clearTimeout(slavljeTajmer.current);
+        slavljeTajmer.current = setTimeout(() => setSlavlje(false), SLAVLJE_MS);
+      }
 
       if (manjePokreta) {
         // Bez međukoraka: koza je odmah na novom spratu, prizor odmah namešten.
@@ -498,12 +596,20 @@ export default function Skakac({
         Dodirni policu sa tačnim članom i koza skače na nju. Svaki tačan odgovor je sprat više i
         koza se sa te visine nikad ne spušta. Strelicama levo i desno biraš policu, a Enterom
         skačeš.
+        {/* Linija rekorda na steni je inače podatak koji postoji samo kao crta
+            na ekranu. Kad rekorda nema, ovde se ne pominje ništa. */}
+        {rekordSprat !== null && ` Na steni je linija tvog rekorda, na ${rekordSprat}. spratu.`}
       </p>
       {/* Visina inače postoji samo kao pokret prizora, pa se svaki nov sprat i
           izgovori. „Uljudno", da ne preseca odziv ljuske („Zack!", „Ups!"), koji
           je hitniji i stiže u istom trenutku. */}
       <p aria-live="polite" className="sr-only">
         {najava}
+      </p>
+      {/* Obaranje rekorda ima SVOJ `aria-live`, a ne dopisak na najavu sprata:
+          spojeni, čitač bi ponovo pročitao sprat kad se javljanje ugasi. */}
+      <p aria-live="polite" className="sr-only">
+        {slavlje ? `Nov rekord! ${sprat}. sprat.` : ""}
       </p>
 
       <div
@@ -585,6 +691,8 @@ export default function Skakac({
               <Lik />
             </span>
           </span>
+
+          {rekordSprat !== null && <LinijaRekorda sprat={rekordSprat} />}
 
           {predjeni.map((s) => (
             <PredjenSprat key={s} sprat={s} osvojen={istorija.at(s - 1)} />
@@ -677,6 +785,24 @@ export default function Skakac({
           >
             {sprat === 0 ? "tlo" : `${sprat}. sprat`}
           </span>
+
+          {/* Obaranje rekorda: sitna pločica ispod imenice, u zelenoj boji uspeha
+              iz ljuske. U toku, a ne preko imenice: duga reč bi inače prošla
+              ispod nje. Nema animacije, pa izgleda isto i kad je pokret ugašen, i
+              nestaje sama posle par sekundi. Čitač ekrana isto dobija gore. */}
+          {slavlje && (
+            <p
+              aria-hidden="true"
+              className="font-heading mt-1.5 text-[12px] font-bold leading-none"
+            >
+              <span
+                className="inline-block rounded-full border-2 px-2.5 py-[4px]"
+                style={{ borderColor: ZELENA, background: ZELENA_PODLOGA, color: ZELENA }}
+              >
+                Nov rekord!
+              </span>
+            </p>
+          )}
         </div>
       </div>
     </div>

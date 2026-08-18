@@ -4,7 +4,13 @@
 import { notFound } from "next/navigation";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { stanjeAlbuma } from "@/lib/zack/album";
-import { nadjiDete, neotvoreneKesice, reciLekcije, zapisiSlicica } from "@/lib/zack/upiti";
+import {
+  nadjiDete,
+  neotvoreneKesice,
+  reciLekcije,
+  rekordZaIgru,
+  zapisiSlicica,
+} from "@/lib/zack/upiti";
 import LekcijaClient from "./LekcijaClient";
 
 // Album se menja posle svake odigrane igre, pa keširana lekcija vredi manje od
@@ -39,12 +45,16 @@ export default async function LekcijaPage({
   if (error) throw new Error(`Ne mogu da pročitam lekciju: ${error.message}`);
   if (!lekcija) notFound();
 
-  const [reci, zapisi, kesice] = await Promise.all([
+  const [reci, zapisi, kesice, rekordSkakaca] = await Promise.all([
     reciLekcije(lekcija.id),
     // zapisiSlicica vraća SAMO isporučene sličice, pa album ne može da oda reč
     // koja još čeka u neotvorenoj kesici.
     zapisiSlicica(dete.id),
     neotvoreneKesice(dete.id),
+    // Rekord se dovlači ovde, uz lekciju, da bi linija na steni stajala već u
+    // prvom kadru partije. Da se dovlači iz same igre, prvi skokovi bi prošli
+    // bez nje.
+    rekordZaIgru(dete.id, lekcija.id, "skakac"),
   ]);
 
   return (
@@ -54,6 +64,7 @@ export default async function LekcijaPage({
       reci={reci}
       pocetnoStanje={stanjeAlbuma(reci, zapisi, new Date())}
       neotvorenaKesica={kesice.get(lekcija.id) ?? 0}
+      pocetniRekord={rekordSkakaca}
     />
   );
 }

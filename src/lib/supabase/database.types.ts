@@ -2727,6 +2727,48 @@ export type Database = {
           },
         ]
       }
+      zack_rekordi: {
+        Row: {
+          dete_id: string
+          id: string
+          igra: string
+          lekcija_id: string
+          postavljen_at: string
+          sprat: number
+        }
+        Insert: {
+          dete_id: string
+          id?: string
+          igra: string
+          lekcija_id: string
+          postavljen_at?: string
+          sprat?: number
+        }
+        Update: {
+          dete_id?: string
+          id?: string
+          igra?: string
+          lekcija_id?: string
+          postavljen_at?: string
+          sprat?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zack_rekordi_dete_id_fkey"
+            columns: ["dete_id"]
+            isOneToOne: false
+            referencedRelation: "zack_deca"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "zack_rekordi_lekcija_id_fkey"
+            columns: ["lekcija_id"]
+            isOneToOne: false
+            referencedRelation: "zack_lekcije"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       zack_slicice: {
         Row: {
           dete_id: string

@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import type { Rec } from "./rec";
-import { napraviPitanja, ponudjeni } from "./pitanja";
+import { jeIgra, napraviPitanja, ponudjeni, SVE_IGRE, uKrugovima } from "./pitanja";
 
 const R = (i: number, over: Partial<Rec> = {}): Rec => ({
   id: `r${i}`,
@@ -73,10 +73,84 @@ describe("napraviPitanja, skakac", () => {
   it("uzima samo imenice koje imaju rod, isto kao rod", () => {
     const reci = [R(1, { rod: "der" }), R(2, { rod: "nema", vrsta: "glagol" }), R(3, { rod: "das" })];
     const p = napraviPitanja(reci, "skakac", 10, nula);
-    expect(p).toHaveLength(2);
+    // Reč bez roda ne ulazi ni u jedan krug.
     expect(p.every((x) => x.igra === "rod")).toBe(true);
-    if (p[0].igra !== "rod") throw new Error("pogrešna igra");
-    expect(["der", "die", "das"]).toContain(p[0].tacan);
+    expect(p.map((x) => (x.igra === "rod" ? x.recId : ""))).not.toContain("r2");
+  });
+
+  // Ovo je razlog zbog kog rekord uopšte ima smisla: partija koja staje na broju
+  // imenica u lekciji uvek ima isti vrhunac i nema šta da se obori.
+  it("ne staje na broju reči, nego daje koliko je traženo", () => {
+    const reci = [R(1, { rod: "der" }), R(2, { rod: "die" }), R(3, { rod: "das" })];
+    expect(napraviPitanja(reci, "skakac", 20, nula)).toHaveLength(20);
+  });
+
+  it("ostale igre i dalje staju na broju reči", () => {
+    const reci = [R(1, { rod: "der" }), R(2, { rod: "die" }), R(3, { rod: "das" })];
+    expect(napraviPitanja(reci, "rod", 20, nula)).toHaveLength(3);
+  });
+});
+
+describe("jeIgra", () => {
+  // Rute primaju ime igre iz tela zahteva, pa se ono mora proveriti vrednošću.
+  it("prihvata svaku postojeću igru", () => {
+    expect(SVE_IGRE.every(jeIgra)).toBe(true);
+  });
+
+  it("odbija izmišljene igre i sve što nije tekst", () => {
+    expect(jeIgra("skakač")).toBe(false);
+    expect(jeIgra("")).toBe(false);
+    expect(jeIgra(7)).toBe(false);
+    expect(jeIgra(null)).toBe(false);
+  });
+});
+
+describe("uKrugovima", () => {
+  /** Prost izvor slučajnosti sa istim redosledom pri svakom pokretanju testa. */
+  const seme = (pocetak: number) => {
+    let s = pocetak;
+    return () => {
+      s = (s * 1103515245 + 12345) % 2147483648;
+      return s / 2147483648;
+    };
+  };
+
+  it("daje tačno traženi broj stavki i kad ih u spisku ima manje", () => {
+    expect(uKrugovima(["a", "b", "c"], 20, nula)).toHaveLength(20);
+  });
+
+  it("u svakom krugu prođe ceo spisak, pa se nijedna reč ne preskače", () => {
+    const tok = uKrugovima(["a", "b", "c", "d"], 12, seme(7));
+    expect(new Set(tok.slice(0, 4)).size).toBe(4);
+    expect(new Set(tok.slice(4, 8)).size).toBe(4);
+    expect(new Set(tok.slice(8, 12)).size).toBe(4);
+  });
+
+  it("meša svaki krug iznova, pa drugi prolaz nije isti redosled", () => {
+    // Sa spiskom od šest stavki bi poklapanje slučajno bilo jedno u 720.
+    const tok = uKrugovima(["a", "b", "c", "d", "e", "f"], 12, seme(3));
+    expect(tok.slice(0, 6)).not.toEqual(tok.slice(6, 12));
+  });
+
+  it("nikad ne pušta dve iste stavke jednu za drugom", () => {
+    for (let broj = 2; broj <= 6; broj++) {
+      const stavke = Array.from({ length: broj }, (_, i) => `s${i}`);
+      for (let s = 1; s <= 40; s++) {
+        const tok = uKrugovima(stavke, 60, seme(s));
+        for (let i = 1; i < tok.length; i++) {
+          expect(tok[i]).not.toBe(tok[i - 1]);
+        }
+      }
+    }
+  });
+
+  it("spisak od jedne stavke ne vrti se u prazno, samo se ponavlja", () => {
+    expect(uKrugovima(["a"], 3, nula)).toEqual(["a", "a", "a"]);
+  });
+
+  it("na prazan spisak i na nulu vraća prazno", () => {
+    expect(uKrugovima([], 10, nula)).toEqual([]);
+    expect(uKrugovima(["a"], 0, nula)).toEqual([]);
   });
 });
 
