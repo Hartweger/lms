@@ -2866,6 +2866,9 @@ export type Database = {
           created_at: string
           email: string
           id: string
+          izvestaj_ukljucen: boolean
+          poslednji_izvestaj_at: string | null
+          praznih_zaredom: number
           pristanak_at: string
           pristanak_tekst: string
         }
@@ -2874,6 +2877,9 @@ export type Database = {
           created_at?: string
           email: string
           id?: string
+          izvestaj_ukljucen?: boolean
+          poslednji_izvestaj_at?: string | null
+          praznih_zaredom?: number
           pristanak_at?: string
           pristanak_tekst: string
         }
@@ -2882,6 +2888,9 @@ export type Database = {
           created_at?: string
           email?: string
           id?: string
+          izvestaj_ukljucen?: boolean
+          poslednji_izvestaj_at?: string | null
+          praznih_zaredom?: number
           pristanak_at?: string
           pristanak_tekst?: string
         }

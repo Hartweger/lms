@@ -17,6 +17,29 @@ export type StavkaAlbuma = { rec: Rec; stanje: Stanje };
 
 const DAN = 24 * 60 * 60 * 1000;
 
+/**
+ * Stanje jednog zapisa, bez reči: ista pravila važe i kad se album crta detetu
+ * (uz pune reči, kroz `stanjeAlbuma`) i kad se roditelju samo broji.
+ */
+export function stanjeZapisa(z: ZapisSlicice | undefined, sada: Date): Stanje {
+  if (!z) return "prazno";
+  if (!z.zalepljena_at) return "u-ruci";
+
+  // Sat bledenja kreće od kasnijeg od dva datuma. Vreme koje je sličica
+  // provela u ruci se ne broji, jer tada nije ni bila u albumu.
+  const odKada = Math.max(
+    Date.parse(z.zalepljena_at),
+    Date.parse(z.poslednje_tacno_at)
+  );
+  // Pokvaren ili neprepoznat datum daje NaN. Namerno pada u korist deteta:
+  // Number.isFinite to hvata eksplicitno, da ponašanje ne zavisi od toga
+  // što je poređenje sa NaN slučajno false.
+  if (!Number.isFinite(odKada)) return "zalepljena";
+
+  const dana = (sada.getTime() - odKada) / DAN;
+  return dana > DANA_DO_BLEDENJA ? "izbledela" : "zalepljena";
+}
+
 export function stanjeAlbuma(
   reci: readonly Rec[],
   zapisi: readonly ZapisSlicice[],
@@ -26,25 +49,7 @@ export function stanjeAlbuma(
 
   return [...reci]
     .sort((a, b) => a.redni_broj - b.redni_broj)
-    .map((rec) => {
-      const z = poRecId.get(rec.id);
-      if (!z) return { rec, stanje: "prazno" as const };
-      if (!z.zalepljena_at) return { rec, stanje: "u-ruci" as const };
-
-      // Sat bledenja kreće od kasnijeg od dva datuma. Vreme koje je sličica
-      // provela u ruci se ne broji, jer tada nije ni bila u albumu.
-      const odKada = Math.max(
-        Date.parse(z.zalepljena_at),
-        Date.parse(z.poslednje_tacno_at)
-      );
-      // Pokvaren ili neprepoznat datum daje NaN. Namerno pada u korist deteta:
-      // Number.isFinite to hvata eksplicitno, da ponašanje ne zavisi od toga
-      // što je poređenje sa NaN slučajno false.
-      if (!Number.isFinite(odKada)) return { rec, stanje: "zalepljena" as const };
-
-      const dana = (sada.getTime() - odKada) / DAN;
-      return { rec, stanje: dana > DANA_DO_BLEDENJA ? ("izbledela" as const) : ("zalepljena" as const) };
-    });
+    .map((rec) => ({ rec, stanje: stanjeZapisa(poRecId.get(rec.id), sada) }));
 }
 
 /**
