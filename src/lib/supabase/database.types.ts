@@ -2609,25 +2609,40 @@ export type Database = {
           created_at: string
           id: string
           ime: string
+          kod: string | null
           niz: number
+          pin_hash: string | null
+          pin_pokusaji: number
           poslednji_dan: string | null
+          roditelj_id: string | null
           udzbenik_id: string
+          zakljucano_do: string | null
         }
         Insert: {
           created_at?: string
           id?: string
           ime: string
+          kod?: string | null
           niz?: number
+          pin_hash?: string | null
+          pin_pokusaji?: number
           poslednji_dan?: string | null
+          roditelj_id?: string | null
           udzbenik_id: string
+          zakljucano_do?: string | null
         }
         Update: {
           created_at?: string
           id?: string
           ime?: string
+          kod?: string | null
           niz?: number
+          pin_hash?: string | null
+          pin_pokusaji?: number
           poslednji_dan?: string | null
+          roditelj_id?: string | null
           udzbenik_id?: string
+          zakljucano_do?: string | null
         }
         Relationships: [
           {
@@ -2844,6 +2859,33 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      zack_roditelji: {
+        Row: {
+          auth_user_id: string
+          created_at: string
+          email: string
+          id: string
+          pristanak_at: string
+          pristanak_tekst: string
+        }
+        Insert: {
+          auth_user_id: string
+          created_at?: string
+          email: string
+          id?: string
+          pristanak_at?: string
+          pristanak_tekst: string
+        }
+        Update: {
+          auth_user_id?: string
+          created_at?: string
+          email?: string
+          id?: string
+          pristanak_at?: string
+          pristanak_tekst?: string
+        }
+        Relationships: []
       }
       zack_slicice: {
         Row: {
