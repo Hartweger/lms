@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 export type AuthKorisnik = { id: string; email: string | null };
-export type Roditelj = { id: string; email: string };
+export type Roditelj = { id: string; email: string; izvestaj_ukljucen: boolean };
 
 /**
  * Prijavljeni korisnik iz kolačića. getUser() proverava token kod Supabase-a,
@@ -27,7 +27,7 @@ export async function nadjiRoditelja(authUserId: string): Promise<Roditelj | nul
   const sb = createAdminClient();
   const { data, error } = await sb
     .from("zack_roditelji")
-    .select("id, email")
+    .select("id, email, izvestaj_ukljucen")
     .eq("auth_user_id", authUserId)
     .maybeSingle();
   if (error) throw new Error(`Ne mogu da pročitam roditelja: ${error.message}`);

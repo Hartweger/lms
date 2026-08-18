@@ -59,6 +59,7 @@ export default async function RoditeljPage() {
         udzbenik: naziviUdzbenika.get(d.udzbenik_id) ?? "",
       }))}
       udzbenici={udzbenici}
+      izvestajUkljucen={roditelj.izvestaj_ukljucen}
     />
   );
 }

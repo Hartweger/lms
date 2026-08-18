@@ -8,6 +8,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { recDan } from "@/lib/zack/izvestaj";
 
 const PAPIR = "#FCFBF7";
 const IVICA = "#DED8C8";
@@ -91,6 +92,124 @@ function PinPolja(props: {
   );
 }
 
+/** Šta ruta napretka vraća za jedno dete. */
+type Napredak = {
+  reci: { naucene: number; ukupno: number };
+  gradivo: string;
+  lekcije: { broj: number; naziv: string; naucene: number; ukupno: number }[];
+  vezbaZaredom: number | null;
+  rekord: string | null;
+  aktivnost: string;
+};
+
+/** „vežbalo pre 2 dana" stiže kao sredina rečenice; na početku reda treba veliko slovo. */
+function velikoPrvoSlovo(s: string): string {
+  return s.length === 0 ? s : s[0].toUpperCase() + s.slice(1);
+}
+
+/**
+ * Napredak jednog deteta, sklopljen ispod kartice na klik. Roditelju se ne
+ * priča o sličicama ni spratovima nego o rečima i vežbanju - i samo o onome
+ * što je dete URADILO. Nema procenata tačnosti ni poređenja; kad dete nije
+ * vežbalo, rečenica je mirna i bez uzvičnika.
+ */
+function NapredakDeteta({ deteId }: { deteId: string }) {
+  const [otvoren, setOtvoren] = useState(false);
+  const [napredak, setNapredak] = useState<Napredak | null>(null);
+  const [ucitava, setUcitava] = useState(false);
+  const [poruka, setPoruka] = useState<string | null>(null);
+
+  const otvori = async () => {
+    if (otvoren) {
+      setOtvoren(false);
+      return;
+    }
+    setOtvoren(true);
+    if (napredak || ucitava) return;
+    setUcitava(true);
+    setPoruka(null);
+    try {
+      const odgovor = await fetch(`/api/zack/roditelj/deca/${deteId}/napredak`);
+      if (odgovor.ok) {
+        const podaci: Napredak = await odgovor.json();
+        setNapredak(podaci);
+      } else {
+        setPoruka("Nešto je zapelo. Probaj ponovo za koji trenutak.");
+      }
+    } catch {
+      setPoruka("Nema veze sa internetom. Probaj ponovo za koji trenutak.");
+    }
+    setUcitava(false);
+  };
+
+  return (
+    <div className="mt-3">
+      <button
+        type="button"
+        onClick={otvori}
+        aria-expanded={otvoren}
+        className="font-heading rounded-xl border-2 px-4 py-2.5 text-[15px] font-bold outline-offset-2 focus-visible:outline-4 focus-visible:outline-[#0B54C9]"
+        style={{ borderColor: IVICA, color: MASTILO, background: "#FFFFFF" }}
+      >
+        {otvoren ? "Sakrij napredak" : "Napredak"}
+      </button>
+
+      {otvoren && (
+        <div className="mt-3 rounded-xl border p-3" style={{ borderColor: IVICA, background: "#FFFFFF" }}>
+          {ucitava && (
+            <p className="text-[14px]" style={{ color: PRIGUSEN }}>
+              Učitava se...
+            </p>
+          )}
+          {poruka && (
+            <p className="text-[14px]" style={{ color: CRVENA }}>
+              {poruka}
+            </p>
+          )}
+          {napredak && (
+            <>
+              <p className="font-heading text-[22px] font-bold" style={{ color: MASTILO }}>
+                Zna {napredak.reci.naucene} od {napredak.reci.ukupno}
+              </p>
+              <p className="text-[14px]" style={{ color: PRIGUSEN }}>
+                {napredak.gradivo}
+              </p>
+
+              <p className="mt-2 text-[14px]" style={{ color: PRIGUSEN }}>
+                {velikoPrvoSlovo(napredak.aktivnost)}.
+                {napredak.vezbaZaredom !== null && (
+                  <> Vežba {napredak.vezbaZaredom} {recDan(napredak.vezbaZaredom)} zaredom.</>
+                )}
+                {napredak.rekord !== null && (
+                  <> U igri pogađanja roda (der/die/das) popelo se {napredak.rekord}.</>
+                )}
+              </p>
+
+              {napredak.lekcije.length > 0 && (
+                <ul className="mt-3 space-y-1.5">
+                  {napredak.lekcije.map((lekcija) => (
+                    <li
+                      key={lekcija.broj}
+                      className="flex items-baseline justify-between gap-3 text-[14px]"
+                    >
+                      <span className="min-w-0 truncate" style={{ color: MASTILO }}>
+                        {lekcija.naziv}
+                      </span>
+                      <span className="flex-none tabular-nums" style={{ color: PRIGUSEN }}>
+                        zna {lekcija.naucene} od {lekcija.ukupno}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 /** Kartica jednog deteta: kod krupno (da se lako prepiše) i promena PIN-a. */
 function DeteKartica({ dete }: { dete: DeteStavka }) {
   const [otvoreno, setOtvoreno] = useState(false);
@@ -154,6 +273,8 @@ function DeteKartica({ dete }: { dete: DeteStavka }) {
       >
         {dete.kod ?? "bez koda"}
       </p>
+
+      <NapredakDeteta deteId={dete.id} />
 
       <div aria-live="polite">
         {uspeh && !otvoreno && (
@@ -351,10 +472,89 @@ function DodajDete({ udzbenici }: { udzbenici: UdzbenikStavka[] }) {
   );
 }
 
+/**
+ * Prekidač dvonedeljnog izveštaja. Dugme sa aria-pressed, ne ukras: isti
+ * prekidač i gasi i vraća izveštaje - i onda kad su se sami ugasili posle
+ * mesec dana tišine.
+ */
+function IzvestajPrekidac({ ukljucen: pocetno }: { ukljucen: boolean }) {
+  const [ukljucen, setUkljucen] = useState(pocetno);
+  const [poruka, setPoruka] = useState<string | null>(null);
+  const [saljeSe, setSaljeSe] = useState(false);
+
+  const promeni = async () => {
+    if (saljeSe) return;
+    const novo = !ukljucen;
+    setSaljeSe(true);
+    setPoruka(null);
+    try {
+      const odgovor = await fetch("/api/zack/roditelj/izvestaj", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ukljucen: novo }),
+      });
+      if (odgovor.ok) {
+        setUkljucen(novo);
+      } else {
+        const podaci: { error?: string } = await odgovor.json();
+        setPoruka(podaci.error ?? "Nešto je zapelo. Probaj ponovo za koji trenutak.");
+      }
+    } catch {
+      setPoruka("Nema veze sa internetom. Probaj ponovo za koji trenutak.");
+    }
+    setSaljeSe(false);
+  };
+
+  return (
+    <div
+      className="mt-4 rounded-2xl border p-4 shadow-[0_2px_0_0_#DED8C8]"
+      style={{ background: PAPIR, borderColor: IVICA }}
+    >
+      <div className="flex items-center justify-between gap-3">
+        <div className="min-w-0">
+          <p id="izvestaj-naslov" className="font-heading text-[16px] font-bold" style={{ color: MASTILO }}>
+            Izveštaj na dve nedelje
+          </p>
+          <p className="mt-0.5 text-[13px]" style={{ color: PRIGUSEN }}>
+            Kratak mejl o napretku dece, na svake dve nedelje.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={promeni}
+          disabled={saljeSe}
+          aria-pressed={ukljucen}
+          aria-labelledby="izvestaj-naslov"
+          className="relative h-8 w-14 flex-none rounded-full border-2 outline-offset-4 focus-visible:outline-4 focus-visible:outline-[#0B54C9] disabled:opacity-60"
+          style={{
+            background: ukljucen ? ZELENA : "#FFFFFF",
+            borderColor: ukljucen ? ZELENA : IVICA,
+          }}
+        >
+          <span
+            aria-hidden="true"
+            className={`absolute top-0.5 h-6 w-6 rounded-full transition-[left] motion-reduce:transition-none ${
+              ukljucen ? "left-[26px]" : "left-0.5"
+            }`}
+            style={{
+              background: ukljucen ? "#FFFFFF" : PRIGUSEN,
+              boxShadow: "0 1px 2px rgba(0,0,0,0.2)",
+            }}
+          />
+        </button>
+      </div>
+      <p aria-live="polite" className="text-[14px]" style={{ color: CRVENA }}>
+        {poruka}
+      </p>
+    </div>
+  );
+}
+
 export default function RoditeljPanel(props: {
   email: string;
   deca: DeteStavka[];
   udzbenici: UdzbenikStavka[];
+  izvestajUkljucen: boolean;
 }) {
   const router = useRouter();
 
@@ -395,6 +595,8 @@ export default function RoditeljPanel(props: {
       )}
 
       <DodajDete udzbenici={props.udzbenici} />
+
+      <IzvestajPrekidac ukljucen={props.izvestajUkljucen} />
 
       <p className="mt-5 text-center text-[13px]" style={{ color: PRIGUSEN }}>
         Dete se prijavljuje kodom i PIN-om na{" "}
