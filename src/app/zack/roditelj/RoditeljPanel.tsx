@@ -4,19 +4,28 @@
 // promena PIN-a i dodavanje deteta. Sva pravila (slab PIN, jedinstven kod,
 // čija su deca) živi na serveru - ovde se proverava samo oblik unosa, da
 // roditelj ne čeka mrežu zbog očigledne omaške.
+//
+// Izgled: kartica deteta je mala korica albuma - ime na žutoj nalepnici (ista
+// nalepnica koju dete vidi na svojoj stazi), a kod kao registarska tablica,
+// ista slika koju dete vidi na prijavi. Roditelj tako zna šta detetu prepisuje.
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { recDan } from "@/lib/zack/izvestaj";
-
-const PAPIR = "#FCFBF7";
-const IVICA = "#DED8C8";
-const PRIGUSEN = "#6E6A5E";
-const MASTILO = "#16161A";
-const PLAVA = "#0B54C9";
-const CRVENA = "#B3261E";
-const ZELENA = "#1B6E3C";
+import {
+  DISPLAY,
+  GRESKA,
+  IVICA,
+  MASTILO,
+  PAPIR,
+  PLAVA,
+  PRIGUSEN,
+  TablicaOkvir,
+  ZELENA,
+  ZUTA,
+  ZackZnak,
+} from "../Ukras";
 
 // Ista provera kao pinJeIspravan iz lib/zack/pin.ts, koji se ovde ne sme
 // uvesti jer vuče node:crypto.
@@ -40,6 +49,13 @@ const OZNAKA = "font-heading block text-[15px] font-bold";
 const POLJE =
   "mt-1.5 w-full rounded-xl border-2 px-3.5 py-2.5 text-[16px] outline-offset-2 focus-visible:outline-4 focus-visible:outline-[#0B54C9]";
 const POLJE_STIL = { background: "#FFFFFF", borderColor: IVICA, color: MASTILO };
+
+// Dugmad kao na dečjoj strani, samo mirnija: puna plava sa tamnom stopom,
+// bela sa papirnom stopom. Na pritisak „legnu".
+const DUGME_PUNO =
+  "font-heading rounded-xl text-white shadow-[0_3px_0_0_#083E93] outline-offset-2 focus-visible:outline-4 focus-visible:outline-[#0B54C9] disabled:opacity-60 motion-safe:transition-transform motion-safe:duration-100 motion-safe:active:translate-y-[2px] motion-safe:active:shadow-[0_1px_0_0_#083E93]";
+const DUGME_BELO =
+  "font-heading rounded-xl border-2 bg-white shadow-[0_2px_0_0_#DED8C8] outline-offset-2 focus-visible:outline-4 focus-visible:outline-[#0B54C9] motion-safe:transition-transform motion-safe:duration-100 motion-safe:active:translate-y-[1px] motion-safe:active:shadow-none";
 
 /** Dva polja za PIN: novi i ponovljen. Oblik proverava ovde, snagu server. */
 function proveriPinUnos(pin: string, ponovo: string): string | null {
@@ -148,8 +164,8 @@ function NapredakDeteta({ deteId }: { deteId: string }) {
         type="button"
         onClick={otvori}
         aria-expanded={otvoren}
-        className="font-heading rounded-xl border-2 px-4 py-2.5 text-[15px] font-bold outline-offset-2 focus-visible:outline-4 focus-visible:outline-[#0B54C9]"
-        style={{ borderColor: IVICA, color: MASTILO, background: "#FFFFFF" }}
+        className={`${DUGME_BELO} px-4 py-2.5 text-[15px] font-bold`}
+        style={{ borderColor: IVICA, color: MASTILO }}
       >
         {otvoren ? "Sakrij napredak" : "Napredak"}
       </button>
@@ -162,13 +178,13 @@ function NapredakDeteta({ deteId }: { deteId: string }) {
             </p>
           )}
           {poruka && (
-            <p className="text-[14px]" style={{ color: CRVENA }}>
+            <p className="text-[14px]" style={{ color: GRESKA }}>
               {poruka}
             </p>
           )}
           {napredak && (
             <>
-              <p className="font-heading text-[22px] font-bold" style={{ color: MASTILO }}>
+              <p className="text-[22px]" style={{ color: MASTILO, fontFamily: DISPLAY }}>
                 Zna {napredak.reci.naucene} od {napredak.reci.ukupno}
               </p>
               <p className="text-[14px]" style={{ color: PRIGUSEN }}>
@@ -252,11 +268,15 @@ function DeteKartica({ dete }: { dete: DeteStavka }) {
 
   return (
     <li
-      className="rounded-2xl border p-4 shadow-[0_2px_0_0_#DED8C8]"
+      className="rounded-2xl border p-4 shadow-[0_3px_0_0_#DED8C8]"
       style={{ background: PAPIR, borderColor: IVICA }}
     >
-      <div className="flex items-baseline justify-between gap-3">
-        <span className="font-heading text-[18px] font-bold" style={{ color: MASTILO }}>
+      <div className="flex items-center justify-between gap-3">
+        {/* Ime na žutoj nalepnici - ista nalepnica koju dete vidi na stazi. */}
+        <span
+          className="inline-block -rotate-1 rounded-lg border-[3px] border-white px-2.5 py-0.5 text-[17px] shadow-[0_2px_6px_rgba(22,22,26,0.15)]"
+          style={{ background: ZUTA, color: MASTILO, fontFamily: DISPLAY }}
+        >
           {dete.ime}
         </span>
         <span className="text-[13px]" style={{ color: PRIGUSEN }}>
@@ -264,16 +284,25 @@ function DeteKartica({ dete }: { dete: DeteStavka }) {
         </span>
       </div>
 
-      <p className="mt-2 text-[13px]" style={{ color: PRIGUSEN }}>
+      <p className="mt-3 text-[13px]" style={{ color: PRIGUSEN }}>
         Kod za prijavu
       </p>
-      <p
-        className="font-heading text-[30px] font-bold tracking-[0.12em]"
-        style={{ color: PLAVA }}
-      >
-        {dete.kod ?? "bez koda"}
-      </p>
-      <p className="text-[13px]" style={{ color: PRIGUSEN }}>
+      {/* Tablica: ono što dete kuca na svojoj prijavi izgleda baš ovako. */}
+      {dete.kod ? (
+        <TablicaOkvir className="mt-1.5 max-w-[240px]">
+          <span
+            className="flex-1 px-3 py-2 text-center text-[22px] uppercase tracking-[0.1em]"
+            style={{ color: MASTILO, fontFamily: DISPLAY }}
+          >
+            {dete.kod}
+          </span>
+        </TablicaOkvir>
+      ) : (
+        <p className="text-[22px]" style={{ color: PRIGUSEN, fontFamily: DISPLAY }}>
+          bez koda
+        </p>
+      )}
+      <p className="mt-2 text-[13px]" style={{ color: PRIGUSEN }}>
         Detetu za prijavu trebaju dve stvari: ovaj kod i tajni broj (PIN) koji
         ti postaviš. Kod je kao korisničko ime, samo što se ne bira nego ga
         dete dobije, a tajni broj je kao šifra.
@@ -298,14 +327,14 @@ function DeteKartica({ dete }: { dete: DeteStavka }) {
             naPin={setPin}
             naPonovo={setPonovo}
           />
-          <p aria-live="polite" className="min-h-[20px] pt-2 text-[14px]" style={{ color: CRVENA }}>
+          <p aria-live="polite" className="min-h-[20px] pt-2 text-[14px]" style={{ color: GRESKA }}>
             {poruka}
           </p>
           <div className="mt-1 flex gap-3">
             <button
               type="submit"
               disabled={saljeSe}
-              className="font-heading rounded-xl px-4 py-2.5 text-[15px] font-bold text-white outline-offset-2 focus-visible:outline-4 focus-visible:outline-[#0B54C9] disabled:opacity-60"
+              className={`${DUGME_PUNO} px-4 py-2.5 text-[15px] font-bold`}
               style={{ background: PLAVA }}
             >
               {saljeSe ? "Čuva se..." : "Sačuvaj PIN"}
@@ -318,8 +347,8 @@ function DeteKartica({ dete }: { dete: DeteStavka }) {
                 setPin("");
                 setPonovo("");
               }}
-              className="font-heading rounded-xl border-2 px-4 py-2.5 text-[15px] font-bold outline-offset-2 focus-visible:outline-4 focus-visible:outline-[#0B54C9]"
-              style={{ borderColor: IVICA, color: MASTILO, background: "#FFFFFF" }}
+              className={`${DUGME_BELO} px-4 py-2.5 text-[15px] font-bold`}
+              style={{ borderColor: IVICA, color: MASTILO }}
             >
               Odustani
             </button>
@@ -332,8 +361,8 @@ function DeteKartica({ dete }: { dete: DeteStavka }) {
             setOtvoreno(true);
             setUspeh(null);
           }}
-          className="font-heading mt-3 rounded-xl border-2 px-4 py-2.5 text-[15px] font-bold outline-offset-2 focus-visible:outline-4 focus-visible:outline-[#0B54C9]"
-          style={{ borderColor: IVICA, color: MASTILO, background: "#FFFFFF" }}
+          className={`${DUGME_BELO} mt-3 px-4 py-2.5 text-[15px] font-bold`}
+          style={{ borderColor: IVICA, color: MASTILO }}
         >
           Novi PIN
         </button>
@@ -402,10 +431,10 @@ function DodajDete({ udzbenici }: { udzbenici: UdzbenikStavka[] }) {
     <form
       onSubmit={dodaj}
       noValidate
-      className="mt-4 rounded-2xl border p-4 shadow-[0_2px_0_0_#DED8C8]"
+      className="mt-4 rounded-2xl border p-4 shadow-[0_3px_0_0_#DED8C8]"
       style={{ background: PAPIR, borderColor: IVICA }}
     >
-      <h2 className="font-heading text-[18px] font-bold" style={{ color: MASTILO }}>
+      <h2 className="text-[18px]" style={{ color: MASTILO, fontFamily: DISPLAY }}>
         Dodaj dete
       </h2>
 
@@ -458,7 +487,7 @@ function DodajDete({ udzbenici }: { udzbenici: UdzbenikStavka[] }) {
         </p>
       </div>
 
-      <p aria-live="polite" className="min-h-[20px] pt-2 text-[14px]" style={{ color: CRVENA }}>
+      <p aria-live="polite" className="min-h-[20px] pt-2 text-[14px]" style={{ color: GRESKA }}>
         {poruka}
       </p>
       <p aria-live="polite" className="text-[15px] font-bold" style={{ color: ZELENA }}>
@@ -468,7 +497,7 @@ function DodajDete({ udzbenici }: { udzbenici: UdzbenikStavka[] }) {
       <button
         type="submit"
         disabled={saljeSe}
-        className="font-heading mt-2 w-full rounded-xl px-4 py-3 text-[16px] font-bold text-white outline-offset-4 focus-visible:outline-4 focus-visible:outline-[#0B54C9] disabled:opacity-60"
+        className={`${DUGME_PUNO} mt-2 w-full px-4 py-3 text-[16px] font-bold`}
         style={{ background: PLAVA }}
       >
         {saljeSe ? "Pravi se..." : "Napravi profil"}
@@ -512,12 +541,12 @@ function IzvestajPrekidac({ ukljucen: pocetno }: { ukljucen: boolean }) {
 
   return (
     <div
-      className="mt-4 rounded-2xl border p-4 shadow-[0_2px_0_0_#DED8C8]"
+      className="mt-4 rounded-2xl border p-4 shadow-[0_3px_0_0_#DED8C8]"
       style={{ background: PAPIR, borderColor: IVICA }}
     >
       <div className="flex items-center justify-between gap-3">
         <div className="min-w-0">
-          <p id="izvestaj-naslov" className="font-heading text-[16px] font-bold" style={{ color: MASTILO }}>
+          <p id="izvestaj-naslov" className="text-[16px]" style={{ color: MASTILO, fontFamily: DISPLAY }}>
             Izveštaj na dve nedelje
           </p>
           <p className="mt-0.5 text-[13px]" style={{ color: PRIGUSEN }}>
@@ -548,7 +577,7 @@ function IzvestajPrekidac({ ukljucen: pocetno }: { ukljucen: boolean }) {
           />
         </button>
       </div>
-      <p aria-live="polite" className="text-[14px]" style={{ color: CRVENA }}>
+      <p aria-live="polite" className="text-[14px]" style={{ color: GRESKA }}>
         {poruka}
       </p>
     </div>
@@ -571,10 +600,13 @@ export default function RoditeljPanel(props: {
 
   return (
     <main className="mx-auto max-w-md">
-      <h1 className="font-heading text-3xl font-bold" style={{ color: MASTILO }}>
-        zack! za roditelje
+      <h1 className="flex flex-wrap items-center gap-x-2.5 gap-y-2">
+        <ZackZnak velicina="md" />
+        <span className="text-[24px] tracking-tight" style={{ color: MASTILO, fontFamily: DISPLAY }}>
+          za roditelje
+        </span>
       </h1>
-      <p className="mt-2 text-[14px]" style={{ color: PRIGUSEN }}>
+      <p className="mt-3 text-[14px]" style={{ color: PRIGUSEN }}>
         Prijavljen si kao {props.email}.{" "}
         <button
           type="button"

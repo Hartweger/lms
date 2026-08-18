@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Archivo_Black } from "next/font/google";
 
 // Dečji deo ima svoj papirni okvir, odvojen od ostatka platforme. Podloga je
 // topao papir, a ne beli ekran, jer se ceo zack drži tog jednog utiska.
@@ -33,9 +34,37 @@ export const viewport = {
   themeColor: "#F4F1E9",
 };
 
+// Display slovo SAMO za zack: znak, naslovi, kodovi. Učitava se ovde, u
+// dečjem rasporedu, pa ostatak sajta ostaje na svojim fontovima. next/font ga
+// pri buildu spusti kod nas (self-hosted), pa CSP ne vidi nijedan novi domen.
+const archivo = Archivo_Black({
+  weight: "400",
+  subsets: ["latin", "latin-ext"],
+  display: "swap",
+  variable: "--font-zack",
+});
+
 export default function ZackLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-[#F4F1E9] text-[#16161A]">
+    <div className={`${archivo.variable} min-h-screen bg-[#F4F1E9] text-[#16161A]`}>
+      {/* Jedina animacija u celom zack-u: sličica se „zalepi" - padne za
+          nijansu krupnija pa legne. Definisana je jednom, ovde, i postoji
+          isključivo unutar no-preference, pa uz reduced-motion elementi prosto
+          stoje na mestu (bez animacije su vidljivi, `both` ih krije samo dok
+          animacija stvarno teče). */}
+      <style>{`
+        @media (prefers-reduced-motion: no-preference) {
+          @keyframes zack-zalepi {
+            0% { opacity: 0; transform: translateY(-12px) scale(1.3) rotate(var(--zack-r, 0deg)); }
+            65% { opacity: 1; transform: translateY(0) scale(0.97) rotate(var(--zack-r, 0deg)); }
+            100% { opacity: 1; transform: translateY(0) scale(1) rotate(var(--zack-r, 0deg)); }
+          }
+          .zack-zalepi {
+            animation: zack-zalepi 0.5s cubic-bezier(0.2, 0.7, 0.3, 1.15) both;
+            animation-delay: var(--zack-kasni, 0s);
+          }
+        }
+      `}</style>
       {/* Uža kolona nego inače: ovo se čita na telefonu u ruci, a na širem
           ekranu ne sme da se razvuče u traku preko celog monitora. */}
       <div className="mx-auto max-w-2xl px-4 py-6 sm:px-6 sm:py-10">{children}</div>

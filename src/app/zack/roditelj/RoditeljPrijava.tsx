@@ -3,18 +3,27 @@
 // Prijava roditelja mejlom: isti magic-link tok kao ostatak platforme
 // (signInWithOtp), samo se link vraća na /zack/roditelj umesto na dashboard.
 // Ovde se namerno NE pravi nikakva nova vrsta prijave.
+//
+// Izgled: ista porodica kao dečja strana, samo smirenija - znak gore, papir,
+// red. Trio mini-sličica u bojama roda stoji kao mig na ono što dete dobija.
 import { useRef, useState } from "react";
 import * as Sentry from "@sentry/nextjs";
 import { createClient } from "@/lib/supabase/client";
 import Turnstile, { TURNSTILE_SITE_KEY, type TurnstileHandle } from "@/components/Turnstile";
-
-const PAPIR = "#FCFBF7";
-const IVICA = "#DED8C8";
-const PRIGUSEN = "#6E6A5E";
-const MASTILO = "#16161A";
-const PLAVA = "#0B54C9";
-const CRVENA = "#B3261E";
-const ZELENA = "#1B6E3C";
+import {
+  CRVENA_ZNAK,
+  DISPLAY,
+  GRESKA,
+  IVICA,
+  MASTILO,
+  MiniSlicica,
+  PAPIR,
+  PLAVA,
+  PRIGUSEN,
+  ZELENA,
+  ZUTA,
+  ZackZnak,
+} from "../Ukras";
 
 export default function RoditeljPrijava() {
   const [email, setEmail] = useState("");
@@ -60,17 +69,29 @@ export default function RoditeljPrijava() {
 
   return (
     <main className="mx-auto max-w-md">
-      <h1 className="font-heading text-3xl font-bold" style={{ color: MASTILO }}>
-        zack! za roditelje
-      </h1>
-      <p className="mt-3 text-[16px] leading-relaxed" style={{ color: PRIGUSEN }}>
+      <div className="flex items-start justify-between gap-4">
+        <h1 className="flex flex-wrap items-center gap-x-2.5 gap-y-2">
+          <ZackZnak velicina="md" />
+          <span className="text-[24px] tracking-tight" style={{ color: MASTILO, fontFamily: DISPLAY }}>
+            za roditelje
+          </span>
+        </h1>
+        {/* Tri sličice, tri roda: crvena die, plava der, žuta das. Mig na ono
+            što dete u aplikaciji skuplja. */}
+        <span aria-hidden="true" className="flex flex-none -space-x-2 pt-1">
+          <MiniSlicica boja={CRVENA_ZNAK} ugao={-7} sirina={26} kasni={120} />
+          <MiniSlicica boja={PLAVA} ugao={3} sirina={26} kasni={220} />
+          <MiniSlicica boja={ZUTA} ugao={9} sirina={26} kasni={320} />
+        </span>
+      </div>
+      <p className="mt-4 text-[16px] leading-relaxed" style={{ color: PRIGUSEN }}>
         zack! je Hartweger aplikacija u kojoj tvoje dete vežba nemački uz lekcije iz svog
         školskog udžbenika i za tačne odgovore skuplja sličice. Ovde detetu otvaraš profil
         i dobijaš kod i PIN kojima se ono prijavljuje, bez mejla i bez svog naloga.
       </p>
 
       <div
-        className="mt-6 rounded-2xl border p-5 shadow-[0_2px_0_0_#DED8C8]"
+        className="mt-6 rounded-2xl border p-5 shadow-[0_3px_0_0_#DED8C8]"
         style={{ background: PAPIR, borderColor: IVICA }}
       >
         {poslato ? (
@@ -82,8 +103,8 @@ export default function RoditeljPrijava() {
           <form onSubmit={posalji} noValidate>
             <label
               htmlFor="roditelj-email"
-              className="font-heading block text-[16px] font-bold"
-              style={{ color: MASTILO }}
+              className="block text-[16px]"
+              style={{ color: MASTILO, fontFamily: DISPLAY }}
             >
               Tvoj mejl
             </label>
@@ -100,13 +121,13 @@ export default function RoditeljPrijava() {
               style={{ background: "#FFFFFF", borderColor: IVICA, color: MASTILO }}
             />
             <Turnstile ref={turnstileRef} onToken={setCaptchaToken} />
-            <p aria-live="polite" className="min-h-[22px] pt-2 text-[14px]" style={{ color: CRVENA }}>
+            <p aria-live="polite" className="min-h-[22px] pt-2 text-[14px]" style={{ color: GRESKA }}>
               {poruka}
             </p>
             <button
               type="submit"
               disabled={saljeSe || captchaCeka}
-              className="font-heading mt-1 w-full rounded-xl px-4 py-3.5 text-[17px] font-bold text-white outline-offset-4 focus-visible:outline-4 focus-visible:outline-[#0B54C9] disabled:opacity-60"
+              className="font-heading mt-1 w-full rounded-xl px-4 py-3.5 text-[17px] font-bold text-white shadow-[0_3px_0_0_#083E93] outline-offset-4 focus-visible:outline-4 focus-visible:outline-[#0B54C9] disabled:opacity-60 motion-safe:transition-transform motion-safe:duration-100 motion-safe:active:translate-y-[2px] motion-safe:active:shadow-[0_1px_0_0_#083E93]"
               style={{ background: PLAVA }}
             >
               {saljeSe ? "Šalje se..." : "Pošalji mi link za prijavu"}

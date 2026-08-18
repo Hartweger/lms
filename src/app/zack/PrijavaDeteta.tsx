@@ -4,21 +4,61 @@
 // prijave je „pošalji pa pročitaj poruku": odluke (poklapanje, zaključavanje)
 // žive na serveru, a ovde se samo pazi da dete ne šalje očigledno nepotpun
 // unos i da svaku poruku dobije mirno, uz polje i kroz aria-live.
+//
+// Izgled: otvaranje albuma, ne formular. Krupan zack! znak, oko njega se pri
+// učitavanju „zalepe" mini-sličice u bojama roda (čist ukras, aria-hidden),
+// kod je registarska tablica, dugme debela crvena nalepnica.
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { kodJeIspravan } from "@/lib/zack/kod";
+import {
+  CRVENA,
+  CRVENA_ZNAK,
+  DISPLAY,
+  GRESKA,
+  IVICA,
+  MASTILO,
+  MiniSlicica,
+  PAPIR,
+  PLAVA,
+  PRIGUSEN,
+  SJAJ,
+  TablicaOkvir,
+  ZUTA,
+  ZackZnak,
+} from "./Ukras";
 
 // Ista provera kao pinJeIspravan iz lib/zack/pin.ts. Taj modul se ovde ne sme
 // uvesti jer vuče node:crypto, koji ne postoji u pretraživaču.
 const PIN_OBLIK = /^\d{4}$/;
 
-const PAPIR = "#FCFBF7";
-const IVICA = "#DED8C8";
-const PRIGUSEN = "#6E6A5E";
-const MASTILO = "#16161A";
-const PLAVA = "#0B54C9";
-const CRVENA = "#B3261E";
+/**
+ * Razbacane sličice iza znaka. Položaji su ručno nameštani za 375px: par
+ * viri uz ivice, nijedna ne dodiruje tekst. Sjajna je tačno jedna i najmanja
+ * je - izuzetak, kao i u albumu. Koza viri iza leve, na papirnoj sličici.
+ */
+function RazbacaneSlicice() {
+  return (
+    <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+      <span className="absolute left-[4%] top-1">
+        <MiniSlicica boja={PAPIR} ugao={-8} sirina={52} kasni={220} ikonica="/zack/ikonice/1f410.svg" />
+      </span>
+      <span className="absolute bottom-2 left-[16%]">
+        <MiniSlicica boja={ZUTA} ugao={6} sirina={40} kasni={340} />
+      </span>
+      <span className="absolute right-[5%] top-0">
+        <MiniSlicica boja={PLAVA} ugao={9} sirina={48} kasni={280} />
+      </span>
+      <span className="absolute bottom-1 right-[17%]">
+        <MiniSlicica boja={CRVENA_ZNAK} ugao={-6} sirina={38} kasni={400} />
+      </span>
+      <span className="absolute bottom-8 right-[2%]">
+        <MiniSlicica boja={SJAJ} ugao={-10} sirina={26} kasni={480} />
+      </span>
+    </div>
+  );
+}
 
 export default function PrijavaDeteta() {
   const router = useRouter();
@@ -60,47 +100,58 @@ export default function PrijavaDeteta() {
 
   return (
     <main className="mx-auto max-w-md">
-      <h1 className="font-heading text-center text-4xl font-bold" style={{ color: MASTILO }}>
-        zack!
-      </h1>
-      <p className="mt-2 text-center text-[17px]" style={{ color: PRIGUSEN }}>
+      {/* Scena otvaranja: znak padne prvi, sličice se zalepe za njim. */}
+      <div className="relative flex min-h-[150px] items-center justify-center">
+        <RazbacaneSlicice />
+        <h1 className="zack-zalepi relative" style={{ ["--zack-kasni" as string]: "60ms" }}>
+          <ZackZnak velicina="lg" />
+        </h1>
+      </div>
+      <p
+        className="zack-zalepi mt-3 text-center text-[17px]"
+        style={{ color: PRIGUSEN, ["--zack-kasni" as string]: "520ms" }}
+      >
         Upiši svoj kod i PIN, pa pravac na stazu.
       </p>
 
       <form
         onSubmit={posalji}
         noValidate
-        className="mt-6 rounded-2xl border p-5 shadow-[0_2px_0_0_#DED8C8]"
+        className="mt-6 rounded-2xl border p-5 shadow-[0_3px_0_0_#DED8C8]"
         style={{ background: PAPIR, borderColor: IVICA }}
       >
         <label
           htmlFor="zack-kod"
-          className="font-heading block text-[17px] font-bold"
-          style={{ color: MASTILO }}
+          className="block text-[17px]"
+          style={{ color: MASTILO, fontFamily: DISPLAY }}
         >
           Tvoj kod
         </label>
         <p className="mt-0.5 text-[14px]" style={{ color: PRIGUSEN }}>
           Dobijaš ga od roditelja. On kaže ko si, i nije tajna.
         </p>
-        <input
-          id="zack-kod"
-          name="kod"
-          type="text"
-          value={kod}
-          onChange={(e) => setKod(e.target.value)}
-          placeholder="ZK-4F7Q"
-          autoComplete="off"
-          autoCapitalize="characters"
-          spellCheck={false}
-          className="font-heading mt-2 w-full rounded-xl border-2 px-4 py-3.5 text-center text-[26px] font-bold uppercase tracking-[0.15em] outline-offset-2 focus-visible:outline-4 focus-visible:outline-[#0B54C9]"
-          style={{ background: "#FFFFFF", borderColor: IVICA, color: MASTILO }}
-        />
+        {/* Kod izgleda kao registarska tablica - ista slika koju roditelj vidi
+            na svojoj kartici, pa dete prepozna šta se ovde kuca. */}
+        <TablicaOkvir className="mt-2 outline-offset-2 focus-within:outline-4 focus-within:outline-[#0B54C9]">
+          <input
+            id="zack-kod"
+            name="kod"
+            type="text"
+            value={kod}
+            onChange={(e) => setKod(e.target.value)}
+            placeholder="ZK-4F7Q"
+            autoComplete="off"
+            autoCapitalize="characters"
+            spellCheck={false}
+            className="w-full min-w-0 flex-1 bg-white px-3 py-3.5 text-center text-[24px] uppercase tracking-[0.1em] outline-none"
+            style={{ color: MASTILO, fontFamily: DISPLAY }}
+          />
+        </TablicaOkvir>
 
         <label
           htmlFor="zack-pin"
-          className="font-heading mt-5 block text-[17px] font-bold"
-          style={{ color: MASTILO }}
+          className="mt-5 block text-[17px]"
+          style={{ color: MASTILO, fontFamily: DISPLAY }}
         >
           Tajni broj (PIN)
         </label>
@@ -118,20 +169,21 @@ export default function PrijavaDeteta() {
           maxLength={4}
           placeholder="••••"
           autoComplete="off"
-          className="font-heading mt-2 w-full rounded-xl border-2 px-4 py-3.5 text-center text-[26px] font-bold tracking-[0.4em] outline-offset-2 focus-visible:outline-4 focus-visible:outline-[#0B54C9]"
-          style={{ background: "#FFFFFF", borderColor: IVICA, color: MASTILO }}
+          className="mt-2 w-full rounded-xl border-[3px] bg-white px-4 py-3.5 text-center text-[24px] tracking-[0.4em] outline-offset-2 focus-visible:outline-4 focus-visible:outline-[#0B54C9]"
+          style={{ borderColor: MASTILO, color: MASTILO, fontFamily: DISPLAY }}
         />
 
         {/* aria-live čita poruku naglas i kad se fokus ne pomeri. */}
-        <p aria-live="polite" className="mt-3 min-h-[24px] text-[15px]" style={{ color: CRVENA }}>
+        <p aria-live="polite" className="mt-3 min-h-[24px] text-[15px]" style={{ color: GRESKA }}>
           {poruka}
         </p>
 
+        {/* Debela crvena nalepnica: tamna stopa ispod, na pritisak „legne". */}
         <button
           type="submit"
           disabled={saljeSe}
-          className="font-heading mt-2 w-full rounded-xl px-4 py-4 text-[20px] font-bold text-white outline-offset-4 focus-visible:outline-4 focus-visible:outline-[#0B54C9] disabled:opacity-60 motion-safe:transition-transform motion-safe:duration-100 motion-safe:active:scale-[0.985]"
-          style={{ background: PLAVA }}
+          className="mt-2 w-full rounded-2xl border-4 border-white px-4 py-4 text-[22px] text-white shadow-[0_4px_0_0_#8F1B14,0_6px_12px_rgba(22,22,26,0.18)] outline-offset-4 focus-visible:outline-4 focus-visible:outline-[#0B54C9] disabled:opacity-60 motion-safe:transition-transform motion-safe:duration-100 motion-safe:active:translate-y-[3px] motion-safe:active:shadow-[0_1px_0_0_#8F1B14]"
+          style={{ background: CRVENA, fontFamily: DISPLAY }}
         >
           {saljeSe ? "Samo trenutak..." : "Uđi"}
         </button>

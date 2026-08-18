@@ -4,17 +4,14 @@
 // tekst server upisuje u bazu, pa ono što roditelj vidi i ono što se čuva ne
 // mogu da se raziđu. Bez klika na „Prihvatam" nema reda u zack_roditelji, a
 // bez tog reda rute ne daju da se napravi nijedan dečji profil.
+//
+// Tekst se za prikaz samo deli na pasuse (split po praznom redu) - sadržaj
+// ostaje slovo po slovo isti kao PRISTANAK_TEKST koji ide u bazu.
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { PRISTANAK_TEKST } from "@/lib/zack/pristanak";
-
-const PAPIR = "#FCFBF7";
-const IVICA = "#DED8C8";
-const PRIGUSEN = "#6E6A5E";
-const MASTILO = "#16161A";
-const PLAVA = "#0B54C9";
-const CRVENA = "#B3261E";
+import { DISPLAY, GRESKA, IVICA, MASTILO, PAPIR, PLAVA, PRIGUSEN, ZackZnak } from "../Ukras";
 
 export default function PristanakEkran({ email }: { email: string }) {
   const router = useRouter();
@@ -47,9 +44,17 @@ export default function PristanakEkran({ email }: { email: string }) {
     router.refresh();
   };
 
+  const pasusi = PRISTANAK_TEKST.split("\n\n");
+
   return (
     <main className="mx-auto max-w-md">
-      <h1 className="font-heading text-3xl font-bold" style={{ color: MASTILO }}>
+      <p>
+        <ZackZnak velicina="sm" />
+      </p>
+      <h1
+        className="mt-3 text-[26px] tracking-tight"
+        style={{ color: MASTILO, fontFamily: DISPLAY }}
+      >
         Još samo pristanak
       </h1>
       <p className="mt-3 text-[15px] leading-relaxed" style={{ color: PRIGUSEN }}>
@@ -58,20 +63,25 @@ export default function PristanakEkran({ email }: { email: string }) {
       </p>
 
       <div
-        className="mt-5 whitespace-pre-line rounded-2xl border p-5 text-[16px] leading-relaxed shadow-[0_2px_0_0_#DED8C8]"
+        className="mt-5 space-y-4 rounded-2xl border p-5 text-[16px] leading-relaxed shadow-[0_3px_0_0_#DED8C8]"
         style={{ background: PAPIR, borderColor: IVICA, color: MASTILO }}
       >
-        {PRISTANAK_TEKST}
+        {pasusi.map((pasus, i) => (
+          // Prvi pasus je sama izjava, pa stoji krupnije od objašnjenja ispod.
+          <p key={i} className={i === 0 ? "font-heading text-[17px] font-bold" : ""}>
+            {pasus}
+          </p>
+        ))}
       </div>
 
-      <p aria-live="polite" className="min-h-[22px] pt-3 text-[14px]" style={{ color: CRVENA }}>
+      <p aria-live="polite" className="min-h-[22px] pt-3 text-[14px]" style={{ color: GRESKA }}>
         {poruka}
       </p>
       <button
         type="button"
         onClick={prihvati}
         disabled={saljeSe}
-        className="font-heading mt-1 w-full rounded-xl px-4 py-3.5 text-[17px] font-bold text-white outline-offset-4 focus-visible:outline-4 focus-visible:outline-[#0B54C9] disabled:opacity-60"
+        className="font-heading mt-1 w-full rounded-xl px-4 py-3.5 text-[17px] font-bold text-white shadow-[0_3px_0_0_#083E93] outline-offset-4 focus-visible:outline-4 focus-visible:outline-[#0B54C9] disabled:opacity-60 motion-safe:transition-transform motion-safe:duration-100 motion-safe:active:translate-y-[2px] motion-safe:active:shadow-[0_1px_0_0_#083E93]"
         style={{ background: PLAVA }}
       >
         {saljeSe ? "Čuva se..." : "Prihvatam"}
