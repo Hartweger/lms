@@ -37,6 +37,10 @@
       "schedule": "0 22 * * *"
     },
     {
+      "path": "/api/cron/nestpay-poll",
+      "schedule": "2,17,32,47 * * * *"
+    },
+    {
       "path": "/api/cron/close-groups",
       "schedule": "0 1 * * *"
     },

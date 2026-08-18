@@ -2,8 +2,7 @@
 import { NextResponse } from "next/server";
 import { withCronLog } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { queryTransaction } from "@/lib/nestpay";
-import { grantAccessForOrder } from "@/lib/grant-access";
+import { reconcilePendingCards } from "@/lib/reconcile-cards";
 import { sendCardRetryEmail, sendCardReminder2Email, sendOrderCancelledEmail, sendUplataReminderEmail } from "@/lib/email";
 import { recoveryAction, uplataReminderAction, calculatePaypalEur, needsFiscalRetry } from "@/lib/order-utils";
 import { generateIpsQrUrl } from "@/lib/ips-qr";
@@ -28,23 +27,16 @@ async function cronHandler(request: Request) {
   const now = Date.now();
 
   // 1) Oporavak izgubljenog callback-a: kartica pending >15 min → pitaj banku, ako je naplaćeno dodeli pristup.
-  const cutoff = new Date(now - 15 * 60 * 1000).toISOString();
-  const { data: pending } = await admin
-    .from("orders").select("id, order_number, total")
-    .in("payment_method", ["kartica", "kartica_rate"])
-    .eq("payment_status", "pending")
-    .lt("created_at", cutoff)
-    .limit(50);
+  //    Puni prolaz, bez ograničenja starosti (brzi cron nestpay-poll pokriva poslednja 24h na 15 min).
+  const { checked, reconciled, answers } = await reconcilePendingCards(admin, { nowMs: now });
 
-  let reconciled = 0;
-  for (const o of pending ?? []) {
-    if (!o.order_number) continue; // kartične porudžbine uvek imaju broj; bez njega nema upita banci
-    const q = await queryTransaction(o.order_number);
-    if (q?.procReturnCode === "00") {
-      await admin.from("orders").update({ nestpay_status: "charged" }).eq("id", o.id);
-      await grantAccessForOrder(o.id);
-      reconciled++;
-    }
+  // Banka nije odgovorila ni „jeste" ni „nije": upit je pao ili porudžbina nije stigla na red.
+  // Takva porudžbina u koraku 2 ne sme da dobije mejl/otkazivanje - vidi komentar tamo.
+  const neodgovoreno = [...answers.values()].filter((a) => a === "unknown").length;
+  if (neodgovoreno > 0) {
+    Sentry.captureException(
+      new Error(`[nestpay] banka nije odgovorila na ${neodgovoreno} upit(a) o statusu - podsetnici preskočeni`)
+    );
   }
 
   // 2) Sekvenca povraćaja (abandoned cart) - mašina stanja po recovery_stage:
@@ -81,6 +73,12 @@ async function cronHandler(request: Request) {
       now
     );
     const mail = { email: o.email, fullName: o.full_name ?? "", courseTitle, courseSlug, orderNumber: o.order_number };
+
+    // „Nije ti ništa naplaćeno" i otkazivanje su tvrdnje o novcu: šaljemo ih samo kad je
+    // banka u koraku 1 izričito rekla da naplate nema. Ako je upit pao (unknown), ćutimo
+    // i čekamo sledeći prolaz - inače kupac koji je upravo platio dobije poruku da nije.
+    // (cancel-silent nije tvrdnja - polaznik je već platio drugačije, samo zatvaramo mrtav red.)
+    if (action !== "cancel-silent" && answers.get(o.id) !== "not-charged") continue;
 
     if (action === "mejl1") {
       await sendCardRetryEmail(mail);
@@ -189,7 +187,7 @@ async function cronHandler(request: Request) {
     }
   }
 
-  return NextResponse.json({ checked: pending?.length ?? 0, reconciled, ...counts, ...uplCounts, fiscalRetried, fiscalFailed });
+  return NextResponse.json({ checked, reconciled, neodgovoreno, ...counts, ...uplCounts, fiscalRetried, fiscalFailed });
 }
 
 export const GET = withCronLog("nestpay-reconcile", cronHandler);

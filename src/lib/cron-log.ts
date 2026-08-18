@@ -21,6 +21,8 @@ export const EXPECTED_CRONS: { name: string; maxAgeHours: number }[] = [
   { name: "subscriptions-poll", maxAgeHours: 26 },
   // 3x dnevno (6,14,22 UTC → najviše 8h razmaka + zazor)
   { name: "nestpay-reconcile", maxAgeHours: 10 },
+  // na 15 minuta (izgubljena potvrda plaćanja - novac je već naplaćen, kupac čeka pristup)
+  { name: "nestpay-poll", maxAgeHours: 2 },
   // nedeljni (170h = 7 dana + zazor)
   { name: "access-audit", maxAgeHours: 170 },
   { name: "naki-content-weekly", maxAgeHours: 170 },
