@@ -139,24 +139,6 @@ function BlokPoverenja() {
       className="mt-5 rounded-2xl border bg-white p-5 shadow-[0_3px_0_0_#DED8C8]"
       style={{ borderColor: IVICA }}
     >
-      <h2 className="text-xs font-semibold uppercase tracking-wide" style={{ color: PRIGUSEN }}>
-        Kome plaćaš
-      </h2>
-      {/* Tačno podaci iz /uslovi, odeljak 6 „Osnovni podaci o firmi". */}
-      <p className="mt-2 text-[14px] leading-relaxed" style={{ color: MASTILO }}>
-        NATAŠA HARTWEGER PR STUDIO ZA UČENJE NEMAČKOG JEZIKA I PREVOĐENJE HARTWEGER BEOGRAD (NOVI
-        BEOGRAD)
-        <br />
-        Jurija Gagarina 20, Beograd (Novi Beograd)
-        <br />
-        Matični broj: 63647357 · PIB: 108712117
-        <br />
-        Kontakt:{" "}
-        <a href="mailto:info@hartweger.rs" className="underline">
-          info@hartweger.rs
-        </a>
-      </p>
-
       <h2
         className="mt-5 text-xs font-semibold uppercase tracking-wide"
         style={{ color: PRIGUSEN }}
