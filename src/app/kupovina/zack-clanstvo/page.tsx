@@ -123,7 +123,7 @@ function StaSePlaca({ imeDeteta }: { imeDeteta?: string }) {
           </li>
           <li>
             <strong style={{ color: MASTILO }}>Otkazivanje:</strong> u svakom trenutku, u
-            roditeljskom panelu, bez pisanja i bez obrazlaganja. Posle otkazivanja igre rade do
+            roditeljskom panelu. Posle otkazivanja igre rade do
             kraja plaćenog meseca, a album i sve zarađeno ostaju zauvek.
           </li>
           <li>
