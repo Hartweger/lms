@@ -14,6 +14,8 @@ import { accessUntilForCharge, planForSlug, unlockedSlugsAfter } from "@/lib/sub
 import { recurringTxData } from "@/lib/payment-confirmation";
 import { CLANSTVO_CONTENT_SLUG } from "@/lib/clanstvo";
 import { noviRokClanstva, ZACK_PROMO_RSD } from "@/lib/zack/clanstvo";
+import { napraviKod } from "@/lib/zack/kod";
+import type { ZackGostMeta } from "@/lib/zack/gost";
 
 interface OrderItem { course_id: string; course_slug: string; title: string; price: number; }
 
@@ -119,6 +121,89 @@ export async function revokeAccessForOrder(orderId: string): Promise<RevokeResul
   return { ok: true, skinuto, napomene };
 }
 
+/** Isti broj izvlačenja koda kao /api/zack/roditelj/deca - vidi komentar tamo. */
+const IZVLACENJA_KODA = 20;
+
+/**
+ * Gost-porudžbina zack! članstva (items[0].zack_gost, bez dete_id): kupac je
+ * platio PRE nego što ima roditeljski red i dete, pa se ovde - tek POSLE
+ * uspešne naplate - obezbeđuje oboje:
+ * - auth nalog već postoji (napravio ga /api/orders pri kreiranju porudžbine),
+ * - red u zack_roditelji nastaje sa pristankom IZ PORUDŽBINE (tekst + vreme
+ *   koje je roditelj stvarno video na kupovnoj strani); POSTOJEĆEM roditelju
+ *   se pristanak ne prepisuje - njegov prvobitni dokaz ostaje netaknut,
+ * - dete sa jedinstvenim kodom i pin_hash = NULL (PIN roditelj postavlja na
+ *   hvala strani ili kasnije u panelu).
+ *
+ * Retry granta (reconcile cron posle pada) ne pravi duplikat: svoje dete
+ * prepoznaje po (roditelj, ime, udžbenik, pin_hash NULL) - jedini trag koji
+ * postoji bez posebne kolone porekla.
+ */
+async function obezbediGostDete(
+  admin: ReturnType<typeof createAdminClient>,
+  order: { user_id: string; email: string },
+  gost: ZackGostMeta,
+): Promise<{ ok: true; deteId: string } | { ok: false; error: string }> {
+  // 1) Roditelj za kupčev auth nalog.
+  const { data: postojeci, error: rGreska } = await admin
+    .from("zack_roditelji").select("id").eq("auth_user_id", order.user_id).maybeSingle();
+  if (rGreska) return { ok: false, error: `zack_roditelji čitanje: ${rGreska.message}` };
+  let roditeljId = postojeci?.id ?? null;
+  if (!roditeljId) {
+    const { data: novi, error: insGreska } = await admin
+      .from("zack_roditelji")
+      .insert({
+        auth_user_id: order.user_id,
+        email: order.email,
+        pristanak_tekst: gost.pristanak_tekst,
+        pristanak_at: gost.pristanak_at,
+      })
+      .select("id").single();
+    if (!insGreska) {
+      roditeljId = novi?.id ?? null;
+    } else if (insGreska.code === "23505") {
+      // Trka: paralelni tok (npr. roditelj koji se baš sad prijavio u panel i
+      // potvrdio pristanak) upravo je upisao red - pročitaj ga i nastavi.
+      const { data: uTrci } = await admin
+        .from("zack_roditelji").select("id").eq("auth_user_id", order.user_id).maybeSingle();
+      roditeljId = uTrci?.id ?? null;
+    } else {
+      return { ok: false, error: `zack_roditelji upis: ${insGreska.message}` };
+    }
+    if (!roditeljId) return { ok: false, error: "zack_roditelji: red nije nastao" };
+  }
+
+  // 2) Dete - najpre da li ga je prošli (prekinuti) pokušaj granta već napravio.
+  const { data: vecPostoji, error: dGreska } = await admin
+    .from("zack_deca").select("id")
+    .eq("roditelj_id", roditeljId).eq("ime", gost.ime).eq("udzbenik_id", gost.udzbenik_id)
+    .is("pin_hash", null)
+    .limit(1).maybeSingle();
+  if (dGreska) return { ok: false, error: `zack_deca čitanje: ${dGreska.message}` };
+  if (vecPostoji) return { ok: true, deteId: vecPostoji.id };
+
+  // Isti obrazac kao /api/zack/roditelj/deca: „pokušaj pa novi kod na sudar",
+  // jer „proveri pa upiši" ume da izgubi trku oko UNIQUE(kod).
+  for (let i = 0; i < IZVLACENJA_KODA; i++) {
+    const kod = napraviKod(Math.random);
+    const { data: dete, error } = await admin
+      .from("zack_deca")
+      .insert({
+        ime: gost.ime,
+        udzbenik_id: gost.udzbenik_id,
+        roditelj_id: roditeljId,
+        kod,
+        pin_hash: null,
+      })
+      .select("id").single();
+    if (!error && dete) return { ok: true, deteId: dete.id };
+    if (error && error.code !== "23505") {
+      return { ok: false, error: `zack_deca upis: ${error.message}` };
+    }
+  }
+  return { ok: false, error: "zack_deca: nije izvučen slobodan kod" };
+}
+
 /** Dodeljuje pristup za narudžbinu (course_unlocks → course_access), označava completed+granted, šalje welcome mejl. Idempotentno. */
 export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolean; error?: string }> {
   const admin = createAdminClient();
@@ -169,11 +254,68 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
   // ostalo (order → completed, fiskalizacija u pozivaocu, GA4/Meta, mejl) ide
   // istim tokom kao školske porudžbine. Školske stavke nemaju dete_id, pa se
   // za njih ova grana nikad ne izvršava.
-  const zackDeteId = (items[0] as { dete_id?: string } | undefined)?.dete_id;
+  const zackStavka = items[0] as { dete_id?: string; zack_gost?: ZackGostMeta } | undefined;
+  let zackDeteId = zackStavka?.dete_id;
+
+  // Gost-porudžbina: dete (i po potrebi roditelj) nastaju TEK SAD, posle
+  // naplate - do ovog trenutka o kupcu postoji samo auth nalog i porudžbina.
+  if (!zackDeteId && zackStavka?.zack_gost) {
+    const gost = await obezbediGostDete(admin, order, zackStavka.zack_gost);
+    const oznaka = order.order_number ?? orderId;
+    if (!gost.ok) {
+      // PLAĆENO-A-NEMA-DETETA ne sme tiho: order ostaje pending (reconcile
+      // cron ponavlja), lock se oslobađa odmah - isto kao za clanstvo_do dole.
+      const msg = `[grant][zack] gost-porudžbina bez deteta (order ${oznaka}): ${gost.error}`;
+      console.error(msg);
+      Sentry.captureException(new Error(msg));
+      await admin.from("orders").update({ grant_lock_at: null }).eq("id", orderId);
+      return { ok: false, error: msg };
+    }
+
+    // dete_id mora u stavku PRE nastavka: rata 2+ kopira items sa ove
+    // porudžbine (subscription-charges), a hvala strana po njemu zna kome da
+    // pokaže kod i ponudi PIN. zack_gost namerno OSTAJE - trajan dokaz
+    // pristanka (tekst + vreme), i posle nastanka roditeljskog reda.
+    const sirove = Array.isArray(order.items) ? order.items : [];
+    const prva = sirove[0];
+    const noveStavke =
+      typeof prva === "object" && prva !== null && !Array.isArray(prva)
+        ? [{ ...prva, dete_id: gost.deteId }, ...sirove.slice(1)]
+        : null;
+    const { error: itemsGreska } = noveStavke
+      ? await admin.from("orders").update({ items: noveStavke }).eq("id", orderId)
+      : { error: { message: "items[0] nije objekat" } };
+    if (itemsGreska) {
+      const msg = `[grant][zack] dete_id nije upisan u stavku (order ${oznaka}, dete ${gost.deteId}): ${itemsGreska.message}`;
+      console.error(msg);
+      Sentry.captureException(new Error(msg));
+      await admin.from("orders").update({ grant_lock_at: null }).eq("id", orderId);
+      return { ok: false, error: msg };
+    }
+
+    // Pretplata je upisana PRE granta (redosled u nestpay callbacku), pa joj je
+    // dete_id ostao NULL - dopuna, jer roditeljski panel po subscriptions.dete_id
+    // prikazuje i otkazuje članstvo. Best-effort uslov .is(null): tuđu vrednost
+    // nikad ne prepisuje.
+    if (order.subscription_id) {
+      const { error: subGreska } = await admin
+        .from("subscriptions")
+        .update({ dete_id: gost.deteId })
+        .eq("id", order.subscription_id)
+        .is("dete_id", null);
+      if (subGreska) {
+        console.error(`[grant][zack] subscriptions.dete_id dopuna pala (order ${oznaka}):`, subGreska.message);
+        Sentry.captureException(new Error(`[grant][zack] subscriptions.dete_id dopuna pala: ${subGreska.message}`));
+      }
+    }
+
+    zackDeteId = gost.deteId;
+  }
+
   if (zackDeteId) {
     const { data: dete, error: deteError } = await admin
       .from("zack_deca")
-      .select("id, ime, clanstvo_do")
+      .select("id, ime, clanstvo_do, kod, pin_hash")
       .eq("id", zackDeteId)
       .maybeSingle();
     const rokError = dete
@@ -209,6 +351,11 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
         imeDeteta: dete.ime,
         monthlyRsd: ZACK_PROMO_RSD,
         accessUntil: expiresAt.toISOString(),
+        // Kod uvek uz mejl (roditelju je to jedini „login" podatak deteta);
+        // napomena o PIN-u samo dok PIN stvarno ne postoji - dete iz panela
+        // ga već ima, gost-dete ga postavlja na hvala strani ili u panelu.
+        kod: dete.kod,
+        pinNijePostavljen: dete.pin_hash === null,
       });
     } else {
       const { data: sub } = await admin

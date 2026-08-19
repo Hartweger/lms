@@ -13,6 +13,8 @@ import { gaIdsFromCookieHeader } from "@/lib/ga-cookies";
 import { chargeAmountFor, planForSlug } from "@/lib/subscription-plans";
 import { ZACK_CLANSTVO_SLUG } from "@/lib/zack/clanstvo";
 import { jeUuid } from "@/lib/zack/upiti";
+import { proveriGostUnos, type ZackGostMeta } from "@/lib/zack/gost";
+import { PRISTANAK_TEKST } from "@/lib/zack/pristanak";
 
 export async function POST(request: Request) {
   try {
@@ -27,8 +29,11 @@ export async function POST(request: Request) {
       );
     }
 
-    const { fullName, email, country, courseSlug, paymentMethod, couponCode: rawCouponCode, professorId, packageType, pages: rawPages, attribution, deteId } =
+    const { fullName, email: emailIzTela, country, courseSlug, paymentMethod, couponCode: rawCouponCode, professorId, packageType, pages: rawPages, attribution, deteId, deteIme, udzbenikId, pristanak } =
       await request.json();
+    // let samo zbog zack gost grane, koja mejl normalizuje (mala slova, trim);
+    // svi ostali tokovi ga koriste kakav je stigao, kao i do sada.
+    let email = emailIzTela;
     const attr = (attribution && typeof attribution === "object") ? attribution as Record<string, string> : {};
     // GA4 kolačići kupca (postoje samo uz saglasnost) - čuvaju se na porudžbini da
     // server-side Measurement Protocol purchase dobije pravu atribuciju kanala
@@ -70,14 +75,42 @@ export async function POST(request: Request) {
       );
     }
 
-    // zack! članstvo se plaća PO DETETU: bez deteta nema stavke, a dete mora da
-    // pripada roditeljskom nalogu sa mejla porudžbine - pretplata se upisuje na
-    // taj nalog, i samo iz njegovog panela može da se otkaže. Bez ove provere bi
-    // se članstvo moglo uključiti tuđim mejlom, pa ostati bez ikoga ko ume da ga
-    // otkaže.
+    // zack! članstvo se plaća PO DETETU, na dva puta do stavke:
+    // - roditelj IZ PANELA šalje deteId postojećeg deteta (provere ispod), ili
+    // - GOST sa javne kupovne strane šalje ime deteta + udžbenik + pristanak,
+    //   BEZ deteId - dete i nalog nastaju tek posle uspešne naplate, u
+    //   grant-access. Porudžbina dotle nosi items[0].zack_gost kao dokaz šta
+    //   je roditelj video i na šta je pristao (tekst + vreme).
+    // VAŽNO za gost granu: ovde se NIGDE ne odgovara različito po tome da li
+    // mejl već postoji u sistemu - grananje po postojećem nalogu ide tek u
+    // grant-access, posle uplate.
     const jeZack = course.slug === ZACK_CLANSTVO_SLUG;
     let zackDete: { id: string; ime: string } | null = null;
-    if (jeZack) {
+    let zackGost: ZackGostMeta | null = null;
+    if (jeZack && deteId == null) {
+      const provera = proveriGostUnos({ ime: deteIme, udzbenikId, email, pristanak });
+      if (!provera.ok) {
+        return NextResponse.json({ error: provera.poruka }, { status: 400 });
+      }
+      // Mejl porudžbine = normalizovan mejl iz provere (mala slova, bez ivičnih
+      // razmaka) - na njega se posle uplate kači nalog i šalje kod deteta.
+      email = provera.email;
+      const { data: udzbenik, error: greskaUdzbenika } = await supabase
+        .from("zack_udzbenici")
+        .select("id")
+        .eq("id", provera.udzbenikId)
+        .maybeSingle();
+      if (greskaUdzbenika) throw new Error(`Ne mogu da proverim udžbenik: ${greskaUdzbenika.message}`);
+      if (!udzbenik) {
+        return NextResponse.json({ error: "Izaberi razred i udžbenik." }, { status: 400 });
+      }
+      zackGost = {
+        ime: provera.ime,
+        udzbenik_id: provera.udzbenikId,
+        pristanak_tekst: PRISTANAK_TEKST,
+        pristanak_at: new Date().toISOString(),
+      };
+    } else if (jeZack) {
       if (typeof deteId !== "string" || !jeUuid(deteId)) {
         return NextResponse.json(
           { error: "Nedostaje dete za koje se uključuje članstvo. Kreni iz roditeljskog panela." },
@@ -447,6 +480,9 @@ export async function POST(request: Request) {
     // Build items JSONB
     // Usluga: broj strana ide u naziv stavke (fiskalni račun čita items[0].title) + quantity.
     const stranaLabel = pages % 10 >= 2 && pages % 10 <= 4 && (pages % 100 < 12 || pages % 100 > 14) ? "strane" : "strana";
+    // zack: ime deteta za naziv stavke, iz panela (postojeće dete) ili iz
+    // gost-obrasca (dete koje će nastati posle naplate).
+    const zackIme = zackDete?.ime ?? zackGost?.ime ?? null;
     const items = [
       {
         course_id: course.id,
@@ -457,8 +493,8 @@ export async function POST(request: Request) {
         // o detetu nigde i ne čuva.
         title: isService
           ? `${course.title} - ${pages} ${stranaLabel}`
-          : zackDete
-            ? `${course.title} - ${zackDete.ime}`
+          : zackIme
+            ? `${course.title} - ${zackIme}`
             : course.title,
         price: unitPrice,
         ...(isService ? { quantity: pages } : {}),
@@ -467,6 +503,10 @@ export async function POST(request: Request) {
         // subscription-start.ts prepoznaju - bez njega bi naplata prošla
         // kao školska i pristup ne bi stigao do deteta.
         ...(zackDete ? { dete_id: zackDete.id } : {}),
+        // Gost: dete još ne postoji - grant-access ga posle naplate pravi iz
+        // ovog zapisa i tek tada u stavku upiše dete_id. Tekst i vreme
+        // pristanka ostaju ovde trajno, kao dokaz šta je viđeno i kad.
+        ...(zackGost ? { zack_gost: zackGost } : {}),
       },
     ];
 

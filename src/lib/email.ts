@@ -2530,7 +2530,15 @@ export async function sendSubscriptionChargeEmail(o: {
 export async function sendZackWelcomeEmail(
   to: string,
   name: string | null,
-  o: { imeDeteta: string; monthlyRsd: number; accessUntil: string },
+  o: {
+    imeDeteta: string;
+    monthlyRsd: number;
+    accessUntil: string;
+    /** Kod za prijavu deteta - roditelju jedini „login" podatak, pa ide u mejl kad postoji. */
+    kod?: string | null;
+    /** Gost-kupovina: dete je tek nastalo, PIN se postavlja na hvala strani ili u panelu. */
+    pinNijePostavljen?: boolean;
+  },
 ) {
   try {
     const resend = getResend();
@@ -2538,13 +2546,25 @@ export async function sendZackWelcomeEmail(
     const ime = name ? name.split(" ")[0] : "";
     const fmt = (n: number) => n.toLocaleString("de-DE");
     const doKada = new Date(o.accessUntil).toLocaleDateString("sr-RS");
+    // Dete iz panela već ima i kod i PIN; gost-dete tek dobija kod, a PIN ga čeka.
+    const uvodDeteta = o.pinNijePostavljen
+      ? `Profil za <strong>${esc(o.imeDeteta)}</strong> je napravljen, a članstvo uključeno - igre, kesice sa sličicama i Milioner su otključani.`
+      : `Članstvo za <strong>${esc(o.imeDeteta)}</strong> je uključeno - igre, kesice sa sličicama i Milioner su otključani. Dete nastavlja tamo gde je stalo, sa istim kodom i PIN-om.`;
+    const blokKoda = o.kod
+      ? `<p>Kod za prijavu deteta: <strong style="font-size:20px;letter-spacing:2px">${esc(o.kod)}</strong>${
+          o.pinNijePostavljen
+            ? `<br>PIN još nije postavljen - postavi ga na strani na koju te je plaćanje odvelo, ili u <a href="${SITE_URL}/zack/roditelj">roditeljskom panelu</a> („Novi PIN" uz dete). Onda detetu prepiši kod i PIN na papirić - to je cela instalacija.`
+            : ""
+        }</p>`
+      : "";
     await sendEmail(resend, {
       to,
       subject: `zack! članstvo za ${o.imeDeteta} je aktivno`,
       html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
 <body style="font-family:sans-serif;line-height:1.6;color:#222">
 <p>Zdravo${ime ? ", " + esc(ime) : ""}!</p>
-<p>Članstvo za <strong>${esc(o.imeDeteta)}</strong> je uključeno - igre, kesice sa sličicama i Milioner su otključani. Dete nastavlja tamo gde je stalo, sa istim kodom i PIN-om.</p>
+<p>${uvodDeteta}</p>
+${blokKoda}
 <p>Pokrenuto je <strong>mesečno plaćanje od ${fmt(o.monthlyRsd)} RSD</strong>: isti iznos banka će automatski naplaćivati sa tvoje kartice svakog meseca, dok članstvo ne otkažeš. Trenutna naplata pokriva period do <strong>${doKada}</strong> i produžiće se sama sa sledećom naplatom.</p>
 <p><strong>Otkazivanje:</strong> jednim klikom, u svakom trenutku, u <a href="${SITE_URL}/zack/roditelj">roditeljskom panelu</a> - ne moraš da nam pišeš ni da obrazlažeš. Posle otkazivanja pristup traje do kraja plaćenog meseca.</p>
 <p style="font-size:13px;color:#666">Fiskalni račun i potvrda o plaćanju stižu zasebnim mejlovima. Za sva pitanja piši nam na info@hartweger.rs.</p>
