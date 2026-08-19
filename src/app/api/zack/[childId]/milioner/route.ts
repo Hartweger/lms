@@ -34,6 +34,7 @@ import {
   brojLekcijeUUdzbeniku,
   dozvoljenaGramatika,
   gramatickaPitanja,
+  greskePitanja,
   jeUuid,
   nadjiDete,
 } from "@/lib/zack/upiti";
@@ -72,11 +73,17 @@ export async function POST(request: Request, { params }: { params: Promise<{ chi
     const tacke = await dozvoljenaGramatika(dete.udzbenik_id, brojLekcije);
     if (tacke.length === 0) {
       // Nije greška: lekcija prosto još nema obrađenog gradiva za proveru.
-      return NextResponse.json({ brojLekcije, tacke: [], pitanja: [] });
+      return NextResponse.json({ brojLekcije, tacke: [], pitanja: [], greske: {} });
     }
 
-    const pitanja = await gramatickaPitanja(tacke.map((t) => t.id));
-    return NextResponse.json({ brojLekcije, tacke, pitanja });
+    // Uz gradivo idu i ranije promašena pitanja deteta (ključ → koliko puta):
+    // `sastaviPartiju` im daje prednost, da se rupa u gradivu ne zaobilazi
+    // slučajnošću. Ovo nije rezultat ni ocena - detetu se nigde ne pokazuje.
+    const [pitanja, greske] = await Promise.all([
+      gramatickaPitanja(tacke.map((t) => t.id)),
+      greskePitanja(dete.id),
+    ]);
+    return NextResponse.json({ brojLekcije, tacke, pitanja, greske: Object.fromEntries(greske) });
   } catch (e) {
     // Sirova poruka iz Postgresa ide u log, detetu se ne prosleđuje.
     console.error("[zack/milioner] čitanje gradiva:", e);
