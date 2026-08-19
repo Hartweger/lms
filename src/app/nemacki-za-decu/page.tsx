@@ -1002,7 +1002,7 @@ export default function ZaRoditeljePage() {
                 },
                 {
                   p: "Koliko košta?",
-                  o: "Promo cena je 1.200 dinara mesečno po detetu (puna cena 2.399). Svako dete ima svoj profil, kod i album.",
+                  o: "Promo cena je 1.200 dinara mesečno po detetu i važi do kraja godine (puna cena 2.399). Svako dete ima svoj profil, kod i album.",
                 },
               ].map((stavka) => (
                 <details

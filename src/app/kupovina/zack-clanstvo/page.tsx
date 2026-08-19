@@ -98,7 +98,7 @@ function StaSePlaca({ imeDeteta }: { imeDeteta?: string }) {
         <p className="text-[17px] leading-relaxed" style={{ color: MASTILO }}>
           zack! članstvo {imeDeteta ? <>za <strong>{imeDeteta}</strong></> : "za tvoje dete"} -{" "}
           <strong>{rsd(ZACK_PROMO_RSD)} din mesečno</strong>{" "}
-          <span style={{ color: PRIGUSEN }}>(promo cena, puna je {rsd(ZACK_PUNA_RSD)})</span>,
+          <span style={{ color: PRIGUSEN }}>(promo cena važi do kraja godine, puna je {rsd(ZACK_PUNA_RSD)})</span>,
           obnavlja se automatski, otkazuješ jednim klikom.
         </p>
         <ul className="mt-4 space-y-2 text-[15px] leading-relaxed" style={{ color: PRIGUSEN }}>
@@ -125,10 +125,6 @@ function StaSePlaca({ imeDeteta }: { imeDeteta?: string }) {
             <strong style={{ color: MASTILO }}>Otkazivanje:</strong> u svakom trenutku, u
             roditeljskom panelu. Posle otkazivanja igre rade do
             kraja plaćenog meseca, a album i sve zarađeno ostaju zauvek.
-          </li>
-          <li>
-            Na strani banke <strong style={{ color: MASTILO }}>ne biraj „na rate“</strong> -
-            mesečne naplate pokrećemo mi, a rate Banca Intesa kartice su nešto drugo.
           </li>
         </ul>
       </div>
