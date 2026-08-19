@@ -86,15 +86,17 @@ const ALBUM_MOCK: { rec: Rec; stanje: "zalepljena" | "izbledela" | "prazno" }[] 
 /** Fokus prsten za svetle podloge - isti plavi kao na dečjim ekranima. */
 const FOKUS = "outline-offset-4 focus-visible:outline-4 focus-visible:outline-[#0B54C9]";
 
-/** Glavno dugme: debela crvena nalepnica, ista gramatika kao dečje „Uđi". */
+/** Glavno dugme: debela crvena nalepnica, ista gramatika kao dečje „Uđi".
+    Vodi PRAVO NA PLAĆANJE - nalog nastaje sam, posle uplate (odluka vlasnice:
+    „zašto bi neko otvarao nalog da bi platio?"). */
 function CtaDugme() {
   return (
     <Link
-      href="/zack/roditelj"
+      href="/kupovina/zack-clanstvo"
       className={`inline-block rounded-2xl border-4 border-white px-8 py-4 text-[20px] text-white shadow-[0_5px_0_0_#8F1B14,0_8px_18px_rgba(22,22,26,0.22)] ${FOKUS} motion-safe:transition-transform motion-safe:duration-100 motion-safe:hover:-translate-y-0.5 motion-safe:active:translate-y-[3px] motion-safe:active:shadow-[0_1px_0_0_#8F1B14]`}
       style={{ background: CRVENA, fontFamily: DISPLAY }}
     >
-      Napravi roditeljski nalog
+      Uključi članstvo
     </Link>
   );
 }
@@ -612,8 +614,8 @@ export default function ZaRoditeljePage() {
             <Otkrij className="mt-10 grid gap-4 lg:grid-cols-3">
               {[
                 {
-                  naslov: "Napraviš nalog",
-                  opis: "Mejl, profil deteta i PIN. Povežeš bilo koju karticu i pretplatiš se - mesečno manje nego što daješ na kesice sa sličicama za album.",
+                  naslov: "Uplatiš članstvo",
+                  opis: "Ime deteta, tvoj mejl i kartica - sve na jednoj strani. Nalog nastane sam, a mesečno te košta manje nego kesice sa sličicama za album.",
                 },
                 {
                   naslov: "Prepišeš detetu kod i PIN na papirić",

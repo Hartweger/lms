@@ -90,11 +90,11 @@ export default function LepljivPoziv() {
               <span className="hidden lg:inline"> po detetu</span>
             </p>
             <Link
-              href="/zack/roditelj"
+              href="/kupovina/zack-clanstvo"
               className={`flex min-h-[44px] flex-none items-center justify-center rounded-lg border-2 border-white px-3.5 text-[15px] font-bold text-white shadow-[0_2px_0_0_#8F1B14] ${FOKUS}`}
               style={{ background: CRVENA, fontFamily: DISPLAY }}
             >
-              Napravi nalog
+              Uključi članstvo
             </Link>
             <button
               type="button"

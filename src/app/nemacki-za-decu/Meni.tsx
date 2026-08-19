@@ -70,12 +70,14 @@ export default function Meni() {
         >
           Prijava za dete
         </Link>
+        {/* Diskretna prijava za roditelje koji NALOG VEĆ IMAJU - glavni CTA-ovi
+            strane vode pravo na plaćanje (/kupovina/zack-clanstvo). */}
         <Link
           href="/zack/roditelj"
           className={`ml-1 rounded-xl border-2 px-4 py-2.5 text-[15px] font-bold ${FOKUS}`}
           style={{ borderColor: MASTILO, color: MASTILO }}
         >
-          Uđi u nalog
+          Prijava za roditelje
         </Link>
       </nav>
 
