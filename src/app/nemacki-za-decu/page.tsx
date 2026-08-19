@@ -354,7 +354,7 @@ export default function ZaRoditeljePage() {
           <div className="mx-auto grid max-w-6xl gap-8 px-5 py-16 sm:px-8 lg:grid-cols-[5fr_7fr] lg:gap-14 lg:py-24">
             <Otkrij>
               <span className="zz block" style={{ ["--zack-kasni" as string]: "0ms" }}>
-                <Naslov boja="#FFFFFF">Čas-dva pred ispit kod jezika ne pomažu</Naslov>
+                <Naslov boja="#FFFFFF">Čas-dva pred test kod jezika ne pomažu</Naslov>
               </span>
               {/* Tri stvari od kojih je jezik sazdan, kao tri nalepnice. */}
               <span aria-hidden="true" className="mt-6 flex flex-wrap gap-2.5">
