@@ -4,9 +4,10 @@
 // display slovo, isključeno školsko merenje - i ceo ukrasni rečnik iz Ukras.tsx.
 //
 // Glas je Natašin, ti-forma prema roditelju, bez roda deteta („tvoje dete").
-// Nijedan broj ovde nije izmišljen: 12 lekcija, deset minuta, dve nedelje i
-// program Ministarstva su činjenice proizvoda. Utisaka korisnika nema, jer ih
-// još nemamo.
+// Nijedan broj ovde nije izmišljen: deset minuta, dve nedelje, 1.200 dinara
+// mesečno po detetu i program Ministarstva su činjenice proizvoda. Utisaka
+// korisnika nema, jer ih još nemamo. Peti razred se NE ističe u naslovima -
+// stižu svi razredi, pa dostupnost živi sitno u FAQ-u, ne u reklami.
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -28,19 +29,21 @@ import {
   ZUTA,
   ZackZnak,
 } from "../Ukras";
+import LepljivPoziv from "./LepljivPoziv";
+import Meni from "./Meni";
 import Otkrij from "./Otkrij";
 
 // Za razliku od dečjih ekrana (čije adrese nose ključ deteta), ova strana je
 // javna i SME u pretragu - njoj je posao da dovodi roditelje.
 export const metadata: Metadata = {
-  title: "zack! za roditelje - nemački za osnovce",
+  title: "zack! - nemački za osnovce",
   description:
-    "Album sa sličicama u kom tvoje dete uči nemački po deset minuta dnevno - po programu za peti razred, bez reklama i bez ocena.",
+    "Album sa sličicama u kom tvoje dete uči nemački po deset minuta dnevno - po školskom programu, bez reklama i bez ocena.",
   robots: { index: true, follow: true },
   openGraph: {
     title: "zack! - nemački za osnovce",
     description:
-      "Album sa sličicama u kom tvoje dete uči nemački po deset minuta dnevno - po programu za peti razred.",
+      "Album sa sličicama u kom tvoje dete uči nemački po deset minuta dnevno - po školskom programu.",
   },
 };
 
@@ -51,7 +54,9 @@ const PRIGUSEN_NA_TAMNOM = "#C9C4B4";
 // Sličice u ovim ilustracijama su PRAVE sličice iz proizvoda (ista komponenta
 // koju dete gleda u albumu), sa stvarnim rečima iz školske teme i tačnim
 // rodovima - boje o rodu ne smeju da lažu ni u reklami. Sjajna je tačno jedna
-// i to pravi izuzetak (das Mädchen), kao i u proizvodu.
+// i to pravi izuzetak (die Tür, stvaran izuzetak iz lekcije „Im
+// Klassenzimmer"), kao i u proizvodu. Baš Tür, a ne Mädchen: reč je kratka,
+// pa se na uskom ekranu ne prelama nasred reči („Mäd-chen").
 function rec(
   redniBroj: number,
   de: string,
@@ -80,7 +85,7 @@ const ALBUM_MOCK: { rec: Rec; stanje: "zalepljena" | "izbledela" | "prazno" }[] 
   { rec: rec(4, "Lehrerin", "nastavnica", "die", "1f469-200d-1f3eb"), stanje: "zalepljena" },
   { rec: rec(5, "Fenster", "prozor", "das", "1fa9f"), stanje: "izbledela" },
   { rec: rec(6, "Lehrer", "nastavnik", "der", "1f468-200d-1f3eb"), stanje: "izbledela" },
-  { rec: rec(7, "Mädchen", "devojčica", "das", null, true), stanje: "zalepljena" },
+  { rec: rec(7, "Tür", "vrata", "die", null, true), stanje: "zalepljena" },
   { rec: rec(8, "Schule", "škola", "die", "1f3eb"), stanje: "prazno" },
   { rec: rec(9, "Buch", "knjiga", "das", "1f4d5"), stanje: "prazno" },
 ];
@@ -300,31 +305,21 @@ export default function ZaRoditeljePage() {
 
       {/* ── Zaglavlje ──────────────────────────────────────────────────── */}
       <header className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-5 pt-6 sm:px-8">
+        {/* Uz znak ide zvanični par iz identiteta: „nemački za osnovce".
+            „Za roditelje" NIKAD ne stoji uz znak kao odrednica proizvoda -
+            proizvod nije nemački za roditelje. */}
         <span className="flex items-center gap-3">
           <ZackZnak velicina="sm" />
           <span className="text-[15px] font-bold tracking-wide" style={{ color: PRIGUSEN, fontFamily: DISPLAY }}>
-            za roditelje
+            nemački za osnovce
           </span>
         </span>
-        <nav className="flex items-center gap-1">
-          <Link
-            href="/zack"
-            className={`rounded-lg px-3 py-2.5 text-[15px] underline underline-offset-2 ${FOKUS}`}
-            style={{ color: PRIGUSEN }}
-          >
-            Dete već ima kod?
-          </Link>
-          <Link
-            href="/zack/roditelj"
-            className={`rounded-xl border-2 px-4 py-2.5 text-[15px] font-bold ${FOKUS}`}
-            style={{ borderColor: MASTILO, color: MASTILO }}
-          >
-            Uđi u nalog
-          </Link>
-        </nav>
+        <Meni />
       </header>
 
-      <main>
+      {/* Koreni raspored već renderuje <main id="glavni">, pa bi još jedan
+          <main> ovde bio ugnežden i nevalidan - zato običan div. */}
+      <div>
         {/* ── HERO ───────────────────────────────────────────────────────── */}
         <section className="mx-auto max-w-6xl px-5 pb-16 pt-8 sm:px-8 sm:pt-12 lg:pb-24">
           <KolazTelefon />
@@ -334,7 +329,7 @@ export default function ZaRoditeljePage() {
                 className="zack-zalepi inline-block -rotate-1 rounded-lg border-2 bg-white px-3 py-1.5 text-[14px] font-bold tracking-wide shadow-[0_2px_5px_rgba(22,22,26,0.12)]"
                 style={{ borderColor: IVICA, color: PRIGUSEN, ["--zack-kasni" as string]: "40ms" }}
               >
-                nemački za osnovce - peti razred
+                po školskom programu
               </p>
               <h1
                 className="zack-zalepi mt-5 text-[40px] leading-[1.02] tracking-tight sm:text-[56px] lg:text-[64px] xl:text-[72px]"
@@ -346,14 +341,16 @@ export default function ZaRoditeljePage() {
                 className="zack-zalepi mt-6 max-w-xl text-[18px] leading-relaxed sm:text-[19px]"
                 style={{ color: PRIGUSEN, ["--zack-kasni" as string]: "260ms" }}
               >
-                Jezik se gradi iz reči, a reči se ne stignu za jedno popodne. zack!
+                Jezik se gradi iz reči, a reči se ne uče za jedno popodne. zack!
                 pretvara učenje u album sa sličicama koji tvoje dete samo hoće da
                 popuni - po deset minuta, svaki dan.
               </p>
-              <div className="zack-zalepi mt-8" style={{ ["--zack-kasni" as string]: "380ms" }}>
+              {/* id koristi lepljivi poziv: dok je ovo dugme u kadru (ili
+                  ispod njega), papirić sa cenom se ne prikazuje. */}
+              <div id="hero-cta" className="zack-zalepi mt-8" style={{ ["--zack-kasni" as string]: "380ms" }}>
                 <CtaDugme />
                 <p className="mt-3 text-[14px]" style={{ color: PRIGUSEN }}>
-                  Besplatno dok traje probni period. Bez kartice.
+                  Bez ugovora - otkazuješ kad hoćeš.
                 </p>
               </div>
             </div>
@@ -389,8 +386,8 @@ export default function ZaRoditeljePage() {
             </Otkrij>
             <Otkrij kasni={120}>
               <p className="zz text-[18px] leading-relaxed sm:text-[20px]" style={{ color: PRIGUSEN_NA_TAMNOM }}>
-                Za matematiku možeš da naučiš postupak za jedno veče. Za jezik ne
-                možeš, jer je jezik{" "}
+                Za test iz biologije dete može da nabuba lekcije za jedno veče.
+                Za jezik ne može, jer je jezik{" "}
                 <strong className="font-bold text-white">hiljadu malih stvari</strong>{" "}
                 - reči, rodovi, oblici - i svaka traži svoje vreme. Dete koje je
                 zapustilo reči ne može da ih stigne pred kontrolni, ma koliko
@@ -405,7 +402,9 @@ export default function ZaRoditeljePage() {
         </section>
 
         {/* ── ALBUM, A NE KURS ───────────────────────────────────────────── */}
-        <section className="relative mx-auto max-w-6xl px-5 py-16 sm:px-8 lg:py-24">
+        {/* Kraći lg:py i uža kartica nego u susednim sekcijama: mockup je
+            visok, pa bi pun ritam ostavio mrtav prostor oko teksta. */}
+        <section id="kako-radi" className="relative mx-auto max-w-6xl scroll-mt-6 px-5 py-16 sm:px-8 lg:py-20">
           <div className="grid items-center gap-10 lg:grid-cols-[6fr_6fr] lg:gap-14">
             <Otkrij>
               <span className="zz block">
@@ -442,7 +441,7 @@ export default function ZaRoditeljePage() {
 
             {/* Živ mockup albuma: prava Slicica komponenta, ne slika. */}
             <Otkrij kasni={160}>
-              <div aria-hidden="true" className="relative mx-auto w-full max-w-md">
+              <div aria-hidden="true" className="relative mx-auto w-full max-w-md lg:max-w-[400px]">
                 <Koza className="absolute -top-9 right-8 z-10 h-11 w-11 rotate-6" />
                 <div
                   className="zz rounded-3xl border p-4 shadow-[0_4px_0_0_#DED8C8,0_14px_30px_rgba(22,22,26,0.12)] sm:p-6"
@@ -539,7 +538,134 @@ export default function ZaRoditeljePage() {
           </div>
         </section>
 
-        {/* ── ŠTA TI DOBIJAŠ ─────────────────────────────────────────────── */}
+        {/* ── ŠTA SVE DOBIJAŠ ────────────────────────────────────────────── */}
+        {/* Cela ponuda na jednom mestu, kao nalepnice - ne generička lista sa
+            štikliranjem. Boje mini-sličica idu sve tri u krug, nikad jedna
+            sama, po pravilu iz Ukras.tsx. */}
+        <section id="sta-dobijas" className="mx-auto max-w-6xl scroll-mt-6 px-5 py-16 sm:px-8 lg:py-24">
+          <Otkrij className="max-w-2xl">
+            <span className="zz block">
+              <Naslov>Šta sve dobijaš</Naslov>
+            </span>
+          </Otkrij>
+          <Otkrij className="mt-10 grid gap-4 sm:grid-cols-2">
+            {[
+              {
+                naslov: "Šest igara za reči",
+                ostatak: "+ skakač sa kozom za der-die-das.",
+              },
+              {
+                naslov: "Milioner",
+                ostatak: "- kviz za gramatiku, kao onaj sa televizije.",
+              },
+              {
+                naslov: "Album sa sličicama",
+                ostatak: "za svaku lekciju.",
+              },
+              {
+                naslov: "Izveštaj tebi na mejl,",
+                ostatak: "na svake dve nedelje.",
+              },
+              {
+                naslov: "Roditeljski panel",
+                ostatak: "sa napretkom po lekcijama.",
+              },
+              {
+                naslov: "Svako dete ima svoj profil, kod i album",
+                ostatak: "- sve iz jednog roditeljskog naloga.",
+              },
+              {
+                naslov: "Bez reklama,",
+                ostatak: "bez kupovina u aplikaciji.",
+              },
+              {
+                naslov: "Bez instalacije",
+                ostatak:
+                  "- radi u pretraživaču, a na telefonu se doda na početni ekran kao aplikacija.",
+              },
+            ].map((stavka, i) => (
+              <div
+                key={stavka.naslov}
+                className="zz flex items-start gap-4 rounded-2xl border p-5 shadow-[0_3px_0_0_#DED8C8]"
+                style={{ background: PAPIR, borderColor: IVICA, ["--zack-kasni" as string]: `${(i % 4) * 90}ms` }}
+              >
+                <span aria-hidden="true" className="mt-0.5 flex-none">
+                  <MiniSlicica
+                    boja={[PLAVA, CRVENA_ZNAK, ZUTA][i % 3]}
+                    ugao={i % 2 === 0 ? -5 : 5}
+                    sirina={30}
+                  />
+                </span>
+                <p className="text-[16px] leading-relaxed" style={{ color: PRIGUSEN }}>
+                  <strong className="font-bold" style={{ color: MASTILO }}>
+                    {stavka.naslov}
+                  </strong>{" "}
+                  {stavka.ostatak}
+                </p>
+              </div>
+            ))}
+          </Otkrij>
+        </section>
+
+        {/* ── KAKO POČINJEŠ ──────────────────────────────────────────────── */}
+        {/* Tri koraka sa crvenim brojevima-nalepnicama, istom gramatikom kao
+            broj lekcije u mockup albumu. Broj nosi CRVENA (5.0:1 uz beli
+            tekst), ne brend CRVENA_ZNAK - pravilo iz Ukras.tsx. */}
+        <section id="kako-pocinjes" className="scroll-mt-6 border-y" style={{ background: PAPIR, borderColor: IVICA }}>
+          <div className="mx-auto max-w-6xl px-5 py-16 sm:px-8 lg:py-24">
+            <Otkrij className="max-w-2xl">
+              <span className="zz block">
+                <Naslov>Kako počinješ</Naslov>
+              </span>
+            </Otkrij>
+            <Otkrij className="mt-10 grid gap-4 lg:grid-cols-3">
+              {[
+                {
+                  naslov: "Napraviš nalog",
+                  opis: "Mejl, profil deteta i PIN. Povežeš bilo koju karticu i pretplatiš se - mesečno manje nego što daješ na kesice sa sličicama za album.",
+                },
+                {
+                  naslov: "Prepišeš detetu kod i PIN na papirić",
+                  opis: "To je cela „instalacija“. Bez mejla za dete, bez skidanja.",
+                },
+                {
+                  naslov: "Dete igra, ti gledaš kako raste album",
+                  opis: "Deset minuta dnevno je dovoljno, a izveštaj ti stiže na svake dve nedelje.",
+                },
+              ].map((korak, i) => (
+                <div
+                  key={korak.naslov}
+                  className="zz rounded-2xl border bg-white p-6 shadow-[0_3px_0_0_#DED8C8]"
+                  style={{ borderColor: IVICA, ["--zack-kasni" as string]: `${i * 140}ms` }}
+                >
+                  <span
+                    aria-hidden="true"
+                    className={`flex h-12 w-12 items-center justify-center rounded-xl border-[3px] border-white text-[22px] text-white shadow-[0_2px_5px_rgba(22,22,26,0.25)] ${i % 2 === 0 ? "-rotate-3" : "rotate-3"}`}
+                    style={{ background: CRVENA, fontFamily: DISPLAY }}
+                  >
+                    {i + 1}
+                  </span>
+                  <h3 className="mt-4 text-[19px] leading-tight" style={{ color: MASTILO, fontFamily: DISPLAY }}>
+                    {korak.naslov}
+                  </h3>
+                  <p className="mt-2 text-[16px] leading-relaxed" style={{ color: PRIGUSEN }}>
+                    {korak.opis}
+                  </p>
+                </div>
+              ))}
+            </Otkrij>
+            <Otkrij className="mt-10 text-center">
+              <div className="zz">
+                <CtaDugme />
+                <p className="mt-3 text-[14px]" style={{ color: PRIGUSEN }}>
+                  Bez ugovora - otkazuješ kad hoćeš.
+                </p>
+              </div>
+            </Otkrij>
+          </div>
+        </section>
+
+        {/* ── IZVEŠTAJ RODITELJU ─────────────────────────────────────────── */}
         <section className="mx-auto max-w-6xl px-5 py-16 sm:px-8 lg:py-24">
           <div className="grid items-center gap-10 lg:grid-cols-[6fr_6fr] lg:gap-14">
             {/* Mockup izveštaja: skica bez ijednog broja, jer brojeve mockup
@@ -600,11 +726,6 @@ export default function ZaRoditeljePage() {
                 običnim jezikom, bez procenata. A u roditeljskom panelu u svakom
                 trenutku vidiš napredak po lekcijama.
               </p>
-              <p className="zz mt-4 text-[17px] leading-relaxed sm:text-[18px]" style={{ color: PRIGUSEN, ["--zack-kasni" as string]: "220ms" }}>
-                <strong className="font-bold" style={{ color: MASTILO }}>Bez prekora</strong>{" "}
-                - i kad dete pauzira, mi ne šaljemo opomene, nego mu tiho vraćamo
-                stare reči u igru.
-              </p>
             </Otkrij>
           </div>
         </section>
@@ -617,10 +738,9 @@ export default function ZaRoditeljePage() {
                 <Naslov boja="#FFFFFF">Po programu, ne pokraj njega</Naslov>
               </span>
               <p className="zz mt-6 max-w-xl text-[17px] leading-relaxed text-white sm:text-[18px]" style={{ ["--zack-kasni" as string]: "120ms" }}>
-                Sadržaj prati zvanični plan i program Ministarstva prosvete za
-                peti razred - 12 lekcija, sve reči i gramatika koje dete sreće u
-                školi. Radi uz svaki udžbenik, jer svi udžbenici prate isti
-                program.
+                Sadržaj prati zvanični plan i program Ministarstva prosvete -
+                za svaki razred, redom kako se gradivo uči u školi. Radi uz
+                svaki udžbenik, jer svi udžbenici prate isti program.
               </p>
             </Otkrij>
             <Otkrij className="flex flex-wrap items-center justify-start gap-4 lg:justify-center" kasni={160}>
@@ -629,7 +749,7 @@ export default function ZaRoditeljePage() {
                   className="inline-block -rotate-2 rounded-2xl border-4 border-white px-5 py-3 text-[26px] shadow-[0_3px_10px_rgba(22,22,26,0.25)]"
                   style={{ background: PAPIR, color: MASTILO, fontFamily: DISPLAY }}
                 >
-                  12 lekcija
+                  svaki razred
                 </span>
               </span>
               <span className="zz inline-block" style={{ ["--zack-kasni" as string]: "140ms" }}>
@@ -637,7 +757,7 @@ export default function ZaRoditeljePage() {
                   className="inline-block rotate-2 rounded-2xl border-4 border-white px-5 py-3 text-[26px] shadow-[0_3px_10px_rgba(22,22,26,0.25)]"
                   style={{ background: ZUTA, color: MASTILO, fontFamily: DISPLAY }}
                 >
-                  5. razred
+                  svaki udžbenik
                 </span>
               </span>
             </Otkrij>
@@ -756,6 +876,65 @@ export default function ZaRoditeljePage() {
         </section>
 
 
+        {/* ── ČLANSTVO ───────────────────────────────────────────────────── */}
+        {/* Informativna kartica sa cenom, u identitetu: papir traka, bela
+            kartica. NIKAKVE naplate ovde nema - CTA i dalje vodi samo na
+            registraciju. Nigde „besplatno" ni „probni period": naplata je
+            stvarna od početka i strana o tome ne sme da laže. */}
+        <section id="cena" className="scroll-mt-6 border-y" style={{ background: PAPIR, borderColor: IVICA }}>
+          <div className="mx-auto max-w-6xl px-5 py-16 sm:px-8 lg:py-20">
+            <Otkrij className="mx-auto max-w-md">
+              <span className="zz block text-center">
+                <Naslov>Članstvo</Naslov>
+              </span>
+              <div className="zz relative mt-10" style={{ ["--zack-kasni" as string]: "140ms" }}>
+                {/* Žuta nalepnica preko gornje ivice kartice - u čitanju ide
+                    PRE cene, pa precrtani broj odmah ima objašnjenje. */}
+                <span
+                  className="absolute -top-4 left-1/2 z-10 -translate-x-1/2 -rotate-2 rounded-lg border-[3px] border-white px-3.5 py-1.5 text-[15px] font-bold uppercase tracking-wide shadow-[0_3px_8px_rgba(22,22,26,0.18)]"
+                  style={{ background: ZUTA, color: MASTILO, fontFamily: DISPLAY }}
+                >
+                  Promo cena
+                </span>
+                <div
+                  className="rounded-3xl border bg-white px-6 pb-8 pt-10 text-center shadow-[0_4px_0_0_#DED8C8,0_14px_30px_rgba(22,22,26,0.1)] sm:px-8"
+                  style={{ borderColor: IVICA }}
+                >
+                  <p className="text-[34px] leading-tight tracking-tight sm:text-[38px]" style={{ color: MASTILO, fontFamily: DISPLAY }}>
+                    <span className="sr-only">Puna cena </span>
+                    <s className="mr-1 text-[20px] sm:text-[22px]" style={{ color: PRIGUSEN }}>
+                      2.399
+                    </s>{" "}
+                    1.200 dinara{" "}
+                    <span className="text-[20px] sm:text-[22px]">mesečno</span>
+                  </p>
+                  <p className="mt-1 text-[17px]" style={{ color: PRIGUSEN }}>
+                    po detetu
+                  </p>
+                  <p className="mt-4 text-[16px] leading-relaxed" style={{ color: PRIGUSEN }}>
+                    Manje nego što mesečno ode na kesice sa sličicama na kiosku
+                    - a{" "}
+                    <strong className="font-bold" style={{ color: MASTILO }}>
+                      ove sličice uče nemački
+                    </strong>
+                    .
+                  </p>
+                  <p className="mt-3 text-[16px] leading-relaxed" style={{ color: PRIGUSEN }}>
+                    Svako dete ima svoj profil, kod i album.
+                  </p>
+                  <p
+                    className="mt-5 border-t pt-5 text-[16px] leading-relaxed"
+                    style={{ color: PRIGUSEN, borderColor: IVICA }}
+                  >
+                    Otkazuješ jednim klikom,{" "}
+                    <strong className="font-bold" style={{ color: MASTILO }}>bez ugovora</strong>.
+                  </p>
+                </div>
+              </div>
+            </Otkrij>
+          </div>
+        </section>
+
         {/* ── ZAVRŠNI POZIV ──────────────────────────────────────────────── */}
         <section className="mx-auto max-w-6xl px-5 py-16 text-center sm:px-8 lg:py-24">
           <Otkrij className="mx-auto max-w-2xl">
@@ -792,21 +971,25 @@ export default function ZaRoditeljePage() {
             <div className="zz mt-8" style={{ ["--zack-kasni" as string]: "300ms" }}>
               <CtaDugme />
               <p className="mt-3 text-[14px]" style={{ color: PRIGUSEN }}>
-                Besplatno dok traje probni period. Bez kartice.
+                Bez ugovora - otkazuješ kad hoćeš.
               </p>
             </div>
           </Otkrij>
         </section>
 
         {/* ── ČESTA PITANJA ──────────────────────────────────────────────── */}
-        <section className="border-t" style={{ background: PAPIR, borderColor: IVICA }}>
+        <section id="pitanja" className="scroll-mt-6 border-t" style={{ background: PAPIR, borderColor: IVICA }}>
           <div className="mx-auto max-w-3xl px-5 py-16 sm:px-8 lg:py-20">
             <Naslov className="text-[26px] sm:text-[32px] lg:text-[34px]">Česta pitanja</Naslov>
             <div className="mt-8 flex flex-col gap-3">
               {[
                 {
                   p: "Da li radi uz udžbenik koji dete koristi u školi?",
-                  o: "Da. Svi udžbenici za peti razred prate isti plan i program Ministarstva prosvete, a zack! prati taj program - iste reči, ista gramatika, isti redosled tema.",
+                  o: "Da. Svi udžbenici prate isti plan i program Ministarstva prosvete, a zack! prati taj program - iste reči, ista gramatika, isti redosled tema.",
+                },
+                {
+                  p: "Za koje razrede postoji?",
+                  o: "Krećemo od petog razreda - kompletan je, po programu. Ostali razredi stižu redom. Ako ti treba drugi razred, javi nam se na info@hartweger.rs da znamo šta da guramo prvo.",
                 },
                 {
                   p: "Koliko vremena dnevno je dovoljno?",
@@ -817,12 +1000,16 @@ export default function ZaRoditeljePage() {
                   o: "Ništa se ne gubi. Sličice koje dete dugo ne ponovi samo izblede, a vraćaju se u boju čim ih dete ponovo pogodi u igri. Bez opomena i bez prekora.",
                 },
                 {
+                  p: "Mora li da se instalira?",
+                  o: "Ne. Radi u pretraživaču na bilo kom telefonu, tabletu ili računaru, a na telefonu se jednim potezom doda na početni ekran i ponaša se kao aplikacija.",
+                },
+                {
                   p: "Da li mogu da upišem dva deteta?",
-                  o: "Da. Svako dete dobija svoj profil, svoj kod i svoj album - a ti sve vidiš iz istog roditeljskog naloga.",
+                  o: "Da - iz istog roditeljskog naloga dodaješ više dece, svako ima svoj profil, kod i album. Članarina je po detetu.",
                 },
                 {
                   p: "Koliko košta?",
-                  o: "Dok traje probni period - ništa, i ne tražimo karticu. O članarini ćemo te obavestiti unapred, pa ti odlučuješ da li nastavljate.",
+                  o: "Promo cena je 1.200 dinara mesečno po detetu (puna cena 2.399). Svako dete ima svoj profil, kod i album.",
                 },
               ].map((stavka) => (
                 <details
@@ -851,33 +1038,56 @@ export default function ZaRoditeljePage() {
             </div>
           </div>
         </section>
-      </main>
+      </div>
 
       {/* ── Podnožje ───────────────────────────────────────────────────────── */}
-      <footer className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-5 py-10 sm:px-8">
-        <span className="flex items-center gap-3">
-          <ZackZnak velicina="sm" />
-          <span className="text-[14px]" style={{ color: PRIGUSEN }}>
-            nemački za osnovce
+      {/* Roditeljska strana je jedino mesto pod /zack gde Hartweger ime sme da
+          stoji - dečji deo ostaje bez škole. */}
+      <footer className="mx-auto max-w-6xl px-5 py-10 sm:px-8">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <span className="flex items-center gap-3">
+            <ZackZnak velicina="sm" />
+            <span className="text-[14px]" style={{ color: PRIGUSEN }}>
+              nemački za osnovce
+            </span>
           </span>
-        </span>
-        <nav className="flex flex-wrap items-center gap-1">
-          <Link
-            href="/zack"
-            className={`rounded-lg px-3 py-2.5 text-[14px] underline underline-offset-2 ${FOKUS}`}
-            style={{ color: PRIGUSEN }}
-          >
-            Prijava za dete
-          </Link>
-          <Link
-            href="/zack/roditelj"
-            className={`rounded-lg px-3 py-2.5 text-[14px] underline underline-offset-2 ${FOKUS}`}
-            style={{ color: PRIGUSEN }}
-          >
-            Roditeljski nalog
-          </Link>
-        </nav>
+          <nav className="flex flex-wrap items-center gap-1">
+            <Link
+              href="/zack"
+              className={`rounded-lg px-3 py-2.5 text-[14px] underline underline-offset-2 ${FOKUS}`}
+              style={{ color: PRIGUSEN }}
+            >
+              Prijava za dete
+            </Link>
+            <Link
+              href="/zack/roditelj"
+              className={`rounded-lg px-3 py-2.5 text-[14px] underline underline-offset-2 ${FOKUS}`}
+              style={{ color: PRIGUSEN }}
+            >
+              Roditeljski nalog
+            </Link>
+          </nav>
+        </div>
+        <div
+          className="mt-6 flex flex-wrap items-center justify-between gap-x-6 gap-y-1 border-t pt-5 text-[14px]"
+          style={{ borderColor: IVICA, color: PRIGUSEN }}
+        >
+          <p className="flex flex-wrap items-center">
+            Pitanja? Piši nam:{" "}
+            <a
+              href="mailto:info@hartweger.rs"
+              className={`ml-1 inline-block rounded-lg py-2.5 underline underline-offset-2 ${FOKUS}`}
+              style={{ color: PRIGUSEN }}
+            >
+              info@hartweger.rs
+            </a>
+          </p>
+          <p>zack! je deo Hartweger škole nemačkog jezika.</p>
+        </div>
       </footer>
+
+      {/* Papirić sa cenom koji prati skrol - pojavi se tek posle hero dugmeta. */}
+      <LepljivPoziv />
     </div>
   );
 }
