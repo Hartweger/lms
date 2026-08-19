@@ -115,8 +115,8 @@ function StaSePlaca({ imeDeteta }: { imeDeteta?: string }) {
               </>
             ) : (
               <>
-                Odmah posle plaćanja dete dobija svoj profil sa otključanim igrama, kesicama sa
-                sličicama i Milionerom. Nalog nastane sam - kod za prijavu deteta stiže na tvoj
+                Odmah posle plaćanja dete dobija svoj otključan profil. Nalog nastane
+                sam - kod za prijavu deteta stiže na tvoj
                 mejl i piše na strani posle plaćanja.
               </>
             )}
