@@ -2522,6 +2522,42 @@ export async function sendSubscriptionChargeEmail(o: {
 }
 
 /**
+ * Prva naplata zack! članstva - roditelju, uz obavezno pretplatno obaveštenje
+ * (banka/EPM: iznos, učestalost i otkazivanje moraju stajati već u prvoj
+ * poruci). Potvrda kartične transakcije sa svim podacima banke ide zasebnim
+ * mejlom iz callbacka; rate 2+ dobijaju sendSubscriptionChargeEmail.
+ */
+export async function sendZackWelcomeEmail(
+  to: string,
+  name: string | null,
+  o: { imeDeteta: string; monthlyRsd: number; accessUntil: string },
+) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    const ime = name ? name.split(" ")[0] : "";
+    const fmt = (n: number) => n.toLocaleString("de-DE");
+    const doKada = new Date(o.accessUntil).toLocaleDateString("sr-RS");
+    await sendEmail(resend, {
+      to,
+      subject: `zack! članstvo za ${o.imeDeteta} je aktivno`,
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:sans-serif;line-height:1.6;color:#222">
+<p>Zdravo${ime ? ", " + esc(ime) : ""}!</p>
+<p>Članstvo za <strong>${esc(o.imeDeteta)}</strong> je uključeno - igre, kesice sa sličicama i Milioner su otključani. Dete nastavlja tamo gde je stalo, sa istim kodom i PIN-om.</p>
+<p>Pokrenuto je <strong>mesečno plaćanje od ${fmt(o.monthlyRsd)} RSD</strong>: isti iznos banka će automatski naplaćivati sa tvoje kartice svakog meseca, dok članstvo ne otkažeš. Trenutna naplata pokriva period do <strong>${doKada}</strong> i produžiće se sama sa sledećom naplatom.</p>
+<p><strong>Otkazivanje:</strong> jednim klikom, u svakom trenutku, u <a href="${SITE_URL}/zack/roditelj">roditeljskom panelu</a> - ne moraš da nam pišeš ni da obrazlažeš. Posle otkazivanja pristup traje do kraja plaćenog meseca.</p>
+<p style="font-size:13px;color:#666">Fiskalni račun i potvrda o plaćanju stižu zasebnim mejlovima. Za sva pitanja piši nam na info@hartweger.rs.</p>
+<p style="margin-top:20px">Hartweger tim</p>
+</body></html>`,
+    });
+    console.log(`[email] zack welcome mejl poslat → ${to}`);
+  } catch (e) {
+    console.error("[email] sendZackWelcomeEmail pao:", e);
+  }
+}
+
+/**
  * Pala mesečna naplata - šalje se JEDNOM, kad je prvi put primetimo (posle toga
  * banka na naš zahtev pokušava iznova danima, ne treba 30 mejlova). Istekla
  * kartica se ne da spasiti pokušajima: banka traži da kupac autorizuje NOV plan.

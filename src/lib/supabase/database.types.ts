@@ -2338,6 +2338,7 @@ export type Database = {
           cancelled_at: string | null
           course_id: string
           created_at: string
+          dete_id: string | null
           id: string
           initial_order_id: string
           last_polled_at: string | null
@@ -2359,6 +2360,7 @@ export type Database = {
           cancelled_at?: string | null
           course_id: string
           created_at?: string
+          dete_id?: string | null
           id?: string
           initial_order_id: string
           last_polled_at?: string | null
@@ -2380,6 +2382,7 @@ export type Database = {
           cancelled_at?: string | null
           course_id?: string
           created_at?: string
+          dete_id?: string | null
           id?: string
           initial_order_id?: string
           last_polled_at?: string | null
@@ -2400,6 +2403,13 @@ export type Database = {
             columns: ["course_id"]
             isOneToOne: false
             referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "subscriptions_dete_id_fkey"
+            columns: ["dete_id"]
+            isOneToOne: false
+            referencedRelation: "zack_deca"
             referencedColumns: ["id"]
           },
           {
@@ -2624,11 +2634,13 @@ export type Database = {
       }
       zack_deca: {
         Row: {
+          clanstvo_do: string | null
           created_at: string
           id: string
           ime: string
           kod: string | null
           niz: number
+          oslobodjeno: boolean
           pin_hash: string | null
           pin_pokusaji: number
           poslednji_dan: string | null
@@ -2637,11 +2649,13 @@ export type Database = {
           zakljucano_do: string | null
         }
         Insert: {
+          clanstvo_do?: string | null
           created_at?: string
           id?: string
           ime: string
           kod?: string | null
           niz?: number
+          oslobodjeno?: boolean
           pin_hash?: string | null
           pin_pokusaji?: number
           poslednji_dan?: string | null
@@ -2650,11 +2664,13 @@ export type Database = {
           zakljucano_do?: string | null
         }
         Update: {
+          clanstvo_do?: string | null
           created_at?: string
           id?: string
           ime?: string
           kod?: string | null
           niz?: number
+          oslobodjeno?: boolean
           pin_hash?: string | null
           pin_pokusaji?: number
           poslednji_dan?: string | null

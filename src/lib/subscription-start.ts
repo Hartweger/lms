@@ -29,7 +29,7 @@ export async function startSubscriptionForOrder(
   if (order.payment_method !== "kartica_pretplata" || order.subscription_id) return null;
 
   const item = Array.isArray(order.items)
-    ? (order.items[0] as { course_id?: string; course_slug?: string })
+    ? (order.items[0] as { course_id?: string; course_slug?: string; dete_id?: string })
     : null;
   const plan = item?.course_slug ? planForSlug(item.course_slug) : null;
   const recurringId = recurringIdFromCallback(params);
@@ -62,6 +62,9 @@ export async function startSubscriptionForOrder(
       paid_payments: 1,
       status: "active",
       next_charge_at: nextCharge.toISOString(),
+      // zack! članstvo: pretplata pripada detetu (roditelj plaća). Za sve
+      // školske pretplate stavka nema dete_id, pa ostaje NULL - ponašanje netaknuto.
+      dete_id: item.dete_id ?? null,
     })
     .select("id")
     .single();

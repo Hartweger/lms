@@ -1,7 +1,7 @@
 // src/lib/grant-access.ts
 import * as Sentry from "@sentry/nextjs";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { sendWelcomeEmail, sendGrupniWelcomeEmail, sendProfNewStudentEmail, sendIndividualWelcomeEmail, sendProfNewIndividualStudentEmail, sendSubscriptionChargeEmail, sendAcademyWelcomeEmail } from "@/lib/email";
+import { sendWelcomeEmail, sendGrupniWelcomeEmail, sendProfNewStudentEmail, sendIndividualWelcomeEmail, sendProfNewIndividualStudentEmail, sendSubscriptionChargeEmail, sendAcademyWelcomeEmail, sendZackWelcomeEmail } from "@/lib/email";
 import { nivoForSlug } from "@/lib/course-nivo";
 import { computeSeats, pickOpenGroupForNivo } from "@/lib/groups";
 import { callGas } from "@/lib/gas";
@@ -13,6 +13,7 @@ import { firstLessonForCourses } from "@/lib/first-lesson";
 import { accessUntilForCharge, planForSlug, unlockedSlugsAfter } from "@/lib/subscription-plans";
 import { recurringTxData } from "@/lib/payment-confirmation";
 import { CLANSTVO_CONTENT_SLUG } from "@/lib/clanstvo";
+import { noviRokClanstva, ZACK_PROMO_RSD } from "@/lib/zack/clanstvo";
 
 interface OrderItem { course_id: string; course_slug: string; title: string; price: number; }
 
@@ -60,6 +61,14 @@ export async function revokeAccessForOrder(orderId: string): Promise<RevokeResul
 
   const oznaka = `order:${order.order_number ?? orderId}`;
   const items = (order.items ?? []) as unknown as OrderItem[];
+
+  // zack! članstvo ne živi u course_access nego u zack_deca.clanstvo_do, pa ga
+  // brisanje ispod ne dira - admin pri stornu mora da vidi da rok skida ručno.
+  if ((items[0] as { dete_id?: string } | undefined)?.dete_id) {
+    napomene.push(
+      `zack! članstvo: rok pristupa stoji na zack_deca.clanstvo_do (dete ${(items[0] as { dete_id?: string }).dete_id}) - ako storno treba da ukine pristup, skratiti ručno.`,
+    );
+  }
 
   // 1) Pristup sadržaju. Vezujemo se za `source`, jedini trag koji grant ostavlja na redu.
   // PAŽNJA: kod obnove grant PREPIŠE source na postojećem redu (npr. wp-migracija), pa se
@@ -153,6 +162,72 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
   const expiresAt = jePretplata
     ? accessUntilForCharge(new Date())
     : (() => { const d = new Date(); d.setFullYear(d.getFullYear() + 1); return d; })();
+
+  // zack! članstvo (stavka nosi dete_id): kupac je RODITELJ, a pristup pripada
+  // DETETU - zato ovde nema course_access. Naplata (i prva iz callbacka i rata
+  // iz subscriptions-poll crona) samo produžava zack_deca.clanstvo_do; sve
+  // ostalo (order → completed, fiskalizacija u pozivaocu, GA4/Meta, mejl) ide
+  // istim tokom kao školske porudžbine. Školske stavke nemaju dete_id, pa se
+  // za njih ova grana nikad ne izvršava.
+  const zackDeteId = (items[0] as { dete_id?: string } | undefined)?.dete_id;
+  if (zackDeteId) {
+    const { data: dete, error: deteError } = await admin
+      .from("zack_deca")
+      .select("id, ime, clanstvo_do")
+      .eq("id", zackDeteId)
+      .maybeSingle();
+    const rokError = dete
+      ? (
+          await admin
+            .from("zack_deca")
+            .update({ clanstvo_do: noviRokClanstva(dete.clanstvo_do, expiresAt).toISOString() })
+            .eq("id", dete.id)
+        ).error
+      : null;
+    if (!dete || rokError) {
+      // Isti princip kao za course_access: PLAĆENO-A-NEMA-PRISTUP ne sme da
+      // prođe tiho. Order ostaje pending (reconcile cron ponavlja), lock se
+      // oslobađa odmah.
+      const msg = `[grant][zack] clanstvo_do nije upisan za dete ${zackDeteId} (order ${order.order_number ?? orderId}): ${rokError?.message ?? deteError?.message ?? "dete ne postoji"}`;
+      console.error(msg);
+      Sentry.captureException(new Error(msg));
+      await admin.from("orders").update({ grant_lock_at: null }).eq("id", orderId);
+      return { ok: false, error: msg };
+    }
+
+    await admin.from("orders").update({ payment_status: "completed", granted: true, grant_lock_at: null }).eq("id", orderId);
+
+    // Ista pravila merenja kao dole: samo PRVA naplata je konverzija.
+    if (jePrvaNaplata) await sendGa4Purchase(order);
+    if (jePrvaNaplata && !order.meta_purchase_sent) {
+      const metaOk = await sendPurchaseEvent(order, { eventSourceUrl: `${SITE_URL}/kupovina/hvala/${order.id}` });
+      if (metaOk) await admin.from("orders").update({ meta_purchase_sent: true }).eq("id", orderId);
+    }
+
+    if (jePrvaNaplata) {
+      await sendZackWelcomeEmail(order.email, order.full_name, {
+        imeDeteta: dete.ime,
+        monthlyRsd: ZACK_PROMO_RSD,
+        accessUntil: expiresAt.toISOString(),
+      });
+    } else {
+      const { data: sub } = await admin
+        .from("subscriptions").select("total_payments").eq("id", order.subscription_id!).maybeSingle();
+      await sendSubscriptionChargeEmail({
+        email: order.email,
+        name: order.full_name,
+        courseTitle: items[0]?.title ?? "zack! članstvo",
+        installmentNo: rataBr,
+        totalPayments: sub?.total_payments ?? 121,
+        amount: order.total,
+        accessUntil: expiresAt.toISOString(),
+        orderNumber: order.order_number ?? "",
+        tx: recurringTxData(order.nestpay_response as Record<string, unknown> | null, order.created_at),
+        tip: "clanstvo",
+      });
+    }
+    return { ok: true };
+  }
 
   const purchasedIds = items.map((i) => i.course_id);
   const { data: unlocks } = await admin

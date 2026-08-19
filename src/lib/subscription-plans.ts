@@ -54,6 +54,17 @@ export const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
     tip: "clanstvo",
     unlocks: [{ installment: 1, slug: "nh-clanstvo-sadrzaj" }],
   },
+  // zack! članstvo (migracija 093): mesečno PO DETETU, 1.200 promo (puna 2.399 -
+  // prikazna konstanta u lib/zack/clanstvo.ts). unlocks je namerno PRAZAN:
+  // pristup ne ide kroz course_access (kupac je roditelj, pristup pripada
+  // detetu) nego kroz zack_deca.clanstvo_do - vidi zack granu u grant-access.ts.
+  {
+    slug: "zack-clanstvo",
+    monthlyRsd: 1200,
+    totalPayments: 121,
+    tip: "clanstvo",
+    unlocks: [],
+  },
 ];
 
 export function planForSlug(slug: string): SubscriptionPlan | null {
