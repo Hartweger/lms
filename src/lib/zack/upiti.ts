@@ -2,6 +2,7 @@
 // potpuno zatvoren i dete nema svoj Supabase nalog u ovoj fazi. Zbog toga dečji
 // deo nikad ne pipa Supabase iz pretraživača, nego isključivo kroz /api/zack/*.
 import { createAdminClient } from "@/lib/supabase/admin";
+import { jeOtkljucano } from "./clanstvo";
 import type { Rec } from "./rec";
 import type { ZapisSlicice } from "./album";
 import type { GramatickaTacka, GramatickoPitanje } from "./milioner";
@@ -336,4 +337,26 @@ export async function neotvoreneKesice(deteId: string): Promise<Map<string, numb
     poLekciji.set(lekcijaId, (poLekciji.get(lekcijaId) ?? 0) + 1);
   }
   return poLekciji;
+}
+
+/**
+ * Server-side provera članstva za rute igara (zaradi/kesica/zalepi/milioner).
+ * Pravilo je u lib/zack/clanstvo.ts (jeOtkljucano); ovde je samo čitanje.
+ * Nepostojeće dete je „zaključano" - ali rute pre ove provere ionako rade
+ * nadjiDete i vraćaju 404, pa dotle ne stiže.
+ */
+export async function clanstvoAktivno(deteId: string): Promise<boolean> {
+  if (!jeUuid(deteId)) return false;
+  const sb = createAdminClient();
+  const { data, error } = await sb
+    .from("zack_deca")
+    .select("roditelj_id, oslobodjeno, clanstvo_do")
+    .eq("id", deteId)
+    .maybeSingle();
+  if (error) throw new Error(`Ne mogu da proverim članstvo: ${error.message}`);
+  if (!data) return false;
+  return jeOtkljucano(
+    { roditeljId: data.roditelj_id, oslobodjeno: data.oslobodjeno, clanstvoDo: data.clanstvo_do },
+    new Date()
+  );
 }

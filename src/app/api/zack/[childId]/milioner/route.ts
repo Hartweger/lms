@@ -31,6 +31,7 @@
 // i tada provera odgovora ide na server.
 import { NextResponse } from "next/server";
 import {
+  clanstvoAktivno,
   brojLekcijeUUdzbeniku,
   dozvoljenaGramatika,
   gramatickaPitanja,
@@ -38,6 +39,7 @@ import {
   jeUuid,
   nadjiDete,
 } from "@/lib/zack/upiti";
+import { PORUKA_ZAKLJUCANO } from "@/lib/zack/clanstvo";
 
 const greska = (poruka: string, status: number) =>
   NextResponse.json({ error: poruka }, { status });
@@ -47,6 +49,11 @@ export async function POST(request: Request, { params }: { params: Promise<{ chi
 
   const dete = await nadjiDete(childId);
   if (!dete) return greska("Nema takvog deteta", 404);
+
+  // Bez članstva su igre zaključane i NA SERVERU, ne samo u UI - mirna poruka,
+  // bez cene i bez krivice. Album i sve zarađeno ostaju netaknuti; oslobođena
+  // deca i naša probna (bez roditelja) prolaze - vidi lib/zack/clanstvo.ts.
+  if (!(await clanstvoAktivno(dete.id))) return greska(PORUKA_ZAKLJUCANO, 403);
 
   let telo: unknown;
   try {

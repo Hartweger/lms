@@ -35,6 +35,7 @@ import Kesica, { CIK_CAK } from "@/components/zack/Kesica";
 import Milioner from "@/components/zack/Milioner";
 import Slicica from "@/components/zack/Slicica";
 import { brojac, type StavkaAlbuma } from "@/lib/zack/album";
+import { PORUKA_ZAKLJUCANO } from "@/lib/zack/clanstvo";
 import type { Igra as VrstaIgre } from "@/lib/zack/pitanja";
 import { dokleSePopela, opisSprata } from "@/lib/zack/pojas";
 import type { StaraRec } from "@/lib/zack/ponavljanje";
@@ -95,6 +96,24 @@ const HEX_MALI = "polygon(12px 0, calc(100% - 12px) 0, 100% 50%, calc(100% - 12p
 
 /** Zajednički izgled svega što se klikće, sa vidljivim fokusom. */
 const FOKUS = "outline-offset-2 focus-visible:outline-4 focus-visible:outline-[#0B54C9]";
+
+/**
+ * Katanac na zaključanoj pločici. Uvek stoji uz reč „Zaključano" - ikona sama
+ * ne sme da nosi značenje - pa je za čitače ekrana čist ukras.
+ */
+function Katanac() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none">
+      <rect x="5" y="10.5" width="14" height="9.5" rx="2.5" fill="currentColor" />
+      <path
+        d="M8 10.5V8a4 4 0 0 1 8 0v2.5"
+        stroke="currentColor"
+        strokeWidth="2.6"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
 /** Na crvenoj kesici plavi okvir fokusa se gubi, pa je tamo fokus beo. */
 const FOKUS_NA_CRVENOJ = "outline-offset-2 focus-visible:outline-4 focus-visible:outline-white";
 
@@ -421,6 +440,7 @@ export default function LekcijaClient({
   neotvorenaKesica,
   pocetniRekord,
   imaGramatike,
+  zakljucano,
 }: {
   childId: string;
   lekcija: Lekcija;
@@ -440,6 +460,13 @@ export default function LekcijaClient({
    * dugme kog nema.
    */
   imaGramatike: boolean;
+  /**
+   * Bez aktivnog članstva (odluka vlasnice): igre, kesica i Milioner stoje pod
+   * katancem sa MIRNOM porukom - bez cene i bez krivice, jer ovo čita dete.
+   * Album, brojači i sve zarađeno ostaju netaknuti. Rute isto odbijaju (403),
+   * ovde je samo izgled.
+   */
+  zakljucano: boolean;
 }) {
   const [stanje, setStanje] = useState<StavkaAlbuma[]>(pocetnoStanje);
   const [igra, setIgra] = useState<VrstaIgre | null>(null);
@@ -769,8 +796,12 @@ export default function LekcijaClient({
 
       {/* ── Kesica je PRVO što dete vidi ────────────────────────────────────
           Iznad naslova, iznad svega. To je jedini razlog zbog kog se dete vraća
-          sutradan, pa ne sme da bude pri dnu ekrana. */}
-      {bedzKesice && (
+          sutradan, pa ne sme da bude pri dnu ekrana.
+
+          Pod katancem se kesica i lepljenje NE prikazuju: zarađeno mirno čeka
+          u bazi i dočekaće dete kad se članstvo uključi - ništa se ne oduzima,
+          samo se ne mami dugmetom koje bi vratilo 403. */}
+      {!zakljucano && bedzKesice && (
         /* Prava kesica sa sličicama: crvena, debela bela ivica, blag nagib i
            nazubljena gornja ivica po kojoj se cepa. Nagib nosi omotač, da se
            dugme unutra ne bori sa zarotiranim fokusom. */
@@ -821,7 +852,7 @@ export default function LekcijaClient({
         </section>
       )}
 
-      {zauzeto && !bedzKesice && (
+      {!zakljucano && zauzeto && !bedzKesice && (
         <div
           className="mb-6 flex items-center justify-center gap-4 rounded-2xl border-[3px] p-4"
           style={{ background: PAPIR, borderColor: ZUTA }}
@@ -843,7 +874,7 @@ export default function LekcijaClient({
           Stoje tu dok ih dete ne zalepi. Lepljenje jednu po jednu je zabavno
           prve nedelje, ali „zalepi sve" mora da postoji, jer je u petoj nedelji
           tapkanje po dvadeset sličica teret. */}
-      {uRuci.length > 0 && (
+      {!zakljucano && uRuci.length > 0 && (
         <section
           className="mb-6 rounded-2xl border-[3px] p-4"
           style={{ background: PAPIR, borderColor: CRVENA_ZNAK }}
@@ -1066,7 +1097,51 @@ export default function LekcijaClient({
           ekran ne postane duga. */}
       <section className="mb-8">
         <NaslovSekcije>Igre</NaslovSekcije>
-        {reci.length === 0 ? (
+        {zakljucano ? (
+          <>
+            {/* Jedna mirna rečenica za sve pločice - ista koju vraćaju i rute.
+                Bez cene, bez krivice i bez ijednog dugmeta za plaćanje: novac
+                je roditeljska strana, dete ovde samo vidi da igre čekaju. */}
+            <p
+              className="flex items-center gap-2.5 rounded-2xl border p-4 text-[15px] leading-relaxed"
+              style={{ background: PAPIR, borderColor: IVICA, color: MASTILO }}
+            >
+              <span aria-hidden="true" className="flex-none" style={{ color: PRIGUSEN }}>
+                <Katanac />
+              </span>
+              <span>{PORUKA_ZAKLJUCANO}</span>
+            </p>
+            <ul className="mt-3 grid grid-cols-2 gap-3">
+              {IGRE.map((vrsta) => (
+                <li key={vrsta}>
+                  {/* Ista pločica, samo nije dugme: bledi crtež, katanac i reč
+                      „Zaključano" - status stoji i kao tekst, ne samo kao ikona. */}
+                  <div
+                    className="flex min-h-[120px] w-full flex-col items-center justify-center gap-2 rounded-2xl border p-3 text-center"
+                    style={{ background: PAPIR, borderColor: IVICA }}
+                  >
+                    <span aria-hidden="true" className="flex h-12 items-center justify-center opacity-40">
+                      {VINJETA[vrsta]}
+                    </span>
+                    <span
+                      className="block text-[15px] leading-tight"
+                      style={{ color: PRIGUSEN, fontFamily: DISPLAY }}
+                    >
+                      {NAZIVI[vrsta]}
+                    </span>
+                    <span
+                      className="font-heading flex items-center gap-1 text-[13px] font-bold"
+                      style={{ color: PRIGUSEN }}
+                    >
+                      <Katanac />
+                      Zaključano
+                    </span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </>
+        ) : reci.length === 0 ? (
           <p
             className="rounded-2xl border border-dashed p-5 text-center text-[15px] leading-relaxed"
             style={{ borderColor: IVICA, background: PAPIR, color: PRIGUSEN }}
@@ -1129,7 +1204,42 @@ export default function LekcijaClient({
           </h2>
           {/* Tamna kartica: mini najava Milionerovog TV studija, plava noć sa
               zlatnim šestougaonikom. Već po boji se vidi da OVO nije igra za
-              sličice. */}
+              sličice. Pod katancem ista kartica nije dugme i kaže „Zaključano" -
+              zašto, već piše iznad, kod igara. */}
+          {zakljucano ? (
+            <div
+              className="flex min-h-[76px] w-full items-center gap-3.5 rounded-2xl border-[3px] px-4 py-4 text-left opacity-90"
+              style={{
+                background: `radial-gradient(120% 130% at 50% 0%, ${NOC_SJAJ} 0%, ${NOC} 72%)`,
+                borderColor: NOC_SJAJ,
+              }}
+            >
+              <span
+                aria-hidden="true"
+                className="flex h-10 w-16 flex-none items-center justify-center opacity-60"
+                style={{ background: ZLATNA, clipPath: HEX_MALI }}
+              >
+                <span className="text-[19px]" style={{ color: TAMNO, fontFamily: DISPLAY }}>
+                  ?
+                </span>
+              </span>
+              <span className="min-w-0 flex-1">
+                <span
+                  className="block text-[19px] leading-tight text-white"
+                  style={{ fontFamily: DISPLAY }}
+                >
+                  Milioner
+                </span>
+                <span
+                  className="mt-1 flex items-center gap-1.5 text-[14px] font-bold leading-snug"
+                  style={{ color: NOC_PRIGUSENA }}
+                >
+                  <Katanac />
+                  Zaključano
+                </span>
+              </span>
+            </div>
+          ) : (
           <button
             type="button"
             onClick={() => {
@@ -1170,6 +1280,7 @@ export default function LekcijaClient({
               <Strelica />
             </span>
           </button>
+          )}
         </section>
       )}
 

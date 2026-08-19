@@ -6,6 +6,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { stanjeAlbuma, stanjeZapisa } from "@/lib/zack/album";
 import type { StaraRec } from "@/lib/zack/ponavljanje";
 import {
+  clanstvoAktivno,
   dozvoljenaGramatika,
   greskeReci,
   nadjiDete,
@@ -50,7 +51,7 @@ export default async function LekcijaPage({
   if (error) throw new Error(`Ne mogu da pročitam lekciju: ${error.message}`);
   if (!lekcija) notFound();
 
-  const [reci, zapisi, kesice, rekordSkakaca, gramatika, sveStare, greske] = await Promise.all([
+  const [reci, zapisi, kesice, rekordSkakaca, gramatika, sveStare, greske, otkljucano] = await Promise.all([
     reciLekcije(lekcija.id),
     // zapisiSlicica vraća SAMO isporučene sličice, pa album ne može da oda reč
     // koja još čeka u neotvorenoj kesici.
@@ -68,6 +69,10 @@ export default async function LekcijaPage({
     // lekciju su oba prazna i sve radi kao i do sad.
     stareReciUdzbenika(dete.udzbenik_id, lekcija.broj),
     greskeReci(dete.id),
+    // Članstvo (odluka vlasnice): bez njega se zaključavaju SAMO igre, kesice
+    // i Milioner - album i sve zarađeno ostaju. Rute isto proveravaju na
+    // serveru; ovde je provera za izgled ekrana.
+    clanstvoAktivno(dete.id),
   ]);
 
   const sada = new Date();
@@ -95,6 +100,7 @@ export default async function LekcijaPage({
         neotvorenaKesica={kesice.get(lekcija.id) ?? 0}
         pocetniRekord={rekordSkakaca}
         imaGramatike={gramatika.length > 0}
+        zakljucano={!otkljucano}
       />
     </UskiStub>
   );
