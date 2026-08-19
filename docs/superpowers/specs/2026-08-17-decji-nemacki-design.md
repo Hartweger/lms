@@ -24,6 +24,22 @@ slobodno se prate. Tekstovi, zadaci i ilustracije iz udžbenika se **ne prepisuj
 čak ni oni koje je Nataša pisala, jer prava drži izdavač. Sav sadržaj u aplikaciji
 je originalan i samo prati isti redosled.
 
+## VAŽNA IZMENA PRAVCA, 19.08.2026.
+
+**Sadržaj se gradi po NASTAVNOM PLANU I PROGRAMU, ne po udžbeniku.** Odluka
+vlasnice, menja odluku iz prvobitnog dizajna („po lekcijama udžbenika, jedan
+izdavač").
+
+Razlozi:
+1. Plan i program je javan propis, niko na njega nema autorska prava.
+2. Radi za svako dete iz svake škole, jer svi udžbenici prate isti program.
+3. Natašino autorstvo je celo: piše svoj kurs, ne izvlači ničije spiskove.
+
+Cena: roditelju se više ne kaže „prati baš vaš udžbenik" nego „prati nastavni
+plan i program za peti razred". Tehnički ništa ne puca: zapis „udžbenika" u bazi
+postaje zapis razreda (npr. „Nemački, 5. razred"). Nataša dostavlja gradivo po
+razredu, aplikacija ga deli na celine i lekcije.
+
 ## 2. Korisnici
 
 **Dete, 11-14 godina.** Čita tečno, kuca, samo koristi telefon. Igra samo ako je
