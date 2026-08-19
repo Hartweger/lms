@@ -11,6 +11,8 @@ import { computeCouponDiscount, isTermPackage } from "@/lib/coupon-discount";
 import { computeSeats, pickOpenGroupForNivo } from "@/lib/groups";
 import { gaIdsFromCookieHeader } from "@/lib/ga-cookies";
 import { chargeAmountFor, planForSlug } from "@/lib/subscription-plans";
+import { ZACK_CLANSTVO_SLUG } from "@/lib/zack/clanstvo";
+import { jeUuid } from "@/lib/zack/upiti";
 
 export async function POST(request: Request) {
   try {
@@ -25,7 +27,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const { fullName, email, country, courseSlug, paymentMethod, couponCode: rawCouponCode, professorId, packageType, pages: rawPages, attribution } =
+    const { fullName, email, country, courseSlug, paymentMethod, couponCode: rawCouponCode, professorId, packageType, pages: rawPages, attribution, deteId } =
       await request.json();
     const attr = (attribution && typeof attribution === "object") ? attribution as Record<string, string> : {};
     // GA4 kolačići kupca (postoje samo uz saglasnost) - čuvaju se na porudžbini da
@@ -68,6 +70,76 @@ export async function POST(request: Request) {
       );
     }
 
+    // zack! članstvo se plaća PO DETETU: bez deteta nema stavke, a dete mora da
+    // pripada roditeljskom nalogu sa mejla porudžbine - pretplata se upisuje na
+    // taj nalog, i samo iz njegovog panela može da se otkaže. Bez ove provere bi
+    // se članstvo moglo uključiti tuđim mejlom, pa ostati bez ikoga ko ume da ga
+    // otkaže.
+    const jeZack = course.slug === ZACK_CLANSTVO_SLUG;
+    let zackDete: { id: string; ime: string } | null = null;
+    if (jeZack) {
+      if (typeof deteId !== "string" || !jeUuid(deteId)) {
+        return NextResponse.json(
+          { error: "Nedostaje dete za koje se uključuje članstvo. Kreni iz roditeljskog panela." },
+          { status: 400 }
+        );
+      }
+      const { data: dete } = await supabase
+        .from("zack_deca")
+        .select("id, ime, roditelj_id, oslobodjeno, clanstvo_do")
+        .eq("id", deteId)
+        .maybeSingle();
+      if (!dete || !dete.roditelj_id) {
+        return NextResponse.json(
+          { error: "Ovo dete nije pronađeno. Kreni iz roditeljskog panela." },
+          { status: 400 }
+        );
+      }
+      // Dva jasna upita umesto ugnježdenog - isti razlog kao u lib/zack/upiti.ts.
+      const { data: roditelj } = await supabase
+        .from("zack_roditelji")
+        .select("email")
+        .eq("id", dete.roditelj_id)
+        .maybeSingle();
+      if (!roditelj || roditelj.email.toLowerCase() !== String(email).toLowerCase()) {
+        return NextResponse.json(
+          { error: "Članstvo se uključuje sa roditeljskog naloga na koji je dete vezano. Prijavi se u roditeljski panel pa kreni odatle." },
+          { status: 403 }
+        );
+      }
+      if (dete.oslobodjeno) {
+        return NextResponse.json(
+          { error: `${dete.ime} već ima uključen pristup - članstvo mu ne treba.` },
+          { status: 400 }
+        );
+      }
+      if (dete.clanstvo_do && new Date(dete.clanstvo_do) > new Date()) {
+        // sr-RS datum se završava tačkom („29. 8. 2026."), pa se ona skida da
+        // rečenica ne dobije duplu tačku.
+        const doKada = new Date(dete.clanstvo_do).toLocaleDateString("sr-RS").replace(/\.$/, "");
+        return NextResponse.json(
+          { error: `Članstvo za ${dete.ime} već važi do ${doKada}. Novo možeš da uključiš kad taj period istekne.` },
+          { status: 400 }
+        );
+      }
+      // Dupla pretplata se za zack gleda PO DETETU, ne po (kupac, kurs) kao za
+      // školske pretplate - roditelj sa dvoje dece legitimno ima dve serije na
+      // istom proizvodu.
+      const { data: aktivnaZaDete } = await supabase
+        .from("subscriptions")
+        .select("id")
+        .eq("dete_id", dete.id)
+        .eq("status", "active")
+        .maybeSingle();
+      if (aktivnaZaDete) {
+        return NextResponse.json(
+          { error: `Za ${dete.ime} već postoji aktivno mesečno članstvo. Proveri roditeljski panel.` },
+          { status: 400 }
+        );
+      }
+      zackDete = { id: dete.id, ime: dete.ime };
+    }
+
     // Povratak sa NestPay strane: kupac često ponovi pokušaj plaćanja za isti kurs,
     // pa bi svaki pokušaj pravio novu porudžbinu + novi admin mejl. Umesto toga
     // ažuriramo njegovu poslednju pending porudžbinu (<24h) za isti kurs.
@@ -86,7 +158,11 @@ export async function POST(request: Request) {
           (o) =>
             o.payment_status === "pending" &&
             Array.isArray(o.items) &&
-            (o.items[0] as { course_id?: string } | undefined)?.course_id === course.id
+            (o.items[0] as { course_id?: string } | undefined)?.course_id === course.id &&
+            // zack: porudžbine za dvoje dece su isti kurs, ali NISU ista
+            // porudžbina - reuse za drugo dete bi pregazio prvu. Školske
+            // stavke nemaju dete_id, pa je poređenje null === null.
+            ((o.items[0] as { dete_id?: string } | undefined)?.dete_id ?? null) === (zackDete?.id ?? null)
         )
         .sort((a, b) => String(b.created_at).localeCompare(String(a.created_at)))[0] ?? null;
 
@@ -294,7 +370,9 @@ export async function POST(request: Request) {
     // Dupla pretplata: za članstvo (i pakete) course_access pokazuje na sadržajni
     // kurs, pa provera ispod (na PRODUKT kursu) ne hvata slučaj kad neko već ima
     // aktivnu pretplatu na isti proizvod i pokuša da pokrene drugu paralelno.
-    if (paymentMethod === "kartica_pretplata" && plan) {
+    // zack je izuzet: njegova dupla pretplata se gleda PO DETETU (provera gore),
+    // a roditelj sa više dece sme više serija na istom proizvodu.
+    if (paymentMethod === "kartica_pretplata" && plan && !jeZack) {
       const { data: postojeciZaPretplatu } = await supabase
         .from("user_profiles").select("id").ilike("email", email).maybeSingle();
       if (postojeciZaPretplatu) {
@@ -316,7 +394,9 @@ export async function POST(request: Request) {
 
     // Ko već ima važeći pristup ovom kursu ne sme da pokrene mesečno plaćanje - plaćao bi
     // mesecima nešto što već ima, pa bi tražio povraćaj (odluka 21.07.2026).
-    if (paymentMethod === "kartica_pretplata") {
+    // zack je izuzet: roditelj nikad nema course_access na zack proizvod (pristup
+    // stoji na detetu), pa se isto pravilo za njega proverava gore, na clanstvo_do.
+    if (paymentMethod === "kartica_pretplata" && !jeZack) {
       const { data: postojeciNalog } = await supabase
         .from("user_profiles").select("id").ilike("email", email).maybeSingle();
       if (postojeciNalog) {
@@ -371,10 +451,22 @@ export async function POST(request: Request) {
       {
         course_id: course.id,
         course_slug: course.slug,
-        title: isService ? `${course.title} - ${pages} ${stranaLabel}` : course.title,
+        // zack: ime deteta u nazivu stavke - fiskalni račun, potvrde i admin
+        // mejl tako kažu ZA KOJE dete je naplata (roditelj sa dvoje dece ima
+        // dve identične stavke bez toga). Samo ime, bez prezimena - drugo se
+        // o detetu nigde i ne čuva.
+        title: isService
+          ? `${course.title} - ${pages} ${stranaLabel}`
+          : zackDete
+            ? `${course.title} - ${zackDete.ime}`
+            : course.title,
         price: unitPrice,
         ...(isService ? { quantity: pages } : {}),
         ...(isIndividual ? { professor_id: chosenProfessorId, package_lessons: packageLessons } : {}),
+        // dete_id je jedini trag koji zack grana u grant-access.ts i
+        // subscription-start.ts prepoznaju - bez njega bi naplata prošla
+        // kao školska i pristup ne bi stigao do deteta.
+        ...(zackDete ? { dete_id: zackDete.id } : {}),
       },
     ];
 

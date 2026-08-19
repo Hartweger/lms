@@ -20,6 +20,8 @@ interface OrderItem {
   course_slug: string;
   title: string;
   price: number;
+  /** zack! članstvo: dete kome naplata pripada - vidi grant-access.ts. */
+  dete_id?: string;
 }
 
 export default async function HvalaPage({
@@ -52,6 +54,9 @@ export default async function HvalaPage({
   // EPM 2.7 potvrda i statusne poruke važe i za nju.
   const isPretplata = order.payment_method === "kartica_pretplata";
   const isCard = order.payment_method === "kartica" || order.payment_method === "kartica_rate" || isPretplata;
+  // zack! članstvo: kupac je roditelj, „kurs" ne postoji - poruka i CTA vode u
+  // roditeljski panel umesto u lekcije. Potvrda o plaćanju (EPM 2.7) ostaje ista.
+  const jeZack = !!items?.[0]?.dete_id;
 
   // Posle kartičnog auto-logina kupac stiže ULOGOVAN - CTA vodi pravo u prvu lekciju
   // umesto na /prijava. Stranica ostaje landing zbog browser Pixel Purchase (dedup sa CAPI).
@@ -118,11 +123,13 @@ export default async function HvalaPage({
           <div className="bg-green-50 border border-green-200 rounded-xl px-5 py-4 mb-6 text-sm text-green-800">
             <p className="font-semibold">{CARD_OUTCOME.success} 🎉</p>
             <p className="mt-1">
-              {!firstLessonId
-                ? "Uplata je uspela. Sve detalje o tvojim časovima poslali smo ti na mejl."
-                : user
-                  ? "Pristup kursu je aktiviran i već si prijavljen/a - kreni odmah."
-                  : "Pristup kursu je aktiviran. Poslali smo ti email - prijavi se i počni."}
+              {jeZack
+                ? "Članstvo je aktivno - igre, kesice i Milioner su detetu otključani. Detalje smo ti poslali na mejl."
+                : !firstLessonId
+                  ? "Uplata je uspela. Sve detalje o tvojim časovima poslali smo ti na mejl."
+                  : user
+                    ? "Pristup kursu je aktiviran i već si prijavljen/a - kreni odmah."
+                    : "Pristup kursu je aktiviran. Poslali smo ti email - prijavi se i počni."}
             </p>
           </div>
         )}
@@ -132,7 +139,11 @@ export default async function HvalaPage({
             <p className="mt-1 mb-4">{CARD_OUTCOME.failHint}</p>
             {courseSlug && (
               <Link
-                href={`/kupovina/${courseSlug}`}
+                href={
+                  jeZack
+                    ? `/kupovina/zack-clanstvo?dete=${items[0].dete_id}`
+                    : `/kupovina/${courseSlug}`
+                }
                 className="inline-block px-5 py-2.5 rounded-lg font-semibold text-white text-sm bg-[#F78687] hover:bg-[#E06566] transition-colors"
               >
                 Pokušaj ponovo
@@ -345,7 +356,14 @@ export default async function HvalaPage({
 
         {/* CTA */}
         <div className="flex flex-wrap items-center gap-4">
-          {user && cardOk ? (
+          {jeZack ? (
+            <Link
+              href="/zack/roditelj"
+              className="inline-block px-6 py-3 rounded-lg font-semibold text-white text-sm bg-plava hover:bg-plava-dark transition-colors"
+            >
+              Nazad u roditeljski panel →
+            </Link>
+          ) : user && cardOk ? (
             <Link
               href={firstLessonId ? `/lekcija/${firstLessonId}` : "/nalog"}
               className="inline-block px-6 py-3 rounded-lg font-semibold text-white text-sm bg-plava hover:bg-plava-dark transition-colors"
@@ -365,9 +383,11 @@ export default async function HvalaPage({
               Prijavi se da vidiš kurs
             </Link>
           )}
-          <Link href="/kursevi" className="text-sm text-plava hover:underline">
-            ← Nazad na kurseve
-          </Link>
+          {!jeZack && (
+            <Link href="/kursevi" className="text-sm text-plava hover:underline">
+              ← Nazad na kurseve
+            </Link>
+          )}
         </div>
       </div>
     </section>

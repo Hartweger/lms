@@ -75,7 +75,9 @@ export default function UsloviPage() {
             <li>U okviru zajednice važe Pravila zajednice istaknuta na platformi. HARTWEGER zadržava pravo da ukloni sadržaj koji krši pravila i da, kod težih ili ponovljenih kršenja, privremeno ili trajno ukine pristup zajednici.</li>
           </ul>
 
-          <h2>5. Plaćanje</h2>
+          {/* id: sa stranica plaćanja se linkuje pravo na pravila mesečnog
+              plaćanja i otkazivanja (EPM: uslovi pre unosa kartice). */}
+          <h2 id="placanje">5. Plaćanje</h2>
           <ul>
             <li>Plaćanje je moguće platnom karticom (Visa, Mastercard, Maestro, DinaCard, American Express), uplatom na dinarski račun ili putem PayPal-a.</li>
             <li>Plaćanje na rate moguće je isključivo karticama Banca Intesa banke (do 6 rata).</li>
