@@ -146,16 +146,21 @@ gtag('config', '${ADS_ID}', { allow_enhanced_conversions: true });` : ""}
         {/* Dečji deo (/zack) je zaseban brend i namerno nema ništa od školskog
             okvira: ni promo traku, ni navigaciju sa Hartweger logotipom, ni
             podnožje, ni prodajnog asistenta. Natašino ime stoji na roditeljskoj
-            strani, gde gradi poverenje, i nigde više. */}
-        <SakrijNa prefiksi={["/zack"]}>
+            strani, gde gradi poverenje, i nigde više.
+            Isti okvir se krije i na /nemacki-za-decu (prodajni landing zack!-a,
+            van /zack): brend je zack!, ali publika odrasla - pa merenje,
+            kolačići i piksel tamo NORMALNO rade i ne kriju se. */}
+        <SakrijNa prefiksi={["/zack", "/nemacki-za-decu"]}>
           <PromoBar />
         </SakrijNa>
-        <SakrijNa prefiksi={["/clanstvo", "/zack"]}>
+        <SakrijNa prefiksi={["/clanstvo", "/zack", "/nemacki-za-decu"]}>
           <Navigacija />
         </SakrijNa>
         {/* Strukturirani podaci o školi (adresa, mejl, osnivač, društvene mreže)
-            nemaju šta da traže na dečjoj stranici. Dva su brenda, ne jedan. */}
-        <SakrijNa prefiksi={["/zack"]}>
+            nemaju šta da traže na dečjoj stranici. Dva su brenda, ne jedan.
+            Iz istog razloga ni na zack! landingu - on je indeksiran, pa bi se
+            školska schema tamo i te kako videla. */}
+        <SakrijNa prefiksi={["/zack", "/nemacki-za-decu"]}>
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{
@@ -217,11 +222,12 @@ gtag('config', '${ADS_ID}', { allow_enhanced_conversions: true });` : ""}
         <main id="glavni" className="flex-1">{children}</main>
         {/* Članstvo ima svoj ClanstvoFooter (clanstvo/layout.tsx) - školski
             footer sa kursevima i bankarskim logotipima tamo nema smisla. */}
-        <SakrijNa prefiksi={["/clanstvo", "/zack"]}>
+        <SakrijNa prefiksi={["/clanstvo", "/zack", "/nemacki-za-decu"]}>
           <Footer />
         </SakrijNa>
-        {/* Smile je prodajni asistent za odrasle. Detetu nema šta da ponudi. */}
-        <SakrijNa prefiksi={["/zack"]}>
+        {/* Smile je prodajni asistent za odrasle. Detetu nema šta da ponudi,
+            a na zack! landingu bi školski asistent mešao dva brenda. */}
+        <SakrijNa prefiksi={["/zack", "/nemacki-za-decu"]}>
           <SmileWidget />
         </SakrijNa>
         {/* Dete pravno ne može da da saglasnost za kolačiće, pa mu se traka ne

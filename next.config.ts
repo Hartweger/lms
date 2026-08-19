@@ -90,6 +90,9 @@ const nextConfig: NextConfig = {
           "https://rzmyglynjcygsbicssbt.supabase.co/storage/v1/object/public/lekcije-media/audio/:path*",
         permanent: true,
       },
+      // zack! landing za roditelje preseljen van /zack (19.08.2026): ceo /zack
+      // je bez merenja i blokiran u robots.txt, a prodajnoj strani treba oboje.
+      { source: "/zack/za-roditelje", destination: "/nemacki-za-decu", permanent: true },
       { source: "/korpa", destination: "/kursevi", permanent: true },
       { source: "/moj-nalog", destination: "/nalog", permanent: true },
       { source: "/prodavnica", destination: "/kursevi", permanent: true },
@@ -123,8 +126,12 @@ const nextConfig: NextConfig = {
       // Stari WP blog: root-level tekstovi (/<slug>) → /magazin/<slug>
       // Samo "čisti" slugovi (a-z, 0-9, -); slugovi sa %-encoded znakovima (npr. emoji)
       // se preskaču jer ruše path-to-regexp pattern.
+      // "nemacki-za-decu" se preskače NAMERNO: tu adresu je 19.08.2026 zauzeo
+      // zack! landing (prava stranica u src/app/nemacki-za-decu), pa bi WP
+      // redirect na /magazin/... presreo rutu pre nego što se uopšte renderuje.
+      // Stari WP blog linkovi sad vode na landing - tema je ista, prodaja bolja.
       ...legacyBlogSlugs
-        .filter((slug) => /^[a-z0-9-]+$/.test(slug))
+        .filter((slug) => /^[a-z0-9-]+$/.test(slug) && slug !== "nemacki-za-decu")
         .map((slug) => ({
           source: `/${slug}`,
           destination: `/magazin/${slug}`,

@@ -20,6 +20,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: "https://www.hartweger.rs/individualni-kursevi", lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: "https://www.hartweger.rs/kursevi/paket-a1-a2-b1", lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: "https://www.hartweger.rs/besplatno-testiranje", lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    // zack! landing za roditelje - jedina javna zack strana (ostatak /zack je namerno van indeksa)
+    { url: "https://www.hartweger.rs/nemacki-za-decu", lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: "https://www.hartweger.rs/naki", lastModified: now, changeFrequency: "monthly", priority: 0.6 },
     { url: "https://www.hartweger.rs/magazin", lastModified: now, changeFrequency: "weekly", priority: 0.7 },
     { url: "https://www.hartweger.rs/o-natasi", lastModified: now, changeFrequency: "monthly", priority: 0.6 },

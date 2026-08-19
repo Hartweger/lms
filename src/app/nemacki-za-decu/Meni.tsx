@@ -10,7 +10,7 @@
 // sekciju nosi i fokus, pa tastatura nastavlja tamo gde čitalac gleda.
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { IVICA, MASTILO, PAPIR, PRIGUSEN } from "../Ukras";
+import { IVICA, MASTILO, PAPIR, PRIGUSEN } from "../zack/Ukras";
 
 /** Isti fokus prsten kao na ostatku strane. */
 const FOKUS = "outline-offset-4 focus-visible:outline-4 focus-visible:outline-[#0B54C9]";

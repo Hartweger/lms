@@ -68,8 +68,8 @@ export default function ZackLayout({ children }: { children: React.ReactNode }) 
       {/* Širinu ovde namerno NE stežemo: aplikacione stranice (prijava,
           roditelj, staza, lekcija) oblače svoj uski stub kroz UskiStub iz
           Ukras.tsx - kolona uska kao pre, jer se čita na telefonu u ruci.
-          Landing za roditelje (/zack/za-roditelje) jedini koristi punu širinu,
-          zato stub više ne sme da živi u rasporedu. */}
+          (Prodajni landing je preseljen na /nemacki-za-decu, sa sopstvenim
+          rasporedom - njemu treba merenje, koje je pod /zack isključeno.) */}
       {children}
       {/* Licenca ikonica (CC BY 4.0) traži navođenje autora. Stoji sitno i
           jednom, jer je namenjeno pravnoj obavezi, ne detetu. */}

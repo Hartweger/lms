@@ -1,14 +1,15 @@
-// Prodajna strana zack!-a za roditelje. Jedina stranica pod /zack koja koristi
-// punu širinu: sekcije su pune trake (papir, mastilo, plava), a sadržaj unutar
-// njih drži svoju kolonu. Sve ostalo nasleđuje od dečjeg dela: papirni okvir,
-// display slovo, isključeno školsko merenje - i ceo ukrasni rečnik iz Ukras.tsx.
+// Prodajna strana zack!-a za roditelje. Živi VAN /zack (na /nemacki-za-decu),
+// jer je publika odrasla i strani trebaju i merenje i Google - ceo /zack
+// prefiks je namerno bez ijednog od toga. Sekcije su pune trake (papir,
+// mastilo, plava), a sadržaj unutar njih drži svoju kolonu. Papirni okvir,
+// display slovo i metapodaci žive u layout.tsx pored ove strane; ukrasni
+// rečnik i dalje stiže iz zajedničkog ../zack/Ukras.tsx.
 //
 // Glas je Natašin, ti-forma prema roditelju, bez roda deteta („tvoje dete").
 // Nijedan broj ovde nije izmišljen: deset minuta, dve nedelje, 1.200 dinara
 // mesečno po detetu i program Ministarstva su činjenice proizvoda. Utisaka
 // korisnika nema, jer ih još nemamo. Peti razred se NE ističe u naslovima -
 // stižu svi razredi, pa dostupnost živi sitno u FAQ-u, ne u reklami.
-import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import Slicica from "@/components/zack/Slicica";
@@ -28,24 +29,13 @@ import {
   TablicaOkvir,
   ZUTA,
   ZackZnak,
-} from "../Ukras";
+} from "../zack/Ukras";
 import LepljivPoziv from "./LepljivPoziv";
 import Meni from "./Meni";
 import Otkrij from "./Otkrij";
 
-// Za razliku od dečjih ekrana (čije adrese nose ključ deteta), ova strana je
-// javna i SME u pretragu - njoj je posao da dovodi roditelje.
-export const metadata: Metadata = {
-  title: "zack! - nemački za osnovce",
-  description:
-    "Album sa sličicama u kom tvoje dete uči nemački po deset minuta dnevno - po školskom programu, bez reklama i bez ocena.",
-  robots: { index: true, follow: true },
-  openGraph: {
-    title: "zack! - nemački za osnovce",
-    description:
-      "Album sa sličicama u kom tvoje dete uči nemački po deset minuta dnevno - po školskom programu.",
-  },
-};
+// Metapodaci (naslov, opis, robots, canonical, OG) žive u layout.tsx pored
+// ove strane - jedno mesto, da se ne dupliraju i ne razjedu.
 
 // Tekst prigušene boje na tamnoj traci: izmereno 10.3:1 na mastilu.
 const PRIGUSEN_NA_TAMNOM = "#C9C4B4";

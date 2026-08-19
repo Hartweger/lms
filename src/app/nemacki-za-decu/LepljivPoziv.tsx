@@ -18,7 +18,7 @@
 // jer u traku od ~64px ne staje čitko.
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { CRVENA, DISPLAY, MASTILO, ZUTA } from "../Ukras";
+import { CRVENA, DISPLAY, MASTILO, ZUTA } from "../zack/Ukras";
 
 const FOKUS = "outline-offset-4 focus-visible:outline-4 focus-visible:outline-[#0B54C9]";
 const KLJUC = "zack-lepljivi-cta";
