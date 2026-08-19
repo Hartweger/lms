@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { brojac, stanjeAlbuma } from "@/lib/zack/album";
 import { nadjiDete, neotvoreneKesice, zapisiSlicica } from "@/lib/zack/upiti";
+import { UskiStub } from "../Ukras";
 import StazaClient from "./StazaClient";
 
 // Brojač sličica se menja posle svake odigrane igre, pa keširana staza vredi
@@ -62,22 +63,24 @@ export default async function StazaPage({
   const sada = new Date();
 
   return (
-    <StazaClient
-      childId={dete.id}
-      ime={dete.ime}
-      niz={niz}
-      lekcije={(lekcije ?? []).map((lekcija) => {
-        // zapisi su sve isporučene sličice deteta, a stanjeAlbuma uzima u
-        // obzir samo one koje odgovaraju rečima ove lekcije.
-        const { zalepljene, ukupno } = brojac(stanjeAlbuma(lekcija.zack_reci, zapisi, sada));
-        return {
-          broj: lekcija.broj,
-          naziv: lekcija.naziv,
-          zalepljene,
-          ukupno,
-          neotvorenaKesica: kesice.get(lekcija.id) ?? 0,
-        };
-      })}
-    />
+    <UskiStub>
+      <StazaClient
+        childId={dete.id}
+        ime={dete.ime}
+        niz={niz}
+        lekcije={(lekcije ?? []).map((lekcija) => {
+          // zapisi su sve isporučene sličice deteta, a stanjeAlbuma uzima u
+          // obzir samo one koje odgovaraju rečima ove lekcije.
+          const { zalepljene, ukupno } = brojac(stanjeAlbuma(lekcija.zack_reci, zapisi, sada));
+          return {
+            broj: lekcija.broj,
+            naziv: lekcija.naziv,
+            zalepljene,
+            ukupno,
+            neotvorenaKesica: kesice.get(lekcija.id) ?? 0,
+          };
+        })}
+      />
+    </UskiStub>
   );
 }

@@ -124,3 +124,13 @@ export function TablicaOkvir({
     </span>
   );
 }
+
+/**
+ * Uski stub aplikacije: kolona koju su ulazni ekrani, staza i lekcija nosili
+ * kroz raspored dok landing nije stigao. Landing za roditelje traži sekcije
+ * pune širine, pa raspored više ne sme da steže svu decu - svaka aplikaciona
+ * stranica sad sama oblači ovaj stub, piksel za piksel isti kao pre.
+ */
+export function UskiStub({ children }: { children: React.ReactNode }) {
+  return <div className="mx-auto max-w-2xl px-4 py-6 sm:px-6 sm:py-10">{children}</div>;
+}

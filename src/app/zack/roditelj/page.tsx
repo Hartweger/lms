@@ -10,6 +10,7 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { nadjiRoditelja } from "@/lib/zack/roditelj";
+import { UskiStub } from "../Ukras";
 import RoditeljPrijava from "./RoditeljPrijava";
 import PristanakEkran from "./PristanakEkran";
 import RoditeljPanel from "./RoditeljPanel";
@@ -25,10 +26,22 @@ export default async function RoditeljPage() {
   const { data } = await supabase.auth.getUser();
   const korisnik = data.user;
 
-  if (!korisnik) return <RoditeljPrijava />;
+  if (!korisnik) {
+    return (
+      <UskiStub>
+        <RoditeljPrijava />
+      </UskiStub>
+    );
+  }
 
   const roditelj = await nadjiRoditelja(korisnik.id);
-  if (!roditelj) return <PristanakEkran email={korisnik.email ?? ""} />;
+  if (!roditelj) {
+    return (
+      <UskiStub>
+        <PristanakEkran email={korisnik.email ?? ""} />
+      </UskiStub>
+    );
+  }
 
   const sb = createAdminClient();
   // Dva ravna upita umesto ugnježdenog: ugnježdeni kroz strani ključ ume da
@@ -50,16 +63,18 @@ export default async function RoditeljPage() {
   const naziviUdzbenika = new Map(udzbenici.map((u) => [u.id, u.naziv]));
 
   return (
-    <RoditeljPanel
-      email={roditelj.email}
-      deca={(decaUpit.data ?? []).map((d) => ({
-        id: d.id,
-        ime: d.ime,
-        kod: d.kod,
-        udzbenik: naziviUdzbenika.get(d.udzbenik_id) ?? "",
-      }))}
-      udzbenici={udzbenici}
-      izvestajUkljucen={roditelj.izvestaj_ukljucen}
-    />
+    <UskiStub>
+      <RoditeljPanel
+        email={roditelj.email}
+        deca={(decaUpit.data ?? []).map((d) => ({
+          id: d.id,
+          ime: d.ime,
+          kod: d.kod,
+          udzbenik: naziviUdzbenika.get(d.udzbenik_id) ?? "",
+        }))}
+        udzbenici={udzbenici}
+        izvestajUkljucen={roditelj.izvestaj_ukljucen}
+      />
+    </UskiStub>
   );
 }

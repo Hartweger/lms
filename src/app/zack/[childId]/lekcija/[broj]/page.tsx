@@ -15,6 +15,7 @@ import {
   stareReciUdzbenika,
   zapisiSlicica,
 } from "@/lib/zack/upiti";
+import { UskiStub } from "../../../Ukras";
 import LekcijaClient from "./LekcijaClient";
 
 // Album se menja posle svake odigrane igre, pa keširana lekcija vredi manje od
@@ -84,15 +85,17 @@ export default async function LekcijaPage({
   });
 
   return (
-    <LekcijaClient
-      childId={dete.id}
-      lekcija={lekcija}
-      reci={reci}
-      stareReci={stareReci}
-      pocetnoStanje={stanjeAlbuma(reci, zapisi, sada)}
-      neotvorenaKesica={kesice.get(lekcija.id) ?? 0}
-      pocetniRekord={rekordSkakaca}
-      imaGramatike={gramatika.length > 0}
-    />
+    <UskiStub>
+      <LekcijaClient
+        childId={dete.id}
+        lekcija={lekcija}
+        reci={reci}
+        stareReci={stareReci}
+        pocetnoStanje={stanjeAlbuma(reci, zapisi, sada)}
+        neotvorenaKesica={kesice.get(lekcija.id) ?? 0}
+        pocetniRekord={rekordSkakaca}
+        imaGramatike={gramatika.length > 0}
+      />
+    </UskiStub>
   );
 }

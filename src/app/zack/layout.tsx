@@ -65,9 +65,12 @@ export default function ZackLayout({ children }: { children: React.ReactNode }) 
           }
         }
       `}</style>
-      {/* Uža kolona nego inače: ovo se čita na telefonu u ruci, a na širem
-          ekranu ne sme da se razvuče u traku preko celog monitora. */}
-      <div className="mx-auto max-w-2xl px-4 py-6 sm:px-6 sm:py-10">{children}</div>
+      {/* Širinu ovde namerno NE stežemo: aplikacione stranice (prijava,
+          roditelj, staza, lekcija) oblače svoj uski stub kroz UskiStub iz
+          Ukras.tsx - kolona uska kao pre, jer se čita na telefonu u ruci.
+          Landing za roditelje (/zack/za-roditelje) jedini koristi punu širinu,
+          zato stub više ne sme da živi u rasporedu. */}
+      {children}
       {/* Licenca ikonica (CC BY 4.0) traži navođenje autora. Stoji sitno i
           jednom, jer je namenjeno pravnoj obavezi, ne detetu. */}
       <p className="pb-6 text-center text-[11px]" style={{ color: "#6E6A5E" }}>
