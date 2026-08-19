@@ -32,11 +32,14 @@
 // ekran lekcije sam odradi ne bi imao šta da ponovo pošalje.
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
-  napraviPitanja,
   SPRATOVA_NAJVISE,
   type Igra as VrstaIgre,
   type Pitanje,
 } from "@/lib/zack/pitanja";
+// Pitanja partije se prave kroz ponavljanje, ne direktno: uz reči ove lekcije
+// se umeša i po koja STARA reč (izbledela ili ranije promašena), da se ono što
+// bledi samo vrati pred dete. Prva lekcija nema starih i radi kao i uvek.
+import { pitanjaSaStarima, type StaraRec } from "@/lib/zack/ponavljanje";
 import { bojaZaRod, promesaj, type Rec, type Rod } from "@/lib/zack/rec";
 // Skakač je drugo telo za isto pitanje o rodu, pa im je i pomoć oko članova
 // zajednička. Živi u `Skakac.tsx` zato što ljuska već uvozi taj fajl, pa uvoz u
@@ -135,12 +138,20 @@ function Srca({ srca }: { srca: number }) {
 export default function Igra({
   childId,
   reci,
+  stare = [],
   vrsta,
   rekord,
   onKraj,
 }: {
   childId: string;
   reci: Rec[];
+  /**
+   * Stare reči iz ranijih lekcija koje smeju da se umešaju u partiju: samo one
+   * koje dete VEĆ IMA u albumu, sa oznakom izbledelosti i brojem grešaka.
+   * Tačan odgovor na staru reč kroz `zaradi` samo osveži datum (i time vrati
+   * boju) - novu sličicu ne pravi, pa ni kesicu ne dira.
+   */
+  stare?: StaraRec[];
   vrsta: VrstaIgre;
   /**
    * Lični rekord u skakaču na ovoj lekciji, ili ništa ako ga još nema. Ljuska ga
@@ -177,6 +188,12 @@ export default function Igra({
     reciRef.current = reci;
   }, [reci]);
 
+  // Isti razlog i za stare reči.
+  const stareRef = useRef(stare);
+  useEffect(() => {
+    stareRef.current = stare;
+  }, [stare]);
+
   /**
    * Dokle se koza popela u skakaču. Ref, ne stanje: ljuska time ništa ne crta,
    * samo prosleđuje broj dalje na kraju partije, pa bi stanje značilo render
@@ -188,7 +205,11 @@ export default function Igra({
   }, []);
 
   useEffect(() => {
-    setSesija(novaSesija(napraviPitanja(reciRef.current, vrsta, kolikoPitanja(vrsta), Math.random)));
+    setSesija(
+      novaSesija(
+        pitanjaSaStarima(reciRef.current, stareRef.current, vrsta, kolikoPitanja(vrsta), Math.random)
+      )
+    );
     setOdziv(null);
     setZamrznuto(null);
     setKorak((k) => k + 1);
@@ -222,6 +243,28 @@ export default function Igra({
     [childId]
   );
 
+  /**
+   * Beleženje greške, isti pošalji-i-zaboravi obrazac kao slanje zarađenog:
+   * ne čeka se, pad se guta, igra se zbog mreže ne prekida i ne usporava. Za
+   * razliku od zarađenog, greška se na kraju NE šalje ponovo: izgubljena
+   * greška je gubitak koji sme da se desi - sledeća ista će je zapamtiti.
+   */
+  const posaljiGresku = useCallback(
+    (recIdovi: string[]) => {
+      if (recIdovi.length === 0) return;
+      void fetch(`/api/zack/${childId}/greska`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ recIdovi }),
+        // Dete ume da zatvori karticu i posle greške.
+        keepalive: true,
+      }).catch(() => {
+        /* Igra se ne prekida zbog mreže. */
+      });
+    },
+    [childId]
+  );
+
   const javi = useCallback((o: Odziv) => {
     setOdziv(o);
     if (tajmer.current) clearTimeout(tajmer.current);
@@ -238,12 +281,14 @@ export default function Igra({
   /** Igre sa jednim odgovorom po pitanju. Parovi ovo NE koriste. */
   const naOdgovor = useCallback(
     (tacno: boolean, tacanTekst: string, pitanje: Pitanje) => {
+      // Tačno se zarađuje, netačno se pamti - oba u pozadini, nijedno ne koči.
       if (tacno) posaljiZaradjeno(tacniRecIdovi(pitanje));
+      else posaljiGresku(tacniRecIdovi(pitanje));
       setZamrznuto(pitanje);
       setSesija((s) => (s ? odgovori(s, tacno) : s));
       javi({ tacno, tekst: tacno ? "Zack!" : `Ups! ${tacanTekst}` });
     },
-    [javi, posaljiZaradjeno]
+    [javi, posaljiGresku, posaljiZaradjeno]
   );
 
   const naSpojen = useCallback(
@@ -256,11 +301,13 @@ export default function Igra({
   );
 
   const naPromasaj = useCallback(
-    (tacanTekst: string) => {
+    (tacanTekst: string, recId: string) => {
+      // Pamti se reč koja je bila CILJ spajanja, jer je nju dete promašilo.
+      posaljiGresku([recId]);
       setSesija((s) => (s ? oduzmiSrce(s) : s));
       javi({ tacno: false, tekst: `Ups! ${tacanTekst}` });
     },
-    [javi]
+    [javi, posaljiGresku]
   );
 
   /**
@@ -755,7 +802,7 @@ function Parovi({
 }: {
   pitanje: Extract<Pitanje, { igra: "parovi" }>;
   naSpojen: (recId: string) => void;
-  naPromasaj: (tacanTekst: string) => void;
+  naPromasaj: (tacanTekst: string, recId: string) => void;
   naKraj: () => void;
 }) {
   const parovi = pitanje.parovi;
@@ -797,7 +844,7 @@ function Parovi({
     // Promašena reč se otkriva i sklanja zajedno sa svojim pravim prevodom.
     // Da ostane na stolu, dete bi je dobilo metodom eliminacije i zaradilo
     // sličicu koju nije znalo. Zarađuje se samo ono što je stvarno spojeno.
-    naPromasaj(`${parovi[l].de} je ${parovi[l].sr}`);
+    naPromasaj(`${parovi[l].de} je ${parovi[l].sr}`, parovi[l].recId);
     setReseni((x) => [...x, { levi: l, desni: l, tacno: false }]);
   };
 

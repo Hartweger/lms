@@ -37,6 +37,7 @@ import Slicica from "@/components/zack/Slicica";
 import { brojac, type StavkaAlbuma } from "@/lib/zack/album";
 import type { Igra as VrstaIgre } from "@/lib/zack/pitanja";
 import { dokleSePopela, opisSprata } from "@/lib/zack/pojas";
+import type { StaraRec } from "@/lib/zack/ponavljanje";
 import type { Rec } from "@/lib/zack/rec";
 import {
   CRVENA,
@@ -414,6 +415,7 @@ export default function LekcijaClient({
   childId,
   lekcija,
   reci,
+  stareReci,
   pocetnoStanje,
   neotvorenaKesica,
   pocetniRekord,
@@ -422,6 +424,11 @@ export default function LekcijaClient({
   childId: string;
   lekcija: Lekcija;
   reci: Rec[];
+  /**
+   * Stare reči iz ranijih lekcija za ponavljanje kroz igre: samo one koje dete
+   * već ima u albumu, sa izbledelošću i brojem grešaka. Prva lekcija ih nema.
+   */
+  stareReci: StaraRec[];
   pocetnoStanje: StavkaAlbuma[];
   neotvorenaKesica: number;
   /** Lični rekord u skakaču na ovoj lekciji, ili ništa ako ga još nema. */
@@ -693,6 +700,7 @@ export default function LekcijaClient({
       <Igra
         childId={childId}
         reci={reci}
+        stare={stareReci}
         vrsta={igra}
         rekord={rekord > 0 ? rekord : null}
         onKraj={naKrajIgre}

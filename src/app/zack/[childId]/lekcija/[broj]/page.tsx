@@ -3,13 +3,16 @@
 // se prepoznaje po ključu iz adrese.
 import { notFound } from "next/navigation";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { stanjeAlbuma } from "@/lib/zack/album";
+import { stanjeAlbuma, stanjeZapisa } from "@/lib/zack/album";
+import type { StaraRec } from "@/lib/zack/ponavljanje";
 import {
   dozvoljenaGramatika,
+  greskeReci,
   nadjiDete,
   neotvoreneKesice,
   reciLekcije,
   rekordZaIgru,
+  stareReciUdzbenika,
   zapisiSlicica,
 } from "@/lib/zack/upiti";
 import LekcijaClient from "./LekcijaClient";
@@ -46,7 +49,7 @@ export default async function LekcijaPage({
   if (error) throw new Error(`Ne mogu da pročitam lekciju: ${error.message}`);
   if (!lekcija) notFound();
 
-  const [reci, zapisi, kesice, rekordSkakaca, gramatika] = await Promise.all([
+  const [reci, zapisi, kesice, rekordSkakaca, gramatika, sveStare, greske] = await Promise.all([
     reciLekcije(lekcija.id),
     // zapisiSlicica vraća SAMO isporučene sličice, pa album ne može da oda reč
     // koja još čeka u neotvorenoj kesici.
@@ -60,14 +63,33 @@ export default async function LekcijaPage({
     // Bez ijedne obrađene gramatičke tačke se ne prikazuje, jer bi otvarao
     // prazan ekran. Sama pitanja dovlači ruta, kad dete uđe.
     dozvoljenaGramatika(dete.udzbenik_id, lekcija.broj),
+    // Ponavljanje kroz module: reči ranijih lekcija i greške deteta. Za prvu
+    // lekciju su oba prazna i sve radi kao i do sad.
+    stareReciUdzbenika(dete.udzbenik_id, lekcija.broj),
+    greskeReci(dete.id),
   ]);
+
+  const sada = new Date();
+
+  // Kandidati za ponavljanje su ISKLJUČIVO stare reči koje dete već ima u
+  // albumu (isporučena sličica postoji). Reč koju nikad nije zaradilo se ne
+  // meša: tačan odgovor na nju bi kroz `zaradi` napravio NOVU sličicu u kesici
+  // stare lekcije, a ponavljanje ne sme ništa novo da deli - samo da vraća
+  // boju. Za viđene reči `zaradi` osveži samo `poslednje_tacno_at`.
+  const poRecId = new Map(zapisi.map((z) => [z.rec_id, z]));
+  const stareReci: StaraRec[] = sveStare.flatMap((rec) => {
+    const stanje = stanjeZapisa(poRecId.get(rec.id), sada);
+    if (stanje === "prazno") return [];
+    return [{ rec, izbledela: stanje === "izbledela", gresaka: greske.get(rec.id) ?? 0 }];
+  });
 
   return (
     <LekcijaClient
       childId={dete.id}
       lekcija={lekcija}
       reci={reci}
-      pocetnoStanje={stanjeAlbuma(reci, zapisi, new Date())}
+      stareReci={stareReci}
+      pocetnoStanje={stanjeAlbuma(reci, zapisi, sada)}
       neotvorenaKesica={kesice.get(lekcija.id) ?? 0}
       pocetniRekord={rekordSkakaca}
       imaGramatike={gramatika.length > 0}

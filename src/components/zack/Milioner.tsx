@@ -17,9 +17,11 @@
 //
 // ŠTA OVDE NAMERNO NEMA
 // ---------------------
-// Nema srca, nema kesice, nema sličica i nema rekorda. Milioner ne dodiruje
-// nijednu rutu koja nešto upisuje. Razlog je što provera znanja i skupljanje ne
-// smeju da se pomešaju: dete koje na proveri gubi sličice prestane da bira
+// Nema srca, nema kesice, nema sličica i nema rekorda. Jedino što Milioner
+// upisuje je memorija grešaka (`/api/zack/*/greska`, pošalji-i-zaboravi), i to
+// nije rezultat: promašeno pitanje se nigde ne pokazuje, samo dobija prednost
+// u sledećoj partiji. Razlog za sve ostalo je što provera znanja i skupljanje
+// ne smeju da se pomešaju: dete koje na proveri gubi sličice prestane da bira
 // odgovor koji misli da je tačan i počne da bira odgovor koji je siguran.
 // Zato ovde nema šta da se izgubi, pa nema ni straha.
 //
@@ -164,16 +166,35 @@ function jePitanje(v: unknown): v is GramatickoPitanje {
   );
 }
 
-type Gradivo = { brojLekcije: number; tacke: GramatickaTacka[]; pitanja: GramatickoPitanje[] };
+type Gradivo = {
+  brojLekcije: number;
+  tacke: GramatickaTacka[];
+  pitanja: GramatickoPitanje[];
+  /** Ranije promašena pitanja (ključ → koliko puta). Prednost pri izboru. */
+  greske: Map<string, number>;
+};
 
 function citajGradivo(telo: unknown): Gradivo | null {
   if (typeof telo !== "object" || telo === null) return null;
   const o = telo as Record<string, unknown>;
   if (typeof o.brojLekcije !== "number") return null;
+
+  // Greške su samo prednost pri izboru, pa pokvaren red ovde ne obara ništa:
+  // takav se preskoči i partija se sastavi kao da grešaka nema.
+  const greske = new Map<string, number>();
+  if (typeof o.greske === "object" && o.greske !== null && !Array.isArray(o.greske)) {
+    for (const [kljuc, vrednost] of Object.entries(o.greske)) {
+      if (typeof vrednost === "number" && Number.isFinite(vrednost) && vrednost > 0) {
+        greske.set(kljuc, vrednost);
+      }
+    }
+  }
+
   return {
     brojLekcije: o.brojLekcije,
     tacke: (Array.isArray(o.tacke) ? o.tacke : []).filter(jeTacka),
     pitanja: (Array.isArray(o.pitanja) ? o.pitanja : []).filter(jePitanje),
+    greske,
   };
 }
 
@@ -274,7 +295,8 @@ export default function Milioner({
           gradivo.tacke,
           gradivo.pitanja,
           gradivo.brojLekcije,
-          Math.random
+          Math.random,
+          gradivo.greske
         );
         setSveTacke(gradivo.tacke);
         setTacke(partija.tacke);
@@ -303,12 +325,34 @@ export default function Milioner({
   const zakljucano = izabrano !== null;
   const otkriveno = odziv !== null;
 
+  /**
+   * Promašeno pitanje se beleži u pozadini, pošalji-i-zaboravi: poziv se ne
+   * čeka i njegov pad se namerno guta, jer partija ne sme da zavisi od mreže.
+   * Sledeća partija promašenom pitanju daje prednost - i to je sve; detetu se
+   * ovo nigde ne pokazuje.
+   */
+  const posaljiGresku = useCallback(
+    (pitanjeId: string) => {
+      void fetch(`/api/zack/${childId}/greska`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pitanjeIdovi: [pitanjeId] }),
+        // Dete ume da zatvori karticu čim vidi da je promašilo.
+        keepalive: true,
+      }).catch(() => {
+        /* Partija se ne prekida zbog mreže. */
+      });
+    },
+    [childId]
+  );
+
   const naOdgovor = useCallback(
     (i: number) => {
       if (!pitanje || izabrano !== null) return;
 
       const tacno = i === pitanje.tacan;
       if (tacno) setTacnih((t) => t + 1);
+      else posaljiGresku(pitanje.id);
       // Prvo samo zlatno, kao kad se odgovor zaključa u emisiji. Boja ishoda
       // dolazi tek posle tajca.
       setIzabrano(i);
@@ -334,7 +378,7 @@ export default function Milioner({
         );
       }, ZAKLJUCAJ);
     },
-    [izabrano, pitanje]
+    [izabrano, pitanje, posaljiGresku]
   );
 
   const naPolaPola = useCallback(() => {
