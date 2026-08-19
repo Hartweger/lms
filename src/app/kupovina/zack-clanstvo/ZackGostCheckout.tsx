@@ -68,7 +68,7 @@ export default function ZackGostCheckout(props: {
     const cistMejl = (props.fiksniEmail ?? email).trim().toLowerCase();
     if (!ime.trim()) g.ime = "Upiši ime deteta.";
     else if (ime.trim().length > GOST_IME_NAJVISE) g.ime = "Ime je predugačko.";
-    if (!udzbenikId) g.udzbenik = "Izaberi razred i udžbenik.";
+    if (!udzbenikId) g.udzbenik = "Izaberi razred.";
     if (!cistMejl || !isDeliverableEmail(cistMejl)) {
       const predlog = cistMejl ? domainTypoHint(cistMejl) : null;
       g.email = predlog
@@ -155,7 +155,7 @@ export default function ZackGostCheckout(props: {
 
       <div className="mt-3">
         <label htmlFor="zack-gost-udzbenik" className={OZNAKA} style={{ color: MASTILO }}>
-          Razred i udžbenik iz škole
+          Razred
         </label>
         <select
           id="zack-gost-udzbenik"
@@ -166,10 +166,10 @@ export default function ZackGostCheckout(props: {
           className={POLJE}
           style={POLJE_STIL}
         >
-          <option value="">Izaberi razred i udžbenik</option>
+          <option value="">Izaberi razred</option>
           {props.udzbenici.map((u) => (
             <option key={u.id} value={u.id}>
-              {u.razred}. razred - {u.naziv} ({u.izdavac})
+              {u.razred}. razred
             </option>
           ))}
         </select>

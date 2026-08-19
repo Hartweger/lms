@@ -268,9 +268,12 @@ export default async function ZackClanstvoPage({
   }
 
   // ── Javna kupovna strana: sve na jednoj strani, bez prethodne prijave ──────
+  // U ponudi su samo razredi po planu i programu - udžbenici se kupcu ne
+  // pominju (odluka 19.08: sadržaj prati program, ne izdavača).
   const { data: udzbenici, error: greskaUdzbenika } = await admin
     .from("zack_udzbenici")
     .select("id, naziv, izdavac, razred")
+    .eq("izdavac", "Po planu i programu")
     .order("razred");
   if (greskaUdzbenika) {
     throw new Error(`Ne mogu da pročitam udžbenike: ${greskaUdzbenika.message}`);
@@ -312,8 +315,6 @@ export default async function ZackClanstvoPage({
         </Link>
       </p>
       <NaslovStrane />
-      <StaSePlaca />
-      <BlokPoverenja />
 
       {postojecaDeca.length > 0 && (
         <div
@@ -350,6 +351,9 @@ export default async function ZackClanstvoPage({
         pocetnoIme={pocetnoIme}
         iznosRsd={ZACK_PROMO_RSD}
       />
+
+      <StaSePlaca />
+      <BlokPoverenja />
     </Okvir>
   );
 }
