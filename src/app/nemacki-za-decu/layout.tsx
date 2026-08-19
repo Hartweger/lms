@@ -21,6 +21,12 @@ export const metadata: Metadata = {
       "Album sa sličicama u kom tvoje dete uči nemački po deset minuta dnevno - po programu Ministarstva, sa izveštajem roditelju.",
     url: "/nemacki-za-decu",
   },
+  twitter: {
+    card: "summary",
+    title: "zack! - nemački za osnovce kroz igru",
+    description:
+      "Album sa sličicama u kom tvoje dete uči nemački po deset minuta dnevno - po programu Ministarstva, sa izveštajem roditelju.",
+  },
   // Kartica u pretraživaču nosi zack! znak, ne školski - dva su brenda.
   icons: {
     icon: [{ url: "/zack/ikonica.svg", type: "image/svg+xml" }],
