@@ -137,6 +137,15 @@ describe("buildSalesSystemPrompt", () => {
     expect(out).toContain("video kurs A1.2");
   });
 
+  // 19.08.2026: lid sa položenim A1 dobio je preporuku paketa A1+A2+B1 (29.133 RSD)
+  // umesto pojedinačnih A2 + B1 (23.200 RSD) - platio bi i nivo koji već ima.
+  it("posetiocu sa položenim nivoom ne prodaje paket koji taj nivo uključuje", () => {
+    const out = buildSalesSystemPrompt("katalog", { coupon: false });
+    expect(out).toContain("VEĆ IMA");
+    expect(out).toContain("NE preporučuj video paket koji taj nivo uključuje");
+    expect(out).toContain("pojedinačno je povoljnije od paketa A1+A2+B1");
+  });
+
   it("za visoke nivoe (C1) upucuje na mesecne pakete umesto 'nemamo u ponudi'", () => {
     const out = buildSalesSystemPrompt("katalog", { coupon: false });
     expect(out).toContain("IZUZETAK - visoki nivoi");
