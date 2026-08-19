@@ -4,6 +4,11 @@ import { useState, useCallback } from "react";
 import type { FlashcardSection } from "@/lib/section-types";
 import SpeakButton from "@/components/SpeakButton";
 
+// Kartice su uvek čist tekst — HTML iz sadržaja lekcije (npr. <mark>) ovde nema šta da traži
+function stripTags(text: string): string {
+  return text.replace(/<[^>]*>/g, "");
+}
+
 export default function FlashcardBlock({ items, frontLabel, backLabel }: FlashcardSection) {
   const fLabel = frontLabel || "DE";
   const bLabel = backLabel || "SR";
@@ -14,8 +19,8 @@ export default function FlashcardBlock({ items, frontLabel, backLabel }: Flashca
   const [shuffled, setShuffled] = useState(false);
   const [order, setOrder] = useState<number[]>(items.map((_, i) => i));
 
-  const front = reversed ? items[order[currentIndex]].back : items[order[currentIndex]].front;
-  const back = reversed ? items[order[currentIndex]].front : items[order[currentIndex]].back;
+  const front = stripTags(reversed ? items[order[currentIndex]].back : items[order[currentIndex]].front);
+  const back = stripTags(reversed ? items[order[currentIndex]].front : items[order[currentIndex]].back);
 
   const next = useCallback(() => {
     setFlipped(false);
