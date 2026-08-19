@@ -7,8 +7,11 @@ import { firstLessonForOrder } from "@/lib/first-lesson";
 import { BANK_DETAILS, PAYPAL_ME_URL, buildIpsString } from "@/lib/order-utils";
 import { MERCHANT, CARD_OUTCOME, nestpayTxData, pdvBreakdown } from "@/lib/payment-confirmation";
 import type { Order } from "@/lib/types";
+import { ZACK_CLANSTVO_SLUG } from "@/lib/zack/clanstvo";
+import { smePostavljanjePina } from "@/lib/zack/gost";
 import IpsQrCode from "./IpsQrCode";
 import PixelPurchase from "@/components/PixelPurchase";
+import ZackPinForma from "./ZackPinForma";
 
 export const metadata: Metadata = {
   title: "Hvala na narudžbini - Hartweger",
@@ -56,7 +59,31 @@ export default async function HvalaPage({
   const isCard = order.payment_method === "kartica" || order.payment_method === "kartica_rate" || isPretplata;
   // zack! članstvo: kupac je roditelj, „kurs" ne postoji - poruka i CTA vode u
   // roditeljski panel umesto u lekcije. Potvrda o plaćanju (EPM 2.7) ostaje ista.
-  const jeZack = !!items?.[0]?.dete_id;
+  // Slug hvata i gost-porudžbinu kojoj grant (koji upisuje dete_id) još nije
+  // prošao - i njoj se govori zack jezikom, ne školskim.
+  const jeZack = !!items?.[0]?.dete_id || courseSlug === ZACK_CLANSTVO_SLUG;
+
+  // Gost-kupovina: dete je upravo nastalo u grant-access - hvala strana mu
+  // pokazuje kod KRUPNO i, dok je pin_hash NULL, nudi postavljanje PIN-a.
+  // Jednom postavljen PIN se ovde više ne nudi (menja se u panelu); orderId iz
+  // adrese je dovoljan dokaz jer je gen_random_uuid() i stiže samo kupcu.
+  const zackDeteId = items?.[0]?.dete_id ?? null;
+  const zackDete = zackDeteId
+    ? (
+        await supabase
+          .from("zack_deca")
+          .select("id, ime, kod, pin_hash")
+          .eq("id", zackDeteId)
+          .maybeSingle()
+      ).data
+    : null;
+  const zackNudiPin =
+    !!zackDete &&
+    smePostavljanjePina({
+      paymentStatus: order.payment_status,
+      deteId: zackDeteId,
+      pinHash: zackDete.pin_hash,
+    });
 
   // Posle kartičnog auto-logina kupac stiže ULOGOVAN - CTA vodi pravo u prvu lekciju
   // umesto na /prijava. Stranica ostaje landing zbog browser Pixel Purchase (dedup sa CAPI).
@@ -133,6 +160,30 @@ export default async function HvalaPage({
             </p>
           </div>
         )}
+        {/* zack: kod za prijavu deteta KRUPNO + postavljanje PIN-a (samo dok
+            PIN ne postoji). Roditelj sa ove strane odlazi sa svime što detetu
+            treba na papiriću: kod + PIN. */}
+        {jeZack && zackDete && order.payment_status === "completed" && (
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+            <h2 className="font-montserrat font-semibold text-lg text-gray-900 mb-1">
+              Prijava za dete
+            </h2>
+            <p className="text-sm text-gray-700">
+              Kod kojim se {zackDete.ime} prijavljuje (poslali smo ga i na mejl):
+            </p>
+            <p className="mt-2 inline-block rounded-xl border-2 border-gray-900 bg-white px-5 py-2 font-mono text-3xl font-bold tracking-[0.15em] text-gray-900">
+              {zackDete.kod ?? "—"}
+            </p>
+            {zackNudiPin ? (
+              <ZackPinForma orderId={order.id} imeDeteta={zackDete.ime} />
+            ) : (
+              <p className="mt-3 text-sm text-gray-700">
+                PIN za ovo dete već postoji. Prepiši detetu kod i PIN na papirić - a novi PIN,
+                ako zatreba, postavljaš u roditeljskom panelu.
+              </p>
+            )}
+          </div>
+        )}
         {isCard && status === "fail" && (
           <div className="bg-[#FFF3F3] border border-[#F78687]/40 rounded-xl px-5 py-4 mb-6 text-sm text-gray-700">
             <p className="font-semibold text-[#E06566]">{CARD_OUTCOME.fail}</p>
@@ -140,8 +191,12 @@ export default async function HvalaPage({
             {courseSlug && (
               <Link
                 href={
+                  // zack iz panela: nazad na kupovinu ISTOG deteta; gost (bez
+                  // dete_id - dete nastaje tek posle uplate): na javnu stranu.
                   jeZack
-                    ? `/kupovina/zack-clanstvo?dete=${items[0].dete_id}`
+                    ? zackDeteId
+                      ? `/kupovina/zack-clanstvo?dete=${zackDeteId}`
+                      : "/kupovina/zack-clanstvo"
                     : `/kupovina/${courseSlug}`
                 }
                 className="inline-block px-5 py-2.5 rounded-lg font-semibold text-white text-sm bg-[#F78687] hover:bg-[#E06566] transition-colors"
