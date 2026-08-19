@@ -386,9 +386,12 @@ teme. Znak je sama nalepnica: reč `zack!` na crvenoj podlozi sa belom ivicom,
 blago iskošena. Nema crteža, nema maskote, pa ne treba ilustrator i radi na
 ikonici od 28 piksela.
 
-**Boje:** crvena `#E5342A` (znak i die), plava `#0B54C9` (der), žuta `#FFC400`
-(das), mastilo `#16161A` (glagoli, slova, ivice), papir `#FCFBF7`. Preliv za sjaj
-samo na izuzecima.
+**Boje:** crvena `#E5342A` (znak i die), plava `#0B54C9` (der), zelena `#2E9E4F`
+(das), žuta `#FFC400` (množina i nagrada, NIKAD rod), mastilo `#16161A` (glagoli,
+slova, ivice), papir `#FCFBF7`. Preliv za sjaj samo na izuzecima.
+*(ispravka 19.08.2026: prava učionička konvencija iz nemačkih udžbenika je
+der plava, die crvena, das zelena, množina žuta - das je do tada pogrešno
+stajao na žutoj.)*
 
 **Slova:** Archivo Black za naslove, Archivo za tekst. Oba besplatna sa Google
 Fonts, sa punim našim i nemačkim znacima, i mnogo ređa od Intera i Poppinsa.
@@ -397,8 +400,10 @@ Fonts, sa punim našim i nemačkim znacima, i mnogo ređa od Intera i Poppinsa.
 mirno i činjenično. Greška uvek daje tačan odgovor odmah, bez „pokušaj ponovo".
 Ime se koristi samo u trenutku uspeha (*Zack!*), nikad u trenutku greške.
 
-**Šta se ne radi:** plišana maskota, tamna gejmerska tema, zelena boja (svaka
-zelena aplikacija za jezike izgleda kao Duolingo), nemačka zastava i pivske krigle,
+**Šta se ne radi:** plišana maskota, tamna gejmerska tema, zelena kao boja
+aplikacije (svaka zelena aplikacija za jezike izgleda kao Duolingo; das zelena
+na sličicama je učionička konvencija i nije tema - ispravka 19.08.2026),
+nemačka zastava i pivske krigle,
 sjaj na bilo čemu osim izuzetaka, i Hartweger logotip u dečjem delu. Natašino ime
 stoji na roditeljskoj strani, gde gradi poverenje, i nigde više.
 

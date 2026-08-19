@@ -153,7 +153,7 @@ export const NATPIS_RODA: Record<Rod, string> = {
   nema: "bez člana",
 };
 
-/** Na žutoj i na crnoj podlozi bela slova ne rade isto. */
+/** Na das zelenoj belo daje samo 3.4:1, pa das nosi mastilo (5.3:1). */
 export function slovaNaRodu(rod: Rod): string {
   return rod === "das" ? MASTILO : "#FFFFFF";
 }

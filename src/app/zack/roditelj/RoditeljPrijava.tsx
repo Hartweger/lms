@@ -21,7 +21,7 @@ import {
   PLAVA,
   PRIGUSEN,
   ZELENA,
-  ZUTA,
+  ZELENA_DAS,
   ZackZnak,
 } from "../Ukras";
 
@@ -76,12 +76,12 @@ export default function RoditeljPrijava() {
             za roditelje
           </span>
         </h1>
-        {/* Tri sličice, tri roda: crvena die, plava der, žuta das. Mig na ono
+        {/* Tri sličice, tri roda: crvena die, plava der, zelena das. Mig na ono
             što dete u aplikaciji skuplja. */}
         <span aria-hidden="true" className="flex flex-none -space-x-2 pt-1">
           <MiniSlicica boja={CRVENA_ZNAK} ugao={-7} sirina={26} kasni={120} />
           <MiniSlicica boja={PLAVA} ugao={3} sirina={26} kasni={220} />
-          <MiniSlicica boja={ZUTA} ugao={9} sirina={26} kasni={320} />
+          <MiniSlicica boja={ZELENA_DAS} ugao={9} sirina={26} kasni={320} />
         </span>
       </div>
       <p className="mt-4 text-[16px] leading-relaxed" style={{ color: PRIGUSEN }}>

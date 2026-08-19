@@ -40,7 +40,7 @@ import {
 // se umeša i po koja STARA reč (izbledela ili ranije promašena), da se ono što
 // bledi samo vrati pred dete. Prva lekcija nema starih i radi kao i uvek.
 import { pitanjaSaStarima, type StaraRec } from "@/lib/zack/ponavljanje";
-import { bojaZaRod, promesaj, type Rec, type Rod } from "@/lib/zack/rec";
+import { BOJA_MNOZINA, bojaZaRod, promesaj, type Rec, type Rod } from "@/lib/zack/rec";
 // Skakač je drugo telo za isto pitanje o rodu, pa im je i pomoć oko članova
 // zajednička. Živi u `Skakac.tsx` zato što ljuska već uvozi taj fajl, pa uvoz u
 // suprotnom smeru ne bi bio put nego krug.
@@ -509,18 +509,34 @@ function OdzivTraka({ odziv }: { odziv: Odziv | null }) {
   );
 }
 
-/** Reč o kojoj se pita. Isti okvir u sve četiri igre sa jednim odgovorom. */
-function Zadatak({ tekst, nemacki, nadnaslov }: { tekst: string; nemacki: boolean; nadnaslov: string }) {
+/**
+ * Reč o kojoj se pita. Isti okvir u sve četiri igre sa jednim odgovorom.
+ * Množina jedina nosi žutu nalepnicu na nadnaslovu: žuta je u učioničkoj
+ * konvenciji boja množine, pa dete i po boji zna šta se traži.
+ */
+function Zadatak({
+  tekst,
+  nemacki,
+  nadnaslov,
+  mnozina = false,
+}: {
+  tekst: string;
+  nemacki: boolean;
+  nadnaslov: string;
+  mnozina?: boolean;
+}) {
   return (
     <div
       className="rounded-2xl border px-5 py-7 text-center"
       style={{ background: PAPIR, borderColor: IVICA }}
     >
-      <p
-        className="font-heading text-[12px] font-bold uppercase tracking-[.18em]"
-        style={{ color: PRIGUSEN }}
-      >
-        {nadnaslov}
+      <p className="font-heading text-[12px] font-bold uppercase tracking-[.18em]">
+        <span
+          className={mnozina ? "rounded-md px-2 py-1" : undefined}
+          style={mnozina ? { background: BOJA_MNOZINA, color: MASTILO } : { color: PRIGUSEN }}
+        >
+          {nadnaslov}
+        </span>
       </p>
       <p
         {...(nemacki ? { lang: "de" } : {})}
@@ -559,6 +575,7 @@ function IgraBiranje({
         nadnaslov={mnozina ? "Kako glasi u množini" : "Šta ovo znači"}
         tekst={mnozina ? pitanje.jednina : pitanje.pitanje}
         nemacki
+        mnozina={mnozina}
       />
       <ul className="mt-4 space-y-2.5">
         {pitanje.opcije.map((opcija) => {

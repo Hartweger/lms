@@ -2,9 +2,12 @@
 // registarska tablica za kod. Čista prezentacija, bez ijednog stanja - zato
 // sme da se uvozi i u serverske i u klijentske komponente.
 //
-// Boje ovde NOSE ZNAČENJE iz proizvoda: crvena je die, plava der, žuta das.
-// Kad se koriste kao ukras, koriste se sve tri zajedno (album u kom ima
+// Boje ovde NOSE ZNAČENJE iz proizvoda: crvena je die, plava der, zelena das,
+// a žuta množina - prava učionička konvencija iz nemačkih udžbenika. Kad se
+// boje roda koriste kao ukras, koriste se sve tri zajedno (album u kom ima
 // svakakvih reči), nikad jedna sama da ne bi lagala o rodu.
+
+import { ROD_BOJA } from "@/lib/zack/rec";
 
 export const PAPIR = "#FCFBF7";
 export const PODLOGA = "#F4F1E9";
@@ -12,7 +15,11 @@ export const IVICA = "#DED8C8";
 export const PRIGUSEN = "#6E6A5E";
 export const MASTILO = "#16161A";
 export const PLAVA = "#0B54C9";
+// Žuta znači množinu, a kao nagrada (kesica, nalepnica sa imenom, promo
+// nalepnice) sme svuda - ali NIKAD ne znači rod.
 export const ZUTA = "#FFC400";
+// Das zelena iz izvora istine, da se ukrasi nikad ne raziđu sa sličicama.
+export const ZELENA_DAS = ROD_BOJA.das;
 // Crvena znaka je brend (#E5342A), ali belom tekstu daje samo 4.3:1. Zato sve
 // što nosi beli tekst (dugmad, nalepnice sa brojem) stoji na za nijansu
 // tamnijoj crvenoj: #D6291F daje izmerenih 5.0:1 i oku je ista boja.

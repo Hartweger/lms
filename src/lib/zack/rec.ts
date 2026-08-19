@@ -21,13 +21,26 @@ export type Rec = {
   ikonica?: string | null;
 };
 
-/** Boja sličice po rodu. Iste tri boje se koriste u nemačkim učionicama. */
+/**
+ * Boja sličice po rodu - prava učionička konvencija iz nemačkih udžbenika:
+ * der plava, die crvena, das zelena. Žuta NIJE rod (vidi BOJA_MNOZINA).
+ */
 export const ROD_BOJA: Record<Rod, string> = {
   der: "#0B54C9",
   die: "#E5342A",
-  das: "#FFC400",
+  // Ista zelena kao Milionerov „tačan odgovor": zasićena i vedra kao plava i
+  // crvena pored nje, a mastilo #16161A na njoj daje izmerenih 5.3:1, pa das
+  // nosi tamna slova kao nekad na žutoj.
+  das: "#2E9E4F",
   nema: "#16161A",
 };
+
+/**
+ * Žuta u učioničkoj konvenciji znači MNOŽINU: der plava, die crvena, das
+ * zelena, množina žuta - kao u nemačkim učionicama. Nagradna žuta (kesica,
+ * nalepnica sa imenom) je ista boja, ali sasvim drugo, nagradno značenje.
+ */
+export const BOJA_MNOZINA = "#FFC400";
 
 export function bojaZaRod(rod: Rod): string {
   return ROD_BOJA[rod];

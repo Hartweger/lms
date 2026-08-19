@@ -163,7 +163,7 @@ function PunaSlicica({
 }) {
   const { clan, oblik } = podeliOblik(rec);
 
-  // Na žutoj i na prelivu bela slova se ne vide, pa idu tamna.
+  // Na das zelenoj (belo 3.4:1, mastilo 5.3:1) i na prelivu idu tamna slova.
   const tamnaSlova = rec.izuzetak || rec.rod === "das";
   const bojaSlova = tamnaSlova ? MASTILO : "#FFFFFF";
   const pozadina = rec.izuzetak ? SJAJ : bojaZaRod(rec.rod);
@@ -217,7 +217,7 @@ function PunaSlicica({
             {/* Slika stoji SAMO ovde, na sličici. Nikad u pitanju, jer bi dete
                 onda pokazivalo na sliku umesto da prevodi.
                 Papirni krug ispod nje je nužan: ikonice su šarene i na plavoj,
-                crvenoj i žutoj se gube. Reč koja nema sliku nije nedovršena,
+                crvenoj i zelenoj se gube. Reč koja nema sliku nije nedovršena,
                 nego prosto nema sliku - to je normalno stanje za glagole i
                 apstraktne reči, pa se ništa ne rezerviše unapred.
                 alt je prazan namerno: prevod već stoji ispod, pa bi čitač

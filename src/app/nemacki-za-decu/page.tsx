@@ -27,6 +27,7 @@ import {
   PRIGUSEN,
   SJAJ,
   TablicaOkvir,
+  ZELENA_DAS,
   ZUTA,
   ZackZnak,
 } from "../zack/Ukras";
@@ -147,7 +148,7 @@ function KolazTelefon() {
         <MiniSlicica boja={PAPIR} ugao={-9} sirina={54} kasni={240} ikonica="/zack/ikonice/1f410.svg" />
       </span>
       <span className="absolute bottom-1 left-[17%]">
-        <MiniSlicica boja={ZUTA} ugao={7} sirina={42} kasni={360} ikonica="/zack/ikonice/1f4d3.svg" />
+        <MiniSlicica boja={ZELENA_DAS} ugao={7} sirina={42} kasni={360} ikonica="/zack/ikonice/1f4d3.svg" />
       </span>
       <span className="absolute right-[4%] top-0">
         <MiniSlicica boja={PLAVA} ugao={9} sirina={50} kasni={300} ikonica="/zack/ikonice/1fa91.svg" />
@@ -202,7 +203,7 @@ function KolazSiroki() {
       </span>
       {/* Prazne poleđine popunjavaju dubinu, sve tri boje zajedno. */}
       <span className="absolute left-[38%] top-[6%]">
-        <MiniSlicica boja={ZUTA} ugao={8} sirina={44} kasni={560} />
+        <MiniSlicica boja={ZELENA_DAS} ugao={8} sirina={44} kasni={560} />
       </span>
       <span className="absolute bottom-[2%] left-[42%]">
         <MiniSlicica boja={PLAVA} ugao={-6} sirina={40} kasni={620} />
@@ -227,7 +228,7 @@ function VinjetaSkakac() {
       <span className="absolute bottom-0 left-1 flex items-end gap-1">
         <span className="block w-6 rounded-t-md" style={{ height: "12px", background: PLAVA }} />
         <span className="block w-6 rounded-t-md" style={{ height: "20px", background: CRVENA_ZNAK }} />
-        <span className="block w-6 rounded-t-md" style={{ height: "28px", background: ZUTA }} />
+        <span className="block w-6 rounded-t-md" style={{ height: "28px", background: ZELENA_DAS }} />
       </span>
       <Koza className="absolute bottom-[26px] left-[56px] h-8 w-8 -rotate-3" />
     </span>
@@ -269,7 +270,7 @@ function VinjetaKesica() {
         </span>
       </span>
       <span className="absolute left-[74px] top-6">
-        <MiniSlicica boja={ZUTA} ugao={12} sirina={24} kasni={0} />
+        <MiniSlicica boja={ZELENA_DAS} ugao={12} sirina={24} kasni={0} />
       </span>
     </span>
   );
@@ -422,8 +423,8 @@ export default function ZaRoditeljePage() {
                   <strong className="font-bold" style={{ color: MASTILO }}>die</strong> crvena
                 </span>
                 <span className="inline-flex items-center gap-1.5">
-                  <span aria-hidden="true" className="inline-block h-3.5 w-3.5 rounded-[4px]" style={{ background: ZUTA }} />
-                  <strong className="font-bold" style={{ color: MASTILO }}>das</strong> žuta
+                  <span aria-hidden="true" className="inline-block h-3.5 w-3.5 rounded-[4px]" style={{ background: ZELENA_DAS }} />
+                  <strong className="font-bold" style={{ color: MASTILO }}>das</strong> zelena
                 </span>
                 <span className="w-full sm:w-auto">Dete rod upija kroz boju, ne bubanjem.</span>
               </p>
@@ -581,7 +582,7 @@ export default function ZaRoditeljePage() {
               >
                 <span aria-hidden="true" className="mt-0.5 flex-none">
                   <MiniSlicica
-                    boja={[PLAVA, CRVENA_ZNAK, ZUTA][i % 3]}
+                    boja={[PLAVA, CRVENA_ZNAK, ZELENA_DAS][i % 3]}
                     ugao={i % 2 === 0 ? -5 : 5}
                     sirina={30}
                   />
@@ -694,7 +695,7 @@ export default function ZaRoditeljePage() {
                   <span className="mt-1.5 flex gap-1.5">
                     <MiniSlicica boja={PLAVA} ugao={-3} sirina={24} />
                     <MiniSlicica boja={CRVENA_ZNAK} ugao={2} sirina={24} />
-                    <MiniSlicica boja={ZUTA} ugao={-2} sirina={24} />
+                    <MiniSlicica boja={ZELENA_DAS} ugao={-2} sirina={24} />
                     <MiniSlicica boja={PLAVA} ugao={3} sirina={24} />
                     <MiniSlicica boja={CRVENA_ZNAK} ugao={-2} sirina={24} />
                   </span>

@@ -25,7 +25,7 @@ import {
   PRIGUSEN,
   SJAJ,
   TablicaOkvir,
-  ZUTA,
+  ZELENA_DAS,
   ZackZnak,
 } from "./Ukras";
 
@@ -45,7 +45,7 @@ function RazbacaneSlicice() {
         <MiniSlicica boja={PAPIR} ugao={-8} sirina={52} kasni={220} ikonica="/zack/ikonice/1f410.svg" />
       </span>
       <span className="absolute bottom-2 left-[16%]">
-        <MiniSlicica boja={ZUTA} ugao={6} sirina={40} kasni={340} />
+        <MiniSlicica boja={ZELENA_DAS} ugao={6} sirina={40} kasni={340} />
       </span>
       <span className="absolute right-[5%] top-0">
         <MiniSlicica boja={PLAVA} ugao={9} sirina={48} kasni={280} />

@@ -49,6 +49,7 @@ import {
   PAPIR,
   PLAVA,
   PRIGUSEN,
+  ZELENA_DAS,
   ZUTA,
 } from "../../../Ukras";
 
@@ -238,7 +239,7 @@ function Strelica({ nazad }: { nazad?: boolean }) {
 // ── Vinjete igara ───────────────────────────────────────────────────────────
 // Svaka igra ima svoj mali crtež, nacrtan ovde u CSS-u i SVG-u, bez ijedne
 // slike sa strane. Sve su čist ukras i stoje iza aria-hidden u samoj pločici.
-// Boje roda (plava der, crvena die, žuta das) se i ovde drže pravila iz
+// Boje roda (plava der, crvena die, zelena das) se i ovde drže pravila iz
 // Ukrasa: kao ukras idu SVE TRI zajedno, nikad jedna sama da ne slaže o rodu.
 
 /** Prazna poleđina sličice: isti karton kao u albumu, samo sitniji. */
@@ -292,7 +293,7 @@ function VinjetaSkakac() {
       <span className="absolute bottom-0 left-1 flex items-end gap-1">
         <span className="block w-5 rounded-t-md" style={{ height: "10px", background: PLAVA }} />
         <span className="block w-5 rounded-t-md" style={{ height: "16px", background: CRVENA_ZNAK }} />
-        <span className="block w-5 rounded-t-md" style={{ height: "22px", background: ZUTA }} />
+        <span className="block w-5 rounded-t-md" style={{ height: "22px", background: ZELENA_DAS }} />
       </span>
       {/* eslint-disable-next-line @next/next/no-img-element -- sitan lokalni
           svg ukras; next/image bi mu samo dodao obradu koja ničemu ne služi */}
@@ -319,17 +320,17 @@ function VinjetaRod() {
       />
       <span
         className="block h-6 w-6 -rotate-2 rounded-md border-2 shadow-[0_1px_3px_rgba(22,22,26,0.25)]"
-        style={{ background: ZUTA, borderColor: "#FFFFFF" }}
+        style={{ background: ZELENA_DAS, borderColor: "#FFFFFF" }}
       />
     </span>
   );
 }
 
-/** Množina: jedna sličica postane tri. */
+/** Množina: jedna sličica postane tri - a sve tri su žute, jer žuta znači množinu. */
 function VinjetaMnozina() {
   return (
     <span className="flex h-12 items-center gap-1.5">
-      <KartonSlicice boja={ZUTA} ugao={-4} sirina={22} />
+      <KartonSlicice boja={PLAVA} ugao={-4} sirina={22} />
       <svg
         viewBox="0 0 24 24"
         className="h-4 w-4 flex-none"
@@ -343,10 +344,10 @@ function VinjetaMnozina() {
       </svg>
       <span className="relative block h-11 w-12">
         <span className="absolute left-0 top-2">
-          <KartonSlicice boja={PLAVA} ugao={-8} sirina={22} />
+          <KartonSlicice boja={ZUTA} ugao={-8} sirina={22} />
         </span>
         <span className="absolute left-3 top-0">
-          <KartonSlicice boja={CRVENA_ZNAK} ugao={2} sirina={22} />
+          <KartonSlicice boja={ZUTA} ugao={2} sirina={22} />
         </span>
         <span className="absolute left-6 top-2">
           <KartonSlicice boja={ZUTA} ugao={9} sirina={22} />

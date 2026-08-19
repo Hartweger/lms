@@ -1,11 +1,16 @@
 import { describe, it, expect } from "vitest";
-import { bojaZaRod, promesaj, ROD_BOJA } from "./rec";
+import { BOJA_MNOZINA, bojaZaRod, promesaj, ROD_BOJA } from "./rec";
 
 describe("bojaZaRod", () => {
-  it("der je plava, die crvena, das žuta", () => {
+  it("der je plava, die crvena, das zelena", () => {
     expect(bojaZaRod("der")).toBe("#0B54C9");
     expect(bojaZaRod("die")).toBe("#E5342A");
-    expect(bojaZaRod("das")).toBe("#FFC400");
+    expect(bojaZaRod("das")).toBe("#2E9E4F");
+  });
+
+  it("žuta je množina i nije ni jedan rod", () => {
+    expect(BOJA_MNOZINA).toBe("#FFC400");
+    expect(Object.values(ROD_BOJA)).not.toContain(BOJA_MNOZINA);
   });
 
   it("reč bez roda dobija mastilo", () => {
