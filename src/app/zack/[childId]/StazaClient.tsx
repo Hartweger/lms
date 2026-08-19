@@ -269,7 +269,7 @@ export default function StazaClient({
           className="mt-3 text-[28px] leading-tight tracking-tight"
           style={{ color: MASTILO, fontFamily: DISPLAY }}
         >
-          Zdravo,{" "}
+          Hallo,{" "}
           <span
             className="mt-1 inline-block -rotate-1 rounded-lg border-[3px] border-white px-2.5 py-0.5 shadow-[0_2px_6px_rgba(22,22,26,0.18)]"
             style={{ background: ZUTA, color: MASTILO }}
