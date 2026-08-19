@@ -174,12 +174,20 @@ function raspodeli(poTezini: PitanjePartije[][], koliko: number): void {
  * Isto pitanje se u jednoj partiji ne pojavljuje dvaput ni kad ih nema dovoljno.
  * Radije se igra kraća partija nego da se dete pita isto dvaput - to je jedina
  * stvar koju u kvizu odmah primeti i doživi kao da aplikacija ne radi.
+ *
+ * `greske` su ranije promašena pitanja deteta (ključ pitanja → koliko puta).
+ * Pitanje sa greškom ima prednost pri izboru UNUTAR SVOJE TEŽINE: kad partija
+ * ne prima sva pitanja, otpadaju prvo ona bez greške. Raspored težina se time
+ * ne dira - greška na teškom pitanju ne može da istisne lako pitanje, jer bi
+ * partija onda počinjala teškim i to bi bila kazna, a ne ponavljanje. Bez
+ * grešaka je ponašanje isto kao i do sad.
  */
 export function sastaviPartiju(
   tacke: readonly GramatickaTacka[],
   pitanja: readonly GramatickoPitanje[],
   brojLekcije: number,
-  rng: () => number
+  rng: () => number,
+  greske: ReadonlyMap<string, number> = new Map()
 ): Partija {
   const dozvoljene = dozvoljeneTacke(tacke, brojLekcije);
   const kljucevi = new Set(dozvoljene.map((t) => t.id));
@@ -191,6 +199,13 @@ export function sastaviPartiju(
   for (const p of promesaj(podobna, rng)) {
     const spremno = zaEkran(p, rng);
     poTezini[spremno.tezina - 1].push(spremno);
+  }
+
+  // Promašena pitanja idu na POČETAK svoje korpe (`raspodeli` skida sa kraja,
+  // pa višak odnese baš ona bez greške). Sort je stabilan, pa među jednakima
+  // ostaje redosled iz mešanja - slučajnost se ne gubi, samo dobija prednost.
+  for (const grupa of poTezini) {
+    grupa.sort((a, b) => (greske.get(b.id) ?? 0) - (greske.get(a.id) ?? 0));
   }
 
   // Ono što ostane u korpama posle raspodele je rezerva za „zameni pitanje".

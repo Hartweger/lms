@@ -31,6 +31,18 @@ function jeIgraRoda(igra: Igra): boolean {
 }
 
 /**
+ * Da li reč uopšte može da bude pitanje u ovoj igri. Isto pravilo po kom
+ * `napraviPitanja` odbacuje nepodobne reči, izvučeno da ga vidi i ponavljanje:
+ * stara reč bez roda ne sme da uđe u kvotu skakača, jer bi tamo tiho otpala i
+ * partija bi bila kraća nego što je obećano.
+ */
+export function podobnaZaIgru(rec: Rec, igra: Igra): boolean {
+  if (jeIgraRoda(igra)) return rec.rod !== "nema";
+  if (igra === "mnozina") return Boolean(rec.mnozina);
+  return true;
+}
+
+/**
  * Dokle skakač ume da se popne. NIJE dužina partije: partija se završava kad se
  * potroše srca, a ovo je samo kočnica da tok pitanja ne bude beskonačna petlja.
  * Namerno visoko - dete sa tri srca realno ne stiže dotle, pa granicu ne oseti.
@@ -98,11 +110,18 @@ export function uKrugovima<T>(stavke: readonly T[], koliko: number, rng: () => n
   return tok.slice(0, koliko);
 }
 
+/**
+ * `pool` je skup iz kog se vade POGREŠNI ponuđeni odgovori. Podrazumevano su to
+ * iste reči iz kojih se prave pitanja, i tada sve radi kao i uvek. Ponavljanje
+ * kroz module ga širi na lekciju plus izabrane stare reči, da pitanje o staroj
+ * reči ima jednako bogat izbor odgovora kao i lekcijsko.
+ */
 export function napraviPitanja(
   reci: readonly Rec[],
   igra: Igra,
   koliko: number,
-  rng: () => number
+  rng: () => number,
+  pool: readonly Rec[] = reci
 ): Pitanje[] {
   if (reci.length === 0) return [];
 
@@ -116,11 +135,7 @@ export function napraviPitanja(
     ];
   }
 
-  const podobne = reci.filter((r) => {
-    if (jeIgraRoda(igra)) return r.rod !== "nema";
-    if (igra === "mnozina") return Boolean(r.mnozina);
-    return true;
-  });
+  const podobne = reci.filter((r) => podobnaZaIgru(r, igra));
 
   // Skakač jedini dobija tok koji se ponavlja: njegova partija ne staje na broju
   // reči nego na srcima. Ostale igre prođu spisak jednom i tu je kraj.
@@ -129,7 +144,7 @@ export function napraviPitanja(
 
   return izabrane.map((r): Pitanje => {
     if (igra === "brzo-biranje") {
-      const kandidati = reci.filter((d) => d.id !== r.id).map((d) => d.sr);
+      const kandidati = pool.filter((d) => d.id !== r.id).map((d) => d.sr);
       return {
         igra: "brzo-biranje",
         recId: r.id,
@@ -142,7 +157,7 @@ export function napraviPitanja(
       return { igra: "rod", recId: r.id, imenica: r.de, tacan: r.rod };
     }
     if (igra === "mnozina") {
-      const kandidati = reci
+      const kandidati = pool
         .filter((d) => d.id !== r.id && d.mnozina)
         .map((d) => d.mnozina as string);
       return {

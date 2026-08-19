@@ -209,6 +209,61 @@ describe("sastaviPartiju, oblik partije", () => {
   });
 });
 
+describe("sastaviPartiju, ranije promašena pitanja", () => {
+  // Od deset lakih u partiju stane osam, pa bez grešaka svako od njih ume da
+  // završi u rezervi. Sa greškom to ne sme da se desi.
+  it("pitanje sa ranijom greškom ulazi u partiju pre pitanja bez nje", () => {
+    const greske = new Map([
+      ["l3", 2],
+      ["l7", 1],
+    ]);
+    for (let s = 1; s <= 15; s++) {
+      const partija = sastaviPartiju(TACKE, PITANJA, 1, nizRng(s), greske);
+      const idovi = new Set(partija.pitanja.map((p) => p.id));
+      expect(idovi.has("l3")).toBe(true);
+      expect(idovi.has("l7")).toBe(true);
+    }
+  });
+
+  it("unutar svoje težine promašena idu prva, više grešaka ispred manje", () => {
+    const greske = new Map([
+      ["l3", 2],
+      ["l7", 1],
+    ]);
+    const partija = sastaviPartiju(TACKE, PITANJA, 1, nizRng(4), greske);
+    expect(partija.pitanja[0].id).toBe("l3");
+    expect(partija.pitanja[1].id).toBe("l7");
+  });
+
+  it("raspored težina se ne kvari: greška na lakom ne dira srednja ni teška", () => {
+    const greske = new Map([
+      ["l1", 5],
+      ["x0", 3],
+    ]);
+    const brojPoTezini = (pitanja: readonly PitanjePartije[]) =>
+      [1, 2, 3].map((t) => pitanja.filter((p) => p.tezina === t).length);
+
+    const sa = sastaviPartiju(TACKE, PITANJA, 1, nizRng(6), greske);
+    const bez = sastaviPartiju(TACKE, PITANJA, 1, nizRng(6));
+    expect(brojPoTezini(sa.pitanja)).toEqual(brojPoTezini(bez.pitanja));
+
+    const tezine = sa.pitanja.map((p) => p.tezina);
+    expect(tezine).toEqual([...tezine].sort((a, b) => a - b));
+  });
+
+  it("bez grešaka je ponašanje isto kao i do sad", () => {
+    const staro = sastaviPartiju(TACKE, PITANJA, 1, nizRng(5));
+    const novo = sastaviPartiju(TACKE, PITANJA, 1, nizRng(5), new Map());
+    expect(novo).toEqual(staro);
+  });
+
+  it("greška na neobrađenom pitanju ne otvara neobrađeno gradivo", () => {
+    const greske = new Map([["z0", 9]]);
+    const partija = sastaviPartiju(TACKE, PITANJA, 1, nizRng(2), greske);
+    expect(partija.pitanja.some((p) => p.id === "z0")).toBe(false);
+  });
+});
+
 describe("polaPola", () => {
   it("uvek ostavlja tačan odgovor", () => {
     const p = naEkran(P("a", "t1", 1));

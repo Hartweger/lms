@@ -2748,6 +2748,55 @@ export type Database = {
           },
         ]
       }
+      zack_greske: {
+        Row: {
+          broj: number
+          dete_id: string
+          id: string
+          pitanje_id: string | null
+          poslednja_at: string
+          rec_id: string | null
+        }
+        Insert: {
+          broj?: number
+          dete_id: string
+          id?: string
+          pitanje_id?: string | null
+          poslednja_at?: string
+          rec_id?: string | null
+        }
+        Update: {
+          broj?: number
+          dete_id?: string
+          id?: string
+          pitanje_id?: string | null
+          poslednja_at?: string
+          rec_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zack_greske_dete_id_fkey"
+            columns: ["dete_id"]
+            isOneToOne: false
+            referencedRelation: "zack_deca"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "zack_greske_pitanje_id_fkey"
+            columns: ["pitanje_id"]
+            isOneToOne: false
+            referencedRelation: "zack_gramatika_pitanja"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "zack_greske_rec_id_fkey"
+            columns: ["rec_id"]
+            isOneToOne: false
+            referencedRelation: "zack_reci"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       zack_lekcije: {
         Row: {
           broj: number

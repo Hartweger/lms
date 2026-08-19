@@ -76,6 +76,107 @@ export async function reciUUdzbeniku(
 }
 
 /**
+ * Od poslatih ključeva pitanja gramatike zadržava SAMO ona iz udžbenika ovog
+ * deteta. Isti obrazac i isti razlog kao `reciUUdzbeniku`: ko vidi adresu
+ * deteta, ne sme da mu tuđim ključevima puni memoriju grešaka. I ovde dva
+ * jasna upita umesto ugnježdenog, iz istog razloga kao gore.
+ */
+export async function pitanjaUUdzbeniku(
+  pitanjeIdovi: readonly string[],
+  udzbenikId: string
+): Promise<Set<string>> {
+  if (pitanjeIdovi.length === 0) return new Set();
+
+  const sb = createAdminClient();
+  const { data: pitanja, error } = await sb
+    .from("zack_gramatika_pitanja")
+    .select("id, gramatika_id")
+    .in("id", [...pitanjeIdovi]);
+  if (error) throw new Error(`Ne mogu da proverim pitanja: ${error.message}`);
+  if (!pitanja || pitanja.length === 0) return new Set();
+
+  const tackaIdovi = [...new Set(pitanja.map((p) => p.gramatika_id))];
+  const { data: tacke, error: greskaTacaka } = await sb
+    .from("zack_gramatika")
+    .select("id")
+    .in("id", tackaIdovi)
+    .eq("udzbenik_id", udzbenikId);
+  if (greskaTacaka) throw new Error(`Ne mogu da proverim gramatiku: ${greskaTacaka.message}`);
+
+  const nase = new Set((tacke ?? []).map((t) => t.id));
+  return new Set(pitanja.filter((p) => nase.has(p.gramatika_id)).map((p) => p.id));
+}
+
+/**
+ * Broj ranijih grešaka deteta po reči. Iz ovoga igre kasnijih lekcija znaju
+ * koje stare reči da vrate pred dete. Mapa, ne spisak: čita se po ključu reči.
+ */
+export async function greskeReci(deteId: string): Promise<Map<string, number>> {
+  const sb = createAdminClient();
+  const { data, error } = await sb
+    .from("zack_greske")
+    .select("rec_id, broj")
+    .eq("dete_id", deteId)
+    .not("rec_id", "is", null);
+  if (error) throw new Error(`Ne mogu da pročitam greške reči: ${error.message}`);
+
+  const poReci = new Map<string, number>();
+  for (const red of data ?? []) {
+    if (red.rec_id) poReci.set(red.rec_id, red.broj);
+  }
+  return poReci;
+}
+
+/**
+ * Broj ranijih grešaka deteta po pitanju gramatike. Milioner iz ovoga daje
+ * prednost ranije promašenim pitanjima pri sastavljanju partije.
+ */
+export async function greskePitanja(deteId: string): Promise<Map<string, number>> {
+  const sb = createAdminClient();
+  const { data, error } = await sb
+    .from("zack_greske")
+    .select("pitanje_id, broj")
+    .eq("dete_id", deteId)
+    .not("pitanje_id", "is", null);
+  if (error) throw new Error(`Ne mogu da pročitam greške pitanja: ${error.message}`);
+
+  const poPitanju = new Map<string, number>();
+  for (const red of data ?? []) {
+    if (red.pitanje_id) poPitanju.set(red.pitanje_id, red.broj);
+  }
+  return poPitanju;
+}
+
+/**
+ * Reči SVIH ranijih lekcija udžbenika (broj manji od zadatog). Iz njih igre
+ * kasnijih lekcija mešaju ponavljanje. Za prvu lekciju vraća prazno bez upita,
+ * jer ranijih lekcija nema.
+ */
+export async function stareReciUdzbenika(
+  udzbenikId: string,
+  brojLekcije: number
+): Promise<Rec[]> {
+  if (brojLekcije <= 1) return [];
+
+  const sb = createAdminClient();
+  const { data: lekcije, error } = await sb
+    .from("zack_lekcije")
+    .select("id")
+    .eq("udzbenik_id", udzbenikId)
+    .lt("broj", brojLekcije);
+  if (error) throw new Error(`Ne mogu da pročitam ranije lekcije: ${error.message}`);
+  if (!lekcije || lekcije.length === 0) return [];
+
+  const { data: reci, error: greskaReci } = await sb
+    .from("zack_reci")
+    .select("id, redni_broj, de, sr, rod, mnozina, vrsta, izuzetak, ikonica")
+    .in("lekcija_id", lekcije.map((l) => l.id))
+    .order("redni_broj");
+  if (greskaReci) throw new Error(`Ne mogu da pročitam stare reči: ${greskaReci.message}`);
+  return reci ?? [];
+}
+
+/**
  * Broj lekcije, ali samo ako je lekcija iz udžbenika ovog deteta. `null` znači
  * i „nema takve lekcije" i „nije njegova", i to je namerno isti odgovor: nema
  * razloga da se sa strane sazna koja tuđa lekcija postoji.
