@@ -49,7 +49,7 @@ export default async function RoditeljPage() {
   const [decaUpit, udzbeniciUpit] = await Promise.all([
     sb
       .from("zack_deca")
-      .select("id, ime, kod, udzbenik_id")
+      .select("id, ime, kod, udzbenik_id, oslobodjeno, clanstvo_do")
       .eq("roditelj_id", roditelj.id)
       .order("created_at"),
     sb.from("zack_udzbenici").select("id, naziv, izdavac, razred").order("razred"),
@@ -61,17 +61,61 @@ export default async function RoditeljPage() {
 
   const udzbenici = udzbeniciUpit.data ?? [];
   const naziviUdzbenika = new Map(udzbenici.map((u) => [u.id, u.naziv]));
+  const deca = decaUpit.data ?? [];
+
+  // Aktivne mesečne serije za ovu decu - osnova za „Otkaži" (postojeći cancel
+  // tok iz /api/pretplata/otkazi; pretplata glasi na roditeljev nalog).
+  const pretplatePoDetetu = new Map<string, string>();
+  if (deca.length > 0) {
+    const { data: pretplate, error: pretplateGreska } = await sb
+      .from("subscriptions")
+      .select("id, dete_id")
+      .in("dete_id", deca.map((d) => d.id))
+      .eq("status", "active");
+    if (pretplateGreska) {
+      throw new Error(`Ne mogu da pročitam članstva: ${pretplateGreska.message}`);
+    }
+    for (const p of pretplate ?? []) {
+      if (p.dete_id) pretplatePoDetetu.set(p.dete_id, p.id);
+    }
+  }
+
+  const sada = new Date();
 
   return (
     <UskiStub>
       <RoditeljPanel
         email={roditelj.email}
-        deca={(decaUpit.data ?? []).map((d) => ({
-          id: d.id,
-          ime: d.ime,
-          kod: d.kod,
-          udzbenik: naziviUdzbenika.get(d.udzbenik_id) ?? "",
-        }))}
+        deca={deca.map((d) => {
+          const pretplataId = pretplatePoDetetu.get(d.id) ?? null;
+          const vaziDoDatum = d.clanstvo_do ? new Date(d.clanstvo_do) : null;
+          const placenoVazi = !!vaziDoDatum && vaziDoDatum > sada;
+          // Datum se formatira OVDE, na serveru, da klijent ne hidrira drugi
+          // ispis od onog koji je stigao u HTML-u.
+          const vaziDo =
+            placenoVazi && vaziDoDatum
+              ? // sr-RS datum nosi završnu tačku - skida se, jer u panelu iza
+                // datuma dolazi zapeta ili tačka rečenice.
+                vaziDoDatum.toLocaleDateString("sr-RS").replace(/\.$/, "")
+              : null;
+          return {
+            id: d.id,
+            ime: d.ime,
+            kod: d.kod,
+            udzbenik: naziviUdzbenika.get(d.udzbenik_id) ?? "",
+            clanstvo: {
+              stanje: d.oslobodjeno
+                ? ("oslobodjeno" as const)
+                : pretplataId
+                  ? ("aktivno" as const)
+                  : placenoVazi
+                    ? ("otkazano-vazi" as const)
+                    : ("neaktivno" as const),
+              vaziDo,
+              pretplataId,
+            },
+          };
+        })}
         udzbenici={udzbenici}
         izvestajUkljucen={roditelj.izvestaj_ukljucen}
       />

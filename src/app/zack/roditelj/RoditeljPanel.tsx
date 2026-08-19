@@ -31,11 +31,26 @@ import {
 // uvesti jer vuče node:crypto.
 const PIN_OBLIK = /^\d{4}$/;
 
+export type ClanstvoStavka = {
+  /**
+   * "oslobodjeno" - pilot porodice, plaćanje se ne traži i ne pominje;
+   * "aktivno" - postoji aktivna mesečna serija (može da se otkaže);
+   * "otkazano-vazi" - serija otkazana, plaćeni period još traje;
+   * "neaktivno" - igre su zaključane, nudi se uključivanje.
+   */
+  stanje: "oslobodjeno" | "aktivno" | "otkazano-vazi" | "neaktivno";
+  /** Formatiran na serveru (sr-RS), da se HTML i hidratacija ne raziđu. */
+  vaziDo: string | null;
+  /** Aktivna serija - osnova za „Otkaži" kroz postojeći /api/pretplata/otkazi. */
+  pretplataId: string | null;
+};
+
 export type DeteStavka = {
   id: string;
   ime: string;
   kod: string | null;
   udzbenik: string;
+  clanstvo: ClanstvoStavka;
 };
 
 export type UdzbenikStavka = {
@@ -226,6 +241,143 @@ function NapredakDeteta({ deteId }: { deteId: string }) {
   );
 }
 
+/**
+ * Članstvo jednog deteta: status kao rečenica (ne samo boja ili ikona) i tačno
+ * jedna radnja - „Uključi" vodi na checkout, „Otkaži" koristi postojeći cancel
+ * tok pretplata. Posle otkaza pristup traje do isteka plaćenog perioda, kao i
+ * kod školskih pretplata, i to se roditelju odmah kaže.
+ */
+function ClanstvoBlok({ dete }: { dete: DeteStavka }) {
+  const router = useRouter();
+  const c = dete.clanstvo;
+  const [potvrda, setPotvrda] = useState(false);
+  const [saljeSe, setSaljeSe] = useState(false);
+  const [poruka, setPoruka] = useState<string | null>(null);
+  const [uspeh, setUspeh] = useState<string | null>(null);
+
+  const otkazi = async () => {
+    if (saljeSe || !c.pretplataId) return;
+    setSaljeSe(true);
+    setPoruka(null);
+    try {
+      const odgovor = await fetch("/api/pretplata/otkazi", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ subscriptionId: c.pretplataId }),
+      });
+      if (odgovor.ok) {
+        setPotvrda(false);
+        setUspeh(
+          `Članstvo je otkazano - nema više naplata. ${dete.ime} igra do isteka plaćenog perioda.`
+        );
+        // Status iznad stiže sa servera, pa se osvežava cela stranica.
+        router.refresh();
+      } else {
+        const podaci: { error?: string } = await odgovor.json();
+        setPoruka(podaci.error ?? "Nešto je zapelo. Probaj ponovo za koji trenutak.");
+      }
+    } catch {
+      setPoruka("Nema veze sa internetom. Probaj ponovo za koji trenutak.");
+    }
+    setSaljeSe(false);
+  };
+
+  return (
+    <div className="mt-3 rounded-xl border p-3" style={{ borderColor: IVICA, background: "#FFFFFF" }}>
+      <p className="text-[13px]" style={{ color: PRIGUSEN }}>
+        Članstvo
+      </p>
+
+      {c.stanje === "oslobodjeno" && (
+        <p className="mt-1 text-[15px] leading-snug" style={{ color: MASTILO }}>
+          Uključeno - ovaj profil je oslobođen plaćanja.
+        </p>
+      )}
+
+      {c.stanje === "aktivno" && (
+        <>
+          <p className="mt-1 text-[15px] leading-snug" style={{ color: MASTILO }}>
+            <strong className="font-bold">Aktivno</strong>
+            {c.vaziDo ? ` - plaćeni period važi do ${c.vaziDo}` : ""}, obnavlja se automatski.
+          </p>
+          {potvrda ? (
+            <div className="mt-2.5">
+              <p className="text-[14px] leading-snug" style={{ color: MASTILO }}>
+                Otkazivanjem prestaju sve buduće naplate. {dete.ime} igra do isteka
+                plaćenog perioda, a album i sve zarađeno ostaju zauvek.
+              </p>
+              <div className="mt-2 flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => void otkazi()}
+                  disabled={saljeSe}
+                  className={`${DUGME_BELO} px-4 py-2.5 text-[15px] font-bold`}
+                  style={{ borderColor: GRESKA, color: GRESKA }}
+                >
+                  {saljeSe ? "Otkazuje se..." : "Da, otkaži"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPotvrda(false);
+                    setPoruka(null);
+                  }}
+                  className={`${DUGME_BELO} px-4 py-2.5 text-[15px] font-bold`}
+                  style={{ borderColor: IVICA, color: MASTILO }}
+                >
+                  Ipak ne
+                </button>
+              </div>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => {
+                setPotvrda(true);
+                setUspeh(null);
+              }}
+              className={`${DUGME_BELO} mt-2.5 px-4 py-2.5 text-[15px] font-bold`}
+              style={{ borderColor: IVICA, color: MASTILO }}
+            >
+              Otkaži članstvo
+            </button>
+          )}
+        </>
+      )}
+
+      {c.stanje === "otkazano-vazi" && (
+        <p className="mt-1 text-[15px] leading-snug" style={{ color: MASTILO }}>
+          Otkazano - igre rade još do <strong className="font-bold">{c.vaziDo}</strong>. Novo
+          članstvo možeš da uključiš kad taj period istekne.
+        </p>
+      )}
+
+      {c.stanje === "neaktivno" && (
+        <>
+          <p className="mt-1 text-[15px] leading-snug" style={{ color: MASTILO }}>
+            Nije aktivno - igre, kesice i Milioner su detetu zaključani. Album i sve
+            zarađeno ostaju vidljivi.
+          </p>
+          <Link
+            href={`/kupovina/zack-clanstvo?dete=${dete.id}`}
+            className={`${DUGME_PUNO} mt-2.5 inline-block px-4 py-2.5 text-[15px] font-bold`}
+            style={{ background: PLAVA }}
+          >
+            Uključi članstvo
+          </Link>
+        </>
+      )}
+
+      <p aria-live="polite" className="text-[14px]" style={{ color: GRESKA }}>
+        {poruka}
+      </p>
+      <p aria-live="polite" className="text-[14px] font-bold" style={{ color: ZELENA }}>
+        {uspeh}
+      </p>
+    </div>
+  );
+}
+
 /** Kartica jednog deteta: kod krupno (da se lako prepiše) i promena PIN-a. */
 function DeteKartica({ dete }: { dete: DeteStavka }) {
   const [otvoreno, setOtvoreno] = useState(false);
@@ -307,6 +459,8 @@ function DeteKartica({ dete }: { dete: DeteStavka }) {
         ti postaviš. Kod je kao korisničko ime, samo što se ne bira nego ga
         dete dobije, a tajni broj je kao šifra.
       </p>
+
+      <ClanstvoBlok dete={dete} />
 
       <NapredakDeteta deteId={dete.id} />
 
