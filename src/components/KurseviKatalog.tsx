@@ -136,7 +136,6 @@ const tabs: TabConfig[] = [
       { id: "a2", label: "A2" },
       { id: "b1", label: "B1" },
       { id: "paket", label: "Paketi" },
-      { id: "masterclass", label: "Masterclass" },
       { id: "gramatika", label: "Gramatika" },
       { id: "specijalni", label: "Specijalni kursevi" },
     ],
@@ -147,14 +146,9 @@ const tabs: TabConfig[] = [
       { badges: [{ label: "Video", color: "video" }, { label: "B1", color: "b1" }], title: "VIDEO kurs B1", meta: "Tvoj tempo · Pristup godinu dana", desc: "Srednji nivo u tvom tempu. Priprema za B1 ispit ili rad u nemačkom govornom području.", price: "11.600 RSD", priceEur: "≈ 99€", href: "/kursevi/video-kurs-b1", cta: "Kupi kurs", level: "b1" },
       { badges: [{ label: "Paket", color: "paket" }, { label: "- 12%", color: "sale" }], title: "Video paket A1 + A2", meta: "2 kursa u paketu", desc: "A1 i A2 video kurs zajedno po specijalnoj ceni. Idealno za početnike koji žele brži napredak.", oldPrice: "23.200 RSD", salePrice: "20.475 RSD", salePriceEur: "≈ 175€", saveAmount: "Uštedite 2.725 RSD", price: "", priceEur: "", href: "/kursevi/paket-a1-i-a2", cta: "Kupi paket", level: "paket" },
       { badges: [{ label: "Paket", color: "paket" }, { label: "Najpopularnije", color: "novo" }, { label: "- 16%", color: "sale" }], title: "Video paket A1 + A2 + B1", meta: "3 kursa · najveća ušteda", desc: "Kompletna putanja od nule do B1. Tri video kursa po najboljoj ceni.", oldPrice: "34.800 RSD", salePrice: "29.133 RSD", salePriceEur: "≈ 249€", saveAmount: "Uštedite 5.667 RSD", price: "", priceEur: "", href: "/kursevi/paket-a1-a2-b1", cta: "Kupi paket", level: "paket" },
-      { badges: [{ label: "Masterclass", color: "master" }, { label: "B1", color: "b1" }], title: "Video + B1 ispit - kompletna priprema", meta: "Svi delovi ispita", desc: "Kompletna priprema za B1 ispit - pisanje, čitanje, slušanje i govor u jednom video kursu.", price: "3.600 RSD", priceEur: "≈ 31€", href: "/kursevi/polozi-goethe-b1", cta: "Kupi", level: "masterclass" },
-      // „VIDEO: Položi Goethe B2" je sklonjen dok kurs ne bude gotov: u LMS-u za sada
-      // postoje samo uvodni video i 3 Leseverstehen Modelltesta, a kartica je obećavala
-      // sve delove ispita. Prodaja je i inače bila nemoguća (courses.is_purchasable = false,
-      // pa /kursevi/polozi-goethe-b2 vraća 404) - zato je href pogrešno pokazivao na
-      // LMS stranicu /kurs/. Vratiti karticu tek uz href "/kursevi/polozi-goethe-b2"
-      // i is_purchasable = true.
-      { badges: [{ label: "Masterclass", color: "master" }, { label: "Goethe C1", color: "c1" }], title: "VIDEO: Položi Goethe C1", meta: "Napredni nivo", desc: "Priprema za Goethe C1. Kompleksni tekstovi, esej pisanje, govor i slušanje na naprednom nivou.", price: "3.500 RSD", priceEur: "≈ 30€", href: "/kursevi/polozi-goethe-c1", cta: "Kupi", level: "masterclass" },
+      // Masterclass kursevi (Položi Goethe B1/B2/C1) su od avgusta 2026 besplatni i žive
+      // u tabu „Besplatno" - prodaja je isključena (courses.is_purchasable = false, sve
+      // lekcije is_free_preview = true), pa /kursevi/polozi-goethe-* vraća 404.
       { badges: [{ label: "Gramatika", color: "gram" }, { label: "A2-B1", color: "b1" }], title: "VIDEO + E-book Gramatika A2-B1", meta: "Tvoj tempo · Uključen e-book", desc: "90 minuta predavanja prof. Nataše Hartweger + e-book sa svim objašnjenjima i vežbama na platformi. Kompletna gramatika od A2 do B1.", price: "4.680 RSD", priceEur: "≈ 40€", href: "/kursevi/gramatika-a2-b1", cta: "Kupi", level: "gramatika" },
       { badges: [{ label: "Specijalni", color: "spec" }, { label: "U pripremi", color: "novo" }], title: "Kurs za mame i trudnice", meta: "Prilagođen mamama", desc: "Kurs nemačkog posebno dizajniran za mame i trudnice koje se pripremaju za život u Nemačkoj ili Austriji.", price: "6.435 RSD", priceEur: "≈ 55€", href: "/kursevi/kurs-za-mame-i-trudnice", cta: "Saznaj više", level: "specijalni", accent: true },
       { badges: [{ label: "Specijalni", color: "spec" }, { label: "FIDE", color: "fide" }], title: "VIDEO: Položi FIDE", meta: "Boravišna dozvola - Švajcarska", desc: "Priprema za FIDE jezički ispit koji se traži za dobijanje boravišne dozvole u Švajcarskoj.", price: "9.360 RSD", priceEur: "≈ 80€", href: "/kursevi/polozi-fide", cta: "Kupi", level: "specijalni", accent: true },
@@ -201,6 +195,9 @@ const tabs: TabConfig[] = [
     cards: [
       { badges: [{ label: "Besplatno", color: "free" }], title: "Besplatno testiranje nivoa", meta: "Rezultat odmah", desc: "Ne znate koji nivo da upišete? Uradite kratak test i saznajte odmah gde stojite.", price: "Besplatno", priceEur: "", href: "/besplatno-testiranje", cta: "Uradi test", level: "sve", freeCta: true },
       { badges: [{ label: "Besplatno", color: "free" }, { label: "Masterclass", color: "video" }], title: "Kako da naučiš reči na stranom jeziku", meta: "90 minuta", desc: "Besplatan masterclass Nataše Hartweger sa smernicama kako se lakše i efikasnije uče reči na stranom jeziku.", price: "Besplatno", priceEur: "", href: "/masterclass-reci", cta: "Gledaj besplatno", level: "sve", freeCta: true },
+      { badges: [{ label: "Besplatno", color: "free" }, { label: "Masterclass", color: "video" }, { label: "B1", color: "b1" }], title: "Položi Goethe B1 - kompletna priprema", meta: "Svi delovi ispita", desc: "Besplatna video priprema za B1 ispit - pisanje, čitanje, slušanje i govor, sa modelltestovima.", price: "Besplatno", priceEur: "", href: "/kurs/polozi-goethe-b1", cta: "Gledaj besplatno", level: "sve", freeCta: true },
+      { badges: [{ label: "Besplatno", color: "free" }, { label: "Masterclass", color: "video" }, { label: "B2", color: "b2" }], title: "Položi Goethe B2 - Leseverstehen", meta: "3 modelltesta", desc: "Besplatan uvod u Goethe B2 ispit i tri Leseverstehen modelltesta za vežbanje čitanja.", price: "Besplatno", priceEur: "", href: "/kurs/polozi-goethe-b2", cta: "Gledaj besplatno", level: "sve", freeCta: true },
+      { badges: [{ label: "Besplatno", color: "free" }, { label: "Masterclass", color: "video" }, { label: "C1", color: "c1" }], title: "Položi Goethe C1", meta: "Napredni nivo", desc: "Besplatna priprema za Goethe C1 - kompleksni tekstovi, esej, govor i slušanje na naprednom nivou.", price: "Besplatno", priceEur: "", href: "/kurs/polozi-goethe-c1", cta: "Gledaj besplatno", level: "sve", freeCta: true },
       { badges: [{ label: "Besplatno", color: "free" }, { label: "AI", color: "ai" }], title: "NaKI - AI asistent za nemački", meta: "Vežbajte uvek i svuda", desc: "Hartwegerov AI asistent za učenje nemačkog. Vežbajte gramatiku i dobijajte objašnjenja na srpskom.", price: "Besplatno", priceEur: "", href: "https://www.hartweger.rs/naki-ai-asistent-nemacki/", cta: "Isprobaj", level: "sve", freeCta: true },
     ],
   },

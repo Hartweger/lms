@@ -153,6 +153,10 @@ export default async function KursStranica({ params }: PageProps) {
 
   const modules = hasAccess ? groupByModules(allLessons) : [];
 
+  // Potpuno besplatan kurs (masterclass): nije u prodaji, a lekcije su javne kroz
+  // is_free_preview - nema šta da se kupi, pa nema ni CTA „Kupi kurs"/„Prijavi se".
+  const fullyFree = !typedCourse.is_purchasable && (previewLessons?.length ?? 0) > 0;
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
       {/* Header */}
@@ -165,6 +169,7 @@ export default async function KursStranica({ params }: PageProps) {
       </div>
 
       {/* CTA */}
+      {(hasAccess || !fullyFree) && (
       <div className="bg-white rounded-xl p-6 shadow-sm mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div></div>
         {hasAccess ? (
@@ -193,6 +198,7 @@ export default async function KursStranica({ params }: PageProps) {
           </a>
         )}
       </div>
+      )}
 
       {/* Handbook link */}
       {hasAccess && typedCourse.handbook_url && (
@@ -270,7 +276,7 @@ export default async function KursStranica({ params }: PageProps) {
       {!hasAccess && previewLessons && previewLessons.length > 0 && (
         <div className="mb-8">
           <h2 className="text-xl font-bold text-gray-900 mb-4">
-            Besplatne probne lekcije
+            {fullyFree ? "Besplatne lekcije" : "Besplatne probne lekcije"}
           </h2>
           <div className="space-y-3">
             {(previewLessons as Lesson[]).map((lesson, i) => (

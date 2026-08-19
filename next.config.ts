@@ -188,9 +188,14 @@ const nextConfig: NextConfig = {
       { source: "/blog/:path*", destination: "/magazin", permanent: true },
       // -- stari kurs/proizvod slugovi → tačne kurs stranice
       { source: "/kursevi/polozi-fide-ispit", destination: "/kursevi/polozi-fide", permanent: true },
-      { source: "/kursevi/polozi-goethe-b1-sa-natasom-i-katarinom", destination: "/kursevi/polozi-goethe-b1", permanent: true },
-      { source: "/kursevi/polozi-geothe-c1", destination: "/kursevi/polozi-goethe-c1", permanent: true },
-      { source: "/kursevi/video-polozi-goethe-b2-sa-natasom-i-ankom", destination: "/kursevi", permanent: true },
+      // Masterclass kursevi su besplatni od avgusta 2026 (is_purchasable = false →
+      // /kursevi/polozi-goethe-* je 404), pa sve prodajne adrese vode na LMS /kurs/ stranice.
+      { source: "/kursevi/polozi-goethe-b1", destination: "/kurs/polozi-goethe-b1", permanent: true },
+      { source: "/kursevi/polozi-goethe-b2", destination: "/kurs/polozi-goethe-b2", permanent: true },
+      { source: "/kursevi/polozi-goethe-c1", destination: "/kurs/polozi-goethe-c1", permanent: true },
+      { source: "/kursevi/polozi-goethe-b1-sa-natasom-i-katarinom", destination: "/kurs/polozi-goethe-b1", permanent: true },
+      { source: "/kursevi/polozi-geothe-c1", destination: "/kurs/polozi-goethe-c1", permanent: true },
+      { source: "/kursevi/video-polozi-goethe-b2-sa-natasom-i-ankom", destination: "/kurs/polozi-goethe-b2", permanent: true },
       { source: "/kursevi/kurs-nemackog-jezika-video-kurs-a1", destination: "/kursevi/video-kurs-a1", permanent: true },
       { source: "/kursevi/fsp-pripremni-kurs", destination: "/kursevi/fsp", permanent: true },
       { source: "/kursevi/grupni-kurs-nemackog-jezika-a1-2", destination: "/kursevi/grupni-kurs-nemackog-jezika-a1-2-2", permanent: true },
@@ -233,9 +238,9 @@ const nextConfig: NextConfig = {
       { source: "/proizvod/kurs-nemackog-jezika-video-kurs-a1", destination: "/kursevi/video-kurs-a1", permanent: true },
       { source: "/proizvod/osnovna-ponuda-kurs-nemackog-jezika-a2", destination: "/kursevi/video-kurs-a2", permanent: true },
       { source: "/proizvod/osnovna-ponuda-kurs-b1", destination: "/kursevi/video-kurs-b1", permanent: true },
-      { source: "/proizvod/polozi-goethe-b1", destination: "/kursevi/polozi-goethe-b1", permanent: true },
-      { source: "/proizvod/polozi-goethe-b2", destination: "/kursevi", permanent: true },
-      { source: "/proizvod/polozi-c1", destination: "/kursevi/polozi-goethe-c1", permanent: true },
+      { source: "/proizvod/polozi-goethe-b1", destination: "/kurs/polozi-goethe-b1", permanent: true },
+      { source: "/proizvod/polozi-goethe-b2", destination: "/kurs/polozi-goethe-b2", permanent: true },
+      { source: "/proizvod/polozi-c1", destination: "/kurs/polozi-goethe-c1", permanent: true },
       { source: "/proizvod/gramatika-a2-b1", destination: "/kursevi/gramatika-a2-b1", permanent: true },
       { source: "/proizvod/kurs-za-mame", destination: "/kursevi/kurs-za-mame-i-trudnice", permanent: true },
       { source: "/proizvod/polozi-fide", destination: "/kursevi/polozi-fide", permanent: true },
@@ -283,9 +288,9 @@ const nextConfig: NextConfig = {
       // Masterclass „reči" preseljen sa kurs stranice na email-gate landing
       { source: "/kursevi/kako-uciti-reci", destination: "/masterclass-reci", permanent: true },
       { source: "/proizvod/polozi-fide-ispit", destination: "/kursevi/polozi-fide", permanent: true },
-      { source: "/proizvod/polozi-goethe-b1-sa-natasom-i-katarinom", destination: "/kursevi/polozi-goethe-b1", permanent: true },
-      { source: "/proizvod/polozi-goethe-c1", destination: "/kursevi/polozi-goethe-c1", permanent: true },
-      { source: "/proizvod/video-polozi-goethe-b2-sa-natasom-i-ankom", destination: "/kursevi", permanent: true },
+      { source: "/proizvod/polozi-goethe-b1-sa-natasom-i-katarinom", destination: "/kurs/polozi-goethe-b1", permanent: true },
+      { source: "/proizvod/polozi-goethe-c1", destination: "/kurs/polozi-goethe-c1", permanent: true },
+      { source: "/proizvod/video-polozi-goethe-b2-sa-natasom-i-ankom", destination: "/kurs/polozi-goethe-b2", permanent: true },
       { source: "/proizvod/grupni-kurs-konverzacije-na-nemackom-jeziku-2", destination: "/grupni-kursevi", permanent: true },
       { source: "/proizvod/kako-da-naucis-reci-na-stranom-jeziku", destination: "/kurs/kako-uciti-reci", permanent: true },
 
