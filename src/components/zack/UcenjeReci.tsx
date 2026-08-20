@@ -283,6 +283,7 @@ export default function UcenjeReci({
           >
             Idemo na proveru
           </button>
+          <Izlaz onIzlaz={() => zavrsi(false)} />
         </div>
       ) : (
         <div className="mt-5">
@@ -318,21 +319,35 @@ export default function UcenjeReci({
             })}
           </ul>
 
-          {/* Bez ovoga dete koje se zaglavi nema izlaz osim dugmeta „nazad" u
-              pretraživaču, a tim putem se kraj nikad ne javi i ponovno slanje
-              izostane. Sve zarađeno ide sa njim; ne prolazi samo kao završeno
-              učenje. */}
-          <button
-            type="button"
-            onClick={() => zavrsi(false)}
-            className={`${DUGME} font-heading mt-6 block min-h-[52px] w-full border-2 text-[17px] font-bold`}
-            style={{ background: "transparent", borderColor: IVICA, color: PRIGUSEN }}
-          >
-            Dosta za sad
-          </button>
+          <Izlaz onIzlaz={() => zavrsi(false)} />
         </div>
       )}
     </div>
+  );
+}
+
+/**
+ * Izlaz iz učenja. Stoji u OBE faze, i na karticama i u proveri.
+ *
+ * Učenje zauzima ceo ekran, pa i link „Sve lekcije" ostaje iza njega. Dok je
+ * ovog dugmeta bilo samo u proveri, dete je kroz pet ekrana kartica (lekcija od
+ * 26 reči ih ima toliko) imalo jedini izlaz preko dugmeta „nazad" u
+ * pretraživaču - a tim putem se kraj nikad ne javi, pa izostane i ponovno
+ * slanje zarađenog i otvaranje kesice.
+ *
+ * Javlja kraj sa „nije prošlo do kraja", što je tačno u obe faze: sve zarađeno
+ * ide sa njim, samo se učenje ne broji kao završeno.
+ */
+function Izlaz({ onIzlaz }: { onIzlaz: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onIzlaz}
+      className={`${DUGME} font-heading mt-6 block min-h-[52px] w-full border-2 text-[17px] font-bold`}
+      style={{ background: "transparent", borderColor: IVICA, color: PRIGUSEN }}
+    >
+      Dosta za sad
+    </button>
   );
 }
 
