@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { buildSalesSystemPrompt, SMILE_MODEL, leadNudgeAddon } from "./sales-prompt";
+import { renderNatasaIndividual } from "./catalog";
 
 describe("leadNudgeAddon", () => {
   const u = (content: string) => ({ role: "user" as const, content });
@@ -249,5 +250,66 @@ describe("buildSalesSystemPrompt", () => {
     it("kaže da mesečno plaćanje ide samo karticom", () => {
       expect(out()).toMatch(/samo.{0,30}kartic/i);
     });
+  });
+});
+
+// Regresija 20.08.2026: lid je dvaput izričito tražio individualne časove sa Natašom,
+// a Smile mu je odgovorio da ih „ne drži lično" - iako ona ima 11 aktivnih 1:1 varijanti
+// i svoje polaznike. Ovi testovi padaju ako se ta tvrdnja ikad vrati u prompt.
+describe("Nataša na individualnim časovima", () => {
+  const natasa =
+    "- Individualni kurs A1.1 | 28.000 RSD | https://www.hartweger.rs/kursevi/individualni-kurs-nemackog-jezika-a11";
+  const out = (n?: string) => buildSalesSystemPrompt("KATALOG", { coupon: false, natasa: n });
+
+  it("nigde ne tvrdi da individualne kurseve vode samo profesorke", () => {
+    expect(out(natasa)).not.toMatch(/individualne kurseve vode profesorke/i);
+    expect(out(natasa)).not.toMatch(/individualne časove ne drži lično/i);
+  });
+
+  it("izričito kaže da Nataša drži 1:1", () => {
+    expect(out(natasa)).toMatch(/Nataša DRŽI individualne/i);
+  });
+
+  it("zabranjuje tvrdnju da se posvetila samo vođenju tima", () => {
+    expect(out(natasa)).toMatch(/NIKAD ne reci ni da Nataša uopšte ne predaje/i);
+  });
+
+  it("ubacuje njene cene i traži mejl zbog dostupnosti", () => {
+    expect(out(natasa)).toContain(natasa);
+    expect(out(natasa)).toMatch(/dostupnost NE ZNAŠ/i);
+    expect(out(natasa)).toMatch(/UVEK zamoli za mejl/i);
+  });
+
+  it("zabranjuje izgovaranje standardne cene kursa kao njene", () => {
+    expect(out(natasa)).toMatch(/NIKAD ne izgovaraj standardnu cenu/i);
+  });
+
+  it("bez podatka o varijantama nema bloka - ne tvrdi ni da drži ni da ne drži", () => {
+    expect(out(undefined)).not.toMatch(/NATAŠINE CENE/i);
+    expect(out("")).not.toMatch(/NATAŠINE CENE/i);
+  });
+
+  it("grupni kursevi i dalje idu profesorkama iz tima", () => {
+    expect(out(natasa)).toMatch(/Grupne kurseve vode profesorke iz tima/i);
+  });
+});
+
+describe("renderNatasaIndividual", () => {
+  it("piše cenu varijante, ne baznu cenu kursa, i sortira pakete po veličini", () => {
+    const txt = renderNatasaIndividual([
+      { courseTitle: "Individualni mesečni paketi", courseSlug: "individualni-mesecni-paketi", packageType: "paket12", price: 48300 },
+      { courseTitle: "Individualni mesečni paketi", courseSlug: "individualni-mesecni-paketi", packageType: "paket4", price: 16100 },
+      { courseTitle: "Individualni kurs A1.1", courseSlug: "individualni-kurs-nemackog-jezika-a11", price: 28000, packageType: null },
+    ]);
+    const lines = txt.split("\n");
+    expect(lines[0]).toContain("Individualni kurs A1.1");
+    expect(lines[0]).toContain("28.000 RSD");
+    expect(lines[1]).toContain("4 časa mesečno");
+    expect(lines[2]).toContain("12 časova mesečno");
+    expect(txt).not.toContain("23.000");
+  });
+
+  it("prazan spisak daje prazan string", () => {
+    expect(renderNatasaIndividual([])).toBe("");
   });
 });

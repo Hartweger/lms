@@ -143,3 +143,74 @@ export async function getCatalogText(admin: SupabaseClient): Promise<string> {
     .order("category", { ascending: true });
   return renderCatalog((data ?? []) as CatalogCourse[]);
 }
+
+/**
+ * Natašina 1:1 ponuda. Do 20.08.2026 prompt je tvrdio da individualne kurseve vode
+ * isključivo profesorke iz tima, pa je Smile lidu koji je dvaput izričito tražio baš
+ * Natašu odgovorio da „individualne časove ne drži lično" - a ona ima svoje aktivne
+ * 1:1 varijante i svoje polaznike. Njena cena je viša od standardne, pa se ne sme
+ * izgovoriti bazna cena kursa: uzima se iz `product_variants`, isti izvor kao checkout.
+ *
+ * Prazan string = nema aktivnih varijanti; tada bloka nema i Smile o njoj ne tvrdi ništa.
+ */
+const NATASA_PROFESSOR_EMAIL = "natasa@hartweger.rs";
+
+export type NatasaVariant = {
+  courseTitle: string;
+  courseSlug: string;
+  packageType: string | null;
+  price: number | null; // RSD
+};
+
+const PACKAGE_LABEL: Record<string, string> = {
+  paket4: "4 časa mesečno",
+  paket8: "8 časova mesečno",
+  paket12: "12 časova mesečno",
+};
+
+export function renderNatasaIndividual(rows: NatasaVariant[]): string {
+  if (rows.length === 0) return "";
+  const order = ["paket4", "paket8", "paket12"];
+  return [...rows]
+    .sort(
+      (a, b) =>
+        a.courseTitle.localeCompare(b.courseTitle, "sr") ||
+        order.indexOf(a.packageType ?? "") - order.indexOf(b.packageType ?? "")
+    )
+    .map((r) => {
+      const label = r.packageType
+        ? `${r.courseTitle} - ${PACKAGE_LABEL[r.packageType] ?? r.packageType}`
+        : r.courseTitle;
+      const cena = r.price != null ? `${r.price.toLocaleString("sr-RS")} RSD` : "cena varira";
+      return `- ${label} | ${cena} | ${SITE_URL}/kursevi/${r.courseSlug}`;
+    })
+    .join("\n");
+}
+
+export async function getNatasaIndividualText(admin: SupabaseClient): Promise<string> {
+  const { data: prof } = await admin
+    .from("user_profiles")
+    .select("id")
+    .eq("email", NATASA_PROFESSOR_EMAIL)
+    .maybeSingle();
+  if (!prof) return "";
+  const { data } = await admin
+    .from("product_variants")
+    .select("package_type, price, courses!inner(title, slug, is_purchasable)")
+    .eq("professor_id", (prof as { id: string }).id)
+    .eq("is_active", true)
+    .eq("courses.is_purchasable", true);
+  const rows = ((data ?? []) as unknown as {
+    package_type: string | null;
+    price: number | null;
+    courses: { title: string; slug: string } | null;
+  }[])
+    .filter((r) => r.courses)
+    .map((r) => ({
+      courseTitle: r.courses!.title,
+      courseSlug: r.courses!.slug,
+      packageType: r.package_type,
+      price: r.price,
+    }));
+  return renderNatasaIndividual(rows);
+}
