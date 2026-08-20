@@ -21,6 +21,11 @@ import { izracunajBrisanje, normalizujDe, pripremiReci } from "@/lib/zack/lekcij
 // Pazi: pošto je `de` ključ, ispravka samog nemačkog oblika JESTE brisanje -
 // stara reč nestaje sa svim sličicama, a nova ulazi prazna.
 //
+// Isti kaskadni put ima i zack_recenice.rec_id: sa rečju nestaju i sve rečenice
+// kojima je ona glavna. Tu detetu ne propada ništa zarađeno, ali propada
+// Natašin rad, i to bez ijednog traga - zato se rečenice broje pre brisanja i
+// pominju i u pitanju pred brisanje i u odgovoru posle njega.
+//
 // NE VRAĆAJ `delete` nad celom lekcijom. To nije čišćenje spiska, to je
 // oduzimanje detetu onoga što je zaradilo.
 //
@@ -139,6 +144,27 @@ export async function POST(request: Request) {
   const zaBrisanjeSet = new Set(zaBrisanje);
   const obrisaceSe = postojece.filter((r) => zaBrisanjeSet.has(r.id)).map((r) => normalizujDe(r.de));
 
+  // Koliko rečenica nosi sa sobom brisanje tih reči. Broji se OVDE, pre ijednog
+  // brisanja, jer posle njega više nema šta da se prebroji - a broj treba i
+  // pitanju pred brisanje i odgovoru posle njega.
+  //
+  // I zack_recenice.rec_id ima ON DELETE CASCADE, isto kao zack_slicice. Dok se
+  // to nije brojalo, ispravka jedne kucaće greške u nemačkom obliku tiho je
+  // odnosila i sve rečenice te reči, a o njima nije pisalo nigde ni reč.
+  let brojRecenica = 0;
+  if (zaBrisanje.length > 0) {
+    const { count, error: greskaRecenica } = await admin
+      .from("zack_recenice")
+      .select("id", { count: "exact", head: true })
+      .in("rec_id", zaBrisanje);
+
+    if (greskaRecenica) {
+      console.error("[zack/lekcija] brojanje rečenica:", greskaRecenica);
+      return greska("Rečenice nisu prebrojane", 500);
+    }
+    brojRecenica = count ?? 0;
+  }
+
   // 5. Ako bi se nešto brisalo a potvrda nije stigla, stajemo ovde. Do sada nije
   // upisano ništa, pa Nataša koja je pogrešila broj lekcije vidi tuđe reči u
   // odgovoru i može da odustane, a u bazi je sve ostalo netaknuto.
@@ -159,10 +185,12 @@ export async function POST(request: Request) {
         potrebnaPotvrda: true,
         obrisaceSe,
         brojSlicica,
+        brojRecenica,
         poruka:
           `Ovaj upis briše ${obrisaceSe.length} reči iz lekcije ${broj}, a sa njima i ` +
-          `${brojSlicica} već zarađenih sličica dece. Ako ovo nije lekcija koju si htela, ` +
-          `proveri broj lekcije. Ako jeste, pošalji ponovo sa potvrdaBrisanja: true.`,
+          `${brojSlicica} već zarađenih sličica dece i ${brojRecenica} rečenica tih reči. ` +
+          `Ako ovo nije lekcija koju si htela, proveri broj lekcije. ` +
+          `Ako jeste, pošalji ponovo sa potvrdaBrisanja: true.`,
       },
       { status: 409 }
     );
@@ -230,5 +258,8 @@ export async function POST(request: Request) {
     upisanoReci: pripremljene.length,
     obrisanoReci: zaBrisanje.length,
     obrisaneReci: obrisaceSe,
+    // Rečenice su otišle sa rečima, kaskadno. Broj stoji uz spisak obrisanih
+    // reči, iz istog razloga iz kog i on: brisanje ne sme da bude nevidljivo.
+    obrisanoRecenica: brojRecenica,
   });
 }

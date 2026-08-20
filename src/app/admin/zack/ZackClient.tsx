@@ -380,9 +380,13 @@ export default function ZackClient({ udzbenici }: Props) {
 
   const [cuvanje, setCuvanje] = useState(false);
   const [greska, setGreska] = useState<string | null>(null);
-  const [rezultat, setRezultat] = useState<
-    { upisanoReci: number; obrisanoReci: number; obrisaneReci: string[] } | null
-  >(null);
+  const [rezultat, setRezultat] = useState<{
+    upisanoReci: number;
+    obrisanoReci: number;
+    obrisaneReci: string[];
+    /** Rečenice koje su kaskadno otišle sa obrisanim rečima. */
+    obrisanoRecenica: number;
+  } | null>(null);
   const [recTekst, setRecTekst] = useState("");
   const [recCuvanje, setRecCuvanje] = useState(false);
   const [recGreska, setRecGreska] = useState<string | null>(null);
@@ -396,6 +400,8 @@ export default function ZackClient({ udzbenici }: Props) {
   const [potvrda, setPotvrda] = useState<{
     obrisaceSe: string[];
     brojSlicica: number;
+    /** Rečenice koje bi kaskadno otišle sa tim rečima. */
+    brojRecenica: number;
     /** Zahtev na koji se potvrda odnosi, doslovno onakav kakav je poslat. */
     teloJson: string;
   } | null>(null);
@@ -509,6 +515,8 @@ export default function ZackClient({ udzbenici }: Props) {
           obrisaceSe: citajSpisakReci(odgovor.obrisaceSe),
           brojSlicica:
             typeof odgovor.brojSlicica === "number" ? odgovor.brojSlicica : 0,
+          brojRecenica:
+            typeof odgovor.brojRecenica === "number" ? odgovor.brojRecenica : 0,
           teloJson: poslato,
         });
         return;
@@ -531,6 +539,8 @@ export default function ZackClient({ udzbenici }: Props) {
         obrisanoReci:
           typeof odgovor.obrisanoReci === "number" ? odgovor.obrisanoReci : 0,
         obrisaneReci: citajSpisakReci(odgovor.obrisaneReci),
+        obrisanoRecenica:
+          typeof odgovor.obrisanoRecenica === "number" ? odgovor.obrisanoRecenica : 0,
       });
     } catch {
       setGreska("Lekcija nije upisana, veza sa serverom je pukla.");
@@ -843,6 +853,17 @@ export default function ZackClient({ udzbenici }: Props) {
             </p>
           )}
 
+          {/* Rečenice odlaze kaskadno, zajedno sa rečju kojoj su glavna reč.
+              Ovde detetu ne propada ništa zarađeno, ali propada tvoj rad, pa
+              mora da piše pre nego što se klikne, a ne posle. */}
+          {potvrda.brojRecenica > 0 && (
+            <p className="mt-2 text-base font-semibold text-[#16161A]">
+              {`Sa tim rečima nestaju i rečenice vezane za njih: ${
+                potvrda.brojRecenica
+              } ${recenicaOblik(potvrda.brojRecenica)}. Ponovni upis spiska reči ih ne vraća - rečenice se upisuju posebno.`}
+            </p>
+          )}
+
           <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center">
             {/* Mirnije i prvo po redu, jer je odustajanje ono što se najčešće
                 stvarno želi kad se ovaj blok pojavi. */}
@@ -918,6 +939,13 @@ export default function ZackClient({ udzbenici }: Props) {
               Sličice koje su deca imala za obrisane reči ne mogu da se vrate ni
               ako ponovo upišeš isti spisak.
             </p>
+            {rezultat.obrisanoRecenica > 0 && (
+              <p className="mt-2 text-base font-semibold text-[#16161A]">
+                {`Sa njima su nestale i rečenice vezane za te reči: ${
+                  rezultat.obrisanoRecenica
+                } ${recenicaOblik(rezultat.obrisanoRecenica)}. Njih vraćaš posebnim upisom rečenica.`}
+              </p>
+            )}
           </div>
         ) : (
           <p className="mt-4 rounded-lg border border-[#0B54C9] bg-[#0B54C9]/10 p-4 text-base font-medium text-[#16161A]">
