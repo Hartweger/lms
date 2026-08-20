@@ -90,8 +90,21 @@ export default async function LekcijaPage({
     // Rečenice ove lekcije hrane učenje rečenica, slagalicu i dopunu, a stare
     // rečenice ponavljanje kroz njih. Idu u ISTI krug čitanja, jer bi zaseban
     // krug samo produžio čekanje pred praznim ekranom.
-    receniceLekcije(lekcija.id),
-    stareReceniceUdzbenika(dete.udzbenik_id, lekcija.broj),
+    //
+    // Oba čitanja hvataju svoju grešku i vraćaju prazno. Bez toga bi zastoj na
+    // ove dve tabele oborio CELU lekciju - album, kesicu, brojač, sve - zbog
+    // dela koji lekcija i inače sme da nema. Ovako kvar pada u korist deteta:
+    // ekran se svede na lekciju bez sekcije „Rečenice", tačno kao lekcija u
+    // koju rečenice još nisu ni upisane, a sve zarađeno ostaje na svom mestu.
+    // Isti razlog zbog kog je i `ucenjeProlazi` ispod ograđen.
+    receniceLekcije(lekcija.id).catch((e) => {
+      console.error("[zack/lekcija] čitanje rečenica lekcije:", e);
+      return [];
+    }),
+    stareReceniceUdzbenika(dete.udzbenik_id, lekcija.broj).catch((e) => {
+      console.error("[zack/lekcija] čitanje starih rečenica:", e);
+      return [];
+    }),
   ]);
 
   // Prođene faze učenja se čitaju ODVOJENO, jer se jedino ovde greška ne sme
