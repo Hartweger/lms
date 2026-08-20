@@ -631,6 +631,11 @@ describe("napraviGrupe", () => {
     expect(napraviGrupe(spisak(7)).map((g) => g.length)).toEqual([4, 3]);
   });
 
+  it("stvarne veličine lekcija ne ostavljaju patrljak na kraju", () => {
+    expect(napraviGrupe(spisak(26)).map((g) => g.length)).toEqual([6, 5, 5, 5, 5]);
+    expect(napraviGrupe(spisak(31)).map((g) => g.length)).toEqual([6, 5, 5, 5, 5, 5]);
+  });
+
   it("prazan spisak daje prazan niz grupa", () => {
     expect(napraviGrupe([])).toEqual([]);
   });
@@ -680,17 +685,23 @@ export const PROVERA_PITANJA = 3;
 /**
  * Reči lekcije u grupama za učenje. Redosled se NE meša: redni_broj je
  * didaktički redosled koji je autor lekcije odredio. Grupe su ujednačene
- * (7 reči je 4+3, ne 6+1), da poslednja grupa ne bude patrljak.
+ * (7 reči je 4+3, ne 6+1), da poslednja grupa ne bude patrljak: višak preko
+ * ravnomerne podele se deli prvim grupama, po jedna reč, pa se veličine
+ * razlikuju najviše za jedan (26 reči je 6+5+5+5+5, ne 6+6+6+6+2).
  */
 export function napraviGrupe(reci: readonly Rec[]): Rec[][] {
   if (reci.length === 0) return [];
   const poRedu = [...reci].sort((a, b) => a.redni_broj - b.redni_broj);
   const brojGrupa = Math.ceil(poRedu.length / GRUPA_NAJVISE);
-  const osnovna = Math.ceil(poRedu.length / brojGrupa);
+  const osnovna = Math.floor(poRedu.length / brojGrupa);
+  const visak = poRedu.length % brojGrupa;
 
   const grupe: Rec[][] = [];
-  for (let i = 0; i < poRedu.length; i += osnovna) {
-    grupe.push(poRedu.slice(i, i + osnovna));
+  let od = 0;
+  for (let g = 0; g < brojGrupa; g++) {
+    const duzina = osnovna + (g < visak ? 1 : 0);
+    grupe.push(poRedu.slice(od, od + duzina));
+    od += duzina;
   }
   return grupe;
 }
