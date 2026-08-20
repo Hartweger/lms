@@ -1454,6 +1454,27 @@ export default function LekcijaClient({
         </section>
       )}
 
+      {/* ── Zašto je zaključano ──────────────────────────────────────────────
+          Kad članstvo ne važi, razlog stoji JEDNOM, iznad svih sekcija - dakle
+          pre prve zaključane pločice koju dete uopšte vidi. Ranije je stajao
+          tek kod vežbi, pa je dete prvo naletalo na katance u Učenju, bez ijedne
+          reči o tome zašto. Katanac bez razloga nije mirno obaveštenje.
+
+          Ista mirna rečenica koju vraćaju i rute: bez cene, bez krivice i bez
+          ijednog dugmeta za plaćanje - novac je roditeljska strana, dete ovde
+          samo vidi da igre čekaju.
+
+          KATANAC ČLANSTVA IMA PREDNOST NAD KATANCEM UČENJA. Dok stoji ovaj
+          razlog, nijedna sekcija ispod ne sme da doda svoj („Vežbe se
+          otključavaju kad jednom pređeš Učenje.", „Otključava se kad jednom
+          pređeš Nauči rečenice."). Jedan katanac, jedan razlog: dva razloga za
+          istu pločicu su jedan razlog previše. */}
+      {zakljucano && (
+        <div className="mb-6">
+          <RedKatanca>{PORUKA_ZAKLJUCANO}</RedKatanca>
+        </div>
+      )}
+
       {/* ── Učenje ───────────────────────────────────────────────────────────
           UVEK PRVO i uvek otvoreno. Reč se prvo vidi, pa tek onda vežba.
           „Nauči reči" ostaje otvoreno i pošto je jednom prođeno: povratak na
@@ -1465,8 +1486,8 @@ export default function LekcijaClient({
             U ovoj lekciji još nema gradiva, pa nema ni šta da se uči. Vrati se malo kasnije.
           </RedPrazno>
         ) : zakljucano ? (
-          /* Zašto je zaključano piše niže, kod vežbi - jedna rečenica za sve
-             tri sekcije. Ista poruka triput bila bi opomena, a ovo je samo
+          /* Zašto je zaključano piše IZNAD, jednom za sve tri sekcije. Ista
+             poruka uz svaku sekciju bila bi opomena, a ovo je samo
              obaveštenje. */
           <ul className="grid grid-cols-2 gap-3">
             {imaReci && (
@@ -1520,19 +1541,17 @@ export default function LekcijaClient({
       <section className="mb-8">
         <NaslovSekcije>Vežbe</NaslovSekcije>
         {zakljucano ? (
-          <>
-            {/* Jedna mirna rečenica za sve pločice - ista koju vraćaju i rute.
-                Bez cene, bez krivice i bez ijednog dugmeta za plaćanje: novac
-                je roditeljska strana, dete ovde samo vidi da igre čekaju. */}
-            <RedKatanca>{PORUKA_ZAKLJUCANO}</RedKatanca>
-            <ul className="mt-3 grid grid-cols-2 gap-3">
-              {IGRE.map((vrsta) => (
-                <li key={vrsta}>
-                  <PlocicaZakljucana vrsta={vrsta} />
-                </li>
-              ))}
-            </ul>
-          </>
+          /* Razlog stoji iznad svih sekcija, pa se ovde ne ponavlja. Ova grana
+             namerno dolazi PRE grane sa čekanjem učenja: dok važi katanac
+             članstva, red „Vežbe se otključavaju kad jednom pređeš Učenje." se
+             ne crta, jer bi detetu ponudio drugi razlog za isti katanac. */
+          <ul className="grid grid-cols-2 gap-3">
+            {IGRE.map((vrsta) => (
+              <li key={vrsta}>
+                <PlocicaZakljucana vrsta={vrsta} />
+              </li>
+            ))}
+          </ul>
         ) : reci.length === 0 ? (
           <RedPrazno>
             U ovoj lekciji još nema reči, pa nema ni šta da se igra. Vrati se malo kasnije.
@@ -1576,6 +1595,11 @@ export default function LekcijaClient({
         <section className="mb-8">
           <NaslovSekcije>Rečenice</NaslovSekcije>
           {zakljucano ? (
+            /* Sekcija OSTAJE na ekranu, samo pod katancem - isto kao Učenje i
+               Vežbe. Da nestane, detetu bi pod katancem falio deo lekcije koji
+               inače postoji, a to izgleda kao da mu je nešto oduzeto. Razlog
+               piše iznad, pa se ni ovde ne ponavlja, i red o učenju rečenica se
+               u ovoj grani ne crta. */
             <ul className="grid grid-cols-2 gap-3">
               {imaSlagalicu && (
                 <li>
@@ -1655,7 +1679,7 @@ export default function LekcijaClient({
           {/* Tamna kartica: mini najava Milionerovog TV studija, plava noć sa
               zlatnim šestougaonikom. Već po boji se vidi da OVO nije igra za
               sličice. Pod katancem ista kartica nije dugme i kaže „Zaključano" -
-              zašto, već piše iznad, kod igara. */}
+              zašto, već piše iznad, jednom za ceo ekran. */}
           {zakljucano ? (
             <div
               className="flex min-h-[76px] w-full items-center gap-3.5 rounded-2xl border-[3px] px-4 py-4 text-left opacity-90"
