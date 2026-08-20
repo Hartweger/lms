@@ -2166,6 +2166,24 @@ pa u `naKrajIgre` uslov glasi:
 
 - [ ] **Step 4: `LekcijaClient.tsx` - novi raspored sekcija**
 
+VAŽNO (nalaz pregleda pozadinskog sloja): rečenični blok se NE sme kačiti na
+`recenice.length > 0`. Rečenica duža od 6 pločica automatski dobija
+`samo_dopuna`, a učenje rečenica je prikaz slagalice - lekcija u kojoj su SVE
+rečenice duge ima rečenica, ali nema nijedno pitanje za slaganje. Tada bi
+dete dobilo pločicu „Nauči rečenice" koja otvara praznu partiju, a Dopuna bi
+zauvek ostala pod katancem iza faze koja se ne može proći.
+
+Zato:
+- za prikaz UČENJA rečenica i SLAGALICE gleda se broj rečenica podobnih za
+  slaganje: `recenice.some((r) => podobnaZaSlagalicu(r))` (uvezi iz
+  `lib/zack/recenice.ts`);
+- DOPUNA se prikazuje kad ima bar jedne rečenice podobne za dopunu, i njen
+  katanac pada ako u lekciji nema nijedne slagalične rečenice (nema faze
+  učenja koja bi je otključala) - u tom slučaju dopuna stoji otključana
+  odmah, jer se detetu ništa ne zaključava iza nemogućeg uslova;
+- prazna partija učenja rečenica se broji kao PROĐENA (`prosloSve`), da
+  katanac ne ostane zauvek.
+
 Postojeća sekcija „Igre" se deli na tri sekcije. Redosled na ekranu:
 kesica/ruka/poruke (netaknuto) → naslov → pravilo → **Učenje** → **Vežbe** →
 **Rečenice** → Milioner → Album.
