@@ -39,6 +39,11 @@ describe("napraviGrupe", () => {
     expect(napraviGrupe(spisak(7)).map((g) => g.length)).toEqual([4, 3]);
   });
 
+  it("stvarne veličine lekcija ne ostavljaju patrljak na kraju", () => {
+    expect(napraviGrupe(spisak(26)).map((g) => g.length)).toEqual([6, 5, 5, 5, 5]);
+    expect(napraviGrupe(spisak(31)).map((g) => g.length)).toEqual([6, 5, 5, 5, 5, 5]);
+  });
+
   it("prazan spisak daje prazan niz grupa", () => {
     expect(napraviGrupe([])).toEqual([]);
   });
