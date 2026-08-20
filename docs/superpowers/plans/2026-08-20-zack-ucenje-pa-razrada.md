@@ -1571,8 +1571,9 @@ export function Dopuna({
 }
 ```
 
-Dodaj i animaciju tresenja u globalni CSS (`src/app/globals.css`, uz postojeće
-zack animacije):
+Animacija tresenja NE ide u `globals.css`. Jedina zack animacija stoji u
+`src/app/zack/layout.tsx`, unutar `@media (prefers-reduced-motion:
+no-preference)` - dodaj je u ISTI blok, da i ona poštuje smanjeno kretanje:
 
 ```css
 @keyframes zack-tresi {
@@ -1580,7 +1581,11 @@ zack animacije):
   25% { transform: translateX(-5px); }
   75% { transform: translateX(5px); }
 }
+.zack-tresi { animation: zack-tresi 0.4s ease-in-out; }
 ```
+
+Uz reduced-motion pločica se onda ne trese, nego se samo vrati - poruka je
+ista, bez pokreta.
 
 - [ ] **Step 2: Ugradi u ljusku `Igra.tsx`**
 
