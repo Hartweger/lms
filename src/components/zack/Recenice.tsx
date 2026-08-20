@@ -10,8 +10,10 @@
 // -----------------------
 // Ime brenda samo na uspehu, greška neutralno „Ups!" i ODMAH tačan odgovor -
 // oba ispisuje ljuska. Ovde se ne piše nijedna reč prekora, a u vođenom režimu
-// (učenje rečenica) greške nema uopšte: pogrešna pločica se zatrese i vrati, i
-// to je sve što se desi.
+// (učenje rečenica) greške nema uopšte: pločica koja je stigla prerano se
+// zatrese, vrati i mirno kaže „Ta reč ide kasnije." - i to je sve što se desi.
+// Ni ta poruka ni isticanje pločice ne uzimaju crvenu: crvena je u vežbama boja
+// pogrešnog odgovora, a ovde pogrešnog odgovora nema.
 import { useEffect, useRef, useState } from "react";
 import type { Pitanje } from "@/lib/zack/pitanja";
 import { proveriSlaganje } from "@/lib/zack/recenice";
@@ -55,11 +57,36 @@ function velikoPrvo(s: string): string {
 /**
  * Odziv za čitač ekrana. Pločica koja se tapne nestaje iz spiska i osvane u
  * redu, pa fokus ostane bez svog dugmeta - bez ovoga dete koje sluša ne bi
- * imalo odakle da zna šta se desilo.
+ * imalo odakle da zna šta se desilo. Ovde ide SAMO tok slaganja („Do sada:
+ * ..."); ono što ima šta da kaže i oku stoji u `Napomena`.
  */
 function Najava({ tekst }: { tekst: string }) {
   return (
     <p aria-live="polite" className="sr-only">
+      {tekst}
+    </p>
+  );
+}
+
+/**
+ * Mirna linija ispod pločica, u vođenom slaganju.
+ *
+ * ONO ŠTO BOJA KAŽE MORA DA POSTOJI I KAO TEKST. Pločica koja je stigla
+ * prerano se vraća, a u vođenom režimu ljuskina traka odziva stoji prazna (tu
+ * se ništa ne javlja dok rečenica nije cela složena). Dok je poruka išla samo u
+ * skriveni deo za čitač ekrana, detetu koje gleda ostajali su boja i pokret - a
+ * uz smanjeno kretanje ni pokreta nema, pa je ostajala gola boja.
+ *
+ * Visina je rezervisana, kao i kod trake odziva u ljusci, da ekran ne poskoči
+ * kad se poruka pojavi i dete ne promaši pločicu koja je odskočila.
+ */
+function Napomena({ tekst }: { tekst: string }) {
+  return (
+    <p
+      aria-live="polite"
+      className="mt-3 flex min-h-[1.75rem] items-center justify-center text-center text-[15px] leading-snug"
+      style={{ color: PRIGUSEN }}
+    >
       {tekst}
     </p>
   );
@@ -97,6 +124,10 @@ export function Slagalica({
   const [tresem, setTresem] = useState<number | null>(null);
   const [odgovoreno, setOdgovoreno] = useState(false);
   const [najava, setNajava] = useState("");
+  /** Vidljiva mirna poruka o pločici koja je stigla prerano. */
+  const [napomena, setNapomena] = useState("");
+  /** Da li je složena rečenica tačna. `null` dok se ne odgovori. */
+  const [slozenoTacno, setSlozenoTacno] = useState<boolean | null>(null);
 
   // Odgovor se šalje TAČNO jednom. Stanje `odgovoreno` stiže tek u sledećem
   // renderu, pa dva brza tapa po „Proveri" prođu kroz istu proveru - kao dvaput
@@ -169,9 +200,9 @@ export function Slagalica({
       if (ocekivana !== undefined && pitanje.plocice[i].toLocaleLowerCase("de") !== ocekivana) {
         setTresem(i);
         // Tresenje je pokret, a pokret se ne čuje i uz smanjeno kretanje se ni
-        // ne dešava. Zato ista poruka ide i kao tekst - mirno, kao uputstvo, ne
-        // kao ocena.
-        setNajava("Ta reč ide kasnije.");
+        // ne dešava. Zato ista poruka ide i kao VIDLJIV tekst - mirno, kao
+        // uputstvo, ne kao ocena.
+        setNapomena("Ta reč ide kasnije.");
         if (tajmer.current) clearTimeout(tajmer.current);
         tajmer.current = setTimeout(() => setTresem(null), TRESE_SE);
         return;
@@ -181,10 +212,15 @@ export function Slagalica({
     const novi = [...uRedu, i];
     setURedu(novi);
     setNajava(doSada(novi));
+    // Pločica je legla, pa poruka o prethodnoj više nema šta da kaže. Bez ovog
+    // brisanja bi ista rečenica ostala da visi i posle uspeha, a čitač ekrana
+    // ne bi ponovio poruku kad sledeća pločica opet stigne prerano.
+    setNapomena("");
 
     if (vodjeno && novi.length === pitanje.plocice.length) {
       poslato.current = true;
       setOdgovoreno(true);
+      setSlozenoTacno(true);
       naVodjenoSlozena?.(pitanje);
     }
   };
@@ -203,9 +239,11 @@ export function Slagalica({
     poslato.current = true;
     setOdgovoreno(true);
     const slozeno = uRedu.map((i) => pitanje.plocice[i]);
+    const jeTacno = proveriSlaganje(slozeno, pitanje.tacan);
+    setSlozenoTacno(jeTacno);
     // Tačan tekst za „Ups!" je CELA tačna rečenica: greška se ne prebacuje,
     // nego se odmah pokaže kako rečenica glasi.
-    naOdgovor(proveriSlaganje(slozeno, pitanje.tacan), cela, pitanje);
+    naOdgovor(jeTacno, cela, pitanje);
   };
 
   return (
@@ -273,6 +311,23 @@ export function Slagalica({
             {pitanje.znak}
           </span>
         </div>
+
+        {/* Tačno složena rečenica se pokaže onako kako se PIŠE: veliko početno
+            slovo i završni znak. Pločice namerno idu malim slovom da ne odaju
+            rešenje, pa je ispravan zapis do sada postojao samo uz „Ups!" - put
+            nagrade je bio jedini na kom dete nikad ne vidi ispravan nemački.
+            Kad odgovor nije tačan, ovde se ne crta ništa: tačnu rečenicu tada
+            već ispisuje traka odziva u ljusci, a zeleni tekst ispod pogrešno
+            složenog reda bi tvrdio da je taj red tačan. */}
+        {slozenoTacno === true && (
+          <p
+            lang="de"
+            className="font-heading mt-3 text-[20px] font-bold leading-snug [overflow-wrap:anywhere]"
+            style={{ color: ZELENA }}
+          >
+            {cela}
+          </p>
+        )}
       </div>
 
       <ul
@@ -294,9 +349,16 @@ export function Slagalica({
                 disabled={zakljucano || odgovoreno}
                 aria-label={`Dodaj reč ${tekst}`}
                 className={`${DUGME} font-heading min-h-[56px] border-2 px-4 py-3 text-[19px] font-bold motion-safe:transition-transform motion-safe:duration-100 motion-safe:active:scale-[0.97]`}
+                // Vraćena pločica se NAMERNO ne boji crveno. Rozikasta podloga
+                // i crvena ivica su u vežbama boja pogrešnog odgovora, a ovde
+                // je faza u kojoj greške nema: pločica koja je stigla prerano
+                // nije promašaj nego reč koja još nije na redu. Crvena bi na
+                // tom mestu bila presuda tamo gde presude nema. Zato neutralno
+                // isticanje - ivica u boji mastila - a šta se desilo kaže
+                // rečenica ispod pločica.
                 style={{
-                  background: trese ? "#FBE7E5" : PAPIR,
-                  borderColor: trese ? CRVENA : IVICA,
+                  background: PAPIR,
+                  borderColor: trese ? MASTILO : IVICA,
                   color: MASTILO,
                 }}
               >
@@ -306,6 +368,11 @@ export function Slagalica({
           );
         })}
       </ul>
+
+      {/* Samo u vođenom režimu: tamo je ovo jedino mesto na kom se vidi zašto
+          se pločica vratila. U vežbi se pločice ne odbijaju, pa bi prazna linija
+          bila samo rupa u rasporedu. */}
+      {vodjeno && <Napomena tekst={napomena} />}
 
       {/* Vođeni režim nema „Proveri": tamo je svaka pločica već proverena pri
           tapu, pa se rečenica završi sama kad poslednja legne na svoje mesto. */}
