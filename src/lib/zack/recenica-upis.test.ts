@@ -89,6 +89,31 @@ describe("pripremiRecenice", () => {
     }
   });
 
+  // Isto pravilo kao za izuzetak u lekcija-upis.ts: `"da" === true` je netačno,
+  // pa bi kolona iz tabele tiho isključila dopunu-samo za ceo spisak.
+  it("odbija samoDopuna koja nije tačno ili netačno", () => {
+    const ishod = pripremiRecenice([red({ samoDopuna: "da" })], reciLekcije);
+    expect(ishod.ok).toBe(false);
+    if (!ishod.ok) {
+      expect(ishod.greska).toContain("Rečenica broj 1");
+      expect(ishod.greska).toContain("tačno ili netačno");
+    }
+  });
+
+  it("samoDopuna sme da izostane i tada je netačno", () => {
+    const bezOznake: Record<string, unknown> = { ...red() };
+    delete bezOznake.samoDopuna;
+    const ishod = pripremiRecenice([bezOznake], reciLekcije);
+    expect(ishod.ok).toBe(true);
+    if (ishod.ok) expect(ishod.recenice[0].samo_dopuna).toBe(false);
+  });
+
+  it("samoDopuna tačno označi rečenicu za dopunu", () => {
+    const ishod = pripremiRecenice([red({ samoDopuna: true })], reciLekcije);
+    expect(ishod.ok).toBe(true);
+    if (ishod.ok) expect(ishod.recenice[0].samo_dopuna).toBe(true);
+  });
+
   it("odbija prazan spisak", () => {
     expect(pripremiRecenice([], reciLekcije).ok).toBe(false);
   });

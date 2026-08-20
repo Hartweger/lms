@@ -150,6 +150,21 @@ export function pripremiRecenice(
       };
     }
 
+    // Oznaka mora biti pravi boolean, isto kao izuzetak u lekcija-upis.ts.
+    // `"da" === true` je netačno, pa bi kolona sa tekstom umesto kvačice tiho
+    // vratila svaku rečenicu u slagalicu - i to baš one koje autor iz slagalice
+    // namerno vadi, jer imaju više ispravnih redosleda.
+    let samoDopuna = false;
+    if (r.samoDopuna !== undefined && r.samoDopuna !== null) {
+      if (typeof r.samoDopuna !== "boolean") {
+        return {
+          ok: false,
+          greska: `Rečenica broj ${red}: samo dopuna mora biti tačno ili netačno`,
+        };
+      }
+      samoDopuna = r.samoDopuna;
+    }
+
     // Broj pločica se računa direktno preko `rastaviRecenicu`, jer bi
     // `podobnaZaSlagalicu` tražila ceo `Recenica` zapis (sa id-jem koji ovde
     // još ne postoji); pravilo je isto, samo bez izmišljanja objekta.
@@ -163,7 +178,7 @@ export function pripremiRecenice(
       praznina,
       distraktori,
       rec_id,
-      samo_dopuna: r.samoDopuna === true || vanSlagalice,
+      samo_dopuna: samoDopuna || vanSlagalice,
     });
   }
 
