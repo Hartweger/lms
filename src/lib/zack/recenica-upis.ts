@@ -99,8 +99,12 @@ export function pripremiRecenice(
     // izvadi, a sa dve bi obe bile ispravan odgovor a priznala bi se samo jedna.
     // `brojPojavljivanja` gleda pločice bez repa („Komm,“ je „komm“) i ne
     // razlikuje veliko od malog slova.
+    // Praznina ide kroz isto sređivanje kao `de`, i to iz istog razloga: „ö“
+    // spojeno (NFC) i „ö“ razdvojeno (NFD) izgledaju isto a nisu isti tekst.
+    // Bez ovoga bi oblik koji očigledno stoji u rečenici bio prijavljen kao da
+    // se javlja 0 puta, pa bi ispravan red bio odbijen bez razumljivog razloga.
     const { reci } = rastaviRecenicu(de);
-    const praznina = r.praznina.trim();
+    const praznina = normalizujDe(r.praznina);
     const puta = brojPojavljivanja(reci, praznina);
     if (puta !== 1) {
       return {
@@ -129,7 +133,11 @@ export function pripremiRecenice(
       if (!jeNeprazanTekst(d)) {
         return { ok: false, greska: `Rečenica broj ${red}: pogrešan oblik je prazan` };
       }
-      const oblik = d.trim();
+      // Isto sređivanje kao za prazninu, jer se ovde poredi sa njom: pogrešan
+      // oblik koji je samo drugačiji zapis tačnog inače prođe proveru i detetu
+      // da dva ista dugmeta, od kojih se priznaje samo jedno - a promašaj
+      // odnosi srce za odgovor koji je zapravo tačan.
+      const oblik = normalizujDe(d);
       const kljuc = oblik.toLocaleLowerCase("de");
       if (videniOblici.has(kljuc)) {
         return {

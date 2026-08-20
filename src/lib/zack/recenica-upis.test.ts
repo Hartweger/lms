@@ -117,4 +117,37 @@ describe("pripremiRecenice", () => {
   it("odbija prazan spisak", () => {
     expect(pripremiRecenice([], reciLekcije).ok).toBe(false);
   });
+
+  // Nalepljeno iz druge aplikacije ume da pomeša zapise istog slova: „ö“ kao
+  // jedan znak (NFC) i „ö“ kao o + kvačica (NFD) na ekranu izgledaju isto, a
+  // kao tekst su različiti. Zato praznina i pogrešni oblici moraju da prođu
+  // isto sređivanje kao rečenica, inače kvar stigne do deteta.
+  /** „möchte“ sa ö kao jednim znakom (NFC). */
+  const OE_NFC = "m\u00f6chte";
+  /** Isto to na ekranu, ali o + kvačica, dva znaka (NFD). */
+  const OE_NFD = "mo\u0308chte";
+  const reciMochten = new Map([["m\u00f6chten", "id-mochten"]]);
+  const redMochte = (delovi: Partial<Record<string, unknown>> = {}) => ({
+    de: `Ich ${OE_NFC} essen.`,
+    sr: "Želim da jedem.",
+    praznina: OE_NFC,
+    distraktori: ["mag", "magst", "wollen"],
+    glavna: "m\u00f6chten",
+    ...delovi,
+  });
+
+  it("prima prazninu zapisanu drugim Unicode zapisom nego rečenica", () => {
+    const ishod = pripremiRecenice([redMochte({ praznina: OE_NFD })], reciMochten);
+    expect(ishod.ok).toBe(true);
+    if (ishod.ok) expect(ishod.recenice[0].praznina).toBe(OE_NFC);
+  });
+
+  it("odbija pogrešan oblik koji je isti kao praznina, samo u drugom zapisu", () => {
+    const ishod = pripremiRecenice(
+      [redMochte({ distraktori: [OE_NFD, "mag", "magst"] })],
+      reciMochten
+    );
+    expect(ishod.ok).toBe(false);
+    if (!ishod.ok) expect(ishod.greska).toContain("jednak tačnom odgovoru");
+  });
 });
