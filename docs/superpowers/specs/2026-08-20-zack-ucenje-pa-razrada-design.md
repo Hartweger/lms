@@ -86,7 +86,7 @@ Novi tipovi u `Igra`: `"ucenje-reci"`, `"ucenje-recenica"`, `"slagalica"`,
 Tipovi rečeničnih pitanja:
 
 ```
-{ igra: "slagalica"; recenicaId; recId; plocice: string[]; tacan: string; znak: string; prevod: string }
+{ igra: "slagalica"; recenicaId; recId; plocice: string[]; tacan: string[]; znak: string; prevod: string }
 { igra: "dopuna"; recenicaId; recId; saPrazninom: string; opcije: string[]; tacan: string; prevod: string }
 ```
 
