@@ -11,9 +11,12 @@ import {
   greskeReci,
   nadjiDete,
   neotvoreneKesice,
+  receniceLekcije,
   reciLekcije,
   rekordZaIgru,
   stareReciUdzbenika,
+  stareReceniceUdzbenika,
+  ucenjeProlazi,
   zapisiSlicica,
 } from "@/lib/zack/upiti";
 import { UskiStub } from "../../../Ukras";
@@ -51,7 +54,18 @@ export default async function LekcijaPage({
   if (error) throw new Error(`Ne mogu da pročitam lekciju: ${error.message}`);
   if (!lekcija) notFound();
 
-  const [reci, zapisi, kesice, rekordSkakaca, gramatika, sveStare, greske, otkljucano] = await Promise.all([
+  const [
+    reci,
+    zapisi,
+    kesice,
+    rekordSkakaca,
+    gramatika,
+    sveStare,
+    greske,
+    otkljucano,
+    recenice,
+    stareRecenice,
+  ] = await Promise.all([
     reciLekcije(lekcija.id),
     // zapisiSlicica vraća SAMO isporučene sličice, pa album ne može da oda reč
     // koja još čeka u neotvorenoj kesici.
@@ -73,7 +87,24 @@ export default async function LekcijaPage({
     // i Milioner - album i sve zarađeno ostaju. Rute isto proveravaju na
     // serveru; ovde je provera za izgled ekrana.
     clanstvoAktivno(dete.id),
+    // Rečenice ove lekcije hrane učenje rečenica, slagalicu i dopunu, a stare
+    // rečenice ponavljanje kroz njih. Idu u ISTI krug čitanja, jer bi zaseban
+    // krug samo produžio čekanje pred praznim ekranom.
+    receniceLekcije(lekcija.id),
+    stareReceniceUdzbenika(dete.udzbenik_id, lekcija.broj),
   ]);
+
+  // Prođene faze učenja se čitaju ODVOJENO, jer se jedino ovde greška ne sme
+  // propagirati: `ucenjeProlazi` baca kao i svaki upit, a pad tog upita ne sme
+  // da zaključa vežbe detetu koje je učenje odavno prešlo.
+  let prolazi: Set<string>;
+  try {
+    prolazi = await ucenjeProlazi(dete.id, lekcija.id);
+  } catch (e) {
+    console.error("[zack/lekcija] čitanje prolaza:", e);
+    // Kvar pada u korist deteta: bez ovog podatka vežbe stoje OTKLJUČANE.
+    prolazi = new Set(["reci", "recenice"]);
+  }
 
   const sada = new Date();
 
@@ -96,6 +127,10 @@ export default async function LekcijaPage({
         lekcija={lekcija}
         reci={reci}
         stareReci={stareReci}
+        recenice={recenice}
+        stareRecenice={stareRecenice}
+        pocetniProsaoReci={prolazi.has("reci")}
+        pocetniProsaoRecenice={prolazi.has("recenice")}
         pocetnoStanje={stanjeAlbuma(reci, zapisi, sada)}
         neotvorenaKesica={kesice.get(lekcija.id) ?? 0}
         pocetniRekord={rekordSkakaca}

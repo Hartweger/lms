@@ -1,7 +1,20 @@
 "use client";
 
 // Ekran lekcije. Ovo je jedini ekran koji dete stvarno koristi svaki dan, pa se
-// ovde spaja sve: podsetnik na pravilo, pet igara, kesica i album.
+// ovde spaja sve: podsetnik na pravilo, učenje, vežbe, rečenice, kesica i album.
+//
+// REDOSLED: PRVO UČENJE, PA RAZRADA
+// ---------------------------------
+// Lekcija ide istim redom kojim se uči. Sekcija „Učenje" stoji prva i uvek je
+// otvorena; „Vežbe" i „Rečenice" iza nje čekaju da se odgovarajuća faza jednom
+// pređe. Ta dva katanca su MIRNA OBAVEŠTENJA, ne kazne:
+//
+// - nijedan ne oduzima ništa - i pod katancem se sve zarađeno vidi u albumu;
+// - prođena faza se ne poništava, pa povratak na učenje ništa ne zaključava;
+// - katanac se nikad ne veže za uslov koji se ne može ispuniti: lekcija bez
+//   pločičnih rečenica nema fazu učenja rečenica, pa se dopuna otvara odmah;
+// - kad se prolaz ne može ni pročitati ni upisati, ide se u korist deteta -
+//   otključano.
 //
 // VRHOVNO PRAVILO
 // ---------------
@@ -34,11 +47,13 @@ import Isticanje from "@/components/zack/Isticanje";
 import Kesica, { CIK_CAK } from "@/components/zack/Kesica";
 import Milioner from "@/components/zack/Milioner";
 import Slicica from "@/components/zack/Slicica";
+import UcenjeReci from "@/components/zack/UcenjeReci";
 import { brojac, type StavkaAlbuma } from "@/lib/zack/album";
 import { PORUKA_ZAKLJUCANO } from "@/lib/zack/clanstvo";
 import type { Igra as VrstaIgre, IgraReci as VrstaIgreReci } from "@/lib/zack/pitanja";
 import { dokleSePopela, opisSprata } from "@/lib/zack/pojas";
 import type { StaraRec } from "@/lib/zack/ponavljanje";
+import { podobnaZaDopunu, podobnaZaSlagalicu, type Recenica } from "@/lib/zack/recenice";
 import type { Rec } from "@/lib/zack/rec";
 import {
   CRVENA,
@@ -64,16 +79,18 @@ type Lekcija = {
 };
 
 /**
- * Redosled igara na ekranu. Diktat je ubedljivo najteži i namerno stoji
- * poslednji: dete koje prvo naleti na njega odustane pre nego što proba ostalo.
- * Parovi su najlakši ulaz, pa idu prvi.
+ * Redosled pločica u sekciji „Vežbe". Diktat je ubedljivo najteži i namerno
+ * stoji poslednji: dete koje prvo naleti na njega odustane pre nego što proba
+ * ostalo. Parovi su najlakši ulaz, pa idu prvi.
  *
  * Skakač stoji ODMAH iznad spiskovne verzije istog pitanja. Isti rod, dva tela:
  * ko hoće da igra bira skakač, ko hoće da brzo prođe reči bira spisak.
  *
- * Spisak drži samo igre koje se prave od REČI, jer se sve odavde predaju ljusci
- * `Igra`, a ona rečenična pitanja nema čime da nacrta. Rečenične igre kad dođu
- * dobijaju svoj spisak i svoju ljusku.
+ * Tip je namerno UŽI od onog koji ljuska `Igra` prima. Ljuska sada ume da
+ * nacrta i rečenično pitanje, pa stanje `igra` drži ceo `VrstaIgre` - ali ovaj
+ * spisak je spisak ŠEST VEŽBI OD REČI i rečenična igra u njemu nema šta da
+ * traži: „Nauči rečenice" pripada Učenju, a slagalica i dopuna Rečenicama, i
+ * nijedna od njih ne sme da se pojavi među vežbama koje čekaju na učenje reči.
  */
 const IGRE: readonly VrstaIgreReci[] = [
   "parovi",
@@ -402,8 +419,116 @@ function VinjetaOlovka() {
 }
 
 /**
- * Koja vinjeta ide uz koju igru. Redosled prikaza i dalje drži `IGRE`; ovde
+ * Nauči reči: kartice sa trakom roda, iste kao u samom učenju. Traka nikad ne
+ * ide sama u jednoj boji - jedna boja bi bila tvrdnja o rodu - pa su kartice
+ * tri, ceo komplet der, die i das, razmaknute da se sve tri trake vide.
+ */
+function VinjetaKartica() {
+  return (
+    <span className="relative block h-12 w-16">
+      {[
+        { boja: PLAVA, levo: 0, vrh: 9, ugao: -7 },
+        { boja: CRVENA_ZNAK, levo: 15, vrh: 5, ugao: 2 },
+        { boja: ZELENA_DAS, levo: 31, vrh: 9, ugao: 8 },
+      ].map((k) => (
+        <span
+          key={k.boja}
+          className="absolute block overflow-hidden rounded-[6px] border-2 shadow-[0_1px_3px_rgba(22,22,26,0.25)]"
+          style={{
+            left: `${k.levo}px`,
+            top: `${k.vrh}px`,
+            width: "25px",
+            height: "34px",
+            background: PAPIR,
+            borderColor: "#FFFFFF",
+            transform: `rotate(${k.ugao}deg)`,
+          }}
+        >
+          <span className="block h-[6px] w-full" style={{ background: k.boja }} />
+          {/* Dve crte umesto teksta: reč se na ovoj veličini ne bi pročitala. */}
+          <span
+            className="mx-auto mt-[7px] block h-[3px] w-[14px] rounded-full"
+            style={{ background: IVICA }}
+          />
+          <span
+            className="mx-auto mt-[4px] block h-[3px] w-[9px] rounded-full"
+            style={{ background: IVICA }}
+          />
+        </span>
+      ))}
+    </span>
+  );
+}
+
+/** Jedna pločica reči: papir sa ivicom mastila i crtom koja glumi reč. */
+function PlocicaReci({ ugao, sirina }: { ugao: number; sirina: number }) {
+  return (
+    <span
+      className="flex flex-none items-center justify-center rounded-[5px] border-2 shadow-[0_1px_3px_rgba(22,22,26,0.25)]"
+      style={{
+        width: `${sirina}px`,
+        height: "20px",
+        background: PAPIR,
+        borderColor: MASTILO,
+        transform: `rotate(${ugao}deg)`,
+      }}
+    >
+      <span
+        className="block h-[3px] rounded-full"
+        style={{ width: `${sirina - 10}px`, background: PRIGUSEN }}
+      />
+    </span>
+  );
+}
+
+/**
+ * Nauči rečenice i Složi rečenicu: tri pločice u nizu na traci po kojoj se
+ * ređaju. Boje roda se ovde NE koriste: pločica nosi bilo koju reč, pa bi je
+ * boja roda lažno predstavila kao imenicu.
+ */
+function VinjetaPlocice() {
+  return (
+    <span className="flex h-12 flex-col items-center justify-center gap-1.5">
+      <span className="flex items-center gap-1.5">
+        <PlocicaReci ugao={-5} sirina={20} />
+        <PlocicaReci ugao={3} sirina={16} />
+        <PlocicaReci ugao={-2} sirina={22} />
+      </span>
+      <span className="block h-[4px] w-16 rounded-full" style={{ background: ZUTA }} />
+    </span>
+  );
+}
+
+/** Dopuni rečenicu: reč, prazno mesto koje se popunjava, pa opet reč. */
+function VinjetaPraznina() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 56 32" className="h-12 w-16">
+      <rect x="1" y="12" width="14" height="6" rx="3" fill={MASTILO} />
+      {/* Isprekidana ivica kaže da je mesto prazno, a ne da je tu neka reč. */}
+      <rect
+        x="19"
+        y="6"
+        width="18"
+        height="17"
+        rx="4"
+        fill={ZUTA}
+        stroke={MASTILO}
+        strokeWidth="1.8"
+        strokeDasharray="4 3"
+      />
+      <rect x="41" y="12" width="14" height="6" rx="3" fill={MASTILO} />
+      {/* Crta na kojoj rečenica stoji, kao red u svesci. */}
+      <path d="M1 28h54" stroke={IVICA} strokeWidth="2.4" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+/**
+ * Koja vinjeta ide uz koju igru. Redosled prikaza drže sekcije ekrana; ovde
  * stoji samo crtež.
+ *
+ * „Nauči rečenice" i „Složi rečenicu" namerno dele isti crtež: to su ista
+ * pločice, jednom vođene a jednom same. Razliku nosi naziv, ne slika.
  */
 const VINJETA: Record<VrstaIgre, React.ReactNode> = {
   parovi: <VinjetaParovi />,
@@ -412,11 +537,10 @@ const VINJETA: Record<VrstaIgre, React.ReactNode> = {
   rod: <VinjetaRod />,
   mnozina: <VinjetaMnozina />,
   diktat: <VinjetaOlovka />,
-  // Rečenične igre još nemaju svoje crteže; prave vinjete stižu u kasnijem zadatku.
-  "ucenje-reci": <VinjetaOlovka />,
-  "ucenje-recenica": <VinjetaOlovka />,
-  slagalica: <VinjetaOlovka />,
-  dopuna: <VinjetaOlovka />,
+  "ucenje-reci": <VinjetaKartica />,
+  "ucenje-recenica": <VinjetaPlocice />,
+  slagalica: <VinjetaPlocice />,
+  dopuna: <VinjetaPraznina />,
 };
 
 /**
@@ -436,6 +560,115 @@ function NaslovSekcije({ children }: { children: React.ReactNode }) {
   );
 }
 
+// ── Pločice ─────────────────────────────────────────────────────────────────
+// Pločica, ne red u spisku: svaka igra ima svoj crtež i display naslov, kao
+// sličice na tezgi. Podloga svake ostaje papir - boju nose crteži, da ekran ne
+// postane duga. Tri stanja, jedan izgled, pa se markup piše samo jednom.
+
+/** Pločica koja se klikće. `kasni` je pomak u nizanju crteža pri ulasku. */
+function PlocicaIgre({
+  vrsta,
+  kasni,
+  onClick,
+}: {
+  vrsta: VrstaIgre;
+  kasni: number;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`${FOKUS} flex min-h-[120px] w-full flex-col items-center justify-center gap-2.5 rounded-2xl border p-3 text-center shadow-[0_3px_0_0_#DED8C8] motion-safe:transition-transform motion-safe:duration-100 motion-safe:active:scale-[0.985]`}
+      style={{ background: PAPIR, borderColor: IVICA }}
+    >
+      <span
+        aria-hidden="true"
+        className="zack-zalepi flex h-12 items-center justify-center"
+        style={{ ["--zack-kasni" as string]: `${kasni}ms` }}
+      >
+        {VINJETA[vrsta]}
+      </span>
+      <span
+        className="block text-[15px] leading-tight"
+        style={{ color: MASTILO, fontFamily: DISPLAY }}
+      >
+        {NAZIVI[vrsta]}
+      </span>
+    </button>
+  );
+}
+
+/**
+ * Pločica koja čeka prethodni korak: ista kartica, samo nije dugme - bledi
+ * crtež, katanac i jedna mirna reč o tome šta se čeka. Tekst je OBAVEZAN, jer
+ * katanac je ikona, a ikona sama ne sme da nosi značenje.
+ *
+ * Ovde nema nijedne reči prekora ni zapovesti: piše šta dolazi posle čega, a ne
+ * šta dete „mora" ili šta „nije" uradilo.
+ */
+function PlocicaCeka({ vrsta, tekst }: { vrsta: VrstaIgre; tekst: string }) {
+  return (
+    <div
+      className="flex min-h-[120px] w-full flex-col items-center justify-center gap-2 rounded-2xl border p-3 text-center"
+      style={{ background: PAPIR, borderColor: IVICA }}
+    >
+      <span aria-hidden="true" className="flex h-12 items-center justify-center opacity-40">
+        {VINJETA[vrsta]}
+      </span>
+      <span
+        className="block text-[15px] leading-tight"
+        style={{ color: PRIGUSEN, fontFamily: DISPLAY }}
+      >
+        {NAZIVI[vrsta]}
+      </span>
+      <span
+        className="font-heading flex items-center gap-1 text-[13px] font-bold leading-snug"
+        style={{ color: PRIGUSEN }}
+      >
+        <Katanac />
+        {tekst}
+      </span>
+    </div>
+  );
+}
+
+/**
+ * Pločica pod katancem članstva. Ista mirna kartica kao gore, samo joj je reč
+ * druga: ovde se ne čeka nikakav korak deteta, pa piše prosto „Zaključano", a
+ * zašto - stoji ispisano iznad pločica.
+ */
+function PlocicaZakljucana({ vrsta }: { vrsta: VrstaIgre }) {
+  return <PlocicaCeka vrsta={vrsta} tekst="Zaključano" />;
+}
+
+/** Mirna rečenica iznad zaključanih pločica, uz katanac kao ukras. */
+function RedKatanca({ children }: { children: React.ReactNode }) {
+  return (
+    <p
+      className="flex items-center gap-2.5 rounded-2xl border p-4 text-[15px] leading-relaxed"
+      style={{ background: PAPIR, borderColor: IVICA, color: MASTILO }}
+    >
+      <span aria-hidden="true" className="flex-none" style={{ color: PRIGUSEN }}>
+        <Katanac />
+      </span>
+      <span>{children}</span>
+    </p>
+  );
+}
+
+/** Prazna sekcija: nema šta da se radi, i to se kaže bez izvinjavanja. */
+function RedPrazno({ children }: { children: React.ReactNode }) {
+  return (
+    <p
+      className="rounded-2xl border border-dashed p-5 text-center text-[15px] leading-relaxed"
+      style={{ borderColor: IVICA, background: PAPIR, color: PRIGUSEN }}
+    >
+      {children}
+    </p>
+  );
+}
+
 // ── Ekran ───────────────────────────────────────────────────────────────────
 
 type Poruka = "prazna-kesica" | "greska-kesice" | "nije-stiglo" | null;
@@ -445,6 +678,10 @@ export default function LekcijaClient({
   lekcija,
   reci,
   stareReci,
+  recenice,
+  stareRecenice,
+  pocetniProsaoReci,
+  pocetniProsaoRecenice,
   pocetnoStanje,
   neotvorenaKesica,
   pocetniRekord,
@@ -459,6 +696,24 @@ export default function LekcijaClient({
    * već ima u albumu, sa izbledelošću i brojem grešaka. Prva lekcija ih nema.
    */
   stareReci: StaraRec[];
+  /**
+   * Rečenice OVE lekcije. Iz njih se vidi i šta ekran uopšte sme da ponudi:
+   * lekcija bez ijedne pločične rečenice nema „Nauči rečenice" ni „Složi
+   * rečenicu", a lekcija bez ijedne rečenice nema celu sekciju „Rečenice".
+   */
+  recenice: Recenica[];
+  /** Rečenice ranijih lekcija, za ponavljanje u slagalici i dopuni. */
+  stareRecenice: Recenica[];
+  /**
+   * Da li je dete već prešlo faze učenja na ovoj lekciji. Polazno stanje
+   * katanaca, ne konačno: prelazak u toku ove posete otključava odmah, bez
+   * osvežavanja stranice.
+   *
+   * Kad se prolazi nisu mogli ni pročitati, stranica ovamo šalje `true` - kvar
+   * pada u korist deteta.
+   */
+  pocetniProsaoReci: boolean;
+  pocetniProsaoRecenice: boolean;
   pocetnoStanje: StavkaAlbuma[];
   neotvorenaKesica: number;
   /** Lični rekord u skakaču na ovoj lekciji, ili ništa ako ga još nema. */
@@ -478,11 +733,24 @@ export default function LekcijaClient({
   zakljucano: boolean;
 }) {
   const [stanje, setStanje] = useState<StavkaAlbuma[]>(pocetnoStanje);
-  const [igra, setIgra] = useState<VrstaIgreReci | null>(null);
+  // Ceo `VrstaIgre`, ne samo igre od reči: ljuska `Igra` sada ume da nacrta i
+  // rečenično pitanje, pa se odavde biraju i slagalica, dopuna i učenje
+  // rečenica. Spisak `IGRE` ostaje uži - vidi komentar uz njega.
+  const [igra, setIgra] = useState<VrstaIgre | null>(null);
   // Milioner stoji odvojeno od igara i ne dodiruje ništa od ovoga: ne troši
   // srca, ne donosi sličice i ne javlja kraj partije. Zato mu je dovoljno jedno
   // da-ne stanje, bez ijednog poziva u `zavrsiIgru`.
   const [milioner, setMilioner] = useState(false);
+  // Učenje reči zauzima ceo ekran, isto kao Milioner, pa mu je dovoljno jedno
+  // da-ne stanje. Kraj mu se ipak obrađuje kao kraj partije, jer se u proveri
+  // zarađuju prave sličice.
+  const [ucenjeReci, setUcenjeReci] = useState(false);
+
+  // Katanci učenja. Sede u stanju, a ne samo u propovima, da bi se otvorili u
+  // istom trenutku kad dete pređe fazu - bez čekanja na mrežu i bez osvežavanja
+  // stranice. Prelaze samo iz `false` u `true`: prođeno se ne poništava.
+  const [prosaoReci, setProsaoReci] = useState(pocetniProsaoReci);
+  const [prosaoRecenice, setProsaoRecenice] = useState(pocetniProsaoRecenice);
 
   // Dokle se koza popela u poslednjem skakaču. Visina je drugi rezultat te igre,
   // pored sličica, pa se posle partije i kaže - inače bi penjanje postojalo samo
@@ -631,6 +899,42 @@ export default function LekcijaClient({
   );
 
   /**
+   * Javljanje da je faza učenja prođena. Poziv ide u POZADINI i njegov pad se
+   * guta, a katanac se u stanju otvara odmah: dete ne sme da čeka mrežu za
+   * nešto što je upravo uradilo.
+   *
+   * Izgubljen upis ne oduzima ništa. Ruta je idempotentna i red o prolasku ne
+   * briše nikad, pa je najgore što se desi da sledeći dolazak na lekciju opet
+   * ponudi fazu učenja - a ponavljanje učenja i inače nije kazna. Sličice, niz
+   * i rekordi ne zavise od ovog reda.
+   */
+  const posaljiProlaz = useCallback(
+    (faza: "reci" | "recenice") => {
+      void fetch(`/api/zack/${childId}/ucenje`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ lekcijaId: lekcija.id, faza }),
+        // Dete često zatvori karticu čim vidi kraj učenja.
+        keepalive: true,
+      }).catch(() => {
+        /* Katanac je već otvoren u stanju; ništa zarađeno ne zavisi od ovoga. */
+      });
+    },
+    [childId, lekcija.id]
+  );
+
+  /**
+   * Zajednički početak svakog ulaska u učenje ili igru. Domet i javljanje o
+   * rekordu pripadaju PRETHODNOJ partiji, pa novu ne smeju da dočekaju. Sam
+   * rekord OSTAJE - on se ne poništava.
+   */
+  const ocistiEkran = useCallback(() => {
+    setPoruka(null);
+    setDomet(0);
+    setNovRekord(false);
+  }, []);
+
+  /**
    * Upis rekorda posle skakača. O tome da rekord SAMO raste brine ruta, pa se
    * ovde ništa ne poredi pre slanja: prima se ono što u bazi zaista stoji, a ne
    * ono što je poslato.
@@ -674,16 +978,23 @@ export default function LekcijaClient({
    * iza nedovršene partije.
    */
   const naKrajIgre = useCallback(
-    (tacniRecIdovi: string[], sprat: number) => {
+    (tacniRecIdovi: string[], sprat: number, prosloSve: boolean) => {
       // Koja se igra upravo završila mora da se zapamti pre gašenja, jer se
       // rekord vodi po igri, a `sprat` veći od nule javlja samo skakač.
       const odigrana = igra;
       setIgra(null);
       setDomet(sprat);
       if (odigrana === "skakac") void upisiRekord(sprat);
+      // Katanac rečenica otvara SAMO učenje rečenica, i samo kad je prošlo do
+      // kraja. Izlaz na „Dosta za sad" ne otvara ništa - ali ni ne zatvara:
+      // zarađeno iz te partije ide dalje kao i uvek, redom ispod.
+      if (odigrana === "ucenje-recenica" && prosloSve) {
+        setProsaoRecenice(true);
+        posaljiProlaz("recenice");
+      }
       void zavrsiIgru(tacniRecIdovi);
     },
-    [igra, upisiRekord, zavrsiIgru]
+    [igra, posaljiProlaz, upisiRekord, zavrsiIgru]
   );
 
   /** Poziv ide u pozadini. Ne čeka se, i njegov pad se namerno guta. */
@@ -728,6 +1039,31 @@ export default function LekcijaClient({
     return <Milioner childId={childId} lekcijaId={lekcija.id} onIzlaz={() => setMilioner(false)} />;
   }
 
+  // ── Učenje reči zauzima ceo ekran ─────────────────────────────────────────
+  // Izlaz („Dosta za sad") stoji UNUTAR učenja, kao i kod igre: samo ono zna
+  // šta je dete do tog trenutka zaradilo.
+  if (ucenjeReci) {
+    return (
+      <UcenjeReci
+        childId={childId}
+        reci={reci}
+        onKraj={(tacni, prosloSve) => {
+          setUcenjeReci(false);
+          // Katanac vežbi otvara samo učenje prođeno DO KRAJA. Ranijim izlaskom
+          // se ništa ne gubi - ono što je zarađeno ide dole, kao i uvek.
+          if (prosloSve) {
+            setProsaoReci(true);
+            posaljiProlaz("reci");
+          }
+          // Ovo se NE sme preskočiti ni u jednom slučaju: `zavrsiIgru` je ono
+          // što garantuje da zarađeno stvarno stigne (slanje iz same provere
+          // sme tiho da padne) i što otvara kesicu.
+          void zavrsiIgru(tacni);
+        }}
+      />
+    );
+  }
+
   // ── Igra zauzima ceo ekran ────────────────────────────────────────────────
   if (igra) {
     // Izlaz iz igre („Dosta za sad") stoji unutar same igre, jer samo ona zna
@@ -738,6 +1074,8 @@ export default function LekcijaClient({
         childId={childId}
         reci={reci}
         stare={stareReci}
+        recenice={recenice}
+        stareRecenice={stareRecenice}
         vrsta={igra}
         rekord={rekord > 0 ? rekord : null}
         onKraj={naKrajIgre}
@@ -746,6 +1084,22 @@ export default function LekcijaClient({
   }
 
   const imaPravilo = Boolean(lekcija.pravilo_tekst ?? lekcija.pravilo_naslov);
+
+  // ── Šta lekcija uopšte ume da ponudi ──────────────────────────────────────
+  // Pločica koja otvara prazan ekran je gora od pločice koje nema, pa se sve
+  // odlučuje iz sadržaja: ako rečenica nije podobna za pločice, nema slagalice
+  // ni učenja rečenica; ako nijedna nema prazninu, nema dopune.
+  const imaReci = reci.length > 0;
+  const imaSlagalicu = recenice.some(podobnaZaSlagalicu);
+  const imaDopunu = recenice.some(podobnaZaDopunu);
+
+  // KATANAC SE NIKAD NE VEZUJE ZA USLOV KOJI SE NE MOŽE ISPUNITI.
+  // Učenje rečenica se pravi od pločica, pa lekcija bez ijedne pločične
+  // rečenice tu fazu NEMA. Kad je nema, nema se ni šta preći - i dopuna stoji
+  // otvorena od prvog trenutka. Isto važi za lekciju bez reči i fazu učenja
+  // reči. Katanac koji se ne može otvoriti nije mirno obaveštenje nego ćorsokak.
+  const cekaUcenjeReci = imaReci && !prosaoReci;
+  const cekaUcenjeRecenica = imaSlagalicu && !prosaoRecenice;
   // Bedž sa neotvorenom kesicom ima svoje dugme, pa dok se ona otvara i sam
   // kaže da se otvara. Kad bedža nema, čekanje mora da dobije svoju karticu,
   // inače dete posle odigrane igre nakratko gleda ekran na kom se ništa ne
@@ -1100,100 +1454,187 @@ export default function LekcijaClient({
         </section>
       )}
 
-      {/* ── Igre ─────────────────────────────────────────────────────────────
-          Pločice, ne spisak: svaka igra ima svoj crtež i display naslov, kao
-          sličice na tezgi. Podloga svake ostaje papir - boju nose crteži, da
-          ekran ne postane duga. */}
+      {/* ── Učenje ───────────────────────────────────────────────────────────
+          UVEK PRVO i uvek otvoreno. Reč se prvo vidi, pa tek onda vežba.
+          „Nauči reči" ostaje otvoreno i pošto je jednom prođeno: povratak na
+          učenje je dobrodošao, nikad korak unazad. */}
       <section className="mb-8">
-        <NaslovSekcije>Igre</NaslovSekcije>
+        <NaslovSekcije>Učenje</NaslovSekcije>
+        {!imaReci && !imaSlagalicu ? (
+          <RedPrazno>
+            U ovoj lekciji još nema gradiva, pa nema ni šta da se uči. Vrati se malo kasnije.
+          </RedPrazno>
+        ) : zakljucano ? (
+          /* Zašto je zaključano piše niže, kod vežbi - jedna rečenica za sve
+             tri sekcije. Ista poruka triput bila bi opomena, a ovo je samo
+             obaveštenje. */
+          <ul className="grid grid-cols-2 gap-3">
+            {imaReci && (
+              <li>
+                <PlocicaZakljucana vrsta="ucenje-reci" />
+              </li>
+            )}
+            {imaSlagalicu && (
+              <li>
+                <PlocicaZakljucana vrsta="ucenje-recenica" />
+              </li>
+            )}
+          </ul>
+        ) : (
+          <ul className="grid grid-cols-2 gap-3">
+            {imaReci && (
+              <li>
+                <PlocicaIgre
+                  vrsta="ucenje-reci"
+                  kasni={0}
+                  onClick={() => {
+                    ocistiEkran();
+                    setUcenjeReci(true);
+                  }}
+                />
+              </li>
+            )}
+            {imaSlagalicu && (
+              <li>
+                {cekaUcenjeReci ? (
+                  <PlocicaCeka vrsta="ucenje-recenica" tekst="Posle učenja reči" />
+                ) : (
+                  <PlocicaIgre
+                    vrsta="ucenje-recenica"
+                    kasni={60}
+                    onClick={() => {
+                      ocistiEkran();
+                      setIgra("ucenje-recenica");
+                    }}
+                  />
+                )}
+              </li>
+            )}
+          </ul>
+        )}
+      </section>
+
+      {/* ── Vežbe ────────────────────────────────────────────────────────────
+          Šest igara od reči. Stoje iza učenja, jer se vežba ono što je već
+          viđeno - a ne oduzimaju ništa dok čekaju. */}
+      <section className="mb-8">
+        <NaslovSekcije>Vežbe</NaslovSekcije>
         {zakljucano ? (
           <>
             {/* Jedna mirna rečenica za sve pločice - ista koju vraćaju i rute.
                 Bez cene, bez krivice i bez ijednog dugmeta za plaćanje: novac
                 je roditeljska strana, dete ovde samo vidi da igre čekaju. */}
-            <p
-              className="flex items-center gap-2.5 rounded-2xl border p-4 text-[15px] leading-relaxed"
-              style={{ background: PAPIR, borderColor: IVICA, color: MASTILO }}
-            >
-              <span aria-hidden="true" className="flex-none" style={{ color: PRIGUSEN }}>
-                <Katanac />
-              </span>
-              <span>{PORUKA_ZAKLJUCANO}</span>
-            </p>
+            <RedKatanca>{PORUKA_ZAKLJUCANO}</RedKatanca>
             <ul className="mt-3 grid grid-cols-2 gap-3">
               {IGRE.map((vrsta) => (
                 <li key={vrsta}>
-                  {/* Ista pločica, samo nije dugme: bledi crtež, katanac i reč
-                      „Zaključano" - status stoji i kao tekst, ne samo kao ikona. */}
-                  <div
-                    className="flex min-h-[120px] w-full flex-col items-center justify-center gap-2 rounded-2xl border p-3 text-center"
-                    style={{ background: PAPIR, borderColor: IVICA }}
-                  >
-                    <span aria-hidden="true" className="flex h-12 items-center justify-center opacity-40">
-                      {VINJETA[vrsta]}
-                    </span>
-                    <span
-                      className="block text-[15px] leading-tight"
-                      style={{ color: PRIGUSEN, fontFamily: DISPLAY }}
-                    >
-                      {NAZIVI[vrsta]}
-                    </span>
-                    <span
-                      className="font-heading flex items-center gap-1 text-[13px] font-bold"
-                      style={{ color: PRIGUSEN }}
-                    >
-                      <Katanac />
-                      Zaključano
-                    </span>
-                  </div>
+                  <PlocicaZakljucana vrsta={vrsta} />
                 </li>
               ))}
             </ul>
           </>
         ) : reci.length === 0 ? (
-          <p
-            className="rounded-2xl border border-dashed p-5 text-center text-[15px] leading-relaxed"
-            style={{ borderColor: IVICA, background: PAPIR, color: PRIGUSEN }}
-          >
+          <RedPrazno>
             U ovoj lekciji još nema reči, pa nema ni šta da se igra. Vrati se malo kasnije.
-          </p>
+          </RedPrazno>
+        ) : cekaUcenjeReci ? (
+          <>
+            {/* Konstatacija, ne zapovest: piše ŠTA otključava vežbe, ne šta
+                dete treba da uradi i ne šta nije uradilo. „Jednom" je tu
+                namerno - drugi put se više ne traži. */}
+            <RedKatanca>Vežbe se otključavaju kad jednom pređeš Učenje.</RedKatanca>
+            <ul className="mt-3 grid grid-cols-2 gap-3">
+              {IGRE.map((vrsta) => (
+                <li key={vrsta}>
+                  <PlocicaCeka vrsta={vrsta} tekst="Posle učenja reči" />
+                </li>
+              ))}
+            </ul>
+          </>
         ) : (
           <ul className="grid grid-cols-2 gap-3">
             {IGRE.map((vrsta, redni) => (
               <li key={vrsta}>
-                <button
-                  type="button"
+                <PlocicaIgre
+                  vrsta={vrsta}
+                  kasni={redni * 60}
                   onClick={() => {
-                    setPoruka(null);
-                    // Domet je rezultat prethodne partije. Nova partija kreće od
-                    // tla, pa ostavljen broj ne sme da je dočeka. Isto i za
-                    // javljanje o rekordu; sam rekord OSTAJE, on se ne poništava.
-                    setDomet(0);
-                    setNovRekord(false);
+                    ocistiEkran();
                     setIgra(vrsta);
                   }}
-                  className={`${FOKUS} flex min-h-[120px] w-full flex-col items-center justify-center gap-2.5 rounded-2xl border p-3 text-center shadow-[0_3px_0_0_#DED8C8] motion-safe:transition-transform motion-safe:duration-100 motion-safe:active:scale-[0.985]`}
-                  style={{ background: PAPIR, borderColor: IVICA }}
-                >
-                  <span
-                    aria-hidden="true"
-                    className="zack-zalepi flex h-12 items-center justify-center"
-                    style={{ ["--zack-kasni" as string]: `${redni * 60}ms` }}
-                  >
-                    {VINJETA[vrsta]}
-                  </span>
-                  <span
-                    className="block text-[15px] leading-tight"
-                    style={{ color: MASTILO, fontFamily: DISPLAY }}
-                  >
-                    {NAZIVI[vrsta]}
-                  </span>
-                </button>
+                />
               </li>
             ))}
           </ul>
         )}
       </section>
+
+      {/* ── Rečenice ─────────────────────────────────────────────────────────
+          Cele sekcije nema kad lekcija nema nijednu upotrebljivu rečenicu.
+          Prazan naslov bi obećavao nešto čega nema. */}
+      {(imaSlagalicu || imaDopunu) && (
+        <section className="mb-8">
+          <NaslovSekcije>Rečenice</NaslovSekcije>
+          {zakljucano ? (
+            <ul className="grid grid-cols-2 gap-3">
+              {imaSlagalicu && (
+                <li>
+                  <PlocicaZakljucana vrsta="slagalica" />
+                </li>
+              )}
+              {imaDopunu && (
+                <li>
+                  <PlocicaZakljucana vrsta="dopuna" />
+                </li>
+              )}
+            </ul>
+          ) : cekaUcenjeRecenica ? (
+            /* Kad se čeka, čekaju OBE pločice: dopuna se otvara samo uz
+               slagalicu, a bez slagalice ovde uopšte ne bi bilo katanca. Zato
+               jedna rečenica pokriva celu sekciju. */
+            <>
+              <RedKatanca>Otključava se kad jednom pređeš Nauči rečenice.</RedKatanca>
+              <ul className="mt-3 grid grid-cols-2 gap-3">
+                <li>
+                  <PlocicaCeka vrsta="slagalica" tekst="Posle učenja rečenica" />
+                </li>
+                {imaDopunu && (
+                  <li>
+                    <PlocicaCeka vrsta="dopuna" tekst="Posle učenja rečenica" />
+                  </li>
+                )}
+              </ul>
+            </>
+          ) : (
+            <ul className="grid grid-cols-2 gap-3">
+              {imaSlagalicu && (
+                <li>
+                  <PlocicaIgre
+                    vrsta="slagalica"
+                    kasni={0}
+                    onClick={() => {
+                      ocistiEkran();
+                      setIgra("slagalica");
+                    }}
+                  />
+                </li>
+              )}
+              {imaDopunu && (
+                <li>
+                  <PlocicaIgre
+                    vrsta="dopuna"
+                    kasni={60}
+                    onClick={() => {
+                      ocistiEkran();
+                      setIgra("dopuna");
+                    }}
+                  />
+                </li>
+              )}
+            </ul>
+          )}
+        </section>
+      )}
 
       {/* ── Milioner ─────────────────────────────────────────────────────────
           NAMERNO ODVOJEN OD IGARA, i naslovom i izgledom. Milioner ne donosi
