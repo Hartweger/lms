@@ -2854,6 +2854,57 @@ export type Database = {
           },
         ]
       }
+      zack_recenice: {
+        Row: {
+          de: string
+          distraktori: Json
+          id: string
+          lekcija_id: string
+          praznina: string
+          rec_id: string
+          redni_broj: number
+          samo_dopuna: boolean
+          sr: string
+        }
+        Insert: {
+          de: string
+          distraktori: Json
+          id?: string
+          lekcija_id: string
+          praznina: string
+          rec_id: string
+          redni_broj: number
+          samo_dopuna?: boolean
+          sr: string
+        }
+        Update: {
+          de?: string
+          distraktori?: Json
+          id?: string
+          lekcija_id?: string
+          praznina?: string
+          rec_id?: string
+          redni_broj?: number
+          samo_dopuna?: boolean
+          sr?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zack_recenice_lekcija_id_fkey"
+            columns: ["lekcija_id"]
+            isOneToOne: false
+            referencedRelation: "zack_lekcije"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "zack_recenice_rec_id_fkey"
+            columns: ["rec_id"]
+            isOneToOne: false
+            referencedRelation: "zack_reci"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       zack_reci: {
         Row: {
           de: string
@@ -3020,6 +3071,45 @@ export type Database = {
             columns: ["rec_id"]
             isOneToOne: false
             referencedRelation: "zack_reci"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      zack_ucenje_prolazi: {
+        Row: {
+          dete_id: string
+          faza: string
+          id: string
+          lekcija_id: string
+          prosao_at: string
+        }
+        Insert: {
+          dete_id: string
+          faza: string
+          id?: string
+          lekcija_id: string
+          prosao_at?: string
+        }
+        Update: {
+          dete_id?: string
+          faza?: string
+          id?: string
+          lekcija_id?: string
+          prosao_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zack_ucenje_prolazi_dete_id_fkey"
+            columns: ["dete_id"]
+            isOneToOne: false
+            referencedRelation: "zack_deca"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "zack_ucenje_prolazi_lekcija_id_fkey"
+            columns: ["lekcija_id"]
+            isOneToOne: false
+            referencedRelation: "zack_lekcije"
             referencedColumns: ["id"]
           },
         ]

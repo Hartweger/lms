@@ -4,6 +4,7 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { jeOtkljucano } from "./clanstvo";
 import type { Rec } from "./rec";
+import type { Recenica } from "./recenice";
 import type { ZapisSlicice } from "./album";
 import type { GramatickaTacka, GramatickoPitanje } from "./milioner";
 
@@ -359,4 +360,100 @@ export async function clanstvoAktivno(deteId: string): Promise<boolean> {
     { roditeljId: data.roditelj_id, oslobodjeno: data.oslobodjeno, clanstvoDo: data.clanstvo_do },
     new Date()
   );
+}
+
+/** Red rečenice kakav stigne iz baze: `distraktori` je JSONB, dakle bilo šta. */
+type RedRecenice = Omit<Recenica, "distraktori"> & { distraktori: unknown };
+
+/**
+ * Redovi iz baze u `Recenica`. Isto za oba čitanja rečenica, pa stoji na jednom
+ * mestu.
+ *
+ * `distraktori` je JSONB, dakle sve što je u bazu upisano, pa se ovde svodi na
+ * spisak stringova. Red koji to nije se ne popravlja nego dobija prazne
+ * distraktore - `napraviPitanjaRecenica` takvu rečenicu tiho preskoči, isto kao
+ * pokvaren red u gramatici. Kvar tako pada u korist deteta: izgubi se jedno
+ * pitanje, ne cela igra.
+ */
+function uRecenice(redovi: readonly RedRecenice[]): Recenica[] {
+  return redovi.map((red) => ({
+    id: red.id,
+    redni_broj: red.redni_broj,
+    de: red.de,
+    sr: red.sr,
+    praznina: red.praznina,
+    distraktori: Array.isArray(red.distraktori)
+      ? red.distraktori.filter((d) => typeof d === "string")
+      : [],
+    rec_id: red.rec_id,
+    samo_dopuna: red.samo_dopuna,
+  }));
+}
+
+/** Rečenice jedne lekcije, didaktičkim redosledom. */
+export async function receniceLekcije(lekcijaId: string): Promise<Recenica[]> {
+  const sb = createAdminClient();
+  const { data, error } = await sb
+    .from("zack_recenice")
+    .select("id, redni_broj, de, sr, praznina, distraktori, rec_id, samo_dopuna")
+    .eq("lekcija_id", lekcijaId)
+    .order("redni_broj");
+  if (error) throw new Error(`Ne mogu da pročitam rečenice lekcije: ${error.message}`);
+  return uRecenice(data ?? []);
+}
+
+/**
+ * Rečenice SVIH ranijih lekcija udžbenika (broj manji od zadatog), za
+ * ponavljanje kroz rečenične igre. Za prvu lekciju vraća prazno bez upita, jer
+ * ranijih lekcija nema.
+ *
+ * Kao i `stareReciUdzbenika`, dva jasna upita umesto ugnježdenog: ugnježdeni
+ * ume da tiho vrati prazno kad veza između tabela nije onakva kakvom je
+ * smatramo, a ovde prazno znači „nema šta da se ponavlja".
+ */
+export async function stareReceniceUdzbenika(
+  udzbenikId: string,
+  brojLekcije: number
+): Promise<Recenica[]> {
+  if (brojLekcije <= 1) return [];
+
+  const sb = createAdminClient();
+  const { data: lekcije, error } = await sb
+    .from("zack_lekcije")
+    .select("id")
+    .eq("udzbenik_id", udzbenikId)
+    .lt("broj", brojLekcije);
+  if (error) throw new Error(`Ne mogu da pročitam ranije lekcije: ${error.message}`);
+  if (!lekcije || lekcije.length === 0) return [];
+
+  const { data: recenice, error: greskaRecenica } = await sb
+    .from("zack_recenice")
+    .select("id, redni_broj, de, sr, praznina, distraktori, rec_id, samo_dopuna")
+    .in("lekcija_id", lekcije.map((l) => l.id))
+    .order("redni_broj");
+  if (greskaRecenica) {
+    throw new Error(`Ne mogu da pročitam stare rečenice: ${greskaRecenica.message}`);
+  }
+  return uRecenice(recenice ?? []);
+}
+
+/**
+ * Koje je faze učenja dete prošlo na lekciji. Skup imena faza („reci",
+ * „recenice").
+ *
+ * Greška se ovde BACA, kao u svakom upitu ovog fajla, ali POZIVALAC je mora
+ * shvatiti kao „faza je prošla": izgubljeno čitanje ne sme da zaključa vežbe
+ * detetu koje je učenje odavno završilo. Kvar pada u korist deteta, isto pravilo
+ * po kome se red o prolasku nikad ne briše. Progutati grešku ovde bi značilo i
+ * ne znati da je bilo kvara, pa to radi stranica koja poziva.
+ */
+export async function ucenjeProlazi(deteId: string, lekcijaId: string): Promise<Set<string>> {
+  const sb = createAdminClient();
+  const { data, error } = await sb
+    .from("zack_ucenje_prolazi")
+    .select("faza")
+    .eq("dete_id", deteId)
+    .eq("lekcija_id", lekcijaId);
+  if (error) throw new Error(`Ne mogu da pročitam prolaze učenja: ${error.message}`);
+  return new Set((data ?? []).map((red) => red.faza));
 }
