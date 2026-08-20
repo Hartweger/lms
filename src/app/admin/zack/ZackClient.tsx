@@ -3,6 +3,7 @@
 import { useMemo, useRef, useState } from "react";
 
 import { normalizujDe } from "@/lib/zack/lekcija-upis";
+import { PLOCICA_NAJMANJE, PLOCICA_NAJVISE } from "@/lib/zack/recenice";
 
 // Ekran kroz koji Nataša unosi jednu lekciju zack-a. Reči se ne kucaju jedna po
 // jedna, nego se nalepe iz tabele, jedan red po reči, kolone razdvojene
@@ -32,6 +33,15 @@ import { normalizujDe } from "@/lib/zack/lekcija-upis";
 // „der Hund“ prošli bi pregled kao dve reči, pa bi ih ruta odbila greškom koju
 // pregled nije najavio. Normalizuje se samo za poređenje - ruti se šalje ono
 // što je Nataša otkucala, ona sama normalizuje pri upisu.
+//
+// REČENICE SU DRUGA PRIČA
+// -----------------------
+// Ispod spiska reči stoji spisak rečenica iste lekcije. Tamo nema pitanja o
+// brisanju, jer na rečenici ne visi ništa detetovo: sličice i greške se knjiže
+// na reč, pa zamena spiska rečenica nikome ništa ne oduzima. Zato taj deo
+// ekrana čuva iz prve, ali zato mora glasno da kaže KAKO se spisak podelio -
+// rečenica van raspona pločica tiho ispada iz slagalice, i to je jedino mesto
+// na kome Nataša to može da vidi.
 
 interface Udzbenik {
   id: string;
@@ -63,6 +73,21 @@ type Pregled = {
   bezTabulatora: boolean;
 };
 
+type RedRecenice = {
+  de: string;
+  sr: string;
+  praznina: string;
+  distraktori: string[];
+  glavna: string;
+  samoDopuna: boolean;
+};
+
+type PregledRecenica = {
+  redovi: RedRecenice[];
+  problemi: Problem[];
+  bezTabulatora: boolean;
+};
+
 const RODOVI: readonly string[] = ["der", "die", "das"];
 /** Prazna kolona roda. Sve ostalo što nije rod je greška, ne prećutno „nema". */
 const PRAZAN_ROD: readonly string[] = ["", "-", "/", "nema"];
@@ -70,6 +95,14 @@ const IZUZETAK_DA: readonly string[] = ["da", "x", "+"];
 const IZUZETAK_NE: readonly string[] = ["", "ne", "-", "/"];
 
 const UPUTSTVO = `nemački → naš → der/die/das → množina → izuzetak (upiši „da")`;
+
+const UPUTSTVO_RECENICE = `nemačka rečenica → naš prevod → praznina → 3 pogrešna oblika (razdvojena sa „;") → glavna reč → samo dopuna (upiši „da")`;
+
+/** Koliko pogrešnih oblika mora da stoji uz svaku rečenicu. Isto broji i ruta. */
+const DISTRAKTORA = 3;
+
+/** Razdvajač pogrešnih oblika unutar jedne ćelije. Tabulator je već zauzet. */
+const RAZDVAJAC_DISTRAKTORA = ";";
 
 /** Koliko se pokvarenih redova ispisuje pojedinačno pre nego što se sabiju u broj. */
 const PRIKAZANIH_PROBLEMA = 12;
@@ -168,8 +201,152 @@ function parsirajSpisak(tekst: string): Pregled {
   return { redovi, problemi, bezTabulatora: imaSadrzaja && !imaTabulatora };
 }
 
+/**
+ * Duga rečenica u spisku grešaka se seče, da bi red poruke ostao čitljiv i da
+ * bi se ono što poruka kaže videlo bez vodoravnog čitanja.
+ */
+function kratko(s: string): string {
+  return s.length <= 48 ? s : `${s.slice(0, 47)}...`;
+}
+
+/**
+ * Razbija nalepljeni spisak rečenica. Ista pravila kao kod reči: prazan red je
+ * prazan red, a red koji se ne čita zaustavlja čuvanje umesto da se pretvori u
+ * nešto približno tačno. Rečenica bez rešenja detetu daje pitanje na koje ne
+ * može da odgovori, pa se ovde ništa ne pogađa.
+ */
+function parsirajRecenice(tekst: string): PregledRecenica {
+  const redovi: RedRecenice[] = [];
+  const problemi: Problem[] = [];
+  const videno = new Map<string, number>();
+  let imaSadrzaja = false;
+  let imaTabulatora = false;
+
+  const linije = tekst.split(/\r?\n/);
+
+  for (let i = 0; i < linije.length; i++) {
+    const linija = linije[i];
+    const broj = i + 1;
+
+    if (linija.trim() === "") continue;
+    imaSadrzaja = true;
+    if (linija.includes("\t")) imaTabulatora = true;
+
+    const d = linija.split("\t").map((x) => x.trim());
+    const de = d[0] ?? "";
+    const sr = d[1] ?? "";
+    const praznina = d[2] ?? "";
+    const distraktoriSirovi = d[3] ?? "";
+    const glavna = d[4] ?? "";
+
+    if (!de) {
+      problemi.push({ broj, poruka: "red nema nemačku rečenicu" });
+      continue;
+    }
+
+    // Prvih pet kolona su obavezne. Kad neka fali, gotovo uvek je posredi
+    // razmak umesto tabulatora, pa to piše u poruci - a ne „popravlja" se time
+    // što bi se red pročitao do mesta na kome je stao.
+    const fali = !sr
+      ? "prevod na naš jezik"
+      : !praznina
+        ? "oblik koji se vadi za dopunu"
+        : !distraktoriSirovi
+          ? "pogrešne oblike"
+          : !glavna
+            ? "glavnu reč"
+            : null;
+    if (fali) {
+      problemi.push({
+        broj,
+        poruka: `„${kratko(de)}" nema ${fali}. Kolone se razdvajaju tabulatorom, ne razmakom.`,
+      });
+      continue;
+    }
+
+    // Duplikat se traži po normalizovanom obliku, jer je to ono što ruta vidi
+    // kao ključ spiska. Da se poredi po golom tekstu, dva zapisa iste rečenice
+    // prošla bi pregled, pa bi ruta odbila upis greškom koju pregled nije
+    // najavio.
+    const vecViden = videno.get(normalizujDe(de));
+    if (vecViden !== undefined) {
+      problemi.push({
+        broj,
+        poruka: `rečenica „${kratko(de)}" već stoji u redu ${vecViden}. Ista rečenica ne sme dvaput u istoj lekciji.`,
+      });
+      continue;
+    }
+
+    const distraktori = distraktoriSirovi
+      .split(RAZDVAJAC_DISTRAKTORA)
+      .map((x) => x.trim())
+      .filter((x) => x !== "");
+    if (distraktori.length !== DISTRAKTORA) {
+      problemi.push({
+        broj,
+        poruka: `u koloni pogrešnih oblika stoji ${distraktori.length} ${
+          distraktori.length === 1 ? "oblik" : "oblika"
+        }, a treba ih tačno ${DISTRAKTORA}. Razdvajaju se tačkom i zarezom.`,
+      });
+      continue;
+    }
+
+    // Šesta kolona je jedina koja sme da bude prazna. Sve što nije „da" ni
+    // prazno je greška, jer ruta prima pravi boolean: kad bi ovde bilo šta
+    // drugo tiho palo na netačno, rečenica koju je Nataša namerno izbacila iz
+    // slagalice tiho bi se u njoj i našla.
+    const samoDopunaSirov = (d[5] ?? "").toLowerCase();
+    let samoDopuna = false;
+    if (samoDopunaSirov === "da") {
+      samoDopuna = true;
+    } else if (samoDopunaSirov !== "") {
+      problemi.push({
+        broj,
+        poruka: `u koloni samo dopune piše „${d[5]}". Upiši „da" ili ostavi prazno.`,
+      });
+      continue;
+    }
+
+    // Sedma kolona i dalje. Ako tu nešto stoji, kolone su verovatno pomerene,
+    // pa i sve pročitano levo od toga može biti pogrešno.
+    if (d.slice(6).some((x) => x !== "")) {
+      problemi.push({
+        broj,
+        poruka: "red ima više od šest kolona. Kolone su verovatno pomerene.",
+      });
+      continue;
+    }
+
+    videno.set(normalizujDe(de), broj);
+    redovi.push({ de, sr, praznina, distraktori, glavna, samoDopuna });
+  }
+
+  return { redovi, problemi, bezTabulatora: imaSadrzaja && !imaTabulatora };
+}
+
 function reciOblik(n: number): string {
   return n === 1 ? "reč" : "reči";
+}
+
+/** „1 rečenica", „2 rečenice", „5 rečenica", „12 rečenica", „22 rečenice". */
+function recenicaOblik(n: number): string {
+  const dve = n % 100;
+  const jedna = n % 10;
+  if (dve < 11 || dve > 14) {
+    if (jedna === 1) return "rečenica";
+    if (jedna >= 2 && jedna <= 4) return "rečenice";
+  }
+  return "rečenica";
+}
+
+/**
+ * Glagol uz broj: uz 2, 3 i 4 ide množina, uz sve ostalo jednina. Odlučuju
+ * poslednje dve cifre, jer 12, 13 i 14 idu kao mnogo, a 22 kao 2.
+ */
+function uzBroj(n: number, jednina: string, mnozina: string): string {
+  const dve = n % 100;
+  const jedna = n % 10;
+  return (dve < 11 || dve > 14) && jedna >= 2 && jedna <= 4 ? mnozina : jednina;
 }
 
 /**
@@ -206,6 +383,16 @@ export default function ZackClient({ udzbenici }: Props) {
   const [rezultat, setRezultat] = useState<
     { upisanoReci: number; obrisanoReci: number; obrisaneReci: string[] } | null
   >(null);
+  const [recTekst, setRecTekst] = useState("");
+  const [recCuvanje, setRecCuvanje] = useState(false);
+  const [recGreska, setRecGreska] = useState<string | null>(null);
+  const [recRezultat, setRecRezultat] = useState<{
+    /** Lekcija na koju se odgovor odnosi, onakva kakva je poslata. */
+    uLekciji: number;
+    upisano: number;
+    uSlagalici: number;
+    samoDopuna: number;
+  } | null>(null);
   const [potvrda, setPotvrda] = useState<{
     obrisaceSe: string[];
     brojSlicica: number;
@@ -217,9 +404,13 @@ export default function ZackClient({ udzbenici }: Props) {
   // iscrtavanjem. Ovo je brava koja se zaključava odmah, da dva brza klika ne
   // pošalju dva zahteva.
   const slanjeUToku = useRef(false);
+  const recSlanjeUToku = useRef(false);
 
   const pregled = useMemo(() => parsirajSpisak(tekst), [tekst]);
   const izuzetaka = pregled.redovi.filter((r) => r.izuzetak).length;
+
+  const pregledRec = useMemo(() => parsirajRecenice(recTekst), [recTekst]);
+  const oznacenoDopuna = pregledRec.redovi.filter((r) => r.samoDopuna).length;
 
   const brojLekcije = Number(broj);
   const brojOk =
@@ -236,6 +427,16 @@ export default function ZackClient({ udzbenici }: Props) {
     pregled.redovi.length > 0 &&
     pregled.problemi.length === 0 &&
     !pregled.bezTabulatora;
+
+  // Rečenice ne traže naziv lekcije: one se kače na već upisanu lekciju, a ako
+  // je još nema, ruta to kaže svojim imenom.
+  const mozeDaSacuvaRecenice =
+    !recCuvanje &&
+    udzbenikId !== "" &&
+    brojOk &&
+    pregledRec.redovi.length > 0 &&
+    pregledRec.problemi.length === 0 &&
+    !pregledRec.bezTabulatora;
 
   // Telo zahteva se gradi iz onoga što trenutno stoji na ekranu, pa je zato i
   // merilo da li se od kad je stigao 409 nešto promenilo. Nemački oblik ide
@@ -347,6 +548,57 @@ export default function ZackClient({ udzbenici }: Props) {
       return;
     }
     void posalji(true);
+  }
+
+  async function posaljiRecenice() {
+    if (recSlanjeUToku.current) return;
+    recSlanjeUToku.current = true;
+    setRecCuvanje(true);
+    setRecGreska(null);
+    setRecRezultat(null);
+    // Broj lekcije se čita iz ovog iscrtavanja, pa odgovor ispod govori o
+    // lekciji u koju je zaista upisano, čak i ako se polje u međuvremenu
+    // promeni.
+    const uLekciji = brojLekcije;
+    try {
+      const res = await fetch("/api/admin/zack/recenice", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          udzbenikId,
+          broj: uLekciji,
+          recenice: pregledRec.redovi,
+        }),
+      });
+      const podaci: unknown = await res.json().catch(() => null);
+      const odgovor =
+        typeof podaci === "object" && podaci !== null
+          ? (podaci as Record<string, unknown>)
+          : {};
+
+      if (!res.ok) {
+        // Poruka rute ide doslovno: ona jedina zna koji je red pao i zašto,
+        // i u njoj već stoji broj reda.
+        setRecGreska(
+          typeof odgovor.error === "string"
+            ? odgovor.error
+            : `Rečenice nisu upisane (greška ${res.status}).`
+        );
+        return;
+      }
+
+      setRecRezultat({
+        uLekciji,
+        upisano: typeof odgovor.upisano === "number" ? odgovor.upisano : 0,
+        uSlagalici: typeof odgovor.uSlagalici === "number" ? odgovor.uSlagalici : 0,
+        samoDopuna: typeof odgovor.samoDopuna === "number" ? odgovor.samoDopuna : 0,
+      });
+    } catch {
+      setRecGreska("Rečenice nisu upisane, veza sa serverom je pukla.");
+    } finally {
+      setRecCuvanje(false);
+      recSlanjeUToku.current = false;
+    }
   }
 
   const poljeKlase =
@@ -674,6 +926,149 @@ export default function ZackClient({ udzbenici }: Props) {
             )}. Nijedna reč nije obrisana.`}
           </p>
         ))}
+
+      {/* REČENICE ISTE LEKCIJE */}
+      <section className="mt-10 border-t border-gray-200 pt-8">
+        <h2 className="text-xl font-bold text-[#16161A]">Rečenice lekcije</h2>
+
+        <p className="mt-2 text-sm text-[#16161A]">
+          Rečenice idu u istu lekciju izabranu gore, pa ovde nema ponovnog
+          biranja udžbenika i broja. Glavna reč svake rečenice mora da bude reč
+          te lekcije, zato prvo sačuvaj reči pa onda rečenice.
+        </p>
+        <p className="mt-2 text-sm text-[#16161A]">
+          Čuvanje ZAMENJUJE sve rečenice te lekcije: ostaje tačno ono što je u
+          polju ispod, a što nije - nema ga više. Ništa što su deca zaradila se
+          time ne dira. Sličice i greške stoje na rečima, ne na rečenicama, pa
+          album, kesica i niz posle ovog upisa izgledaju isto kao pre njega.
+        </p>
+
+        <div className="mt-4 mb-4">
+          <label className={labelaKlase} htmlFor="zack-recenice">
+            Rečenice, nalepi iz tabele
+          </label>
+          <p className="mb-2 text-xs text-gray-600">
+            {`Jedan red po rečenici, kolone razdvojene tabulatorom: ${UPUTSTVO_RECENICE}`}
+          </p>
+          <textarea
+            id="zack-recenice"
+            rows={12}
+            value={recTekst}
+            onChange={(e) => setRecTekst(e.target.value)}
+            spellCheck={false}
+            placeholder={
+              "Ich habe einen Hund.\tImam psa.\teinen\teine; ein; einem\tder Hund\nKomm schnell nach Hause!\tDođi brzo kući!\tschnell\tschnelle; schneller; schnellen\tschnell\tda"
+            }
+            className={`${poljeKlase} font-mono`}
+          />
+        </div>
+
+        {/* Živi pregled rečenica */}
+        <div className="mb-4 rounded-xl bg-gray-50 p-4">
+          {pregledRec.bezTabulatora ? (
+            <p className="text-sm font-semibold text-[#E5342A]">
+              Nijedan red nema tabulator, pa nijedna rečenica nije prepoznata.
+              Kolone moraju biti razdvojene tabulatorom, ne razmacima. Tačkom i
+              zarezom se razdvajaju samo pogrešni oblici unutar svoje kolone.
+              Ako lepiš iz Excela ili Google tabele, označi ćelije u tabeli i
+              nalepi ih direktno.
+            </p>
+          ) : (
+            <p className="text-sm text-[#16161A]">
+              {`Prepoznato ${pregledRec.redovi.length} ${recenicaOblik(
+                pregledRec.redovi.length
+              )}, sa oznakom „samo dopuna": ${oznacenoDopuna}.`}
+            </p>
+          )}
+
+          {/* Kad nijedan red nema tabulator, svaki red je „problem", pa bi
+              spisak bio dugačak koliko i lekcija. Objašnjenje iznad je već
+              tačno. */}
+          {!pregledRec.bezTabulatora && pregledRec.problemi.length > 0 && (
+            <div className="mt-3">
+              <p className="text-sm font-semibold text-[#E5342A]">
+                {`${pregledRec.problemi.length} ${
+                  pregledRec.problemi.length === 1
+                    ? "red se ne čita"
+                    : "reda se ne čita"
+                }, popravi ih pa sačuvaj:`}
+              </p>
+              <ul className="mt-1 space-y-1">
+                {pregledRec.problemi.slice(0, PRIKAZANIH_PROBLEMA).map((p) => (
+                  <li key={p.broj} className="text-sm text-[#E5342A]">
+                    {`Red ${p.broj}: ${p.poruka}`}
+                  </li>
+                ))}
+              </ul>
+              {pregledRec.problemi.length > PRIKAZANIH_PROBLEMA && (
+                <p className="mt-1 text-sm text-[#E5342A]">
+                  {`... i još ${pregledRec.problemi.length - PRIKAZANIH_PROBLEMA}.`}
+                </p>
+              )}
+            </div>
+          )}
+        </div>
+
+        <button
+          type="button"
+          onClick={() => void posaljiRecenice()}
+          disabled={!mozeDaSacuvaRecenice}
+          className="px-5 py-2.5 rounded-lg text-sm font-semibold bg-[#0B54C9] text-white hover:bg-[#093f97] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          {recCuvanje ? "Čuvanje..." : "Sačuvaj rečenice lekcije"}
+        </button>
+
+        {recGreska && (
+          <p className="mt-4 rounded-lg border border-[#E5342A] bg-[#E5342A]/10 p-3 text-sm font-medium text-[#E5342A]">
+            {recGreska}
+          </p>
+        )}
+
+        {recRezultat &&
+          (recRezultat.uSlagalici === 0 ? (
+            // Lekcija bez ijedne rečenice u slagalici nije greška upisa, ali
+            // jeste rupa u učenju: dete bi dobilo slaganje rečenica u kome
+            // nema šta da složi. Zato ovo ne sme da prođe kao obična potvrda.
+            <div className="mt-4 rounded-xl border-4 border-[#FFC400] bg-[#FFC400]/20 p-6">
+              <p className="text-2xl sm:text-3xl font-extrabold leading-snug text-[#16161A]">
+                {`Upisano je ${recRezultat.upisano} ${recenicaOblik(
+                  recRezultat.upisano
+                )} u lekciju ${recRezultat.uLekciji}, ali nijedna ne ulazi u slagalicu.`}
+              </p>
+              <p className="mt-3 text-base text-[#16161A]">
+                Ova lekcija nema slaganje rečenica - dete u njoj dobija samo
+                dopunu, ni na jednoj rečenici ne slaže pločice.
+              </p>
+              <p className="mt-2 text-base text-[#16161A]">
+                {`U slagalicu ulazi rečenica od ${PLOCICA_NAJMANJE} do ${PLOCICA_NAJVISE} reči. Ako to nisi htela, proveri da nisu sve rečenice kraće ili duže od toga, ili da im u poslednjoj koloni ne piše „da".`}
+              </p>
+            </div>
+          ) : (
+            <div className="mt-4 rounded-lg border border-[#0B54C9] bg-[#0B54C9]/10 p-4">
+              <p className="text-base font-medium text-[#16161A]">
+                {`Upisano je ${recRezultat.upisano} ${recenicaOblik(
+                  recRezultat.upisano
+                )} u lekciju ${recRezultat.uLekciji}. Stare rečenice te lekcije su zamenjene ovim spiskom.`}
+              </p>
+              <p className="mt-2 text-base font-medium text-[#16161A]">
+                {recRezultat.samoDopuna === 0
+                  ? recRezultat.uSlagalici === 1
+                    ? "Ta jedna rečenica ulazi i u slagalicu."
+                    : "Sve ulaze u slagalicu, nijedna nije ostala samo na dopuni."
+                  : `U slagalicu ${uzBroj(recRezultat.uSlagalici, "ulazi", "ulaze")} ${recRezultat.uSlagalici} ${recenicaOblik(
+                      recRezultat.uSlagalici
+                    )}, a ${recRezultat.samoDopuna} ${recenicaOblik(
+                      recRezultat.samoDopuna
+                    )} ${uzBroj(recRezultat.samoDopuna, "ostaje", "ostaju")} samo za dopunu.`}
+              </p>
+              {recRezultat.samoDopuna > 0 && (
+                <p className="mt-2 text-sm text-gray-600">
+                  {`Samo za dopunu ostaju i one koje si sama označila i one koje su van slagalice po dužini - u slagalicu ulazi rečenica od ${PLOCICA_NAJMANJE} do ${PLOCICA_NAJVISE} reči.`}
+                </p>
+              )}
+            </div>
+          ))}
+      </section>
     </div>
   );
 }
