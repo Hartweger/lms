@@ -371,9 +371,14 @@ type RedRecenice = Omit<Recenica, "distraktori"> & { distraktori: unknown };
  *
  * `distraktori` je JSONB, dakle sve što je u bazu upisano, pa se ovde svodi na
  * spisak stringova. Red koji to nije se ne popravlja nego dobija prazne
- * distraktore - `napraviPitanjaRecenica` takvu rečenicu tiho preskoči, isto kao
- * pokvaren red u gramatici. Kvar tako pada u korist deteta: izgubi se jedno
- * pitanje, ne cela igra.
+ * distraktore.
+ *
+ * Takva rečenica se NE preskače: `napraviPitanjaRecenica` bira po
+ * `podobnaZaDopunu`, a to pravilo broji samo pojave praznine i u distraktore
+ * uopšte ne gleda. Pitanje dopune onda od `ponudjeni` dobije jednu jedinu
+ * ponudu - tačan oblik - pa nema šta pogrešno da se izabere. To se namerno ne
+ * dira, jer kvar pada u korist deteta: tačan odgovor stiže badava, a srce se
+ * ne gubi. Slagalicu distraktori ionako ne tiču.
  */
 function uRecenice(redovi: readonly RedRecenice[]): Recenica[] {
   return redovi.map((red) => ({
