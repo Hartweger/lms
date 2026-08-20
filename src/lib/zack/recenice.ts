@@ -57,18 +57,40 @@ export function rastaviRecenicu(de: string): { reci: string[]; znak: string } {
 }
 
 /**
+ * Reč iz spiska bez člana ispred. Udžbenici se ne slažu oko toga kako se imenica
+ * zapisuje: u „nemacki-5-razred" stoji goli oblik („Familie"), a u starijim
+ * „maximal-*" udžbenicima stoji sa članom („die Familie"). Pločica nosi uvek
+ * goli oblik, pa bi poređenje celog zapisa promašilo baš imenice iz starijih
+ * udžbenika i ostavljalo ih malim slovom. Isti oblik izraza kao u
+ * `istoNapisano` (`components/zack/Igra.tsx`), da se pravilo o članu na oba
+ * mesta čita isto.
+ */
+function bezClana(de: string): string {
+  return de.replace(/^(der|die|das)\s+/i, "");
+}
+
+/**
  * Prikazni oblici pločica: prva reč rečenice ide malim slovom, da veliko slovo
  * ne oda rešenje (kod imperativa bi „Mach" odalo poentu). Veliko slovo
  * zadržavaju imenice (nemačke imenice ga ionako nose) i imena iz VELIKA_UVEK.
- * `pool` su reči iz kojih je rečenica sastavljena (lekcija + stare).
+ *
+ * `pool` su reči iz kojih je rečenica sastavljena (lekcija + SVE ranije reči
+ * udžbenika). Ovaj spisak se namerno NE filtrira po tome šta dete već ima u
+ * albumu: veliko slovo je pravilo nemačkog jezika, a ne nagrada. Kad bi pool
+ * bio spisak zarađenih reči, detetu koje još ništa nije zaradilo bi svaka
+ * imenica iz ranijih lekcija osvanula malim slovom - pogrešan nemački, i to
+ * baš onom detetu koje najmanje ume da ga prepozna.
  */
 export function prikazPlocica(reci: readonly string[], pool: readonly Rec[]): string[] {
   return reci.map((r, i) => {
     if (i > 0) return r;
     if (VELIKA_UVEK.has(r)) return r;
-    const jeImenica = pool.some(
-      (p) => p.vrsta === "imenica" && p.de.toLocaleLowerCase("de") === r.toLocaleLowerCase("de")
-    );
+    const plocica = r.toLocaleLowerCase("de");
+    const jeImenica = pool.some((p) => {
+      if (p.vrsta !== "imenica") return false;
+      const zapis = p.de.toLocaleLowerCase("de");
+      return zapis === plocica || bezClana(zapis) === plocica;
+    });
     return jeImenica ? r : r.toLocaleLowerCase("de");
   });
 }

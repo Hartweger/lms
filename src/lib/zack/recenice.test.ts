@@ -74,6 +74,24 @@ describe("prikazPlocica", () => {
     expect(prikazPlocica(["Buch", "und", "Heft"], pool)[0]).toBe("Buch");
   });
 
+  it("imenica upisana sa članom zadržava veliko slovo na goloj pločici", () => {
+    // Stariji udžbenici („maximal-*") imenicu čuvaju kao „die Mutter", a
+    // pločica nosi samo „Mutter". Bez skidanja člana bi ovde pisalo „mutter".
+    const saClanom = [rec({ de: "die Mutter", vrsta: "imenica" })];
+    expect(prikazPlocica(["Mutter", "kocht", "gern"], saClanom)[0]).toBe("Mutter");
+  });
+
+  it("goli zapis imenice i dalje radi", () => {
+    const bezClana = [rec({ de: "Mutter", vrsta: "imenica" })];
+    expect(prikazPlocica(["Mutter", "kocht", "gern"], bezClana)[0]).toBe("Mutter");
+  });
+
+  it("reč koja nije imenica ide malim slovom i kad je u spisku sa članom", () => {
+    // „Die" je ovde član iz zapisa, ne dokaz da je prva reč imenica.
+    const spisak = [rec({ de: "die Mutter", vrsta: "imenica" })];
+    expect(prikazPlocica(["Kocht", "die", "Mutter"], spisak)[0]).toBe("kocht");
+  });
+
   it("ime iz ugrađenog spiska zadržava veliko slovo", () => {
     expect(prikazPlocica(["Anna", "ist", "nett"], pool)[0]).toBe("Anna");
   });

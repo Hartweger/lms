@@ -127,6 +127,10 @@ export default async function LekcijaPage({
         lekcija={lekcija}
         reci={reci}
         stareReci={stareReci}
+        // Sve ranije reči, bez filtera po albumu. Služe SAMO pravilu velikog
+        // slova na pločicama: nemačka imenica se piše velikim slovom bez obzira
+        // na to da li je dete njenu sličicu već zaradilo.
+        sveStareReci={sveStare}
         recenice={recenice}
         stareRecenice={stareRecenice}
         pocetniProsaoReci={prolazi.has("reci")}

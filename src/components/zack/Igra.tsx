@@ -172,6 +172,7 @@ export default function Igra({
   childId,
   reci,
   stare = [],
+  sveStare = [],
   recenice = [],
   stareRecenice = [],
   vrsta,
@@ -187,6 +188,14 @@ export default function Igra({
    * boju) - novu sličicu ne pravi, pa ni kesicu ne dira.
    */
   stare?: StaraRec[];
+  /**
+   * SVE reči ranijih lekcija, bez filtera po albumu. Ulaze isključivo u spisak
+   * po kome se odlučuje veliko slovo prve pločice. Ponavljanje ih NE koristi -
+   * ono i dalje bira iz `stare`, jer se dete sme pitati samo ono što je
+   * zaradilo. Veliko slovo nemačke imenice nije nagrada nego pravopis, pa mu
+   * spisak zarađenog nije merilo.
+   */
+  sveStare?: Rec[];
   /** Rečenice OVE lekcije - hrane slagalicu, dopunu i učenje rečenica. */
   recenice?: Recenica[];
   /**
@@ -247,6 +256,12 @@ export default function Igra({
     stareRef.current = stare;
   }, [stare]);
 
+  // I za spisak po kom se odlučuje veliko slovo.
+  const sveStareRef = useRef(sveStare);
+  useEffect(() => {
+    sveStareRef.current = sveStare;
+  }, [sveStare]);
+
   // I za rečenice: i one stižu kao nov niz pri svakom renderu roditelja.
   const receniceRef = useRef(recenice);
   useEffect(() => {
@@ -275,10 +290,12 @@ export default function Igra({
       // ova lekcija. Vežbe (slagalica i dopuna) idu normalnu partiju, sa
       // umešanim rečenicama starih reči.
       const ucenje = vrsta === "ucenje-recenica";
-      // Pogrešni odgovori i pravilo velikog slova gledaju u ZAJEDNIČKI skup
-      // reči, da pitanje o staroj reči ne bude prepoznatljivo po tome što nudi
-      // manje ili drugačije reči.
-      const pool = [...reciRef.current, ...stareRef.current.map((s) => s.rec)];
+      // Pravilo velikog slova gleda u SVE reči udžbenika do ove lekcije, ne
+      // samo u one koje dete već ima u albumu. Nemačka imenica se piše velikim
+      // slovom bez obzira na to čija je sličica zarađena, pa bi spisak
+      // zarađenog ovde značio da detetu koje tek počinje svaka stara imenica
+      // osvane malim slovom.
+      const pool = [...reciRef.current, ...sveStareRef.current];
       setSesija(
         novaSesija(
           recenicnaPitanja(

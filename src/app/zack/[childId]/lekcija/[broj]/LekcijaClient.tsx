@@ -678,6 +678,7 @@ export default function LekcijaClient({
   lekcija,
   reci,
   stareReci,
+  sveStareReci,
   recenice,
   stareRecenice,
   pocetniProsaoReci,
@@ -696,6 +697,14 @@ export default function LekcijaClient({
    * već ima u albumu, sa izbledelošću i brojem grešaka. Prva lekcija ih nema.
    */
   stareReci: StaraRec[];
+  /**
+   * SVE reči ranijih lekcija, bez filtera po albumu. Koriste se ISKLJUČIVO za
+   * pravilo velikog slova na pločicama rečenica. Ponavljanje i dalje ide preko
+   * `stareReci`, jer se dete sme pitati samo ono što je zaradilo - a veliko
+   * slovo nemačke imenice nije nagrada nego pravopis, pa mu spisak zarađenog
+   * nije merilo.
+   */
+  sveStareReci: Rec[];
   /**
    * Rečenice OVE lekcije. Iz njih se vidi i šta ekran uopšte sme da ponudi:
    * lekcija bez ijedne pločične rečenice nema „Nauči rečenice" ni „Složi
@@ -1074,6 +1083,7 @@ export default function LekcijaClient({
         childId={childId}
         reci={reci}
         stare={stareReci}
+        sveStare={sveStareReci}
         recenice={recenice}
         stareRecenice={stareRecenice}
         vrsta={igra}
