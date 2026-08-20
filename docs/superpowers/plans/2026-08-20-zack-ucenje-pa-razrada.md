@@ -2016,6 +2016,19 @@ i prosledi u klijenta:
 
 - [ ] **Step 2: `LekcijaClient.tsx` - novi props i stanje**
 
+VAŽNO (posledica popravke iz Taska 2-4): `napraviPitanja` sada prima samo
+`IgraReci` (igre od reči), pa su i `IGRE` i stanje `igra` u ovoj datoteci
+suženi na `VrstaIgreReci`. Rečenične igre MORAJU da prođu kroz isto telo
+`Igra`, pa u ovom tasku:
+- stanje `igra` se vraća na širi tip: `useState<VrstaIgre | null>(null)`
+  (sve igre, jer se sada bira i slagalica/dopuna/učenje rečenica),
+- `IGRE` OSTAJE `readonly VrstaIgreReci[]` - to je spisak šest pločica vežbi
+  od reči i ne sme da primi rečenične,
+- ljuska `Igra` (`components/zack/Igra.tsx`) mora da primi `vrsta: VrstaIgre`
+  umesto suženog tipa, jer od ovog taska stvarno crta i rečenična pitanja;
+  unutra `kolikoPitanja` i poziv `pitanjaSaStarima` ostaju na `IgraReci`
+  grani (vidi grananje u Step 3 Taska 8).
+
 Dodaj u props tip (uz komentar u stilu datoteke):
 
 ```ts
