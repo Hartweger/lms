@@ -109,6 +109,14 @@ export async function POST(request: Request) {
     poDe.set(normalizujDe(rec.de), rec.id);
   }
 
+  // Lekcija ume da postoji bez ijedne reči. Preslikavanje je tada prazno, pa bi
+  // već prva rečenica pala na „glavna reč nije reč ove lekcije" - poruka koja
+  // šalje da se greška traži u rečenici, a rečenice su ispravne. Zato se to
+  // kaže odmah i svojim imenom.
+  if (poDe.size === 0) {
+    return greska(`Lekcija ${broj} još nema nijednu reč, prvo upiši reči lekcije`, 400);
+  }
+
   // 5. Provera celog spiska. Prva pokvarena rečenica ruši ceo upis, sa brojem
   // reda u poruci: pola upisane lekcije bi detetu davalo pitanja bez rešenja.
   const priprema = pripremiRecenice(body.recenice, poDe);

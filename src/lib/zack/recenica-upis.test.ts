@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { pripremiRecenice } from "./recenica-upis";
+import { NAJVISE_RECENICA, pripremiRecenice } from "./recenica-upis";
 
 /** Reči lekcije kakve ruta pročita iz baze: de → id. */
 const reciLekcije = new Map([
@@ -149,5 +149,84 @@ describe("pripremiRecenice", () => {
     );
     expect(ishod.ok).toBe(false);
     if (!ishod.ok) expect(ishod.greska).toContain("jednak tačnom odgovoru");
+  });
+
+  it("odbija spisak duži od granice", () => {
+    const previse = Array.from({ length: NAJVISE_RECENICA + 1 }, () => red());
+    const ishod = pripremiRecenice(previse, reciLekcije);
+    expect(ishod.ok).toBe(false);
+    if (!ishod.ok) expect(ishod.greska).toContain(String(NAJVISE_RECENICA));
+  });
+
+  it("odbija ulaz koji uopšte nije niz", () => {
+    expect(pripremiRecenice("Ich komme aus Serbien.", reciLekcije).ok).toBe(false);
+    expect(pripremiRecenice(null, reciLekcije).ok).toBe(false);
+    expect(pripremiRecenice({ 0: red() }, reciLekcije).ok).toBe(false);
+  });
+
+  it("odbija red koji nije objekat", () => {
+    for (const nijeRed of ["Ich komme aus Serbien.", null, 7, ["de", "sr"]]) {
+      const ishod = pripremiRecenice([nijeRed], reciLekcije);
+      expect(ishod.ok).toBe(false);
+      if (!ishod.ok) expect(ishod.greska).toContain("Rečenica broj 1");
+    }
+  });
+
+  it("odbija red kome nedostaje obavezno polje, i kaže koje", () => {
+    const polja: [string, string][] = [
+      ["de", "nemačka rečenica"],
+      ["sr", "prevod na naš jezik"],
+      ["praznina", "oblik koji se vadi za dopunu"],
+      ["glavna", "glavna reč"],
+    ];
+    for (const [polje, deoPoruke] of polja) {
+      const ishod = pripremiRecenice([red({ [polje]: "" })], reciLekcije);
+      expect(ishod.ok).toBe(false);
+      if (!ishod.ok) expect(ishod.greska).toContain(deoPoruke);
+    }
+  });
+
+  it("odbija distraktore koji nisu niz", () => {
+    const ishod = pripremiRecenice([red({ distraktori: "kommst" })], reciLekcije);
+    expect(ishod.ok).toBe(false);
+    if (!ishod.ok) expect(ishod.greska).toContain("spisak");
+  });
+
+  it("odbija pogrešan oblik koji nije tekst", () => {
+    const ishod = pripremiRecenice([red({ distraktori: ["kommst", 5, "kommt"] })], reciLekcije);
+    expect(ishod.ok).toBe(false);
+    if (!ishod.ok) expect(ishod.greska).toContain("Rečenica broj 1");
+  });
+
+  // Redni broj je didaktički redosled lekcije, pa mora da prati red u tabeli,
+  // a ne da svaka rečenica bude prva.
+  it("redni_broj prati redosled iz spiska", () => {
+    const ishod = pripremiRecenice(
+      [
+        red(),
+        red({
+          de: "Wir wohnen in Berlin.",
+          praznina: "wohnen",
+          glavna: "wohnen",
+          distraktori: ["wohne", "wohnst", "wohnt"],
+        }),
+        red({
+          de: "Sie kommt aus Serbien.",
+          praznina: "Serbien",
+          glavna: "Serbien",
+          distraktori: ["Berlin", "Bonn", "Wien"],
+        }),
+      ],
+      reciLekcije
+    );
+    expect(ishod.ok).toBe(true);
+    if (ishod.ok) {
+      expect(ishod.recenice.map((r) => r.redni_broj)).toEqual([1, 2, 3]);
+      expect(ishod.recenice.map((r) => r.rec_id)).toEqual([
+        "id-kommen",
+        "id-wohnen",
+        "id-serbien",
+      ]);
+    }
   });
 });
