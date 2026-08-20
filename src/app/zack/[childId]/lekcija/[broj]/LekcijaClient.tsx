@@ -37,9 +37,15 @@
 //    prazna mesta koja nema čime da popuni.
 // 5. Prođena faza učenja ide TIM ISTIM putem, uporedo sa spiskom tačnih.
 //    Katanac se u stanju otvara odmah, ne čekajući mrežu, ali upis koji ne
-//    stigne ostaje u ruci (`neposlataFaza`) i ide uz prvi sledeći pokušaj.
+//    stigne ostaje u ruci (`neposlateFaze`) i ide uz prvi sledeći pokušaj.
 //    Inače bi dete koje je učenje prešlo na klimavoj vezi videlo otvorene
 //    vežbe, osvežilo stranicu i dobilo katanac nazad.
+// 6. ALI KESICA NIKAD NE ČEKA NA TAJ UPIS. Sličice su detetove; prolaz je
+//    knjigovodstvo. Kad sličice stignu, kesica se otvara i onda kad upis
+//    prolaza padne - i o tom padu se detetu ne kaže NIŠTA, jer se ništa nije
+//    izgubilo i svaka poruka o kvaru bi tu bila neistina. Izgubljen prolaz
+//    košta jedno ponavljanje faze koju dete i ovako sme da ponavlja kad god
+//    hoće; zadržana kesica bi bila oduzimanje zarađenog.
 //
 // ŠTA ALBUM SME DA POKAŽE
 // -----------------------
@@ -678,6 +684,28 @@ function RedPrazno({ children }: { children: React.ReactNode }) {
 
 type Poruka = "prazna-kesica" | "greska-kesice" | "nije-stiglo" | null;
 
+/**
+ * Prolaz kroz fazu učenja koji čeka na upis. Nosi SVOJU lekciju uza se, a ne
+ * samo naziv faze: ponovni pokušaj sme da se desi i pošto je dete otišlo na
+ * drugu lekciju, pa bi prolaz bez lekcije mogao da se upiše na pogrešnu.
+ */
+type Prolaz = { lekcijaId: string; faza: "reci" | "recenice" };
+
+function kljucProlaza(p: Prolaz): string {
+  return `${p.lekcijaId}:${p.faza}`;
+}
+
+/**
+ * Dodaje prolaz u red čekanja, bez duplikata. Red, a ne jedno mesto: dete ume
+ * da u istoj poseti pređe i reči i rečenice, pa bi jedno mesto tiho progutalo
+ * prvi prolaz čim stigne drugi - a progutan prolaz vraća katanac.
+ */
+function saProlazom(red: readonly Prolaz[], nov: Prolaz | null): Prolaz[] {
+  if (!nov) return [...red];
+  const kljuc = kljucProlaza(nov);
+  return red.some((p) => kljucProlaza(p) === kljuc) ? [...red] : [...red, nov];
+}
+
 export default function LekcijaClient({
   childId,
   lekcija,
@@ -804,10 +832,13 @@ export default function LekcijaClient({
   // propala kad dete odigra sledeću. Referenca, ne stanje: čita se unutar
   // asinhronog toka, gde bi zatvorena vrednost stanja bila zastarela.
   const neposlato = useRef<string[]>([]);
-  // Isto za prođenu fazu učenja: faza koja nije stigla do baze čeka ovde i ide
-  // uz prvi sledeći pokušaj. Bez toga bi dete koje je učenje prešlo na klimavoj
-  // vezi zateklo vežbe opet pod katancem čim osveži stranicu.
-  const neposlataFaza = useRef<"reci" | "recenice" | null>(null);
+  // Isto za prođene faze učenja: prolaz koji nije stigao do baze čeka ovde i
+  // ide uz prvi sledeći pokušaj. Bez toga bi dete koje je učenje prešlo na
+  // klimavoj vezi zateklo vežbe opet pod katancem čim osveži stranicu.
+  //
+  // Ovo NIJE razlog da se kesica zadrži - vidi tačku 6 na vrhu fajla. Ovde se
+  // samo tiho popravlja knjigovodstvo, bez ijedne reči detetu.
+  const neposlateFaze = useRef<Prolaz[]>([]);
   // Isto: drugi tap na „Probaj ponovo" ne sme da pokrene drugi tok.
   const krajUToku = useRef(false);
 
@@ -890,14 +921,19 @@ export default function LekcijaClient({
    * svih 26 reči je videlo otvorene vežbe, osvežilo stranicu i dočekalo
    * „Vežbe se otključavaju kad jednom pređeš Učenje." Rečenica je mirna, ali je
    * detetu koje je taj posao upravo odradilo poricanje.
+   *
+   * Lekcija stiže IZ SAMOG PROLAZA, ne iz propova ekrana. Ponovni pokušaj sme
+   * da krene i pošto je dete otvorilo drugu lekciju, pa bi lekcija sa ekrana
+   * upisala prolaz na pogrešnu - a to bi detetu otključalo ono kroz šta nije
+   * prošlo i ostavilo zaključanim ono kroz šta jeste.
    */
   const posaljiProlaz = useCallback(
-    async (faza: "reci" | "recenice"): Promise<boolean> => {
+    async ({ lekcijaId, faza }: Prolaz): Promise<boolean> => {
       try {
         const odgovor = await fetch(`/api/zack/${childId}/ucenje`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ lekcijaId: lekcija.id, faza }),
+          body: JSON.stringify({ lekcijaId, faza }),
           // Dete često zatvori karticu čim vidi kraj učenja.
           keepalive: true,
         });
@@ -906,7 +942,7 @@ export default function LekcijaClient({
         return false;
       }
     },
-    [childId, lekcija.id]
+    [childId]
   );
 
   /**
@@ -919,12 +955,27 @@ export default function LekcijaClient({
    * na sličice. Katanac se u stanju otvara odmah, još pre ovoga - ovde se samo
    * osigurava da to preživi i osvežavanje stranice.
    *
-   * Ako nešto od toga ne prođe, kesica se NE otvara: bila bi to poruka o uspehu
-   * preko toka koji nije uspeo. Umesto toga se kaže istina, a spisak i faza se
-   * čuvaju za sledeći pokušaj - koji je jedan tap na „Probaj ponovo".
+   * KESICA VISI SAMO O SLIČICAMA, NIKAD O PROLAZU.
+   * Ako sličice ne prođu, kesica se NE otvara: bila bi to poruka o uspehu preko
+   * toka koji nije uspeo. Tada se kaže istina, a spisak se čuva za sledeći
+   * pokušaj - koji je jedan tap na „Probaj ponovo".
+   * Ako sličice prođu a prolaz padne, kesica se otvara SASVIM NORMALNO i detetu
+   * se o tome ne kaže ni reč. Sličice su njegove i stoje u bazi; svaka poruka o
+   * kvaru bi tu bila neistina, a zadržana kesica oduzimanje zarađenog. Prolaz
+   * se tiho ponavlja: uz „Probaj ponovo" ako ga dete slučajno pritisne, i uz
+   * prvi sledeći kraj partije. Najgore što se desi je da sledeća poseta još
+   * jednom zatraži fazu koju dete i ovako sme da ponavlja kad god hoće.
    */
   const zavrsiIgru = useCallback(
     async (tacniRecIdovi: string[], faza?: "reci" | "recenice") => {
+      // Svež prolaz se PRVO upiše u red čekanja, pa se tek onda gleda ide li
+      // ovaj tok dalje. Da ga rani izlaz ispod (drugi tap dok prvi još traje)
+      // ne bi progutao u tišini.
+      neposlateFaze.current = saProlazom(
+        neposlateFaze.current,
+        faza ? { lekcijaId: lekcija.id, faza } : null
+      );
+
       if (krajUToku.current) return;
       krajUToku.current = true;
       setSaljem(true);
@@ -932,20 +983,26 @@ export default function LekcijaClient({
 
       // Uz svež spisak ide i sve što je zaostalo od ranijih partija.
       const zaSlanje = [...new Set([...neposlato.current, ...tacniRecIdovi])];
-      const zaFazu = faza ?? neposlataFaza.current;
+      const zaFaze = neposlateFaze.current;
       // Zajedno, ne jedno za drugim: dva čekanja u nizu bi detetu produžila
       // ekran „Samo trenutak..." bez ijednog razloga.
       // Nijedna od dve funkcije ne baca, pa ovde nema šta da se hvata.
-      const [stiglo, stiglaFaza] = await Promise.all([
+      const [stiglo, stigleFaze] = await Promise.all([
         posaljiZaradjeno(zaSlanje),
-        zaFazu ? posaljiProlaz(zaFazu) : Promise.resolve(true),
+        Promise.all(zaFaze.map((p) => posaljiProlaz(p))),
       ]);
+
       neposlato.current = stiglo ? [] : zaSlanje;
-      neposlataFaza.current = stiglaFaza ? null : zaFazu;
+      // Iz reda se BRIŠE samo ono što je zaista stiglo. Sve ostalo ostaje da
+      // čeka - i ono što je palo, i ono što je u međuvremenu dodato - pa nijedan
+      // prolaz ne može tiho da ispari, a red ne može da ostane pun već upisanog.
+      const stigli = new Set(zaFaze.filter((_, redni) => stigleFaze[redni]).map(kljucProlaza));
+      neposlateFaze.current = neposlateFaze.current.filter((p) => !stigli.has(kljucProlaza(p)));
+
       krajUToku.current = false;
       setSaljem(false);
 
-      if (!stiglo || !stiglaFaza) {
+      if (!stiglo) {
         setPoruka("nije-stiglo");
         setNajava(
           "Internet trenutno ne radi kako treba, pa neke sličice iz ove igre možda nisu stigle. Probaj ponovo kad veza proradi."
@@ -953,9 +1010,12 @@ export default function LekcijaClient({
         return;
       }
 
+      // Sličice su stigle. Odavde nadalje pad prolaza NE menja ništa: kesica se
+      // otvara, katanac koji je već otvoren u stanju tako i ostaje do kraja
+      // posete, i nijedna poruka se detetu ne prikazuje.
       await otvoriKesicu();
     },
-    [otvoriKesicu, posaljiProlaz, posaljiZaradjeno]
+    [lekcija.id, otvoriKesicu, posaljiProlaz, posaljiZaradjeno]
   );
 
   /**
@@ -1026,7 +1086,7 @@ export default function LekcijaClient({
       const presao = odigrana === "ucenje-recenica" && prosloSve;
       if (presao) setProsaoRecenice(true);
       // Faza ide istim sigurnim putem kao i sličice, ne zasebnim slanjem koje
-      // sme tiho da padne.
+      // sme tiho da padne - ali ih ne zadržava: sličice ne čekaju knjigovodstvo.
       void zavrsiIgru(tacniRecIdovi, presao ? "recenice" : undefined);
     },
     [igra, upisiRekord, zavrsiIgru]
@@ -1090,7 +1150,9 @@ export default function LekcijaClient({
           // Ovo se NE sme preskočiti ni u jednom slučaju: `zavrsiIgru` je ono
           // što garantuje da zarađeno stvarno stigne (slanje iz same provere
           // sme tiho da padne) i što otvara kesicu. Istim putem ide i prođena
-          // faza, da otključane vežbe prežive osvežavanje stranice.
+          // faza, da otključane vežbe prežive osvežavanje stranice - ali kesica
+          // se otvara i kad taj upis padne. Katanac gore je već otvoren i takav
+          // ostaje do kraja posete, ma šta mreža radila.
           void zavrsiIgru(tacni, prosloSve ? "reci" : undefined);
         }}
       />
@@ -1344,10 +1406,14 @@ export default function LekcijaClient({
         </section>
       )}
 
-      {/* Ponovno slanje nije prošlo. Ovde se NE sme reći da je sve na broju,
-          jer nije: deo iz ove partije možda nije stigao do baze. Kaže se
-          mirno, bez uzvičnika i bez prebacivanja, i ponudi se pokušaj ponovo -
-          spisak stoji sačuvan i ide uz njega. */}
+      {/* SLIČICE nisu prošle - i samo zbog njih. Ovde se NE sme reći da je sve
+          na broju, jer nije: deo iz ove partije možda nije stigao do baze. Kaže
+          se mirno, bez uzvičnika i bez prebacivanja, i ponudi se pokušaj ponovo
+          - spisak stoji sačuvan i ide uz njega.
+
+          Neupisan prolaz kroz fazu učenja NIKAD ne dovodi do ove poruke: tada
+          su sličice stigle, pa bi ova rečenica bila neistina. Prolaz se popravi
+          tiho, uz ovaj isti tap ako se dogodi, i uz sledeći kraj partije. */}
       {poruka === "nije-stiglo" && (
         <section
           className="mb-6 rounded-2xl border-2 p-4"
