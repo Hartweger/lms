@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import type { Rec } from "./rec";
-import { napraviGrupe, miniProvera, GRUPA_NAJVISE } from "./ucenje";
+import { napraviGrupe, miniProvera, GRUPA_NAJVISE, PROVERA_PITANJA } from "./ucenje";
 
 function rngNiz(vrednosti: number[]): () => number {
   let i = 0;
@@ -46,6 +46,28 @@ describe("napraviGrupe", () => {
 
   it("prazan spisak daje prazan niz grupa", () => {
     expect(napraviGrupe([])).toEqual([]);
+  });
+
+  // Pojedinačni primeri gore prolaze i podeli koja na kraju ostavi patrljak, pa
+  // se pravilo proverava za SVAKU veličinu lekcije odjednom.
+  it("invarijanta za svaku veličinu lekcije", () => {
+    for (let n = 1; n <= 40; n++) {
+      const grupe = napraviGrupe(spisak(n));
+      const duzine = grupe.map((g) => g.length);
+      expect(duzine.reduce((a, b) => a + b, 0)).toBe(n);
+      expect(Math.max(...duzine)).toBeLessThanOrEqual(GRUPA_NAJVISE);
+      expect(Math.max(...duzine) - Math.min(...duzine)).toBeLessThanOrEqual(1);
+      expect(grupe.flat().map((r) => r.redni_broj)).toEqual(spisak(n).map((r) => r.redni_broj));
+      // Grupa manja od provere bi detetu dala kraću proveru nego što je obećano.
+      if (n >= PROVERA_PITANJA) expect(Math.min(...duzine)).toBeGreaterThanOrEqual(PROVERA_PITANJA);
+    }
+  });
+
+  // Uvoznik lekcije ume da propusti dve reči sa istim rednim brojem. Ređanje
+  // mora da ostane stabilno, da red iz tabele ne bi zavisio od načina sortiranja.
+  it("dve reči sa istim rednim brojem zadržavaju redosled iz spiska", () => {
+    const reci = [rec("prva", 2), rec("druga", 2), rec("treca", 1)];
+    expect(napraviGrupe(reci)[0].map((r) => r.id)).toEqual(["treca", "prva", "druga"]);
   });
 });
 
