@@ -284,6 +284,53 @@ describe("recenicnaPitanja", () => {
     expect(p).toHaveLength(8);
   });
 
+  it("stara reč sa podobnom rečenicom pretekne onu bez nje", () => {
+    // Kvota je tačno jedna stara (floor(4 * 0.25)). `r8` ima više grešaka, pa
+    // po rangiranju ide prva - ali nema nijednu rečenicu, pa bi njen izbor
+    // pojeo celu kvotu i od ponavljanja kroz rečenice ne bi ostalo ništa.
+    const bezRecenice: StaraRec = { rec: rec({ id: "r8" }), izbledela: true, gresaka: 9 };
+    const saRecenicom: StaraRec = { rec: rec({ id: "r9" }), izbledela: false, gresaka: 1 };
+    const staraRecenica = recenica({
+      id: "s9",
+      rec_id: "r9",
+      de: "Wo wohnst du?",
+      praznina: "wohnst",
+    });
+    const p = recenicnaPitanja(
+      lekcijske(4),
+      [staraRecenica],
+      [bezRecenice, saRecenicom],
+      "dopuna",
+      4,
+      rngNiz([0.1, 0.9, 0.4, 0.6]),
+      []
+    );
+    expect(p.some((x) => x.igra === "dopuna" && x.recenicaId === "s9")).toBe(true);
+    expect(p).toHaveLength(4);
+  });
+
+  it("podobnost se gleda po IGRI: rečenica samo za dopunu ne kvalifikuje za slagalicu", () => {
+    const stara: StaraRec = { rec: rec({ id: "r9" }), izbledela: true, gresaka: 9 };
+    const samoDopuna = recenica({
+      id: "s9",
+      rec_id: "r9",
+      de: "Wo wohnst du?",
+      praznina: "wohnst",
+      samo_dopuna: true,
+    });
+    const p = recenicnaPitanja(
+      lekcijske(4),
+      [samoDopuna],
+      [stara],
+      "slagalica",
+      4,
+      rngNiz([0.3, 0.7]),
+      []
+    );
+    expect(p.some((x) => x.igra === "slagalica" && x.recenicaId === "s9")).toBe(false);
+    expect(p).toHaveLength(4);
+  });
+
   it("rečenica stare reči koja nije izabrana ne ulazi", () => {
     const staraRecenica = recenica({ id: "s9", rec_id: "r9", de: "Wo wohnst du?", praznina: "wohnst" });
     const p = recenicnaPitanja(lekcijske(4), [staraRecenica], [], "dopuna", 8, rngNiz([0.5]), []);

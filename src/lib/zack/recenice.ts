@@ -229,8 +229,14 @@ export function napraviPitanjaRecenica(
  *
  * Stara pitanja ULAZE u dogovoreni broj, ne preko njega: koliko ih se stvarno
  * napravilo, toliko manje ide lekcijskih. Broji se ono što je napravljeno, a ne
- * ono što je izabrano, jer stara reč ume da nema nijednu rečenicu podobnu za
- * ovu igru - tada njeno mesto mirno pripadne lekciji umesto da propadne.
+ * ono što je izabrano, jer i posle svega ispod ume da se desi da pitanje ne
+ * ispadne - tada mesto mirno pripadne lekciji umesto da propadne.
+ *
+ * IZBOR IDE SAMO MEĐU REČIMA KOJE ZAISTA IMAJU REČENICU ZA OVU IGRU. Ranije se
+ * biralo iz svih starih reči pa se presecalo sa rečenicama, a većina starih
+ * reči nije glavna reč nijedne rečenice - kvota se time gotovo uvek istopila i
+ * ponavljanja kroz rečenice praktično nije ni bilo. Isti redosled kao u
+ * `pitanjaSaStarima`: prvo se sužava na podobne kandidate, pa se onda bira.
  */
 export function recenicnaPitanja(
   recenice: readonly Recenica[],
@@ -242,7 +248,16 @@ export function recenicnaPitanja(
   pool: readonly Rec[]
 ): Pitanje[] {
   const kvota = kvotaStarih(koliko);
-  const izabraneStare = izaberiStare(stare, kvota, rng);
+  const podobna = igra === "slagalica" ? podobnaZaSlagalicu : podobnaZaDopunu;
+  // Reči koje imaju bar jednu rečenicu podobnu BAŠ ZA OVU igru. Rečenica koja
+  // ne ulazi u slagalicu (previše pločica, više ispravnih redosleda) ne čini
+  // svoju reč kandidatom za slagalicu, ma koliko drugih rečenica imala.
+  const saRecenicom = new Set(stareRecenice.filter(podobna).map((s) => s.rec_id));
+  const izabraneStare = izaberiStare(
+    stare.filter((s) => saRecenicom.has(s.rec.id)),
+    kvota,
+    rng
+  );
   const stariIdovi = new Set(izabraneStare.map((r) => r.id));
   const kandidati = stareRecenice.filter((s) => stariIdovi.has(s.rec_id));
 
