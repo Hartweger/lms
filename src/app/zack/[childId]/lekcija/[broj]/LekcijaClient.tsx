@@ -61,7 +61,11 @@ import Slicica from "@/components/zack/Slicica";
 import UcenjeReci from "@/components/zack/UcenjeReci";
 import { brojac, type StavkaAlbuma } from "@/lib/zack/album";
 import { PORUKA_ZAKLJUCANO } from "@/lib/zack/clanstvo";
-import type { Igra as VrstaIgre, IgraReci as VrstaIgreReci } from "@/lib/zack/pitanja";
+import {
+  igreSaDovoljnoReci,
+  type Igra as VrstaIgre,
+  type IgraReci as VrstaIgreReci,
+} from "@/lib/zack/pitanja";
 import { dokleSePopela, opisSprata } from "@/lib/zack/pojas";
 import type { StaraRec } from "@/lib/zack/ponavljanje";
 import { podobnaZaDopunu, podobnaZaSlagalicu, type Recenica } from "@/lib/zack/recenice";
@@ -102,6 +106,10 @@ type Lekcija = {
  * spisak je spisak ŠEST VEŽBI OD REČI i rečenična igra u njemu nema šta da
  * traži: „Nauči rečenice" pripada Učenju, a slagalica i dopuna Rečenicama, i
  * nijedna od njih ne sme da se pojavi među vežbama koje čekaju na učenje reči.
+ *
+ * Ovo je NAJVIŠE što lekcija ume da ponudi, ne i ono što se uvek vidi: kroz
+ * `igreSaDovoljnoReci` ispada svaka igra kojoj u lekciji nema dovoljno svojih
+ * reči (vidi `igreLekcije` niže).
  */
 const IGRE: readonly VrstaIgreReci[] = [
   "parovi",
@@ -1189,6 +1197,21 @@ export default function LekcijaClient({
   const imaSlagalicu = recenice.some(podobnaZaSlagalicu);
   const imaDopunu = recenice.some(podobnaZaDopunu);
 
+  // Isto pravilo i za vežbe: igra kojoj u lekciji nema ni pet svojih reči se ne
+  // nudi. Lekcija puna reči bez množine (Hunger, Durst, Wasser) je do sada
+  // davala „Množinu" od tri pitanja - a tako kratka partija detetu ne izgleda
+  // kao kratka nego kao pokvarena. Podobnost broji `igreSaDovoljnoReci` preko
+  // istog `podobnaZaIgru` po kom se prave i sama pitanja.
+  //
+  // ISTO I POD KATANCEM ČLANSTVA. Broj podobnih reči je osobina SADRŽAJA
+  // lekcije, ne deteta ni njegovog članstva, pa se ne sme razlikovati: pločica
+  // koja pod katancem stoji, a posle uključenog članstva nestane, izgledala bi
+  // kao da je nešto oduzeto. Ovako je nema ni pre ni posle.
+  //
+  // Ovim se NE oduzima ništa: sličice zarađene u igri koje više nema i dalje
+  // stoje u albumu, kao i rekord u skakaču.
+  const igreLekcije = igreSaDovoljnoReci(reci, IGRE);
+
   // KATANAC SE NIKAD NE VEZUJE ZA USLOV KOJI SE NE MOŽE ISPUNITI.
   // Učenje rečenica se pravi od pločica, pa lekcija bez ijedne pločične
   // rečenice tu fazu NEMA. Kad je nema, nema se ni šta preći - i dopuna stoji
@@ -1640,22 +1663,27 @@ export default function LekcijaClient({
           viđeno - a ne oduzimaju ništa dok čekaju. */}
       <section className="mb-8">
         <NaslovSekcije>Vežbe</NaslovSekcije>
-        {zakljucano ? (
+        {igreLekcije.length === 0 ? (
+          /* Prazna sekcija ide PRE svih ostalih grana, i pre katanca članstva:
+             naslov iznad rešetke bez ijedne pločice izgleda kao kvar. Ista
+             mirna rečenica kao u Učenju, samo se razlikuje po tome čega nema. */
+          <RedPrazno>
+            {imaReci
+              ? "U ovoj lekciji još nema vežbi od ovih reči, pa nema ni šta da se igra. Vrati se malo kasnije."
+              : "U ovoj lekciji još nema reči, pa nema ni šta da se igra. Vrati se malo kasnije."}
+          </RedPrazno>
+        ) : zakljucano ? (
           /* Razlog stoji iznad svih sekcija, pa se ovde ne ponavlja. Ova grana
              namerno dolazi PRE grane sa čekanjem učenja: dok važi katanac
              članstva, red „Vežbe se otključavaju kad jednom pređeš Učenje." se
              ne crta, jer bi detetu ponudio drugi razlog za isti katanac. */
           <ul className="grid grid-cols-2 gap-3">
-            {IGRE.map((vrsta) => (
+            {igreLekcije.map((vrsta) => (
               <li key={vrsta}>
                 <PlocicaZakljucana vrsta={vrsta} />
               </li>
             ))}
           </ul>
-        ) : reci.length === 0 ? (
-          <RedPrazno>
-            U ovoj lekciji još nema reči, pa nema ni šta da se igra. Vrati se malo kasnije.
-          </RedPrazno>
         ) : cekaUcenjeReci ? (
           <>
             {/* Konstatacija, ne zapovest: piše ŠTA otključava vežbe, ne šta
@@ -1663,7 +1691,7 @@ export default function LekcijaClient({
                 namerno - drugi put se više ne traži. */}
             <RedKatanca>Vežbe se otključavaju kad jednom pređeš Učenje.</RedKatanca>
             <ul className="mt-3 grid grid-cols-2 gap-3">
-              {IGRE.map((vrsta) => (
+              {igreLekcije.map((vrsta) => (
                 <li key={vrsta}>
                   <PlocicaCeka vrsta={vrsta} tekst="Posle učenja reči" />
                 </li>
@@ -1672,7 +1700,7 @@ export default function LekcijaClient({
           </>
         ) : (
           <ul className="grid grid-cols-2 gap-3">
-            {IGRE.map((vrsta, redni) => (
+            {igreLekcije.map((vrsta, redni) => (
               <li key={vrsta}>
                 <PlocicaIgre
                   vrsta={vrsta}

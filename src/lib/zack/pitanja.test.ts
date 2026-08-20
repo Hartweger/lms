@@ -1,6 +1,16 @@
 import { describe, it, expect } from "vitest";
 import type { Rec } from "./rec";
-import { jeIgra, napraviPitanja, podobnaZaIgru, ponudjeni, SVE_IGRE, uKrugovima } from "./pitanja";
+import {
+  igreSaDovoljnoReci,
+  jeIgra,
+  type IgraReci,
+  NAJMANJE_ZA_IGRU,
+  napraviPitanja,
+  podobnaZaIgru,
+  ponudjeni,
+  SVE_IGRE,
+  uKrugovima,
+} from "./pitanja";
 
 /** Oznake kojima Nataša u tabeli piše „ova reč nema množinu". */
 const OZNAKE_BEZ_MNOZINE = ["-", "–", "—", "/"];
@@ -183,6 +193,56 @@ describe("podobnaZaIgru, mnozina", () => {
     for (const oznaka of OZNAKE_BEZ_MNOZINE) {
       expect(podobnaZaIgru(R(1, { de: "der Hunger", mnozina: oznaka }), "mnozina")).toBe(false);
     }
+  });
+});
+
+describe("igreSaDovoljnoReci", () => {
+  const SVE: IgraReci[] = ["parovi", "brzo-biranje", "skakac", "rod", "mnozina", "diktat"];
+  /** Reči od kojih se prave lekcije u ovim proverama, sve podobne za sve igre. */
+  const punih = (koliko: number, over: Partial<Rec> = {}) =>
+    Array.from({ length: koliko }, (_, i) => R(i + 1, over));
+
+  it("propušta igru koja u lekciji ima tačno NAJMANJE_ZA_IGRU reči", () => {
+    expect(igreSaDovoljnoReci(punih(NAJMANJE_ZA_IGRU), ["mnozina"])).toEqual(["mnozina"]);
+  });
+
+  it("izbacuje igru kojoj fali jedna reč do granice", () => {
+    expect(igreSaDovoljnoReci(punih(NAJMANJE_ZA_IGRU - 1), ["mnozina"])).toEqual([]);
+  });
+
+  it("broji SAMO reči podobne za tu igru, ne sve reči lekcije", () => {
+    // Lekcija puna reči, ali samo tri imaju množinu: množina ispada, ostale
+    // igre ostaju. Baš zbog ovoga se granica i uvodi.
+    const reci = [
+      ...punih(3, { mnozina: "mn" }),
+      ...Array.from({ length: 9 }, (_, i) => R(i + 10, { de: "der Hunger", mnozina: "-" })),
+    ];
+    const igre = igreSaDovoljnoReci(reci, SVE);
+    expect(igre).not.toContain("mnozina");
+    expect(igre).toEqual(["parovi", "brzo-biranje", "skakac", "rod", "diktat"]);
+  });
+
+  it("lekcija bez ijednog roda ostaje bez roda i skakača", () => {
+    const igre = igreSaDovoljnoReci(punih(10, { rod: "nema", vrsta: "glagol" }), SVE);
+    expect(igre).not.toContain("rod");
+    expect(igre).not.toContain("skakac");
+    expect(igre).toContain("diktat");
+  });
+
+  it("igre koje primaju svaku reč prolaze čim lekcija ima dovoljno reči", () => {
+    expect(igreSaDovoljnoReci(punih(NAJMANJE_ZA_IGRU), ["parovi", "brzo-biranje", "diktat"])).toEqual([
+      "parovi",
+      "brzo-biranje",
+      "diktat",
+    ]);
+  });
+
+  it("prazna lekcija ne nudi nijednu igru", () => {
+    expect(igreSaDovoljnoReci([], SVE)).toEqual([]);
+  });
+
+  it("čuva zadati redosled igara", () => {
+    expect(igreSaDovoljnoReci(punih(10), SVE)).toEqual(SVE);
   });
 });
 

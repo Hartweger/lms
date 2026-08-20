@@ -83,6 +83,35 @@ export function podobnaZaIgru(rec: Rec, igra: IgraReci): boolean {
 }
 
 /**
+ * Ispod ovoliko podobnih reči igra se u lekciji ne nudi. Partija od dve-tri
+ * reči deluje pokvareno, a ne kratko - bolje je da pločice nema nego da
+ * razočara. Sve što je dete ranije zaradilo u toj igri OSTAJE.
+ */
+export const NAJMANJE_ZA_IGRU = 5;
+
+/**
+ * Igre iz zadatog spiska koje ova lekcija ume da ponudi: ispadaju one kojima u
+ * lekciji nema ni `NAJMANJE_ZA_IGRU` podobnih reči. Podobnost se ne broji po
+ * svom pravilu nego kroz `podobnaZaIgru`, isto ono po kom `napraviPitanja`
+ * bira reči - dva pravila bi pre ili kasnije rekla različito.
+ *
+ * BROJE SE SAMO REČI LEKCIJE, NAMERNO. Igre umeju da u partiju umešaju i
+ * poneku staru reč iz ranijih lekcija (ponavljanje), pa lekcija na granici
+ * stvarno ima koje pitanje više nego što se ovde izbroji. Merilo ipak ostaje
+ * sadržaj same lekcije: stare reči zavise od toga šta je koje dete zaradilo, pa
+ * bi ista lekcija jednom detetu imala pločicu a drugom ne - a ovo je osobina
+ * lekcije, ne deteta.
+ */
+export function igreSaDovoljnoReci(
+  reci: readonly Rec[],
+  igre: readonly IgraReci[]
+): IgraReci[] {
+  return igre.filter(
+    (igra) => reci.filter((r) => podobnaZaIgru(r, igra)).length >= NAJMANJE_ZA_IGRU
+  );
+}
+
+/**
  * Dokle skakač ume da se popne. NIJE dužina partije: partija se završava kad se
  * potroše srca, a ovo je samo kočnica da tok pitanja ne bude beskonačna petlja.
  * Namerno visoko - dete sa tri srca realno ne stiže dotle, pa granicu ne oseti.
