@@ -35,6 +35,11 @@
 // 4. Sličice koje su ostale u ruci od prošlog puta se pri učitavanju vraćaju u
 //    ruku. Bez toga bi dete koje je zatvorilo karticu pre lepljenja zateklo
 //    prazna mesta koja nema čime da popuni.
+// 5. Prođena faza učenja ide TIM ISTIM putem, uporedo sa spiskom tačnih.
+//    Katanac se u stanju otvara odmah, ne čekajući mrežu, ali upis koji ne
+//    stigne ostaje u ruci (`neposlataFaza`) i ide uz prvi sledeći pokušaj.
+//    Inače bi dete koje je učenje prešlo na klimavoj vezi videlo otvorene
+//    vežbe, osvežilo stranicu i dobilo katanac nazad.
 //
 // ŠTA ALBUM SME DA POKAŽE
 // -----------------------
@@ -799,6 +804,10 @@ export default function LekcijaClient({
   // propala kad dete odigra sledeću. Referenca, ne stanje: čita se unutar
   // asinhronog toka, gde bi zatvorena vrednost stanja bila zastarela.
   const neposlato = useRef<string[]>([]);
+  // Isto za prođenu fazu učenja: faza koja nije stigla do baze čeka ovde i ide
+  // uz prvi sledeći pokušaj. Bez toga bi dete koje je učenje prešlo na klimavoj
+  // vezi zateklo vežbe opet pod katancem čim osveži stranicu.
+  const neposlataFaza = useRef<"reci" | "recenice" | null>(null);
   // Isto: drugi tap na „Probaj ponovo" ne sme da pokrene drugi tok.
   const krajUToku = useRef(false);
 
@@ -871,16 +880,51 @@ export default function LekcijaClient({
   );
 
   /**
+   * Javljanje da je faza učenja prođena, sa ČEKANJEM i proverom odgovora - isto
+   * kao ponovno slanje zarađenog. Ruta je idempotentna i red o prolasku ne briše
+   * nikad, pa ponovljeno slanje ne može ništa da pokvari. Vraća da li je zaista
+   * stiglo, jer se na tome zasniva da li faza ostaje za sledeći pokušaj.
+   *
+   * Ranije je ovo bilo pošalji-i-zaboravi. Izgubljen upis nije oduzimao ništa
+   * zarađeno, ali jeste zaključavao vežbe: dete koje je na klimavoj vezi prešlo
+   * svih 26 reči je videlo otvorene vežbe, osvežilo stranicu i dočekalo
+   * „Vežbe se otključavaju kad jednom pređeš Učenje." Rečenica je mirna, ali je
+   * detetu koje je taj posao upravo odradilo poricanje.
+   */
+  const posaljiProlaz = useCallback(
+    async (faza: "reci" | "recenice"): Promise<boolean> => {
+      try {
+        const odgovor = await fetch(`/api/zack/${childId}/ucenje`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ lekcijaId: lekcija.id, faza }),
+          // Dete često zatvori karticu čim vidi kraj učenja.
+          keepalive: true,
+        });
+        return odgovor.ok;
+      } catch {
+        return false;
+      }
+    },
+    [childId, lekcija.id]
+  );
+
+  /**
    * Kraj partije: prvo se osigura zarađeno, pa tek onda otvara kesica. Spisak
    * tačnih dolazi iz same igre, jer samo ona zna šta je dete stvarno uradilo -
    * ruta zna samo ono što je do nje stiglo.
    *
-   * Ako ponovno slanje ne prođe, kesica se NE otvara: bila bi to poruka o
-   * uspehu preko toka koji nije uspeo. Umesto toga se kaže istina i spisak se
-   * čuva za sledeći pokušaj.
+   * Prođena faza učenja (`faza`) ide ISTIM putem i u ISTOM trenutku: oba poziva
+   * kreću zajedno, pa dete ne čeka ni trenutak duže nego što je i dosad čekalo
+   * na sličice. Katanac se u stanju otvara odmah, još pre ovoga - ovde se samo
+   * osigurava da to preživi i osvežavanje stranice.
+   *
+   * Ako nešto od toga ne prođe, kesica se NE otvara: bila bi to poruka o uspehu
+   * preko toka koji nije uspeo. Umesto toga se kaže istina, a spisak i faza se
+   * čuvaju za sledeći pokušaj - koji je jedan tap na „Probaj ponovo".
    */
   const zavrsiIgru = useCallback(
-    async (tacniRecIdovi: string[]) => {
+    async (tacniRecIdovi: string[], faza?: "reci" | "recenice") => {
       if (krajUToku.current) return;
       krajUToku.current = true;
       setSaljem(true);
@@ -888,13 +932,20 @@ export default function LekcijaClient({
 
       // Uz svež spisak ide i sve što je zaostalo od ranijih partija.
       const zaSlanje = [...new Set([...neposlato.current, ...tacniRecIdovi])];
-      // `posaljiZaradjeno` ne baca, pa ovde nema šta da se hvata.
-      const stiglo = await posaljiZaradjeno(zaSlanje);
+      const zaFazu = faza ?? neposlataFaza.current;
+      // Zajedno, ne jedno za drugim: dva čekanja u nizu bi detetu produžila
+      // ekran „Samo trenutak..." bez ijednog razloga.
+      // Nijedna od dve funkcije ne baca, pa ovde nema šta da se hvata.
+      const [stiglo, stiglaFaza] = await Promise.all([
+        posaljiZaradjeno(zaSlanje),
+        zaFazu ? posaljiProlaz(zaFazu) : Promise.resolve(true),
+      ]);
       neposlato.current = stiglo ? [] : zaSlanje;
+      neposlataFaza.current = stiglaFaza ? null : zaFazu;
       krajUToku.current = false;
       setSaljem(false);
 
-      if (!stiglo) {
+      if (!stiglo || !stiglaFaza) {
         setPoruka("nije-stiglo");
         setNajava(
           "Internet trenutno ne radi kako treba, pa neke sličice iz ove igre možda nisu stigle. Probaj ponovo kad veza proradi."
@@ -904,32 +955,7 @@ export default function LekcijaClient({
 
       await otvoriKesicu();
     },
-    [otvoriKesicu, posaljiZaradjeno]
-  );
-
-  /**
-   * Javljanje da je faza učenja prođena. Poziv ide u POZADINI i njegov pad se
-   * guta, a katanac se u stanju otvara odmah: dete ne sme da čeka mrežu za
-   * nešto što je upravo uradilo.
-   *
-   * Izgubljen upis ne oduzima ništa. Ruta je idempotentna i red o prolasku ne
-   * briše nikad, pa je najgore što se desi da sledeći dolazak na lekciju opet
-   * ponudi fazu učenja - a ponavljanje učenja i inače nije kazna. Sličice, niz
-   * i rekordi ne zavise od ovog reda.
-   */
-  const posaljiProlaz = useCallback(
-    (faza: "reci" | "recenice") => {
-      void fetch(`/api/zack/${childId}/ucenje`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ lekcijaId: lekcija.id, faza }),
-        // Dete često zatvori karticu čim vidi kraj učenja.
-        keepalive: true,
-      }).catch(() => {
-        /* Katanac je već otvoren u stanju; ništa zarađeno ne zavisi od ovoga. */
-      });
-    },
-    [childId, lekcija.id]
+    [otvoriKesicu, posaljiProlaz, posaljiZaradjeno]
   );
 
   /**
@@ -997,13 +1023,13 @@ export default function LekcijaClient({
       // Katanac rečenica otvara SAMO učenje rečenica, i samo kad je prošlo do
       // kraja. Izlaz na „Dosta za sad" ne otvara ništa - ali ni ne zatvara:
       // zarađeno iz te partije ide dalje kao i uvek, redom ispod.
-      if (odigrana === "ucenje-recenica" && prosloSve) {
-        setProsaoRecenice(true);
-        posaljiProlaz("recenice");
-      }
-      void zavrsiIgru(tacniRecIdovi);
+      const presao = odigrana === "ucenje-recenica" && prosloSve;
+      if (presao) setProsaoRecenice(true);
+      // Faza ide istim sigurnim putem kao i sličice, ne zasebnim slanjem koje
+      // sme tiho da padne.
+      void zavrsiIgru(tacniRecIdovi, presao ? "recenice" : undefined);
     },
-    [igra, posaljiProlaz, upisiRekord, zavrsiIgru]
+    [igra, upisiRekord, zavrsiIgru]
   );
 
   /** Poziv ide u pozadini. Ne čeka se, i njegov pad se namerno guta. */
@@ -1060,14 +1086,12 @@ export default function LekcijaClient({
           setUcenjeReci(false);
           // Katanac vežbi otvara samo učenje prođeno DO KRAJA. Ranijim izlaskom
           // se ništa ne gubi - ono što je zarađeno ide dole, kao i uvek.
-          if (prosloSve) {
-            setProsaoReci(true);
-            posaljiProlaz("reci");
-          }
+          if (prosloSve) setProsaoReci(true);
           // Ovo se NE sme preskočiti ni u jednom slučaju: `zavrsiIgru` je ono
           // što garantuje da zarađeno stvarno stigne (slanje iz same provere
-          // sme tiho da padne) i što otvara kesicu.
-          void zavrsiIgru(tacni);
+          // sme tiho da padne) i što otvara kesicu. Istim putem ide i prođena
+          // faza, da otključane vežbe prežive osvežavanje stranice.
+          void zavrsiIgru(tacni, prosloSve ? "reci" : undefined);
         }}
       />
     );
