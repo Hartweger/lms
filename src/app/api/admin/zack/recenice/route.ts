@@ -136,5 +136,21 @@ export async function POST(request: Request) {
     return greska("Rečenice lekcije nisu upisane, lekcija je ostala bez njih", 500);
   }
 
-  return NextResponse.json({ ok: true, upisano: priprema.recenice.length });
+  // 7. Odgovor kaže i kako se spisak podelio. `pripremiRecenice` sama označi
+  // `samo_dopuna` svakoj rečenici koja ispadne iz raspona pločica slagalice, i
+  // to bez greške - Nataša inače nikad ne bi saznala da joj rečenica nije ušla
+  // u slagalicu. Isto kao što se kod reči vraća `obrisaneReci`, da tiha izmena
+  // ne bude nevidljiva. `samoDopuna` broji obe vrste zajedno - i one koje je
+  // Nataša sama označila i one označene automatski - jer je za nju važno koliko
+  // ih je ostalo van slagalice, a ne ko ih je izbacio. `uSlagalici` je nula kad
+  // su sve rečenice lekcije predugačke ili prekratke: tada lekcija nema
+  // slagalicu, samo dopunu.
+  const uSlagalici = priprema.recenice.filter((r) => !r.samo_dopuna).length;
+
+  return NextResponse.json({
+    ok: true,
+    upisano: priprema.recenice.length,
+    uSlagalici,
+    samoDopuna: priprema.recenice.length - uSlagalici,
+  });
 }
