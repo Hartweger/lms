@@ -1,6 +1,9 @@
 "use client";
 
-// Ljuska igre i pet igara koje se sve hrane iz istog spiska reči.
+// Ljuska igre i tela igara koja se hrane spiskom reči. Rečenične igre imaju
+// svoja tela u `Recenice.tsx`, ali istu ovu ljusku: srca, traka napretka,
+// odziv, izlaz i ponovno slanje su im zajednički, jer bi druga ljuska značila
+// drugi brojač zarađenog.
 //
 // GLAS
 // ----
@@ -42,6 +45,10 @@ import {
 // bledi samo vrati pred dete. Prva lekcija nema starih i radi kao i uvek.
 import { pitanjaSaStarima, type StaraRec } from "@/lib/zack/ponavljanje";
 import { BOJA_MNOZINA, bojaZaRod, promesaj, type Rec, type Rod } from "@/lib/zack/rec";
+// Rečenična pitanja se prave iz zapisa rečenice, a ne iz reči, pa imaju svoju
+// fabriku. Sesija, srca i tok su im isti kao i svima ostalima.
+import { recenicnaPitanja, type Recenica } from "@/lib/zack/recenice";
+import { Dopuna, Slagalica } from "@/components/zack/Recenice";
 // Skakač je drugo telo za isto pitanje o rodu, pa im je i pomoć oko članova
 // zajednička. Živi u `Skakac.tsx` zato što ljuska već uvozi taj fajl, pa uvoz u
 // suprotnom smeru ne bi bio put nego krug.
@@ -99,6 +106,18 @@ function kolikoPitanja(vrsta: VrstaIgreReci): number {
   return vrsta === "skakac" ? SPRATOVA_NAJVISE : PITANJA_PO_PARTIJI;
 }
 
+/** Igre koje se prave od REČENICA. Učenje rečenica je blaži prikaz slagalice. */
+type VrstaIgreRecenica = "slagalica" | "dopuna" | "ucenje-recenica";
+
+/**
+ * Podela na dve fabrike pitanja, kao vrednost i kao tip. Predikat postoji da bi
+ * druga grana bila SUŽENA na igre od reči: `kolikoPitanja` i `pitanjaSaStarima`
+ * rečeničnu vrstu ne umeju da obrade, a `as` bi ovde bio nada, ne provera.
+ */
+function jeRecenicna(vrsta: VrstaIgre): vrsta is VrstaIgreRecenica {
+  return vrsta === "slagalica" || vrsta === "dopuna" || vrsta === "ucenje-recenica";
+}
+
 /** Koliko odziv stoji na ekranu. Greška duže, jer se uz nju čita i tačan odgovor. */
 const ZADRZI_TACNO = 850;
 const ZADRZI_GRESKU = 1900;
@@ -125,6 +144,15 @@ function Srce({ puno }: { puno: boolean }) {
   );
 }
 
+/**
+ * Učenje rečenica NEMA srca i to se vidi: tamo se greška ne kažnjava, pa red
+ * srca koji stoji pun i nepomičan ne bi bio istina nego pretnja koja se nikad
+ * ne ostvaruje. Ostale igre ih imaju uvek.
+ */
+function srcaZaVrstu(vrsta: VrstaIgre, srca: number): number | null {
+  return vrsta === "ucenje-recenica" ? null : srca;
+}
+
 function Srca({ srca }: { srca: number }) {
   const preostalo = Math.max(0, srca);
   return (
@@ -144,6 +172,8 @@ export default function Igra({
   childId,
   reci,
   stare = [],
+  recenice = [],
+  stareRecenice = [],
   vrsta,
   rekord,
   onKraj,
@@ -157,12 +187,20 @@ export default function Igra({
    * boju) - novu sličicu ne pravi, pa ni kesicu ne dira.
    */
   stare?: StaraRec[];
+  /** Rečenice OVE lekcije - hrane slagalicu, dopunu i učenje rečenica. */
+  recenice?: Recenica[];
   /**
-   * Samo igre koje se prave od reči. Rečenične igre imaju svoja tela i svoju
-   * ljusku, a ova ovde za njihova pitanja nema šta da nacrta - da im je prolaz
-   * ostao otvoren, dete bi umesto slaganja rečenice dobilo diktat.
+   * Rečenice ranijih lekcija, za ponavljanje u rečeničnim igrama. Biraju se
+   * preko svoje glavne reči, istim pravilom kao stare reči. Učenje rečenica ih
+   * ne dobija: tamo se uči OVA lekcija.
    */
-  vrsta: VrstaIgreReci;
+  stareRecenice?: Recenica[];
+  /**
+   * Sve igre, i one od reči i one od rečenica: ljuska sada zaista ume da nacrta
+   * i rečenično pitanje, pa nema razloga da im prolaz bude zatvoren. Koja se
+   * fabrika pitanja koristi, odlučuje `jeRecenicna`.
+   */
+  vrsta: VrstaIgre;
   /**
    * Lični rekord u skakaču na ovoj lekciji, ili ništa ako ga još nema. Ljuska ga
    * samo prosleđuje telu igre; upisuje ga ekran lekcije na kraju partije.
@@ -171,8 +209,13 @@ export default function Igra({
   /**
    * Kraj partije. Uz spisak tačnih ide i dokle se koza popela u skakaču, jer je
    * visina drugi rezultat te igre, pored sličica. Ostale igre javljaju nulu.
+   *
+   * `prosloSve` kaže da li je dete stiglo kroz sva pitanja, za razliku od
+   * izlaza na „Dosta za sad" ili partije koja je pala na srcima. Katanci učenja
+   * gledaju baš to. Partija BEZ ijednog pitanja se broji kao prođena: prazna
+   * faza ne sme da zaključa ono što stoji iza nje.
    */
-  onKraj: (tacniRecIdovi: string[], sprat: number) => void;
+  onKraj: (tacniRecIdovi: string[], sprat: number, prosloSve: boolean) => void;
 }) {
   // Sesija se pravi tek posle montiranja. Pitanja se mešaju preko Math.random,
   // pa bi računanje u prvom renderu dalo drugačiji redosled na serveru nego u
@@ -204,6 +247,17 @@ export default function Igra({
     stareRef.current = stare;
   }, [stare]);
 
+  // I za rečenice: i one stižu kao nov niz pri svakom renderu roditelja.
+  const receniceRef = useRef(recenice);
+  useEffect(() => {
+    receniceRef.current = recenice;
+  }, [recenice]);
+
+  const stareReceniceRef = useRef(stareRecenice);
+  useEffect(() => {
+    stareReceniceRef.current = stareRecenice;
+  }, [stareRecenice]);
+
   /**
    * Dokle se koza popela u skakaču. Ref, ne stanje: ljuska time ništa ne crta,
    * samo prosleđuje broj dalje na kraju partije, pa bi stanje značilo render
@@ -215,11 +269,46 @@ export default function Igra({
   }, []);
 
   useEffect(() => {
-    setSesija(
-      novaSesija(
-        pitanjaSaStarima(reciRef.current, stareRef.current, vrsta, kolikoPitanja(vrsta), Math.random)
-      )
-    );
+    if (jeRecenicna(vrsta)) {
+      // Učenje rečenica je PROLAZ KROZ LEKCIJU, ne partija od osam pitanja:
+      // ide se kroz sve podobne rečenice lekcije i bez ijedne stare, jer se uči
+      // ova lekcija. Vežbe (slagalica i dopuna) idu normalnu partiju, sa
+      // umešanim rečenicama starih reči.
+      const ucenje = vrsta === "ucenje-recenica";
+      // Pogrešni odgovori i pravilo velikog slova gledaju u ZAJEDNIČKI skup
+      // reči, da pitanje o staroj reči ne bude prepoznatljivo po tome što nudi
+      // manje ili drugačije reči.
+      const pool = [...reciRef.current, ...stareRef.current.map((s) => s.rec)];
+      setSesija(
+        novaSesija(
+          recenicnaPitanja(
+            receniceRef.current,
+            ucenje ? [] : stareReceniceRef.current,
+            ucenje ? [] : stareRef.current,
+            // Učenje rečenica je blaži prikaz slagalice, pa i pitanja nosi
+            // njena - isto kao što skakač nosi pitanja o rodu.
+            ucenje ? "slagalica" : vrsta,
+            ucenje ? receniceRef.current.length : PITANJA_PO_PARTIJI,
+            Math.random,
+            pool
+          )
+        )
+      );
+    } else {
+      // Ovde je `vrsta` sužena na igre od reči, pa `kolikoPitanja` i
+      // `pitanjaSaStarima` dobijaju tačno ono što umeju da obrade.
+      setSesija(
+        novaSesija(
+          pitanjaSaStarima(
+            reciRef.current,
+            stareRef.current,
+            vrsta,
+            kolikoPitanja(vrsta),
+            Math.random
+          )
+        )
+      );
+    }
     setOdziv(null);
     setZamrznuto(null);
     setKorak((k) => k + 1);
@@ -340,16 +429,27 @@ export default function Igra({
   useEffect(() => {
     if (!sesija || !sesija.gotovo || odziv !== null || javljenKraj.current) return;
     javljenKraj.current = true;
-    onKrajRef.current(sesija.tacni, visina.current);
+    // Prošlo je sve ako je tok stigao do kraja. Izlaz na „Dosta za sad" i
+    // partija koja je pala na srcima ostaju iza toga, a partija bez ijednog pitanja
+    // prolazi (0 >= 0) - prazna faza ne sme da drži katanac zatvorenim.
+    onKrajRef.current(
+      sesija.tacni,
+      visina.current,
+      sesija.indeks >= sesija.pitanja.length
+    );
   }, [sesija, odziv]);
 
   if (!sesija) return <Cekanje />;
 
   if (sesija.pitanja.length === 0) {
     return (
-      <Okvir naslov={NAZIVI[vrsta]} srca={SRCA} popunjeno={0}>
+      <Okvir naslov={NAZIVI[vrsta]} srca={srcaZaVrstu(vrsta, SRCA)} popunjeno={0}>
         <p className="p-6 text-center text-[17px] leading-relaxed" style={{ color: PRIGUSEN }}>
-          Za ovu igru u lekciji još nema dovoljno reči. Probaj neku drugu.
+          {/* Rečenične igre se ne hrane rečima, pa bi im poruka o rečima bila
+              netačna: dete bi tražilo grešku tamo gde je nema. */}
+          {jeRecenicna(vrsta)
+            ? "Za ovu igru u lekciji još nema rečenica. Probaj neku drugu."
+            : "Za ovu igru u lekciji još nema dovoljno reči. Probaj neku drugu."}
         </p>
       </Okvir>
     );
@@ -377,7 +477,7 @@ export default function Igra({
   const zakljucano = zamrznuto !== null;
 
   return (
-    <Okvir naslov={NAZIVI[vrsta]} srca={sesija.srca} popunjeno={popunjeno}>
+    <Okvir naslov={NAZIVI[vrsta]} srca={srcaZaVrstu(vrsta, sesija.srca)} popunjeno={popunjeno}>
       <OdzivTraka odziv={odziv} />
       {p.igra === "parovi" ? (
         <Parovi
@@ -425,9 +525,27 @@ export default function Igra({
         />
       ) : p.igra === "brzo-biranje" || p.igra === "mnozina" ? (
         <IgraBiranje key={korak} pitanje={p} zakljucano={zakljucano} naOdgovor={naOdgovor} />
-      ) : // Tela slagalice i dopune stižu u kasnijem zadatku; njihova pitanja u
-      // ovu ljusku još ne ulaze.
-      null}
+      ) : p.igra === "slagalica" ? (
+        <Slagalica
+          key={korak}
+          pitanje={p}
+          // Isto pitanje, dva režima: učenje rečenica prvo pokaže rečenicu i
+          // vodi kroz slaganje, vežba pusti dete da složi pa proveri.
+          vodjeno={vrsta === "ucenje-recenica"}
+          zakljucano={zakljucano}
+          naOdgovor={naOdgovor}
+          naVodjenoSlozena={(pit) => {
+            // U vođenom režimu se javlja SAMO tačno, i to tek kad je rečenica
+            // cela složena. Zato ovde srce ne može da padne (`odgovori` gubi
+            // srce jedino na netačno) ni greška da se upiše (`posaljiGresku`
+            // se zove samo na netačno), a reč rečenice se uredno zaradi. Tekst
+            // tačnog odgovora ostaje prazan: on se ispisuje samo uz „Ups!".
+            naOdgovor(true, "", pit);
+          }}
+        />
+      ) : p.igra === "dopuna" ? (
+        <Dopuna key={korak} pitanje={p} zakljucano={zakljucano} naOdgovor={naOdgovor} />
+      ) : null}
 
       {/* Bez ovoga dete koje se zaglavi nema izlaz osim dugmeta „nazad" u
           pretraživaču, a tim putem se kraj partije nikad ne javi i ponovno
@@ -463,7 +581,8 @@ function Okvir({
   children,
 }: {
   naslov: string;
-  srca: number;
+  /** `null` znači da se u ovoj igri srca ne troše, pa se i ne crtaju. */
+  srca: number | null;
   /** `null` znači da partija nema unapred poznat kraj, pa se traka ne crta. */
   popunjeno: number | null;
   children: React.ReactNode;
@@ -477,7 +596,7 @@ function Okvir({
         >
           {naslov}
         </h1>
-        <Srca srca={srca} />
+        {srca !== null && <Srca srca={srca} />}
       </header>
 
       {popunjeno !== null && (
