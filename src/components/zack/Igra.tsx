@@ -69,6 +69,10 @@ export const NAZIVI: Record<VrstaIgre, string> = {
   mnozina: "Množina",
   diktat: "Diktat",
   parovi: "Parovi",
+  "ucenje-reci": "Nauči reči",
+  "ucenje-recenica": "Nauči rečenice",
+  slagalica: "Složi rečenicu",
+  dopuna: "Dopuni rečenicu",
 };
 
 // Papir, ne gejmerski ekran.
@@ -413,9 +417,11 @@ export default function Igra({
           zakljucano={zakljucano}
           naOdgovor={naOdgovor}
         />
-      ) : (
+      ) : p.igra === "brzo-biranje" || p.igra === "mnozina" ? (
         <IgraBiranje key={korak} pitanje={p} zakljucano={zakljucano} naOdgovor={naOdgovor} />
-      )}
+      ) : // Tela slagalice i dopune stižu u kasnijem zadatku; njihova pitanja u
+      // ovu ljusku još ne ulaze.
+      null}
 
       {/* Bez ovoga dete koje se zaglavi nema izlaz osim dugmeta „nazad" u
           pretraživaču, a tim putem se kraj partije nikad ne javi i ponovno

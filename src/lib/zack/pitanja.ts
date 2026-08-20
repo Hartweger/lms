@@ -6,7 +6,20 @@ import { promesaj, type Rec, type Rod } from "./rec";
 // Zato ovde stoji među igrama, a dole se obrađuje isto kao „rod" i pravi pitanja
 // sa `igra: "rod"`. Da je dobio svoj tip pitanja, sve što zna da radi sa rodom
 // (sesija, spisak tačnih, telo igre) moralo bi da nauči još jedan slučaj.
-export type Igra = "brzo-biranje" | "rod" | "skakac" | "mnozina" | "diktat" | "parovi";
+export type Igra =
+  | "brzo-biranje"
+  | "rod"
+  | "skakac"
+  | "mnozina"
+  | "diktat"
+  | "parovi"
+  // Rečenični blok. „ucenje-reci" i „ucenje-recenica" NISU nove vrste pitanja
+  // nego blaži režimi prikaza (kao skakač prema rodu): učenje reči koristi
+  // pitanja brzog biranja, učenje rečenica pitanja slagalice.
+  | "ucenje-reci"
+  | "ucenje-recenica"
+  | "slagalica"
+  | "dopuna";
 
 /**
  * Iste igre, ali kao vrednosti. Tip `Igra` postoji samo dok se prevodi, a ruta
@@ -19,6 +32,10 @@ export const SVE_IGRE: readonly Igra[] = [
   "mnozina",
   "diktat",
   "parovi",
+  "ucenje-reci",
+  "ucenje-recenica",
+  "slagalica",
+  "dopuna",
 ];
 
 export function jeIgra(vrednost: unknown): vrednost is Igra {
@@ -57,7 +74,31 @@ export type Pitanje =
   | { igra: "rod"; recId: string; imenica: string; tacan: Rod }
   | { igra: "mnozina"; recId: string; jednina: string; opcije: string[]; tacan: string }
   | { igra: "diktat"; recId: string; prevod: string; tacan: string }
-  | { igra: "parovi"; parovi: { recId: string; de: string; sr: string }[] };
+  | { igra: "parovi"; parovi: { recId: string; de: string; sr: string }[] }
+  // Rečenična pitanja pravi lib/zack/recenice.ts; ovde su samo zbog
+  // zajedničke sesije (srca, tačni, tok) i zajedničke ljuske igre.
+  | {
+      igra: "slagalica";
+      recenicaId: string;
+      recId: string;
+      /** Izmešani prikazni oblici pločica (prva reč po pravilu malog slova). */
+      plocice: string[];
+      /** Reči rečenice u tačnom redosledu, originalnim zapisom. */
+      tacan: string[];
+      /** Završni znak: ., ! ili ? - stoji van pločica. */
+      znak: string;
+      prevod: string;
+    }
+  | {
+      igra: "dopuna";
+      recenicaId: string;
+      recId: string;
+      /** Cela rečenica sa tačno 6 crta umesto izvađenog oblika. */
+      saPrazninom: string;
+      opcije: string[];
+      tacan: string;
+      prevod: string;
+    };
 
 /**
  * Tačan odgovor plus najviše (koliko - 1) pogrešnih, promešano.

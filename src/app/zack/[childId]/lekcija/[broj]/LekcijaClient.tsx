@@ -408,6 +408,11 @@ const VINJETA: Record<VrstaIgre, React.ReactNode> = {
   rod: <VinjetaRod />,
   mnozina: <VinjetaMnozina />,
   diktat: <VinjetaOlovka />,
+  // Rečenične igre još nemaju svoje crteže; prave vinjete stižu u kasnijem zadatku.
+  "ucenje-reci": <VinjetaOlovka />,
+  "ucenje-recenica": <VinjetaOlovka />,
+  slagalica: <VinjetaOlovka />,
+  dopuna: <VinjetaOlovka />,
 };
 
 /**
