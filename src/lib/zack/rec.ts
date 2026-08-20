@@ -22,6 +22,41 @@ export type Rec = {
 };
 
 /**
+ * Oznake kojima se u Natašinoj tabeli piše da reč NEMA množinu: crtica, duga
+ * crtica (tabela ume sama da ispravi „-" u „–" ili „—") i kosa crta. Sve to su
+ * oznake praznog polja, a ne oblici reči.
+ */
+const OZNAKE_BEZ_MNOZINE = new Set(["-", "–", "—", "/"]);
+
+/**
+ * Množina reči, ili `null` kad je reč nema (Hunger, Durst, Wasser, svi glagoli
+ * i pridevi). Jedino mesto koje sme da odlučuje šta stoji u koloni množine.
+ *
+ * ZAŠTO POSTOJI: u bazi već stoje reči kojima je množina upisana kao crtica,
+ * jer je parser tu oznaku sačuvao kao tekst. Zapisi se NE prepravljaju, pa svako
+ * čitanje mora da zna da crtica znači prazno. Bez ovoga igra Množina pita „kako
+ * glasi u množini: Hunger?" i kao tačan odgovor očekuje crticu.
+ */
+export function mnozinaReci(rec: Rec): string | null {
+  return normalizujMnozinu(rec.mnozina);
+}
+
+/** Da li reč uopšte ima množinu. */
+export function imaMnozinu(rec: Rec): boolean {
+  return mnozinaReci(rec) !== null;
+}
+
+/**
+ * Isto pravilo nad sirovom vrednošću iz tabele, pre nego što reč postoji.
+ * Koristi ga upis lekcije, da nove crtice više ne ulaze u bazu.
+ */
+export function normalizujMnozinu(vrednost: string | null | undefined): string | null {
+  const upisano = (vrednost ?? "").trim();
+  if (upisano === "" || OZNAKE_BEZ_MNOZINE.has(upisano)) return null;
+  return upisano;
+}
+
+/**
  * Boja sličice po rodu - prava učionička konvencija iz nemačkih udžbenika:
  * der plava, die crvena, das zelena. Žuta NIJE rod (vidi BOJA_MNOZINA).
  */

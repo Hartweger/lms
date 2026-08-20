@@ -144,6 +144,12 @@ describe("pripremiReci, ono što prolazi", () => {
     expect(reciZa([rec({ mnozina: "  " })])[0].mnozina).toBeNull();
   });
 
+  it("crtica i kosa crta iz tabele postaju null, jer znače da množine nema", () => {
+    for (const oznaka of ["-", " - ", "/", "–", "—"]) {
+      expect(reciZa([rec({ mnozina: oznaka })])[0].mnozina).toBeNull();
+    }
+  });
+
   it("popunjena reč se prenosi cela", () => {
     const reci = reciZa([
       rec({ rod: "der", vrsta: "imenica", mnozina: "die Hunde", izuzetak: true }),

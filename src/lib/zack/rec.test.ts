@@ -1,5 +1,24 @@
 import { describe, it, expect } from "vitest";
-import { BOJA_MNOZINA, bojaZaRod, promesaj, ROD_BOJA } from "./rec";
+import {
+  BOJA_MNOZINA,
+  bojaZaRod,
+  imaMnozinu,
+  mnozinaReci,
+  promesaj,
+  ROD_BOJA,
+  type Rec,
+} from "./rec";
+
+const R = (mnozina: string | null): Rec => ({
+  id: "r1",
+  redni_broj: 1,
+  de: "der Hunger",
+  sr: "glad",
+  rod: "der",
+  mnozina,
+  vrsta: "imenica",
+  izuzetak: false,
+});
 
 describe("bojaZaRod", () => {
   it("der je plava, die crvena, das zelena", () => {
@@ -19,6 +38,27 @@ describe("bojaZaRod", () => {
 
   it("paleta ima tačno četiri unosa", () => {
     expect(Object.keys(ROD_BOJA)).toHaveLength(4);
+  });
+});
+
+describe("imaMnozinu", () => {
+  it("prava množina se prepoznaje i vraća bez ivičnih razmaka", () => {
+    expect(imaMnozinu(R("die Häuser"))).toBe(true);
+    expect(mnozinaReci(R("  die Häuser  "))).toBe("die Häuser");
+  });
+
+  it("prazna kolona znači da množine nema", () => {
+    for (const prazno of [null, "", "   "]) {
+      expect(imaMnozinu(R(prazno))).toBe(false);
+      expect(mnozinaReci(R(prazno))).toBeNull();
+    }
+  });
+
+  it("crtica, kosa crta i duge crtice iz tabele znače da množine nema", () => {
+    for (const oznaka of ["-", " - ", "/", " / ", "–", "—"]) {
+      expect(imaMnozinu(R(oznaka))).toBe(false);
+      expect(mnozinaReci(R(oznaka))).toBeNull();
+    }
   });
 });
 

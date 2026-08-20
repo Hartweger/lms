@@ -2,7 +2,7 @@
 // bi brisanje odnelo. Ovde nema ni baze ni HTTP-a, da bi moglo da se testira
 // bez ijednog mreženog poziva. Ruta iznad ovoga samo priča sa Supabaseom.
 
-import type { Rod, Vrsta } from "./rec";
+import { normalizujMnozinu, type Rod, type Vrsta } from "./rec";
 
 const RODOVI: readonly Rod[] = ["der", "die", "das", "nema"];
 const VRSTE: readonly Vrsta[] = ["imenica", "glagol", "pridev", "ostalo"];
@@ -121,12 +121,17 @@ export function pripremiReci(ulaz: unknown): PripremaIshod {
 
     // Množina sme da izostane, ali ono što nije ni tekst ni null je greška.
     // Tiho pretvaranje u null bi obrisalo množinu koja već stoji u bazi.
+    //
+    // Crtica i kosa crta su u tabeli oznaka praznog polja („ova reč nema
+    // množinu"), pa se upisuju kao null - inače bi igra Množina pitala kako
+    // glasi množina od Hunger i očekivala crticu. Prava množina se upisuje
+    // onako kako je otkucana, samo bez ivičnih razmaka.
     let mnozina: string | null = null;
     if (r.mnozina !== undefined && r.mnozina !== null) {
       if (typeof r.mnozina !== "string") {
         return { ok: false, greska: `Reč broj ${red}: množina mora biti tekst ili prazno` };
       }
-      mnozina = r.mnozina.trim() || null;
+      mnozina = normalizujMnozinu(r.mnozina);
     }
 
     // Izuzetak mora biti pravi boolean. `Boolean("false")` je `true`, pa bi

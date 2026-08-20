@@ -3,6 +3,7 @@
 import { useMemo, useRef, useState } from "react";
 
 import { normalizujDe } from "@/lib/zack/lekcija-upis";
+import { normalizujMnozinu } from "@/lib/zack/rec";
 import { PLOCICA_NAJMANJE, PLOCICA_NAJVISE } from "@/lib/zack/recenice";
 
 // Ekran kroz koji Nataša unosi jednu lekciju zack-a. Reči se ne kucaju jedna po
@@ -461,7 +462,9 @@ export default function ZackClient({ udzbenici }: Props) {
         de: r.de,
         sr: r.sr,
         rod: r.rod,
-        mnozina: r.mnozina.trim() === "" ? null : r.mnozina.trim(),
+        // Isto pravilo kao u ruti: crtica u koloni množine znači da množine
+        // nema, pa se šalje null a ne crtica kao tekst.
+        mnozina: normalizujMnozinu(r.mnozina),
         vrsta: r.rod === "nema" ? "ostalo" : "imenica",
         izuzetak: r.izuzetak,
       })),

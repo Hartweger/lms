@@ -1,6 +1,6 @@
 // Iz jednog spiska reči pravi pitanja za svih pet igara prve celine.
 // Ništa se ne unosi posebno po igri, sve izlazi iz iste tabele.
-import { promesaj, type Rec, type Rod } from "./rec";
+import { imaMnozinu, mnozinaReci, promesaj, type Rec, type Rod } from "./rec";
 
 // „skakac" NIJE nova vrsta pitanja, nego drugi način prikaza pitanja o rodu.
 // Zato ovde stoji među igrama, a dole se obrađuje isto kao „rod" i pravi pitanja
@@ -71,10 +71,14 @@ function jeIgraBiranja(igra: IgraReci): boolean {
  * `napraviPitanja` odbacuje nepodobne reči, izvučeno da ga vidi i ponavljanje:
  * stara reč bez roda ne sme da uđe u kvotu skakača, jer bi tamo tiho otpala i
  * partija bi bila kraća nego što je obećano.
+ *
+ * Množina se pita preko `imaMnozinu`, a ne preko `Boolean(rec.mnozina)`: crtica
+ * iz tabele je neprazan tekst, pa bi Hunger ušao u igru sa crticom kao tačnim
+ * odgovorom.
  */
 export function podobnaZaIgru(rec: Rec, igra: IgraReci): boolean {
   if (jeIgraRoda(igra)) return rec.rod !== "nema";
-  if (igra === "mnozina") return Boolean(rec.mnozina);
+  if (igra === "mnozina") return imaMnozinu(rec);
   return true;
 }
 
@@ -217,15 +221,21 @@ export function napraviPitanja(
       return { igra: "rod", recId: r.id, imenica: r.de, tacan: r.rod };
     }
     if (igra === "mnozina") {
+      // I pogrešni odgovori idu kroz `mnozinaReci`: reč kojoj u tabeli stoji
+      // crtica nema šta da ponudi, pa bi se inače crtica našla među ponuđenim
+      // odgovorima na tuđe pitanje.
       const kandidati = pool
-        .filter((d) => d.id !== r.id && d.mnozina)
-        .map((d) => d.mnozina as string);
+        .filter((d) => d.id !== r.id)
+        .map((d) => mnozinaReci(d))
+        .filter((m): m is string => m !== null);
+      // `podobne` je već propustila samo reči sa pravom množinom.
+      const tacan = mnozinaReci(r) as string;
       return {
         igra: "mnozina",
         recId: r.id,
         jednina: r.de,
-        opcije: ponudjeni(r.mnozina as string, kandidati, 4, rng),
-        tacan: r.mnozina as string,
+        opcije: ponudjeni(tacan, kandidati, 4, rng),
+        tacan,
       };
     }
     return { igra: "diktat", recId: r.id, prevod: r.sr, tacan: r.de };

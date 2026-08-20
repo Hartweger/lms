@@ -1,6 +1,9 @@
 import { describe, it, expect } from "vitest";
 import type { Rec } from "./rec";
-import { jeIgra, napraviPitanja, ponudjeni, SVE_IGRE, uKrugovima } from "./pitanja";
+import { jeIgra, napraviPitanja, podobnaZaIgru, ponudjeni, SVE_IGRE, uKrugovima } from "./pitanja";
+
+/** Oznake kojima Nataša u tabeli piše „ova reč nema množinu". */
+const OZNAKE_BEZ_MNOZINE = ["-", "–", "—", "/"];
 
 const R = (i: number, over: Partial<Rec> = {}): Rec => ({
   id: `r${i}`,
@@ -171,11 +174,50 @@ describe("uKrugovima", () => {
   });
 });
 
+describe("podobnaZaIgru, mnozina", () => {
+  it("reč sa pravom množinom ulazi u igru", () => {
+    expect(podobnaZaIgru(R(1, { mnozina: "die Hunde" }), "mnozina")).toBe(true);
+  });
+
+  it("reč kojoj u koloni množine stoji crtica ne ulazi u igru", () => {
+    for (const oznaka of OZNAKE_BEZ_MNOZINE) {
+      expect(podobnaZaIgru(R(1, { de: "der Hunger", mnozina: oznaka }), "mnozina")).toBe(false);
+    }
+  });
+});
+
 describe("napraviPitanja, mnozina", () => {
   it("preskače reči bez upisane množine", () => {
     const reci = [R(1, { mnozina: "Häuser" }), R(2, { mnozina: null }), R(3, { mnozina: "Bäume" })];
     const p = napraviPitanja(reci, "mnozina", 10, nula);
     expect(p).toHaveLength(2);
+  });
+
+  it("preskače reči kojima množina stoji kao crtica ili kosa crta", () => {
+    const reci = [
+      R(1, { mnozina: "Häuser" }),
+      R(2, { de: "der Hunger", mnozina: "-" }),
+      R(3, { de: "der Durst", mnozina: "/" }),
+      R(4, { de: "das Wasser", mnozina: "–" }),
+    ];
+    const p = napraviPitanja(reci, "mnozina", 10, nula);
+    expect(p).toHaveLength(1);
+  });
+
+  it("crtica se ne nudi ni kao pogrešan odgovor", () => {
+    const reci = [
+      R(1, { mnozina: "Häuser" }),
+      R(2, { mnozina: "-" }),
+      R(3, { mnozina: "—" }),
+      R(4, { mnozina: "Bäume" }),
+    ];
+    for (const p of napraviPitanja(reci, "mnozina", 10, nula)) {
+      if (p.igra !== "mnozina") throw new Error("pogrešna igra");
+      expect(OZNAKE_BEZ_MNOZINE).not.toContain(p.tacan);
+      for (const opcija of p.opcije) {
+        expect(OZNAKE_BEZ_MNOZINE).not.toContain(opcija);
+      }
+    }
   });
 });
 

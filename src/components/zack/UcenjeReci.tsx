@@ -26,7 +26,7 @@
 // lekcije sam odradio ne bi imao šta da ponovo pošalje.
 import { useEffect, useRef, useState } from "react";
 import type { Pitanje } from "@/lib/zack/pitanja";
-import { BOJA_MNOZINA, bojaZaRod, type Rec } from "@/lib/zack/rec";
+import { BOJA_MNOZINA, bojaZaRod, mnozinaReci, type Rec } from "@/lib/zack/rec";
 import { miniProvera, napraviGrupe } from "@/lib/zack/ucenje";
 
 // Papir, ne gejmerski ekran. Iste vrednosti kao u `Igra.tsx`; tamo nisu
@@ -406,6 +406,9 @@ function Kartica({ rec }: { rec: Rec }) {
   // crna traka pored plave, crvene i zelene izgleda kao četvrti član. Ivica
   // papira ne tvrdi ništa.
   const traka = rec.rod === "nema" ? IVICA : bojaZaRod(rec.rod);
+  // Ne `rec.mnozina`: rečima bez množine u tabeli stoji crtica, pa bi se na
+  // kartici pojavila žuta oznaka na kojoj piše „množina -".
+  const mnozina = mnozinaReci(rec);
 
   return (
     <li
@@ -426,9 +429,9 @@ function Kartica({ rec }: { rec: Rec }) {
           {rec.sr}
         </p>
 
-        {(rec.mnozina || rec.izuzetak) && (
+        {(mnozina || rec.izuzetak) && (
           <p className="mt-2.5 flex flex-wrap items-center gap-2">
-            {rec.mnozina && (
+            {mnozina && (
               // Žuta u učioničkoj konvenciji znači MNOŽINU, ali boja se ne čita,
               // pa reč „množina" stoji ispisana uz oblik.
               <span
@@ -436,7 +439,7 @@ function Kartica({ rec }: { rec: Rec }) {
                 style={{ background: BOJA_MNOZINA, color: MASTILO }}
               >
                 <span>množina</span>
-                <span lang="de">{rec.mnozina}</span>
+                <span lang="de">{mnozina}</span>
               </span>
             )}
             {rec.izuzetak && (
