@@ -47,11 +47,14 @@ const archivo = Archivo_Black({
 export default function ZackLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className={`${archivo.variable} min-h-screen bg-[#F4F1E9] text-[#16161A]`}>
-      {/* Jedina animacija u celom zack-u: sličica se „zalepi" - padne za
-          nijansu krupnija pa legne. Definisana je jednom, ovde, i postoji
-          isključivo unutar no-preference, pa uz reduced-motion elementi prosto
-          stoje na mestu (bez animacije su vidljivi, `both` ih krije samo dok
-          animacija stvarno teče). */}
+      {/* Sve animacije celog zack-a stoje ovde, na jednom mestu, i sve
+          isključivo unutar no-preference - uz reduced-motion se onda ne dešava
+          ništa, a poruka ostaje ista:
+
+          „zalepi" - sličica padne za nijansu krupnija pa legne (bez animacije
+          je prosto tu; `both` je krije samo dok animacija stvarno teče);
+          „tresi" - pločica u vođenom slaganju odmahne glavom i vrati se u
+          spisak (bez animacije se prosto ne pomeri, a vraća se svejedno). */}
       <style>{`
         @media (prefers-reduced-motion: no-preference) {
           @keyframes zack-zalepi {
@@ -63,6 +66,12 @@ export default function ZackLayout({ children }: { children: React.ReactNode }) 
             animation: zack-zalepi 0.5s cubic-bezier(0.2, 0.7, 0.3, 1.15) both;
             animation-delay: var(--zack-kasni, 0s);
           }
+          @keyframes zack-tresi {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+          }
+          .zack-tresi { animation: zack-tresi 0.4s ease-in-out; }
         }
       `}</style>
       {/* Širinu ovde namerno NE stežemo: aplikacione stranice (prijava,
