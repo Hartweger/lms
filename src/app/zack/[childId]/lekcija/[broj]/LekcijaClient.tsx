@@ -36,7 +36,7 @@ import Milioner from "@/components/zack/Milioner";
 import Slicica from "@/components/zack/Slicica";
 import { brojac, type StavkaAlbuma } from "@/lib/zack/album";
 import { PORUKA_ZAKLJUCANO } from "@/lib/zack/clanstvo";
-import type { Igra as VrstaIgre } from "@/lib/zack/pitanja";
+import type { Igra as VrstaIgre, IgraReci as VrstaIgreReci } from "@/lib/zack/pitanja";
 import { dokleSePopela, opisSprata } from "@/lib/zack/pojas";
 import type { StaraRec } from "@/lib/zack/ponavljanje";
 import type { Rec } from "@/lib/zack/rec";
@@ -70,8 +70,12 @@ type Lekcija = {
  *
  * Skakač stoji ODMAH iznad spiskovne verzije istog pitanja. Isti rod, dva tela:
  * ko hoće da igra bira skakač, ko hoće da brzo prođe reči bira spisak.
+ *
+ * Spisak drži samo igre koje se prave od REČI, jer se sve odavde predaju ljusci
+ * `Igra`, a ona rečenična pitanja nema čime da nacrta. Rečenične igre kad dođu
+ * dobijaju svoj spisak i svoju ljusku.
  */
-const IGRE: readonly VrstaIgre[] = [
+const IGRE: readonly VrstaIgreReci[] = [
   "parovi",
   "brzo-biranje",
   "skakac",
@@ -474,7 +478,7 @@ export default function LekcijaClient({
   zakljucano: boolean;
 }) {
   const [stanje, setStanje] = useState<StavkaAlbuma[]>(pocetnoStanje);
-  const [igra, setIgra] = useState<VrstaIgre | null>(null);
+  const [igra, setIgra] = useState<VrstaIgreReci | null>(null);
   // Milioner stoji odvojeno od igara i ne dodiruje ništa od ovoga: ne troši
   // srca, ne donosi sličice i ne javlja kraj partije. Zato mu je dovoljno jedno
   // da-ne stanje, bez ijednog poziva u `zavrsiIgru`.

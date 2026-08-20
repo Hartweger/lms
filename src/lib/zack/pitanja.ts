@@ -42,9 +42,28 @@ export function jeIgra(vrednost: unknown): vrednost is Igra {
   return typeof vrednost === "string" && (SVE_IGRE as readonly string[]).includes(vrednost);
 }
 
+/**
+ * Igre koje se prave od REČI. Rečenične igre (slagalica, dopuna i učenje
+ * rečenica) prave se u `recenice.ts` iz zapisa rečenice, pa ovamo ne ulaze:
+ * kad bi ušle, propale bi kroz grananje do diktata i dete bi umesto slaganja
+ * dobilo kucanje.
+ */
+export type IgraReci = Exclude<Igra, "ucenje-recenica" | "slagalica" | "dopuna">;
+
 /** Igre koje se hrane pitanjima o rodu, bez obzira na to kako izgledaju. */
-function jeIgraRoda(igra: Igra): boolean {
+function jeIgraRoda(igra: IgraReci): boolean {
   return igra === "rod" || igra === "skakac";
+}
+
+/**
+ * Igre koje se hrane pitanjima brzog biranja. Učenje reči je isti izbor između
+ * četiri prevoda, samo u blažoj ljusci (kao skakač prema rodu), pa i ovde daje
+ * pitanja `igra: "brzo-biranje"`. Da dobije svoj tip pitanja, sve što zna da
+ * radi sa biranjem (sesija, spisak tačnih, telo igre) moralo bi da nauči još
+ * jedan slučaj bez ijednog razloga.
+ */
+function jeIgraBiranja(igra: IgraReci): boolean {
+  return igra === "brzo-biranje" || igra === "ucenje-reci";
 }
 
 /**
@@ -53,7 +72,7 @@ function jeIgraRoda(igra: Igra): boolean {
  * stara reč bez roda ne sme da uđe u kvotu skakača, jer bi tamo tiho otpala i
  * partija bi bila kraća nego što je obećano.
  */
-export function podobnaZaIgru(rec: Rec, igra: Igra): boolean {
+export function podobnaZaIgru(rec: Rec, igra: IgraReci): boolean {
   if (jeIgraRoda(igra)) return rec.rod !== "nema";
   if (igra === "mnozina") return Boolean(rec.mnozina);
   return true;
@@ -159,7 +178,7 @@ export function uKrugovima<T>(stavke: readonly T[], koliko: number, rng: () => n
  */
 export function napraviPitanja(
   reci: readonly Rec[],
-  igra: Igra,
+  igra: IgraReci,
   koliko: number,
   rng: () => number,
   pool: readonly Rec[] = reci
@@ -184,7 +203,7 @@ export function napraviPitanja(
     igra === "skakac" ? uKrugovima(podobne, koliko, rng) : promesaj(podobne, rng).slice(0, koliko);
 
   return izabrane.map((r): Pitanje => {
-    if (igra === "brzo-biranje") {
+    if (jeIgraBiranja(igra)) {
       const kandidati = pool.filter((d) => d.id !== r.id).map((d) => d.sr);
       return {
         igra: "brzo-biranje",

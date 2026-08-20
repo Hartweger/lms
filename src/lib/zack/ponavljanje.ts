@@ -21,7 +21,7 @@
 // -----------------------
 // Ništa ovde ne zove `Math.random()`. Izvor slučajnosti dolazi kao `rng`, da bi
 // se izbor mogao ponoviti u testu - isto pravilo kao u `milioner.ts`.
-import { napraviPitanja, podobnaZaIgru, type Igra, type Pitanje } from "./pitanja";
+import { napraviPitanja, podobnaZaIgru, type IgraReci, type Pitanje } from "./pitanja";
 import { promesaj, type Rec } from "./rec";
 
 /** Stara reč kako je vidi izbor: uz nju i ono po čemu se rangira. */
@@ -89,7 +89,7 @@ const UMETANJE_DO = 12;
 export function pitanjaSaStarima(
   reci: readonly Rec[],
   stare: readonly StaraRec[],
-  igra: Igra,
+  igra: IgraReci,
   koliko: number,
   rng: () => number
 ): Pitanje[] {

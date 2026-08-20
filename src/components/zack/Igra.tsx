@@ -34,6 +34,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   SPRATOVA_NAJVISE,
   type Igra as VrstaIgre,
+  type IgraReci as VrstaIgreReci,
   type Pitanje,
 } from "@/lib/zack/pitanja";
 // Pitanja partije se prave kroz ponavljanje, ne direktno: uz reči ove lekcije
@@ -94,7 +95,7 @@ const PITANJA_PO_PARTIJI = 8;
  * bude beskonačan. Bez ovoga bi svaka partija stala na broju imenica u lekciji,
  * pa bi rekord bio taj isti broj zauvek i ne bi imao šta da se obori.
  */
-function kolikoPitanja(vrsta: VrstaIgre): number {
+function kolikoPitanja(vrsta: VrstaIgreReci): number {
   return vrsta === "skakac" ? SPRATOVA_NAJVISE : PITANJA_PO_PARTIJI;
 }
 
@@ -156,7 +157,12 @@ export default function Igra({
    * boju) - novu sličicu ne pravi, pa ni kesicu ne dira.
    */
   stare?: StaraRec[];
-  vrsta: VrstaIgre;
+  /**
+   * Samo igre koje se prave od reči. Rečenične igre imaju svoja tela i svoju
+   * ljusku, a ova ovde za njihova pitanja nema šta da nacrta - da im je prolaz
+   * ostao otvoren, dete bi umesto slaganja rečenice dobilo diktat.
+   */
+  vrsta: VrstaIgreReci;
   /**
    * Lični rekord u skakaču na ovoj lekciji, ili ništa ako ga još nema. Ljuska ga
    * samo prosleđuje telu igre; upisuje ga ekran lekcije na kraju partije.

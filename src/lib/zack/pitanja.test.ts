@@ -51,6 +51,23 @@ describe("napraviPitanja, brzo-biranje", () => {
   });
 });
 
+describe("napraviPitanja, ucenje-reci", () => {
+  // Učenje reči je isto pitanje kao brzo biranje, samo u blažoj ljusci. Ako
+  // propadne kroz grananje do diktata, dete u fazi učenja umesto da dodirne
+  // prevod dobije da kuca nemačku reč koju prvi put vidi.
+  it("daje pitanja brzog biranja, ne diktat", () => {
+    const p = napraviPitanja(RECI, "ucenje-reci", 2, nula);
+    expect(p).toHaveLength(2);
+    expect(p.every((x) => x.igra === "brzo-biranje")).toBe(true);
+  });
+
+  it("daje ista pitanja kao brzo biranje, red po red", () => {
+    expect(napraviPitanja(RECI, "ucenje-reci", 3, nula)).toEqual(
+      napraviPitanja(RECI, "brzo-biranje", 3, nula)
+    );
+  });
+});
+
 describe("napraviPitanja, rod", () => {
   it("uzima samo imenice koje imaju rod", () => {
     const reci = [R(1, { rod: "der" }), R(2, { rod: "nema", vrsta: "glagol" }), R(3, { rod: "das" })];
