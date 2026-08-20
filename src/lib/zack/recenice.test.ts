@@ -1,10 +1,14 @@
 import { describe, it, expect } from "vitest";
+import type { StaraRec } from "./ponavljanje";
 import type { Rec } from "./rec";
 import {
   rastaviRecenicu,
   prikazPlocica,
+  podobnaZaSlagalicu,
+  promesajPlocice,
   proveriSlaganje,
   napraviPitanjaRecenica,
+  recenicnaPitanja,
   PRAZNINA_PRIKAZ,
   type Recenica,
 } from "./recenice";
@@ -99,6 +103,52 @@ describe("proveriSlaganje", () => {
   });
 });
 
+describe("promesajPlocice", () => {
+  // rng koji uvek vrati skoro jedinicu daje u Fisher-Yatesu j === i, dakle
+  // NEIZMEŠAN niz. Baš tu zamena mora da uskoči, inače rečenica stigne već
+  // složena i ne pita ništa.
+  const bezMesanja = () => 0.999999;
+
+  it("neizmešan niz ipak ne stiže složen", () => {
+    const plocice = ["ich", "komme", "aus", "Serbien"];
+    const izmesano = promesajPlocice(plocice, bezMesanja);
+    expect(proveriSlaganje(izmesano, plocice)).toBe(false);
+    expect([...izmesano].sort()).toEqual([...plocice].sort());
+  });
+
+  it("pločica koja se od prve razlikuje SAMO po velikom slovu ne služi za zamenu", () => {
+    // „sie" i „Sie" su za proveru ista pločica, pa zamena sa njom ostavlja
+    // rečenicu i dalje složenom.
+    const plocice = ["sie", "Sie", "grüßt"];
+    const izmesano = promesajPlocice(plocice, bezMesanja);
+    expect(proveriSlaganje(izmesano, plocice)).toBe(false);
+  });
+
+  it("spisak od jedne pločice se vraća kakav jeste", () => {
+    expect(promesajPlocice(["hallo"], bezMesanja)).toEqual(["hallo"]);
+  });
+});
+
+describe("podobnaZaSlagalicu", () => {
+  it("dve pločice su premalo", () => {
+    expect(podobnaZaSlagalicu(recenica({ de: "Ich komme." }))).toBe(false);
+  });
+
+  it("tri pločice su taman", () => {
+    expect(podobnaZaSlagalicu(recenica({ de: "Ich komme heute." }))).toBe(true);
+  });
+
+  it("šest pločica je još uvek u granici", () => {
+    expect(podobnaZaSlagalicu(recenica({ de: "Ich komme heute aus der Schule." }))).toBe(true);
+  });
+
+  it("sedam pločica je previše za ekran", () => {
+    expect(podobnaZaSlagalicu(recenica({ de: "Ich komme heute aus der großen Schule." }))).toBe(
+      false
+    );
+  });
+});
+
 describe("napraviPitanjaRecenica - slagalica", () => {
   it("preskače rečenice označene samo_dopuna", () => {
     const p = napraviPitanjaRecenica(
@@ -150,5 +200,75 @@ describe("napraviPitanjaRecenica - dopuna", () => {
   it("samo_dopuna rečenice ulaze u dopunu", () => {
     const p = napraviPitanjaRecenica([recenica({ samo_dopuna: true })], "dopuna", 5, rngNiz([0.5]), []);
     expect(p).toHaveLength(1);
+  });
+
+  it("zapeta uz izvađenu reč ostaje na svom mestu", () => {
+    const p = napraviPitanjaRecenica(
+      [recenica({ de: "Komm, bitte her!", praznina: "Komm", distraktori: ["Kommt", "Kommen"] })],
+      "dopuna",
+      1,
+      rngNiz([0.4, 0.8]),
+      []
+    );
+    expect(p).toHaveLength(1);
+    if (p[0].igra !== "dopuna") throw new Error("očekivana dopuna");
+    expect(p[0].saPrazninom).toBe(`${PRAZNINA_PRIKAZ}, bitte her!`);
+  });
+});
+
+describe("napraviPitanjaRecenica - koliko", () => {
+  // Bez ove granice bi `slice(0, -1)` vratio skoro sve umesto ničega, pa bi
+  // partija od nula pitanja detetu ispala puna.
+  it("nula i manje ne daju nijedno pitanje", () => {
+    const spisak = [recenica({ id: "s1" }), recenica({ id: "s2" }), recenica({ id: "s3" })];
+    expect(napraviPitanjaRecenica(spisak, "dopuna", 0, rngNiz([0.5]), [])).toEqual([]);
+    expect(napraviPitanjaRecenica(spisak, "dopuna", -1, rngNiz([0.5]), [])).toEqual([]);
+  });
+});
+
+describe("recenicnaPitanja", () => {
+  const lekcijske = (koliko: number): Recenica[] =>
+    Array.from({ length: koliko }, (_, i) =>
+      recenica({ id: `s${i}`, de: `Ich komme aus Serbien${i}.` })
+    );
+
+  it("bez starih reči vraća samo lekcijske rečenice", () => {
+    const p = recenicnaPitanja([recenica({})], [], [], "dopuna", 8, rngNiz([0.5]), []);
+    expect(p).toHaveLength(1);
+    expect(p.every((x) => x.igra === "dopuna" && x.recenicaId === "s1")).toBe(true);
+  });
+
+  it("stara rečenica ulazi kad je njena glavna reč izabrana", () => {
+    const stara: StaraRec = { rec: rec({ id: "r9" }), izbledela: true, gresaka: 2 };
+    const staraRecenica = recenica({
+      id: "s9",
+      rec_id: "r9",
+      de: "Wo wohnst du?",
+      praznina: "wohnst",
+    });
+    const p = recenicnaPitanja(
+      lekcijske(8),
+      [staraRecenica],
+      [stara],
+      "dopuna",
+      8,
+      rngNiz([0.1, 0.9, 0.4, 0.6]),
+      []
+    );
+    expect(p.some((x) => x.igra === "dopuna" && x.recenicaId === "s9")).toBe(true);
+    // Stara pitanja ULAZE u dogovoreni broj, ne preko njega.
+    expect(p).toHaveLength(8);
+  });
+
+  it("stara reč bez svoje rečenice ne oduzima mesto lekciji", () => {
+    const stara: StaraRec = { rec: rec({ id: "r9" }), izbledela: true, gresaka: 2 };
+    const p = recenicnaPitanja(lekcijske(8), [], [stara], "dopuna", 8, rngNiz([0.3, 0.7]), []);
+    expect(p).toHaveLength(8);
+  });
+
+  it("rečenica stare reči koja nije izabrana ne ulazi", () => {
+    const staraRecenica = recenica({ id: "s9", rec_id: "r9", de: "Wo wohnst du?", praznina: "wohnst" });
+    const p = recenicnaPitanja(lekcijske(4), [staraRecenica], [], "dopuna", 8, rngNiz([0.5]), []);
+    expect(p.some((x) => x.igra === "dopuna" && x.recenicaId === "s9")).toBe(false);
   });
 });

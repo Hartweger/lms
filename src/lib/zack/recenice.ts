@@ -2,6 +2,10 @@
 // i za dopunu (i za učenje rečenica, koje je blaži prikaz slagalice).
 // Ista filozofija kao pitanja.ts: čiste funkcije, ubrizgan rng, bez mreže.
 import { ponudjeni, type Pitanje } from "./pitanja";
+// Rečenično ponavljanje se drži ISTOG pravila kao rečeničko: bira se preko
+// glavne reči (`izaberiStare`), pa se uzmu rečenice tih reči. Uvoz ide samo u
+// ovom smeru - `ponavljanje.ts` ne zna za rečenice, pa kruga nema.
+import { izaberiStare, kvotaStarih, type StaraRec } from "./ponavljanje";
 import { promesaj, type Rec } from "./rec";
 
 export type Recenica = {
@@ -130,7 +134,11 @@ export function podobnaZaDopunu(recenica: Recenica): boolean {
 export function promesajPlocice(plocice: readonly string[], rng: () => number): string[] {
   const izmesano = promesaj(plocice, rng);
   if (plocice.length < 2 || !proveriSlaganje(izmesano, plocice)) return izmesano;
-  const j = izmesano.findIndex((p) => p !== izmesano[0]);
+  // Traži se pločica različita PO ISTOM MERILU po kom se gore proverava da li
+  // je složeno: „sie" i „Sie" su za proveru ista pločica, pa zamena sa njom ne
+  // bi razložila rečenicu nego bi je samo prepisala.
+  const prva = izmesano[0].toLocaleLowerCase("de");
+  const j = izmesano.findIndex((p) => p.toLocaleLowerCase("de") !== prva);
   if (j > 0) [izmesano[0], izmesano[j]] = [izmesano[j], izmesano[0]];
   return izmesano;
 }
@@ -157,6 +165,10 @@ export function napraviPitanjaRecenica(
   rng: () => number,
   pool: readonly Rec[]
 ): Pitanje[] {
+  // Bez ove granice bi `slice(0, -1)` na negativnom broju vratio skoro ceo
+  // spisak: traženo je nula pitanja, a stiglo bi ih desetak.
+  if (koliko <= 0) return [];
+
   const podobne = recenice.filter(
     igra === "slagalica" ? podobnaZaSlagalicu : podobnaZaDopunu
   );
@@ -185,4 +197,50 @@ export function napraviPitanjaRecenica(
       prevod: r.sr,
     };
   });
+}
+
+/**
+ * Pitanja rečenične partije sa ponavljanjem: lekcijske rečenice + rečenice
+ * starih reči (izbor starih ide ISTIM pravilom kao kod reči: greške >
+ * izbledele, preko glavne reči). Učenje rečenica ne meša stare - uči se OVA
+ * lekcija, pa mu ljuska i ne šalje stare rečenice.
+ *
+ * Stara pitanja ULAZE u dogovoreni broj, ne preko njega: koliko ih se stvarno
+ * napravilo, toliko manje ide lekcijskih. Broji se ono što je napravljeno, a ne
+ * ono što je izabrano, jer stara reč ume da nema nijednu rečenicu podobnu za
+ * ovu igru - tada njeno mesto mirno pripadne lekciji umesto da propadne.
+ */
+export function recenicnaPitanja(
+  recenice: readonly Recenica[],
+  stareRecenice: readonly Recenica[],
+  stare: readonly StaraRec[],
+  igra: "slagalica" | "dopuna",
+  koliko: number,
+  rng: () => number,
+  pool: readonly Rec[]
+): Pitanje[] {
+  const kvota = kvotaStarih(koliko);
+  const izabraneStare = izaberiStare(stare, kvota, rng);
+  const stariIdovi = new Set(izabraneStare.map((r) => r.id));
+  const kandidati = stareRecenice.filter((s) => stariIdovi.has(s.rec_id));
+
+  const staraPitanja = napraviPitanjaRecenica(kandidati, igra, kvota, rng, pool);
+  // `Math.max` je pojas i tregeri: kvota je najviše četvrtina, pa iznad
+  // `koliko` ne može da ode - ali negativan broj ovde bi značio partiju od
+  // skoro svih rečenica lekcije, pa se ne oslanja na to.
+  const osnovna = napraviPitanjaRecenica(
+    recenice,
+    igra,
+    Math.max(0, koliko - staraPitanja.length),
+    rng,
+    pool
+  );
+
+  // Stara pitanja se umeću na slučajna mesta, da se ne grupišu na kraju i da
+  // dete ne oseti šav između „lekcije" i „ponavljanja".
+  const sva = [...osnovna];
+  for (const p of staraPitanja) {
+    sva.splice(Math.floor(rng() * (sva.length + 1)), 0, p);
+  }
+  return sva;
 }
