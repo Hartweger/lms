@@ -8,7 +8,12 @@
 //
 // Boje na polici drže se podele iz proizvoda: crvena je zack (nalepnica sa
 // brojem, kao i znak), žuta je nagrada koja čeka (kesica), plava je pun album.
+//
+// Tačno jedna kartica nosi i znak „gde sam stalo" (v. lib/zack/staza.ts). On je
+// poziv, a ne kapija: nijedna kartica se zbog njega ne zaključava ni priguši.
 import Link from "next/link";
+import { useEffect, useRef } from "react";
+import { znakStaze, type StavkaStaze } from "@/lib/zack/staza";
 import {
   CRVENA,
   DISPLAY,
@@ -21,13 +26,9 @@ import {
   ZackZnak,
 } from "../Ukras";
 
-export type StavkaStaze = {
-  broj: number;
-  naziv: string;
-  zalepljene: number;
-  ukupno: number;
-  neotvorenaKesica: number;
-};
+// Oblik kartice stoji uz pravilo koje ga čita, u lib/zack/staza.ts; ovde se
+// samo izvozi dalje, da stranica i dalje uvozi tip odande gde ga i koristi.
+export type { StavkaStaze };
 
 /**
  * Broj u našem jeziku menja oblik imenice iza sebe: 1 sličica, 2 sličice,
@@ -126,14 +127,42 @@ function Strelica() {
   );
 }
 
+/**
+ * Znak „gde sam stalo". Namerno NIJE žut: žuta u zack-u znači nagradu koja čeka,
+ * pa bi žut znak lagao da negde stoji nova sličica. Ovo je mastilo na papiru -
+ * kao kad se olovkom obeleži strana dokle se stiglo. Sitniji je i mirniji od
+ * žutog bedža i stoji na vrhu kartice, pa mu ne smeta kad se nađu zajedno.
+ * Ne nosi ni broj ni rok ni požurivanje: samo pokazuje odakle je najlakše.
+ */
+function ZnakOdavde({ tekst, redni }: { tekst: string; redni: number }) {
+  return (
+    <span
+      className="zack-zalepi font-heading mb-3 inline-flex rotate-1 items-center rounded-full border-2 border-white px-3 py-1 text-[13px] font-bold shadow-[0_2px_4px_rgba(22,22,26,0.15)]"
+      style={{
+        background: MASTILO,
+        color: PAPIR,
+        // Ista zadrška kao nalepnica sa brojem na istoj kartici, da znak sleti
+        // zajedno sa njom umesto da naknadno iskoči.
+        ["--zack-r" as string]: "1deg",
+        ["--zack-kasni" as string]: `${redni * 70}ms`,
+      }}
+    >
+      {tekst}
+    </span>
+  );
+}
+
 function Kartica({
   childId,
   lekcija,
   redni,
+  znak,
 }: {
   childId: string;
   lekcija: StavkaStaze;
   redni: number;
+  /** Natpis znaka, ako baš ova kartica nosi znak. Inače null. */
+  znak: string | null;
 }) {
   const { broj, naziv, zalepljene, ukupno, neotvorenaKesica } = lekcija;
   const puna = ukupno > 0 && zalepljene === ukupno;
@@ -153,7 +182,12 @@ function Kartica({
         cekaKesica ? "border-[3px] border-[#FFC400]" : "border border-[#DED8C8]"
       }`}
       style={{ background: PAPIR }}
+      // Čitač ekrana ovako kaže da je baš ovo mesto na kom se stalo, a natpis
+      // znaka je uz to i pravi tekst u kartici, pa se čuje i bez ovoga.
+      aria-current={znak ? "step" : undefined}
     >
+      {znak && <ZnakOdavde tekst={znak} redni={redni} />}
+
       <div className="flex items-center gap-3.5">
         {/* Broj lekcije kao nalepnica na korici: crvena kao znak, bela ivica,
             blag nagib. Pun album je zalepi u plavo i ispravi, a da razlika ne
@@ -251,6 +285,30 @@ export default function StazaClient({
   niz: number;
   lekcije: StavkaStaze[];
 }) {
+  const znak = znakStaze(lekcije);
+  const znakBroj = znak?.broj ?? null;
+  const oznacena = useRef<HTMLLIElement>(null);
+
+  // Kartica sa znakom se sama dovede u vidik, da dete koje se vraća ne mora da
+  // prelistava policu. Blago i bez iznenađenja:
+  // - ref se kači samo kad znak postoji i kad kartica NIJE prva (prva je i tako
+  //   na vrhu, pa bi svako pomeranje bilo pomeranje bez razloga);
+  // - ako je kartica ionako u kadru, ne pomera se ništa;
+  // - uz „manje pokreta" nema klizanja, nego se ekran prosto zatekne tu.
+  // Radi se posle prikaza, u efektu, pa se prvi ispis servera i klijenta
+  // poklapaju i spajanje (hidracija) ostaje netaknuto.
+  useEffect(() => {
+    const kartica = oznacena.current;
+    if (!kartica) return;
+
+    const mere = kartica.getBoundingClientRect();
+    const uKadru = mere.top >= 0 && mere.bottom <= window.innerHeight;
+    if (uKadru) return;
+
+    const mirno = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    kartica.scrollIntoView({ behavior: mirno ? "auto" : "smooth", block: "center" });
+  }, [znakBroj]);
+
   return (
     <div>
       <header className="mb-6">
@@ -299,11 +357,19 @@ export default function StazaClient({
         </p>
       ) : (
         <ol className="space-y-3.5">
-          {lekcije.map((lekcija, i) => (
-            <li key={lekcija.broj}>
-              <Kartica childId={childId} lekcija={lekcija} redni={i} />
-            </li>
-          ))}
+          {lekcije.map((lekcija, i) => {
+            const nosiZnak = lekcija.broj === znakBroj;
+            return (
+              <li key={lekcija.broj} ref={nosiZnak && i > 0 ? oznacena : null}>
+                <Kartica
+                  childId={childId}
+                  lekcija={lekcija}
+                  redni={i}
+                  znak={nosiZnak ? (znak?.tekst ?? null) : null}
+                />
+              </li>
+            );
+          })}
         </ol>
       )}
     </div>
