@@ -9,6 +9,7 @@ import { MERCHANT, CARD_OUTCOME, nestpayTxData, pdvBreakdown } from "@/lib/payme
 import type { Order } from "@/lib/types";
 import { ZACK_CLANSTVO_SLUG } from "@/lib/zack/clanstvo";
 import { smePostavljanjePina } from "@/lib/zack/gost";
+import { POKLON_DO_PRIKAZ, jePoklonStavka } from "@/lib/zack/poklon";
 import IpsQrCode from "./IpsQrCode";
 import PixelPurchase from "@/components/PixelPurchase";
 import ZackPinForma from "./ZackPinForma";
@@ -62,6 +63,11 @@ export default async function HvalaPage({
   // Slug hvata i gost-porudžbinu kojoj grant (koji upisuje dete_id) još nije
   // prošao - i njoj se govori zack jezikom, ne školskim.
   const jeZack = !!items?.[0]?.dete_id || courseSlug === ZACK_CLANSTVO_SLUG;
+
+  // Poklon do 1.9. (/poklon): ista strana, ali NIJEDNA rečenica o plaćanju ne
+  // sme da se pojavi - ništa nije naplaćeno niti će biti. Zato poklon gasi
+  // blok o uplati i dobija svoju potvrdu.
+  const jePoklon = jePoklonStavka(items?.[0]);
 
   // Gost-kupovina: dete je upravo nastalo u grant-access - hvala strana mu
   // pokazuje kod KRUPNO i, dok je pin_hash NULL, nudi postavljanje PIN-a.
@@ -135,11 +141,11 @@ export default async function HvalaPage({
         <div className="flex items-center gap-3 mb-2">
           <span className="text-3xl text-green-500">✓</span>
           <h1 className="font-montserrat font-bold text-2xl md:text-3xl text-gray-900">
-            Hvala na narudžbini!
+            {jePoklon ? "zack! je otključan!" : "Hvala na narudžbini!"}
           </h1>
         </div>
         <p className="text-gray-500 mb-1">
-          Narudžbina #{order.order_number}
+          {jePoklon ? "Zapis" : "Narudžbina"} #{order.order_number}
         </p>
         {courseTitle && (
           <p className="text-gray-700 font-medium mb-8">{courseTitle}</p>
@@ -157,6 +163,18 @@ export default async function HvalaPage({
                   : user
                     ? "Pristup kursu je aktiviran i već si prijavljen/a - kreni odmah."
                     : "Pristup kursu je aktiviran. Poslali smo ti email - prijavi se i počni."}
+            </p>
+          </div>
+        )}
+        {/* Poklon: potvrda koja ne pominje naplatu, jer je nije bilo. Stoji na
+            mestu kartične potvrde - roditelj mora odmah da vidi da je gotovo. */}
+        {jePoklon && order.payment_status === "completed" && (
+          <div className="bg-green-50 border border-green-200 rounded-xl px-5 py-4 mb-6 text-sm text-green-800">
+            <p className="font-semibold">Poklon je aktiviran 🎉</p>
+            <p className="mt-1">
+              Ništa nije naplaćeno i neće biti - kartica nam nije ni potrebna. Igre, kesice i
+              Milioner otključani su do {POKLON_DO_PRIKAZ}, a album i sve što dete zaradi ostaju
+              mu i posle toga.
             </p>
           </div>
         )}
@@ -391,8 +409,9 @@ export default async function HvalaPage({
           </div>
         )}
 
-        {/* Info note (samo za uplatnicu/PayPal - kartica je instant) */}
-        {!isCard && (
+        {/* Info note (samo za uplatnicu/PayPal - kartica je instant).
+            Poklon je izuzet: nema uplate koju bismo potvrđivali. */}
+        {!isCard && !jePoklon && (
         <div className="bg-plava-light/60 rounded-xl px-5 py-4 mb-8 text-sm text-gray-700 space-y-2">
           <p>
             Poslali smo instrukcije i na <span className="font-medium">{order.email}</span>.

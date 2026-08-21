@@ -113,7 +113,10 @@ export default async function NalogPage() {
                 <div>
                   <p className="text-sm font-medium text-gray-900">{naziv}</p>
                   <p className="text-xs text-gray-500">
-                    {new Date(o.created_at).toLocaleDateString("sr-RS")} · {o.payment_method} · plaćeno
+                    {/* Poklon (zack!, /poklon) je porudžbina od 0 dinara - nikad nije
+                        naplaćen, pa ne sme da piše „plaćeno". */}
+                    {new Date(o.created_at).toLocaleDateString("sr-RS")} ·{" "}
+                    {o.payment_method === "poklon" ? "poklon - bez plaćanja" : `${o.payment_method} · plaćeno`}
                   </p>
                 </div>
                 <div className="flex items-center gap-3">

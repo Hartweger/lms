@@ -1,7 +1,7 @@
 // src/lib/grant-access.ts
 import * as Sentry from "@sentry/nextjs";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { sendWelcomeEmail, sendGrupniWelcomeEmail, sendProfNewStudentEmail, sendIndividualWelcomeEmail, sendProfNewIndividualStudentEmail, sendSubscriptionChargeEmail, sendAcademyWelcomeEmail, sendZackWelcomeEmail } from "@/lib/email";
+import { sendWelcomeEmail, sendGrupniWelcomeEmail, sendProfNewStudentEmail, sendIndividualWelcomeEmail, sendProfNewIndividualStudentEmail, sendSubscriptionChargeEmail, sendAcademyWelcomeEmail, sendZackWelcomeEmail, sendZackPoklonEmail } from "@/lib/email";
 import { nivoForSlug } from "@/lib/course-nivo";
 import { computeSeats, pickOpenGroupForNivo } from "@/lib/groups";
 import { callGas } from "@/lib/gas";
@@ -16,6 +16,7 @@ import { CLANSTVO_CONTENT_SLUG } from "@/lib/clanstvo";
 import { noviRokClanstva, ZACK_PROMO_RSD } from "@/lib/zack/clanstvo";
 import { napraviKod } from "@/lib/zack/kod";
 import type { ZackGostMeta } from "@/lib/zack/gost";
+import { POKLON_DO, jePoklonStavka, type ZackPoklonMeta } from "@/lib/zack/poklon";
 
 interface OrderItem { course_id: string; course_slug: string; title: string; price: number; }
 
@@ -254,8 +255,18 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
   // ostalo (order → completed, fiskalizacija u pozivaocu, GA4/Meta, mejl) ide
   // istim tokom kao školske porudžbine. Školske stavke nemaju dete_id, pa se
   // za njih ova grana nikad ne izvršava.
-  const zackStavka = items[0] as { dete_id?: string; zack_gost?: ZackGostMeta } | undefined;
+  const zackStavka = items[0] as
+    | { dete_id?: string; zack_gost?: ZackGostMeta; zack_poklon?: ZackPoklonMeta }
+    | undefined;
   let zackDeteId = zackStavka?.dete_id;
+
+  // Poklon do 1.9.2026 (/poklon): porudžbina je istog oblika kao gost-kupovina,
+  // ali sa iznosom 0 i bez ijedne naplate iza sebe. Zato ovde dve razlike -
+  // rok je FIKSAN datum umesto godine dana od danas, i mejl ne sme da pomene
+  // plaćanje. Sve ostalo (nalog, roditelj sa pristankom, dete sa kodom) ide
+  // istim putem, pa poklon ne duplira nijedan red logike.
+  const jePoklon = jePoklonStavka(zackStavka);
+  const zackRok = jePoklon ? new Date(POKLON_DO) : expiresAt;
 
   // Gost-porudžbina: dete (i po potrebi roditelj) nastaju TEK SAD, posle
   // naplate - do ovog trenutka o kupcu postoji samo auth nalog i porudžbina.
@@ -322,7 +333,7 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
       ? (
           await admin
             .from("zack_deca")
-            .update({ clanstvo_do: noviRokClanstva(dete.clanstvo_do, expiresAt).toISOString() })
+            .update({ clanstvo_do: noviRokClanstva(dete.clanstvo_do, zackRok).toISOString() })
             .eq("id", dete.id)
         ).error
       : null;
@@ -340,13 +351,25 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
     await admin.from("orders").update({ payment_status: "completed", granted: true, grant_lock_at: null }).eq("id", orderId);
 
     // Ista pravila merenja kao dole: samo PRVA naplata je konverzija.
-    if (jePrvaNaplata) await sendGa4Purchase(order);
-    if (jePrvaNaplata && !order.meta_purchase_sent) {
+    // Poklon NIJE konverzija - nema kupovine ni dinara prihoda, pa bi Purchase
+    // od 0 RSD samo razvodnio GA4 i Meta (isto pravilo kao za pretplatu:
+    // Purchase ide samo iz stvarne naplate).
+    if (jePrvaNaplata && !jePoklon) await sendGa4Purchase(order);
+    if (jePrvaNaplata && !jePoklon && !order.meta_purchase_sent) {
       const metaOk = await sendPurchaseEvent(order, { eventSourceUrl: `${SITE_URL}/kupovina/hvala/${order.id}` });
       if (metaOk) await admin.from("orders").update({ meta_purchase_sent: true }).eq("id", orderId);
     }
 
-    if (jePrvaNaplata) {
+    if (jePoklon) {
+      // Poklon-mejl ne pominje ni karticu ni iznos ni obnavljanje - ničega od
+      // toga nema. Kaže samo šta dete ima, do kada, i šta biva posle.
+      await sendZackPoklonEmail(order.email, order.full_name, {
+        imeDeteta: dete.ime,
+        vaziDo: zackRok.toISOString(),
+        kod: dete.kod,
+        pinNijePostavljen: dete.pin_hash === null,
+      });
+    } else if (jePrvaNaplata) {
       await sendZackWelcomeEmail(order.email, order.full_name, {
         imeDeteta: dete.ime,
         monthlyRsd: ZACK_PROMO_RSD,

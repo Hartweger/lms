@@ -2578,6 +2578,61 @@ ${blokKoda}
 }
 
 /**
+ * Poklon do 1. septembra (/poklon): dete je dobilo ceo zack! bez plaćanja.
+ *
+ * Ovaj mejl NE SME da pomene karticu, iznos, naplatu ni obnavljanje - ničega
+ * od toga u poklonu nema, pa bi svaka takva rečenica bila neistina. Zato je
+ * odvojen od `sendZackWelcomeEmail`, umesto da se u njemu granaju rečenice.
+ * Kaže tri stvari: šta dete ima, do kada, i šta biva posle tog datuma.
+ */
+export async function sendZackPoklonEmail(
+  to: string,
+  name: string | null,
+  o: {
+    imeDeteta: string;
+    /** Fiksan rok poklona (lib/zack/poklon.ts) - u mejlu stoji ispisan datum. */
+    vaziDo: string;
+    /** Kod za prijavu deteta - roditelju jedini „login" podatak. */
+    kod?: string | null;
+    /** PIN se postavlja na strani posle prijave za poklon, ili kasnije u panelu. */
+    pinNijePostavljen?: boolean;
+  },
+) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    const ime = name ? name.split(" ")[0] : "";
+    // sr-RS datum se završava tačkom („1. 9. 2026."), pa se ona skida da
+    // rečenica ne dobije duplu tačku.
+    const doKada = new Date(o.vaziDo).toLocaleDateString("sr-RS").replace(/\.$/, "");
+    const blokKoda = o.kod
+      ? `<p>Kod za prijavu deteta: <strong style="font-size:20px;letter-spacing:2px">${esc(o.kod)}</strong>${
+          o.pinNijePostavljen
+            ? `<br>PIN još nije postavljen - postavi ga na strani na koju te je prijava odvela, ili u <a href="${SITE_URL}/zack/roditelj">roditeljskom panelu</a> („Novi PIN" uz dete). Onda detetu prepiši kod i PIN na papirić - to je cela instalacija.`
+            : ""
+        }</p>`
+      : "";
+    await sendEmail(resend, {
+      to,
+      subject: `zack! je otključan za ${o.imeDeteta} - poklon do 1. septembra`,
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:sans-serif;line-height:1.6;color:#222">
+<p>Zdravo${ime ? ", " + esc(ime) : ""}!</p>
+<p>Profil za <strong>${esc(o.imeDeteta)}</strong> je napravljen i ceo zack! je otključan - igre, kesice sa sličicama i Milioner. Dete se prijavljuje na <a href="${SITE_URL}/zack">hartweger.rs/zack</a>.</p>
+${blokKoda}
+<p>Ovo je <strong>poklon do ${doKada}</strong>: ništa nije naplaćeno, kartica nam nije potrebna i ništa neće biti naplaćeno ni kasnije.</p>
+<p>Posle tog datuma igre, kesice i Milioner miruju, a <strong>album i sve što je dete zaradilo ostaju</strong> - ništa mu se ne oduzima. Ako želiš da dete nastavi, članstvo se uključuje u <a href="${SITE_URL}/zack/roditelj">roditeljskom panelu</a> - a ako ne želiš, ne moraš ništa da radiš.</p>
+<p style="font-size:13px;color:#666">Za sva pitanja piši nam na info@hartweger.rs.</p>
+<p style="margin-top:20px">Hartweger tim</p>
+</body></html>`,
+    });
+    console.log(`[email] zack poklon mejl poslat → ${to}`);
+  } catch (e) {
+    console.error("[email] sendZackPoklonEmail pao:", e);
+  }
+}
+
+/**
  * Pala mesečna naplata - šalje se JEDNOM, kad je prvi put primetimo (posle toga
  * banka na naš zahtev pokušava iznova danima, ne treba 30 mejlova). Istekla
  * kartica se ne da spasiti pokušajima: banka traži da kupac autorizuje NOV plan.
