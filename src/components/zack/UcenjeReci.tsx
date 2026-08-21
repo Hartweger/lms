@@ -10,6 +10,12 @@
 // odgovor mirno otkrije tačan i ide dalje - bez „pokušaj ponovo", bez drugog
 // pokušaja i bez ijedne reči prekora.
 //
+// ZVUK STOJI SAMO NA KARTICI, NE I U PROVERI
+// ------------------------------------------
+// Dugme „Čuj" ide uz reč na kartici, gde pitanja nema. U proveru ispod njega ne
+// ulazi, jer bi zvuk pored pitanja pretvorio čitanje u pogađanje po sluhu (a u
+// Diktatu bi izdiktirao odgovor). Ostalo piše u `ZvucnikDugme.tsx`.
+//
 // ZARAĐENO SE ŠALJE ODMAH, PA SE NA KRAJU ŠALJE JOŠ JEDNOM
 // --------------------------------------------------------
 // Ista disciplina kao u `Igra.tsx`: posle svakog tačnog odgovora u proveri ide
@@ -25,6 +31,7 @@
 // samo ovde se zna šta je dete do tog trenutka zaradilo. Izlaz koji bi ekran
 // lekcije sam odradio ne bi imao šta da ponovo pošalje.
 import { useEffect, useRef, useState } from "react";
+import ZvucnikDugme from "./ZvucnikDugme";
 import type { Pitanje } from "@/lib/zack/pitanja";
 import { BOJA_MNOZINA, bojaZaRod, mnozinaReci, type Rec } from "@/lib/zack/rec";
 import { miniProvera, napraviGrupe } from "@/lib/zack/ucenje";
@@ -409,6 +416,8 @@ function Kartica({ rec }: { rec: Rec }) {
   // Ne `rec.mnozina`: rečima bez množine u tabeli stoji crtica, pa bi se na
   // kartici pojavila žuta oznaka na kojoj piše „množina -".
   const mnozina = mnozinaReci(rec);
+  // Jedan oblik za oko i za uvo: isti tekst se ispisuje i izgovara.
+  const oblik = saClanom(rec);
 
   return (
     <li
@@ -417,13 +426,18 @@ function Kartica({ rec }: { rec: Rec }) {
     >
       <span aria-hidden="true" className="block h-2.5 w-full" style={{ background: traka }} />
       <div className="px-4 py-3.5">
-        <p
-          lang="de"
-          className="font-heading text-[22px] font-bold leading-tight [overflow-wrap:anywhere]"
-          style={{ color: MASTILO }}
-        >
-          {saClanom(rec)}
-        </p>
+        <div className="flex items-start gap-3">
+          <p
+            lang="de"
+            className="font-heading min-w-0 flex-1 text-[22px] font-bold leading-tight [overflow-wrap:anywhere]"
+            style={{ color: MASTILO }}
+          >
+            {oblik}
+          </p>
+          {/* Izgovara se oblik SA ČLANOM, isti onaj koji na kartici i piše: član
+              nosi rod, pa je „der Hund" ono što dete treba da nauči da kaže. */}
+          <ZvucnikDugme tekst={oblik} />
+        </div>
         {/* Prevod se ne seče: on je jedino mesto gde piše šta reč znači. */}
         <p className="mt-1 text-[17px] leading-snug break-words" style={{ color: PRIGUSEN }}>
           {rec.sr}
