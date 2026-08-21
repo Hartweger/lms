@@ -8,9 +8,13 @@
 // Zatvaranje: Escape (fokus se vraća na dugme), klik van menija, klik na
 // stavku. Kod klika na sidro fokus namerno NE vraćamo na dugme - skok na
 // sekciju nosi i fokus, pa tastatura nastavlja tamo gde čitalac gleda.
+//
+// Dok traje poklon, „Poklon" stoji prvi i jedini je podebljan - vodi, ali ne
+// izbacuje ništa: sidro „Cena" i dalje stoji, pa je članstvo na dohvat. Rok ne
+// odlučuje ovaj meni: poklonAktivan stiže sa strane, koja ga čita iz POKLON_DO.
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { IVICA, MASTILO, PAPIR, PRIGUSEN } from "../zack/Ukras";
+import { IVICA, MASTILO, PAPIR, PRIGUSEN, ZUTA } from "../zack/Ukras";
 
 /** Isti fokus prsten kao na ostatku strane. */
 const FOKUS = "outline-offset-4 focus-visible:outline-4 focus-visible:outline-[#0B54C9]";
@@ -23,7 +27,7 @@ const SIDRA = [
   { href: "#pitanja", tekst: "Pitanja" },
 ];
 
-export default function Meni() {
+export default function Meni({ poklonAktivan }: { poklonAktivan: boolean }) {
   const [otvoren, setOtvoren] = useState(false);
   const dugme = useRef<HTMLButtonElement | null>(null);
   const okvir = useRef<HTMLDivElement | null>(null);
@@ -53,6 +57,15 @@ export default function Meni() {
     <div ref={okvir} className="relative">
       {/* Veliki ekran: mirna traka - sidra pa prijave, bez ikakve mehanike. */}
       <nav aria-label="Delovi strane" className="hidden items-center gap-0.5 lg:flex">
+        {poklonAktivan && (
+          <Link
+            href="/poklon"
+            className={`mr-1 rounded-lg px-2.5 py-2.5 text-[15px] font-bold ${FOKUS}`}
+            style={{ color: MASTILO, background: ZUTA }}
+          >
+            Poklon
+          </Link>
+        )}
         {SIDRA.map((s) => (
           <a
             key={s.href}
@@ -70,8 +83,9 @@ export default function Meni() {
         >
           Prijava za dete
         </Link>
-        {/* Diskretna prijava za roditelje koji NALOG VEĆ IMAJU - glavni CTA-ovi
-            strane vode pravo na plaćanje (/kupovina/zack-clanstvo). */}
+        {/* Diskretna prijava za roditelje koji NALOG VEĆ IMAJU - glavni pozivi
+            strane vode na ponudu (poklon dok traje, inače pravo na plaćanje),
+            nikad na otvaranje naloga. */}
         <Link
           href="/zack/roditelj"
           className={`ml-1 rounded-xl border-2 px-4 py-2.5 text-[15px] font-bold ${FOKUS}`}
@@ -110,6 +124,16 @@ export default function Meni() {
         style={{ background: PAPIR, borderColor: IVICA }}
       >
         <nav aria-label="Meni" className="flex flex-col">
+          {poklonAktivan && (
+            <Link
+              href="/poklon"
+              onClick={() => setOtvoren(false)}
+              className={`mb-1 flex min-h-[44px] items-center rounded-lg px-3 text-[16px] font-bold ${FOKUS}`}
+              style={{ color: MASTILO, background: ZUTA }}
+            >
+              Poklon
+            </Link>
+          )}
           {SIDRA.map((s) => (
             <a
               key={s.href}

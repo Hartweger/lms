@@ -13,6 +13,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Slicica from "@/components/zack/Slicica";
+import { POKLON_DO_PRIKAZ, poklonVazi } from "@/lib/zack/poklon";
 import type { Rec, Rod } from "@/lib/zack/rec";
 import {
   CRVENA,
@@ -34,6 +35,11 @@ import {
 import LepljivPoziv from "./LepljivPoziv";
 import Meni from "./Meni";
 import Otkrij from "./Otkrij";
+
+// Rok poklona se čita iz POKLON_DO u trenutku zahteva, pa strana NE sme da se
+// zamrzne u statički HTML iz avgusta i posle 1.9. i dalje nudi poklon. Ista
+// disciplina kao na /poklon: force-dynamic.
+export const dynamic = "force-dynamic";
 
 // Metapodaci (naslov, opis, robots, canonical, OG) žive u layout.tsx pored
 // ove strane - jedno mesto, da se ne dupliraju i ne razjedu.
@@ -86,18 +92,73 @@ const ALBUM_MOCK: { rec: Rec; stanje: "zalepljena" | "izbledela" | "prazno" }[] 
 /** Fokus prsten za svetle podloge - isti plavi kao na dečjim ekranima. */
 const FOKUS = "outline-offset-4 focus-visible:outline-4 focus-visible:outline-[#0B54C9]";
 
-/** Glavno dugme: debela crvena nalepnica, ista gramatika kao dečje „Uđi".
-    Vodi PRAVO NA PLAĆANJE - nalog nastaje sam, posle uplate (odluka vlasnice:
-    „zašto bi neko otvarao nalog da bi platio?"). */
+/** Izgled velikog dugmeta - debela crvena nalepnica, ista gramatika kao dečje
+    „Uđi". Deli ga poziv na članstvo i poziv na poklon, da se ne razilaze. */
+const DUGME = `inline-block rounded-2xl border-4 border-white px-8 py-4 text-[20px] text-white shadow-[0_5px_0_0_#8F1B14,0_8px_18px_rgba(22,22,26,0.22)] ${FOKUS} motion-safe:transition-transform motion-safe:duration-100 motion-safe:hover:-translate-y-0.5 motion-safe:active:translate-y-[3px] motion-safe:active:shadow-[0_1px_0_0_#8F1B14]`;
+
+/** Poziv na članstvo. Vodi PRAVO NA PLAĆANJE - nalog nastaje sam, posle uplate
+    (odluka vlasnice: „zašto bi neko otvarao nalog da bi platio?"). */
 function CtaDugme() {
   return (
-    <Link
-      href="/kupovina/zack-clanstvo"
-      className={`inline-block rounded-2xl border-4 border-white px-8 py-4 text-[20px] text-white shadow-[0_5px_0_0_#8F1B14,0_8px_18px_rgba(22,22,26,0.22)] ${FOKUS} motion-safe:transition-transform motion-safe:duration-100 motion-safe:hover:-translate-y-0.5 motion-safe:active:translate-y-[3px] motion-safe:active:shadow-[0_1px_0_0_#8F1B14]`}
-      style={{ background: CRVENA, fontFamily: DISPLAY }}
-    >
+    <Link href="/kupovina/zack-clanstvo" className={DUGME} style={{ background: CRVENA, fontFamily: DISPLAY }}>
       Uključi članstvo
     </Link>
+  );
+}
+
+/** Poziv na poklon - primarni dok akcija traje. Vodi na /poklon, gde se ne
+    traži ni dinar ni broj kartice. */
+function PoklonDugme() {
+  return (
+    <Link href="/poklon" className={DUGME} style={{ background: CRVENA, fontFamily: DISPLAY }}>
+      Uzmi poklon
+    </Link>
+  );
+}
+
+/** Poklon na vrhu strane: dok akcija traje, ovo je jedini krupan poziv, a
+    članstvo ostaje ispod njega kao mirna rečenica - roditelj ne bira između
+    dve jednake ponude, nego ulazi. Datum stiže iz POKLON_DO_PRIKAZ, pa se
+    tekst ne može razići sa rokom koji poklon stvarno poštuje. */
+function PoklonBlok() {
+  return (
+    <>
+      <div
+        className="relative max-w-md -rotate-1 rounded-2xl border-2 bg-white p-5 shadow-[0_4px_0_0_#DED8C8,0_12px_26px_rgba(22,22,26,0.12)] sm:p-6"
+        style={{ borderColor: IVICA }}
+      >
+        <p
+          className="inline-block -rotate-2 rounded-lg border-[3px] border-white px-3.5 py-1.5 text-[17px] shadow-[0_3px_8px_rgba(22,22,26,0.18)]"
+          style={{ background: ZUTA, color: MASTILO, fontFamily: DISPLAY }}
+        >
+          Poklon do {POKLON_DO_PRIKAZ}
+        </p>
+        <p className="mt-4 text-[16px] leading-relaxed sm:text-[17px]" style={{ color: PRIGUSEN }}>
+          Petacima koji tek kreću sa nemačkim - da se pripreme i upoznaju sa
+          jezikom pre prvog časa.
+        </p>
+        <p className="mt-2 text-[16px] leading-relaxed sm:text-[17px]" style={{ color: PRIGUSEN }}>
+          Starijim razredima - da obnove gradivo petog pre nove školske godine.
+        </p>
+        <p className="mt-4 text-[17px] font-bold leading-relaxed" style={{ color: MASTILO }}>
+          Bez plaćanja i bez kartice.
+        </p>
+        <p className="mt-5">
+          <PoklonDugme />
+        </p>
+      </div>
+      <p className="mt-4 max-w-md text-[15px] leading-relaxed" style={{ color: PRIGUSEN }}>
+        Ako ti je draže da dete odmah krene bez roka:{" "}
+        <Link
+          href="/kupovina/zack-clanstvo"
+          className={`font-bold underline underline-offset-2 ${FOKUS}`}
+          style={{ color: MASTILO }}
+        >
+          uključi članstvo
+        </Link>{" "}
+        - 1.200 dinara mesečno po detetu, bez ugovora.
+      </p>
+    </>
   );
 }
 
@@ -281,6 +342,10 @@ function VinjetaKesica() {
 // ── Strana ──────────────────────────────────────────────────────────────────
 
 export default function ZaRoditeljePage() {
+  // Jedan izvor istine za ceo landing: i vrh strane, i lepljivi poziv, i meni
+  // gledaju OVU vrednost, pa posle roka nigde ne ostane ni blok ni mrtav link.
+  const poklonAktivan = poklonVazi(new Date());
+
   return (
     <div className="overflow-x-clip">
       {/* Otkrivanje na skrol živi u istom no-preference svetu kao zack-zalepi:
@@ -307,7 +372,7 @@ export default function ZaRoditeljePage() {
             nemački za osnovce
           </span>
         </span>
-        <Meni />
+        <Meni poklonAktivan={poklonAktivan} />
       </header>
 
       {/* Koreni raspored već renderuje <main id="glavni">, pa bi još jedan
@@ -341,10 +406,16 @@ export default function ZaRoditeljePage() {
               {/* id koristi lepljivi poziv: dok je ovo dugme u kadru (ili
                   ispod njega), papirić sa cenom se ne prikazuje. */}
               <div id="hero-cta" className="zack-zalepi mt-8" style={{ ["--zack-kasni" as string]: "380ms" }}>
-                <CtaDugme />
-                <p className="mt-3 text-[14px]" style={{ color: PRIGUSEN }}>
-                  Bez ugovora - otkazuješ kad hoćeš.
-                </p>
+                {poklonAktivan ? (
+                  <PoklonBlok />
+                ) : (
+                  <>
+                    <CtaDugme />
+                    <p className="mt-3 text-[14px]" style={{ color: PRIGUSEN }}>
+                      Bez ugovora - otkazuješ kad hoćeš.
+                    </p>
+                  </>
+                )}
               </div>
             </div>
             <KolazSiroki />
@@ -1080,7 +1151,7 @@ export default function ZaRoditeljePage() {
       </footer>
 
       {/* Papirić sa cenom koji prati skrol - pojavi se tek posle hero dugmeta. */}
-      <LepljivPoziv />
+      <LepljivPoziv poklonAktivan={poklonAktivan} />
     </div>
   );
 }

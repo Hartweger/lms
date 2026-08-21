@@ -149,8 +149,12 @@ gtag('config', '${ADS_ID}', { allow_enhanced_conversions: true });` : ""}
             strani, gde gradi poverenje, i nigde više.
             Isti okvir se krije i na /nemacki-za-decu (prodajni landing zack!-a,
             van /zack): brend je zack!, ali publika odrasla - pa merenje,
-            kolačići i piksel tamo NORMALNO rade i ne kriju se. */}
-        <SakrijNa prefiksi={["/zack", "/nemacki-za-decu"]}>
+            kolačići i piksel tamo NORMALNO rade i ne kriju se.
+            Promo traka se krije i na /poklon: ona reklamira mesečno plaćanje, a
+            cela poruka poklona je „bez plaćanja i bez kartice" - dve rečenice
+            koje na istom ekranu ne smeju da stoje. Ostatak okvira na /poklon
+            ostaje kakav je bio. */}
+        <SakrijNa prefiksi={["/zack", "/nemacki-za-decu", "/poklon"]}>
           <PromoBar />
         </SakrijNa>
         <SakrijNa prefiksi={["/clanstvo", "/zack", "/nemacki-za-decu"]}>

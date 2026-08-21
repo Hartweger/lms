@@ -14,10 +14,28 @@ import IpsQrCode from "./IpsQrCode";
 import PixelPurchase from "@/components/PixelPurchase";
 import ZackPinForma from "./ZackPinForma";
 
-export const metadata: Metadata = {
-  title: "Hvala na narudžbini - Hartweger",
-  robots: { index: false },
-};
+// Naslov kartice pretraživača mora da prati ono što na strani PIŠE: kod
+// poklona nema nikakve narudžbine, pa ne sme ni da je pominje. Zato se čita
+// ista oznaka (jePoklonStavka) kao u telu strane - jedan upit, samo items.
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ orderId: string }>;
+}): Promise<Metadata> {
+  const { orderId } = await params;
+  // Nepostojeća ili neispravna porudžbina ovde nije greška - strana ionako
+  // ide u notFound(), a naslov prosto ostaje podrazumevani.
+  const { data } = await createAdminClient()
+    .from("orders")
+    .select("items")
+    .eq("id", orderId)
+    .maybeSingle<{ items: unknown }>();
+  const stavke = Array.isArray(data?.items) ? data.items : [];
+  return {
+    title: jePoklonStavka(stavke[0]) ? "zack! je otključan - Hartweger" : "Hvala na narudžbini - Hartweger",
+    robots: { index: false },
+  };
+}
 
 interface OrderItem {
   course_id: string;
