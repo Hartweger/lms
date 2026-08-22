@@ -25,6 +25,7 @@ import { grantAccessForOrder } from "@/lib/grant-access";
 import { ZACK_CLANSTVO_SLUG } from "@/lib/zack/clanstvo";
 import { proveriGostUnos, type ZackGostMeta } from "@/lib/zack/gost";
 import { PRISTANAK_TEKST } from "@/lib/zack/pristanak";
+import { sendAdminZackPoklonEmail } from "@/lib/email";
 import {
   PORUKA_POKLON_ISTEKAO,
   PORUKA_POKLON_VEC_UZET,
@@ -89,7 +90,7 @@ export async function POST(request: Request) {
     // da je poslao id iz padajuće liste.
     const { data: udzbenik, error: greskaUdzbenika } = await sb
       .from("zack_udzbenici")
-      .select("id")
+      .select("id, razred")
       .eq("id", provera.udzbenikId)
       .eq("izdavac", IZDAVAC_PO_PLANU)
       .maybeSingle();
@@ -202,6 +203,25 @@ export async function POST(request: Request) {
         "Profil za dete nije uspeo da se napravi. Piši nam na info@hartweger.rs i rešićemo to za tebe.",
         500,
       );
+    }
+
+    // Javka vlasnici - da uživo vidi da li reklama radi. Best-effort: roditelj
+    // je već dobio pristup, pa pad ovog mejla NE sme da mu vrati grešku.
+    try {
+      const { count } = await sb
+        .from("orders")
+        .select("id", { count: "exact", head: true })
+        .eq("payment_method", METOD_POKLON)
+        .eq("payment_status", "completed");
+      await sendAdminZackPoklonEmail({
+        imeDeteta: provera.ime,
+        razred: udzbenik.razred ?? null,
+        email: provera.email,
+        ukupno: count ?? 0,
+      });
+    } catch (e) {
+      console.error("[zack/poklon] javka adminu pala:", e);
+      Sentry.captureException(e);
     }
 
     return NextResponse.json({ orderId: porudzbina.id });

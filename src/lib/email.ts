@@ -2681,6 +2681,42 @@ export async function sendZackPoklonPodsetnikEmail(
 }
 
 /**
+ * Javka Nataši čim neko uzme poklon - da uživo vidi da li reklama radi, bez
+ * ulaženja u admin.
+ *
+ * Nosi i UKUPAN broj poklona do sada, pa jedan mejl odgovara na pravo pitanje
+ * („koliko ih je?") umesto da se broje mejlovi u sandučetu. Ako akcija krene
+ * jako, ovo se gasi jednom linijom u ruti i ostaje dnevni pregled.
+ *
+ * NIJE bulk: ovo je javka vlasnici, ne pošta polazniku.
+ */
+export async function sendAdminZackPoklonEmail(o: {
+  imeDeteta: string;
+  razred: number | null;
+  email: string;
+  ukupno: number;
+}) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    await sendEmail(resend, {
+      to: ["info@hartweger.rs", "natasa@hartweger.rs"],
+      subject: `zack! poklon #${o.ukupno} - ${o.imeDeteta}`,
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:sans-serif;line-height:1.6;color:#222">
+<p><strong>${esc(o.imeDeteta)}</strong>${o.razred ? `, ${o.razred}. razred` : ""} - poklon uzet.</p>
+<p style="color:#666">Roditelj: ${esc(o.email)}</p>
+<p style="font-size:22px"><strong>Ukupno do sada: ${o.ukupno}</strong></p>
+<p style="font-size:13px;color:#666">Stiže sa svakim novim poklonom. Sve zajedno vidiš u <a href="${SITE_URL}/admin/analitika">analitici</a>.</p>
+</body></html>`,
+    });
+    console.log(`[email] admin javka za poklon #${o.ukupno}`);
+  } catch (e) {
+    console.error("[email] sendAdminZackPoklonEmail pao:", e);
+  }
+}
+
+/**
  * Trećeg dana, SAMO ako se dete nijednom nije prijavilo. Poklon koji dete nikad
  * ne otvori je propao poklon, a razlog je po pravilu proza - papirić sa kodom
  * se zaturi.
