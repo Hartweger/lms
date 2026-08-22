@@ -5,8 +5,8 @@ import { sendWelcomeEmail, sendGrupniWelcomeEmail, sendProfNewStudentEmail, send
 import { nivoForSlug } from "@/lib/course-nivo";
 import { computeSeats, pickOpenGroupForNivo } from "@/lib/groups";
 import { callGas } from "@/lib/gas";
-import { sendGa4Purchase } from "@/lib/ga4-mp";
-import { sendPurchaseEvent } from "@/lib/meta-capi";
+import { sendGa4Poklon, sendGa4Purchase } from "@/lib/ga4-mp";
+import { sendPoklonEvent, sendPurchaseEvent } from "@/lib/meta-capi";
 import { SITE_URL } from "@/lib/site-url";
 import { createLoginLinkToken } from "@/lib/login-link";
 import { firstLessonForCourses } from "@/lib/first-lesson";
@@ -359,8 +359,14 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
       const metaOk = await sendPurchaseEvent(order, { eventSourceUrl: `${SITE_URL}/kupovina/hvala/${order.id}` });
       if (metaOk) await admin.from("orders").update({ meta_purchase_sent: true }).eq("id", orderId);
     }
-
+    // Poklon ipak MORA da se meri, samo ne kao prihod: bez ijednog događaja se
+    // oglas plaća naslepo, a ni Meta ni Google nemaju na šta da optimizuju.
+    // Zato ide svoj par (GA4 `zack_poklon` + Meta CompleteRegistration), bez
+    // vrednosti. meta_purchase_sent se NE dira - to je zastavica kupovine, a
+    // poklon-porudžbina se nikad ne naplaćuje, pa nema šta da se sudari.
     if (jePoklon) {
+      await sendGa4Poklon(order);
+      await sendPoklonEvent(order, { eventSourceUrl: `${SITE_URL}/kupovina/hvala/${order.id}` });
       // Poklon-mejl ne pominje ni karticu ni iznos ni obnavljanje - ničega od
       // toga nema. Kaže samo šta dete ima, do kada, i šta biva posle.
       await sendZackPoklonEmail(order.email, order.full_name, {

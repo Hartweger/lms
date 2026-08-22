@@ -95,3 +95,55 @@ export async function sendGa4Purchase(order: OrderLike): Promise<void> {
     console.error(`[ga4-mp] purchase send pao za order ${order.id}:`, e);
   }
 }
+
+/**
+ * Poklon (zack!, /poklon) - zaseban događaj `zack_poklon`, NIJE purchase.
+ *
+ * Purchase od 0 RSD bi ušao u isti izveštaj kao prave prodaje i pokvario i
+ * prihod i prosečnu vrednost porudžbine, pa poklon dobija svoje ime. Da bi se
+ * oglasi mogli optimizovati i meriti, ovaj događaj treba u GA4 označiti kao
+ * ključni (Admin → Events) i uvesti ga u Google Ads kao konverziju bez vrednosti.
+ *
+ * Nikad ne baca - kao i purchase, ne sme da obori dodelu pristupa.
+ */
+export async function sendGa4Poklon(order: OrderLike): Promise<void> {
+  const apiSecret = process.env.GA4_API_SECRET;
+  const measurementId = process.env.GA4_MEASUREMENT_ID || "G-MB9DRXVVF6";
+  if (!apiSecret) return; // tiho preskoči dok secret nije postavljen
+
+  try {
+    const rawItems = Array.isArray(order.items) ? (order.items as OrderItemLike[]) : [];
+    const body = {
+      client_id: order.ga_client_id || order.id,
+      ...(order.ga_client_id ? { user_data: ga4UserData(order.email) } : {}),
+      events: [
+        {
+          name: "zack_poklon",
+          params: {
+            // transaction_id drži GA4 dedup ako se dodela pristupa ikad ponovi.
+            transaction_id: order.order_number || order.id,
+            item_name: rawItems[0]?.title ?? "zack! poklon",
+            ...(order.ga_session_id ? { session_id: order.ga_session_id, engagement_time_msec: 100 } : {}),
+          },
+        },
+      ],
+    };
+
+    const url =
+      "https://www.google-analytics.com/mp/collect?measurement_id=" +
+      encodeURIComponent(measurementId) +
+      "&api_secret=" +
+      encodeURIComponent(apiSecret);
+
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    if (!res.ok) {
+      console.error(`[ga4-mp] zack_poklon HTTP ${res.status} za order ${order.id}`);
+    }
+  } catch (e) {
+    console.error(`[ga4-mp] zack_poklon send pao za order ${order.id}:`, e);
+  }
+}

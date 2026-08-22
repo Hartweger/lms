@@ -14,6 +14,16 @@ export function purchaseEventId(orderNumber: string | null): string {
   return `purchase_${orderNumber}`;
 }
 
+/**
+ * Isti posao za poklon (zack!, /poklon). Poklon NIJE Purchase - nema ni dinara
+ * prihoda, pa bi kupovina od 0 RSD razvodnila i prihod i optimizaciju oglasa.
+ * Zato ide kao CompleteRegistration, sa svojim event_id-om da se ne sudari sa
+ * kupovinom iste porudžbine.
+ */
+export function poklonEventId(orderNumber: string | null): string {
+  return `poklon_${orderNumber}`;
+}
+
 type Fbq = (...args: unknown[]) => void;
 
 declare global {
