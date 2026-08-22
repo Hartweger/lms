@@ -352,7 +352,7 @@ export default function StazaClient({
           className="rounded-2xl border border-dashed p-6 text-center text-[16px] leading-relaxed"
           style={{ borderColor: IVICA, background: PAPIR, color: PRIGUSEN }}
         >
-          Ovde još nema nijedne lekcije. Čim tvoj udžbenik dobije prvu, naći ćeš je baš na ovom
+          Ovde još nema nijedne lekcije. Čim stigne prva, naći ćeš je baš na ovom
           mestu.
         </p>
       ) : (

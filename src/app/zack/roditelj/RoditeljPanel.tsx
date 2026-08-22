@@ -543,7 +543,7 @@ function DodajDete({ udzbenici }: { udzbenici: UdzbenikStavka[] }) {
       return;
     }
     if (!udzbenikId) {
-      setPoruka("Izaberi udžbenik.");
+      setPoruka("Izaberi razred.");
       return;
     }
     const omaska = proveriPinUnos(pin, ponovo);
@@ -610,7 +610,7 @@ function DodajDete({ udzbenici }: { udzbenici: UdzbenikStavka[] }) {
 
       <div className="mt-3">
         <label htmlFor="novo-udzbenik" className={OZNAKA} style={{ color: MASTILO }}>
-          Udžbenik iz škole
+          Razred
         </label>
         <select
           id="novo-udzbenik"
@@ -619,10 +619,10 @@ function DodajDete({ udzbenici }: { udzbenici: UdzbenikStavka[] }) {
           className={POLJE}
           style={POLJE_STIL}
         >
-          <option value="">Izaberi udžbenik</option>
+          <option value="">Izaberi razred</option>
           {udzbenici.map((u) => (
             <option key={u.id} value={u.id}>
-              {u.naziv} ({u.izdavac}, {u.razred}. razred)
+              {u.razred}. razred
             </option>
           ))}
         </select>

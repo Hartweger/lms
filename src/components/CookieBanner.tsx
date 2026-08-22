@@ -62,8 +62,13 @@ export default function CookieBanner() {
       aria-label="Saglasnost za kolačiće"
       className="fixed inset-x-0 bottom-0 z-50 bg-[#1a2332] text-gray-200 shadow-2xl"
     >
-      <div className="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row sm:items-center gap-4">
-        <p className="text-sm leading-relaxed flex-1">
+      {/* Na telefonu je ova traka merila ~400px od 812px ekrana - pola prvog
+          ekrana svake ulazne strane, pa je ponuda ostajala iza nje. Tekst se NE
+          skraćuje (svrha obrade i pravo izbora moraju da stoje), nego se zbija:
+          sitnije slovo, uži prored i manje vazduha. Od sm: naviše sve ostaje
+          kako je i bilo. */}
+      <div className="max-w-6xl mx-auto px-4 py-3 sm:py-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+        <p className="text-[13px] leading-snug sm:text-sm sm:leading-relaxed flex-1">
           Uz tvoju saglasnost pratimo kako se sajt koristi da bismo ti prikazali pravi sadržaj i
           stalno unapređivali časove i platformu. Neophodni kolačići rade uvek; analitičke i
           marketinške postavljamo samo ako prihvatiš. Detaljnije u{" "}

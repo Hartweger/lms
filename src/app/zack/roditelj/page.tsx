@@ -52,7 +52,15 @@ export default async function RoditeljPage() {
       .select("id, ime, kod, udzbenik_id, oslobodjeno, clanstvo_do")
       .eq("roditelj_id", roditelj.id)
       .order("created_at"),
-    sb.from("zack_udzbenici").select("id, naziv, izdavac, razred").order("razred"),
+    // Samo sadržaj po planu i programu (odluka 19.08). Bez ovog filtera panel
+    // je roditelju koji dodaje drugo dete nudio i stare Maximal zapise - a to
+    // su prelazni sadržaji (Maximal 1 ima JEDNU probnu lekciju), pa bi dete
+    // dobilo skoro prazan album bez ijednog upozorenja.
+    sb
+      .from("zack_udzbenici")
+      .select("id, naziv, izdavac, razred")
+      .eq("izdavac", "Po planu i programu")
+      .order("razred"),
   ]);
   if (decaUpit.error) throw new Error(`Ne mogu da pročitam decu: ${decaUpit.error.message}`);
   if (udzbeniciUpit.error) {

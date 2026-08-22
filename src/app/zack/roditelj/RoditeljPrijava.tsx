@@ -85,8 +85,11 @@ export default function RoditeljPrijava() {
         </span>
       </div>
       <p className="mt-4 text-[16px] leading-relaxed" style={{ color: PRIGUSEN }}>
-        zack! je Hartweger aplikacija u kojoj tvoje dete vežba nemački uz lekcije iz svog
-        školskog udžbenika i za tačne odgovore skuplja sličice. Ovde detetu otvaraš profil
+        {/* Udžbenik se roditelju NE pominje (odluka 19.08: sadržaj ide po planu i
+            programu, ne po udžbeniku) - ova rečenica je do 22.08. jedina na sajtu
+            još tvrdila suprotno. */}
+        zack! je Hartweger aplikacija u kojoj tvoje dete vežba nemački po školskom planu i
+        programu i za tačne odgovore skuplja sličice. Ovde detetu otvaraš profil
         i dobijaš kod i PIN kojima se ono prijavljuje, bez mejla i bez svog naloga.
       </p>
 

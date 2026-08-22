@@ -8,8 +8,10 @@
 // Glas je Natašin, ti-forma prema roditelju, bez roda deteta („tvoje dete").
 // Nijedan broj ovde nije izmišljen: deset minuta, dve nedelje, 1.200 dinara
 // mesečno po detetu i program Ministarstva su činjenice proizvoda. Utisaka
-// korisnika nema, jer ih još nemamo. Peti razred se NE ističe u naslovima -
-// stižu svi razredi, pa dostupnost živi sitno u FAQ-u, ne u reklami.
+// korisnika nema, jer ih još nemamo. Dostupnost razreda se NE ulepšava: sekcija
+// „Po programu" je do 22.08. tvrdila „svaki razred", a kompletan je bio samo
+// peti - uz plaćene oglase to je i bacanje para na roditelje 6-8. razreda i
+// obećanje koje ne možemo da ispunimo. Sada piše šta stvarno postoji.
 import Image from "next/image";
 import Link from "next/link";
 import Slicica from "@/components/zack/Slicica";
@@ -135,12 +137,18 @@ function PoklonDugme() {
 /** Poklon na vrhu strane: dok akcija traje, ovo je jedini krupan poziv, a
     članstvo ostaje ispod njega kao mirna rečenica - roditelj ne bira između
     dve jednake ponude, nego ulazi. Datum stiže iz POKLON_DO_PRIKAZ, pa se
-    tekst ne može razići sa rokom koji poklon stvarno poštuje. */
+    tekst ne može razići sa rokom koji poklon stvarno poštuje.
+
+    REDOSLED (ispravka 22.08): ponuda, uslov i dugme idu PRE obrazloženja. Ranije
+    su dve rečenice o tome kome je poklon namenjen stajale između značke i
+    dugmeta, pa je na telefonu dugme padalo ~170px ispod pregiba - a traka za
+    kolačiće je pokrivala i ono malo što se videlo. Obrazloženje nije izbačeno,
+    samo je spušteno tik ispod dugmeta, gde i dalje stiže pre svakog skrola. */
 function PoklonBlok() {
   return (
     <>
       <div
-        className="relative max-w-md -rotate-1 rounded-2xl border-2 bg-white p-5 shadow-[0_4px_0_0_#DED8C8,0_12px_26px_rgba(22,22,26,0.12)] sm:p-6"
+        className="relative max-w-md -rotate-1 rounded-2xl border-2 bg-white p-4 shadow-[0_4px_0_0_#DED8C8,0_12px_26px_rgba(22,22,26,0.12)] sm:p-6"
         style={{ borderColor: IVICA }}
       >
         <p
@@ -149,6 +157,12 @@ function PoklonBlok() {
         >
           Poklon do {POKLON_DO_PRIKAZ}
         </p>
+        <p className="mt-3 text-[17px] font-bold leading-relaxed sm:mt-4" style={{ color: MASTILO }}>
+          Bez plaćanja i bez kartice.
+        </p>
+        <p className="mt-4">
+          <PoklonDugme />
+        </p>
         <p className="mt-4 text-[16px] leading-relaxed sm:text-[17px]" style={{ color: PRIGUSEN }}>
           Petacima koji tek kreću sa nemačkim - da uđu u jezik bez straha od
           prvih časova.
@@ -156,12 +170,6 @@ function PoklonBlok() {
         <p className="mt-2 text-[16px] leading-relaxed sm:text-[17px]" style={{ color: PRIGUSEN }}>
           Starijim razredima - da obnove gradivo petog dok nova godina tek uzima
           zalet.
-        </p>
-        <p className="mt-4 text-[17px] font-bold leading-relaxed" style={{ color: MASTILO }}>
-          Bez plaćanja i bez kartice.
-        </p>
-        <p className="mt-5">
-          <PoklonDugme />
         </p>
       </div>
       <p className="mt-4 max-w-md text-[15px] leading-relaxed" style={{ color: PRIGUSEN }}>
@@ -223,7 +231,7 @@ function Koza({ className = "" }: { className?: string }) {
 /** Uzak kolaž za telefon: znak sa zalepljenim sličicama, kao dečja prijava. */
 function KolazTelefon() {
   return (
-    <div aria-hidden="true" className="relative mx-auto h-[168px] max-w-md lg:hidden">
+    <div aria-hidden="true" className="relative mx-auto h-[126px] max-w-md sm:h-[168px] lg:hidden">
       <span className="absolute left-[3%] top-2">
         <MiniSlicica boja={PAPIR} ugao={-9} sirina={54} kasni={240} ikonica="/zack/ikonice/1f410.svg" />
       </span>
@@ -396,24 +404,29 @@ export default function ZaRoditeljePage() {
           <main> ovde bio ugnežden i nevalidan - zato običan div. */}
       <div>
         {/* ── HERO ───────────────────────────────────────────────────────── */}
-        <section className="mx-auto max-w-6xl px-5 pb-16 pt-8 sm:px-8 sm:pt-12 lg:pb-24">
+        <section className="mx-auto max-w-6xl px-5 pb-16 pt-5 sm:px-8 sm:pt-12 lg:pb-24">
           <KolazTelefon />
-          <div className="mt-6 grid items-center gap-10 lg:mt-0 lg:grid-cols-[7fr_5fr]">
-            <div>
+          <div className="mt-4 grid items-center gap-10 sm:mt-6 lg:mt-0 lg:grid-cols-[7fr_5fr]">
+            {/* Na telefonu ponuda preskače uvodni pasus: pet redova proze je
+                gurnulo „Uzmi poklon" ispod pregiba, a traka za kolačiće je
+                pojela i ostatak. Pasus nije izbačen - samo stoji ispod ponude,
+                gde ga roditelj i dalje pročita pre prvog skrola. Od sm: naviše
+                redosled je normalan, jer tamo sve i onako staje. */}
+            <div className="flex flex-col">
               <p
-                className="zack-zalepi inline-block -rotate-1 rounded-lg border-2 bg-white px-3 py-1.5 text-[14px] font-bold tracking-wide shadow-[0_2px_5px_rgba(22,22,26,0.12)]"
+                className="zack-zalepi inline-block self-start -rotate-1 rounded-lg border-2 bg-white px-3 py-1.5 text-[14px] font-bold tracking-wide shadow-[0_2px_5px_rgba(22,22,26,0.12)]"
                 style={{ borderColor: IVICA, color: PRIGUSEN, ["--zack-kasni" as string]: "40ms" }}
               >
                 po školskom programu
               </p>
               <h1
-                className="zack-zalepi mt-5 text-[40px] leading-[1.02] tracking-tight sm:text-[56px] lg:text-[64px] xl:text-[72px]"
+                className="zack-zalepi mt-4 text-[38px] leading-[1.02] tracking-tight sm:mt-5 sm:text-[56px] lg:text-[64px] xl:text-[72px]"
                 style={{ color: MASTILO, fontFamily: DISPLAY, ["--zack-kasni" as string]: "140ms" }}
               >
                 Nemački se ne uči <Marker>veče pred kontrolni.</Marker>
               </h1>
               <p
-                className="zack-zalepi mt-6 max-w-xl text-[18px] leading-relaxed sm:text-[19px]"
+                className="zack-zalepi order-4 mt-6 max-w-xl text-[18px] leading-relaxed sm:order-3 sm:mt-6 sm:text-[19px]"
                 style={{ color: PRIGUSEN, ["--zack-kasni" as string]: "260ms" }}
               >
                 Jezik se gradi iz reči, a reči se ne uče za jedno popodne. zack!
@@ -422,7 +435,11 @@ export default function ZaRoditeljePage() {
               </p>
               {/* id koristi lepljivi poziv: dok je ovo dugme u kadru (ili
                   ispod njega), papirić sa cenom se ne prikazuje. */}
-              <div id="hero-cta" className="zack-zalepi mt-8" style={{ ["--zack-kasni" as string]: "380ms" }}>
+              <div
+                id="hero-cta"
+                className="zack-zalepi order-3 mt-6 sm:order-4 sm:mt-8"
+                style={{ ["--zack-kasni" as string]: "380ms" }}
+              >
                 {poklonAktivan ? (
                   <PoklonBlok />
                 ) : (
@@ -821,9 +838,10 @@ export default function ZaRoditeljePage() {
                 <Naslov boja="#FFFFFF">Po programu, ne pokraj njega</Naslov>
               </span>
               <p className="zz mt-6 max-w-xl text-[17px] leading-relaxed text-white sm:text-[18px]" style={{ ["--zack-kasni" as string]: "120ms" }}>
-                Sadržaj prati zvanični plan i program Ministarstva prosvete -
-                za svaki razred, redom kako se gradivo uči u školi. Radi uz
-                svaki udžbenik, jer svi udžbenici prate isti program.
+                Sadržaj prati zvanični plan i program Ministarstva prosvete,
+                redom kako se gradivo uči u školi. Radi uz svaki udžbenik, jer
+                svi udžbenici prate isti program. Kompletan je peti razred -
+                ostali stižu redom.
               </p>
             </Otkrij>
             <Otkrij className="flex flex-wrap items-center justify-start gap-4 lg:justify-center" kasni={160}>
@@ -832,7 +850,7 @@ export default function ZaRoditeljePage() {
                   className="inline-block -rotate-2 rounded-2xl border-4 border-white px-5 py-3 text-[26px] shadow-[0_3px_10px_rgba(22,22,26,0.25)]"
                   style={{ background: PAPIR, color: MASTILO, fontFamily: DISPLAY }}
                 >
-                  svaki razred
+                  peti razred
                 </span>
               </span>
               <span className="zz inline-block" style={{ ["--zack-kasni" as string]: "140ms" }}>
@@ -1085,7 +1103,13 @@ export default function ZaRoditeljePage() {
                 },
                 {
                   p: "Da li mogu da upišem dva deteta?",
-                  o: "Da - iz istog roditeljskog naloga dodaješ više dece, svako ima svoj profil, kod i album. Članarina je po detetu.",
+                  // Dok poklon traje odgovor MORA da pomene granicu: poklon ide
+                  // jedan po mejl adresi, a ponuda izričito zove i starije
+                  // razrede - roditelj sa dvoje dece bi inače bio pozvan pa
+                  // odbijen porukom o 409 tek posle popunjenog obrasca.
+                  o: poklonAktivan
+                    ? "Da - iz istog roditeljskog naloga dodaješ više dece, svako ima svoj profil, kod i album. Poklon ide jedan po mejl adresi, pa za drugo dete uključuješ članstvo (1.200 dinara mesečno po detetu)."
+                    : "Da - iz istog roditeljskog naloga dodaješ više dece, svako ima svoj profil, kod i album. Članarina je po detetu.",
                 },
                 {
                   p: "Koliko košta?",

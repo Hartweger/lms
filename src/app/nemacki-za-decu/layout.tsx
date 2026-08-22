@@ -13,8 +13,9 @@ export const metadata: Metadata = {
     "Album sa sličicama u kom tvoje dete uči nemački po deset minuta dnevno - po programu Ministarstva, sa izveštajem roditelju. Bez reklama i bez ocena.",
   robots: { index: true, follow: true },
   alternates: { canonical: "/nemacki-za-decu" },
-  // OG bez slike: zack! još nema svoju OG sliku (ikonica.svg ne važi kao OG,
-  // a školski /og/share.png je pogrešan brend) - bolje ništa nego pogrešno.
+  // OG slika stiže iz opengraph-image.tsx pored ove strane (Next je sam upisuje
+  // u <head>), pa se ovde NE navodi - dva izvora bi se razišla. Školski
+  // /og/share.png se namerno ne koristi: to je pogrešan brend.
   openGraph: {
     title: "zack! - nemački za osnovce kroz igru",
     description:
