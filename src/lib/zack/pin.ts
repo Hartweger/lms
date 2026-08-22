@@ -1,7 +1,7 @@
 // PIN deteta. NIKAD se ne čuva kao broj, samo kao nepovratan otisak.
 // Četiri cifre je deset hiljada kombinacija, što je ništa bez ograničenja
 // pokušaja, pa uz ovo obavezno ide i `zakljucavanje.ts`.
-import { randomBytes, scrypt, timingSafeEqual } from "node:crypto";
+import { randomBytes, randomInt, scrypt, timingSafeEqual } from "node:crypto";
 
 // Parametri se upisuju u sam otisak, pa se kasnije mogu pojačati bez
 // obaranja postojećih PIN-ova. N je namerno visok jer se PIN proverava
@@ -23,6 +23,25 @@ export function slabPin(pin: string): boolean {
   const uzlazni = c.every((x, i) => i === 0 || x === c[i - 1] + 1);
   const silazni = c.every((x, i) => i === 0 || x === c[i - 1] - 1);
   return uzlazni || silazni;
+}
+
+/**
+ * Nasumičan PIN koji dete dobija odmah, bez ijednog roditeljevog koraka.
+ *
+ * Zašto uopšte postoji: mereno prve večeri akcije (22.08.2026), trećina
+ * roditelja je zatvorila hvala-stranu pre nego što je postavila PIN - a bez
+ * PIN-a dete FIZIČKI ne može da uđe. Korak koji se preskače najbolje se rešava
+ * tako što ga nema.
+ *
+ * randomInt, ne Math.random: ovo je šifra, ma koliko niski bili ulozi.
+ * Očigledni PIN-ovi (1111, 1234, 4321) se odbacuju istim pravilom koje važi i
+ * kad ga roditelj kuca sam - inače bi nasumičnost povremeno dala baš njih.
+ */
+export function napraviNasumicniPin(): string {
+  for (;;) {
+    const pin = String(randomInt(0, 10000)).padStart(4, "0");
+    if (!slabPin(pin)) return pin;
+  }
 }
 
 function izvedi(pin: string, so: Buffer): Promise<Buffer> {

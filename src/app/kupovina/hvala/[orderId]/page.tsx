@@ -211,11 +211,19 @@ export default async function HvalaPage({
               {zackDete.kod ?? "—"}
             </p>
             {zackNudiPin ? (
+              /* Deca napravljena pre 22.08.2026: PIN se tada postavljao ručno. */
               <ZackPinForma orderId={order.id} imeDeteta={zackDete.ime} />
             ) : (
+              /* Od 22.08.2026. PIN se dodeljuje SAM, pa se ovde nema šta postaviti.
+                 Otvoreni PIN nigde ne čuvamo, pa je mejl jedino mesto na kom stoji -
+                 i to strana mora da kaže jasno, inače roditelj traži dugme kog nema. */
               <p className="mt-3 text-sm text-gray-700">
-                PIN za ovo dete već postoji. Prepiši detetu kod i PIN na papirić - a novi PIN,
-                ako zatreba, postavljaš u roditeljskom panelu.
+                <strong>PIN smo poslali na mejl</strong>, zajedno sa ovim kodom - prepiši detetu
+                oba na papirić. Ako mejl ne stigne, novi PIN postavljaš u{" "}
+                <Link href="/zack/roditelj" className="text-plava underline">
+                  roditeljskom panelu
+                </Link>
+                .
               </p>
             )}
           </div>

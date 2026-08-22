@@ -2539,7 +2539,9 @@ export async function sendZackWelcomeEmail(
     accessUntil: string;
     /** Kod za prijavu deteta - roditelju jedini „login" podatak, pa ide u mejl kad postoji. */
     kod?: string | null;
-    /** Gost-kupovina: dete je tek nastalo, PIN se postavlja na hvala strani ili u panelu. */
+    /** Otvoreni PIN, samo za novonapravljeno dete. Nigde se ne čuva. */
+    pin?: string | null;
+    /** Staro dete bez PIN-a: ide uputstvo kako da ga postavi. */
     pinNijePostavljen?: boolean;
   },
 ) {
@@ -2553,13 +2555,7 @@ export async function sendZackWelcomeEmail(
     const uvodDeteta = o.pinNijePostavljen
       ? `Profil za <strong>${esc(o.imeDeteta)}</strong> je napravljen, a članstvo uključeno - igre, kesice sa sličicama i Milioner su otključani.`
       : `Članstvo za <strong>${esc(o.imeDeteta)}</strong> je uključeno - igre, kesice sa sličicama i Milioner su otključani. Dete nastavlja tamo gde je stalo, sa istim kodom i PIN-om.`;
-    const blokKoda = o.kod
-      ? `<p>Kod za prijavu deteta: <strong style="font-size:20px;letter-spacing:2px">${esc(o.kod)}</strong>${
-          o.pinNijePostavljen
-            ? `<br>PIN još nije postavljen - postavi ga na strani na koju te je plaćanje odvelo, ili u <a href="${SITE_URL}/zack/roditelj">roditeljskom panelu</a> („Novi PIN" uz dete). Onda detetu prepiši kod i PIN na papirić - to je cela instalacija.`
-            : ""
-        }</p>`
-      : "";
+    const blokKoda = papiric(o);
     await sendEmail(resend, {
       to,
       subject: `zack! članstvo za ${o.imeDeteta} je aktivno`,
@@ -2578,6 +2574,27 @@ ${blokKoda}
   } catch (e) {
     console.error("[email] sendZackWelcomeEmail pao:", e);
   }
+}
+
+/**
+ * „Papirić": kod i PIN na jednom mestu, uokvireni, da roditelj ima šta da
+ * prepiše bez traženja po mejlu.
+ *
+ * Od 22.08.2026. PIN se dodeljuje SAM pri pravljenju deteta, pa je ovaj mejl
+ * jedino mesto na kom se otvoreni PIN uopšte pojavljuje - nigde se ne čuva.
+ * Stara deca (napravljena pre toga) nemaju `pin`, pa im i dalje ide uputstvo
+ * kako da ga postave.
+ */
+function papiric(o: { kod?: string | null; pin?: string | null; pinNijePostavljen?: boolean }): string {
+  if (!o.kod) return "";
+  const red = (naziv: string, vrednost: string) =>
+    `<tr><td style="padding:2px 14px 2px 0;color:#666;font-size:14px">${naziv}</td>` +
+    `<td style="font-size:22px;font-weight:bold;letter-spacing:2px">${esc(vrednost)}</td></tr>`;
+  const uputstvoBezPina = `<p>PIN još nije postavljen - postavlja se u <a href="${SITE_URL}/zack/roditelj">roditeljskom panelu</a> („Novi PIN" uz dete).</p>`;
+  return `<table style="border:2px solid #DED8C8;border-radius:10px;padding:14px 18px;margin:18px 0;background:#FCFBF7">
+${red("Kod", o.kod)}${o.pin ? red("PIN", o.pin) : ""}
+</table>
+${o.pin ? "<p>Prepiši detetu kod i PIN na papirić - to je cela instalacija.</p>" : o.pinNijePostavljen ? uputstvoBezPina : ""}`;
 }
 
 /**
@@ -2602,7 +2619,9 @@ export async function sendZackPoklonEmail(
     vaziDo: string;
     /** Kod za prijavu deteta - roditelju jedini „login" podatak. */
     kod?: string | null;
-    /** PIN se postavlja na strani posle prijave za poklon, ili kasnije u panelu. */
+    /** Otvoreni PIN, samo za novonapravljeno dete. Nigde se ne čuva. */
+    pin?: string | null;
+    /** Staro dete bez PIN-a: ide uputstvo kako da ga postavi. */
     pinNijePostavljen?: boolean;
   },
 ) {
@@ -2613,13 +2632,7 @@ export async function sendZackPoklonEmail(
     // Ispisan datum, isti oblik kao svuda na sajtu („15. septembra 2026"), a NE
     // sr-RS „15. 9. 2026" - dva zapisa istog roka u istom mejlu zbunjuju.
     const doKada = datumSlovima(o.vaziDo);
-    const blokKoda = o.kod
-      ? `<p>Kod za prijavu deteta: <strong style="font-size:20px;letter-spacing:2px">${esc(o.kod)}</strong>${
-          o.pinNijePostavljen
-            ? `<br>PIN još nije postavljen - postavi ga na strani na koju te je prijava odvela, ili u <a href="${SITE_URL}/zack/roditelj">roditeljskom panelu</a> („Novi PIN" uz dete). Onda detetu prepiši kod i PIN na papirić - to je cela instalacija.`
-            : ""
-        }</p>`
-      : "";
+    const blokKoda = papiric(o);
     await sendEmail(resend, {
       to,
       subject: `${o.imeDeteta} ima zack! - poklon do ${POKLON_DO_PRIKAZ}`,

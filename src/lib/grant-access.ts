@@ -2,6 +2,7 @@
 import * as Sentry from "@sentry/nextjs";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendWelcomeEmail, sendGrupniWelcomeEmail, sendProfNewStudentEmail, sendIndividualWelcomeEmail, sendProfNewIndividualStudentEmail, sendSubscriptionChargeEmail, sendAcademyWelcomeEmail, sendZackWelcomeEmail, sendZackPoklonEmail } from "@/lib/email";
+import { napraviNasumicniPin, napraviPinOtisak } from "@/lib/zack/pin";
 import { nivoForSlug } from "@/lib/course-nivo";
 import { computeSeats, pickOpenGroupForNivo } from "@/lib/groups";
 import { callGas } from "@/lib/gas";
@@ -144,7 +145,7 @@ async function obezbediGostDete(
   admin: ReturnType<typeof createAdminClient>,
   order: { user_id: string; email: string },
   gost: ZackGostMeta,
-): Promise<{ ok: true; deteId: string } | { ok: false; error: string }> {
+): Promise<{ ok: true; deteId: string; pin?: string } | { ok: false; error: string }> {
   // 1) Roditelj za kupčev auth nalog.
   const { data: postojeci, error: rGreska } = await admin
     .from("zack_roditelji").select("id").eq("auth_user_id", order.user_id).maybeSingle();
@@ -175,16 +176,24 @@ async function obezbediGostDete(
   }
 
   // 2) Dete - najpre da li ga je prošli (prekinuti) pokušaj granta već napravio.
+  // Traži se po imenu i udžbeniku, BEZ uslova na pin_hash: otkad se PIN dodeljuje
+  // odmah, novo dete ga uvek ima, pa bi `is("pin_hash", null)` prestao da
+  // prepoznaje svoj raniji pokušaj i pravio bi duplo dete pri ponovljenom grantu.
   const { data: vecPostoji, error: dGreska } = await admin
     .from("zack_deca").select("id")
     .eq("roditelj_id", roditeljId).eq("ime", gost.ime).eq("udzbenik_id", gost.udzbenik_id)
-    .is("pin_hash", null)
     .limit(1).maybeSingle();
   if (dGreska) return { ok: false, error: `zack_deca čitanje: ${dGreska.message}` };
+  // Bez PIN-a: dete je nastalo pre 22.08.2026, kad se PIN postavljao ručno.
   if (vecPostoji) return { ok: true, deteId: vecPostoji.id };
 
   // Isti obrazac kao /api/zack/roditelj/deca: „pokušaj pa novi kod na sudar",
   // jer „proveri pa upiši" ume da izgubi trku oko UNIQUE(kod).
+  // PIN se dodeljuje ODMAH, pa roditelju ne ostaje nijedan korak koji može da
+  // preskoči. Menja ga kad hoće u panelu („Novi PIN").
+  const pin = napraviNasumicniPin();
+  const pinOtisak = await napraviPinOtisak(pin);
+
   for (let i = 0; i < IZVLACENJA_KODA; i++) {
     const kod = napraviKod(Math.random);
     const { data: dete, error } = await admin
@@ -194,10 +203,10 @@ async function obezbediGostDete(
         udzbenik_id: gost.udzbenik_id,
         roditelj_id: roditeljId,
         kod,
-        pin_hash: null,
+        pin_hash: pinOtisak,
       })
       .select("id").single();
-    if (!error && dete) return { ok: true, deteId: dete.id };
+    if (!error && dete) return { ok: true, deteId: dete.id, pin };
     if (error && error.code !== "23505") {
       return { ok: false, error: `zack_deca upis: ${error.message}` };
     }
@@ -259,6 +268,8 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
     | { dete_id?: string; zack_gost?: ZackGostMeta; zack_poklon?: ZackPoklonMeta }
     | undefined;
   let zackDeteId = zackStavka?.dete_id;
+  /** Otvoreni PIN novonapravljenog deteta - samo za mejl, nigde se ne čuva. */
+  let zackNoviPin: string | null = null;
 
   // Poklon do 1.9.2026 (/poklon): porudžbina je istog oblika kao gost-kupovina,
   // ali sa iznosom 0 i bez ijedne naplate iza sebe. Zato ovde dve razlike -
@@ -321,6 +332,9 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
     }
 
     zackDeteId = gost.deteId;
+    // Otvoreni PIN postoji SAMO ovde i samo u ovom trenutku - nigde se ne
+    // čuva. Zato mora odmah u mejl; posle ovoga se može jedino postaviti nov.
+    zackNoviPin = gost.pin ?? null;
   }
 
   if (zackDeteId) {
@@ -373,6 +387,7 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
         imeDeteta: dete.ime,
         vaziDo: zackRok.toISOString(),
         kod: dete.kod,
+        pin: zackNoviPin,
         pinNijePostavljen: dete.pin_hash === null,
       });
     } else if (jePrvaNaplata) {
@@ -384,6 +399,7 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
         // napomena o PIN-u samo dok PIN stvarno ne postoji - dete iz panela
         // ga već ima, gost-dete ga postavlja na hvala strani ili u panelu.
         kod: dete.kod,
+        pin: zackNoviPin,
         pinNijePostavljen: dete.pin_hash === null,
       });
     } else {
