@@ -2717,6 +2717,47 @@ export async function sendAdminZackPoklonEmail(o: {
 }
 
 /**
+ * PIN nije postavljen - jedan mejl, sutradan.
+ *
+ * Ovo je NAJHITNIJI mejl u nizu: bez PIN-a dete ne može da uđe, pa poklon
+ * stoji neupotrebljen. Zato mejl ima tačno jedan zadatak i tačno jedno dugme -
+ * bez priče o igrama, albumu i roku, koje bi razvodnile taj jedan klik.
+ *
+ * Ton je i dalje bez prekora: ne kaže „nisi postavio", nego „fali još PIN".
+ */
+export async function sendZackPinPodsetnikEmail(
+  to: string,
+  name: string | null,
+  o: { imeDeteta: string; kod: string | null },
+) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    const ime = name ? name.split(" ")[0] : "";
+    await sendEmail(resend, {
+      to,
+      bulk: true,
+      subject: `Fali još PIN za ${o.imeDeteta}`,
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:sans-serif;line-height:1.6;color:#222">
+<p>Zdravo${ime ? ", " + esc(ime) : ""}!</p>
+<p>Profil je otvoren i sve čeka, samo <strong>${esc(o.imeDeteta)}</strong> još nema PIN - a bez njega prijava ne radi.</p>
+${o.kod ? `<p>Kod: <strong style="font-size:20px;letter-spacing:2px">${esc(o.kod)}</strong></p>` : ""}
+<p style="margin:26px 0">
+  <a href="${SITE_URL}/zack/roditelj" style="display:inline-block;padding:14px 26px;border-radius:10px;background:#D6291F;color:#fff;text-decoration:none;font-weight:bold;font-size:17px">Postavi PIN</a>
+</p>
+<p>U panelu stoji „Novi PIN" uz dete. Četiri cifre, pola minuta - pa kod i PIN prepišeš detetu na papirić.</p>
+<p style="font-size:13px;color:#666">Ovo je jedini mejl o PIN-u.</p>
+<p style="margin-top:20px">Hartweger tim</p>
+</body></html>`,
+    });
+    console.log(`[email] zack pin podsetnik poslat → ${to}`);
+  } catch (e) {
+    console.error("[email] sendZackPinPodsetnikEmail pao:", e);
+  }
+}
+
+/**
  * Trećeg dana, SAMO ako se dete nijednom nije prijavilo. Poklon koji dete nikad
  * ne otvori je propao poklon, a razlog je po pravilu proza - papirić sa kodom
  * se zaturi.

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   danaIzmedju,
   jeVracaSeKljuc,
+  vremeZaPin,
   ocistiOmiljeno,
   ocistiSmeta,
   vremeZaAktivaciju,
@@ -13,8 +14,30 @@ import {
 const ROK = "2026-09-15T00:00:00+02:00";
 const UZETO = "2026-08-25T10:00:00+02:00";
 
+describe("vremeZaPin", () => {
+  // Izmereno prve večeri akcije: od 25 poklona osmoro dece nije imalo PIN, a
+  // bez njega prijava ne radi - zato ovaj mejl ide već sutradan.
+  const osnova = { napravljeno: UZETO, pinPostavljen: false, clanstvoDo: ROK };
+
+  it("istog dana se ćuti - roditelj možda upravo postavlja PIN", () => {
+    expect(vremeZaPin({ ...osnova, sada: new Date("2026-08-25T22:00:00+02:00") })).toBe(false);
+  });
+
+  it("sutradan ide mejl", () => {
+    expect(vremeZaPin({ ...osnova, sada: new Date("2026-08-26T09:00:00+02:00") })).toBe(true);
+  });
+
+  it("dete koje PIN ima se preskače", () => {
+    expect(vremeZaPin({ ...osnova, pinPostavljen: true, sada: new Date("2026-08-26T09:00:00+02:00") })).toBe(false);
+  });
+
+  it("posle isteka poklona nema šta da se otključa", () => {
+    expect(vremeZaPin({ ...osnova, sada: new Date("2026-09-20T09:00:00+02:00") })).toBe(false);
+  });
+});
+
 describe("vremeZaAktivaciju", () => {
-  const osnova = { napravljeno: UZETO, poslednjiDan: null, clanstvoDo: ROK };
+  const osnova = { napravljeno: UZETO, poslednjiDan: null, pinPostavljen: true, clanstvoDo: ROK };
 
   it("drugog dana se ćuti - detetu se daje vremena", () => {
     expect(vremeZaAktivaciju({ ...osnova, sada: new Date("2026-08-27T09:00:00+02:00") })).toBe(false);
@@ -22,6 +45,12 @@ describe("vremeZaAktivaciju", () => {
 
   it("trećeg dana ide jedan mejl da kod čeka", () => {
     expect(vremeZaAktivaciju({ ...osnova, sada: new Date("2026-08-28T09:00:00+02:00") })).toBe(true);
+  });
+
+  it("dete BEZ PIN-a se preskače - njemu je već otišao svoj mejl, ne dva o istom", () => {
+    expect(
+      vremeZaAktivaciju({ ...osnova, pinPostavljen: false, sada: new Date("2026-08-28T09:00:00+02:00") })
+    ).toBe(false);
   });
 
   it("dete koje se ijednom igralo nema šta da aktivira", () => {

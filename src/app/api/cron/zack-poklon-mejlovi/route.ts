@@ -1,7 +1,8 @@
 // Ceo niz mejlova oko poklona, iz JEDNE rute. Cron ide jednom dnevno i za svako
 // dete koje je dobilo poklon proverava šta mu je danas na redu:
 //
-//   3. dan   - kod čeka           (samo ako se dete NIJEDNOM nije prijavilo)
+//   1. dan   - fali PIN            (bez njega prijava fizički ne radi)
+//   3. dan   - kod čeka           (samo ako dete IMA PIN a nije se prijavilo)
 //   7. dan   - anketa o utiscima  (samo ako dete STVARNO vežba)
 //   -3 dana  - poklon ističe
 //   +1 dan   - poklon je prošao, album ostaje
@@ -29,18 +30,20 @@ import { withCronLog, must } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
 import {
   sendZackAktivacijaEmail,
+  sendZackPinPodsetnikEmail,
   sendZackAnketaEmail,
   sendZackIstekEmail,
   sendZackPoklonPodsetnikEmail,
 } from "@/lib/email";
 import { ZACK_PROMO_RSD } from "@/lib/zack/clanstvo";
 import { jePoklonStavka, vremeZaPodsetnik } from "@/lib/zack/poklon";
-import { vremeZaAktivaciju, vremeZaAnketu, vremeZaIstek } from "@/lib/zack/anketa";
+import { vremeZaAktivaciju, vremeZaAnketu, vremeZaIstek, vremeZaPin } from "@/lib/zack/anketa";
 
 type Stavka = { dete_id?: string | null };
 
 /** Kolone-tragovi na detetu; nabrojane da se ime kolone ne može omaći u kucanju. */
 type Trag =
+  | "pin_podsetnik_at"
   | "aktivacija_podsetnik_at"
   | "anketa_poslata_at"
   | "poklon_podsetnik_at"
@@ -54,7 +57,7 @@ async function cronHandler(request: NextRequest) {
 
   const sb = createAdminClient();
   const sada = new Date();
-  const brojac = { aktivacija: 0, anketa: 0, podsetnik: 0, istek: 0, preskoceno: 0 };
+  const brojac = { pin: 0, aktivacija: 0, anketa: 0, podsetnik: 0, istek: 0, preskoceno: 0 };
 
   // Poklon-porudžbine se ne mogu filtrirati u upitu (oznaka živi u JSONB nizu),
   // pa se čitaju poklon-porudžbine i prosejavaju istom funkcijom koju koristi i
@@ -77,7 +80,7 @@ async function cronHandler(request: NextRequest) {
     const { data: dete } = await sb
       .from("zack_deca")
       .select(
-        "id, ime, kod, pin_hash, created_at, poslednji_dan, clanstvo_do, aktivacija_podsetnik_at, anketa_poslata_at, poklon_podsetnik_at, istek_mejl_at"
+        "id, ime, kod, pin_hash, created_at, poslednji_dan, clanstvo_do, pin_podsetnik_at, aktivacija_podsetnik_at, anketa_poslata_at, poklon_podsetnik_at, istek_mejl_at"
       )
       .eq("id", deteId)
       .maybeSingle();
@@ -88,6 +91,7 @@ async function cronHandler(request: NextRequest) {
       sada,
       napravljeno: dete.created_at,
       poslednjiDan: dete.poslednji_dan,
+      pinPostavljen: dete.pin_hash !== null,
       clanstvoDo: dete.clanstvo_do,
     };
 
@@ -103,8 +107,18 @@ async function cronHandler(request: NextRequest) {
       );
     };
 
-    // Redosled provera je redosled po važnosti: poklon koji dete nije ni
-    // otvorilo je najhitniji, a mejl o isteku najmanje hitan.
+    // Redosled provera je redosled po hitnosti: bez PIN-a dete NE MOŽE da uđe,
+    // pa to ide prvo; mejl o isteku je najmanje hitan.
+    if (!dete.pin_podsetnik_at && vremeZaPin(stanje)) {
+      await obelezi("pin_podsetnik_at");
+      await sendZackPinPodsetnikEmail(o.email, o.full_name, {
+        imeDeteta: dete.ime,
+        kod: dete.kod,
+      });
+      brojac.pin++;
+      continue;
+    }
+
     if (!dete.aktivacija_podsetnik_at && vremeZaAktivaciju(stanje)) {
       await obelezi("aktivacija_podsetnik_at");
       await sendZackAktivacijaEmail(o.email, o.full_name, {
@@ -153,7 +167,7 @@ async function cronHandler(request: NextRequest) {
   }
 
   console.log(
-    `[cron/zack-poklon-mejlovi] aktivacija ${brojac.aktivacija}, anketa ${brojac.anketa}, ` +
+    `[cron/zack-poklon-mejlovi] pin ${brojac.pin}, aktivacija ${brojac.aktivacija}, anketa ${brojac.anketa}, ` +
       `podsetnik ${brojac.podsetnik}, istek ${brojac.istek}, bez posla ${brojac.preskoceno}`
   );
   return NextResponse.json(brojac);

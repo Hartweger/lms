@@ -2689,6 +2689,7 @@ export type Database = {
           aktivacija_podsetnik_at: string | null
           anketa_poslata_at: string | null
           istek_mejl_at: string | null
+          pin_podsetnik_at: string | null
           pin_pokusaji: number
           poklon_podsetnik_at: string | null
           poslednji_dan: string | null
@@ -2708,6 +2709,7 @@ export type Database = {
           aktivacija_podsetnik_at?: string | null
           anketa_poslata_at?: string | null
           istek_mejl_at?: string | null
+          pin_podsetnik_at?: string | null
           pin_pokusaji?: number
           poklon_podsetnik_at?: string | null
           poslednji_dan?: string | null
@@ -2727,6 +2729,7 @@ export type Database = {
           aktivacija_podsetnik_at?: string | null
           anketa_poslata_at?: string | null
           istek_mejl_at?: string | null
+          pin_podsetnik_at?: string | null
           pin_pokusaji?: number
           poklon_podsetnik_at?: string | null
           poslednji_dan?: string | null

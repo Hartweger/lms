@@ -106,11 +106,41 @@ export function vremeZaAnketu(o: {
 }
 
 /**
+ * PIN nije postavljen - javlja se već SUTRADAN.
+ *
+ * Ovo nije isto što i „dete još nije ušlo": bez PIN-a prijava fizički ne radi,
+ * pa detetu fali jedan roditeljev klik, a ne navika. Mereno prve večeri akcije
+ * (22.08.2026): od 25 uzetih poklona osmoro dece nije imalo PIN - trećina
+ * prijava koja bez ovog mejla nikad ne bi ni ušla.
+ *
+ * Zato dan, a ne tri: oduševljenje je te večeri, ne krajem nedelje.
+ */
+export const DANA_DO_PINA = 1;
+
+export function vremeZaPin(o: {
+  sada: Date;
+  napravljeno: string;
+  pinPostavljen: boolean;
+  clanstvoDo: string | null;
+}): boolean {
+  if (o.pinPostavljen) return false;
+  const od = new Date(o.napravljeno);
+  if (Number.isNaN(od.getTime())) return false;
+  if (danaIzmedju(od, o.sada) < DANA_DO_PINA) return false;
+  const rok = o.clanstvoDo ? Date.parse(o.clanstvoDo) : NaN;
+  if (Number.isNaN(rok) || o.sada.getTime() >= rok) return false;
+  return true;
+}
+
+/**
  * Da li roditelju treba javiti da kod još čeka.
  *
  * Poklon koji dete nikad ne otvori je propao poklon, a najčešći razlog je
  * proza: papirić sa kodom se zaturi. Zato JEDAN miran mejl trećeg dana, i to
  * bez ijednog prekora - ne kaže se „dete nije ušlo", nego „kod čeka".
+ *
+ * Deca BEZ PIN-a se ovde preskaču: njima je već sutradan otišao svoj mejl
+ * (vremeZaPin). Ko je taj mejl prećutao, ne dobija drugi o istoj stvari.
  */
 export const DANA_DO_AKTIVACIJE = 3;
 
@@ -118,10 +148,12 @@ export function vremeZaAktivaciju(o: {
   sada: Date;
   napravljeno: string;
   poslednjiDan: string | null;
+  pinPostavljen: boolean;
   clanstvoDo: string | null;
 }): boolean {
   // Dete koje se ijednom igralo nema šta da aktivira.
   if (o.poslednjiDan) return false;
+  if (!o.pinPostavljen) return false;
   const od = new Date(o.napravljeno);
   if (Number.isNaN(od.getTime())) return false;
   if (danaIzmedju(od, o.sada) < DANA_DO_AKTIVACIJE) return false;
