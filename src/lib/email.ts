@@ -10,6 +10,8 @@ import type { SubscriptionBrief } from "@/lib/subscription-brief";
 import type { NakiBrief } from "@/lib/naki-brief";
 import { naslovIzvestaja, receniceZaDete, type IzvestajDeteta } from "@/lib/zack/izvestaj";
 import { POKLON_DO_PRIKAZ } from "@/lib/zack/poklon";
+import { datumSlovima } from "@/lib/datum";
+import { VRACA_SE } from "@/lib/zack/anketa";
 
 const FROM = "Hartweger <info@hartweger.rs>";
 
@@ -2581,6 +2583,11 @@ ${blokKoda}
 /**
  * Poklon do 15. septembra (/poklon): dete je dobilo ceo zack! bez plaćanja.
  *
+ * PADEŽI: ime deteta se NIKAD ne stavlja u položaj koji traži promenu („za
+ * Mila" umesto „za Milu"). Automatsko menjanje padeža nije pouzdano - strana
+ * imena, nadimci, skraćenice - pa se rečenice grade tako da ime uvek stoji u
+ * nominativu. Isto pravilo važi za sve mejlove ovog niza.
+ *
  * Ovaj mejl NE SME da pomene karticu, iznos, naplatu ni obnavljanje - ničega
  * od toga u poklonu nema, pa bi svaka takva rečenica bila neistina. Zato je
  * odvojen od `sendZackWelcomeEmail`, umesto da se u njemu granaju rečenice.
@@ -2603,9 +2610,9 @@ export async function sendZackPoklonEmail(
     const resend = getResend();
     if (!resend) return;
     const ime = name ? name.split(" ")[0] : "";
-    // sr-RS datum se završava tačkom („1. 9. 2026."), pa se ona skida da
-    // rečenica ne dobije duplu tačku.
-    const doKada = new Date(o.vaziDo).toLocaleDateString("sr-RS").replace(/\.$/, "");
+    // Ispisan datum, isti oblik kao svuda na sajtu („15. septembra 2026"), a NE
+    // sr-RS „15. 9. 2026" - dva zapisa istog roka u istom mejlu zbunjuju.
+    const doKada = datumSlovima(o.vaziDo);
     const blokKoda = o.kod
       ? `<p>Kod za prijavu deteta: <strong style="font-size:20px;letter-spacing:2px">${esc(o.kod)}</strong>${
           o.pinNijePostavljen
@@ -2615,11 +2622,11 @@ export async function sendZackPoklonEmail(
       : "";
     await sendEmail(resend, {
       to,
-      subject: `zack! je otključan za ${o.imeDeteta} - poklon do ${POKLON_DO_PRIKAZ}`,
+      subject: `${o.imeDeteta} ima zack! - poklon do ${POKLON_DO_PRIKAZ}`,
       html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
 <body style="font-family:sans-serif;line-height:1.6;color:#222">
 <p>Zdravo${ime ? ", " + esc(ime) : ""}!</p>
-<p>Profil za <strong>${esc(o.imeDeteta)}</strong> je napravljen i ceo zack! je otključan - igre, kesice sa sličicama i Milioner. Dete se prijavljuje na <a href="${SITE_URL}/zack">hartweger.rs/zack</a>.</p>
+<p><strong>${esc(o.imeDeteta)}</strong> ima svoj profil i ceo zack! je otključan - igre, kesice sa sličicama i Milioner. Prijava je na <a href="${SITE_URL}/zack">hartweger.rs/zack</a>.</p>
 ${blokKoda}
 <p>Ovo je <strong>poklon do ${doKada}</strong>: ništa nije naplaćeno, kartica nam nije potrebna i ništa neće biti naplaćeno ni kasnije.</p>
 <p>Posle tog datuma igre, kesice i Milioner miruju, a <strong>album i sve što je dete zaradilo ostaju</strong> - ništa mu se ne oduzima. Ako želiš da dete nastavi, članstvo se uključuje u <a href="${SITE_URL}/zack/roditelj">roditeljskom panelu</a> - a ako ne želiš, ne moraš ništa da radiš.</p>
@@ -2651,15 +2658,15 @@ export async function sendZackPoklonPodsetnikEmail(
     const resend = getResend();
     if (!resend) return;
     const ime = name ? name.split(" ")[0] : "";
-    const doKada = new Date(o.vaziDo).toLocaleDateString("sr-RS").replace(/\.$/, "");
+    const doKada = datumSlovima(o.vaziDo);
     await sendEmail(resend, {
       to,
       bulk: true,
-      subject: `zack! za ${o.imeDeteta} važi još do ${doKada}`,
+      subject: `${o.imeDeteta} ima zack! još do ${doKada}`,
       html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
 <body style="font-family:sans-serif;line-height:1.6;color:#222">
 <p>Zdravo${ime ? ", " + esc(ime) : ""}!</p>
-<p>Poklon za <strong>${esc(o.imeDeteta)}</strong> važi do <strong>${doKada}</strong>. Posle tog datuma igre, kesice i Milioner miruju.</p>
+<p><strong>${esc(o.imeDeteta)}</strong> ima poklon do <strong>${doKada}</strong>. Posle tog datuma igre, kesice i Milioner miruju.</p>
 <p><strong>Album i sve sličice ostaju</strong> - ništa se detetu ne oduzima i ništa se ne briše.</p>
 <p>Ako želiš da ${esc(o.imeDeteta)} nastavi, članstvo je ${o.mesecnoRsd.toLocaleString("de-DE")} dinara mesečno po detetu, bez ugovora, i uključuje se u <a href="${SITE_URL}/zack/roditelj">roditeljskom panelu</a>.</p>
 <p>Ako ne želiš - ne moraš ništa da radiš. Ništa ti neće biti naplaćeno.</p>
@@ -2670,6 +2677,132 @@ export async function sendZackPoklonPodsetnikEmail(
     console.log(`[email] zack poklon podsetnik poslat → ${to}`);
   } catch (e) {
     console.error("[email] sendZackPoklonPodsetnikEmail pao:", e);
+  }
+}
+
+/**
+ * Trećeg dana, SAMO ako se dete nijednom nije prijavilo. Poklon koji dete nikad
+ * ne otvori je propao poklon, a razlog je po pravilu proza - papirić sa kodom
+ * se zaturi.
+ *
+ * Ton: NEMA prekora. Ne piše „dete nije ušlo" ni „nisi iskoristio", nego „kod
+ * čeka" - i kod se ponavlja u samom mejlu, da roditelj ne mora ništa da traži.
+ */
+export async function sendZackAktivacijaEmail(
+  to: string,
+  name: string | null,
+  o: { imeDeteta: string; kod: string | null; pinNijePostavljen: boolean },
+) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    const ime = name ? name.split(" ")[0] : "";
+    await sendEmail(resend, {
+      to,
+      bulk: true,
+      subject: "Kod za prijavu još čeka",
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:sans-serif;line-height:1.6;color:#222">
+<p>Zdravo${ime ? ", " + esc(ime) : ""}!</p>
+<p>Profil je spreman i čeka: <strong>${esc(o.imeDeteta)}</strong> se prijavljuje na <a href="${SITE_URL}/zack">hartweger.rs/zack</a>.</p>
+${o.kod ? `<p>Kod: <strong style="font-size:20px;letter-spacing:2px">${esc(o.kod)}</strong></p>` : ""}
+${
+  o.pinNijePostavljen
+    ? `<p>PIN još nije postavljen - postavlja se u <a href="${SITE_URL}/zack/roditelj">roditeljskom panelu</a> („Novi PIN" uz dete).</p>`
+    : "<p>Kod i PIN staju na papirić - to je cela instalacija, bez mejla za dete i bez skidanja.</p>"
+}
+<p>Deset minuta je dovoljno za prvi put.</p>
+<p style="font-size:13px;color:#666">Ovo je jedini podsetnik koji šaljemo o kodu.</p>
+<p style="margin-top:20px">Hartweger tim</p>
+</body></html>`,
+    });
+    console.log(`[email] zack aktivacija poslata → ${to}`);
+  } catch (e) {
+    console.error("[email] sendZackAktivacijaEmail pao:", e);
+  }
+}
+
+/**
+ * Anketa o utiscima, oko 7. dana i SAMO roditelju čije dete stvarno vežba.
+ *
+ * Prvo pitanje su tri dugmeta u samom mejlu: klik već upisuje odgovor i tek
+ * onda otvara stranicu sa preostala dva. Ko odustane posle prvog klika, ipak
+ * nam je odgovorio - zato dugmad vode na rutu sa odgovorom, a ne na praznu
+ * stranicu.
+ *
+ * Anketa je INTERNA: nigde ne traži dozvolu za objavu i nigde ne obećava da će
+ * nešto biti objavljeno, jer neće.
+ */
+export async function sendZackAnketaEmail(
+  to: string,
+  name: string | null,
+  o: { imeDeteta: string; token: string },
+) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    const ime = name ? name.split(" ")[0] : "";
+    // Dugmad idu na rutu koja UPIŠE odgovor pa preusmeri na stranicu - zato
+    // GET sa odgovorom u putanji, a ne link na obrazac.
+    const dugme = (kljuc: string, tekst: string) =>
+      `<a href="${SITE_URL}/api/zack/anketa/${encodeURIComponent(o.token)}/${encodeURIComponent(kljuc)}" style="display:inline-block;margin:0 6px 8px 0;padding:11px 18px;border-radius:8px;background:#0B54C9;color:#fff;text-decoration:none;font-weight:bold">${esc(tekst)}</a>`;
+    await sendEmail(resend, {
+      to,
+      bulk: true,
+      subject: "Kako ide sa zack!-om?",
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:sans-serif;line-height:1.6;color:#222">
+<p>Zdravo${ime ? ", " + esc(ime) : ""}!</p>
+<p><strong>${esc(o.imeDeteta)}</strong> već nedelju dana vežba u zack!-u. Zanima nas jedna stvar, pa da nam kažeš klikom:</p>
+<p style="font-size:17px;font-weight:bold;margin-bottom:12px">Da li se ${esc(o.imeDeteta)} vraća zack!-u?</p>
+<p>${VRACA_SE.map((v) => dugme(v.kljuc, v.tekst)).join("")}</p>
+<p>Posle klika te čekaju još dva pitanja, oba neobavezna. Ukupno pola minuta.</p>
+<p style="font-size:13px;color:#666">Odgovori ostaju kod nas i služe samo da vidimo šta da popravimo - ništa se nigde ne objavljuje.</p>
+<p style="margin-top:20px">Hartweger tim</p>
+</body></html>`,
+    });
+    console.log(`[email] zack anketa poslata → ${to}`);
+  } catch (e) {
+    console.error("[email] sendZackAnketaEmail pao:", e);
+  }
+}
+
+/**
+ * Dan posle isteka poklona. Poslednji mejl u nizu.
+ *
+ * Ovo je najosetljiviji mejl niza: roditelj je upravo izgubio nešto što nije
+ * platio. Zato prvo stoji šta OSTAJE, pa tek onda šta miruje, a ponuda članstva
+ * je jedna rečenica bez popusta, bez roka i bez „poslednja šansa". Ko ne uradi
+ * ništa, ne dobija više nijedan mejl o ovome.
+ */
+export async function sendZackIstekEmail(
+  to: string,
+  name: string | null,
+  o: { imeDeteta: string; mesecnoRsd: number },
+) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    const ime = name ? name.split(" ")[0] : "";
+    await sendEmail(resend, {
+      to,
+      bulk: true,
+      subject: "zack! miruje, album ostaje",
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:sans-serif;line-height:1.6;color:#222">
+<p>Zdravo${ime ? ", " + esc(ime) : ""}!</p>
+<p>Poklon je juče istekao, pa da ti kažemo šta to znači.</p>
+<p><strong>Sve zarađeno ostaje</strong>: album, sve sličice i ceo napredak. Ništa se ne briše, a profil i prijava kodom rade kao i do sada.</p>
+<p>Miruju samo igre, kesice i Milioner.</p>
+<p>Ako želiš da se otključaju, članstvo je ${o.mesecnoRsd.toLocaleString("de-DE")} dinara mesečno po detetu, bez ugovora, i uključuje se u <a href="${SITE_URL}/zack/roditelj">roditeljskom panelu</a>. Ako ne želiš, ne moraš ništa da radiš - ovo je poslednji mejl o poklonu.</p>
+<p>Hvala na poverenju.</p>
+<p style="font-size:13px;color:#666">Za sva pitanja piši nam na info@hartweger.rs.</p>
+<p style="margin-top:20px">Hartweger tim</p>
+</body></html>`,
+    });
+    console.log(`[email] zack istek poslat → ${to}`);
+  } catch (e) {
+    console.error("[email] sendZackIstekEmail pao:", e);
   }
 }
 

@@ -93,7 +93,7 @@
       "schedule": "30 8 * * *"
     },
     {
-      "path": "/api/cron/zack-poklon-podsetnik",
+      "path": "/api/cron/zack-poklon-mejlovi",
       "schedule": "0 9 * * *"
     }
   ]

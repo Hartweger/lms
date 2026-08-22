@@ -109,7 +109,7 @@ describe("EXPECTED_CRONS", () => {
       "eseji-pregled", "expiry-reminder", "grupe-podsetnik", "honorari",
       "inactivity", "jutarnji-pregled", "naki-content-weekly", "nestpay-poll",
       "nestpay-reconcile", "prof-podsetnik", "review-recert", "review-request",
-      "subscriptions-poll", "test-funnel", "zack-izvestaj", "zack-poklon-podsetnik",
+      "subscriptions-poll", "test-funnel", "zack-izvestaj", "zack-poklon-mejlovi",
     ]);
   });
 });

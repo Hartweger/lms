@@ -2632,6 +2632,50 @@ export type Database = {
         }
         Relationships: []
       }
+      zack_ankete: {
+        Row: {
+          dete_id: string
+          dovrsena_at: string | null
+          id: string
+          omiljeno: string[] | null
+          poslata_at: string
+          smeta: string | null
+          token: string
+          vraca_se: string | null
+          vraca_se_at: string | null
+        }
+        Insert: {
+          dete_id: string
+          dovrsena_at?: string | null
+          id?: string
+          omiljeno?: string[] | null
+          poslata_at?: string
+          smeta?: string | null
+          token: string
+          vraca_se?: string | null
+          vraca_se_at?: string | null
+        }
+        Update: {
+          dete_id?: string
+          dovrsena_at?: string | null
+          id?: string
+          omiljeno?: string[] | null
+          poslata_at?: string
+          smeta?: string | null
+          token?: string
+          vraca_se?: string | null
+          vraca_se_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zack_ankete_dete_id_fkey"
+            columns: ["dete_id"]
+            isOneToOne: false
+            referencedRelation: "zack_deca"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       zack_deca: {
         Row: {
           clanstvo_do: string | null
@@ -2642,6 +2686,9 @@ export type Database = {
           niz: number
           oslobodjeno: boolean
           pin_hash: string | null
+          aktivacija_podsetnik_at: string | null
+          anketa_poslata_at: string | null
+          istek_mejl_at: string | null
           pin_pokusaji: number
           poklon_podsetnik_at: string | null
           poslednji_dan: string | null
@@ -2658,6 +2705,9 @@ export type Database = {
           niz?: number
           oslobodjeno?: boolean
           pin_hash?: string | null
+          aktivacija_podsetnik_at?: string | null
+          anketa_poslata_at?: string | null
+          istek_mejl_at?: string | null
           pin_pokusaji?: number
           poklon_podsetnik_at?: string | null
           poslednji_dan?: string | null
@@ -2674,6 +2724,9 @@ export type Database = {
           niz?: number
           oslobodjeno?: boolean
           pin_hash?: string | null
+          aktivacija_podsetnik_at?: string | null
+          anketa_poslata_at?: string | null
+          istek_mejl_at?: string | null
           pin_pokusaji?: number
           poklon_podsetnik_at?: string | null
           poslednji_dan?: string | null
