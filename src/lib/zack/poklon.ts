@@ -1,5 +1,8 @@
-// zack! poklon do 1. septembra 2026: dete dobija ceo zack! BESPLATNO, bez
-// kartice i bez ijednog plaćanja - obnavljanje nemačkog pred polazak u školu.
+// zack! poklon do 15. septembra 2026: dete dobija ceo zack! BESPLATNO, bez
+// kartice i bez ijednog plaćanja - da nemački u novoj školskoj godini krene
+// lakše. Rok je 22.08.2026. pomeren sa 1. na 15. septembar (Natašina odluka),
+// da akcija uhvati i prve dve nedelje škole - kad roditelj tek vidi da nemački
+// štuca. Nijedan poklon do tada nije bio uzet, pa nije bilo koga da se seli.
 //
 // Zašto poklon jaše postojeći gost-tok umesto da ima svoj: nalog, roditeljski
 // red sa pristankom i dete sa kodom već zna da pravi grant-access.ts, iz
@@ -22,17 +25,17 @@
  * - koliko detetu traje pristup (zack_deca.clanstvo_do), FIKSNO - poklon nije
  *   period od 30 dana koji se pomera, nego datum koji je vlasnica odredila.
  *
- * Beogradsko vreme (+02:00, letnje): poklon se gasi u ponoć između 31. avgusta
- * i 1. septembra, kako roditelj i čita „do 1. septembra".
+ * Beogradsko vreme (+02:00, letnje): poklon se gasi u ponoć između 14. i
+ * 15. septembra, kako roditelj i čita „do 15. septembra".
  */
-export const POKLON_DO = "2026-09-01T00:00:00+02:00";
+export const POKLON_DO = "2026-09-15T00:00:00+02:00";
 
 /** Isti datum ispisan za ljude - da se u tekstovima ne kuca ručno. */
-export const POKLON_DO_PRIKAZ = "1. septembra 2026";
+export const POKLON_DO_PRIKAZ = "15. septembra 2026";
 
 /** Mirna poruka kad je poklon prošao - roditelju, bez greške i bez žurbe. */
 export const PORUKA_POKLON_ISTEKAO =
-  "Poklon je važio do 1. septembra i sada je zatvoren. Ako želiš da dete nastavi, članstvo se uključuje u svakom trenutku.";
+  `Poklon je važio do ${POKLON_DO_PRIKAZ} i sada je zatvoren. Ako želiš da dete nastavi, članstvo se uključuje u svakom trenutku.`;
 
 /**
  * Mirna poruka na drugi pokušaj sa istim mejlom. NAMERNO ne kaže ni ime
@@ -56,7 +59,12 @@ export type ZackPoklonMeta = {
   akcija: string;
 };
 
-/** Naziv akcije u tragu; menja se samo ako vlasnica pokrene NOVU poklon-akciju. */
+/**
+ * Naziv akcije u tragu; menja se samo ako vlasnica pokrene NOVU poklon-akciju.
+ * Pomeranje roka sa 1. na 15.9. NIJE nova akcija, pa oznaka namerno ostaje ista
+ * - inače bi se jedna kampanja u izveštajima raspala na dva imena. Pravi obećani
+ * datum svake porudžbine ionako stoji u njenom `do` polju, ne u ovom imenu.
+ */
 export const POKLON_AKCIJA = "poklon-do-1-9-2026";
 
 export function napraviPoklonMeta(): ZackPoklonMeta {
@@ -93,4 +101,29 @@ export function vecUzetPoklon(porudzbine: readonly { items: unknown }[]): boolea
   return porudzbine.some(
     (o) => Array.isArray(o.items) && o.items.some((stavka) => jePoklonStavka(stavka)),
   );
+}
+
+/**
+ * Koliko dana pre isteka roditelj dobija podsetnik. Tri: dovoljno da stigne da
+ * odluči, prekratko da bi mejl ličio na opominjanje. Podsetnik ide TAČNO JEDNOM
+ * po detetu (trag je zack_deca.poklon_podsetnik_at).
+ */
+export const DANA_PRE_ISTEKA_PODSETNIK = 3;
+
+/**
+ * Da li je detetu vreme za podsetnik pred istek poklona. Namerno čista funkcija
+ * bez baze - cron samo dodaje „a nije već poslat".
+ *
+ * Šalje se samo dok poklon još traje i samo detetu koje se u međuvremenu NIJE
+ * prebacilo na članstvo: ako je roditelj već platio, `clanstvo_do` je pomeren
+ * preko roka poklona i podsetnik bi bio besmislen.
+ */
+export function vremeZaPodsetnik(sada: Date, clanstvoDo: string | null): boolean {
+  if (!clanstvoDo) return false;
+  const rok = Date.parse(clanstvoDo);
+  const kraj = Date.parse(POKLON_DO);
+  // Dete koje traje duže od poklona je već na članstvu - njemu ništa ne ističe.
+  if (Number.isNaN(rok) || rok > kraj) return false;
+  const pocetakProzora = rok - DANA_PRE_ISTEKA_PODSETNIK * 24 * 60 * 60 * 1000;
+  return sada.getTime() >= pocetakProzora && sada.getTime() < rok;
 }

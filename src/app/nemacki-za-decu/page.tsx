@@ -37,7 +37,7 @@ import Meni from "./Meni";
 import Otkrij from "./Otkrij";
 
 // Rok poklona se čita iz POKLON_DO u trenutku zahteva, pa strana NE sme da se
-// zamrzne u statički HTML iz avgusta i posle 1.9. i dalje nudi poklon. Ista
+// zamrzne u statički HTML iz avgusta i posle roka i dalje nudi poklon. Ista
 // disciplina kao na /poklon: force-dynamic.
 export const dynamic = "force-dynamic";
 
@@ -106,6 +106,22 @@ function CtaDugme() {
   );
 }
 
+/** Glavni poziv u telu strane (posle koraka i na dnu). Dok poklon traje MORA
+    da vodi na poklon: roditelj koji je gore pročitao „bez plaćanja i bez
+    kartice" ne sme dva skrola niže da naleti na dugme koje traži karticu. */
+function GlavniPoziv({ poklonAktivan }: { poklonAktivan: boolean }) {
+  return (
+    <>
+      {poklonAktivan ? <PoklonDugme /> : <CtaDugme />}
+      <p className="mt-3 text-[14px]" style={{ color: PRIGUSEN }}>
+        {poklonAktivan
+          ? `Besplatno do ${POKLON_DO_PRIKAZ} - članstvo uključuješ posle, ako poželiš.`
+          : "Bez ugovora - otkazuješ kad hoćeš."}
+      </p>
+    </>
+  );
+}
+
 /** Poziv na poklon - primarni dok akcija traje. Vodi na /poklon, gde se ne
     traži ni dinar ni broj kartice. */
 function PoklonDugme() {
@@ -134,11 +150,12 @@ function PoklonBlok() {
           Poklon do {POKLON_DO_PRIKAZ}
         </p>
         <p className="mt-4 text-[16px] leading-relaxed sm:text-[17px]" style={{ color: PRIGUSEN }}>
-          Petacima koji tek kreću sa nemačkim - da se pripreme i upoznaju sa
-          jezikom pre prvog časa.
+          Petacima koji tek kreću sa nemačkim - da uđu u jezik bez straha od
+          prvih časova.
         </p>
         <p className="mt-2 text-[16px] leading-relaxed sm:text-[17px]" style={{ color: PRIGUSEN }}>
-          Starijim razredima - da obnove gradivo petog pre nove školske godine.
+          Starijim razredima - da obnove gradivo petog dok nova godina tek uzima
+          zalet.
         </p>
         <p className="mt-4 text-[17px] font-bold leading-relaxed" style={{ color: MASTILO }}>
           Bez plaćanja i bez kartice.
@@ -684,10 +701,15 @@ export default function ZaRoditeljePage() {
             </Otkrij>
             <Otkrij className="mt-10 grid gap-4 lg:grid-cols-3">
               {[
-                {
-                  naslov: "Uplatiš članstvo",
-                  opis: "Ime deteta, tvoj mejl i kartica - sve na jednoj strani. Nalog nastane sam, a mesečno te košta manje nego kesice sa sličicama za album.",
-                },
+                poklonAktivan
+                  ? {
+                      naslov: "Uzmeš poklon",
+                      opis: "Ime deteta, razred i tvoj mejl - sve na jednoj strani. Kartica se ne traži i ništa se ne naplaćuje. Nalog nastane sam.",
+                    }
+                  : {
+                      naslov: "Uplatiš članstvo",
+                      opis: "Ime deteta, tvoj mejl i kartica - sve na jednoj strani. Nalog nastane sam, a mesečno te košta manje nego kesice sa sličicama za album.",
+                    },
                 {
                   naslov: "Prepišeš detetu kod i PIN na papirić",
                   opis: "To je cela „instalacija“. Bez mejla za dete, bez skidanja.",
@@ -720,10 +742,7 @@ export default function ZaRoditeljePage() {
             </Otkrij>
             <Otkrij className="mt-10 text-center">
               <div className="zz">
-                <CtaDugme />
-                <p className="mt-3 text-[14px]" style={{ color: PRIGUSEN }}>
-                  Bez ugovora - otkazuješ kad hoćeš.
-                </p>
+                <GlavniPoziv poklonAktivan={poklonAktivan} />
               </div>
             </Otkrij>
           </div>
@@ -1033,10 +1052,7 @@ export default function ZaRoditeljePage() {
               Kod i PIN staju na papirić.
             </p>
             <div className="zz mt-8" style={{ ["--zack-kasni" as string]: "300ms" }}>
-              <CtaDugme />
-              <p className="mt-3 text-[14px]" style={{ color: PRIGUSEN }}>
-                Bez ugovora - otkazuješ kad hoćeš.
-              </p>
+              <GlavniPoziv poklonAktivan={poklonAktivan} />
             </div>
           </Otkrij>
         </section>

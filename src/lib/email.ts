@@ -9,6 +9,7 @@ import { MERCHANT, CARD_OUTCOME, pdvBreakdown, type NestpayTx, type RecurringTx 
 import type { SubscriptionBrief } from "@/lib/subscription-brief";
 import type { NakiBrief } from "@/lib/naki-brief";
 import { naslovIzvestaja, receniceZaDete, type IzvestajDeteta } from "@/lib/zack/izvestaj";
+import { POKLON_DO_PRIKAZ } from "@/lib/zack/poklon";
 
 const FROM = "Hartweger <info@hartweger.rs>";
 
@@ -2578,7 +2579,7 @@ ${blokKoda}
 }
 
 /**
- * Poklon do 1. septembra (/poklon): dete je dobilo ceo zack! bez plaćanja.
+ * Poklon do 15. septembra (/poklon): dete je dobilo ceo zack! bez plaćanja.
  *
  * Ovaj mejl NE SME da pomene karticu, iznos, naplatu ni obnavljanje - ničega
  * od toga u poklonu nema, pa bi svaka takva rečenica bila neistina. Zato je
@@ -2614,7 +2615,7 @@ export async function sendZackPoklonEmail(
       : "";
     await sendEmail(resend, {
       to,
-      subject: `zack! je otključan za ${o.imeDeteta} - poklon do 1. septembra`,
+      subject: `zack! je otključan za ${o.imeDeteta} - poklon do ${POKLON_DO_PRIKAZ}`,
       html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
 <body style="font-family:sans-serif;line-height:1.6;color:#222">
 <p>Zdravo${ime ? ", " + esc(ime) : ""}!</p>
@@ -2629,6 +2630,46 @@ ${blokKoda}
     console.log(`[email] zack poklon mejl poslat → ${to}`);
   } catch (e) {
     console.error("[email] sendZackPoklonEmail pao:", e);
+  }
+}
+
+/**
+ * Podsetnik par dana pred istek poklona - šalje se TAČNO JEDNOM po detetu
+ * (trag je zack_deca.poklon_podsetnik_at, upisan pre slanja).
+ *
+ * Ton: nema prekora, nema odbrojavanja i nema „poslednja šansa". Mejl kaže šta
+ * ističe, šta OSTAJE i šta roditelj može da uradi ako hoće - a izričito kaže i
+ * da ne mora ništa. Rod deteta se nigde ne pogađa (album i sličice, ne
+ * „zaradio/la"). Ide kao bulk, pa odjavljene i baunsere sender sam preskoči.
+ */
+export async function sendZackPoklonPodsetnikEmail(
+  to: string,
+  name: string | null,
+  o: { imeDeteta: string; vaziDo: string; mesecnoRsd: number },
+) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    const ime = name ? name.split(" ")[0] : "";
+    const doKada = new Date(o.vaziDo).toLocaleDateString("sr-RS").replace(/\.$/, "");
+    await sendEmail(resend, {
+      to,
+      bulk: true,
+      subject: `zack! za ${o.imeDeteta} važi još do ${doKada}`,
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:sans-serif;line-height:1.6;color:#222">
+<p>Zdravo${ime ? ", " + esc(ime) : ""}!</p>
+<p>Poklon za <strong>${esc(o.imeDeteta)}</strong> važi do <strong>${doKada}</strong>. Posle tog datuma igre, kesice i Milioner miruju.</p>
+<p><strong>Album i sve sličice ostaju</strong> - ništa se detetu ne oduzima i ništa se ne briše.</p>
+<p>Ako želiš da ${esc(o.imeDeteta)} nastavi, članstvo je ${o.mesecnoRsd.toLocaleString("de-DE")} dinara mesečno po detetu, bez ugovora, i uključuje se u <a href="${SITE_URL}/zack/roditelj">roditeljskom panelu</a>.</p>
+<p>Ako ne želiš - ne moraš ništa da radiš. Ništa ti neće biti naplaćeno.</p>
+<p style="font-size:13px;color:#666">Za sva pitanja piši nam na info@hartweger.rs.</p>
+<p style="margin-top:20px">Hartweger tim</p>
+</body></html>`,
+    });
+    console.log(`[email] zack poklon podsetnik poslat → ${to}`);
+  } catch (e) {
+    console.error("[email] sendZackPoklonPodsetnikEmail pao:", e);
   }
 }
 

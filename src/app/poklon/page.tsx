@@ -1,5 +1,5 @@
-// Poklon do 1. septembra 2026: dete dobija ceo zack! besplatno, bez kartice i
-// bez ijednog plaćanja - obnavljanje nemačkog pred polazak u školu.
+// Poklon do 15. septembra 2026: dete dobija ceo zack! besplatno, bez kartice i
+// bez ijednog plaćanja - da nemački u novoj školskoj godini krene lakše.
 //
 // Strana je RODITELJSKA (sme da nosi Hartweger okvir), ali izgleda kao ostatak
 // zack! sveta: papir, uska kolona, mirne rečenice. Obrazac je isti kao na
@@ -11,7 +11,7 @@
 // „Razred", isto kao na kupovnoj strani.
 //
 // force-dynamic: rok poklona se gleda po SADAŠNJEM trenutku, pa se strana ne
-// sme zamrznuti u keš iz avgusta i posle 1.9. i dalje nuditi poklon.
+// sme zamrznuti u keš iz avgusta i posle roka i dalje nuditi poklon.
 import type { Metadata } from "next";
 import Link from "next/link";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -22,7 +22,7 @@ import PoklonForma from "./PoklonForma";
 export const metadata: Metadata = {
   // Bez indeksiranja dok vlasnica ne odluči gde se poklon oglašava - strana
   // radi, ali je ne nalazi ko na nju nije pozvan.
-  title: "zack! na poklon do 1. septembra | Hartweger",
+  title: `zack! na poklon do ${POKLON_DO_PRIKAZ} | Hartweger`,
   robots: { index: false },
 };
 
@@ -114,8 +114,8 @@ export default async function PoklonPage() {
       {/* Sve što roditelj mora da zna PRE obrasca - bez sitnih slova. */}
       <Kartica className="mt-8">
         <p className="text-[17px] leading-relaxed" style={{ color: MASTILO }}>
-          Do {POKLON_DO_PRIKAZ} dete dobija ceo zack! <strong>besplatno</strong> - da obnovi
-          nemački pre nego što krene škola.
+          Do {POKLON_DO_PRIKAZ} dete dobija ceo zack! <strong>besplatno</strong> - da mu
+          nemački u novoj školskoj godini krene lakše.
         </p>
         <ul className="mt-4 space-y-2 text-[15px] leading-relaxed" style={{ color: PRIGUSEN }}>
           <li>

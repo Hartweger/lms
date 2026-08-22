@@ -5,23 +5,24 @@ import {
   napraviPoklonMeta,
   poklonVazi,
   vecUzetPoklon,
+  vremeZaPodsetnik,
 } from "./poklon";
 
 const PRE_ROKA = new Date("2026-08-21T10:00:00+02:00");
-const POSLEDNJI_TREN = new Date("2026-08-31T23:59:59+02:00");
+const POSLEDNJI_TREN = new Date("2026-09-14T23:59:59+02:00");
 const NA_ROKU = new Date(POKLON_DO);
-const POSLE_ROKA = new Date("2026-09-02T09:00:00+02:00");
+const POSLE_ROKA = new Date("2026-09-16T09:00:00+02:00");
 
 describe("poklonVazi", () => {
   it("pre roka poklon važi", () => {
     expect(poklonVazi(PRE_ROKA)).toBe(true);
   });
 
-  it("poslednji trenutak avgusta još važi", () => {
+  it("poslednji trenutak pred rok još važi", () => {
     expect(poklonVazi(POSLEDNJI_TREN)).toBe(true);
   });
 
-  it("tačno na rok više ne važi - 1. septembra igre miruju", () => {
+  it("tačno na rok više ne važi - tog dana igre miruju", () => {
     expect(poklonVazi(NA_ROKU)).toBe(false);
   });
 
@@ -78,5 +79,38 @@ describe("vecUzetPoklon", () => {
 
   it("porudžbina bez stavki ne ruši proveru", () => {
     expect(vecUzetPoklon([{ items: null }, { items: [] }, { items: "nije-niz" }])).toBe(false);
+  });
+});
+
+describe("vremeZaPodsetnik", () => {
+  // Dete na poklonu: rok mu je tačno rok akcije.
+  const NA_POKLONU = POKLON_DO;
+
+  it("van prozora - četiri dana pre isteka ćuti", () => {
+    expect(vremeZaPodsetnik(new Date("2026-09-10T09:00:00+02:00"), NA_POKLONU)).toBe(false);
+  });
+
+  it("u prozoru - tri dana pre isteka je vreme", () => {
+    expect(vremeZaPodsetnik(new Date("2026-09-12T09:00:00+02:00"), NA_POKLONU)).toBe(true);
+  });
+
+  it("dan pred istek je i dalje vreme", () => {
+    expect(vremeZaPodsetnik(new Date("2026-09-14T20:00:00+02:00"), NA_POKLONU)).toBe(true);
+  });
+
+  it("posle isteka se ne šalje - podsetnik na prošlost je opominjanje", () => {
+    expect(vremeZaPodsetnik(new Date("2026-09-15T09:00:00+02:00"), NA_POKLONU)).toBe(false);
+  });
+
+  it("dete koje je prešlo na članstvo se preskače - njemu ništa ne ističe", () => {
+    expect(vremeZaPodsetnik(new Date("2026-09-12T09:00:00+02:00"), "2026-10-20T00:00:00+02:00")).toBe(false);
+  });
+
+  it("dete bez roka (oslobođeno ili bez članstva) se preskače", () => {
+    expect(vremeZaPodsetnik(new Date("2026-09-12T09:00:00+02:00"), null)).toBe(false);
+  });
+
+  it("pokvaren datum ne ruši cron", () => {
+    expect(vremeZaPodsetnik(new Date("2026-09-12T09:00:00+02:00"), "nije-datum")).toBe(false);
   });
 });

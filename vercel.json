@@ -91,6 +91,10 @@
     {
       "path": "/api/cron/zack-izvestaj",
       "schedule": "30 8 * * *"
+    },
+    {
+      "path": "/api/cron/zack-poklon-podsetnik",
+      "schedule": "0 9 * * *"
     }
   ]
 }

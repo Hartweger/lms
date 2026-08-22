@@ -2643,6 +2643,7 @@ export type Database = {
           oslobodjeno: boolean
           pin_hash: string | null
           pin_pokusaji: number
+          poklon_podsetnik_at: string | null
           poslednji_dan: string | null
           roditelj_id: string | null
           udzbenik_id: string
@@ -2658,6 +2659,7 @@ export type Database = {
           oslobodjeno?: boolean
           pin_hash?: string | null
           pin_pokusaji?: number
+          poklon_podsetnik_at?: string | null
           poslednji_dan?: string | null
           roditelj_id?: string | null
           udzbenik_id: string
@@ -2673,6 +2675,7 @@ export type Database = {
           oslobodjeno?: boolean
           pin_hash?: string | null
           pin_pokusaji?: number
+          poklon_podsetnik_at?: string | null
           poslednji_dan?: string | null
           roditelj_id?: string | null
           udzbenik_id?: string
