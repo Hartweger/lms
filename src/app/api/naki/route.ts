@@ -17,6 +17,7 @@ import {
   supportAddon,
 } from "@/lib/naki/system-prompt";
 import { sanitizeReply } from "@/lib/naki/sanitize";
+import { imaRodniOblik, izaberiPrepis, NEUTRALIZE_PROMPT } from "@/lib/naki/gender-guard";
 import { pickExtraAsk } from "@/lib/naki/extra-ask";
 import { loadSessionHistory } from "@/lib/naki/session-history";
 import { createHash } from "crypto";
@@ -37,6 +38,28 @@ import {
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 type ChatMessage = { role: "user" | "assistant"; content: string };
+
+/**
+ * Drugi prolaz kad rod procuri: model prepisuje SVOJ odgovor bez rodno obeleženih
+ * oblika. Radi se samo kad rod nije poznat i kad je oblik stvarno procurio - mereno nad
+ * poslednjih 30 dana to je 797 od 10.440 odgovora (7,6%), oko 26 dodatnih poziva dnevno. Greška u ovom pozivu nije greška za
+ * korisnika - vraća se original.
+ */
+async function neutralizujRod(text: string): Promise<string> {
+  try {
+    const completion = await anthropic.messages.create({
+      model: NAKI_MODEL,
+      max_tokens: NAKI_MAX_TOKENS,
+      system: NEUTRALIZE_PROMPT,
+      messages: [{ role: "user", content: text }],
+    });
+    const block = completion.content[0];
+    const prepis = block && block.type === "text" ? sanitizeReply(block.text) : "";
+    return izaberiPrepis(text, prepis);
+  } catch {
+    return text;
+  }
+}
 
 function detectLevel(text: string): string | null {
   const m = text.match(/\b(A1|A2|B1|B2|C1)\b/i);
@@ -246,6 +269,13 @@ export async function POST(request: Request) {
 
   if (!reply) {
     return NextResponse.json({ error: "Neočekivan odgovor od AI servisa." }, { status: 502 });
+  }
+
+  // Rod je poslednja brana: prompt ga ne izdrži (probano 26.07, procurelo i 23.08 na
+  // produkciji), pa sporan odgovor vraćamo modelu na jedan prepis. Ponuda kursa se
+  // dopisuje POSLE toga - ona je fiksan tekst i nema šta da se prepisuje.
+  if (genderRule && imaRodniOblik(reply)) {
+    reply = await neutralizujRod(reply);
   }
 
   // Dopisujemo ponudu samo ako je i dobila slot - inače bi korisnik u istom odgovoru
