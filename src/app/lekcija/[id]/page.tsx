@@ -12,12 +12,34 @@ import { getFixedWriting } from "@/lib/fixed-writing";
 import { isExamLessonTitle } from "@/lib/certificate-check";
 import { buildDrawerLessons } from "@/lib/drawer-lessons";
 import type { Lesson, Exercise, ExerciseQuestion } from "@/lib/types";
+import type { Metadata } from "next";
 
 interface PageProps {
   params: Promise<{ id: string }>;
 }
 
 export const dynamic = "force-dynamic";
+
+// Lekcije su iza prijave i ne smeju u indeks. Bez generateMetadata su nasleđivale
+// robots: index iz root layouta, a zbog force-dynamic je notFound() stizao tek
+// posle streamovanog 200 - Google je to čitao kao soft-404 (GSC coverage 23.08.2026:
+// 2.263 "Crawled - currently not indexed"). Metapodaci se razrešavaju PRE streama,
+// pa notFound() odavde daje pravi 404 status.
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { id } = await params;
+  // Admin klijent namerno: RLS krije i lekcije koje POSTOJE, a 404 sme samo za
+  // one kojih stvarno nema - inače bi gate (LekcijaGate) ispod nestao.
+  const { data } = await createAdminClient()
+    .from("lessons")
+    .select("title")
+    .eq("id", id)
+    .maybeSingle();
+  if (!data) notFound();
+  return {
+    title: `${data.title as string} - Hartweger`,
+    robots: { index: false, follow: false },
+  };
+}
 
 export default async function LekcijaStranica({ params }: PageProps) {
   const { id } = await params;

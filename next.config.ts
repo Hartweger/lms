@@ -123,6 +123,16 @@ const nextConfig: NextConfig = {
       // pa_tip-kursa taksonomija (nova u sitemap-u, /tip-kursa/grupni...) → kursevi
       { source: "/tip-kursa/:path*", destination: "/kursevi", permanent: true },
 
+      // LearnDash/WP korenske putanje (GSC coverage audit 23.08.2026). Bez ovoga
+      // su išle /courses/ → 308 → /courses → 404, pa su se iste adrese brojale
+      // i kao "Page with redirect" i kao 404 u Search Console-u.
+      { source: "/courses", destination: "/kursevi", permanent: true },
+      { source: "/courses/:path*", destination: "/kursevi", permanent: true },
+      { source: "/lessons", destination: "/kursevi", permanent: true },
+      { source: "/lessons/:path*", destination: "/kursevi", permanent: true },
+      { source: "/feed", destination: "/magazin", permanent: true },
+      { source: "/feed/:path*", destination: "/magazin", permanent: true },
+
       // Stari WP blog: root-level tekstovi (/<slug>) → /magazin/<slug>
       // Samo "čisti" slugovi (a-z, 0-9, -); slugovi sa %-encoded znakovima (npr. emoji)
       // se preskaču jer ruše path-to-regexp pattern.

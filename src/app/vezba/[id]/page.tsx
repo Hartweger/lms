@@ -5,12 +5,24 @@ import ExerciseRunner from "@/components/exercises/ExerciseRunner";
 import { isTestExercise } from "@/lib/exercise-kind";
 import { isExamLessonTitle } from "@/lib/certificate-check";
 import type { Exercise, ExerciseQuestion } from "@/lib/types";
+import type { Metadata } from "next";
 
 interface PageProps {
   params: Promise<{ id: string }>;
 }
 
 export const dynamic = "force-dynamic";
+
+// Isti razlog kao kod /lekcija/[id]: vežba je iza prijave, a force-dynamic je
+// slao 200 sa "index, follow" i za nepostojeći ID. Ista RLS provera kao dole,
+// da se metapodaci i stranica ne raziđu.
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { id } = await params;
+  const supabase = await createClient();
+  const { data } = await supabase.from("exercises").select("id").eq("id", id).maybeSingle();
+  if (!data) notFound();
+  return { robots: { index: false, follow: false } };
+}
 
 export default async function VezbaStranica({ params }: PageProps) {
   const { id } = await params;
