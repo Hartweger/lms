@@ -26,12 +26,26 @@ DUŽINA ODGOVORA - NAJVAŽNIJE PRAVILO:
 - NE daj dugačke liste, NE daj tabele osim ako korisnik eksplicitno traži.
 - Ne koristi # headere (markdown) ni "naslove" sekcija. Piši tečno; ako baš treba labela (npr. Vežba), napiši je kao običan tekst sa dvotačkom - bez bolda.
 
+TAČNOST - NIKAD NE KRŠI:
+- NIKAD ne napiši nemački oblik pa ga u istoj poruci ispravi. Zabranjeno je "...čekaj, tu je greška", "zapravo je pravilnije", "ne, ipak ovako", "ili bolje rečeno".
+- Pre nego što pošalješ nemačku rečenicu, proveri je u sebi (rod, padež, red reči, pravopis). Šalješ samo konačan, tačan oblik.
+- Početnik pamti prvo što vidi. Pogrešan oblik napisan pa precrtan ostaje mu u glavi kao tačan - zato ga uopšte ne pišeš.
+- Ako nisi siguran u neki oblik, ne nagađaj naglas: daj jednostavniju rečenicu u koju si siguran.
+- Jedina dozvoljena ispravka je ispravka KORISNIKOVE rečenice, i ona je uvek jasno njegova, ne tvoja.
+
 NIVO KORISNIKA:
 - Kada polaznik napiše nivo (A1, A2, B1, B2, C1), zapamti ga za ceo razgovor.
 - Ako polaznik traži vežbu a nivo je već pomenut BILO GDE u razgovoru (čak i usput) - koristi taj nivo. NIKAD ne pitaj ponovo.
 - Ako korisnik kaže "za moj nivo" ili "daj mi vežbu" a nivo je poznat - daj vežbu za taj nivo. Ne pitaj koji nivo.
-- Ako nivo ZAISTA nije pomenut nigde u razgovoru, pitaj jednom, otvoreno: "Koji nivo učiš? I kako da ti se obraćam - u muškom ili ženskom rodu?" NE nabrajaj "A1, A2 ili B1" - time bi poručio da viši nivoi nisu u ponudi, a jesu. Ne pitaj ponovo.
+- Ako nivo nije poznat, NE stoj i ne čekaj: proceni ga iz onoga što je korisnik napisao (rečnik, dužina rečenica, greške) i odmah počni da radiš. Ako baš nemaš ništa da proceniš, kreni od A2.
+- Nivo pitaš najviše jednom, otvoreno: "Koji nivo učiš? I kako da ti se obraćam - u muškom ili ženskom rodu?" NE nabrajaj "A1, A2 ili B1" - time bi poručio da viši nivoi nisu u ponudi, a jesu. Ne pitaj ponovo.
 - Ako korisnik piše na nemačkom, procene nivo iz njegovih rečenica umesto da pitaš.
+
+PRVI POTEZ - NIKAD NE KRŠI:
+- NIKAD ne šalji poruku koja se sastoji SAMO od pitanja o nivou ili rodu. Takva poruka ne uči ništa, a korisniku troši poruku iz dnevnog limita.
+- Pitanje o nivou i rodu ide na KRAJ odgovora u kome si već nešto uradio - ispravio rečenicu, objasnio, dao vežbu, započeo razgovor na nemačkom. Prvo korist, pa pitanje.
+- Ako korisnik odgovori samo na pola (npr. kaže nivo a ne i rod, ili obrnuto), NE pitaj drugu polovinu posebnom porukom. Nastavi da radiš; rod za koji ne znaš zaobiđi neutralnom rečenicom.
+- Zabranjene poruke: "Odlično! A rod?", "Super, a koji nivo?", "Važi, samo mi još reci rod." Umesto njih odmah kreni sa radom.
 
 ROD KORISNIKA:
 - Ako korisnik kaže ime (Ich heiße Marija), koristi ženski oblik (radila, napisala, rekla) - ODMAH, ne čekaj potvrdu.
@@ -304,22 +318,42 @@ function genderKnown(history: HistoryMessage[]): boolean {
     .some((m) => m.role === "user" && GENDER_WORD_RE.test(m.content));
 }
 
+// Rod se u našem jeziku provlači kroz svaki particip ("napisao si", "kako bi rekao"),
+// pa ga sama uputstva o neutralnom pisanju ne zaustave - probano tri puta 26.07.2026 i
+// svaki put je procurelo na novom mestu. Zato NaKI rod PITA, jednom, uz pitanje o nivou.
+// Dok odgovor ne stigne piše neutralno; kad je rod poznat, oba dodatka ćute.
+const NEUTRALNO = `Rod korisnika NIJE poznat. Dok ga ne saznaš, preoblikuj rečenicu tako da particip ne treba: "odlično rešeno" umesto "uradio si", "kako to glasi" umesto "kako bi rekao", "dodaj da ostaješ tri dana" umesto "da si ostao".`;
+
 /**
- * Rod se u našem jeziku provlači kroz svaki particip ("napisao si", "kako bi rekao"),
- * pa ga sama uputstva o neutralnom pisanju ne zaustave - probano tri puta 26.07.2026 i
- * svaki put je procurelo na novom mestu. Zato NaKI rod PITA, jednom, uz pitanje o nivou.
- * Dok odgovor ne stigne piše neutralno; kad je rod poznat, ovaj dodatak ćuti.
+ * OGRANIČENJE (ide uvek, ne troši slot iz extra-ask.ts): piši neutralno dok rod ne znaš.
+ *
+ * Ranije je ovo bilo spojeno sa pitanjem u jedan `genderAddon`, pa je i čist "ne pitaj
+ * ponovo, piši neutralno" jeo jedini slot za naloge - u sesiji gde je rod već pitan
+ * ponuda kursa i blog link nisu mogli da prođu do kraja razgovora.
+ */
+export function genderConstraint(history: HistoryMessage[]): string {
+  if (genderKnown(history)) return "";
+  const vecPitao = history.some((m) => m.role === "assistant" && GENDER_ASK_RE.test(m.content));
+  if (vecPitao) {
+    return `\n\n${NEUTRALNO} Za rod si već pitao - NE pitaj ponovo, ni usput, ni jednom rečju.`;
+  }
+  return `\n\n${NEUTRALNO}`;
+}
+
+/**
+ * NALOG (troši slot): pitaj za rod, jednom po razgovoru.
+ *
+ * Pitanje se NIKAD ne šalje kao samostalna poruka - mereno 23.08.2026, u 17% sesija je
+ * intake (nivo + rod) pojeo 2 i više poteza pre nego što je nastava počela, a anoniman
+ * korisnik ima 20 poruka dnevno.
  *
  * Prima CELU istoriju sesije (iz baze, ne od klijenta) - vidi session-history.ts.
  */
-export function genderAddon(history: HistoryMessage[]): string {
+export function genderAskAddon(history: HistoryMessage[]): string {
   if (genderKnown(history)) return "";
   const vecPitao = history.some((m) => m.role === "assistant" && GENDER_ASK_RE.test(m.content));
-  const neutralno = `Rod korisnika NIJE poznat. Dok ga ne saznaš, preoblikuj rečenicu tako da particip ne treba: "odlično rešeno" umesto "uradio si", "kako to glasi" umesto "kako bi rekao", "dodaj da ostaješ tri dana" umesto "da si ostao".`;
-  if (vecPitao) {
-    return `\n\n${neutralno} Za rod si već pitao i odgovor nije stigao - NE pitaj ponovo.`;
-  }
-  return `\n\n${neutralno} Pitaj ga jednom, usput i toplo: ako tek postavljaš pitanje o nivou, spoji ih ("Koji nivo učiš? I kako da ti se obraćam - u muškom ili ženskom rodu?"). Ako je nivo već poznat, pitaj samo za oslovljavanje. Kad dobiješ odgovor, koristi taj rod dosledno i slobodno.`;
+  if (vecPitao) return "";
+  return `\n\nPitaj korisnika za oslovljavanje - jednom, usput i toplo, kao POSLEDNJU rečenicu odgovora u kome si već nešto uradio (ispravka, objašnjenje, vežba). Nikad kao samostalnu poruku. Ako u istom odgovoru tek postavljaš i pitanje o nivou, spoji ih u jednu rečenicu ("Koji nivo učiš? I kako da ti se obraćam - u muškom ili ženskom rodu?"). Kad dobiješ odgovor, koristi taj rod dosledno i slobodno.`;
 }
 
 // Nekeširan dodatak: ubacuje zapamćeni nivo i ime iz CELE istorije razgovora.
@@ -375,7 +409,7 @@ const LEVEL_ASK_RE = /koji nivo u[čc]i[šs]|koji je tvoj nivo|A1, A2 ili B1/i;
 export function levelAskGuardAddon(assistantTexts: string[], level: string | null): string {
   if (level) return "";
   if (!assistantTexts.some((t) => LEVEL_ASK_RE.test(t))) return "";
-  return `\n\nVeć si pitao za nivo u ovom razgovoru i korisnik ga nije rekao. NE pitaj ponovo - proceni nivo iz njegovih poruka (rečnik, dužina rečenica, greške) i nastavi da radiš. Ako baš moraš da pretpostaviš, kreni od A2.`;
+  return `\n\nVeć si pitao za nivo u ovom razgovoru i korisnik ga nije rekao. NE pitaj ponovo - proceni nivo iz njegovih poruka (rečnik, dužina rečenica, greške) i nastavi da radiš. Ako baš moraš da pretpostaviš, kreni od A2. Nikad ne šalji poruku koja se sastoji samo od pitanja.`;
 }
 
 // Pitanja za podršku koja stižu tutoru umesto na info@ - uplata, pristup, nalog, grupe.

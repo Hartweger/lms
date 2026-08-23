@@ -3,7 +3,8 @@ import {
   NAKI_SYSTEM_PROMPT,
   conversationMemoryAddon,
   examinerAddon,
-  genderAddon,
+  genderAskAddon,
+  genderConstraint,
   levelAskGuardAddon,
   supportAddon,
 } from "./system-prompt";
@@ -91,6 +92,26 @@ describe("NAKI_SYSTEM_PROMPT - rod, nivo, varijanta jezika", () => {
     expect(NAKI_SYSTEM_PROMPT).not.toContain('"Koji nivo učiš - A1, A2 ili B1?"');
   });
 
+  // 17% sesija je trošilo 2+ poteza na "koji nivo" i "koji rod" pre nego što nastava
+  // počne, a anoniman korisnik ima 20 poruka dnevno (mereno 23.08.2026).
+  it("zabranjuje poruku koja je samo pitanje o nivou ili rodu", () => {
+    expect(NAKI_SYSTEM_PROMPT).toMatch(/PRVI POTEZ/);
+    expect(NAKI_SYSTEM_PROMPT).toMatch(/SAMO od pitanja o nivou ili rodu/);
+    expect(NAKI_SYSTEM_PROMPT).toContain("Odlično! A rod?");
+  });
+
+  it("ne čeka odgovor o nivou nego ga proceni i radi", () => {
+    expect(NAKI_SYSTEM_PROMPT).toMatch(/proceni ga iz onoga što je korisnik napisao/i);
+  });
+
+  // NaKI je u 1,1% odgovora napisao pogrešan nemački oblik pa se ispravio u istoj
+  // poruci ("...čekaj, tu je greška"). Početnik zapamti prvo što vidi.
+  it("zabranjuje samoispravku usred odgovora", () => {
+    expect(NAKI_SYSTEM_PROMPT).toMatch(/TAČNOST/);
+    expect(NAKI_SYSTEM_PROMPT).toMatch(/pa ga u istoj poruci ispravi/);
+    expect(NAKI_SYSTEM_PROMPT).toContain("čekaj, tu je greška");
+  });
+
   it("prati varijantu kojom korisnik piše (ijekavica ostaje ijekavica)", () => {
     expect(NAKI_SYSTEM_PROMPT).toMatch(/ijekav/i);
     expect(NAKI_SYSTEM_PROMPT).not.toMatch(/Uvek odgovaraj na srpskom/);
@@ -106,7 +127,7 @@ describe("NAKI_SYSTEM_PROMPT", () => {
   });
 });
 
-describe("genderAddon", () => {
+describe("genderConstraint + genderAskAddon", () => {
   // Rod se najčešće otkrije participom, ne imenom. Redosled reči varira, a "č/š/ž"
   // ruše \w u JavaScriptu - zato ovoliko slučajeva.
   it.each([
@@ -125,7 +146,8 @@ describe("genderAddon", () => {
     "muško sam, učim A2",
     "ja sam žensko",
   ])("ćuti kad je rod poznat iz: %s", (t) => {
-    expect(genderAddon([{ role: "user", content: t }])).toBe("");
+    expect(genderConstraint([{ role: "user", content: t }])).toBe("");
+    expect(genderAskAddon([{ role: "user", content: t }])).toBe("");
   });
 
   const PITANJE = "Koji nivo učiš? I kako da ti se obraćam - u muškom ili ženskom rodu?";
@@ -145,30 +167,49 @@ describe("genderAddon", () => {
     "B1, muški",
     "u zenskom rodu molim",
   ])("prepoznaje odgovor na pitanje o rodu: %s", (t) => {
-    expect(genderAddon(posle(t))).toBe("");
+    expect(genderConstraint(posle(t))).toBe("");
+    expect(genderAskAddon(posle(t))).toBe("");
   });
 
   it("ne meša gramatički ženski rod imenice sa rodom korisnika", () => {
-    const out = genderAddon([
+    const out = genderConstraint([
       { role: "user", content: "objasni mi ženski rod imenica u nemačkom" },
     ]);
     expect(out).toMatch(/Rod korisnika NIJE poznat/);
   });
 
   it("kad rod nije poznat a nije ni pitao - traži da pita jednom", () => {
-    const out = genderAddon([{ role: "user", content: "daj mi vežbu" }]);
-    expect(out).toMatch(/Rod korisnika NIJE poznat/);
-    expect(out).toMatch(/Pitaj ga jednom/);
+    const istorija = [{ role: "user" as const, content: "daj mi vežbu" }];
+    expect(genderConstraint(istorija)).toMatch(/Rod korisnika NIJE poznat/);
+    expect(genderAskAddon(istorija)).toMatch(/Pitaj korisnika za oslovljavanje/);
+  });
+
+  it("pitanje o rodu nikad ne ide kao samostalna poruka", () => {
+    const out = genderAskAddon([{ role: "user", content: "daj mi vežbu" }]);
+    expect(out).toMatch(/POSLEDNJU rečenicu odgovora/);
+    expect(out).toMatch(/Nikad kao samostalnu poruku/);
   });
 
   it("kad je već pitao a odgovor nije stigao - NE pita ponovo", () => {
-    const out = genderAddon([
-      { role: "user", content: "Vežbajmo razgovor" },
-      { role: "assistant", content: PITANJE },
-      { role: "user", content: "ne bih rekao" },
-    ]);
-    expect(out).toMatch(/NE pitaj ponovo/);
-    expect(out).not.toMatch(/Pitaj ga jednom/);
+    const istorija = [
+      { role: "user" as const, content: "Vežbajmo razgovor" },
+      { role: "assistant" as const, content: PITANJE },
+      { role: "user" as const, content: "ne bih rekao" },
+    ];
+    expect(genderConstraint(istorija)).toMatch(/NE pitaj ponovo/);
+    expect(genderAskAddon(istorija)).toBe("");
+  });
+
+  // Ograničenje "piši neutralno" nije nalog: kad je rod već pitan, slot iz extra-ask.ts
+  // mora da ostane slobodan za ponudu kursa i blog link.
+  it("ograničenje ne troši slot za naloge", () => {
+    const istorija = [
+      { role: "user" as const, content: "Vežbajmo razgovor" },
+      { role: "assistant" as const, content: PITANJE },
+      { role: "user" as const, content: "B1" },
+    ];
+    expect(genderConstraint(istorija)).not.toBe("");
+    expect(genderAskAddon(istorija)).toBe("");
   });
 
   it("ne pita ponovo ni kad je pitanje daleko iza (uzrok ponavljanja 26.07)", () => {
@@ -180,7 +221,8 @@ describe("genderAddon", () => {
         content: `poruka ${i}`,
       })),
     ];
-    expect(genderAddon(dugacka)).toMatch(/NE pitaj ponovo/);
+    expect(genderConstraint(dugacka)).toMatch(/NE pitaj ponovo/);
+    expect(genderAskAddon(dugacka)).toBe("");
   });
 });
 
@@ -315,7 +357,7 @@ describe("conversationMemoryAddon", () => {
     expect(out).not.toMatch(/Korisnik se zove/);
   });
 
-  it("ne bavi se rodom - to je posao genderAddon", () => {
+  it("ne bavi se rodom - to je posao genderConstraint", () => {
     expect(conversationMemoryAddon(["daj mi vežbu"], null)).toBe("");
   });
 });

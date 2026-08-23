@@ -11,7 +11,8 @@ import {
   blogLinkAddon,
   conversationMemoryAddon,
   examinerAddon,
-  genderAddon,
+  genderAskAddon,
+  genderConstraint,
   levelAskGuardAddon,
   supportAddon,
 } from "@/lib/naki/system-prompt";
@@ -115,7 +116,14 @@ export async function POST(request: Request) {
   if (personalLimit !== null) {
     const todayCount = await countTodayMessages(admin, { day: today, userId, ipHash });
     if (todayCount >= personalLimit) {
-      const knownLevel = stickyLevel(messages.filter((m) => m.role === "user").map((m) => m.content));
+      // Nivo iz CELE sesije u bazi, ne samo iz prozora od 12 poruka koji šalje klijent:
+      // mereno 15.08.2026 nivo je na limitu bio nepoznat u 89% slučajeva, pa je poruka
+      // o limitu ostajala bez konkretnog kursa.
+      const limitHistory = await loadSessionHistory(admin, sessionId);
+      const limitTexts = (limitHistory.length ? limitHistory : messages)
+        .filter((m) => m.role === "user")
+        .map((m) => m.content);
+      const knownLevel = stickyLevel(limitTexts);
       const levelCourse = await getLevelCourse(admin, knownLevel);
       await admin.from("naki_messages").insert({
         session_id: sessionId,
@@ -136,14 +144,21 @@ export async function POST(request: Request) {
     }
   }
 
+  // ── Istorija cele sesije iz baze (pamćenje: nivo, ime, rod, već postavljena pitanja) ──
+  const sessionHistory = await loadSessionHistory(admin, sessionId);
+
   // ── Loguj poslednju korisničku poruku ──
+  // Nivo se upisuje LEPLJIVO: ne samo kad ga korisnik doslovno napiše u toj poruci, nego
+  // i posle, dok traje sesija. Bez toga je kolona `level` bila prazna u 94% poruka
+  // (mereno 23.08.2026), pa se nivo nije video ni u analizi ni na limit-događaju.
   const last = messages[messages.length - 1];
   if (last.role === "user") {
+    const dosadUser = sessionHistory.filter((m) => m.role === "user").map((m) => m.content);
     await admin.from("naki_messages").insert({
       session_id: sessionId,
       role: "user",
       message: last.content,
-      level: detectLevel(last.content),
+      level: detectLevel(last.content) ?? stickyLevel(dosadUser),
       ip_hash: ipHash,
       user_id: userId,
     });
@@ -162,7 +177,6 @@ export async function POST(request: Request) {
   // Klijent šalje samo poslednjih 12 poruka, pa je server ranije "zaboravljao" sve
   // starije - zbog toga je NaKI iznova pitao za nivo i rod. Ako reda u bazi nema
   // (npr. sesija bez id-a), padamo nazad na ono što je klijent poslao.
-  const sessionHistory = await loadSessionHistory(admin, sessionId);
   const memory = sessionHistory.length ? sessionHistory : messages;
   const allUserTexts = memory.filter((m) => m.role === "user").map((m) => m.content);
   const knownLevel = stickyLevel(allUserTexts);
@@ -187,8 +201,9 @@ export async function POST(request: Request) {
   // Ako je NaKI već pitao za nivo a odgovor nije stigao, ne sme da pita iznova.
   const allAssistantTexts = memory.filter((m) => m.role === "assistant").map((m) => m.content);
   const levelGuard = levelAskGuardAddon(allAssistantTexts, knownLevel);
-  // Rod se pita jednom (najbolje uz nivo); dok odgovor ne stigne piše se neutralno.
-  const gender = genderAddon(memory);
+  // Rod: ograničenje (piši neutralno) ide UVEK; pitanje je nalog i troši slot.
+  const genderRule = genderConstraint(memory);
+  const gender = genderAskAddon(memory);
   // Pitanja za podršku (uplata, pristup, nalog) preusmeravamo na info@ umesto da NaKI nagađa.
   const support = supportAddon(userTexts);
   // Ko sprema zvaničan ispit treba da zna čiji je program - jednom po razgovoru.
@@ -204,7 +219,7 @@ export async function POST(request: Request) {
     upsell: upsellAddon,
     blogLink: linkAddon,
   });
-  const dynamic = memoryAddon + levelGuard + couponAddon + ask.text;
+  const dynamic = memoryAddon + levelGuard + genderRule + couponAddon + ask.text;
   const system: Anthropic.TextBlockParam[] = [
     { type: "text", text: NAKI_SYSTEM_PROMPT, cache_control: { type: "ephemeral" } },
     ...(dynamic ? [{ type: "text" as const, text: dynamic }] : []),
