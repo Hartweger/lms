@@ -1,25 +1,53 @@
-# zack! za prvake - predlog
+# Prvi nemački - predlog
 
-Datum: 22.08.2026. Status: nacrt, čeka Natašinu potvrdu. Ništa nije napisano u kodu.
+Datum: 22.08.2026, opseg promenjen 23.08. Status: nacrt. Ništa nije napisano u
+kodu.
+
+**PROMENA OPSEGA 23.08 (Nataša):** proizvod se **ne vezuje za prvi razred**.
+Namenjen je deci od 6-7 godina koja još ne čitaju, **bez obzira na to da li
+nemački uče u školi.** Radna oznaka i dalje „zack! mali".
 
 Klikabilan prototip lekcije:
 https://claude.ai/code/artifact/da355755-aa7a-43eb-8a57-fb7150e4b18f
 
 ## Šta pravimo
 
-Režim zack!-a **bez ijednog slova**, za decu od 7 godina koja još ne čitaju
-latinicu. Isti repo, iste tabele, ista naplata, ista roditeljska strana.
-Menja se samo ono što dete vidi i čuje.
+Režim zack!-a **bez ijednog slova**, za decu od 6-7 godina koja još ne čitaju.
+Isti repo, iste tabele, ista naplata, ista roditeljska strana. Menja se samo
+ono što dete vidi i čuje.
 
-## Zašto baš tako
+Dete ne mora da uči nemački u školi. Većina i ne uči - nemački je u prvom
+razredu redak kao prvi strani jezik. **Ovo je detetov prvi susret sa jezikom,
+ne pomoć oko školskog gradiva.**
 
-- Prvak u prvom razredu uči **ćirilicu**; latinica dolazi u drugom. Nemački se
-  piše latinicom, pa dete ne može da pročita ni nemačku reč ni srpski prevod.
-- Po Pravilniku je strani jezik u prvom razredu **isključivo usmen** - slušanje
-  i govor, bez čitanja i pisanja.
+## Zašto bez slova
 
-Znači: odsustvo teksta nije zaobilaženje problema nego usklađivanje sa
-programom. To je i argument za landing.
+- Dete tog uzrasta uči **ćirilicu**, latinica dolazi kasnije. Nemački se piše
+  latinicom, pa ne može da pročita ni nemačku reč ni srpski prevod.
+- Predškolac uopšte ne čita.
+
+Odsustvo teksta nije zaobilaženje problema nego jedini pošten oblik za taj
+uzrast, i ujedno ono što nas razlikuje od svega ostalog na tržištu.
+
+## Šta je promena opsega donela
+
+Vezivanje za prvi razred bi nas koštalo više nego što bi dalo:
+
+1. **Publika je znatno veća.** Nemački se u prvom razredu retko uči kao prvi
+   strani jezik, pa bi „za prvake koji uče nemački u školi" bio sasvim uzak
+   krug. Ovako ulaze i predškolci i prvaci i deca koja nemački uče samo kod
+   kuće.
+2. **Rečnik pišemo sami** - i to je najveća praktična razlika. Ranije je
+   početak čekao izvlačenje spiska iz Pravilnika; sada ne čeka ništa.
+3. **Reči biramo tako da se lako crtaju.** Kad spisak diktira Pravilnik, dobiju
+   se i apstraktne reči bez moguće slike. Sada svaka reč može da ima jasan
+   crtež - a ilustracija je najveći trošak u projektu.
+4. **Pitanje „der Bär" nestaje.** Medveda prosto ne stavljamo u rečnik, pa se
+   maskota i gradivo ne sudaraju.
+
+**Šta gubimo, pošteno:** argument „isto što uči u školi", koji je za peti
+razred bio najjači. Zamenjuju ga dva druga: *radi sam, bez tvoje pomoći* i
+*krene spreman, umesto od nule*.
 
 ## Odluke koje su već pale
 
@@ -77,12 +105,12 @@ gramatiku koju treba da provali. Boje der/die/das ostaju izbačene, kao što
 stoji niže.
 
 Posledice koje treba upisati u kod:
-- `zack_reci.de` za prvi razred sadrži reč sa članom, ili se član sastavlja iz
+- `zack_reci.de` sadrži reč sa članom, ili se član sastavlja iz
   postojeće kolone `rod` pri prikazu. **Drugo je bolje** - `rod` već postoji, a
   pretraga i poređenje reči tako ostaju neizmenjeni.
 - Snimak reči sadrži i član (`der Hund`, ne `Hund`), pa se snima jednom, kao
   celina.
-- Množina se ne pominje nigde u prvom razredu, pa `mnozina` ostaje prazna.
+- Množina se ovde ne pominje nigde, pa `mnozina` ostaje prazna.
 
 ### Scena
 
@@ -142,50 +170,80 @@ pravilo i dalje važi svuda gde u pitanju stoji tekst.
 
 ## Sadržaj
 
-Rečnik po Pravilniku za prvi razred. **Moja procena je 60-80 reči za celu
-godinu** (jedan čas nedeljno, usmeni program) prema 348 koliko ima peti - dakle
-oko četvrtine posla. Procenu treba proveriti prema Pravilniku, isto kako je
-rađeno za peti razred. Nataša dostavlja gradivo.
+**Rečnik pišemo mi, po temama, ne po Pravilniku.** Osam do deset tematskih
+celina, oko deset reči po celini - ukupno **80 do 100 reči**.
 
-Zapis u `zack_udzbenici`: slug `nemacki-1-razred`, izdavac
-`Po planu i programu`, razred 1.
+Prirodne teme za taj uzrast: pozdravi, boje, brojevi do deset, porodica,
+životinje, telo, hrana, igračke, odeća.
 
-**MIGRACIJA JE OBAVEZNA:** `zack_udzbenici.razred` ima
-`CHECK (razred BETWEEN 5 AND 8)` i prvi razred bez izmene fizički ne može da se
-upiše.
+Dva pravila pri izboru reči:
+
+- **Svaka reč mora da ima jasan crtež.** Reč koju sedmogodišnjak ne prepoznaje
+  na slici u ovaj proizvod ne ulazi, koliko god bila česta.
+- **Bez medveda** (`der Bär`), da se ne sudari sa maskotom.
+
+Zapis u `zack_udzbenici`: slug `prvi-nemacki`, izdavac `Prvi nemački`,
+`razred` = NULL, naziv „6-7 godina".
+
+**MIGRACIJA JE OBAVEZNA.** `zack_udzbenici.razred` je danas
+`SMALLINT NOT NULL CHECK (razred BETWEEN 5 AND 8)`. Ovaj proizvod nije razred,
+pa kolona mora da dozvoli NULL:
+
+```sql
+ALTER TABLE public.zack_udzbenici ALTER COLUMN razred DROP NOT NULL;
+ALTER TABLE public.zack_udzbenici DROP CONSTRAINT zack_udzbenici_razred_check;
+ALTER TABLE public.zack_udzbenici ADD CONSTRAINT zack_udzbenici_razred_check
+  CHECK (razred IS NULL OR razred BETWEEN 1 AND 8);
+```
+
+(Tačno ime ograničenja proveriti u bazi pre pisanja migracije.)
 
 ## Roditeljska strana
 
-Ne menja se. Panel već filtrira po `izdavac='Po planu i programu'`, a polje se
-zove „Razred", pa novi zapis ulazi sam. Izveštaj ostaje isti, samo bez
-rečenica.
+Skoro se ne menja, ali **jedna izmena je obavezna**: panel danas filtrira po
+`izdavac='Po planu i programu'` i polje zove „Razred". Ovaj proizvod nije
+razred i nije po programu, pa bi uz taj filter bio nevidljiv.
+
+Rešenje: polje se zove **„Šta uči"**, a bira se između dva zapisa - „Peti
+razred (po školskom programu)" i „Prvi nemački (6-7 godina)". Kad `razred`
+bude NULL, prikazuje se `naziv`.
+
+Izveštaj roditelju ostaje isti, samo bez rečenica.
 
 ## Prodaja
 
-Zasebna stranica `/nemacki-za-prvake`. `/nemacki-za-decu` ostaje petom razredu
+Zasebna stranica `/prvi-nemacki`. `/nemacki-za-decu` ostaje petom razredu
 netaknuta - tek je doterana pred oglase.
 
 Vrh stranice:
 
-> **Nemački za prvake koji još ne čitaju**
+> **Nemački za decu koja još ne čitaju**
 > Ne treba mu ni jedno slovo. Sluša, gleda slike i bira - i radi sam.
-> Prvi razred je i ovako pun. Neka nemački bude pet minuta igre.
+> Za uzrast od šest do sedam godina, bez obzira na to da li nemački uče u
+> školi.
 
-Niže: blok „da mu ne bude teško kasnije" kao razuman razlog da se plati.
+Naslov namerno govori o **sposobnosti, ne o godinama**: roditelj odmah zna da
+li je to njegovo dete, bio ono predškolac ili prvak. Uzrast stoji u trećem redu
+kao putokaz, ne kao uslov.
 
-Čega se klonimo: obećanja o oceni i kontrolnom (u prvom razredu ih nema),
-„pripreme za peti razred" kao glavne poruke, i svakog tona koji roditelju
-sugeriše da nešto propušta.
+Niže: blok „krene spreman, umesto od nule" kao razuman razlog da se plati.
+
+Čega se klonimo:
+
+- **znački „po školskom programu"** - ona pripada petom razredu i ovde bi bila
+  neistina;
+- obećanja o oceni i kontrolnom;
+- svakog tona koji roditelju sugeriše da nešto propušta.
 
 ### Cena
 
 Peti razred: 348 reči, 12 lekcija, 120 rečenica, osam igara i Milioner, za
 1.200 promo i 2.399 punu cenu.
-Prvi razred: oko 70 reči, osam do deset lekcija, bez rečenica, tri igre.
+Prvi nemački: 80-100 reči, osam do deset celina, bez rečenica, tri igre.
 
 Odnos sadržaja je oko 20%, ali **cena se po tome ne računa**, iz tri razloga:
 
-1. Članstvo je vremensko, ne po rečima - prvak plaća isti broj meseci kao
+1. Članstvo je vremensko, ne po rečima - malo dete plaća isti broj meseci kao
    petak.
 2. Naš trošak po reči je ovde **veći**, ne manji: svaka reč traži i ilustraciju
    i snimak, a kod petaka nova reč ne košta ništa dodatno.
@@ -194,7 +252,7 @@ Odnos sadržaja je oko 20%, ali **cena se po tome ne računa**, iz tri razloga:
 Zato ne 20% cene (oko 480 dinara, što i podcenjuje i zvuči neozbiljno), nego
 prag niže od petog razreda:
 
-| | Peti | Prvi (predlog) |
+| | Peti razred | Prvi nemački (predlog) |
 |---|---|---|
 | Promo | 1.200 | **990** |
 | Puna | 2.399 | **1.990** |
@@ -203,13 +261,13 @@ Oba iznosa prelaze prag naniže (ispod hiljadu, ispod dve hiljade), pa se čitaj
 kao jasno jeftinije, a proizvod ne ispada bezvredan.
 
 **Drugo dete iz iste kuće -40%.** Ovo vredi više od svakog obaranja osnovne
-cene: roditelj sa prvakom i petakom je najverovatniji kupac drugog članstva, a
-naš granični trošak za to dete je nula. Popust se vezuje za roditeljski nalog,
+cene: roditelj sa malim detetom i petakom je najverovatniji kupac drugog
+članstva, a naš granični trošak za to dete je nula. Popust se vezuje za roditeljski nalog,
 ne za kupon.
 
 **Bez poklon akcije na startu.** Peti razred je dobio poklon zato što je
-trebalo dokazati proizvod i napuniti levak. Ako i prvi krene besplatno, tržište
-nauči da svaki novi razred sačeka.
+trebalo dokazati proizvod i napuniti levak. Ako i ovaj krene besplatno,
+tržište nauči da svaki novi proizvod sačeka.
 
 ## Šta namerno NE radimo
 
@@ -219,7 +277,7 @@ kucanje, i snimanje detetovog izgovora. Poslednje je moguća druga faza, ne ovo.
 ## Redosled
 
 1. Migracija: razred 1-8, `glas_url`, `slika_url`, dva bucketa.
-2. Rečnik prvog razreda u bazu.
+2. Rečnik (80-100 reči po temama) napisati i uneti u bazu.
 3. **Nabavka zvuka i slika** - najduže traje, zato kreće prva.
 4. Dečji ekran: slušaj i pokaži, šta je ovo, parovi sa zvukom.
 5. Scena.
@@ -264,11 +322,11 @@ nadmašuje time što je nova.
    glava, telo, noge, ruke, njuška), **ne** na licu. Crtež se ne dira.
    Praktično: `MascotBear` dobija prop `obris?: boolean`, podrazumevano
    `false`, pa se platforma ne menja ni za piksel.
-2. **Dva nova stanja za prvake:** `pita` (dok postavlja zadatak) i `slusa`
+2. **Dva nova stanja:** `pita` (dok postavlja zadatak) i `slusa`
    (dok reč svira). To je po jedno lice u `FACES`, ne nov lik.
-3. **`der Bär` u rečniku.** Ako medved uđe u gradivo prvog razreda, dete ga u
-   igri „slušaj i pokaži" dobije kao ponuđeni odgovor i vodič postane gradivo.
-   PROVERITI pre nego što se zaključa spisak reči.
+3. **`der Bär` ne ulazi u rečnik.** Pošto spisak reči sada pišemo mi, ovo više
+   nije provera nego pravilo: medveda nema u gradivu, pa se maskota i odgovor u
+   igri ne sudaraju.
 
 ### Glas medveda - Natašin
 
@@ -300,12 +358,13 @@ Praktično, pre snimanja:
   Natašinom imenu i logotipu (vidi komentar u `app/zack/layout.tsx`), ne o
   liku. Meda na sebi nema ni ime ni znak. Odvojen manifest, ikonica i naslov
   ostaju kakvi jesu.
-- **Mašnica je cijan `#0AB3D7`**, boja koje u zack!-u nema. Pošto su za prvake
+- **Mašnica je cijan `#0AB3D7`**, boja koje u zack!-u nema. Pošto su ovde
   boje roda ionako izbačene, plava je slobodna i ne sudara se ni sa čim.
   Ostaje.
 
 ## Otvorena pitanja za Natašu
 
-1. **Rečnik po Pravilniku - ko ga izvlači i kada.** Jedina stavka koja blokira
-   početak, jer i slike i snimci zavise od spiska reči.
+1. **Spisak reči po temama** - ko ga piše. Više ne čeka Pravilnik, pa može da
+   krene odmah. Sve ostalo (slike, snimci) visi na njemu.
 2. Potvrda cene 990 / 1.990 i popusta za drugo dete.
+3. Potvrda imena i adrese: „Prvi nemački", `/prvi-nemacki`.
