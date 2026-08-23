@@ -21,10 +21,14 @@ interface PageProps {
 export const dynamic = "force-dynamic";
 
 // Lekcije su iza prijave i ne smeju u indeks. Bez generateMetadata su nasleđivale
-// robots: index iz root layouta, a zbog force-dynamic je notFound() stizao tek
-// posle streamovanog 200 - Google je to čitao kao soft-404 (GSC coverage 23.08.2026:
-// 2.263 "Crawled - currently not indexed"). Metapodaci se razrešavaju PRE streama,
-// pa notFound() odavde daje pravi 404 status.
+// robots: index iz root layouta, pa je svaki ID bio indeksabilna adresa - 436 lekcija
+// (GSC coverage 23.08.2026: 2.263 "Crawled - currently not indexed").
+//
+// Status za nepostojeću lekciju OSTAJE 200: loading.tsx u ovom folderu otvara Suspense
+// granicu, pa Next isprazni shell pre nego što notFound() stigne. Provereno posle
+// deploya 23.08.2026 - /vezba/[id] (bez loading.tsx) daje pravi 404, ova ruta ne.
+// Skeleton je vredniji od statusnog koda: noindex je za Google obavezujuć i bez 404,
+// a lekcija je spora ruta kojoj skeleton treba.
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
   // Admin klijent namerno: RLS krije i lekcije koje POSTOJE, a 404 sme samo za
