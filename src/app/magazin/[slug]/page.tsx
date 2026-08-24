@@ -69,10 +69,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   const description = post.meta_description || post.excerpt || "";
   return {
-    title: `${post.title} - Hartweger Magazin`,
+    title: post.title,
     description,
     openGraph: {
-      title: `${post.title} - Hartweger Magazin`,
+      title: post.title,
       description,
       type: "article",
       ...(post.thumbnail_url && {
@@ -82,7 +82,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     },
     twitter: {
       card: "summary_large_image",
-      title: `${post.title} - Hartweger Magazin`,
+      title: post.title,
       description,
       ...(post.thumbnail_url && { images: [post.thumbnail_url] }),
     },
