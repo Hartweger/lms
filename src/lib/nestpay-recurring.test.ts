@@ -189,6 +189,26 @@ describe("isRecurringOpApproved", () => {
   it("odbija grešku", () => {
     expect(isRecurringOpApproved("<CC5Response><Response>Error</Response><ErrMsg>CORE-5103</ErrMsg></CC5Response>")).toBe(false);
   });
+
+  // Na RECURRINGOPERATION banka odgovara tagom <RESULT>, ne <Response>. Sirov odgovor
+  // sa produkcije 25.08.2026 (serija 26205TpyJ29844, pokušaj pomeranja rate 2026-228-2).
+  it("čita <RESULT>Failed</RESULT> kao odbijeno", () => {
+    const odgovor =
+      '<?xml version="1.0" encoding="ISO-8859-9"?>\n<CC5Response>\n  <RESULT>Failed</RESULT>\n  <Extra></Extra>\n</CC5Response>';
+    expect(isRecurringOpApproved(odgovor)).toBe(false);
+  });
+
+  it("čita <RESULT>Approved</RESULT> kao prihvaćeno", () => {
+    expect(isRecurringOpApproved("<CC5Response><RESULT>Approved</RESULT><Extra></Extra></CC5Response>")).toBe(true);
+  });
+
+  // Bez ovoga bi izričito „Failed" moglo da se previdi zbog generičkog ProcReturnCode 00
+  // iz istog odgovora - a to je greška koja tiho naplaćuje ili tiho ne otkazuje.
+  it("izričit RESULT je jači od ProcReturnCode", () => {
+    expect(
+      isRecurringOpApproved("<CC5Response><ProcReturnCode>00</ProcReturnCode><RESULT>Failed</RESULT></CC5Response>"),
+    ).toBe(false);
+  });
 });
 
 describe("isSeriesCancelled", () => {

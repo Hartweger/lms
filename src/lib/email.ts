@@ -1862,7 +1862,9 @@ export function buildDailyBriefHtml(d: DailyBrief): string {
       ...(p?.pale ?? []).map(
         (r) =>
           `⚠️ <strong>${esc(r.ime)}</strong> - ${r.rata ? `${r.rata}. naplata` : "naplata"} nije prošla, ` +
-          `${r.pokusaj}. pokušaj od 30 (banka pokušava sama)`,
+          (r.odbijeno
+            ? `<strong>banka odbila raniji pokušaj</strong> - čeka se redovan termin, vidi da li treba ručno`
+            : `zakazan ${r.pokusaj}. pokušaj od 30`),
       ),
       ...(p?.otkazano ?? []).map(
         (r) => `🚪 <strong>${esc(r.ime)}</strong> - otkazano posle ${r.placeno}/${r.ukupno} naplata · ${esc(r.razlog)}`,
@@ -3040,12 +3042,26 @@ export async function sendSubscriptionRetryEmail(o: {
   installmentNo: number;
   totalPayments: number;
   amount: number;
+  /** Da li je banka prihvatila da ranije pokuša ponovo. Kad nije, ne smemo da
+   *  obećavamo automatske pokušaje - ostaje redovan termin sledeće naplate. */
+  automatskiPokusaj?: boolean;
+  /** Prvi termin na čekanju u seriji, "YYYY-MM-DD HH:mm:ss.S" (bankino vreme). */
+  sledecaNaplata?: string | null;
 }) {
   try {
     const resend = getResend();
     if (!resend) return;
     const ime = o.name ? o.name.split(" ")[0] : "";
     const fmt = (n: number) => n.toLocaleString("de-DE");
+    const automatski = o.automatskiPokusaj !== false;
+    const sledeci = o.sledecaNaplata
+      ? new Date(o.sledecaNaplata.replace(" ", "T")).toLocaleDateString("sr-RS")
+      : null;
+    // Kad banka odbije da pomeri palu naplatu, jedini istinit podatak je redovan
+    // termin sledeće naplate. Obećanje „pokušaćemo narednih dana" tu ne sme da stoji.
+    const sledeciKorak = automatski
+      ? `<p><strong>Ništa ne moraš da radiš odmah</strong> - narednih dana ćemo automatski pokušati ponovo. Proveri samo da na kartici ima sredstava.</p>`
+      : `<p>Mesečno plaćanje <strong>nije otkazano</strong> - plan ide dalje${sledeci ? `, a sledeća naplata je zakazana za <strong>${esc(sledeci)}</strong>` : ""}. Ako želiš da nastaviš bez prekida, odgovori na ovaj mejl pa ćemo ponovo pokušati naplatu od <strong>${fmt(o.amount)} RSD</strong>. Pre toga proveri kod svoje banke da li kartica ima pokriće i da li propušta ponavljajuće (recurring) naplate - to je najčešći razlog.</p>`;
     await resend.emails.send({
       from: FROM,
       to: o.email,
@@ -3055,9 +3071,9 @@ export async function sendSubscriptionRetryEmail(o: {
 <body style="font-family:sans-serif;line-height:1.6;color:#222">
 <p>Zdravo${ime ? ", " + esc(ime) : ""}!</p>
 <p>Pokušali smo da naplatimo <strong>${fmt(o.amount)} RSD</strong> - ${o.installmentNo}. mesečnu uplatu od ukupno ${o.totalPayments} za kurs <strong>${esc(o.courseTitle)}</strong> - ali naplata nije prošla (najčešće: nedovoljno sredstava na kartici).</p>
-<p><strong>Ništa ne moraš da radiš odmah</strong> - narednih dana ćemo automatski pokušati ponovo. Proveri samo da na kartici ima sredstava.</p>
+${sledeciKorak}
 <p>Ako je kartica u međuvremenu <strong>istekla ili zamenjena</strong>, automatski pokušaji ne pomažu: odgovori nam na ovaj mejl, pa ćemo zajedno pokrenuti mesečno plaćanje novom karticom.</p>
-<p style="font-size:13px;color:#666">Dok uplata ne prođe, pristup kursu može privremeno da se pauzira. Mesečno plaćanje uvek možeš da otkažeš u odeljku „Moj nalog" na platformi.</p>
+<p style="font-size:13px;color:#666">Dok uplata ne prođe, pristup kursu pauzira - napredak ostaje sačuvan i čeka te na istom mestu. Mesečno plaćanje uvek možeš da otkažeš u odeljku „Moj nalog" na platformi.</p>
 <p style="margin-top:20px">Hartweger tim</p>
 </body></html>`,
     });

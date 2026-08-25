@@ -38,7 +38,29 @@ describe("buildSubscriptionBrief", () => {
         { ime: "Anja Bunić", amount: 3199, baseOid: "2026-227", retryOid: null, retryCount: 0 },
       ],
     });
-    expect(b.pale).toEqual([{ ime: "Milan Tošić", rata: 4, pokusaj: 2 }]);
+    expect(b.pale).toEqual([{ ime: "Milan Tošić", rata: 4, pokusaj: 2, odbijeno: false }]);
+  });
+
+  // Zamka 25.08.2026: dok se `retry_oid` upisivao samo posle prihvaćenog zahteva,
+  // odbijena naplata (Sonja Kricak, rata 2) nije ulazila u pregled uopšte - a to je
+  // baš slučaj u kome se ništa ne rešava samo od sebe.
+  it("odbijen zahtev banci se vidi kao pala naplata, i to označen", () => {
+    const b = buildSubscriptionBrief({
+      ...prazno,
+      aktivne: [
+        {
+          ime: "Sonja Kricak",
+          amount: 3199,
+          baseOid: "2026-228",
+          retryOid: "2026-228-2",
+          retryCount: 1,
+          lastRetryError: "<CC5Response><RESULT>Failed</RESULT></CC5Response>",
+        },
+      ],
+    });
+    expect(b.pale).toEqual([{ ime: "Sonja Kricak", rata: 2, pokusaj: 1, odbijeno: true }]);
+    expect(b.aktivnih).toBe(1);
+    expect(b.mesecno).toBe(3199);
   });
 
   it("pretplata i dalje ulazi u mesečni prihod dok se naplata pokušava", () => {

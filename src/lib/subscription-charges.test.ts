@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import {
   belgradeDate,
   chargesToProcess,
+  nextPlannedCharge,
   MAX_RETRIES,
   retryDecision,
   retryStartDate,
@@ -132,5 +133,15 @@ describe("subscriptionStateFromCharges", () => {
   it("prazan odgovor banke ostavlja pretplatu aktivnom", () => {
     // Bez ovoga bi jedan loš upit ugasio tuđu pretplatu.
     expect(subscriptionStateFromCharges([], 12).status).toBe("active");
+  });
+});
+
+describe("nextPlannedCharge", () => {
+  it("vraća termin prve naplate na čekanju", () => {
+    expect(nextPlannedCharge([naplata(1, "ok"), naplata(2, "pala"), naplata(3, "ceka")])).toBe("2026-08-21 14:39:00.0");
+  });
+
+  it("vraća null kad na čekanju nema ničega", () => {
+    expect(nextPlannedCharge([naplata(1, "ok"), naplata(2, "pala")])).toBe(null);
   });
 });

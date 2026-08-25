@@ -15,6 +15,8 @@ export interface BriefPala {
   ime: string;
   rata: number | null;
   pokusaj: number;
+  /** Banka je odbila da pomeri palu naplatu - ranijeg pokušaja NEMA, čeka se redovan termin. */
+  odbijeno: boolean;
 }
 
 export interface BriefOtkaz {
@@ -34,7 +36,14 @@ export interface SubscriptionBrief {
 
 export interface SubscriptionBriefInput {
   naplaceneRate: { ime: string | null; rata: number; ukupno: number; iznos: number }[];
-  aktivne: { ime: string | null; amount: number; baseOid: string; retryOid: string | null; retryCount: number }[];
+  aktivne: {
+    ime: string | null;
+    amount: number;
+    baseOid: string;
+    retryOid: string | null;
+    retryCount: number;
+    lastRetryError?: string | null;
+  }[];
   otkazane: { ime: string | null; paidPayments: number; totalPayments: number; cancelReason: string | null }[];
 }
 
@@ -54,11 +63,18 @@ const ime = (v: string | null) => v ?? "-";
 export function buildSubscriptionBrief(input: SubscriptionBriefInput): SubscriptionBrief {
   return {
     naplaceno: input.naplaceneRate.map((r) => ({ ime: ime(r.ime), rata: r.rata, ukupno: r.ukupno, iznos: r.iznos })),
-    // Pala je ona pretplata kojoj je zakazan ponovni pokušaj: serija je i dalje
-    // aktivna i ostaje u mesečnom prihodu, ali novac za taj mesec još nije stigao.
+    // Pala je ona pretplata kojoj je naplata odbijena: serija je i dalje aktivna i
+    // ostaje u mesečnom prihodu, ali novac za taj mesec još nije stigao.
+    // `retryOid` se od 25.08.2026. upisuje i kad banka odbije pomeranje - do tada je
+    // ovaj filter propuštao baš one slučajeve u kojima ništa ne radi samo od sebe.
     pale: input.aktivne
       .filter((s) => s.retryOid !== null)
-      .map((s) => ({ ime: ime(s.ime), rata: rataIzOida(s.retryOid as string, s.baseOid), pokusaj: s.retryCount })),
+      .map((s) => ({
+        ime: ime(s.ime),
+        rata: rataIzOida(s.retryOid as string, s.baseOid),
+        pokusaj: s.retryCount,
+        odbijeno: !!s.lastRetryError,
+      })),
     otkazano: input.otkazane.map((s) => ({
       ime: ime(s.ime),
       placeno: s.paidPayments,

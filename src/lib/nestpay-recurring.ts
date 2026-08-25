@@ -157,8 +157,23 @@ export function isSeriesCancelled(charges: RecurringCharge[]): boolean {
   return nenaplacene.length > 0 && nenaplacene.every((c) => c.transStat === "CNCL");
 }
 
-/** Da li je banka prihvatila RECURRINGOPERATION zahtev (Cancel ili Update). */
+/**
+ * Da li je banka prihvatila RECURRINGOPERATION zahtev (Cancel ili Update).
+ *
+ * Na izmenu serije banka odgovara tagom `<RESULT>` (`Approved`/`Failed`), a NE
+ * `<Response>`/`<ProcReturnCode>` kao na običnu transakciju - potvrđeno na
+ * produkciji 25.08.2026, serija `26205TpyJ29844`:
+ * `<CC5Response>…<RESULT>Failed</RESULT><Extra></Extra></CC5Response>`.
+ * Dok se taj tag nije čitao, nijedna izmena serije nije mogla da bude prepoznata
+ * kao uspešna - odatle Milenin slučaj 13.08.2026 (otkazivanje prošlo kod banke,
+ * kupcu javljeno da nije).
+ *
+ * Kad `<RESULT>` postoji, on je merodavan: izričito „Failed" ne sme da nadjača
+ * generički `ProcReturnCode 00` iz istog odgovora.
+ */
 export function isRecurringOpApproved(text: string): boolean {
+  const result = text.match(/<RESULT>([^<]*)<\/RESULT>/i)?.[1]?.trim() ?? "";
+  if (result) return result.toLowerCase() === "approved";
   const response = text.match(/<Response>([^<]*)<\/Response>/i)?.[1]?.trim() ?? "";
   const proc = text.match(/<ProcReturnCode>([^<]*)<\/ProcReturnCode>/i)?.[1]?.trim() ?? "";
   return response.toLowerCase() === "approved" || proc === "00";

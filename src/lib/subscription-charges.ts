@@ -152,6 +152,15 @@ export interface RetryState {
   retry_planned_for: string | null;
 }
 
+/**
+ * Prvi termin na čekanju u seriji - to je datum kad banka sama pokušava sledeći put,
+ * bez obzira na to da li smo uspeli da pomerimo palu naplatu. Kupcu je to jedini
+ * konkretan podatak kad naš zahtev za raniji pokušaj ne prođe.
+ */
+export function nextPlannedCharge(charges: RecurringCharge[]): string | null {
+  return charges.find((c) => !c.succeeded && !c.failed)?.plannedAt || null;
+}
+
 export type RetryAction = "none" | "wait" | "exhausted" | "retry";
 
 /**
@@ -186,11 +195,19 @@ export async function maybeRetryFailedCharge(
 
   const startDate = retryStartDate(now);
   const odgovor = await postCc5(buildChargeRetryXml(pala.oid, startDate, env), env);
-  if (!odgovor || !isRecurringOpApproved(odgovor)) {
-    Sentry.captureException(
-      new Error(`[pretplata] ponovno iniciranje ${pala.oid} nije prošlo: ${odgovor?.slice(0, 300) ?? "banka nije odgovorila"}`),
-    );
-    return "error";
+  const prihvaceno = !!odgovor && isRecurringOpApproved(odgovor);
+  const greska = prihvaceno
+    ? null
+    : (odgovor?.replace(/\s+/g, " ").trim().slice(0, 500) ?? "banka nije odgovorila");
+
+  if (!prihvaceno) {
+    // Odbijen zahtev se od 25.08.2026. i dalje UPISUJE. Ranije se izlazilo odmah,
+    // pa je ostajalo `retry_oid = null` i to je imalo dve tihe posledice: pala
+    // naplata se nije videla u jutarnjem pregledu (filtrira se po `retry_oid`),
+    // a čuvar `retry_planned_for` se nikad nije uključio, pa je cron svako jutro
+    // slao isti odbijen zahtev i trošio bankinu kvotu od 30 pokušaja naslepo.
+    console.error(`[pretplata] banka odbila pomeranje naplate ${pala.oid}: ${greska}`);
+    Sentry.captureException(new Error(`[pretplata] ponovno iniciranje ${pala.oid} nije prošlo: ${greska}`));
   }
 
   const prviPut = sub.retry_oid !== pala.oid;
@@ -203,9 +220,13 @@ export async function maybeRetryFailedCharge(
       retry_count: noviBroj,
       last_retry_at: now.toISOString(),
       retry_planned_for: startDate,
+      last_retry_error: greska,
     })
     .eq("id", sub.id);
 
+  // Mejl ide kad palu naplatu PRVI PUT primetimo, bez obzira na to da li je banka
+  // prihvatila raniji pokušaj. Dok je slanje viselo o prihvaćenom zahtevu, kupac
+  // čija je kartica odbijena nije dobijao ništa - tačno to se desilo 24.08.2026.
   if (prviPut) {
     const { data: prva } = await admin
       .from("orders")
@@ -221,6 +242,8 @@ export async function maybeRetryFailedCharge(
         installmentNo: pala.installmentNo,
         totalPayments: sub.total_payments,
         amount: sub.amount,
+        automatskiPokusaj: prihvaceno,
+        sledecaNaplata: nextPlannedCharge(charges),
       });
     }
   }
@@ -229,5 +252,5 @@ export async function maybeRetryFailedCharge(
       new Error(`[pretplata] zakazan poslednji (${MAX_RETRIES}.) pokušaj naplate ${pala.oid} - ako ne prođe, javiti se kupcu ručno`),
     );
   }
-  return "retry";
+  return prihvaceno ? "retry" : "error";
 }

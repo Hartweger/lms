@@ -9,6 +9,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { sendExpiryReminder } from "@/lib/email";
 import { renewalProductSlugs } from "@/lib/renewal-product";
 import { cancelledSubscriptionCourseIds } from "@/lib/renewal-eligibility";
+import { planForSlug } from "@/lib/subscription-plans";
 import { groupExpiryRows } from "@/lib/expiry-grouping";
 
 export const dynamic = "force-dynamic";
@@ -109,6 +110,25 @@ async function cronHandler(request: Request) {
   const grpUsers = await fetchAll("group_enrollments", () => admin.from("group_enrollments").select("user_id").eq("status", "active")) as { user_id: string }[];
   const noCouponUsers = new Set([...indUsers, ...grpUsers].map((u) => u.user_id));
 
+  // AKTIVNA pretplata sama produžava pristup svakom naplatom - „ističe ti pristup"
+  // tu jednostavno nije istina, polaznik ne treba ništa da obnavlja. Gore od toga,
+  // kupon -50% bi mu isti sadržaj dao jeftinije nego što ga plaća na rate (Milena
+  // Vukić, 18.08.2026). Do 25.08.2026. je podsetnik otišao petorici aktivnih
+  // pretplatnika. Izuzimaju se SAMO kursevi koje ta pretplata otvara - nezavisna
+  // kupovina istog čoveka i dalje uredno dobija podsetnik.
+  const aktivnePretplate = await fetchAll("subscriptions active", () =>
+    admin.from("subscriptions").select("user_id, course_id").eq("status", "active")
+  ) as { user_id: string; course_id: string }[];
+  const idPoSlugu = new Map((courses ?? []).map((c) => [c.slug, c.id]));
+  const pretplatomPokriveno = new Set<string>();
+  for (const s of aktivnePretplate) {
+    const plan = planForSlug(courseMap.get(s.course_id)?.slug ?? "");
+    for (const u of plan?.unlocks ?? []) {
+      const cid = idPoSlugu.get(u.slug);
+      if (cid) pretplatomPokriveno.add(`${s.user_id}|${cid}`);
+    }
+  }
+
   // Ko je otkazao mesečno plaćanje pre kraja serije takođe ide BEZ kupona: pristup mu
   // ističe zato što je prekinuo plaćanje, a ne zato što je godina istekla - podsetnik sa
   // -50% bi mu isti sadržaj dao jeftinije nego što ga je platio (odluka Natašina, 18.08.2026).
@@ -133,6 +153,7 @@ async function cronHandler(request: Request) {
     const c = courseMap.get(a.course_id);
     if (!c || !c.slug) return false;          // bez kursa/slug-a nema linka
     if (excluded.has(a.course_id)) return false; // ind mesečni paketi 4/8/12
+    if (pretplatomPokriveno.has(`${a.user_id}|${a.course_id}`)) return false; // aktivna pretplata sama produžava
     return !sentSet.has(`${a.user_id}|${a.course_id}|${a.expires_at}`);
   });
 

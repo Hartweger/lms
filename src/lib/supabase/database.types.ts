@@ -2343,6 +2343,7 @@ export type Database = {
           initial_order_id: string
           last_polled_at: string | null
           last_retry_at: string | null
+          last_retry_error: string | null
           next_charge_at: string | null
           paid_payments: number
           recurring_id: string
@@ -2365,6 +2366,7 @@ export type Database = {
           initial_order_id: string
           last_polled_at?: string | null
           last_retry_at?: string | null
+          last_retry_error?: string | null
           next_charge_at?: string | null
           paid_payments?: number
           recurring_id: string
@@ -2387,6 +2389,7 @@ export type Database = {
           initial_order_id?: string
           last_polled_at?: string | null
           last_retry_at?: string | null
+          last_retry_error?: string | null
           next_charge_at?: string | null
           paid_payments?: number
           recurring_id?: string
