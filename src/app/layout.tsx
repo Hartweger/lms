@@ -255,7 +255,10 @@ gtag('config', '${ADS_ID}', { allow_enhanced_conversions: true });` : ""}
           <MetaPixel />
         </SakrijNa>
         <Analytics />
-        <SpeedInsights />
+        {/* sampleRate 0.1: free kvota je 10.000 merenja/30 dana, a saobraćaj
+            pravi ~66.000 - Vercel je 25.08.2026. pauzirao sakupljanje do 08.09.
+            Svaki 10. pregled = ~6.700 mesečno, trend brzine ostaje vidljiv. */}
+        <SpeedInsights sampleRate={0.1} />
         {/* lazyOnload (kao Meta Pixel): gtag.js je 176KB i ne sme da se nadmeće
             sa prvim renderom na mobilnom; dataLayer stub iz consent skripta
             baferuje evente dok se gtag.js ne učita.
