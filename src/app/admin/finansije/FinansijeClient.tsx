@@ -11,7 +11,7 @@ function din(n: number): string {
   return `${Math.round(n).toLocaleString("sr-RS")} din`;
 }
 
-const KATEGORIJE: Kategorija[] = ["video", "grupni", "individualni", "paket", "ostalo"];
+const KATEGORIJE: Kategorija[] = ["video", "grupni", "individualni", "paket", "academy", "konsultacije", "ostalo"];
 
 interface Props {
   data: FinansijeData;

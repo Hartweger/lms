@@ -1,13 +1,16 @@
 // src/lib/finansije.ts - čiste funkcije za admin Finansije (P&L, marže, grupe, profesorke). Bez I/O.
 import { nivoForSlug } from "@/lib/course-nivo";
+import { KONSULTACIJA_SLUG } from "@/lib/konsultacija";
 
-export type Kategorija = "video" | "grupni" | "individualni" | "paket" | "ostalo";
+export type Kategorija = "video" | "grupni" | "individualni" | "paket" | "academy" | "konsultacije" | "ostalo";
 
 export const KATEGORIJA_LABELS: Record<Kategorija, string> = {
   video: "Video kursevi",
   grupni: "Grupni kursevi",
   individualni: "Individualni kursevi",
   paket: "Paketi",
+  academy: "NH Academy",
+  konsultacije: "Konsultacije",
   ostalo: "Ostalo",
 };
 
@@ -56,9 +59,15 @@ export function monthKey(dateStr: string): string {
  * Kategorija stavke po course_type, pa prefiks slug-a kao fallback.
  * Paketi se NE prikazuju kao zaseban red - rutiraju se po tipu: video-paketi → "video",
  * individualni/mesečni paketi → "individualni" (usklađeno sa WooCommerce taksonomijom).
+ *
+ * NH proizvodi (Academy, konsultacija) imaju course_type "video" jer baza dozvoljava samo
+ * video|individual|group, pa bi bez ove provere upali u "Video kursevi" i pomešali prihod
+ * škole nemačkog sa NH prihodom. Zato se hvataju po slug-u, PRE provere tipa.
  */
 export function kategorijaForItem(slug: string, courseType: string | null | undefined): Kategorija {
   const s = String(slug ?? "");
+  if (s === KONSULTACIJA_SLUG) return "konsultacije";
+  if (s.startsWith("nh-academy")) return "academy";
   if (s.startsWith("grupni-") || courseType === "group") return "grupni";
   if (courseType === "individual") return "individualni";
   if (s.startsWith("video-") || courseType === "video") return "video";
@@ -187,7 +196,7 @@ export function expenseMonthsInYear(e: ExpenseRow, year: number, nowKey: string)
 }
 
 function emptyKategorije(): Record<Kategorija, number> {
-  return { video: 0, grupni: 0, individualni: 0, paket: 0, ostalo: 0 };
+  return { video: 0, grupni: 0, individualni: 0, paket: 0, academy: 0, konsultacije: 0, ostalo: 0 };
 }
 
 /** Da li datum upada u izabrani period (godina + opcioni mesec). */

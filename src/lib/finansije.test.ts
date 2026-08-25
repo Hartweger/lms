@@ -22,6 +22,11 @@ describe("kategorijaForItem", () => {
     expect(kategorijaForItem("paket-a1-a2", "video")).toBe("video");
     expect(kategorijaForItem("paket-nivo-a1-individualni-standard", "individual")).toBe("individualni");
   });
+  it("NH proizvodi ne upadaju u video, iako im je course_type video", () => {
+    expect(kategorijaForItem("konsultacija", "video")).toBe("konsultacije");
+    expect(kategorijaForItem("nh-academy-gen2", "video")).toBe("academy");
+    expect(kategorijaForItem("nh-academy-gen3", "video")).toBe("academy");
+  });
   it("nepoznato → ostalo", () => {
     expect(kategorijaForItem("nesto", null)).toBe("ostalo");
   });
