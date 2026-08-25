@@ -7,6 +7,7 @@ import { firstLessonForOrder } from "@/lib/first-lesson";
 import { BANK_DETAILS, PAYPAL_ME_URL, buildIpsString } from "@/lib/order-utils";
 import { MERCHANT, CARD_OUTCOME, nestpayTxData, pdvBreakdown } from "@/lib/payment-confirmation";
 import type { Order } from "@/lib/types";
+import { KONSULTACIJA_CALENDAR_URL, KONSULTACIJA_SLUG } from "@/lib/konsultacija";
 import { ZACK_CLANSTVO_SLUG } from "@/lib/zack/clanstvo";
 import { smePostavljanjePina } from "@/lib/zack/gost";
 import { POKLON_DO_PRIKAZ, jePoklonStavka } from "@/lib/zack/poklon";
@@ -81,6 +82,10 @@ export default async function HvalaPage({
   // Slug hvata i gost-porudžbinu kojoj grant (koji upisuje dete_id) još nije
   // prošao - i njoj se govori zack jezikom, ne školskim.
   const jeZack = !!items?.[0]?.dete_id || courseSlug === ZACK_CLANSTVO_SLUG;
+
+  // Konsultacija: nema kursa koji se „aktivira" ni lekcije koja se započinje. Posle
+  // potvrđene uplate kupcu treba jedno: link za biranje termina, odmah na ovoj strani.
+  const jeKonsultacija = courseSlug === KONSULTACIJA_SLUG;
 
   // Poklon do 1.9. (/poklon): ista strana, ali NIJEDNA rečenica o plaćanju ne
   // sme da se pojavi - ništa nije naplaćeno niti će biti. Zato poklon gasi
@@ -174,7 +179,9 @@ export default async function HvalaPage({
           <div className="bg-green-50 border border-green-200 rounded-xl px-5 py-4 mb-6 text-sm text-green-800">
             <p className="font-semibold">{CARD_OUTCOME.success} 🎉</p>
             <p className="mt-1">
-              {jeZack
+              {jeKonsultacija
+                ? "Uplata je uspela. Ostalo je samo da izabereš termin - link je ispod, a poslali smo ti ga i na mejl."
+                : jeZack
                 ? "Članstvo je aktivno - igre, kesice i Milioner su detetu otključani. Detalje smo ti poslali na mejl."
                 : !firstLessonId
                   ? "Uplata je uspela. Sve detalje o tvojim časovima poslali smo ti na mejl."
@@ -443,7 +450,9 @@ export default async function HvalaPage({
             Poslali smo instrukcije i na <span className="font-medium">{order.email}</span>.
           </p>
           <p>
-            {order.payment_method === "paypal"
+            {jeKonsultacija
+              ? "Uplatu potvrđujemo ručno - obično u roku od 24h, najkasnije 3 radna dana. Čim potvrdimo, na mejl ti stiže link za biranje termina."
+              : order.payment_method === "paypal"
               ? "Tvoju uplatu potvrđujemo ručno - obično u roku od 24h, najkasnije 3 radna dana. Čim potvrdimo, dobićeš email i pristup kursu se aktivira."
               : "Čim potvrdimo uplatu - obično u roku od 24h, najkasnije 3 radna dana - dobićeš email i pristup kursu se aktivira."}
           </p>
@@ -456,7 +465,18 @@ export default async function HvalaPage({
 
         {/* CTA */}
         <div className="flex flex-wrap items-center gap-4">
-          {jeZack ? (
+          {jeKonsultacija && cardOk ? (
+            <a
+              href={KONSULTACIJA_CALENDAR_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block px-6 py-3 rounded-lg font-semibold text-white text-sm bg-plava hover:bg-plava-dark transition-colors"
+            >
+              Izaberi termin →
+            </a>
+          ) : jeKonsultacija ? (
+            <span className="text-sm text-gray-500">Link za biranje termina stiže na mejl čim potvrdimo uplatu.</span>
+          ) : jeZack ? (
             <Link
               href="/zack/roditelj"
               className="inline-block px-6 py-3 rounded-lg font-semibold text-white text-sm bg-plava hover:bg-plava-dark transition-colors"
@@ -483,7 +503,7 @@ export default async function HvalaPage({
               Prijavi se da vidiš kurs
             </Link>
           )}
-          {!jeZack && (
+          {!jeZack && !jeKonsultacija && (
             <Link href="/kursevi" className="text-sm text-plava hover:underline">
               ← Nazad na kurseve
             </Link>

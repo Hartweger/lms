@@ -7,6 +7,7 @@ import { EUR_RATE } from "@/lib/order-utils";
 import { computeCouponDiscount } from "@/lib/coupon-discount";
 import { professorsFromVariants, packageTypesFromVariants, resolveVariant, type Variant } from "@/lib/individual-pricing";
 import { checkoutStrings } from "@/lib/product-i18n";
+import { KONSULTACIJA_CATEGORY } from "@/lib/konsultacija";
 import { planForSlug } from "@/lib/subscription-plans";
 import { pretplataOpis } from "@/lib/pretplata-opis";
 
@@ -71,6 +72,8 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
   const isIndividual = variants.length > 0;
   // Usluge (npr. prevod) se naplaćuju po strani - kupac bira broj strana.
   const isService = category === "usluga";
+  // Konsultacija se ne „aktivira na nalogu": posle uplate na mejl stiže link za termin.
+  const jeKonsultacija = category === KONSULTACIJA_CATEGORY;
   const [pages, setPages] = useState(1);
   const professors = professorsFromVariants(variants);
   const packageTypes = packageTypesFromVariants(variants);
@@ -402,15 +405,25 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
           />
           {isLoggedIn && emailLocked && (
             <p className="text-xs text-gray-500 mt-1">
-              {en ? <>Buying as <strong>{email}</strong> - the course is activated on this account.{" "}</> : <>Kupuješ kao <strong>{email}</strong> - kurs se aktivira na ovom nalogu.{" "}</>}
+              {jeKonsultacija
+                ? en
+                  ? <>Booking as <strong>{email}</strong> - the link for choosing a time goes to this address.{" "}</>
+                  : <>Prijavljuješ se kao <strong>{email}</strong> - na ovaj mejl stiže link za biranje termina.{" "}</>
+                : en
+                  ? <>Buying as <strong>{email}</strong> - the course is activated on this account.{" "}</>
+                  : <>Kupuješ kao <strong>{email}</strong> - kurs se aktivira na ovom nalogu.{" "}</>}
               <button type="button" onClick={() => setEmailLocked(false)} className="text-[#0AB3D7] hover:underline">
-                {en ? "I'm buying for someone else" : "Kupujem za nekog drugog"}
+                {jeKonsultacija
+                  ? en ? "I'm paying for someone else" : "Plaćam za nekog drugog"
+                  : en ? "I'm buying for someone else" : "Kupujem za nekog drugog"}
               </button>
             </p>
           )}
           {isLoggedIn && !emailLocked && (
             <p className="text-xs text-[#F78687] mt-1">
-              {en ? "Access goes to the account with this email, not yours." : "Pristup ide na nalog sa ovim emailom, ne na tvoj."}{" "}
+              {jeKonsultacija
+                ? en ? "The link for choosing a time goes to this email, not yours." : "Link za biranje termina ide na ovaj mejl, ne na tvoj."
+                : en ? "Access goes to the account with this email, not yours." : "Pristup ide na nalog sa ovim emailom, ne na tvoj."}{" "}
               <button type="button" onClick={() => { setEmail(initialEmail); setEmailLocked(true); }} className="text-[#0AB3D7] hover:underline">
                 {en ? "Back to my account" : "Vrati na moj nalog"}
               </button>

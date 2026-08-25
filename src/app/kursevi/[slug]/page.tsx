@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -217,6 +217,11 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
   const supabase = await createClient();
   const { data } = await supabase.from("courses").select("*").eq("slug", slug).eq("is_purchasable", true).single();
   if (!data) notFound();
+
+  // Konsultacija se prodaje sa natasahartweger.rs; ovde postoji samo zbog naplate
+  // (mora is_published=true da je anon uopšte vidi, RLS). Generička stranica kursa na
+  // školskom sajtu bila bi tanka kopija prodajne stranice, pa vodi na original.
+  if (data.category === "konsultacija") redirect("https://natasahartweger.rs/konsultacija");
 
   const course = data as Course;
   const category = course.category || "video";

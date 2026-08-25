@@ -5,7 +5,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const supabase = await createClient();
 
   const [{ data: courses }, { data: posts }] = await Promise.all([
-    supabase.from("courses").select("slug, created_at").eq("is_published", true).eq("is_purchasable", true),
+    // Konsultacija je objavljena samo da bi checkout radio (RLS), prodajna stranica joj je
+    // na natasahartweger.rs - u sitemap škole nemačkog ne spada.
+    supabase.from("courses").select("slug, created_at").eq("is_published", true).eq("is_purchasable", true).neq("category", "konsultacija"),
     supabase.from("blog_posts").select("slug, updated_at").eq("is_published", true),
   ]);
 

@@ -178,3 +178,37 @@ export function vremeZaIstek(sada: Date, clanstvoDo: string | null): boolean {
   const dan = 24 * 60 * 60 * 1000;
   return sada.getTime() >= rok && sada.getTime() < rok + DANA_PROZOR_ISTEKA * dan;
 }
+
+/**
+ * Koliko dana tišine pre nego što se roditelju javi da dete nije ulazilo.
+ *
+ * Dva: dovoljno da se vidi da nije reč o jednoj preskočenoj večeri, prekratko
+ * da bi se navika ohladila. Mereno 24.08.2026: od 12 dece koja su igrala, svih
+ * 12 je igralo TAČNO JEDAN DAN - dakle upravo ovaj trenutak niz mejlova nije
+ * pokrivao.
+ */
+export const DANA_TISINE = 2;
+
+/**
+ * Da li je vreme za mejl detetu koje je ušlo jednom pa stalo.
+ *
+ * Uslov je namerno uzak: dete koje NIJE nikad igralo ovde ne spada (njemu ide
+ * mejl o kodu), a dete koje je igralo juče ne spada takođe - jedna preskočena
+ * večer nije prekid. Šalje se JEDNOM po detetu; ko i posle toga ne uđe, ne
+ * dobija drugi mejl o istoj stvari.
+ */
+export function vremeZaPovratak(o: {
+  sada: Date;
+  poslednjiDan: string | null;
+  clanstvoDo: string | null;
+}): boolean {
+  if (!o.poslednjiDan) return false;
+  // poslednji_dan je DATE („2026-08-22"); vezuje se za beogradsku ponoć, jer se
+  // i sam upisuje po lokalnom danu igranja.
+  const poslednji = new Date(`${o.poslednjiDan}T00:00:00+02:00`);
+  if (Number.isNaN(poslednji.getTime())) return false;
+  if (danaIzmedju(poslednji, o.sada) < DANA_TISINE) return false;
+  const rok = o.clanstvoDo ? Date.parse(o.clanstvoDo) : NaN;
+  if (Number.isNaN(rok) || o.sada.getTime() >= rok) return false;
+  return true;
+}

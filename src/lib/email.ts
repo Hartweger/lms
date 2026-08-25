@@ -1,5 +1,6 @@
 import { Resend } from "resend";
 import * as Sentry from "@sentry/nextjs";
+import { KONSULTACIJA_CALENDAR_URL } from "@/lib/konsultacija";
 import { SITE_URL } from "@/lib/site-url";
 import { odjavaUrl, listUnsubscribeHeaders } from "@/lib/optout";
 import { isSuppressed } from "@/lib/email-suppression";
@@ -172,6 +173,76 @@ export async function sendAcademyWelcomeEmail(to: string, name: string) {
     });
   } catch (e) {
     console.error("[email] Academy welcome pao:", e);
+    Sentry.captureException(e);
+  }
+}
+
+/**
+ * Konsultacija nije kurs: posle uplate ne sledi pristup sadržaju nego biranje termina.
+ * Generički welcome mejl bi kupca poslao na kontrolnu tablu gde ga ne čeka ništa, uz
+ * brendiranje škole nemačkog. Zato svoj mejl: NH brend i jedno dugme, link za termin.
+ */
+export async function sendKonsultacijaEmail(to: string, name: string) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    await sendEmail(resend, {
+      to,
+      from: "Nataša Hartweger <info@hartweger.rs>",
+      subject: "Uplata je stigla - izaberi termin konsultacije",
+      html: `
+<!DOCTYPE html>
+<html lang="sr">
+<head><meta charset="utf-8"></head>
+<body style="font-family: 'Helvetica Neue', Arial, sans-serif; color: #1a1a1a; background: #fdf5f7; margin: 0; padding: 0;">
+  <div style="max-width: 520px; margin: 0 auto; padding: 40px 20px;">
+    <div style="background: #ffffff; border-radius: 12px; padding: 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.08);">
+
+      <div style="text-align: center; margin-bottom: 26px;">
+        <div style="font-family: Georgia, serif; font-size: 24px; font-weight: 700; color: #c94f6d;">Nataša Hartweger</div>
+        <div style="font-size: 13px; color: #999; margin-top: 4px;">Konsultacija, 90 minuta</div>
+      </div>
+
+      <h1 style="font-size: 20px; color: #1a1a1a; margin: 0 0 16px;">Zdravo, ${esc(name) || "draga"}!</h1>
+
+      <p style="font-size: 15px; line-height: 1.7; color: #444; margin: 0 0 18px;">
+        Uplata je stigla i ostalo je samo da izabereš termin koji ti odgovara.
+      </p>
+
+      <div style="text-align: center; margin: 0 0 22px;">
+        <a href="${KONSULTACIJA_CALENDAR_URL}"
+           style="display: inline-block; background: #c94f6d; color: #ffffff; text-decoration: none;
+                  font-size: 15px; font-weight: 600; padding: 13px 26px; border-radius: 8px;">
+          Izaberi termin
+        </a>
+      </div>
+
+      <div style="background: #fdf5f7; border-left: 3px solid #c94f6d; border-radius: 6px; padding: 16px 18px; margin: 0 0 20px;">
+        <div style="font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">Kako izgleda poziv</div>
+        <div style="font-size: 15px; color: #1a1a1a; line-height: 1.7;">
+          90 minuta, video poziv jedan na jedan.<br>
+          Prolazimo gde si sad, šta te koči i šta prvo da rešiš.<br>
+          Snimak poziva ostaje tebi.
+        </div>
+      </div>
+
+      <p style="font-size: 15px; line-height: 1.7; color: #444; margin: 0 0 18px;">
+        <strong>Da dođem spremna:</strong> odgovori na ovaj mejl u par rečenica čime se baviš i šta te
+        trenutno najviše koči. Pročitam pre nego što se čujemo, pa ne trošimo poziv na upoznavanje.
+      </p>
+
+      <p style="font-size: 15px; line-height: 1.7; color: #444; margin: 0 0 22px;">
+        Ako ti termin ne odgovara ili moraš da pomeriš, samo mi javi na ovaj mejl.
+      </p>
+
+      <p style="font-family: Georgia, serif; font-size: 15px; color: #c94f6d; margin: 0;">- Nataša</p>
+    </div>
+  </div>
+</body>
+</html>`,
+    });
+  } catch (e) {
+    console.error("[email] Konsultacija mejl pao:", e);
     Sentry.captureException(e);
   }
 }
@@ -2809,6 +2880,67 @@ ${
     console.log(`[email] zack aktivacija poslata → ${to}`);
   } catch (e) {
     console.error("[email] sendZackAktivacijaEmail pao:", e);
+  }
+}
+
+/**
+ * Dete je ušlo jednom pa stalo - jedan miran mejl roditelju.
+ *
+ * NAJOSETLJIVIJI ton u nizu. Odsustvo se NE pominje: nema „nije ulazilo", nema
+ * „primetili smo", nema broja propuštenih dana. Mejl govori samo o onome što je
+ * zarađeno i o onome što je nadomak - album kao razlog da se vrati, nikad
+ * prekor zato što se nije vratio.
+ *
+ * Zato i nema dugme „Vrati se", nego „Otvori album": zove ono što je detetovo,
+ * a ne obavezu.
+ */
+/**
+ * „1 sličica, 2 sličice, 5 sličica" - srpska množina ima tri oblika, a ne dva.
+ * Nominativ jednine i genitiv množine su ovde isti („sličica"), pa se izdvaja
+ * samo opseg 2-4. Izuzeci 11-14 idu po pravilu za pet i više (11 sličica).
+ */
+function slicicaOblik(n: number): string {
+  const d = n % 10;
+  const dd = n % 100;
+  if (dd >= 11 && dd <= 14) return "sličica";
+  return d >= 2 && d <= 4 ? "sličice" : "sličica";
+}
+
+export async function sendZackPovratakEmail(
+  to: string,
+  name: string | null,
+  o: { imeDeteta: string; slicica: number; lekcija: string | null; fali: number },
+) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    const ime = name ? name.split(" ")[0] : "";
+    // „fali još 5 sličica" ima smisla samo dok lekcija nije popunjena; kad jeste,
+    // rečenica bi bila neistinita, pa je nema.
+    const redFali =
+      o.fali > 0 && o.lekcija
+        ? `<p>Do kraja lekcije <strong>${esc(o.lekcija)}</strong> fali još ${o.fali} ${slicicaOblik(o.fali)}.</p>`
+        : "";
+    await sendEmail(resend, {
+      to,
+      bulk: true,
+      subject: `${o.imeDeteta} ima ${o.slicica} ${slicicaOblik(o.slicica)}`,
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:sans-serif;line-height:1.6;color:#222">
+<p>Zdravo${ime ? ", " + esc(ime) : ""}!</p>
+<p><strong>${esc(o.imeDeteta)}</strong> u zack! albumu ima <strong>${o.slicica}</strong> ${slicicaOblik(o.slicica)}. ${o.slicica === 1 ? "I ostaje tu." : "Sve tu i ostaju."}</p>
+${redFali}
+<p style="margin:26px 0">
+  <a href="${SITE_URL}/zack" style="display:inline-block;padding:14px 26px;border-radius:10px;background:#D6291F;color:#fff;text-decoration:none;font-weight:bold;font-size:17px">Otvori album</a>
+</p>
+<p>Deset minuta je dovoljno. Prijava je kodom i PIN-om, kao i prvi put.</p>
+<p style="font-size:13px;color:#666">Ovo je jedini mejl ove vrste.</p>
+<p style="margin-top:20px">Hartweger tim</p>
+</body></html>`,
+    });
+    console.log(`[email] zack povratak poslat → ${to}`);
+  } catch (e) {
+    console.error("[email] sendZackPovratakEmail pao:", e);
   }
 }
 

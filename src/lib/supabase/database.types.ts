@@ -2693,6 +2693,7 @@ export type Database = {
           pin_pokusaji: number
           poklon_podsetnik_at: string | null
           poslednji_dan: string | null
+          povratak_mejl_at: string | null
           roditelj_id: string | null
           udzbenik_id: string
           zakljucano_do: string | null
@@ -2713,6 +2714,7 @@ export type Database = {
           pin_pokusaji?: number
           poklon_podsetnik_at?: string | null
           poslednji_dan?: string | null
+          povratak_mejl_at?: string | null
           roditelj_id?: string | null
           udzbenik_id: string
           zakljucano_do?: string | null
@@ -2733,6 +2735,7 @@ export type Database = {
           pin_pokusaji?: number
           poklon_podsetnik_at?: string | null
           poslednji_dan?: string | null
+          povratak_mejl_at?: string | null
           roditelj_id?: string | null
           udzbenik_id?: string
           zakljucano_do?: string | null

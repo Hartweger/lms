@@ -1,7 +1,7 @@
 // src/lib/grant-access.ts
 import * as Sentry from "@sentry/nextjs";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { sendWelcomeEmail, sendGrupniWelcomeEmail, sendProfNewStudentEmail, sendIndividualWelcomeEmail, sendProfNewIndividualStudentEmail, sendSubscriptionChargeEmail, sendAcademyWelcomeEmail, sendZackWelcomeEmail, sendZackPoklonEmail } from "@/lib/email";
+import { sendWelcomeEmail, sendGrupniWelcomeEmail, sendProfNewStudentEmail, sendIndividualWelcomeEmail, sendProfNewIndividualStudentEmail, sendSubscriptionChargeEmail, sendAcademyWelcomeEmail, sendKonsultacijaEmail, sendZackWelcomeEmail, sendZackPoklonEmail } from "@/lib/email";
 import { napraviNasumicniPin, napraviPinOtisak } from "@/lib/zack/pin";
 import { nivoForSlug } from "@/lib/course-nivo";
 import { computeSeats, pickOpenGroupForNivo } from "@/lib/groups";
@@ -18,11 +18,14 @@ import { noviRokClanstva, ZACK_PROMO_RSD } from "@/lib/zack/clanstvo";
 import { napraviKod } from "@/lib/zack/kod";
 import type { ZackGostMeta } from "@/lib/zack/gost";
 import { POKLON_DO, jePoklonStavka, type ZackPoklonMeta } from "@/lib/zack/poklon";
+import { KONSULTACIJA_SLUG } from "@/lib/konsultacija";
 
 interface OrderItem { course_id: string; course_slug: string; title: string; price: number; }
 
 /** NH Academy Gen II (migracija 081) - program uživo, ima svoj mejl potvrde. */
 const ACADEMY_SLUG = "nh-academy-gen2";
+
+
 
 /**
  * Do kada Academy Gen II poklanja članstvo: do kraja programa, ne godinu dana koliko
@@ -720,6 +723,13 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
   // datumom početka i sledećim korakom.
   if (!grupniWelcomeSent && !individualWelcomeSent && items.some((i) => i.course_slug === ACADEMY_SLUG)) {
     await sendAcademyWelcomeEmail(order.email, order.full_name);
+    return { ok: true };
+  }
+
+  // Konsultacija je usluga bez sadržaja: generički mejl bi vodio na kontrolnu tablu
+  // gde kupca ne čeka ništa. Umesto toga ide link za biranje termina.
+  if (!grupniWelcomeSent && !individualWelcomeSent && items.some((i) => i.course_slug === KONSULTACIJA_SLUG)) {
+    await sendKonsultacijaEmail(order.email, order.full_name);
     return { ok: true };
   }
 

@@ -3,6 +3,7 @@ import {
   danaIzmedju,
   jeVracaSeKljuc,
   vremeZaPin,
+  vremeZaPovratak,
   ocistiOmiljeno,
   ocistiSmeta,
   vremeZaAktivaciju,
@@ -145,5 +146,39 @@ describe("danaIzmedju", () => {
 
   it("prelaz meseca ne pravi skok", () => {
     expect(danaIzmedju(new Date("2026-08-31T20:00:00+02:00"), new Date("2026-09-01T08:00:00+02:00"))).toBe(1);
+  });
+});
+
+describe("vremeZaPovratak", () => {
+  const ROK_ = "2026-09-15T00:00:00+02:00";
+
+  it("dete koje je igralo juče se NE dira - jedna preskočena večer nije prekid", () => {
+    expect(
+      vremeZaPovratak({ sada: new Date("2026-08-24T11:00:00+02:00"), poslednjiDan: "2026-08-23", clanstvoDo: ROK_ })
+    ).toBe(false);
+  });
+
+  it("posle dva dana tišine ide mejl", () => {
+    expect(
+      vremeZaPovratak({ sada: new Date("2026-08-24T11:00:00+02:00"), poslednjiDan: "2026-08-22", clanstvoDo: ROK_ })
+    ).toBe(true);
+  });
+
+  it("dete koje NIKAD nije igralo ovde ne spada - njemu ide mejl o kodu", () => {
+    expect(
+      vremeZaPovratak({ sada: new Date("2026-08-24T11:00:00+02:00"), poslednjiDan: null, clanstvoDo: ROK_ })
+    ).toBe(false);
+  });
+
+  it("posle isteka poklona album ionako miruje", () => {
+    expect(
+      vremeZaPovratak({ sada: new Date("2026-09-20T11:00:00+02:00"), poslednjiDan: "2026-09-01", clanstvoDo: ROK_ })
+    ).toBe(false);
+  });
+
+  it("pokvaren datum ne ruši cron", () => {
+    expect(
+      vremeZaPovratak({ sada: new Date("2026-08-24T11:00:00+02:00"), poslednjiDan: "nije-datum", clanstvoDo: ROK_ })
+    ).toBe(false);
   });
 });
