@@ -98,6 +98,32 @@ interface MiniInvoiceDto {
 }
 
 /**
+ * Vadi id fakture iz odgovora na slanje.
+ *
+ * Spec kaže MiniInvoiceDto, ali SEF isti endpoint objavljuje i kao `text/plain`,
+ * pa odgovor ume da bude goli broj (`12345`) umesto objekta. Uz to se imena polja
+ * razlikuju po velikom slovu. Zato se gleda sve što liči na id, a ne samo jedno
+ * polje - inače faktura postoji na SEF-u, a mi mislimo da nije prošla.
+ */
+export function izvuciSefId(data: unknown): string | null {
+  if (typeof data === "number" && Number.isFinite(data)) return String(data);
+  if (typeof data === "string") {
+    const t = data.trim().replace(/^"|"$/g, "");
+    return /^\d+$/.test(t) ? t : null;
+  }
+  if (data && typeof data === "object") {
+    const o = data as Record<string, unknown>;
+    for (const k of Object.keys(o)) {
+      if (!/^(sales)?invoiceid$/i.test(k)) continue;
+      const v = o[k];
+      if (typeof v === "number" && Number.isFinite(v)) return String(v);
+      if (typeof v === "string" && /^\d+$/.test(v.trim())) return v.trim();
+    }
+  }
+  return null;
+}
+
+/**
  * Šalje UBL XML na SEF. `requestId` je ključ protiv duplog slanja - isti ključ
  * znači isti zahtev, pa ponovni pokušaj posle prekinute veze ne pravi drugu fakturu.
  *
@@ -109,11 +135,19 @@ export async function posaljiUbl(
   requestId: string,
 ): Promise<Odgovor<MiniInvoiceDto>> {
   const q = new URLSearchParams({ requestId, sendToCir: "false" });
-  return sefFetch<MiniInvoiceDto>(`/api/publicApi/sales-invoice/ubl?${q}`, {
+  const res = await sefFetch<MiniInvoiceDto>(`/api/publicApi/sales-invoice/ubl?${q}`, {
     metod: "POST",
     telo: ubl,
     contentType: "application/xml",
   });
+  // Ako je prošlo a id se ne prepoznaje, zapiši ceo odgovor - faktura je tada
+  // najverovatnije NA SEF-u, pa je važno videti u kom obliku stiže id.
+  if (res.ok && !izvuciSefId(res.data)) {
+    const msg = `[sef] odgovor bez prepoznatljivog id-a: ${JSON.stringify(res.data).slice(0, 500)}`;
+    console.error(msg);
+    Sentry.captureException(new Error(msg));
+  }
+  return res;
 }
 
 interface SimpleSalesInvoiceDto {

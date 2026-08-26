@@ -10,7 +10,7 @@ import { requireAdmin } from "@/lib/api-auth";
 import { MERCHANT } from "@/lib/payment-confirmation";
 import { BANK_FIRME } from "@/lib/order-utils";
 import { napraviUbl, type UblStavka } from "@/lib/sef-ubl";
-import { posaljiUbl, procitajStatus, firmaJeNaSefu, upisiSefOdgovor, sefPodesen } from "@/lib/sef";
+import { posaljiUbl, procitajStatus, firmaJeNaSefu, upisiSefOdgovor, sefPodesen, izvuciSefId } from "@/lib/sef";
 import type { Json } from "@/lib/supabase/database.types";
 
 /** YYYY-MM-DD u beogradskom vremenu - datum na dokumentu, ne UTC dan. */
@@ -165,12 +165,19 @@ export async function POST(
     return NextResponse.json({ error: `SEF nije primio fakturu: ${poslato.greska}` }, { status: 502 });
   }
 
-  const sefInvoiceId = String(
-    poslato.data.salesInvoiceId ?? poslato.data.invoiceId ?? "",
-  );
+  const sefInvoiceId = izvuciSefId(poslato.data);
   if (!sefInvoiceId) {
+    // Faktura je verovatno primljena - samo joj ne prepoznajemo id. Odgovor se
+    // upisuje da se vidi šta je stiglo, ali bez `sef_invoice_id`, jer ga nemamo.
+    await upisiSefOdgovor(admin, groupId, {
+      sef_status: "GRESKA",
+      sef_response: poslato.data as unknown as Json,
+    });
     return NextResponse.json(
-      { error: "SEF je odgovorio bez broja fakture. Proveri u SEF panelu pre ponovnog slanja." },
+      {
+        error: "SEF je primio fakturu, ali nije vratio broj u očekivanom obliku. Proveri u SEF panelu pre ponovnog slanja.",
+        odgovor: poslato.data,
+      },
       { status: 502 },
     );
   }
