@@ -18,6 +18,13 @@
 // ide u PayableRoundingAmount (BT-114) - polje koje EN 16931 ima baš za ovo - pa
 // PayableAmount ostaje TAČNO ono što firma plaća.
 
+// REDOSLED ELEMENATA NIJE PROIZVOLJAN. UBL 2.1 ima propisanu sekvencu i SEF
+// odbija XML koji je prekrši, uz poruku „has invalid child element". Tačan red
+// gornjih blokova je:
+//   InvoicePeriod -> AccountingSupplierParty -> AccountingCustomerParty ->
+//   Delivery -> PaymentMeans -> TaxTotal -> LegalMonetaryTotal -> InvoiceLine
+// Zaštićeno testom „redosled elemenata prati UBL sekvencu".
+// (Objavljeni primeri to ume da prikažu drugačije - njima se ne veruje.)
 export const SEF_CUSTOMIZATION_ID =
   "urn:cen.eu:en16931:2017#compliant#urn:mfin.gov.rs:srbdt:2021";
 
@@ -177,6 +184,8 @@ export function napraviUbl(f: UblFaktura): string {
    <cac:InvoicePeriod>
       <cbc:DescriptionCode>35</cbc:DescriptionCode>
    </cac:InvoicePeriod>
+${strankaXml("AccountingSupplierParty", f.prodavac, false)}
+${strankaXml("AccountingCustomerParty", f.kupac, true)}
    <cac:Delivery>
       <cbc:ActualDeliveryDate>${f.datumPrometa}</cbc:ActualDeliveryDate>
    </cac:Delivery>
@@ -187,8 +196,6 @@ export function napraviUbl(f: UblFaktura): string {
          <cbc:ID>${esc(f.racun)}</cbc:ID>
       </cac:PayeeFinancialAccount>
    </cac:PaymentMeans>
-${strankaXml("AccountingSupplierParty", f.prodavac, false)}
-${strankaXml("AccountingCustomerParty", f.kupac, true)}
    <cac:TaxTotal>
       <cbc:TaxAmount currencyID="RSD">${iznos(o.pdv)}</cbc:TaxAmount>
       <cac:TaxSubtotal>

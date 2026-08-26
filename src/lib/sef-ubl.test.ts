@@ -158,6 +158,31 @@ describe("napraviUbl", () => {
     expect(Math.round(zbirLinija * 100) / 100).toBe(o.ukupnoNeto);
   });
 
+  it("redosled elemenata prati UBL sekvencu", () => {
+    // SEF je 26.08.2026. odbio XML sa porukom „has invalid child element 'Delivery'"
+    // jer su Delivery i PaymentMeans stajali PRE stranaka. UBL 2.1 ima propisan
+    // redosled i ne prašta. Objavljeni primeri ga prikazuju drugačije - ne veruj im.
+    const xml = napraviUbl(faktura());
+    const redosled = [...xml.matchAll(/<cac:(\w+)>/g)]
+      .map((m) => m[1])
+      .filter((t) =>
+        [
+          "InvoicePeriod", "AccountingSupplierParty", "AccountingCustomerParty",
+          "Delivery", "PaymentMeans", "TaxTotal", "LegalMonetaryTotal", "InvoiceLine",
+        ].includes(t),
+      );
+    expect(redosled).toEqual([
+      "InvoicePeriod",
+      "AccountingSupplierParty",
+      "AccountingCustomerParty",
+      "Delivery",
+      "PaymentMeans",
+      "TaxTotal",
+      "LegalMonetaryTotal",
+      "InvoiceLine",
+    ]);
+  });
+
   it("bez stavki baca grešku umesto praznog XML-a", () => {
     expect(() => napraviUbl(faktura({ stavke: [] }))).toThrow("Faktura bez stavki");
   });
