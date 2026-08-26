@@ -23,3 +23,25 @@ export async function generateIpsQrUrl(
     return null;
   }
 }
+
+/**
+ * IPS QR kao PNG bafer, za ugradnju u PDF predračuna ili fakture. Ne diže se na
+ * Storage - dokument ionako ide kao prilog u mejlu, pa javni URL nije potreban.
+ */
+export async function ipsQrBuffer(d: {
+  total: number;
+  broj: string;
+  tip: "predracun" | "faktura";
+}): Promise<Buffer | null> {
+  try {
+    const naziv = d.tip === "predracun" ? "predracunu" : "fakturi";
+    const ips = buildIpsString(
+      { total: d.total, order_number: d.broj },
+      { poziv: d.broj, svrha: `Placanje po ${naziv} ${d.broj}` },
+    );
+    return await QRCode.toBuffer(ips, { width: 260, margin: 1, errorCorrectionLevel: "M" });
+  } catch (e) {
+    console.error("[ips-qr] dokument QR pao:", e);
+    return null;
+  }
+}

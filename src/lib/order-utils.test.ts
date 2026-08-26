@@ -28,6 +28,26 @@ describe("buildIpsString - NBS IPS QR format", () => {
     expect(buildIpsString({ total: 3199.5, order_number: "2026-001" })).toContain("I:RSD3199,50"));
 });
 
+describe("buildIpsString - dokument firme", () => {
+  it("faktura dobija svoju svrhu, poziv na broj ostaje broj narudžbine", () => {
+    const ips = buildIpsString(
+      { total: 39200, order_number: "2026-408" },
+      { svrha: "Placanje po fakturi 2026-408" },
+    );
+    expect(ips).toContain("S:Placanje po fakturi 2026-408");
+    expect(ips).toContain("RO:002026-408");
+  });
+
+  it("poziv na broj može da se zada zasebno", () => {
+    const ips = buildIpsString(
+      { total: 39200, order_number: "2026-409" },
+      { poziv: "2026-408" },
+    );
+    expect(ips).toContain("RO:002026-408");
+    expect(ips).toContain("S:Placanje porudzbine #2026-409");
+  });
+});
+
 describe("canDeleteOrder", () => {
   it("dozvoljava brisanje pending narudžbine koja nije dodeljena", () =>
     expect(canDeleteOrder({ payment_status: "pending", granted: false })).toBe(true));

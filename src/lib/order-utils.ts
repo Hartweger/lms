@@ -19,15 +19,23 @@ function racunZaIps(racun: string): string {
 // IPS QR string (NBS standard) za uplatnicu - isti format kao na hvala stranici. Pure string.
 // PAZI: I mora zarez (ne tačku), svrha ide u S (P je platilac), RO mora model prefiks (00).
 // Format potvrđen na NBS validatoru (nbs.rs/QRcode/api/qr/v1/validate, code 0).
-export function buildIpsString(o: { total: number; order_number: string }): string {
+// `opcije` služe dokumentima za firme (predračun/faktura): svrha se piše drukčije,
+// a poziv na broj ume da bude broj PRVE narudžbine u grupi, ne ove. Bez opcija
+// ponašanje je nepromenjeno - taj string je prošao NBS validator i ne dira se.
+export function buildIpsString(
+  o: { total: number; order_number: string },
+  opcije?: { poziv?: string; svrha?: string },
+): string {
+  const poziv = opcije?.poziv ?? o.order_number;
+  const svrha = opcije?.svrha ?? `Placanje porudzbine #${o.order_number}`;
   return [
     "K:PR", "V:01", "C:1",
     `R:${racunZaIps(BANK_DETAILS.racun)}`,
     `N:${BANK_DETAILS.primalac}`,
     `I:RSD${Number(o.total).toFixed(2).replace(".", ",")}`,
-    `S:Placanje porudzbine #${o.order_number}`,
+    `S:${svrha}`,
     `SF:${BANK_DETAILS.sifraPalcanja}`,
-    `RO:00${o.order_number}`,
+    `RO:00${poziv}`,
   ].join("|");
 }
 
