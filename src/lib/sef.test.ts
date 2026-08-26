@@ -14,6 +14,15 @@ describe("izvuciSefId", () => {
     expect(izvuciSefId(' "12345" ')).toBe("12345");
   });
 
+  it("pravi odgovor SEF-a: uzima SalesInvoiceId, ne InvoiceId", () => {
+    // Zabelezeno na demou 26.08.2026. `InvoiceId` je jednak `PurchaseInvoiceId` -
+    // to je broj sa strane PRIMAOCA. Nama treba izlazna faktura, jer po njoj
+    // webhook javlja promene statusa.
+    expect(
+      izvuciSefId({ InvoiceId: 5619601, SalesInvoiceId: 5747642, PurchaseInvoiceId: 5619601 }),
+    ).toBe("5747642");
+  });
+
   it("objekat po specifikaciji", () => {
     expect(izvuciSefId({ salesInvoiceId: 998877, invoiceId: 111 })).toBe("998877");
     expect(izvuciSefId({ invoiceId: 555 })).toBe("555");

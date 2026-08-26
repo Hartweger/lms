@@ -113,12 +113,21 @@ export function izvuciSefId(data: unknown): string | null {
   }
   if (data && typeof data === "object") {
     const o = data as Record<string, unknown>;
-    for (const k of Object.keys(o)) {
-      if (!/^(sales)?invoiceid$/i.test(k)) continue;
-      const v = o[k];
-      if (typeof v === "number" && Number.isFinite(v)) return String(v);
-      if (typeof v === "string" && /^\d+$/.test(v.trim())) return v.trim();
-    }
+    const uzmi = (test: RegExp): string | null => {
+      for (const k of Object.keys(o)) {
+        if (!test.test(k)) continue;
+        const v = o[k];
+        if (typeof v === "number" && Number.isFinite(v)) return String(v);
+        if (typeof v === "string" && /^\d+$/.test(v.trim())) return v.trim();
+      }
+      return null;
+    };
+    // REDOSLED JE BITAN. SEF na jedno slanje vrati TRI broja:
+    //   {"InvoiceId":5619601,"SalesInvoiceId":5747642,"PurchaseInvoiceId":5619601}
+    // `InvoiceId` je tu jednak PurchaseInvoiceId - to je broj sa strane PRIMAOCA.
+    // Nama treba SalesInvoiceId: po njemu webhook javlja promene statusa i po njemu
+    // se pita za status. Ako uzmemo pogrešan, status zauvek ostane „šalje se".
+    return uzmi(/^salesinvoiceid$/i) ?? uzmi(/^invoiceid$/i);
   }
   return null;
 }
