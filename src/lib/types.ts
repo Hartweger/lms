@@ -198,6 +198,18 @@ export interface Order {
   ga_client_id?: string | null;
   /** GA4 session_id iz _ga_<stream> kolačića - vezuje MP purchase za sesiju. */
   ga_session_id?: string | null;
+  /** Kupac pravno lice (migracija 101). Null za fizička lica. */
+  company_id?: string | null;
+  /** Mejl računovodstva - tamo idu predračun i faktura. `email` ostaje polaznikov. */
+  billing_email?: string | null;
+  /** Vezuje narudžbine iste kupovine firme; jedan dokument pokriva celu grupu. */
+  company_order_group?: string | null;
+  /** Broj narudžbine, upisan kad je predračun poslat. */
+  predracun_broj?: string | null;
+  predracun_sent_at?: string | null;
+  /** Isti broj kao predračun; ide i na SEF. */
+  faktura_broj?: string | null;
+  faktura_sent_at?: string | null;
 }
 
 export interface Coupon {

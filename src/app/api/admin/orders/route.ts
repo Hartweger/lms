@@ -25,7 +25,7 @@ export async function POST(request: Request) {
   const admin = auth.admin;
 
   try {
-    const { email, courseId, totalAmount, paymentMethod, markAsPaid, sendPaymentEmail, fiscalize, professorId, packageType } = await request.json();
+    const { email, courseId, totalAmount, paymentMethod, markAsPaid, sendPaymentEmail, fiscalize, professorId, packageType, firma, billingEmail, groupId } = await request.json();
 
     // Validate required fields
     if (!email || !courseId || !totalAmount || !paymentMethod) {
@@ -124,6 +124,35 @@ export async function POST(request: Request) {
       });
     }
 
+    // Kupac pravno lice: firma se pamti po PIB-u, da se sledeći put podaci popune
+    // sami. `groupId` stiže kad se dodaje još jedan polaznik iste kupovine - tada
+    // sve narudžbine dele grupu i dobijaju JEDAN predračun i JEDNU fakturu.
+    // Prisustvo firme NE utiče na fiskalizaciju - to ostaje `fiscalize` čekboks.
+    let companyId: string | null = null;
+    let companyGroup: string | null = null;
+    if (firma?.pib) {
+      const { data: c, error: cErr } = await admin
+        .from("companies")
+        .upsert(
+          {
+            pib: String(firma.pib).trim(),
+            naziv: String(firma.naziv ?? "").trim(),
+            adresa: firma.adresa?.trim() || null,
+            maticni_broj: firma.maticniBroj?.trim() || null,
+            email: firma.email?.trim() || billingEmail?.trim() || null,
+          },
+          { onConflict: "pib" },
+        )
+        .select("id")
+        .single();
+      if (cErr || !c) {
+        console.error("[admin/orders] Upis firme pao:", cErr);
+        return NextResponse.json({ error: "Upis firme nije uspeo." }, { status: 500 });
+      }
+      companyId = c.id;
+      companyGroup = groupId ?? crypto.randomUUID();
+    }
+
     // Generate order number
     const { generateOrderNumber } = await import("@/lib/order-utils");
     const orderNumber = await generateOrderNumber();
@@ -153,6 +182,9 @@ export async function POST(request: Request) {
         order_number: orderNumber,
         payment_status: "pending",
         granted: false,
+        company_id: companyId,
+        billing_email: billingEmail?.trim() || null,
+        company_order_group: companyGroup,
       })
       .select("*")
       .single();

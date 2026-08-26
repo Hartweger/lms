@@ -77,6 +77,19 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
   const [newSendEmail, setNewSendEmail] = useState(true);
   const [newLoading, setNewLoading] = useState(false);
   const [newError, setNewError] = useState<string | null>(null);
+  // Kupac pravno lice. `newGroupId` se puni posle prve sačuvane narudžbine te
+  // kupovine, pa svaki sledeći polaznik ulazi u istu grupu i isti dokument.
+  const [newJeFirma, setNewJeFirma] = useState(false);
+  const [newPib, setNewPib] = useState("");
+  const [newNazivFirme, setNewNazivFirme] = useState("");
+  const [newAdresaFirme, setNewAdresaFirme] = useState("");
+  const [newMaticni, setNewMaticni] = useState("");
+  const [newBillingEmail, setNewBillingEmail] = useState("");
+  const [newGroupId, setNewGroupId] = useState<string | null>(null);
+  const [firmaTrazenje, setFirmaTrazenje] = useState(false);
+  const [firmaNadjena, setFirmaNadjena] = useState(false);
+  const [dokLoading, setDokLoading] = useState<string | null>(null);
+  const [dokError, setDokError] = useState<string | null>(null);
   const [sendingPay, setSendingPay] = useState<string | null>(null);
   const [sentPay, setSentPay] = useState<string | null>(null);
 
@@ -125,6 +138,61 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
     if (p != null) setNewAmount(String(p));
   }
 
+  /** Firma koja je već kupovala se ne kuca ponovo - podaci dolaze iz naše baze. */
+  async function povuciFirmu(pib: string) {
+    const cist = pib.trim();
+    if (cist.length < 8) return;
+    setFirmaTrazenje(true);
+    try {
+      const res = await fetch(`/api/admin/companies/${encodeURIComponent(cist)}`);
+      const json = await res.json();
+      if (json.firma) {
+        setNewNazivFirme(json.firma.naziv ?? "");
+        setNewAdresaFirme(json.firma.adresa ?? "");
+        setNewMaticni(json.firma.maticni_broj ?? "");
+        if (!newBillingEmail) setNewBillingEmail(json.firma.email ?? "");
+        setFirmaNadjena(true);
+      } else {
+        setFirmaNadjena(false);
+      }
+    } catch {
+      setFirmaNadjena(false);
+    } finally {
+      setFirmaTrazenje(false);
+    }
+  }
+
+  /** Izdaje predračun ili fakturu za celu grupu narudžbina te firme. */
+  async function izdajDokument(order: Order, tip: "predracun" | "faktura") {
+    if (!order.company_order_group) return;
+    setDokLoading(`${order.id}-${tip}`);
+    setDokError(null);
+    try {
+      const res = await fetch(`/api/admin/dokument/${order.company_order_group}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tip }),
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        setDokError(json.error ?? "Dokument nije poslat.");
+        return;
+      }
+      // Broj se upisuje na SVE narudžbine grupe, isto kao na serveru.
+      setOrders((prev) =>
+        prev.map((o) =>
+          o.company_order_group === order.company_order_group
+            ? { ...o, [tip === "predracun" ? "predracun_broj" : "faktura_broj"]: json.broj }
+            : o,
+        ),
+      );
+    } catch {
+      setDokError("Greška na serveru.");
+    } finally {
+      setDokLoading(null);
+    }
+  }
+
   async function createOrder() {
     setNewLoading(true);
     setNewError(null);
@@ -142,6 +210,11 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
           sendPaymentEmail: newSendEmail && !newMarkPaid,
           professorId: selIsIndividual ? newProfessorId : null,
           packageType: selIsIndividual ? newPackageType : null,
+          firma: newJeFirma
+            ? { pib: newPib, naziv: newNazivFirme, adresa: newAdresaFirme, maticniBroj: newMaticni }
+            : null,
+          billingEmail: newJeFirma ? newBillingEmail : null,
+          groupId: newJeFirma ? newGroupId : null,
         }),
       });
       const json = await res.json();
@@ -155,15 +228,22 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
         ? selProfessors.find((p) => p.id === newProfessorId)?.full_name ?? null
         : null;
       setOrders((prev) => [{ ...json.order, professor_name: profName }, ...prev]);
-      setShowNewForm(false);
+      // Polaznikova polja se uvek prazne. Kod firme forma OSTAJE otvorena sa
+      // podacima firme i grupom - da sledeći polaznik iste kupovine uđe u isti
+      // dokument, bez ponovnog kucanja PIB-a.
       setNewEmail("");
       setNewCourseId("");
       setNewProfessorId(null);
       setNewPackageType(null);
       setNewAmount("");
-      setNewPayment("uplatnica");
-      setNewMarkPaid(false);
-      setNewFiscalize(false);
+      if (newJeFirma) {
+        setNewGroupId(json.order.company_order_group ?? null);
+      } else {
+        setShowNewForm(false);
+        setNewPayment("uplatnica");
+        setNewMarkPaid(false);
+        setNewFiscalize(false);
+      }
     } catch {
       setNewError("Greška na serveru.");
     } finally {
@@ -355,10 +435,107 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
       {showNewForm && (
         <div className="bg-plava-light rounded-xl p-6 mb-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Nova narudžbina</h2>
+
+          <label className="flex items-center gap-2 cursor-pointer mb-4">
+            <input
+              type="checkbox"
+              checked={newJeFirma}
+              onChange={(e) => {
+                setNewJeFirma(e.target.checked);
+                if (!e.target.checked) {
+                  setNewGroupId(null);
+                  setFirmaNadjena(false);
+                }
+              }}
+              className="rounded border-gray-300 text-plava focus:ring-plava"
+            />
+            <span className="text-sm font-medium text-gray-700">Kupac je firma</span>
+          </label>
+
+          {newJeFirma && (
+            <div className="rounded-lg bg-white/60 p-4 mb-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">PIB</label>
+                  <input
+                    type="text"
+                    value={newPib}
+                    onChange={(e) => setNewPib(e.target.value)}
+                    onBlur={(e) => povuciFirmu(e.target.value)}
+                    disabled={!!newGroupId}
+                    placeholder="108712117"
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-plava disabled:bg-gray-100"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    {firmaTrazenje
+                      ? "Tražim firmu..."
+                      : firmaNadjena
+                      ? "Firma je već kupovala - podaci su popunjeni."
+                      : "Nova firma - podaci se pamte za sledeći put."}
+                  </p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Naziv firme</label>
+                  <input
+                    type="text"
+                    value={newNazivFirme}
+                    onChange={(e) => setNewNazivFirme(e.target.value)}
+                    disabled={!!newGroupId}
+                    placeholder="PROBA DOO BEOGRAD"
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-plava disabled:bg-gray-100"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Adresa</label>
+                  <input
+                    type="text"
+                    value={newAdresaFirme}
+                    onChange={(e) => setNewAdresaFirme(e.target.value)}
+                    disabled={!!newGroupId}
+                    placeholder="Neka ulica 1, 11000 Beograd"
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-plava disabled:bg-gray-100"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Matični broj</label>
+                  <input
+                    type="text"
+                    value={newMaticni}
+                    onChange={(e) => setNewMaticni(e.target.value)}
+                    disabled={!!newGroupId}
+                    placeholder="21268372"
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-plava disabled:bg-gray-100"
+                  />
+                </div>
+                <div className="sm:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Mejl za predračun i fakturu
+                  </label>
+                  <input
+                    type="email"
+                    value={newBillingEmail}
+                    onChange={(e) => setNewBillingEmail(e.target.value)}
+                    disabled={!!newGroupId}
+                    placeholder="racunovodstvo@firma.rs"
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-plava disabled:bg-gray-100"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Ovde idu dokumenti. Polaznik dobija pristup na svoj mejl, ispod.
+                  </p>
+                </div>
+              </div>
+              {newGroupId && (
+                <p className="text-xs text-plava mt-3">
+                  Polaznik je sačuvan. Unesi sledećeg - ući će u isti predračun i istu fakturu.
+                </p>
+              )}
+            </div>
+          )}
+
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Email kupca
+                {newJeFirma ? "Email polaznika" : "Email kupca"}
               </label>
               <input
                 type="email"
@@ -471,18 +648,27 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
                 </span>
               </label>
             )}
-            <label className={`flex items-center gap-2 ${newMarkPaid ? "opacity-40 cursor-not-allowed" : "cursor-pointer"}`}>
-              <input
-                type="checkbox"
-                checked={newSendEmail && !newMarkPaid}
-                disabled={newMarkPaid}
-                onChange={(e) => setNewSendEmail(e.target.checked)}
-                className="rounded border-gray-300 text-plava focus:ring-plava"
-              />
-              <span className="text-sm text-gray-700">
-                Pošalji kupcu podatke za uplatu (mejl sa {newPayment === "kartica" ? "linkom za karticu" : newPayment === "paypal" ? "PayPal-om" : "uplatnicom i pozivom na broj"})
-              </span>
-            </label>
+            {/* Kod firme ovo bi poslalo uplatnicu POLAZNIKU, a plaća računovodstvo
+                po predračunu. Zato se kod firme uopšte ne nudi. */}
+            {!newJeFirma && (
+              <label className={`flex items-center gap-2 ${newMarkPaid ? "opacity-40 cursor-not-allowed" : "cursor-pointer"}`}>
+                <input
+                  type="checkbox"
+                  checked={newSendEmail && !newMarkPaid}
+                  disabled={newMarkPaid}
+                  onChange={(e) => setNewSendEmail(e.target.checked)}
+                  className="rounded border-gray-300 text-plava focus:ring-plava"
+                />
+                <span className="text-sm text-gray-700">
+                  Pošalji kupcu podatke za uplatu (mejl sa {newPayment === "kartica" ? "linkom za karticu" : newPayment === "paypal" ? "PayPal-om" : "uplatnicom i pozivom na broj"})
+                </span>
+              </label>
+            )}
+            {newJeFirma && (
+              <p className="text-sm text-gray-500">
+                Firma dobija predračun - dugme stoji u redu narudžbine, kad završiš unos polaznika.
+              </p>
+            )}
           </div>
           {newError && (
             <p className="mt-3 text-sm text-koral font-medium">{newError}</p>
@@ -493,15 +679,30 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
               disabled={newLoading}
               className="px-5 py-2 rounded-lg text-sm font-medium bg-plava text-white hover:bg-plava-dark transition-colors disabled:opacity-50"
             >
-              {newLoading ? "Kreiranje..." : "Kreiraj narudžbinu"}
+              {newLoading
+                ? "Kreiranje..."
+                : newGroupId
+                ? "Dodaj polaznika"
+                : "Kreiraj narudžbinu"}
             </button>
             <button
-              onClick={() => setShowNewForm(false)}
+              onClick={() => {
+                setShowNewForm(false);
+                setNewGroupId(null);
+                setNewJeFirma(false);
+                setFirmaNadjena(false);
+              }}
               className="px-5 py-2 rounded-lg text-sm font-medium bg-white text-gray-600 hover:bg-gray-50 border border-gray-200 transition-colors"
             >
-              Otkaži
+              {newGroupId ? "Završi" : "Otkaži"}
             </button>
           </div>
+        </div>
+      )}
+
+      {dokError && (
+        <div className="mb-4 rounded-lg bg-koral/10 border border-koral/30 px-4 py-3">
+          <p className="text-sm text-koral font-medium">{dokError}</p>
         </div>
       )}
 
@@ -717,6 +918,43 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
                       {new Date(order.created_at).toLocaleDateString("sr-RS")}
                     </td>
                     <td className="px-6 py-4 text-right">
+                      {/* Dokumenti za firmu. Stoje iznad ostalih dugmadi jer su
+                          zaseban tok: predračun traži uplatu, faktura dolazi posle.
+                          Fiskalizacija je nezavisna i ne dira se odavde. */}
+                      {order.company_order_group && (
+                        <div className="flex items-center justify-end gap-2 mb-2">
+                          {order.predracun_broj ? (
+                            <span className="text-xs text-gray-500" title="Predračun je poslat računovodstvu">
+                              Predračun {order.predracun_broj}
+                            </span>
+                          ) : (
+                            <button
+                              onClick={() => izdajDokument(order, "predracun")}
+                              disabled={dokLoading === `${order.id}-predracun`}
+                              title="Napravi predračun i pošalji ga na mejl računovodstva"
+                              className="text-xs px-3 py-1.5 rounded-lg bg-white text-plava font-medium border border-plava/30 hover:bg-plava hover:text-white transition-colors disabled:opacity-50"
+                            >
+                              {dokLoading === `${order.id}-predracun` ? "..." : "Pošalji predračun"}
+                            </button>
+                          )}
+                          {order.faktura_broj ? (
+                            <span className="text-xs text-green-600" title="Faktura je poslata računovodstvu">
+                              Faktura {order.faktura_broj}
+                            </span>
+                          ) : (
+                            !isPending && (
+                              <button
+                                onClick={() => izdajDokument(order, "faktura")}
+                                disabled={dokLoading === `${order.id}-faktura`}
+                                title="Napravi fakturu i pošalji je na mejl računovodstva"
+                                className="text-xs px-3 py-1.5 rounded-lg bg-white text-green-600 font-medium border border-green-600/30 hover:bg-green-600 hover:text-white transition-colors disabled:opacity-50"
+                              >
+                                {dokLoading === `${order.id}-faktura` ? "..." : "Izdaj fakturu"}
+                              </button>
+                            )
+                          )}
+                        </div>
+                      )}
                       {isPending ? (
                         isConfirming ? (
                           <span className="flex items-center justify-end gap-1">
