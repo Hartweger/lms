@@ -10,7 +10,7 @@ import * as Sentry from "@sentry/nextjs";
 import { requireAdmin } from "@/lib/api-auth";
 import { sastaviDokument } from "@/lib/dokument-podaci";
 import { napraviDokumentPdf } from "@/lib/dokument-pdf";
-import { ipsQrBuffer } from "@/lib/ips-qr";
+import { ipsQrBuffer, dokumentIpsQrUrl } from "@/lib/ips-qr";
 import { sendDokumentEmail } from "@/lib/email";
 
 export async function POST(
@@ -108,10 +108,15 @@ export async function POST(
     napomena: napomena?.trim() || null,
   });
 
-  const qr = await ipsQrBuffer({ total: dokument.ukupnoSaPdv, broj, tip });
+  const qrPodaci = { total: dokument.ukupnoSaPdv, broj, tip };
+  const qr = await ipsQrBuffer(qrPodaci);
   const pdf = napraviDokumentPdf(dokument, qr);
 
-  const poslato = await sendDokumentEmail({ to: primalac, tip, broj, pdf });
+  // QR se dodatno kači na Storage: prilog se u mejlu ne prikazuje, a predračun
+  // mora da se vidi i bez otvaranja PDF-a - prosleđuje se onome ko plaća.
+  const ipsQrUrl = tip === "predracun" ? await dokumentIpsQrUrl(admin, qrPodaci) : null;
+
+  const poslato = await sendDokumentEmail({ to: primalac, dokument, pdf, ipsQrUrl });
   if (!poslato) {
     // Bez upisa broja - da sledeći klik pokuša ponovo umesto da tvrdi da je poslato.
     const msg = `[dokument] slanje ${tip} ${broj} palo`;

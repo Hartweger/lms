@@ -10,7 +10,10 @@ vi.mock("@/lib/api-auth", () => ({
   requireAdmin: async () => ({ ok: true, admin: h.fake.admin }),
 }));
 vi.mock("@sentry/nextjs", () => ({ captureException: vi.fn() }));
-vi.mock("@/lib/ips-qr", () => ({ ipsQrBuffer: vi.fn(async () => null) }));
+vi.mock("@/lib/ips-qr", () => ({
+  ipsQrBuffer: vi.fn(async () => null),
+  dokumentIpsQrUrl: vi.fn(async () => "https://storage.test/qr.png"),
+}));
 vi.mock("@/lib/dokument-pdf", () => ({
   napraviDokumentPdf: vi.fn(() => Buffer.from("pdf")),
 }));
@@ -78,7 +81,12 @@ describe("izdavanje dokumenta firmi", () => {
     expect(res.status).toBe(200);
     expect(body.broj).toBe("2026-408");
     expect(sendDokumentEmail).toHaveBeenCalledWith(
-      expect.objectContaining({ to: "racunovodstvo@firma.rs", tip: "predracun", broj: "2026-408" }),
+      expect.objectContaining({
+        to: "racunovodstvo@firma.rs",
+        dokument: expect.objectContaining({ tip: "predracun", broj: "2026-408" }),
+        // Predračun se prosleđuje onome ko plaća, pa QR mora da se VIDI u mejlu.
+        ipsQrUrl: "https://storage.test/qr.png",
+      }),
     );
 
     const upisano = h.fake.tables.get("orders")!;
@@ -143,6 +151,19 @@ describe("izdavanje dokumenta firmi", () => {
 
     expect(body.broj).toBe("2026-408");
     expect(h.fake.row("orders", (o) => o.id === "o1")!.faktura_broj).toBe("2026-408");
+  });
+
+  it("faktura ne nosi podatke za uplatu - do nje se stiže posle uplate", async () => {
+    h.fake = createFakeAdmin({
+      orders: [narudzbina({ payment_status: "completed" })],
+      companies: [firma],
+    });
+
+    await POST(zahtev("faktura"), { params });
+
+    expect(sendDokumentEmail).toHaveBeenCalledWith(
+      expect.objectContaining({ ipsQrUrl: null }),
+    );
   });
 
   it("kad mejl padne, broj se ne upisuje - da sledeći klik pokuša ponovo", async () => {

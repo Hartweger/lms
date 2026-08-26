@@ -7,6 +7,8 @@ import { isSuppressed } from "@/lib/email-suppression";
 import { htmlToText } from "@/lib/html-to-text";
 import type { Ga4Weekly } from "@/lib/ga4-report";
 import { MERCHANT, CARD_OUTCOME, pdvBreakdown, type NestpayTx, type RecurringTx } from "@/lib/payment-confirmation";
+import { BANK_FIRME } from "@/lib/order-utils";
+import type { DokumentPodaci } from "@/lib/dokument-podaci";
 import type { SubscriptionBrief } from "@/lib/subscription-brief";
 import type { NakiBrief } from "@/lib/naki-brief";
 import { naslovIzvestaja, receniceZaDete, type IzvestajDeteta } from "@/lib/zack/izvestaj";
@@ -3221,53 +3223,139 @@ export async function sendZackIzvestajEmail(to: string, mejl: { subject: string;
   }
 }
 
+/** Podaci za uplatu na dokumentu firme - drugi račun nego kod uplatnica fizičkim licima. */
+function firmaUplatnicaBlockHtml(o: {
+  ukupnoSaPdv: number;
+  broj: string;
+  tip: "predracun" | "faktura";
+  ipsQrUrl?: string | null;
+}) {
+  const svrha = `Placanje po ${o.tip === "predracun" ? "predracunu" : "fakturi"} ${o.broj}`;
+  return `
+      <div style="background: #f8fcfd; border-left: 3px solid #4fb1d3; border-radius: 6px; padding: 14px 16px; margin: 0 0 20px;">
+        <div style="font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;">Podaci za uplatu</div>
+        <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+          <tr><td style="padding: 6px 0; color: #888; width: 45%;">Primalac</td><td style="padding: 6px 0; color: #1a1a2e; font-weight: 600;">${MERCHANT.naziv}</td></tr>
+          <tr><td style="padding: 6px 0; color: #888;">Broj računa</td><td style="padding: 6px 0; color: #1a1a2e; font-weight: 600;">${BANK_FIRME.racun} (${BANK_FIRME.naziv})</td></tr>
+          <tr><td style="padding: 6px 0; color: #888;">Iznos</td><td style="padding: 6px 0; color: #1a1a2e; font-weight: 700; font-size: 16px;">${o.ukupnoSaPdv.toLocaleString("sr-RS")} RSD</td></tr>
+          <tr><td style="padding: 6px 0; color: #888;">Poziv na broj</td><td style="padding: 6px 0; color: #1a1a2e; font-weight: 600;">${o.broj}</td></tr>
+          <tr><td style="padding: 6px 0; color: #888;">Svrha</td><td style="padding: 6px 0; color: #1a1a2e; font-weight: 600;">${svrha}</td></tr>
+          <tr><td style="padding: 6px 0; color: #888;">Šifra plaćanja</td><td style="padding: 6px 0; color: #1a1a2e; font-weight: 600;">189</td></tr>
+        </table>
+        ${o.ipsQrUrl ? `<div style="text-align: center; margin-top: 16px; padding-top: 14px; border-top: 1px solid #e8f4f8;">
+          <img src="${o.ipsQrUrl}" alt="IPS QR kod" width="180" height="180" style="border-radius: 8px;" />
+          <div style="font-size: 12px; color: #888; margin-top: 6px;">Skenirajte IPS QR kod u aplikaciji za mobilno bankarstvo</div>
+        </div>` : ""}
+      </div>`;
+}
+
+/** Stavke dokumenta u telu mejla - da se vidi ŠTA se plaća, bez otvaranja priloga. */
+function stavkeBlockHtml(d: DokumentPodaci) {
+  const redovi = d.stavke
+    .map(
+      (s) => `<tr>
+            <td style="padding: 8px 0; border-bottom: 1px solid #f0f0f0; color: #1a1a2e;">${s.opis}${s.kolicina > 1 ? ` <span style="color:#888;">× ${s.kolicina}</span>` : ""}</td>
+            <td style="padding: 8px 0; border-bottom: 1px solid #f0f0f0; text-align: right; color: #1a1a2e; white-space: nowrap;">${s.iznosBezPdv.toLocaleString("sr-RS")} RSD</td>
+          </tr>`,
+    )
+    .join("");
+  return `
+      <table style="width: 100%; border-collapse: collapse; font-size: 14px; margin: 0 0 16px;">
+        <tr>
+          <td style="padding: 0 0 8px; font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 0.5px;">Opis usluge</td>
+          <td style="padding: 0 0 8px; font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 0.5px; text-align: right;">Bez PDV</td>
+        </tr>
+        ${redovi}
+        <tr><td style="padding: 8px 0; color: #888;">Ukupno bez PDV</td><td style="padding: 8px 0; text-align: right; color: #1a1a2e;">${d.ukupnoBezPdv.toLocaleString("sr-RS")} RSD</td></tr>
+        <tr><td style="padding: 2px 0; color: #888;">PDV (20%)</td><td style="padding: 2px 0; text-align: right; color: #1a1a2e;">${d.pdv.toLocaleString("sr-RS")} RSD</td></tr>
+        <tr><td style="padding: 8px 0; font-weight: 700; color: #1a1a2e; border-top: 2px solid #1a1a2e;">UKUPNO SA PDV</td><td style="padding: 8px 0; text-align: right; font-weight: 700; font-size: 16px; color: #1a1a2e; border-top: 2px solid #1a1a2e;">${d.ukupnoSaPdv.toLocaleString("sr-RS")} RSD</td></tr>
+      </table>`;
+}
+
 /**
- * Predračun ili faktura firmi, kao PDF prilog. Ide računovodstvu, ne polazniku -
- * zato `billing_email`, a ne `email` sa narudžbine.
+ * Predračun ili faktura firmi. PDF ide kao prilog, ali telo mejla nosi SVE
+ * potrebno za uplatu - jer se ovaj mejl prosleđuje računovođi ili onome ko plaća,
+ * a prilog se u prosleđenom mejlu lako izgubi iz vida.
  *
- * Persiranje je namerno: ovo je jedini mejl koji ide firmi, a ne polazniku, i
- * prati formulaciju sa Natašine postojeće fakture („Molimo vas...").
+ * Predračun nosi podatke za uplatu; faktura ne - do nje se stiže tek posle uplate.
  *
+ * Persiranje je namerno: ovo je jedini mejl koji ide firmi, a ne polazniku.
  * Nije `bulk` - ne prolazi kroz odjave i baunsere, kao ni ostale potvrde.
  */
+export function dokumentEmailNaslov(d: DokumentPodaci): string {
+  const naziv = d.tip === "predracun" ? "Predračun" : "Faktura";
+  return `${naziv} ${d.broj} · ${d.ukupnoSaPdv.toLocaleString("sr-RS")} RSD · Hartweger`;
+}
+
+/** Telo mejla. Izdvojeno da može da se pregleda i testira bez slanja. */
+export function dokumentEmailHtml(d: DokumentPodaci, ipsQrUrl?: string | null): string {
+  const jePredracun = d.tip === "predracun";
+  const naziv = jePredracun ? "Predračun" : "Faktura";
+  return `
+<!DOCTYPE html>
+<html lang="sr">
+<head><meta charset="utf-8"></head>
+<body style="font-family: 'Helvetica Neue', Arial, sans-serif; color: #1a1a2e; background: #f6f7f9; margin: 0; padding: 0;">
+  <div style="max-width: 560px; margin: 0 auto; padding: 32px 20px;">
+    <div style="background: #ffffff; border-radius: 12px; padding: 28px;">
+
+      <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #1a1a2e; padding-bottom: 12px; margin-bottom: 18px;">
+        <span style="font-size: 20px; font-weight: 700; letter-spacing: 1px;">${naziv.toUpperCase()}</span>
+      </div>
+
+      <table style="width: 100%; font-size: 14px; margin: 0 0 18px;">
+        <tr><td style="color: #888; padding: 3px 0;">Broj</td><td style="text-align: right; font-weight: 600;">${d.broj}</td></tr>
+        <tr><td style="color: #888; padding: 3px 0;">Datum</td><td style="text-align: right;">${d.datum}</td></tr>
+        <tr><td style="color: #888; padding: 3px 0;">Kupac</td><td style="text-align: right; font-weight: 600;">${d.kupac.naziv}</td></tr>
+        <tr><td style="color: #888; padding: 3px 0;">PIB</td><td style="text-align: right;">${d.kupac.pib}</td></tr>
+      </table>
+
+      ${stavkeBlockHtml(d)}
+
+      ${jePredracun ? firmaUplatnicaBlockHtml({ ukupnoSaPdv: d.ukupnoSaPdv, broj: d.broj, tip: d.tip, ipsQrUrl }) : ""}
+
+      ${jePredracun
+        ? `<p style="font-size: 14px; margin: 0 0 6px;"><strong>Rok plaćanja: 7 dana</strong> od datuma predračuna.</p>
+           <p style="font-size: 13px; color: #666; margin: 0 0 18px;">Ovaj mejl možete proslediti računovodstvu - sadrži sve podatke potrebne za uplatu. Predračun je i u prilogu, kao PDF.</p>`
+        : `<p style="font-size: 13px; color: #666; margin: 0 0 18px;">Faktura je u prilogu, kao PDF.</p>`}
+
+      <p style="font-size: 14px; margin: 0 0 4px;">Za sva pitanja samo odgovorite na ovaj mejl.</p>
+      <p style="font-size: 14px; margin: 18px 0 0;">Srdačno,<br/>Hartweger tim</p>
+
+      <p style="font-size: 11px; color: #aaa; margin: 26px 0 0; border-top: 1px solid #eee; padding-top: 14px;">
+        ${MERCHANT.naziv}<br/>
+        ${MERCHANT.adresa} · PIB: ${MERCHANT.pib}<br/>
+        www.hartweger.rs · info@hartweger.rs
+      </p>
+    </div>
+  </div>
+</body>
+</html>`;
+}
+
 export async function sendDokumentEmail(o: {
   to: string;
-  tip: "predracun" | "faktura";
-  broj: string;
+  dokument: DokumentPodaci;
   pdf: Buffer;
+  ipsQrUrl?: string | null;
 }) {
-  const naziv = o.tip === "predracun" ? "Predračun" : "Faktura";
+  const d = o.dokument;
   try {
     const resend = getResend();
     if (!resend) return null;
     return await sendEmail(resend, {
       to: o.to,
-      subject: `${naziv} ${o.broj} — Hartweger`,
-      html: `
-<!DOCTYPE html>
-<html lang="sr">
-<head><meta charset="utf-8"></head>
-<body style="font-family: 'Helvetica Neue', Arial, sans-serif; color: #1a1a1a; margin: 0; padding: 0;">
-  <div style="max-width: 520px; margin: 0 auto; padding: 32px 20px; line-height: 1.6;">
-    <p>Poštovani,</p>
-    <p>u prilogu vam šaljemo ${naziv.toLowerCase()} broj <strong>${o.broj}</strong>.</p>
-    <p>Molimo vas da iznos uplatite u roku od 7 dana. Ako imate pitanja, samo odgovorite na ovaj mejl.</p>
-    <p style="margin-top: 28px;">Srdačno,<br/>Hartweger tim</p>
-    <p style="font-size: 12px; color: #999; margin-top: 32px;">
-      HARTWEGER · www.hartweger.rs · info@hartweger.rs · PIB: ${MERCHANT.pib}
-    </p>
-  </div>
-</body>
-</html>`,
+      subject: dokumentEmailNaslov(d),
+      html: dokumentEmailHtml(d, o.ipsQrUrl),
       attachments: [
         {
-          filename: `${o.tip}-${o.broj.replace(/[^\w-]/g, "-")}.pdf`,
+          filename: `${d.tip}-${d.broj.replace(/[^\w-]/g, "-")}.pdf`,
           content: o.pdf.toString("base64"),
         },
       ],
     });
   } catch (e) {
-    console.error(`[email] sendDokumentEmail pao za ${o.broj}:`, e);
+    console.error(`[email] sendDokumentEmail pao za ${d.broj}:`, e);
     return null;
   }
 }

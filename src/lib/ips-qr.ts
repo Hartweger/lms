@@ -24,24 +24,51 @@ export async function generateIpsQrUrl(
   }
 }
 
-/**
- * IPS QR kao PNG bafer, za ugradnju u PDF predračuna ili fakture. Ne diže se na
- * Storage - dokument ionako ide kao prilog u mejlu, pa javni URL nije potreban.
- */
-export async function ipsQrBuffer(d: {
+interface DokumentQr {
   total: number;
   broj: string;
   tip: "predracun" | "faktura";
-}): Promise<Buffer | null> {
+}
+
+/** IPS string za dokument firme - uvek na račun firme, sa brojem dokumenta kao pozivom. */
+function dokumentIps(d: DokumentQr): string {
+  const naziv = d.tip === "predracun" ? "predracunu" : "fakturi";
+  return buildIpsString(
+    { total: d.total, order_number: d.broj },
+    { poziv: d.broj, svrha: `Placanje po ${naziv} ${d.broj}`, racun: BANK_FIRME.racun },
+  );
+}
+
+/** IPS QR kao PNG bafer, za ugradnju u PDF predračuna ili fakture. */
+export async function ipsQrBuffer(d: DokumentQr): Promise<Buffer | null> {
   try {
-    const naziv = d.tip === "predracun" ? "predracunu" : "fakturi";
-    const ips = buildIpsString(
-      { total: d.total, order_number: d.broj },
-      { poziv: d.broj, svrha: `Placanje po ${naziv} ${d.broj}`, racun: BANK_FIRME.racun },
-    );
-    return await QRCode.toBuffer(ips, { width: 260, margin: 1, errorCorrectionLevel: "M" });
+    return await QRCode.toBuffer(dokumentIps(d), { width: 260, margin: 1, errorCorrectionLevel: "M" });
   } catch (e) {
     console.error("[ips-qr] dokument QR pao:", e);
+    return null;
+  }
+}
+
+/**
+ * Isti QR, ali okačen na Storage i vraćen kao javni URL - da može da se PRIKAŽE
+ * u telu mejla. Prilog se ne prikazuje, a predračun mora da se vidi i bez
+ * otvaranja PDF-a, jer se prosleđuje onome ko plaća.
+ */
+export async function dokumentIpsQrUrl(
+  admin: SupabaseClient,
+  d: DokumentQr,
+): Promise<string | null> {
+  try {
+    const buf = await QRCode.toBuffer(dokumentIps(d), { width: 260, margin: 1, errorCorrectionLevel: "M" });
+    const dest = `dokumenti/${d.tip}-${d.broj.replace(/[^\w-]/g, "-")}.png`;
+    const { error } = await admin.storage.from("blog-media").upload(dest, buf, {
+      contentType: "image/png",
+      upsert: true,
+    });
+    if (error) throw error;
+    return admin.storage.from("blog-media").getPublicUrl(dest).data.publicUrl;
+  } catch (e) {
+    console.error("[ips-qr] dokument QR URL pao:", e);
     return null;
   }
 }
