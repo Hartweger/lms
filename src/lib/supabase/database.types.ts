@@ -398,6 +398,7 @@ export type Database = {
           renewal_only: boolean
           requires_course_id: string | null
           term_packages_only: boolean
+          late_join_only: boolean
           usage_count: number
           video_only: boolean
         }
@@ -419,6 +420,7 @@ export type Database = {
           renewal_only?: boolean
           requires_course_id?: string | null
           term_packages_only?: boolean
+          late_join_only?: boolean
           usage_count?: number
           video_only?: boolean
         }
@@ -440,6 +442,7 @@ export type Database = {
           renewal_only?: boolean
           requires_course_id?: string | null
           term_packages_only?: boolean
+          late_join_only?: boolean
           usage_count?: number
           video_only?: boolean
         }

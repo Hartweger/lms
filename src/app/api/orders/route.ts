@@ -8,6 +8,7 @@ import { emailOwnsCourse, emailOwnsAnyVideoCourse, emailUsedCoupon, couponApplie
 import { emailCanRenewWithCoupon, renewalAccessExpiry } from "@/lib/renewal-eligibility";
 import { renewalWindowStatus, renewalWindowMessage } from "@/lib/renewal-window";
 import { computeCouponDiscount, isTermPackage } from "@/lib/coupon-discount";
+import { courseAllowsLateJoin, LATE_JOIN_PORUKA } from "@/lib/coupon-late-join";
 import { computeSeats, pickOpenGroupForNivo } from "@/lib/groups";
 import { gaIdsFromCookieHeader } from "@/lib/ga-cookies";
 import { chargeAmountFor, planForSlug } from "@/lib/subscription-plans";
@@ -365,6 +366,10 @@ export async function POST(request: Request) {
             { error: await couponRequiresMessage(supabase, coupon.requires_course_id) },
             { status: 400 }
           );
+        }
+        // late_join_only: kupon važi samo za ulazak u grupu koja je već krenula
+        if (coupon.late_join_only && !(await courseAllowsLateJoin(supabase, course))) {
+          return NextResponse.json({ error: LATE_JOIN_PORUKA }, { status: 400 });
         }
         // term_packages_only: kupon važi samo na individualne pakete od 4/8/12 termina
         if (coupon.term_packages_only && !isTermPackage(packageType)) {

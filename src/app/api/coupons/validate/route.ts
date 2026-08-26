@@ -4,6 +4,7 @@ import { emailOwnsCourse, emailOwnsAnyVideoCourse, emailUsedCoupon, couponApplie
 import { emailCanRenewWithCoupon, renewalAccessExpiry } from "@/lib/renewal-eligibility";
 import { renewalWindowStatus, renewalWindowMessage } from "@/lib/renewal-window";
 import { isTermPackage } from "@/lib/coupon-discount";
+import { courseAllowsLateJoin, LATE_JOIN_PORUKA } from "@/lib/coupon-late-join";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -138,6 +139,16 @@ export async function GET(request: NextRequest) {
         { error: await couponRequiresMessage(supabase, coupon.requires_course_id) },
         { status: 400 }
       );
+    }
+  }
+
+  // late_join_only: kupon važi samo za ulazak u grupu koja je već krenula
+  // (naknadni upis) - propušteni časovi se plaćaju manje.
+  if (coupon.late_join_only) {
+    const { data: course } = await supabase
+      .from("courses").select("slug, course_type").eq("slug", courseSlug).maybeSingle();
+    if (!course || !(await courseAllowsLateJoin(supabase, course))) {
+      return NextResponse.json({ error: LATE_JOIN_PORUKA }, { status: 400 });
     }
   }
 
