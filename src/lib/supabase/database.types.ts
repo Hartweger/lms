@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.5"
+    PostgrestVersion: "14.17"
   }
   public: {
     Tables: {
@@ -379,6 +379,36 @@ export type Database = {
         }
         Relationships: []
       }
+      companies: {
+        Row: {
+          adresa: string | null
+          created_at: string
+          email: string | null
+          id: string
+          maticni_broj: string | null
+          naziv: string
+          pib: string
+        }
+        Insert: {
+          adresa?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          maticni_broj?: string | null
+          naziv: string
+          pib: string
+        }
+        Update: {
+          adresa?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          maticni_broj?: string | null
+          naziv?: string
+          pib?: string
+        }
+        Relationships: []
+      }
       coupons: {
         Row: {
           amount: number
@@ -389,6 +419,7 @@ export type Database = {
           expires_at: string | null
           id: string
           is_active: boolean
+          late_join_only: boolean
           max_uses: number | null
           min_order: number | null
           new_customers_only: boolean
@@ -398,7 +429,6 @@ export type Database = {
           renewal_only: boolean
           requires_course_id: string | null
           term_packages_only: boolean
-          late_join_only: boolean
           usage_count: number
           video_only: boolean
         }
@@ -411,6 +441,7 @@ export type Database = {
           expires_at?: string | null
           id?: string
           is_active?: boolean
+          late_join_only?: boolean
           max_uses?: number | null
           min_order?: number | null
           new_customers_only?: boolean
@@ -420,7 +451,6 @@ export type Database = {
           renewal_only?: boolean
           requires_course_id?: string | null
           term_packages_only?: boolean
-          late_join_only?: boolean
           usage_count?: number
           video_only?: boolean
         }
@@ -433,6 +463,7 @@ export type Database = {
           expires_at?: string | null
           id?: string
           is_active?: boolean
+          late_join_only?: boolean
           max_uses?: number | null
           min_order?: number | null
           new_customers_only?: boolean
@@ -442,7 +473,6 @@ export type Database = {
           renewal_only?: boolean
           requires_course_id?: string | null
           term_packages_only?: boolean
-          late_join_only?: boolean
           usage_count?: number
           video_only?: boolean
         }
@@ -1744,11 +1774,16 @@ export type Database = {
       }
       orders: {
         Row: {
+          billing_email: string | null
+          company_id: string | null
+          company_order_group: string | null
           country: string
           coupon_code: string | null
           created_at: string
           discount: number
           email: string
+          faktura_broj: string | null
+          faktura_sent_at: string | null
           fiscal_journal: string | null
           fiscal_pdf_url: string | null
           fiscal_referent_dt: string | null
@@ -1776,6 +1811,8 @@ export type Database = {
           payment_status: string
           paypal_note: string | null
           phone: string | null
+          predracun_broj: string | null
+          predracun_sent_at: string | null
           recovery_email_sent_at: string | null
           recovery_stage: number
           refund_journal: string | null
@@ -1794,11 +1831,16 @@ export type Database = {
           utm_source: string | null
         }
         Insert: {
+          billing_email?: string | null
+          company_id?: string | null
+          company_order_group?: string | null
           country?: string
           coupon_code?: string | null
           created_at?: string
           discount?: number
           email: string
+          faktura_broj?: string | null
+          faktura_sent_at?: string | null
           fiscal_journal?: string | null
           fiscal_pdf_url?: string | null
           fiscal_referent_dt?: string | null
@@ -1826,6 +1868,8 @@ export type Database = {
           payment_status?: string
           paypal_note?: string | null
           phone?: string | null
+          predracun_broj?: string | null
+          predracun_sent_at?: string | null
           recovery_email_sent_at?: string | null
           recovery_stage?: number
           refund_journal?: string | null
@@ -1844,11 +1888,16 @@ export type Database = {
           utm_source?: string | null
         }
         Update: {
+          billing_email?: string | null
+          company_id?: string | null
+          company_order_group?: string | null
           country?: string
           coupon_code?: string | null
           created_at?: string
           discount?: number
           email?: string
+          faktura_broj?: string | null
+          faktura_sent_at?: string | null
           fiscal_journal?: string | null
           fiscal_pdf_url?: string | null
           fiscal_referent_dt?: string | null
@@ -1876,6 +1925,8 @@ export type Database = {
           payment_status?: string
           paypal_note?: string | null
           phone?: string | null
+          predracun_broj?: string | null
+          predracun_sent_at?: string | null
           recovery_email_sent_at?: string | null
           recovery_stage?: number
           refund_journal?: string | null
@@ -1894,6 +1945,13 @@ export type Database = {
           utm_source?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "orders_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "orders_subscription_id_fkey"
             columns: ["subscription_id"]
@@ -2684,17 +2742,17 @@ export type Database = {
       }
       zack_deca: {
         Row: {
+          aktivacija_podsetnik_at: string | null
+          anketa_poslata_at: string | null
           clanstvo_do: string | null
           created_at: string
           id: string
           ime: string
+          istek_mejl_at: string | null
           kod: string | null
           niz: number
           oslobodjeno: boolean
           pin_hash: string | null
-          aktivacija_podsetnik_at: string | null
-          anketa_poslata_at: string | null
-          istek_mejl_at: string | null
           pin_podsetnik_at: string | null
           pin_pokusaji: number
           poklon_podsetnik_at: string | null
@@ -2705,17 +2763,17 @@ export type Database = {
           zakljucano_do: string | null
         }
         Insert: {
+          aktivacija_podsetnik_at?: string | null
+          anketa_poslata_at?: string | null
           clanstvo_do?: string | null
           created_at?: string
           id?: string
           ime: string
+          istek_mejl_at?: string | null
           kod?: string | null
           niz?: number
           oslobodjeno?: boolean
           pin_hash?: string | null
-          aktivacija_podsetnik_at?: string | null
-          anketa_poslata_at?: string | null
-          istek_mejl_at?: string | null
           pin_podsetnik_at?: string | null
           pin_pokusaji?: number
           poklon_podsetnik_at?: string | null
@@ -2726,17 +2784,17 @@ export type Database = {
           zakljucano_do?: string | null
         }
         Update: {
+          aktivacija_podsetnik_at?: string | null
+          anketa_poslata_at?: string | null
           clanstvo_do?: string | null
           created_at?: string
           id?: string
           ime?: string
+          istek_mejl_at?: string | null
           kod?: string | null
           niz?: number
           oslobodjeno?: boolean
           pin_hash?: string | null
-          aktivacija_podsetnik_at?: string | null
-          anketa_poslata_at?: string | null
-          istek_mejl_at?: string | null
           pin_podsetnik_at?: string | null
           pin_pokusaji?: number
           poklon_podsetnik_at?: string | null
@@ -2747,6 +2805,13 @@ export type Database = {
           zakljucano_do?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "zack_deca_roditelj_id_fkey"
+            columns: ["roditelj_id"]
+            isOneToOne: false
+            referencedRelation: "zack_roditelji"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "zack_deca_udzbenik_id_fkey"
             columns: ["udzbenik_id"]

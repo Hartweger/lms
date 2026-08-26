@@ -57,9 +57,16 @@ osnovu prisustva PIB-a.
 **Slanje na SEF je zaseban klik, ne posledica potvrde uplate.** Iz istog razloga —
 Nataša bira i da li i kada.
 
-**Dva dokumenta, dve serije brojeva.** Prvo predračun, firma plati, pa tek onda
-faktura. Predračun nosi broj iz serije `P-2026/N`, faktura iz serije `2026/N`.
-Broj na PDF fakturi i broj poslat na SEF su isti broj.
+**Dva dokumenta, jedan broj — broj narudžbine.** Prvo predračun, firma plati, pa
+tek onda faktura. Oba nose broj narudžbine (npr. `2026-408`), jer je Nataša tako
+radila i ručno: napravi porudžbinu na sajtu i taj broj ide na dokument. Isti broj
+prati kupovinu od predračuna do fakture i do zapisa na SEF-u.
+
+Kad firma šalje više polaznika, dokument nosi broj **prve** narudžbine u grupi.
+
+Zaseban brojač je razmatran i odbačen: uvodi drugu seriju brojeva koju treba
+usaglašavati sa onim što je već izdato, a `orders.order_number` je već jedinstven
+i već raste po godini.
 
 **Predračun nije SEF dokument.** SEF prima fakturu (380), avansni račun (386),
 knjižno odobrenje i zaduženje. Predračun se šalje van SEF-a, kao PDF mejlom.
@@ -79,7 +86,8 @@ samo na klik.
 Prati postojeću Google tabelu (`12zZhnw9RGPkGPiS_mBG5Mo_dYvpkCEsJFrBbxZ2-ZJ8`),
 tab koji Apps Script generiše. Redosled elemenata:
 
-1. Naslov gore desno: `FAKTURA` ili `PREDRAČUN`, uz `Broj:` i `Datum:`
+1. Naslov gore desno: `FAKTURA` ili `PREDRAČUN`, uz `Broj:` (broj narudžbine,
+   npr. `2026-408`) i `Datum:`
 2. Zaglavlje levo: adresa, `PIB: 108712117 · Banca Intesa: 160-6000001689258-40`,
    `www.hartweger.rs · info@hartweger.rs`
 3. Blok `KUPAC / PRIMALAC`: naziv, adresa, PIB, matični broj, mejl
@@ -121,20 +129,6 @@ jedno mesto.
 Upsert po PIB-u pri čuvanju narudžbine za firmu. Sledeći put se naziv, adresa i
 mejl popunjavaju iz naše baze, bez pitanja SEF-u.
 
-### Nova tabela `document_counters`
-
-| kolona | tip | napomena |
-|---|---|---|
-| `serija` | text | `faktura` ili `predracun` |
-| `godina` | int | |
-| `poslednji_broj` | int | |
-
-PK je (`serija`, `godina`). Broj se dodeljuje atomično, u istoj transakciji kao
-upis dokumenta, da se ne pojave dupli ili preskočeni brojevi.
-
-Format: faktura `2026/N`, predračun `P-2026/N`. Početna vrednost za fakture se
-postavlja na poslednji broj koji je Nataša već izdala — vidi Preduslove.
-
 ### Nove kolone na `orders`
 
 | kolona | tip | napomena |
@@ -142,9 +136,9 @@ postavlja na poslednji broj koji je Nataša već izdala — vidi Preduslove.
 | `company_id` | uuid | null za fizička lica |
 | `billing_email` | text | mejl računovodstva; `email` ostaje polaznikov |
 | `company_order_group` | uuid | vezuje narudžbine iste kupovine firme |
-| `predracun_broj` | text | |
+| `predracun_broj` | text | broj narudžbine, upisan kad je predračun poslat |
 | `predracun_sent_at` | timestamptz | |
-| `faktura_broj` | text | isti broj ide i na SEF |
+| `faktura_broj` | text | isti broj; ide i na SEF |
 | `faktura_sent_at` | timestamptz | |
 | `sef_invoice_id` | text | id fakture na SEF-u |
 | `sef_status` | text | poslednji poznati status |
@@ -168,13 +162,12 @@ odobri), `raw` jsonb.
    PIB → autofill iz `companies`. Mejl za fakturu. Kurs, polaznik, profesorka,
    paket — postojeća polja, nepromenjena.
 2. „Dodaj polaznika" pravi još jednu narudžbinu sa istim `company_order_group`.
-3. Čuvanje → „Pošalji predračun" izda broj iz serije `P-2026/N`, napravi PDF i
+3. Čuvanje → „Pošalji predračun" uzme broj prve narudžbine u grupi, napravi PDF i
    pošalje ga na `billing_email`. Jedan PDF po grupi, sa svim stavkama.
 4. Polaznik ne dobija ništa. Narudžbina stoji „Čeka uplatu".
 5. „Potvrdi uplatu" → `grantAccessForOrder` po narudžbini, svaki polaznik dobija
    svoj pristup i mejl dobrodošlice.
-6. „Izdaj fakturu" izda broj iz serije `2026/N`, napravi PDF i pošalje ga na
-   `billing_email`.
+6. „Izdaj fakturu" uzme isti broj, napravi PDF i pošalje ga na `billing_email`.
 7. „Pošalji na SEF" pošalje tu istu fakturu, pod istim brojem. Jedna faktura po
    `company_order_group`.
 8. Status stiže webhookom i stoji u redu narudžbine. Bez mejlova.
@@ -239,8 +232,6 @@ ne klikne, izveštaji su netaknuti.
 
 - Jedinični testovi za `sef-ubl.ts` — ispravan XML za jednu i za više stavki,
   ispravan PDV, ispravni podaci firme.
-- Jedinični testovi za dodelu brojeva iz `document_counters` — bez duplikata pri
-  istovremenim pozivima, ispravan prelaz godine.
 - Jedinični testovi za grupisanje narudžbina po `company_order_group`.
 - Ceo tok prvo na demo okruženju SEF-a, sa odvojenim ključem.
 - Na produkciju tek kad demo faktura prođe pun krug: poslata → prihvaćena.
@@ -250,8 +241,6 @@ ne klikne, izveštaji su netaknuti.
 
 - Nataša obnavlja SEF API ključ (stari je bio na deljenom snimku ekrana) i
   postavlja novi na Vercel kao `SEF_API_KEY`.
-- Nataša javlja **poslednji izdati broj fakture** iz tekuće serije, da brojač
-  krene od sledećeg i ne ponovi već izdat broj.
 - Potvrditi tačnu adresu za zaglavlje (`20k-39` iz tabele ili `20` iz koda).
 - Potvrditi u SEF Swaggeru: postoji li pretraga firme po PIB-u. Ako ne, podaci se
   kucaju ručno prvi put i pamte u `companies`.
