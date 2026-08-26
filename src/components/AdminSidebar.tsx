@@ -14,6 +14,7 @@ const links = [
   { href: "/admin/profesori", label: "Profesori" },
   { href: "/admin/pristup", label: "Pristup" },
   { href: "/admin/narudzbine", label: "Narudžbine" },
+  { href: "/admin/firme", label: "Firme", indent: true },
   { href: "/admin/kuponi", label: "Kuponi" },
   { href: "/admin/faq", label: "FAQ" },
   { href: "/admin/analitika", label: "Analitika", exact: true },
