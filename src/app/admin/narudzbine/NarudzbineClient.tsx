@@ -23,6 +23,29 @@ interface Props {
 
 const PAKET_LABEL: Record<string, string> = { paket4: "4 termina", paket8: "8 termina", paket12: "12 termina" };
 
+/** SEF statusi na našem jeziku. Ono što nije ovde se prikazuje kako je stiglo. */
+const SEF_LABEL: Record<string, string> = {
+  Sending: "šalje se",
+  Sent: "poslata",
+  Approved: "prihvaćena",
+  Rejected: "ODBIJENA",
+  Paid: "plaćena",
+  Cancelled: "otkazana",
+  Storno: "stornirana",
+  Mistake: "greška",
+  OverDue: "istekla",
+  GRESKA: "slanje palo",
+};
+
+const SEF_BOJA: Record<string, string> = {
+  Approved: "text-green-600",
+  Paid: "text-green-600",
+  Rejected: "text-koral font-semibold",
+  Mistake: "text-koral font-semibold",
+  GRESKA: "text-koral font-semibold",
+  OverDue: "text-amber-600",
+};
+
 /**
  * Sitan red ispod statusa: šta je tačno banka odgovorila.
  * Tooltip nosi sirove kodove (ProcReturnCode, 3DS) - to je ono što se citira banci u reklamaciji.
@@ -83,6 +106,7 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
   const [newPib, setNewPib] = useState("");
   const [newNazivFirme, setNewNazivFirme] = useState("");
   const [newAdresaFirme, setNewAdresaFirme] = useState("");
+  const [newGradFirme, setNewGradFirme] = useState("");
   const [newMaticni, setNewMaticni] = useState("");
   const [newBillingEmail, setNewBillingEmail] = useState("");
   const [newGroupId, setNewGroupId] = useState<string | null>(null);
@@ -149,6 +173,7 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
       if (json.firma) {
         setNewNazivFirme(json.firma.naziv ?? "");
         setNewAdresaFirme(json.firma.adresa ?? "");
+        setNewGradFirme(json.firma.grad ?? "");
         setNewMaticni(json.firma.maticni_broj ?? "");
         if (!newBillingEmail) setNewBillingEmail(json.firma.email ?? "");
         setFirmaNadjena(true);
@@ -193,6 +218,32 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
     }
   }
 
+  /** Šalje već izdatu fakturu na SEF. Zaseban klik, namerno odvojen od izdavanja. */
+  async function posaljiNaSef(order: Order) {
+    if (!order.company_order_group) return;
+    setDokLoading(`${order.id}-sef`);
+    setDokError(null);
+    try {
+      const res = await fetch(`/api/admin/sef/${order.company_order_group}`, { method: "POST" });
+      const json = await res.json();
+      if (!res.ok) {
+        setDokError(json.error ?? "Slanje na SEF nije uspelo.");
+        return;
+      }
+      setOrders((prev) =>
+        prev.map((o) =>
+          o.company_order_group === order.company_order_group
+            ? { ...o, sef_invoice_id: json.sefInvoiceId, sef_status: json.status }
+            : o,
+        ),
+      );
+    } catch {
+      setDokError("Greška na serveru.");
+    } finally {
+      setDokLoading(null);
+    }
+  }
+
   async function createOrder() {
     setNewLoading(true);
     setNewError(null);
@@ -211,7 +262,7 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
           professorId: selIsIndividual ? newProfessorId : null,
           packageType: selIsIndividual ? newPackageType : null,
           firma: newJeFirma
-            ? { pib: newPib, naziv: newNazivFirme, adresa: newAdresaFirme, maticniBroj: newMaticni }
+            ? { pib: newPib, naziv: newNazivFirme, adresa: newAdresaFirme, grad: newGradFirme, maticniBroj: newMaticni }
             : null,
           billingEmail: newJeFirma ? newBillingEmail : null,
           groupId: newJeFirma ? newGroupId : null,
@@ -495,6 +546,18 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
                     placeholder="Neka ulica 1, 11000 Beograd"
                     className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-plava disabled:bg-gray-100"
                   />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Grad</label>
+                  <input
+                    type="text"
+                    value={newGradFirme}
+                    onChange={(e) => setNewGradFirme(e.target.value)}
+                    disabled={!!newGroupId}
+                    placeholder="Beograd"
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-plava disabled:bg-gray-100"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Zasebno polje jer SEF traži grad odvojeno od ulice.</p>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Matični broj</label>
@@ -950,6 +1013,25 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
                                 className="text-xs px-3 py-1.5 rounded-lg bg-white text-green-600 font-medium border border-green-600/30 hover:bg-green-600 hover:text-white transition-colors disabled:opacity-50"
                               >
                                 {dokLoading === `${order.id}-faktura` ? "..." : "Izdaj fakturu"}
+                              </button>
+                            )
+                          )}
+                          {order.faktura_broj && (
+                            order.sef_invoice_id ? (
+                              <span
+                                className={`text-xs ${SEF_BOJA[order.sef_status ?? ""] ?? "text-gray-500"}`}
+                                title={`SEF id: ${order.sef_invoice_id}`}
+                              >
+                                SEF: {SEF_LABEL[order.sef_status ?? ""] ?? order.sef_status ?? "poslata"}
+                              </span>
+                            ) : (
+                              <button
+                                onClick={() => posaljiNaSef(order)}
+                                disabled={dokLoading === `${order.id}-sef`}
+                                title="Šalje istu fakturu, pod istim brojem, na Sistem elektronskih faktura"
+                                className="text-xs px-3 py-1.5 rounded-lg bg-white text-gray-700 font-medium border border-gray-300 hover:bg-gray-800 hover:text-white transition-colors disabled:opacity-50"
+                              >
+                                {dokLoading === `${order.id}-sef` ? "..." : "Pošalji na SEF"}
                               </button>
                             )
                           )}

@@ -14,7 +14,7 @@ export async function GET(
 
   const { data } = await auth.admin
     .from("companies")
-    .select("pib, naziv, adresa, maticni_broj, email")
+    .select("pib, naziv, adresa, grad, maticni_broj, email")
     .eq("pib", pib.trim())
     .maybeSingle();
 

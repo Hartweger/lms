@@ -138,6 +138,7 @@ export async function POST(request: Request) {
             pib: String(firma.pib).trim(),
             naziv: String(firma.naziv ?? "").trim(),
             adresa: firma.adresa?.trim() || null,
+            grad: firma.grad?.trim() || null,
             maticni_broj: firma.maticniBroj?.trim() || null,
             email: firma.email?.trim() || billingEmail?.trim() || null,
           },

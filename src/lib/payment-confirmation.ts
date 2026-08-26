@@ -7,7 +7,15 @@ export const MERCHANT = {
   naziv:
     "NATAŠA HARTWEGER PR STUDIO ZA UČENJE NEMAČKOG JEZIKA I PREVOĐENJE HARTWEGER BEOGRAD (NOVI BEOGRAD)",
   pib: "108712117",
+  maticniBroj: "63647357",
+  /** Formulacija propisana uputstvom banke (EPM 2.7) - ne menjati. */
   adresa: "Jurija Gagarina 20, Beograd (Novi Beograd)",
+  /**
+   * Ista adresa razložena, jer UBL/SEF traži ulicu i grad kao ODVOJENA polja
+   * (StreetName, CityName). Slobodan tekst iz `adresa` se ne sme seći programski.
+   */
+  ulica: "Jurija Gagarina 20",
+  grad: "Beograd",
 };
 
 /** Propisana formulacija ishoda (EPM 2.7 tačka 1) - ne menjati bez provere sa bankom. */

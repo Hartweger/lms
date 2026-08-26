@@ -210,6 +210,11 @@ export interface Order {
   /** Isti broj kao predračun; ide i na SEF. */
   faktura_broj?: string | null;
   faktura_sent_at?: string | null;
+  /** Id fakture na SEF-u; postoji tek kad je poslata. */
+  sef_invoice_id?: string | null;
+  /** Poslednji poznati status sa SEF-a (Sent, Approved, Rejected, ...). */
+  sef_status?: string | null;
+  sef_sent_at?: string | null;
 }
 
 export interface Coupon {

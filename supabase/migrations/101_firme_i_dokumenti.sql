@@ -30,3 +30,8 @@ create index if not exists orders_company_order_group_idx
 -- Tabela je isključivo admin/service-role. RLS je uključen bez ijedne politike,
 -- pa anon i authenticated ne vide ništa.
 alter table public.companies enable row level security;
+
+-- Dopuna 26.08.2026: UBL/SEF traži ulicu i grad kao ODVOJENA polja
+-- (StreetName, CityName). Slobodan tekst iz `adresa` se ne sme seći programski.
+alter table public.companies
+  add column if not exists grad text;

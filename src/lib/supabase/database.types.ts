@@ -384,6 +384,7 @@ export type Database = {
           adresa: string | null
           created_at: string
           email: string | null
+          grad: string | null
           id: string
           maticni_broj: string | null
           naziv: string
@@ -393,6 +394,7 @@ export type Database = {
           adresa?: string | null
           created_at?: string
           email?: string | null
+          grad?: string | null
           id?: string
           maticni_broj?: string | null
           naziv: string
@@ -402,6 +404,7 @@ export type Database = {
           adresa?: string | null
           created_at?: string
           email?: string | null
+          grad?: string | null
           id?: string
           maticni_broj?: string | null
           naziv?: string
@@ -1821,6 +1824,11 @@ export type Database = {
           refund_response: Json | null
           refund_verification_url: string | null
           refunded_at: string | null
+          sef_invoice_id: string | null
+          sef_request_id: string | null
+          sef_response: Json | null
+          sef_sent_at: string | null
+          sef_status: string | null
           source_type: string | null
           subscription_id: string | null
           subtotal: number
@@ -1878,6 +1886,11 @@ export type Database = {
           refund_response?: Json | null
           refund_verification_url?: string | null
           refunded_at?: string | null
+          sef_invoice_id?: string | null
+          sef_request_id?: string | null
+          sef_response?: Json | null
+          sef_sent_at?: string | null
+          sef_status?: string | null
           source_type?: string | null
           subscription_id?: string | null
           subtotal: number
@@ -1935,6 +1948,11 @@ export type Database = {
           refund_response?: Json | null
           refund_verification_url?: string | null
           refunded_at?: string | null
+          sef_invoice_id?: string | null
+          sef_request_id?: string | null
+          sef_response?: Json | null
+          sef_sent_at?: string | null
+          sef_status?: string | null
           source_type?: string | null
           subscription_id?: string | null
           subtotal?: number
