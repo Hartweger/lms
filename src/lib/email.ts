@@ -61,7 +61,12 @@ function esc(s: string) {
  */
 async function sendEmail(
   resend: Resend,
-  p: { to: string | string[]; subject: string; html: string; from?: string; replyTo?: string; bulk?: boolean },
+  p: {
+    to: string | string[]; subject: string; html: string;
+    from?: string; replyTo?: string; bulk?: boolean;
+    /** PDF prilozi (predračun, faktura). `content` je base64 bez `data:` prefiksa. */
+    attachments?: { filename: string; content: string }[];
+  },
 ) {
   // Odjavljeni i trajno neisporučivi ne dobijaju masovnu poštu. Provera stoji OVDE, a ne
   // u svakom cron-u, da bi je i budući sender dobio sam od sebe. Transakcijske mejlove
@@ -78,6 +83,7 @@ async function sendEmail(
     html: p.html,
     text: htmlToText(p.html),
     ...(p.bulk && typeof p.to === "string" ? { headers: listUnsubscribeHeaders(p.to) } : {}),
+    ...(p.attachments?.length ? { attachments: p.attachments } : {}),
   });
 }
 
@@ -3212,5 +3218,56 @@ export async function sendZackIzvestajEmail(to: string, mejl: { subject: string;
     console.log(`[email] zack izveštaj poslat → ${to}`);
   } catch (e) {
     console.error(`[email] sendZackIzvestajEmail pao → ${to}:`, e);
+  }
+}
+
+/**
+ * Predračun ili faktura firmi, kao PDF prilog. Ide računovodstvu, ne polazniku -
+ * zato `billing_email`, a ne `email` sa narudžbine.
+ *
+ * Persiranje je namerno: ovo je jedini mejl koji ide firmi, a ne polazniku, i
+ * prati formulaciju sa Natašine postojeće fakture („Molimo vas...").
+ *
+ * Nije `bulk` - ne prolazi kroz odjave i baunsere, kao ni ostale potvrde.
+ */
+export async function sendDokumentEmail(o: {
+  to: string;
+  tip: "predracun" | "faktura";
+  broj: string;
+  pdf: Buffer;
+}) {
+  const naziv = o.tip === "predracun" ? "Predračun" : "Faktura";
+  try {
+    const resend = getResend();
+    if (!resend) return null;
+    return await sendEmail(resend, {
+      to: o.to,
+      subject: `${naziv} ${o.broj} — Hartweger`,
+      html: `
+<!DOCTYPE html>
+<html lang="sr">
+<head><meta charset="utf-8"></head>
+<body style="font-family: 'Helvetica Neue', Arial, sans-serif; color: #1a1a1a; margin: 0; padding: 0;">
+  <div style="max-width: 520px; margin: 0 auto; padding: 32px 20px; line-height: 1.6;">
+    <p>Poštovani,</p>
+    <p>u prilogu vam šaljemo ${naziv.toLowerCase()} broj <strong>${o.broj}</strong>.</p>
+    <p>Molimo vas da iznos uplatite u roku od 7 dana. Ako imate pitanja, samo odgovorite na ovaj mejl.</p>
+    <p style="margin-top: 28px;">Srdačno,<br/>Hartweger tim</p>
+    <p style="font-size: 12px; color: #999; margin-top: 32px;">
+      HARTWEGER · www.hartweger.rs · info@hartweger.rs · PIB: ${MERCHANT.pib}
+    </p>
+  </div>
+</body>
+</html>`,
+      attachments: [
+        {
+          filename: `${o.tip}-${o.broj.replace(/[^\w-]/g, "-")}.pdf`,
+          content: o.pdf.toString("base64"),
+        },
+      ],
+    });
+  } catch (e) {
+    console.error(`[email] sendDokumentEmail pao za ${o.broj}:`, e);
+    return null;
   }
 }
