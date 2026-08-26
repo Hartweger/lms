@@ -37,6 +37,15 @@ export function sefPodesen(): boolean {
   return SEF.apiKey.length > 0;
 }
 
+/**
+ * Da li pričamo sa demo okruženjem. Admin to MORA da vidi: bez oznake „SEF: poslata"
+ * na demou izgleda isto kao na produkciji, pa se lako pomisli da je faktura
+ * prijavljena državi, a nije.
+ */
+export function sefJeDemo(): boolean {
+  return SEF.apiUrl.includes("demo");
+}
+
 type Odgovor<T> =
   | { ok: true; data: T }
   | { ok: false; greska: string; status: number };

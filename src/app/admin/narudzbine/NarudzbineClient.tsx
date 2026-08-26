@@ -19,6 +19,8 @@ interface Props {
   initialOrders: Order[];
   courses: CourseOption[];
   variantsByCourse?: Record<string, Variant[]>;
+  /** Pričamo sa demo SEF-om - fakture nisu prijavljene državi. */
+  sefDemo?: boolean;
 }
 
 const PAKET_LABEL: Record<string, string> = { paket4: "4 termina", paket8: "8 termina", paket12: "12 termina" };
@@ -77,7 +79,7 @@ function RazlogBanke({ decline, kartica }: { decline: CardDecline | null; kartic
   );
 }
 
-export default function NarudzbineClient({ initialOrders, courses, variantsByCourse = {} }: Props) {
+export default function NarudzbineClient({ initialOrders, courses, variantsByCourse = {}, sefDemo = false }: Props) {
   const [orders, setOrders] = useState<Order[]>(initialOrders);
   const [filter, setFilter] = useState<Filter>("sve");
   const [search, setSearch] = useState("");
@@ -1022,7 +1024,7 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
                                 className={`text-xs ${SEF_BOJA[order.sef_status ?? ""] ?? "text-gray-500"}`}
                                 title={`SEF id: ${order.sef_invoice_id}`}
                               >
-                                SEF: {SEF_LABEL[order.sef_status ?? ""] ?? order.sef_status ?? "poslata"}
+                                SEF{sefDemo ? " (DEMO)" : ""}: {SEF_LABEL[order.sef_status ?? ""] ?? order.sef_status ?? "poslata"}
                               </span>
                             ) : (
                               <button
@@ -1031,7 +1033,7 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
                                 title="Šalje istu fakturu, pod istim brojem, na Sistem elektronskih faktura"
                                 className="text-xs px-3 py-1.5 rounded-lg bg-white text-gray-700 font-medium border border-gray-300 hover:bg-gray-800 hover:text-white transition-colors disabled:opacity-50"
                               >
-                                {dokLoading === `${order.id}-sef` ? "..." : "Pošalji na SEF"}
+                                {dokLoading === `${order.id}-sef` ? "..." : sefDemo ? "Pošalji na SEF (DEMO)" : "Pošalji na SEF"}
                               </button>
                             )
                           )}

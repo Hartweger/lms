@@ -1,6 +1,7 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import type { Variant } from "@/lib/individual-pricing";
 import NarudzbineClient from "./NarudzbineClient";
+import { sefJeDemo } from "@/lib/sef";
 
 export const dynamic = "force-dynamic";
 
@@ -55,5 +56,5 @@ export default async function AdminNarudzbinePage() {
   for (const e of enrs ?? []) if (e.order_id && e.professor_id) profByOrder[e.order_id] = profName[e.professor_id] ?? "";
   const enriched = (orders ?? []).map((o) => ({ ...o, professor_name: profByOrder[o.id] || null }));
 
-  return <NarudzbineClient initialOrders={enriched} courses={courses ?? []} variantsByCourse={variantsByCourse} />;
+  return <NarudzbineClient initialOrders={enriched} courses={courses ?? []} variantsByCourse={variantsByCourse} sefDemo={sefJeDemo()} />;
 }
