@@ -1,7 +1,7 @@
 import "server-only";
 import QRCode from "qrcode";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { buildIpsString } from "@/lib/order-utils";
+import { BANK_FIRME, buildIpsString } from "@/lib/order-utils";
 
 // Generiše IPS QR (PNG) za uplatnicu i okači na Supabase Storage; vrati public URL (ili null).
 export async function generateIpsQrUrl(
@@ -37,7 +37,7 @@ export async function ipsQrBuffer(d: {
     const naziv = d.tip === "predracun" ? "predracunu" : "fakturi";
     const ips = buildIpsString(
       { total: d.total, order_number: d.broj },
-      { poziv: d.broj, svrha: `Placanje po ${naziv} ${d.broj}` },
+      { poziv: d.broj, svrha: `Placanje po ${naziv} ${d.broj}`, racun: BANK_FIRME.racun },
     );
     return await QRCode.toBuffer(ips, { width: 260, margin: 1, errorCorrectionLevel: "M" });
   } catch (e) {

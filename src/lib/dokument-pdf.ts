@@ -10,7 +10,7 @@ import { jsPDF } from "jspdf";
 import * as fs from "fs";
 import * as path from "path";
 import { MERCHANT } from "@/lib/payment-confirmation";
-import { BANK_DETAILS } from "@/lib/order-utils";
+import { BANK_FIRME } from "@/lib/order-utils";
 import type { DokumentPodaci } from "@/lib/dokument-podaci";
 
 const M = 18;   // margina
@@ -50,7 +50,7 @@ export function napraviDokumentPdf(d: DokumentPodaci, qr: Buffer | null): Buffer
   doc.setFontSize(8.5);
   doc.setTextColor(70);
   doc.text(MERCHANT.adresa, M, y);
-  doc.text(`PIB: ${MERCHANT.pib}  ·  Banca Intesa: ${BANK_DETAILS.racun}`, M, y + 4);
+  doc.text(`PIB: ${MERCHANT.pib}  ·  ${BANK_FIRME.naziv}: ${BANK_FIRME.racun}`, M, y + 4);
   doc.text("www.hartweger.rs  ·  info@hartweger.rs", M, y + 8);
 
   doc.setTextColor(0);

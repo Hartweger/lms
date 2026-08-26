@@ -8,6 +8,17 @@ export const BANK_DETAILS = {
   model: "",
 };
 
+/**
+ * Račun za predračune i fakture pravnim licima. Namerno je drugi od `BANK_DETAILS`,
+ * koji ostaje za uplatnice fizičkim licima (odluka 26.08.2026). Ako se ovde nešto
+ * menja, mora i u IPS QR-u dokumenta - inače faktura kaže jedan račun, a skeniranje
+ * odvede novac na drugi.
+ */
+export const BANK_FIRME = {
+  naziv: "Banca Intesa",
+  racun: "160-6000001689258-40",
+};
+
 export const PAYPAL_ME_URL = "https://www.paypal.com/paypalme/natasahartweger1";
 
 // NBS IPS traži račun kao 18 cifara bez crtica: banka(3) + broj dopunjen nulama na 13 + kontrola(2).
@@ -24,13 +35,13 @@ function racunZaIps(racun: string): string {
 // ponašanje je nepromenjeno - taj string je prošao NBS validator i ne dira se.
 export function buildIpsString(
   o: { total: number; order_number: string },
-  opcije?: { poziv?: string; svrha?: string },
+  opcije?: { poziv?: string; svrha?: string; racun?: string },
 ): string {
   const poziv = opcije?.poziv ?? o.order_number;
   const svrha = opcije?.svrha ?? `Placanje porudzbine #${o.order_number}`;
   return [
     "K:PR", "V:01", "C:1",
-    `R:${racunZaIps(BANK_DETAILS.racun)}`,
+    `R:${racunZaIps(opcije?.racun ?? BANK_DETAILS.racun)}`,
     `N:${BANK_DETAILS.primalac}`,
     `I:RSD${Number(o.total).toFixed(2).replace(".", ",")}`,
     `S:${svrha}`,

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { buildIpsString, canDeleteOrder, canRefundOrder, orderTotals, orderFiscalStatus, pendingPaymentState, cardDeclineReason, shouldSendRecovery, recoveryAction, uplataReminderAction, needsFiscalRetry } from "./order-utils";
+import { BANK_FIRME, buildIpsString, canDeleteOrder, canRefundOrder, orderTotals, orderFiscalStatus, pendingPaymentState, cardDeclineReason, shouldSendRecovery, recoveryAction, uplataReminderAction, needsFiscalRetry } from "./order-utils";
 
 describe("buildIpsString - NBS IPS QR format", () => {
   const ips = buildIpsString({ total: 35000, order_number: "2026-216" });
@@ -36,6 +36,16 @@ describe("buildIpsString - dokument firme", () => {
     );
     expect(ips).toContain("S:Placanje po fakturi 2026-408");
     expect(ips).toContain("RO:002026-408");
+  });
+
+  it("QR nosi račun firme, ne onaj sa uplatnice", () => {
+    // Da faktura ne kaže jedan račun a skeniranje odvede novac na drugi.
+    const ips = buildIpsString(
+      { total: 39200, order_number: "2026-408" },
+      { racun: BANK_FIRME.racun },
+    );
+    expect(ips).toContain("R:160600000168925840");
+    expect(ips).not.toContain("R:170001055976700018");
   });
 
   it("poziv na broj može da se zada zasebno", () => {

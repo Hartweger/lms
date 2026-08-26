@@ -107,10 +107,16 @@ Dve razlike u odnosu na tabelu:
 cene sa uračunatim PDV-om. Prevod: `cena bez PDV = cena sa sajta / 1.20`, isto kao
 u cenovniku u tabeli.
 
-**Napomena:** adresa u zaglavlju tabele je `Jurija Gagarina 20k-39, 11070 Beograd`,
-a `MERCHANT.adresa` u `src/lib/payment-confirmation.ts` je `Jurija Gagarina 20,
-Beograd (Novi Beograd)`. Pre implementacije potvrditi koja je tačna i uskladiti na
-jedno mesto.
+**Adresa** je ona iz `MERCHANT.adresa` (`Jurija Gagarina 20, Beograd (Novi
+Beograd)`), a ne skraćena verzija iz tabele — ta formulacija je upisana po
+uputstvu banke za kartična plaćanja i ostaje jedna, na jednom mestu.
+Odluka 26.08.2026.
+
+**Račun na dokumentima firmama je Banca Intesa `160-6000001689258-40`**, zaseban
+od `BANK_DETAILS.racun` koji ostaje za uplatnice fizičkim licima. Stoji kao
+`BANK_FIRME` u `src/lib/order-utils.ts`. IPS QR na dokumentu **mora** da nosi taj
+isti račun — inače faktura kaže jedno, a skeniranje odvede novac na drugo mesto.
+Pokriveno testom.
 
 ## Podaci
 

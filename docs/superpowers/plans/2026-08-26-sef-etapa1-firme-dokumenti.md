@@ -16,12 +16,10 @@
 
 ## Preduslovi — podaci od Nataše
 
-Bez ova dva odgovora Task 5 ne može da se završi. Ostali taskovi mogu da idu paralelno.
+Odgovoreno 26.08.2026, oba su ugrađena:
 
-1. **Koji tekući račun ide na fakture firmama.** Na postojećoj fakturi je Banca Intesa `160-6000001689258-40`, a `BANK_DETAILS.racun` u `src/lib/order-utils.ts:6` je `170-10559767000-18`.
-2. **Tačna adresa za zaglavlje.** Tabela: `Jurija Gagarina 20k-39, 11070 Beograd`. Kod (`MERCHANT.adresa`): `Jurija Gagarina 20, Beograd (Novi Beograd)`.
-
-Dok odgovori ne stignu, u kodu se koriste vrednosti iz `MERCHANT` i `BANK_DETAILS` i ostaje `TODO` samo u Preduslovima ovog plana — nikad u kodu.
+1. **Račun na dokumentima firmama:** Banca Intesa `160-6000001689258-40` (`BANK_FIRME` u `src/lib/order-utils.ts`). Uplatnice fizičkim licima ostaju na `BANK_DETAILS.racun`.
+2. **Adresa u zaglavlju:** `MERCHANT.adresa`, dakle `Jurija Gagarina 20, Beograd (Novi Beograd)`.
 
 ---
 
