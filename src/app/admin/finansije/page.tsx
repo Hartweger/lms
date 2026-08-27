@@ -1,4 +1,6 @@
 import { createAdminClient } from "@/lib/supabase/admin";
+import { predlozenaKategorija } from "@/lib/sef-ulazne";
+import type { UlaznaRed } from "./UlazneFakture";
 import { buildFinansije, fillGroupCourseIds, monthKey, type ExpenseRow, type FinOrder, type FinOrderItem, type FinMonthlyRevenue, type FinMonthlyHonorar, type Kategorija } from "@/lib/finansije";
 import { loadPayables } from "@/lib/professor-payable";
 import wcRevenueHistory from "@/lib/wc-revenue-history.json";
@@ -131,6 +133,26 @@ export default async function AdminFinansijePage({
     .map((c) => ({ id: c.id, title: c.title }))
     .sort((a, b) => a.title.localeCompare(b.title, "sr"));
 
+  // Ulazne fakture koje čekaju odluku. Ne filtriraju se po izabranom periodu -
+  // faktura koja čeka mora da se vidi bez obzira koji mesec gledaš.
+  const { data: ulazneRes } = await admin
+    .from("sef_purchase_invoices")
+    .select("id, broj_dokumenta, dobavljac_naziv, dobavljac_pib, iznos, datum, rok_placanja")
+    .is("expense_id", null)
+    .eq("zanemarena", false)
+    .order("datum", { ascending: false });
+
+  const ulazne: UlaznaRed[] = (ulazneRes ?? []).map((u) => ({
+    id: u.id,
+    brojDokumenta: u.broj_dokumenta,
+    dobavljac: u.dobavljac_naziv,
+    pib: u.dobavljac_pib,
+    iznos: u.iznos == null ? null : Number(u.iznos),
+    datum: u.datum,
+    rokPlacanja: u.rok_placanja,
+    predlog: predlozenaKategorija(u.dobavljac_naziv),
+  }));
+
   return (
     <FinansijeClient
       data={data}
@@ -139,6 +161,7 @@ export default async function AdminFinansijePage({
       pendingTotal={pendingTotal}
       profName={profName}
       expenses={(expensesRes.data ?? []) as ExpenseRow[]}
+      ulazne={ulazne}
       courseOptions={courseOptions}
       ukupanSaldo={ukupanSaldo}
     />

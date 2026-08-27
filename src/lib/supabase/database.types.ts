@@ -2379,6 +2379,74 @@ export type Database = {
         }
         Relationships: []
       }
+      sef_purchase_invoices: {
+        Row: {
+          broj_dokumenta: string | null
+          cir_invoice_id: string | null
+          created_at: string
+          datum: string | null
+          dobavljac_naziv: string | null
+          dobavljac_pib: string | null
+          expense_id: string | null
+          id: string
+          iznos: number | null
+          iznos_bez_pdv: number | null
+          pdv: number | null
+          raw: Json | null
+          rok_placanja: string | null
+          sef_invoice_id: string
+          status: string | null
+          valuta: string | null
+          zanemarena: boolean
+        }
+        Insert: {
+          broj_dokumenta?: string | null
+          cir_invoice_id?: string | null
+          created_at?: string
+          datum?: string | null
+          dobavljac_naziv?: string | null
+          dobavljac_pib?: string | null
+          expense_id?: string | null
+          id?: string
+          iznos?: number | null
+          iznos_bez_pdv?: number | null
+          pdv?: number | null
+          raw?: Json | null
+          rok_placanja?: string | null
+          sef_invoice_id: string
+          status?: string | null
+          valuta?: string | null
+          zanemarena?: boolean
+        }
+        Update: {
+          broj_dokumenta?: string | null
+          cir_invoice_id?: string | null
+          created_at?: string
+          datum?: string | null
+          dobavljac_naziv?: string | null
+          dobavljac_pib?: string | null
+          expense_id?: string | null
+          id?: string
+          iznos?: number | null
+          iznos_bez_pdv?: number | null
+          pdv?: number | null
+          raw?: Json | null
+          rok_placanja?: string | null
+          sef_invoice_id?: string
+          status?: string | null
+          valuta?: string | null
+          zanemarena?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sef_purchase_invoices_expense_id_fkey"
+            columns: ["expense_id"]
+            isOneToOne: false
+            referencedRelation: "expenses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       smile_config: {
         Row: {
           key: string

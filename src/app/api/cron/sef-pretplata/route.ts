@@ -6,12 +6,18 @@
 // i status fakture u našem panelu tiho zastari - izgleda kao da firma nije reagovala,
 // a ona jeste.
 //
-// Uz obnovu, prolaz osvežava i statuse faktura koje još nisu na završnom statusu -
-// mreža za slučaj da je obaveštenje ipak promaklo.
+// Uz obnovu, prolaz radi još dve stvari:
+//  - osvežava statuse izlaznih faktura koje nisu na završnom statusu (mreža za
+//    slučaj da je obaveštenje promaklo)
+//  - povlači ulazne fakture sa SEF-a u `sef_purchase_invoices`
+//
+// Ulazne fakture NE ulaze u troškove same od sebe - čekaju da Nataša izabere
+// kategoriju i potvrdi. Dok se to ne desi, izveštaji su netaknuti.
 import { NextResponse } from "next/server";
 import { withCronLog } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { obnoviPretplatu, procitajStatus, jeZavrsenStatus, sefPodesen } from "@/lib/sef";
+import { obnoviPretplatu, procitajStatus, jeZavrsenStatus, sefPodesen, pregledUlaznihFaktura } from "@/lib/sef";
+import { uRed, jeZaKnjizenje } from "@/lib/sef-ulazne";
 import type { Json } from "@/lib/supabase/database.types";
 
 export const dynamic = "force-dynamic";
@@ -56,10 +62,38 @@ async function cronHandler(request: Request) {
     osvezeno += 1;
   }
 
+  // Ulazne fakture: gleda se unazad 35 dana, jer faktura ume da stigne sa
+  // zakašnjenjem, a upsert po `sef_invoice_id` ionako ne pravi duplikate.
+  const danas = new Date();
+  const od = new Date(danas.getTime() - 35 * 24 * 3600_000);
+  const ymd = (d: Date) => d.toISOString().slice(0, 10);
+
+  let noveUlazne = 0;
+  let ulazneGreska: string | null = null;
+  const pregled = await pregledUlaznihFaktura(ymd(od), ymd(danas));
+  if (!pregled.ok) {
+    ulazneGreska = pregled.greska;
+  } else {
+    const redovi = pregled.data
+      .map(uRed)
+      .filter((r): r is NonNullable<typeof r> => r !== null)
+      .filter((r) => jeZaKnjizenje(r.status));
+    if (redovi.length) {
+      // `expense_id` i `zanemarena` se NE navode, pa ih upsert ne dira - odluka
+      // koju je Nataša već donela ne sme da se poništi sledećim prolazom.
+      const { error, count } = await admin
+        .from("sef_purchase_invoices")
+        .upsert(redovi, { onConflict: "sef_invoice_id", count: "exact" });
+      if (error) ulazneGreska = error.message;
+      else noveUlazne = count ?? redovi.length;
+    }
+  }
+
   return NextResponse.json({
     pretplata: pretplata.ok ? "obnovljena" : `pala: ${pretplata.greska}`,
     proverenoFaktura: poGrupi.size,
     osvezeno,
+    ulazne: ulazneGreska ? `pala: ${ulazneGreska}` : noveUlazne,
   });
 }
 

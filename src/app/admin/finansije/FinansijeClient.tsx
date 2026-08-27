@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import UlazneFakture, { type UlaznaRed } from "./UlazneFakture";
 import { useRouter } from "next/navigation";
 import {
   KATEGORIJA_LABELS, EXPENSE_CATEGORIES, EXPENSE_CATEGORY_LABELS, MESECI_KRATKO,
@@ -20,11 +21,12 @@ interface Props {
   pendingTotal: number;
   profName: Record<string, string>;
   expenses: ExpenseRow[];
+  ulazne: UlaznaRed[];
   courseOptions: { id: string; title: string }[];
   ukupanSaldo: Record<string, number>;
 }
 
-export default function FinansijeClient({ data, year, mesec, pendingTotal, profName, expenses, courseOptions, ukupanSaldo }: Props) {
+export default function FinansijeClient({ data, year, mesec, pendingTotal, profName, expenses, ulazne, courseOptions, ukupanSaldo }: Props) {
   const router = useRouter();
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<ExpenseRow | null>(null);
@@ -185,6 +187,8 @@ export default function FinansijeClient({ data, year, mesec, pendingTotal, profN
           </tbody>
         </table>
       </section>
+
+      <UlazneFakture redovi={ulazne} />
 
       {/* Marže po kursevima */}
       <section className="bg-white rounded-xl border border-gray-100 p-4 overflow-x-auto">

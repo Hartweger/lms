@@ -198,6 +198,44 @@ export async function obnoviPretplatu(): Promise<Odgovor<unknown>> {
   return sefFetch<unknown>("/api/publicApi/subscribe", { metod: "POST" });
 }
 
+/** Jedan red iz pregleda ulaznih faktura. */
+export interface UlaznaFakturaSef {
+  invoiceId?: number;
+  cirInvoiceId?: string | null;
+  documentNumber?: string | null;
+  supplierName?: string | null;
+  supplierVatRegistrationNumber?: string | null;
+  amount?: number | null;
+  sumWithoutVat?: number | null;
+  vatAmount?: number | null;
+  currency?: string | null;
+  dueDate?: string | null;
+  sentDate?: string | null;
+  deliveryDate?: string | null;
+  status?: string | null;
+}
+
+/**
+ * Pregled ulaznih faktura u zadatom razdoblju.
+ *
+ * Namerno se koristi `overview`, a ne `purchase-invoice`: taj drugi vraća samo id
+ * i status, bez dobavljača i iznosa. `overview` u jednom pozivu daje sve što nam
+ * treba, pa nema preuzimanja i parsiranja XML-a po fakturi.
+ *
+ * Datumi idu kao YYYY-MM-DD.
+ */
+export async function pregledUlaznihFaktura(
+  dateFrom: string,
+  dateTo: string,
+): Promise<Odgovor<UlaznaFakturaSef[]>> {
+  const q = new URLSearchParams({ dateFrom, dateTo });
+  const res = await sefFetch<UlaznaFakturaSef[]>(`/api/publicApi/purchase-invoice/overview?${q}`);
+  if (res.ok && !Array.isArray(res.data)) {
+    return { ok: false, greska: "Neočekivan oblik odgovora za ulazne fakture.", status: 0 };
+  }
+  return res;
+}
+
 /** Upisuje ishod slanja na sve narudžbine grupe. */
 export async function upisiSefOdgovor(
   admin: SupabaseClient,
