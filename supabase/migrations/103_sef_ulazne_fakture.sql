@@ -1,4 +1,4 @@
--- 102_sef_ulazne_fakture.sql — ulazne fakture povučene sa SEF-a
+-- 103_sef_ulazne_fakture.sql — ulazne fakture povučene sa SEF-a
 --
 -- NE ulaze u troškove same od sebe: dok Nataša ne izabere kategoriju i ne potvrdi,
 -- izveštaji su netaknuti. Zato veza ka `expenses` stoji prazna dok se ne odobri.
