@@ -41,6 +41,7 @@ export default function ProfesorEseji() {
   const [editCorrections, setEditCorrections] = useState<{ original: string; corrected: string; explanation: string }[]>([]);
   const [saving, setSaving] = useState(false);
   const [taskByEx, setTaskByEx] = useState<Record<string, string>>({});
+  const [maxByEx, setMaxByEx] = useState<Record<string, number>>({});
   const [openTasks, setOpenTasks] = useState<Set<string>>(new Set());
 
   useEffect(() => {
@@ -111,7 +112,9 @@ export default function ProfesorEseji() {
           .select("exercise_id, question, options")
           .in("exercise_id", exIds)
           .order("order_index", { ascending: true });
-        setTaskByEx(pickSubmissionQuestions(eqs || []).taskByEx);
+        const { taskByEx, maxByEx } = pickSubmissionQuestions(eqs || []);
+        setTaskByEx(taskByEx);
+        setMaxByEx(maxByEx);
       }
       setLoading(false);
     };
@@ -130,7 +133,10 @@ export default function ProfesorEseji() {
   const startReview = (essay: EssayRow) => {
     setEditingId(essay.id);
     setProfFeedback(essay.professor_feedback || essay.ai_feedback || "");
-    setProfScore(essay.professor_score || essay.ai_score || 3);
+    // AI sugestija je uvek na skali 1-5, pa je ne nudimo kao polaznu ocenu na
+    // ispitnim vežbama (20/40 bodova) - tamo profesorka upisuje bodove sama.
+    const mx = maxByEx[essay.exercise_id] ?? 5;
+    setProfScore(essay.professor_score ?? (mx <= 5 ? (essay.ai_score ?? 3) : 0));
     setEditCorrections((essay.ai_corrections ?? []).map((c) => ({
       original: c.original ?? "",
       corrected: c.corrected ?? "",
@@ -341,22 +347,39 @@ export default function ProfesorEseji() {
                   </button>
                 </div>
                 <div>
-                  <label className="text-xs font-semibold text-gray-500 block mb-1">Ocena:</label>
-                  <div className="flex gap-2">
-                    {[1, 2, 3, 4, 5].map((s) => (
-                      <button
-                        key={s}
-                        onClick={() => setProfScore(s)}
-                        className={`w-10 h-10 rounded-lg text-sm font-bold ${
-                          profScore === s
-                            ? "bg-plava text-white"
-                            : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                        }`}
-                      >
-                        {s}
-                      </button>
-                    ))}
-                  </div>
+                  <label className="text-xs font-semibold text-gray-500 block mb-1">
+                    Ocena{(maxByEx[essay.exercise_id] ?? 5) > 5 ? ` (0-${maxByEx[essay.exercise_id]} bodova)` : ""}:
+                  </label>
+                  {/* Ispitne vežbe nose 20 ili 40 bodova - dugmići 1-5 bi tamo dali 5/40 (pad modula). */}
+                  {(maxByEx[essay.exercise_id] ?? 5) > 5 ? (
+                    <input
+                      type="number"
+                      min={0}
+                      max={maxByEx[essay.exercise_id]}
+                      value={profScore}
+                      onChange={(e) => {
+                        const mx = maxByEx[essay.exercise_id] ?? 5;
+                        setProfScore(Math.max(0, Math.min(mx, parseInt(e.target.value) || 0)));
+                      }}
+                      className="w-24 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-plava"
+                    />
+                  ) : (
+                    <div className="flex gap-2">
+                      {[1, 2, 3, 4, 5].map((s) => (
+                        <button
+                          key={s}
+                          onClick={() => setProfScore(s)}
+                          className={`w-10 h-10 rounded-lg text-sm font-bold ${
+                            profScore === s
+                              ? "bg-plava text-white"
+                              : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                          }`}
+                        >
+                          {s}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
                 <div className="flex gap-2">
                   <button
@@ -388,7 +411,7 @@ export default function ProfesorEseji() {
             {essay.status === "published" && essay.professor_feedback && (
               <div className="bg-green-50 rounded-lg p-4 mt-4">
                 <p className="text-xs font-semibold text-green-600 mb-1">
-                  Profesor (ocena: {essay.professor_score}/5):
+                  Profesor (ocena: {essay.professor_score}/{maxByEx[essay.exercise_id] ?? 5}):
                 </p>
                 <p className="text-sm text-gray-700">{essay.professor_feedback}</p>
               </div>

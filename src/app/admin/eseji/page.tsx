@@ -120,7 +120,10 @@ export default function AdminEseji() {
   const startReview = (essay: EssayRow) => {
     setEditingId(essay.id);
     setProfFeedback(essay.professor_feedback || essay.ai_feedback || "");
-    setProfScore(essay.professor_score || essay.ai_score || 3);
+    // AI sugestija je uvek na skali 1-5, pa je ne nudimo kao polaznu ocenu na
+    // ispitnim vežbama (20/40 bodova) - tamo se bodovi upisuju ručno.
+    const mx = maxByEx[essay.exercise_id] ?? 5;
+    setProfScore(essay.professor_score ?? (mx <= 5 ? (essay.ai_score ?? 3) : 0));
     setEditCorrections((essay.ai_corrections ?? []).map((c) => ({
       original: c.original ?? "",
       corrected: c.corrected ?? "",

@@ -115,6 +115,7 @@ export async function POST(request: Request) {
       lessonTitle: lesson?.title ?? "Schreiben",
       lessonId: essay.lesson_id as string,
       score: professorScore,
+      maxPoints,
       feedback: professorFeedback ?? null,
     });
   }

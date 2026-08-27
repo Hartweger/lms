@@ -2137,6 +2137,7 @@ export async function sendEssayFeedbackEmail(o: {
   lessonTitle: string;
   lessonId: string;
   score: number | null;
+  maxPoints?: number | null;
   feedback: string | null;
 }) {
   try {
@@ -2150,10 +2151,20 @@ export async function sendEssayFeedbackEmail(o: {
       4: "Vrlo dobro",
       5: "Odlično!",
     };
+    // Ispitne vežbe nose maxPoints (20, 40) - tamo zvezdice nemaju smisla, ide „x/y bodova".
+    // Bez ovoga je "☆".repeat(5 - 32) bacao RangeError, catch ga je progutao i učenik
+    // NIJE dobijao mejl da mu je rad pregledan.
+    const maxPoints = o.maxPoints ?? 5;
+    const zvezdice = (n: number) => {
+      const s = Math.max(0, Math.min(5, n));
+      return `${"★".repeat(s)}${"☆".repeat(5 - s)}`;
+    };
     const ocenaHtml =
-      o.score != null
-        ? `<p style="font-size:15px;margin:0 0 12px;color:#1a1a2e;"><strong>Ocena:</strong> ${"★".repeat(o.score)}${"☆".repeat(5 - o.score)} - ${esc(labels[o.score] ?? "")}</p>`
-        : "";
+      o.score == null
+        ? ""
+        : maxPoints <= 5
+          ? `<p style="font-size:15px;margin:0 0 12px;color:#1a1a2e;"><strong>Ocena:</strong> ${zvezdice(o.score)} - ${esc(labels[o.score] ?? "")}</p>`
+          : `<p style="font-size:15px;margin:0 0 12px;color:#1a1a2e;"><strong>Ocena:</strong> ${o.score}/${maxPoints} bodova - ${o.score >= 0.6 * maxPoints ? "položeno" : "nije položeno"}</p>`;
     const komentarHtml = o.feedback
       ? `<div style="background:#f8fcfd;border-radius:8px;padding:14px 16px;margin:0 0 16px;font-size:15px;line-height:1.6;color:#333;">${esc(o.feedback)}</div>`
       : "";
