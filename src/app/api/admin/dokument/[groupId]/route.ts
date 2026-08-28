@@ -10,7 +10,8 @@ import * as Sentry from "@sentry/nextjs";
 import { requireAdmin } from "@/lib/api-auth";
 import { sastaviDokument } from "@/lib/dokument-podaci";
 import { napraviDokumentPdf } from "@/lib/dokument-pdf";
-import { ipsQrBuffer, dokumentIpsQrUrl } from "@/lib/ips-qr";
+import { ipsQrBuffer } from "@/lib/ips-qr";
+import { SITE_URL } from "@/lib/site-url";
 import { sendDokumentEmail } from "@/lib/email";
 
 export async function POST(
@@ -112,9 +113,10 @@ export async function POST(
   const qr = await ipsQrBuffer(qrPodaci);
   const pdf = napraviDokumentPdf(dokument, qr);
 
-  // QR se dodatno kači na Storage: prilog se u mejlu ne prikazuje, a predračun
-  // mora da se vidi i bez otvaranja PDF-a - prosleđuje se onome ko plaća.
-  const ipsQrUrl = tip === "predracun" ? await dokumentIpsQrUrl(admin, qrPodaci) : null;
+  // QR u mejlu se služi sa NAŠE adrese, ne sa Supabase Storage-a: slika sa strane
+  // adrese obara isporučivost (Resend upozorava, Gmail je ceni kao sumnjivu).
+  const ipsQrUrl =
+    tip === "predracun" ? `${SITE_URL}/api/qr/${orders[0].id}?tip=predracun` : null;
 
   const poslato = await sendDokumentEmail({ to: primalac, dokument, pdf, ipsQrUrl });
   if (!poslato) {

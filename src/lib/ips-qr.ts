@@ -48,27 +48,3 @@ export async function ipsQrBuffer(d: DokumentQr): Promise<Buffer | null> {
     return null;
   }
 }
-
-/**
- * Isti QR, ali okačen na Storage i vraćen kao javni URL - da može da se PRIKAŽE
- * u telu mejla. Prilog se ne prikazuje, a predračun mora da se vidi i bez
- * otvaranja PDF-a, jer se prosleđuje onome ko plaća.
- */
-export async function dokumentIpsQrUrl(
-  admin: SupabaseClient,
-  d: DokumentQr,
-): Promise<string | null> {
-  try {
-    const buf = await QRCode.toBuffer(dokumentIps(d), { width: 260, margin: 1, errorCorrectionLevel: "M" });
-    const dest = `dokumenti/${d.tip}-${d.broj.replace(/[^\w-]/g, "-")}.png`;
-    const { error } = await admin.storage.from("blog-media").upload(dest, buf, {
-      contentType: "image/png",
-      upsert: true,
-    });
-    if (error) throw error;
-    return admin.storage.from("blog-media").getPublicUrl(dest).data.publicUrl;
-  } catch (e) {
-    console.error("[ips-qr] dokument QR URL pao:", e);
-    return null;
-  }
-}

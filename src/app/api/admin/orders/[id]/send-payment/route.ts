@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/api-auth";
 import { sendPaymentInstructionsEmail } from "@/lib/email";
 import { calculatePaypalEur } from "@/lib/order-utils";
-import { generateIpsQrUrl } from "@/lib/ips-qr";
+import { SITE_URL } from "@/lib/site-url";
 
 // (Ponovno) slanje kupcu podataka za uplatu - za metodu te narudžbine.
 export async function POST(
@@ -35,7 +35,8 @@ export async function POST(
     pm === "paypal" ? "paypal" : pm.startsWith("kartica") ? "kartica" : "uplatnica";
   const courseTitle = Array.isArray(order.items) && order.items[0]?.title ? order.items[0].title : "kurs";
   const paypalEur = method === "paypal" ? calculatePaypalEur(Number(order.total)) : undefined;
-  const ipsQrUrl = method === "uplatnica" ? await generateIpsQrUrl(admin, { total: Number(order.total), order_number: order.order_number }) : null;
+  // QR se služi sa naše adrese - slika sa strane adrese obara isporučivost.
+  const ipsQrUrl = method === "uplatnica" ? `${SITE_URL}/api/qr/${order.id}` : null;
 
   try {
     await sendPaymentInstructionsEmail(

@@ -10,10 +10,8 @@ vi.mock("@/lib/api-auth", () => ({
   requireAdmin: async () => ({ ok: true, admin: h.fake.admin }),
 }));
 vi.mock("@sentry/nextjs", () => ({ captureException: vi.fn() }));
-vi.mock("@/lib/ips-qr", () => ({
-  ipsQrBuffer: vi.fn(async () => null),
-  dokumentIpsQrUrl: vi.fn(async () => "https://storage.test/qr.png"),
-}));
+vi.mock("@/lib/ips-qr", () => ({ ipsQrBuffer: vi.fn(async () => null) }));
+vi.mock("@/lib/site-url", () => ({ SITE_URL: "https://test.local" }));
 vi.mock("@/lib/dokument-pdf", () => ({
   napraviDokumentPdf: vi.fn(() => Buffer.from("pdf")),
 }));
@@ -84,8 +82,9 @@ describe("izdavanje dokumenta firmi", () => {
       expect.objectContaining({
         to: "racunovodstvo@firma.rs",
         dokument: expect.objectContaining({ tip: "predracun", broj: "2026-408" }),
-        // Predračun se prosleđuje onome ko plaća, pa QR mora da se VIDI u mejlu.
-        ipsQrUrl: "https://storage.test/qr.png",
+        // Predračun se prosleđuje onome ko plaća, pa QR mora da se VIDI u mejlu -
+        // i to sa NAŠE adrese, jer slika sa strane adrese obara isporučivost.
+        ipsQrUrl: "https://test.local/api/qr/o1?tip=predracun",
       }),
     );
 

@@ -223,8 +223,8 @@ export async function POST(request: Request) {
         const paypalEur = paymentMethod === "paypal" ? calculatePaypalEur(finalAmount) : undefined;
         let ipsQrUrl: string | null = null;
         if (paymentMethod === "uplatnica") {
-          const { generateIpsQrUrl } = await import("@/lib/ips-qr");
-          ipsQrUrl = await generateIpsQrUrl(admin, order);
+          const { SITE_URL } = await import("@/lib/site-url");
+          ipsQrUrl = `${SITE_URL}/api/qr/${order.id}`;
         }
         await sendPaymentInstructionsEmail(email, userName, course.title, order.order_number, finalAmount, paymentMethod, paypalEur, order.id, ipsQrUrl ?? undefined);
       } catch (e) {

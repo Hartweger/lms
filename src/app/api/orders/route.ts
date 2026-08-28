@@ -670,8 +670,8 @@ export async function POST(request: Request) {
     if (!isCard) {
       let ipsQrUrl: string | null = null;
       if (paymentMethod === "uplatnica") {
-        const { generateIpsQrUrl } = await import("@/lib/ips-qr");
-        ipsQrUrl = await generateIpsQrUrl(supabase, { total: finalPrice, order_number: order.order_number });
+        const { SITE_URL } = await import("@/lib/site-url");
+        ipsQrUrl = `${SITE_URL}/api/qr/${order.id}`;
       }
       await sendPaymentInstructionsEmail(
         email,

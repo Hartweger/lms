@@ -5,7 +5,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { reconcilePendingCards } from "@/lib/reconcile-cards";
 import { sendCardRetryEmail, sendCardReminder2Email, sendOrderCancelledEmail, sendUplataReminderEmail } from "@/lib/email";
 import { recoveryAction, uplataReminderAction, calculatePaypalEur, needsFiscalRetry } from "@/lib/order-utils";
-import { generateIpsQrUrl } from "@/lib/ips-qr";
+import { SITE_URL } from "@/lib/site-url";
 import { fiscalizeOrder } from "@/lib/fiscomm";
 import * as Sentry from "@sentry/nextjs";
 
@@ -153,7 +153,7 @@ async function cronHandler(request: Request) {
       stage,
       paypalEur: isUplatnica ? undefined : calculatePaypalEur(o.total),
       ipsQrUrl: isUplatnica
-        ? (await generateIpsQrUrl(admin, { total: o.total, order_number: o.order_number })) ?? undefined
+        ? `${SITE_URL}/api/qr/${o.id}`
         : undefined,
     });
     await admin.from("orders").update({
