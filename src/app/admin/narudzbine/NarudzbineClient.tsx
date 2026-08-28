@@ -1090,14 +1090,19 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
                           </span>
                         ) : (
                           <span className="flex items-center justify-end gap-2">
-                            <button
-                              onClick={() => sendPayment(order.id)}
-                              disabled={sendingPay === order.id}
-                              title="Pošalji kupcu mejl sa podacima za uplatu"
-                              className="text-xs px-3 py-1.5 rounded-lg bg-plava-light text-plava font-medium hover:bg-plava hover:text-white transition-colors disabled:opacity-50"
-                            >
-                              {sendingPay === order.id ? "..." : sentPay === order.id ? "✓ Poslato" : "Pošalji uplatu"}
-                            </button>
+                            {/* Kod firme ovo je zamka: šalje POLAZNIKU, sa računom za
+                                fizička lica. Firmu plaća računovodstvo po predračunu,
+                                na drugi račun - zato se dugme tu i ne prikazuje. */}
+                            {!order.company_order_group && (
+                              <button
+                                onClick={() => sendPayment(order.id)}
+                                disabled={sendingPay === order.id}
+                                title="Pošalji kupcu mejl sa podacima za uplatu"
+                                className="text-xs px-3 py-1.5 rounded-lg bg-plava-light text-plava font-medium hover:bg-plava hover:text-white transition-colors disabled:opacity-50"
+                              >
+                                {sendingPay === order.id ? "..." : sentPay === order.id ? "✓ Poslato" : "Pošalji uplatu"}
+                              </button>
+                            )}
                             <button
                               onClick={() => setConfirmId(order.id)}
                               className="text-xs px-3 py-1.5 rounded-lg bg-green-50 text-green-600 font-medium hover:bg-green-100 transition-colors"

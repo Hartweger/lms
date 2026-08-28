@@ -18,6 +18,17 @@ export async function POST(
   const { data: order, error } = await admin.from("orders").select("*").eq("id", id).single();
   if (error || !order) return NextResponse.json({ error: "Order not found" }, { status: 404 });
 
+  // Firmu plaća računovodstvo po PREDRAČUNU, na drugi račun. Ovaj mejl bi otišao
+  // polazniku i tražio od njega da plati kurs koji plaća njegov poslodavac -
+  // pogrešnom čoveku, sa pogrešnim računom. Dugme je sklonjeno iz prikaza, ali
+  // provera stoji i ovde: skrivanje dugmeta nije zaštita.
+  if (order.company_order_group) {
+    return NextResponse.json(
+      { error: "Narudžbina je za firmu - umesto uplatnice pošalji predračun." },
+      { status: 400 },
+    );
+  }
+
   // metoda mejla = metoda narudžbine (kartica-link radi samo za kartica narudžbine)
   const pm = String(order.payment_method || "");
   const method: "uplatnica" | "paypal" | "kartica" =
