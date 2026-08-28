@@ -71,6 +71,14 @@ export async function POST(
       vecPoslato: true,
     });
   }
+  // Narudžbina probana na demo okruženju. Njen broj sa demoa ne važi na produkciji,
+  // a ponovno slanje bi probnu fakturu predalo državi kao pravu.
+  if (prva.sef_status === "DEMO") {
+    return NextResponse.json(
+      { error: "Ovo je probna narudžbina sa demo okruženja - ne šalje se na pravi SEF." },
+      { status: 400 },
+    );
+  }
   if (!prva.faktura_broj || !prva.faktura_sent_at) {
     return NextResponse.json(
       { error: "Prvo izdaj fakturu, pa je onda pošalji na SEF." },

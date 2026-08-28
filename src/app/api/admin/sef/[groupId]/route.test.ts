@@ -96,6 +96,21 @@ describe("slanje fakture na SEF", () => {
     expect(posaljiUbl).not.toHaveBeenCalled();
   });
 
+  it("probna narudžbina sa demoa se ne šalje na pravi SEF", async () => {
+    // Posle prelaska na produkciju demo broj je obrisan, pa bi se dugme inače
+    // vratilo - a klik bi probnu fakturu predao državi kao pravu.
+    h.fake = createFakeAdmin({
+      orders: [narudzbina({ sef_status: "DEMO", sef_invoice_id: null })],
+      companies: [firma],
+    });
+
+    const res = await POST(zahtev(), { params });
+
+    expect(res.status).toBe(400);
+    expect((await res.json()).error).toContain("probna");
+    expect(posaljiUbl).not.toHaveBeenCalled();
+  });
+
   it("drugi klik ne šalje drugu fakturu", async () => {
     h.fake = createFakeAdmin({
       orders: [narudzbina({ sef_invoice_id: "998877", sef_status: "Approved" })],

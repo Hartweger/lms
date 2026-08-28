@@ -27,6 +27,7 @@ const PAKET_LABEL: Record<string, string> = { paket4: "4 termina", paket8: "8 te
 
 /** SEF statusi na našem jeziku. Ono što nije ovde se prikazuje kako je stiglo. */
 const SEF_LABEL: Record<string, string> = {
+  DEMO: "probna (demo)",
   Sending: "šalje se",
   Sent: "poslata",
   Approved: "prihvaćena",
@@ -1019,7 +1020,11 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
                             )
                           )}
                           {order.faktura_broj && (
-                            order.sef_invoice_id ? (
+                            order.sef_status === "DEMO" ? (
+                              <span className="text-xs text-gray-400" title="Probana na demo okruženju; na pravi SEF se ne šalje">
+                                SEF: probna (demo)
+                              </span>
+                            ) : order.sef_invoice_id ? (
                               <span
                                 className={`text-xs ${SEF_BOJA[order.sef_status ?? ""] ?? "text-gray-500"}`}
                                 title={`SEF id: ${order.sef_invoice_id}`}
