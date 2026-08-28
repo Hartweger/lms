@@ -191,6 +191,14 @@ export async function firmaJeNaSefu(pib: string): Promise<boolean | null> {
 }
 
 /**
+ * Verzija SEF-a. Čita se samo da bi se proverilo da ključ radi - ništa ne menja
+ * i ništa ne šalje, pa je bezbedna za proveru veze na produkciji.
+ */
+export async function sefVerzija(): Promise<Odgovor<unknown>> {
+  return sefFetch<unknown>("/api/publicApi/getEfakturaVersion");
+}
+
+/**
  * Obnavlja pretplatu na obaveštenja o promeni statusa. Važi za SLEDEĆI dan, pa
  * mora da se poziva svakog dana - vidi cron. Bez ovoga statusi tiho zastare.
  */
