@@ -3,6 +3,7 @@
 // je zaustavljala slanje na SEF i moralo se u bazu ručno.
 import { createAdminClient } from "@/lib/supabase/admin";
 import FirmeClient, { type FirmaRed } from "./FirmeClient";
+import MesecneFakture, { type MesecnaRed } from "./MesecneFakture";
 
 export const dynamic = "force-dynamic";
 
@@ -36,5 +37,35 @@ export default async function AdminFirmePage() {
     brojNarudzbina: brojPoFirmi.get(f.id) ?? 0,
   }));
 
-  return <FirmeClient firme={redovi} />;
+  // Mesečne fakture koje čekaju slanje ili SEF.
+  const { data: runs } = await admin
+    .from("recurring_invoice_runs")
+    .select("id, period, broj, iznos, opis, faktura_sent_at, sef_invoice_id, sef_status, recurring:recurring_id(company_id)")
+    .order("period", { ascending: false })
+    .limit(24);
+
+  const poId = new Map((firme ?? []).map((f) => [f.id, f]));
+  const mesecne: MesecnaRed[] = (runs ?? []).map((r) => {
+    const veza = r.recurring as { company_id: string } | null;
+    const f = veza ? poId.get(veza.company_id) : undefined;
+    return {
+      id: r.id,
+      firma: f?.naziv ?? "Nepoznata firma",
+      opis: r.opis,
+      iznos: r.iznos,
+      period: r.period,
+      broj: r.broj,
+      poslata: r.faktura_sent_at != null,
+      sefId: r.sef_invoice_id,
+      sefStatus: r.sef_status,
+      mejl: f?.email ?? null,
+    };
+  });
+
+  return (
+    <>
+      <MesecneFakture redovi={mesecne} />
+      <FirmeClient firme={redovi} />
+    </>
+  );
 }

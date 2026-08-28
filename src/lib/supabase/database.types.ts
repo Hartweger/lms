@@ -1603,6 +1603,21 @@ export type Database = {
           },
         ]
       }
+      invoice_series: {
+        Row: {
+          godina: number
+          poslednji_broj: number
+        }
+        Insert: {
+          godina: number
+          poslednji_broj: number
+        }
+        Update: {
+          godina?: number
+          poslednji_broj?: number
+        }
+        Relationships: []
+      }
       lesson_progress: {
         Row: {
           completed: boolean
@@ -2459,6 +2474,103 @@ export type Database = {
           reset_at?: string
         }
         Relationships: []
+      }
+      recurring_invoice_runs: {
+        Row: {
+          broj: string | null
+          created_at: string
+          faktura_sent_at: string | null
+          id: string
+          iznos: number
+          opis: string
+          period: string
+          recurring_id: string
+          sef_invoice_id: string | null
+          sef_request_id: string | null
+          sef_response: Json | null
+          sef_sent_at: string | null
+          sef_status: string | null
+        }
+        Insert: {
+          broj?: string | null
+          created_at?: string
+          faktura_sent_at?: string | null
+          id?: string
+          iznos: number
+          opis: string
+          period: string
+          recurring_id: string
+          sef_invoice_id?: string | null
+          sef_request_id?: string | null
+          sef_response?: Json | null
+          sef_sent_at?: string | null
+          sef_status?: string | null
+        }
+        Update: {
+          broj?: string | null
+          created_at?: string
+          faktura_sent_at?: string | null
+          id?: string
+          iznos?: number
+          opis?: string
+          period?: string
+          recurring_id?: string
+          sef_invoice_id?: string | null
+          sef_request_id?: string | null
+          sef_response?: Json | null
+          sef_sent_at?: string | null
+          sef_status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recurring_invoice_runs_recurring_id_fkey"
+            columns: ["recurring_id"]
+            isOneToOne: false
+            referencedRelation: "recurring_invoices"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recurring_invoices: {
+        Row: {
+          aktivno: boolean
+          company_id: string
+          created_at: string
+          dan_u_mesecu: number
+          id: string
+          iznos: number
+          napomena: string | null
+          opis: string
+        }
+        Insert: {
+          aktivno?: boolean
+          company_id: string
+          created_at?: string
+          dan_u_mesecu?: number
+          id?: string
+          iznos: number
+          napomena?: string | null
+          opis: string
+        }
+        Update: {
+          aktivno?: boolean
+          company_id?: string
+          created_at?: string
+          dan_u_mesecu?: number
+          id?: string
+          iznos?: number
+          napomena?: string | null
+          opis?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recurring_invoices_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       review_requests: {
         Row: {
@@ -3545,6 +3657,7 @@ export type Database = {
           remaining: number
         }[]
       }
+      sledeci_broj_fakture: { Args: { p_godina: number }; Returns: number }
     }
     Enums: {
       zack_rod: "der" | "die" | "das" | "nema"
