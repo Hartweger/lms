@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.17"
+    PostgrestVersion: "14.5"
   }
   public: {
     Tables: {
@@ -124,6 +124,84 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      bank_transactions: {
+        Row: {
+          created_at: string
+          datum: string | null
+          expense_id: string | null
+          fitid: string
+          id: string
+          iznos: number
+          izvod_broj: number | null
+          naziv: string | null
+          order_id: string | null
+          poziv_druge: string | null
+          poziv_na_broj: string | null
+          racun: string | null
+          racun_druge: string | null
+          raw: Json | null
+          sifra: string | null
+          smer: string
+          status: string
+          svrha: string | null
+        }
+        Insert: {
+          created_at?: string
+          datum?: string | null
+          expense_id?: string | null
+          fitid: string
+          id?: string
+          iznos: number
+          izvod_broj?: number | null
+          naziv?: string | null
+          order_id?: string | null
+          poziv_druge?: string | null
+          poziv_na_broj?: string | null
+          racun?: string | null
+          racun_druge?: string | null
+          raw?: Json | null
+          sifra?: string | null
+          smer: string
+          status?: string
+          svrha?: string | null
+        }
+        Update: {
+          created_at?: string
+          datum?: string | null
+          expense_id?: string | null
+          fitid?: string
+          id?: string
+          iznos?: number
+          izvod_broj?: number | null
+          naziv?: string | null
+          order_id?: string | null
+          poziv_druge?: string | null
+          poziv_na_broj?: string | null
+          racun?: string | null
+          racun_druge?: string | null
+          raw?: Json | null
+          sifra?: string | null
+          smer?: string
+          status?: string
+          svrha?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bank_transactions_expense_id_fkey"
+            columns: ["expense_id"]
+            isOneToOne: false
+            referencedRelation: "expenses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_transactions_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       blog_posts: {
         Row: {
@@ -1027,6 +1105,27 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      expense_rules: {
+        Row: {
+          created_at: string
+          id: string
+          kategorija: string
+          obrazac: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          kategorija: string
+          obrazac: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          kategorija?: string
+          obrazac?: string
+        }
+        Relationships: []
       }
       expenses: {
         Row: {
