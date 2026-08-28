@@ -7,11 +7,11 @@
 // Gađa `getEfakturaVersion`: čita verziju sistema, ništa ne menja i ništa ne šalje.
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/api-auth";
-import { sefPodesen, sefJeDemo, sefVerzija } from "@/lib/sef";
+import { sefPodesen, sefJeDemo, sefVerzija, procitajStatus } from "@/lib/sef";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(request: Request) {
   const auth = await requireAdmin();
   if (!auth.ok) return auth.response;
 
@@ -39,10 +39,23 @@ export async function GET() {
     );
   }
 
+  // ?invoiceId=470879420 pita SEF za status konkretne fakture. Služi da se odvoji
+  // „status još nije stigao" od „čitanje statusa uopšte ne radi" - a to se inače
+  // ne vidi, jer oba izgledaju kao faktura koja zauvek stoji na „šalje se".
+  const invoiceId = new URL(request.url).searchParams.get("invoiceId");
+  let faktura: unknown = undefined;
+  if (invoiceId) {
+    const st = await procitajStatus(invoiceId);
+    faktura = st.ok
+      ? { invoiceId, status: st.data.status ?? "(SEF nije vratio status)", odgovor: st.data }
+      : { invoiceId, greska: st.greska, httpStatus: st.status };
+  }
+
   return NextResponse.json({
     veza: "RADI",
     okruzenje,
     verzijaSefa: res.data,
+    ...(faktura ? { faktura } : {}),
     napomena:
       okruzenje === "DEMO"
         ? "Fakture poslate na SEF nisu prijavljene državi."
