@@ -162,16 +162,80 @@ describe("uKrugovima", () => {
     expect(tok.slice(0, 6)).not.toEqual(tok.slice(6, 12));
   });
 
+  /**
+   * Nalaz umesto tvrđenja, NAMERNO: `expect` po svakom paru je ovaj test
+   * dizao na ~2.8s od podrazumevanih 5s vitest timeout-a, pa je na natovarenom
+   * CI-ju povremeno padao na VREME - a ulaz mu je oduvek bio determinističan,
+   * tako da sa samom funkcijom to nije imalo veze. Ista računica bez `expect`
+   * u petlji staje u ~30ms, pa se tvrdi jednom, na kraju.
+   */
+  const dveIsteZaredom = (tok: readonly string[]): string | null => {
+    for (let i = 1; i < tok.length; i++) {
+      if (tok[i] === tok[i - 1]) return `„${tok[i]}" dvaput, na ${i - 1}. i ${i}. mestu`;
+    }
+    return null;
+  };
+
   it("nikad ne pušta dve iste stavke jednu za drugom", () => {
+    const pukla: string[] = [];
+    for (let broj = 2; broj <= 8; broj++) {
+      const stavke = Array.from({ length: broj }, (_, i) => `s${i}`);
+      for (let s = 1; s <= 500; s++) {
+        const greska = dveIsteZaredom(uKrugovima(stavke, 60, seme(s)));
+        if (greska) pukla.push(`spisak od ${broj}, seme ${s}: ${greska}`);
+      }
+    }
+    expect(pukla).toEqual([]);
+  });
+
+  /** rng koji Fisher-Yates u `promesaj` tera da izvuče baš zadati raspored. */
+  const poPlanu = (plan: readonly number[]) => {
+    let k = 0;
+    return () => plan[k++ % plan.length];
+  };
+
+  /** Svi mogući ishodi jednog prolaza mešanja nad `broj` stavki, kao planovi. */
+  const sviKrugovi = (broj: number): number[][] => {
+    let sve: number[][] = [[]];
+    for (let i = broj - 1; i > 0; i--) {
+      const nove: number[][] = [];
+      // +0.5 da `Math.floor(rng() * (i + 1))` padne na traženo j i kad deljenje
+      // ne vraća tačan razlomak; gola granica j/(i+1) ume da promaši za jedan.
+      for (const p of sve) for (let j = 0; j <= i; j++) nove.push([...p, (j + 0.5) / (i + 1)]);
+      sve = nove;
+    }
+    return sve;
+  };
+
+  /**
+   * Semena pogađaju samo one rasporede mešanja na koje slučajno naiđu, a spoj
+   * dva kruga je jedino mesto gde funkcija uopšte može da pusti dve iste. Zato
+   * se ovde ne pogađa nego NABRAJA: svaki mogući sledeći krug, iza svakog
+   * mogućeg završetka prethodnog. Sledeći krug od prethodnog vidi samo
+   * poslednju stavku, pa je time granični slučaj pokriven do kraja.
+   */
+  it("nijedan mogući raspored mešanja ne spoji dve iste na sastavu krugova", () => {
+    const pukla: string[] = [];
     for (let broj = 2; broj <= 6; broj++) {
       const stavke = Array.from({ length: broj }, (_, i) => `s${i}`);
-      for (let s = 1; s <= 40; s++) {
-        const tok = uKrugovima(stavke, 60, seme(s));
-        for (let i = 1; i < tok.length; i++) {
-          expect(tok[i]).not.toBe(tok[i - 1]);
+      const krugovi = sviKrugovi(broj);
+
+      const zavrseci = new Map<string, number[]>();
+      for (const plan of krugovi) {
+        const kraj = uKrugovima(stavke, broj, poPlanu(plan)).at(-1);
+        if (kraj !== undefined && !zavrseci.has(kraj)) zavrseci.set(kraj, plan);
+      }
+      // Ako se ne skupe svi završeci, nabrajanje ne pokriva ono što tvrdi.
+      expect(zavrseci.size).toBe(broj);
+
+      for (const [kraj, prvi] of zavrseci) {
+        for (const drugi of krugovi) {
+          const greska = dveIsteZaredom(uKrugovima(stavke, broj * 2, poPlanu([...prvi, ...drugi])));
+          if (greska) pukla.push(`spisak od ${broj}, iza „${kraj}": ${greska}`);
         }
       }
     }
+    expect(pukla).toEqual([]);
   });
 
   it("spisak od jedne stavke ne vrti se u prazno, samo se ponavlja", () => {
