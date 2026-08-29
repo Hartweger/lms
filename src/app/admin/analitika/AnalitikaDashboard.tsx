@@ -83,6 +83,19 @@ function categorize(name: string): string {
   return "Ostalo";
 }
 
+// Iznos stavke = deo STVARNO naplaćenog novca (`order.total`), srazmerno ceni
+// stavke. Cena iz `items[]` nije naplaćen iznos: kod pretplate na rate to je
+// puna cena paketa (29.133) a naplaćena je rata (3.199), kod prevoda je cena
+// po strani. Novac uvek iz `total`, kategorija iz stavke.
+function itemAmounts(order: WcOrder): number[] {
+  const items = order.items ?? [];
+  if (items.length === 0) return [];
+  const orderTotal = Number(order.total) || 0;
+  const listedSum = items.reduce((s, it) => s + Number(it.total ?? 0), 0);
+  if (listedSum <= 0) return items.map(() => orderTotal / items.length);
+  return items.map((it) => (Number(it.total ?? 0) / listedSum) * orderTotal);
+}
+
 function statusBadge(status: string) {
   switch (status) {
     case "completed":
@@ -374,10 +387,11 @@ export default function AnalitikaDashboard({
     const categoryMap: Record<string, number> = {};
     for (const order of completed) {
       if (!order.items) continue;
-      for (const item of order.items) {
+      const amounts = itemAmounts(order);
+      order.items.forEach((item, i) => {
         const cat = categorize(item.name ?? "");
-        categoryMap[cat] = (categoryMap[cat] ?? 0) + Number(item.total ?? 0);
-      }
+        categoryMap[cat] = (categoryMap[cat] ?? 0) + amounts[i];
+      });
     }
     const categoryData = Object.entries(categoryMap)
       .map(([name, value]) => ({ name, value }))
@@ -431,14 +445,15 @@ export default function AnalitikaDashboard({
     const productMap: Record<string, { name: string; sales: number; revenue: number }> = {};
     for (const order of completed) {
       if (!order.items) continue;
-      for (const item of order.items) {
+      const amounts = itemAmounts(order);
+      order.items.forEach((item, i) => {
         const key = String(item.product_id ?? item.name);
         if (!productMap[key]) {
           productMap[key] = { name: item.name ?? "-", sales: 0, revenue: 0 };
         }
         productMap[key].sales += item.quantity ?? 1;
-        productMap[key].revenue += Number(item.total ?? 0);
-      }
+        productMap[key].revenue += amounts[i];
+      });
     }
     const top10 = Object.values(productMap)
       .sort((a, b) => b.revenue - a.revenue)
