@@ -50,6 +50,15 @@ export function rasporedPomeren(pre: Partial<Group> | null, sad: Partial<Group> 
 
 export const imaTermin = (g: Partial<Group> | null) => !!(g?.gcal_event_id || g?.meet_link);
 
+// Promena profesorke je poseban slučaj: Google serija živi u KALENDARU profesorke, pa termin
+// mora da se preseli (stari se gasi, nov otvara) - jedini put kad se Meet link menja.
+// B1.1, 29.08.2026: bez ovoga „Osveži termin" gađa novi kalendar i vraća „Not Found".
+export function profesorkaPromenjena(pre: Partial<Group> | null, sad: Partial<Group> | null): boolean {
+  if (!pre || !sad) return false;
+  if (!pre.professor_id || !sad.professor_id) return false;
+  return pre.professor_id !== sad.professor_id;
+}
+
 const STATUSI = ["planiran", "uskoro", "otvoren", "u_toku", "zavrsena", "otkazana"];
 const AKTIVNI_STATUSI = ["planiran", "uskoro", "otvoren", "u_toku"];
 const STATUS_BOJA: Record<string, string> = {
@@ -176,12 +185,19 @@ export default function GrupeAdmin({ initial }: { initial: Group[] }) {
 
     // Raspored pomeren na grupi koja već ima termin: PATCH je promenio samo `groups`.
     // Sesije (honorar!), end_date i Google serija ostaju na starom dok se ne osveži termin.
-    if (form.id && imaTermin(polazno) && rasporedPomeren(polazno, form)) {
+    const zamena = profesorkaPromenjena(polazno, form);
+    if (form.id && imaTermin(polazno) && (rasporedPomeren(polazno, form) || zamena)) {
       const ok = confirm(
-        "⚠ Termin je pomeren, a grupa već ima Google termin.\n\n" +
-        "Sačuvan je samo novi raspored. Termini časova, datum kraja i Google serija su i dalje na STAROM rasporedu - " +
-        "to znači pogrešan honorar i pogrešan Meet termin u kalendaru profesorke.\n\n" +
-        "Osvežiti termin sada? (isti Meet link, prijave ostaju)",
+        zamena
+          ? "⚠ Promenjena je profesorka, a grupa već ima Google termin.\n\n" +
+            "Termin je i dalje u kalendaru STARE profesorke. Osvežavanje ga gasi kod nje i " +
+            "otvara nov kod nove - polaznici se prebacuju sami, beleške se prave u njenom folderu.\n\n" +
+            "ALI: Meet link se time MENJA i treba ga javiti polaznicima.\n\n" +
+            "Preseliti termin sada?"
+          : "⚠ Termin je pomeren, a grupa već ima Google termin.\n\n" +
+            "Sačuvan je samo novi raspored. Termini časova, datum kraja i Google serija su i dalje na STAROM rasporedu - " +
+            "to znači pogrešan honorar i pogrešan Meet termin u kalendaru profesorke.\n\n" +
+            "Osvežiti termin sada? (isti Meet link, prijave ostaju)",
       );
       if (ok) await pokreniOsveziTermin(form.id);
       else setPolazno({ ...form }); // ne dosađuj ponovo za istu izmenu
@@ -202,7 +218,16 @@ export default function GrupeAdmin({ initial }: { initial: Group[] }) {
     const j = await r.json().catch(() => ({}));
     setSaving(false);
     if (!r.ok) { alert("Greška: " + (j.error || "nešto nije u redu")); return; }
-    alert("Termin osvežen! ✅\n\nMeet: " + (j.meetLink || "-") + "\nBeleške: " + (j.notesUrl || "(zadržane postojeće)"));
+    alert(
+      (j.preseljeno
+        ? "Termin PRESELJEN kod nove profesorke! ✅\n\n⚠ Meet link je NOV - javi ga polaznicima.\n\n"
+        : "Termin osvežen! ✅\n\n") +
+      "Meet: " + (j.meetLink || "-") +
+      "\nBeleške: " + (j.notesUrl || "(zadržane postojeće)") +
+      (j.polaznikaUkupno
+        ? `\nPolaznici vraćeni na termin: ${j.polaznikaVraceno}/${j.polaznikaUkupno}`
+        : ""),
+    );
     cancelEdit();
     fetchGroups();
   }
@@ -221,7 +246,11 @@ export default function GrupeAdmin({ initial }: { initial: Group[] }) {
     const j = await r.json().catch(() => ({}));
     setSaving(false);
     if (!r.ok) { alert("Greška: " + (j.error || "nešto nije u redu")); return; }
-    alert("Termin napravljen! ✅\n\nMeet: " + (j.meetLink || "-") + "\nBeleške: " + (j.notesUrl || "(zadržane)"));
+    alert(
+      "Termin napravljen! ✅\n\nMeet: " + (j.meetLink || "-") +
+      "\nBeleške: " + (j.notesUrl || "(zadržane)") +
+      (j.polaznikaUkupno ? `\nPolaznici na terminu: ${j.polaznikaVraceno}/${j.polaznikaUkupno}` : ""),
+    );
     fetchGroups();
   }
 
@@ -497,6 +526,19 @@ export default function GrupeAdmin({ initial }: { initial: Group[] }) {
               ))}
             </div>
           </div>
+
+          {imaTermin(polazno) && profesorkaPromenjena(polazno, form) && (
+            <div className="mb-3 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+              <strong>⚠ Menjaš profesorku grupi koja već ima termin.</strong>
+              <p className="mt-1 text-amber-800">
+                {'Google serija je u kalendaru stare profesorke. '}
+                <strong>{'„Napravi / osveži termin”'}</strong>
+                {' je gasi kod nje i otvara novu kod nove profesorke - polaznici se prebacuju sami, ali se '}
+                <strong>{'Meet link menja'}</strong>
+                {' i treba ga javiti polaznicima.'}
+              </p>
+            </div>
+          )}
 
           {imaTermin(polazno) && rasporedPomeren(polazno, form) && (
             <div className="mb-3 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900">
