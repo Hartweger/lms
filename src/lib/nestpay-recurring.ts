@@ -194,3 +194,13 @@ export async function postCc5(xml: string, env: NestpayEnv = "prod"): Promise<st
   if (!res.ok) return null;
   return res.text();
 }
+
+/**
+ * Kod greške u NAŠEM zahtevu banka vraća `<ERRORCODE>` (npr. `CORE-1032 Invalid
+ * format for order start date.`, produkcija 27-28.08.2026). Takvo odbijanje se
+ * dešava na proveri zahteva - kartica se ne dodiruje - pa NE sme da troši kvotu
+ * od 30 ponovnih iniciranja koju banka daje po naplati.
+ */
+export function recurringOpErrorCode(text: string): string | null {
+  return text.match(/<ERRORCODE>([^<]*)<\/ERRORCODE>/i)?.[1]?.trim() || null;
+}

@@ -6,6 +6,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import {
   buildChargeRetryXml,
   isRecurringOpApproved,
+  recurringOpErrorCode,
   isSeriesCancelled,
   postCc5,
   type NestpayEnv,
@@ -199,6 +200,11 @@ export async function maybeRetryFailedCharge(
   const greska = prihvaceno
     ? null
     : (odgovor?.replace(/\s+/g, " ").trim().slice(0, 500) ?? "banka nije odgovorila");
+  // Odbijen NAŠ zahtev (banka vratila ERRORCODE) nije pokušaj naplate - kartica se
+  // nije dodirnula. Da se brojač uvećavao i tada, greška u zahtevu bi za mesec dana
+  // pojela svih 30 pokušaja koje banka daje po naplati, i to bez ijednog pravog
+  // pokušaja. Tačno to se desilo 27-28.08.2026 sa `CORE-1032` (format datuma).
+  const nasaGreska = !prihvaceno && !!odgovor && !!recurringOpErrorCode(odgovor);
 
   if (!prihvaceno) {
     // Odbijen zahtev se od 25.08.2026. i dalje UPISUJE. Ranije se izlazilo odmah,
@@ -211,7 +217,7 @@ export async function maybeRetryFailedCharge(
   }
 
   const prviPut = sub.retry_oid !== pala.oid;
-  const noviBroj = prviPut ? 1 : sub.retry_count + 1;
+  const noviBroj = nasaGreska ? (prviPut ? 0 : sub.retry_count) : prviPut ? 1 : sub.retry_count + 1;
   const admin = createAdminClient();
   await admin
     .from("subscriptions")

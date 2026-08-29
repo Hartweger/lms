@@ -5,6 +5,7 @@ import {
   buildChargeRetryXml,
   parseRecurringStatus,
   isRecurringOpApproved,
+  recurringOpErrorCode,
   isSeriesCancelled,
 } from "./nestpay-recurring";
 
@@ -243,5 +244,26 @@ describe("isSeriesCancelled", () => {
   it("prazan odgovor banke ne sme da prođe kao potvrda", () => {
     // Bez ovoga bi svaki neuspeo upit tiho značio „otkazano" i naplate bi tekle dalje.
     expect(isSeriesCancelled([])).toBe(false);
+  });
+});
+
+describe("recurringOpErrorCode", () => {
+  it("izdvaja šifru greške u našem zahtevu", () => {
+    // Sirov odgovor sa produkcije 28.08.2026 (serije 2026-228 i 2026-233): banka je
+    // odbila dokumentovani `YYYY-MM-DD` iz priručnika, pogl. 7.
+    const odgovor =
+      `<?xml version="1.0" encoding="ISO-8859-9"?> <CC5Response> <RECURRINGOPERATION></RECURRINGOPERATION> ` +
+      `<RECORDTYPE></RECORDTYPE> <ERRORMESSAGE>Invalid format for order start date.</ERRORMESSAGE> ` +
+      `<ERRORCODE>CORE-1032</ERRORCODE> <RESULT>Failed</RESULT> <Extra></Extra> </CC5Response>`;
+    expect(recurringOpErrorCode(odgovor)).toBe("CORE-1032");
+    expect(isRecurringOpApproved(odgovor)).toBe(false);
+  });
+
+  it("odbijena KARTICA nema ERRORCODE - to je pravi pokušaj, ne greška u zahtevu", () => {
+    expect(recurringOpErrorCode("<CC5Response><RESULT>Failed</RESULT><Extra></Extra></CC5Response>")).toBeNull();
+  });
+
+  it("prihvaćen zahtev nema šifru greške", () => {
+    expect(recurringOpErrorCode("<CC5Response><RESULT>Approved</RESULT></CC5Response>")).toBeNull();
   });
 });
