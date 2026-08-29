@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Play, RotateCcw, ArrowRight, Award, GraduationCap, BookOpen } from "lucide-react";
+import { Play, RotateCcw, ArrowRight, Award, GraduationCap, BookOpen, Mail } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import ProgressBar from "@/components/ProgressBar";
 import quotesData from "@/data/quotes.json";
@@ -345,18 +345,51 @@ export default async function Dashboard() {
         </>
       ) : (
         /* Empty State */
-        <div className="text-center py-16">
-          <GraduationCap className="w-12 h-12 text-gray-300 mx-auto mb-3" strokeWidth={1.5} />
-          <p className="text-gray-400 mb-4">Nemaš upisane kurseve.</p>
-          <a
-            href="https://hartweger.rs"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-plava text-white px-6 py-3 rounded-xl font-bold hover:bg-plava-dark transition-colors"
-          >
-            Kupi kurs na hartweger.rs
-            <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
-          </a>
+        <div className="py-16">
+          <div className="text-center">
+            <GraduationCap className="w-12 h-12 text-gray-300 mx-auto mb-3" strokeWidth={1.5} />
+            <p className="text-gray-400 mb-4">Nemaš upisane kurseve.</p>
+            <a
+              href="https://hartweger.rs"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-plava text-white px-6 py-3 rounded-xl font-bold hover:bg-plava-dark transition-colors"
+            >
+              Kupi kurs na hartweger.rs
+              <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
+            </a>
+          </div>
+
+          {/* Najčešći razlog praznog spiska: kupovina je na jednoj adresi, a „Prijava
+              preko Google-a" napravi drugi nalog na drugoj (Gmail ignoriše tačke).
+              Ovo je stizalo kao mejl podršci - poruka ih hvata pre toga. */}
+          <div className="mt-10 max-w-lg mx-auto bg-plava-light/50 border border-plava/20 rounded-2xl p-5 text-left">
+            <div className="flex items-start gap-3">
+              <Mail className="w-5 h-5 text-plava shrink-0 mt-0.5" strokeWidth={2} />
+              <div className="min-w-0">
+                <h3 className="font-bold text-sm text-gray-900">
+                  Kurs je plaćen, a spisak prazan?
+                </h3>
+                <p className="text-sm text-gray-600 mt-1">
+                  Trenutno si na nalogu{" "}
+                  <span className="font-semibold text-gray-900 break-all">{user.email}</span>.
+                  Ako je kupovina išla sa druge mejl adrese, kursevi te čekaju na njoj -
+                  prijavi se tom adresom ili nam javi pa spajamo naloge.
+                </p>
+                <a
+                  href={`mailto:info@hartweger.rs?subject=${encodeURIComponent(
+                    "Nemam kurseve na nalogu"
+                  )}&body=${encodeURIComponent(
+                    `Zdravo,\n\nprijavljen/a sam kao ${user.email}, ali ne vidim svoje kurseve.\n\nKurs sam kupio/la sa adrese: \nIme i prezime: \n\nHvala!`
+                  )}`}
+                  className="inline-flex items-center gap-1.5 mt-3 text-sm font-semibold text-plava hover:text-plava-dark transition-colors"
+                >
+                  Javi nam se na info@hartweger.rs
+                  <ArrowRight className="w-3.5 h-3.5" strokeWidth={2.5} />
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
