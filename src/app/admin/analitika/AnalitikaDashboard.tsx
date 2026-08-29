@@ -20,7 +20,7 @@ type WcOrder = {
   customer_email: string | null;
   customer_name: string | null;
   country: string | null;
-  items: Array<{ name: string; quantity: number; total: string; product_id: number }> | null;
+  items: Array<{ name: string; quantity: number; total: string; product_id: number | string }> | null;
   date_created: string;
   utm_source?: string | null;
 };
@@ -76,7 +76,8 @@ function pct(current: number, previous: number): number | null {
 
 function categorize(name: string): string {
   if (/video/i.test(name)) return "Video kursevi";
-  if (/grupni/i.test(name)) return "Grupni kursevi";
+  // Konverzacijski kurs je po formatu grupni, samo se ne zove tako.
+  if (/grupni|konverzacijski/i.test(name)) return "Grupni kursevi";
   if (/individualni/i.test(name)) return "Individualni kursevi";
   if (/paket/i.test(name)) return "Paketi";
   return "Ostalo";

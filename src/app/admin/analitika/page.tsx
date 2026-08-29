@@ -46,7 +46,18 @@ export default async function AdminAnalitika() {
       customer_name: o.full_name,
       customer_email: o.email,
       country: o.country ?? null,
-      items: (Array.isArray(o.items) ? o.items : []) as Porudzbina["items"],
+      // `orders.items` ima svoj oblik ({title, price, course_id}), ne WooCommerce
+      // ({name, total, product_id}). Bez ovog prevoda kategorije i top-10 su
+      // gledali nepostojeća polja - sve je padalo u "Ostalo" sa iznosom 0.
+      items: (Array.isArray(o.items) ? o.items : []).map((it) => {
+        const row = it as { title?: string; price?: number | string; course_id?: string; quantity?: number };
+        return {
+          name: row.title ?? "-",
+          quantity: row.quantity ?? 1,
+          total: String(row.price ?? 0),
+          product_id: row.course_id ?? row.title ?? "-",
+        };
+      }) as Porudzbina["items"],
       utm_source: o.utm_source ?? null,
       payment_method: o.payment_method ?? null,
     });
