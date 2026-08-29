@@ -41,14 +41,29 @@ export function buildRecurringCancelXml(recurringId: string, env: NestpayEnv = "
 }
 
 /**
+ * `STARTDATE` mora da nosi i VREME. Priručnik (pogl. 7) daje primer `2013-10-04`,
+ * ali ga ova instalacija odbija sa `CORE-1032 Invalid format for order start date.`
+ * i time zaustavlja svaki ponovni pokušaj naplate - tako su serije 2026-228 i
+ * 2026-233 stajale 24-29.08.2026. Probom nad nepostojećim zapisom (29.08.2026,
+ * `/api/admin/nestpay-recurring-retry` GET) utvrđeno: `2026-08-31`, `31/08/2026`,
+ * `31.08.2026` i `20260831` daju CORE-1032, a `2026-08-31 00:00:00[.0]` prolazi
+ * proveru i banka ide dalje (CORE-5107, „nema takvog zapisa"). Koristi se zapis u
+ * kom banka i sama vraća `PLANNED_START_DTTM`: „yyyy-MM-dd HH:mm:ss.S".
+ */
+export function cc5StartDate(startDate: string): string {
+  return /^\d{4}-\d{2}-\d{2}$/.test(startDate) ? `${startDate} 00:00:00.0` : startDate;
+}
+
+/**
  * Ponovno iniciranje JEDNE pale naplate pomeranjem njenog planiranog datuma
  * (priručnik, pogl. 7 „Modification of Order Planned Start Date"). Banka je
  * 22.07.2026 potvrdila da se pala naplata ovim ponovo pokreće - najviše jednom
  * dnevno, ukupno do 30 puta - a serija posle nastavlja po svom rasporedu.
- * `chargeOid` je ORD_ID_n te naplate (`<base_oid>-N`), `startDate` je YYYY-MM-DD.
+ * `chargeOid` je ORD_ID_n te naplate (`<base_oid>-N`), `startDate` je YYYY-MM-DD
+ * (vreme dodaje `cc5StartDate`) ili već gotov zapis sa vremenom.
  */
 export function buildChargeRetryXml(chargeOid: string, startDate: string, env: NestpayEnv = "prod"): string {
-  return `<?xml version="1.0" encoding="UTF-8"?><CC5Request>${credentials(env)}<Extra><RECURRINGOPERATION>Update</RECURRINGOPERATION><RECORDTYPE>Order</RECORDTYPE><RECORDID>${chargeOid}</RECORDID><STARTDATE>${startDate}</STARTDATE></Extra></CC5Request>`;
+  return `<?xml version="1.0" encoding="UTF-8"?><CC5Request>${credentials(env)}<Extra><RECURRINGOPERATION>Update</RECURRINGOPERATION><RECORDTYPE>Order</RECORDTYPE><RECORDID>${chargeOid}</RECORDID><STARTDATE>${cc5StartDate(startDate)}</STARTDATE></Extra></CC5Request>`;
 }
 
 export interface RecurringCharge {

@@ -50,7 +50,14 @@ describe("buildChargeRetryXml", () => {
     expect(xml).toContain("<RECURRINGOPERATION>Update</RECURRINGOPERATION>");
     expect(xml).toContain("<RECORDTYPE>Order</RECORDTYPE>");
     expect(xml).toContain("<RECORDID>2026-300-2</RECORDID>");
-    expect(xml).toContain("<STARTDATE>2026-07-23</STARTDATE>");
+    // Datum MORA da nosi vreme - goli `2026-07-23` banka odbija sa CORE-1032.
+    expect(xml).toContain("<STARTDATE>2026-07-23 00:00:00.0</STARTDATE>");
+  });
+
+  it("gotov zapis sa vremenom prosleđuje neizmenjen (proba formata)", () => {
+    expect(buildChargeRetryXml("2026-300-2", "2026-07-23 12:00:00")).toContain(
+      "<STARTDATE>2026-07-23 12:00:00</STARTDATE>",
+    );
   });
 });
 
