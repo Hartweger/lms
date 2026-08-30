@@ -84,12 +84,42 @@ export interface GroupRowForDisplay {
 
 export interface OpenGroupRow { id: string; level: string; status: string; start_date: string | null; }
 
+/** Otvorene grupe za nivo, sortirane po start_date rastuće. */
+export function openGroupsForNivo<T extends OpenGroupRow>(groups: T[], nivo: string): T[] {
+  // Grupa bez datuma ne pobeđuje datiranu (sentinel u daleku budućnost). slice() da ne mutiramo ulaz.
+  return groups
+    .filter((g) => g.level === nivo && g.status === "otvoren")
+    .slice()
+    .sort((a, b) => (a.start_date ?? "9999-12-31").localeCompare(b.start_date ?? "9999-12-31"));
+}
+
 /** Otvorena grupa za nivo, sa najranijim start_date. null ako ne postoji. */
 export function pickOpenGroupForNivo<T extends OpenGroupRow>(groups: T[], nivo: string): T | null {
-  const open = groups.filter((g) => g.level === nivo && g.status === "otvoren");
-  if (!open.length) return null;
-  // Grupa bez datuma ne pobeđuje datiranu (sentinel u daleku budućnost). slice() da ne mutiramo ulaz.
-  return open.slice().sort((a, b) => (a.start_date ?? "9999-12-31").localeCompare(b.start_date ?? "9999-12-31"))[0];
+  return openGroupsForNivo(groups, nivo)[0] ?? null;
+}
+
+export interface OpenGroupSeatRow extends OpenGroupRow { max_seats: number; manual_enrolled: number | null; }
+
+/**
+ * Prva otvorena grupa za nivo KOJA IMA SLOBODNO MESTO (po start_date rastuće).
+ * null kad su sve pune ili ih nema. Bez ovoga puna ranija grupa blokira prodaju
+ * iako je sledeći termin već otvoren (A1.1, avgust 2026: 15.09 puna, 28.09 prazna).
+ */
+export function pickOpenGroupWithSeats<T extends OpenGroupSeatRow>(
+  groups: T[],
+  nivo: string,
+  activeByGroupId: Record<string, number>,
+): T | null {
+  return (
+    openGroupsForNivo(groups, nivo).find(
+      (g) =>
+        !computeSeats({
+          maxSeats: g.max_seats,
+          manualEnrolled: g.manual_enrolled,
+          activeEnrollments: activeByGroupId[g.id] ?? 0,
+        }).full,
+    ) ?? null
+  );
 }
 
 /**

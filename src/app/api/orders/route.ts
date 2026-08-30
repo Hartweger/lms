@@ -9,7 +9,7 @@ import { emailCanRenewWithCoupon, renewalAccessExpiry } from "@/lib/renewal-elig
 import { renewalWindowStatus, renewalWindowMessage } from "@/lib/renewal-window";
 import { computeCouponDiscount, isTermPackage } from "@/lib/coupon-discount";
 import { courseAllowsLateJoin, LATE_JOIN_PORUKA } from "@/lib/coupon-late-join";
-import { computeSeats, pickOpenGroupForNivo } from "@/lib/groups";
+import { openGroupsForNivo, pickOpenGroupWithSeats } from "@/lib/groups";
 import { gaIdsFromCookieHeader } from "@/lib/ga-cookies";
 import { chargeAmountFor, planForSlug } from "@/lib/subscription-plans";
 import { ZACK_CLANSTVO_SLUG } from "@/lib/zack/clanstvo";
@@ -222,12 +222,12 @@ export async function POST(request: Request) {
     if (course.category === "grupni") {
       const nivo = nivoForSlug(course.slug);
       if (nivo) {
-        // Status filter radi pickOpenGroupForNivo (jedinstveno mesto definicije "otvoren"), isto kao grant-access.
+        // Status filter rade openGroupsForNivo/pickOpenGroupWithSeats (jedinstveno mesto definicije "otvoren"), isto kao grant-access.
         const { data: groupsForNivo } = await supabase
           .from("groups").select("id, level, status, start_date, max_seats, manual_enrolled")
           .eq("level", nivo);
-        const group = pickOpenGroupForNivo(groupsForNivo ?? [], nivo);
-        if (!group) {
+        const openGroups = openGroupsForNivo(groupsForNivo ?? [], nivo);
+        if (!openGroups.length) {
           // Ranije je ovde porudžbina prolazila: kupac bi platio pun iznos za kurs bez
           // grupe, datuma i Meet linka. Zatečeno 21.07.2026 - 6 objavljenih grupnih kurseva
           // (A1.1, A1.2, C1.1, C1.2, B1.1, konverzacijski) bilo je bez otvorenog termina.
@@ -237,15 +237,16 @@ export async function POST(request: Request) {
             { status: 409 },
           );
         }
-        const { count } = await supabase
-          .from("group_enrollments").select("*", { count: "exact", head: true })
-          .eq("group_id", group.id).eq("status", "active");
-        const seats = computeSeats({
-          maxSeats: group.max_seats, manualEnrolled: group.manual_enrolled ?? null,
-          activeEnrollments: count ?? 0,
-        });
-        if (seats.full) {
-          console.log(`[orders] Grupna blokada (409): ${course.slug} / ${nivo} - grupa ${group.id} popunjena`);
+        // Popunjenost po grupi: puna ranija grupa ne sme da blokira prodaju kad je
+        // sledeći termin već otvoren - bira se prva otvorena grupa sa mestom.
+        const { data: enrRows } = await supabase
+          .from("group_enrollments").select("group_id")
+          .in("group_id", openGroups.map((g) => g.id)).eq("status", "active");
+        const activeByGroupId: Record<string, number> = {};
+        (enrRows ?? []).forEach((e) => { activeByGroupId[e.group_id] = (activeByGroupId[e.group_id] ?? 0) + 1; });
+        const group = pickOpenGroupWithSeats(openGroups, nivo, activeByGroupId);
+        if (!group) {
+          console.log(`[orders] Grupna blokada (409): ${course.slug} / ${nivo} - sve otvorene grupe popunjene`);
           return NextResponse.json(
             { error: "Grupa je trenutno popunjena. Ostavi mejl da te obavestimo za sledeći termin." },
             { status: 409 },

@@ -295,7 +295,11 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
     const nivo = slugToNivo[slug];
     if (nivo) {
       const raspored = await fetchRaspored();
-      grupa = raspored.find((g) => g.nivo === nivo) || null;
+      // Prednost grupi sa slobodnim mestom: puna ranija grupa ne sme da pokaže
+      // „Popunjeno" dok je sledeći termin već otvoren (isto pravilo kao /api/orders).
+      grupa = raspored.find((g) => g.nivo === nivo && !g.full)
+        ?? raspored.find((g) => g.nivo === nivo)
+        ?? null;
     }
   }
 

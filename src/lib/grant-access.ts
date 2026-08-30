@@ -4,7 +4,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { sendWelcomeEmail, sendGrupniWelcomeEmail, sendProfNewStudentEmail, sendIndividualWelcomeEmail, sendProfNewIndividualStudentEmail, sendSubscriptionChargeEmail, sendAcademyWelcomeEmail, sendKonsultacijaEmail, sendZackWelcomeEmail, sendZackPoklonEmail } from "@/lib/email";
 import { napraviNasumicniPin, napraviPinOtisak } from "@/lib/zack/pin";
 import { nivoForSlug } from "@/lib/course-nivo";
-import { computeSeats, pickOpenGroupForNivo } from "@/lib/groups";
+import { openGroupsForNivo, pickOpenGroupWithSeats } from "@/lib/groups";
 import { callGas } from "@/lib/gas";
 import { sendGa4Poklon, sendGa4Purchase } from "@/lib/ga4-mp";
 import { sendPoklonEvent, sendPurchaseEvent } from "@/lib/meta-capi";
@@ -506,7 +506,7 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
     const nivo = nivoForSlug(item.course_slug);
     if (!nivo) continue;
     try {
-      // Status filter radi pickOpenGroupForNivo (jedinstveno mesto definicije "otvoren").
+      // Status filter rade openGroupsForNivo/pickOpenGroupWithSeats (jedinstveno mesto definicije "otvoren").
       const { data: groupsForNivo } = await admin
         .from("groups")
         .select("id, level, status, start_date, max_seats, manual_enrolled, gcal_event_id, meet_link, notes_url, professor_id, content_course_id, professor:professor_id(full_name, email)")
@@ -515,20 +515,24 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
       // ostane van grupe - i to mu niko ne kaže. Ranije se samo logovalo, pa je jedna polaznica
       // (jun 2026) zaključila da plaćanje nije prošlo i platila ista kurs tri puta. Zato Sentry.
       const oznaka = order.order_number ?? orderId;
-      const group = pickOpenGroupForNivo(groupsForNivo ?? [], nivo);
-      if (!group) {
+      const openGroups = openGroupsForNivo(groupsForNivo ?? [], nivo);
+      if (!openGroups.length) {
         const msg = `[grant] PLAĆENO-A-NEMA-MESTO: nema otvorene grupe za nivo ${nivo} (order ${oznaka}, user ${order.user_id}) - kupac ima sadržaj ali nije ni u jednoj grupi, upisati ručno`;
         console.error(msg);
         Sentry.captureException(new Error(msg));
         continue;
       }
 
-      const { count } = await admin.from("group_enrollments").select("*", { count: "exact", head: true })
-        .eq("group_id", group.id).eq("status", "active");
+      // Puna ranija grupa ne sme da proguta upis kad je sledeći termin otvoren -
+      // upis ide u prvu otvorenu grupu sa slobodnim mestom (isto pravilo kao /api/orders).
+      const { data: enrRows } = await admin.from("group_enrollments").select("group_id")
+        .in("group_id", openGroups.map((g) => g.id)).eq("status", "active");
+      const activeByGroupId: Record<string, number> = {};
+      (enrRows ?? []).forEach((e) => { activeByGroupId[e.group_id] = (activeByGroupId[e.group_id] ?? 0) + 1; });
 
-      const seats = computeSeats({ maxSeats: group.max_seats, manualEnrolled: group.manual_enrolled, activeEnrollments: count ?? 0 });
-      if (seats.full) {
-        const msg = `[grant][oversell] PLAĆENO-A-NEMA-MESTO: grupa ${group.id} (${nivo}) je puna - preskočen auto-upis za order ${oznaka} (user ${order.user_id}), rešiti ručno`;
+      const group = pickOpenGroupWithSeats(openGroups, nivo, activeByGroupId);
+      if (!group) {
+        const msg = `[grant][oversell] PLAĆENO-A-NEMA-MESTO: sve otvorene grupe za nivo ${nivo} su pune - preskočen auto-upis za order ${oznaka} (user ${order.user_id}), rešiti ručno`;
         console.error(msg);
         Sentry.captureException(new Error(msg));
         continue;

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { naknadniUpisZaStatus, computeGrupaProgres, computeSeats, computeEndDate, computeFirstSessionDate, computeSessionDates, formatDays, formatDaysFull, formatPocetak, mapGroupToRaspored, nextExpiry, pickOpenGroupForNivo, resolveGroupCourse } from "./groups";
+import { naknadniUpisZaStatus, computeGrupaProgres, computeSeats, computeEndDate, computeFirstSessionDate, computeSessionDates, formatDays, formatDaysFull, formatPocetak, mapGroupToRaspored, nextExpiry, pickOpenGroupForNivo, pickOpenGroupWithSeats, resolveGroupCourse } from "./groups";
 
 describe("formatDays", () => {
   it("mapira brojeve dana u srpske skraćenice", () => {
@@ -109,6 +109,26 @@ describe("pickOpenGroupForNivo", () => {
       { id: "x", level: "A1.1", status: "otvoren", start_date: null },
       { id: "y", level: "A1.1", status: "otvoren", start_date: "2026-06-01" },
     ], "A1.1")?.id).toBe("y"));
+});
+
+describe("pickOpenGroupWithSeats", () => {
+  // Scenario iz avgusta 2026: ranija A1.1 grupa puna (6/6), sledeća otvorena i prazna.
+  const groups = [
+    { id: "puna", level: "A1.1", status: "otvoren", start_date: "2026-09-15", max_seats: 6, manual_enrolled: null },
+    { id: "nova", level: "A1.1", status: "otvoren", start_date: "2026-09-28", max_seats: 6, manual_enrolled: null },
+  ];
+  it("preskače punu raniju grupu i bira sledeću sa mestom", () =>
+    expect(pickOpenGroupWithSeats(groups, "A1.1", { puna: 6, nova: 0 })?.id).toBe("nova"));
+  it("bira najraniju kad obe imaju mesta", () =>
+    expect(pickOpenGroupWithSeats(groups, "A1.1", { puna: 5, nova: 0 })?.id).toBe("puna"));
+  it("null kad su sve pune", () =>
+    expect(pickOpenGroupWithSeats(groups, "A1.1", { puna: 6, nova: 6 })).toBeNull());
+  it("null kad nema otvorene grupe za nivo", () =>
+    expect(pickOpenGroupWithSeats(groups, "B1.1", {})).toBeNull());
+  it("manual_enrolled ulazi u popunjenost", () =>
+    expect(pickOpenGroupWithSeats([
+      { id: "m", level: "A1.1", status: "otvoren", start_date: "2026-09-15", max_seats: 6, manual_enrolled: 6 },
+    ], "A1.1", {})).toBeNull());
 });
 
 describe("formatDaysFull", () => {
