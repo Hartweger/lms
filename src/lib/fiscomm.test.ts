@@ -155,23 +155,113 @@ describe("refundOrder - storno", () => {
   });
 
   it("bez API ključa ne šalje ništa", async () => {
-    // Ključ se čita pri učitavanju modula, pa se modul mora učitati iznova bez njega.
-    vi.resetModules();
+    // Env se čita po pozivu, dovoljno je isprazniti ključ i vratiti ga posle.
     process.env.FISCOMM_API_KEY = "";
     h.fake = createFakeAdmin({ orders: [fiskalizovana()] });
     const fetchMock = vi.fn(async () => new Response("{}", { status: 200 }));
     global.fetch = fetchMock as unknown as typeof fetch;
     try {
-      const { refundOrder: bezKljuca } = await import("./fiscomm");
-
-      const res = await bezKljuca("o1");
+      const res = await refundOrder("o1");
 
       expect(res.ok).toBe(false);
       expect(res.error).toBe("no_api_key");
       expect(fetchMock).not.toHaveBeenCalled();
     } finally {
       process.env.FISCOMM_API_KEY = "test-key";
-      vi.resetModules();
     }
+  });
+});
+
+/**
+ * Fiscomm 2.0 (api.fiscomm.rs) - pali se preko FISCOMM_API_URL. Oblik zahteva i
+ * odgovora je drugačiji: /receipt/ rute, payments[] {type, amount}, metaFields
+ * obavezno, odgovor umotan u { correlationId, receipt }.
+ */
+describe("Fiscomm 2.0", () => {
+  beforeEach(() => { process.env.FISCOMM_API_URL = "https://api.fiscomm.rs"; });
+  afterEach(() => { delete process.env.FISCOMM_API_URL; });
+
+  it("prodaja: /receipt/normal/sale, novi oblik zahteva, mapira iz receipt objekta", async () => {
+    const fetchMock = vi.fn(async () => new Response(JSON.stringify({
+      correlationId: "corr-1",
+      receipt: {
+        invoiceNumber: "QQ9JGBJ7-9JGW75O0-500",
+        referentDocumentNumber: null, // na prodaji je null - broj računa je invoiceNumber
+        sdcDateTime: "2026-09-01T10:00:00+02:00",
+        verificationUrl: "https://suf.purs.gov.rs/v/?vl=v2",
+        invoicePdfUrl: "https://api.fiscomm.rs/pdf/500.pdf",
+        qrCodeFileUrl: "https://api.fiscomm.rs/qr/500.png",
+      },
+    }), { status: 200 }));
+    global.fetch = fetchMock as unknown as typeof fetch;
+
+    const res = await fiscalizeOrder("o1");
+
+    expect(res.ok).toBe(true);
+    const [url, init] = fetchMock.mock.calls[0] as unknown as [string, { body: string }];
+    expect(url).toBe("https://api.fiscomm.rs/receipt/normal/sale");
+    const poslato = JSON.parse(init.body);
+    expect(poslato.orderNumber).toBe("1001");
+    expect(poslato.payments).toEqual([{ type: "Card", amount: 4800 }]);
+    expect(poslato.metaFields).toEqual({});
+    expect(poslato.settings).toEqual({ returnIfOrderNumberExists: true });
+    // 2.0 ne prima invoicePdfUrl ni staro payment[] polje
+    expect(poslato.invoicePdfUrl).toBeUndefined();
+    expect(poslato.payment).toBeUndefined();
+
+    const red = h.fake.row("orders", (r) => r.id === "o1")!;
+    expect(red.fiscal_referent_number).toBe("QQ9JGBJ7-9JGW75O0-500");
+    expect(red.fiscal_referent_dt).toBe("2026-09-01T10:00:00+02:00");
+    expect(red.fiscal_verification_url).toBe("https://suf.purs.gov.rs/v/?vl=v2");
+    expect(red.fiscal_pdf_url).toBe("https://api.fiscomm.rs/pdf/500.pdf");
+    // Sirov odgovor se čuva CEO (sa correlationId), ne samo receipt
+    expect((red.fiscal_response as Record<string, unknown>).correlationId).toBe("corr-1");
+  });
+
+  it("storno: /receipt/normal/refund, skipBuyerIdValidation, referentDocumentDt (malo t)", async () => {
+    h.fake = createFakeAdmin({ orders: [fiskalizovana()] });
+    const fetchMock = vi.fn(async () => new Response(JSON.stringify({
+      correlationId: "corr-2",
+      receipt: {
+        invoiceNumber: "QQ9JGBJ7-9JGW75O0-501", // broj SAMOG storna
+        referentDocumentNumber: "QQ9JGBJ7-9JGW75O0-348", // original koji poništavamo
+        sdcDateTime: "2026-09-01T11:00:00+02:00",
+        verificationUrl: "https://suf.purs.gov.rs/v/?vl=storno-v2",
+        invoicePdfUrl: "https://api.fiscomm.rs/pdf/501.pdf",
+      },
+    }), { status: 200 }));
+    global.fetch = fetchMock as unknown as typeof fetch;
+
+    const res = await refundOrder("o1");
+
+    expect(res.ok).toBe(true);
+    const [url, init] = fetchMock.mock.calls[0] as unknown as [string, { body: string }];
+    expect(url).toBe("https://api.fiscomm.rs/receipt/normal/refund");
+    const poslato = JSON.parse(init.body);
+    expect(poslato.orderNumber).toBe("2026-312-S");
+    expect(poslato.referentDocumentNumber).toBe("QQ9JGBJ7-9JGW75O0-348");
+    expect(poslato.referentDocumentDt).toBe("2026-08-16T13:48:22.0284009+02:00");
+    expect(poslato.referentDocumentDT).toBeUndefined(); // staro ime polja ne sme da procuri
+    expect(poslato.settings).toEqual({ skipBuyerIdValidation: true, returnIfOrderNumberExists: true });
+
+    const red = h.fake.row("orders", (r) => r.id === "o1")!;
+    // Upisan je broj storna, ne originala
+    expect(red.refund_referent_number).toBe("QQ9JGBJ7-9JGW75O0-501");
+    expect(red.refund_pdf_url).toBe("https://api.fiscomm.rs/pdf/501.pdf");
+  });
+
+  it("greška 2.0 API-ja → ok:false, sirov odgovor u fiscal_response", async () => {
+    global.fetch = vi.fn(async () => new Response(
+      JSON.stringify({ message: "Invalid tax label", statusCode: 400 }), { status: 400 }
+    )) as typeof fetch;
+
+    const res = await fiscalizeOrder("o1");
+
+    expect(res.ok).toBe(false);
+    expect(res.error).toBe("http_400");
+    const red = h.fake.row("orders", (r) => r.id === "o1")!;
+    expect(red.fiscal_referent_number).toBeNull();
+    expect((red.fiscal_response as Record<string, unknown>).message).toBe("Invalid tax label");
+    expect(h.sentry.captureException).toHaveBeenCalled();
   });
 });
