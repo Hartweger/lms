@@ -10,6 +10,8 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { SITE_URL } from "@/lib/site-url";
 import type { Json } from "@/lib/supabase/database.types";
 
+export function fiscommCfg() { return cfg(); }
+
 function cfg() {
   const apiUrl = process.env.FISCOMM_API_URL ?? "https://us-central1-fiscal-38558.cloudfunctions.net/api";
   return {
