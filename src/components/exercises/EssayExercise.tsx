@@ -77,7 +77,7 @@ export default function EssayExercise({ task, level, onAnswer, exerciseId, lesso
       const response = await fetch("/api/check-essay", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text, task, level }),
+        body: JSON.stringify({ text, task, level, maxPoints }),
       });
       const aiData = await response.json();
 
@@ -92,6 +92,7 @@ export default function EssayExercise({ task, level, onAnswer, exerciseId, lesso
             ai_feedback: aiData.feedback || null,
             ai_corrections: aiData.corrections || null,
             ai_score: aiData.score || null,
+            ai_criteria: aiData.criteria || null,
             status: "pending",
           });
         }

@@ -926,6 +926,7 @@ export type Database = {
       essay_submissions: {
         Row: {
           ai_corrections: Json | null
+          ai_criteria: Json | null
           ai_feedback: string | null
           ai_score: number | null
           audio_url: string | null
@@ -943,6 +944,7 @@ export type Database = {
         }
         Insert: {
           ai_corrections?: Json | null
+          ai_criteria?: Json | null
           ai_feedback?: string | null
           ai_score?: number | null
           audio_url?: string | null
@@ -960,6 +962,7 @@ export type Database = {
         }
         Update: {
           ai_corrections?: Json | null
+          ai_criteria?: Json | null
           ai_feedback?: string | null
           ai_score?: number | null
           audio_url?: string | null

@@ -13,6 +13,15 @@ interface EssayRow {
   ai_feedback: string | null;
   ai_corrections: { original: string; corrected: string; explanation: string }[] | null;
   ai_score: number | null;
+  ai_criteria: {
+    erfuellung?: number;
+    kohaerenz?: number;
+    wortschatz?: number;
+    korrektheit?: number;
+    nedostaje?: string;
+    suggestedPoints?: number;
+    maxPoints?: number;
+  } | null;
   professor_feedback: string | null;
   professor_score: number | null;
   status: "pending" | "reviewed" | "published";
@@ -120,10 +129,16 @@ export default function AdminEseji() {
   const startReview = (essay: EssayRow) => {
     setEditingId(essay.id);
     setProfFeedback(essay.professor_feedback || essay.ai_feedback || "");
-    // AI sugestija je uvek na skali 1-5, pa je ne nudimo kao polaznu ocenu na
-    // ispitnim vežbama (20/40 bodova) - tamo se bodovi upisuju ručno.
+    // Polazna ocena: na skali 1-5 AI ocena; na ispitnim vežbama (20/40 bodova)
+    // AI predlog bodova ako postoji i odgovara skali vežbe, inače 0.
     const mx = maxByEx[essay.exercise_id] ?? 5;
-    setProfScore(essay.professor_score ?? (mx <= 5 ? (essay.ai_score ?? 3) : 0));
+    const aiPoints = essay.ai_criteria?.suggestedPoints;
+    setProfScore(
+      essay.professor_score ??
+        (mx <= 5
+          ? (essay.ai_score ?? 3)
+          : (typeof aiPoints === "number" && aiPoints <= mx ? aiPoints : 0))
+    );
     setEditCorrections((essay.ai_corrections ?? []).map((c) => ({
       original: c.original ?? "",
       corrected: c.corrected ?? "",
@@ -262,8 +277,30 @@ export default function AdminEseji() {
             {essay.ai_feedback && (
               <div className="bg-blue-50 rounded-lg p-4 mb-4">
                 <p className="text-xs font-semibold text-blue-600 mb-1">
-                  AI sugestija (ocena: {essay.ai_score}/5):
+                  AI sugestija (ocena: {essay.ai_score}/5
+                  {typeof essay.ai_criteria?.suggestedPoints === "number"
+                    ? `, predlog bodova: ${essay.ai_criteria.suggestedPoints}/${essay.ai_criteria.maxPoints ?? maxByEx[essay.exercise_id] ?? ""}`
+                    : ""}):
                 </p>
+                {essay.ai_criteria && (
+                  <div className="flex flex-wrap gap-2 my-2">
+                    {([
+                      ["Erfüllung", essay.ai_criteria.erfuellung],
+                      ["Kohärenz", essay.ai_criteria.kohaerenz],
+                      ["Wortschatz", essay.ai_criteria.wortschatz],
+                      ["Korrektheit", essay.ai_criteria.korrektheit],
+                    ] as const).map(([label, val]) =>
+                      typeof val === "number" ? (
+                        <span key={label} className="text-xs bg-white border border-blue-100 rounded-full px-2 py-0.5 text-gray-600">
+                          {label}: <span className="font-semibold">{val}/5</span>
+                        </span>
+                      ) : null
+                    )}
+                  </div>
+                )}
+                {essay.ai_criteria?.nedostaje && (
+                  <p className="text-xs text-amber-700 mb-1">Nedostaje: {essay.ai_criteria.nedostaje}</p>
+                )}
                 <p className="text-sm text-gray-700">{essay.ai_feedback}</p>
                 {essay.ai_corrections && essay.ai_corrections.length > 0 && (
                   <div className="mt-2 space-y-1">

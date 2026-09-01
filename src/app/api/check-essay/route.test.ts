@@ -48,4 +48,10 @@ describe("POST /api/check-essay", () => {
     const res = await POST(essayRequest());
     expect(res.status).toBe(429);
   });
+
+  it("predugačak tekst → 400 bez trošenja AI tokena", async () => {
+    h.user = { id: "u1" };
+    const res = await POST(essayRequest({ text: "a".repeat(8001), task: "Stell dich vor" }));
+    expect(res.status).toBe(400);
+  });
 });
