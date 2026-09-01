@@ -34,7 +34,7 @@
     },
     {
       "path": "/api/cron/nestpay-reconcile",
-      "schedule": "0 22 * * *"
+      "schedule": "0 17 * * *"
     },
     {
       "path": "/api/cron/nestpay-poll",
