@@ -9,14 +9,20 @@ const h = vi.hoisted(() => ({
 
 vi.mock("@/lib/supabase/admin", () => ({ createAdminClient: () => h.fake.admin }));
 vi.mock("@sentry/nextjs", () => ({ captureException: vi.fn() }));
-vi.mock("@/lib/sef", () => ({
+vi.mock("@/lib/sef", async () => {
+  const stvarni = await vi.importActual<typeof import("@/lib/sef")>("@/lib/sef");
+  return {
+  // `izvuciStatus` je prava funkcija - ona i jeste ono što se ovde proverava:
+  // SEF vraća `Status` velikim slovom.
+  izvuciStatus: stvarni.izvuciStatus,
   sefPodesen: () => true,
   procitajStatus: vi.fn(async () =>
     h.sefOdgovara
-      ? { ok: true, data: { status: h.sefStatus } }
+      ? { ok: true, data: { Status: h.sefStatus } }
       : { ok: false, greska: "SEF nedostupan", status: 0 },
   ),
-}));
+  };
+});
 
 import { POST } from "./route";
 import { procitajStatus } from "@/lib/sef";

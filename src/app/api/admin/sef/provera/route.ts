@@ -7,7 +7,7 @@
 // Gađa `getEfakturaVersion`: čita verziju sistema, ništa ne menja i ništa ne šalje.
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/api-auth";
-import { sefPodesen, sefJeDemo, sefVerzija, procitajStatus } from "@/lib/sef";
+import { sefPodesen, sefJeDemo, sefVerzija, procitajStatus, izvuciStatus } from "@/lib/sef";
 
 export const dynamic = "force-dynamic";
 
@@ -47,7 +47,7 @@ export async function GET(request: Request) {
   if (invoiceId) {
     const st = await procitajStatus(invoiceId);
     faktura = st.ok
-      ? { invoiceId, status: st.data.status ?? "(SEF nije vratio status)", odgovor: st.data }
+      ? { invoiceId, status: izvuciStatus(st.data) ?? "(SEF nije vratio status)", odgovor: st.data }
       : { invoiceId, greska: st.greska, httpStatus: st.status };
   }
 

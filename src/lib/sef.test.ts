@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { izvuciSefId, jeZavrsenStatus, trazipaznju } from "./sef";
+import { izvuciSefId, izvuciStatus, poljeIz, jeZavrsenStatus, trazipaznju } from "./sef";
 
 describe("izvuciSefId", () => {
   // Spec kaže objekat, ali isti endpoint je objavljen i kao text/plain, pa odgovor
@@ -43,6 +43,40 @@ describe("izvuciSefId", () => {
     expect(izvuciSefId("Faktura je primljena")).toBe(null);
     expect(izvuciSefId({ purchaseInvoiceId: 999 })).toBe(null);
     expect(izvuciSefId({ invoiceId: null })).toBe(null);
+  });
+});
+
+describe("izvuciStatus / poljeIz", () => {
+  // Pravi odgovor SEF-a, zabeležen 02.09.2026 za fakturu 470879420. Polja su
+  // VELIKIM početnim slovom, iako specifikacija navodi mala. Zbog toga je faktura
+  // 2026-419 pet dana stajala na „šalje se", a bila je PRIHVAĆENA od 31.08.
+  const pravi = {
+    Status: "Approved",
+    InvoiceId: 470879420,
+    GlobUniqId: "8a2983dc-8b68-4d40-af8d-5958b94ea778",
+    CirStatus: "None",
+    Version: 8,
+    LastModifiedUtc: "2026-08-31T10:04:21.5781047+00:00",
+  };
+
+  it("čita Status pisan velikim slovom", () => {
+    expect(izvuciStatus(pravi)).toBe("Approved");
+  });
+
+  it("čita i status pisan malim slovom, kako spec navodi", () => {
+    expect(izvuciStatus({ status: "Rejected" })).toBe("Rejected");
+  });
+
+  it("bez statusa vraća null, ne izmišlja", () => {
+    expect(izvuciStatus({})).toBe(null);
+    expect(izvuciStatus(null)).toBe(null);
+    expect(izvuciStatus({ Status: "" })).toBe(null);
+  });
+
+  it("poljeIz ne zavisi od velikog slova", () => {
+    expect(poljeIz(pravi, "invoiceid")).toBe(470879420);
+    expect(poljeIz(pravi, "lastModifiedUtc")).toBe("2026-08-31T10:04:21.5781047+00:00");
+    expect(poljeIz(pravi, "nema")).toBeUndefined();
   });
 });
 

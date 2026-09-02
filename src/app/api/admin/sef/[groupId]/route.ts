@@ -10,7 +10,7 @@ import { requireAdmin } from "@/lib/api-auth";
 import { MERCHANT } from "@/lib/payment-confirmation";
 import { BANK_FIRME } from "@/lib/order-utils";
 import { napraviUbl, type UblStavka } from "@/lib/sef-ubl";
-import { posaljiUbl, procitajStatus, firmaJeNaSefu, upisiSefOdgovor, sefPodesen, izvuciSefId } from "@/lib/sef";
+import { posaljiUbl, procitajStatus, firmaJeNaSefu, upisiSefOdgovor, sefPodesen, izvuciSefId, izvuciStatus } from "@/lib/sef";
 import type { Json } from "@/lib/supabase/database.types";
 
 /** YYYY-MM-DD u beogradskom vremenu - datum na dokumentu, ne UTC dan. */
@@ -195,14 +195,14 @@ export async function POST(
 
   await upisiSefOdgovor(admin, groupId, {
     sef_invoice_id: sefInvoiceId,
-    sef_status: stanje.ok ? (stanje.data.status ?? "Sending") : "Sending",
+    sef_status: stanje.ok ? (izvuciStatus(stanje.data) ?? "Sending") : "Sending",
     sef_sent_at: new Date().toISOString(),
     sef_response: (stanje.ok ? stanje.data : poslato.data) as unknown as Json,
   });
 
   return NextResponse.json({
     sefInvoiceId,
-    status: stanje.ok ? stanje.data.status : "Sending",
+    status: stanje.ok ? izvuciStatus(stanje.data) : "Sending",
     broj: prva.faktura_broj,
   });
 }

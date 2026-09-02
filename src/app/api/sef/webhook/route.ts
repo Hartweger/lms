@@ -8,7 +8,7 @@
 import { NextResponse } from "next/server";
 import * as Sentry from "@sentry/nextjs";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { procitajStatus, sefPodesen } from "@/lib/sef";
+import { procitajStatus, sefPodesen, izvuciStatus } from "@/lib/sef";
 import type { Json } from "@/lib/supabase/database.types";
 
 export const dynamic = "force-dynamic";
@@ -56,10 +56,10 @@ export async function POST(request: Request) {
   await admin
     .from("orders")
     .update({
-      sef_status: stanje.data.status ?? "Unknown",
+      sef_status: izvuciStatus(stanje.data) ?? "Unknown",
       sef_response: stanje.data as unknown as Json,
     })
     .eq("company_order_group", nase.company_order_group);
 
-  return NextResponse.json({ ok: true, status: stanje.data.status });
+  return NextResponse.json({ ok: true, status: izvuciStatus(stanje.data) });
 }

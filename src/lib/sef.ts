@@ -159,19 +159,39 @@ export async function posaljiUbl(
   return res;
 }
 
-interface SimpleSalesInvoiceDto {
-  invoiceId?: number;
-  status?: SefStatus;
-  comment?: string | null;
-  cirInvoiceId?: string | null;
-  lastModifiedUtc?: string | null;
+/**
+ * Odgovor SEF-a na upit o fakturi. SEF polja piše VELIKIM početnim slovom
+ * (`Status`, `InvoiceId`, `LastModifiedUtc`), iako specifikacija navodi mala.
+ * Zato se ništa ne čita direktno po imenu nego kroz `poljeIz`.
+ */
+export type SefOdgovor = Record<string, unknown>;
+
+/**
+ * Čita polje iz SEF odgovora bez obzira na veliko/malo slovo.
+ *
+ * Postoji zato što je ista greška napravljena dvaput: prvo `salesInvoiceId` (SEF
+ * vraća `SalesInvoiceId`), pa `status` (SEF vraća `Status`). Druga je faktura
+ * 2026-419 držala na „šalje se" pet dana, iako je bila PRIHVAĆENA od 31.08.
+ */
+export function poljeIz(data: unknown, ime: string): unknown {
+  if (!data || typeof data !== "object") return undefined;
+  const o = data as Record<string, unknown>;
+  const trazeno = ime.toLowerCase();
+  for (const k of Object.keys(o)) {
+    if (k.toLowerCase() === trazeno) return o[k];
+  }
+  return undefined;
+}
+
+/** Status fakture iz SEF odgovora, ili null ako ga nema. */
+export function izvuciStatus(data: unknown): string | null {
+  const v = poljeIz(data, "status");
+  return typeof v === "string" && v ? v : null;
 }
 
 /** Pita SEF za pravi status fakture. Telo webhooka se NE koristi kao izvor istine. */
-export async function procitajStatus(
-  sefInvoiceId: string,
-): Promise<Odgovor<SimpleSalesInvoiceDto>> {
-  return sefFetch<SimpleSalesInvoiceDto>(
+export async function procitajStatus(sefInvoiceId: string): Promise<Odgovor<SefOdgovor>> {
+  return sefFetch<SefOdgovor>(
     `/api/publicApi/sales-invoice?invoiceId=${encodeURIComponent(sefInvoiceId)}`,
   );
 }

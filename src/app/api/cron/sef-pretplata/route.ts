@@ -16,7 +16,7 @@
 import { NextResponse } from "next/server";
 import { withCronLog } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { obnoviPretplatu, procitajStatus, jeZavrsenStatus, sefPodesen, pregledUlaznihFaktura } from "@/lib/sef";
+import { obnoviPretplatu, procitajStatus, jeZavrsenStatus, sefPodesen, pregledUlaznihFaktura, izvuciStatus } from "@/lib/sef";
 import { uRed, jeZaKnjizenje } from "@/lib/sef-ulazne";
 import type { Json } from "@/lib/supabase/database.types";
 
@@ -59,11 +59,11 @@ async function cronHandler(request: Request) {
       neuspesno.push(`${f.sefInvoiceId}: ${stanje.greska}`);
       continue;
     }
-    if (!stanje.data.status || stanje.data.status === f.status) continue;
+    if (!izvuciStatus(stanje.data) || izvuciStatus(stanje.data) === f.status) continue;
     await admin
       .from("orders")
       .update({
-        sef_status: stanje.data.status,
+        sef_status: izvuciStatus(stanje.data),
         sef_response: stanje.data as unknown as Json,
       })
       .eq("company_order_group", groupId);

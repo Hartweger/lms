@@ -16,7 +16,7 @@ import { napraviDokumentPdf } from "@/lib/dokument-pdf";
 import { ipsQrBuffer } from "@/lib/ips-qr";
 import { sendDokumentEmail } from "@/lib/email";
 import { napraviUbl } from "@/lib/sef-ubl";
-import { posaljiUbl, procitajStatus, izvuciSefId, sefPodesen } from "@/lib/sef";
+import { posaljiUbl, procitajStatus, izvuciSefId, sefPodesen, izvuciStatus } from "@/lib/sef";
 import type { Json } from "@/lib/supabase/database.types";
 
 function danBeograd(d: Date): string {
@@ -201,13 +201,13 @@ export async function POST(
     .from("recurring_invoice_runs")
     .update({
       sef_invoice_id: sefInvoiceId,
-      sef_status: stanje.ok ? (stanje.data.status ?? "Sending") : "Sending",
+      sef_status: stanje.ok ? (izvuciStatus(stanje.data) ?? "Sending") : "Sending",
       sef_sent_at: new Date().toISOString(),
       sef_response: (stanje.ok ? stanje.data : poslato.data) as unknown as Json,
     })
     .eq("id", id);
 
-  return NextResponse.json({ sefInvoiceId, status: stanje.ok ? stanje.data.status : "Sending" });
+  return NextResponse.json({ sefInvoiceId, status: stanje.ok ? izvuciStatus(stanje.data) : "Sending" });
 }
 
 /** Pregled pripremljene fakture kao PDF, pre slanja. */
