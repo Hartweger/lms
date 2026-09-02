@@ -67,16 +67,21 @@ export function napraviDokumentPdf(d: DokumentPodaci, qr: Buffer | null): Buffer
   doc.setTextColor(0);
   y += 6;
 
+  // Puni poslovni nazivi umeju da budu vrlo dugi („DRUŠTVO SA OGRANIČENOM
+  // ODGOVORNOŠĆU ZA TRGOVINU I USLUGE ... DOO VRANIĆ") - moraju da se prelome,
+  // inače se seku na ivici strane.
   doc.setFontSize(10);
-  doc.text(d.kupac.naziv, M, y);
-  y += 5;
+  for (const red of doc.splitTextToSize(d.kupac.naziv, W - 2 * M) as string[]) {
+    doc.text(red, M, y);
+    y += 5;
+  }
 
+  // Mejl se NAMERNO ne štampa: služi za slanje, na dokumentu nema šta da traži.
   doc.setFontSize(9);
   for (const red of [
     d.kupac.adresa,
     `PIB: ${d.kupac.pib}`,
     d.kupac.maticniBroj ? `Matični broj: ${d.kupac.maticniBroj}` : null,
-    d.kupac.email,
   ]) {
     if (!red) continue;
     doc.text(red, M, y);
