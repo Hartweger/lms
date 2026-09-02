@@ -1,5 +1,8 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { predlozenaKategorija } from "@/lib/sef-ulazne";
+import { predloziZa, type CekaUplatu } from "@/lib/izvod-uparivanje";
+import type { IzvodStavka } from "@/lib/izvod-xml";
+import type { IzvodRed } from "./IzvodStavke";
 import type { UlaznaRed } from "./UlazneFakture";
 import { buildFinansije, fillGroupCourseIds, monthKey, type ExpenseRow, type FinOrder, type FinOrderItem, type FinMonthlyRevenue, type FinMonthlyHonorar, type Kategorija } from "@/lib/finansije";
 import { loadPayables } from "@/lib/professor-payable";
@@ -153,6 +156,51 @@ export default async function AdminFinansijePage({
     predlog: predlozenaKategorija(u.dobavljac_naziv),
   }));
 
+  // Stavke sa bankovnog izvoda koje čekaju odluku, sa predlogom za svaku.
+  const [{ data: stavke }, { data: cekajuData }, { data: pravilaData }] = await Promise.all([
+    admin.from("bank_transactions").select("*").eq("status", "novo").order("datum", { ascending: false }).limit(200),
+    admin.from("orders").select("id, order_number, total").eq("payment_status", "pending").not("order_number", "is", null),
+    admin.from("expense_rules").select("obrazac, kategorija"),
+  ]);
+
+  const cekaju: CekaUplatu[] = (cekajuData ?? []).map((o) => ({
+    id: o.id,
+    orderNumber: o.order_number!,
+    total: Number(o.total),
+  }));
+  const pravila = new Map((pravilaData ?? []).map((p) => [p.obrazac, p.kategorija]));
+
+  const izvodRedovi: IzvodRed[] = (stavke ?? []).map((s) => {
+    const stavka: IzvodStavka = {
+      fitid: s.fitid,
+      smer: s.smer as "priliv" | "odliv",
+      iznos: Number(s.iznos),
+      datum: s.datum,
+      naziv: s.naziv,
+      racunDruge: s.racun_druge,
+      svrha: s.svrha,
+      sifra: s.sifra,
+      pozivNaBroj: s.poziv_na_broj,
+      pozivDruge: s.poziv_druge,
+    };
+    const p = predloziZa(stavka, cekaju, pravila);
+    return {
+      id: s.id,
+      smer: stavka.smer,
+      iznos: stavka.iznos,
+      datum: s.datum,
+      naziv: s.naziv,
+      svrha: s.svrha,
+      izvodBroj: s.izvod_broj,
+      vrsta: p.vrsta,
+      razlog: p.razlog,
+      orderId: p.orderId ?? null,
+      orderNumber: p.orderNumber ?? null,
+      kategorija: p.kategorija ?? null,
+      neslaganje: p.neslaganje ?? null,
+    };
+  });
+
   return (
     <FinansijeClient
       data={data}
@@ -162,6 +210,7 @@ export default async function AdminFinansijePage({
       profName={profName}
       expenses={(expensesRes.data ?? []) as ExpenseRow[]}
       ulazne={ulazne}
+      izvodRedovi={izvodRedovi}
       courseOptions={courseOptions}
       ukupanSaldo={ukupanSaldo}
     />

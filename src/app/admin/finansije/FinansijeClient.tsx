@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import UlazneFakture, { type UlaznaRed } from "./UlazneFakture";
+import IzvodStavke, { type IzvodRed } from "./IzvodStavke";
 import { useRouter } from "next/navigation";
 import {
   KATEGORIJA_LABELS, EXPENSE_CATEGORIES, EXPENSE_CATEGORY_LABELS, MESECI_KRATKO,
@@ -22,11 +23,12 @@ interface Props {
   profName: Record<string, string>;
   expenses: ExpenseRow[];
   ulazne: UlaznaRed[];
+  izvodRedovi: IzvodRed[];
   courseOptions: { id: string; title: string }[];
   ukupanSaldo: Record<string, number>;
 }
 
-export default function FinansijeClient({ data, year, mesec, pendingTotal, profName, expenses, ulazne, courseOptions, ukupanSaldo }: Props) {
+export default function FinansijeClient({ data, year, mesec, pendingTotal, profName, expenses, ulazne, izvodRedovi, courseOptions, ukupanSaldo }: Props) {
   const router = useRouter();
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<ExpenseRow | null>(null);
@@ -187,6 +189,8 @@ export default function FinansijeClient({ data, year, mesec, pendingTotal, profN
           </tbody>
         </table>
       </section>
+
+      <IzvodStavke redovi={izvodRedovi} />
 
       <UlazneFakture redovi={ulazne} />
 
