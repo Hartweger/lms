@@ -49,9 +49,17 @@ async function cronHandler(request: Request) {
   }
 
   let osvezeno = 0;
+  const neuspesno: string[] = [];
   for (const [groupId, f] of poGrupi) {
     const stanje = await procitajStatus(f.sefInvoiceId);
-    if (!stanje.ok || !stanje.data.status || stanje.data.status === f.status) continue;
+    // Neuspeh se NE prećutkuje. Do 02.09.2026. ovde je stajao goli `continue`, pa je
+    // faktura 2026-419 pet dana stajala na „šalje se" dok je cron svakog jutra
+    // uredno vraćao 200. Kvar koji se ne vidi je gori od kvara koji vikne.
+    if (!stanje.ok) {
+      neuspesno.push(`${f.sefInvoiceId}: ${stanje.greska}`);
+      continue;
+    }
+    if (!stanje.data.status || stanje.data.status === f.status) continue;
     await admin
       .from("orders")
       .update({
@@ -94,6 +102,7 @@ async function cronHandler(request: Request) {
     proverenoFaktura: poGrupi.size,
     osvezeno,
     ulazne: ulazneGreska ? `pala: ${ulazneGreska}` : noveUlazne,
+    ...(neuspesno.length ? { citanjeStatusaPalo: neuspesno } : {}),
   });
 }
 

@@ -43,7 +43,7 @@ async function cronHandler(request: Request) {
 
   const { data: pravila, error } = await admin
     .from("recurring_invoices")
-    .select("id, opis, iznos, dan_u_mesecu")
+    .select("id, opis, iznos, dan_u_mesecu, created_at")
     .eq("aktivno", true);
 
   if (error) {
@@ -53,7 +53,13 @@ async function cronHandler(request: Request) {
   // Dan se poredi sa `>=`, ne sa `=`: ako cron jednog dana ne prođe (ispad, izmena
   // rasporeda), faktura se pripremi sutradan umesto da se preskoči ceo mesec.
   // Jedinstvenost (recurring_id, period) čuva da se ne pripremi dvaput.
-  const zaDanas = (pravila ?? []).filter((p) => dan >= p.dan_u_mesecu);
+  //
+  // Ali NE za mesec koji je počeo pre nego što je pravilo uopšte postojalo: pravilo
+  // napravljeno 28.08. ne sme da izda avgustovsku fakturu, jer je taj mesec već
+  // fakturisan ručno. (Uhvaćeno 02.09.2026 - avgustovska je bila pripremljena.)
+  const zaDanas = (pravila ?? []).filter(
+    (p) => dan >= p.dan_u_mesecu && p.created_at.slice(0, 10) <= period,
+  );
 
   let pripremljeno = 0;
   for (const p of zaDanas) {
