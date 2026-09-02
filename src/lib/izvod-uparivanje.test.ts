@@ -73,6 +73,37 @@ describe("predloziZa - prilivi", () => {
   });
 });
 
+describe("prava uplata sa izvoda 172", () => {
+  // Zabeleženo 02.09.2026 na pravom izvodu br. 172 (28.08). Ovo je prva prava
+  // uplata firme kroz sistem - NEXT FIBER po fakturi 2026-419. Poziv na broj je
+  // TAČNO broj narudžbine, bez repa, i sedi u polju „Poziv na broj (odobrenje)"
+  // (u XML-u: `refnumber`).
+  const pravaUplata: IzvodStavka = {
+    fitid: "000DOPR2624016DT",
+    smer: "priliv",
+    iznos: 40250,
+    datum: "2026-08-28",
+    naziv: "DRUŠTVO ZA KABLOVSKE TELEKOMUNIKAC,SAVE KOVACEVICA 296,Novi",
+    racunDruge: "155-0000000032839-45",
+    svrha: "Promet robe i usluga - finalna potrosnja [08700117711596]",
+    sifra: "221",
+    pozivNaBroj: "2026-419",
+    pozivDruge: null,
+  };
+
+  it("uparuje se sa narudžbinom, bez neslaganja", () => {
+    const p = predloziZa(pravaUplata, cekaju, bezPravila);
+    expect(p).toMatchObject({ vrsta: "uplata", orderId: "o1", orderNumber: "2026-419" });
+    expect(p.neslaganje).toBeUndefined();
+  });
+
+  it("ne uparuje se kad ta narudžbina više ne čeka uplatu", () => {
+    // Već potvrđena narudžbina nije u spisku, pa se uplata ne nudi drugi put.
+    const p = predloziZa(pravaUplata, [{ id: "o2", orderNumber: "2026-402", total: 19600 }], bezPravila);
+    expect(p.vrsta).toBe("nista");
+  });
+});
+
 describe("predloziZa - odlivi", () => {
   const odliv = stavka({
     smer: "odliv",
