@@ -14,6 +14,7 @@
 // Ulazne fakture NE ulaze u troškove same od sebe - čekaju da Nataša izabere
 // kategoriju i potvrdi. Dok se to ne desi, izveštaji su netaknuti.
 import { NextResponse } from "next/server";
+import * as Sentry from "@sentry/nextjs";
 import { withCronLog } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { obnoviPretplatu, procitajStatus, jeZavrsenStatus, sefPodesen, pregledUlaznihFaktura, izvuciStatus } from "@/lib/sef";
@@ -97,7 +98,27 @@ async function cronHandler(request: Request) {
     }
   }
 
+  // Izvodi koji tiho prestanu da stižu su najgori kvar u ovom lancu: sve izgleda
+  // uredno, a troškovi i uplate se ne vide. Izvod stiže radnim danima, pa razmak
+  // preko 4 dana (vikend + praznik) znači da nešto ne radi.
+  const { data: poslednja } = await admin
+    .from("bank_transactions")
+    .select("datum")
+    .order("datum", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  let izvodiAlarm: string | null = null;
+  if (poslednja?.datum) {
+    const dana = Math.floor((Date.now() - new Date(poslednja.datum).getTime()) / 86400000);
+    if (dana > 4) {
+      izvodiAlarm = `Poslednji izvod je od ${poslednja.datum} (pre ${dana} dana).`;
+      Sentry.captureException(new Error(`[izvodi] ${izvodiAlarm} Proveri Apps Script skriptu.`));
+    }
+  }
+
   return NextResponse.json({
+    ...(izvodiAlarm ? { izvodiAlarm } : {}),
     pretplata: pretplata.ok ? "obnovljena" : `pala: ${pretplata.greska}`,
     proverenoFaktura: poGrupi.size,
     osvezeno,
