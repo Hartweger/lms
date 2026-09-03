@@ -140,13 +140,14 @@ export default async function AdminFinansijePage({
   // faktura koja čeka mora da se vidi bez obzira koji mesec gledaš.
   const { data: ulazneRes } = await admin
     .from("sef_purchase_invoices")
-    .select("id, broj_dokumenta, dobavljac_naziv, dobavljac_pib, iznos, datum, rok_placanja")
+    .select("id, broj_dokumenta, dobavljac_naziv, dobavljac_pib, iznos, datum, rok_placanja, status")
     .is("expense_id", null)
     .eq("zanemarena", false)
     .order("datum", { ascending: false });
 
   const ulazne: UlaznaRed[] = (ulazneRes ?? []).map((u) => ({
     id: u.id,
+    sefStatus: u.status,
     brojDokumenta: u.broj_dokumenta,
     dobavljac: u.dobavljac_naziv,
     pib: u.dobavljac_pib,

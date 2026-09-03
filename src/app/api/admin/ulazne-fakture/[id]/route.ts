@@ -9,6 +9,7 @@
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/api-auth";
 import { EXPENSE_CATEGORIES } from "@/lib/finansije";
+import { prihvatiOdbijUlaznu, izvuciStatus } from "@/lib/sef";
 
 export async function PATCH(
   request: Request,
@@ -23,16 +24,41 @@ export async function PATCH(
     kategorija?: string;
     zanemari?: boolean;
     napomena?: string;
+    /** Prihvatanje ili odbijanje fakture NA SEF-u. */
+    odluka?: "prihvati" | "odbij";
   };
 
   const { data: faktura } = await admin
     .from("sef_purchase_invoices")
-    .select("id, sef_invoice_id, broj_dokumenta, dobavljac_naziv, dobavljac_pib, iznos, datum, expense_id")
+    .select("id, sef_invoice_id, broj_dokumenta, dobavljac_naziv, dobavljac_pib, iznos, datum, expense_id, status")
     .eq("id", id)
     .maybeSingle();
 
   if (!faktura) {
     return NextResponse.json({ error: "Faktura nije pronađena." }, { status: 404 });
+  }
+
+  // ---------- Prihvatanje / odbijanje NA SEF-u ----------
+  // Pravni čin: njime se dobavljačeva faktura zvanično prihvata ili odbija.
+  // Zato samo na izričit klik, i nikad zajedno sa knjiženjem u troškove.
+  if (telo.odluka) {
+    const prihvacena = telo.odluka === "prihvati";
+    if (!prihvacena && !telo.napomena?.trim()) {
+      return NextResponse.json(
+        { error: "Za odbijanje je potreban razlog - dobavljač ga vidi." },
+        { status: 400 },
+      );
+    }
+
+    const res = await prihvatiOdbijUlaznu(faktura.sef_invoice_id, prihvacena, telo.napomena?.trim());
+    if (!res.ok) {
+      return NextResponse.json({ error: `SEF nije prihvatio odluku: ${res.greska}` }, { status: 502 });
+    }
+
+    const noviStatus = izvuciStatus(res.data) ?? (prihvacena ? "Approved" : "Rejected");
+    await admin.from("sef_purchase_invoices").update({ status: noviStatus }).eq("id", id);
+
+    return NextResponse.json({ status: noviStatus });
   }
 
   if (telo.zanemari) {

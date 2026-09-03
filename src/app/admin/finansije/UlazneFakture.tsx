@@ -11,6 +11,8 @@ import { EXPENSE_CATEGORIES, EXPENSE_CATEGORY_LABELS, type ExpenseCategory } fro
 
 export interface UlaznaRed {
   id: string;
+  /** Status na SEF-u: New, Seen, Approved, Rejected... */
+  sefStatus: string | null;
   brojDokumenta: string | null;
   dobavljac: string | null;
   pib: string | null;
@@ -19,6 +21,17 @@ export interface UlaznaRed {
   rokPlacanja: string | null;
   predlog: string | null;
 }
+
+/** Statusi ulazne fakture na SEF-u, na našem jeziku. */
+const SEF_LABEL: Record<string, string> = {
+  New: "nova",
+  Seen: "viđena",
+  ReNotified: "ponovo javljena",
+  Approved: "prihvaćena",
+  Rejected: "odbijena",
+  Cancelled: "otkazana",
+  Storno: "stornirana",
+};
 
 function dan(d: string | null): string {
   if (!d) return "—";
@@ -84,6 +97,7 @@ export default function UlazneFakture({ redovi }: { redovi: UlaznaRed[] }) {
               </p>
               <p className="text-xs text-gray-500">
                 {r.brojDokumenta ?? "bez broja"} · {dan(r.datum)}
+                {r.sefStatus && ` · ${SEF_LABEL[r.sefStatus] ?? r.sefStatus}`}
                 {r.pib && ` · PIB ${r.pib}`}
                 {r.rokPlacanja && ` · rok ${dan(r.rokPlacanja)}`}
               </p>
@@ -92,6 +106,42 @@ export default function UlazneFakture({ redovi }: { redovi: UlaznaRed[] }) {
             <span className="text-sm font-semibold text-gray-900 whitespace-nowrap">
               {r.iznos != null ? `${Math.round(r.iznos).toLocaleString("sr-RS")} RSD` : "—"}
             </span>
+
+            <a
+              href={`/api/admin/ulazne-fakture/${r.id}/pdf`}
+              target="_blank"
+              rel="noreferrer"
+              className="text-xs text-plava hover:underline whitespace-nowrap"
+            >
+              Pogledaj
+            </a>
+
+            {r.sefStatus === "Approved" ? (
+              <span className="text-xs text-green-600 whitespace-nowrap">✓ prihvaćena</span>
+            ) : r.sefStatus === "Rejected" ? (
+              <span className="text-xs text-koral whitespace-nowrap">odbijena</span>
+            ) : (
+              <>
+                <button
+                  onClick={() => posalji(r.id, { odluka: "prihvati" })}
+                  disabled={radi === r.id}
+                  title="Zvanično prihvata fakturu na SEF-u"
+                  className="text-xs px-3 py-1.5 rounded-lg bg-white text-gray-700 font-medium border border-gray-300 hover:bg-gray-800 hover:text-white transition-colors disabled:opacity-50 whitespace-nowrap"
+                >
+                  {radi === r.id ? "..." : "Prihvati na SEF-u"}
+                </button>
+                <button
+                  onClick={() => {
+                    const razlog = window.prompt("Razlog odbijanja (dobavljač ga vidi):");
+                    if (razlog?.trim()) posalji(r.id, { odluka: "odbij", napomena: razlog.trim() });
+                  }}
+                  disabled={radi === r.id}
+                  className="text-xs text-gray-400 hover:text-koral hover:underline whitespace-nowrap"
+                >
+                  Odbij
+                </button>
+              </>
+            )}
 
             <select
               value={izbor[r.id] ?? ""}

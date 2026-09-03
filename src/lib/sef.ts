@@ -264,6 +264,46 @@ export async function pregledUlaznihFaktura(
   return res;
 }
 
+/**
+ * Prihvata ili odbija ulaznu fakturu na SEF-u.
+ *
+ * Ovo je pravni čin - njime se dobavljačeva faktura zvanično prihvata. Zato se
+ * poziva ISKLJUČIVO na Natašin klik, nikad iz crona.
+ */
+export async function prihvatiOdbijUlaznu(
+  sefInvoiceId: string,
+  prihvacena: boolean,
+  komentar?: string,
+): Promise<Odgovor<SefOdgovor>> {
+  return sefFetch<SefOdgovor>("/api/publicApi/purchase-invoice/acceptRejectPurchaseInvoice", {
+    metod: "POST",
+    telo: JSON.stringify({
+      invoiceId: Number(sefInvoiceId),
+      accepted: prihvacena,
+      comment: komentar ?? "",
+    }),
+  });
+}
+
+/** PDF ulazne fakture, onakav kakav SEF prikazuje u portalu. */
+export async function ulaznaFakturaPdf(sefInvoiceId: string): Promise<Buffer | null> {
+  if (!SEF.apiKey) return null;
+  try {
+    const res = await fetch(
+      `${SEF.apiUrl}/api/publicApi/purchase-invoice/pdf?invoiceId=${encodeURIComponent(sefInvoiceId)}`,
+      { headers: { ApiKey: SEF.apiKey, Accept: "application/pdf" } },
+    );
+    if (!res.ok) {
+      console.error(`[sef] PDF ulazne fakture ${sefInvoiceId}: HTTP ${res.status}`);
+      return null;
+    }
+    return Buffer.from(await res.arrayBuffer());
+  } catch (e) {
+    console.error(`[sef] PDF ulazne fakture ${sefInvoiceId} pao:`, e);
+    return null;
+  }
+}
+
 /** Upisuje ishod slanja na sve narudžbine grupe. */
 export async function upisiSefOdgovor(
   admin: SupabaseClient,

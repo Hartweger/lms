@@ -61,6 +61,35 @@ describe("uRed", () => {
   });
 });
 
+describe("uRed - SEF piše polja velikim slovom", () => {
+  // Ista zamka koja je promašila broj fakture i status. Uhvaćena 03.09.2026 pre
+  // nego što je zasmetala: spisak ulaznih faktura je bio prazan jer se `InvoiceId`
+  // tražio kao `invoiceId`.
+  it("čita PascalCase polja iz pravog oblika odgovora", () => {
+    const r = uRed({
+      InvoiceId: 5619601,
+      DocumentNumber: "2026/145",
+      SupplierName: "VERCEL INC",
+      SupplierVatRegistrationNumber: "111222333",
+      Amount: 2400,
+      SumWithoutVat: 2000,
+      VatAmount: 400,
+      Currency: "RSD",
+      SentDate: "2026-08-25T09:00:00Z",
+      DueDate: "2026-09-01T00:00:00Z",
+      Status: "New",
+    } as never);
+    expect(r).toMatchObject({
+      sef_invoice_id: "5619601",
+      broj_dokumenta: "2026/145",
+      dobavljac_naziv: "VERCEL INC",
+      iznos: 2400,
+      datum: "2026-08-25",
+      status: "New",
+    });
+  });
+});
+
 describe("jeZaKnjizenje", () => {
   it("otkazana, obrisana i stornirana nisu trošak", () => {
     expect(jeZaKnjizenje("Cancelled")).toBe(false);
