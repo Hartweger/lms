@@ -47,7 +47,27 @@ export default function UlazneFakture({ redovi }: { redovi: UlaznaRed[] }) {
   const [radi, setRadi] = useState<string | null>(null);
   const [greska, setGreska] = useState<string | null>(null);
 
-  if (redovi.length === 0) return null;
+  async function povuci() {
+    setRadi("povlacenje");
+    setGreska(null);
+    try {
+      const res = await fetch("/api/admin/ulazne-fakture/povuci", { method: "POST" });
+      const json = await res.json();
+      if (!res.ok) {
+        setGreska(json.error ?? "Povlačenje nije uspelo.");
+        return;
+      }
+      if (json.upisano === 0) {
+        setGreska(`SEF nema ulaznih faktura u poslednjih ${json.dana} dana.`);
+        return;
+      }
+      router.refresh();
+    } catch {
+      setGreska("Greška na serveru.");
+    } finally {
+      setRadi(null);
+    }
+  }
 
   async function posalji(id: string, telo: Record<string, unknown>) {
     setRadi(id);
@@ -75,9 +95,23 @@ export default function UlazneFakture({ redovi }: { redovi: UlaznaRed[] }) {
     <section className="bg-white rounded-xl border border-plava/30 p-4">
       <div className="flex flex-wrap items-baseline justify-between gap-2 mb-1">
         <h2 className="font-semibold">Ulazne fakture sa SEF-a</h2>
-        <span className="text-sm text-gray-500">
-          {redovi.length === 1 ? "1 čeka odluku" : `${redovi.length} čeka odluku`}
-        </span>
+        <div className="flex items-center gap-3">
+          <span className="text-sm text-gray-500">
+            {redovi.length === 0
+              ? "nijedna ne čeka"
+              : redovi.length === 1
+              ? "1 čeka odluku"
+              : `${redovi.length} čeka odluku`}
+          </span>
+          <button
+            onClick={povuci}
+            disabled={radi === "povlacenje"}
+            title="Isti posao koji cron radi u 5:30, samo odmah"
+            className="text-xs px-3 py-1.5 rounded-lg bg-white text-gray-700 font-medium border border-gray-300 hover:bg-gray-800 hover:text-white transition-colors disabled:opacity-50 whitespace-nowrap"
+          >
+            {radi === "povlacenje" ? "Povlačim..." : "Povuci sa SEF-a"}
+          </button>
+        </div>
       </div>
       <p className="text-xs text-gray-500 mb-4">
         Ne ulaze u troškove dok ne izabereš kategoriju. Do tada ne utiču ni na jedan izveštaj.
