@@ -1,5 +1,6 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { predlozenaKategorija } from "@/lib/sef-ulazne";
+import { upozorenje as upozorenjeODuplikatu } from "@/lib/duplikat-troska";
 import { predloziZa, type CekaUplatu } from "@/lib/izvod-uparivanje";
 import type { IzvodStavka } from "@/lib/izvod-xml";
 import type { IzvodRed } from "./IzvodStavke";
@@ -155,6 +156,11 @@ export default async function AdminFinansijePage({
     datum: u.datum,
     rokPlacanja: u.rok_placanja,
     predlog: predlozenaKategorija(u.dobavljac_naziv),
+    // Isti račun ume da stigne i kao mesečno ponavljanje i sa izvoda - vidi lib/duplikat-troska.
+    upozorenje: upozorenjeODuplikatu(
+      { naziv: u.dobavljac_naziv, iznos: u.iznos == null ? null : Number(u.iznos), datum: u.datum },
+      (expensesRes.data ?? []) as ExpenseRow[],
+    ),
   }));
 
   // Stavke sa bankovnog izvoda koje čekaju odluku, sa predlogom za svaku.
@@ -199,6 +205,13 @@ export default async function AdminFinansijePage({
       orderNumber: p.orderNumber ?? null,
       kategorija: p.kategorija ?? null,
       neslaganje: p.neslaganje ?? null,
+      upozorenje:
+        stavka.smer === "odliv"
+          ? upozorenjeODuplikatu(
+              { naziv: s.naziv, iznos: stavka.iznos, datum: s.datum },
+              (expensesRes.data ?? []) as ExpenseRow[],
+            )
+          : null,
     };
   });
 

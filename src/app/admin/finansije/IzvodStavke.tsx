@@ -23,6 +23,8 @@ export interface IzvodRed {
   orderNumber: string | null;
   kategorija: string | null;
   neslaganje: { ocekivano: number; stiglo: number } | null;
+  /** Postoji li već sličan trošak; samo upozorenje, ne blokira. */
+  upozorenje: string | null;
 }
 
 function dan(d: string | null): string {
@@ -105,6 +107,9 @@ export default function IzvodStavke({ redovi }: { redovi: IzvodRed[] }) {
               <p className={`text-xs mt-0.5 ${r.neslaganje ? "text-koral font-medium" : "text-gray-400"}`}>
                 {r.razlog}
               </p>
+              {r.upozorenje && (
+                <p className="text-xs mt-0.5 text-koral font-medium">{r.upozorenje}</p>
+              )}
             </div>
 
             <span

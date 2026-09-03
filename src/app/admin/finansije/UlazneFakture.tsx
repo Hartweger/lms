@@ -20,6 +20,8 @@ export interface UlaznaRed {
   datum: string | null;
   rokPlacanja: string | null;
   predlog: string | null;
+  /** Postoji li već sličan trošak; samo upozorenje, ne blokira. */
+  upozorenje: string | null;
 }
 
 /** Statusi ulazne fakture na SEF-u, na našem jeziku. */
@@ -129,6 +131,9 @@ export default function UlazneFakture({ redovi }: { redovi: UlaznaRed[] }) {
               <p className="text-sm font-medium text-gray-900">
                 {r.dobavljac ?? "Nepoznat dobavljač"}
               </p>
+              {r.upozorenje && (
+                <p className="text-xs text-koral font-medium">{r.upozorenje}</p>
+              )}
               <p className="text-xs text-gray-500">
                 {r.brojDokumenta ?? "bez broja"} · {dan(r.datum)}
                 {r.sefStatus && ` · ${SEF_LABEL[r.sefStatus] ?? r.sefStatus}`}
