@@ -9,7 +9,7 @@ import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/api-auth";
 import { grantAccessForOrder, GRANT_IN_PROGRESS } from "@/lib/grant-access";
 import { EXPENSE_CATEGORIES } from "@/lib/finansije";
-import { predlogObrasca } from "@/lib/izvod-uparivanje";
+import { vrediZapamtiti, predlogObrasca } from "@/lib/izvod-uparivanje";
 
 export async function POST(
   request: Request,
@@ -119,7 +119,7 @@ export async function POST(
     .eq("id", id);
 
   // Zapamti kategoriju za ovog dobavljača, da se sledeći put predloži sama.
-  if (telo.zapamti !== false && naziv.length >= 3) {
+  if (telo.zapamti !== false && vrediZapamtiti(naziv)) {
     await admin
       .from("expense_rules")
       .upsert({ obrazac: naziv, kategorija }, { onConflict: "obrazac" });

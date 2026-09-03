@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { predloziZa, kategorijaZa, predlogObrasca, type CekaUplatu } from "./izvod-uparivanje";
+import { predloziZa, kategorijaZa, predlogObrasca, vrediZapamtiti, type CekaUplatu } from "./izvod-uparivanje";
 import type { IzvodStavka } from "./izvod-xml";
 
 function stavka(over: Partial<IzvodStavka> = {}): IzvodStavka {
@@ -187,5 +187,30 @@ describe("predlogObrasca", () => {
 
   it("bez svrhe pada na naziv", () => {
     expect(predlogObrasca({ naziv: "VERCEL INC, Dublin", svrha: null })).toBe("VERCEL INC");
+  });
+});
+
+describe("vrediZapamtiti", () => {
+  it("pamti ime dobavljača", () => {
+    expect(vrediZapamtiti("FACEBK")).toBe(true);
+    expect(vrediZapamtiti("KNJIŠKI MOLJAC 2012 DOO")).toBe(false); // godina u imenu
+    expect(vrediZapamtiti("ANTHROPIC")).toBe(true);
+    expect(vrediZapamtiti("Yettel d.o.o. Beograd")).toBe(true);
+  });
+
+  it("ne pamti opis vezan za jedan mesec", () => {
+    // Ovakva pravila su se stvarno nakupila u avgustu 2026.
+    expect(vrediZapamtiti("OBRAČUN TARIFE NA USLUGE PLATNOG PROMETA ZA PERIOD: OD - 21-aug-2026")).toBe(false);
+    expect(vrediZapamtiti("Korišćenje BizMobi softverskog rešenja (avgust")).toBe(false);
+  });
+
+  it("ne pamti broj računa", () => {
+    expect(vrediZapamtiti("11812026-8")).toBe(false);
+    expect(vrediZapamtiti("2026-419")).toBe(false);
+  });
+
+  it("ne pamti prekratko ni predugačko", () => {
+    expect(vrediZapamtiti("AB")).toBe(false);
+    expect(vrediZapamtiti("X".repeat(41))).toBe(false);
   });
 });

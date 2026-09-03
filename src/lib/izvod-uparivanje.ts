@@ -139,3 +139,21 @@ export function predlogObrasca(s: Pick<IzvodStavka, "naziv" | "svrha">): string 
 
   return (s.naziv ?? "").split(",")[0].trim();
 }
+
+/**
+ * Da li obrazac vredi zapamtiti kao pravilo za ubuduće.
+ *
+ * Banka u svrhu plaćanja često upiše i mesec ili broj računa: "OBRAČUN TARIFE ...
+ * OD - 21-aug-2026 DO - 31-aug-2026", "11812026-8". Takav obrazac se nikad više
+ * neće poklopiti, a spisak pravila zatrpa. Pamti se samo ime dobavljača.
+ */
+export function vrediZapamtiti(obrazac: string): boolean {
+  const o = obrazac.trim();
+  if (o.length < 3 || o.length > 40) return false;
+  // Godina ili naziv meseca znače da je opis vezan za jedan period.
+  if (/20\d{2}|jan|feb|mar|apr|maj|jun|jul|avg|aug|sep|okt|oct|nov|dec/i.test(o)) return false;
+  // Broj računa: pretežno cifre.
+  const cifre = (o.match(/\d/g) ?? []).length;
+  if (cifre > o.replace(/\s/g, "").length / 2) return false;
+  return true;
+}
