@@ -5,11 +5,13 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { sanitizeHtml } from "@/lib/sanitize";
 import { examItemsOf, examCorrectIndexOf } from "@/lib/grouped-exam";
+import { markLessonCompleted } from "@/lib/lesson-complete";
 import type { Exercise, ExerciseQuestion } from "@/lib/types";
 
 interface Props {
   exercise: Exercise;
   questions: ExerciseQuestion[];
+  nextExerciseId?: string | null;
   nextLessonId?: string | null;
   isTest?: boolean;
   isModelltest?: boolean;
@@ -39,7 +41,7 @@ function fmtMd(md: string): string {
     .replace(/\n/g, "<br>");
 }
 
-export default function GroupedExamExercise({ exercise, questions, nextLessonId, isTest = false, isModelltest = false, courseId = null }: Props) {
+export default function GroupedExamExercise({ exercise, questions, nextExerciseId = null, nextLessonId, isTest = false, isModelltest = false, courseId = null }: Props) {
   const supabase = createClient();
   const [certificateId, setCertificateId] = useState<string | null>(null);
 
@@ -89,6 +91,10 @@ export default function GroupedExamExercise({ exercise, questions, nextLessonId,
       setSaveFailed(true);
       setSaving(false);
       return;
+    }
+    // Poslednja vežba u lekciji → lekcija je time završena (vidi lib/lesson-complete).
+    if (!nextExerciseId) {
+      await markLessonCompleted(supabase, user.id, exercise.lesson_id);
     }
     // Modelltest: na poslednjem modulu server proverava sve module (≥60%) i izdaje sertifikat.
     if (isModelltest && courseId) {

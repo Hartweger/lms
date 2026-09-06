@@ -20,6 +20,7 @@ import GroupedExamExercise from "./GroupedExamExercise";
 import MillionaireExercise from "./MillionaireExercise";
 import { canRenderGroupedExam } from "@/lib/grouped-exam";
 import { passesThreshold, passLabel } from "@/lib/certificate-threshold";
+import { markLessonCompleted } from "@/lib/lesson-complete";
 import type { Exercise, ExerciseQuestion } from "@/lib/types";
 
 interface ExerciseRunnerProps {
@@ -92,7 +93,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
     return hasCtx || !!q.audio_url;
   });
   if (isGroupedExam) {
-    return <GroupedExamExercise exercise={exercise} questions={questions} nextLessonId={nextLessonId} isTest={isTest} isModelltest={isModelltest} courseId={courseId} />;
+    return <GroupedExamExercise exercise={exercise} questions={questions} nextExerciseId={nextExerciseId} nextLessonId={nextLessonId} isTest={isTest} isModelltest={isModelltest} courseId={courseId} />;
   }
 
   const question = questions[currentIndex];
@@ -204,6 +205,13 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
       return;
     }
 
+    // Poslednja vežba u lekciji → lekcija je time završena. Bez ovoga polaznik
+    // koji sa završnog ekrana klikne „Sledeća lekcija →" preskoči dugme
+    // „Završi i nastavi" i lekcija mu zauvek ostane neoznačena.
+    if (!nextExerciseId) {
+      await markLessonCompleted(supabase, user.id, exercise.lesson_id);
+    }
+
     // dodela srca za vežbu (server računa iznos)
     try {
       await fetch("/api/hearts/award", {
@@ -302,6 +310,8 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
     });
     if (error) {
       setSaveFailed(true);
+    } else if (!nextExerciseId) {
+      await markLessonCompleted(supabase, user.id, exercise.lesson_id);
     }
     setSaving(false);
   };
