@@ -2,10 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { withCronLog } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
 
-// NH Academy Gen II ima tri cene po fazama kampanje. Ranije se cena menjala ručno,
-// što je značilo da jedan zaboravljen dan prodaje program 100 EUR jeftinije nego
-// što treba. Zato ovaj posao svakog dana proveri koji je period i, ako se cena
-// razlikuje, ispravi je.
+// NH Academy Gen II ima dve cene: rani upis do 31.8. i punu cenu posle toga.
+// Ranije se cena menjala ručno, što je značilo da jedan zaboravljen dan prodaje
+// program 100 EUR jeftinije nego što treba. Zato ovaj posao svakog dana proveri
+// koji je period i, ako se cena razlikuje, ispravi je.
+//
+// Međukorak 590 EUR (1.–20.9.) je izbačen 7.9.2026: hitnost više ne nosi cena nego
+// broj mesta i rok prijava, a 590 ostaje samo kao kupon uz radionicu i veče 17.9.
 //
 // Kupon se NE koristi: CheckoutForm validira kupon iz URL-a samo za poznat mejl,
 // pa bi anonimna kupovina prikazala punu cenu (vidi migraciju 082).
@@ -15,7 +18,6 @@ const SLUG = "nh-academy-gen2";
 /** Granice su POSLEDNJI dan po beogradskom vremenu na kom važi ta cena. */
 const CENE: { do: string | null; rsd: number; opis: string }[] = [
   { do: "2026-08-31", rsd: 57300, opis: "rani upis (490 EUR)" },
-  { do: "2026-09-20", rsd: 69000, opis: "druga cena (590 EUR)" },
   { do: null, rsd: 80700, opis: "puna cena (690 EUR)" },
 ];
 

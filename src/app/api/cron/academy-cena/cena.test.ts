@@ -7,13 +7,9 @@ describe("NH Academy — cena po fazi kampanje", () => {
     expect(cenaZaDan("2026-08-31").rsd).toBe(57300);
   });
 
-  it("druga cena kreće 1.9. i drži do 20.9. uključivo", () => {
-    expect(cenaZaDan("2026-09-01").rsd).toBe(69000);
-    expect(cenaZaDan("2026-09-20").rsd).toBe(69000);
-  });
-
-  it("puna cena kreće 21.9.", () => {
-    expect(cenaZaDan("2026-09-21").rsd).toBe(80700);
+  it("puna cena kreće 1.9., bez međukoraka", () => {
+    expect(cenaZaDan("2026-09-01").rsd).toBe(80700);
+    expect(cenaZaDan("2026-09-20").rsd).toBe(80700);
     expect(cenaZaDan("2026-09-29").rsd).toBe(80700);
   });
 
