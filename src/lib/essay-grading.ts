@@ -53,6 +53,32 @@ export function normalizeCriteria(raw: unknown): EssayCriteria {
 
 // Zbirna ocena 1-5: ponderisani prosek sa duplom težinom Erfüllung-a.
 // Erfüllung 0 (zadatak promašen/prazan) → 1, ma kakav jezik bio.
+export interface Correction {
+  original: string;
+  corrected: string;
+  explanation: string;
+}
+
+// Model kroz tool_use ume da vrati corrections kao string ili ispusti polja
+// (07.09.2026: sačuvan "[\n " kao string → admin/eseji pukao na .map).
+// Sve što nije niz validnih objekata se odbacuje; najviše 3 ispravke.
+export function normalizeCorrections(raw: unknown): Correction[] {
+  if (!Array.isArray(raw)) return [];
+  const out: Correction[] = [];
+  for (const item of raw) {
+    if (!item || typeof item !== "object" || Array.isArray(item)) continue;
+    const c = item as Record<string, unknown>;
+    if (typeof c.original !== "string" || typeof c.corrected !== "string") continue;
+    out.push({
+      original: c.original,
+      corrected: c.corrected,
+      explanation: typeof c.explanation === "string" ? c.explanation : "",
+    });
+    if (out.length === 3) break;
+  }
+  return out;
+}
+
 export function computeScore(c: EssayCriteria): number {
   if (c.erfuellung === 0) return 1;
   const weighted = (2 * c.erfuellung + c.kohaerenz + c.wortschatz + c.korrektheit) / 5;

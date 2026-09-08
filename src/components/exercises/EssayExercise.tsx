@@ -58,7 +58,7 @@ export default function EssayExercise({ task, level, onAnswer, exerciseId, lesso
             professor_feedback: data.professor_feedback,
             professor_score: data.professor_score,
             ai_feedback: data.ai_feedback,
-            ai_corrections: data.ai_corrections as Correction[] | null,
+            ai_corrections: Array.isArray(data.ai_corrections) ? (data.ai_corrections as unknown as Correction[]) : null,
           });
           onAnswer((data.professor_score || 0) >= 0.6 * maxPoints);
         } else {

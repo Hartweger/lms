@@ -111,7 +111,12 @@ export default function ProfesorEseji() {
         }
       }
 
-      setEssays(rows.map((r) => ({ ...r, user_profiles: profById.get(r.user_id) })));
+      // ai_corrections mora biti niz - stari redovi umeju da nose string (vidi normalizeCorrections)
+      setEssays(rows.map((r) => ({
+        ...r,
+        ai_corrections: Array.isArray(r.ai_corrections) ? r.ai_corrections : null,
+        user_profiles: profById.get(r.user_id),
+      })));
 
       // Tekst zadatka (uputstvo koje polaznik vidi) - da profesor zna šta je traženo.
       const exIds = [...new Set(rows.map((e) => e.exercise_id))];

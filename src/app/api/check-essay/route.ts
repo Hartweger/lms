@@ -7,6 +7,7 @@ import {
   computePoints,
   computeScore,
   GRADING_TOOL,
+  normalizeCorrections,
   normalizeCriteria,
   pickGradingModel,
 } from "@/lib/essay-grading";
@@ -81,7 +82,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       feedback: result.feedback || "",
-      corrections: (result.corrections || []).slice(0, 3),
+      corrections: normalizeCorrections(result.corrections),
       score,
       criteria: {
         ...criteria,

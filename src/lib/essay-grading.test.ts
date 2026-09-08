@@ -4,6 +4,7 @@ import {
   computePoints,
   computeScore,
   countWords,
+  normalizeCorrections,
   normalizeCriteria,
   pickGradingModel,
 } from "./essay-grading";
@@ -90,5 +91,35 @@ describe("buildGradingPrompt", () => {
   it("ispitni režim se najavljuje", () => {
     const p = buildGradingPrompt({ task: "t", text: "x", level: "B1", isExam: true });
     expect(p).toContain("ISPITNA");
+  });
+});
+
+describe("normalizeCorrections", () => {
+  it("niz ispravnih objekata prolazi, seče se na 3", () => {
+    const four = [1, 2, 3, 4].map((i) => ({ original: `o${i}`, corrected: `c${i}`, explanation: `e${i}` }));
+    expect(normalizeCorrections(four)).toEqual(four.slice(0, 3));
+  });
+
+  it("string umesto niza (model vratio tekst) → prazan niz", () => {
+    // 07.09.2026: model je kroz tool_use vratio "[\n " kao string i to je sačuvano
+    // u bazu, pa je admin/eseji pukao na ai_corrections.map
+    expect(normalizeCorrections("[\n ")).toEqual([]);
+  });
+
+  it("null/undefined/objekat → prazan niz", () => {
+    expect(normalizeCorrections(null)).toEqual([]);
+    expect(normalizeCorrections(undefined)).toEqual([]);
+    expect(normalizeCorrections({ original: "a", corrected: "b" })).toEqual([]);
+  });
+
+  it("stavke bez original/corrected stringova se izbacuju, explanation se popunjava", () => {
+    expect(
+      normalizeCorrections([
+        { original: "ich bin gegangen", corrected: "ich ging" },
+        "tekst",
+        { original: 5, corrected: "x" },
+        null,
+      ])
+    ).toEqual([{ original: "ich bin gegangen", corrected: "ich ging", explanation: "" }]);
   });
 });

@@ -83,7 +83,12 @@ export default function AdminEseji() {
         }
       }
 
-      const rows = baseRows.map((r) => ({ ...r, user_profiles: profById.get(r.user_id) }));
+      // ai_corrections mora biti niz - stari redovi umeju da nose string (vidi normalizeCorrections)
+      const rows = baseRows.map((r) => ({
+        ...r,
+        ai_corrections: Array.isArray(r.ai_corrections) ? r.ai_corrections : null,
+        user_profiles: profById.get(r.user_id),
+      }));
       setEssays(rows);
 
       // Koji esej je dodeljen profesorki (da admin zna šta profesor pregleda).
