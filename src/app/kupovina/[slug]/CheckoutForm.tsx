@@ -78,7 +78,12 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
   const professors = professorsFromVariants(variants);
   const packageTypes = packageTypesFromVariants(variants);
   const PAKET_LABEL: Record<string, string> = ct.packageLabels;
-  const [professorId, setProfessorId] = useState<string | null>(professors[0]?.id ?? null);
+  // Kad se bira između više profesorki, NE bira se nijedna unapred - kupac mora
+  // sam da klikne. Ranije je meni bio prećutno popunjen prvom iz baze, pa je onaj
+  // ko ga ne dirne kupovao kod nasumične profesorke (porudžbina 2026-475).
+  const [professorId, setProfessorId] = useState<string | null>(
+    professors.length === 1 ? professors[0].id : null,
+  );
   const [packageType, setPackageType] = useState<string | null>(packageTypes[0] ?? null);
   const [fullName, setFullName] = useState(initialName);
   const [email, setEmail] = useState(initialEmail);
@@ -127,6 +132,9 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
   }
 
   const selectedVariant = isIndividual ? resolveVariant(variants, { professorId, packageType }) : null;
+  // Individualni bez izabrane profesorke: cena se još ne zna (nije 0) - u sažetku
+  // stoji crtica dok kupac ne izabere.
+  const cekaIzborProf = isIndividual && !selectedVariant;
   // Za individualne cena dolazi iz varijacije; za usluge cena po strani × broj strana; inače prop priceRsd.
   const basePrice = isIndividual ? (selectedVariant?.price ?? 0) : isService ? priceRsd * pages : priceRsd;
   const discountedRsd = appliedCoupon
@@ -137,7 +145,11 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
 
   // Meta Pixel - InitiateCheckout kad korisnik dođe na korak kupovine (jednom).
   useEffect(() => {
-    trackInitiateCheckout({ contentId: courseSlug, contentName: courseTitle, value: basePrice, currency: "RSD" });
+    // Na mount profesorka još nije izabrana (individualni), pa bi basePrice bio 0 i
+    // pokvario merenje - u tom slučaju šalji najnižu cenu za taj kurs.
+    const cene = variants.map((v) => v.price).filter((p) => p > 0);
+    const value = basePrice || (cene.length ? Math.min(...cene) : priceRsd);
+    trackInitiateCheckout({ contentId: courseSlug, contentName: courseTitle, value, currency: "RSD" });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -188,6 +200,13 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
       if (c) attribution = JSON.parse(decodeURIComponent(c.split("=").slice(1).join("=")));
     } catch { /* ignore */ }
 
+    // Bez izabrane profesorke se ne kupuje - pristanak na „prvu ponuđenu" je greška
+    // koja se vidi tek kad stigne mejl dobrodošlice sa pogrešnim imenom.
+    if (isIndividual && !professorId) {
+      setError(en ? "Please choose your tutor first." : "Izaberi profesorku pre nastavka.");
+      setLoading(false);
+      return;
+    }
     if (jePretplata && !pretplataPotvrda) {
       setError("Potvrdi da razumeš da pokrećeš mesečno plaćanje.");
       setLoading(false);
@@ -249,7 +268,12 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
             )}
           </div>
           <div className="text-right flex-shrink-0">
-            {appliedCoupon ? (
+            {cekaIzborProf ? (
+              <div>
+                <p className="font-bold text-gray-900">—</p>
+                <p className="text-xs text-gray-400 mt-0.5">{en ? "choose your tutor" : "izaberi profesorku"}</p>
+              </div>
+            ) : appliedCoupon ? (
               <div>
                 <p className="text-sm text-gray-400 line-through">{formatPrice(basePrice)} RSD</p>
                 <p className="font-bold text-gray-900">{en ? `${eurDisplay} €` : `${formatPrice(discountedRsd)} RSD`}</p>
@@ -299,10 +323,17 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
           {professors.length > 1 && (
             <div>
               <label htmlFor="prof" className="block text-sm font-medium text-gray-700 mb-1">{en ? "Tutor" : "Profesorka"}</label>
-              <select id="prof" value={professorId ?? ""} onChange={(e) => setProfessorId(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#0AB3D7]">
+              <select id="prof" required value={professorId ?? ""} onChange={(e) => setProfessorId(e.target.value || null)}
+                aria-describedby="prof-hint"
+                className={`w-full border rounded-lg px-4 py-2.5 text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#0AB3D7] ${professorId ? "border-gray-300" : "border-[#F78687]"}`}>
+                <option value="">{en ? "— choose your tutor —" : "— izaberi profesorku —"}</option>
                 {professors.map((p) => (<option key={p.id} value={p.id}>{p.full_name + optionPriceSuffix({ professorId: p.id, packageType })}</option>))}
               </select>
+              {!professorId && (
+                <p id="prof-hint" className="text-xs text-[#F78687] mt-1">
+                  {en ? "Choose your tutor - the course is booked with the tutor you pick here." : "Izaberi profesorku - kurs se upisuje kod one koju ovde izabereš."}
+                </p>
+              )}
             </div>
           )}
 

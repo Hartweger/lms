@@ -11,11 +11,14 @@ const MP = [
 ];
 
 describe("professorsFromVariants", () => {
-  it("vraća distinct profesorke", () => {
+  it("vraća distinct profesorke, azbučno (ne zatečenim redosledom baze)", () => {
     expect(professorsFromVariants(V)).toEqual([
-      { id: "p-suzana", full_name: "Suzana Marjanović" },
       { id: "p-natasa", full_name: "Nataša Hartweger" },
+      { id: "p-suzana", full_name: "Suzana Marjanović" },
     ]);
+  });
+  it("isti redosled bez obzira kako baza vrati redove", () => {
+    expect(professorsFromVariants([...V].reverse())).toEqual(professorsFromVariants(V));
   });
 });
 

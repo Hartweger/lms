@@ -11,7 +11,15 @@ export interface Variant {
   professor?: ProfRef | null;
 }
 
-/** Distinct profesorke iz varijacija, u zatečenom redosledu. */
+/**
+ * Distinct profesorke iz varijacija, azbučno po imenu.
+ *
+ * Redosled MORA biti determinističan: upit nad product_variants nema `order by`,
+ * pa je baza vraćala zatečeni (fizički) redosled reda. Kako je padajući meni na
+ * kupovini pokazivao tu prvu profesorku, kupac koji meni ne dirne kupovao je kod
+ * nasumične profesorke (porudžbina 2026-475, B2.1: prva iz baze bila je Marija
+ * umesto tražene Hristine).
+ */
 export function professorsFromVariants(variants: Variant[]): ProfRef[] {
   const seen = new Set<string>();
   const out: ProfRef[] = [];
@@ -21,7 +29,7 @@ export function professorsFromVariants(variants: Variant[]): ProfRef[] {
       out.push({ id: v.professor.id, full_name: v.professor.full_name });
     }
   }
-  return out;
+  return out.sort((a, b) => a.full_name.localeCompare(b.full_name, "sr"));
 }
 
 /** Sortirani distinct package_type-ovi (prazno za "po nivou"). */

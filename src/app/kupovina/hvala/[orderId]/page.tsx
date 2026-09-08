@@ -45,6 +45,8 @@ interface OrderItem {
   price: number;
   /** zack! članstvo: dete kome naplata pripada - vidi grant-access.ts. */
   dete_id?: string;
+  /** Individualni 1:1: izabrana profesorka. */
+  professor_id?: string | null;
 }
 
 export default async function HvalaPage({
@@ -69,6 +71,21 @@ export default async function HvalaPage({
   const items = order.items as OrderItem[];
   const courseTitle = items?.[0]?.title ?? "";
   const courseSlug = items?.[0]?.course_slug ?? "";
+
+  // Individualni 1:1: ime profesorke odmah na potvrdi, da se pogrešan izbor uhvati
+  // ovde a ne tek iz mejla dobrodošlice (slučaj 2026-475).
+  // Merodavan je upis (posle prebacivanja kod druge profesorke stavke porudžbine
+  // ostaju kakve su bile), a stavka je rezerva dok upisa nema (npr. uplatnica čeka).
+  let profIme: string | null = null;
+  if (items?.[0]?.professor_id) {
+    const { data: enr } = await supabase
+      .from("individual_enrollments").select("professor_id")
+      .eq("order_id", order.id).eq("course_id", items[0].course_id).maybeSingle();
+    const { data: prof } = await supabase
+      .from("user_profiles").select("full_name")
+      .eq("id", enr?.professor_id ?? items[0].professor_id).maybeSingle();
+    profIme = prof?.full_name ?? null;
+  }
 
   const ipsData = buildIpsString({ total: order.total, order_number: order.order_number ?? "" });
 
@@ -171,7 +188,14 @@ export default async function HvalaPage({
           {jePoklon ? "Zapis" : "Narudžbina"} #{order.order_number}
         </p>
         {courseTitle && (
-          <p className="text-gray-700 font-medium mb-8">{courseTitle}</p>
+          <p className={`text-gray-700 font-medium ${profIme ? "mb-1" : "mb-8"}`}>{courseTitle}</p>
+        )}
+        {profIme && (
+          <p className="text-gray-500 text-sm mb-8">
+            Profesorka: <strong className="text-gray-700">{profIme}</strong>
+            {" - "}nije ta? Piši nam na{" "}
+            <a href="mailto:info@hartweger.rs" className="text-plava underline">info@hartweger.rs</a> i prebacujemo te.
+          </p>
         )}
 
         {/* Kartica status */}
