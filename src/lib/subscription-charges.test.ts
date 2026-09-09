@@ -4,6 +4,7 @@ import {
   chargesToProcess,
   nextPlannedCharge,
   MAX_RETRIES,
+  noviRetryCount,
   retryDecision,
   retryStartDate,
   subscriptionStateFromCharges,
@@ -85,6 +86,35 @@ describe("retryDecision", () => {
     // Brojač od 30 važi PO NAPLATI: iscrpljen brojač rate 2 ne sme da blokira ratu 5.
     const s = stanje({ retry_oid: "2026-300-2", retry_count: MAX_RETRIES, retry_planned_for: "2026-07-21" });
     expect(retryDecision(s, naplata(5, "pala"), "2026-07-22")).toBe("retry");
+  });
+});
+
+describe("noviRetryCount", () => {
+  // Četiri iste pale rate (2026-228, 233, 249, 282): banka na Update pale naplate
+  // uvek vrati CORE-5107 - poglavlje 7 menja samo BUDUĆE naplate. Dok se to nije
+  // gasilo samo, cron je svakog drugog dana slao isti zahtev i palio Sentry, a
+  // brojač se ručno stavljao na 30.
+  it("CORE-5107 (pala naplata se ne može pomeriti) odmah iscrpljuje pokušaje", () => {
+    expect(noviRetryCount(stanje(), "2026-282-2", false, "CORE-5107")).toBe(MAX_RETRIES);
+  });
+
+  it("odbijen NAŠ zahtev (druga šifra) ne troši pokušaj - kartica nije dodirnuta", () => {
+    expect(noviRetryCount(stanje(), "2026-300-2", false, "CORE-1032")).toBe(0);
+    const s = stanje({ retry_oid: "2026-300-2", retry_count: 4, retry_planned_for: "2026-07-21" });
+    expect(noviRetryCount(s, "2026-300-2", false, "CORE-1032")).toBe(4);
+  });
+
+  it("odbijena KARTICA (bez šifre) troši pokušaj", () => {
+    expect(noviRetryCount(stanje(), "2026-300-2", false, null)).toBe(1);
+    const s = stanje({ retry_oid: "2026-300-2", retry_count: 4, retry_planned_for: "2026-07-21" });
+    expect(noviRetryCount(s, "2026-300-2", false, null)).toBe(5);
+  });
+
+  it("prihvaćen zahtev broji pokušaj, nova pala naplata kreće od jedan", () => {
+    expect(noviRetryCount(stanje(), "2026-300-2", true, null)).toBe(1);
+    const s = stanje({ retry_oid: "2026-300-2", retry_count: 4, retry_planned_for: "2026-07-21" });
+    expect(noviRetryCount(s, "2026-300-2", true, null)).toBe(5);
+    expect(noviRetryCount(s, "2026-300-5", true, null)).toBe(1);
   });
 });
 

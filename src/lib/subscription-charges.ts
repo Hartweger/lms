@@ -165,6 +165,37 @@ export function nextPlannedCharge(charges: RecurringCharge[]): string | null {
 export type RetryAction = "none" | "wait" | "exhausted" | "retry";
 
 /**
+ * Šifra kojom banka kaže da PALA naplata ne može da se pomeri: „nema zapisa za
+ * OrderId" iako serijski upit tu naplatu vraća pod istim imenom. Poglavlje 7
+ * priručnika menja samo naplate koje TEK PREDSTOJE - odbijena se već desila.
+ * Potvrđeno četiri puta zaredom (2026-228-2, 233-2, 249-2, 282-2, avgust/septembar
+ * 2026). Dalji pokušaji su besmisleni: serija ide dalje po redovnom rasporedu.
+ */
+export const RETRY_IMPOSSIBLE_CODE = "CORE-5107";
+
+/**
+ * Novi brojač pokušaja posle odgovora banke na Update:
+ * - CORE-5107: naplata se ne može pomeriti → brojač odmah na maksimum, da cron
+ *   ne šalje isti zahtev svakog drugog dana (i ne pali Sentry) dok se ručno ne ugasi;
+ * - odbijen NAŠ zahtev (bilo koja druga šifra): kartica nije dodirnuta, ne troši
+ *   pokušaj - inače bi greška u zahtevu za mesec dana pojela svih 30 (CORE-1032, 27-28.08.2026);
+ * - prihvaćen zahtev ili odbijena KARTICA (bez šifre): pravi pokušaj, broji se.
+ * Nova pala naplata (drugi oid) kreće od nule.
+ */
+export function noviRetryCount(
+  state: RetryState,
+  palaOid: string,
+  prihvaceno: boolean,
+  sifraGreske: string | null,
+): number {
+  const prviPut = state.retry_oid !== palaOid;
+  if (!prihvaceno && sifraGreske === RETRY_IMPOSSIBLE_CODE) return MAX_RETRIES;
+  const nasaGreska = !prihvaceno && !!sifraGreske;
+  if (nasaGreska) return prviPut ? 0 : state.retry_count;
+  return prviPut ? 1 : state.retry_count + 1;
+}
+
+/**
  * Da li danas šaljemo Update za palu naplatu. „wait" dok zakazani datum ne prođe:
  * ne znamo da li banka posle Update-a odmah vrati TRANS_STAT na PN, pa bi slanje
  * pre toga svakog dana iznova pomeralo STARTDATE i naplata se nikad ne bi ni
@@ -197,16 +228,23 @@ export async function maybeRetryFailedCharge(
   const startDate = retryStartDate(now);
   const odgovor = await postCc5(buildChargeRetryXml(pala.oid, startDate, env), env);
   const prihvaceno = !!odgovor && isRecurringOpApproved(odgovor);
+  const sifra = odgovor ? recurringOpErrorCode(odgovor) : null;
+  const nemoguce = !prihvaceno && sifra === RETRY_IMPOSSIBLE_CODE;
   const greska = prihvaceno
     ? null
-    : (odgovor?.replace(/\s+/g, " ").trim().slice(0, 500) ?? "banka nije odgovorila");
-  // Odbijen NAŠ zahtev (banka vratila ERRORCODE) nije pokušaj naplate - kartica se
-  // nije dodirnula. Da se brojač uvećavao i tada, greška u zahtevu bi za mesec dana
-  // pojela svih 30 pokušaja koje banka daje po naplati, i to bez ijednog pravog
-  // pokušaja. Tačno to se desilo 27-28.08.2026 sa `CORE-1032` (format datuma).
-  const nasaGreska = !prihvaceno && !!odgovor && !!recurringOpErrorCode(odgovor);
+    : nemoguce
+      ? `${RETRY_IMPOSSIBLE_CODE} - banka ne prepoznaje zapis pale naplate; poglavlje 7 menja samo BUDUĆE naplate. Pokušaji ugašeni, serija ide dalje po redovnom rasporedu.`
+      : (odgovor?.replace(/\s+/g, " ").trim().slice(0, 500) ?? "banka nije odgovorila");
 
-  if (!prihvaceno) {
+  if (nemoguce) {
+    // Poznat i očekivan ishod (vidi RETRY_IMPOSSIBLE_CODE): nije greška u kodu ni
+    // kod banke, pa ide kao upozorenje, jednom - brojač odmah ide na maksimum.
+    console.warn(`[pretplata] pala naplata ${pala.oid} ne može da se pomeri (${RETRY_IMPOSSIBLE_CODE}) - pokušaji ugašeni`);
+    Sentry.captureMessage(
+      `[pretplata] pala naplata ${pala.oid} ne može ponovo da se inicira (${RETRY_IMPOSSIBLE_CODE}) - serija ide dalje, rata preskočena`,
+      "warning",
+    );
+  } else if (!prihvaceno) {
     // Odbijen zahtev se od 25.08.2026. i dalje UPISUJE. Ranije se izlazilo odmah,
     // pa je ostajalo `retry_oid = null` i to je imalo dve tihe posledice: pala
     // naplata se nije videla u jutarnjem pregledu (filtrira se po `retry_oid`),
@@ -217,7 +255,7 @@ export async function maybeRetryFailedCharge(
   }
 
   const prviPut = sub.retry_oid !== pala.oid;
-  const noviBroj = nasaGreska ? (prviPut ? 0 : sub.retry_count) : prviPut ? 1 : sub.retry_count + 1;
+  const noviBroj = noviRetryCount(sub, pala.oid, prihvaceno, sifra);
   const admin = createAdminClient();
   await admin
     .from("subscriptions")
@@ -253,10 +291,10 @@ export async function maybeRetryFailedCharge(
       });
     }
   }
-  if (noviBroj >= MAX_RETRIES) {
+  if (noviBroj >= MAX_RETRIES && !nemoguce) {
     Sentry.captureException(
       new Error(`[pretplata] zakazan poslednji (${MAX_RETRIES}.) pokušaj naplate ${pala.oid} - ako ne prođe, javiti se kupcu ručno`),
     );
   }
-  return prihvaceno ? "retry" : "error";
+  return prihvaceno ? "retry" : nemoguce ? "exhausted" : "error";
 }
