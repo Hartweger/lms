@@ -3080,14 +3080,12 @@ export async function sendSubscriptionRetryEmail(o: {
     // termin sledeće naplate. Obećanje „pokušaćemo narednih dana" tu ne sme da stoji.
     // Banka palu naplatu NE MOŽE ponovo da inicira (CORE-5107, potvrđeno 4× u
     // avgustu/septembru 2026) - zato ovde nema obećanja „pokušaćemo ponovo", ni
-    // molbe da se kupac javi radi toga. Pristup se ne pauzira: ostaje do sledeće
-    // redovne naplate (odluka 30.08.2026).
+    // molbe da se kupac javi radi toga. Pristup se NE produžava ručno (odluka
+    // Nataše 09.09.2026): ističe kako je zadato uz poslednju naplatu i sam se
+    // vraća kad prođe sledeća redovna naplata (grant-access).
     const sledeciKorak = automatski
       ? `<p><strong>Ništa ne moraš da radiš odmah</strong> - narednih dana ćemo automatski pokušati ponovo. Proveri samo da na kartici ima sredstava.</p>`
-      : `<p>Mesečno plaćanje <strong>nije otkazano</strong> - plan ide dalje po redovnom rasporedu${sledeci ? `, a sledeća naplata od <strong>${fmt(o.amount)} RSD</strong> je zakazana za <strong>${esc(sledeci)}</strong>` : ""}. Ovu naplatu ne možemo ponovo da pokrenemo, a pristup kursu ti ostaje. Do sledeće naplate proveri kod svoje banke da li kartica ima pokriće i da li propušta ponavljajuće (recurring) naplate - to je najčešći razlog.</p>`;
-    const podnozje = automatski
-      ? `Dok uplata ne prođe, pristup kursu pauzira - napredak ostaje sačuvan i čeka te na istom mestu. `
-      : ``;
+      : `<p>Mesečno plaćanje <strong>nije otkazano</strong> - plan ide dalje po redovnom rasporedu${sledeci ? `, a sledeća naplata od <strong>${fmt(o.amount)} RSD</strong> je zakazana za <strong>${esc(sledeci)}</strong>` : ""}. Ovu naplatu ne možemo ponovo da pokrenemo, pa pristup kursu pauzira do sledeće naplate. Do tada proveri kod svoje banke da li kartica ima pokriće i da li propušta ponavljajuće (recurring) naplate - to je najčešći razlog.</p>`;
     await resend.emails.send({
       from: FROM,
       to: o.email,
@@ -3099,7 +3097,7 @@ export async function sendSubscriptionRetryEmail(o: {
 <p>Pokušali smo da naplatimo <strong>${fmt(o.amount)} RSD</strong> - ${o.installmentNo}. mesečnu uplatu od ukupno ${o.totalPayments} za kurs <strong>${esc(o.courseTitle)}</strong> - ali naplata nije prošla (najčešće: nedovoljno sredstava na kartici).</p>
 ${sledeciKorak}
 <p>Ako je kartica u međuvremenu <strong>istekla ili zamenjena</strong>, odgovori nam na ovaj mejl, pa ćemo zajedno pokrenuti mesečno plaćanje novom karticom.</p>
-<p style="font-size:13px;color:#666">${podnozje}Mesečno plaćanje uvek možeš da otkažeš u odeljku „Moj nalog" na platformi.</p>
+<p style="font-size:13px;color:#666">Dok uplata ne prođe, pristup kursu pauzira - napredak ostaje sačuvan i čeka te na istom mestu. Mesečno plaćanje uvek možeš da otkažeš u odeljku „Moj nalog" na platformi.</p>
 <p style="margin-top:20px">Hartweger tim</p>
 </body></html>`,
     });
