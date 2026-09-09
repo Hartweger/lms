@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { NakiFace } from "./NakiAvatar";
 import { renderRich } from "./render-rich";
+import { createClient } from "@/lib/supabase/client";
 
 // GA event helper (gtag je globalno učitan u layout.tsx)
 function ga(event: string, params?: Record<string, unknown>) {
@@ -29,6 +30,8 @@ export default function NakiChat() {
   const [gateName, setGateName] = useState("");
   const [gateEmail, setGateEmail] = useState("");
   const [gateSubmitting, setGateSubmitting] = useState(false);
+  // null = još ne znamo; false = neprijavljen (nagoveštaj "prijavi se", vidi ispod)
+  const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
 
   const sessionId = useRef<string>("");
   const startTime = useRef<number>(0);
@@ -63,6 +66,24 @@ export default function NakiChat() {
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight });
   }, [messages, showGate]);
+
+  // Lični limit se vezuje za prijavu: polaznik koji piše neprijavljen (drugi uređaj,
+  // istekla sesija) dobija anonimnih 20 poruka i poruku "kupi kurs" iako kurs već ima
+  // (Darko, 09.09.2026). Zato neprijavljenom odmah, pre limita, kažemo da se prijavi.
+  useEffect(() => {
+    let active = true;
+    createClient()
+      .auth.getUser()
+      .then(({ data }) => {
+        if (active) setLoggedIn(!!data.user);
+      })
+      .catch(() => {
+        if (active) setLoggedIn(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const extractLevel = useCallback((text: string) => {
     const m = text.match(/\b(A1|A2|B1|B2|C1)\b/i);
@@ -215,6 +236,16 @@ export default function NakiChat() {
           <span className="text-xs text-white/85">Online · Nemački A1-C1</span>
         </div>
       </div>
+
+      {loggedIn === false && (
+        <div className="border-b border-gray-100 bg-plava-light px-5 py-1.5 text-xs text-gray-600">
+          Polaznik si?{" "}
+          <a href="/prijava" className="font-semibold text-plava underline">
+            Prijavi se
+          </a>{" "}
+          pa pišeš bez dnevnog limita.
+        </div>
+      )}
 
       <div ref={scrollRef} className="flex flex-1 flex-col gap-2.5 overflow-y-auto p-4">
         {messages.map((m, i) => (

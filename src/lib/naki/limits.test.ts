@@ -27,8 +27,18 @@ describe("limitReachedMessage", () => {
   it("anonimnom nudi mejl (plan učenja), bez upućivanja na pravljenje naloga", () => {
     const msg = limitReachedMessage({ loggedIn: false, course: null });
     expect(msg).toContain("plan učenja");
-    // /prijava nema registraciju - slanje anonimnih tamo je ćorsokak
-    expect(msg).not.toContain("/prijava");
+    // /prijava nema registraciju - anonimnog ne zovemo da "napravi nalog"
+    expect(msg).not.toMatch(/napravi.*nalog|besplatan nalog|registr/i);
+  });
+
+  // Darko 09.09.2026: polaznik sa kupljenim kursom pisao neprijavljen, dobio anonimni
+  // limit i poruku "kupi kurs" - zaključio da mora "kupiti vreme". Prijava mu je jedino rešenje.
+  it("neprijavljenom kaže da se prijavi ako već ima kurs, pre ponude i mejla", () => {
+    const msg = limitReachedMessage({ loggedIn: false, course });
+    expect(msg).toContain("Već imaš kurs kod nas?");
+    expect(msg).toContain("/prijava");
+    expect(msg.indexOf("/prijava")).toBeGreaterThan(msg.indexOf("/kursevi/"));
+    expect(msg.indexOf("/prijava")).toBeLessThan(msg.indexOf("plan učenja"));
   });
 
   it("anonimnom sa poznatim nivoom dodaje kurs sa kuponom NAKI10 i cenom sa popustom", () => {

@@ -66,6 +66,14 @@ export function limitReachedMessage(opts: {
   }
 
   if (!opts.loggedIn) {
+    // Polaznik koji NIJE prijavljen (drugi uređaj, istekla sesija) dobija isti limit kao
+    // anoniman i poruku "polaznici nemaju limit, kupi kurs" - a kurs već ima. Darko,
+    // 09.09.2026: "kupio sam, a NaKI mi kaže da moram kupiti vreme". Zato mu prvo kažemo
+    // da se prijavi. Ovo NIJE poziv anonimnima da prave nalog (vidi napomenu iznad):
+    // rečenica je uslovna, "ako već imaš kurs".
+    parts.push(
+      `Već imaš kurs kod nas? Onda se samo prijavi na ${SITE_URL}/prijava pa nastavljamo bez limita.`
+    );
     parts.push("Ostavi mi ime i mejl pa ti pošaljem besplatan plan učenja za tvoj nivo.");
   }
 
