@@ -31,7 +31,14 @@ function posaljiIzvode() {
 
   // Traže se samo neobeležene niti, i to unazad 30 dana - da prvo pokretanje ne
   // povuče celu istoriju.
-  var upit = 'from:' + POSILJALAC + ' has:attachment newer_than:30d -label:' + ETIKETA;
+  //
+  // ZAŠTO `in:anywhere`: GmailApp.search se ponaša kao pretraga u Gmailu i po
+  // podrazumevanom PRESKAČE korpu i spam. Od 01.09.2026. su mejlovi Intese
+  // završavali u korpi (filter ili ručno brisanje), pa je skripta svakog jutra
+  // uredno radila i nalazila nula niti - izvodi 174-179 nisu stigli u bazu, a
+  // nijedna greška se nije prijavila. Korpa se čisti posle 30 dana, što se
+  // poklapa sa `newer_than:30d`, pa dnevni prolaz stigne na vreme.
+  var upit = 'from:' + POSILJALAC + ' has:attachment newer_than:30d in:anywhere -label:' + ETIKETA;
   var niti = GmailApp.search(upit, 0, 25);
 
   var poslato = 0;
