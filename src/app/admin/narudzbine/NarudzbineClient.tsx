@@ -853,7 +853,9 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
 
       {/* Table */}
       {filtered.length > 0 ? (
-        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+        /* overflow-x-auto, ne hidden: tabela je široka ~1470px i na užem prozoru je
+           krajnja kolona (Fiskalizuj / Račun / Storniraj) bila tiho odsečena. */
+        <div className="bg-white rounded-xl shadow-sm overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="bg-gray-50 text-gray-500 uppercase text-xs">
               <tr>
