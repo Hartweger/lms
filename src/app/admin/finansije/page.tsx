@@ -163,6 +163,32 @@ export default async function AdminFinansijePage({
     ),
   }));
 
+  // Fakture koje su VEĆ dodate u troškove, ali još nisu zvanično prihvaćene/odbijene
+  // na SEF-u. Knjiženje u troškove i prihvatanje na SEF-u su namerno dva odvojena
+  // klika - bez ovog spiska, faktura ovde nestane čim dobije expense_id i niko je
+  // više ne vidi da klikne "Prihvati na SEF-u", pa doveka ostaje "Nova" na SEF-u.
+  const { data: naSefuRes } = await admin
+    .from("sef_purchase_invoices")
+    .select("id, broj_dokumenta, dobavljac_naziv, dobavljac_pib, iznos, datum, rok_placanja, status")
+    .not("expense_id", "is", null)
+    // Samo statusi na kojima SEF još nešto očekuje od nas - ne negacija, jer bi
+    // `status NOT IN (...)` na SQL-u tiho izbacio redove sa status = NULL.
+    .in("status", ["New", "Seen", "ReNotified"])
+    .order("datum", { ascending: false });
+
+  const naSefu: UlaznaRed[] = (naSefuRes ?? []).map((u) => ({
+    id: u.id,
+    sefStatus: u.status,
+    brojDokumenta: u.broj_dokumenta,
+    dobavljac: u.dobavljac_naziv,
+    pib: u.dobavljac_pib,
+    iznos: u.iznos == null ? null : Number(u.iznos),
+    datum: u.datum,
+    rokPlacanja: u.rok_placanja,
+    predlog: null,
+    upozorenje: null,
+  }));
+
   // Stavke sa bankovnog izvoda koje čekaju odluku, sa predlogom za svaku.
   const [{ data: stavke }, { data: cekajuData }, { data: pravilaData }] = await Promise.all([
     admin.from("bank_transactions").select("*").eq("status", "novo").order("datum", { ascending: false }).limit(200),
@@ -224,6 +250,7 @@ export default async function AdminFinansijePage({
       profName={profName}
       expenses={(expensesRes.data ?? []) as ExpenseRow[]}
       ulazne={ulazne}
+      naSefu={naSefu}
       izvodRedovi={izvodRedovi}
       courseOptions={courseOptions}
       ukupanSaldo={ukupanSaldo}

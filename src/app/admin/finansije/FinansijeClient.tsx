@@ -23,12 +23,13 @@ interface Props {
   profName: Record<string, string>;
   expenses: ExpenseRow[];
   ulazne: UlaznaRed[];
+  naSefu: UlaznaRed[];
   izvodRedovi: IzvodRed[];
   courseOptions: { id: string; title: string }[];
   ukupanSaldo: Record<string, number>;
 }
 
-export default function FinansijeClient({ data, year, mesec, pendingTotal, profName, expenses, ulazne, izvodRedovi, courseOptions, ukupanSaldo }: Props) {
+export default function FinansijeClient({ data, year, mesec, pendingTotal, profName, expenses, ulazne, naSefu, izvodRedovi, courseOptions, ukupanSaldo }: Props) {
   const router = useRouter();
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<ExpenseRow | null>(null);
@@ -192,7 +193,7 @@ export default function FinansijeClient({ data, year, mesec, pendingTotal, profN
 
       <IzvodStavke redovi={izvodRedovi} />
 
-      <UlazneFakture redovi={ulazne} />
+      <UlazneFakture redovi={ulazne} naSefu={naSefu} />
 
       {/* Marže po kursevima */}
       <section className="bg-white rounded-xl border border-gray-100 p-4 overflow-x-auto">

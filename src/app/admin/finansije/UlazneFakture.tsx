@@ -41,7 +41,14 @@ function dan(d: string | null): string {
   return `${x}.${m}.${g}.`;
 }
 
-export default function UlazneFakture({ redovi }: { redovi: UlaznaRed[] }) {
+export default function UlazneFakture({
+  redovi,
+  naSefu,
+}: {
+  redovi: UlaznaRed[];
+  /** Već dodate u troškove, ali još nisu zvanično prihvaćene/odbijene na SEF-u. */
+  naSefu: UlaznaRed[];
+}) {
   const router = useRouter();
   const [izbor, setIzbor] = useState<Record<string, string>>(
     Object.fromEntries(redovi.map((r) => [r.id, r.predlog ?? ""])),
@@ -214,6 +221,71 @@ export default function UlazneFakture({ redovi }: { redovi: UlaznaRed[] }) {
           </div>
         ))}
       </div>
+
+      {naSefu.length > 0 && (
+        <div className="mt-5 pt-4 border-t border-gray-100">
+          <div className="flex items-baseline justify-between gap-2 mb-1">
+            <h3 className="text-sm font-semibold text-gray-700">Čeka odluku na SEF-u</h3>
+            <span className="text-xs text-gray-500">
+              {naSefu.length === 1 ? "1 već u troškovima" : `${naSefu.length} već u troškovima`}
+            </span>
+          </div>
+          <p className="text-xs text-gray-500 mb-3">
+            Već dodate u troškove - ostalo je samo da se zvanično prihvate ili odbiju na SEF-u.
+          </p>
+          <div className="space-y-2">
+            {naSefu.map((r) => (
+              <div
+                key={r.id}
+                className="flex flex-wrap items-center gap-3 rounded-lg border border-gray-100 px-3 py-2.5"
+              >
+                <div className="min-w-[200px] flex-1">
+                  <p className="text-sm font-medium text-gray-900">
+                    {r.dobavljac ?? "Nepoznat dobavljač"}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {r.brojDokumenta ?? "bez broja"} · {dan(r.datum)}
+                    {r.sefStatus && ` · ${SEF_LABEL[r.sefStatus] ?? r.sefStatus}`}
+                    {r.pib && ` · PIB ${r.pib}`}
+                  </p>
+                </div>
+
+                <span className="text-sm font-semibold text-gray-900 whitespace-nowrap">
+                  {r.iznos != null ? `${Math.round(r.iznos).toLocaleString("sr-RS")} RSD` : "—"}
+                </span>
+
+                <a
+                  href={`/api/admin/ulazne-fakture/${r.id}/pdf`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-xs text-plava hover:underline whitespace-nowrap"
+                >
+                  Pogledaj
+                </a>
+
+                <button
+                  onClick={() => posalji(r.id, { odluka: "prihvati" })}
+                  disabled={radi === r.id}
+                  title="Zvanično prihvata fakturu na SEF-u"
+                  className="text-xs px-3 py-1.5 rounded-lg bg-white text-gray-700 font-medium border border-gray-300 hover:bg-gray-800 hover:text-white transition-colors disabled:opacity-50 whitespace-nowrap"
+                >
+                  {radi === r.id ? "..." : "Prihvati na SEF-u"}
+                </button>
+                <button
+                  onClick={() => {
+                    const razlog = window.prompt("Razlog odbijanja (dobavljač ga vidi):");
+                    if (razlog?.trim()) posalji(r.id, { odluka: "odbij", napomena: razlog.trim() });
+                  }}
+                  disabled={radi === r.id}
+                  className="text-xs text-gray-400 hover:text-koral hover:underline whitespace-nowrap"
+                >
+                  Odbij
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </section>
   );
 }
