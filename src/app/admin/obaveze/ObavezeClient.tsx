@@ -79,7 +79,7 @@ export default function ObavezeClient({ payables, pending, groups, profs, pendin
       </div>
       <p className="text-xs text-gray-400 -mt-6">Saldo = koliko profesorki trenutno stoji nenaplaćeno; minus znači da je unapred plaćena. Za pregled po mesecu - zarađeno, isplaćeno i saldo meseca - koristi mesečni pregled na Finansijama.</p>
 
-      <section className="bg-white rounded-xl shadow-sm overflow-hidden">
+      <section className="bg-white rounded-xl shadow-sm overflow-x-auto">
         <table className="w-full text-sm">
           <thead className="bg-gray-50 text-gray-500 uppercase text-xs">
             {/* Zarađeno/Isplaćeno su namerno sklonjeni: zbirovi su od početka godine i
@@ -115,7 +115,7 @@ export default function ObavezeClient({ payables, pending, groups, profs, pendin
 
       <section>
         <h2 className="font-medium text-gray-900 mb-3">Zamene na čekanju ({pendingZamene.length})</h2>
-        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+        <div className="bg-white rounded-xl shadow-sm overflow-x-auto">
           {pendingZamene.length === 0 ? <p className="px-4 py-4 text-gray-400 text-sm">Nema prijavljenih zamena.</p> : (
             <table className="w-full text-sm"><tbody className="divide-y divide-gray-50">
               {pendingZamene.map((z) => (
@@ -135,7 +135,7 @@ export default function ObavezeClient({ payables, pending, groups, profs, pendin
 
       <section>
         <h2 className="font-medium text-gray-900 mb-3">Aktivnosti na čekanju ({pending.length})</h2>
-        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+        <div className="bg-white rounded-xl shadow-sm overflow-x-auto">
           {pending.length === 0 ? <p className="px-4 py-4 text-gray-400 text-sm">Nema stavki na čekanju.</p> : (
             <table className="w-full text-sm"><tbody className="divide-y divide-gray-50">
               {pending.map((a) => (
