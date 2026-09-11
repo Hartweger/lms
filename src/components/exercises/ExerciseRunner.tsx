@@ -56,6 +56,13 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
   const [saving, setSaving] = useState(false);
   const [saveFailed, setSaveFailed] = useState(false);
   const [dialogResult, setDialogResult] = useState<{ score: number; total: number } | null>(null);
+  // Esej je već predat i ocenjen (učitan pri otvaranju) - „Završi vežbu" tada
+  // ne sme da upiše novi pokušaj ni da dodeli srca; rezultat već postoji.
+  const vecZabelezeno = useRef(false);
+  const naPostojeciEsej = (correct: boolean) => {
+    vecZabelezeno.current = true;
+    handleAnswer(correct);
+  };
 
   // Konfete za 100% - izračunaju se jednom, inače bi svaki render premestio čestice.
   const [confetti] = useState(() =>
@@ -183,6 +190,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
   // Bez tihog preskakanja: ako sesija/upis padne, polaznik mora da vidi
   // da rezultat nije sačuvan i da može da pokuša ponovo.
   const saveResults = async () => {
+    if (vecZabelezeno.current) return;
     setSaving(true);
     setSaveFailed(false);
     const { data: { user } } = await supabase.auth.getUser();
@@ -669,6 +677,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
                 task={question.question}
                 level={level}
                 onAnswer={handleAnswer}
+                onExisting={naPostojeciEsej}
                 exerciseId={exercise.id}
                 lessonId={exercise.lesson_id}
               maxPoints={(question.options as { maxPoints?: number } | null)?.maxPoints ?? 5}
@@ -806,6 +815,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
                 task={question.question}
                 level={level}
                 onAnswer={handleAnswer}
+                onExisting={naPostojeciEsej}
                 exerciseId={exercise.id}
                 lessonId={exercise.lesson_id}
               maxPoints={(question.options as { maxPoints?: number } | null)?.maxPoints ?? 5}
@@ -819,6 +829,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
               task={question.question}
               level={level}
               onAnswer={handleAnswer}
+              onExisting={naPostojeciEsej}
               exerciseId={exercise.id}
               lessonId={exercise.lesson_id}
             maxPoints={(question.options as { maxPoints?: number } | null)?.maxPoints ?? 5}

@@ -1,6 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { sendCourseCompletedEmail } from "@/lib/email";
 import { passesThreshold } from "@/lib/certificate-threshold";
+import { isExamLessonTitle } from "@/lib/exam-lesson";
 
 /**
  * Per-modul provera Modelltest sertifikata: SVAKI modul mora ≥60%
@@ -32,14 +33,9 @@ export function groupExercisesForCertificate<T extends { exercise_type: string |
   };
 }
 
-/**
- * Da li je lekcija ZAVRŠNI ispit (Modelltest) - jedini kontekst u kom se sme izdati
- * sertifikat za ceo kurs. Mora se poklapati sa regexom u lekcija stranici (isExamLesson).
- * Bez ove provere, ocena bilo kog Schreiben eseja u običnoj lekciji je izdavala sertifikat.
- */
-export function isExamLessonTitle(title: string | null | undefined): boolean {
-  return /Modelltest|Završni ispit/.test(title || "");
-}
+// isExamLessonTitle živi u exam-lesson.ts (bez mejl uvoza, može u klijentski
+// bundle); ovde se re-exportuje da postojeći uvozi i testovi ostanu.
+export { isExamLessonTitle };
 
 export async function checkAndIssueCertificate(
   admin: SupabaseClient,

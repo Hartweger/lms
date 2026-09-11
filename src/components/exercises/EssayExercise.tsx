@@ -7,6 +7,13 @@ interface EssayProps {
   task: string;
   level: string;
   onAnswer: (correct: boolean) => void;
+  /**
+   * Poziva se umesto onAnswer kad je rad VEĆ predat i ocenjen (učitan pri
+   * otvaranju). Runner tako zna da ne upisuje novi pokušaj - ranije je svako
+   * ponovno otvaranje ocenjenog eseja + „Završi vežbu" pravilo još jedan
+   * exercise_attempts red (Emina: 4 pokušaja po eseju, pisala ga jednom).
+   */
+  onExisting?: (correct: boolean) => void;
   exerciseId?: string;
   lessonId?: string;
   maxPoints?: number;
@@ -27,7 +34,7 @@ interface PublishedResult {
   ai_corrections: Correction[] | null;
 }
 
-export default function EssayExercise({ task, level, onAnswer, exerciseId, lessonId, maxPoints = 5 }: EssayProps) {
+export default function EssayExercise({ task, level, onAnswer, onExisting, exerciseId, lessonId, maxPoints = 5 }: EssayProps) {
   const supabase = createClient();
   const [text, setText] = useState("");
   const [checking, setChecking] = useState(false);
@@ -60,7 +67,7 @@ export default function EssayExercise({ task, level, onAnswer, exerciseId, lesso
             ai_feedback: data.ai_feedback,
             ai_corrections: Array.isArray(data.ai_corrections) ? (data.ai_corrections as unknown as Correction[]) : null,
           });
-          onAnswer((data.professor_score || 0) >= 0.6 * maxPoints);
+          (onExisting ?? onAnswer)((data.professor_score || 0) >= 0.6 * maxPoints);
         } else {
           setAlreadyPending(true);
         }
