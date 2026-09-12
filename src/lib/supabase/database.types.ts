@@ -505,6 +505,7 @@ export type Database = {
           min_order: number | null
           new_customers_only: boolean
           once_per_email: boolean
+          partner_id: string | null
           renewal_days_after: number | null
           renewal_days_before: number | null
           renewal_only: boolean
@@ -527,6 +528,7 @@ export type Database = {
           min_order?: number | null
           new_customers_only?: boolean
           once_per_email?: boolean
+          partner_id?: string | null
           renewal_days_after?: number | null
           renewal_days_before?: number | null
           renewal_only?: boolean
@@ -549,6 +551,7 @@ export type Database = {
           min_order?: number | null
           new_customers_only?: boolean
           once_per_email?: boolean
+          partner_id?: string | null
           renewal_days_after?: number | null
           renewal_days_before?: number | null
           renewal_only?: boolean
@@ -563,6 +566,13 @@ export type Database = {
             columns: ["applies_to_course_id"]
             isOneToOne: false
             referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "coupons_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "partners"
             referencedColumns: ["id"]
           },
           {
@@ -1927,6 +1937,8 @@ export type Database = {
           nestpay_trans_id: string | null
           nestpay_transaction_id: string | null
           order_number: string | null
+          partner_fee: number | null
+          partner_id: string | null
           payment_method: string
           payment_status: string
           paypal_note: string | null
@@ -1989,6 +2001,8 @@ export type Database = {
           nestpay_trans_id?: string | null
           nestpay_transaction_id?: string | null
           order_number?: string | null
+          partner_fee?: number | null
+          partner_id?: string | null
           payment_method: string
           payment_status?: string
           paypal_note?: string | null
@@ -2051,6 +2065,8 @@ export type Database = {
           nestpay_trans_id?: string | null
           nestpay_transaction_id?: string | null
           order_number?: string | null
+          partner_fee?: number | null
+          partner_id?: string | null
           payment_method?: string
           payment_status?: string
           paypal_note?: string | null
@@ -2088,6 +2104,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "orders_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "partners"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "orders_subscription_id_fkey"
             columns: ["subscription_id"]
             isOneToOne: false
@@ -2095,6 +2118,74 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      partner_payouts: {
+        Row: {
+          amount: number
+          created_at: string
+          created_by: string | null
+          id: string
+          note: string | null
+          paid_at: string
+          partner_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          note?: string | null
+          paid_at: string
+          partner_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          note?: string | null
+          paid_at?: string
+          partner_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partner_payouts_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "partners"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      partners: {
+        Row: {
+          created_at: string
+          email: string | null
+          fee_rsd: number
+          id: string
+          is_active: boolean
+          name: string
+          note: string | null
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          fee_rsd: number
+          id?: string
+          is_active?: boolean
+          name: string
+          note?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          fee_rsd?: number
+          id?: string
+          is_active?: boolean
+          name?: string
+          note?: string | null
+        }
+        Relationships: []
       }
       placement_test_questions: {
         Row: {

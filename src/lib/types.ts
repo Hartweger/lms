@@ -224,6 +224,9 @@ export interface Coupon {
   amount: number;
   requires_course_id: string | null;
   applies_to_course_id: string | null;
+  partner_id: string | null;
+  /** Popunjeno samo kad upit radi join `partners(name)` (admin kuponi). */
+  partners?: { name: string } | null;
   min_order: number | null;
   max_uses: number | null;
   usage_count: number;

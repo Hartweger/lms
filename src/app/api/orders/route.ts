@@ -288,6 +288,9 @@ export async function POST(request: Request) {
     // Validate coupon if provided
     let couponForDiscount: { discount_type: string; amount: number } | null = null;
     let validCouponCode: string | null = null;
+    // Saradnik (afilijat kod): snimak iznosa u trenutku porudžbine - vidi partner-balance.ts.
+    let partnerId: string | null = null;
+    let partnerFee: number | null = null;
 
     if (rawCouponCode) {
       const { data: coupon } = await supabase
@@ -382,6 +385,17 @@ export async function POST(request: Request) {
         if (notExpired && notMaxed && renewalOk) {
           couponForDiscount = { discount_type: coupon.discount_type, amount: Number(coupon.amount) };
           validCouponCode = coupon.code;
+          if (coupon.partner_id) {
+            const { data: partner } = await supabase
+              .from("partners")
+              .select("id, fee_rsd, is_active")
+              .eq("id", coupon.partner_id)
+              .single();
+            if (partner?.is_active) {
+              partnerId = partner.id;
+              partnerFee = partner.fee_rsd;
+            }
+          }
         }
       }
     }
@@ -536,6 +550,8 @@ export async function POST(request: Request) {
           discount,
           total: chargeNow,
           coupon_code: validCouponCode,
+          partner_id: partnerId,
+          partner_fee: partnerFee,
           payment_method: paymentMethod,
           paypal_note: paypalNote,
           ga_client_id: gaClientId,
@@ -613,6 +629,8 @@ export async function POST(request: Request) {
           discount,
           total: chargeNow,
           coupon_code: validCouponCode,
+          partner_id: partnerId,
+          partner_fee: partnerFee,
           payment_method: paymentMethod,
           order_number: orderNumber,
           utm_source: attr.utm_source ?? null,
