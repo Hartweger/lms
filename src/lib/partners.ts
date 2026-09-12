@@ -115,6 +115,9 @@ export async function loadPartnerDetail(id: string): Promise<PartnerDetail | nul
     admin.from("orders").select(ORDER_SELECT).eq("partner_id", id).order("created_at", { ascending: false }),
     admin.from("partner_payouts").select("id, amount, paid_at, note").eq("partner_id", id).order("paid_at", { ascending: false }),
   ]);
+  if (cRes.error || oRes.error || payRes.error) {
+    console.error("[partners] DB greška za", id, cRes.error ?? oRes.error ?? payRes.error);
+  }
   const orders = ((oRes.data ?? []) as unknown as OrderRaw[]).map(mapOrder);
   const payouts = (payRes.data ?? []) as PartnerPayoutRow[];
   return {

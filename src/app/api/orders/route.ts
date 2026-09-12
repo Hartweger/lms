@@ -394,6 +394,10 @@ export async function POST(request: Request) {
             if (partner?.is_active) {
               partnerId = partner.id;
               partnerFee = partner.fee_rsd;
+            } else {
+              // Kod je upaljen a saradnik nije (ili ne postoji): popust ide, naknada ne.
+              // Bez ovog zapisa takva prodaja ne bi ostavila nikakav trag.
+              console.error(`[orders] Kupon ${coupon.code} ima partner_id ${coupon.partner_id}, ali saradnik nije aktivan - porudžbina ide bez naknade.`);
             }
           }
         }

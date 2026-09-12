@@ -35,7 +35,8 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
 
   // Deaktivacija saradnika gasi i sve njegove kodove - kasa ne dobija novu proveru.
   if (patch.is_active === false) {
-    await admin.from("coupons").update({ is_active: false }).eq("partner_id", id);
+    const { error: cErr } = await admin.from("coupons").update({ is_active: false }).eq("partner_id", id);
+    if (cErr) return NextResponse.json({ error: `Saradnik je deaktiviran, ali kodovi nisu ugašeni: ${cErr.message}` }, { status: 500 });
   }
 
   return NextResponse.json({ partner });

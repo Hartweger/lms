@@ -25,7 +25,7 @@ export default function SaradniciClient({ partners, courses }: { partners: Partn
       body: JSON.stringify({ ...form, feeRsd: Number(form.feeRsd), percent: Number(form.percent), expiresDate: form.expiresDate || null }),
     });
     setBusy(false);
-    if (!res.ok) { setError((await res.json()).error || "Greška"); return; }
+    if (!res.ok) { setError((await res.json().catch(() => ({}))).error || "Greška"); return; }
     setShowForm(false);
     setForm({ name: "", email: "", feeRsd: "5000", code: "", percent: "10", courseId: defaultCourse, expiresDate: "" });
     router.refresh();

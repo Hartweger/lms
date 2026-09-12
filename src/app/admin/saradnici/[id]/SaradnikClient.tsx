@@ -13,6 +13,7 @@ const STATUS: Record<string, { label: string; cls: string }> = {
   completed: { label: "plaćeno", cls: "bg-green-50 text-green-600" },
   pending: { label: "čeka", cls: "bg-yellow-50 text-yellow-700" },
   refunded: { label: "storno", cls: "bg-gray-100 text-gray-500" },
+  cancelled: { label: "otkazano", cls: "bg-gray-100 text-gray-500" },
 };
 
 export default function SaradnikClient({ partner, courses }: { partner: PartnerDetail; courses: CourseOpt[] }) {
@@ -36,7 +37,7 @@ export default function SaradnikClient({ partner, courses }: { partner: PartnerD
     setBusy(key); setError(null);
     const res = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
     setBusy(null);
-    if (!res.ok) { setError((await res.json()).error || "Greška"); return; }
+    if (!res.ok) { setError((await res.json().catch(() => ({}))).error || "Greška"); return; }
     onOk();
     router.refresh();
   }

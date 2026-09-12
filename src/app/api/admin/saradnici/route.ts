@@ -31,7 +31,8 @@ export async function POST(request: NextRequest) {
   const cErr = await insertPartnerCoupon(admin, partner.id, kupon.value);
   if (cErr) {
     // Trka: neko je u međuvremenu napravio isti kod. Ne ostavljamo saradnika bez koda.
-    await admin.from("partners").delete().eq("id", partner.id);
+    const { error: dErr } = await admin.from("partners").delete().eq("id", partner.id);
+    if (dErr) console.error("[saradnici] rollback saradnika pao:", partner.id, dErr);
     return NextResponse.json({ error: cErr.error }, { status: cErr.status });
   }
 
