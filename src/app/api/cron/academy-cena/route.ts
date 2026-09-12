@@ -8,7 +8,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 // koji je period i, ako se cena razlikuje, ispravi je.
 //
 // Međukorak 590 EUR (1.–20.9.) je izbačen 7.9.2026: hitnost više ne nosi cena nego
-// broj mesta i rok prijava, a 590 ostaje samo kao kupon uz radionicu i veče 17.9.
+// broj mesta i rok prijava.
 //
 // Kupon se NE koristi: CheckoutForm validira kupon iz URL-a samo za poznat mejl,
 // pa bi anonimna kupovina prikazala punu cenu (vidi migraciju 082).
