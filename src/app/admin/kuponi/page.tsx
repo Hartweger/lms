@@ -7,7 +7,7 @@ export default async function AdminKuponiPage() {
   const supabase = createAdminClient();
   const { data: coupons } = await supabase
     .from("coupons")
-    .select("*")
+    .select("*, partners:partner_id(name)")
     .order("created_at", { ascending: false });
 
   return <KuponiClient initialCoupons={coupons ?? []} />;

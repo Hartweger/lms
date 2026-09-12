@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import type { Coupon } from "@/lib/types";
 
 interface Props {
@@ -223,6 +224,14 @@ export default function KuponiClient({ initialCoupons }: Props) {
                   <tr key={coupon.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 font-mono text-sm font-medium text-gray-900">
                       {coupon.code}
+                      {coupon.partners?.name && (
+                        <Link
+                          href={`/admin/saradnici/${coupon.partner_id}`}
+                          className="ml-2 font-sans text-xs font-normal text-plava hover:underline"
+                        >
+                          saradnik: {coupon.partners.name}
+                        </Link>
+                      )}
                     </td>
                     <td className="px-6 py-4 text-gray-700">
                       {coupon.amount}%
