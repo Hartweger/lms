@@ -1,7 +1,7 @@
 # Saradnici (afilijat kodovi) - dizajn
 
 Datum: 12.09.2026
-Status: odobreno u razgovoru, čeka plan
+Status: odobreno, plan u `docs/superpowers/plans/2026-09-12-saradnici-afilijat.md`
 
 ## Cilj
 
@@ -52,11 +52,13 @@ Ana se upisuje u istoj migraciji:
 ```sql
 insert into partners (name, fee_rsd) values ('Ana', 5000);
 insert into coupons (code, discount_type, amount, expires_at, is_active, applies_to_course_id, partner_id)
-select 'ANA', 'percent', 10, '2026-09-29 21:59:59+00', true, c.id, p.id
+select 'ANA', 'percent', 10, '2026-09-29 21:59:59+00', false, c.id, p.id
 from courses c, partners p where c.slug = 'nh-academy-gen2' and p.name = 'Ana';
 ```
 
 Istek 29.9.2026 u 23:59 po Beogradu = `21:59:59+00` (CEST). Bez `max_uses`, bez `once_per_email`: brojanje ide preko plaćenih porudžbina, ne preko brojača.
+
+Kupon ANA se upisuje **neaktivan** i pali se ručno (`update coupons set is_active = true where code = 'ANA'`) tek posle deploya koda i smoke testa. Razlog: između migracije i deploya kasa još ne zna da upiše `partner_fee`, pa bi porudžbina sa ANA u tom prozoru ostala bez iznosa za Anu.
 
 Migracija se primenjuje PRE deploya koda (`scripts/db-apply.mjs`).
 
