@@ -95,9 +95,10 @@ async function cronHandler(request: Request) {
 
   let sent = 0;
   for (const p of eligible.slice(0, MAX_PER_RUN)) {
-    await sendReviewRequest({ email: p.email, name: p.full_name ?? "" });
-    // Pad upisa mora da obori cron: bez zapisa bi isti čovek sutra dobio još jednu zamolnicu.
+    // PRVO upis, PA mejl: pad upisa obara cron PRE slanja, pa niko ne dobije zamolnicu koja nije
+    // zabeležena (vidi review-recert - tamo je obrnut redosled pravio duple mejlove 28.08-12.09.2026).
     must(await admin.from("review_requests").insert({ user_id: p.id }), "review_requests insert");
+    await sendReviewRequest({ email: p.email, name: p.full_name ?? "" });
     sent++;
   }
 

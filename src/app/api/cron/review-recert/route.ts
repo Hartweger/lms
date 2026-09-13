@@ -1,6 +1,7 @@
 // src/app/api/cron/review-recert/route.ts
 // Ponovni ask za recenziju posle NOVOG sertifikata (položen ispit). Google link je prvi.
 // Pravila: okidač = sertifikat izdat u zadnja 3 dana; min 60 dana od prošlog ask-a.
+// review_requests je DNEVNIK (više redova po čoveku) - UNIQUE(user_id) skinut migracijom 13.09.2026.
 // (Namerno BEZ "skip ako je popunio formu" - obim je mali, 60-dnevni razmak je dovoljan.)
 import { NextResponse } from "next/server";
 import { withCronLog, must } from "@/lib/cron-log";
@@ -83,9 +84,12 @@ async function cronHandler(request: Request) {
 
   let sent = 0;
   for (const p of toSend.slice(0, MAX_PER_RUN)) {
-    await sendReviewRequestRecert({ email: p.email as string, name: (p.full_name as string) ?? "" });
-    // Pad upisa mora da obori cron: bez zapisa 60-dnevni razmak ne važi, pa bi čovek dobio dupli ask.
+    // PRVO upis, PA mejl. Pad upisa mora da obori cron pre slanja: 28.08-12.09.2026 je UNIQUE(user_id)
+    // (ostatak prve verzije tabele) obarao insert POSLE poslatog mejla, pa je isti čovek dobijao
+    // recert mejl svaki dan dok mu je sertifikat u 3-dnevnom prozoru (11 duplih mejlova, 5 ljudi).
+    // Ako mejl padne posle upisa, čovek samo ostaje bez ovog ask-a - manja šteta od duplog.
     must(await admin.from("review_requests").insert({ user_id: p.id }), "review_requests insert");
+    await sendReviewRequestRecert({ email: p.email as string, name: (p.full_name as string) ?? "" });
     sent++;
   }
 
