@@ -14,7 +14,12 @@ const CSP = [
   // 17.07: Sentry prijava 5b282137 (wasm-eval na /naki, 1 posetilac) = browser ekstenzija;
   // naš kod ne koristi WebAssembly, a Turnstile wasm vrti u svom iframe-u (challenges.cloudflare.com)
   // pod svojim CSP-om - 'wasm-unsafe-eval' NAMERNO ne dodajemo.
-  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://connect.facebook.net https://challenges.cloudflare.com https://player.vimeo.com",
+  // 13.09: + googleads.g.doubleclick.net i www.googleadservices.com. Google Ads tag (AW-18269388129,
+  // od 12.08) preko gtag-a UČITAVA SKRIPT sa googleads.g.doubleclick.net/pagead/viewthroughconversion/
+  // (remarketing liste + view-through konverzije). Popravka od 15.08 je otvorila samo connect-src,
+  // pa je taj skript ostao blokiran na SVAKOM učitavanju kod SVAKOG posetioca: Sentry 4,7K CSP
+  // prijava za mesec dana (702 korisnika) - to je i pojelo 80% besplatne Sentry kvote za septembar.
+  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://googleads.g.doubleclick.net https://www.googleadservices.com https://connect.facebook.net https://challenges.cloudflare.com https://player.vimeo.com",
   // 17.07: + www.gstatic.com po Sentry prijavi 46de38f2 - Chrome ugrađeni prevodilac stranice
   // (translate_http) ubacuje CSS sa gstatic.com; legitimna funkcija (dijaspora prevodi blog),
   // ponavljaće se kod raznih posetilaca - mora da radi i posle enforce-a
@@ -49,9 +54,10 @@ const CSP = [
   // pagead2 je viđen blokiran; googleads.g.doubleclick.net, td.doubleclick.net i
   // googleadservices.com idu uz njega jer gtag tamo šalje samu konverziju i Enhanced
   // Conversions (Purchase se dešava na /hvala pa se ne može isprobati bez prave kupovine).
-  // script-src i frame-src NAMERNO ostaju netaknuti - tamo ništa nije prijavljeno blokirano,
-  // a report-uri i dalje javlja u Sentry ako zatreba. img-src je već https: pa pikseli prolaze.
-  "connect-src 'self' https://rzmyglynjcygsbicssbt.supabase.co wss://rzmyglynjcygsbicssbt.supabase.co https://translate.googleapis.com https://translate-pa.googleapis.com https://*.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://stats.g.doubleclick.net https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://td.doubleclick.net https://www.googleadservices.com https://www.google.com https://www.google.rs https://www.google.de https://www.google.at https://www.google.ch https://www.google.ba https://www.google.me https://www.google.hr https://www.google.si https://www.google.mk https://www.google.nl https://www.google.es https://www.google.com.tr https://www.google.se https://www.google.no https://www.google.dk https://www.google.fr https://www.google.it https://www.google.be https://www.google.co.uk https://www.google.gr https://www.google.com.cy https://www.google.pt https://www.google.lu https://www.google.ie https://www.google.fi https://www.google.com.ua https://www.google.pl https://www.google.cz https://www.google.sk https://www.google.hu https://www.google.ro https://www.google.bg https://www.google.ru https://www.google.com.au https://www.google.ca https://www.natasahartweger.rs https://natasahartweger.rs https://www.googletagmanager.com https://*.ingest.de.sentry.io https://challenges.cloudflare.com https://connect.facebook.net https://graph.facebook.com https://www.facebook.com https://vumbnail.com",
+  // 13.09: + ad.doubleclick.net - isti Ads tag šalje i ad.doubleclick.net/ccm/s/collect (2,2K CSP
+  // prijava za mesec dana, 702 korisnika). Skript sa googleads.g.doubleclick.net je otvoren u script-src.
+  // img-src je već https: pa pikseli prolaze.
+  "connect-src 'self' https://rzmyglynjcygsbicssbt.supabase.co wss://rzmyglynjcygsbicssbt.supabase.co https://translate.googleapis.com https://translate-pa.googleapis.com https://*.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://stats.g.doubleclick.net https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://ad.doubleclick.net https://td.doubleclick.net https://www.googleadservices.com https://www.google.com https://www.google.rs https://www.google.de https://www.google.at https://www.google.ch https://www.google.ba https://www.google.me https://www.google.hr https://www.google.si https://www.google.mk https://www.google.nl https://www.google.es https://www.google.com.tr https://www.google.se https://www.google.no https://www.google.dk https://www.google.fr https://www.google.it https://www.google.be https://www.google.co.uk https://www.google.gr https://www.google.com.cy https://www.google.pt https://www.google.lu https://www.google.ie https://www.google.fi https://www.google.com.ua https://www.google.pl https://www.google.cz https://www.google.sk https://www.google.hu https://www.google.ro https://www.google.bg https://www.google.ru https://www.google.com.au https://www.google.ca https://www.natasahartweger.rs https://natasahartweger.rs https://www.googletagmanager.com https://*.ingest.de.sentry.io https://challenges.cloudflare.com https://connect.facebook.net https://graph.facebook.com https://www.facebook.com https://vumbnail.com",
   // lekcijski embedovi + Turnstile + YouTube/Vimeo + Google mape na kontaktu.
   // 'self' + supabase + drive po Sentry prijavama 12.07: PdfBlock/LekcijaContent iframe-uju
   // PDF-ove sa Supabase Storage (117 lekcija) i Google Drive embede (6 lekcija)
