@@ -168,8 +168,12 @@ export function parseRecurringStatus(text: string): { count: number; charges: Re
  * pala rata (D, koju ponovni pokušaj još može da oživi) NISU potvrda otkazivanja.
  */
 export function isSeriesCancelled(charges: RecurringCharge[]): boolean {
-  const nenaplacene = charges.filter((c) => !c.succeeded);
-  return nenaplacene.length > 0 && nenaplacene.every((c) => c.transStat === "CNCL");
+  // Pala rata (D) se IZUZIMA iz provere: posle odbijanja banka je ne može ni da
+  // ponovi ni da otkaže (CORE-5107, utvrđeno 30.08.2026) - ostaje D zauvek, i kad
+  // je ostatak serije otkazan. 14.09.2026 je baš to zaustavilo Sašino otkazivanje
+  // (2026-249): rate 3-12 CNCL, rata 2 D, a kupac dobio „otkazivanje ne prolazi".
+  const buduce = charges.filter((c) => !c.succeeded && c.transStat !== "D");
+  return buduce.length > 0 && buduce.every((c) => c.transStat === "CNCL");
 }
 
 /**

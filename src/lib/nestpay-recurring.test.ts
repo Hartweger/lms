@@ -244,8 +244,19 @@ describe("isSeriesCancelled", () => {
     expect(isSeriesCancelled(naplate([["S", 319900], ["PN", null], ["PN", null]]))).toBe(false);
   });
 
-  it("palu ratu (D) ne broji kao otkazivanje - nju ponovni pokušaj još može da oživi", () => {
-    expect(isSeriesCancelled(naplate([["S", 319900], ["D", null], ["CNCL", null]]))).toBe(false);
+  it("palu ratu (D) preskače - otkazana serija sa palom ratom je i dalje otkazana", () => {
+    // 14.09.2026, serija 2026-249: banka otkazala rate 3-12, rata 2 ostala D
+    // (CORE-5107 - ne može ni da se ponovi ni da se otkaže). Dok se D brojala kao
+    // „nenaplaćena", kupac je dobijao 502, a baza ostajala „active".
+    expect(isSeriesCancelled(naplate([["S", 319900], ["D", null], ["CNCL", null]]))).toBe(true);
+  });
+
+  it("pala rata (D) uz ratu koja još čeka (PN) nije otkazivanje", () => {
+    expect(isSeriesCancelled(naplate([["S", 319900], ["D", null], ["PN", null]]))).toBe(false);
+  });
+
+  it("serija u kojoj je jedina nenaplaćena rata pala (D) nije otkazana", () => {
+    expect(isSeriesCancelled(naplate([["S", 319900], ["D", null]]))).toBe(false);
   });
 
   it("prazan odgovor banke ne sme da prođe kao potvrda", () => {
