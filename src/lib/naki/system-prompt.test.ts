@@ -28,6 +28,12 @@ describe("NAKI_SYSTEM_PROMPT - mesečno plaćanje", () => {
 // 14.08.2026: Smile je izmislio Zoom jer platforma nigde nije pisala u promptu.
 // Ista rupa je bila i kod NaKI-ja, pa je popravljeno na oba mesta.
 describe("NAKI_SYSTEM_PROMPT - platforma i par", () => {
+  // 14.09.2026: isti propust kao u Smile-u - grupni kurs uključuje platformu za polunivo.
+  it("zna da grupni kurs uključuje platformu sa video lekcijama", () => {
+    expect(NAKI_SYSTEM_PROMPT).toContain("GRUPNI KURS UKLJUČUJE PLATFORMU");
+    expect(NAKI_SYSTEM_PROMPT).toContain("NIKAD ne reci da polaznik grupe mora posebno da kupi video kurs");
+  });
+
   it("kaže Google Meet i izričito zabranjuje Zoom", () => {
     expect(NAKI_SYSTEM_PROMPT).toContain("ISKLJUČIVO preko Google Meet-a");
     expect(NAKI_SYSTEM_PROMPT).toContain("NIKAD ne reci Zoom");

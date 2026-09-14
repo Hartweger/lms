@@ -73,6 +73,16 @@ describe("buildSalesSystemPrompt", () => {
     expect(out).toContain("NIKAD ne reci Zoom");
   });
 
+  // 14.09.2026: na „ako upišem A1 grupni kurs, dobijam li i video kurseve" Smile je rekao
+  // da su to odvojeni proizvodi i ponudio video A1 za 11.600. Netačno: grupni kurs kroz
+  // course_unlocks daje platformu (video lekcije, vežbe, testove) za taj polunivo.
+  it("zna da grupni kurs uključuje platformu sa video lekcijama za taj polunivo", () => {
+    const out = buildSalesSystemPrompt("katalog", { coupon: false });
+    expect(out).toContain("PLATFORMA IDE UZ GRUPU");
+    expect(out).toContain("NIKAD ne reci da su grupni i video kurs");
+    expect(out).toContain("Grupni A1.1 dakle daje platformu za A1.1");
+  });
+
   // 14.08.2026: na pitanje „dve drugarice, biramo termine i profesora" Smile je rekao da
   // svako mora svoj kurs posebno - opcija „u paru" nije ni postojala u promptu.
   it("zna individualni kurs u paru: 30% za drugu osobu i mejl za ponudu", () => {
