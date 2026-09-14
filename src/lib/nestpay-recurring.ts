@@ -189,10 +189,16 @@ export function isSeriesCancelled(charges: RecurringCharge[]): boolean {
  *
  * Kad `<RESULT>` postoji, on je merodavan: izričito „Failed" ne sme da nadjača
  * generički `ProcReturnCode 00` iz istog odgovora.
+ *
+ * Reč uspeha nije uvek „Approved": na Cancel banka vraća `Successfull` (sa dva l) -
+ * produkcija 14.09.2026, serija `26211OGnH23154`. Dok se to nije čitalo, svako
+ * otkazivanje je zavisilo od drugog upita (status serije), a pad tog upita bi
+ * kupcu javio „ne prolazi" iako je serija već mrtva. Zato je uspeh sve što počinje
+ * sa „approved" ili „success", bez obzira na pravopis.
  */
 export function isRecurringOpApproved(text: string): boolean {
   const result = text.match(/<RESULT>([^<]*)<\/RESULT>/i)?.[1]?.trim() ?? "";
-  if (result) return result.toLowerCase() === "approved";
+  if (result) return /^(approved|success)/i.test(result);
   const response = text.match(/<Response>([^<]*)<\/Response>/i)?.[1]?.trim() ?? "";
   const proc = text.match(/<ProcReturnCode>([^<]*)<\/ProcReturnCode>/i)?.[1]?.trim() ?? "";
   return response.toLowerCase() === "approved" || proc === "00";

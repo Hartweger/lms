@@ -210,6 +210,22 @@ describe("isRecurringOpApproved", () => {
     expect(isRecurringOpApproved("<CC5Response><RESULT>Approved</RESULT><Extra></Extra></CC5Response>")).toBe(true);
   });
 
+  // Na Cancel banka NE vraća „Approved" nego „Successfull" (sa dva l). Sirov odgovor
+  // sa produkcije 14.09.2026, serija 26211OGnH23154 (2026-249): serija JESTE otkazana,
+  // a mi smo odgovor odbacili i tražili potvrdu preko statusa serije. Dok se ova reč
+  // nije čitala, otkazivanje je zavisilo od drugog upita banci - a pad tog upita bi
+  // kupcu javio „ne prolazi" iako je serija mrtva (Milena 13.08.2026).
+  it("čita <RESULT>Successfull</RESULT> (odgovor na Cancel) kao prihvaćeno", () => {
+    const odgovor =
+      '<?xml version="1.0" encoding="ISO-8859-9"?>\n<CC5Response>\n  <RECURRINGOPERATION>CANCEL</RECURRINGOPERATION>\n  <RECORDTYPE>RECURRING</RECORDTYPE>\n  <RECORDID>26211OGnH23154</RECORDID>\n  <RESULT>Successfull</RESULT>\n  <Extra></Extra>\n</CC5Response>';
+    expect(isRecurringOpApproved(odgovor)).toBe(true);
+  });
+
+  it("prihvata i pravilno napisano Successful / Success", () => {
+    expect(isRecurringOpApproved("<CC5Response><RESULT>Successful</RESULT></CC5Response>")).toBe(true);
+    expect(isRecurringOpApproved("<CC5Response><RESULT>Success</RESULT></CC5Response>")).toBe(true);
+  });
+
   // Bez ovoga bi izričito „Failed" moglo da se previdi zbog generičkog ProcReturnCode 00
   // iz istog odgovora - a to je greška koja tiho naplaćuje ili tiho ne otkazuje.
   it("izričit RESULT je jači od ProcReturnCode", () => {
