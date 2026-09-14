@@ -20,6 +20,15 @@ describe("groupExercisesForCertificate", () => {
     expect(g.sprechen.map((e) => e.exercise_type)).toEqual(["sprechen"]);
   });
 
+  it("listen_write je Schreiben (A1.2/A2 ispiti), ne quiz", () => {
+    // Stari ispiti (A1.2 E-Mail, A2.1/A2.2 SMS + E-Mail) imaju tip listen_write, a runner ih
+    // uvek prikazuje kao esej. U quiz grupi su davali automatskih 1/1 iz exercise_attempts,
+    // pa je „Ne znam" ocenjen 1/5 od profesorke prolazio kao 100% (Ana M., 14.09.2026).
+    const g = groupExercisesForCertificate([ex("quiz"), ex("listen_write"), ex("essay")]);
+    expect(g.quiz.map((e) => e.exercise_type)).toEqual(["quiz"]);
+    expect(g.essay.map((e) => e.exercise_type)).toEqual(["listen_write", "essay"]);
+  });
+
   it("Schreiben i Sprechen se ne slepljuju u jedan modul", () => {
     // Spojen modul bi dozvolio da odličan Schreiben pokrije pao Sprechen.
     const g = groupExercisesForCertificate([ex("essay"), ex("sprechen")]);

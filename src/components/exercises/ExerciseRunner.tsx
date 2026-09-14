@@ -52,6 +52,9 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
   const [dialogAttempts, setDialogAttempts] = useState(0);
   const [certificateId, setCertificateId] = useState<string | null>(null);
   const [modelltestTotal, setModelltestTotal] = useState<{ score: number; total: number } | null>(null);
+  // Presuda servera za Modelltest (certificate-check): Schreiben se računa po oceni
+  // profesorke, koju klijent nema - zato prikaz sluša server kad odgovori.
+  const [serverVerdict, setServerVerdict] = useState<{ eligible: boolean; percent?: number; reason?: string } | null>(null);
   const [contextOpen, setContextOpen] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saveFailed, setSaveFailed] = useState(false);
@@ -190,7 +193,6 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
   // Bez tihog preskakanja: ako sesija/upis padne, polaznik mora da vidi
   // da rezultat nije sačuvan i da može da pokuša ponovo.
   const saveResults = async () => {
-    if (vecZabelezeno.current) return;
     setSaving(true);
     setSaveFailed(false);
     const { data: { user } } = await supabase.auth.getUser();
@@ -199,36 +201,43 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
       setSaving(false);
       return;
     }
-    const { error } = await supabase.from("exercise_attempts").insert({
-      exercise_id: exercise.id,
-      user_id: user.id,
-      score,
-      total_questions: questions.filter(
-        (q) => !q.question.toLowerCase().includes("beispiel") && !q.explanation?.includes("Beispiel")
-      ).length,
-    });
-    if (error) {
-      setSaveFailed(true);
-      setSaving(false);
-      return;
-    }
 
-    // Poslednja vežba u lekciji → lekcija je time završena. Bez ovoga polaznik
-    // koji sa završnog ekrana klikne „Sledeća lekcija →" preskoči dugme
-    // „Završi i nastavi" i lekcija mu zauvek ostane neoznačena.
-    if (!nextExerciseId) {
-      await markLessonCompleted(supabase, user.id, exercise.lesson_id);
-    }
-
-    // dodela srca za vežbu (server računa iznos)
-    try {
-      await fetch("/api/hearts/award", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reason: "exercise", correct: score, hadStreak: maxStreak >= 3 }),
+    // Esej koji je već ocenjen: bez novog pokušaja i bez srca - ali Modelltest
+    // provera ispod MORA da prođe. Ranije se ovde izlazilo, pa polaznik koji je
+    // posle ocene Schreibena popravio Lesen/Hören nikad nije dobio sertifikat
+    // (Schreiben je poslednja vežba ispita, a samo ona pokreće proveru).
+    if (!vecZabelezeno.current) {
+      const { error } = await supabase.from("exercise_attempts").insert({
+        exercise_id: exercise.id,
+        user_id: user.id,
+        score,
+        total_questions: questions.filter(
+          (q) => !q.question.toLowerCase().includes("beispiel") && !q.explanation?.includes("Beispiel")
+        ).length,
       });
-    } catch {
-      /* tiho - srca su sekundarna */
+      if (error) {
+        setSaveFailed(true);
+        setSaving(false);
+        return;
+      }
+
+      // Poslednja vežba u lekciji → lekcija je time završena. Bez ovoga polaznik
+      // koji sa završnog ekrana klikne „Sledeća lekcija →" preskoči dugme
+      // „Završi i nastavi" i lekcija mu zauvek ostane neoznačena.
+      if (!nextExerciseId) {
+        await markLessonCompleted(supabase, user.id, exercise.lesson_id);
+      }
+
+      // dodela srca za vežbu (server računa iznos)
+      try {
+        await fetch("/api/hearts/award", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ reason: "exercise", correct: score, hadStreak: maxStreak >= 3 }),
+        });
+      } catch {
+        /* tiho - srca su sekundarna */
+      }
     }
 
     // Modelltest: calculate total score across ALL exercises on this lesson
@@ -280,20 +289,26 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
         } catch {
           /* tiho */
         }
+      }
 
-        try {
-          const res = await fetch("/api/certificate", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ lessonId: exercise.lesson_id, courseId }),
-          });
-          if (res.ok) {
-            const data = await res.json();
-            if (data.certificateId) setCertificateId(data.certificateId);
+      // Server se pita UVEK (idempotentno): Schreiben on računa po oceni profesorke,
+      // a klijent u exercise_attempts vidi samo „predato" (1/1). Bez toga bi klijent
+      // čestitao na 100% Schreibenu koji je profesorka ocenila 1/5.
+      try {
+        const res = await fetch("/api/certificate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ lessonId: exercise.lesson_id, courseId }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (typeof data.eligible === "boolean") {
+            setServerVerdict({ eligible: data.eligible, percent: data.percent, reason: data.reason });
           }
-        } catch {
-          // Network error - certificate can be re-issued on next completion.
+          if (data.certificateId) setCertificateId(data.certificateId);
         }
+      } catch {
+        // Network error - certificate can be re-issued on next completion.
       }
     }
     setSaving(false);
@@ -381,9 +396,22 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
         </p>
         <p className="text-plava font-bold mb-1">{xp} ❤️ srca zarađeno</p>
         {isModelltest && modelltestTotal ? (() => {
-          const overallPercent = Math.round((modelltestTotal.score / modelltestTotal.total) * 100);
-          const polozeno = passesThreshold(modelltestTotal.score, modelltestTotal.total, courseSlug);
+          const klijentPercent = Math.round((modelltestTotal.score / modelltestTotal.total) * 100);
+          // Kad server odgovori, njegova presuda važi (vidi saveResults).
+          const overallPercent = serverVerdict?.percent ?? klijentPercent;
+          const polozeno = serverVerdict ? serverVerdict.eligible : passesThreshold(modelltestTotal.score, modelltestTotal.total, courseSlug);
           const prag = passLabel(courseSlug);
+          const cekaOcenu = serverVerdict?.reason === "schreiben-incomplete" || serverVerdict?.reason === "sprechen-incomplete";
+          if (cekaOcenu) {
+            return (
+              <div className="mt-2">
+                <p className="text-lg font-bold text-plava">Čeka se ocena profesora</p>
+                <p className="text-sm text-gray-500">
+                  {serverVerdict?.reason === "sprechen-incomplete" ? "Sprechen" : "Schreiben"} deo ocenjuje profesor. Kad bude ocenjen, sertifikat stiže na mejl ako su svi delovi iznad praga ({prag}).
+                </p>
+              </div>
+            );
+          }
           return polozeno ? (
             <div className="mt-2">
               <p className="text-lg font-bold text-green-600">Položio/la! Čestitamo!</p>

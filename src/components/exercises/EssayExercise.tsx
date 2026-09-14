@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { canRewriteEssay, essayPassed } from "@/lib/essay-retry";
 
 interface EssayProps {
   task: string;
@@ -41,6 +42,10 @@ export default function EssayExercise({ task, level, onAnswer, onExisting, exerc
   const [submitted, setSubmitted] = useState(false);
   const [published, setPublished] = useState<PublishedResult | null>(null);
   const [alreadyPending, setAlreadyPending] = useState(false);
+  // Pao rad (ispod 60%) sme ponovo da se piše: prikazuje se prazno polje, a nova
+  // predaja ide profesorki kao novi „pending" red. Runner je već dobio onExisting,
+  // pa se pri ponovnoj predaji ne javlja još jedan odgovor.
+  const [rewriting, setRewriting] = useState(false);
 
   useEffect(() => {
     if (!exerciseId) return;
@@ -67,7 +72,7 @@ export default function EssayExercise({ task, level, onAnswer, onExisting, exerc
             ai_feedback: data.ai_feedback,
             ai_corrections: Array.isArray(data.ai_corrections) ? (data.ai_corrections as unknown as Correction[]) : null,
           });
-          (onExisting ?? onAnswer)((data.professor_score || 0) >= 0.6 * maxPoints);
+          (onExisting ?? onAnswer)(essayPassed(data.professor_score, maxPoints));
         } else {
           setAlreadyPending(true);
         }
@@ -106,7 +111,7 @@ export default function EssayExercise({ task, level, onAnswer, onExisting, exerc
       }
 
       setSubmitted(true);
-      onAnswer(true);
+      if (!rewriting) onAnswer(true);
     } catch {
       if (exerciseId && lessonId) {
         const { data: { user } } = await supabase.auth.getUser();
@@ -121,7 +126,7 @@ export default function EssayExercise({ task, level, onAnswer, onExisting, exerc
         }
       }
       setSubmitted(true);
-      onAnswer(true);
+      if (!rewriting) onAnswer(true);
     }
     setChecking(false);
   };
@@ -142,7 +147,8 @@ export default function EssayExercise({ task, level, onAnswer, onExisting, exerc
     5: "text-green-600",
   };
 
-  if (published) {
+  if (published && !rewriting) {
+    const mozePonovo = canRewriteEssay("published", published.professor_score, maxPoints);
     return (
       <div>
         <div className="mb-4">
@@ -194,6 +200,20 @@ export default function EssayExercise({ task, level, onAnswer, onExisting, exerc
                   )}
                 </div>
               ))}
+            </div>
+          )}
+          {mozePonovo && (
+            <div className="bg-gray-50 rounded-xl p-4">
+              <p className="text-sm text-gray-600 mb-3">
+                Ovaj rad nije prošao prag. Možeš da ga napišeš ponovo - profesor će pregledati novi rad i ocena se računa iznova.
+              </p>
+              <button
+                type="button"
+                onClick={() => setRewriting(true)}
+                className="bg-plava text-white px-6 py-3 rounded-lg hover:bg-plava-dark transition-colors font-medium"
+              >
+                Napiši ponovo
+              </button>
             </div>
           )}
         </div>

@@ -24,11 +24,19 @@ const NIL = "00000000-0000-0000-0000-000000000000";
  * Ranije je sprechen upadao u quiz grupu i lomio se na dve strane: ko preskoči vežbu -
  * sertifikat se tiho blokira („incomplete"), ko je uradi - dobija automatskih 100%,
  * jer SprechenExercise javlja tačan odgovor čim se snimak otpremi, pre nego što ga je iko preslušao.
+ *
+ * Isto važi za „listen_write": stariji ispiti (A1.2 E-Mail, A2.1/A2.2 SMS + E-Mail) nose taj
+ * tip, a ExerciseRunner ih uvek prikazuje kao esej (EssayExercise → essay_submissions).
+ * U quiz grupi su davali automatskih 1/1 iz exercise_attempts, pa je rad „Ne znam" ocenjen
+ * 1/5 prolazio kao 100% (Ana M., 14.09.2026). Sada su Schreiben modul kao i „essay".
  */
+export const ESSAY_EXERCISE_TYPES: ReadonlySet<string> = new Set(["essay", "listen_write"]);
+
 export function groupExercisesForCertificate<T extends { exercise_type: string | null }>(exercises: T[]) {
+  const isEssay = (e: T) => !!e.exercise_type && ESSAY_EXERCISE_TYPES.has(e.exercise_type);
   return {
-    quiz: exercises.filter((e) => e.exercise_type !== "essay" && e.exercise_type !== "sprechen"),
-    essay: exercises.filter((e) => e.exercise_type === "essay"),
+    quiz: exercises.filter((e) => !isEssay(e) && e.exercise_type !== "sprechen"),
+    essay: exercises.filter(isEssay),
     sprechen: exercises.filter((e) => e.exercise_type === "sprechen"),
   };
 }
