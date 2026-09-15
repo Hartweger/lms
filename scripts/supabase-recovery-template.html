@@ -1,5 +1,5 @@
 <!-- Supabase Auth → Reset Password (recovery) template (Authentication → Email Templates → Reset Password).
-     Link ide na NAŠ domen: {{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=recovery → ruta src/app/auth/confirm/route.ts. -->
+     Link ide na NAŠ domen: {{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=recovery → ruta src/app/auth/confirm/route.ts (GET vodi na /auth/potvrda sa dugmetom, POST troši token - link iz mejla NE sme da nosi auto=1). -->
 <!-- 30.06.2026: prebačeno sa podrazumevanog {{ .ConfirmationURL }} (PKCE /auth/callback, puca u Gmail in-app browseru) na token_hash flow preko hartweger.rs — radi u svakom pretraživaču. -->
 <!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
 <body style="font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a2e;background:#f8f9fa;margin:0;padding:0;">

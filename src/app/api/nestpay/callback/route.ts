@@ -106,7 +106,7 @@ export async function POST(request: Request) {
     });
     if (!linkError && link?.properties?.hashed_token) {
       return NextResponse.redirect(
-        `${base}/auth/confirm?token_hash=${link.properties.hashed_token}&type=magiclink&next=${encodeURIComponent(hvalaPath)}`,
+        `${base}/auth/confirm?token_hash=${link.properties.hashed_token}&type=magiclink&auto=1&next=${encodeURIComponent(hvalaPath)}`,
         { status: 303 },
       );
     }

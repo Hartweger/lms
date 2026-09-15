@@ -44,7 +44,7 @@ export async function POST(
   });
 
   const origin = new URL(_request.url).origin;
-  const url = `${origin}/auth/confirm?token_hash=${link.properties.hashed_token}&type=magiclink&next=/dashboard`;
+  const url = `${origin}/auth/confirm?token_hash=${link.properties.hashed_token}&type=magiclink&auto=1&next=/dashboard`;
 
   return NextResponse.json({ url });
 }
