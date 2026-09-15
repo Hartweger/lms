@@ -85,15 +85,15 @@ const grupa = (o: Partial<GrupaRaspored> = {}): GrupaRaspored => ({
 });
 
 describe("daniInstrumental", () => {
-  it("daje verzal + instrumental, pa Smile dane ubacuje u rečenicu bez prevođenja", () => {
-    expect(daniInstrumental("Sreda, Subota")).toBe("SREDOM i SUBOTOM");
-    expect(daniInstrumental("Utorak, Četvrtak")).toBe("UTORKOM i ČETVRTKOM");
-    expect(daniInstrumental("Ponedeljak, Sreda")).toBe("PONEDELJKOM i SREDOM");
+  it("daje instrumental, pa Smile dane ubacuje u rečenicu bez prevođenja", () => {
+    expect(daniInstrumental("Sreda, Subota")).toBe("sredom i subotom");
+    expect(daniInstrumental("Utorak, Četvrtak")).toBe("utorkom i četvrtkom");
+    expect(daniInstrumental("Ponedeljak, Sreda")).toBe("ponedeljkom i sredom");
   });
 
   it("jedan dan ide bez veznika, tri sa zarezima", () => {
-    expect(daniInstrumental("Subota")).toBe("SUBOTOM");
-    expect(daniInstrumental("Ponedeljak, Sreda, Petak")).toBe("PONEDELJKOM, SREDOM i PETKOM");
+    expect(daniInstrumental("Subota")).toBe("subotom");
+    expect(daniInstrumental("Ponedeljak, Sreda, Petak")).toBe("ponedeljkom, sredom i petkom");
   });
 
   it("prazno ostaje prazno - termin se tada izostavlja iz reda", () => {
@@ -106,7 +106,7 @@ describe("renderOpenGroups", () => {
     const out = renderOpenGroups([grupa()]);
     expect(out).toContain("A1.1");
     expect(out).toContain("početak 11.08.2026");
-    expect(out).toContain("UTORKOM i ČETVRTKOM 20:00-21:00");
+    expect(out).toContain("utorkom i četvrtkom 20:00-21:00");
     expect(out).toContain("7 nedelja");
     expect(out).toContain("5 od 6 mesta slobodno");
     expect(out).toContain("19.600 RSD / 168 EUR");

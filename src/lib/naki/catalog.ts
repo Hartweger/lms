@@ -83,21 +83,25 @@ export async function getPreviewLessonsText(admin: SupabaseClient): Promise<stri
 }
 
 /**
- * Dani se Smile-u daju u gotovom, naglašenom obliku („SREDOM i SUBOTOM"), a ne kao
- * lista iz baze („sreda, subota"). Razlog: 22.08.2026 je posetiocu koji je pitao za
- * B2.1 (sre+sub) rekao „utorkom i subotom" - sve ostalo iz reda je prepisao tačno
+ * Dani se Smile-u daju gotovi za rečenicu („sredom i subotom"), a ne kao lista iz
+ * baze („sreda, subota"). Razlog: 22.08.2026 je posetiocu koji je pitao za B2.1
+ * (sre+sub) rekao „utorkom i subotom" - sve ostalo iz reda je prepisao tačno
  * (datum, cena, mesta, link), a dane je povukao iz obrasca uto+čet, tada 5 od 7
- * otvorenih grupa. Verzal i instrumental se ubacuju u rečenicu takvi kakvi jesu,
- * pa model nema šta da „prevodi" - i vizuelno odskaču od ostatka reda.
+ * otvorenih grupa. Greška je nastala u prevođenju nominativa u instrumental, pa
+ * se prevod ukida: oblik se prepisuje takav kakav jeste.
+ *
+ * Bez verzala, iako bi odskakao od ostatka reda: prva verzija (15.09.2026) davala
+ * je „SREDOM i SUBOTOM" i Smile je verzal prepisivao u odgovor posetiocu - dani
+ * tačni, ali usred rečenice izgleda kao vika.
  */
 const DAN_INSTRUMENTAL: Record<string, string> = {
-  Ponedeljak: "PONEDELJKOM",
-  Utorak: "UTORKOM",
-  Sreda: "SREDOM",
-  Četvrtak: "ČETVRTKOM",
-  Petak: "PETKOM",
-  Subota: "SUBOTOM",
-  Nedelja: "NEDELJOM",
+  Ponedeljak: "ponedeljkom",
+  Utorak: "utorkom",
+  Sreda: "sredom",
+  Četvrtak: "četvrtkom",
+  Petak: "petkom",
+  Subota: "subotom",
+  Nedelja: "nedeljom",
 };
 
 export function daniInstrumental(daniPuni: string): string {
@@ -105,7 +109,7 @@ export function daniInstrumental(daniPuni: string): string {
     .split(",")
     .map((d) => d.trim())
     .filter(Boolean)
-    .map((d) => DAN_INSTRUMENTAL[d] ?? d.toUpperCase());
+    .map((d) => DAN_INSTRUMENTAL[d] ?? d.toLowerCase());
   if (dani.length === 0) return "";
   if (dani.length === 1) return dani[0];
   return `${dani.slice(0, -1).join(", ")} i ${dani[dani.length - 1]}`;
