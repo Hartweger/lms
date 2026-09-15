@@ -83,6 +83,35 @@ export async function getPreviewLessonsText(admin: SupabaseClient): Promise<stri
 }
 
 /**
+ * Dani se Smile-u daju u gotovom, naglašenom obliku („SREDOM i SUBOTOM"), a ne kao
+ * lista iz baze („sreda, subota"). Razlog: 22.08.2026 je posetiocu koji je pitao za
+ * B2.1 (sre+sub) rekao „utorkom i subotom" - sve ostalo iz reda je prepisao tačno
+ * (datum, cena, mesta, link), a dane je povukao iz obrasca uto+čet, tada 5 od 7
+ * otvorenih grupa. Verzal i instrumental se ubacuju u rečenicu takvi kakvi jesu,
+ * pa model nema šta da „prevodi" - i vizuelno odskaču od ostatka reda.
+ */
+const DAN_INSTRUMENTAL: Record<string, string> = {
+  Ponedeljak: "PONEDELJKOM",
+  Utorak: "UTORKOM",
+  Sreda: "SREDOM",
+  Četvrtak: "ČETVRTKOM",
+  Petak: "PETKOM",
+  Subota: "SUBOTOM",
+  Nedelja: "NEDELJOM",
+};
+
+export function daniInstrumental(daniPuni: string): string {
+  const dani = daniPuni
+    .split(",")
+    .map((d) => d.trim())
+    .filter(Boolean)
+    .map((d) => DAN_INSTRUMENTAL[d] ?? d.toUpperCase());
+  if (dani.length === 0) return "";
+  if (dani.length === 1) return dani[0];
+  return `${dani.slice(0, -1).join(", ")} i ${dani[dani.length - 1]}`;
+}
+
+/**
  * Otvoreni grupni termini za Smile. Do 07.08.2026 katalog je imao samo kurseve i
  * cene, pa Smile nije znao da grupa uopšte postoji - posetiocu koji pita „koliko
  * košta kurs za početnike" tri dana pre starta A1.1 grupe nudio je video kurs.
@@ -98,7 +127,7 @@ export function renderOpenGroups(rows: GrupaRaspored[]): string {
   if (open.length === 0) return "";
   return open
     .map((g) => {
-      const termin = [g.daniPuni.toLowerCase(), g.sat].filter(Boolean).join(" ");
+      const termin = [daniInstrumental(g.daniPuni), g.sat].filter(Boolean).join(" ");
       const cena =
         g.cena != null
           ? `${g.cena.toLocaleString("sr-RS")} RSD${g.cenaEur != null ? ` / ${g.cenaEur} EUR` : ""}`

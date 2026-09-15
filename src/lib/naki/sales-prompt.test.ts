@@ -100,7 +100,7 @@ describe("buildSalesSystemPrompt", () => {
   it("uz otvorene termine daje spisak i nalog da termin kaže sam od sebe", () => {
     const out = buildSalesSystemPrompt("katalog", {
       coupon: false,
-      groups: "- A1.1 | početak 11.08.2026 | utorak, četvrtak 20:00-21:00 | 19.600 RSD / 168 EUR",
+      groups: "- A1.1 | početak 11.08.2026 | UTORKOM i ČETVRTKOM 20:00-21:00 | 19.600 RSD / 168 EUR",
     });
     expect(out).toContain("OTVORENI GRUPNI TERMINI");
     expect(out).toContain("početak 11.08.2026");
