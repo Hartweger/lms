@@ -135,11 +135,17 @@ export async function getOpenGroupsText(): Promise<string> {
   return renderOpenGroups(await fetchRaspored());
 }
 
+/**
+ * Samo objavljeni kursevi. Admin klijent zaobilazi RLS, a javna `/kursevi/<slug>`
+ * čita anon klijentom kome RLS krije neobjavljen red - pa je Smile do 15.09.2026
+ * nudio „VIDEO kurs B2" (nacrt, is_published=false) sa linkom koji vraća 404.
+ */
 export async function getCatalogText(admin: SupabaseClient): Promise<string> {
   const { data } = await admin
     .from("courses")
     .select("title, slug, price, paypal_price_eur, category, course_type")
     .eq("is_purchasable", true)
+    .eq("is_published", true)
     .order("category", { ascending: true });
   return renderCatalog((data ?? []) as CatalogCourse[]);
 }
@@ -196,10 +202,11 @@ export async function getNatasaIndividualText(admin: SupabaseClient): Promise<st
   if (!prof) return "";
   const { data } = await admin
     .from("product_variants")
-    .select("package_type, price, courses!inner(title, slug, is_purchasable)")
+    .select("package_type, price, courses!inner(title, slug, is_purchasable, is_published)")
     .eq("professor_id", (prof as { id: string }).id)
     .eq("is_active", true)
-    .eq("courses.is_purchasable", true);
+    .eq("courses.is_purchasable", true)
+    .eq("courses.is_published", true);
   const rows = ((data ?? []) as unknown as {
     package_type: string | null;
     price: number | null;

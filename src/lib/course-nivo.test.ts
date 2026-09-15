@@ -26,6 +26,11 @@ describe("funnelUrlsForNivo", () => {
     expect(u.videoUrl).toBeNull();
     expect(u.kurseviUrl).toContain("/kursevi");
   });
+  it("za B2 nema video kursa dok je nacrt - link bi vodio na 404", () => {
+    expect(funnelUrlsForNivo("B2.1").videoUrl).toBeNull();
+    expect(funnelUrlsForNivo("B2.2").videoUrl).toBeNull();
+    expect(funnelUrlsForNivo("B2.1").grupniUrl).toContain("grupni-kurs-b2-1");
+  });
   it("C1+ se mapira na C1.1", () => {
     expect(funnelUrlsForNivo("C1+").grupniUrl).toContain("grupni-kurs-c1-1");
   });

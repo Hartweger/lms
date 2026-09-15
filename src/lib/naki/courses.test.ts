@@ -9,14 +9,16 @@ import {
 } from "./courses";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
-function fakeAdmin(result: { data: unknown; error: unknown }): SupabaseClient {
-  return {
-    from: () => ({
-      select: () => ({
-        eq: () => ({ maybeSingle: async () => result }),
-      }),
-    }),
-  } as unknown as SupabaseClient;
+function fakeAdmin(
+  result: { data: unknown; error: unknown },
+  eqCalls: [string, unknown][] = []
+): SupabaseClient {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const b: any = {
+    eq: (col: string, val: unknown) => { eqCalls.push([col, val]); return b; },
+    maybeSingle: async () => result,
+  };
+  return { from: () => ({ select: () => b }) } as unknown as SupabaseClient;
 }
 
 describe("couponPrice", () => {
@@ -159,5 +161,11 @@ describe("getLevelCourse", () => {
   });
   it("null za null nivo", async () => {
     expect(await getLevelCourse(fakeAdmin({ data: { price: 1 }, error: null }), null)).toBeNull();
+  });
+  it("traži samo objavljen kurs - nacrt se ne preporučuje ni ne linkuje", async () => {
+    const eqCalls: [string, unknown][] = [];
+    await getLevelCourse(fakeAdmin({ data: { price: 11600 }, error: null }, eqCalls), "A1");
+    expect(eqCalls).toContainEqual(["slug", "video-kurs-a1"]);
+    expect(eqCalls).toContainEqual(["is_published", true]);
   });
 });

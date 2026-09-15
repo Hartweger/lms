@@ -1,6 +1,15 @@
 import { describe, it, expect } from "vitest";
-import { renderCatalog, renderPreviewLessons, renderOpenGroups, type CatalogCourse, type PreviewLesson } from "./catalog";
+import {
+  renderCatalog,
+  renderPreviewLessons,
+  renderOpenGroups,
+  getCatalogText,
+  getNatasaIndividualText,
+  type CatalogCourse,
+  type PreviewLesson,
+} from "./catalog";
 import type { GrupaRaspored } from "@/lib/raspored";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
 const SAMPLE: CatalogCourse[] = [
   { title: "Video kurs A1", slug: "video-kurs-a1", price: 11600, paypal_price_eur: 99, category: "Video kursevi", course_type: "video" },
@@ -120,5 +129,55 @@ describe("renderOpenGroups", () => {
     const out = renderOpenGroups([grupa()]);
     expect(out).toContain("Milica Vučić");
     expect(out).not.toMatch(/profesorka Milica/);
+  });
+});
+
+/**
+ * Beleži upite: koja tabela, koji select i koji `.eq` filteri. Svaki upit se
+ * razrešava praznom listom (thenable), a `maybeSingle` vraća Natašin profil.
+ */
+function recordingAdmin() {
+  const calls: { table: string; select: string; eq: [string, unknown][] }[] = [];
+  const admin = {
+    from(table: string) {
+      const call = { table, select: "", eq: [] as [string, unknown][] };
+      calls.push(call);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const b: any = {
+        select(sel: string) { call.select = sel; return b; },
+        eq(col: string, val: unknown) { call.eq.push([col, val]); return b; },
+        order() { return b; },
+        maybeSingle: async () => ({ data: { id: "prof-1" }, error: null }),
+        then(res: (v: unknown) => unknown, rej?: (e: unknown) => unknown) {
+          return Promise.resolve({ data: [], error: null }).then(res, rej);
+        },
+      };
+      return b;
+    },
+  };
+  return { admin: admin as unknown as SupabaseClient, calls };
+}
+
+describe("getCatalogText - samo objavljeni kursevi", () => {
+  // 15.09.2026: Smile je nudio „VIDEO kurs B2" (is_published=false, nacrt) sa linkom
+  // koji anon posetiocu vraća 404 - admin klijent zaobilazi RLS, pa filter mora u upit.
+  it("filtrira is_published=true uz is_purchasable=true", async () => {
+    const { admin, calls } = recordingAdmin();
+    await getCatalogText(admin);
+    expect(calls[0].table).toBe("courses");
+    expect(calls[0].eq).toContainEqual(["is_purchasable", true]);
+    expect(calls[0].eq).toContainEqual(["is_published", true]);
+  });
+});
+
+describe("getNatasaIndividualText - samo objavljeni kursevi", () => {
+  it("join na courses traži i is_published=true", async () => {
+    const { admin, calls } = recordingAdmin();
+    await getNatasaIndividualText(admin);
+    const variants = calls.find((c) => c.table === "product_variants");
+    expect(variants).toBeDefined();
+    expect(variants!.select).toContain("is_published");
+    expect(variants!.eq).toContainEqual(["courses.is_purchasable", true]);
+    expect(variants!.eq).toContainEqual(["courses.is_published", true]);
   });
 });

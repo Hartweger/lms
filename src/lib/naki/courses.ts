@@ -100,10 +100,12 @@ export async function getLevelCourse(
   if (!level) return null;
   const entry = LEVEL_VIDEO_COURSE[level.toUpperCase()];
   if (!entry) return null;
+  // Samo objavljen kurs: neobjavljen red anon posetiocu vraća 404 na /kursevi/<slug>.
   const { data, error } = await admin
     .from("courses")
     .select("price")
     .eq("slug", entry.slug)
+    .eq("is_published", true)
     .maybeSingle();
   if (error || !data || (data as { price: number | null }).price == null) return null;
   return { slug: entry.slug, title: entry.title, price: (data as { price: number }).price };
