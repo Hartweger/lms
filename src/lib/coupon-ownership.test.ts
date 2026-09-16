@@ -84,3 +84,66 @@ describe("emailOwnsCourse", () => {
     expect(await emailOwnsCourse(ownershipAdmin(), "niko@example.com", "v-a1")).toBe(false);
   });
 });
+
+// Paket (A1+A2) otključava sadržaj VIŠE video kurseva. Kupon za obnovu važi samo za ono
+// što je polaznik već imao, pa vlasnik samog A1 ne sme da uzme ceo paket upola cene
+// (odluka Nataše 16.09.2026, povod Katarina J.: A1 do 06.10, u novembru kupuje A1+A2).
+function paketAdmin(courseAccess: Record<string, unknown>[]) {
+  return createFakeAdmin({
+    user_profiles: [{ id: "u1", email: "ana@example.com" }],
+    courses: [
+      { id: "v-a1", course_type: "video" },
+      { id: "v-a2", course_type: "video" },
+      { id: "pk-a1-a2", course_type: "video" },
+      { id: "pk-a1-a2-b1", course_type: "video" },
+      { id: "g-a11", course_type: "grupni" },
+    ],
+    course_unlocks: [
+      { purchasable_course_id: "v-a1", content_course_id: "a11" },
+      { purchasable_course_id: "v-a1", content_course_id: "a12" },
+      { purchasable_course_id: "v-a2", content_course_id: "a21" },
+      { purchasable_course_id: "v-a2", content_course_id: "a22" },
+      { purchasable_course_id: "pk-a1-a2", content_course_id: "a11" },
+      { purchasable_course_id: "pk-a1-a2", content_course_id: "a12" },
+      { purchasable_course_id: "pk-a1-a2", content_course_id: "a21" },
+      { purchasable_course_id: "pk-a1-a2", content_course_id: "a22" },
+      { purchasable_course_id: "pk-a1-a2-b1", content_course_id: "a11" },
+      { purchasable_course_id: "pk-a1-a2-b1", content_course_id: "a12" },
+      { purchasable_course_id: "pk-a1-a2-b1", content_course_id: "a21" },
+      { purchasable_course_id: "pk-a1-a2-b1", content_course_id: "a22" },
+      { purchasable_course_id: "pk-a1-a2-b1", content_course_id: "b11" },
+      { purchasable_course_id: "pk-a1-a2-b1", content_course_id: "b12" },
+      // grupni A1.1 daje samo a11 - NIJE video komponenta, ne sme da pooštri video-kurs-a1
+      { purchasable_course_id: "g-a11", content_course_id: "a11" },
+    ],
+    course_access: courseAccess,
+    individual_enrollments: [],
+  }).admin as unknown as SupabaseClient;
+}
+
+describe("emailOwnsCourse - paketi", () => {
+  it("vlasnik samo A1 NE može paket A1+A2 (dobio bi A2 upola cene)", async () => {
+    const admin = paketAdmin([{ user_id: "u1", course_id: "a11" }, { user_id: "u1", course_id: "a12" }]);
+    expect(await emailOwnsCourse(admin, "ana@example.com", "pk-a1-a2")).toBe(false);
+  });
+
+  it("vlasnik A1 i A2 može paket A1+A2", async () => {
+    const admin = paketAdmin([{ user_id: "u1", course_id: "a11" }, { user_id: "u1", course_id: "a21" }]);
+    expect(await emailOwnsCourse(admin, "ana@example.com", "pk-a1-a2")).toBe(true);
+  });
+
+  it("vlasnik A1 i A2 NE može paket A1+A2+B1 (nema B1)", async () => {
+    const admin = paketAdmin([{ user_id: "u1", course_id: "a11" }, { user_id: "u1", course_id: "a21" }]);
+    expect(await emailOwnsCourse(admin, "ana@example.com", "pk-a1-a2-b1")).toBe(false);
+  });
+
+  it("migrirani polaznik sa samo A1.1 i dalje može da obnovi video-kurs-a1", async () => {
+    const admin = paketAdmin([{ user_id: "u1", course_id: "a11" }]);
+    expect(await emailOwnsCourse(admin, "ana@example.com", "v-a1")).toBe(true);
+  });
+
+  it("vlasnik A1 ne može video-kurs-a2", async () => {
+    const admin = paketAdmin([{ user_id: "u1", course_id: "a11" }, { user_id: "u1", course_id: "a12" }]);
+    expect(await emailOwnsCourse(admin, "ana@example.com", "v-a2")).toBe(false);
+  });
+});

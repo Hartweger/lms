@@ -33,12 +33,64 @@ export async function emailOwnsCourse(
   if (contentIds.length === 0) return false;
 
   const { data: caContent } = await admin
-    .from("course_access").select("id").eq("user_id", prof.id).in("course_id", contentIds).limit(1);
-  if (caContent && caContent.length) return true;
-
+    .from("course_access").select("course_id").eq("user_id", prof.id).in("course_id", contentIds);
   const { data: ieContent } = await admin
-    .from("individual_enrollments").select("id").eq("user_id", prof.id).in("course_id", contentIds).limit(1);
-  return !!(ieContent && ieContent.length);
+    .from("individual_enrollments").select("course_id").eq("user_id", prof.id).in("course_id", contentIds);
+  const owned = new Set<string>(
+    [...(caContent ?? []), ...(ieContent ?? [])].map((r) => r.course_id as string)
+  );
+  if (owned.size === 0) return false;
+
+  // Paket (A1+A2) otključava sadržaj VIŠE video kurseva. Kupon za obnovu važi samo za ono
+  // što je polaznik već imao, pa mora da ima bar jedan sadržajni kurs SVAKOG video kursa
+  // iz paketa - inače bi vlasnik A1 uzeo ceo paket upola cene (odluka 16.09.2026).
+  // Pojedinačni video kurs nema video komponente, pa za njega ostaje „bar jedan sadržajni"
+  // (migrirani polaznici često imaju samo A1.1, a proizvod za sam A1.1 ne postoji).
+  const components = await videoComponentsOf(admin, courseId, contentIds);
+  if (components.length === 0) return true;
+  // Ko ima bar jedan podnivo nekog video kursa (npr. samo A1.1) računa se kao vlasnik tog
+  // celog kursa; sve ostalo iz paketa mora da bude pokriveno na isti način.
+  const covered = new Set(owned);
+  for (const ids of components) {
+    if (ids.some((id) => owned.has(id))) ids.forEach((id) => covered.add(id));
+  }
+  return contentIds.every((id) => covered.has(id));
+}
+
+/**
+ * Video proizvodi čiji je sadržaj strogi podskup sadržaja proizvoda `courseId`
+ * (za paket A1+A2 to su video-kurs-a1 i video-kurs-a2). Grupni/individualni se preskaču:
+ * oni otključavaju po jedan podnivo i pooštrili bi i obnovu običnog video kursa.
+ */
+async function videoComponentsOf(
+  admin: SupabaseClient,
+  courseId: string,
+  contentIds: string[]
+): Promise<string[][]> {
+  const { data: rel } = await admin
+    .from("course_unlocks").select("purchasable_course_id").in("content_course_id", contentIds);
+  const candidates = [...new Set((rel ?? []).map((r) => r.purchasable_course_id as string))]
+    .filter((id) => id !== courseId);
+  if (candidates.length === 0) return [];
+
+  const { data: video } = await admin
+    .from("courses").select("id").in("id", candidates).eq("course_type", "video");
+  const videoIds = (video ?? []).map((c) => c.id as string);
+  if (videoIds.length === 0) return [];
+
+  const { data: unlocks } = await admin
+    .from("course_unlocks").select("purchasable_course_id, content_course_id").in("purchasable_course_id", videoIds);
+  const byProduct = new Map<string, string[]>();
+  for (const u of unlocks ?? []) {
+    const p = u.purchasable_course_id as string;
+    const c = u.content_course_id as string;
+    if (c === p) continue;
+    byProduct.set(p, [...(byProduct.get(p) ?? []), c]);
+  }
+  const contentSet = new Set(contentIds);
+  return [...byProduct.values()].filter(
+    (ids) => ids.length > 0 && ids.length < contentIds.length && ids.every((id) => contentSet.has(id))
+  );
 }
 
 /**
