@@ -1277,11 +1277,14 @@ export async function sendNewOrderAdminEmail(o: {
    * porudžbini (reuse pending porudžbine u /api/orders) - tada je ovo prethodni metod.
    */
   previousPaymentMethod?: string;
+  /** Rata 2..N mesečnog plaćanja koju je naplatio cron (subscriptions-poll) - novac je već legao. */
+  installment?: { no: number; total: number };
 }) {
   try {
     const resend = getResend();
     if (!resend) return;
     const promena = Boolean(o.previousPaymentMethod);
+    const rata = o.installment;
     const fmt = (n: number) => n.toLocaleString("de-DE");
     const metodCell = promena
       ? `<span style="color:#888;text-decoration:line-through">${esc(metodPlacanjaLabel(o.previousPaymentMethod!))}</span><br>` +
@@ -1293,11 +1296,14 @@ export async function sendNewOrderAdminEmail(o: {
       replyTo: o.email,
       subject: promena
         ? `Promenjen način plaćanja - ${o.fullName} · ${o.orderNumber}`
-        : `Nova narudžbina - ${o.fullName} · ${fmt(o.total)} din`,
+        : rata
+          ? `Naplaćena ${rata.no}. rata od ${rata.total} - ${o.fullName} · ${fmt(o.total)} din`
+          : `Nova narudžbina - ${o.fullName} · ${fmt(o.total)} din`,
       html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
 <body style="font-family:sans-serif;line-height:1.6;color:#222;max-width:560px;margin:0 auto;padding:16px">
-<h2 style="margin:0 0 12px">${promena ? "🔄 Promenjen način plaćanja" : "🛒 Nova narudžbina"}</h2>
+<h2 style="margin:0 0 12px">${promena ? "🔄 Promenjen način plaćanja" : rata ? `🔁 Naplaćena ${rata.no}. rata od ${rata.total}` : "🛒 Nova narudžbina"}</h2>
 ${promena ? `<p style="margin:0 0 12px;background:#fff6e5;border-left:3px solid #e6a23c;padding:8px 12px;font-size:14px">Kupac je na istoj narudžbini promenio način plaćanja. Važi novi metod ispod.</p>` : ""}
+${rata ? `<p style="margin:0 0 12px;background:#eef8f0;border-left:3px solid #1c7a34;padding:8px 12px;font-size:14px">Redovna mesečna naplata - banka je već naplatila. Pristup, mejl polazniku i fiskalni račun idu sami, ništa ručno.</p>` : ""}
 <table style="border-collapse:collapse;font-size:14px;width:100%">
 <tbody>
 <tr><td style="padding:6px 8px;color:#888">Narudžbina</td><td style="padding:6px 8px;font-weight:600">${esc(o.orderNumber)}</td></tr>
@@ -1317,7 +1323,9 @@ ${promena ? `<p style="margin:0 0 12px;background:#fff6e5;border-left:3px solid 
     console.log(
       promena
         ? `[email] Admin obavešten o promeni metoda na ${o.orderNumber}: ${o.previousPaymentMethod} → ${o.paymentMethod}`
-        : `[email] Admin obavešten o narudžbini ${o.orderNumber}`
+        : rata
+          ? `[email] Admin obavešten o ${rata.no}. rati na ${o.orderNumber}`
+          : `[email] Admin obavešten o narudžbini ${o.orderNumber}`
     );
   } catch (e) {
     console.error("[email] sendNewOrderAdminEmail pao:", e);
@@ -1871,7 +1879,7 @@ export function buildDailyBriefHtml(d: DailyBrief): string {
         (r) =>
           `⚠️ <strong>${esc(r.ime)}</strong> - ${r.rata ? `${r.rata}. naplata` : "naplata"} nije prošla, ` +
           (r.odbijeno
-            ? `<strong>banka odbila raniji pokušaj</strong> - čeka se redovan termin, vidi da li treba ručno`
+            ? `<strong>banka ne može ponovo da naplati</strong> - rata preskočena, plan ide dalje po rasporedu, polaznik obavešten mejlom; ništa ručno`
             : `zakazan ${r.pokusaj}. pokušaj od 30`),
       ),
       ...(p?.otkazano ?? []).map(

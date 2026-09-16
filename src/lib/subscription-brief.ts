@@ -43,8 +43,17 @@ export interface SubscriptionBriefInput {
     retryOid: string | null;
     retryCount: number;
     lastRetryError?: string | null;
+    /** Kad je banka poslednji put odgovorila na ponovni pokušaj (`subscriptions.last_retry_at`). */
+    lastRetryAt?: string | null;
   }[];
   otkazane: { ime: string | null; paidPayments: number; totalPayments: number; cancelReason: string | null }[];
+  /**
+   * Jučerašnji dan [od, do) u ISO zapisu. Odbijena pala rata (CORE-5107) se javlja
+   * samo u pregledu za dan kad je banka odbila - `retry_oid` se nikad ne briše, pa
+   * bi se inače ista rata ponavljala svako jutro do kraja serije (Sonja, Milan,
+   * Nemanja: 16.09.2026). Bez prozora se ponaša kao ranije (svaki dan).
+   */
+  prozor?: { od: string; do: string };
 }
 
 /**
@@ -60,6 +69,12 @@ export function rataIzOida(oid: string, baseOid: string): number | null {
 
 const ime = (v: string | null) => v ?? "-";
 
+function uProzoru(t: string | null | undefined, p: { od: string; do: string }): boolean {
+  if (!t) return false;
+  const ms = new Date(t).getTime();
+  return ms >= new Date(p.od).getTime() && ms < new Date(p.do).getTime();
+}
+
 export function buildSubscriptionBrief(input: SubscriptionBriefInput): SubscriptionBrief {
   return {
     naplaceno: input.naplaceneRate.map((r) => ({ ime: ime(r.ime), rata: r.rata, ukupno: r.ukupno, iznos: r.iznos })),
@@ -69,6 +84,9 @@ export function buildSubscriptionBrief(input: SubscriptionBriefInput): Subscript
     // ovaj filter propuštao baš one slučajeve u kojima ništa ne radi samo od sebe.
     pale: input.aktivne
       .filter((s) => s.retryOid !== null)
+      // Odbijena (ništa se više ne dešava samo od sebe, a ni ručno - odluka 09.09.2026)
+      // ide u pregled samo jednom: kad je banka odbila. Zakazan pokušaj se vidi dok traje.
+      .filter((s) => !s.lastRetryError || !input.prozor || uProzoru(s.lastRetryAt, input.prozor))
       .map((s) => ({
         ime: ime(s.ime),
         rata: rataIzOida(s.retryOid as string, s.baseOid),

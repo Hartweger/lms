@@ -15,7 +15,7 @@ import {
 import { grantAccessForOrder } from "@/lib/grant-access";
 import { fiscalizeOrder } from "@/lib/fiscomm";
 import { generateOrderNumber } from "@/lib/order-utils";
-import { sendSubscriptionRetryEmail } from "@/lib/email";
+import { sendNewOrderAdminEmail, sendSubscriptionRetryEmail } from "@/lib/email";
 
 /**
  * Stanje pretplate izvedeno iz naplata kod banke - jedini izvor istine je banka,
@@ -55,9 +55,35 @@ interface SubscriptionRow {
 }
 
 /**
+ * Admin mejl za naplaćenu ratu - isti oblik kao „Nova narudžbina" iz checkouta,
+ * uz redni broj rate. Do 16.09.2026. rate 2..N nisu slale adminu ništa: taj mejl
+ * je živeo samo u /api/orders, a ratu pravi cron - 11 rata od 15.08. prošlo tiho,
+ * Nataša ih je videla tek sutradan u jutarnjem pregledu.
+ */
+export function adminEmailZaRatu(
+  prva: { email: string; full_name: string | null; country: string | null; items: unknown },
+  novi: { order_number: string | null },
+  sub: { total_payments: number },
+  charge: { installmentNo: number },
+  iznos: number,
+): Parameters<typeof sendNewOrderAdminEmail>[0] {
+  const items = prva.items as { title?: string }[] | null;
+  return {
+    orderNumber: novi.order_number ?? "-",
+    fullName: prva.full_name ?? "-",
+    email: prva.email,
+    courseTitle: items?.[0]?.title ?? "kurs",
+    total: iznos,
+    paymentMethod: "kartica_pretplata",
+    country: prva.country ?? "-",
+    installment: { no: charge.installmentNo, total: sub.total_payments },
+  };
+}
+
+/**
  * Pravi porudžbinu za jednu ratu i pokreće standardni lanac (pristup → fiskalni
- * račun). Idempotentno: `orders.nestpay_oid` je unique, pa dupli prolaz pada na
- * insertu i tiho se preskače.
+ * račun → admin mejl). Idempotentno: `orders.nestpay_oid` je unique, pa dupli
+ * prolaz pada na insertu i tiho se preskače.
  */
 export async function processCharge(sub: SubscriptionRow, charge: RecurringCharge): Promise<boolean> {
   const admin = createAdminClient();
@@ -119,6 +145,7 @@ export async function processCharge(sub: SubscriptionRow, charge: RecurringCharg
     );
   }
   await fiscalizeOrder(novi.id);
+  await sendNewOrderAdminEmail(adminEmailZaRatu(prva, novi, sub, charge, iznos));
 
   await admin
     .from("subscriptions")

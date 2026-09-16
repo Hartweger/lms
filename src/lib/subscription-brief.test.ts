@@ -110,3 +110,46 @@ describe("buildSubscriptionBrief", () => {
     expect(b).toEqual({ naplaceno: [], pale: [], otkazano: [], aktivnih: 0, mesecno: 0 });
   });
 });
+
+// Odluka Nataše 09.09.2026: pala rata NE traži ništa ručno - cron sam gasi pokušaje
+// (CORE-5107), polaznik dobije mejl, pristup se sam vrati kad sledeća rata prođe.
+// Do 16.09. se ista odbijena rata ponavljala u pregledu SVAKI dan do kraja serije
+// (retry_oid se ne briše), sa tekstom „vidi da li treba ručno".
+describe("odbijena pala rata se javlja samo jednom", () => {
+  const prozor = { od: "2026-09-15T00:00:00.000Z", do: "2026-09-16T00:00:00.000Z" };
+  const sonja = (lastRetryAt: string) => ({
+    ime: "Sonja Kricak",
+    amount: 3199,
+    baseOid: "2026-228",
+    retryOid: "2026-228-2",
+    retryCount: 30,
+    lastRetryError: "CORE-5107 - banka ne prepoznaje zapis",
+    lastRetryAt,
+  });
+
+  it("odbijena juče - ulazi u pregled", () => {
+    const b = buildSubscriptionBrief({ ...prazno, aktivne: [sonja("2026-09-15T03:00:00.000Z")], prozor });
+    expect(b.pale).toEqual([{ ime: "Sonja Kricak", rata: 2, pokusaj: 30, odbijeno: true }]);
+  });
+
+  it("odbijena pre dva dana - više se ne ponavlja, ali ostaje u mesečnom prihodu", () => {
+    const b = buildSubscriptionBrief({ ...prazno, aktivne: [sonja("2026-09-13T03:00:00.000Z")], prozor });
+    expect(b.pale).toEqual([]);
+    expect(b.aktivnih).toBe(1);
+    expect(b.mesecno).toBe(3199);
+  });
+
+  it("zakazan ponovni pokušaj (nije odbijen) se i dalje vidi svaki dan dok traje", () => {
+    const b = buildSubscriptionBrief({
+      ...prazno,
+      prozor,
+      aktivne: [{ ime: "Milan Tošić", amount: 3199, baseOid: "2026-233", retryOid: "2026-233-4", retryCount: 2, lastRetryAt: "2026-09-01T03:00:00.000Z" }],
+    });
+    expect(b.pale).toEqual([{ ime: "Milan Tošić", rata: 4, pokusaj: 2, odbijeno: false }]);
+  });
+
+  it("bez prozora (stari pozivi) ponašanje je nepromenjeno", () => {
+    const b = buildSubscriptionBrief({ ...prazno, aktivne: [sonja("2026-09-01T03:00:00.000Z")] });
+    expect(b.pale).toHaveLength(1);
+  });
+});

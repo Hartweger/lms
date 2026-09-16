@@ -171,7 +171,7 @@ async function cronHandler(request: NextRequest) {
 
   const { data: aktivnePretplate } = await admin
     .from("subscriptions")
-    .select("amount, base_oid, retry_oid, retry_count, last_retry_error, orders!subscriptions_initial_order_id_fkey(full_name)")
+    .select("amount, base_oid, retry_oid, retry_count, last_retry_error, last_retry_at, orders!subscriptions_initial_order_id_fkey(full_name)")
     .eq("status", "active");
 
   const { data: otkazaneJuce } = await admin
@@ -195,7 +195,9 @@ async function cronHandler(request: NextRequest) {
       retryOid: s.retry_oid,
       retryCount: s.retry_count ?? 0,
       lastRetryError: s.last_retry_error,
+      lastRetryAt: s.last_retry_at,
     })),
+    prozor: { od: startYday.toISOString(), do: startToday.toISOString() },
     otkazane: (otkazaneJuce ?? []).map((s) => ({
       ime: one(s.orders)?.full_name ?? null,
       paidPayments: s.paid_payments ?? 0,

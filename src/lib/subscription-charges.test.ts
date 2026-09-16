@@ -5,6 +5,7 @@ import {
   nextPlannedCharge,
   MAX_RETRIES,
   noviRetryCount,
+  adminEmailZaRatu,
   retryDecision,
   retryStartDate,
   subscriptionStateFromCharges,
@@ -173,5 +174,42 @@ describe("nextPlannedCharge", () => {
 
   it("vraća null kad na čekanju nema ničega", () => {
     expect(nextPlannedCharge([naplata(1, "ok"), naplata(2, "pala")])).toBe(null);
+  });
+});
+
+describe("adminEmailZaRatu", () => {
+  // 16.09.2026: rate 2..N je pravio cron, pa admin mejl „Nova narudžbina" (koji živi
+  // samo u /api/orders) nikad nije išao - 11 rata od 15.08. prošlo bez ijednog mejla.
+  it("sklapa admin mejl kao za novu narudžbinu, uz redni broj rate", () => {
+    const ulaz = adminEmailZaRatu(
+      { email: "ana@example.com", full_name: "Ana Anić", country: "RS", items: [{ title: "Video paket A1+A2+B1" }] },
+      { order_number: "2026-521" },
+      { total_payments: 12 },
+      naplata(2, "ok"),
+      3199,
+    );
+    expect(ulaz).toEqual({
+      orderNumber: "2026-521",
+      fullName: "Ana Anić",
+      email: "ana@example.com",
+      courseTitle: "Video paket A1+A2+B1",
+      total: 3199,
+      paymentMethod: "kartica_pretplata",
+      country: "RS",
+      installment: { no: 2, total: 12 },
+    });
+  });
+
+  it("bez naslova kursa i zemlje ne pada", () => {
+    const ulaz = adminEmailZaRatu(
+      { email: "a@b.rs", full_name: null, country: null, items: null },
+      { order_number: "2026-1" },
+      { total_payments: 6 },
+      naplata(3, "ok"),
+      1000,
+    );
+    expect(ulaz.courseTitle).toBe("kurs");
+    expect(ulaz.fullName).toBe("-");
+    expect(ulaz.country).toBe("-");
   });
 });
