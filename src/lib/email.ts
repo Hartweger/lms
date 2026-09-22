@@ -2155,6 +2155,8 @@ export async function sendEssayFeedbackEmail(o: {
   score: number | null;
   maxPoints?: number | null;
   feedback: string | null;
+  /** Profesor je naknadno izmenio već objavljenu ocenu/komentar - drugačiji naslov i uvod. */
+  updated?: boolean;
 }) {
   try {
     const resend = getResend();
@@ -2189,14 +2191,18 @@ export async function sendEssayFeedbackEmail(o: {
       from: FROM,
       to: o.to,
       replyTo: "info@hartweger.rs",
-      subject: "📝 Tvoj Schreiben je pregledan",
+      subject: o.updated ? "📝 Komentar na tvoj Schreiben je izmenjen" : "📝 Tvoj Schreiben je pregledan",
       html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
 <body style="font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a2e;background:#f8f9fa;margin:0;padding:0;">
   <div style="max-width:520px;margin:0 auto;padding:40px 20px;">
     <div style="background:white;border-radius:12px;padding:32px;box-shadow:0 1px 3px rgba(0,0,0,0.08);">
       <div style="text-align:center;margin-bottom:20px;"><img src="https://hartweger.rs/logo.jpg" alt="Hartweger" style="width:120px;height:auto;"/></div>
       <h1 style="font-size:20px;margin:0 0 12px;">Zdravo, ${esc(o.studentName || "")}!</h1>
-      <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 16px;">Tvoj profesor je pregledao Schreiben iz lekcije <strong>${esc(o.lessonTitle)}</strong>.</p>
+      <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 16px;">${
+        o.updated
+          ? `Tvoj profesor je dopunio ocenu ili komentar na Schreiben iz lekcije <strong>${esc(o.lessonTitle)}</strong>. Evo šta sada piše:`
+          : `Tvoj profesor je pregledao Schreiben iz lekcije <strong>${esc(o.lessonTitle)}</strong>.`
+      }</p>
       ${ocenaHtml}
       ${komentarHtml}
       <div style="text-align:center;margin:24px 0 8px;">

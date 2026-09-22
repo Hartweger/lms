@@ -429,7 +429,7 @@ export default function ProfesorEseji() {
                     disabled={saving}
                     className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-700 disabled:opacity-50"
                   >
-                    {saving ? "Čuvam..." : "Objavi studentu"}
+                    {saving ? "Čuvam..." : essay.status === "published" ? "Sačuvaj izmene" : "Objavi studentu"}
                   </button>
                   <button
                     onClick={() => setEditingId(null)}
@@ -439,15 +439,22 @@ export default function ProfesorEseji() {
                   </button>
                 </div>
               </div>
+            ) : essay.status !== "published" ? (
+              <button
+                onClick={() => startReview(essay)}
+                className="bg-plava text-white px-4 py-2 rounded-lg text-sm hover:bg-plava-dark"
+              >
+                Pregledaj i oceni
+              </button>
             ) : (
-              essay.status !== "published" && (
-                <button
-                  onClick={() => startReview(essay)}
-                  className="bg-plava text-white px-4 py-2 rounded-lg text-sm hover:bg-plava-dark"
-                >
-                  Pregledaj i oceni
-                </button>
-              )
+              // Objavljen rad: komentar, ocena i ispravke smeju naknadno da se isprave.
+              // Ruta /api/essays/publish to tretira kao izmenu (mejl „izmenjeno" učeniku).
+              <button
+                onClick={() => startReview(essay)}
+                className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm hover:bg-gray-200"
+              >
+                Izmeni komentar / ocenu
+              </button>
             )}
 
             {essay.status === "published" && essay.professor_feedback && (

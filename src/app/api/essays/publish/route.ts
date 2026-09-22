@@ -1,5 +1,7 @@
 // Objava pregledanog Schreiben-a + mejl učeniku, u jednom koraku (Resend ključ je samo na serveru).
 // Profesor sme samo svoje učenike; admin sve.
+// Već objavljen rad sme ponovo da se pošalje = IZMENA (komentar/ocena/ispravke): upis + mejl
+// „izmenjeno" učeniku. Ako se ništa nije promenilo, ne upisuje i ne šalje ništa.
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -31,9 +33,8 @@ export async function POST(request: Request) {
 
   // Izmenjene ispravke (opciono). Ako su poslate, prepisuju ai_corrections - to je ono
   // što učenik vidi pod "Ispravke". Prazni redovi se izbacuju.
-  let editedCorrections: { original: string; corrected: string; explanation: string }[] | undefined;
-  if (Array.isArray(corrections)) {
-    editedCorrections = corrections
+  const normalizeCorrections = (arr: unknown[]) =>
+    arr
       .filter((c: unknown): c is Record<string, unknown> => !!c && typeof c === "object")
       .map((c) => ({
         original: typeof c.original === "string" ? c.original : "",
@@ -41,7 +42,7 @@ export async function POST(request: Request) {
         explanation: typeof c.explanation === "string" ? c.explanation : "",
       }))
       .filter((c) => c.original.trim() !== "" || c.corrected.trim() !== "");
-  }
+  const editedCorrections = Array.isArray(corrections) ? normalizeCorrections(corrections) : undefined;
 
   const { admin, userId, isAdmin } = staff;
 
@@ -50,11 +51,11 @@ export async function POST(request: Request) {
   // Ime/mejl učenika se čita zasebno ispod.
   const { data: essay, error: essayErr } = await admin
     .from("essay_submissions")
-    .select("id, status, user_id, lesson_id, exercise_id, lessons(title, course_id)")
+    .select("id, status, user_id, lesson_id, exercise_id, professor_feedback, professor_score, ai_corrections, lessons(title, course_id)")
     .eq("id", essayId)
     .single();
   if (essayErr || !essay) return NextResponse.json({ error: "Esej nije pronađen" }, { status: 404 });
-  if (essay.status === "published") return NextResponse.json({ ok: true, alreadyPublished: true });
+  const isUpdate = essay.status === "published";
 
   // Max bodovi po eseju (options.maxPoints, default 5) - gornja granica ocene.
   const { data: eq } = await admin
@@ -94,6 +95,20 @@ export async function POST(request: Request) {
     if (!link) return NextResponse.json({ error: "Nije tvoj učenik" }, { status: 403 });
   }
 
+  // Izmena bez promene (profesor otvorio „Izmeni" i samo kliknuo sačuvaj) - ne diraj red
+  // i ne šalji učeniku mejl ni o čemu.
+  if (isUpdate) {
+    const sameFeedback = (essay.professor_feedback ?? null) === (professorFeedback ?? null);
+    const sameScore = essay.professor_score === professorScore;
+    const sameCorrections =
+      editedCorrections === undefined ||
+      JSON.stringify(editedCorrections) ===
+        JSON.stringify(normalizeCorrections(Array.isArray(essay.ai_corrections) ? essay.ai_corrections : []));
+    if (sameFeedback && sameScore && sameCorrections) {
+      return NextResponse.json({ ok: true, unchanged: true });
+    }
+  }
+
   // Upis (prioritet - ovo mora da prođe).
   const { error: updErr } = await admin
     .from("essay_submissions")
@@ -117,6 +132,7 @@ export async function POST(request: Request) {
       score: professorScore,
       maxPoints,
       feedback: professorFeedback ?? null,
+      updated: isUpdate,
     });
   }
 
@@ -129,5 +145,5 @@ export async function POST(request: Request) {
     console.error("[publish] provera sertifikata pala:", e);
   }
 
-  return NextResponse.json({ ok: true });
+  return NextResponse.json(isUpdate ? { ok: true, updated: true } : { ok: true });
 }
