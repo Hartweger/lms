@@ -260,6 +260,24 @@ describe("buildSalesSystemPrompt", () => {
     it("kaže da mesečno plaćanje ide samo karticom", () => {
       expect(out()).toMatch(/samo.{0,30}kartic/i);
     });
+
+    // Regresija 22.09.2026: Marija (2026-551) je htela mesečno, a rekla je da nema
+    // karticu Intese - Smile je zaključio da joj „nijedna opcija nije dostupna",
+    // iako Intesa važi samo za rate, a mesečno ide karticom bilo koje banke.
+    it("mesečno plaćanje NE traži Intesa karticu - prolazi kartica bilo koje banke", () => {
+      expect(out()).toMatch(/karticom BILO KOJE banke - NE mora Intesa/i);
+      expect(out()).toMatch(/Intesa je uslov SAMO za rate/i);
+    });
+
+    it("„nemam karticu Intese\u201c ne znači „nemam karticu\u201c", () => {
+      expect(out()).toMatch(/nemam karticu Intese.{0,40}NE znači da nema karticu/i);
+    });
+
+    it("pogrešna narudžbina bez uplate: ništa nije naplaćeno, samo ponovo izabere mesečno", () => {
+      expect(out()).toMatch(/NIŠTA nije naplaćeno/i);
+      expect(out()).toMatch(/ponovo otvori stranicu paketa i izabere „Mesečno plaćanje/i);
+      expect(out()).toMatch(/kartica VEĆ naplaćena.{0,40}tim/i);
+    });
   });
 });
 
