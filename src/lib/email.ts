@@ -910,6 +910,8 @@ export async function sendNextLevelOffer(
     courseUrl: string;
     /** Konkretna otvorena grupa sledećeg nivoa, ako postoji - datum i termin prodaju bolje od gole prodajne strane. */
     sledeca?: { startDate: string; dani: string; vreme: string; profIme: string; slobodno: number } | null;
+    /** Ponovna ponuda: posle prve se otvorila nova grupa sa istom profesorkom. */
+    ponovna?: boolean;
   },
 ) {
   try {
@@ -917,6 +919,7 @@ export async function sendNextLevelOffer(
     if (!resend) return;
     const ime = name ? name.split(" ")[0] : "";
     const s = opts.sledeca;
+    const ponovna = !!opts.ponovna && !!s;
     const datum = s
       ? new Date(s.startDate).toLocaleDateString("sr-Latn-RS", { day: "numeric", month: "long", year: "numeric" })
       : "";
@@ -936,13 +939,18 @@ ${s.profIme ? `• profesorka: ${esc(s.profIme)}<br>` : ""}
       from: FROM,
       to,
       replyTo: "info@hartweger.rs",
-      subject: s
+      subject: ponovna
+        ? `Nov termin za ${opts.nextNivo} sa ${s!.profIme ? "profesorkom " + s!.profIme.split(" ")[0] : "tvojom profesorkom"} - ${datum}`
+        : s
         ? `Nastavi nemački - ${opts.nextNivo} kreće ${datum}`
         : `Nastavi nemački - upiši ${opts.nextNivo}`,
       html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
 <body style="font-family:sans-serif;line-height:1.6;color:#222">
-<h2>Bravo${ime ? ", " + esc(ime) : ""}! 🎉</h2>
-<p>Tvoj grupni kurs <strong>${esc(opts.currentNivo)}</strong> se bliži kraju. Da ne praviš pauzu, upiši se na sledeći nivo i nastavi sa istim ritmom.</p>
+${ponovna
+  ? `<h2>Ćao${ime ? ", " + esc(ime) : ""}!</h2>
+<p>Otvorio se <strong>nov termin za ${esc(opts.nextNivo)}</strong>${s!.profIme ? ` sa ${esc(s!.profIme)}, tvojom profesorkom sa ${esc(opts.currentNivo)}` : ""}. Javljamo ti odmah, da nastavak bude u istom ritmu i sa istim licem na ekranu.</p>`
+  : `<h2>Bravo${ime ? ", " + esc(ime) : ""}! 🎉</h2>
+<p>Tvoj grupni kurs <strong>${esc(opts.currentNivo)}</strong> se bliži kraju. Da ne praviš pauzu, upiši se na sledeći nivo i nastavi sa istim ritmom.</p>`}
 ${detalji}
 <p style="margin:24px 0"><a href="${esc(opts.courseUrl)}" style="background:#F78687;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:bold;display:inline-block">Upiši ${esc(opts.nextNivo)}</a></p>
 <p style="font-size:13px;color:#666">${esc(zurba)}</p>

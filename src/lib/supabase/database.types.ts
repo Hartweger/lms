@@ -1381,6 +1381,8 @@ export type Database = {
           offer_sent_at: string | null
           price: number | null
           prof_reminder_sent_at: string | null
+          offer_resent_at: string | null
+          offer_resent_group_id: string | null
           professor_id: string | null
           purchasable_course_id: string | null
           reminder_sent_at: string | null
@@ -1415,6 +1417,8 @@ export type Database = {
           offer_sent_at?: string | null
           price?: number | null
           prof_reminder_sent_at?: string | null
+          offer_resent_at?: string | null
+          offer_resent_group_id?: string | null
           professor_id?: string | null
           purchasable_course_id?: string | null
           reminder_sent_at?: string | null
@@ -1449,6 +1453,8 @@ export type Database = {
           offer_sent_at?: string | null
           price?: number | null
           prof_reminder_sent_at?: string | null
+          offer_resent_at?: string | null
+          offer_resent_group_id?: string | null
           professor_id?: string | null
           purchasable_course_id?: string | null
           reminder_sent_at?: string | null

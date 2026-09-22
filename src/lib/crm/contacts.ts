@@ -2,6 +2,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { normalizeEmail, pickMatch } from "./match";
 import { suggestEmailFix } from "./email-typos";
 import type { CrmSource, CrmChannel, CrmDirection } from "./types";
+import { jeAktivanKupac, fazaPosleSignala, pocetnaFaza } from "./customer-status";
 
 /** Tag na kontaktu čija adresa ima sumnjiv domen. Postavlja se automatski, skida se ručno. */
 export const TAG_PROVERI_ADRESU = "proveri-adresu";
@@ -39,17 +40,16 @@ export async function upsertContact(
     if (prof?.id) userId = prof.id;
   }
 
-  // Aktivan kupac (ima bar jedan važeći pristup) → ne vodi se kao svež lid, ide u „upisan".
+  // Aktivan kupac (ima bar jedan važeći pristup KUPLJEN na platformi) → ne vodi se kao
+  // svež lid, ide u „upisan". Ostatak stare migracije (ld-migracija, pilot...) se ne računa -
+  // vidi customer-status.ts.
   let isActiveCustomer = false;
   if (userId) {
     const { data: acc } = await admin
       .from("course_access")
-      .select("expires_at")
+      .select("expires_at, source")
       .eq("user_id", userId);
-    const nowMs = Date.now();
-    isActiveCustomer = (acc ?? []).some(
-      (a: { expires_at: string | null }) => a.expires_at === null || new Date(a.expires_at).getTime() > nowMs,
-    );
+    isActiveCustomer = jeAktivanKupac(acc ?? []);
   }
 
   // Učitaj kandidate (mali skup: po mejlu ili IG-u)
@@ -84,12 +84,14 @@ export async function upsertContact(
     if (instagram) patch.instagram_handle = instagram;
     if (input.level) patch.level = input.level;
     if (userId) patch.user_id = userId;
-    if (isActiveCustomer) patch.stage = "upisan";
     const { data: cur } = await admin
       .from("crm_contacts")
-      .select("name,phone,level,user_id,tags")
+      .select("name,phone,level,user_id,tags,stage")
       .eq("id", existingId)
       .single();
+    // Arhiviran „upisan" se vraća u levak kad više nije kupac ili kad se javi preko forme.
+    const novaFaza = fazaPosleSignala(cur?.stage, isActiveCustomer, input.source);
+    if (novaFaza) patch.stage = novaFaza;
     if (cur?.name) delete patch.name;
     if (cur?.phone) delete patch.phone;
     if (cur?.level) delete patch.level;
@@ -115,7 +117,7 @@ export async function upsertContact(
       source: input.source,
       level: input.level || null,
       tags: typo ? [TAG_PROVERI_ADRESU] : [],
-      stage: isActiveCustomer ? "upisan" : "nov",
+      stage: pocetnaFaza(isActiveCustomer, input.source),
       last_interaction_at: now,
     })
     .select("id")

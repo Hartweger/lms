@@ -4,6 +4,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { nextNivoFor, grupniSlugForNivo } from "@/lib/course-nivo";
 import { sendNatasaNextTermReminder, sendNextLevelOffer, sendProfNextGroupReminder } from "@/lib/email";
 import { formatDaysFull } from "@/lib/groups";
+import { izaberiSledecu, novaGrupaZaPonovnuPonudu } from "@/lib/groups-nastavak";
 import { SITE_URL } from "@/lib/site-url";
 
 // Dnevni cron: podsetnik adminu 14 dana pre kraja + ponuda polaznicima 7 dana pre kraja.
@@ -23,7 +24,7 @@ async function cronHandler(request: NextRequest) {
   const groups = must(
     await admin
       .from("groups")
-      .select("id, level, end_date, term_opened_at, reminder_sent_at, offer_sent_at, prof_reminder_sent_at, professor:professor_id(full_name, email)")
+      .select("id, level, end_date, term_opened_at, reminder_sent_at, offer_sent_at, offer_resent_at, prof_reminder_sent_at, professor_id, professor:professor_id(full_name, email)")
       .in("status", ["otvoren", "u_toku"])
       .not("end_date", "is", null),
     "groups"
@@ -48,18 +49,25 @@ async function cronHandler(request: NextRequest) {
    * Koriste je i ponuda polaznicima i podsetnik profesorki - konkretan datum,
    * termin i broj slobodnih mesta ubedljivije prodaju od gole prodajne strane.
    */
-  async function sledecaGrupa(nivo: string | null, afterDate: string) {
-    if (!nivo) return null;
-    const kandidati = must(
+  type Kandidat = {
+    id: string; level: string; status: string; start_date: string; created_at: string; professor_id: string | null;
+    days: number[] | null; session_time: string | null; max_seats: number | null;
+    professor: { full_name: string | null } | { full_name: string | null }[] | null;
+  };
+  /** Sve otvorene grupe datog nivoa koje kreću posle `afterDate` (ne samo prva). */
+  async function kandidatiZa(nivo: string | null, afterDate: string): Promise<Kandidat[]> {
+    if (!nivo) return [];
+    const rows = must(
       await admin
         .from("groups")
-        .select("id, level, start_date, days, session_time, max_seats, professor:professor_id(full_name)")
+        .select("id, level, status, start_date, created_at, professor_id, days, session_time, max_seats, professor:professor_id(full_name)")
         .eq("level", nivo).eq("status", "otvoren").gte("start_date", afterDate)
-        .order("start_date", { ascending: true }).limit(1),
+        .order("start_date", { ascending: true }).limit(10),
       "next-level group"
     );
-    const n = (kandidati ?? [])[0];
-    if (!n) return null;
+    return (rows ?? []) as Kandidat[];
+  }
+  async function opisGrupe(n: Kandidat) {
     const upisani = must(
       await admin.from("group_enrollments").select("id").eq("group_id", n.id).eq("status", "active"),
       "next-level enrollments"
@@ -74,9 +82,15 @@ async function cronHandler(request: NextRequest) {
       slobodno: Math.max(0, (n.max_seats ?? 6) - (upisani ?? []).length),
     };
   }
+  /** Prva ponuda: prednost ima grupa iste profesorke (izaberiSledecu), inače najraniji start. */
+  async function sledecaGrupa(nivo: string | null, afterDate: string, professorId: string | null) {
+    const n = izaberiSledecu(await kandidatiZa(nivo, afterDate), professorId);
+    return n ? opisGrupe(n) : null;
+  }
 
   let reminders = 0;
   let offers = 0;
+  let reoffers = 0;
   let profReminders = 0;
 
   for (const g of groups ?? []) {
@@ -98,7 +112,7 @@ async function cronHandler(request: NextRequest) {
       if (nextNivo) {
         const slug = grupniSlugForNivo(nextNivo);
         const courseUrl = slug ? `${SITE_URL}/kursevi/${slug}` : `${SITE_URL}/kursevi`;
-        const sledeca = await sledecaGrupa(nextNivo, g.end_date);
+        const sledeca = await sledecaGrupa(nextNivo, g.end_date, g.professor_id);
         for (const p of await polazniciZa(g)) {
           await sendNextLevelOffer(p.email, p.ime, { currentNivo: g.level, nextNivo, courseUrl, sledeca });
           offers++;
@@ -109,6 +123,28 @@ async function cronHandler(request: NextRequest) {
       must(await admin.from("groups").update({ offer_sent_at: now }).eq("id", g.id), "groups offer_sent_at update");
     }
 
+    // 2b) PONOVNA ponuda - posle prve ponude otvorena je nova grupa sledećeg nivoa sa istom
+    // profesorkom (slučaj 22.09.2026: A2.2 dobila Marijin B1.1 od 19.09, a Miličin od 28.09 je
+    // otvoren tek posle). Šalje se tačno jednom, dok je grupa još „sveža" (do 14 dana posle kraja).
+    if (g.offer_sent_at && !g.offer_resent_at && nextNivo) {
+      const nova = novaGrupaZaPonovnuPonudu(
+        { id: g.id, end_date: g.end_date, professor_id: g.professor_id, offer_sent_at: g.offer_sent_at, offer_resent_at: g.offer_resent_at },
+        await kandidatiZa(nextNivo, plus(-7)),
+        plus(0),
+      );
+      if (nova) {
+        const slug = grupniSlugForNivo(nextNivo);
+        const courseUrl = slug ? `${SITE_URL}/kursevi/${slug}` : `${SITE_URL}/kursevi`;
+        const sledeca = await opisGrupe(nova);
+        for (const p of await polazniciZa(g)) {
+          await sendNextLevelOffer(p.email, p.ime, { currentNivo: g.level, nextNivo, courseUrl, sledeca, ponovna: true });
+          reoffers++;
+        }
+        // Pad upisa mora da obori cron: bez flaga bi polaznici sutra dobili istu ponudu ponovo.
+        must(await admin.from("groups").update({ offer_resent_at: now, offer_resent_group_id: nova.id }).eq("id", g.id), "groups offer_resent_at update");
+      }
+    }
+
     // 3) Podsetnik profesorki - 14 dana pre kraja, da lično pozove svoju grupu u sledeći nivo.
     // Odluka 21.07.2026: lični poziv od profesorke, jer masovna slanja konvertuju 0.
     if (!g.prof_reminder_sent_at && g.end_date <= in14) {
@@ -116,7 +152,7 @@ async function cronHandler(request: NextRequest) {
         await sendProfNextGroupReminder(prof.email, {
           profIme, nivo: g.level, endDate: g.end_date, nextNivo,
           polaznici: await polazniciZa(g),
-          sledeca: await sledecaGrupa(nextNivo, g.end_date),
+          sledeca: await sledecaGrupa(nextNivo, g.end_date, g.professor_id),
           rasporedUrl: `${SITE_URL}/raspored`,
         });
         profReminders++;
@@ -127,7 +163,7 @@ async function cronHandler(request: NextRequest) {
     }
   }
 
-  return NextResponse.json({ reminders, offers, profReminders });
+  return NextResponse.json({ reminders, offers, reoffers, profReminders });
 }
 
 export const GET = withCronLog("grupe-podsetnik", cronHandler);
