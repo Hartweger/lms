@@ -368,3 +368,30 @@ describe("sekcija Besplatno", () => {
     expect(out).not.toContain("SPISAK BESPLATNOG");
   });
 });
+
+// 23.09.2026: Smile je posetiocu koji je pitao red reči (imenica + pridev, imenica
+// + broj) održao mali čas gramatike umesto da ga uputi na NaKI. Smile savetuje
+// izbor kursa; nemački predaje NaKI.
+describe("Smile ne podučava nemački", () => {
+  const out = () => buildSalesSystemPrompt("katalog", { coupon: false });
+
+  it("ima odeljak koji zabranjuje podučavanje nemačkog", () => {
+    expect(out()).toContain("NE PODUČAVAŠ NEMAČKI");
+    expect(out()).toContain("gramatiku");
+    expect(out()).toContain("prevode reči i rečenica");
+  });
+
+  it("ne dopušta ni delimičan odgovor na jezičko pitanje", () => {
+    const txt = out();
+    expect(txt).toContain("NE odgovaraj na njega");
+    expect(txt).toContain("ni sa jednim primerom");
+  });
+
+  it("daje link na NaKI kao adresu za jezička pitanja", () => {
+    expect(out()).toContain("www.hartweger.rs/naki");
+  });
+
+  it("izuzima pitanja o ponudi - na njih Smile i dalje odgovara", () => {
+    expect(out()).toContain("Ovo se NE odnosi na pitanja o ponudi");
+  });
+});
