@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+import { BESPLATNO_PONUDA } from "@/lib/besplatno";
 import {
   NAKI_SYSTEM_PROMPT,
   conversationMemoryAddon,
@@ -365,5 +366,25 @@ describe("conversationMemoryAddon", () => {
 
   it("ne bavi se rodom - to je posao genderConstraint", () => {
     expect(conversationMemoryAddon(["daj mi vežbu"], null)).toBe("");
+  });
+});
+
+describe("besplatno na sajtu (NaKI)", () => {
+  it("zna svaku stavku iz sekcije Besplatno", () => {
+    for (const r of BESPLATNO_PONUDA) {
+      expect(NAKI_SYSTEM_PROMPT).toContain(r.href);
+    }
+  });
+
+  it("ne šalje na YouTube umesto na besplatno sa sajta", () => {
+    expect(NAKI_SYSTEM_PROMPT).toContain("Ne šalji ga na YouTube umesto na ovo");
+  });
+
+  it("besplatno ne troši slot za preporuku kursa", () => {
+    expect(NAKI_SYSTEM_PROMPT).toContain("NIJE preporuka kursa i ne računa se kao ponuda");
+  });
+
+  it("prenosi napomenu o nepotpunom B2 masterclassu", () => {
+    expect(NAKI_SYSTEM_PROMPT).toContain("nepotpun je");
   });
 });

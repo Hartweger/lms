@@ -1,3 +1,5 @@
+import { SITE_URL } from "@/lib/site-url";
+
 /**
  * Izvor istine za sve što na sajtu stoji u sekciji „Besplatno" (tab u
  * `KurseviKatalog.tsx`). Pravilo Nataše (23.09.2026): sve iz te sekcije
@@ -60,3 +62,18 @@ export const BESPLATNO_PONUDA: BesplatnaPonuda[] = [
     opis: "vežbanje i objašnjenja na srpskom, bez naloga",
   },
 ];
+
+/**
+ * Spisak za prompt. Cena se nikad ne ispisuje: Goethe masterclassi su 23.09.2026
+ * i u bazi dobili cenu 0 i naslove bez prodajnog prizvuka, ali i da negde ostane
+ * upisan iznos, stavka iz sekcije „Besplatno" se ne plaća.
+ */
+export function renderBesplatno(rows: BesplatnaPonuda[]): string {
+  if (rows.length === 0) return "";
+  return rows
+    .map((r) => {
+      const napomena = r.napomena ? ` | NAPOMENA: ${r.napomena}` : "";
+      return `- ${r.naslov} | potpuno besplatno | ${r.opis}${napomena} | ${SITE_URL}${r.href}`;
+    })
+    .join("\n");
+}

@@ -8,10 +8,10 @@ import {
   getNatasaIndividualText,
   getFullyFreeCourses,
   getFreeCoursesText,
-  renderBesplatno,
   type CatalogCourse,
   type PreviewLesson,
 } from "./catalog";
+import { renderBesplatno } from "@/lib/besplatno";
 import type { GrupaRaspored } from "@/lib/raspored";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
