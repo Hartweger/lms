@@ -7,7 +7,8 @@ import {
   getCatalogText,
   getNatasaIndividualText,
   getFullyFreeCourses,
-  renderFreeCourses,
+  getFreeCoursesText,
+  renderBesplatno,
   type CatalogCourse,
   type PreviewLesson,
 } from "./catalog";
@@ -273,17 +274,61 @@ describe("getFullyFreeCourses - samo kursevi kojima je svaka lekcija besplatna",
   });
 });
 
-describe("renderFreeCourses", () => {
-  it("daje /kurs/ link, kaže da je besplatno i NE pominje cenu", () => {
-    const out = renderFreeCourses([
-      { title: "VIDEO + B1 ispit - kompletna priprema", slug: "polozi-goethe-b1" },
+describe("renderBesplatno", () => {
+  it("kaže da je potpuno besplatno, daje link i NE pominje cenu", () => {
+    const out = renderBesplatno([
+      { naslov: "Položi Goethe B1 - kompletna priprema", href: "/kurs/polozi-goethe-b1", slug: "polozi-goethe-b1", opis: "video priprema" },
     ]);
     expect(out).toContain("https://www.hartweger.rs/kurs/polozi-goethe-b1");
-    expect(out).toContain("ceo kurs besplatan");
+    expect(out).toContain("potpuno besplatno");
     expect(out).not.toMatch(/RSD|EUR/);
   });
 
+  it("prenosi napomenu (nepotpun B2, mejl za masterclass reči)", () => {
+    const out = renderBesplatno([
+      { naslov: "Položi Goethe B2 - Leseverstehen", href: "/kurs/polozi-goethe-b2", opis: "tri modelltesta", napomena: "nepotpun je" },
+    ]);
+    expect(out).toContain("NAPOMENA: nepotpun je");
+  });
+
   it("prazna lista vraća prazan string (bloka tada nema)", () => {
-    expect(renderFreeCourses([])).toBe("");
+    expect(renderBesplatno([])).toBe("");
+  });
+});
+
+describe("getFreeCoursesText - kurs koji se opet prodaje ispada iz besplatnog", () => {
+  function adminWithFreeSlugs(slugs: string[]) {
+    const courses = slugs.map((s, i) => ({ id: `c${i}`, title: s, slug: s }));
+    const lessons = courses.map((c) => ({ course_id: c.id, is_free_preview: true }));
+    const admin = {
+      from(table: string) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const b: any = {
+          select() { return b; },
+          eq() { return b; },
+          in() { return b; },
+          order() { return b; },
+          then(res: (v: unknown) => unknown, rej?: (e: unknown) => unknown) {
+            return Promise.resolve({ data: table === "courses" ? courses : lessons, error: null }).then(res, rej);
+          },
+        };
+        return b;
+      },
+    };
+    return admin as unknown as SupabaseClient;
+  }
+
+  it("stavke bez slug-a (test nivoa, masterclass reči, NaKI) uvek ostaju", async () => {
+    const out = await getFreeCoursesText(adminWithFreeSlugs([]));
+    expect(out).toContain("/besplatno-testiranje");
+    expect(out).toContain("/masterclass-reci");
+    expect(out).toContain("/naki");
+    expect(out).not.toContain("polozi-goethe-b1");
+  });
+
+  it("Goethe masterclass ostaje dok je u bazi besplatan", async () => {
+    const out = await getFreeCoursesText(adminWithFreeSlugs(["polozi-goethe-b1", "polozi-goethe-b2", "polozi-goethe-c1"]));
+    expect(out).toContain("/kurs/polozi-goethe-b1");
+    expect(out).toContain("NAPOMENA: nepotpun je");
   });
 });

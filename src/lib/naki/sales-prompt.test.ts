@@ -342,12 +342,12 @@ describe("renderNatasaIndividual", () => {
   });
 });
 
-describe("besplatni kursevi (Goethe masterclassi)", () => {
-  const FREE = "- VIDEO + B1 ispit - kompletna priprema | ceo kurs besplatan, bez naloga i bez plaćanja | https://www.hartweger.rs/kurs/polozi-goethe-b1";
+describe("sekcija Besplatno", () => {
+  const FREE = "- Položi Goethe B1 - kompletna priprema | potpuno besplatno | video priprema | https://www.hartweger.rs/kurs/polozi-goethe-b1";
 
   it("zabranjuje pregled pre kupovine i izgovaranje cene za njih", () => {
     const out = buildSalesSystemPrompt("katalog", { coupon: false, free: FREE });
-    expect(out).toContain("BESPLATNI KURSEVI - CEO KURS JE BESPLATAN I NE PRODAJE SE");
+    expect(out).toContain("BESPLATNO - OVO SE NE PLAĆA NIKAD");
     expect(out).toContain("pogledaj besplatno pre kupovine");
     expect(out).toContain("NIKAD im ne izgovaraj cenu");
     expect(out).toContain(FREE);
@@ -358,13 +358,13 @@ describe("besplatni kursevi (Goethe masterclassi)", () => {
     expect(out).toContain("format samog ispita");
   });
 
-  it("o nepotpunom B2 masterclassu govori pošteno", () => {
+  it("traži da se napomena iz spiska prenese posetiocu", () => {
     const out = buildSalesSystemPrompt("katalog", { coupon: false, free: FREE });
-    expect(out).toContain("Masterclass za Goethe B2 je nepotpun");
+    expect(out).toContain("Ako stavka ima NAPOMENU, prenesi je pošteno");
   });
 
   it("bez spiska nema bloka - Smile ne tvrdi da nešto jeste besplatno", () => {
     const out = buildSalesSystemPrompt("katalog", { coupon: false });
-    expect(out).not.toContain("SPISAK BESPLATNIH KURSEVA");
+    expect(out).not.toContain("SPISAK BESPLATNOG");
   });
 });

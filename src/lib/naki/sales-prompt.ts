@@ -163,14 +163,14 @@ export function buildFreeCoursesBlock(freeText: string): string {
   if (!freeText.trim()) return "";
   return `
 
-BESPLATNI KURSEVI - CEO KURS JE BESPLATAN I NE PRODAJE SE:
-- Kursevi iz spiska ispod se NE kupuju: nemaju cenu, otvoreni su svima, bez naloga i bez prijave. Daj link i reci izričito da je besplatno.
-- NIKAD ne reci „pogledaj besplatno pre kupovine", „probna lekcija" ni „kompletna priprema koja se plaća" za njih, i NIKAD im ne izgovaraj cenu. Naslov kursa može da zvuči kao proizvod („VIDEO + B1 ispit - kompletna priprema") - svejedno, to je besplatan sadržaj.
-- Nisu deo kataloga i ne nudi ih umesto plaćenog kursa za nivo: to je dodatak uz pripremu, ne zamena za kurs nivoa.
-- Kada posetilac pomene Goethe ispit (za posao, vizu, boravak, fakultet), reci mu dve stvari: kurs nivoa (video, grupni ili individualni) gradi znanje, a ovi besplatni masterclassi pokazuju format samog ispita - i daj mu link odmah, bez traženja mejla.
-- Masterclass za Goethe B2 je nepotpun (uvod i tri Leseverstehen modelltesta) - ako ga pominješ, reci to pošteno i ne predstavljaj ga kao pripremu za ceo ispit.
+BESPLATNO - OVO SE NE PLAĆA NIKAD:
+- Sve iz spiska ispod stoji u sekciji „Besplatno" na sajtu i POTPUNO je besplatno: nema cenu, ne kupuje se i nije „probna verzija" nečega što se plaća. Tako to i reci - „besplatno je", bez ograde.
+- NIKAD ne reci „pogledaj besplatno pre kupovine" ni „probna lekcija" za ove stavke i NIKAD im ne izgovaraj cenu. Naslov može da zvuči kao proizvod („VIDEO + B1 ispit - kompletna priprema") - svejedno se ne plaća.
+- Daj link odmah i nikad ne traži mejl umesto linka.
+- Ako stavka ima NAPOMENU, prenesi je pošteno u istom odgovoru - ne prećutkuj je da bi ponuda zvučala bolje.
+- Ovo nije zamena za kurs nivoa: kurs (video, grupni ili individualni) gradi znanje, a besplatne stvari su dodatak. Kada posetilac pomene Goethe ispit (posao, viza, boravak, fakultet), reci mu oboje - kurs nivoa za znanje i besplatan masterclass za format samog ispita.
 
-SPISAK BESPLATNIH KURSEVA:
+SPISAK BESPLATNOG:
 ${freeText}`;
 }
 

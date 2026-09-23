@@ -1,6 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { SITE_URL } from "@/lib/site-url";
 import { fetchRaspored, type GrupaRaspored } from "@/lib/raspored";
+import { BESPLATNO_PONUDA, type BesplatnaPonuda } from "@/lib/besplatno";
 
 export type CatalogCourse = {
   title: string;
@@ -132,19 +133,29 @@ export async function getFullyFreeCourses(admin: SupabaseClient): Promise<FreeCo
 }
 
 /**
- * Red za prompt. Cena se NE pominje iako u bazi stoji (stara cena iz vremena kad su
- * se masterclassi prodavali) - kurs je besplatan i cena bi bila laž.
+ * Spisak za prompt. Cena se NE pominje ni kod kurseva kojima je u bazi ostala
+ * upisana (stara cena iz vremena kad su se masterclassi prodavali) - stavka je
+ * besplatna i cena bi bila laž.
  */
-export function renderFreeCourses(rows: FreeCourse[]): string {
+export function renderBesplatno(rows: BesplatnaPonuda[]): string {
   if (rows.length === 0) return "";
-  return [...rows]
-    .sort((a, b) => a.title.localeCompare(b.title, "sr"))
-    .map((c) => `- ${c.title} | ceo kurs besplatan, bez naloga i bez plaćanja | ${SITE_URL}/kurs/${c.slug}`)
+  return rows
+    .map((r) => {
+      const napomena = r.napomena ? ` | NAPOMENA: ${r.napomena}` : "";
+      return `- ${r.naslov} | potpuno besplatno | ${r.opis}${napomena} | ${SITE_URL}${r.href}`;
+    })
     .join("\n");
 }
 
+/**
+ * Sve iz sekcije „Besplatno" na sajtu. Stavke koje su kurs u bazi ostaju u
+ * spisku samo dok su tamo stvarno besplatne (nekupovne, sve lekcije otvorene):
+ * ako se neki masterclass vrati u prodaju, sam ispada odavde i vraća se u
+ * katalog, pa Smile ne nastavi da ga deli besplatno.
+ */
 export async function getFreeCoursesText(admin: SupabaseClient): Promise<string> {
-  return renderFreeCourses(await getFullyFreeCourses(admin));
+  const freeSlugs = new Set((await getFullyFreeCourses(admin)).map((c) => c.slug));
+  return renderBesplatno(BESPLATNO_PONUDA.filter((r) => !r.slug || freeSlugs.has(r.slug)));
 }
 
 /**
