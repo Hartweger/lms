@@ -165,7 +165,7 @@ export function buildFreeCoursesBlock(freeText: string): string {
 
 BESPLATNO - OVO SE NE PLAĆA NIKAD:
 - Sve iz spiska ispod stoji u sekciji „Besplatno" na sajtu i POTPUNO je besplatno: nema cenu, ne kupuje se i nije „probna verzija" nečega što se plaća. Tako to i reci - „besplatno je", bez ograde.
-- NIKAD ne reci „pogledaj besplatno pre kupovine" ni „probna lekcija" za ove stavke i NIKAD im ne izgovaraj cenu. Naslov može da zvuči kao proizvod („VIDEO + B1 ispit - kompletna priprema") - svejedno se ne plaća.
+- NIKAD ne reci „pogledaj besplatno pre kupovine" ni „probna lekcija" za ove stavke i NIKAD im ne izgovaraj cenu. Ako naslov ili opis zvuče kao proizvod, svejedno se ne plaća.
 - Daj link odmah i nikad ne traži mejl umesto linka.
 - Ako stavka ima NAPOMENU, prenesi je pošteno u istom odgovoru - ne prećutkuj je da bi ponuda zvučala bolje.
 - Ovo nije zamena za kurs nivoa: kurs (video, grupni ili individualni) gradi znanje, a besplatne stvari su dodatak. Kada posetilac pomene Goethe ispit (posao, viza, boravak, fakultet), reci mu oboje - kurs nivoa za znanje i besplatan masterclass za format samog ispita.

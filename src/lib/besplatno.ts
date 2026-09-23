@@ -4,9 +4,10 @@
  * komunicira se kao POTPUNO besplatno - bez cene, bez kupovine, bez
  * „pogledaj pre kupovine".
  *
- * Povod: Smile je „VIDEO + B1 ispit - kompletna priprema" (besplatan Goethe
- * masterclass) nudio kao kurs koji se kupuje. Prompt je za besplatne stvari
- * imao samo pojedinačna pravila (NaKI, test nivoa), a spisak nije postojao.
+ * Povod: Smile je besplatan Goethe masterclass nudio kao kurs koji se kupuje -
+ * red u bazi se tada zvao „VIDEO + B1 ispit - kompletna priprema" i imao upisanu
+ * cenu (oboje sređeno 23.09.2026: naslovi kao na karticama, cena 0). Prompt je za
+ * besplatne stvari imao samo pojedinačna pravila (NaKI, test nivoa), bez spiska.
  *
  * `besplatno.test.ts` pada ako se kartice u tabu „Besplatno" i ovaj spisak
  * raziđu - prikazano i izgovoreno moraju biti isto (ista pouka kao kod

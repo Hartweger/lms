@@ -133,9 +133,9 @@ export async function getFullyFreeCourses(admin: SupabaseClient): Promise<FreeCo
 }
 
 /**
- * Spisak za prompt. Cena se NE pominje ni kod kurseva kojima je u bazi ostala
- * upisana (stara cena iz vremena kad su se masterclassi prodavali) - stavka je
- * besplatna i cena bi bila laž.
+ * Spisak za prompt. Cena se nikad ne ispisuje: Goethe masterclassi su 23.09.2026
+ * i u bazi dobili cenu 0 i naslove bez prodajnog prizvuka, ali i da negde ostane
+ * upisan iznos, stavka iz sekcije „Besplatno" se ne plaća.
  */
 export function renderBesplatno(rows: BesplatnaPonuda[]): string {
   if (rows.length === 0) return "";
