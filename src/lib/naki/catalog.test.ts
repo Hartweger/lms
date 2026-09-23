@@ -6,6 +6,8 @@ import {
   daniInstrumental,
   getCatalogText,
   getNatasaIndividualText,
+  getFullyFreeCourses,
+  renderFreeCourses,
   type CatalogCourse,
   type PreviewLesson,
 } from "./catalog";
@@ -164,6 +166,7 @@ function recordingAdmin() {
       const b: any = {
         select(sel: string) { call.select = sel; return b; },
         eq(col: string, val: unknown) { call.eq.push([col, val]); return b; },
+        in() { return b; },
         order() { return b; },
         maybeSingle: async () => ({ data: { id: "prof-1" }, error: null }),
         then(res: (v: unknown) => unknown, rej?: (e: unknown) => unknown) {
@@ -197,5 +200,90 @@ describe("getNatasaIndividualText - samo objavljeni kursevi", () => {
     expect(variants!.select).toContain("is_published");
     expect(variants!.eq).toContainEqual(["courses.is_purchasable", true]);
     expect(variants!.eq).toContainEqual(["courses.is_published", true]);
+  });
+});
+
+/**
+ * 23.09.2026: Goethe masterclassi (is_purchasable=false + SVE lekcije besplatne) su
+ * upadali u spisak probnih lekcija, pa ih je Smile nudio kao „pogledaj pre kupovine".
+ */
+describe("getFullyFreeCourses - samo kursevi kojima je svaka lekcija besplatna", () => {
+  function adminWith(
+    courses: { id: string; title: string; slug: string }[],
+    lessons: { course_id: string; is_free_preview: boolean }[]
+  ) {
+    const admin = {
+      from(table: string) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const b: any = {
+          select() { return b; },
+          eq() { return b; },
+          in() { return b; },
+          order() { return b; },
+          then(res: (v: unknown) => unknown, rej?: (e: unknown) => unknown) {
+            const data = table === "courses" ? courses : lessons;
+            return Promise.resolve({ data, error: null }).then(res, rej);
+          },
+        };
+        return b;
+      },
+    };
+    return admin as unknown as SupabaseClient;
+  }
+
+  it("uzima kurs kome su sve lekcije is_free_preview", async () => {
+    const out = await getFullyFreeCourses(
+      adminWith(
+        [{ id: "c1", title: "VIDEO + B1 ispit - kompletna priprema", slug: "polozi-goethe-b1" }],
+        [
+          { course_id: "c1", is_free_preview: true },
+          { course_id: "c1", is_free_preview: true },
+        ]
+      )
+    );
+    expect(out).toEqual([{ title: "VIDEO + B1 ispit - kompletna priprema", slug: "polozi-goethe-b1" }]);
+  });
+
+  it("ne uzima sadržajni kurs sa par probnih lekcija (nemacki-a1-1)", async () => {
+    const out = await getFullyFreeCourses(
+      adminWith(
+        [{ id: "c2", title: "Nemački A1.1", slug: "nemacki-a1-1" }],
+        [
+          { course_id: "c2", is_free_preview: true },
+          { course_id: "c2", is_free_preview: false },
+        ]
+      )
+    );
+    expect(out).toEqual([]);
+  });
+
+  it("ne uzima kurs bez ijedne lekcije (paket)", async () => {
+    const out = await getFullyFreeCourses(
+      adminWith([{ id: "c3", title: "Video paket A1 + A2", slug: "paket-a1-i-a2" }], [])
+    );
+    expect(out).toEqual([]);
+  });
+
+  it("traži is_published=true i is_purchasable=false", async () => {
+    const { admin, calls } = recordingAdmin();
+    await getFullyFreeCourses(admin);
+    expect(calls[0].table).toBe("courses");
+    expect(calls[0].eq).toContainEqual(["is_published", true]);
+    expect(calls[0].eq).toContainEqual(["is_purchasable", false]);
+  });
+});
+
+describe("renderFreeCourses", () => {
+  it("daje /kurs/ link, kaže da je besplatno i NE pominje cenu", () => {
+    const out = renderFreeCourses([
+      { title: "VIDEO + B1 ispit - kompletna priprema", slug: "polozi-goethe-b1" },
+    ]);
+    expect(out).toContain("https://www.hartweger.rs/kurs/polozi-goethe-b1");
+    expect(out).toContain("ceo kurs besplatan");
+    expect(out).not.toMatch(/RSD|EUR/);
+  });
+
+  it("prazna lista vraća prazan string (bloka tada nema)", () => {
+    expect(renderFreeCourses([])).toBe("");
   });
 });

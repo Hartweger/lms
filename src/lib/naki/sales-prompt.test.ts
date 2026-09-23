@@ -341,3 +341,30 @@ describe("renderNatasaIndividual", () => {
     expect(renderNatasaIndividual([])).toBe("");
   });
 });
+
+describe("besplatni kursevi (Goethe masterclassi)", () => {
+  const FREE = "- VIDEO + B1 ispit - kompletna priprema | ceo kurs besplatan, bez naloga i bez plaćanja | https://www.hartweger.rs/kurs/polozi-goethe-b1";
+
+  it("zabranjuje pregled pre kupovine i izgovaranje cene za njih", () => {
+    const out = buildSalesSystemPrompt("katalog", { coupon: false, free: FREE });
+    expect(out).toContain("BESPLATNI KURSEVI - CEO KURS JE BESPLATAN I NE PRODAJE SE");
+    expect(out).toContain("pogledaj besplatno pre kupovine");
+    expect(out).toContain("NIKAD im ne izgovaraj cenu");
+    expect(out).toContain(FREE);
+  });
+
+  it("na pomen Goethe ispita spaja kurs nivoa i besplatan masterclass", () => {
+    const out = buildSalesSystemPrompt("katalog", { coupon: false, free: FREE });
+    expect(out).toContain("format samog ispita");
+  });
+
+  it("o nepotpunom B2 masterclassu govori pošteno", () => {
+    const out = buildSalesSystemPrompt("katalog", { coupon: false, free: FREE });
+    expect(out).toContain("Masterclass za Goethe B2 je nepotpun");
+  });
+
+  it("bez spiska nema bloka - Smile ne tvrdi da nešto jeste besplatno", () => {
+    const out = buildSalesSystemPrompt("katalog", { coupon: false });
+    expect(out).not.toContain("SPISAK BESPLATNIH KURSEVA");
+  });
+});

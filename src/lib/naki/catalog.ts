@@ -63,23 +63,88 @@ export function renderPreviewLessons(rows: PreviewLesson[]): string {
 export async function getPreviewLessonsText(admin: SupabaseClient): Promise<string> {
   // Samo objavljeni kursevi - `/kurs/<slug>` neobjavljenog kursa vraća 404
   // (npr. „kurs-konverzacije"), pa bi Smile davao mrtav link.
-  const { data } = await admin
-    .from("lessons")
-    .select("title, order_index, courses!inner(title, slug, is_published)")
-    .eq("is_free_preview", true)
-    .eq("courses.is_published", true)
-    .order("order_index");
-  const rows = ((data ?? []) as unknown as {
+  //
+  // Potpuno besplatni kursevi (Goethe masterclassi) se IZBACUJU: kod njih su sve
+  // lekcije `is_free_preview`, pa su do 23.09.2026 upadali u ovaj spisak i Smile ih
+  // je predstavljao kao „pogledaj besplatno pre kupovine" - a ne prodaju se uopšte.
+  // Oni idu u svoj odeljak (vidi `getFreeCoursesText`).
+  const [res, freeCourses] = await Promise.all([
+    admin
+      .from("lessons")
+      .select("title, order_index, courses!inner(title, slug, is_published)")
+      .eq("is_free_preview", true)
+      .eq("courses.is_published", true)
+      .order("order_index"),
+    getFullyFreeCourses(admin),
+  ]);
+  const freeSlugs = new Set(freeCourses.map((c) => c.slug));
+  const rows = (((res as { data: unknown }).data ?? []) as unknown as {
     title: string;
     courses: { title: string; slug: string } | null;
   }[])
-    .filter((r) => r.courses)
+    .filter((r) => r.courses && !freeSlugs.has(r.courses.slug))
     .map((r) => ({
       lessonTitle: r.title,
       courseTitle: r.courses!.title,
       courseSlug: r.courses!.slug,
     }));
   return renderPreviewLessons(rows);
+}
+
+export type FreeCourse = { title: string; slug: string };
+
+/**
+ * Potpuno besplatni kursevi - cela stranica je otvorena svima, kurs se NE prodaje.
+ * Danas su to tri Goethe masterclassa (`is_purchasable=false` + sve lekcije
+ * `is_free_preview=true`, odluka od 19.08.2026).
+ *
+ * Kriterijum je namerno „sve lekcije besplatne", ne samo `is_purchasable=false`:
+ * sadržajni kursevi grupnih polaznika (`nemacki-a1-1`...) takođe nisu kupovni, ali
+ * imaju po jednu-dve probne lekcije i ostatak zaključan - oni ostaju u spisku
+ * probnih lekcija.
+ */
+export async function getFullyFreeCourses(admin: SupabaseClient): Promise<FreeCourse[]> {
+  const { data: courseRows } = await admin
+    .from("courses")
+    .select("id, title, slug")
+    .eq("is_published", true)
+    .eq("is_purchasable", false);
+  const courses = (courseRows ?? []) as { id: string; title: string; slug: string }[];
+  if (courses.length === 0) return [];
+
+  const { data: lessonRows } = await admin
+    .from("lessons")
+    .select("course_id, is_free_preview")
+    .in("course_id", courses.map((c) => c.id));
+  const stat = new Map<string, { total: number; free: number }>();
+  for (const l of (lessonRows ?? []) as { course_id: string; is_free_preview: boolean | null }[]) {
+    const s = stat.get(l.course_id) ?? { total: 0, free: 0 };
+    s.total += 1;
+    if (l.is_free_preview) s.free += 1;
+    stat.set(l.course_id, s);
+  }
+  return courses
+    .filter((c) => {
+      const s = stat.get(c.id);
+      return !!s && s.total > 0 && s.free === s.total;
+    })
+    .map((c) => ({ title: c.title, slug: c.slug }));
+}
+
+/**
+ * Red za prompt. Cena se NE pominje iako u bazi stoji (stara cena iz vremena kad su
+ * se masterclassi prodavali) - kurs je besplatan i cena bi bila laž.
+ */
+export function renderFreeCourses(rows: FreeCourse[]): string {
+  if (rows.length === 0) return "";
+  return [...rows]
+    .sort((a, b) => a.title.localeCompare(b.title, "sr"))
+    .map((c) => `- ${c.title} | ceo kurs besplatan, bez naloga i bez plaćanja | ${SITE_URL}/kurs/${c.slug}`)
+    .join("\n");
+}
+
+export async function getFreeCoursesText(admin: SupabaseClient): Promise<string> {
+  return renderFreeCourses(await getFullyFreeCourses(admin));
 }
 
 /**

@@ -119,7 +119,7 @@ SERTIFIKAT:
 - Testove kroz kurs i završni ispit nivoa (Modelltest), pa Hartweger sertifikat kad ga položi (vidi odeljak SERTIFIKAT).
 - Pristup platformi godinu dana, 0-24, i pristup WhatsApp grupi polaznika tog nivoa.
 - AKO PITAJU ZA „PDF VEŽBE" ILI RADNU SVESKU: odgovori tačno ovo - vežbe su interaktivne na platformi i uz svako rešenje ide objašnjenje, a PDF-ovi koje dobija jesu priručnik za nivo i liste reči po modulima. NE obećavaj PDF radnu svesku ni štampanu knjigu koja se šalje poštom - toga nema.
-- Specijalni kursevi (FSP, FIDE, Položi Goethe B1/C1, Gramatika A2-B1, Kurs za mame) imaju drugačiji sadržaj - za njih ne nabrajaj ovaj spisak nego uputi na stranicu kursa.
+- Specijalni kursevi (FSP, FIDE, Položi Goethe B1/B2/C1, Gramatika A2-B1, Kurs za mame) imaju drugačiji sadržaj - za njih ne nabrajaj ovaj spisak nego uputi na stranicu kursa. Za „Položi Goethe" kurseve vidi odeljak BESPLATNI KURSEVI - oni se ne prodaju.
 - Nikad ne izmišljaj materijale kojih nema u ovom spisku. Ako te pitaju za nešto što ovde ne piše, reci da nisi sigurna i zamoli za mejl.
 
 ŠTA JE UKLJUČENO U GRUPNI KURS (A1 do B2) - PLATFORMA IDE UZ GRUPU:
@@ -147,6 +147,31 @@ PROBNE LEKCIJE - UVEK DAJ LINK, NIKAD NE TRAŽI MEJL ZA OVO:
 
 SPISAK PROBNIH LEKCIJA:
 ${previewText}`;
+}
+
+/**
+ * Potpuno besplatni kursevi (Goethe masterclassi B1/B2/C1). Do 23.09.2026 nisu
+ * postojali u promptu kao svoja kategorija: kako su im SVE lekcije `is_free_preview`,
+ * upadali su u spisak probnih lekcija, pa ih je Smile nudio kao „možeš besplatno da
+ * pogledaš kako izgleda pre kupovine". Slučaj 23.09.2026: na pitanje da li je B1 video
+ * kurs dovoljan za Goethe ispit, Smile je „VIDEO + B1 ispit - kompletna priprema"
+ * predstavio kao poseban kurs koji se kupuje - a od 19.08.2026 se ne prodaje uopšte.
+ * Naslov reda u bazi i dalje zvuči kao proizvod i cena je ostala upisana, zato blok
+ * izričito zabranjuje i cenu i kupovinu.
+ */
+export function buildFreeCoursesBlock(freeText: string): string {
+  if (!freeText.trim()) return "";
+  return `
+
+BESPLATNI KURSEVI - CEO KURS JE BESPLATAN I NE PRODAJE SE:
+- Kursevi iz spiska ispod se NE kupuju: nemaju cenu, otvoreni su svima, bez naloga i bez prijave. Daj link i reci izričito da je besplatno.
+- NIKAD ne reci „pogledaj besplatno pre kupovine", „probna lekcija" ni „kompletna priprema koja se plaća" za njih, i NIKAD im ne izgovaraj cenu. Naslov kursa može da zvuči kao proizvod („VIDEO + B1 ispit - kompletna priprema") - svejedno, to je besplatan sadržaj.
+- Nisu deo kataloga i ne nudi ih umesto plaćenog kursa za nivo: to je dodatak uz pripremu, ne zamena za kurs nivoa.
+- Kada posetilac pomene Goethe ispit (za posao, vizu, boravak, fakultet), reci mu dve stvari: kurs nivoa (video, grupni ili individualni) gradi znanje, a ovi besplatni masterclassi pokazuju format samog ispita - i daj mu link odmah, bez traženja mejla.
+- Masterclass za Goethe B2 je nepotpun (uvod i tri Leseverstehen modelltesta) - ako ga pominješ, reci to pošteno i ne predstavljaj ga kao pripremu za ceo ispit.
+
+SPISAK BESPLATNIH KURSEVA:
+${freeText}`;
 }
 
 /**
@@ -258,7 +283,7 @@ export function leadNudgeAddon(
 
 export function buildSalesSystemPrompt(
   catalogText: string,
-  opts: { coupon: boolean; leadCapture?: boolean; previews?: string; groups?: string; natasa?: string }
+  opts: { coupon: boolean; leadCapture?: boolean; previews?: string; free?: string; groups?: string; natasa?: string }
 ): string {
   const base = SMILE_STATIC.replace("{{KATALOG}}", catalogText || "(katalog trenutno nedostupan - uputi na " + SITE_HOST + "/kursevi)");
   return (
@@ -266,6 +291,7 @@ export function buildSalesSystemPrompt(
     buildOpenGroupsBlock(opts.groups) +
     buildNatasaBlock(opts.natasa) +
     buildPreviewBlock(opts.previews ?? "") +
+    buildFreeCoursesBlock(opts.free ?? "") +
     (opts.coupon ? COUPON_BLOCK : "") +
     (opts.leadCapture ? LEAD_CAPTURE_BLOCK : "") +
     FOOTER
