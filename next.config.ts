@@ -322,6 +322,10 @@ const nextConfig: NextConfig = {
 
       // Catch-all: any remaining /proizvod/ URLs → /kursevi
       { source: "/proizvod/:slug", destination: "/kursevi", permanent: true },
+
+      // Interaktivne igre za nastavu su statična strana u public/igre/.
+      // Čist link bez .html; nije permanent jer se sadržaj menja po času.
+      { source: "/igre/hallo", destination: "/igre/hallo.html", permanent: false },
     ];
   },
   async headers() {

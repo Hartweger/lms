@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Hallo! Wie heißt du?</title>
+<style>
+/* Namerno jedna tema: tabla u zamračenoj učionici, za projektor i telefon.
+   Sve boje su eksplicitne, pa strana drži i na svetloj i na tamnoj podlozi. */
+:root{
+  --bg:#0d1b2a; --bg2:#13263a; --card:#1a3149; --line:#2b5074;
+  --cyan:#25C2E6; --coral:#FF9B9C; --gold:#FFC145; --green:#4FE3A0;
+  --txt:#eef6fc; --dim:#a8c2d6;
+  --sans:"Barlow Semi Condensed",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --body:"Karla",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --step:clamp(15px,1vw + 12px,17px);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  margin:0;background:var(--bg);color:var(--txt);
+  font-family:var(--body);font-size:var(--step);line-height:1.5;
+  background-image:radial-gradient(1100px 560px at 50% -12%,var(--bg2),var(--bg));
+  background-attachment:fixed;
+}
+.wrap{max-width:900px;margin:0 auto;padding-block:20px;padding-left:16px;padding-right:16px}
+h1,h2,h3{font-family:var(--sans);font-weight:700;text-wrap:balance;margin:0}
+button{font-family:var(--body)}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:6px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  margin-bottom:20px;flex-wrap:wrap}
+.top h2{font-size:clamp(19px,3vw,26px);letter-spacing:-.3px}
+.back{color:var(--dim);font:600 15px/1 var(--body);border:1px solid var(--line);
+  background:transparent;padding:10px 16px;border-radius:999px;cursor:pointer}
+.back:hover{color:var(--txt);border-color:var(--cyan)}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px}
+.btn{font-size:17px;font-weight:700;padding:14px 22px;border-radius:14px;border:none;
+  cursor:pointer;background:var(--cyan);color:#062430;transition:filter .15s,transform .08s}
+.btn:hover{filter:brightness(1.1)}
+.btn:active{transform:translateY(1px)}
+.btn.ghost{background:transparent;color:var(--txt);border:1px solid var(--line)}
+.btn.gold{background:var(--gold);color:#3a2c00}
+.row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.center{text-align:center}.dim{color:var(--dim)}.de{color:var(--cyan)}.en{color:var(--coral)}
+
+/* ---- meni ---- */
+.hero{text-align:center;margin:6px 0 30px}
+.hero h1{font-size:clamp(32px,7vw,58px);letter-spacing:-1.4px;line-height:1.02}
+.hero h1 em{font-style:normal;color:var(--cyan)}
+.hero p{color:var(--dim);margin:12px 0 0;font-size:17px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;
+  text-align:left;color:var(--txt);cursor:pointer;transition:transform .12s,border-color .15s}
+.tile:hover{transform:translateY(-3px);border-color:var(--cyan)}
+.tile .n{font:700 12px/1 var(--sans);color:var(--gold);letter-spacing:1.6px}
+.tile h3{margin:9px 0 6px;font-size:20px}
+.tile p{margin:0;color:var(--dim);font-size:15px}
+.goal{margin-top:26px;border-left:4px solid var(--coral)}
+.goal h3{color:var(--coral);font-size:16px;letter-spacing:.6px;text-transform:uppercase}
+.goal pre{margin:12px 0 0;background:var(--bg);padding:16px;border-radius:12px;color:var(--cyan);
+  font:600 16px/2 var(--body);white-space:pre-wrap;overflow-x:auto}
+
+/* ---- kviz ---- */
+.score{display:flex;gap:12px;justify-content:center;margin-bottom:18px}
+.team{flex:1;max-width:220px;background:var(--card);border:2px solid var(--line);
+  border-radius:16px;padding:12px;text-align:center}
+.team.on{border-color:var(--gold);box-shadow:0 0 0 4px rgba(255,193,69,.14)}
+.team .nm{font:700 15px/1.3 var(--sans);letter-spacing:.5px}
+.team.rot .nm{color:var(--coral)}.team.blau .nm{color:var(--cyan)}
+.team .pt{font:700 34px/1.15 var(--sans);font-variant-numeric:tabular-nums}
+.qhead{display:flex;justify-content:space-between;color:var(--dim);font-size:14px;margin-bottom:12px}
+.timer{font:700 18px/1 var(--sans);color:var(--gold);font-variant-numeric:tabular-nums}
+.timer.low{color:var(--coral)}
+.q{font:700 clamp(19px,3.4vw,27px)/1.35 var(--sans);margin:0 0 20px;text-align:center}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ans{font-size:17px;font-weight:600;padding:17px 14px;border-radius:14px;border:2px solid var(--line);
+  background:var(--bg2);color:var(--txt);cursor:pointer;text-align:left}
+.ans:hover:not(:disabled){border-color:var(--cyan)}
+.ans.right{background:rgba(79,227,160,.17);border-color:var(--green)}
+.ans.wrong{background:rgba(255,155,156,.15);border-color:var(--coral)}
+.ans:disabled{cursor:default}
+.fb{margin-top:16px;text-align:center;font-size:17px;font-weight:600;min-height:28px}
+.bar{height:6px;background:var(--bg2);border-radius:99px;overflow:hidden;margin-bottom:16px}
+.bar i{display:block;height:100%;background:var(--cyan);transition:width .3s}
+
+/* ---- kartice ---- */
+.tabs{display:flex;gap:8px;justify-content:center;margin-bottom:18px;flex-wrap:wrap}
+.tab{font-size:15px;font-weight:700;padding:9px 18px;border-radius:999px;border:1px solid var(--line);
+  background:transparent;color:var(--dim);cursor:pointer}
+.tab.on{background:var(--cyan);color:#062430;border-color:var(--cyan)}
+.flip{perspective:1200px;max-width:560px;margin:0 auto 18px}
+.inner{position:relative;width:100%;min-height:220px;transition:transform .5s;transform-style:preserve-3d;cursor:pointer}
+.flip.turned .inner{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:26px;text-align:center;border-radius:20px;
+  border:1px solid var(--line);background:var(--card)}
+.face.b{transform:rotateY(180deg);background:#1e3350}
+.face .w{font:800 clamp(22px,5vw,36px)/1.25 var(--sans)}
+.face.a .w{color:var(--cyan)}.face.b .w{color:var(--coral)}
+.face .tip{position:absolute;bottom:13px;font-size:13px;color:var(--dim)}
+.pill{display:inline-block;background:var(--bg2);border:1px solid var(--line);border-radius:999px;
+  padding:5px 13px;font-size:13px;color:var(--dim);margin-top:12px}
+.prog{text-align:center;color:var(--dim);margin-bottom:14px;font-size:15px}
+#learnBox{max-width:560px;margin:0 auto;text-align:center}
+.ask{font:800 clamp(21px,4.4vw,30px)/1.3 var(--sans);color:var(--coral);margin:0 0 16px}
+#inp{font-family:var(--body);font-size:20px;padding:14px 16px;border-radius:14px;width:100%;
+  border:2px solid var(--line);background:var(--bg);color:var(--txt);text-align:center}
+#inp:focus{outline:none;border-color:var(--cyan)}
+.res{min-height:30px;margin-top:14px;font-size:17px;font-weight:700}
+.stat{display:flex;gap:18px;justify-content:center;margin-top:14px;color:var(--dim);font-size:15px}
+.stat b{color:var(--txt);font-variant-numeric:tabular-nums}
+
+/* ---- match ---- */
+.mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.c{font-size:15px;font-weight:600;padding:15px 8px;border-radius:12px;border:2px solid var(--line);
+  background:var(--bg2);color:var(--txt);cursor:pointer;min-height:72px;line-height:1.3;
+  display:flex;align-items:center;justify-content:center;text-align:center}
+.c.de{color:var(--cyan)}.c.en{color:var(--coral)}
+.c.sel{border-color:var(--gold);background:#22364c}
+.c.gone{opacity:0;pointer-events:none}
+.c.bad{border-color:var(--coral);animation:sh .3s}
+@keyframes sh{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.hud{display:flex;justify-content:space-between;margin-bottom:14px;font-size:17px;font-weight:700}
+.hud .t{color:var(--gold);font-variant-numeric:tabular-nums}
+
+/* ---- sat ---- */
+.clock{text-align:center;margin:6px 0 22px}
+.clock .time{font:800 clamp(50px,12vw,84px)/1 var(--sans);color:var(--gold);letter-spacing:-2px;
+  font-variant-numeric:tabular-nums}
+.clock .sit{font-size:18px;color:var(--dim);margin-top:10px;min-height:26px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:560px;margin:0 auto}
+.o{font:700 19px/1.2 var(--sans);padding:20px 12px;border-radius:14px;border:2px solid var(--line);
+  background:var(--bg2);color:var(--cyan);cursor:pointer}
+.o:hover:not(:disabled){border-color:var(--cyan)}
+.o.right{background:rgba(79,227,160,.2);border-color:var(--green);color:var(--green)}
+.o.wrong{background:rgba(255,155,156,.17);border-color:var(--coral);color:var(--coral)}
+.streak{display:flex;justify-content:center;gap:26px;margin-bottom:16px;color:var(--dim);font-size:16px}
+.streak b{color:var(--txt);font-size:20px;font-variant-numeric:tabular-nums}
+
+/* ---- wechselspiel ---- */
+table{width:100%;border-collapse:collapse;margin:14px 0}
+th,td{border:1px solid var(--line);padding:11px 13px;text-align:left;font-size:17px}
+th{background:var(--bg2);color:var(--cyan);font:700 13px/1.3 var(--sans);
+  text-transform:uppercase;letter-spacing:1px}
+td.gap{background:#22364c;color:var(--dim)}
+.phr{background:var(--bg2);border-left:4px solid var(--cyan);border-radius:10px;padding:15px 17px;margin-bottom:14px}
+.phr p{margin:0 0 6px;font-size:17px}
+.phr p:last-child{margin-bottom:0}
+.warn{color:var(--coral);font-weight:700;text-align:center;margin:0 0 14px}
+.role{text-align:center;padding:30px 16px}
+.role .n2{font:800 clamp(32px,7vw,54px)/1.1 var(--sans);color:var(--cyan)}
+.role .l{font-size:22px;margin-top:10px}
+.role .s{font-size:17px;color:var(--dim);margin-top:4px}
+.sd{font-size:19px;line-height:2.2;margin:0 0 6px}
+.sd b{color:var(--cyan)}
+.bigclock{font:800 clamp(46px,11vw,76px)/1 var(--sans);color:var(--gold);font-variant-numeric:tabular-nums}
+.tblwrap{overflow-x:auto}
+
+/* ---- dijalozi ---- */
+.dlg{font-size:19px;line-height:2.05;margin:0}
+.who{color:var(--gold);font-weight:800;display:inline-block;min-width:112px}
+.txt{color:var(--cyan)}
+.tr{color:var(--dim);font-size:15px;display:block;margin:-6px 0 8px 112px}
+.gapw{display:inline-block;min-width:92px;border-bottom:2px solid var(--coral);text-align:center;color:var(--coral)}
+.bank{background:var(--bg2);border-radius:12px;padding:12px 16px;color:var(--dim);font-size:16px;margin-top:10px}
+.sec{margin-bottom:22px}
+
+@media(max-width:700px){.mgrid{grid-template-columns:repeat(2,1fr)}.c{font-size:13.5px;min-height:64px}}
+@media(max-width:560px){.answers,.opts{grid-template-columns:1fr}
+  .who{min-width:auto;display:block;margin-top:8px}.tr{margin-left:0}}
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700;800&family=Karla:wght@400;600;700&display=swap">
+
+</head>
+<body>
+<div class="wrap">
+
+<!-- ========== MENÜ ========== -->
+<section id="v-menu">
+  <div class="hero">
+    <h1>Hallo! <em>Wie heißt du?</em></h1>
+    <p>Deutsch A1.1 &middot; Lektion 1 &middot; Begrüßung und Vorstellen</p>
+  </div>
+  <div class="grid">
+    <button class="tile" data-go="quiz"><span class="n">SPIEL 1</span>
+      <h3>Team-Quiz</h3><p>Team Rot gegen Team Blau. Auf Zeit, mit Punkten.</p></button>
+    <button class="tile" data-go="cards"><span class="n">SPIEL 2</span>
+      <h3>Karteikarten</h3><p>46 Wörter. Umdrehen, mischen, oder selbst eintippen.</p></button>
+    <button class="tile" data-go="match"><span class="n">SPIEL 3</span>
+      <h3>Match</h3><p>Deutsch und Englisch verbinden, so schnell wie möglich.</p></button>
+    <button class="tile" data-go="uhr"><span class="n">SPIEL 4</span>
+      <h3>Die Uhr</h3><p>Guten Morgen, Guten Tag oder Guten Abend?</p></button>
+    <button class="tile" data-go="wechsel"><span class="n">SPIEL 5</span>
+      <h3>Wechselspiel</h3><p>Blatt A und B, Rollenkarten, Speed-Dating-Timer.</p></button>
+    <button class="tile" data-go="dlg"><span class="n">TEXT</span>
+      <h3>Dialoge</h3><p>Beide Dialoge zum Lesen mit Rollen, mit Lücken.</p></button>
+  </div>
+  <div class="card goal">
+    <h3>Das kannst du am Ende der Stunde</h3>
+    <pre>Hallo! / Guten Tag!
+Ich heiße ...   Und wie heißt du?
+Woher kommst du?   Ich komme aus ...
+Freut mich!
+Tschüss! / Auf Wiedersehen!</pre>
+  </div>
+</section>
+
+<!-- ========== QUIZ ========== -->
+<section id="v-quiz" hidden>
+  <div class="top"><h2>Team-Quiz</h2><button class="back" data-go="menu">Menü</button></div>
+  <div class="card" id="qStart">
+    <p style="margin-top:0;font-size:18px">Zwei Teams spielen abwechselnd.<br>
+      Richtige Antwort = <b>10 Punkte</b>. Unter 5 Sekunden = <b>15 Punkte</b>.</p>
+    <p class="dim">18 Fragen, jedes Spiel neu gemischt.</p>
+    <div class="row" style="margin-top:16px">
+      <button class="btn" id="q2">Zwei Teams</button>
+      <button class="btn ghost" id="q1">Allein üben</button>
+    </div>
+  </div>
+  <div id="qGame" hidden>
+    <div class="score" id="qScore"></div>
+    <div class="card">
+      <div class="bar"><i id="qBar"></i></div>
+      <div class="qhead"><span id="qCount"></span><span class="timer" id="qTimer">10</span></div>
+      <p class="q" id="qText"></p>
+      <div class="answers" id="qAns"></div>
+      <div class="fb" id="qFb"></div>
+      <div class="center" style="margin-top:12px">
+        <button class="btn gold" id="qNext" hidden>Weiter</button>
+      </div>
+    </div>
+  </div>
+  <div class="card center" id="qEnd" hidden>
+    <p style="font:800 30px/1.2 var(--sans);margin:6px 0" id="qTitle"></p>
+    <p class="dim" style="font-size:17px" id="qSub"></p>
+    <div class="row" style="margin-top:12px">
+      <button class="btn" id="qAgain">Nochmal</button>
+      <button class="btn ghost" data-go="menu">Menü</button>
+    </div>
+  </div>
+</section>
+
+<!-- ========== KARTEIKARTEN ========== -->
+<section id="v-cards" hidden>
+  <div class="top"><h2>Karteikarten</h2><button class="back" data-go="menu">Menü</button></div>
+  <div class="tabs">
+    <button class="tab on" id="tFlip">Umdrehen</button>
+    <button class="tab" id="tLearn">Selbst eintippen</button>
+    <button class="tab" id="tMix">Mischen</button>
+  </div>
+  <div id="cFlipView">
+    <div class="prog" id="cProg"></div>
+    <div class="flip" id="cFlip">
+      <div class="inner">
+        <div class="face a"><div class="w" id="cFront"></div><span class="pill" id="cTag"></span><div class="tip">Klick zum Umdrehen</div></div>
+        <div class="face b"><div class="w" id="cBack"></div><div class="tip">Klick zurück</div></div>
+      </div>
+    </div>
+    <div class="row">
+      <button class="btn ghost" id="cPrev">Zurück</button>
+      <button class="btn" id="cNext">Weiter</button>
+    </div>
+  </div>
+  <div id="cLearnView" hidden>
+    <div class="card" id="learnBox">
+      <div class="prog" id="cProg2"></div>
+      <p class="ask" id="cAsk"></p>
+      <input id="inp" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="auf Deutsch ...">
+      <div class="res" id="cRes"></div>
+      <div class="row" style="margin-top:8px">
+        <button class="btn" id="cChk">Prüfen</button>
+        <button class="btn ghost" id="cSol">Lösung zeigen</button>
+      </div>
+      <div class="stat"><span>Richtig: <b id="cOk">0</b></span><span>Falsch: <b id="cNo">0</b></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== MATCH ========== -->
+<section id="v-match" hidden>
+  <div class="top"><h2>Match</h2><button class="back" data-go="menu">Menü</button></div>
+  <div class="card">
+    <div class="hud"><span>Paare: <span id="mP">0</span> / 8</span><span class="t" id="mT">0.0 s</span></div>
+    <div class="mgrid" id="mGrid"></div>
+    <div class="center" id="mDone" hidden style="margin-top:18px">
+      <p style="font:800 22px/1.3 var(--sans)" id="mMsg"></p>
+      <button class="btn" id="mAgain">Nochmal</button>
+    </div>
+  </div>
+</section>
+
+<!-- ========== UHR ========== -->
+<section id="v-uhr" hidden>
+  <div class="top"><h2>Die Uhr</h2><button class="back" data-go="menu">Menü</button></div>
+  <div class="card">
+    <div class="streak"><span>Serie: <b id="uStr">0</b></span><span>Beste Serie: <b id="uBest">0</b></span></div>
+    <div class="clock"><div class="time" id="uTime"></div><div class="sit" id="uSit"></div></div>
+    <div class="opts" id="uOpts"></div>
+    <div class="fb" id="uFb" style="min-height:52px;line-height:1.5"></div>
+  </div>
+</section>
+
+<!-- ========== WECHSELSPIEL ========== -->
+<section id="v-wechsel" hidden>
+  <div class="top"><h2>Wechselspiel</h2><button class="back" data-go="menu">Menü</button></div>
+  <div class="tabs">
+    <button class="tab on" data-w="a">Blatt A</button>
+    <button class="tab" data-w="b">Blatt B</button>
+    <button class="tab" data-w="r">Rollenkarte</button>
+    <button class="tab" data-w="s">Speed-Dating</button>
+  </div>
+
+  <div class="card wv" id="w-a">
+    <p class="warn">Nur für Partner A - Partner B darf nicht schauen!</p>
+    <div class="phr">
+      <p class="de">Wie heißt sie? / Wie heißt er?</p>
+      <p class="de">Woher kommt sie? / Woher kommt er?</p>
+      <p class="de">Wie bitte? Noch einmal, bitte.</p>
+    </div>
+    <div class="tblwrap"><table>
+      <tr><th>Name</th><th>Land</th><th>Stadt</th></tr>
+      <tr><td>Emma</td><td>England</td><td class="gap">?</td></tr>
+      <tr><td class="gap">?</td><td>Österreich</td><td>Graz</td></tr>
+      <tr><td>Noah</td><td class="gap">?</td><td>Toronto</td></tr>
+      <tr><td class="gap">?</td><td>Irland</td><td class="gap">?</td></tr>
+    </table></div>
+  </div>
+
+  <div class="card wv" id="w-b" hidden>
+    <p class="warn">Nur für Partner B - Partner A darf nicht schauen!</p>
+    <div class="phr">
+      <p class="de">Wie heißt sie? / Wie heißt er?</p>
+      <p class="de">Woher kommt sie? / Woher kommt er?</p>
+      <p class="de">Wie bitte? Noch einmal, bitte.</p>
+    </div>
+    <div class="tblwrap"><table>
+      <tr><th>Name</th><th>Land</th><th>Stadt</th></tr>
+      <tr><td class="gap">?</td><td class="gap">?</td><td>Bristol</td></tr>
+      <tr><td>Felix</td><td class="gap">?</td><td class="gap">?</td></tr>
+      <tr><td class="gap">?</td><td>Kanada</td><td class="gap">?</td></tr>
+      <tr><td>Mia</td><td class="gap">?</td><td>Cork</td></tr>
+    </table></div>
+  </div>
+
+  <div class="card wv" id="w-r" hidden>
+    <div class="role">
+      <div class="n2" id="rN">Lukas</div>
+      <div class="l" id="rL">aus Deutschland</div>
+      <div class="s" id="rS">aus München</div>
+    </div>
+    <div class="center"><button class="btn" id="rDeal">Neue Karte</button></div>
+    <p class="dim center" style="margin:14px 0 0;font-size:15px">Ab jetzt bist du diese Person. Antworte immer aus der Rolle.</p>
+  </div>
+
+  <div class="card wv" id="w-s" hidden>
+    <p class="sd">
+      1. <b>Hallo! / Guten Tag!</b><br>
+      2. <b>Ich heiße ... Und wie heißt du?</b><br>
+      3. <b>Woher kommst du?</b><br>
+      4. <b>Ich komme aus ...</b><br>
+      5. <b>Freut mich!</b><br>
+      6. <b>Tschüss! / Bis später!</b>
+    </p>
+    <p class="en" style="font-size:16px">Runde 4 ist formell: Guten Tag - Wie heißen Sie? - Woher kommen Sie? - Auf Wiedersehen.</p>
+    <div class="center" style="border-top:1px solid var(--line);padding-top:18px;margin-top:6px">
+      <div class="bigclock" id="sdClock">1:15</div>
+      <div class="dim" id="sdRound">Runde 1 von 4</div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="sdGo">Start</button>
+        <button class="btn ghost" id="sdReset">Zurück auf Anfang</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== DIALOGE ========== -->
+<section id="v-dlg" hidden>
+  <div class="top"><h2>Dialoge</h2><button class="back" data-go="menu">Menü</button></div>
+
+  <div class="card sec">
+    <h3 style="font-size:20px">Dialog 1 - informell</h3>
+    <p class="dim" style="margin:4px 0 14px">Erster Schultag. Zwei Jugendliche.</p>
+    <p class="dlg">
+      <span class="who">Jonas:</span><span class="txt">Hallo! Ich heiße Jonas. Und wie heißt du?</span>
+      <span class="tr">Hi! My name is Jonas. And what's your name?</span>
+      <span class="who">Lena:</span><span class="txt">Ich heiße Lena.</span>
+      <span class="tr">My name is Lena.</span>
+      <span class="who">Jonas:</span><span class="txt">Woher kommst du, Lena?</span>
+      <span class="tr">Where are you from, Lena?</span>
+      <span class="who">Lena:</span><span class="txt">Aus Irland. Und du?</span>
+      <span class="tr">From Ireland. And you?</span>
+      <span class="who">Jonas:</span><span class="txt">Aus Österreich, aus Wien.</span>
+      <span class="tr">From Austria, from Vienna.</span>
+      <span class="who">Lena:</span><span class="txt">Ah, schön! Freut mich.</span>
+      <span class="tr">Ah, nice! Nice to meet you.</span>
+      <span class="who">Jonas:</span><span class="txt">Freut mich auch. Bis später!</span>
+      <span class="tr">You too. See you later!</span>
+      <span class="who">Lena:</span><span class="txt">Tschüss!</span>
+      <span class="tr">Bye!</span>
+    </p>
+  </div>
+
+  <div class="card sec">
+    <h3 style="font-size:20px">Dialog 1 - mit Lücken</h3>
+    <p class="dlg">
+      <span class="who">Jonas:</span><span class="txt">Hallo! Ich <span class="gapw">?</span> Jonas. Und wie <span class="gapw">?</span> du?</span>
+      <span class="who">Lena:</span><span class="txt">Ich heiße Lena.</span>
+      <span class="who">Jonas:</span><span class="txt"><span class="gapw">?</span> kommst du?</span>
+      <span class="who">Lena:</span><span class="txt"><span class="gapw">?</span> Irland. Und du?</span>
+      <span class="who">Jonas:</span><span class="txt">Aus Österreich, aus Wien.</span>
+      <span class="who">Lena:</span><span class="txt">Ah, schön! <span class="gapw">?</span> mich.</span>
+      <span class="who">Jonas:</span><span class="txt">Freut mich auch. Bis <span class="gapw">?</span>!</span>
+    </p>
+    <div class="bank">Wortbank: Woher &middot; heißt &middot; später &middot; Aus &middot; heiße &middot; Freut</div>
+    <div class="center" style="margin-top:12px"><button class="btn gold" id="dSol">Lösung zeigen</button></div>
+    <p class="center de" id="dSolTxt" hidden style="font-size:18px;font-weight:700">heiße &middot; heißt &middot; Woher &middot; Aus &middot; Freut &middot; später</p>
+  </div>
+
+  <div class="card sec">
+    <h3 style="font-size:20px">Dialog 2 - formell</h3>
+    <p class="dim" style="margin:4px 0 14px">Anmeldung in der Sprachschule.</p>
+    <p class="dlg">
+      <span class="who">Frau Berger:</span><span class="txt">Guten Tag! Wie heißen Sie?</span>
+      <span class="tr">Hello! What's your name?</span>
+      <span class="who">Du:</span><span class="txt">Guten Tag. Mein Name ist Parker. Tom Parker.</span>
+      <span class="tr">Hello. My name is Parker. Tom Parker.</span>
+      <span class="who">Frau Berger:</span><span class="txt">Und woher kommen Sie, Herr Parker?</span>
+      <span class="tr">And where are you from, Mr Parker?</span>
+      <span class="who">Du:</span><span class="txt">Ich komme aus England, aus Manchester.</span>
+      <span class="tr">I'm from England, from Manchester.</span>
+      <span class="who">Frau Berger:</span><span class="txt">Danke schön. Auf Wiedersehen!</span>
+      <span class="tr">Thank you. Goodbye!</span>
+    </p>
+    <div class="bank"><b>Herr Parker</b>, nicht Herr Tom - Herr und Frau stehen immer mit dem Nachnamen.</div>
+  </div>
+</section>
+
+</div>
+
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+const shuffle = a => { a = a.slice(); for (let j = a.length - 1; j > 0; j--) { const k = Math.floor(Math.random() * (j + 1)); [a[j], a[k]] = [a[k], a[j]]; } return a; };
+
+/* ---------- podaci: KUMULATIVNO, za novi čas samo dodaj na kraj ---------- */
+const VOCAB = [
+ {de:"Guten Morgen",en:"Good morning",tag:"Begrüßung"},
+ {de:"Guten Tag",en:"Hello",tag:"Begrüßung"},
+ {de:"Guten Abend",en:"Good evening",tag:"Begrüßung"},
+ {de:"Gute Nacht",en:"Good night (bedtime)",tag:"Begrüßung"},
+ {de:"Hallo",en:"Hi",tag:"Begrüßung"},
+ {de:"Tschüss",en:"Bye",tag:"Abschied"},
+ {de:"Auf Wiedersehen",en:"Goodbye (formal)",tag:"Abschied"},
+ {de:"Bis später",en:"See you later",tag:"Abschied"},
+ {de:"Bis morgen",en:"See you tomorrow",tag:"Abschied"},
+ {de:"Servus",en:"Hi / Bye (Austria)",tag:"Regional"},
+ {de:"Moin",en:"Hi (North Germany)",tag:"Regional"},
+ {de:"Wie heißt du?",en:"What's your name?",tag:"Vorstellen"},
+ {de:"Wie heißen Sie?",en:"What's your name? (formal)",tag:"Vorstellen"},
+ {de:"Ich heiße ...",en:"My name is ...",tag:"Vorstellen"},
+ {de:"Mein Name ist ...",en:"My name is ... (formal)",tag:"Vorstellen"},
+ {de:"Wer bist du?",en:"Who are you?",tag:"Vorstellen"},
+ {de:"Ich bin ...",en:"I am ...",tag:"Vorstellen"},
+ {de:"Woher kommst du?",en:"Where are you from?",tag:"Vorstellen"},
+ {de:"Woher kommen Sie?",en:"Where are you from? (formal)",tag:"Vorstellen"},
+ {de:"Ich komme aus ...",en:"I'm from ...",tag:"Vorstellen"},
+ {de:"Freut mich.",en:"Nice to meet you.",tag:"Vorstellen"},
+ {de:"Wie bitte?",en:"Sorry - what?",tag:"Wichtig"},
+ {de:"Entschuldigung",en:"Excuse me / sorry",tag:"Wichtig"},
+ {de:"Danke",en:"Thanks",tag:"Wichtig"},
+ {de:"Herr",en:"Mr",tag:"Anrede"},
+ {de:"Frau",en:"Ms / Mrs",tag:"Anrede"},
+ {de:"der Vorname",en:"first name",tag:"Anrede"},
+ {de:"der Nachname",en:"surname",tag:"Anrede"},
+ {de:"und",en:"and",tag:"Wörter"},
+ {de:"auch",en:"also",tag:"Wörter"},
+ {de:"nur",en:"only",tag:"Wörter"},
+ {de:"schön",en:"nice",tag:"Wörter"},
+ {de:"aus England",en:"from England",tag:"Land"},
+ {de:"aus Irland",en:"from Ireland",tag:"Land"},
+ {de:"aus Schottland",en:"from Scotland",tag:"Land"},
+ {de:"aus Amerika",en:"from America",tag:"Land"},
+ {de:"aus Kanada",en:"from Canada",tag:"Land"},
+ {de:"aus Australien",en:"from Australia",tag:"Land"},
+ {de:"aus Deutschland",en:"from Germany",tag:"Land"},
+ {de:"aus Österreich",en:"from Austria",tag:"Land"},
+ {de:"aus der Schweiz",en:"from Switzerland",tag:"Land"},
+ {de:"heißen",en:"to be called",tag:"Verb"},
+ {de:"kommen",en:"to come",tag:"Verb"},
+ {de:"wohnen",en:"to live",tag:"Verb"},
+ {de:"sein",en:"to be",tag:"Verb"},
+ {de:"sprechen",en:"to speak",tag:"Verb"}
+];
+
+const ROLES = [["Lukas","aus Deutschland","aus München"],["Amara","aus Nigeria","aus Lagos"],
+["Sofia","aus Italien","aus Neapel"],["Jonas","aus der Schweiz","aus Zürich"],
+["Zeynep","aus der Türkei","aus Izmir"],["Ellie","aus Schottland","aus Glasgow"],
+["Mateo","aus Spanien","aus Valencia"],["Hana","aus Japan","aus Osaka"],
+["Liam","aus Irland","aus Dublin"],["Ana","aus Kroatien","aus Split"],
+["Oskar","aus Österreich","aus Salzburg"],["Ruby","aus Australien","aus Perth"],
+["Nina","aus Serbien","aus Novi Sad"],["Ben","aus Amerika","aus Chicago"]];
+
+/* [pitanje, tačan odgovor, ...pogrešni] */
+const BANK = [
+ ["Es ist 8 Uhr morgens. Was sagst du?","Guten Morgen","Guten Abend","Gute Nacht","Auf Wiedersehen"],
+ ["Es ist 20 Uhr. Du kommst auf eine Party.","Guten Abend","Gute Nacht","Guten Morgen","Bis morgen"],
+ ["Du gehst ins Bett. Was sagst du?","Gute Nacht","Guten Abend","Guten Tag","Tschüss"],
+ ["Es ist 15 Uhr. Was sagst du?","Guten Tag","Guten Morgen","Gute Nacht","Bis später"],
+ ["Dein Freund im Skatepark","Hallo","Guten Tag","Auf Wiedersehen","Wie bitte"],
+ ["Die Oma von deinem Freund","Guten Tag","Hallo","Tschüss","Servus"],
+ ["Wie fragst du einen Mitschüler nach dem Namen?","Wie heißt du?","Was heißt du?","Wer kommst du?","Wie heiße du?"],
+ ["Wie fragst du deinen Lehrer nach dem Namen?","Wie heißen Sie?","Wie heißt du?","Wer bist Sie?","Was heißen Sie?"],
+ ["Where are you from? (informell)","Woher kommst du?","Wo kommst du?","Woher kommen du?","Wohin kommst du?"],
+ ["I'm from Ireland.","Ich komme aus Irland.","Ich komme von Irland.","Ich bin aus Irland komme.","Ich komme Irland."],
+ ["Nice to meet you.","Freut mich.","Danke schön.","Wie bitte?","Bis später."],
+ ["Was ist richtig?","du heißt","du heißst","du heißen","du heiße"],
+ ["Was ist richtig?","ich komme","ich kommst","ich kommen","ich komm"],
+ ["Was ist richtig?","du bist","du bin","du sind","du ist"],
+ ["Mr Müller =","Herr Müller","Frau Müller","Herr Nachname","Müller Herr"],
+ ["Formeller Abschied","Auf Wiedersehen","Tschüss","Gute Nacht","Hallo"],
+ ["My name is Weber. (formell)","Mein Name ist Weber.","Ich Name Weber.","Mein Name Weber ist.","Ich heiße Name Weber."],
+ ["Sorry - what? Noch einmal, bitte.","Wie bitte?","Wie viel?","Wie geht's?","Wo bitte?"],
+ ["Wie spricht man 'wie' aus?","vee","wye","wee-eh","vye"],
+ ["Wie spricht man 'heißen' aus?","HY-sen","HEE-sen","HAY-zen","HYSH-en"],
+ ["Der Buchstabe w klingt wie","v","w","f","b"],
+ ["Der Buchstabe z klingt wie","ts","z","s","sh"],
+ ["'Servus' sagt man in","Österreich","England","Hamburg","Irland"],
+ ["'Moin' sagt man in","Norddeutschland","Wien","Zürich","München"],
+ ["from Switzerland","aus der Schweiz","aus Schweiz","aus die Schweiz","von Schweiz"],
+ ["See you tomorrow","Bis morgen","Bis später","Guten Morgen","Gute Nacht"],
+ ["Das Handy ist ein ...","Telefon","Buch","Auto","Stuhl"],
+ ["Wer bist du? - Antwort:","Ich bin Tom.","Ich heiße bin Tom.","Du bist Tom.","Ich ist Tom."]
+];
+
+/* ---------- ruter ---------- */
+const VIEWS = ["menu","quiz","cards","match","uhr","wechsel","dlg"];
+function go(name){
+  VIEWS.forEach(v => { $("v-" + v).hidden = (v !== name); });
+  window.scrollTo(0, 0);
+  if (name === "match") Match.start();
+  if (name === "uhr") Uhr.next();
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-go]");
+  if (b) go(b.dataset.go);
+});
+
+/* ---------- Team-Quiz ---------- */
+const Quiz = (() => {
+  const N = 18, TIME = 10;
+  let qs = [], i = 0, teams = [], turn = 0, answered = false, t = null, left = TIME;
+
+  function init(n){
+    teams = n === 2 ? [{n:"Team Rot",p:0,c:"rot"},{n:"Team Blau",p:0,c:"blau"}] : [{n:"Du",p:0,c:"blau"}];
+    qs = shuffle(BANK).slice(0, Math.min(N, BANK.length));
+    i = 0; turn = 0;
+    $("qStart").hidden = true; $("qEnd").hidden = true; $("qGame").hidden = false;
+    drawScore(); render();
+  }
+  function drawScore(){
+    $("qScore").innerHTML = teams.map((tm, k) =>
+      `<div class="team ${tm.c} ${k === turn ? "on" : ""}"><div class="nm">${tm.n}</div><div class="pt">${tm.p}</div></div>`).join("");
+  }
+  function render(){
+    answered = false; left = TIME;
+    const q = qs[i];
+    $("qCount").textContent = `Frage ${i + 1} / ${qs.length}`;
+    $("qBar").style.width = (i / qs.length * 100) + "%";
+    $("qText").textContent = q[0];
+    $("qFb").textContent = ""; $("qNext").hidden = true;
+    $("qAns").innerHTML = shuffle(q.slice(1)).map(o =>
+      `<button class="ans" data-a="${o.replace(/"/g, "&quot;")}">${o}</button>`).join("");
+    $("qAns").querySelectorAll(".ans").forEach(b => b.onclick = () => pick(b, q[1]));
+    clearInterval(t); tick(); t = setInterval(tick, 1000);
+  }
+  function tick(){
+    const el = $("qTimer");
+    el.textContent = left; el.classList.toggle("low", left <= 3);
+    if (left <= 0){ clearInterval(t); timeUp(); }
+    left--;
+  }
+  function reveal(right){
+    $("qAns").querySelectorAll(".ans").forEach(b => {
+      b.disabled = true;
+      if (b.dataset.a === right) b.classList.add("right");
+    });
+    $("qNext").hidden = false;
+  }
+  function timeUp(){
+    if (answered) return; answered = true;
+    const right = qs[i][1]; reveal(right);
+    $("qFb").innerHTML = `<span class="en">Zeit ist um!</span> Richtig: <b class="de">${right}</b>`;
+  }
+  function pick(btn, right){
+    if (answered) return; answered = true; clearInterval(t);
+    reveal(right);
+    const ok = btn.dataset.a === right;
+    if (!ok) btn.classList.add("wrong");
+    const pts = ok ? (left >= 6 ? 15 : 10) : 0;
+    teams[turn].p += pts;
+    $("qFb").innerHTML = ok
+      ? `<span style="color:var(--green)">Richtig! +${pts} Punkte</span>`
+      : `Leider falsch. Richtig: <b class="de">${right}</b>`;
+    drawScore();
+  }
+  function next(){
+    i++; turn = (turn + 1) % teams.length;
+    if (i >= qs.length){ finish(); return; }
+    drawScore(); render();
+  }
+  function finish(){
+    clearInterval(t);
+    $("qGame").hidden = true; $("qEnd").hidden = false;
+    let title, sub;
+    if (teams.length === 1){
+      title = `${teams[0].p} Punkte`; sub = `Maximum: ${qs.length * 15} Punkte. Noch einmal?`;
+    } else if (teams[0].p === teams[1].p){
+      title = "Unentschieden!"; sub = `${teams[0].p} : ${teams[1].p} - noch eine Runde?`;
+    } else {
+      const w = teams[0].p > teams[1].p ? teams[0] : teams[1];
+      title = `${w.n} gewinnt!`; sub = `${teams[0].p} : ${teams[1].p}`;
+    }
+    $("qTitle").textContent = title; $("qSub").textContent = sub;
+  }
+  $("q2").onclick = () => init(2);
+  $("q1").onclick = () => init(1);
+  $("qNext").onclick = next;
+  $("qAgain").onclick = () => { $("qEnd").hidden = true; $("qStart").hidden = false; };
+  return {};
+})();
+
+/* ---------- Karteikarten ---------- */
+const Cards = (() => {
+  let cards = shuffle(VOCAB), i = 0, ok = 0, no = 0, done = false;
+  function draw(){
+    const c = cards[i];
+    $("cProg").textContent = `Karte ${i + 1} von ${cards.length}`;
+    $("cProg2").textContent = `Karte ${i + 1} von ${cards.length}`;
+    $("cFront").textContent = c.de; $("cBack").textContent = c.en; $("cTag").textContent = c.tag;
+    $("cFlip").classList.remove("turned");
+    $("cAsk").textContent = c.en; $("inp").value = ""; $("cRes").textContent = "";
+    done = false; $("cChk").textContent = "Prüfen";
+  }
+  const norm = s => s.trim().toLowerCase().replace(/\.+$/, "").replace(/\s*\.\.\.$/, "").replace(/\s+/g, " ");
+  function check(){
+    if (done){ i = (i + 1) % cards.length; draw(); $("inp").focus(); return; }
+    const c = cards[i], v = norm($("inp").value), target = norm(c.de);
+    if (!v) return;
+    if (v === target || v === target.replace(/ß/g, "ss")){
+      ok++; $("cOk").textContent = ok;
+      $("cRes").innerHTML = '<span style="color:var(--green)">Richtig!</span>';
+    } else {
+      no++; $("cNo").textContent = no;
+      $("cRes").innerHTML = `Fast. Richtig: <b class="de">${c.de}</b>`;
+    }
+    done = true; $("cChk").textContent = "Weiter";
+  }
+  function mode(m){
+    $("tFlip").classList.toggle("on", m === "flip");
+    $("tLearn").classList.toggle("on", m === "learn");
+    $("cFlipView").hidden = m !== "flip";
+    $("cLearnView").hidden = m !== "learn";
+    if (m === "learn") $("inp").focus();
+  }
+  $("cFlip").onclick = () => $("cFlip").classList.toggle("turned");
+  $("cNext").onclick = () => { i = (i + 1) % cards.length; draw(); };
+  $("cPrev").onclick = () => { i = (i - 1 + cards.length) % cards.length; draw(); };
+  $("tFlip").onclick = () => mode("flip");
+  $("tLearn").onclick = () => mode("learn");
+  $("tMix").onclick = () => { cards = shuffle(VOCAB); i = 0; ok = 0; no = 0; $("cOk").textContent = 0; $("cNo").textContent = 0; draw(); };
+  $("cChk").onclick = check;
+  $("cSol").onclick = () => { $("cRes").innerHTML = `<b class="de">${cards[i].de}</b>`; done = true; $("cChk").textContent = "Weiter"; };
+  $("inp").addEventListener("keydown", e => { if (e.key === "Enter") check(); });
+  draw();
+  return {};
+})();
+
+/* ---------- Match ---------- */
+const Match = (() => {
+  const NP = 8;
+  let sel = null, found = 0, t0 = 0, iv = null;
+  function start(){
+    clearInterval(iv); found = 0; sel = null;
+    $("mP").textContent = "0"; $("mDone").hidden = true;
+    const pool = shuffle(VOCAB).slice(0, NP);
+    const cells = shuffle(
+      pool.map((v, k) => ({t:v.de, k, c:"de"})).concat(pool.map((v, k) => ({t:v.en, k, c:"en"})))
+    );
+    $("mGrid").innerHTML = cells.map(c => `<button class="c ${c.c}" data-k="${c.k}">${c.t}</button>`).join("");
+    $("mGrid").querySelectorAll(".c").forEach(b => b.onclick = () => tap(b));
+    t0 = Date.now();
+    iv = setInterval(() => { $("mT").textContent = ((Date.now() - t0) / 1000).toFixed(1) + " s"; }, 100);
+  }
+  function tap(b){
+    if (b.classList.contains("sel")){ b.classList.remove("sel"); sel = null; return; }
+    if (!sel){ sel = b; b.classList.add("sel"); return; }
+    if (sel.dataset.k === b.dataset.k && sel !== b){
+      sel.classList.add("gone"); b.classList.add("gone"); sel = null;
+      found++; $("mP").textContent = String(found);
+      if (found === NP) finish();
+    } else {
+      b.classList.add("bad");
+      const s = sel;
+      setTimeout(() => { b.classList.remove("bad"); s.classList.remove("sel"); }, 320);
+      sel = null;
+    }
+  }
+  function finish(){
+    clearInterval(iv);
+    $("mMsg").textContent = `Fertig in ${((Date.now() - t0) / 1000).toFixed(1)} Sekunden!`;
+    $("mDone").hidden = false;
+  }
+  $("mAgain").onclick = start;
+  return { start };
+})();
+
+/* ---------- Die Uhr ---------- */
+const Uhr = (() => {
+  const OPTS = ["Guten Morgen","Guten Tag","Guten Abend","Gute Nacht"];
+  const ITEMS = [
+   ["06.30","",0],["07.15","",0],["08.00","",0],["09.45","",0],["10.30","",0],
+   ["11.30","",1],["12.00","",1],["13.20","",1],["15.00","",1],["16.45","",1],["17.30","",1],
+   ["18.30","",2],["19.00","",2],["20.30","",2],["21.15","",2],
+   ["23.45","du gehst ins Bett",3],["22.30","du gehst schlafen",3],["23.00","du sagst deinen Eltern gute Nacht",3],
+   ["22.00","du kommst auf eine Party",2],["21.00","du triffst Freunde im Café",2],
+   ["11.00","du kommst in die Schule",1],["10.50","du gehst in die Bäckerei",0]
+  ];
+  const TIP = {
+   "22.00|du kommst auf eine Party":"Achtung: im Englischen sagt man hier 'goodnight', im Deutschen aber Guten Abend. Gute Nacht heißt nur: ich gehe schlafen.",
+   "21.00|du triffst Freunde im Café":"Gute Nacht sagt man nur vor dem Schlafen. Hier: Guten Abend.",
+   "11.00|du kommst in die Schule":"Nach etwa 11 Uhr ist Guten Morgen vorbei.",
+   "10.50|du gehst in die Bäckerei":"Bis etwa 11 Uhr geht Guten Morgen noch."
+  };
+  let cur = null, str = 0, best = 0, lock = false, to = null;
+  function next(){
+    clearTimeout(to); lock = false;
+    cur = ITEMS[Math.floor(Math.random() * ITEMS.length)];
+    $("uTime").textContent = cur[0] + " Uhr";
+    $("uSit").textContent = cur[1] ? "- " + cur[1] : "";
+    $("uFb").textContent = "";
+    $("uOpts").innerHTML = OPTS.map((o, k) => `<button class="o" data-i="${k}">${o}</button>`).join("");
+    $("uOpts").querySelectorAll(".o").forEach(b => b.onclick = () => pick(b));
+  }
+  function pick(b){
+    if (lock) return; lock = true;
+    const ok = Number(b.dataset.i) === cur[2];
+    $("uOpts").querySelectorAll(".o").forEach(x => {
+      x.disabled = true;
+      if (Number(x.dataset.i) === cur[2]) x.classList.add("right");
+    });
+    if (!ok) b.classList.add("wrong");
+    if (ok){ str++; if (str > best){ best = str; $("uBest").textContent = String(best); } } else { str = 0; }
+    $("uStr").textContent = String(str);
+    const tip = TIP[cur[0] + "|" + cur[1]];
+    $("uFb").innerHTML = (ok ? '<span style="color:var(--green)">Richtig!</span>' : `Richtig wäre: <b class="de">${OPTS[cur[2]]}</b>`)
+      + (tip ? `<br><span class="dim" style="font-size:15px">${tip}</span>` : "");
+    to = setTimeout(next, ok ? 900 : 2600);
+  }
+  return { next };
+})();
+
+/* ---------- Wechselspiel ---------- */
+(() => {
+  const sheets = ["a","b","r","s"];
+  document.querySelectorAll("[data-w]").forEach(btn => {
+    btn.onclick = () => {
+      sheets.forEach(s => { $("w-" + s).hidden = (s !== btn.dataset.w); });
+      document.querySelectorAll("[data-w]").forEach(x => x.classList.toggle("on", x === btn));
+    };
+  });
+  function deal(){
+    const r = ROLES[Math.floor(Math.random() * ROLES.length)];
+    $("rN").textContent = r[0]; $("rL").textContent = r[1]; $("rS").textContent = r[2];
+  }
+  $("rDeal").onclick = deal;
+
+  let left = 75, rd = 1, iv = null;
+  const fmt = s => Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
+  $("sdGo").onclick = () => {
+    if (iv){ clearInterval(iv); iv = null; $("sdGo").textContent = "Weiter"; return; }
+    $("sdGo").textContent = "Pause";
+    iv = setInterval(() => {
+      left--; $("sdClock").textContent = fmt(Math.max(left, 0));
+      if (left <= 0){
+        clearInterval(iv); iv = null;
+        if (rd < 4){
+          rd++; left = 75;
+          $("sdRound").textContent = "Runde " + rd + " von 4" + (rd === 4 ? " - jetzt formell mit Sie!" : "");
+          $("sdClock").textContent = fmt(left);
+        } else {
+          $("sdRound").textContent = "Fertig!";
+        }
+        $("sdGo").textContent = "Start";
+      }
+    }, 1000);
+  };
+  $("sdReset").onclick = () => {
+    clearInterval(iv); iv = null; left = 75; rd = 1;
+    $("sdClock").textContent = fmt(left); $("sdRound").textContent = "Runde 1 von 4"; $("sdGo").textContent = "Start";
+  };
+})();
+
+/* ---------- Dialoge ---------- */
+$("dSol").onclick = () => { $("dSolTxt").hidden = false; };
+</script>
+
+</body>
+</html>

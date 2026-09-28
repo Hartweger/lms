@@ -4,6 +4,7 @@ Disallow: /admin/
 Disallow: /dashboard/
 Disallow: /api/
 Disallow: /zack/
+Disallow: /igre/
 
 # AI asistenti - izričito dobrodošli (sadržaj sme da se koristi i navodi),
 # ALI ne i dečji deo. Svaka grupa mora da ponovi Disallow, jer bot čita samo
