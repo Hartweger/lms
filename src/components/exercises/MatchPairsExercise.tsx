@@ -6,6 +6,7 @@ import {
   resolveSrClick,
   isTokenUsed,
   isComplete,
+  type MatchedMap,
   type SrToken,
 } from "@/lib/match-pairs";
 
@@ -15,9 +16,10 @@ interface MatchPairsProps {
 }
 
 export default function MatchPairsExercise({ pairs, onAnswer }: MatchPairsProps) {
-  const [selectedDe, setSelectedDe] = useState<string | null>(null);
-  // de -> reserved right-token id (NOT the value: two pairs may share a value)
-  const [matched, setMatched] = useState<Record<string, number>>({});
+  // Both sides are identified by row, not by the text on the button: a set may
+  // repeat the same prompt on the left or the same target on the right.
+  const [selectedDeIdx, setSelectedDeIdx] = useState<number | null>(null);
+  const [matched, setMatched] = useState<MatchedMap>({});
   const [wrong, setWrong] = useState<number | null>(null);
 
   const [shuffledSr] = useState<SrToken[]>(() =>
@@ -27,19 +29,19 @@ export default function MatchPairsExercise({ pairs, onAnswer }: MatchPairsProps)
 
   const allMatched = isComplete(pairs, matched);
 
-  const handleDeClick = (de: string) => {
-    if (matched[de] !== undefined) return;
-    setSelectedDe(de);
+  const handleDeClick = (idx: number) => {
+    if (matched[idx] !== undefined) return;
+    setSelectedDeIdx(idx);
     setWrong(null);
   };
 
   const handleSrClick = (token: SrToken) => {
-    if (!selectedDe || isTokenUsed(matched, token.id)) return;
-    const reserved = resolveSrClick(pairs, matched, selectedDe, token);
+    if (selectedDeIdx === null || isTokenUsed(matched, token.id)) return;
+    const reserved = resolveSrClick(pairs, matched, selectedDeIdx, token);
     if (reserved !== null) {
-      const newMatched = { ...matched, [selectedDe]: reserved };
+      const newMatched = { ...matched, [selectedDeIdx]: reserved };
       setMatched(newMatched);
-      setSelectedDe(null);
+      setSelectedDeIdx(null);
       if (isComplete(pairs, newMatched) && !done) {
         setDone(true);
         onAnswer(true);
@@ -56,15 +58,15 @@ export default function MatchPairsExercise({ pairs, onAnswer }: MatchPairsProps)
       <p className="text-xs text-gray-400 mb-4">Klikni na pojam levo, pa na ono što mu odgovara desno</p>
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-3">
-          {pairs.map((p) => (
+          {pairs.map((p, i) => (
             <button
-              key={p.de}
-              onClick={() => handleDeClick(p.de)}
-              disabled={matched[p.de] !== undefined}
+              key={i}
+              onClick={() => handleDeClick(i)}
+              disabled={matched[i] !== undefined}
               className={`w-full px-4 py-3 rounded-xl border-2 text-sm font-medium transition-colors ${
-                matched[p.de] !== undefined
+                matched[i] !== undefined
                   ? "border-green-500 bg-green-50 text-green-700"
-                  : selectedDe === p.de
+                  : selectedDeIdx === i
                   ? "border-plava bg-plava-light text-plava"
                   : "border-gray-200 hover:border-plava text-gray-700 cursor-pointer"
               }`}

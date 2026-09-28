@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type { FlashcardItem } from "@/lib/flashcard-types";
 import { buildQuizOptions, type Direction } from "@/lib/flashcard-grading";
 import { cardId } from "@/lib/flashcard-card-id";
@@ -29,6 +29,11 @@ export default function LearnModule({
   const [pool, setPool] = useState<FlashcardItem[]>(() => nonMastered().slice(BATCH));      // čeka na red
   const [seen, setSeen] = useState(0);
   const [checkpoint, setCheckpoint] = useState<number | null>(null); // „Bravo, X naučeno" pauza (null = ne prikazuj)
+  // Brava protiv dvostrukog prelaza: `advance` čeka upis napretka preko mreže, a
+  // kartica sve to vreme stoji na ekranu. Drugi poziv u tom prozoru radio bi sa
+  // zastarelim `card`/`pool` iz istog rendera - izbacio bi tekuću karticu iz reda,
+  // a umesto nje vratio kopiju prethodne (odatle 4x „ledig" u spajanju parova).
+  const advancing = useRef(false);
 
   // Ponovi ceo set (Quizlet-style): sve kartice promešane nazad u red, napredak u bazi ostaje.
   const restart = () => {
@@ -90,39 +95,53 @@ export default function LearnModule({
   const quiz = wantTyping ? null : buildQuizOptions(card, items, quizDir);
   const doTyping = wantTyping || !quiz; // ako set ima < 4 kartice, kviz nije moguć → kucanje
   // Spajanje parova kao pauza - samo u vođenom režimu, na svakih 8 odgovora, koristi tekuću grupu (varira).
-  const showMatch = mode === "guided" && seen > 0 && seen % 8 === 0 && queue.length >= 4;
+  // Isti pojam se u igri nikad ne nudi dva puta: dva reda sa istim tekstom su za
+  // polaznika nerešiva zagonetka (ne vidi se koji red traži koji prevod).
+  const matchCards: FlashcardItem[] = [];
+  for (const c of queue) if (!matchCards.some((u) => u.front === c.front)) matchCards.push(c);
+  const showMatch = mode === "guided" && seen > 0 && seen % 8 === 0 && matchCards.length >= 4;
 
   const advance = async (correct: boolean) => {
-    const updated = await recordAttempt(setKey, card, correct, p);
-    const np = new Map(prog); np.set(id, updated); setProg(np);
-    setSeen((s) => s + 1);
-    if (updated.status === "mastered") {
-      // kartica savladana → izađe iz grupe, povuci sledeću iz pool-a
-      const next = pool[0];
-      setQueue((q) => (next ? [...q.slice(1), next] : q.slice(1)));
-      if (next) setPool((pl) => pl.slice(1));
-      // check-point na svakih 10 naučenih (osim na samom kraju seta)
-      const newMastered = masteredCount + 1;
-      if (newMastered % 10 === 0 && newMastered < total) setCheckpoint(newMastered);
-    } else if (correct) {
-      // tačno ali još ne savladano → na kraj grupe (normalan razmak za 2. ponavljanje)
-      setQueue((q) => [...q.slice(1), card]);
-    } else {
-      // pogrešno → vrati ranije (par mesta unapred), da se brže ponovi
-      setQueue((q) => {
-        const rest = q.slice(1);
-        const pos = Math.min(2, rest.length);
-        return [...rest.slice(0, pos), card, ...rest.slice(pos)];
-      });
+    if (advancing.current) return;
+    advancing.current = true;
+    try {
+      const updated = await recordAttempt(setKey, card, correct, p);
+      const np = new Map(prog); np.set(id, updated); setProg(np);
+      setSeen((s) => s + 1);
+      if (updated.status === "mastered") {
+        // kartica savladana → izađe iz grupe, povuci sledeću iz pool-a
+        const next = pool[0];
+        setQueue((q) => (next ? [...q.slice(1), next] : q.slice(1)));
+        if (next) setPool((pl) => pl.slice(1));
+        // check-point na svakih 10 naučenih (osim na samom kraju seta)
+        const newMastered = masteredCount + 1;
+        if (newMastered % 10 === 0 && newMastered < total) setCheckpoint(newMastered);
+      } else if (correct) {
+        // tačno ali još ne savladano → na kraj grupe (normalan razmak za 2. ponavljanje)
+        setQueue((q) => [...q.slice(1), card]);
+      } else {
+        // pogrešno → vrati ranije (par mesta unapred), da se brže ponovi
+        setQueue((q) => {
+          const rest = q.slice(1);
+          const pos = Math.min(2, rest.length);
+          return [...rest.slice(0, pos), card, ...rest.slice(pos)];
+        });
+      }
+    } finally {
+      advancing.current = false;
     }
   };
 
   if (showMatch) {
-    const pairs = queue.slice(0, 6).map((c) => ({ de: c.front, sr: c.back.split("|")[0].trim() }));
+    const pairs = matchCards.slice(0, 6).map((c) => ({ de: c.front, sr: c.back.split("|")[0].trim() }));
     return (
       <Frame mastered={masteredCount} learning={learningCount} total={total} onExit={onExit}>
         <p className="text-sm text-gray-500 mb-2">Pauza - spoji parove 🧩 <span className="text-gray-400">(ne računa se)</span></p>
         <MatchPairsExercise pairs={pairs} onAnswer={() => setSeen((s) => s + 1)} />
+        {/* Pauza se ne računa - iz nje uvek mora da postoji izlaz napred. */}
+        <button onClick={() => setSeen((s) => s + 1)} className="mt-4 text-sm text-gray-500 underline hover:text-gray-700">
+          Preskoči pauzu →
+        </button>
       </Frame>
     );
   }

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type { FlashcardItem } from "@/lib/flashcard-types";
 import { gradeTyping, type Direction } from "@/lib/flashcard-grading";
 
@@ -21,8 +21,15 @@ export default function LearnTyping({
     setDone(gradeTyping(input, card, direction));
   };
   // Korak 2: „Dalje" - tek sad pređi na sledeću.
+  // `sent` je brava: onResult upisuje napredak preko mreže, pa kartica ostaje na
+  // ekranu dok upis traje. Bez brave drugi klik/Enter u tom prozoru pokrene
+  // prelaz još jednom sa istim (već potrošenim) stanjem - kartica se udvoji u
+  // redu za učenje, a jedna druga tiho ispadne.
+  const sent = useRef(false);
   const next = () => {
-    if (done) onResult(done.status !== "wrong");
+    if (!done || sent.current) return;
+    sent.current = true;
+    onResult(done.status !== "wrong");
   };
 
   return (
