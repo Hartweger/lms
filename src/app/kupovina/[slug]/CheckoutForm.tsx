@@ -507,8 +507,12 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
                 // Po nalazu kontrole banke (jul 2026): bez „preko Banca Intesa" (da kupac ne
                 // pomisli da prolaze samo Intesa kartice) i bez info o ratama na ovom koraku
                 // (za rate banka pravi zvaničan baner - e-commerce@bancaintesa.rs).
-                { v: "kartica", label: ct.methodCard, desc: "Visa, Mastercard, Maestro, DinaCard, American Express." },
-                { v: "uplatnica", label: ct.methodBank, desc: "Podaci za uplatu stižu na email; pristup po potvrdi uplate." },
+                { v: "kartica", label: ct.methodCard, desc: jeKonsultacija
+                    ? "Visa, Mastercard, Maestro, DinaCard, American Express. Link za biranje termina dobijaš odmah po uplati."
+                    : "Visa, Mastercard, Maestro, DinaCard, American Express." },
+                { v: "uplatnica", label: ct.methodBank, desc: jeKonsultacija
+                    ? "Podaci za uplatu stižu na email; link za biranje termina čim potvrdimo uplatu."
+                    : "Podaci za uplatu stižu na email; pristup po potvrdi uplate." },
                 ...(pretplataPlan
                   ? [{
                       v: "kartica_pretplata",
@@ -518,8 +522,12 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
                   : []),
               ]
             : [
-                { v: "kartica", label: ct.methodCard, desc: "Visa, Mastercard, Maestro, DinaCard, American Express. Naplata u dinarima (tvoja banka konvertuje u tvoju valutu)." },
-                { v: "paypal", label: ct.methodPaypal, desc: "PayPal link stiže na email. Naplata u evrima, uključuje 12% PayPal naknadu." },
+                { v: "kartica", label: ct.methodCard, desc: jeKonsultacija
+                    ? "Visa, Mastercard, Maestro, DinaCard, American Express. Naplata u dinarima (tvoja banka konvertuje u tvoju valutu). Link za biranje termina dobijaš odmah po uplati."
+                    : "Visa, Mastercard, Maestro, DinaCard, American Express. Naplata u dinarima (tvoja banka konvertuje u tvoju valutu)." },
+                { v: "paypal", label: ct.methodPaypal, desc: jeKonsultacija
+                    ? "PayPal link stiže na email. Naplata u evrima, uključuje 12% PayPal naknadu. Link za biranje termina stiže čim potvrdimo uplatu."
+                    : "PayPal link stiže na email. Naplata u evrima, uključuje 12% PayPal naknadu." },
                 ...(pretplataPlan
                   ? [{
                       v: "kartica_pretplata",

@@ -481,7 +481,7 @@ export default async function HvalaPage({
               : "Čim potvrdimo uplatu - obično u roku od 24h, najkasnije 3 radna dana - dobićeš email i pristup kursu se aktivira."}
           </p>
           <p className="text-gray-500">
-            Ako ne dobiješ pristup, piši nam na{" "}
+            {jeKonsultacija ? "Ako se ne javimo u tom roku, piši nam na " : "Ako ne dobiješ pristup, piši nam na "}
             <a href="mailto:info@hartweger.rs" className="text-plava hover:underline">info@hartweger.rs</a>.
           </p>
         </div>
