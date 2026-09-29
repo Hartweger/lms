@@ -273,6 +273,9 @@ export default function NakiChat() {
               Super ti ide! Ostavi email - pošaljem ti <strong>plan učenja</strong> prilagođen tebi:
               šta već znaš i šta dalje da vežbaš. Besplatno.
             </p>
+            <p className="mb-3 text-xs text-gray-500">
+              Ovo nije pravljenje naloga - pisati sa mnom možeš i bez prijave.
+            </p>
             <input
               className="mb-2 w-full rounded-lg border border-gray-200 px-4 py-2.5 text-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-plava"
               type="text"

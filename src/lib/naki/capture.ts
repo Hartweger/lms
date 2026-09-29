@@ -149,6 +149,8 @@ export function buildWelcomeHtml(
     <tr><td style="padding:40px;">
       <div style="font-size:16px;color:#333;line-height:1.6;">${planHtml}</div>
       <hr style="border:none;border-top:1px solid #e8e8e8;margin:30px 0;">
+      <p style="font-size:14px;color:#666;line-height:1.6;">Ovaj plan nije nalog na platformi - nalog i lekcije idu uz kurs. NaKI-ju možeš da pišeš i dalje bez prijave, samo otvori <a href="https://www.hartweger.rs/?utm_source=naki&amp;utm_medium=email" style="color:#4EADC5;">www.hartweger.rs</a>.</p>
+      <hr style="border:none;border-top:1px solid #e8e8e8;margin:30px 0;">
       <p style="font-size:14px;color:#666;">Korisni članci za tvoj nivo:</p>
       <p style="font-size:14px;">${linksHtml}</p>
       <p style="font-size:14px;color:#666;">YouTube lekcije: <a href="https://www.youtube.com/@NatasaHartweger?utm_source=naki&utm_medium=email" style="color:#4EADC5;">@NatasaHartweger</a></p>
