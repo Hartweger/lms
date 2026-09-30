@@ -1,6 +1,11 @@
 // Build sadržajnog kursa "Konverzacijski (B1+)": 7 lekcija sa wordset karticama
 // iz scripts/konverzacijski-wordsets/*.tsv. + course_unlocks + groups.content_course_id.
 // Dry-run podrazumevano; --apply za upis.
+//
+// ⚠️ DESTRUKTIVNO: briše SVE lekcije sadržajnog kursa pa ih upisuje iznova →
+// briše i lesson_progress polaznika. Od 30.09.2026 na kursu ima napretka (8 polaznika).
+// Za DODAVANJE jedne teme koristi scripts/apply-konv-tema8.mjs (nedestruktivan šablon).
+// Ovaj skript pokretati samo na praznom kursu ili uz svesno žrtvovanje napretka.
 import { readFileSync } from "node:fs";
 import { createClient } from "@supabase/supabase-js";
 
@@ -14,7 +19,7 @@ const APPLY = process.argv.includes("--apply");
 
 const CONTENT_SLUG = "konverzacijski-b1-sadrzaj";
 const PURCHASABLE_ID = "ec98eaf9-3297-40c8-8233-ea4855162f27"; // grupni-konverzacijski-kurs-nemackog-b1
-const GROUP_ID = "b443d05f-7e87-4935-943c-634c4912c504";       // Konverzacija B1+
+const GROUP_LEVEL = "Konverzacija B1+";                        // tačan string nivoa (SLUG_TO_NIVO)
 
 const DIR = "scripts/konverzacijski-wordsets";
 const TOPICS = [
@@ -25,6 +30,7 @@ const TOPICS = [
   { file: "set-reisen-urlaub.tsv",             title: "Reisen & Urlaub",              key: "konv-b1-reisen-urlaub" },
   { file: "set-umwelt-umweltschutz.tsv",       title: "Umwelt & Umweltschutz",        key: "konv-b1-umwelt-umweltschutz" },
   { file: "set-internet-digitalisierung.tsv",  title: "Internet & Digitalisierung",   key: "konv-b1-internet-digitalisierung" },
+  { file: "set-hoffnungen-erwartungen.tsv",    title: "Hoffnungen & Erwartungen",     key: "konv-b1-hoffnungen-erwartungen" },
 ];
 
 function parseTsv(path) {
@@ -39,7 +45,7 @@ const WILLKOMMEN = `## Dobrodošao/la u konverzacijski kurs! 👋
 Drago nam je što si tu. Ovaj kurs je za vežbanje govora - da ono što već razumeš počneš slobodno da koristiš.
 
 ### Kako kurs funkcioniše
-- Srećemo se jednom nedeljno, petkom, online preko Google Meet-a (link za svaki čas dobijaš mejlom).
+- Srećemo se jednom nedeljno, online preko Google Meet-a (link za svaki čas dobijaš mejlom).
 - Svaki čas je posvećen jednoj temi iz svakodnevnog života.
 - Prvi čas je opušteni Icebreaker - upoznajemo se i pričamo slobodno, bez pritiska.
 - Grupa je mala (do 6 ljudi), pa svako stigne da priča.
@@ -122,10 +128,18 @@ for (const l of lessons) {
   if (error) console.error("course_unlocks:", error.message); else console.log("✓ course_unlocks vezan");
 }
 
-// 4) groups.content_course_id
+// 4) groups.content_course_id — SVE grupe nivoa „Konverzacija B1+" (ne samo jedna)
 {
-  const { error } = await sb.from("groups").update({ content_course_id: contentId }).eq("id", GROUP_ID);
-  if (error) console.error("groups update:", error.message); else console.log("✓ groups.content_course_id postavljen");
+  const { data: gs, error: gErr } = await sb.from("groups").select("id,start_date,status,content_course_id").eq("level", GROUP_LEVEL);
+  if (gErr) console.error("groups select:", gErr.message);
+  else {
+    for (const g of gs) {
+      if (g.content_course_id === contentId) { console.log(`  = grupa ${g.start_date} (${g.status}) već vezana`); continue; }
+      const { error } = await sb.from("groups").update({ content_course_id: contentId }).eq("id", g.id);
+      if (error) console.error(`groups update ${g.id}:`, error.message);
+      else console.log(`✓ grupa ${g.start_date} (${g.status}) vezana na sadržajni kurs (bilo: ${g.content_course_id ?? "null"})`);
+    }
+  }
 }
 
 console.log("Gotovo. contentId =", contentId);
