@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { remainingLessons } from "@/lib/individual-lessons";
 import NotesEditor from "@/components/beleska/NotesEditor";
@@ -30,6 +30,9 @@ export default function IndividualniClient({ rows, showProfessor }: { rows: Enro
   const router = useRouter();
   const [dateById, setDateById] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState<string | null>(null);
+  // Osvežavanje tabele posle upisa: dok traje, dugmad su zaključana da profesorka
+  // ne klikne drugi put na stari (još neosvežen) broj časova.
+  const [refreshing, startRefresh] = useTransition();
   const [openHistory, setOpenHistory] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [showArchived, setShowArchived] = useState(false);
@@ -49,7 +52,7 @@ export default function IndividualniClient({ rows, showProfessor }: { rows: Enro
       });
       const j = await res.json();
       if (!res.ok) { setError(j.error || "Greška."); return; }
-      router.refresh();
+      startRefresh(() => router.refresh());
     } catch { setError("Greška u mreži."); }
     finally { setBusy(null); }
   }
@@ -186,7 +189,7 @@ export default function IndividualniClient({ rows, showProfessor }: { rows: Enro
                       <button
                         type="button"
                         onClick={() => addLesson(r.id)}
-                        disabled={busy === r.id || done || remaining === 0}
+                        disabled={busy === r.id || refreshing || done || remaining === 0}
                         className="bg-plava hover:bg-plava-dark disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium px-3 py-1.5 rounded-lg whitespace-nowrap"
                         title={done || remaining === 0 ? "Paket je popunjen - novi čas ide u novi paket" : undefined}
                       >

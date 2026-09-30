@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { computeLessonStatus } from "@/lib/individual-lessons";
+import { computeLessonStatus, duplicateLessonError } from "@/lib/individual-lessons";
 import { nivoForSlug, nextNivoFor, individualniSlugForNivo } from "@/lib/course-nivo";
 import { sendOneLessonLeftEmail } from "@/lib/email";
 import { SITE_URL } from "@/lib/site-url";
@@ -58,6 +58,14 @@ export async function POST(request: Request) {
   if ((existing ?? 0) >= owned.enr.package_lessons) {
     return NextResponse.json({ error: `Paket je popunjen (${existing}/${owned.enr.package_lessons}) - čas upiši na novi paket.` }, { status: 400 });
   }
+
+  // Idempotentnost: isti upis + isti datum = jedan čas. Bez ovoga je drugi klik pravio
+  // duplikat - profesorka klikne, tabela se još osvežava i pokazuje stari broj, pa klikne opet.
+  const { count: sameDay } = await staff.admin.from("individual_lessons")
+    .select("*", { count: "exact", head: true })
+    .eq("enrollment_id", enrollmentId).eq("lesson_date", lessonDate);
+  const duplicate = duplicateLessonError(sameDay ?? 0, String(lessonDate));
+  if (duplicate) return NextResponse.json({ error: duplicate }, { status: 409 });
 
   const { error } = await staff.admin.from("individual_lessons").insert({
     enrollment_id: enrollmentId,
