@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { remainingLessons } from "@/lib/individual-lessons";
+import NotesEditor from "@/components/beleska/NotesEditor";
 
 export interface EnrollmentRow {
   id: string;
@@ -32,6 +33,7 @@ export default function IndividualniClient({ rows, showProfessor }: { rows: Enro
   const [openHistory, setOpenHistory] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [showArchived, setShowArchived] = useState(false);
+  const [notesFor, setNotesFor] = useState<string | null>(null);
 
   const activeRows = rows.filter((r) => r.status === "active");
   const archivedCount = rows.length - activeRows.length;
@@ -139,6 +141,9 @@ export default function IndividualniClient({ rows, showProfessor }: { rows: Enro
                     ) : (
                       <button type="button" onClick={() => saveNotes(r.id, null)} disabled={busy === r.id} className="text-xs text-gray-400 hover:underline">➕ Dodaj beleške</button>
                     )}
+                    <button type="button" onClick={() => setNotesFor(r.id)} className="block text-xs text-plava hover:underline mt-0.5">
+                      📓 Beleške za današnji čas
+                    </button>
                   </td>
                   {showProfessor && <td className="px-6 py-4 text-gray-600">{r.professorName || "-"}</td>}
                   <td className="px-6 py-4 text-gray-600">
@@ -196,6 +201,21 @@ export default function IndividualniClient({ rows, showProfessor }: { rows: Enro
         </table>
       </div>
       )}
+      {notesFor && (() => {
+        const row = rows.find((r) => r.id === notesFor);
+        if (!row) return null;
+        return (
+          <NotesEditor
+            enrollmentId={row.id}
+            studentName={row.studentName}
+            date={dateById[row.id] || todayISO()}
+            onClose={() => {
+              setNotesFor(null);
+              router.refresh();
+            }}
+          />
+        );
+      })()}
     </div>
   );
 }
