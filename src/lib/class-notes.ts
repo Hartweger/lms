@@ -6,6 +6,8 @@
  * PRAVILO: prazna sekcija se NE prikazuje - ni sadržaj ni naslov.
  */
 
+import { tokenizeInline } from "./beleska-markup";
+
 export type TextSectionKey =
   | "tema" | "redemittel" | "fehler" | "grammatik" | "hausaufgabe" | "lob";
 
@@ -69,6 +71,29 @@ export function visibleSections(content: NoteContent): VisibleSection[] {
   }));
 }
 
+/**
+ * Sadržaj beleške može doći iz baze (stariji/oštećen zapis) ili sa fronta (profesorkin unos) -
+ * u oba slučaja ga svodimo na očekivani oblik PRE nego što uđe u noteToPlainText/deriveWordsetItems,
+ * koje ne proveravaju tipove (npr. content.wortschatz.length bi pukao da wortschatz nije niz).
+ * Bez ovoga bi neispravan content (null, string umesto niza...) oborio rutu u 500 bez poruke.
+ *
+ * Deljeno između profesorkinog API-ja (upis) i polaznikovog čitanja (src/lib/beleske-student.ts) -
+ * namerno JEDNA definicija, da se dve strane iste beleške ne raziđu u tumačenju zapisa.
+ */
+export function sanitizeNoteContent(raw: unknown): NoteContent {
+  const src = raw && typeof raw === "object" ? (raw as Record<string, unknown>) : {};
+  const out = emptyNoteContent();
+  for (const s of TEXT_SECTIONS) {
+    const v = src[s.key];
+    if (typeof v === "string" && v.trim().length > 0) out[s.key] = v;
+  }
+  const rows = Array.isArray(src.wortschatz) ? src.wortschatz : [];
+  out.wortschatz = rows
+    .filter((r): r is Record<string, unknown> => !!r && typeof r === "object")
+    .map((r): WortschatzRow => ({ de: String(r.de ?? ""), sr: String(r.sr ?? "") }));
+  return out;
+}
+
 /** Jedan red WORTSCHATZ tabele kao tekst: „nemačka reč = naš prevod". */
 function formatWortschatz(rows: WortschatzRow[]): string {
   return rows.map((r) => `${r.de} = ${r.sr}`).join("\n");
@@ -89,4 +114,24 @@ export function noteToPlainText(content: NoteContent): string {
     parts.unshift("WORTSCHATZ\n" + formatWortschatz(content.wortschatz));
   }
   return parts.join("\n\n");
+}
+
+const PREVIEW_MAX = 140;
+
+/**
+ * Kratak opis za listu beleški: prvi neprazan red TEME, bez markdown-lite oznaka
+ * (**bold**, *kurziv*, ==marker==, [link](url)) - u listi stoji čist tekst, ne markup.
+ * Vraća null kad TEMA nije popunjena (npr. profesorka je snimila belešku bez ijednog
+ * polja) - prikaz onda pokazuje svoju rezervnu formulaciju, ne prazan red.
+ */
+export function notePreview(content: NoteContent): string | null {
+  if (isSectionEmpty(content.tema)) return null;
+  const firstLine = content.tema!.split(/\r?\n/).find((l) => l.trim().length > 0);
+  if (!firstLine) return null;
+  const plain = tokenizeInline(firstLine.trim())
+    .map((t) => t.text)
+    .join("")
+    .trim();
+  if (!plain) return null;
+  return plain.length > PREVIEW_MAX ? `${plain.slice(0, PREVIEW_MAX - 1).trimEnd()}…` : plain;
 }

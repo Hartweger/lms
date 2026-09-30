@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { CANCEL_REASONS } from "@/lib/subscription-cancel-reason";
 
@@ -197,11 +198,19 @@ export function GrupniIIndividualni() {
             <p className="text-sm text-gray-600 mt-1">
               Ostalo ti {remaining} od {e.packageLessons} časova
             </p>
-            {remaining > 0 && e.calendarUrl && (
-              <a href={e.calendarUrl} target="_blank" rel="noreferrer" className="inline-block mt-2 text-sm text-plava">
-                Zakaži sledeći čas
-              </a>
-            )}
+            <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1">
+              {remaining > 0 && e.calendarUrl && (
+                <a href={e.calendarUrl} target="_blank" rel="noreferrer" className="text-sm text-plava">
+                  Zakaži sledeći čas
+                </a>
+              )}
+              <Link href="/beleske" className="text-sm text-plava">
+                Beleške sa časova
+              </Link>
+              <Link href="/moje-reci" className="text-sm text-plava">
+                Moje reči
+              </Link>
+            </div>
           </div>
         );
       })}

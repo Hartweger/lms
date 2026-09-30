@@ -6,9 +6,8 @@ import { computeLessonStatus } from "@/lib/individual-lessons";
 import {
   emptyNoteContent,
   noteToPlainText,
-  TEXT_SECTIONS,
+  sanitizeNoteContent,
   type NoteContent,
-  type WortschatzRow,
 } from "@/lib/class-notes";
 import { deriveWordsetItems, wordsetTitle, type WordsetItem } from "@/lib/wordset-derive";
 
@@ -52,25 +51,8 @@ function parseParams(enrollmentId: unknown, date: unknown) {
   return { id, date: d };
 }
 
-/**
- * Sadržaj beleške može doći iz baze (stariji/oštećen zapis) ili sa fronta (profesorkin unos) -
- * u oba slučaja ga svodimo na očekivani oblik PRE nego što uđe u noteToPlainText/deriveWordsetItems,
- * koje ne proveravaju tipove (npr. content.wortschatz.length bi pukao da wortschatz nije niz).
- * Bez ovoga bi neispravan content (null, string umesto niza...) oborio rutu u 500 bez poruke.
- */
-function sanitizeNoteContent(raw: unknown): NoteContent {
-  const src = raw && typeof raw === "object" ? (raw as Record<string, unknown>) : {};
-  const out = emptyNoteContent();
-  for (const s of TEXT_SECTIONS) {
-    const v = src[s.key];
-    if (typeof v === "string" && v.trim().length > 0) out[s.key] = v;
-  }
-  const rows = Array.isArray(src.wortschatz) ? src.wortschatz : [];
-  out.wortschatz = rows
-    .filter((r): r is Record<string, unknown> => !!r && typeof r === "object")
-    .map((r): WortschatzRow => ({ de: String(r.de ?? ""), sr: String(r.sr ?? "") }));
-  return out;
-}
+// sanitizeNoteContent je sada u @/lib/class-notes - deljeno sa polaznikovim čitanjem
+// (src/lib/beleske-student.ts), da se upis i čitanje ne raziđu u tumačenju zapisa.
 
 // Prebroji časove i ažuriraj lessons_used + status na enrollmentu - isti obrazac kao
 // recountLessons() u api/profesor/individualni-cas/route.ts.

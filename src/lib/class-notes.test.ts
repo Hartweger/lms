@@ -5,6 +5,8 @@ import {
   isSectionEmpty,
   visibleSections,
   noteToPlainText,
+  notePreview,
+  sanitizeNoteContent,
   type NoteContent,
 } from "./class-notes";
 
@@ -73,5 +75,45 @@ describe("class-notes", () => {
     const t = noteToPlainText(c);
     expect(t.split("WORTSCHATZ").length).toBe(2);
     expect(t.startsWith("WORTSCHATZ")).toBe(true);
+  });
+
+  it("notePreview - prvi neprazan red TEME, bez markdown-lite oznaka", () => {
+    const c: NoteContent = { ...emptyNoteContent(), tema: "\n\n**Konjunktiv II** i modalni glagoli\ndrugi red" };
+    expect(notePreview(c)).toBe("Konjunktiv II i modalni glagoli");
+  });
+
+  it("notePreview - TEMA prazna ili od samih razmaka vraća null, ne prazan string", () => {
+    expect(notePreview(emptyNoteContent())).toBeNull();
+    expect(notePreview({ ...emptyNoteContent(), tema: "   " })).toBeNull();
+  });
+
+  it("notePreview - skraćuje predugačak prvi red", () => {
+    const dugo = "a".repeat(200);
+    const preview = notePreview({ ...emptyNoteContent(), tema: dugo });
+    expect(preview).not.toBeNull();
+    expect(preview!.length).toBe(140);
+    expect(preview!.endsWith("…")).toBe(true);
+  });
+
+  it("sanitizeNoteContent - odbacuje neispravne tipove umesto da pukne", () => {
+    const c = sanitizeNoteContent({ tema: 42, wortschatz: "nije niz", lob: "   ", hausaufgabe: "8 rečenica" });
+    expect(c.tema).toBeUndefined();
+    expect(c.wortschatz).toEqual([]);
+    expect(isSectionEmpty(c.lob)).toBe(true);
+    expect(c.hausaufgabe).toBe("8 rečenica");
+  });
+
+  it("sanitizeNoteContent - null/undefined ulaz daje praznu belešku", () => {
+    expect(sanitizeNoteContent(null)).toEqual(emptyNoteContent());
+    expect(sanitizeNoteContent(undefined)).toEqual(emptyNoteContent());
+  });
+
+  it("sanitizeNoteContent - čisti wortschatz redove sa nedostajućim poljima na prazan string", () => {
+    const c = sanitizeNoteContent({ wortschatz: [{ de: "Haus" }, { sr: "kuća" }, {}] });
+    expect(c.wortschatz).toEqual([
+      { de: "Haus", sr: "" },
+      { de: "", sr: "kuća" },
+      { de: "", sr: "" },
+    ]);
   });
 });

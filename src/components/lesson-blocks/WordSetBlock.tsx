@@ -9,8 +9,16 @@ const LearnModule = dynamic(() => import("@/components/learn/LearnModule"), { ss
 
 type LearnMode = "guided" | "quiz" | "typing" | "memory";
 
-export default function WordSetBlock({ title, setKey, items }: WordSetSection) {
-  const [mode, setMode] = useState<LearnMode | null>(null);
+// startMode je opcion i van WordSetSection namerno - koristi ga /moje-reci za "Uči sve"
+// (otvara više setova odjednom, svaki već u vođenom režimu). Bez njega (undefined) ponašanje
+// je nepromenjeno za sve postojeće pozivaoce (BlockRenderer): mode kreće od null.
+export default function WordSetBlock({
+  title,
+  setKey,
+  items,
+  startMode,
+}: WordSetSection & { startMode?: LearnMode }) {
+  const [mode, setMode] = useState<LearnMode | null>(startMode ?? null);
   const [progress, setProgress] = useState<Map<string, CardProgress> | null>(null);
 
   useEffect(() => {
