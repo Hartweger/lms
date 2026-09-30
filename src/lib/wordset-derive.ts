@@ -11,30 +11,41 @@ export interface WordsetItem {
  * iz lekcije sa <mark> tagovima prikazivale su se sirove, jer FlashcardBlock
  * namerno ne koristi dangerouslySetInnerHTML.
  *
- * Zvezdice i znak jednakosti se brišu SVE, upareno ili ne - naivan pristup koji
- * traži par (**...**, ==...==) ne pogađa ugnežđene ili nezatvorene oznake
- * (npr. "**a *b* c**" ili "==a" bez zatvaranja) i ostavlja smeće na kartici.
- * Nemačka reč ili naš prevod u rečniku realno nikad ne sadrže * ili = kao deo
- * teksta, pa je bezuslovno brisanje bezbedno i pouzdanije od uparivanja.
+ * Zvezdice i znak jednakosti se brišu SAMO kad su upareni - pravi rečnik (npr.
+ * scripts/flashcards/*.json) ima pojedinačne znake kao deo teksta, ne kao
+ * markdown: "zvezdica za Gendern (*)", "(keine Ahnung = nemam pojma)". Ti znaci
+ * MORAJU ostati. Nelenji (.+?) unutar para hvata i ugnežđeno - "**a *b* c**"
+ * i dalje postaje "a b c" - dok obična [^*]+ klasa to ne bi uspela.
  */
 function clean(value: string): string {
   return value
     .replace(/<[^>]*>/g, "") // HTML tagovi (i nezatvoreni, dokle god tag sam ima ">")
-    .replace(/[*=]/g, "") // markdown-lite oznake: bold/kurziv/marker, upareno ili ne
+    .replace(/==(.+?)==/g, "$1") // marker, uključujući ugnežđeno
+    .replace(/\*\*(.+?)\*\*/g, "$1") // bold, uključujući ugnežđeno
+    .replace(/\*(.+?)\*/g, "$1") // kurziv
     .replace(/\s+/g, " ")
     .trim();
 }
 
 export function deriveWordsetItems(rows: WortschatzRow[]): WordsetItem[] {
   const out: WordsetItem[] = [];
-  const seen = new Set<string>();
+  const indexByKey = new Map<string, number>();
   for (const row of rows) {
     const front = clean(row.de ?? "");
     const back = clean(row.sr ?? "");
     if (!front || !back) continue;
     const key = front.toLowerCase();
-    if (seen.has(key)) continue; // isti front sa različitim prevodom - zadržava se prvo pojavljivanje
-    seen.add(key);
+    const existingIdx = indexByKey.get(key);
+    if (existingIdx !== undefined) {
+      // Ista nemačka reč se ponovo pojavila - spoji prevode sa "|", isto kao što
+      // flashcard-grading.ts već prihvata svaki od više prevoda na jednoj kartici.
+      // Zadržava se oblik i pozicija PRVOG pojavljivanja reči.
+      const existing = out[existingIdx];
+      const parts = existing.back.split("|");
+      if (!parts.includes(back)) existing.back = `${existing.back}|${back}`;
+      continue;
+    }
+    indexByKey.set(key, out.length);
     out.push({ idx: out.length, front, back });
   }
   return out;
@@ -46,7 +57,8 @@ export function wordsetSetKey(wordsetId: string): string {
 }
 
 export function wordsetTitle(position: number | null, lessonDate: string): string {
-  if (position && position > 0) return `Termin ${position} - reči`;
+  // null > 0 je već false, pa je "position &&" suvišno - ?? 0 samo drži TS strict happy.
+  if ((position ?? 0) > 0) return `Termin ${position} - reči`;
   const [y, m, d] = lessonDate.split("-");
   return `Reči - ${Number(d)}.${Number(m)}.${y}.`;
 }

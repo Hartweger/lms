@@ -35,12 +35,13 @@ describe("wordset-derive", () => {
     expect(items[0]).toEqual({ idx: 0, front: "gelassen", back: "smiren" });
   });
 
-  it("izbacuje duplikate unutar istog seta (bez obzira na velika slova)", () => {
+  it("spaja duplikate unutar istog seta (bez obzira na velika slova), ne duplira identičan prevod", () => {
     const items = deriveWordsetItems([
       { de: "gelassen", sr: "smiren" },
       { de: "Gelassen", sr: "smiren" },
     ]);
     expect(items).toHaveLength(1);
+    expect(items[0].back).toBe("smiren"); // ne "smiren|smiren"
   });
 
   it("indeksi su uzastopni posle izbacivanja", () => {
@@ -62,26 +63,46 @@ describe("wordset-derive", () => {
     expect(wordsetTitle(null, "2026-10-02")).toBe("Reči - 2.10.2026.");
   });
 
-  it("ugnežđene/nezatvorene oznake ne smeju ostaviti smeće ni pući", () => {
+  it("ugnežđene oznake ne smeju ostaviti smeće ni pući", () => {
     // Naivan regex "**([^*]+)**" ne pogađa ugnežđeno **a *b* c** (nema para ** posle
-    // jednostrukog *), pa ostavi zvezdice na kartici. Reč iz nemačkog/našeg rečnika
-    // realno nikad ne sadrži * ili = kao slovo, pa se ti znakovi bezbedno brišu svi,
-    // upareni ili ne - to je popravka u odnosu na zadati primer koji ovo ne rešava.
+    // jednostrukog *), pa ostavi zvezdice na kartici. Nelenji (.+?) to rešava jer sme
+    // da pojede i unutrašnje zvezdice dok traži par. <mark> bez zatvaranja je i dalje
+    // ispravan HTML tag (ima ">"), pa ga tag-regex briše. Nezatvoreno "==zwei" (bez
+    // druge "==") NEMA par, pa ostaje nedirnuto - baš kao pravi tekst u rečniku
+    // (v. test niže) koji ima pojedinačne znake.
     const items = deriveWordsetItems([
       { de: "**a *b* c**", sr: "x" },
       { de: "<mark>eins", sr: "y" },
       { de: "==zwei", sr: "z" },
     ]);
-    expect(items.map((i) => i.front)).toEqual(["a b c", "eins", "zwei"]);
+    expect(items.map((i) => i.front)).toEqual(["a b c", "eins", "==zwei"]);
   });
 
-  it("isti nemački front sa RAZLIČITIM prevodom - zadržava prvo pojavljivanje", () => {
+  it("ne dira pojedinačnu zvezdicu i znak jednakosti iz pravih setova", () => {
+    // Prave vrednosti iz scripts/flashcards/*.json - jedan znak, ne markdown par.
+    // Ako se * i = ikad počnu brisati bezuslovno (umesto samo u paru), ovo puca.
+    const items = deriveWordsetItems([
+      // scripts/flashcards/b1-1-modul-5.json:106
+      { de: "das Gendersternchen", sr: "zvezdica za Gendern (*)" },
+      // scripts/flashcards/a2-2-ispit-a2.json:9
+      { de: "Ahnung", sr: "predstava (keine Ahnung = nemam pojma)" },
+      // scripts/flashcards/a2-2-ispit-a2.json:22
+      { de: "Bescheid", sr: "obaveštenje (Bescheid sagen = javiti)" },
+    ]);
+    expect(items.map((i) => i.back)).toEqual([
+      "zvezdica za Gendern (*)",
+      "predstava (keine Ahnung = nemam pojma)",
+      "obaveštenje (Bescheid sagen = javiti)",
+    ]);
+  });
+
+  it("isti nemački front sa RAZLIČITIM prevodom - spaja ih sa | (konvencija iz flashcard-types)", () => {
     const items = deriveWordsetItems([
       { de: "die Bedingung", sr: "uslov" },
       { de: "die Bedingung", sr: "drugi prevod" },
     ]);
     expect(items).toHaveLength(1);
-    expect(items[0].back).toBe("uslov");
+    expect(items[0]).toEqual({ idx: 0, front: "die Bedingung", back: "uslov|drugi prevod" });
   });
 
   it("wordsetTitle radi za jednocifrene dane i mesece", () => {
