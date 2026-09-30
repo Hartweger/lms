@@ -35,7 +35,7 @@ async function loadOwnedEnrollment(
 ) {
   const { data: enr } = await admin
     .from("individual_enrollments")
-    .select("id, professor_id, package_lessons")
+    .select("id, professor_id, package_lessons, status")
     .eq("id", enrollmentId)
     .single();
   if (!enr) return { error: "Upis nije pronađen", status: 404 as const };
@@ -84,27 +84,68 @@ async function recountLessons(admin: ReturnType<typeof createAdminClient>, enrol
   return used;
 }
 
-type Failure = { error: string; status: number };
+type Failure = { error: string; status: number; code?: string };
 
-// Nađi individual_lessons red za enrollment+datum, ili ga napravi (samo ovde se čas STVARNO
-// beleži - GET nikad ne piše). select-pa-insert sužava prozor za trku (dve kartice profesorke
-// istovremeno), ali ga ne zatvara jer individual_lessons nema unique(enrollment_id, lesson_date) -
+// Nalazi red časa za enrollment+datum. ZATEČENO STANJE: 16 postojećih parova
+// (enrollment_id, lesson_date) na živoj bazi imaju VIŠE OD JEDNOG časa istog dana (do tri - uglavnom
+// stari dvostruki klikovi) - unique(enrollment_id, lesson_date) bi zato pri primeni pukao i model bi
+// bio pogrešan, pa ga namerno NE dodajemo. Isto tako .maybeSingle() na takvom paru puca (PostgREST
+// vrati grešku kad ima >1 red, ne prvi). Zato se determinisano vezujemo za NAJSTARIJI red
+// (order po created_at + limit 1) - isti izbor u GET i PUT, da beleška uvek ide na isti čas.
+async function findLessonRow(
+  admin: ReturnType<typeof createAdminClient>,
+  enrollmentId: string,
+  date: string
+): Promise<{ lesson: { id: string } | null } | Failure> {
+  const { data, error } = await admin
+    .from("individual_lessons")
+    .select("id")
+    .eq("enrollment_id", enrollmentId)
+    .eq("lesson_date", date)
+    .order("created_at", { ascending: true })
+    .limit(1);
+  if (error) return { error: error.message, status: 500 };
+  return { lesson: data?.[0] ?? null };
+}
+
+// Ista granica kao POST u api/profesor/individualni-cas/route.ts: paket arhiviran ILI već popunjen
+// (broj redova u individual_lessons >= package_lessons) - ne sme novi čas. Namerno preuzeto da se
+// dva mesta ne razilaze.
+async function canCreateLesson(
+  admin: ReturnType<typeof createAdminClient>,
+  enrollmentId: string,
+  status: string,
+  packageLessons: number
+): Promise<boolean> {
+  if (status === "completed") return false;
+  const { count } = await admin.from("individual_lessons").select("*", { count: "exact", head: true }).eq("enrollment_id", enrollmentId);
+  return (count ?? 0) < packageLessons;
+}
+
+// Nađi postojeći čas za enrollment+datum, ili ga prvi put upiši (samo ovde se čas STVARNO beleži -
+// GET nikad ne piše). Ako datum još nema svoj čas, a paket je pun/arhiviran, čas se NE kreira i
+// beleška se ne snima (nema na šta da se veže) - profesorka dobija 409 sa code "paket_pun".
+// select-pa-insert sužava prozor za trku (dve kartice profesorke istovremeno), ali ga ne zatvara -
 // zaključavanje je namerno ostavljeno za kasnije (videti napomenu u izveštaju).
 async function findOrCreateLesson(
   admin: ReturnType<typeof createAdminClient>,
   enrollmentId: string,
   date: string,
   professorId: string,
+  status: string,
   packageLessons: number
 ): Promise<{ lessonId: string } | Failure> {
-  const { data: existing, error: selectError } = await admin
-    .from("individual_lessons")
-    .select("id")
-    .eq("enrollment_id", enrollmentId)
-    .eq("lesson_date", date)
-    .maybeSingle();
-  if (selectError) return { error: selectError.message, status: 500 };
-  if (existing) return { lessonId: existing.id };
+  const found = await findLessonRow(admin, enrollmentId, date);
+  if ("error" in found) return found;
+  if (found.lesson) return { lessonId: found.lesson.id };
+
+  if (!(await canCreateLesson(admin, enrollmentId, status, packageLessons))) {
+    return {
+      error: "Paket je iskorišćen - čas nije upisan. Dodaj čas u panelu ili otvori nov paket.",
+      status: 409,
+      code: "paket_pun",
+    };
+  }
 
   const { data: inserted, error: insertError } = await admin
     .from("individual_lessons")
@@ -261,16 +302,16 @@ export async function GET(request: Request) {
   const owned = await loadOwnedEnrollment(staff.admin, enrollmentId, staff.userId, staff.isAdmin);
   if ("error" in owned) return NextResponse.json({ error: owned.error }, { status: owned.status });
 
-  const { data: lesson } = await staff.admin
-    .from("individual_lessons")
-    .select("id")
-    .eq("enrollment_id", enrollmentId)
-    .eq("lesson_date", date)
-    .maybeSingle();
+  const found = await findLessonRow(staff.admin, enrollmentId, date);
+  if ("error" in found) return NextResponse.json({ error: found.error }, { status: found.status });
 
-  if (!lesson) {
-    return NextResponse.json({ content: emptyNoteContent(), noteId: null, lessonId: null });
+  if (!found.lesson) {
+    // Čas za taj datum još ne postoji - javi i da li bi uopšte smeo da se napravi, da editor u
+    // sledećem zadatku može da upozori profesorku PRE nego što otkuca ceo čas.
+    const canCreate = await canCreateLesson(staff.admin, enrollmentId, owned.enr.status, owned.enr.package_lessons);
+    return NextResponse.json({ content: emptyNoteContent(), noteId: null, lessonId: null, canCreate });
   }
+  const lesson = found.lesson;
 
   const { data: note } = await staff.admin
     .from("class_notes")
@@ -313,9 +354,15 @@ export async function PUT(request: Request) {
   // ona koja baš sad snima.
   const professorId = owned.enr.professor_id ?? staff.userId;
 
-  // 1. Čas - nađi ili prvi put upiši (i tek tad prebroji/ažuriraj paket).
-  const lessonResult = await findOrCreateLesson(admin, enrollmentId, date, professorId, owned.enr.package_lessons);
-  if ("error" in lessonResult) return NextResponse.json({ error: lessonResult.error }, { status: lessonResult.status });
+  // 1. Čas - nađi ili prvi put upiši (i tek tad prebroji/ažuriraj paket). Ako paket ne postoji za
+  // ovaj datum i ne sme da se napravi (pun/arhiviran), stajemo OVDE - beleška se ne snima, jer
+  // nema na koji čas da se veže.
+  const lessonResult = await findOrCreateLesson(admin, enrollmentId, date, professorId, owned.enr.status, owned.enr.package_lessons);
+  if ("error" in lessonResult) {
+    const payload: { error: string; code?: string } = { error: lessonResult.error };
+    if (lessonResult.code) payload.code = lessonResult.code;
+    return NextResponse.json(payload, { status: lessonResult.status });
+  }
   const { lessonId } = lessonResult;
 
   // 2. Beleška.
