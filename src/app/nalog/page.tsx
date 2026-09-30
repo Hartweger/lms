@@ -2,9 +2,9 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { redirect } from "next/navigation";
-import { accessStatus, shouldShowRenew, isRenewable } from "@/lib/account";
+import { accessStatus, accessNote, shouldShowRenew, isRenewable } from "@/lib/account";
 import { renewalProductSlugs } from "@/lib/renewal-product";
-import { noCouponRenewalCourseIds } from "@/lib/renewal-eligibility";
+import { noCouponRenewalCourseIds, activeSubscriptionCourses } from "@/lib/renewal-eligibility";
 import { GrupniIIndividualni, ProfilSekcija } from "./Sekcije";
 
 export const metadata = { title: "Moj nalog - Hartweger", robots: { index: false } };
@@ -47,6 +47,9 @@ export default async function NalogPage() {
   // Bez samoposlužne obnove −50%: grupni/individualni (polunivo vs ceo nivo) i
   // prekinuta pretplata (pristup ističe zbog otkazivanja, ne zbog odslušane godine).
   const upisom = await noCouponRenewalCourseIds(admin, user.id);
+  // Kursevi koje drži aktivna pretplata: rok im nije istek nego „plaćeno do", pa ne
+  // odbrojavaju i ne nude obnovu - vidi `activeSubscriptionCourses`.
+  const pretplatom = await activeSubscriptionCourses(admin, user.id);
 
   const { data: orders } = await supabase
     .from("orders")
@@ -65,20 +68,20 @@ export default async function NalogPage() {
           const expired = c.status.state === "expired";
           const renewSlug = renewSlugs.get(c.id);
           const renew =
-            shouldShowRenew(c.status) && isRenewable(c.category, c.slug) && !!renewSlug && !upisom.has(c.id);
+            shouldShowRenew(c.status) && isRenewable(c.category, c.slug) && !!renewSlug
+            && !upisom.has(c.id) && !pretplatom.has(c.id);
+          const note = accessNote(c.status, pretplatom.get(c.id) ?? null, now);
           return (
             <div
               key={c.id}
               className={`border rounded-lg p-4 mb-2 ${expired ? "border-gray-200 bg-gray-50 opacity-70" : "border-gray-200"}`}
             >
               <p className="font-medium text-gray-900">{c.title}</p>
-              {c.status.state === "active" && c.status.daysLeft !== null && c.status.daysLeft <= 30 && (
-                <p className="text-sm text-gray-500 mt-1">Pristup ističe za {c.status.daysLeft} dana</p>
+              {note && (
+                <p className={`text-sm mt-1 ${note.tone === "alarm" ? "text-koral-dark" : "text-gray-500"}`}>
+                  {note.text}
+                </p>
               )}
-              {c.status.state === "expiring" && (
-                <p className="text-sm text-koral-dark mt-1">Pristup ističe za {c.status.daysLeft} dana</p>
-              )}
-              {expired && <p className="text-sm text-koral-dark mt-1">Pristup je istekao</p>}
               {renew && (
                 <Link
                   href={`/kupovina/${renewSlug}?kupon=OBNOVI50`}

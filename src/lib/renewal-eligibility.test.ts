@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { createFakeAdmin } from "@/lib/test/fake-admin";
-import { enrollmentDerivedCourseIds, cancelledSubscriptionCourseIds, emailCanRenewWithCoupon } from "./renewal-eligibility";
+import { enrollmentDerivedCourseIds, cancelledSubscriptionCourseIds, activeSubscriptionCourses, emailCanRenewWithCoupon } from "./renewal-eligibility";
 
 type Row = Record<string, unknown>;
 
@@ -226,5 +226,61 @@ describe("emailCanRenewWithCoupon - otkazana pretplata", () => {
       ],
     });
     expect(await emailCanRenewWithCoupon(a, "ana@example.com", "v-a1")).toBe(true);
+  });
+});
+
+describe("activeSubscriptionCourses", () => {
+  const aktivna = { id: "s1", user_id: "u1", status: "active", next_charge_at: "2026-10-07T17:46:00Z" };
+  const rata1 = { id: "id-2026-467", order_number: "2026-467", items: [{ course_slug: "v-a1" }], subscription_id: "s1" };
+
+  function sa(over: Record<string, Row[]> = {}) {
+    return admin({
+      subscriptions: [aktivna],
+      orders: [rata1],
+      course_access: [{ user_id: "u1", course_id: "a11", source: "order:2026-467" }],
+      ...over,
+    });
+  }
+
+  it("kurs iz aktivne pretplate nosi datum sledeće naplate", async () => {
+    const m = await activeSubscriptionCourses(sa(), "u1");
+    expect(m.get("a11")).toBe("2026-10-07T17:46:00Z");
+  });
+
+  // Rata 2 dobija svoj broj porudžbine i grant PREPIŠE `source` na postojećem redu,
+  // pa se pokrivenost mora prepoznati i preko naplata 2..N, ne samo preko prve.
+  it("pristup prepisan na ratu 2 se i dalje prepoznaje", async () => {
+    const m = await activeSubscriptionCourses(
+      sa({
+        orders: [rata1, { id: "id-2026-512", order_number: "2026-512", items: [{ course_slug: "v-a1" }], subscription_id: "s1" }],
+        course_access: [
+          { user_id: "u1", course_id: "a11", source: "order:2026-512" },
+          { user_id: "u1", course_id: "a12", source: "order:2026-512" },
+        ],
+      }),
+      "u1",
+    );
+    expect(m.get("a11")).toBe("2026-10-07T17:46:00Z");
+    expect(m.get("a12")).toBe("2026-10-07T17:46:00Z");
+  });
+
+  it("otkazana pretplata se ne računa - tu istek jeste stvaran", async () => {
+    const m = await activeSubscriptionCourses(
+      sa({ subscriptions: [{ ...aktivna, status: "cancelled" }] }),
+      "u1",
+    );
+    expect(m.size).toBe(0);
+  });
+
+  it("obična kupovina bez pretplate se ne dira", async () => {
+    const m = await activeSubscriptionCourses(
+      sa({ orders: [order("2026-071", "v-a1")], course_access: [{ user_id: "u1", course_id: "a11", source: "order:2026-071" }] }),
+      "u1",
+    );
+    expect(m.size).toBe(0);
+  });
+
+  it("bez polaznika - prazna mapa, bez upita", async () => {
+    expect((await activeSubscriptionCourses(sa(), "")).size).toBe(0);
   });
 });

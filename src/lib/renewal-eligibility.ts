@@ -4,6 +4,119 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 const ENROLLMENT_CATEGORIES = new Set(["grupni", "individualni", "mesecni"]);
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
+interface AccessRow { course_id: string; source: string | null }
+
+/** `course_access` redovi polaznika - polazna tačka svih provera porekla pristupa. */
+async function accessRows(admin: SupabaseClient, userId: string): Promise<AccessRow[]> {
+  const { data } = await admin.from("course_access").select("course_id, source").eq("user_id", userId);
+  return (data ?? []) as AccessRow[];
+}
+
+/**
+ * Porudžbine iza tih pristupa. `source` je `order:{order_number}` kod novih, a
+ * `order:{uuid}` kod starijih redova - zato dva upita.
+ */
+async function ordersBehindAccess<T>(
+  admin: SupabaseClient,
+  rows: AccessRow[],
+  columns: string,
+): Promise<T[]> {
+  const tokens = [...new Set(
+    rows.map((r) => r.source ?? "").filter((s) => s.startsWith("order:")).map((s) => s.slice(6))
+  )];
+  if (tokens.length === 0) return [];
+
+  const uuids = tokens.filter((t) => UUID.test(t));
+  const numbers = tokens.filter((t) => !UUID.test(t));
+  const [{ data: byNumber }, { data: byId }] = await Promise.all([
+    numbers.length
+      ? admin.from("orders").select(columns).in("order_number", numbers)
+      : Promise.resolve({ data: [] }),
+    uuids.length
+      ? admin.from("orders").select(columns).in("id", uuids)
+      : Promise.resolve({ data: [] }),
+  ]);
+  return [...(byNumber ?? []), ...(byId ?? [])] as T[];
+}
+
+/** Kursevi čiji pristup stoji na nekoj od datih porudžbina (ključ = broj ILI id). */
+function courseIdsFromOrderKeys(rows: AccessRow[], keys: Set<string>): Set<string> {
+  const out = new Set<string>();
+  rows.forEach((r) => {
+    const s = r.source ?? "";
+    if (s.startsWith("order:") && keys.has(s.slice(6))) out.add(r.course_id);
+  });
+  return out;
+}
+
+interface SubOrder { id: string; order_number: string | null; subscription_id: string | null }
+
+/**
+ * Ključevi porudžbina koje pripadaju datim pretplatama. Naplate 2..N imaju svoj broj
+ * porudžbine ali istu `subscription_id`, pa se hvataju i one - a grant pri svakoj rati
+ * prepiše `course_access.source` na najnoviju.
+ */
+function orderKeysForSubs(orders: SubOrder[], subIds: Set<string>): Set<string> {
+  const keys = new Set<string>();
+  orders.forEach((o) => {
+    if (!o.subscription_id || !subIds.has(o.subscription_id)) return;
+    if (o.order_number) keys.add(o.order_number);
+    if (o.id) keys.add(o.id);
+  });
+  return keys;
+}
+
+/**
+ * Kursevi koje pokriva AKTIVNA pretplata → datum sledeće naplate (ISO), ili `null` ako
+ * ga banka još nije vratila.
+ *
+ * Dve stvari u „Moj nalog" zavise od ovoga. Kartica ne sme da odbrojava do isteka:
+ * rok pretplate je „plaćeno do" i svaka naplata ga pomera, pa je odbrojavanje lažna
+ * uzbuna (vidi `accessNote` u lib/account.ts). I ne sme da nudi „Obnovi −50%":
+ * polaznica bi kupila sadržaj koji upravo plaća mesečno. `cancelledSubscriptionCourseIds`
+ * pokriva samo PREKINUTE pretplate, pa je dugme dotad izlazilo svakome ko je u prozoru
+ * od 7 dana pred naplatu.
+ */
+export async function activeSubscriptionCourses(
+  admin: SupabaseClient,
+  userId: string
+): Promise<Map<string, string | null>> {
+  const out = new Map<string, string | null>();
+  if (!userId) return out;
+
+  const rows = await accessRows(admin, userId);
+  const orders = await ordersBehindAccess<SubOrder>(admin, rows, "id, order_number, subscription_id");
+  const subIds = [...new Set(orders.map((o) => o.subscription_id).filter(Boolean))] as string[];
+  if (subIds.length === 0) return out;
+
+  const { data: subs } = await admin
+    .from("subscriptions")
+    .select("id, next_charge_at")
+    .in("id", subIds)
+    .eq("status", "active");
+  const naplata = new Map(
+    ((subs ?? []) as { id: string; next_charge_at: string | null }[]).map((s) => [s.id, s.next_charge_at])
+  );
+  if (naplata.size === 0) return out;
+
+  // Ključ porudžbine → pretplata, da se sa reda pristupa stigne do datuma naplate.
+  const keySub = new Map<string, string>();
+  orders.forEach((o) => {
+    if (!o.subscription_id || !naplata.has(o.subscription_id)) return;
+    if (o.order_number) keySub.set(o.order_number, o.subscription_id);
+    if (o.id) keySub.set(o.id, o.subscription_id);
+  });
+
+  rows.forEach((r) => {
+    const s = r.source ?? "";
+    if (!s.startsWith("order:")) return;
+    const sub = keySub.get(s.slice(6));
+    if (sub) out.set(r.course_id, naplata.get(sub) ?? null);
+  });
+
+  return out;
+}
+
 /**
  * Kursevi do kojih je polaznik došao kupovinom GRUPNOG ili INDIVIDUALNOG kursa.
  *
@@ -26,33 +139,16 @@ export async function enrollmentDerivedCourseIds(
   const out = new Set<string>();
   if (!userId) return out;
 
-  const { data: access } = await admin
-    .from("course_access").select("course_id, source").eq("user_id", userId);
-  const rows = (access ?? []) as { course_id: string; source: string | null }[];
+  const rows = await accessRows(admin, userId);
   if (rows.length === 0) return out;
 
   // Ručni upis u grupu ne prolazi kroz porudžbinu - prepoznaje se po izvoru.
   rows.forEach((r) => { if ((r.source ?? "").startsWith("grupa")) out.add(r.course_id); });
 
   // Ostalo se odlučuje po porudžbini iz koje je pristup dat: `order:{order_number|id}`.
-  const tokens = [...new Set(
-    rows.map((r) => r.source ?? "").filter((s) => s.startsWith("order:")).map((s) => s.slice(6))
-  )];
-  if (tokens.length === 0) return out;
-
-  const uuids = tokens.filter((t) => UUID.test(t));
-  const numbers = tokens.filter((t) => !UUID.test(t));
-  const [{ data: byNumber }, { data: byId }] = await Promise.all([
-    numbers.length
-      ? admin.from("orders").select("id, order_number, items").in("order_number", numbers)
-      : Promise.resolve({ data: [] }),
-    uuids.length
-      ? admin.from("orders").select("id, order_number, items").in("id", uuids)
-      : Promise.resolve({ data: [] }),
-  ]);
-  const orders = [...(byNumber ?? []), ...(byId ?? [])] as {
+  const orders = await ordersBehindAccess<{
     id: string; order_number: string | null; items: { course_slug?: string }[] | null;
-  }[];
+  }>(admin, rows, "id, order_number, items");
   if (orders.length === 0) return out;
 
   const slugs = [...new Set(orders.flatMap((o) => (o.items ?? []).map((i) => i.course_slug).filter(Boolean)))] as string[];
@@ -73,10 +169,7 @@ export async function enrollmentDerivedCourseIds(
     if (o.id) enrollmentOrders.add(o.id);
   });
 
-  rows.forEach((r) => {
-    const s = r.source ?? "";
-    if (s.startsWith("order:") && enrollmentOrders.has(s.slice(6))) out.add(r.course_id);
-  });
+  courseIdsFromOrderKeys(rows, enrollmentOrders).forEach((id) => out.add(id));
 
   return out;
 }
@@ -104,27 +197,8 @@ export async function cancelledSubscriptionCourseIds(
   const out = new Set<string>();
   if (!userId) return out;
 
-  const { data: access } = await admin
-    .from("course_access").select("course_id, source").eq("user_id", userId);
-  const rows = (access ?? []) as { course_id: string; source: string | null }[];
-  const tokens = [...new Set(
-    rows.map((r) => r.source ?? "").filter((s) => s.startsWith("order:")).map((s) => s.slice(6))
-  )];
-  if (tokens.length === 0) return out;
-
-  const uuids = tokens.filter((t) => UUID.test(t));
-  const numbers = tokens.filter((t) => !UUID.test(t));
-  const [{ data: byNumber }, { data: byId }] = await Promise.all([
-    numbers.length
-      ? admin.from("orders").select("id, order_number, subscription_id").in("order_number", numbers)
-      : Promise.resolve({ data: [] }),
-    uuids.length
-      ? admin.from("orders").select("id, order_number, subscription_id").in("id", uuids)
-      : Promise.resolve({ data: [] }),
-  ]);
-  const orders = [...(byNumber ?? []), ...(byId ?? [])] as {
-    id: string; order_number: string | null; subscription_id: string | null;
-  }[];
+  const rows = await accessRows(admin, userId);
+  const orders = await ordersBehindAccess<SubOrder>(admin, rows, "id, order_number, subscription_id");
   const subIds = [...new Set(orders.map((o) => o.subscription_id).filter(Boolean))] as string[];
   if (subIds.length === 0) return out;
 
@@ -140,17 +214,7 @@ export async function cancelledSubscriptionCourseIds(
   );
   if (prekinute.size === 0) return out;
 
-  const prekinutePorudzbine = new Set<string>();
-  orders.forEach((o) => {
-    if (!o.subscription_id || !prekinute.has(o.subscription_id)) return;
-    if (o.order_number) prekinutePorudzbine.add(o.order_number);
-    if (o.id) prekinutePorudzbine.add(o.id);
-  });
-
-  rows.forEach((r) => {
-    const s = r.source ?? "";
-    if (s.startsWith("order:") && prekinutePorudzbine.has(s.slice(6))) out.add(r.course_id);
-  });
+  courseIdsFromOrderKeys(rows, orderKeysForSubs(orders, prekinute)).forEach((id) => out.add(id));
 
   return out;
 }
