@@ -51,6 +51,45 @@ describe("tokenizeInline", () => {
       },
     ]);
   });
+
+  it("goli https URL u rečenici postaje link", () => {
+    expect(tokenizeInline("vidi https://hartweger.rs za detalje")).toEqual([
+      { kind: "text", text: "vidi " },
+      { kind: "link", text: "https://hartweger.rs", href: "https://hartweger.rs" },
+      { kind: "text", text: " za detalje" },
+    ]);
+  });
+
+  it("www. bez šeme postaje link sa https:// u href-u, tekst ostaje kako je napisano", () => {
+    expect(tokenizeInline("vidi www.goethe.de")).toEqual([
+      { kind: "text", text: "vidi " },
+      { kind: "link", text: "www.goethe.de", href: "https://www.goethe.de" },
+    ]);
+  });
+
+  it("tačka na kraju rečenice ne ulazi u href golog URL-a", () => {
+    expect(tokenizeInline("vidi https://hartweger.rs.")).toEqual([
+      { kind: "text", text: "vidi " },
+      { kind: "link", text: "https://hartweger.rs", href: "https://hartweger.rs" },
+      { kind: "text", text: "." },
+    ]);
+  });
+
+  it("zatvorena zagrada bez otvorene u URL-u ne ulazi u href", () => {
+    expect(tokenizeInline("pogledaj (https://hartweger.rs) odmah")).toEqual([
+      { kind: "text", text: "pogledaj (" },
+      { kind: "link", text: "https://hartweger.rs", href: "https://hartweger.rs" },
+      { kind: "text", text: ") odmah" },
+    ]);
+  });
+
+  it("markdown link i dalje ima prednost nad golim URL pravilom", () => {
+    expect(tokenizeInline("vidi [ovde](https://hartweger.rs) sada")).toEqual([
+      { kind: "text", text: "vidi " },
+      { kind: "link", text: "ovde", href: "https://hartweger.rs" },
+      { kind: "text", text: " sada" },
+    ]);
+  });
 });
 
 describe("parseBlocks", () => {
