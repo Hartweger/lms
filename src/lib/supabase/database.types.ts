@@ -457,6 +457,61 @@ export type Database = {
         }
         Relationships: []
       }
+      class_notes: {
+        Row: {
+          content: Json
+          content_text: string | null
+          created_at: string
+          group_session_id: string | null
+          id: string
+          individual_lesson_id: string | null
+          professor_id: string
+          updated_at: string
+        }
+        Insert: {
+          content?: Json
+          content_text?: string | null
+          created_at?: string
+          group_session_id?: string | null
+          id?: string
+          individual_lesson_id?: string | null
+          professor_id: string
+          updated_at?: string
+        }
+        Update: {
+          content?: Json
+          content_text?: string | null
+          created_at?: string
+          group_session_id?: string | null
+          id?: string
+          individual_lesson_id?: string | null
+          professor_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "class_notes_group_session_id_fkey"
+            columns: ["group_session_id"]
+            isOneToOne: false
+            referencedRelation: "group_sessions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "class_notes_individual_lesson_id_fkey"
+            columns: ["individual_lesson_id"]
+            isOneToOne: false
+            referencedRelation: "individual_lessons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "class_notes_professor_id_fkey"
+            columns: ["professor_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       companies: {
         Row: {
           adresa: string | null
@@ -2787,6 +2842,93 @@ export type Database = {
           day?: string
         }
         Relationships: []
+      }
+      student_wordset_items: {
+        Row: {
+          back: string
+          front: string
+          idx: number
+          wordset_id: string
+        }
+        Insert: {
+          back: string
+          front: string
+          idx: number
+          wordset_id: string
+        }
+        Update: {
+          back?: string
+          front?: string
+          idx?: number
+          wordset_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "student_wordset_items_wordset_id_fkey"
+            columns: ["wordset_id"]
+            isOneToOne: false
+            referencedRelation: "student_wordsets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      student_wordsets: {
+        Row: {
+          created_at: string
+          group_id: string | null
+          id: string
+          individual_enrollment_id: string | null
+          lesson_date: string
+          note_id: string | null
+          position: number | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          group_id?: string | null
+          id?: string
+          individual_enrollment_id?: string | null
+          lesson_date: string
+          note_id?: string | null
+          position?: number | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          group_id?: string | null
+          id?: string
+          individual_enrollment_id?: string | null
+          lesson_date?: string
+          note_id?: string | null
+          position?: number | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "student_wordsets_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "student_wordsets_individual_enrollment_id_fkey"
+            columns: ["individual_enrollment_id"]
+            isOneToOne: false
+            referencedRelation: "individual_enrollments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "student_wordsets_note_id_fkey"
+            columns: ["note_id"]
+            isOneToOne: false
+            referencedRelation: "class_notes"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       subscriptions: {
         Row: {
