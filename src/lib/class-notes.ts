@@ -25,15 +25,23 @@ export interface NoteContent {
   lob?: string;
 }
 
-/** Oznaka = nemačka reč kao u starom Google Doc šablonu; podnaslov = objašnjenje na našem. */
-export const TEXT_SECTIONS: ReadonlyArray<{
+/** Definicija jedne tekstualne sekcije - oznaka, ključ u NoteContent i kratak opis za profesorku. */
+export interface TextSectionDef {
   key: TextSectionKey;
   label: string;
   hint: string;
-}> = [
+}
+
+/** Sekcija spremna za prikaz - definicija plus već popunjena (trimovana) vrednost. */
+export interface VisibleSection extends TextSectionDef {
+  value: string;
+}
+
+/** Oznaka = nemačka reč kao u starom Google Doc šablonu; podnaslov = objašnjenje na našem. */
+export const TEXT_SECTIONS: ReadonlyArray<TextSectionDef> = [
   { key: "tema",        label: "TEMA",        hint: "tema časa" },
   { key: "redemittel",  label: "REDEMITTEL",  hint: "korisne fraze i izrazi" },
-  { key: "fehler",      label: "FEHLER",      hint: "greške i ispravke — bez imena" },
+  { key: "fehler",      label: "FEHLER",      hint: "greške i ispravke, bez imena" },
   { key: "grammatik",   label: "GRAMMATIK",   hint: "gramatika" },
   { key: "hausaufgabe", label: "HAUSAUFGABE", hint: "domaći zadatak" },
   { key: "lob",         label: "LOB",         hint: "pohvala" },
@@ -46,17 +54,24 @@ export function emptyNoteContent(): NoteContent {
   return { v: 1, wortschatz: [] };
 }
 
+/**
+ * Prazna je i vrednost od samih razmaka, i undefined, i null - null nije redak slučaj
+ * jer sadržaj sekcije često dolazi direktno iz Supabase jsonb polja.
+ */
 export function isSectionEmpty(value: string | undefined | null): boolean {
   return !value || value.trim().length === 0;
 }
 
-export function visibleSections(
-  content: NoteContent,
-): Array<{ key: TextSectionKey; label: string; hint: string; value: string }> {
+export function visibleSections(content: NoteContent): VisibleSection[] {
   return TEXT_SECTIONS.filter((s) => !isSectionEmpty(content[s.key])).map((s) => ({
     ...s,
     value: (content[s.key] as string).trim(),
   }));
+}
+
+/** Jedan red WORTSCHATZ tabele kao tekst: „nemačka reč = naš prevod". */
+function formatWortschatz(rows: WortschatzRow[]): string {
+  return rows.map((r) => `${r.de} = ${r.sr}`).join("\n");
 }
 
 /** Plain-text ogledalo za content_text (PDF fallback i kasnija pretraga). */
@@ -66,16 +81,12 @@ export function noteToPlainText(content: NoteContent): string {
     if (isSectionEmpty(content[s.key])) continue;
     parts.push(`${s.label}\n${(content[s.key] as string).trim()}`);
     if (s.key === WORTSCHATZ_AFTER && content.wortschatz.length > 0) {
-      parts.push(
-        "WORTSCHATZ\n" + content.wortschatz.map((r) => `${r.de} — ${r.sr}`).join("\n"),
-      );
+      parts.push("WORTSCHATZ\n" + formatWortschatz(content.wortschatz));
     }
   }
-  // Ako TEMA nije popunjena a reči jesu, WORTSCHATZ ipak mora da uđe.
-  if (isSectionEmpty(content.tema) && content.wortschatz.length > 0) {
-    parts.unshift(
-      "WORTSCHATZ\n" + content.wortschatz.map((r) => `${r.de} — ${r.sr}`).join("\n"),
-    );
+  // Ako sekcija posle koje ide WORTSCHATZ nije popunjena, reči ipak moraju da uđu.
+  if (isSectionEmpty(content[WORTSCHATZ_AFTER]) && content.wortschatz.length > 0) {
+    parts.unshift("WORTSCHATZ\n" + formatWortschatz(content.wortschatz));
   }
   return parts.join("\n\n");
 }

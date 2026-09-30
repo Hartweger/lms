@@ -18,7 +18,9 @@ describe("class-notes", () => {
   it("prazna beleška ima sve sekcije prazne", () => {
     const c = emptyNoteContent();
     expect(c.wortschatz).toEqual([]);
-    expect(isSectionEmpty(c.tema)).toBe(true);
+    for (const s of TEXT_SECTIONS) {
+      expect(isSectionEmpty(c[s.key])).toBe(true);
+    }
   });
 
   it("sekcija od samih razmaka i novih redova je prazna", () => {
@@ -27,7 +29,7 @@ describe("class-notes", () => {
     expect(isSectionEmpty("Konjunktiv II")).toBe(false);
   });
 
-  it("visibleSections izbacuje prazne sekcije — i naslov i sadržaj", () => {
+  it("visibleSections izbacuje prazne sekcije - i naslov i sadržaj", () => {
     const c: NoteContent = {
       ...emptyNoteContent(),
       tema: "Konjunktiv II",
@@ -47,7 +49,29 @@ describe("class-notes", () => {
     const t = noteToPlainText(c);
     expect(t).toContain("TEMA");
     expect(t).toContain("Konjunktiv II");
-    expect(t).toContain("die Bedingung, -en — uslov");
+    expect(t).toContain("die Bedingung, -en = uslov");
     expect(t).not.toContain("LOB");
+  });
+
+  it("noteToPlainText - TEMA popunjena: WORTSCHATZ se pojavljuje tačno jednom, posle TEME", () => {
+    const c: NoteContent = {
+      ...emptyNoteContent(),
+      tema: "Konjunktiv II",
+      wortschatz: [{ de: "die Bedingung, -en", sr: "uslov" }],
+    };
+    const t = noteToPlainText(c);
+    expect(t.split("WORTSCHATZ").length).toBe(2);
+    expect(t.indexOf("TEMA")).toBeLessThan(t.indexOf("WORTSCHATZ"));
+  });
+
+  it("noteToPlainText - TEMA prazna: WORTSCHATZ je na početku i pojavljuje se tačno jednom", () => {
+    const c: NoteContent = {
+      ...emptyNoteContent(),
+      wortschatz: [{ de: "die Bedingung, -en", sr: "uslov" }],
+      redemittel: "Ich hätte gern...",
+    };
+    const t = noteToPlainText(c);
+    expect(t.split("WORTSCHATZ").length).toBe(2);
+    expect(t.startsWith("WORTSCHATZ")).toBe(true);
   });
 });
