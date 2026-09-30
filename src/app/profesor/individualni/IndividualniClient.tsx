@@ -214,7 +214,9 @@ export default function IndividualniClient({ rows, showProfessor }: { rows: Enro
             date={dateById[row.id] || todayISO()}
             onClose={() => {
               setNotesFor(null);
-              router.refresh();
+              // Isti obrazac kao addLesson: osvežavanje ide kroz useTransition, da brojač časova
+              // u tabeli ne ostane star dok RSC odgovor sa novim brojem ne stigne (07bf023).
+              startRefresh(() => router.refresh());
             }}
           />
         );

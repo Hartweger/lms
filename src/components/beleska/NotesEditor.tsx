@@ -96,18 +96,30 @@ export default function NotesEditor({
   const contentRef = useRef(content);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const latestRequestId = useRef(0);
+  // Da li je profesorka već počela da kuca u OVOJ sesiji učitavanja (od trenutka kad se obrazac
+  // otvorio za ovaj enrollment+datum) - dok je true, GET odgovor ne sme da pregazi setContent,
+  // jer bi joj otkucano nestalo ispod prstiju.
+  const hasEditedRef = useRef(false);
 
   useEffect(() => {
     contentRef.current = content;
   }, [content]);
 
-  // Učitavanje: GET za postojeću belešku, ali nacrt iz localStorage-a (ako postoji za baš ovaj
-  // enrollment+datum) ima prednost nad onim iz baze - veza je možda pala pre poslednjeg snimanja.
+  // Učitavanje: obrazac se popuni ODMAH i sinhrono (nacrt iz localStorage-a ili prazan) - profesorka
+  // kuca na času, ne sme da čeka mrežu. GET zatim samo dopuni ono što sinhroni deo nije mogao da zna
+  // (sadržaj već snimljene beleške iz baze, lessonId, canCreate) i to SAMO ako još nije počela da kuca -
+  // inače bi njeno kucanje bilo pregaženo odgovorom koji je krenuo pre nje.
+  // Nacrt iz localStorage-a (ako postoji za baš ovaj enrollment+datum) ima prednost nad bazom -
+  // veza je možda pala pre poslednjeg snimanja.
   useEffect(() => {
     let cancelled = false;
-    setLoading(true);
     setLoadError(null);
+    hasEditedRef.current = false;
     const draft = readDraft(enrollmentId, date);
+    setContent(draft ?? emptyNoteContent());
+    setLessonId(null);
+    setCanCreate(true);
+    setLoading(true);
 
     (async () => {
       try {
@@ -118,23 +130,20 @@ export default function NotesEditor({
         if (cancelled) return;
         if (!res.ok) {
           setLoadError(j.error || "Beleška nije mogla da se učita.");
-          if (draft) setContent(draft);
           return;
         }
         setLessonId(j.lessonId ?? null);
         // canCreate je bitno samo kad čas za ovaj datum još ne postoji - ako postoji, uređivanje
         // beleške je uvek dozvoljeno (isto pravilo kao u PUT ruti).
         setCanCreate(j.lessonId ? true : Boolean(j.canCreate));
-        setContent(draft ?? (j.content as NoteContent) ?? emptyNoteContent());
+        if (!hasEditedRef.current) {
+          setContent(draft ?? (j.content as NoteContent) ?? emptyNoteContent());
+        }
       } catch {
         if (cancelled) return;
+        // Mrežna greška ne sme da blokira kucanje - obrazac je već popunjen (nacrtom ili prazan),
+        // pravi problem (npr. paket pun) će se javiti tek pri snimanju, gde ionako imamo poseban prikaz.
         setLoadError("Greška u mreži - ne mogu da učitam belešku.");
-        // Mrežna greška ne sme da blokira kucanje ako nacrt već postoji - pravi problem (npr.
-        // paket pun) će se javiti tek pri snimanju, gde ionako imamo poseban prikaz za to.
-        if (draft) {
-          setContent(draft);
-          setCanCreate(true);
-        }
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -198,6 +207,7 @@ export default function NotesEditor({
   }
 
   function updateContent(patch: Partial<NoteContent>) {
+    hasEditedRef.current = true;
     setContent((prev) => {
       const next = { ...prev, ...patch };
       writeDraft(enrollmentId, date, next);
@@ -266,13 +276,15 @@ export default function NotesEditor({
     }
   }
 
-  const blocked = !loading && !lessonId && !canCreate;
+  // Namerno BEZ "!loading" - blocked mora da bude tačan i pre nego što GET stigne (canCreate
+  // kreće od optimističnog true), inače bi obrazac čekao mrežu da bi uopšte mogao da se prikaže.
+  const blocked = !lessonId && !canCreate;
   const temaSection = TEXT_SECTIONS.find((s) => s.key === "tema")!;
   const restSections = TEXT_SECTIONS.filter((s) => s.key !== "tema");
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/40 p-4 sm:items-center">
-      <div className="my-4 w-full max-w-2xl rounded-2xl bg-white shadow-xl">
+    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/40 p-4">
+      <div className="my-auto w-full max-w-2xl rounded-2xl bg-white shadow-xl">
         <div className="flex items-start justify-between gap-3 border-b border-gray-100 p-4 md:p-6">
           <div>
             <h2 className="font-heading text-lg font-semibold text-gray-900">
@@ -285,21 +297,20 @@ export default function NotesEditor({
         </div>
 
         <div className="space-y-4 p-4 md:p-6">
-          {loading && <p className="text-sm text-gray-400">Učitavam belešku...</p>}
-
           {loadError && (
             <p className="rounded-lg bg-koral-light px-3 py-2 text-sm text-koral-dark">{loadError}</p>
           )}
 
-          {!loading && blocked && (
+          {blocked && (
             <p className="rounded-lg bg-koral-light px-3 py-2 text-sm text-koral-dark">
               Paket je iskorišćen - za ovaj datum ne može da se upiše nov čas, pa ni beleška nema na
               šta da se veže. Dodaj čas u panelu ili otvori nov paket, pa se vrati ovde.
             </p>
           )}
 
-          {!loading && !blocked && (
+          {!blocked && (
             <>
+              {loading && <p className="text-xs text-gray-400">Učitavam sačuvano...</p>}
               {saveState === "paket_pun" && (
                 <p className="rounded-lg bg-koral-light px-3 py-2 text-sm text-koral-dark">
                   {saveMessage}
