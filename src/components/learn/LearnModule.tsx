@@ -158,7 +158,7 @@ export default function LearnModule({
           onAnswer={(correct) => { window.setTimeout(() => advance(correct), 700); }}
         />
       ) : (
-        <LearnTyping key={id + seen} card={card} direction={direction === "de-sr" ? "sr-de" : "de-sr"} onResult={(correct) => advance(correct)} />
+        <LearnTyping key={id + seen} card={card} pool={items} direction={direction === "de-sr" ? "sr-de" : "de-sr"} onResult={(correct) => advance(correct)} />
       )}
     </Frame>
   );

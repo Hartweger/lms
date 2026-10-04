@@ -4,9 +4,10 @@ import type { FlashcardItem } from "@/lib/flashcard-types";
 import { gradeTyping, type Direction } from "@/lib/flashcard-grading";
 
 export default function LearnTyping({
-  card, direction, onResult,
+  card, direction, onResult, pool,
 }: {
   card: FlashcardItem;
+  pool?: FlashcardItem[];
   direction: Direction;
   onResult: (correct: boolean) => void; // almost se računa kao correct
 }) {
@@ -18,7 +19,7 @@ export default function LearnTyping({
   // Korak 1: „Proveri" - POKAŽI tačan odgovor (ne prelazi). Prazno → otkrije odgovor (gradeTyping("") = wrong + pun oblik).
   const check = () => {
     if (done) return;
-    setDone(gradeTyping(input, card, direction));
+    setDone(gradeTyping(input, card, direction, pool));
   };
   // Korak 2: „Dalje" - tek sad pređi na sledeću.
   // `sent` je brava: onResult upisuje napredak preko mreže, pa kartica ostaje na

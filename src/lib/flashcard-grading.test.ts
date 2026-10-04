@@ -65,3 +65,32 @@ describe("buildQuizOptions", () => {
     expect(buildQuizOptions(pool[0], pool.slice(0, 2), "de-sr")).toBeNull();
   });
 });
+
+describe("prijave polaznika A1 (04.10.2026)", () => {
+  const zahl: FlashcardItem = { front: "Zahl", back: "broj", article: "die", plural: "die Zahlen" };
+  const nummer: FlashcardItem = { front: "Nummer", back: "broj", article: "die", plural: "die Nummern" };
+  const sieSg: FlashcardItem = { front: "sie (Sg.)", back: "ona" };
+  const sieAll: FlashcardItem = { front: "sie (Pl.)", back: "oni" };
+  const mein: FlashcardItem = { front: "mein-", back: "moj" };
+  const set = [zahl, nummer, sieSg, sieAll, mein, { front: "Vater", back: "otac" }, { front: "Mutter", back: "majka" }];
+
+  it("mein bez crtice je tačno, i dalje i sa crticom", () => {
+    expect(gradeTyping("mein", mein, "sr-de").status).toBe("correct");
+    expect(gradeTyping("mein-", mein, "sr-de").status).toBe("correct");
+  });
+  it("sie bez (Sg.)/(Pl.) je tačno", () => {
+    expect(gradeTyping("sie", sieSg, "sr-de").status).toBe("correct");
+    expect(gradeTyping("sie", sieAll, "sr-de").status).toBe("correct");
+  });
+  it("broj: Zahl i Nummer se prihvataju za obe kartice", () => {
+    expect(gradeTyping("Nummer", zahl, "sr-de", set).status).toBe("correct");
+    expect(gradeTyping("die Zahl", nummer, "sr-de", set).status).toBe("correct");
+    expect(gradeTyping("Vater", zahl, "sr-de", set).status).toBe("wrong");
+  });
+  it("kviz ne nudi drugu karticu sa istim promptom kao pogrešan odgovor", () => {
+    for (let i = 0; i < 3; i++) {
+      const r = buildQuizOptions(zahl, set, "sr-de")!;
+      expect(r.options).not.toContain("Nummer");
+    }
+  });
+});

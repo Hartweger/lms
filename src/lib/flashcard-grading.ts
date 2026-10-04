@@ -27,6 +27,12 @@ function acceptedAnswers(card: FlashcardItem, dir: Direction): string[] {
   // „front" može da nosi više oblika („üben, hat geübt") - prihvati svaki pojedinačno i ceo niz.
   const forms = card.front.split(",").map((s) => s.trim()).filter(Boolean);
   const out = [...forms, card.front];
+  // Oznake koje nisu deo reči ne moraju da se kucaju: „sie (Sg.)" -> „sie",
+  // „mein-" (osnova bez nastavka) -> „mein".
+  for (const f of forms) {
+    const bare = f.replace(/\s*\([^)]*\)/g, "").replace(/-$/, "").trim();
+    if (bare && bare !== f) out.push(bare);
+  }
   if (card.article) for (const f of forms) out.push(`${card.article} ${f}`);
   if (card.plural) {
     out.push(card.plural);
@@ -48,9 +54,15 @@ export function fullForm(card: FlashcardItem, dir: Direction): string {
   return `${article}${card.front}${plural}`;
 }
 
-export function gradeTyping(input: string, card: FlashcardItem, dir: Direction): GradeResult {
+/**
+ * `pool` = ceo set. Ako druga kartica ima isti prompt (npr. „broj" = Zahl i
+ * Nummer), polaznik ne može da zna koju tražimo, pa prihvatamo obe.
+ */
+export function gradeTyping(input: string, card: FlashcardItem, dir: Direction, pool: FlashcardItem[] = []): GradeResult {
   const inN = normalize(input);
-  const accepted = acceptedAnswers(card, dir).map(normalize);
+  const promptOf = (c: FlashcardItem) => normalize(dir === "sr-de" ? c.back : c.front);
+  const same = pool.filter((c) => c !== card && promptOf(c) === promptOf(card));
+  const accepted = [card, ...same].flatMap((c) => acceptedAnswers(c, dir)).map(normalize);
   const ff = fullForm(card, dir);
   if (accepted.some((a) => a === inN)) return { status: "correct", fullForm: ff };
   // „skoro" samo za reči od bar 4 slova - na kraćima je 1 greška preveliki udeo (npr. "da" vs "ja").
@@ -64,7 +76,11 @@ export interface QuizOptionsResult { options: string[]; correctIndex: number; }
 export function buildQuizOptions(card: FlashcardItem, pool: FlashcardItem[], dir: Direction): QuizOptionsResult | null {
   const answerOf = (c: FlashcardItem) => (dir === "de-sr" ? c.back.split("|")[0].trim() : c.front);
   const correct = answerOf(card);
-  const distractPool = pool.filter((c) => answerOf(c) !== correct).map(answerOf);
+  // bez kartica sa istim promptom („broj" -> Zahl/Nummer): ponuđena kao „pogrešna" bila bi zapravo tačna
+  const promptOf = (c: FlashcardItem) => normalize(dir === "de-sr" ? c.front : c.back);
+  const distractPool = pool
+    .filter((c) => answerOf(c) !== correct && promptOf(c) !== promptOf(card))
+    .map(answerOf);
   const uniqueDistract = Array.from(new Set(distractPool));
   if (uniqueDistract.length < 3) return null;
   const picked = uniqueDistract.slice(0, 3);
