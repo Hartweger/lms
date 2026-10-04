@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { sanitizeHtml } from "@/lib/sanitize";
+import { collapseDigits, spellNumbers } from "@/lib/german-numbers";
 
 interface TypingProps {
   question: string;
@@ -33,14 +34,23 @@ function lettersOnly(s: string): string {
   return normalize(s).replace(/[^a-z0-9äöüß ]/gi, "").replace(/\s+/g, " ").trim();
 }
 
-function checkAnswer(input: string, answer: string): boolean {
+// Brojevi: "069 123 456", "069123456" i "null sechs neun ..." su isti odgovor,
+// kao i "25" i "fünfundzwanzig".
+function numbersCanonical(s: string): string {
+  return collapseDigits(lettersOnly(spellNumbers(s.toLowerCase())));
+}
+
+export function checkAnswer(input: string, answer: string): boolean {
   // Support multiple correct answers separated by |
   const answers = answer.split("|").map((a) => a.trim());
   const inputNorm = normalize(input);
   const inputLetters = lettersOnly(input);
+  const inputDigits = collapseDigits(inputLetters);
+  const inputNumbers = numbersCanonical(input);
   return answers.some((a) => {
     if (normalize(a) === inputNorm) return true;
-    return lettersOnly(a) === inputLetters;
+    if (lettersOnly(a) === inputLetters) return true;
+    return collapseDigits(lettersOnly(a)) === inputDigits || numbersCanonical(a) === inputNumbers;
   });
 }
 

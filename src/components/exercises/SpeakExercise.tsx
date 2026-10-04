@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import SpeakButton from "@/components/SpeakButton";
 import { sanitizeHtml } from "@/lib/sanitize";
 import { mergeTranscript } from "@/lib/speech-transcript";
+import { spellNumbers, spellDigitWise } from "@/lib/german-numbers";
 
 interface SpeakExerciseProps {
   question: string;
@@ -26,46 +27,22 @@ function levenshtein(a: string, b: string): number {
   return matrix[b.length][a.length];
 }
 
-// Prepoznavanje govora izgovoreni broj UVEK vrati kao cifru ("zweiunddreißig"
-// -> "32"), pa se ne poklapa sa rečju u tačnom odgovoru. Zato cifre pre
-// poređenja pretvaramo u nemačke reči. Podržava 0-9999 (dovoljno za A1-B2);
-// veće ostavljamo kako jesu.
-const NUM_UNITS = ["null", "eins", "zwei", "drei", "vier", "fünf", "sechs", "sieben", "acht", "neun"];
-const NUM_TEENS = ["zehn", "elf", "zwölf", "dreizehn", "vierzehn", "fünfzehn", "sechzehn", "siebzehn", "achtzehn", "neunzehn"];
-const NUM_TENS = ["zwanzig", "dreißig", "vierzig", "fünfzig", "sechzig", "siebzig", "achtzig", "neunzig"];
-
-function numberToGermanWords(n: number): string {
-  if (!Number.isFinite(n) || n < 0 || n > 9999) return String(n);
-  if (n < 10) return NUM_UNITS[n];
-  if (n < 20) return NUM_TEENS[n - 10];
-  if (n < 100) {
-    const u = n % 10, t = Math.floor(n / 10);
-    if (u === 0) return NUM_TENS[t - 2];
-    return (u === 1 ? "ein" : NUM_UNITS[u]) + "und" + NUM_TENS[t - 2];
-  }
-  if (n < 1000) {
-    const h = Math.floor(n / 100), rem = n % 100;
-    const hw = (h === 1 ? "ein" : NUM_UNITS[h]) + "hundert";
-    return rem === 0 ? hw : hw + numberToGermanWords(rem);
-  }
-  const th = Math.floor(n / 1000), rem = n % 1000;
-  const tw = (th === 1 ? "ein" : NUM_UNITS[th]) + "tausend";
-  return rem === 0 ? tw : tw + numberToGermanWords(rem);
-}
-
 // Skini SVU interpunkciju (i unutar rečenice) - prepoznavanje govora je
 // dodaje nepredvidivo, a izgovor se ocenjuje po rečima, ne po znacima.
-function normalize(s: string): string {
-  return s.trim().toLowerCase()
-    .replace(/[.!?,;:„“”‚’‘"'\-—–…()]/g, " ")
-    .replace(/\d+/g, (m) => numberToGermanWords(parseInt(m, 10)))
+// Prepoznavanje govora izgovoreni broj UVEK vrati kao cifru, pa cifre
+// pretvaramo u reči. digitWise: "0176" -> "null eins sieben sechs" (telefon),
+// inače "32" -> "zweiunddreißig"; evaluate() proba oba i uzima povoljnije.
+function normalize(s: string, digitWise = false): string {
+  const t = s.trim().toLowerCase()
+    .replace(/[.!?,;:„“”‚’‘"'\-—–…()]/g, " ");
+  return (digitWise ? spellDigitWise(t) : spellNumbers(t))
     .replace(/\s+/g, " ")
     .trim();
 }
 
-function similarity(a: string, b: string): number {
-  const na = normalize(a);
-  const nb = normalize(b);
+function similarity(a: string, b: string, digitWise = false): number {
+  const na = normalize(a, digitWise);
+  const nb = normalize(b, digitWise);
   if (na === nb) return 1;
   const dist = levenshtein(na, nb);
   const maxLen = Math.max(na.length, nb.length);
@@ -84,9 +61,9 @@ function wordsMatch(a: string, b: string): boolean {
 // Poravnanje sa tolerancijom na umetnute/izostavljene reči: za svaku očekivanu
 // reč tražimo sledeću podudarnu u izgovorenom nizu (umesto krutog poređenja
 // pozicija i pozicija, gde jedna umetnuta reč oboji sve iza nje u crveno).
-function findDifferences(spoken: string, expected: string): { word: string; status: "correct" | "wrong" | "missing" }[] {
-  const spokenWords = normalize(spoken).split(" ").filter(Boolean);
-  const expectedWords = normalize(expected).split(" ").filter(Boolean);
+function findDifferences(spoken: string, expected: string, digitWise = false): { word: string; status: "correct" | "wrong" | "missing" }[] {
+  const spokenWords = normalize(spoken, digitWise).split(" ").filter(Boolean);
+  const expectedWords = normalize(expected, digitWise).split(" ").filter(Boolean);
   const result: { word: string; status: "correct" | "wrong" | "missing" }[] = [];
   let si = 0;
   for (let i = 0; i < expectedWords.length; i++) {
@@ -106,6 +83,15 @@ function findDifferences(spoken: string, expected: string): { word: string; stat
     }
   }
   return result;
+}
+
+export function scoreSpoken(spoken: string, expected: string, digitWise = false) {
+  const differences = findDifferences(spoken, expected, digitWise);
+  const wordScore = differences.length
+    ? differences.filter((d) => d.status === "correct").length / differences.length
+    : 0;
+  // uzmi povoljniju ocenu: poklapanje reči ili sličnost celog niza
+  return { score: Math.max(similarity(spoken, expected, digitWise), wordScore), differences };
 }
 
 type SpeechRecognitionEvent = {
@@ -143,12 +129,10 @@ export default function SpeakExercise({ question, correctAnswer, explanation, on
   const inputRef = useRef<HTMLInputElement>(null);
 
   const evaluate = (text: string) => {
-    const differences = findDifferences(text, correctAnswer);
-    const wordScore = differences.length
-      ? differences.filter((d) => d.status === "correct").length / differences.length
-      : 0;
-    // uzmi povoljniju ocenu: poklapanje reči ili sličnost celog niza
-    const score = Math.max(similarity(text, correctAnswer), wordScore);
+    // brojeve probaj i kao ceo broj i cifru po cifru, zadrži povoljnije
+    const { score, differences } = [false, true]
+      .map((digitWise) => scoreSpoken(text, correctAnswer, digitWise))
+      .reduce((a, b) => (b.score > a.score ? b : a));
     setResult({ score, differences });
     setAnswered(true);
     onAnswer(score >= 0.75);
