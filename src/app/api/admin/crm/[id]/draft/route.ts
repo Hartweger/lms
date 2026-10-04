@@ -1,8 +1,12 @@
 import { NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import { requireAdmin } from "@/lib/api-auth";
-import { getCatalogText } from "@/lib/naki/catalog";
-import { SMILE_MODEL } from "@/lib/naki/sales-prompt";
+import {
+  getCatalogText, getPreviewLessonsText, getFreeCoursesText, getOpenGroupsText, getNatasaIndividualText,
+} from "@/lib/naki/catalog";
+import { SMILE_MODEL, buildSalesSystemPrompt } from "@/lib/naki/sales-prompt";
+import { userOwnsAnyVideoCourse } from "@/lib/coupon-ownership";
+import { buildCrmDraftUserPrompt } from "@/lib/crm/draft-prompt";
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
@@ -18,7 +22,7 @@ export async function POST(_request: Request, { params }: { params: Promise<{ id
   const { id } = await params;
 
   const { data: contact } = await admin
-    .from("crm_contacts").select("name,level,email,instagram_handle,user_id").eq("id", id).single();
+    .from("crm_contacts").select("name,level,source,email,instagram_handle,user_id").eq("id", id).single();
   if (!contact) return NextResponse.json({ error: "Kontakt ne postoji." }, { status: 404 });
 
   // Šta osoba već poseduje (da AI ne nudi ono što već ima)
@@ -36,87 +40,51 @@ export async function POST(_request: Request, { params }: { params: Promise<{ id
     .from("crm_interactions")
     .select("direction,summary,body,occurred_at")
     .eq("contact_id", id)
-    .order("occurred_at", { ascending: true })
+    .order("occurred_at", { ascending: false })
     .limit(50);
 
-  const razgovor = (rawInteractions ?? [])
+  // Najnovijih 50, pa hronološki; seče se od početka da poslednja poruka lida uvek ostane.
+  const razgovor = [...(rawInteractions ?? [])].reverse()
     .map((it: InteractionRow) => {
       const ko = it.direction === "odlazna" ? "Mi" : "Lid";
-      const tekst = [it.summary, it.body].filter(Boolean).join(" — ");
+      const tekst = [it.summary, it.body].filter(Boolean).join(" - ");
       return tekst ? `${ko}: ${tekst}` : null;
     })
     .filter(Boolean)
     .join("\n")
-    .slice(0, 6000);
+    .slice(-6000);
 
-  const catalogText = await getCatalogText(admin);
-
-  const ime = contact.name || "lid";
-  const nivo = contact.level ? `Procenjeni nivo: ${contact.level}.` : "Nivo nije poznat.";
-  const vecKupac = owned.length
-    ? `\n\nVAŽNO - OVA OSOBA JE VEĆ KUPAC i poseduje ove kurseve: ${owned.join(", ")}. NE nudi joj te kurseve ponovo. Umesto toga predloži logičan sledeći korak: viši nivo, dopunski sadržaj, ili obnovu pristupa ako ističe. Ako nema šta da se ponudi, napiši topao mejl za održavanje odnosa (pitaj kako napreduje).`
-    : "";
-
-  const prompt = `Ti si Nataša Hartweger, vlasnica škole nemačkog jezika Hartweger. Pišeš predlog mejl-odgovora osobi koja se zainteresovala za kurs. Tvoj zadatak je da napišeš topao, profesionalan i konkretan odgovor na osnovu razgovora.
-
-PRAVILA:
-- Obraćaj se na "ti" (ti-forma), prijateljski ali profesionalno.
-- Ako je relevantno, predloži konkretan kurs i navedi cenu iz kataloga ispod. Ne izmišljaj cene ni kurseve kojih nema.
-- Ako lid nije postavio konkretno pitanje, napiši ljubazan podsticaj da nastavi razgovor.
-- Za nivoe A2 i više, uvek pomeni da nudimo besplatno testiranje nivoa: https://www.hartweger.rs/besplatno-testiranje
-- Kod NAKI10 (10% na video kurseve) pomeni samo ako osoba NIJE već kupac video kursa.
-- Koristi isključivo običnu crticu (-), nikada — ni –.
-- Ne dodaji potpis na kraju (dodaje se automatski).
-
-FORMATIRANJE (mejl se renderuje, pa formatiraj čitljivo):
-- Kratak pozdrav u prvom redu, pa prazan red.
-- Ako nudiš više kurseva, svaki stavi u poseban red koji počinje crticom (-), sa nazivom, cenom i linkom.
-- Prazan red između celina. Ne pakuj sve u jedan dugačak pasus.
-- Linkove piši kao gole URL-ove (postaće klikabilni automatski), ne u zagradama.
-- Ukupno kratko: pozdrav + ponuda + poziv na sledeći korak.
-
-PRIMERI DOBRIH MEJLOVA (uzor za ton, dužinu i strukturu - prilagodi imenu, nivou i razgovoru, ne kopiraj doslovno):
-
-Primer za nivo A1:
-subject: Tvoj nemački A1 - kako da kreneš
-message:
-Zdravo [ime],
-
-vidim da si pričao/la sa našim NaKI asistentom o učenju nemačkog na A1 nivou - drago mi je što si se javio/la.
-
-Za sam početak najčešće preporučujem dve opcije:
-- VIDEO kurs A1 - učiš svojim tempom, 11.600 RSD (99 €). Kao NaKI korisnik imaš kod NAKI10 za 10% popusta na video kurseve.
-- Grupni kurs A1.1 - uživo sa profesorkom i malom grupom, 19.600 RSD (168 €), sa rasporedom i podrškom.
-
-Ako nisi siguran/na odakle da kreneš, javi mi šta ti je cilj (posao, ispit, selidba) pa da ti predložim tačno ono što ti treba.
-
-Primer za nivo A2 (uvek dodaj besplatno testiranje za A2 i više):
-subject: Tvoj nemački A2 - sledeći korak
-message:
-Zdravo [ime],
-
-pričao/la si sa našim NaKI asistentom o nemačkom na A2 nivou - to znači da već imaš osnovu i sad gradimo dalje.
-
-Predlažem:
-- VIDEO kurs A2 - svojim tempom, 11.600 RSD (99 €). Kao NaKI korisnik imaš kod NAKI10 za 10% popusta.
-- Grupni kurs A2.1 - uživo, mala grupa, 19.600 RSD (168 €).
-
-Ako nisi sigurna da je baš A2 tvoj nivo, imamo i besplatno testiranje - za par minuta dobiješ tačan nivo, pa ne plaćaš nešto što ti ne treba: https://www.hartweger.rs/besplatno-testiranje
-
-KONTAKT: ${ime}. ${nivo}${vecKupac}
-
-KATALOG KURSEVA I CENA:
-${catalogText}
-
-RAZGOVOR DO SAD:
-${razgovor || "(nema zabeleženog razgovora — napiši ljubazan prvi mejl koji poziva na razgovor o kursevima)"}
-
-Vrati ISKLJUČIVO JSON u formatu: {"subject": "kratak naslov mejla", "message": "telo mejla"}`;
+  // Isti izvor istine kao Smile: katalog, otvoreni grupni termini, Nataša na 1:1,
+  // probne i besplatne lekcije. Mejl-režim je u user poruci (src/lib/crm/draft-prompt.ts).
+  const ownsVideo = contact.user_id ? await userOwnsAnyVideoCourse(admin, contact.user_id) : false;
+  const [catalogText, previewText, freeText, groupsText, natasaText] = await Promise.all([
+    getCatalogText(admin),
+    getPreviewLessonsText(admin),
+    getFreeCoursesText(admin),
+    getOpenGroupsText(),
+    getNatasaIndividualText(admin),
+  ]);
+  const systemPrompt = buildSalesSystemPrompt(catalogText, {
+    coupon: !ownsVideo,
+    leadCapture: false,
+    previews: previewText,
+    free: freeText,
+    groups: groupsText,
+    natasa: natasaText,
+  });
+  const prompt = buildCrmDraftUserPrompt({
+    ime: contact.name || "lid",
+    nivo: contact.level,
+    izvor: contact.source,
+    owned,
+    razgovor,
+  });
 
   try {
     const completion = await anthropic.messages.create({
       model: SMILE_MODEL,
-      max_tokens: 800,
+      max_tokens: 1200,
+      system: systemPrompt,
       messages: [{ role: "user", content: prompt }],
     });
     const block = completion.content[0];
