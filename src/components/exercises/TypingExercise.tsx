@@ -99,7 +99,7 @@ export default function TypingExercise({ question, correctAnswer, explanation, o
         <div className={`mt-3 p-3 rounded-lg text-sm ${isCorrect ? "bg-green-50 text-green-700" : "bg-koral-light text-koral-dark"}`}>
           {isCorrect ? "Tačno!" : (
             <>
-              Tačan odgovor: <strong>{correctAnswer}</strong>
+              Tačan odgovor: <strong>{correctAnswer.split("|").map((a) => a.trim()).join(" ili ")}</strong>
               {explanation && <p className="mt-1">{explanation}</p>}
             </>
           )}
