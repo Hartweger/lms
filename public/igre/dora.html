@@ -1,0 +1,900 @@
+<!doctype html>
+<html lang="sr-Cyrl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="light">
+<title>Дорина математика</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pozadina:#FFF8EC; --karta:#FFFFFF; --mastilo:#2A2433; --tiho:#6B6275;
+  --linija:#EADFCB; --tacno:#1F9D55; --tacno-svetlo:#E3F6EA;
+  --skoro:#C26A00; --skoro-svetlo:#FFF1DC;
+  --racun:#3B7DD8; --racun-svetlo:#E6F0FC;
+  --rim:#8A4FD3; --rim-svetlo:#F1E9FC;
+  --misli:#E0603A; --misli-svetlo:#FDECE6;
+  --kontrolni:#1F9D55; --kontrolni-svetlo:#E3F6EA;
+  --zvezda:#FFB800;
+  --senka:0 2px 0 rgba(42,36,51,.08), 0 6px 18px rgba(42,36,51,.06);
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--pozadina);color:var(--mastilo)}
+body{font-family:"Andika",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:18px;line-height:1.4;min-height:100vh;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;touch-action:manipulation}
+.omot{max-width:760px;margin:0 auto;padding:12px 16px 40px}
+
+/* zaglavlje */
+.vrh{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.vrh h1{font-size:22px;margin:0;flex:1;line-height:1.15}
+.vrh .nazad{width:44px;height:44px;border-radius:14px;background:var(--karta);box-shadow:var(--senka);font-size:22px;display:grid;place-items:center}
+.zvezde-brojac{display:flex;align-items:center;gap:4px;background:var(--karta);border-radius:999px;padding:6px 12px;box-shadow:var(--senka);font-weight:700}
+.ikona-dugme{width:44px;height:44px;border-radius:14px;background:var(--karta);box-shadow:var(--senka);font-size:20px;display:grid;place-items:center}
+
+/* pocetna */
+.pozdrav{background:var(--karta);border-radius:22px;padding:16px 18px;box-shadow:var(--senka);margin-bottom:18px;display:flex;gap:14px;align-items:center}
+.pozdrav .lik{font-size:44px;line-height:1}
+.pozdrav b{font-size:22px;display:block}
+.pozdrav span{color:var(--tiho)}
+.odeljak{margin:20px 0 8px;font-size:15px;letter-spacing:.06em;text-transform:uppercase;color:var(--tiho);font-weight:700}
+.plocice{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.plocica{background:var(--karta);border-radius:20px;padding:14px 14px 12px;text-align:left;box-shadow:var(--senka);border-bottom:5px solid var(--boja);display:flex;flex-direction:column;gap:4px;min-height:118px;transition:transform .12s}
+.plocica:active{transform:scale(.97)}
+.plocica .em{font-size:30px;line-height:1}
+.plocica b{font-size:18px;line-height:1.15}
+.plocica small{color:var(--tiho);font-size:14px;line-height:1.25}
+.plocica.siroka{grid-column:1/-1;flex-direction:row;align-items:center;gap:14px;min-height:0}
+.plocica.siroka .em{font-size:38px}
+
+/* zadatak */
+.napredak{display:flex;gap:5px;margin:0 0 14px}
+.napredak i{flex:1;height:8px;border-radius:4px;background:var(--linija)}
+.napredak i.gotov{background:var(--boja,var(--racun))}
+.napredak i.sad{background:var(--boja,var(--racun));opacity:.4}
+.karta{background:var(--karta);border-radius:24px;padding:20px 18px;box-shadow:var(--senka);position:relative}
+.pitanje{font-size:20px;line-height:1.45}
+.izraz{font-size:40px;font-weight:700;text-align:center;letter-spacing:.02em;padding:8px 0;font-variant-numeric:tabular-nums}
+.izraz .upitnik{display:inline-block;min-width:1.4em;border-bottom:4px solid var(--boja,var(--racun));color:var(--boja,var(--racun))}
+.izraz .zagrada{background:var(--skoro-svetlo);border-radius:10px;padding:0 .12em}
+.izraz.mali{font-size:30px}
+.rimski-veliki{font-size:54px;font-weight:700;text-align:center;letter-spacing:.08em;color:var(--rim)}
+.rad{margin:12px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+.rad li{background:var(--tacno-svetlo);border-radius:12px;padding:6px 12px;font-size:18px}
+.rad li::before{content:"✓ ";color:var(--tacno);font-weight:700}
+.upit{margin:16px 0 8px;font-weight:700;font-size:19px}
+.povratna{min-height:28px;margin-top:12px;font-size:18px;border-radius:14px}
+.povratna.tacno{color:var(--tacno);font-weight:700}
+.povratna.skoro{background:var(--skoro-svetlo);color:#7A4300;padding:10px 14px}
+.povratna.resenje{background:var(--racun-svetlo);color:#173C6E;padding:10px 14px}
+.tabla-rim{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:4px 0 2px;font-size:14px;color:var(--tiho)}
+.tabla-rim span{background:var(--rim-svetlo);border-radius:8px;padding:2px 8px}
+.tabla-rim b{color:var(--rim)}
+
+/* unos broja */
+.displej{font-size:40px;font-weight:700;text-align:center;min-height:64px;border:3px dashed var(--linija);border-radius:16px;margin:4px auto 12px;max-width:260px;display:flex;align-items:center;justify-content:center;letter-spacing:.06em;font-variant-numeric:tabular-nums}
+.displej.pun{border-style:solid;border-color:var(--boja,var(--racun))}
+.displej.trese{animation:trese .35s}
+.tastatura{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:320px;margin:0 auto}
+.taster{height:60px;border-radius:16px;background:#F4EEE3;font-size:28px;font-weight:700;box-shadow:0 3px 0 #DDD2BF;transition:transform .06s}
+.taster:active{transform:translateY(2px);box-shadow:0 1px 0 #DDD2BF}
+.taster.ok{background:var(--tacno);color:#fff;box-shadow:0 3px 0 #15703C;font-size:22px}
+.taster.brisi{font-size:24px}
+.rim-tasteri{grid-template-columns:repeat(5,1fr);max-width:380px}
+.rim-tasteri .taster{background:var(--rim-svetlo);color:var(--rim);box-shadow:0 3px 0 #D7C6F2}
+.rim-donji{display:grid;grid-template-columns:1fr 2fr;gap:8px;max-width:380px;margin:8px auto 0}
+
+/* izbor */
+.izbori{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+.izbor{min-height:64px;border-radius:18px;background:#F4EEE3;font-size:24px;font-weight:700;box-shadow:0 3px 0 #DDD2BF;padding:8px 10px}
+.izbor.znak{font-size:40px}
+.izbor:disabled{opacity:.35;box-shadow:none}
+.izbor.dobar{background:var(--tacno);color:#fff;box-shadow:0 3px 0 #15703C}
+.dalje{display:block;margin:16px auto 0;background:var(--boja,var(--racun));color:#fff;border-radius:16px;padding:14px 28px;font-size:20px;font-weight:700}
+
+/* kraj */
+.kraj{text-align:center}
+.kraj .slicica-nova{font-size:96px;line-height:1;margin:10px 0;animation:skok .7s}
+.kraj h2{margin:6px 0 4px;font-size:28px}
+.kraj p{color:var(--tiho);margin:4px 0 14px}
+.dugmad{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.dugme{border-radius:16px;padding:14px 22px;font-size:19px;font-weight:700;background:#F4EEE3;box-shadow:0 3px 0 #DDD2BF}
+.dugme.glavno{background:var(--boja,var(--racun));color:#fff;box-shadow:none}
+
+/* album */
+.album{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:10px}
+.album div{aspect-ratio:1;border-radius:16px;background:var(--karta);box-shadow:var(--senka);display:grid;place-items:center;font-size:36px}
+.album div.prazno{background:transparent;box-shadow:none;border:2px dashed var(--linija);font-size:18px;color:var(--linija)}
+.statistika{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.statistika div{background:var(--karta);border-radius:16px;padding:10px 14px;box-shadow:var(--senka);flex:1;min-width:130px}
+.statistika b{display:block;font-size:26px}
+
+/* nivoi */
+.nivoi{display:flex;flex-direction:column;gap:10px}
+.nivo{background:var(--karta);border-radius:18px;padding:16px;text-align:left;box-shadow:var(--senka);border-left:6px solid var(--boja)}
+.nivo b{display:block;font-size:20px}
+.nivo small{color:var(--tiho);font-size:15px}
+
+/* baloni */
+.baloni{display:grid;grid-template-columns:repeat(2,1fr);gap:18px 10px;margin-top:18px;justify-items:center}
+.balon{width:118px;height:140px;position:relative;font-size:32px;font-weight:700;color:#fff;animation:lebdi 2.6s ease-in-out infinite}
+.balon .telo{position:absolute;inset:0 0 18px 0;border-radius:50% 50% 48% 48%/55% 55% 45% 45%;background:var(--bb);display:grid;place-items:center;box-shadow:inset -10px -12px 0 rgba(0,0,0,.08)}
+.balon .telo::after{content:"";position:absolute;top:16%;left:22%;width:16px;height:26px;border-radius:50%;background:rgba(255,255,255,.45);transform:rotate(20deg)}
+.balon .konac{position:absolute;left:50%;bottom:0;width:2px;height:22px;background:#B9AE9B}
+.balon:nth-child(2){animation-delay:-.7s}.balon:nth-child(3){animation-delay:-1.4s}.balon:nth-child(4){animation-delay:-2s}
+.balon.pukao{animation:puca .35s forwards}
+.balon.ne{animation:trese .35s}
+
+/* memorija */
+.memorija{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media (min-width:560px){.memorija{grid-template-columns:repeat(4,1fr)}}
+.kartica{aspect-ratio:1/1.05;border-radius:16px;background:var(--rim);color:#fff;font-size:26px;font-weight:700;box-shadow:0 3px 0 #5E2FA0;display:grid;place-items:center;padding:4px;line-height:1.1}
+.kartica.okrenuta{background:var(--karta);color:var(--mastilo);box-shadow:var(--senka)}
+.kartica.par{background:var(--tacno-svetlo);color:var(--tacno);box-shadow:none}
+.kartica.rimska{letter-spacing:.04em}
+.kartica .poledjina{font-size:30px;opacity:.85}
+.kartica.dugacka{font-size:19px;letter-spacing:0}
+
+/* trka */
+.vreme{height:14px;border-radius:7px;background:var(--linija);overflow:hidden;margin-bottom:12px}
+.vreme i{display:block;height:100%;background:var(--zvezda);transition:width 1s linear}
+.trka-skor{text-align:center;font-size:20px;margin-bottom:6px}
+.trka-skor b{font-size:28px}
+
+.leteca{position:fixed;font-size:34px;pointer-events:none;animation:leti 1s forwards;z-index:9}
+@keyframes leti{0%{opacity:0;transform:translateY(0) scale(.6)}20%{opacity:1;transform:translateY(-10px) scale(1.2)}100%{opacity:0;transform:translateY(-90px) scale(1)}}
+@keyframes trese{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+@keyframes skok{0%{transform:scale(.2)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
+@keyframes lebdi{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes puca{to{transform:scale(1.5);opacity:0}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:400px){.izraz{font-size:34px}.izraz.mali{font-size:26px}.balon{width:104px;height:126px;font-size:28px}}
+</style>
+</head>
+<body>
+<div class="omot" id="app"></div>
+
+<script>
+/* ===================== pomoćne ===================== */
+const M = "−";
+const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const veliko = s => s.charAt(0).toUpperCase() + s.slice(1);
+
+function uRimski(n) {
+  const t = [[100,"C"],[90,"XC"],[50,"L"],[40,"XL"],[10,"X"],[9,"IX"],[5,"V"],[4,"IV"],[1,"I"]];
+  let s = ""; for (const [v, r] of t) while (n >= v) { s += r; n -= v; } return s;
+}
+
+/* oblik imenice uz broj: [uz 1, uz 2-4, uz 5+] */
+function oblik(n, f) {
+  const d = n % 10, s = n % 100;
+  if (d === 1 && s !== 11) return f[0];
+  if (d >= 2 && d <= 4 && !(s >= 12 && s <= 14)) return f[1];
+  return f[2];
+}
+/* u pričama izbegavamo brojeve na 1 (osim 11) da padež uvek bude prirodan */
+const lepBroj = n => n > 0 && n <= 100 && (n % 10 !== 1 || n % 100 === 11);
+
+/* ===================== računanje ===================== */
+function genSab(prelaz) {
+  for (;;) {
+    const a = rnd(10, 89), b = Math.random() < .45 ? rnd(2, 9) : rnd(11, 79);
+    const v = a + b; if (v > 100) continue;
+    const p = (a % 10 + b % 10) >= 10;
+    if (prelaz === undefined || p === prelaz) return { a, b, op: "+", v };
+  }
+}
+function genOduz(prelaz) {
+  for (;;) {
+    const a = rnd(20, 99), b = Math.random() < .45 ? rnd(2, 9) : rnd(11, a - 5);
+    const p = (a % 10) < (b % 10);
+    if (prelaz === undefined || p === prelaz) return { a, b, op: M, v: a - b };
+  }
+}
+function genRacun(nivo) {
+  const p = nivo === "bez" ? false : nivo === "sa" ? true : Math.random() < .6;
+  return Math.random() < .5 ? genSab(p) : genOduz(p);
+}
+/* koraci rastavljanja: [[izraz, rezultat], ...] */
+function koraciRacuna(a, op, b) {
+  const t = b - b % 10, u = b % 10, k = [];
+  let x = a;
+  if (op === "+") {
+    if (t) { k.push([`${x} + ${t}`, x + t]); x += t; }
+    if (u) {
+      const r = x % 10;
+      if (r && r + u > 10) { const d = 10 - r; k.push([`${x} + ${d}`, x + d]); k.push([`${x + d} + ${u - d}`, x + u]); }
+      else k.push([`${x} + ${u}`, x + u]);
+    }
+  } else {
+    if (t) { k.push([`${x} ${M} ${t}`, x - t]); x -= t; }
+    if (u) {
+      const r = x % 10;
+      if (r && u > r) { k.push([`${x} ${M} ${r}`, x - r]); k.push([`${x - r} ${M} ${u - r}`, x - u]); }
+      else k.push([`${x} ${M} ${u}`, x - u]);
+    }
+  }
+  return k;
+}
+function pomocRacuna(a, op, b) {
+  const k = koraciRacuna(a, op, b);
+  if (k.length < 2) return op === "+" ? "Прво саберите јединице, па десетице." : "Прво одузми јединице, па десетице.";
+  return "Помоћ: " + k.map((s, i) => i === k.length - 1 ? `${s[0]} = ?` : `${s[0]} = ${s[1]}`).join(", па ");
+}
+function resenjeRacuna(a, op, b) {
+  const k = koraciRacuna(a, op, b);
+  const v = op === "+" ? a + b : a - b;
+  if (k.length < 2) return `${a} ${op} ${b} = ${v}`;
+  return k.map(s => `${s[0]} = ${s[1]}`).join(", па ") + `. Значи ${a} ${op} ${b} = ${v}.`;
+}
+function korakRacun(a, op, b, upit) {
+  const v = op === "+" ? a + b : a - b;
+  return { upit, tip: "broj", odgovor: v, pomoc: pomocRacuna(a, op, b), resenje: resenjeRacuna(a, op, b), rad: `${a} ${op} ${b} = ${v}` };
+}
+
+/* ===================== igre: generatori ===================== */
+const IGRE = {};
+
+IGRE.racunaj = {
+  ime: "Рачунај", em: "🧮", boja: "racun", opis: "Сабирање и одузимање до 100",
+  nivoi: [["bez", "Без прелаза", "34 + 25, 68 − 23"], ["sa", "Са прелазом", "55 + 9, 94 − 8, 72 − 28"], ["mix", "Мешано", "Све заједно"]],
+  gen(nivo) {
+    const r = genRacun(nivo);
+    return { pitanje: `<div class="izraz">${r.a} ${r.op} ${r.b} = <span class="upitnik">?</span></div>`, koraci: [korakRacun(r.a, r.op, r.b, "")] };
+  }
+};
+
+IGRE.znak = {
+  ime: "Знак", em: "⚖️", boja: "racun", opis: "Упиши >, < или =",
+  gen() {
+    const L = genRacun("mix");
+    let R, t = Math.random();
+    if (t < .3) {
+      for (;;) {
+        if (Math.random() < .5 && L.v >= 12) { const b = rnd(2, 9); R = { a: L.v - b, b, op: "+", v: L.v }; }
+        else { const b = rnd(2, 19); if (L.v + b > 99) continue; R = { a: L.v + b, b, op: M, v: L.v }; }
+        if (!(R.a === L.a && R.b === L.b)) break;
+      }
+    } else if (t < .55) {
+      const v = Math.max(0, Math.min(100, L.v + pick([-3, -2, -1, 1, 2, 3, -10, 10])));
+      R = { broj: v, v };
+    } else R = genRacun("mix");
+    const levo = Math.random() < .5;
+    const [P, D] = levo ? [L, R] : [R, L];
+    const tekst = x => x.broj !== undefined ? `${x.broj}` : `${x.a} ${x.op} ${x.b}`;
+    const znak = P.v > D.v ? ">" : P.v < D.v ? "<" : "=";
+    const strana = x => x.broj !== undefined ? `${x.broj}` : `${x.a} ${x.op} ${x.b} = ${x.v}`;
+    return {
+      pitanje: `<div class="izraz mali">${tekst(P)} <span class="upitnik">?</span> ${tekst(D)}</div>`,
+      koraci: [{
+        upit: "Који знак иде у средину?", tip: "izbor", opcije: [">", "<", "="], znak: true, odgovor: znak,
+        pomoc: "Израчунај обе стране, па упореди. Отвор знака гледа ка већем броју.",
+        resenje: `Лево: ${strana(P)}. Десно: ${strana(D)}. Значи ${P.v} ${znak} ${D.v}.`,
+        rad: `${P.v} ${znak} ${D.v}`
+      }]
+    };
+  }
+};
+
+IGRE.zagrade = {
+  ime: "Заграде", em: "🧩", boja: "racun", opis: "Прво заграда, па остало",
+  gen() {
+    for (;;) {
+      const f = rnd(1, 5);
+      let a, b, c, html, k1, k2;
+      if (f === 1) { b = rnd(10, 60); c = rnd(2, 19); const d = b + c; if (d > 85) continue; a = rnd(10, 100 - d);
+        html = `${a} + <span class="zagrada">(${b} + ${c})</span>`; k1 = [b, "+", c]; k2 = d => [a, "+", d]; }
+      else if (f === 2) { b = rnd(20, 70); c = rnd(2, b - 5); const d = b - c; a = rnd(d + 5, 99);
+        html = `${a} ${M} <span class="zagrada">(${b} ${M} ${c})</span>`; k1 = [b, M, c]; k2 = d => [a, M, d]; }
+      else if (f === 3) { a = rnd(40, 99); b = rnd(5, a - 20); c = rnd(2, a - b - 2);
+        html = `<span class="zagrada">(${a} ${M} ${b})</span> ${M} ${c}`; k1 = [a, M, b]; k2 = d => [d, M, c]; }
+      else if (f === 4) { a = rnd(10, 60); b = rnd(5, 39); if (a + b > 100) continue; c = rnd(2, a + b - 5);
+        html = `<span class="zagrada">(${a} + ${b})</span> ${M} ${c}`; k1 = [a, "+", b]; k2 = d => [d, M, c]; }
+      else { b = rnd(10, 40); c = rnd(2, 19); a = rnd(b + c + 3, 99);
+        html = `${a} ${M} <span class="zagrada">(${b} + ${c})</span>`; k1 = [b, "+", c]; k2 = d => [a, M, d]; }
+      const d = k1[1] === "+" ? k1[0] + k1[2] : k1[0] - k1[2];
+      const [x, op, y] = k2(d);
+      return {
+        pitanje: `<div class="izraz mali">${html} = <span class="upitnik">?</span></div>`,
+        koraci: [
+          korakRacun(k1[0], k1[1], k1[2], `Прво заграда: ${k1[0]} ${k1[1]} ${k1[2]} = ?`),
+          korakRacun(x, op, y, `Сада: ${x} ${op} ${y} = ?`)
+        ]
+      };
+    }
+  }
+};
+
+IGRE.baloni = { ime: "Балони", em: "🎈", boja: "racun", opis: "Пукни балон са тачним резултатом", posebna: "baloni" };
+IGRE.trka = { ime: "Трка", em: "⏱️", boja: "racun", opis: "Колико стигнеш за 1 минут?", posebna: "trka" };
+
+/* rimske */
+function rimBroj(nivo) {
+  if (nivo === "do20") return rnd(1, 20);
+  const t = Math.random();
+  if (t < .25) return pick([4, 9, 14, 19, 24, 29, 34, 39]);
+  if (t < .5) return rnd(40, 49);
+  if (t < .7) return rnd(90, 99);
+  return rnd(1, 100);
+}
+function rastaviRim(n) {
+  if (n === 100) return "100 = C";
+  const d = n - n % 10, j = n % 10, delovi = [];
+  if (d) delovi.push([d, uRimski(d)]);
+  if (j) delovi.push([j, uRimski(j)]);
+  if (delovi.length < 2) return `${n} = ${uRimski(n)}`;
+  return `${n} = ${d} + ${j}, а ${d} = ${uRimski(d)} и ${j} = ${uRimski(j)}. Заједно: ${uRimski(n)}`;
+}
+const RIM_NIVOI = [["do20", "До 20", "I, IV, IX, XIV, XIX…"], ["do100", "До 100", "XL, L, XC, C…"]];
+
+IGRE.rimPisi = {
+  ime: "Пиши римски", em: "🏛️", boja: "rim", opis: "Број → римске цифре", nivoi: RIM_NIVOI, rimTabla: true,
+  gen(nivo) {
+    const n = rimBroj(nivo);
+    const d = n - n % 10, j = n % 10;
+    return {
+      pitanje: `<div class="izraz">${n}</div>`,
+      koraci: [{
+        upit: "Напиши римским цифрама:", tip: "rimski", odgovor: uRimski(n),
+        pomoc: d && j ? `Помоћ: ${n} = ${d} + ${j}. Напиши прво ${d}, па ${j}.` : "Сети се: I, V, X, L, C. Мања цифра испред веће значи одузимање (IV = 4).",
+        resenje: rastaviRim(n) + ".", rad: `${n} = ${uRimski(n)}`
+      }]
+    };
+  }
+};
+
+IGRE.rimCitaj = {
+  ime: "Читај римски", em: "📜", boja: "rim", opis: "Римске цифре → број", nivoi: RIM_NIVOI, rimTabla: true,
+  gen(nivo) {
+    const n = rimBroj(nivo), r = uRimski(n);
+    const d = n - n % 10, j = n % 10;
+    return {
+      pitanje: `<div class="rimski-veliki">${r}</div>`,
+      koraci: [{
+        upit: "Који је ово број?", tip: "broj", odgovor: n,
+        pomoc: d && j ? `Помоћ: подели на два дела: ${uRimski(d)} и ${uRimski(j)}.` : "Помоћ: I = 1, V = 5, X = 10, L = 50, C = 100.",
+        resenje: d && j ? `${uRimski(d)} = ${d}, ${uRimski(j)} = ${j}. Заједно ${n}.` : `${r} = ${n}.`, rad: `${r} = ${n}`
+      }]
+    };
+  }
+};
+
+function rimOpcije(v) {
+  const s = new Set([v]);
+  for (const d of shuffle([1, -1, 2, -2, 10, -10, 5, -5, 9, 11])) { const x = v + d; if (x >= 1 && x <= 100) s.add(x); if (s.size >= 4) break; }
+  return shuffle([...s]).map(uRimski);
+}
+IGRE.niz = {
+  ime: "Настави низ", em: "🐛", boja: "rim", opis: "Који број долази следећи?", rimTabla: true,
+  gen() {
+    const t = rnd(1, 5);
+    if (t === 1) { // rimske desetice
+      const k = rnd(1, 6), cl = [k, k + 1, k + 2].map(x => uRimski(10 * x)), v = 10 * (k + 3);
+      return niz(cl, { tip: "izbor", opcije: rimOpcije(v), odgovor: uRimski(v), pomoc: "Сваки пут додајемо по 10 (X).", resenje: `После ${cl[2]} (${10 * (k + 2)}) долази ${uRimski(v)} (${v}).`, rad: uRimski(v) });
+    }
+    if (t === 2) { // rimski +1 / +2 / +5
+      const k = pick([1, 1, 2, 5]), n = rnd(1, 100 - 3 * k), cl = [n, n + k, n + 2 * k].map(uRimski), v = n + 3 * k;
+      return niz(cl, { tip: "izbor", opcije: rimOpcije(v), odgovor: uRimski(v), pomoc: `Преведи у бројеве: ${n}, ${n + k}, ${n + 2 * k}… Сваки пут +${k}.`, resenje: `${n}, ${n + k}, ${n + 2 * k}, ${v} → ${uRimski(v)}`, rad: uRimski(v) });
+    }
+    // brojevi
+    const k = pick([2, 3, 4, 5, 10, 11, 9]), raste = Math.random() < .55;
+    let n = raste ? rnd(2, 100 - 4 * k) : rnd(4 * k + 1, 99);
+    const cl = [0, 1, 2, 3].map(i => raste ? n + i * k : n - i * k), v = raste ? n + 4 * k : n - 4 * k;
+    return niz(cl, { tip: "broj", odgovor: v, pomoc: `Колико се мења сваки пут? ${cl[0]} → ${cl[1]}.`, resenje: `Сваки пут ${raste ? "+" : M}${k}: ${cl[3]} ${raste ? "+" : M} ${k} = ${v}.`, rad: `${v}` });
+  }
+};
+function niz(clanovi, korak) {
+  return { pitanje: `<div class="izraz mali">${clanovi.join(", ")}, <span class="upitnik">?</span></div>`, koraci: [Object.assign({ upit: "Шта долази следеће?" }, korak)] };
+}
+
+IGRE.memorija = { ime: "Меморија", em: "🃏", boja: "rim", opis: "Нађи парове: број и римски", posebna: "memorija" };
+
+/* pojmovi */
+const RED_GEN = ["прве", "друге", "треће", "четврте", "пете", "шесте", "седме", "осме", "девете", "десете"];
+const RED_NOM = ["Прва", "Друга", "Трећа", "Четврта", "Пета", "Шеста", "Седма", "Осма", "Девета", "Десета"];
+function pojam(osnovni) {
+  const t = osnovni ? rnd(0, 6) : rnd(0, 9);
+  switch (t) {
+    case 0: return pick([
+      { nom: "највећи двоцифрени број", gen: "највећег двоцифреног броја", v: 99, obj: "Највећи двоцифрени број је 99." },
+      { nom: "најмањи двоцифрени број", gen: "најмањег двоцифреног броја", v: 10, obj: "Најмањи двоцифрени број је 10." },
+      { nom: "највећи једноцифрени број", gen: "највећег једноцифреног броја", v: 9, obj: "Највећи једноцифрени број је 9." }]);
+    case 1: case 2: {
+      const k = rnd(1, 10), od = 10 * k - 9, do_ = 10 * k, naj = t === 1;
+      return { nom: `${naj ? "највећи" : "најмањи"} број ${RED_GEN[k - 1]} десетице`, gen: `${naj ? "највећег" : "најмањег"} броја ${RED_GEN[k - 1]} десетице`,
+        v: naj ? do_ : od, obj: `${RED_NOM[k - 1]} десетица: ${od}, ${od + 1}, … ${do_}. ${naj ? "Највећи" : "Најмањи"} је ${naj ? do_ : od}.` };
+    }
+    case 3: return pick([
+      { nom: "најмањи паран број прве десетице", gen: "најмањег парног броја прве десетице", v: 2, obj: "Парни бројеви прве десетице: 2, 4, 6, 8, 10. Најмањи је 2." },
+      { nom: "највећи непаран број прве десетице", gen: "највећег непарног броја прве десетице", v: 9, obj: "Непарни бројеви прве десетице: 1, 3, 5, 7, 9. Највећи је 9." }]);
+    case 4: return pick([
+      { nom: "највећи паран двоцифрени број", gen: "највећег парног двоцифреног броја", v: 98, obj: "Највећи паран двоцифрени број је 98." },
+      { nom: "најмањи непаран двоцифрени број", gen: "најмањег непарног двоцифреног броја", v: 11, obj: "Најмањи непаран двоцифрени број је 11." }]);
+    case 5: { const n = rnd(2, 99); return { nom: `претходник броја ${n}`, gen: `претходника броја ${n}`, v: n - 1, obj: `Претходник је број пре њега: ${n - 1}.` }; }
+    case 6: { const n = rnd(1, 99); return { nom: `следбеник броја ${n}`, gen: `следбеника броја ${n}`, v: n + 1, obj: `Следбеник је број после њега: ${n + 1}.` }; }
+    default: {
+      for (;;) {
+        const c = pojam(true); if (c.nom.startsWith("претходник") || c.nom.startsWith("следбеник")) continue;
+        const pre = Math.random() < .5, v = pre ? c.v - 1 : c.v + 1;
+        if (v < 1 || v > 100) continue;
+        return { nom: `${pre ? "претходник" : "следбеник"} ${c.gen}`, gen: `${pre ? "претходника" : "следбеника"} ${c.gen}`, v,
+          obj: `${c.obj} ${pre ? "Претходник" : "Следбеник"} је ${v}.` };
+      }
+    }
+  }
+}
+IGRE.zagonetke = {
+  ime: "Загонетке о бројевима", em: "🔎", boja: "misli", opis: "Највећи, најмањи, претходник, десетице",
+  gen() {
+    const t = Math.random();
+    if (t < .45) {
+      const c = pojam(), rim = Math.random() < .3;
+      return {
+        pitanje: `<div class="pitanje">Напиши ${rim ? "<b>римским цифрама</b> " : ""}<b>${c.nom}</b>.</div>`,
+        koraci: [rim
+          ? { upit: "Римским цифрама:", tip: "rimski", odgovor: uRimski(c.v), pomoc: "Прво смисли који је то број, па га запиши римски.", resenje: `${c.obj} Римски: ${uRimski(c.v)}.`, rad: `${c.v} = ${uRimski(c.v)}` }
+          : { upit: "Број:", tip: "broj", odgovor: c.v, pomoc: "Полако прочитај још једном. " + (c.nom.includes("десетице") ? "Пета десетица су бројеви од 41 до 50." : ""), resenje: c.obj, rad: `${c.v}` }]
+      };
+    }
+    for (;;) {
+      const c1 = pojam(), c2 = pojam();
+      if (c1.nom === c2.nom) continue;
+      if (t < .75) {
+        if (c1.v + c2.v > 100) continue;
+        return {
+          pitanje: `<div class="pitanje">Први сабирак је <b>${c1.nom}</b>, а други сабирак је <b>${c2.nom}</b>. Колики је збир?</div>`,
+          koraci: [
+            { upit: "Први сабирак је:", tip: "broj", odgovor: c1.v, pomoc: "Смисли само први број.", resenje: c1.obj, rad: `први сабирак: ${c1.v}` },
+            { upit: "Други сабирак је:", tip: "broj", odgovor: c2.v, pomoc: "Сада само други број.", resenje: c2.obj, rad: `други сабирак: ${c2.v}` },
+            korakRacun(c1.v, "+", c2.v, `Збир: ${c1.v} + ${c2.v} = ?`)
+          ]
+        };
+      }
+      if (c1.v <= c2.v) continue;
+      return {
+        pitanje: `<div class="pitanje">Колика је разлика <b>${c1.gen}</b> и <b>${c2.gen}</b>?</div>`,
+        koraci: [
+          { upit: "Први број је:", tip: "broj", odgovor: c1.v, pomoc: "Смисли само први број.", resenje: c1.obj, rad: `први број: ${c1.v}` },
+          { upit: "Други број је:", tip: "broj", odgovor: c2.v, pomoc: "Сада само други број.", resenje: c2.obj, rad: `други број: ${c2.v}` },
+          korakRacun(c1.v, M, c2.v, `Разлика: ${c1.v} ${M} ${c2.v} = ?`)
+        ]
+      };
+    }
+  }
+};
+
+/* priče */
+const IMENA = [["Никола","m"],["Марина","z"],["Миша","m"],["Јована","z"],["Марко","m"],["Анђелка","z"],["Лука","m"],["Ана","z"],["Петар","m"],["Сара","z"],["Вук","m"],["Мила","z"],["Дора","z"]];
+const STVARI = [
+  ["сличицу", "сличице", "сличица"], ["динар", "динара", "динара"], ["кликер", "кликера", "кликера"],
+  ["бомбону", "бомбоне", "бомбона"], ["налепницу", "налепнице", "налепница"], ["књигу", "књиге", "књига"]
+];
+const dvaImena = () => { const s = shuffle(IMENA); return [s[0], s[1]]; };
+const korakOp = (op, upit) => ({ upit: upit || "Шта рачунамо?", tip: "izbor", opcije: ["+ сабирамо", `${M} одузимамо`], odgovor: op === "+" ? "+ сабирамо" : `${M} одузимамо`,
+  pomoc: op === "+" ? "Да ли се број повећава или смањује?" : "Да ли се број повећава или смањује?",
+  resenje: op === "+" ? "Сабирамо, јер тражимо више или укупно." : "Одузимамо, јер тражимо мање, остатак или разлику.", tiho: true });
+function korakOdgovor(tekst) { return { kraj: tekst }; }
+
+const PRICE = [
+  // ukupno
+  () => { const [[A], [B]] = dvaImena(), f = pick(STVARI), x = rnd(12, 60), y = rnd(12, 99 - x), v = x + y;
+    return [[x, y, v], `${A} има ${x} ${oblik(x, f)}, а ${B} има ${y} ${oblik(y, f)}. Колико ${f[2]} имају заједно?`,
+      [korakOp("+"), korakRacun(x, "+", y, `${x} + ${y} = ?`)], `Заједно имају ${v} ${oblik(v, f)}.`]; },
+  // za n manje
+  () => { const [[A], [B]] = dvaImena(), f = pick(STVARI), x = rnd(30, 99), n = rnd(5, x - 10), v = x - n;
+    return [[x, n, v], `${A} има ${x} ${oblik(x, f)}, а ${B} има за ${n} мање. Колико ${f[2]} има ${B}?`,
+      [korakOp(M), korakRacun(x, M, n, `${x} ${M} ${n} = ?`)], `${B} има ${v} ${oblik(v, f)}.`]; },
+  // za n više
+  () => { const [[A], [B]] = dvaImena(), f = pick(STVARI), x = rnd(12, 80), n = rnd(5, 99 - x), v = x + n;
+    return [[x, n, v], `${A} има ${x} ${oblik(x, f)}, а ${B} има за ${n} више. Колико ${f[2]} има ${B}?`,
+      [korakOp("+"), korakRacun(x, "+", n, `${x} + ${n} = ?`)], `${B} има ${v} ${oblik(v, f)}.`]; },
+  // ostatak
+  () => { const x = rnd(40, 99), y = rnd(10, x - 10), v = x - y, ctx = pick([
+      [`У воћњаку има ${x} ${oblik(x, ["стабло", "стабла", "стабала"])} воћа. Од тога ${y} су крушке, а остало су јабуке. Колико има јабука?`, `У воћњаку има ${v} ${oblik(v, ["јабуку", "јабуке", "јабука"])}.`],
+      [`У парку има ${x} ${oblik(x, ["цвет", "цвета", "цветова"])}. Од тога ${y} су љубичице, а остало су беле раде. Колико има белих рада?`, `Белих рада има ${v}.`],
+      [`У кутији има ${x} ${oblik(x, ["бојицу", "бојице", "бојица"])}. Од тога ${y} су плаве, а остале су црвене. Колико има црвених бојица?`, `Црвених бојица има ${v}.`],
+      [`У хору пева ${x} ${oblik(x, ["дете", "детета", "деце"])}. Од тога ${y} су девојчице, а остало су дечаци. Колико дечака пева у хору?`, `У хору пева ${v} ${oblik(v, ["дечак", "дечака", "дечака"])}.`]]);
+    return [[x, y, v], ctx[0], [korakOp(M), korakRacun(x, M, y, `${x} ${M} ${y} = ?`)], ctx[1]]; },
+  // za koliko je veći / manji
+  () => { const x = rnd(30, 99), y = rnd(10, x - 3), v = x - y, veci = Math.random() < .5;
+    return [[x, y, v], veci ? `За колико је број ${x} већи од броја ${y}?` : `За колико је број ${y} мањи од броја ${x}?`,
+      [korakOp(M), korakRacun(x, M, y, `${x} ${M} ${y} = ?`)], veci ? `Број ${x} је већи за ${v}.` : `Број ${y} је мањи за ${v}.`]; },
+  // dva koraka: više pa zajedno
+  () => { const [[A], [B]] = dvaImena(), f = pick(STVARI), x = rnd(12, 40), n = rnd(5, 99 - 2 * x), b = x + n, v = x + b;
+    if (v > 100 || n < 5) return null;
+    return [[x, n, b, v], `${A} има ${x} ${oblik(x, f)}. ${B} има за ${n} више. Колико ${f[2]} има ${B}, а колико имају заједно?`,
+      [korakOp("+", `Прво: колико има ${B}?`), korakRacun(x, "+", n, `${x} + ${n} = ?`), korakOp("+", "Сада: колико имају заједно?"), korakRacun(x, "+", b, `${x} + ${b} = ?`)],
+      `${B} има ${b} ${oblik(b, f)}. Заједно имају ${v} ${oblik(v, f)}.`]; },
+  // dva koraka: manje pa zajedno (razredi)
+  () => { const x = rnd(30, 60), n = rnd(5, 25), b = x - n, v = x + b; if (v > 100) return null;
+    const U = ["ученика", "ученика", "ученика"];
+    return [[x, n, b, v], `У првом разреду има ${x} ${oblik(x, U)}, а у другом ${n} ${oblik(n, U)} мање. Колико ученика има у другом разреду, а колико у оба разреда заједно?`,
+      [korakOp(M, "Прво: колико има у другом разреду?"), korakRacun(x, M, n, `${x} ${M} ${n} = ?`), korakOp("+", "Сада: колико их је заједно?"), korakRacun(x, "+", b, `${x} + ${b} = ?`)],
+      `У другом разреду има ${b} ${oblik(b, U)}. Заједно има ${v} ${oblik(v, U)}.`]; },
+  // ko ima više
+  () => { const [[A, ga], [B, gb]] = dvaImena(), D = ["динар", "динара", "динара"];
+    const a = rnd(5, 30), T1 = rnd(a + 20, 99), b = rnd(5, 30), T2 = rnd(b + 20, 99), va = T1 - a, vb = T2 - b;
+    if (va === vb) return null;
+    const gl = (g, z, m) => g === "z" ? z : m;
+    const vise = va > vb ? A : B;
+    return [[a, T1, b, T2, va, vb], `Ко има више динара, ${A} или ${B}?<br>Када би ${A} ${gl(ga, "добила", "добио")} ${a} ${oblik(a, D)}, ${gl(ga, "имала", "имао")} би укупно ${T1} ${oblik(T1, D)}.<br>Када би ${B} ${gl(gb, "добила", "добио")} ${b} ${oblik(b, D)}, ${gl(gb, "имала", "имао")} би укупно ${T2} ${oblik(T2, D)}.`,
+      [korakOp(M, `Колико сада има ${A}?`), korakRacun(T1, M, a, `${A}: ${T1} ${M} ${a} = ?`), korakOp(M, `Колико сада има ${B}?`), korakRacun(T2, M, b, `${B}: ${T2} ${M} ${b} = ?`),
+       { upit: "Ко има више?", tip: "izbor", opcije: [A, B], odgovor: vise, pomoc: `Упореди ${va} и ${vb}.`, resenje: `${Math.max(va, vb)} > ${Math.min(va, vb)}, више има ${vise}.`, rad: `${va} ${va > vb ? ">" : "<"} ${vb}` }],
+      `Више динара има ${vise}.`]; }
+];
+IGRE.prica = {
+  ime: "Задаци са причом", em: "📖", boja: "misli", opis: "Прочитај, смисли, израчунај",
+  gen() {
+    for (;;) {
+      const r = pick(PRICE)(); if (!r) continue;
+      const [brojevi, tekst, koraci, odgovor] = r;
+      if (!brojevi.every(lepBroj)) continue;
+      return { pitanje: `<div class="pitanje">${tekst}</div>`, koraci, odgovor };
+    }
+  }
+};
+
+/* mali kontrolni: redom kao na testu */
+IGRE.kontrolni = {
+  ime: "Мали контролни", em: "📝", boja: "kontrolni", opis: "10 задатака као на тесту",
+  redosled: [["racunaj", "sa"], ["racunaj", "mix"], ["znak"], ["zagrade"], ["zagonetke"], ["prica"], ["prica"], ["rimPisi", "do100"], ["rimCitaj", "do100"], ["niz"]],
+  gen(_, i) { const [ig, nv] = this.redosled[i % this.redosled.length]; return IGRE[ig].gen(nv); }
+};
+
+/* ===================== stanje ===================== */
+const KLJUC = "dora-matematika-v1";
+const SLICICE = ["🦊","🐼","🐨","🦁","🐯","🐸","🐵","🦄","🐙","🦋","🐞","🐢","🐬","🦒","🦓","🐘","🦔","🦉","🐧","🌻","🌈","🍓","🍉","🍒","🚀","🎨","🧁","🍭","🐳","🦕","🐝","🐰","🐱","🐶","🐹","🦜","🌵","🍄","🐌","🦩"];
+let S = { zvezde: 0, slicice: [], rekord: 0, zvuk: true };
+
+/* ===================== prikaz ===================== */
+if (typeof document !== "undefined") {
+  try { const s = JSON.parse(localStorage.getItem(KLJUC)); if (s) S = Object.assign(S, s); } catch (e) {}
+  const sacuvaj = () => { try { localStorage.setItem(KLJUC, JSON.stringify(S)); } catch (e) {} };
+  const app = document.getElementById("app");
+  let R = null, tasteri = null, tajmer = null;
+
+  const boja = b => `var(--${b})`;
+  let zvukCtx = null;
+  function zvoni(vrsta) {
+    if (!S.zvuk) return;
+    try {
+      zvukCtx = zvukCtx || new (window.AudioContext || window.webkitAudioContext)();
+      const t = zvukCtx.currentTime, tonovi = vrsta === "kraj" ? [523, 659, 784, 1047] : [660, 880];
+      tonovi.forEach((f, i) => {
+        const o = zvukCtx.createOscillator(), g = zvukCtx.createGain();
+        o.type = "sine"; o.frequency.value = f; o.connect(g); g.connect(zvukCtx.destination);
+        const s = t + i * .09; g.gain.setValueAtTime(0, s); g.gain.linearRampToValueAtTime(.15, s + .02); g.gain.exponentialRampToValueAtTime(.001, s + .3);
+        o.start(s); o.stop(s + .32);
+      });
+    } catch (e) {}
+  }
+  function zvezdica(el) {
+    S.zvezde++; sacuvaj();
+    const r = (el || document.body).getBoundingClientRect(), z = document.createElement("div");
+    z.className = "leteca"; z.textContent = "⭐";
+    z.style.left = (r.left + r.width / 2 - 17) + "px"; z.style.top = (r.top + Math.min(r.height, 200) / 2) + "px";
+    document.body.appendChild(z); setTimeout(() => z.remove(), 1000);
+    const br = document.getElementById("brZvezda"); if (br) br.textContent = S.zvezde;
+    zvoni();
+  }
+  function novaSlicica() {
+    const nema = SLICICE.filter(s => !S.slicice.includes(s));
+    const s = nema.length ? pick(nema) : pick(SLICICE);
+    S.slicice.push(s); sacuvaj(); return s;
+  }
+  function zaglavlje(naslov, nazad) {
+    return `<div class="vrh">
+      ${nazad ? `<button class="nazad" data-a="pocetna" aria-label="Назад">←</button>` : ""}
+      <h1>${naslov}</h1>
+      <span class="zvezde-brojac">⭐ <span id="brZvezda">${S.zvezde}</span></span>
+      ${nazad ? "" : `<button class="ikona-dugme" data-a="album" aria-label="Албум">🎒</button>
+      <button class="ikona-dugme" data-a="zvuk" aria-label="Звук">${S.zvuk ? "🔊" : "🔇"}</button>`}
+    </div>`;
+  }
+  function stop() { if (tajmer) { clearInterval(tajmer); tajmer = null; } tasteri = null; }
+
+  /* ---------- početna ---------- */
+  function pocetna() {
+    stop(); R = null;
+    const plocica = (id, siroka) => { const g = IGRE[id];
+      return `<button class="plocica${siroka ? " siroka" : ""}" style="--boja:${boja(g.boja)}" data-igra="${id}"><span class="em">${g.em}</span><span><b>${g.ime}</b><br><small>${g.opis}</small></span></button>`; };
+    app.innerHTML = zaglavlje("Дорина математика") + `
+      <div class="pozdrav"><div class="lik">🦊</div><div><b>Здраво, Доро!</b><span>Шта играмо данас? Свака тачна = ⭐, свака завршена игра = нова сличица.</span></div></div>
+      <div class="odeljak">Рачунамо до 100</div>
+      <div class="plocice">${["racunaj", "znak", "zagrade", "baloni", "trka"].map(i => plocica(i)).join("")}</div>
+      <div class="odeljak">Римске цифре</div>
+      <div class="plocice">${["rimPisi", "rimCitaj", "niz", "memorija"].map(i => plocica(i)).join("")}</div>
+      <div class="odeljak">Мислимо</div>
+      <div class="plocice">${["zagonetke", "prica"].map(i => plocica(i)).join("")}</div>
+      <div class="odeljak">Пред контролни</div>
+      <div class="plocice">${plocica("kontrolni", true)}</div>`;
+  }
+
+  /* ---------- album ---------- */
+  function album() {
+    stop();
+    const mesta = Math.max(SLICICE.length, S.slicice.length);
+    let html = "";
+    for (let i = 0; i < mesta; i++) html += S.slicice[i] ? `<div>${S.slicice[i]}</div>` : `<div class="prazno">?</div>`;
+    app.innerHTML = zaglavlje("Мој албум", true) + `
+      <div class="statistika"><div>Звездице<b>⭐ ${S.zvezde}</b></div><div>Сличице<b>${S.slicice.length}</b></div><div>Рекорд у трци<b>⏱️ ${S.rekord}</b></div></div>
+      <div class="album">${html}</div>`;
+  }
+
+  /* ---------- izbor nivoa ---------- */
+  function izborNivoa(id) {
+    const g = IGRE[id];
+    app.innerHTML = zaglavlje(`${g.em} ${g.ime}`, true) + `<div class="nivoi">${g.nivoi.map(([k, n, p]) =>
+      `<button class="nivo" style="--boja:${boja(g.boja)}" data-nivo="${k}"><b>${n}</b><small>${p}</small></button>`).join("")}</div>`;
+    app.querySelectorAll("[data-nivo]").forEach(b => b.onclick = () => runda(id, b.dataset.nivo));
+  }
+  function otvori(id) {
+    const g = IGRE[id];
+    if (g.posebna === "baloni") return baloni();
+    if (g.posebna === "trka") return trka();
+    if (g.posebna === "memorija") return memorija();
+    if (g.nivoi) return izborNivoa(id);
+    runda(id);
+  }
+
+  /* ---------- runda zadataka ---------- */
+  function runda(id, nivo) {
+    stop();
+    R = { id, nivo, g: IGRE[id], i: 0, n: 10, zvezdeRunde: 0 };
+    sledeci();
+  }
+  function sledeci() {
+    if (R.i >= R.n) return krajRunde();
+    R.z = R.g.gen(R.nivo, R.i); R.k = 0; R.rad = []; R.otkriveno = false;
+    korak();
+  }
+  function korak() {
+    const g = R.g, z = R.z, k = z.koraci[R.k];
+    R.greske = 0; R.unos = ""; R.reseno = false;
+    const tackice = Array.from({ length: R.n }, (_, i) => `<i class="${i < R.i ? "gotov" : i === R.i ? "sad" : ""}"></i>`).join("");
+    app.innerHTML = zaglavlje(`${g.em} ${g.ime}`, true) + `
+      <div style="--boja:${boja(g.boja)}">
+        <div class="napredak">${tackice}</div>
+        <div class="karta" id="karta">
+          ${z.pitanje}
+          ${g.rimTabla || k.tip === "rimski" ? `<div class="tabla-rim"><span><b>I</b> 1</span><span><b>V</b> 5</span><span><b>X</b> 10</span><span><b>L</b> 50</span><span><b>C</b> 100</span></div>` : ""}
+          ${R.rad.length ? `<ul class="rad">${R.rad.map(r => `<li>${r}</li>`).join("")}</ul>` : ""}
+          ${k.upit ? `<div class="upit">${k.upit}</div>` : ""}
+          <div id="unos"></div>
+          <div class="povratna" id="povratna" aria-live="polite"></div>
+        </div>
+      </div>`;
+    const unos = document.getElementById("unos");
+    if (k.tip === "broj") brojUnos(unos, v => proveri(v));
+    else if (k.tip === "rimski") rimUnos(unos, v => proveri(v));
+    else izborUnos(unos, k, (v, dugme) => proveri(v, dugme));
+  }
+  function proveri(v, dugme) {
+    if (R.reseno) return;
+    const k = R.z.koraci[R.k], pov = document.getElementById("povratna");
+    if (String(v) === String(k.odgovor)) {
+      R.reseno = true;
+      if (dugme) dugme.classList.add("dobar");
+      if (k.rad && !k.tiho) R.rad.push(k.rad);
+      pov.className = "povratna tacno"; pov.textContent = pick(["Тачно!", "Браво!", "Супер!", "Тако је!", "Одлично!"]);
+      setTimeout(posleKoraka, 750);
+    } else {
+      R.greske++;
+      if (dugme) dugme.disabled = true;
+      const d = document.querySelector(".displej"); if (d) { d.classList.remove("trese"); void d.offsetWidth; d.classList.add("trese"); }
+      if (R.greske === 1 || (k.tip === "izbor" && R.greske < k.opcije.length - 1)) {
+        pov.className = "povratna skoro"; pov.textContent = (R.greske === 1 ? "Скоро! " : "Пробај још једном. ") + k.pomoc;
+        if (k.tip !== "izbor") { R.unos = ""; osveziDisplej && osveziDisplej(); }
+      } else {
+        R.reseno = true; R.otkriveno = true;
+        if (k.rad && !k.tiho) R.rad.push(k.rad);
+        pov.className = "povratna resenje";
+        pov.innerHTML = `${k.resenje}<button class="dalje" id="dalje">Даље →</button>`;
+        document.getElementById("dalje").onclick = posleKoraka;
+        tasteri = e => { if (e.key === "Enter") posleKoraka(); };
+      }
+    }
+  }
+  function posleKoraka() {
+    tasteri = null;
+    R.k++;
+    if (R.k < R.z.koraci.length) return korak();
+    // zadatak gotov
+    if (!R.otkriveno) { R.zvezdeRunde++; zvezdica(document.getElementById("karta")); }
+    if (R.z.odgovor) {
+      const pov = document.getElementById("povratna");
+      document.getElementById("unos").innerHTML = "";
+      document.querySelectorAll(".upit").forEach(u => u.remove());
+      pov.className = "povratna resenje";
+      pov.innerHTML = `<b>Одговор:</b> ${R.z.odgovor}<button class="dalje" id="dalje">Даље →</button>`;
+      document.getElementById("dalje").onclick = () => { R.i++; sledeci(); };
+      tasteri = e => { if (e.key === "Enter") { R.i++; sledeci(); } };
+      return;
+    }
+    R.i++; setTimeout(sledeci, R.otkriveno ? 0 : 250);
+  }
+  function krajRunde() {
+    const s = novaSlicica(); zvoni("kraj");
+    const g = R.g;
+    app.innerHTML = zaglavlje(`${g.em} ${g.ime}`, true) + `
+      <div class="karta kraj" style="--boja:${boja(g.boja)}">
+        <h2>Готово! 🎉</h2>
+        <p>У овој игри: ⭐ ${R.zvezdeRunde}</p>
+        <div class="slicica-nova">${s}</div>
+        <p>Нова сличица је у албуму!</p>
+        <div class="dugmad"><button class="dugme glavno" id="opet">Још једном</button><button class="dugme" data-a="pocetna">Почетна</button></div>
+      </div>`;
+    const { id, nivo } = R;
+    document.getElementById("opet").onclick = () => runda(id, nivo);
+  }
+
+  /* ---------- unos ---------- */
+  let osveziDisplej = null;
+  function brojUnos(el, gotovo) {
+    el.innerHTML = `<div class="displej" id="displej"></div><div class="tastatura">
+      ${[1,2,3,4,5,6,7,8,9].map(n => `<button class="taster" data-t="${n}">${n}</button>`).join("")}
+      <button class="taster brisi" data-t="b" aria-label="Обриши">⌫</button><button class="taster" data-t="0">0</button><button class="taster ok" data-t="ok">Провери</button></div>`;
+    const disp = el.querySelector("#displej");
+    osveziDisplej = () => { disp.textContent = R.unos; disp.classList.toggle("pun", !!R.unos); };
+    const pritisni = t => {
+      if (R.reseno) return;
+      if (t === "b") R.unos = R.unos.slice(0, -1);
+      else if (t === "ok") { if (R.unos) gotovo(Number(R.unos)); return; }
+      else if (R.unos.length < 3) R.unos = (R.unos + t).replace(/^0+(?=\d)/, "");
+      osveziDisplej();
+    };
+    el.querySelectorAll("[data-t]").forEach(b => b.onclick = () => pritisni(b.dataset.t));
+    tasteri = e => { if (/^\d$/.test(e.key)) pritisni(e.key); else if (e.key === "Backspace") pritisni("b"); else if (e.key === "Enter") pritisni("ok"); };
+  }
+  function rimUnos(el, gotovo) {
+    el.innerHTML = `<div class="displej" id="displej" style="color:var(--rim)"></div><div class="tastatura rim-tasteri">
+      ${["I","V","X","L","C"].map(n => `<button class="taster" data-t="${n}">${n}</button>`).join("")}</div>
+      <div class="rim-donji"><button class="taster brisi" data-t="b" aria-label="Обриши">⌫</button><button class="taster ok" data-t="ok">Провери</button></div>`;
+    const disp = el.querySelector("#displej");
+    osveziDisplej = () => { disp.textContent = R.unos; disp.classList.toggle("pun", !!R.unos); };
+    const pritisni = t => {
+      if (R.reseno) return;
+      if (t === "b") R.unos = R.unos.slice(0, -1);
+      else if (t === "ok") { if (R.unos) gotovo(R.unos); return; }
+      else if (R.unos.length < 9) R.unos += t;
+      osveziDisplej();
+    };
+    el.querySelectorAll("[data-t]").forEach(b => b.onclick = () => pritisni(b.dataset.t));
+    tasteri = e => { const k = e.key.toUpperCase(); if ("IVXLC".includes(k) && k.length === 1) pritisni(k); else if (e.key === "Backspace") pritisni("b"); else if (e.key === "Enter") pritisni("ok"); };
+  }
+  function izborUnos(el, k, gotovo) {
+    osveziDisplej = null;
+    el.innerHTML = `<div class="izbori">${k.opcije.map(o => `<button class="izbor${k.znak ? " znak" : ""}">${o}</button>`).join("")}</div>`;
+    el.querySelectorAll(".izbor").forEach(b => b.onclick = () => gotovo(b.textContent, b));
+    tasteri = k.znak ? e => { const b = [...el.querySelectorAll(".izbor")].find(x => x.textContent === e.key); if (b && !b.disabled) gotovo(e.key, b); } : null;
+  }
+
+  /* ---------- baloni ---------- */
+  function baloni() {
+    stop();
+    const B = { i: 0, n: 10, zv: 0 };
+    const BOJE = ["#E0603A", "#3B7DD8", "#8A4FD3", "#1F9D55", "#E5A100", "#D6457A"];
+    const crtaj = () => {
+      if (B.i >= B.n) { R = { g: IGRE.baloni, zvezdeRunde: B.zv }; return krajPosebne(IGRE.baloni, B.zv, baloni); }
+      const r = genRacun("mix"), opc = new Set([r.v]);
+      for (const d of shuffle([1, -1, 10, -10, 2, -2, 9, 11])) { const x = r.v + d; if (x >= 0 && x <= 100) opc.add(x); if (opc.size === 4) break; }
+      const boje = shuffle(BOJE);
+      let greska = false;
+      app.innerHTML = zaglavlje("🎈 Балони", true) + `
+        <div class="napredak" style="--boja:var(--racun)">${Array.from({ length: B.n }, (_, i) => `<i class="${i < B.i ? "gotov" : i === B.i ? "sad" : ""}"></i>`).join("")}</div>
+        <div class="karta"><div class="izraz">${r.a} ${r.op} ${r.b} = <span class="upitnik">?</span></div>
+        <div class="baloni">${shuffle([...opc]).map((v, i) => `<button class="balon" data-v="${v}" style="--bb:${boje[i]}"><span class="telo">${v}</span><span class="konac"></span></button>`).join("")}</div>
+        <div class="povratna" id="povratna"></div></div>`;
+      app.querySelectorAll(".balon").forEach(b => b.onclick = () => {
+        if (+b.dataset.v === r.v) {
+          b.classList.add("pukao"); if (!greska) { B.zv++; zvezdica(b); } else zvoni();
+          app.querySelectorAll(".balon").forEach(x => x.onclick = null);
+          setTimeout(() => { B.i++; crtaj(); }, 600);
+        } else {
+          greska = true; b.classList.remove("ne"); void b.offsetWidth; b.classList.add("ne");
+          document.getElementById("povratna").className = "povratna skoro";
+          document.getElementById("povratna").textContent = pomocRacuna(r.a, r.op, r.b);
+        }
+      });
+    };
+    crtaj();
+  }
+
+  /* ---------- trka ---------- */
+  function trka() {
+    stop();
+    const T = { ostalo: 60, broj: 0 };
+    app.innerHTML = zaglavlje("⏱️ Трка", true) + `
+      <div class="karta" style="text-align:center"><p class="pitanje">Имаш <b>1 минут</b>. Реши што више задатака!<br>Грешка се не броји, само пробај опет.</p>
+      <p style="color:var(--tiho)">Рекорд: ⏱️ ${S.rekord}</p>
+      <button class="dalje" id="kreni">Крени!</button></div>`;
+    document.getElementById("kreni").onclick = () => {
+      const zadatak = () => {
+        const r = genRacun("mix"), opc = new Set([r.v]);
+        for (const d of shuffle([1, -1, 10, -10, 2, -2])) { const x = r.v + d; if (x >= 0 && x <= 100) opc.add(x); if (opc.size === 4) break; }
+        document.getElementById("trkaZ").innerHTML = `<div class="izraz">${r.a} ${r.op} ${r.b}</div><div class="izbori">${shuffle([...opc]).map(v => `<button class="izbor" data-v="${v}">${v}</button>`).join("")}</div>`;
+        document.querySelectorAll("#trkaZ .izbor").forEach(b => b.onclick = () => {
+          if (+b.dataset.v === r.v) { T.broj++; document.getElementById("trkaBr").textContent = T.broj; zvezdica(b); zadatak(); }
+          else b.disabled = true;
+        });
+      };
+      app.innerHTML = zaglavlje("⏱️ Трка", true) + `
+        <div class="vreme"><i id="vreme" style="width:100%"></i></div>
+        <div class="trka-skor">Решено: <b id="trkaBr">0</b></div>
+        <div class="karta" id="trkaZ"></div>`;
+      zadatak();
+      tajmer = setInterval(() => {
+        T.ostalo--; const v = document.getElementById("vreme"); if (v) v.style.width = (T.ostalo / 60 * 100) + "%";
+        if (T.ostalo <= 0) {
+          clearInterval(tajmer); tajmer = null;
+          const nov = T.broj > S.rekord; if (nov) { S.rekord = T.broj; sacuvaj(); }
+          krajPosebne(IGRE.trka, T.broj, trka, nov ? `Нови рекорд: ${T.broj}! 🏆` : `Решено: ${T.broj}. Рекорд је ${S.rekord}.`);
+        }
+      }, 1000);
+    };
+  }
+
+  /* ---------- memorija ---------- */
+  function memorija() {
+    stop();
+    const brojevi = new Set();
+    while (brojevi.size < 6) brojevi.add(Math.random() < .5 ? rnd(1, 20) : rnd(21, 100));
+    const karte = shuffle([...brojevi].flatMap(n => [{ n, t: String(n), rim: false }, { n, t: uRimski(n), rim: true }]));
+    let otvorene = [], parova = 0, zauzeto = false;
+    app.innerHTML = zaglavlje("🃏 Меморија", true) + `
+      <p style="margin:0 0 12px;color:var(--tiho)">Окрени две карте. Нађи број и његов римски запис.</p>
+      <div class="memorija">${karte.map((k, i) => `<button class="kartica${k.rim ? " rimska" : ""}" data-i="${i}"><span class="poledjina">?</span></button>`).join("")}</div>
+      <div class="tabla-rim" style="margin-top:14px"><span><b>I</b> 1</span><span><b>V</b> 5</span><span><b>X</b> 10</span><span><b>L</b> 50</span><span><b>C</b> 100</span></div>`;
+    const dugmad = [...app.querySelectorAll(".kartica")];
+    dugmad.forEach(b => b.onclick = () => {
+      const i = +b.dataset.i;
+      if (zauzeto || b.classList.contains("okrenuta") || b.classList.contains("par")) return;
+      b.classList.add("okrenuta"); b.classList.toggle("dugacka", karte[i].t.length >= 6); b.textContent = karte[i].t; otvorene.push(i);
+      if (otvorene.length === 2) {
+        const [x, y] = otvorene; otvorene = [];
+        if (karte[x].n === karte[y].n && karte[x].rim !== karte[y].rim) {
+          [x, y].forEach(j => dugmad[j].classList.add("par")); parova++; zvezdica(dugmad[y]);
+          if (parova === 6) setTimeout(() => krajPosebne(IGRE.memorija, 6, memorija), 700);
+        } else {
+          zauzeto = true;
+          setTimeout(() => { [x, y].forEach(j => { dugmad[j].classList.remove("okrenuta"); dugmad[j].innerHTML = `<span class="poledjina">?</span>`; }); zauzeto = false; }, 1000);
+        }
+      }
+    });
+  }
+
+  function krajPosebne(g, zv, opet, poruka) {
+    stop();
+    const s = novaSlicica(); zvoni("kraj");
+    app.innerHTML = zaglavlje(`${g.em} ${g.ime}`, true) + `
+      <div class="karta kraj" style="--boja:${boja(g.boja)}">
+        <h2>Готово! 🎉</h2>
+        <p>${poruka || `У овој игри: ⭐ ${zv}`}</p>
+        <div class="slicica-nova">${s}</div>
+        <p>Нова сличица је у албуму!</p>
+        <div class="dugmad"><button class="dugme glavno" id="opet">Још једном</button><button class="dugme" data-a="pocetna">Почетна</button></div>
+      </div>`;
+    document.getElementById("opet").onclick = opet;
+  }
+
+  /* ---------- globalni klikovi i tastatura ---------- */
+  app.addEventListener("click", e => {
+    const a = e.target.closest("[data-a]"), ig = e.target.closest("[data-igra]");
+    if (a) {
+      if (a.dataset.a === "pocetna") pocetna();
+      else if (a.dataset.a === "album") album();
+      else if (a.dataset.a === "zvuk") { S.zvuk = !S.zvuk; sacuvaj(); a.textContent = S.zvuk ? "🔊" : "🔇"; }
+    } else if (ig) otvori(ig.dataset.igra);
+  });
+  document.addEventListener("keydown", e => { if (tasteri && !e.metaKey && !e.ctrlKey) tasteri(e); });
+
+  pocetna();
+}
+if (typeof module !== "undefined") module.exports = { IGRE, uRimski, koraciRacuna, oblik, lepBroj, genRacun };
+</script>
+</body>
+</html>

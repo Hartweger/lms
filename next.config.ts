@@ -326,6 +326,7 @@ const nextConfig: NextConfig = {
       // Interaktivne igre za nastavu su statična strana u public/igre/.
       // Čist link bez .html; nije permanent jer se sadržaj menja po času.
       { source: "/igre/hallo", destination: "/igre/hallo.html", permanent: false },
+      { source: "/igre/dora", destination: "/igre/dora.html", permanent: false },
     ];
   },
   async headers() {
