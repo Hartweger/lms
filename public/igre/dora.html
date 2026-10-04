@@ -65,7 +65,7 @@ button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;touch-
 .rad li{background:var(--tacno-svetlo);border-radius:12px;padding:6px 12px;font-size:18px}
 .rad li::before{content:"✓ ";color:var(--tacno);font-weight:700}
 .upit{margin:16px 0 8px;font-weight:700;font-size:19px}
-.povratna{min-height:28px;margin-top:12px;font-size:18px;border-radius:14px}
+.povratna{margin-top:10px;font-size:18px;border-radius:14px}
 .povratna.tacno{color:var(--tacno);font-weight:700}
 .povratna.skoro{background:var(--skoro-svetlo);color:#7A4300;padding:10px 14px}
 .povratna.resenje{background:var(--racun-svetlo);color:#173C6E;padding:10px 14px}
@@ -142,6 +142,51 @@ button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;touch-
 .vreme i{display:block;height:100%;background:var(--zvezda);transition:width 1s linear}
 .trka-skor{text-align:center;font-size:20px;margin-bottom:6px}
 .trka-skor b{font-size:28px}
+
+/* pomoć */
+.pomoc-dugme{display:block;margin:14px auto 0;background:#FFF4C7;color:#6B5200;border-radius:999px;padding:10px 20px;font-size:18px;font-weight:700;box-shadow:0 2px 0 #EAD98F}
+.pomoci{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.pomoci > div{background:#FFF9E0;border-left:5px solid #F2C94C;border-radius:12px;padding:10px 12px;font-size:18px;line-height:1.45}
+.pomoci > div::before{content:"💡 "}
+.vizual{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px;margin:8px 0 2px}
+.vizual b{font-size:24px;align-self:center}
+.blokovi{display:inline-flex;align-items:flex-end;gap:3px;flex-wrap:wrap;max-width:100%}
+.blokovi .d{width:9px;height:42px;border-radius:3px;background:var(--racun);background-image:repeating-linear-gradient(to bottom,transparent 0 3.2px,rgba(255,255,255,.55) 3.2px 4.2px)}
+.blokovi .j{width:9px;height:9px;border-radius:2px;background:#F2994A}
+.blokovi .br{font-size:15px;color:var(--tiho);margin-left:3px;align-self:center}
+.legenda{font-size:14px;color:var(--tiho)}
+.legenda .d,.legenda .j{display:inline-block;vertical-align:middle}
+
+/* uputstvo */
+.zavesa{position:fixed;inset:0;background:rgba(42,36,51,.45);display:flex;align-items:flex-end;justify-content:center;z-index:8;padding:12px}
+@media (min-width:560px){.zavesa{align-items:center}}
+.uputstvo{background:var(--karta);border-radius:24px;padding:20px 18px 18px;max-width:560px;width:100%;max-height:88vh;overflow:auto}
+.uputstvo h2{margin:0 0 10px;font-size:24px}
+.uputstvo p{margin:8px 0}
+.primer{background:var(--pozadina);border-radius:14px;padding:10px 14px;margin:10px 0;font-size:19px;line-height:1.6}
+.primer .vel{font-size:26px;font-weight:700}
+.uputstvo ol{padding-left:22px;margin:8px 0}
+.uputstvo li{margin:4px 0}
+.trag-plus{background:#E3F6EA;color:#15703C;border-radius:6px;padding:0 5px;font-weight:700}
+.trag-minus{background:#FDECE6;color:#A23A1A;border-radius:6px;padding:0 5px;font-weight:700}
+
+.sto{display:flex;flex-direction:column;gap:2px;margin:8px 0;font-size:12px;font-variant-numeric:tabular-nums}
+.sto-red{display:grid;grid-template-columns:52px repeat(10,1fr);gap:2px;opacity:.45}
+.sto-red span{background:var(--pozadina);border-radius:4px;text-align:center;padding:2px 0}
+.sto-red .sto-br{background:none;text-align:left;color:var(--tiho)}
+.sto-red.istaknut{opacity:1;font-weight:700}
+.sto-red.istaknut span{background:var(--misli-svetlo)}
+.sto-red.istaknut span:nth-child(2),.sto-red.istaknut span:last-child{background:var(--misli);color:#fff}
+.lek-vrh{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.lek-vrh h2{flex:1;margin:0;font-size:22px}
+.lek-vrh button{width:40px;height:40px;border-radius:12px;background:var(--pozadina);font-size:18px}
+.lek-telo{min-height:240px;font-size:19px}
+.lek-tacke{display:flex;gap:6px;justify-content:center;margin:12px 0}
+.lek-tacke i{width:8px;height:8px;border-radius:50%;background:var(--linija)}
+.lek-tacke i.sad{background:var(--boja);width:20px;border-radius:4px}
+.lek-dugmad{display:flex;gap:8px;justify-content:space-between;flex-wrap:wrap}
+.lek-dugmad .dugme{flex:1;min-width:120px}
+.podseti{background:#FFF4C7;color:#6B5200;border-radius:999px;padding:8px 12px;font-weight:700;font-size:15px;box-shadow:0 2px 0 #EAD98F;white-space:nowrap}
 
 .leteca{position:fixed;font-size:34px;pointer-events:none;animation:leti 1s forwards;z-index:9}
 @keyframes leti{0%{opacity:0;transform:translateY(0) scale(.6)}20%{opacity:1;transform:translateY(-10px) scale(1.2)}100%{opacity:0;transform:translateY(-90px) scale(1)}}
@@ -220,11 +265,37 @@ function koraciRacuna(a, op, b) {
   }
   return k;
 }
-function pomocRacuna(a, op, b) {
-  const k = koraciRacuna(a, op, b);
-  if (k.length < 2) return op === "+" ? "Прво саберите јединице, па десетице." : "Прво одузми јединице, па десетице.";
-  return "Помоћ: " + k.map((s, i) => i === k.length - 1 ? `${s[0]} = ?` : `${s[0]} = ${s[1]}`).join(", па ");
+/* desetice kao štapići, jedinice kao kockice */
+function blokovi(n) {
+  return `<span class="blokovi" aria-label="${n}">${'<i class="d"></i>'.repeat(Math.floor(n / 10))}${'<i class="j"></i>'.repeat(n % 10)}<span class="br">${n}</span></span>`;
 }
+function vizualRacuna(a, op, b) {
+  return `<div class="vizual">${blokovi(a)}<b>${op}</b>${blokovi(b)}</div><div class="legenda"><i class="d" style="height:14px;width:6px;background:var(--racun);border-radius:2px"></i> = 10 &nbsp; <i class="j" style="width:7px;height:7px;background:#F2994A;border-radius:2px"></i> = 1</div>`;
+}
+/* dve pomoći: prvo kako da krene, pa korak po korak */
+function pomociRacuna(a, op, b) {
+  const t = b - b % 10, u = b % 10, k = koraciRacuna(a, op, b);
+  const posle = op === "+" ? a + t : a - t, r = posle % 10;
+  const prelaz = op === "+" ? (r > 0 && r + u > 10) : (r > 0 && u > r);
+  let h1;
+  if (op === "+") {
+    if (t && u) h1 = `Растави ${b} на ${t} и ${u}. Прво додај десетице (${t}), па јединице (${u}).`;
+    else if (t) h1 = `Додај само десетице. Јединице (${a % 10}) остају исте.`;
+    else if (prelaz) h1 = `Прво допуни до пуне десетице: ${a} + ${10 - r} = ${a + 10 - r}. Од ${b} ти је остало још ${u - (10 - r)}.`;
+    else h1 = `Сабери јединице: ${a % 10} + ${u}. Десетице остају исте.`;
+  } else {
+    if (t && u) h1 = `Растави ${b} на ${t} и ${u}. Прво одузми десетице (${t}), па јединице (${u}).`;
+    else if (t) h1 = `Одузми само десетице. Јединице (${a % 10}) остају исте.`;
+    else if (prelaz) h1 = `Прво сиђи до пуне десетице: ${a} ${M} ${r} = ${a - r}. Од ${b} ти је остало још ${u - r} да одузмеш.`;
+    else h1 = `Одузми јединице: ${a % 10} ${M} ${u}. Десетице остају исте.`;
+  }
+  let h2;
+  if (k.length >= 2) h2 = "Корак по корак: " + k.map((s, i) => i === k.length - 1 ? `${s[0]} = ?` : `${s[0]} = ${s[1]}`).join(", па ");
+  else if (t) { const d = op === "+" ? Math.floor(a / 10) + t / 10 : Math.floor(a / 10) - t / 10; h2 = `Десетице: ${Math.floor(a / 10)} ${op} ${t / 10} = ${d}. Јединица има ${a % 10}. Који је то број?`; }
+  else { const j = op === "+" ? a % 10 + u : a % 10 - u; h2 = `Јединице: ${a % 10} ${op} ${u} = ${j}. Десетица има ${Math.floor(a / 10)}. Који је то број?`; }
+  return [h1 + vizualRacuna(a, op, b), h2];
+}
+const pomocRacuna = (a, op, b) => pomociRacuna(a, op, b)[0];
 function resenjeRacuna(a, op, b) {
   const k = koraciRacuna(a, op, b);
   const v = op === "+" ? a + b : a - b;
@@ -233,7 +304,7 @@ function resenjeRacuna(a, op, b) {
 }
 function korakRacun(a, op, b, upit) {
   const v = op === "+" ? a + b : a - b;
-  return { upit, tip: "broj", odgovor: v, pomoc: pomocRacuna(a, op, b), resenje: resenjeRacuna(a, op, b), rad: `${a} ${op} ${b} = ${v}` };
+  return { upit, tip: "broj", odgovor: v, pomoci: pomociRacuna(a, op, b), resenje: resenjeRacuna(a, op, b), rad: `${a} ${op} ${b} = ${v}` };
 }
 
 /* ===================== igre: generatori ===================== */
@@ -272,7 +343,11 @@ IGRE.znak = {
       pitanje: `<div class="izraz mali">${tekst(P)} <span class="upitnik">?</span> ${tekst(D)}</div>`,
       koraci: [{
         upit: "Који знак иде у средину?", tip: "izbor", opcije: [">", "<", "="], znak: true, odgovor: znak,
-        pomoc: "Израчунај обе стране, па упореди. Отвор знака гледа ка већем броју.",
+        pomoci: [
+          "Прво израчунај обе стране. Знак > и < је као уста крокодила 🐊: увек се отварају ка већем броју. Ако су стране исте, иде =.",
+          P.broj !== undefined ? `Лево је број ${P.v}. Сада израчунај десно: ${tekst(D)} = ?` : `Лево: ${tekst(P)} = ${P.v}. Сада израчунај десно${D.broj !== undefined ? "" : `: ${tekst(D)} = ?`}.`,
+          `Лево је ${P.v}, десно је ${D.v}. Где ће крокодил да отвори уста?`
+        ],
         resenje: `Лево: ${strana(P)}. Десно: ${strana(D)}. Значи ${P.v} ${znak} ${D.v}.`,
         rad: `${P.v} ${znak} ${D.v}`
       }]
@@ -329,6 +404,23 @@ function rastaviRim(n) {
   if (delovi.length < 2) return `${n} = ${uRimski(n)}`;
   return `${n} = ${d} + ${j}, а ${d} = ${uRimski(d)} и ${j} = ${uRimski(j)}. Заједно: ${uRimski(n)}`;
 }
+function rimObjasni(v) {
+  const r = uRimski(v);
+  if ([1, 5, 10, 50, 100].includes(v)) return `${v} = ${r}, то је у таблици.`;
+  if (v <= 3) return `${v} = ${r}: онолико I колико је број.`;
+  if (v === 4) return "4 је за 1 мање од 5: I иде ИСПРЕД V → IV.";
+  if (v <= 8) return `${v} = 5 + ${v - 5}: прво V, па ${"I".repeat(v - 5)} → ${r}.`;
+  if (v === 9) return "9 је за 1 мање од 10: I иде ИСПРЕД X → IX.";
+  if (v <= 30) return `${v} = ${v / 10} пута по 10 → ${r}.`;
+  if (v === 40) return "40 је за 10 мање од 50: X иде ИСПРЕД L → XL.";
+  if (v <= 80) return `${v} = 50 + ${v - 50}: прво L, па ${"X".repeat((v - 50) / 10)} → ${r}.`;
+  if (v === 90) return "90 је за 10 мање од 100: X иде ИСПРЕД C → XC.";
+  return `${v} = ${r}`;
+}
+function citajPomoc(r) {
+  const V = { I: 1, V: 5, X: 10, L: 50, C: 100 };
+  return `Свака цифра: ${[...r].map(c => `${c} = ${V[c]}`).join(", ")}. Сабери их, а где мања стоји ИСПРЕД веће, одузми.`;
+}
 const RIM_NIVOI = [["do20", "До 20", "I, IV, IX, XIV, XIX…"], ["do100", "До 100", "XL, L, XC, C…"]];
 
 IGRE.rimPisi = {
@@ -340,7 +432,7 @@ IGRE.rimPisi = {
       pitanje: `<div class="izraz">${n}</div>`,
       koraci: [{
         upit: "Напиши римским цифрама:", tip: "rimski", odgovor: uRimski(n),
-        pomoc: d && j ? `Помоћ: ${n} = ${d} + ${j}. Напиши прво ${d}, па ${j}.` : "Сети се: I, V, X, L, C. Мања цифра испред веће значи одузимање (IV = 4).",
+        pomoci: d && j ? [`Растави: ${n} = ${d} + ${j}. Прво напиши ${d}, па одмах до њега ${j}.`, `${rimObjasni(d)} ${rimObjasni(j)}`] : [rimObjasni(n), "Погледај таблицу горе и сложи цифре."],
         resenje: rastaviRim(n) + ".", rad: `${n} = ${uRimski(n)}`
       }]
     };
@@ -356,7 +448,7 @@ IGRE.rimCitaj = {
       pitanje: `<div class="rimski-veliki">${r}</div>`,
       koraci: [{
         upit: "Који је ово број?", tip: "broj", odgovor: n,
-        pomoc: d && j ? `Помоћ: подели на два дела: ${uRimski(d)} и ${uRimski(j)}.` : "Помоћ: I = 1, V = 5, X = 10, L = 50, C = 100.",
+        pomoci: d && j ? [`Подели на два дела: ${uRimski(d)} | ${uRimski(j)}. Сваки део прочитај посебно.`, `${uRimski(d)} = ${d}. Колико је ${uRimski(j)}? Сабери их.`] : ["Погледај таблицу горе. Ако је мања цифра ИСПРЕД веће, одузимаш (IV = 5 − 1). Ако је ИЗА, додајеш (VI = 5 + 1).", citajPomoc(r)],
         resenje: d && j ? `${uRimski(d)} = ${d}, ${uRimski(j)} = ${j}. Заједно ${n}.` : `${r} = ${n}.`, rad: `${r} = ${n}`
       }]
     };
@@ -374,17 +466,17 @@ IGRE.niz = {
     const t = rnd(1, 5);
     if (t === 1) { // rimske desetice
       const k = rnd(1, 6), cl = [k, k + 1, k + 2].map(x => uRimski(10 * x)), v = 10 * (k + 3);
-      return niz(cl, { tip: "izbor", opcije: rimOpcije(v), odgovor: uRimski(v), pomoc: "Сваки пут додајемо по 10 (X).", resenje: `После ${cl[2]} (${10 * (k + 2)}) долази ${uRimski(v)} (${v}).`, rad: uRimski(v) });
+      return niz(cl, { tip: "izbor", opcije: rimOpcije(v), odgovor: uRimski(v), pomoci: [`Преведи у бројеве: ${cl.map((_, i) => 10 * (k + i)).join(", ")}…`, `Сваки пут +10. После ${10 * (k + 2)} долази ${v}. Како се пише ${v}?`], resenje: `После ${cl[2]} (${10 * (k + 2)}) долази ${uRimski(v)} (${v}).`, rad: uRimski(v) });
     }
     if (t === 2) { // rimski +1 / +2 / +5
       const k = pick([1, 1, 2, 5]), n = rnd(1, 100 - 3 * k), cl = [n, n + k, n + 2 * k].map(uRimski), v = n + 3 * k;
-      return niz(cl, { tip: "izbor", opcije: rimOpcije(v), odgovor: uRimski(v), pomoc: `Преведи у бројеве: ${n}, ${n + k}, ${n + 2 * k}… Сваки пут +${k}.`, resenje: `${n}, ${n + k}, ${n + 2 * k}, ${v} → ${uRimski(v)}`, rad: uRimski(v) });
+      return niz(cl, { tip: "izbor", opcije: rimOpcije(v), odgovor: uRimski(v), pomoci: [`Преведи у бројеве: ${n}, ${n + k}, ${n + 2 * k}…`, `Сваки пут +${k}. Следећи број је ${v}. Како се пише римски?`], resenje: `${n}, ${n + k}, ${n + 2 * k}, ${v} → ${uRimski(v)}`, rad: uRimski(v) });
     }
     // brojevi
     const k = pick([2, 3, 4, 5, 10, 11, 9]), raste = Math.random() < .55;
     let n = raste ? rnd(2, 100 - 4 * k) : rnd(4 * k + 1, 99);
     const cl = [0, 1, 2, 3].map(i => raste ? n + i * k : n - i * k), v = raste ? n + 4 * k : n - 4 * k;
-    return niz(cl, { tip: "broj", odgovor: v, pomoc: `Колико се мења сваки пут? ${cl[0]} → ${cl[1]}.`, resenje: `Сваки пут ${raste ? "+" : M}${k}: ${cl[3]} ${raste ? "+" : M} ${k} = ${v}.`, rad: `${v}` });
+    return niz(cl, { tip: "broj", odgovor: v, pomoci: [`Погледај прва два броја: ${cl[0]} → ${cl[1]}. За колико се ${raste ? "повећао" : "смањио"}?`, `Сваки пут ${raste ? "+" : M}${k}. Последњи је ${cl[3]}: ${cl[3]} ${raste ? "+" : M} ${k} = ?`], resenje: `Сваки пут ${raste ? "+" : M}${k}: ${cl[3]} ${raste ? "+" : M} ${k} = ${v}.`, rad: `${v}` });
   }
 };
 function niz(clanovi, korak) {
@@ -400,32 +492,44 @@ function pojam(osnovni) {
   const t = osnovni ? rnd(0, 6) : rnd(0, 9);
   switch (t) {
     case 0: return pick([
-      { nom: "највећи двоцифрени број", gen: "највећег двоцифреног броја", v: 99, obj: "Највећи двоцифрени број је 99." },
-      { nom: "најмањи двоцифрени број", gen: "најмањег двоцифреног броја", v: 10, obj: "Најмањи двоцифрени број је 10." },
-      { nom: "највећи једноцифрени број", gen: "највећег једноцифреног броја", v: 9, obj: "Највећи једноцифрени број је 9." }]);
+      { nom: "највећи двоцифрени број", gen: "највећег двоцифреног броја", v: 99, obj: "Највећи двоцифрени број је 99.", pom2: "Двоцифрени: 10, 11, 12, … 97, 98, 99. Који је последњи?" },
+      { nom: "најмањи двоцифрени број", gen: "најмањег двоцифреног броја", v: 10, obj: "Најмањи двоцифрени број је 10.", pom2: "Двоцифрени: 10, 11, 12, 13… Који је први?" },
+      { nom: "највећи једноцифрени број", gen: "највећег једноцифреног броја", v: 9, obj: "Највећи једноцифрени број је 9.", pom2: "Једноцифрени: 1, 2, 3, … 7, 8, 9. Који је последњи?" }]);
     case 1: case 2: {
       const k = rnd(1, 10), od = 10 * k - 9, do_ = 10 * k, naj = t === 1;
       return { nom: `${naj ? "највећи" : "најмањи"} број ${RED_GEN[k - 1]} десетице`, gen: `${naj ? "највећег" : "најмањег"} броја ${RED_GEN[k - 1]} десетице`,
-        v: naj ? do_ : od, obj: `${RED_NOM[k - 1]} десетица: ${od}, ${od + 1}, … ${do_}. ${naj ? "Највећи" : "Најмањи"} је ${naj ? do_ : od}.` };
+        v: naj ? do_ : od, obj: `${RED_NOM[k - 1]} десетица: ${od}, ${od + 1}, … ${do_}. ${naj ? "Највећи" : "Најмањи"} је ${naj ? do_ : od}.`,
+        pom2: `${RED_NOM[k - 1]} десетица: ${od}, ${od + 1}, ${od + 2}, … ${do_ - 1}, ${do_}. Који је ${naj ? "последњи" : "први"}?` };
     }
     case 3: return pick([
-      { nom: "најмањи паран број прве десетице", gen: "најмањег парног броја прве десетице", v: 2, obj: "Парни бројеви прве десетице: 2, 4, 6, 8, 10. Најмањи је 2." },
-      { nom: "највећи непаран број прве десетице", gen: "највећег непарног броја прве десетице", v: 9, obj: "Непарни бројеви прве десетице: 1, 3, 5, 7, 9. Највећи је 9." }]);
+      { nom: "најмањи паран број прве десетице", gen: "најмањег парног броја прве десетице", v: 2, obj: "Парни бројеви прве десетице: 2, 4, 6, 8, 10. Најмањи је 2.", pom2: "Парни бројеви прве десетице: 2, 4, 6, 8, 10. Који је најмањи?" },
+      { nom: "највећи непаран број прве десетице", gen: "највећег непарног броја прве десетице", v: 9, obj: "Непарни бројеви прве десетице: 1, 3, 5, 7, 9. Највећи је 9.", pom2: "Непарни бројеви прве десетице: 1, 3, 5, 7, 9. Који је највећи?" }]);
     case 4: return pick([
-      { nom: "највећи паран двоцифрени број", gen: "највећег парног двоцифреног броја", v: 98, obj: "Највећи паран двоцифрени број је 98." },
-      { nom: "најмањи непаран двоцифрени број", gen: "најмањег непарног двоцифреног броја", v: 11, obj: "Најмањи непаран двоцифрени број је 11." }]);
-    case 5: { const n = rnd(2, 99); return { nom: `претходник броја ${n}`, gen: `претходника броја ${n}`, v: n - 1, obj: `Претходник је број пре њега: ${n - 1}.` }; }
-    case 6: { const n = rnd(1, 99); return { nom: `следбеник броја ${n}`, gen: `следбеника броја ${n}`, v: n + 1, obj: `Следбеник је број после њега: ${n + 1}.` }; }
+      { nom: "највећи паран двоцифрени број", gen: "највећег парног двоцифреног броја", v: 98, obj: "Највећи паран двоцифрени број је 98.", pom2: "Највећи двоцифрени је 99, али он је непаран. Иди корак уназад." },
+      { nom: "најмањи непаран двоцифрени број", gen: "најмањег непарног двоцифреног броја", v: 11, obj: "Најмањи непаран двоцифрени број је 11.", pom2: "Најмањи двоцифрени је 10, али он је паран. Иди корак унапред." }]);
+    case 5: { const n = rnd(2, 99); return { nom: `претходник броја ${n}`, gen: `претходника броја ${n}`, v: n - 1, obj: `Претходник је број пре њега: ${n - 1}.`, pom2: `${n} ${M} 1 = ?` }; }
+    case 6: { const n = rnd(1, 99); return { nom: `следбеник броја ${n}`, gen: `следбеника броја ${n}`, v: n + 1, obj: `Следбеник је број после њега: ${n + 1}.`, pom2: `${n} + 1 = ?` }; }
     default: {
       for (;;) {
         const c = pojam(true); if (c.nom.startsWith("претходник") || c.nom.startsWith("следбеник")) continue;
         const pre = Math.random() < .5, v = pre ? c.v - 1 : c.v + 1;
         if (v < 1 || v > 100) continue;
         return { nom: `${pre ? "претходник" : "следбеник"} ${c.gen}`, gen: `${pre ? "претходника" : "следбеника"} ${c.gen}`, v,
-          obj: `${c.obj} ${pre ? "Претходник" : "Следбеник"} је ${v}.` };
+          obj: `${c.obj} ${pre ? "Претходник" : "Следбеник"} је ${v}.`,
+          pom2: `Прво нађи ${c.nom}: то је ${c.v}. Сада ${pre ? `${c.v} ${M} 1` : `${c.v} + 1`} = ?` };
       }
     }
   }
+}
+function pojamPomoci(c) {
+  const d = [];
+  if (c.nom.startsWith("претходник")) d.push("Претходник је број ПРЕ: за 1 мањи (корак уназад 👣).");
+  if (c.nom.startsWith("следбеник")) d.push("Следбеник је број ПОСЛЕ: за 1 већи (корак унапред 👣).");
+  if (c.nom.includes("десетице")) d.push("Десетица је 10 бројева заредом: прва 1–10, друга 11–20, трећа 21–30, четврта 31–40, пета 41–50, шеста 51–60…");
+  else if (c.nom.includes("двоцифрен")) d.push("Двоцифрени бројеви имају две цифре: од 10 до 99.");
+  else if (c.nom.includes("једноцифрен")) d.push("Једноцифрени бројеви имају једну цифру: од 1 до 9.");
+  if (c.nom.includes("пар")) d.push("Парни: 2, 4, 6, 8, 10… Непарни: 1, 3, 5, 7, 9…");
+  return [d.join(" ") || "Прочитај полако још једном.", c.pom2];
 }
 IGRE.zagonetke = {
   ime: "Загонетке о бројевима", em: "🔎", boja: "misli", opis: "Највећи, најмањи, претходник, десетице",
@@ -436,8 +540,8 @@ IGRE.zagonetke = {
       return {
         pitanje: `<div class="pitanje">Напиши ${rim ? "<b>римским цифрама</b> " : ""}<b>${c.nom}</b>.</div>`,
         koraci: [rim
-          ? { upit: "Римским цифрама:", tip: "rimski", odgovor: uRimski(c.v), pomoc: "Прво смисли који је то број, па га запиши римски.", resenje: `${c.obj} Римски: ${uRimski(c.v)}.`, rad: `${c.v} = ${uRimski(c.v)}` }
-          : { upit: "Број:", tip: "broj", odgovor: c.v, pomoc: "Полако прочитај још једном. " + (c.nom.includes("десетице") ? "Пета десетица су бројеви од 41 до 50." : ""), resenje: c.obj, rad: `${c.v}` }]
+          ? { upit: "Римским цифрама:", tip: "rimski", odgovor: uRimski(c.v), pomoci: [...pojamPomoci(c), "Сада тај број запиши римски. Погледај таблицу горе."], resenje: `${c.obj} Римски: ${uRimski(c.v)}.`, rad: `${c.v} = ${uRimski(c.v)}` }
+          : { upit: "Број:", tip: "broj", odgovor: c.v, pomoci: pojamPomoci(c), resenje: c.obj, rad: `${c.v}` }]
       };
     }
     for (;;) {
@@ -448,8 +552,8 @@ IGRE.zagonetke = {
         return {
           pitanje: `<div class="pitanje">Први сабирак је <b>${c1.nom}</b>, а други сабирак је <b>${c2.nom}</b>. Колики је збир?</div>`,
           koraci: [
-            { upit: "Први сабирак је:", tip: "broj", odgovor: c1.v, pomoc: "Смисли само први број.", resenje: c1.obj, rad: `први сабирак: ${c1.v}` },
-            { upit: "Други сабирак је:", tip: "broj", odgovor: c2.v, pomoc: "Сада само други број.", resenje: c2.obj, rad: `други сабирак: ${c2.v}` },
+            { upit: "Први сабирак је:", tip: "broj", odgovor: c1.v, pomoci: pojamPomoci(c1), resenje: c1.obj, rad: `први сабирак: ${c1.v}` },
+            { upit: "Други сабирак је:", tip: "broj", odgovor: c2.v, pomoci: pojamPomoci(c2), resenje: c2.obj, rad: `други сабирак: ${c2.v}` },
             korakRacun(c1.v, "+", c2.v, `Збир: ${c1.v} + ${c2.v} = ?`)
           ]
         };
@@ -458,8 +562,8 @@ IGRE.zagonetke = {
       return {
         pitanje: `<div class="pitanje">Колика је разлика <b>${c1.gen}</b> и <b>${c2.gen}</b>?</div>`,
         koraci: [
-          { upit: "Први број је:", tip: "broj", odgovor: c1.v, pomoc: "Смисли само први број.", resenje: c1.obj, rad: `први број: ${c1.v}` },
-          { upit: "Други број је:", tip: "broj", odgovor: c2.v, pomoc: "Сада само други број.", resenje: c2.obj, rad: `други број: ${c2.v}` },
+          { upit: "Први број је:", tip: "broj", odgovor: c1.v, pomoci: pojamPomoci(c1), resenje: c1.obj, rad: `први број: ${c1.v}` },
+          { upit: "Други број је:", tip: "broj", odgovor: c2.v, pomoci: pojamPomoci(c2), resenje: c2.obj, rad: `други број: ${c2.v}` },
           korakRacun(c1.v, M, c2.v, `Разлика: ${c1.v} ${M} ${c2.v} = ?`)
         ]
       };
@@ -474,46 +578,48 @@ const STVARI = [
   ["бомбону", "бомбоне", "бомбона"], ["налепницу", "налепнице", "налепница"], ["књигу", "књиге", "књига"]
 ];
 const dvaImena = () => { const s = shuffle(IMENA); return [s[0], s[1]]; };
-const korakOp = (op, upit) => ({ upit: upit || "Шта рачунамо?", tip: "izbor", opcije: ["+ сабирамо", `${M} одузимамо`], odgovor: op === "+" ? "+ сабирамо" : `${M} одузимамо`,
-  pomoc: op === "+" ? "Да ли се број повећава или смањује?" : "Да ли се број повећава или смањује?",
+const TRAGOVI = `Тражи речи-трагове 🔍: <span class="trag-plus">више</span> <span class="trag-plus">укупно</span> <span class="trag-plus">заједно</span> → сабирамо. <span class="trag-minus">мање</span> <span class="trag-minus">остало</span> <span class="trag-minus">за колико је већи</span> → одузимамо.`;
+const korakOp = (op, upit, trag) => ({ upit: upit || "Шта рачунамо?", tip: "izbor", opcije: ["+ сабирамо", `${M} одузимамо`], odgovor: op === "+" ? "+ сабирамо" : `${M} одузимамо`,
+  pomoci: [TRAGOVI, trag || (op === "+" ? "Да ли ће број да буде већи? Онда сабирамо." : "Да ли ће број да буде мањи? Онда одузимамо.")],
   resenje: op === "+" ? "Сабирамо, јер тражимо више или укупно." : "Одузимамо, јер тражимо мање, остатак или разлику.", tiho: true });
+const trag = (rec, op) => `У задатку пише <span class="${op === "+" ? "trag-plus" : "trag-minus"}">${rec}</span>. ${op === "+" ? "Биће више, зато сабирамо." : "Биће мање, зато одузимамо."}`;
 function korakOdgovor(tekst) { return { kraj: tekst }; }
 
 const PRICE = [
   // ukupno
   () => { const [[A], [B]] = dvaImena(), f = pick(STVARI), x = rnd(12, 60), y = rnd(12, 99 - x), v = x + y;
     return [[x, y, v], `${A} има ${x} ${oblik(x, f)}, а ${B} има ${y} ${oblik(y, f)}. Колико ${f[2]} имају заједно?`,
-      [korakOp("+"), korakRacun(x, "+", y, `${x} + ${y} = ?`)], `Заједно имају ${v} ${oblik(v, f)}.`]; },
+      [korakOp("+", null, trag("заједно", "+")), korakRacun(x, "+", y, `${x} + ${y} = ?`)], `Заједно имају ${v} ${oblik(v, f)}.`]; },
   // za n manje
   () => { const [[A], [B]] = dvaImena(), f = pick(STVARI), x = rnd(30, 99), n = rnd(5, x - 10), v = x - n;
     return [[x, n, v], `${A} има ${x} ${oblik(x, f)}, а ${B} има за ${n} мање. Колико ${f[2]} има ${B}?`,
-      [korakOp(M), korakRacun(x, M, n, `${x} ${M} ${n} = ?`)], `${B} има ${v} ${oblik(v, f)}.`]; },
+      [korakOp(M, null, trag("за " + n + " мање", M)), korakRacun(x, M, n, `${x} ${M} ${n} = ?`)], `${B} има ${v} ${oblik(v, f)}.`]; },
   // za n više
   () => { const [[A], [B]] = dvaImena(), f = pick(STVARI), x = rnd(12, 80), n = rnd(5, 99 - x), v = x + n;
     return [[x, n, v], `${A} има ${x} ${oblik(x, f)}, а ${B} има за ${n} више. Колико ${f[2]} има ${B}?`,
-      [korakOp("+"), korakRacun(x, "+", n, `${x} + ${n} = ?`)], `${B} има ${v} ${oblik(v, f)}.`]; },
+      [korakOp("+", null, trag("за " + n + " више", "+")), korakRacun(x, "+", n, `${x} + ${n} = ?`)], `${B} има ${v} ${oblik(v, f)}.`]; },
   // ostatak
   () => { const x = rnd(40, 99), y = rnd(10, x - 10), v = x - y, ctx = pick([
       [`У воћњаку има ${x} ${oblik(x, ["стабло", "стабла", "стабала"])} воћа. Од тога ${y} су крушке, а остало су јабуке. Колико има јабука?`, `У воћњаку има ${v} ${oblik(v, ["јабуку", "јабуке", "јабука"])}.`],
       [`У парку има ${x} ${oblik(x, ["цвет", "цвета", "цветова"])}. Од тога ${y} су љубичице, а остало су беле раде. Колико има белих рада?`, `Белих рада има ${v}.`],
       [`У кутији има ${x} ${oblik(x, ["бојицу", "бојице", "бојица"])}. Од тога ${y} су плаве, а остале су црвене. Колико има црвених бојица?`, `Црвених бојица има ${v}.`],
       [`У хору пева ${x} ${oblik(x, ["дете", "детета", "деце"])}. Од тога ${y} су девојчице, а остало су дечаци. Колико дечака пева у хору?`, `У хору пева ${v} ${oblik(v, ["дечак", "дечака", "дечака"])}.`]]);
-    return [[x, y, v], ctx[0], [korakOp(M), korakRacun(x, M, y, `${x} ${M} ${y} = ?`)], ctx[1]]; },
+    return [[x, y, v], ctx[0], [korakOp(M, null, "Од свих делова одузимамо оне које знамо. Шта <span class=\"trag-minus\">остане</span>, то тражимо."), korakRacun(x, M, y, `${x} ${M} ${y} = ?`)], ctx[1]]; },
   // za koliko je veći / manji
   () => { const x = rnd(30, 99), y = rnd(10, x - 3), v = x - y, veci = Math.random() < .5;
     return [[x, y, v], veci ? `За колико је број ${x} већи од броја ${y}?` : `За колико је број ${y} мањи од броја ${x}?`,
-      [korakOp(M), korakRacun(x, M, y, `${x} ${M} ${y} = ?`)], veci ? `Број ${x} је већи за ${v}.` : `Број ${y} је мањи за ${v}.`]; },
+      [korakOp(M, null, "<span class=\"trag-minus\">За колико</span> је један број већи: од већег одузми мањи."), korakRacun(x, M, y, `${x} ${M} ${y} = ?`)], veci ? `Број ${x} је већи за ${v}.` : `Број ${y} је мањи за ${v}.`]; },
   // dva koraka: više pa zajedno
   () => { const [[A], [B]] = dvaImena(), f = pick(STVARI), x = rnd(12, 40), n = rnd(5, 99 - 2 * x), b = x + n, v = x + b;
     if (v > 100 || n < 5) return null;
     return [[x, n, b, v], `${A} има ${x} ${oblik(x, f)}. ${B} има за ${n} више. Колико ${f[2]} има ${B}, а колико имају заједно?`,
-      [korakOp("+", `Прво: колико има ${B}?`), korakRacun(x, "+", n, `${x} + ${n} = ?`), korakOp("+", "Сада: колико имају заједно?"), korakRacun(x, "+", b, `${x} + ${b} = ?`)],
+      [korakOp("+", `Прво: колико има ${B}?`, trag("за " + n + " више", "+")), korakRacun(x, "+", n, `${x} + ${n} = ?`), korakOp("+", "Сада: колико имају заједно?", trag("заједно", "+")), korakRacun(x, "+", b, `${x} + ${b} = ?`)],
       `${B} има ${b} ${oblik(b, f)}. Заједно имају ${v} ${oblik(v, f)}.`]; },
   // dva koraka: manje pa zajedno (razredi)
   () => { const x = rnd(30, 60), n = rnd(5, 25), b = x - n, v = x + b; if (v > 100) return null;
     const U = ["ученика", "ученика", "ученика"];
     return [[x, n, b, v], `У првом разреду има ${x} ${oblik(x, U)}, а у другом ${n} ${oblik(n, U)} мање. Колико ученика има у другом разреду, а колико у оба разреда заједно?`,
-      [korakOp(M, "Прво: колико има у другом разреду?"), korakRacun(x, M, n, `${x} ${M} ${n} = ?`), korakOp("+", "Сада: колико их је заједно?"), korakRacun(x, "+", b, `${x} + ${b} = ?`)],
+      [korakOp(M, "Прво: колико има у другом разреду?", trag(n + " ученика мање", M)), korakRacun(x, M, n, `${x} ${M} ${n} = ?`), korakOp("+", "Сада: колико их је заједно?", trag("заједно", "+")), korakRacun(x, "+", b, `${x} + ${b} = ?`)],
       `У другом разреду има ${b} ${oblik(b, U)}. Заједно има ${v} ${oblik(v, U)}.`]; },
   // ko ima više
   () => { const [[A, ga], [B, gb]] = dvaImena(), D = ["динар", "динара", "динара"];
@@ -522,8 +628,8 @@ const PRICE = [
     const gl = (g, z, m) => g === "z" ? z : m;
     const vise = va > vb ? A : B;
     return [[a, T1, b, T2, va, vb], `Ко има више динара, ${A} или ${B}?<br>Када би ${A} ${gl(ga, "добила", "добио")} ${a} ${oblik(a, D)}, ${gl(ga, "имала", "имао")} би укупно ${T1} ${oblik(T1, D)}.<br>Када би ${B} ${gl(gb, "добила", "добио")} ${b} ${oblik(b, D)}, ${gl(gb, "имала", "имао")} би укупно ${T2} ${oblik(T2, D)}.`,
-      [korakOp(M, `Колико сада има ${A}?`), korakRacun(T1, M, a, `${A}: ${T1} ${M} ${a} = ?`), korakOp(M, `Колико сада има ${B}?`), korakRacun(T2, M, b, `${B}: ${T2} ${M} ${b} = ?`),
-       { upit: "Ко има више?", tip: "izbor", opcije: [A, B], odgovor: vise, pomoc: `Упореди ${va} и ${vb}.`, resenje: `${Math.max(va, vb)} > ${Math.min(va, vb)}, више има ${vise}.`, rad: `${va} ${va > vb ? ">" : "<"} ${vb}` }],
+      [korakOp(M, `Колико сада има ${A}?`, `Са поклоном би ${A} имало ${T1}. Без поклона има <span class="trag-minus">мање</span>: од ${T1} одузми поклон ${a}.`.replace("имало", gl(ga, "имала", "имао"))), korakRacun(T1, M, a, `${A}: ${T1} ${M} ${a} = ?`), korakOp(M, `Колико сада има ${B}?`, `Са поклоном би ${B} имало ${T2}. Без поклона има <span class="trag-minus">мање</span>: од ${T2} одузми поклон ${b}.`.replace("имало", gl(gb, "имала", "имао"))), korakRacun(T2, M, b, `${B}: ${T2} ${M} ${b} = ?`),
+       { upit: "Ко има више?", tip: "izbor", opcije: [A, B], odgovor: vise, pomoci: [`${A} има ${va}, а ${B} има ${vb}. Који број је већи?`], resenje: `${Math.max(va, vb)} > ${Math.min(va, vb)}, више има ${vise}.`, rad: `${va} ${va > vb ? ">" : "<"} ${vb}` }],
       `Више динара има ${vise}.`]; }
 ];
 IGRE.prica = {
@@ -538,6 +644,9 @@ IGRE.prica = {
   }
 };
 
+/* koja lekcija pomaže kojoj igri */
+const LEKCIJA_ZA = { racunaj: "sabiranje", baloni: "sabiranje", trka: "sabiranje", znak: "znakovi", zagrade: "znakovi", rimPisi: "rimske", rimCitaj: "rimske", niz: "rimske", memorija: "rimske", zagonetke: "brojevi", prica: "price" };
+
 /* mali kontrolni: redom kao na testu */
 IGRE.kontrolni = {
   ime: "Мали контролни", em: "📝", boja: "kontrolni", opis: "10 задатака као на тесту",
@@ -545,6 +654,60 @@ IGRE.kontrolni = {
   gen(_, i) { const [ig, nv] = this.redosled[i % this.redosled.length]; return IGRE[ig].gen(nv); }
 };
 
+
+/* ===================== lekcije: podseti se ===================== */
+function sto(red) {
+  let h = '<div class="sto">';
+  for (let r = 0; r < 10; r++) {
+    h += `<div class="sto-red${r + 1 === red ? " istaknut" : ""}"><span class="sto-br">${RED_NOM[r]}</span>`;
+    for (let c = 1; c <= 10; c++) h += `<span>${r * 10 + c}</span>`;
+    h += "</div>";
+  }
+  return h + "</div>";
+}
+const pr = s => `<div class="primer">${s}</div>`;
+const LEKCIJE = {
+  sabiranje: { naslov: "Сабирање до 100", em: "➕", boja: "racun", igra: "racunaj", sledeca: "oduzimanje", slajdovi: [
+    `<p>Сваки број има <b>десетице</b> и <b>јединице</b>.</p>${pr(`<span class="vel">34</span> = 3 десетице и 4 јединице${blokovi(34)}`)}<p class="legenda"><i class="d" style="height:14px;width:6px;background:var(--racun);border-radius:2px"></i> = 10 &nbsp; <i class="j" style="width:7px;height:7px;background:#F2994A;border-radius:2px"></i> = 1</p>`,
+    `<p><b>Без прелаза.</b> Десетице сабираш са десетицама, јединице са јединицама.</p>${pr(`<span class="vel">34 + 25</span><br>десетице: 30 + 20 = 50<br>јединице: 4 + 5 = 9<br>заједно: <b>59</b>`)}`,
+    `<p>Кад се скупи <b>10 јединица</b>, оне постају <b>1 десетица</b>.</p>${pr(`${blokovi(10).replace('<span class="br">10</span>', "")} &nbsp;=&nbsp; ${'<span class="blokovi"><i class="d"></i></span>'}`)}<p>Зато кажемо да „прелазимо" у следећу десетицу.</p>`,
+    `<p><b>Са прелазом.</b> Прво допуни до пуне десетице, па додај што је остало.</p>${pr(`<span class="vel">55 + 9</span><br>9 растави на 5 и 4<br>55 + 5 = <b>60</b> (пуна десетица!)<br>60 + 4 = <b>64</b>`)}${blokovi(55)} <b>+</b> ${blokovi(9)}`,
+    `<p><b>Двоцифрени + двоцифрени.</b> Прво десетице, па јединице.</p>${pr(`<span class="vel">48 + 19</span><br>48 + 10 = 58<br>58 + 9 → 58 + 2 = 60, па 60 + 7 = <b>67</b>`)}`
+  ] },
+  oduzimanje: { naslov: "Одузимање до 100", em: "➖", boja: "racun", igra: "racunaj", sledeca: "znakovi", slajdovi: [
+    `<p><b>Без прелаза.</b> Десетице од десетица, јединице од јединица.</p>${pr(`<span class="vel">68 ${M} 23</span><br>десетице: 60 ${M} 20 = 40<br>јединице: 8 ${M} 3 = 5<br>заједно: <b>45</b>`)}`,
+    `<p><b>Са прелазом.</b> Кад нема довољно јединица, прво сиђи до пуне десетице.</p>${pr(`<span class="vel">94 ${M} 8</span><br>Има само 4 јединице, а треба одузети 8.<br>8 растави на 4 и 4<br>94 ${M} 4 = <b>90</b> (пуна десетица!)<br>90 ${M} 4 = <b>86</b>`)}${blokovi(94)}`,
+    `<p><b>Двоцифрени − двоцифрени.</b> Прво десетице, па јединице.</p>${pr(`<span class="vel">72 ${M} 28</span><br>72 ${M} 20 = 52<br>52 ${M} 8 → 52 ${M} 2 = 50, па 50 ${M} 6 = <b>44</b>`)}`,
+    `<p><b>Провери сабирањем!</b> Резултат + оно што си одузео = број са почетка.</p>${pr(`94 ${M} 8 = 86 &nbsp;→&nbsp; 86 + 8 = 94 ✓<br>72 ${M} 28 = 44 &nbsp;→&nbsp; 44 + 28 = 72 ✓`)}`
+  ] },
+  znakovi: { naslov: "Знакови и заграде", em: "🐊", boja: "racun", igra: "znak", sledeca: null, slajdovi: [
+    `<p><b>&gt;</b> значи „веће од", <b>&lt;</b> значи „мање од", <b>=</b> значи „исто".</p>${pr(`🐊 Крокодил је гладан и увек отвара уста ка <b>већем</b> броју.<br><span class="vel">31 &gt; 9</span> &nbsp; <span class="vel">63 &lt; 92</span> &nbsp; <span class="vel">50 = 50</span>`)}`,
+    `<p>Ако са стране стоји задатак, <b>прво га израчунај</b>, па упореди.</p>${pr(`<span class="vel">25 + 6 ? 24 ${M} 15</span><br>лево: 25 + 6 = 31<br>десно: 24 ${M} 15 = 9<br>31 &gt; 9`)}`,
+    `<p><b>Заграда је кутија 📦.</b> Прво рачунаш оно што је у кутији.</p>${pr(`<span class="vel">80 ${M} (34 ${M} 24)</span><br>у кутији: 34 ${M} 24 = 10<br>80 ${M} 10 = <b>70</b>`)}`,
+    `<p>Заграда може да стоји и напред. Опет: прво кутија.</p>${pr(`<span class="vel">(60 ${M} 12) ${M} 19</span><br>у кутији: 60 ${M} 12 = 48<br>48 ${M} 19 = <b>29</b>`)}`
+  ] },
+  rimske: { naslov: "Римске цифре", em: "🏛️", boja: "rim", igra: "rimPisi", sledeca: null, slajdovi: [
+    `<p>Римљани су имали само ових <b>5 цифара</b>:</p>${pr(`<span class="vel">I = 1 &nbsp; V = 5 &nbsp; X = 10<br>L = 50 &nbsp; C = 100</span>`)}`,
+    `<p>Мања цифра <b>ИЗА</b> веће → <b>додај</b>.</p>${pr(`<span class="vel">VI</span> = 5 + 1 = 6<br><span class="vel">XV</span> = 10 + 5 = 15<br><span class="vel">LX</span> = 50 + 10 = 60`)}`,
+    `<p>Мања цифра <b>ИСПРЕД</b> веће → <b>одузми</b>. Има их само четири:</p>${pr(`<span class="vel">IV</span> = 5 ${M} 1 = 4<br><span class="vel">IX</span> = 10 ${M} 1 = 9<br><span class="vel">XL</span> = 50 ${M} 10 = 40<br><span class="vel">XC</span> = 100 ${M} 10 = 90`)}`,
+    `<p>Иста цифра се пише <b>највише 3 пута</b>.</p>${pr(`III = 3, а 4 није IIII него <b>IV</b><br>XXX = 30, а 40 није XXXX него <b>XL</b>`)}`,
+    `<p><b>Велики број растави</b> на десетице и јединице, па сваки део напиши посебно.</p>${pr(`<span class="vel">48</span> = 40 + 8 = XL + VIII = <b>XLVIII</b><br><span class="vel">98</span> = 90 + 8 = XC + VIII = <b>XCVIII</b><br><span class="vel">74</span> = 70 + 4 = LXX + IV = <b>LXXIV</b>`)}`,
+    `<p>Десетице редом:</p>${pr(`X, XX, XXX, <b>XL</b>, L, LX, LXX, LXXX, <b>XC</b>, C`)}<p>А јединице: I, II, III, <b>IV</b>, V, VI, VII, VIII, <b>IX</b></p>`
+  ] },
+  brojevi: { naslov: "Десетице и појмови", em: "🔎", boja: "misli", igra: "zagonetke", sledeca: null, slajdovi: [
+    `<p><b>Једноцифрени</b> бројеви имају једну цифру: 1 до 9.<br><b>Двоцифрени</b> имају две: 10 до 99.</p>${pr(`најмањи двоцифрени: <b>10</b><br>највећи двоцифрени: <b>99</b><br>највећи једноцифрени: <b>9</b>`)}`,
+    `<p><b>Десетица</b> је 10 бројева заредом. Пета десетица:</p>${sto(5)}<p>Најмањи број пете десетице је <b>41</b>, а највећи <b>50</b>.</p>`,
+    `<p><b>Претходник</b> је број пре (корак уназад, −1).<br><b>Следбеник</b> је број после (корак унапред, +1).</p>${pr(`46 ← <span class="vel">47</span> → 48<br>претходник броја 47 је 46<br>следбеник броја 47 је 48`)}`,
+    `<p><b>Парни</b> бројеви се деле на два једнака дела. <b>Непарни</b> не могу.</p>${pr(`парни: 2, 4, 6, 8, 10, 12…<br>непарни: 1, 3, 5, 7, 9, 11…<br>најмањи паран број прве десетице: <b>2</b>`)}`,
+    `<p><b>Загонетка у два корака:</b> прво нађи први број, па направи корак.</p>${pr(`„претходник највећег двоцифреног броја"<br>највећи двоцифрени = 99<br>корак уназад: <b>98</b>`)}`
+  ] },
+  price: { naslov: "Задаци са причом", em: "📖", boja: "misli", igra: "prica", sledeca: null, slajdovi: [
+    `<p>Како се решава:</p><ol><li>Прочитај задатак <b>два пута</b>.</li><li>Шта знам? Шта се тражи?</li><li>Нађи <b>реч-траг</b> и изабери + или −.</li><li>Израчунај.</li><li>Напиши <b>одговор реченицом</b>.</li></ol>`,
+    `<p><b>Речи-трагови 🔍</b></p>${pr(`<span class="trag-plus">више</span> <span class="trag-plus">укупно</span> <span class="trag-plus">заједно</span> <span class="trag-plus">добио</span> → <b>+</b><br><br><span class="trag-minus">мање</span> <span class="trag-minus">остало</span> <span class="trag-minus">потрошио</span> <span class="trag-minus">за колико је већи</span> → <b>${M}</b>`)}`,
+    `${pr(`Никола има 62 сличице, а Марина за 23 <span class="trag-minus">мање</span>. Колико сличица има Марина?`)}<p>Траг: <b>мање</b> → одузимамо.<br>62 ${M} 23 = 39<br><b>Одговор:</b> Марина има 39 сличица.</p>`,
+    `${pr(`Миша има 36 динара. Јована има за 25 динара <span class="trag-plus">више</span>. Колико има Јована, а колико имају <span class="trag-plus">заједно</span>?`)}<p>Два питања = два рачуна.<br>1) Јована: 36 + 25 = 61<br>2) заједно: 36 + 61 = 97<br><b>Одговор:</b> Јована има 61 динар. Заједно имају 97 динара.</p>`
+  ] }
+};
 /* ===================== stanje ===================== */
 const KLJUC = "dora-matematika-v1";
 const SLICICE = ["🦊","🐼","🐨","🦁","🐯","🐸","🐵","🦄","🐙","🦋","🐞","🐢","🐬","🦒","🦓","🐘","🦔","🦉","🐧","🌻","🌈","🍓","🍉","🍒","🚀","🎨","🧁","🍭","🐳","🦕","🐝","🐰","🐱","🐶","🐹","🦜","🌵","🍄","🐌","🦩"];
@@ -555,7 +718,7 @@ if (typeof document !== "undefined") {
   try { const s = JSON.parse(localStorage.getItem(KLJUC)); if (s) S = Object.assign(S, s); } catch (e) {}
   const sacuvaj = () => { try { localStorage.setItem(KLJUC, JSON.stringify(S)); } catch (e) {} };
   const app = document.getElementById("app");
-  let R = null, tasteri = null, tajmer = null;
+  let R = null, tasteri = null, tajmer = null, trenutnaLekcija = null;
 
   const boja = b => `var(--${b})`;
   let zvukCtx = null;
@@ -590,6 +753,7 @@ if (typeof document !== "undefined") {
     return `<div class="vrh">
       ${nazad ? `<button class="nazad" data-a="pocetna" aria-label="Назад">←</button>` : ""}
       <h1>${naslov}</h1>
+      ${nazad && trenutnaLekcija ? `<button class="podseti" data-a="lekcija">📚 Подсети се</button>` : ""}
       <span class="zvezde-brojac">⭐ <span id="brZvezda">${S.zvezde}</span></span>
       ${nazad ? "" : `<button class="ikona-dugme" data-a="album" aria-label="Албум">🎒</button>
       <button class="ikona-dugme" data-a="zvuk" aria-label="Звук">${S.zvuk ? "🔊" : "🔇"}</button>`}
@@ -599,11 +763,13 @@ if (typeof document !== "undefined") {
 
   /* ---------- početna ---------- */
   function pocetna() {
-    stop(); R = null;
+    stop(); R = null; trenutnaLekcija = null;
     const plocica = (id, siroka) => { const g = IGRE[id];
       return `<button class="plocica${siroka ? " siroka" : ""}" style="--boja:${boja(g.boja)}" data-igra="${id}"><span class="em">${g.em}</span><span><b>${g.ime}</b><br><small>${g.opis}</small></span></button>`; };
     app.innerHTML = zaglavlje("Дорина математика") + `
       <div class="pozdrav"><div class="lik">🦊</div><div><b>Здраво, Доро!</b><span>Шта играмо данас? Свака тачна = ⭐, свака завршена игра = нова сличица.</span></div></div>
+      <div class="odeljak">📚 Учимо: подсети се</div>
+      <div class="plocice">${Object.entries(LEKCIJE).map(([id, l]) => `<button class="plocica" style="--boja:${boja(l.boja)};min-height:0" data-lek="${id}"><span class="em">${l.em}</span><b>${l.naslov}</b></button>`).join("")}</div>
       <div class="odeljak">Рачунамо до 100</div>
       <div class="plocice">${["racunaj", "znak", "zagrade", "baloni", "trka"].map(i => plocica(i)).join("")}</div>
       <div class="odeljak">Римске цифре</div>
@@ -633,7 +799,7 @@ if (typeof document !== "undefined") {
     app.querySelectorAll("[data-nivo]").forEach(b => b.onclick = () => runda(id, b.dataset.nivo));
   }
   function otvori(id) {
-    const g = IGRE[id];
+    const g = IGRE[id]; trenutnaLekcija = LEKCIJA_ZA[id] || null;
     if (g.posebna === "baloni") return baloni();
     if (g.posebna === "trka") return trka();
     if (g.posebna === "memorija") return memorija();
@@ -664,10 +830,14 @@ if (typeof document !== "undefined") {
           ${g.rimTabla || k.tip === "rimski" ? `<div class="tabla-rim"><span><b>I</b> 1</span><span><b>V</b> 5</span><span><b>X</b> 10</span><span><b>L</b> 50</span><span><b>C</b> 100</span></div>` : ""}
           ${R.rad.length ? `<ul class="rad">${R.rad.map(r => `<li>${r}</li>`).join("")}</ul>` : ""}
           ${k.upit ? `<div class="upit">${k.upit}</div>` : ""}
-          <div id="unos"></div>
           <div class="povratna" id="povratna" aria-live="polite"></div>
+          <div class="pomoci" id="pomoci"></div>
+          ${k.pomoci && k.pomoci.length ? `<button class="pomoc-dugme" id="pomocBtn">💡 Помоћ</button>` : ""}
+          <div id="unos" style="margin-top:12px"></div>
         </div>
       </div>`;
+    R.pom = 0;
+    const pb = document.getElementById("pomocBtn"); if (pb) pb.onclick = pokaziPomoc;
     const unos = document.getElementById("unos");
     if (k.tip === "broj") brojUnos(unos, v => proveri(v));
     else if (k.tip === "rimski") rimUnos(unos, v => proveri(v));
@@ -680,14 +850,17 @@ if (typeof document !== "undefined") {
       R.reseno = true;
       if (dugme) dugme.classList.add("dobar");
       if (k.rad && !k.tiho) R.rad.push(k.rad);
+      const pbt = document.getElementById("pomocBtn"); if (pbt) pbt.remove();
       pov.className = "povratna tacno"; pov.textContent = pick(["Тачно!", "Браво!", "Супер!", "Тако је!", "Одлично!"]);
       setTimeout(posleKoraka, 750);
     } else {
       R.greske++;
       if (dugme) dugme.disabled = true;
       const d = document.querySelector(".displej"); if (d) { d.classList.remove("trese"); void d.offsetWidth; d.classList.add("trese"); }
-      if (R.greske === 1 || (k.tip === "izbor" && R.greske < k.opcije.length - 1)) {
-        pov.className = "povratna skoro"; pov.textContent = (R.greske === 1 ? "Скоро! " : "Пробај још једном. ") + k.pomoc;
+      const imaPomoci = R.pom < (k.pomoci || []).length;
+      if (k.tip === "izbor" || imaPomoci || R.greske < 2) {
+        pov.className = "povratna skoro"; pov.textContent = R.greske === 1 ? "Скоро! Погледај помоћ 💡" : "Пробај још једном.";
+        if (imaPomoci) pokaziPomoc();
         if (k.tip !== "izbor") { R.unos = ""; osveziDisplej && osveziDisplej(); }
       } else {
         R.reseno = true; R.otkriveno = true;
@@ -698,6 +871,13 @@ if (typeof document !== "undefined") {
         tasteri = e => { if (e.key === "Enter") posleKoraka(); };
       }
     }
+  }
+  function pokaziPomoc() {
+    const k = R.z.koraci[R.k], lista = document.getElementById("pomoci");
+    if (!k.pomoci || R.pom >= k.pomoci.length || !lista) return;
+    const d = document.createElement("div"); d.innerHTML = k.pomoci[R.pom++]; lista.appendChild(d);
+    const pb = document.getElementById("pomocBtn");
+    if (pb) { if (R.pom >= k.pomoci.length) pb.remove(); else pb.textContent = "💡 Још помоћи"; }
   }
   function posleKoraka() {
     tasteri = null;
@@ -797,7 +977,7 @@ if (typeof document !== "undefined") {
         } else {
           greska = true; b.classList.remove("ne"); void b.offsetWidth; b.classList.add("ne");
           document.getElementById("povratna").className = "povratna skoro";
-          document.getElementById("povratna").textContent = pomocRacuna(r.a, r.op, r.b);
+          document.getElementById("povratna").innerHTML = pomocRacuna(r.a, r.op, r.b);
         }
       });
     };
@@ -867,6 +1047,39 @@ if (typeof document !== "undefined") {
     });
   }
 
+  /* ---------- lekcija (preko trenutnog ekrana, da zadatak ostane gde je bio) ---------- */
+  function lekcija(id, odIgre) {
+    const L = LEKCIJE[id]; if (!L) return;
+    const stariTasteri = tasteri; tasteri = null;
+    let i = 0;
+    const z = document.createElement("div"); z.className = "zavesa"; document.body.appendChild(z);
+    const zatvori = () => { z.remove(); tasteri = stariTasteri; document.removeEventListener("keydown", strelice); };
+    const strelice = e => { if (e.key === "ArrowRight" && i < L.slajdovi.length - 1) { i++; crtaj(); } else if (e.key === "ArrowLeft" && i > 0) { i--; crtaj(); } else if (e.key === "Escape") zatvori(); };
+    document.addEventListener("keydown", strelice);
+    z.onclick = e => { if (e.target === z) zatvori(); };
+    const crtaj = () => {
+      const posl = i === L.slajdovi.length - 1;
+      z.innerHTML = `<div class="uputstvo" style="--boja:${boja(L.boja)}" role="dialog" aria-label="${L.naslov}">
+        <div class="lek-vrh"><h2>${L.em} ${L.naslov}</h2><button id="lekX" aria-label="Затвори">✕</button></div>
+        <div class="lek-telo">${L.slajdovi[i]}</div>
+        <div class="lek-tacke">${L.slajdovi.map((_, j) => `<i class="${j === i ? "sad" : ""}"></i>`).join("")}</div>
+        <div class="lek-dugmad">
+          ${i > 0 ? `<button class="dugme" id="lekNazad">← Назад</button>` : ""}
+          ${!posl ? `<button class="dugme glavno" id="lekDalje">Даље →</button>` : ""}
+          ${posl && L.sledeca ? `<button class="dugme" id="lekSled">${LEKCIJE[L.sledeca].em} ${LEKCIJE[L.sledeca].naslov} →</button>` : ""}
+          ${posl ? (odIgre ? `<button class="dugme glavno" id="lekKraj">Назад на задатак</button>` : `<button class="dugme glavno" id="lekVezbaj">Вежбај →</button>`) : ""}
+        </div></div>`;
+      z.querySelector("#lekX").onclick = zatvori;
+      const b = (s, f) => { const el = z.querySelector(s); if (el) el.onclick = f; };
+      b("#lekNazad", () => { i--; crtaj(); });
+      b("#lekDalje", () => { i++; crtaj(); });
+      b("#lekSled", () => { zatvori(); lekcija(L.sledeca, odIgre); });
+      b("#lekKraj", zatvori);
+      b("#lekVezbaj", () => { zatvori(); otvori(L.igra); });
+    };
+    crtaj();
+  }
+
   function krajPosebne(g, zv, opet, poruka) {
     stop();
     const s = novaSlicica(); zvoni("kraj");
@@ -887,8 +1100,10 @@ if (typeof document !== "undefined") {
     if (a) {
       if (a.dataset.a === "pocetna") pocetna();
       else if (a.dataset.a === "album") album();
+      else if (a.dataset.a === "lekcija") lekcija(trenutnaLekcija, true);
       else if (a.dataset.a === "zvuk") { S.zvuk = !S.zvuk; sacuvaj(); a.textContent = S.zvuk ? "🔊" : "🔇"; }
     } else if (ig) otvori(ig.dataset.igra);
+    else if (e.target.closest("[data-lek]")) lekcija(e.target.closest("[data-lek]").dataset.lek, false);
   });
   document.addEventListener("keydown", e => { if (tasteri && !e.metaKey && !e.ctrlKey) tasteri(e); });
 
