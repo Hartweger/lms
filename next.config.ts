@@ -327,6 +327,7 @@ const nextConfig: NextConfig = {
       // Čist link bez .html; nije permanent jer se sadržaj menja po času.
       { source: "/igre/hallo", destination: "/igre/hallo.html", permanent: false },
       { source: "/igre/dora", destination: "/igre/dora.html", permanent: false },
+      { source: "/igre/matematika", destination: "/igre/dora.html", permanent: false },
     ];
   },
   async headers() {

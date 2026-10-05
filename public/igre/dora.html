@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <meta name="color-scheme" content="light">
-<title>Дорина математика</title>
+<title>Математика за други разред</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&display=swap" rel="stylesheet">
@@ -572,7 +572,7 @@ IGRE.zagonetke = {
 };
 
 /* priče */
-const IMENA = [["Никола","m"],["Марина","z"],["Миша","m"],["Јована","z"],["Марко","m"],["Анђелка","z"],["Лука","m"],["Ана","z"],["Петар","m"],["Сара","z"],["Вук","m"],["Мила","z"],["Дора","z"]];
+const IMENA = [["Никола","m"],["Марина","z"],["Миша","m"],["Јована","z"],["Марко","m"],["Анђелка","z"],["Лука","m"],["Ана","z"],["Петар","m"],["Сара","z"],["Вук","m"],["Мила","z"]];
 const STVARI = [
   ["сличицу", "сличице", "сличица"], ["динар", "динара", "динара"], ["кликер", "кликера", "кликера"],
   ["бомбону", "бомбоне", "бомбона"], ["налепницу", "налепнице", "налепница"], ["књигу", "књиге", "књига"]
@@ -766,8 +766,8 @@ if (typeof document !== "undefined") {
     stop(); R = null; trenutnaLekcija = null;
     const plocica = (id, siroka) => { const g = IGRE[id];
       return `<button class="plocica${siroka ? " siroka" : ""}" style="--boja:${boja(g.boja)}" data-igra="${id}"><span class="em">${g.em}</span><span><b>${g.ime}</b><br><small>${g.opis}</small></span></button>`; };
-    app.innerHTML = zaglavlje("Дорина математика") + `
-      <div class="pozdrav"><div class="lik">🦊</div><div><b>Здраво, Доро!</b><span>Шта играмо данас? Свака тачна = ⭐, свака завршена игра = нова сличица.</span></div></div>
+    app.innerHTML = zaglavlje("Математика за други разред") + `
+      <div class="pozdrav"><div class="lik">🦊</div><div><b>Здраво!</b><span>Шта играмо данас? Свака тачна = ⭐, свака завршена игра = нова сличица.</span></div></div>
       <div class="odeljak">📚 Учимо: подсети се</div>
       <div class="plocice">${Object.entries(LEKCIJE).map(([id, l]) => `<button class="plocica" style="--boja:${boja(l.boja)};min-height:0" data-lek="${id}"><span class="em">${l.em}</span><b>${l.naslov}</b></button>`).join("")}</div>
       <div class="odeljak">Рачунамо до 100</div>
