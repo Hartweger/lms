@@ -73,6 +73,16 @@ describe("buildSalesSystemPrompt", () => {
     expect(out).toContain("NIKAD ne reci Zoom");
   });
 
+  // 06.10.2026: na pitanje „gde mogu naći aplikaciju" (citat iz našeg FAQ-a) Smile je rekao
+  // da nema aplikacije i da se ništa ne instalira - pomešao Google Meet sa našom PWA.
+  it("zna da imamo aplikaciju i daje link /instaliraj", () => {
+    const out = buildSalesSystemPrompt("katalog", { coupon: false });
+    expect(out).toContain("IMAMO aplikaciju");
+    expect(out).toContain("/instaliraj");
+    expect(out).toContain("NIKAD ne reci da nemamo aplikaciju");
+    expect(out).not.toContain("Ništa se ne instalira");
+  });
+
   // 14.09.2026: na „ako upišem A1 grupni kurs, dobijam li i video kurseve" Smile je rekao
   // da su to odvojeni proizvodi i ponudio video A1 za 11.600. Netačno: grupni kurs kroz
   // course_unlocks daje platformu (video lekcije, vežbe, testove) za taj polunivo.
