@@ -60,7 +60,7 @@ razred bio najjači. Zamenjuju ga dva druga: *radi sam, bez tvoje pomoći* i
 | Nemačka reč | Uvek sa članom: `der Hund`. Član se ne boji. |
 | Kada | Tek posle pilota petog razreda (Nataša, 22.08) |
 | Maskota | Postojeći meda sa platforme, uz dodat obris (Nataša, 22.08) |
-| Cena | Predlog 990 promo / 1.990 puna, plus drugo dete -40% |
+| Cena | **800 din MESEČNO** promo, 1.590 puna; drugo dete -40% (Nataša, 06.10.2026) |
 
 ## Dečja strana
 
@@ -235,35 +235,42 @@ Niže: blok „krene spreman, umesto od nule" kao razuman razlog da se plati.
 - obećanja o oceni i kontrolnom;
 - svakog tona koji roditelju sugeriše da nešto propušta.
 
-### Cena
+### Cena - odlučeno 06.10.2026
 
-Peti razred: 348 reči, 12 lekcija, 120 rečenica, osam igara i Milioner, za
-1.200 promo i 2.399 punu cenu.
-Prvi nemački: 80-100 reči, osam do deset celina, bez rečenica, tri igre.
+**800 dinara MESEČNO po detetu**, puna cena za prikaz 1.590. Drugo dete iz
+iste kuće -40%.
 
-Odnos sadržaja je oko 20%, ali **cena se po tome ne računa**, iz tri razloga:
+Mesečna pretplata nije nov model: peti razred je već `monthlyRsd: 1200`
+(`subscription-plans.ts`, promo; puna 2.399), naplaćuje NestPay dok se ne
+otkaže, do bankine granice od 121 naplate. Ovde se menja samo iznos.
 
-1. Članstvo je vremensko, ne po rečima - malo dete plaća isti broj meseci kao
-   petak.
-2. Naš trošak po reči je ovde **veći**, ne manji: svaka reč traži i ilustraciju
-   i snimak, a kod petaka nova reč ne košta ništa dodatno.
-3. Plaća isti roditelj, sa istom platežnom moći.
+**Zašto 800, a ne 990 kako je prvo predloženo.** Peti je 1.200. Na 990 bi
+roditelj koji uporedi dve stranice video 210 dinara razlike za četvrtinu
+sadržaja, i to pitanje bi nam se vratilo. 800 je dve trećine cene petog -
+razlika koja se iz prve čita kao „manji proizvod, manja cena". Ta jasnoća
+vredi više od 190 dinara mesečno.
 
-Zato ne 20% cene (oko 480 dinara, što i podcenjuje i zvuči neozbiljno), nego
-prag niže od petog razreda:
+**EUR nije opcija bez novog posla.** `nestpay.ts` je na valuti `941` (dinar), a
+fiskalizacija ide na svaku porudžbinu. Naplata u evrima je zaseban tok, ne broj
+na landingu.
 
-| | Peti razred | Prvi nemački (predlog) |
+### Koliko dete ostaje - računati sa tri do četiri meseca
+
+85 reči i 10 lekcija. Jedna lekcija nedeljno = 10 nedelja, oko **2,5 meseca**,
+pa nema šta novo i roditelj otkaže. To nije mana proizvoda nego njegov
+prirodni domet, i mora da uđe u svaki račun:
+
+| | 3 meseca | 6 meseci |
 |---|---|---|
-| Promo | 1.200 | **990** |
-| Puna | 2.399 | **1.990** |
+| 800/mes | 2.400 | 4.800 |
+| 990/mes | 2.970 | 5.940 |
 
-Oba iznosa prelaze prag naniže (ispod hiljadu, ispod dve hiljade), pa se čitaju
-kao jasno jeftinije, a proizvod ne ispada bezvredan.
+Razlika između 800 i 990 je 570 dinara po detetu. **Produžetak sa tri na šest
+meseci nosi 2.400 - četiri puta više.** Poluga je dakle runway, ne cena.
 
-**Drugo dete iz iste kuće -40%.** Ovo vredi više od svakog obaranja osnovne
-cene: roditelj sa malim detetom i petakom je najverovatniji kupac drugog
-članstva, a naš granični trošak za to dete je nula. Popust se vezuje za roditeljski nalog,
-ne za kupon.
+Zato: planirati zadržavanje od tri do četiri meseca, **ne projektovati godinu
+dana**. Druga serija od deset tema je kasnija odluka, kad se vide stvarni
+brojevi zadržavanja - ne sada, i ne otvara zaključan spisak reči.
 
 **Bez poklon akcije na startu.** Peti razred je dobio poklon zato što je
 trebalo dokazati proizvod i napuniti levak. Ako i ovaj krene besplatno,
@@ -367,6 +374,5 @@ Praktično, pre snimanja:
 1. ~~Spisak reči po temama~~ **GOTOVO.** 85 reči u 10 tema, odobreno 06.10.2026:
    `docs/prvi-nemacki-reci-nacrt.md`. Time je otključana nabavka ilustracija i
    snimaka - jedino što sme da teče pre pilota petog razreda.
-2. **Potvrda cene 990 / 1.990 i popusta za drugo dete** - jedino što je još
-   otvoreno.
-3. Potvrda imena i adrese: „Prvi nemački", `/prvi-nemacki`.
+2. ~~Potvrda cene~~ **GOTOVO.** 800 mesečno / 1.590 puna, drugo dete -40%.
+3. Potvrda imena i adrese: „Prvi nemački", `/prvi-nemacki` - poslednje otvoreno.
