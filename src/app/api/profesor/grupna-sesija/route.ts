@@ -51,7 +51,10 @@ export async function DELETE(request: Request) {
 
   // Sesija sa beleškom je održan čas - ne skida se (ni 'manual' brisanjem, ni 'auto' otkazivanjem),
   // jer bi beleška ostala vezana za čas koji „nije održan" ili bi brisanje palo na FK RESTRICT (111).
-  const { data: note } = await staff.admin.from("class_notes").select("id").eq("group_session_id", sessionId).maybeSingle();
+  const { data: note, error: noteErr } = await staff.admin.from("class_notes").select("id").eq("group_session_id", sessionId).maybeSingle();
+  if (noteErr) {
+    return NextResponse.json({ error: "Provera beleške nije uspela - pokušaj ponovo." }, { status: 500 });
+  }
   if (note) {
     return NextResponse.json({ error: "Ovaj čas ima belešku - ne može da se skine. Ako je greška, javi Nataši." }, { status: 409 });
   }

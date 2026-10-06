@@ -2,22 +2,41 @@ import { NextRequest, NextResponse } from "next/server";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { requireAdmin } from "@/lib/api-auth";
 import { naknadniUpisZaStatus } from "@/lib/groups";
+import { withoutNotedSessions } from "@/lib/group-notes";
 
 const FIELDS = ["content_course_id","purchasable_course_id","level","type","professor_id","status","start_date","end_date","duration_weeks","sessions_count","days","session_time","min_seats","max_seats","price","notes","manual_enrolled","naknadni_upis"];
 
 // Otkazana grupa ne sme da ostavi "žive" sesije - ulaze u obračun honorara
 // (honorar-report broji sve necancelovane group_sessions, bez obzira na status grupe).
 // Grupa koja nije ni počela gubi sve sesije; grupa koja je bila u toku samo buduće
-// (od danas), da već održani časovi ostanu plativi.
+// (od danas), da već održani časovi ostanu plativi. Sesija sa beleškom se nikad ne otkazuje.
 async function ponistiSesijeOtkazaneGrupe(admin: SupabaseClient, groupId: string, prethodniStatus: string | null) {
   const drzalaCasove = prethodniStatus === "u_toku" || prethodniStatus === "zavrsena";
-  let q = admin.from("group_sessions").update({ cancelled: true })
+  let q = admin.from("group_sessions").select("id")
     .eq("group_id", groupId).eq("cancelled", false);
   if (drzalaCasove) {
     const danas = new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Belgrade" }).format(new Date());
     q = q.gte("session_date", danas);
   }
-  const { error } = await q;
+  const { data: candidates, error: candErr } = await q;
+  if (candErr) {
+    console.error("[grupe] čitanje sesija otkazane grupe palo za", groupId, candErr);
+    return;
+  }
+  const candidateIds = (candidates ?? []).map((r) => r.id as string);
+  if (candidateIds.length === 0) return;
+  // Sesija sa beleškom je održan čas - ostaje neotkazana (isto kao syncGroupSessions).
+  // Ako provera beleški ne uspe, ne otkazujemo ništa (bezbednije nego otkazati čas sa beleškom).
+  const { data: noted, error: notedErr } = await admin.from("class_notes").select("group_session_id")
+    .in("group_session_id", candidateIds);
+  if (notedErr) {
+    console.error("[grupe] provera beleški za otkazanu grupu pala za", groupId, notedErr);
+    return;
+  }
+  const notedIds = new Set((noted ?? []).map((n) => n.group_session_id as string));
+  const toCancel = withoutNotedSessions(candidates as { id: string }[], notedIds).map((r) => r.id);
+  if (toCancel.length === 0) return;
+  const { error } = await admin.from("group_sessions").update({ cancelled: true }).in("id", toCancel);
   if (error) console.error("[grupe] poništavanje sesija otkazane grupe palo za", groupId, error);
 }
 

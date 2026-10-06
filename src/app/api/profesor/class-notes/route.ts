@@ -159,11 +159,13 @@ export async function GET(request: Request) {
   }
   const lesson = found.lesson;
 
-  const { data: note } = await staff.admin
+  const { data: note, error: noteErr } = await staff.admin
     .from("class_notes")
     .select("id, content")
     .eq("individual_lesson_id", lesson.id)
     .maybeSingle();
+  // Prolazna greška ne sme da izgleda kao prazna beleška - sledeći autosave bi pregazio pravu.
+  if (noteErr) return NextResponse.json({ error: noteErr.message }, { status: 500 });
 
   if (!note) {
     return NextResponse.json({ content: emptyNoteContent(), noteId: null, lessonId: lesson.id });

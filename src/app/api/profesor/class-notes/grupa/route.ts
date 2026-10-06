@@ -79,11 +79,13 @@ export async function GET(request: Request) {
   if (pick.kind === "cancelled") return NextResponse.json({ error: OTKAZAN.error, code: OTKAZAN.code }, { status: 409 });
   if (pick.kind === "none") return NextResponse.json({ content: emptyNoteContent(), noteId: null, sessionId: null });
 
-  const { data: note } = await staff.admin
+  const { data: note, error: noteErr } = await staff.admin
     .from("class_notes")
     .select("id, content")
     .eq("group_session_id", pick.sessionId)
     .maybeSingle();
+  // Prolazna greška ne sme da izgleda kao prazna beleška - sledeći autosave bi pregazio pravu.
+  if (noteErr) return NextResponse.json({ error: noteErr.message }, { status: 500 });
   return NextResponse.json({
     content: note ? sanitizeNoteContent(note.content) : emptyNoteContent(),
     noteId: note?.id ?? null,
