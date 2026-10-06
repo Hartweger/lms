@@ -1,15 +1,10 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import type { Json } from "@/lib/supabase/database.types";
 import { computeLessonStatus } from "@/lib/individual-lessons";
-import {
-  emptyNoteContent,
-  noteToPlainText,
-  sanitizeNoteContent,
-  type NoteContent,
-} from "@/lib/class-notes";
-import { deriveWordsetItems, wordsetTitle, type WordsetItem } from "@/lib/wordset-derive";
+import { emptyNoteContent, noteToPlainText, sanitizeNoteContent } from "@/lib/class-notes";
+import { deriveWordsetItems } from "@/lib/wordset-derive";
+import { replaceWordset, upsertNote, type Failure } from "@/lib/class-notes-store";
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -65,8 +60,6 @@ async function recountLessons(admin: ReturnType<typeof createAdminClient>, enrol
   }).eq("id", enrollmentId);
   return used;
 }
-
-type Failure = { error: string; status: number; code?: string };
 
 // Nalazi red časa za enrollment+datum. ZATEČENO STANJE: 16 postojećih parova
 // (enrollment_id, lesson_date) na živoj bazi imaju VIŠE OD JEDNOG časa istog dana (do tri - uglavnom
@@ -139,135 +132,6 @@ async function findOrCreateLesson(
   }
   await recountLessons(admin, enrollmentId, packageLessons);
   return { lessonId: inserted.id };
-}
-
-// Beleška: select pa update/insert - upsert sa onConflict NE RADI ovde jer je
-// class_notes_individual_uq parcijalan indeks (where individual_lesson_id is not null).
-async function upsertNote(
-  admin: ReturnType<typeof createAdminClient>,
-  lessonId: string,
-  professorId: string,
-  content: NoteContent,
-  contentText: string
-): Promise<{ noteId: string } | Failure> {
-  const { data: existing, error: selectError } = await admin
-    .from("class_notes")
-    .select("id")
-    .eq("individual_lesson_id", lessonId)
-    .maybeSingle();
-  if (selectError) return { error: selectError.message, status: 500 };
-
-  if (existing) {
-    const { error } = await admin
-      .from("class_notes")
-      .update({ content: content as unknown as Json, content_text: contentText, updated_at: new Date().toISOString() })
-      .eq("id", existing.id);
-    if (error) return { error: error.message, status: 500 };
-    return { noteId: existing.id };
-  }
-
-  const { data: inserted, error } = await admin
-    .from("class_notes")
-    .insert({
-      individual_lesson_id: lessonId,
-      professor_id: professorId,
-      content: content as unknown as Json,
-      content_text: contentText,
-    })
-    .select("id")
-    .single();
-  if (!error && inserted) return { noteId: inserted.id };
-
-  // Trka: dva istovremena PUT-a za isti čas oba prođu select (ništa nađeno), pa oba pokušaju insert -
-  // class_notes_individual_uq obori drugi kodom 23505 umesto da ga pusti. Umesto 500, preuzmi
-  // belešku koju je konkurentski zahtev upravo napravio i ažuriraj nju (poslednje snimanje važi) -
-  // tako se za isti čas nikad ne stvore dve beleške.
-  if (error?.code === "23505") {
-    const { data: raced } = await admin
-      .from("class_notes")
-      .select("id")
-      .eq("individual_lesson_id", lessonId)
-      .maybeSingle();
-    if (raced) {
-      const { error: updateError } = await admin
-        .from("class_notes")
-        .update({ content: content as unknown as Json, content_text: contentText, updated_at: new Date().toISOString() })
-        .eq("id", raced.id);
-      if (updateError) return { error: updateError.message, status: 500 };
-      return { noteId: raced.id };
-    }
-  }
-  return { error: error?.message ?? "Beleška nije mogla da se snimi", status: 500 };
-}
-
-// Set reči izveden iz WORTSCHATZ: puna zamena stavki, ili brisanje seta ako je reči nestalo.
-async function replaceWordset(
-  admin: ReturnType<typeof createAdminClient>,
-  noteId: string,
-  enrollmentId: string,
-  date: string,
-  position: number,
-  items: WordsetItem[]
-): Promise<Failure | null> {
-  const { data: existing, error: selectError } = await admin
-    .from("student_wordsets")
-    .select("id")
-    .eq("note_id", noteId)
-    .maybeSingle();
-  if (selectError) return { error: selectError.message, status: 500 };
-
-  if (items.length === 0) {
-    // Profesorka je obrisala sve reči - ukloni set (napredak po card_id ostaje samo istorijski,
-    // items pada preko cascade FK-a).
-    if (existing) {
-      const { error: delItemsErr } = await admin.from("student_wordset_items").delete().eq("wordset_id", existing.id);
-      if (delItemsErr) return { error: delItemsErr.message, status: 500 };
-      const { error: delSetErr } = await admin.from("student_wordsets").delete().eq("id", existing.id);
-      if (delSetErr) return { error: delSetErr.message, status: 500 };
-    }
-    return null;
-  }
-
-  const title = wordsetTitle(position, date);
-  let wordsetId: string;
-  if (existing) {
-    const { error } = await admin
-      .from("student_wordsets")
-      .update({ title, lesson_date: date, position, updated_at: new Date().toISOString() })
-      .eq("id", existing.id);
-    if (error) return { error: error.message, status: 500 };
-    wordsetId = existing.id;
-  } else {
-    const { data: inserted, error } = await admin
-      .from("student_wordsets")
-      .insert({ note_id: noteId, individual_enrollment_id: enrollmentId, title, lesson_date: date, position })
-      .select("id")
-      .single();
-    if (error || !inserted) return { error: error?.message ?? "Set reči nije mogao da se napravi", status: 500 };
-    wordsetId = inserted.id;
-  }
-
-  // Puna zamena stavki BEZ prozora u kome polaznik ostane bez ijedne reči: prvo upsert novih
-  // (primarni ključ (wordset_id, idx) NIJE parcijalan pa onConflict ovde radi, za razliku od
-  // class_notes/student_wordsets), pa tek onda brisanje viška sa starim idx-om koji nove reči
-  // više ne pokrivaju. Da je redosled obrnut (prvo delete pa insert), pad insert-a posle
-  // uspešnog delete-a bi polazniku obrisao ceo set reči.
-  const { error: upsertErr } = await admin
-    .from("student_wordset_items")
-    .upsert(
-      items.map((it) => ({ wordset_id: wordsetId, idx: it.idx, front: it.front, back: it.back })),
-      { onConflict: "wordset_id,idx" }
-    );
-  if (upsertErr) return { error: upsertErr.message, status: 500 };
-
-  const { error: trimErr } = await admin
-    .from("student_wordset_items")
-    .delete()
-    .eq("wordset_id", wordsetId)
-    .gte("idx", items.length);
-  if (trimErr) return { error: trimErr.message, status: 500 };
-
-  return null;
 }
 
 // GET ?enrollmentId=...&date=YYYY-MM-DD - vraća postojeću belešku ili prazan obrazac.
@@ -349,7 +213,7 @@ export async function PUT(request: Request) {
 
   // 2. Beleška.
   const contentText = noteToPlainText(content);
-  const noteResult = await upsertNote(admin, lessonId, professorId, content, contentText);
+  const noteResult = await upsertNote(admin, { column: "individual_lesson_id", id: lessonId }, professorId, content, contentText);
   if ("error" in noteResult) return NextResponse.json({ error: noteResult.error }, { status: noteResult.status });
   const { noteId } = noteResult;
 
@@ -367,7 +231,7 @@ export async function PUT(request: Request) {
     .lte("lesson_date", date);
   const position = positionCount ?? 1;
 
-  const wordsetError = await replaceWordset(admin, noteId, enrollmentId, date, position, items);
+  const wordsetError = await replaceWordset(admin, noteId, { individual_enrollment_id: enrollmentId }, date, position, items);
   if (wordsetError) return NextResponse.json({ error: wordsetError.error }, { status: wordsetError.status });
 
   return NextResponse.json({ ok: true, noteId, lessonId, words: items.length });
