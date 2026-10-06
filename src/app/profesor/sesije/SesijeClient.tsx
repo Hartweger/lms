@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import NotesEditor from "@/components/beleska/NotesEditor";
 
 export interface GroupSessions {
   id: string;
@@ -11,6 +12,8 @@ export interface GroupSessions {
   endDate: string | null;
   professorName: string;
   notesUrl: string | null;
+  // Beleške se pišu na platformi (obrazac) umesto u Google Doc-u
+  notesOnPlatform: boolean;
   students: string[];
   sessions: { id: string; date: string; source: string }[];
 }
@@ -26,6 +29,8 @@ export default function SesijeClient({ rows, showProfessor }: { rows: GroupSessi
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [showArchived, setShowArchived] = useState(false);
+  // Grupa čiji je obrazac za belešku otvoren (datum je onaj iz polja pored „Dodaj sesiju")
+  const [notesFor, setNotesFor] = useState<string | null>(null);
 
   const activeRows = rows.filter((g) => g.status === "otvoren" || g.status === "u_toku");
   const archivedCount = rows.length - activeRows.length;
@@ -92,7 +97,11 @@ export default function SesijeClient({ rows, showProfessor }: { rows: GroupSessi
               <span className="font-semibold text-gray-900">Grupa {g.level}</span>
               {showProfessor && g.professorName && <span className="text-sm text-gray-500"> · {g.professorName}</span>}
               <span className="text-xs text-gray-400 ml-2">{g.sessions.length} sesija</span>
-              {g.notesUrl ? (
+              {g.notesOnPlatform ? (
+                <button type="button" onClick={() => setNotesFor(g.id)} className="text-xs text-plava hover:underline ml-2">
+                  📝 Beleške za čas
+                </button>
+              ) : g.notesUrl ? (
                 <span className="ml-2 inline-flex items-center gap-2">
                   <a href={g.notesUrl} target="_blank" rel="noreferrer" className="text-xs text-plava hover:underline">📝 Beleške</a>
                   <button type="button" onClick={() => saveNotes(g.id, g.notesUrl)} disabled={busy === g.id} className="text-xs text-gray-400 hover:underline">izmeni</button>
@@ -129,7 +138,18 @@ export default function SesijeClient({ rows, showProfessor }: { rows: GroupSessi
             <div className="flex flex-wrap gap-2">
               {g.sessions.map((s) => (
                 <span key={s.id} className={`inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full ${s.source === "auto" ? "bg-gray-100 text-gray-600" : "bg-plava-light text-plava"}`}>
-                  {new Date(s.date).toLocaleDateString("sr-Latn")}
+                  {g.notesOnPlatform ? (
+                    <button
+                      type="button"
+                      onClick={() => { setDateById({ ...dateById, [g.id]: s.date }); setNotesFor(g.id); }}
+                      className="hover:underline"
+                      title="Otvori beleške za ovaj čas"
+                    >
+                      {new Date(s.date).toLocaleDateString("sr-Latn")}
+                    </button>
+                  ) : (
+                    new Date(s.date).toLocaleDateString("sr-Latn")
+                  )}
                   <button type="button" onClick={() => removeSession(s.id, g.id)} disabled={busy === g.id} className="text-koral hover:font-bold" title="Skini (otkazan)">×</button>
                 </span>
               ))}
@@ -137,6 +157,18 @@ export default function SesijeClient({ rows, showProfessor }: { rows: GroupSessi
           )}
         </div>
       ))}
+      {notesFor && (() => {
+        const g = rows.find((r) => r.id === notesFor);
+        if (!g) return null;
+        return (
+          <NotesEditor
+            target={{ kind: "group", groupId: g.id }}
+            title={`Grupa ${g.level}`}
+            date={dateById[g.id] ?? todayISO()}
+            onClose={() => { setNotesFor(null); router.refresh(); }}
+          />
+        );
+      })()}
     </div>
   );
 }

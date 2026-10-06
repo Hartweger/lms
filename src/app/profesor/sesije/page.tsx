@@ -12,7 +12,7 @@ export default async function ProfesorSesije({ searchParams }: { searchParams: P
   const isAdmin = ctx.isAdmin;
 
   let gq = admin.from("groups")
-    .select("id, level, status, start_date, end_date, notes_url, professor_id, professor:professor_id(full_name)")
+    .select("id, level, status, start_date, end_date, notes_url, notes_on_platform, professor_id, professor:professor_id(full_name)")
     .in("status", ["otvoren", "u_toku", "zavrsena"])
     .order("start_date", { ascending: false });
   if (!isAdmin || prof) gq = gq.eq("professor_id", ctx.profId);
@@ -66,6 +66,7 @@ export default async function ProfesorSesije({ searchParams }: { searchParams: P
       endDate: g.end_date,
       professorName: prof?.full_name || "",
       notesUrl: g.notes_url ?? null,
+      notesOnPlatform: !!g.notes_on_platform,
       students: studentsByGroup.get(g.id) ?? [],
       sessions: byGroup.get(g.id) ?? [],
     };
