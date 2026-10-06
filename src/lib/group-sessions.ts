@@ -1,6 +1,7 @@
 // src/lib/group-sessions.ts - auto-izvođenje grupnih sesija iz rasporeda (za honorar).
 import type { createAdminClient } from "@/lib/supabase/admin";
 import { computeSessionDates } from "@/lib/groups";
+import { withoutNotedSessions } from "@/lib/group-notes";
 
 interface GroupForSessions {
   id: string;
@@ -20,9 +21,19 @@ export async function syncGroupSessions(admin: ReturnType<typeof createAdminClie
   try {
     const dates = computeSessionDates(g.start_date, g.days, g.duration_weeks, g.sessions_count);
     const today = new Date().toISOString().slice(0, 10);
-    // Briši SAMO buduće, ne-otkazane 'auto' redove (prošlost = istorija honorara; otkazane ostaju otkazane).
-    await admin.from("group_sessions").delete()
+    // Kandidati za brisanje: SAMO buduće/današnje, ne-otkazane 'auto' sesije (prošlost = istorija
+    // honorara; otkazane ostaju otkazane) - i to SAMO one bez beleške. Beleška je vezana za sesiju
+    // (FK RESTRICT od 111) i ne sme da nestane zato što je admin istog dana kliknuo „Osveži termin".
+    const { data: candidates } = await admin.from("group_sessions").select("id")
       .eq("group_id", g.id).eq("source", "auto").eq("cancelled", false).gte("session_date", today);
+    const candidateIds = (candidates ?? []).map((r) => r.id as string);
+    if (candidateIds.length) {
+      const { data: noted } = await admin.from("class_notes").select("group_session_id")
+        .in("group_session_id", candidateIds);
+      const notedIds = new Set((noted ?? []).map((n) => n.group_session_id as string));
+      const toDelete = withoutNotedSessions(candidates as { id: string }[], notedIds).map((r) => r.id);
+      if (toDelete.length) await admin.from("group_sessions").delete().in("id", toDelete);
+    }
     if (!dates.length) return;
     const rows = dates.map((session_date) => ({
       group_id: g.id, professor_id: g.professor_id, session_date, source: "auto",
