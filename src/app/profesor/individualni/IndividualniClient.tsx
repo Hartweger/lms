@@ -209,8 +209,8 @@ export default function IndividualniClient({ rows, showProfessor }: { rows: Enro
         if (!row) return null;
         return (
           <NotesEditor
-            enrollmentId={row.id}
-            studentName={row.studentName}
+            target={{ kind: "individual", enrollmentId: row.id }}
+            title={row.studentName || "Polaznik"}
             date={dateById[row.id] || todayISO()}
             onClose={() => {
               setNotesFor(null);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   emptyNoteContent,
   TEXT_SECTIONS,
@@ -12,7 +12,7 @@ import SectionEditor from "./SectionEditor";
 import WortschatzTable from "./WortschatzTable";
 
 /**
- * Ceo obrazac za belešku sa 1:1 časa - profesorka ga otvara TOKOM časa, uživo na Meet-u, pa
+ * Ceo obrazac za belešku sa časa (1:1 ili grupa) - profesorka ga otvara TOKOM časa, uživo na Meet-u, pa
  * brzina i sigurnost kucanja imaju prednost nad izgledom.
  *
  * Nacrt u localStorage-u se piše SINHRONO na svaku izmenu (ne čeka odlaganje od 2s pre PUT-a) -
@@ -26,13 +26,50 @@ const SAVE_DELAY_MS = 2000;
 
 type SaveState = "idle" | "saving" | "saved" | "error" | "paket_pun";
 
-function draftKey(enrollmentId: string, date: string): string {
-  return `beleska_nacrt_${enrollmentId}_${date}`;
+export type NotesTarget =
+  | { kind: "individual"; enrollmentId: string }
+  | { kind: "group"; groupId: string };
+
+function targetId(t: NotesTarget): string {
+  return t.kind === "individual" ? t.enrollmentId : t.groupId;
 }
 
-function readDraft(enrollmentId: string, date: string): NoteContent | null {
+function apiUrl(t: NotesTarget): string {
+  return t.kind === "individual" ? "/api/profesor/class-notes" : "/api/profesor/class-notes/grupa";
+}
+
+function apiQuery(t: NotesTarget, date: string): string {
+  const p =
+    t.kind === "individual"
+      ? `enrollmentId=${encodeURIComponent(t.enrollmentId)}`
+      : `groupId=${encodeURIComponent(t.groupId)}`;
+  return `${apiUrl(t)}?${p}&date=${encodeURIComponent(date)}`;
+}
+
+function apiBody(t: NotesTarget, date: string, content: NoteContent) {
+  return JSON.stringify(
+    t.kind === "individual"
+      ? { enrollmentId: t.enrollmentId, date, content }
+      : { groupId: t.groupId, date, content }
+  );
+}
+
+// 1:1 ključ ostaje isti kao u kriški 1 (nacrti zatečeni u pregledaču se ne gube); grupa ima prefiks g_.
+function draftKey(t: NotesTarget, date: string): string {
+  return t.kind === "individual"
+    ? `beleska_nacrt_${t.enrollmentId}_${date}`
+    : `beleska_nacrt_g_${t.groupId}_${date}`;
+}
+
+// Kodovi kojima grupna ruta (409) kaže da za ovaj datum beleška ne može da postoji - obrazac
+// se tada ne prikazuje, nego samo razlog.
+function isBlockingCode(code: unknown): boolean {
+  return code === "otkazan" || code === "nije_na_platformi";
+}
+
+function readDraft(t: NotesTarget, date: string): NoteContent | null {
   try {
-    const raw = localStorage.getItem(draftKey(enrollmentId, date));
+    const raw = localStorage.getItem(draftKey(t, date));
     if (!raw) return null;
     const parsed = JSON.parse(raw);
     return sanitizeDraft(parsed);
@@ -41,17 +78,17 @@ function readDraft(enrollmentId: string, date: string): NoteContent | null {
   }
 }
 
-function writeDraft(enrollmentId: string, date: string, content: NoteContent) {
+function writeDraft(t: NotesTarget, date: string, content: NoteContent) {
   try {
-    localStorage.setItem(draftKey(enrollmentId, date), JSON.stringify(content));
+    localStorage.setItem(draftKey(t, date), JSON.stringify(content));
   } catch {
     // privatni prozor ili pun localStorage - nacrt jednostavno neće biti dostupan, ne rušimo obrazac
   }
 }
 
-function clearDraft(enrollmentId: string, date: string) {
+function clearDraft(t: NotesTarget, date: string) {
   try {
-    localStorage.removeItem(draftKey(enrollmentId, date));
+    localStorage.removeItem(draftKey(t, date));
   } catch {
     // ništa - ako brisanje ne uspe, sledeće otvaranje će prosto ponovo ponuditi isti nacrt
   }
@@ -75,16 +112,25 @@ function sanitizeDraft(raw: unknown): NoteContent | null {
 }
 
 export default function NotesEditor({
-  enrollmentId,
-  studentName,
+  target,
+  title,
   date,
   onClose,
 }: {
-  enrollmentId: string;
-  studentName: string;
+  target: NotesTarget;
+  title: string;
   date: string;
   onClose: () => void;
 }) {
+  // target je nov objekat na svaki render roditelja - zato se efekti vežu za id i vrstu, a ne za
+  // sam objekat, i koristi se stabilna kopija napravljena samo kad se id/vrsta promene.
+  const tId = targetId(target);
+  const tKind = target.kind;
+  const stableTarget = useMemo<NotesTarget>(
+    () => (tKind === "individual" ? { kind: "individual", enrollmentId: tId } : { kind: "group", groupId: tId }),
+    [tId, tKind]
+  );
+
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [content, setContent] = useState<NoteContent>(emptyNoteContent());
@@ -92,6 +138,9 @@ export default function NotesEditor({
   const [canCreate, setCanCreate] = useState(true);
   const [saveState, setSaveState] = useState<SaveState>("idle");
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
+  // Razlog zbog kog beleška za ovaj datum ne može da postoji (grupa: čas otkazan ili grupa nije
+  // na platformi) - kad je postavljen, obrazac se ne prikazuje.
+  const [blockedMessage, setBlockedMessage] = useState<string | null>(null);
 
   const contentRef = useRef(content);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -114,8 +163,9 @@ export default function NotesEditor({
   useEffect(() => {
     let cancelled = false;
     setLoadError(null);
+    setBlockedMessage(null);
     hasEditedRef.current = false;
-    const draft = readDraft(enrollmentId, date);
+    const draft = readDraft(stableTarget, date);
     setContent(draft ?? emptyNoteContent());
     setLessonId(null);
     setCanCreate(true);
@@ -123,19 +173,22 @@ export default function NotesEditor({
 
     (async () => {
       try {
-        const res = await fetch(
-          `/api/profesor/class-notes?enrollmentId=${encodeURIComponent(enrollmentId)}&date=${encodeURIComponent(date)}`
-        );
+        const res = await fetch(apiQuery(stableTarget, date));
         const j = await res.json();
         if (cancelled) return;
         if (!res.ok) {
+          if (isBlockingCode(j.code)) {
+            setBlockedMessage(j.error || "Beleška za ovaj datum ne može da se upiše.");
+            return;
+          }
           setLoadError(j.error || "Beleška nije mogla da se učita.");
           return;
         }
-        setLessonId(j.lessonId ?? null);
+        setLessonId(j.lessonId ?? j.sessionId ?? null);
         // canCreate je bitno samo kad čas za ovaj datum još ne postoji - ako postoji, uređivanje
         // beleške je uvek dozvoljeno (isto pravilo kao u PUT ruti).
-        setCanCreate(j.lessonId ? true : Boolean(j.canCreate));
+        // Grupna ruta ne vraća canCreate - sesija se pravi pri snimanju, pa je tamo uvek dozvoljeno.
+        setCanCreate(j.lessonId || j.sessionId || tKind === "group" ? true : Boolean(j.canCreate));
         if (!hasEditedRef.current) {
           setContent(draft ?? (j.content as NoteContent) ?? emptyNoteContent());
         }
@@ -153,7 +206,7 @@ export default function NotesEditor({
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [enrollmentId, date]);
+  }, [tId, tKind, date]);
 
   async function doSave(): Promise<boolean> {
     if (saveTimer.current) {
@@ -164,10 +217,10 @@ export default function NotesEditor({
     setSaveState("saving");
     setSaveMessage(null);
     try {
-      const res = await fetch("/api/profesor/class-notes", {
+      const res = await fetch(apiUrl(stableTarget), {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ enrollmentId, date, content: contentRef.current }),
+        body: apiBody(stableTarget, date, contentRef.current),
       });
       const j = await res.json();
       // Stariji odgovor stigao posle novijeg zahteva (profesorka je nastavila da kuca dok je
@@ -175,7 +228,13 @@ export default function NotesEditor({
       if (myId !== latestRequestId.current) return res.ok;
 
       if (!res.ok) {
-        if (j.code === "paket_pun") {
+        if (isBlockingCode(j.code)) {
+          // Čas je u međuvremenu otkazan ili grupa skinuta sa platforme - obrazac staje i
+          // prikazuje razlog; otkucano ostaje u nacrtu.
+          setSaveState("idle");
+          setSaveMessage(null);
+          setBlockedMessage(j.error || "Beleška za ovaj datum ne može da se upiše.");
+        } else if (j.code === "paket_pun") {
           setSaveState("paket_pun");
           setSaveMessage(j.error || "Paket je iskorišćen - čas nije upisan, beleška nije snimljena.");
         } else {
@@ -187,9 +246,9 @@ export default function NotesEditor({
 
       setSaveState("saved");
       setSaveMessage(null);
-      setLessonId(j.lessonId ?? null);
+      setLessonId(j.lessonId ?? j.sessionId ?? null);
       setCanCreate(true);
-      clearDraft(enrollmentId, date);
+      clearDraft(stableTarget, date);
       return true;
     } catch {
       if (myId !== latestRequestId.current) return false;
@@ -210,7 +269,7 @@ export default function NotesEditor({
     hasEditedRef.current = true;
     setContent((prev) => {
       const next = { ...prev, ...patch };
-      writeDraft(enrollmentId, date, next);
+      writeDraft(stableTarget, date, next);
       return next;
     });
     setSaveState("idle");
@@ -228,10 +287,10 @@ export default function NotesEditor({
     function handleBeforeUnload() {
       if (!saveTimer.current) return;
       try {
-        void fetch("/api/profesor/class-notes", {
+        void fetch(apiUrl(stableTarget), {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ enrollmentId, date, content: contentRef.current }),
+          body: apiBody(stableTarget, date, contentRef.current),
           keepalive: true,
         });
       } catch {
@@ -240,7 +299,9 @@ export default function NotesEditor({
     }
     window.addEventListener("beforeunload", handleBeforeUnload);
     return () => window.removeEventListener("beforeunload", handleBeforeUnload);
-  }, [enrollmentId, date]);
+    // stableTarget se menja samo sa tId/tKind
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tId, tKind, date]);
 
   useEffect(() => {
     return () => {
@@ -278,7 +339,7 @@ export default function NotesEditor({
 
   // Namerno BEZ "!loading" - blocked mora da bude tačan i pre nego što GET stigne (canCreate
   // kreće od optimističnog true), inače bi obrazac čekao mrežu da bi uopšte mogao da se prikaže.
-  const blocked = !lessonId && !canCreate;
+  const blocked = blockedMessage !== null || (!lessonId && !canCreate);
   const temaSection = TEXT_SECTIONS.find((s) => s.key === "tema")!;
   const restSections = TEXT_SECTIONS.filter((s) => s.key !== "tema");
 
@@ -291,7 +352,7 @@ export default function NotesEditor({
               Beleške za današnji čas
             </h2>
             <p className="text-sm text-gray-500">
-              {studentName || "Polaznik"} · {new Date(date).toLocaleDateString("sr-Latn")}
+              {title} · {new Date(date).toLocaleDateString("sr-Latn")}
             </p>
           </div>
         </div>
@@ -303,8 +364,8 @@ export default function NotesEditor({
 
           {blocked && (
             <p className="rounded-lg bg-koral-light px-3 py-2 text-sm text-koral-dark">
-              Paket je iskorišćen - za ovaj datum ne može da se upiše nov čas, pa ni beleška nema na
-              šta da se veže. Dodaj čas u panelu ili otvori nov paket, pa se vrati ovde.
+              {blockedMessage ??
+                "Paket je iskorišćen - za ovaj datum ne može da se upiše nov čas, pa ni beleška nema na šta da se veže. Dodaj čas u panelu ili otvori nov paket, pa se vrati ovde."}
             </p>
           )}
 
@@ -346,7 +407,10 @@ export default function NotesEditor({
 
               <p className="text-xs text-gray-400">
                 Sekciju koju ostaviš praznu polaznik neće videti - ni naslov. Reči iz tabele odmah
-                postaju njegove kartice za vežbanje.
+                postaju{" "}
+                {tKind === "group"
+                  ? "kartice za vežbanje svih polaznika grupe."
+                  : "njegove kartice za vežbanje."}
               </p>
             </>
           )}
