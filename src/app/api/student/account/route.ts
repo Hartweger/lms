@@ -34,12 +34,13 @@ export async function GET() {
     meet_link: string | null;
     nextSession: string | null;
     professor: string | null;
+    notesOnPlatform: boolean;
   }> = [];
 
   if (groupIds.length) {
     const { data: groupRows } = await admin
       .from("groups")
-      .select("id, level, session_time, meet_link, professor:professor_id(full_name)")
+      .select("id, level, session_time, meet_link, notes_on_platform, professor:professor_id(full_name)")
       .in("id", groupIds);
     const { data: sessions } = await admin
       .from("group_sessions")
@@ -59,6 +60,7 @@ export async function GET() {
         meet_link: (g.meet_link as string) ?? null,
         nextSession: (next?.session_date as string) ?? null,
         professor: prof?.full_name ?? null,
+        notesOnPlatform: !!g.notes_on_platform,
       };
     });
   }

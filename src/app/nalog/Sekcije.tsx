@@ -11,6 +11,7 @@ interface GroupRow {
   meet_link: string | null;
   nextSession: string | null;
   professor: string | null;
+  notesOnPlatform: boolean;
 }
 interface IndivRow {
   id: string;
@@ -184,6 +185,12 @@ export function GrupniIIndividualni() {
             <a href={g.meet_link} target="_blank" rel="noreferrer" className="inline-block mt-2 text-sm text-plava">
               Otvori Meet
             </a>
+          )}
+          {g.notesOnPlatform && (
+            <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1">
+              <Link href="/beleske" className="text-sm text-plava">Beleške sa časova</Link>
+              <Link href="/moje-reci" className="text-sm text-plava">Moje reči</Link>
+            </div>
           )}
         </div>
       ))}
