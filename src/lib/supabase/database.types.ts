@@ -1431,6 +1431,7 @@ export type Database = {
           naknadni_upis: boolean
           notes: string | null
           notes_doc_id: string | null
+          notes_on_platform: boolean
           notes_link: string | null
           notes_url: string | null
           offer_sent_at: string | null
@@ -1467,6 +1468,7 @@ export type Database = {
           naknadni_upis?: boolean
           notes?: string | null
           notes_doc_id?: string | null
+          notes_on_platform?: boolean
           notes_link?: string | null
           notes_url?: string | null
           offer_sent_at?: string | null
@@ -1503,6 +1505,7 @@ export type Database = {
           naknadni_upis?: boolean
           notes?: string | null
           notes_doc_id?: string | null
+          notes_on_platform?: boolean
           notes_link?: string | null
           notes_url?: string | null
           offer_sent_at?: string | null
