@@ -49,6 +49,13 @@ export async function DELETE(request: Request) {
   const g = await ownedGroup(staff.admin, s.group_id, staff.userId, staff.isAdmin);
   if (!g) return NextResponse.json({ error: "Nije tvoja grupa" }, { status: 403 });
 
+  // Sesija sa beleškom je održan čas - ne skida se (ni 'manual' brisanjem, ni 'auto' otkazivanjem),
+  // jer bi beleška ostala vezana za čas koji „nije održan" ili bi brisanje palo na FK RESTRICT (111).
+  const { data: note } = await staff.admin.from("class_notes").select("id").eq("group_session_id", sessionId).maybeSingle();
+  if (note) {
+    return NextResponse.json({ error: "Ovaj čas ima belešku - ne može da se skine. Ako je greška, javi Nataši." }, { status: 409 });
+  }
+
   // 'auto' (iz rasporeda) → označi otkazan da se NE vrati pri osvežavanju termina; 'manual' → obriši.
   if (s.source === "auto") {
     await staff.admin.from("group_sessions").update({ cancelled: true }).eq("id", sessionId);
