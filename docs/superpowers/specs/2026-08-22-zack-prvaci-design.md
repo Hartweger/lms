@@ -277,7 +277,7 @@ kucanje, i snimanje detetovog izgovora. Poslednje je moguća druga faza, ne ovo.
 ## Redosled
 
 1. Migracija: razred 1-8, `glas_url`, `slika_url`, dva bucketa.
-2. Rečnik (80-100 reči po temama) napisati i uneti u bazu.
+2. ~~Rečnik napisati~~ GOTOVO (`docs/prvi-nemacki-reci-nacrt.md`); ostaje unos u bazu.
 3. **Nabavka zvuka i slika** - najduže traje, zato kreće prva.
 4. Dečji ekran: slušaj i pokaži, šta je ovo, parovi sa zvukom.
 5. Scena.
@@ -364,7 +364,9 @@ Praktično, pre snimanja:
 
 ## Otvorena pitanja za Natašu
 
-1. **Spisak reči po temama** - ko ga piše. Više ne čeka Pravilnik, pa može da
-   krene odmah. Sve ostalo (slike, snimci) visi na njemu.
-2. Potvrda cene 990 / 1.990 i popusta za drugo dete.
+1. ~~Spisak reči po temama~~ **GOTOVO.** 85 reči u 10 tema, odobreno 06.10.2026:
+   `docs/prvi-nemacki-reci-nacrt.md`. Time je otključana nabavka ilustracija i
+   snimaka - jedino što sme da teče pre pilota petog razreda.
+2. **Potvrda cene 990 / 1.990 i popusta za drugo dete** - jedino što je još
+   otvoreno.
 3. Potvrda imena i adrese: „Prvi nemački", `/prvi-nemacki`.

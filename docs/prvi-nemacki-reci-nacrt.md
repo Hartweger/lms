@@ -209,9 +209,10 @@ od njih tri ponuđena odgovora mogu da se slijú u jedno:
   scena dobije i radnje.
 - **Množina.** Ne uči se, pa je kolona svuda prazna.
 
-## Otvoreno za Natašu
+## Šta ovaj spisak otključava
 
-1. Prođi kroz spisak i precrtaj šta ne valja - radije manje reči nego reč koja
-   se ne može nacrtati.
-2. Redosled lekcija: slažeš li se da boje i brojevi idu pre svega što ima član?
-3. Pozdravi kroz medvedov govor umesto kao sličice - prolazi li to?
+Rečnik je bio jedina stavka od koje je zavisilo sve ostalo. Sa njim
+zaključanim mogu da krenu i **85 ilustracija** i **85 snimaka nemačkih reči**,
+paralelno i nezavisno jedno od drugog.
+
+Kod i dalje čeka pilot petog razreda, po odluci od 22.08.
