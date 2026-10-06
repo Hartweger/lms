@@ -164,7 +164,7 @@ export default function SesijeClient({ rows, showProfessor }: { rows: GroupSessi
           <NotesEditor
             target={{ kind: "group", groupId: g.id }}
             title={`Grupa ${g.level}`}
-            date={dateById[g.id] ?? todayISO()}
+            date={dateById[g.id] || todayISO()}
             onClose={() => { setNotesFor(null); router.refresh(); }}
           />
         );

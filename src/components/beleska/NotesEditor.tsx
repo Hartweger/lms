@@ -149,6 +149,11 @@ export default function NotesEditor({
   // otvorio za ovaj enrollment+datum) - dok je true, GET odgovor ne sme da pregazi setContent,
   // jer bi joj otkucano nestalo ispod prstiju.
   const hasEditedRef = useRef(false);
+  // Da li je pri poslednjem učitavanju postojao nacrt - bez nacrta, neuspelo učitavanje zaključava
+  // obrazac (inače bi prazan obrazac snimanjem pregazio belešku koja možda postoji u bazi).
+  const hadDraftRef = useRef(false);
+  // Uvećava ga dugme "Pokušaj ponovo" - ponovo pokreće efekat učitavanja.
+  const [reloadNonce, setReloadNonce] = useState(0);
 
   useEffect(() => {
     contentRef.current = content;
@@ -161,11 +166,17 @@ export default function NotesEditor({
   // Nacrt iz localStorage-a (ako postoji za baš ovaj enrollment+datum) ima prednost nad bazom -
   // veza je možda pala pre poslednjeg snimanja.
   useEffect(() => {
+    // Odloženo snimanje iz prethodnog cilja/datuma ne sme da okine sa starim podacima.
+    if (saveTimer.current) {
+      clearTimeout(saveTimer.current);
+      saveTimer.current = null;
+    }
     let cancelled = false;
     setLoadError(null);
     setBlockedMessage(null);
     hasEditedRef.current = false;
     const draft = readDraft(stableTarget, date);
+    hadDraftRef.current = draft !== null;
     setContent(draft ?? emptyNoteContent());
     setLessonId(null);
     setCanCreate(true);
@@ -181,6 +192,11 @@ export default function NotesEditor({
             setBlockedMessage(j.error || "Beleška za ovaj datum ne može da se upiše.");
             return;
           }
+          // Otkucano tokom učitavanja ne ide na PUT - obrazac je možda zaključan (nema nacrta).
+          if (saveTimer.current) {
+            clearTimeout(saveTimer.current);
+            saveTimer.current = null;
+          }
           setLoadError(j.error || "Beleška nije mogla da se učita.");
           return;
         }
@@ -194,6 +210,10 @@ export default function NotesEditor({
         }
       } catch {
         if (cancelled) return;
+        if (saveTimer.current) {
+          clearTimeout(saveTimer.current);
+          saveTimer.current = null;
+        }
         // Mrežna greška ne sme da blokira kucanje - obrazac je već popunjen (nacrtom ili prazan),
         // pravi problem (npr. paket pun) će se javiti tek pri snimanju, gde ionako imamo poseban prikaz.
         setLoadError("Greška u mreži - ne mogu da učitam belešku.");
@@ -206,7 +226,7 @@ export default function NotesEditor({
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tId, tKind, date]);
+  }, [tId, tKind, date, reloadNonce]);
 
   async function doSave(): Promise<boolean> {
     if (saveTimer.current) {
@@ -339,7 +359,8 @@ export default function NotesEditor({
 
   // Namerno BEZ "!loading" - blocked mora da bude tačan i pre nego što GET stigne (canCreate
   // kreće od optimističnog true), inače bi obrazac čekao mrežu da bi uopšte mogao da se prikaže.
-  const blocked = blockedMessage !== null || (!lessonId && !canCreate);
+  const loadBlocked = loadError !== null && !hadDraftRef.current;
+  const blocked = blockedMessage !== null || loadBlocked || (!lessonId && !canCreate);
   const temaSection = TEXT_SECTIONS.find((s) => s.key === "tema")!;
   const restSections = TEXT_SECTIONS.filter((s) => s.key !== "tema");
 
@@ -358,15 +379,28 @@ export default function NotesEditor({
         </div>
 
         <div className="space-y-4 p-4 md:p-6">
-          {loadError && (
+          {loadError && !loadBlocked && (
             <p className="rounded-lg bg-koral-light px-3 py-2 text-sm text-koral-dark">{loadError}</p>
           )}
 
           {blocked && (
-            <p className="rounded-lg bg-koral-light px-3 py-2 text-sm text-koral-dark">
-              {blockedMessage ??
-                "Paket je iskorišćen - za ovaj datum ne može da se upiše nov čas, pa ni beleška nema na šta da se veže. Dodaj čas u panelu ili otvori nov paket, pa se vrati ovde."}
-            </p>
+            <div className="space-y-2 rounded-lg bg-koral-light px-3 py-2 text-sm text-koral-dark">
+              <p>
+                {blockedMessage ??
+                  (loadBlocked
+                    ? loadError
+                    : "Paket je iskorišćen - za ovaj datum ne može da se upiše nov čas, pa ni beleška nema na šta da se veže. Dodaj čas u panelu ili otvori nov paket, pa se vrati ovde.")}
+              </p>
+              {blockedMessage === null && loadBlocked && (
+                <button
+                  type="button"
+                  onClick={() => setReloadNonce((n) => n + 1)}
+                  className="min-h-[44px] rounded-lg border border-gray-200 bg-white px-4 text-sm font-medium text-koral-dark hover:bg-gray-50"
+                >
+                  Pokušaj ponovo
+                </button>
+              )}
+            </div>
           )}
 
           {!blocked && (
@@ -406,8 +440,10 @@ export default function NotesEditor({
               ))}
 
               <p className="text-xs text-gray-400">
-                Sekciju koju ostaviš praznu polaznik neće videti - ni naslov. Reči iz tabele odmah
-                postaju{" "}
+                {tKind === "group"
+                  ? "Sekciju koju ostaviš praznu polaznici neće videti - ni naslov."
+                  : "Sekciju koju ostaviš praznu polaznik neće videti - ni naslov."}{" "}
+                Reči iz tabele odmah postaju{" "}
                 {tKind === "group"
                   ? "kartice za vežbanje svih polaznika grupe."
                   : "njegove kartice za vežbanje."}
