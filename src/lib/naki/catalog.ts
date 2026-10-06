@@ -10,7 +10,18 @@ export type CatalogCourse = {
   paypal_price_eur: number | null; // EUR
   category: string | null;
   course_type: string | null;
+  // Broj 1:1 časova u kursu (samo individualni). Do 06.10.2026 nije bio u katalogu,
+  // pa je Smile za individualni A2.2 rekao „8 časova" (pomešao sa mesečnim paketom
+  // od 8) umesto 10 iz baze.
+  included_lessons?: number | null;
 };
+
+function casova(n: number): string {
+  const d = n % 10, dd = n % 100;
+  if (d === 1 && dd !== 11) return `${n} čas`;
+  if (d >= 2 && d <= 4 && (dd < 12 || dd > 14)) return `${n} časa`;
+  return `${n} časova`;
+}
 
 function formatPrice(c: CatalogCourse): string {
   if (c.price == null) return "cena varira";
@@ -29,7 +40,10 @@ export function renderCatalog(courses: CatalogCourse[]): string {
   const blocks: string[] = [];
   for (const [cat, items] of groups) {
     const lines = items.map(
-      (c) => `- ${c.title} | ${formatPrice(c)} | ${SITE_URL}/kursevi/${c.slug}`
+      (c) =>
+        `- ${c.title} | ${formatPrice(c)}${
+          c.included_lessons ? ` | ${casova(c.included_lessons)} sa profesorkom` : ""
+        } | ${SITE_URL}/kursevi/${c.slug}`
     );
     blocks.push(`${cat.toUpperCase()}:\n${lines.join("\n")}`);
   }
@@ -238,7 +252,7 @@ export async function getOpenGroupsText(): Promise<string> {
 export async function getCatalogText(admin: SupabaseClient): Promise<string> {
   const { data } = await admin
     .from("courses")
-    .select("title, slug, price, paypal_price_eur, category, course_type")
+    .select("title, slug, price, paypal_price_eur, category, course_type, included_lessons")
     .eq("is_purchasable", true)
     .eq("is_published", true)
     .order("category", { ascending: true });

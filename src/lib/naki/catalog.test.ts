@@ -19,6 +19,7 @@ const SAMPLE: CatalogCourse[] = [
   { title: "Video kurs A1", slug: "video-kurs-a1", price: 11600, paypal_price_eur: 99, category: "Video kursevi", course_type: "video" },
   { title: "Grupni A1.1", slug: "grupni-kurs-nemackog-jezika-a1-1", price: 19600, paypal_price_eur: 168, category: "Grupni kursevi", course_type: "group" },
   { title: "Individualni B1.1", slug: "individualni-kurs-nemackog-jezika-b11", price: null, paypal_price_eur: null, category: "Individualni kursevi", course_type: "individual" },
+  { title: "Individualni A2.2", slug: "individualni-kurs-nemackog-jezika-a2-2", price: 33000, paypal_price_eur: 282, category: "Individualni kursevi", course_type: "individual", included_lessons: 10 },
 ];
 
 describe("renderCatalog", () => {
@@ -38,6 +39,21 @@ describe("renderCatalog", () => {
   it("kad nema cene piše 'cena varira'", () => {
     const out = renderCatalog(SAMPLE);
     expect(out).toContain("cena varira");
+  });
+
+  it("individualni kurs nosi broj časova iz baze (A2.2 = 10, ne 8)", () => {
+    const out = renderCatalog(SAMPLE);
+    expect(out).toContain("Individualni A2.2 | 33.000 RSD / 282 EUR | 10 časova sa profesorkom |");
+    expect(out).not.toMatch(/Video kurs A1 \|[^\n]*časov/);
+  });
+
+  it("deklinacija broja časova", () => {
+    const one = (n: number) =>
+      renderCatalog([{ ...SAMPLE[3], included_lessons: n }]);
+    expect(one(5)).toContain("5 časova sa");
+    expect(one(14)).toContain("14 časova sa");
+    expect(one(4)).toContain("4 časa sa");
+    expect(one(21)).toContain("21 čas sa");
   });
 
   it("prazna lista vraća prazan string", () => {

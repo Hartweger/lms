@@ -395,3 +395,14 @@ describe("Smile ne podučava nemački", () => {
     expect(out()).toContain("Ovo se NE odnosi na pitanja o ponudi");
   });
 });
+
+describe("broj časova individualnog kursa (06.10.2026: A2.2 rekao 8 umesto 10)", () => {
+  const out = buildSalesSystemPrompt("KATALOG", { coupon: false, leadCapture: false });
+  it("broj časova uzima iz kataloga, ne pogađa", () => {
+    expect(out).toContain("BROJ ČASOVA INDIVIDUALNOG KURSA");
+    expect(out).toContain("nikad ga ne pogađaj");
+  });
+  it("4/8/12 vezuje samo za mesečne pakete", () => {
+    expect(out).toContain("4/8/12 važi SAMO za mesečne pakete");
+  });
+});
