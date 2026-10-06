@@ -292,6 +292,12 @@ kucanje, i snimanje detetovog izgovora. Poslednje je moguća druga faza, ne ovo.
 7. Landing.
 8. Pilot sa pravim prvakom.
 
+## Bez stranice-najave - odlučeno 06.10.2026
+
+Predloženo je bilo da se prvo pusti sama stranica `/prvi-nemacki` bez kupovine,
+sa prijavom „javi mi kad bude gotovo", da se tražnja proveri pre nego što se
+plati 85 ilustracija. **Nataša je odbila: pravi se sve odjednom.**
+
 ## Vreme - odlučeno
 
 **Prvi razred kreće tek posle pilota petog** (Nataša, 22.08). Peti još nije
@@ -375,4 +381,8 @@ Praktično, pre snimanja:
    `docs/prvi-nemacki-reci-nacrt.md`. Time je otključana nabavka ilustracija i
    snimaka - jedino što sme da teče pre pilota petog razreda.
 2. ~~Potvrda cene~~ **GOTOVO.** 800 mesečno / 1.590 puna, drugo dete -40%.
-3. Potvrda imena i adrese: „Prvi nemački", `/prvi-nemacki` - poslednje otvoreno.
+3. Potvrda imena i adrese: „Prvi nemački", `/prvi-nemacki`.
+4. **Je li peti razred prošao pilot sa pravim detetom?** To je uslov za početak,
+   postavljen 22.08. Dok se ne potvrdi, kod ne kreće.
+5. **Ko radi 85 ilustracija i ko nabavlja 85 snimaka.** Ovo ne zavisi od pilota
+   i najduže traje - jedino što sme da počne odmah.
