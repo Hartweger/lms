@@ -13,7 +13,7 @@ export async function POST(_req: NextRequest, { params }: { params: Promise<{ id
 
   const { data: g } = await admin
     .from("groups")
-    .select("id, level, days, session_time, duration_weeks, sessions_count, start_date, professor_id, professor:professor_id(full_name)")
+    .select("id, level, days, session_time, duration_weeks, sessions_count, start_date, professor_id, notes_on_platform, professor:professor_id(full_name)")
     .eq("id", id)
     .single();
   if (!g) return NextResponse.json({ error: "Grupa ne postoji" }, { status: 404 });
@@ -37,11 +37,13 @@ export async function POST(_req: NextRequest, { params }: { params: Promise<{ id
   // Isprazni prethodnu generaciju (pristup na sadržaj im OSTAJE - dira se samo članstvo u grupi).
   await admin.from("group_enrollments").update({ status: "cancelled", cancelled_at: new Date().toISOString() }).eq("group_id", id).eq("status", "active");
 
+  // Grupa na platformi ne koristi Google Doc - beleške su na /beleske, pa notes_url/notes_doc_id ostaju prazni.
+  const naPlatformi = !!g.notes_on_platform;
   const { error } = await admin.from("groups").update({
     gcal_event_id: gas.eventId ?? null,
     meet_link: gas.meetLink ?? null,
-    notes_url: gas.notesUrl ?? null,
-    notes_doc_id: gas.notesDocId ?? null,
+    notes_url: naPlatformi ? null : gas.notesUrl ?? null,
+    notes_doc_id: naPlatformi ? null : gas.notesDocId ?? null,
     end_date: computeEndDate(g.start_date, g.days, g.duration_weeks, g.sessions_count),
     manual_enrolled: 0,
     reminder_sent_at: null,
@@ -54,5 +56,5 @@ export async function POST(_req: NextRequest, { params }: { params: Promise<{ id
   // Nova generacija → regeneriši 'auto' sesije iz novog rasporeda (za honorar).
   await syncGroupSessions(admin, { id: g.id, professor_id: g.professor_id, start_date: g.start_date, days: g.days, duration_weeks: g.duration_weeks, sessions_count: g.sessions_count });
 
-  return NextResponse.json({ ok: true, meetLink: gas.meetLink, notesUrl: gas.notesUrl });
+  return NextResponse.json({ ok: true, meetLink: gas.meetLink, notesUrl: naPlatformi ? null : gas.notesUrl });
 }

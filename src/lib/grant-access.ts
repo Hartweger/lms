@@ -509,7 +509,7 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
       // Status filter rade openGroupsForNivo/pickOpenGroupWithSeats (jedinstveno mesto definicije "otvoren").
       const { data: groupsForNivo } = await admin
         .from("groups")
-        .select("id, level, status, start_date, max_seats, manual_enrolled, gcal_event_id, meet_link, notes_url, professor_id, content_course_id, professor:professor_id(full_name, email)")
+        .select("id, level, status, start_date, max_seats, manual_enrolled, gcal_event_id, meet_link, notes_url, notes_on_platform, professor_id, content_course_id, professor:professor_id(full_name, email)")
         .eq("level", nivo);
       // PAŽNJA: oba slučaja ispod su PLAĆENO-A-NEMA-MESTO. Kupac dobije pristup sadržaju, ali
       // ostane van grupe - i to mu niko ne kaže. Ranije se samo logovalo, pa je jedna polaznica
@@ -569,8 +569,12 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
       }
 
       // Jedan mejl polazniku: platforma + Meet + beleške.
+      // Grupa na platformi: link vodi na /beleske (polaznik se prijavljuje istim mejlom), ne na Google Doc.
+      const notesUrl = group.notes_on_platform
+        ? `${SITE_URL}/beleske`
+        : group.notes_url ?? undefined;
       await sendGrupniWelcomeEmail(order.email, order.full_name, {
-        nivo, profIme, meetLink: group.meet_link ?? undefined, notesUrl: group.notes_url ?? undefined,
+        nivo, profIme, meetLink: group.meet_link ?? undefined, notesUrl,
       });
       grupniWelcomeSent = true;
 

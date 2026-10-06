@@ -15,7 +15,7 @@ export async function POST(_req: NextRequest, { params }: { params: Promise<{ id
 
   const { data: g } = await admin
     .from("groups")
-    .select("id, level, days, session_time, duration_weeks, sessions_count, start_date, gcal_event_id, calendar_id, notes_doc_id, professor_id, professor:professor_id(full_name, email)")
+    .select("id, level, days, session_time, duration_weeks, sessions_count, start_date, gcal_event_id, calendar_id, notes_doc_id, notes_on_platform, professor_id, professor:professor_id(full_name, email)")
     .eq("id", id)
     .single();
   if (!g) return NextResponse.json({ error: "Grupa ne postoji" }, { status: 404 });
@@ -75,7 +75,8 @@ export async function POST(_req: NextRequest, { params }: { params: Promise<{ id
     updated_at: new Date().toISOString(),
   };
   // Beleške postoje samo kad je openTerm napravio nov dokument; kod moveTerm zadržavamo stari.
-  if (gas.notesUrl) { update.notes_url = gas.notesUrl; update.notes_doc_id = gas.notesDocId ?? null; }
+  // Grupa na platformi nema Google Doc - notes_url ostaje prazan (link u mejlu/nalogu vodi na /beleske).
+  if (gas.notesUrl && !g.notes_on_platform) { update.notes_url = gas.notesUrl; update.notes_doc_id = gas.notesDocId ?? null; }
 
   const { error } = await admin.from("groups").update(update).eq("id", id);
   if (error) return NextResponse.json({ error: error.message }, { status: 400 });
@@ -92,7 +93,8 @@ export async function POST(_req: NextRequest, { params }: { params: Promise<{ id
       try {
         await callGas("enroll", {
           nivo: g.level, prof: profIme, eventId: noviEventId,
-          notesDocId: (gas.notesDocId as string | undefined) ?? null,
+          // Grupi na platformi ne delimo Google Doc (beleške su na /beleske).
+          notesDocId: g.notes_on_platform ? null : (gas.notesDocId as string | undefined) ?? null,
           studentEmail: p.mejl, studentName: p.ime,
         });
         vraceno++;
@@ -108,7 +110,7 @@ export async function POST(_req: NextRequest, { params }: { params: Promise<{ id
   return NextResponse.json({
     ok: true,
     meetLink: gas.meetLink ?? null,
-    notesUrl: gas.notesUrl ?? null,
+    notesUrl: g.notes_on_platform ? null : gas.notesUrl ?? null,
     preseljeno: seliSe,
     polaznikaVraceno: vraceno,
     polaznikaUkupno: polaznici.length,
