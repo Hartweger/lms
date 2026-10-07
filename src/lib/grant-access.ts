@@ -32,7 +32,7 @@ const ACADEMY_SLUG = "nh-academy-gen2";
  * traje podrazumevani pristup. Bez ovoga polaznica koja kupi 15.09. dobija biblioteku
  * do 15.09.2027 - devet meseci preko dogovorenog. Posle roka ide redovnih 2.290 RSD/mes.
  */
-const ACADEMY_CLANSTVO_DO = "2026-12-16T23:59:59+01:00";
+const ACADEMY_CLANSTVO_DO = "2026-12-23T23:59:59+01:00";
 
 /** Paralelni poziv već radi grant za ovaj order — ništa nije poslato ni upisano. */
 export const GRANT_IN_PROGRESS = "grant-in-progress";

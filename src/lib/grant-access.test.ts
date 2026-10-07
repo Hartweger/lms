@@ -257,7 +257,7 @@ describe("grantAccessForOrder", () => {
     expect(h.fake.calls.some((c) => c.table === "coupons")).toBe(false);
   });
 
-  // NH Academy Gen II poklanja članstvo, ali samo do kraja programa (16.12.2026).
+  // NH Academy Gen II poklanja članstvo, ali samo do kraja programa (23.12.2026).
   // Podrazumevana godina dana bi polaznici koja kupi u septembru dala biblioteku
   // do septembra 2027 - devet meseci preko dogovorenog.
   describe("Academy Gen II → rok članstva", () => {
@@ -272,17 +272,17 @@ describe("grantAccessForOrder", () => {
       courses: [{ id: "c-clanstvo", slug: "nh-clanstvo-sadrzaj" }],
     };
 
-    it("biblioteka članstva ističe 16.12.2026, a ne godinu dana od kupovine", async () => {
+    it("biblioteka članstva ističe 23.12.2026, a ne godinu dana od kupovine", async () => {
       h.fake = createFakeAdmin({ orders: [academyOrder()], ...academySetup });
 
       const res = await grantAccessForOrder("o1");
 
       expect(res.ok).toBe(true);
       const access = h.fake.row("course_access", (r) => r.course_id === "c-clanstvo")!;
-      expect(new Date(access.expires_at as string).toISOString()).toBe("2026-12-16T22:59:59.000Z");
+      expect(new Date(access.expires_at as string).toISOString()).toBe("2026-12-23T22:59:59.000Z");
     });
 
-    it("ne skraćuje rok polaznici koja već plaća članstvo duže od 16.12.", async () => {
+    it("ne skraćuje rok polaznici koja već plaća članstvo duže od 23.12.", async () => {
       h.fake = createFakeAdmin({
         orders: [academyOrder()],
         ...academySetup,
