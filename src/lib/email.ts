@@ -875,6 +875,47 @@ ${ponuda}
   }
 }
 
+/**
+ * Podsetnik da mesečna faktura čeka slanje. Cron je samo pripremi, pa bez ovoga
+ * niko ne zna da čeka (oktobar 2026 je stajao nedelju dana neposlat).
+ * Šalje se svakog jutra dok sve ne ode i firmi i na SEF.
+ */
+export async function sendMesecneFaktureReminder(
+  stavke: { firma: string; mesec: string; iznos: number; korak: "faktura" | "sef" }[],
+) {
+  try {
+    const resend = getResend();
+    if (!resend || stavke.length === 0) return;
+    const redovi = stavke
+      .map(
+        (s) =>
+          `<li><strong>${esc(s.firma)}</strong> - ${esc(s.mesec)}, ${s.iznos.toLocaleString("sr-RS")} RSD: ${
+            s.korak === "faktura" ? "čeka „Pošalji fakturu“" : "poslata firmi, čeka slanje na SEF"
+          }</li>`,
+      )
+      .join("");
+    await resend.emails.send({
+      from: FROM,
+      to: ["info@hartweger.rs", "natasa@hartweger.rs"],
+      subject:
+        stavke.length === 1
+          ? `Mesečna faktura čeka slanje: ${stavke[0].firma}`
+          : `${stavke.length} mesečne fakture čekaju slanje`,
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:sans-serif;line-height:1.6;color:#222">
+<h2>Mesečna faktura je spremna</h2>
+<p>Sistem je pripremio fakturu, ali ništa ne šalje sam. Treba tvoj klik:</p>
+<ul>${redovi}</ul>
+<p><a href="${SITE_URL}/admin/firme" style="display:inline-block;background:#0D2E5C;color:#fff;padding:10px 18px;border-radius:6px;text-decoration:none">Otvori Admin → Firme</a></p>
+<p style="font-size:13px;color:#777">Ovaj podsetnik stiže svakog jutra dok faktura ne ode i firmi i na SEF.</p>
+</body></html>`,
+    });
+  } catch (e) {
+    console.error("[email] sendMesecneFaktureReminder pao:", e);
+    Sentry.captureException(e);
+  }
+}
+
 export async function sendNatasaNextTermReminder(
   opts: { nivo: string; nextNivo: string | null; endDate: string; profIme?: string },
 ) {

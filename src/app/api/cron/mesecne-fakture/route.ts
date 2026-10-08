@@ -10,6 +10,7 @@
 import { NextResponse } from "next/server";
 import { withCronLog } from "@/lib/cron-log";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { sendMesecneFaktureReminder } from "@/lib/email";
 
 export const dynamic = "force-dynamic";
 
@@ -76,7 +77,29 @@ async function cronHandler(request: Request) {
     }
   }
 
-  return NextResponse.json({ period, pravila: zaDanas.length, pripremljeno });
+  // Podsetnik za sve što čeka klik - i za ovaj mesec i za zaostale. Cron ide svaki
+  // dan, pa mejl stiže svakog jutra dok faktura ne ode i firmi i na SEF.
+  const { data: cekaju, error: cekErr } = await admin
+    .from("recurring_invoice_runs")
+    .select("period, iznos, faktura_sent_at, sef_invoice_id, recurring:recurring_id(company:company_id(naziv))")
+    .is("sef_invoice_id", null)
+    .order("period");
+  if (cekErr) console.error("[mesecne-fakture] čitanje neposlatih palo:", cekErr);
+
+  const stavke = (cekaju ?? []).map((r) => {
+    const veza = r.recurring as { company: { naziv: string } | null } | null;
+    return {
+      firma: veza?.company?.naziv ?? "(nepoznata firma)",
+      mesec: new Intl.DateTimeFormat("sr-Latn-RS", { month: "long", year: "numeric" }).format(
+        new Date(`${r.period}T12:00:00Z`),
+      ),
+      iznos: r.iznos,
+      korak: (r.faktura_sent_at ? "sef" : "faktura") as "faktura" | "sef",
+    };
+  });
+  await sendMesecneFaktureReminder(stavke);
+
+  return NextResponse.json({ period, pravila: zaDanas.length, pripremljeno, cekaju: stavke.length });
 }
 
 export const GET = withCronLog("mesecne-fakture", cronHandler);
