@@ -878,7 +878,7 @@ ${ponuda}
 /**
  * Podsetnik da mesečna faktura čeka slanje. Cron je samo pripremi, pa bez ovoga
  * niko ne zna da čeka (oktobar 2026 je stajao nedelju dana neposlat).
- * Šalje se svakog jutra dok sve ne ode i firmi i na SEF.
+ * Šalje se jednom mesečno, 2. u mesecu.
  */
 export async function sendMesecneFaktureReminder(
   stavke: { firma: string; mesec: string; iznos: number; korak: "faktura" | "sef" }[],
@@ -907,7 +907,7 @@ export async function sendMesecneFaktureReminder(
 <p>Sistem je pripremio fakturu, ali ništa ne šalje sam. Treba tvoj klik:</p>
 <ul>${redovi}</ul>
 <p><a href="${SITE_URL}/admin/firme" style="display:inline-block;background:#0D2E5C;color:#fff;padding:10px 18px;border-radius:6px;text-decoration:none">Otvori Admin → Firme</a></p>
-<p style="font-size:13px;color:#777">Ovaj podsetnik stiže svakog jutra dok faktura ne ode i firmi i na SEF.</p>
+<p style="font-size:13px;color:#777">Ovaj podsetnik stiže jednom mesečno, 2. u mesecu.</p>
 </body></html>`,
     });
   } catch (e) {

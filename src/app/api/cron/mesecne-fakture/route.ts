@@ -77,8 +77,11 @@ async function cronHandler(request: Request) {
     }
   }
 
-  // Podsetnik za sve što čeka klik - i za ovaj mesec i za zaostale. Cron ide svaki
-  // dan, pa mejl stiže svakog jutra dok faktura ne ode i firmi i na SEF.
+  // Podsetnik jednom mesečno, 2. u mesecu: dan posle pripreme, za sve što još čeka
+  // klik (i zaostale). Nataša ne želi svakodnevni mejl (odluka 08.10.2026).
+  if (dan !== 2) {
+    return NextResponse.json({ period, pravila: zaDanas.length, pripremljeno });
+  }
   const { data: cekaju, error: cekErr } = await admin
     .from("recurring_invoice_runs")
     .select("period, iznos, faktura_sent_at, sef_invoice_id, recurring:recurring_id(company:company_id(naziv))")
