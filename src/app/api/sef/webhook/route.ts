@@ -41,6 +41,27 @@ export async function POST(request: Request) {
     .limit(1)
     .maybeSingle();
 
+  // Mesečna faktura (BAREL) nije u `orders` nego u svojoj tabeli.
+  if (!nase?.company_order_group) {
+    const { data: mesecna } = await admin
+      .from("recurring_invoice_runs")
+      .select("id")
+      .eq("sef_invoice_id", sefInvoiceId)
+      .maybeSingle();
+    if (mesecna) {
+      const stanje = await procitajStatus(sefInvoiceId);
+      if (!stanje.ok) return NextResponse.json({ ok: true, odlozeno: true });
+      await admin
+        .from("recurring_invoice_runs")
+        .update({
+          sef_status: izvuciStatus(stanje.data) ?? "Unknown",
+          sef_response: stanje.data as unknown as Json,
+        })
+        .eq("id", mesecna.id);
+      return NextResponse.json({ ok: true, status: izvuciStatus(stanje.data) });
+    }
+  }
+
   // Obaveštenje za fakturu koju nismo mi poslali (ručno kucana u SEF panelu) -
   // nije greška, samo nemamo šta da upišemo.
   if (!nase?.company_order_group) {

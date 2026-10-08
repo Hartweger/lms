@@ -71,6 +71,28 @@ async function cronHandler(request: Request) {
     osvezeno += 1;
   }
 
+  // Mesečne fakture (BAREL) žive u svojoj tabeli. Do 08.10.2026 se ovde nisu
+  // osvežavale, pa su u adminu zauvek stajale na „Sending" iako su bile prihvaćene.
+  const { data: mesecne } = await admin
+    .from("recurring_invoice_runs")
+    .select("id, sef_invoice_id, sef_status")
+    .not("sef_invoice_id", "is", null);
+  for (const m of mesecne ?? []) {
+    if (!m.sef_invoice_id || jeZavrsenStatus(m.sef_status)) continue;
+    const stanje = await procitajStatus(m.sef_invoice_id);
+    if (!stanje.ok) {
+      neuspesno.push(`${m.sef_invoice_id}: ${stanje.greska}`);
+      continue;
+    }
+    const status = izvuciStatus(stanje.data);
+    if (!status || status === m.sef_status) continue;
+    await admin
+      .from("recurring_invoice_runs")
+      .update({ sef_status: status, sef_response: stanje.data as unknown as Json })
+      .eq("id", m.id);
+    osvezeno += 1;
+  }
+
   // Ulazne fakture: gleda se unazad 35 dana, jer faktura ume da stigne sa
   // zakašnjenjem, a upsert po `sef_invoice_id` ionako ne pravi duplikate.
   const danas = new Date();
