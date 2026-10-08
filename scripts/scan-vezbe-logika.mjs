@@ -86,13 +86,25 @@ const IZUZETAK = /nije razdvojiv/i;
 // Spisak raste kad se pojavi nov lažan nalaz.
 const BEZ_KVACICA_OK = new Set(["sto", "visi", "deca", "decu", "deci", "posao", "poslu", "posla",
   "prijatelje", "prijatelji", "prijatelja", "razgovaramo", "razgovarate", "razgovaraju", "svejedno",
-  "vas", "nas", "sve", "svi", "para", "pare", "kosa", "luk", "sok", "pas", "rana", "cena", "cene"]);
+  "vas", "nas", "sve", "svi", "para", "pare", "kosa", "luk", "sok", "pas", "rana", "cena", "cene",
+  "reci",   // imperativ („Reci i predloži drugo"), ne „reči"
+  "vase"]); // nemačka reč die Vase, ne „vaše"
 
 // Parovi gde su OBE varijante prave nemačke reči - „schon" nije loše napisano „schön".
 const UMLAUT_OK = new Set(["schon", "musste", "mussten", "konnte", "konnten", "wurde", "durfte",
   "mochte", "fuhr", "ware", "hatte", "tochter", "kochen", "kochte", "anfangen", "hort", "horte",
   "vertrage", "kindergarten", "zahlen", "fordern", "sohn", "wusste", "danke", "magen", "messen",
-  "offen", "stehen", "halten", "fallt", "halt", "losung", "sturm", "schwer", "druckt", "stucke"]);
+  "offen", "stehen", "halten", "fallt", "halt", "losung", "sturm", "schwer", "druckt", "stucke",
+  // prave nemačke reči koje liče na verziju bez umlauta - nikad nisu greška:
+  "kasse",    // die Kasse, nije „Käse"
+  "last",     // die Last, nije „lässt"
+  "drucken",  // drucken (štampati), nije „drücken"
+  "gewohnt",  // gewohnt (navikao), nije „gewöhnt"
+  "kalte",    // kalte (hladan), nije „Kälte"
+  "lasst",    // lasst (imperativ), nije „lässt"
+  "schwache", // schwache (slab), nije „Schwäche"
+  "grunde",   // „im Grunde", nije „Gründe"
+  "fuhren"]); // fuhren (Präteritum od fahren), nije „führen"
 
 const nalazi = [];
 const dodaj = (grupa, pouzdanost, tip, gde, detalj, extra = {}) =>
@@ -240,7 +252,10 @@ if (provere.has("C")) {
   const skiniUmlaut = (s) => s.replace(/[äÄ]/g, "a").replace(/[öÖ]/g, "o").replace(/[üÜ]/g, "u").replace(/ß/g, "s").replace(/ss/gi, "s");
 
   // Rečnik se gradi iz CELOG sajta (ne samo iz --kurs), da poređenje ima oslonac.
-  const sveLekcije = await svi("lessons", "id, sections");
+  // Naslovi MORAJU da uđu u rečnik, inače „Zavrsni ispit A1.1" prolazi neprimećeno:
+  // „Završni" postoji 6x, ali samo u naslovima, pa bez ovoga nema sa čim da se poredi.
+  const sveLekcije = await svi("lessons", "id, title, sections");
+  const sveVezbe = await svi("exercises", "id, title");
   const svaPitanja = await svi("exercise_questions", "question, options, correct_answer");
   const kvaciceRec = new Map(), umlautRec = new Map();
   const upisi = (t) => {
@@ -257,14 +272,19 @@ if (provere.has("C")) {
   };
   const broj = new Map();
   const prebroj = (t) => { for (const w of String(t).match(/[A-Za-zÄÖÜäöüßČĆŠŽĐčćšžđ]{3,}/g) || []) { const k = w.toLowerCase(); broj.set(k, (broj.get(k) || 0) + 1); } };
-  for (const l of sveLekcije) { upisi(JSON.stringify(l.sections)); prebroj(JSON.stringify(l.sections)); }
-  for (const q of svaPitanja) { const t = [q.question, q.correct_answer, JSON.stringify(q.options)].join(" "); upisi(t); prebroj(t); }
+  const uKorpus = (t) => { upisi(t); prebroj(t); };
+  for (const l of sveLekcije) { uKorpus(JSON.stringify(l.sections)); uKorpus(l.title); }
+  for (const e of sveVezbe) uKorpus(e.title);
+  for (const q of svaPitanja) uKorpus([q.question, q.correct_answer, JSON.stringify(q.options)].join(" "));
 
   // Ključna provera: gola varijanta je sumnjiva samo ako je RETKA u odnosu na varijantu
   // sa kvačicama. Bez toga nemačko „das" pada na naše „daš", a „Tochter" na „Töchter".
-  const PRAG = 3;        // koliko puta oblik sa kvačicama/umlautom mora da postoji drugde
-  const MAX_GOLIH = 2;   // ako se goli oblik javlja češće od ovoga, to je prava reč
-  const ODNOS = 5;       // i mora biti bar toliko puta ređi od oblika sa kvačicama
+  // ODNOS radi glavni posao: nemačko „das" ima hiljade golih pojava naspram tri „daš",
+  // pa nikad ne prođe. MAX_GOLIH je samo gornja granica - ne sme biti nizak, jer se ista
+  // greška često ponavlja („Zavrsni" je na 4 mesta, a „Završni" na 17).
+  const PRAG = 3;         // koliko puta oblik sa kvačicama/umlautom mora da postoji drugde
+  const MAX_GOLIH = 10;   // preko ovoga je skoro sigurno prava reč, ne greška
+  const ODNOS = 3;        // goli oblik mora biti bar toliko puta ređi od oblika sa znakom
 
   const sumnjivo = (w, recnik, dozvoljeni, kljuc) => {
     const k = w.toLowerCase();
