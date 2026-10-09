@@ -103,6 +103,10 @@
     {
       "path": "/api/cron/mesecne-fakture",
       "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/api/cron/interes-termin",
+      "schedule": "30 8 * * *"
     }
   ]
 }

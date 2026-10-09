@@ -3438,3 +3438,75 @@ export async function sendDokumentEmail(o: {
     return null;
   }
 }
+
+/**
+ * „Termin koji si čekao je otvoren."
+ *
+ * Ide ljudima koji su na stranici kursa kliknuli „Obavesti me za sledeći
+ * termin". Do oktobra 2026 niko im se nije javljao kad se termin otvori -
+ * cron `interes-termin` zatvara taj krug.
+ */
+export async function sendTerminOtvoren(
+  to: string,
+  name: string,
+  opts: {
+    nivo: string;
+    startDate: string;
+    dani: string;
+    vreme: string;
+    profIme: string;
+    kursUrl: string;
+    cena: number | null;
+  },
+) {
+  try {
+    const resend = getResend();
+    if (!resend) return null;
+    const ime = name ? name.split(" ")[0] : "";
+    const datum = new Date(opts.startDate).toLocaleDateString("sr-Latn-RS", {
+      day: "numeric", month: "long", year: "numeric",
+    });
+    const cena = opts.cena
+      ? `<br>• ${new Intl.NumberFormat("sr-RS").format(opts.cena)} RSD`
+      : "";
+    const html = `<!doctype html><html><body style="margin:0;padding:0;background:#f8f9fa;font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a2e">
+<div style="max-width:560px;margin:0 auto;padding:28px 20px">
+  <div style="background:#fff;border-radius:12px;padding:28px;font-size:15px;line-height:1.65">
+    <p style="margin:0">Zdravo${ime ? ` ${esc(ime)}` : ""},</p>
+    <p style="margin:16px 0 0">ostavio/la si nam mejl da te obavestimo kad otvorimo termin za
+    <strong>${esc(opts.nivo)}</strong>. Otvoren je.</p>
+    <div style="background:#f8fcfd;border-left:3px solid #4fb1d3;border-radius:6px;padding:16px 18px;margin:20px 0">
+      <div style="font-size:15px;line-height:1.8">
+        • kreće ${esc(datum)}<br>
+        • ${esc(opts.dani)}, ${esc(opts.vreme)}<br>
+        ${opts.profIme ? `• profesorka: ${esc(opts.profIme)}<br>` : ""}
+        • grupa od 3 do 6 polaznika${cena}
+      </div>
+    </div>
+    <p style="margin:20px 0 0">Mesto se zauzima uplatom, a grupe su male - ako ti termin odgovara,
+    ne bih čekala dugo.</p>
+    <p style="margin:24px 0 0">
+      <a href="${opts.kursUrl}" style="background:#4fb1d3;color:#fff;text-decoration:none;
+      font-weight:700;padding:13px 26px;border-radius:8px;display:inline-block">Pogledaj i prijavi se</a>
+    </p>
+    <p style="margin:20px 0 0">Ako ti ovaj termin ne odgovara, samo odgovori na ovaj mejl - javićemo ti
+    za sledeći.</p>
+    <p style="margin:20px 0 0">Pozdrav,<br><strong>Hartweger tim</strong></p>
+  </div>
+  <div style="text-align:center;font-size:12px;color:#999;padding:18px 0">
+    Hartweger - Škola nemačkog jezika · <a href="https://www.hartweger.rs" style="color:#999">hartweger.rs</a><br>
+    Dobijaš ovaj mejl jer si tražio/la obaveštenje o terminu.
+    <a href="${odjavaUrl(to)}" style="color:#999">Odjavi se</a>
+  </div>
+</div></body></html>`;
+    return await sendEmail(resend, {
+      to,
+      subject: `Otvoren je termin za ${opts.nivo}`,
+      html,
+      bulk: true,
+    });
+  } catch (e) {
+    console.error("[email] sendTerminOtvoren pao:", e);
+    return null;
+  }
+}
