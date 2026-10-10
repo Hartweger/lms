@@ -161,8 +161,9 @@ export async function sendAcademyWelcomeEmail(to: string, name: string) {
       </div>
 
       <p style="font-size: 15px; line-height: 1.7; color: #444; margin: 0 0 18px;">
-        <strong>Sačuvaj ovaj mejl</strong> — u njemu ti je link za sve susrete. Pred prvo veče stiže
-        poruka sa pripremom i pristupom zajednici. Do tada ne moraš ništa.
+        <strong>Sačuvaj ovaj mejl</strong>, u njemu ti je link za sve susrete. Prezentacije i domaći
+        sa susreta koji su već bili čekaju te na platformi: na hartweger.rs se prijaviš svojim mejlom
+        i stiže ti link za ulaz.
       </p>
 
       <p style="font-size: 13px; line-height: 1.6; color: #888; margin: 0 0 22px;">
