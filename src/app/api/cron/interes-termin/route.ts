@@ -44,7 +44,7 @@ async function cronHandler(request: NextRequest) {
   const interakcije = must(
     await admin
       .from("crm_interactions")
-      .select("contact_id, meta, contact:contact_id(email, name)")
+      .select("contact_id, meta, occurred_at, contact:contact_id(email, name)")
       .in("meta->>tip", ["interes-za-grupu", "interes-obavesten"]),
     "crm_interactions",
   );
@@ -60,10 +60,16 @@ async function cronHandler(request: NextRequest) {
     }
     const c = Array.isArray(row.contact) ? row.contact[0] : row.contact;
     if (!c?.email || !meta.nivo) continue;
-    lidovi.push({ contactId: row.contact_id, email: c.email, ime: c.name ?? null, nivo: meta.nivo });
+    lidovi.push({
+      contactId: row.contact_id, email: c.email, ime: c.name ?? null, nivo: meta.nivo,
+      trazioAt: row.occurred_at ?? undefined,
+    });
   }
 
-  const zaSlanje = zaObavestiti(lidovi, grupe, vecObavesteni, danas);
+  // 2b) ko je posle zahteva već platio kurs ili ušao u grupu - njemu se ne javlja
+  const poslednjaKupovina = await kupovinePoMejlu(admin, lidovi.map((l) => l.email));
+
+  const zaSlanje = zaObavestiti(lidovi, grupe, vecObavesteni, danas, poslednjaKupovina);
   if (!zaSlanje.length) return NextResponse.json({ poslato: 0, cekaju: lidovi.length });
 
   // 3) detalji grupe i cena - konkretan termin prodaje bolje od gole stranice
@@ -116,6 +122,46 @@ async function cronHandler(request: NextRequest) {
   }
 
   return NextResponse.json({ poslato, kandidata: zaSlanje.length, cekaju: lidovi.length, greske });
+}
+
+/**
+ * mejl (mala slova) -> ISO poslednje plaćene porudžbine ili upisa u grupu.
+ * Upiti idu u komadima po mejlovima lidova (Supabase tiho seče na 1000 redova).
+ * zack! članstvo nije kurs nemačkog i ne gasi zahtev.
+ */
+async function kupovinePoMejlu(admin: ReturnType<typeof createAdminClient>, mejlovi: string[]) {
+  const rezultat = new Map<string, string>();
+  const zabelezi = (mejl: string | null | undefined, kad: string | null | undefined) => {
+    if (!mejl || !kad) return;
+    const m = mejl.trim().toLowerCase();
+    const pre = rezultat.get(m);
+    if (!pre || kad > pre) rezultat.set(m, kad);
+  };
+  const svi = [...new Set(mejlovi.flatMap((m) => [m.trim(), m.trim().toLowerCase()]))];
+  for (let i = 0; i < svi.length; i += 200) {
+    const komad = svi.slice(i, i + 200);
+    const porudzbine = must(
+      await admin.from("orders").select("email, created_at, items")
+        .eq("payment_status", "completed").in("email", komad),
+      "orders",
+    );
+    for (const o of porudzbine ?? []) {
+      const items = (o.items ?? []) as { course_slug?: string }[];
+      if (items.length && items.every((it) => (it.course_slug ?? "").startsWith("zack"))) continue;
+      zabelezi(o.email, o.created_at);
+    }
+    const profili = must(await admin.from("user_profiles").select("id, email").in("email", komad), "user_profiles");
+    const mejlPoId = new Map((profili ?? []).map((p) => [p.id, p.email as string]));
+    if (mejlPoId.size) {
+      const upisi = must(
+        await admin.from("group_enrollments").select("user_id, enrolled_at")
+          .in("user_id", [...mejlPoId.keys()]).is("cancelled_at", null),
+        "group_enrollments",
+      );
+      for (const u of upisi ?? []) zabelezi(mejlPoId.get(u.user_id), u.enrolled_at);
+    }
+  }
+  return rezultat;
 }
 
 export const GET = withCronLog("interes-termin", cronHandler);

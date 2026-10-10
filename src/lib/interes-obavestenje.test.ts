@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { zaObavestiti, kljuc, type Lid, type OtvorenaGrupa } from "./interes-obavestenje";
+import { zaObavestiti, kljuc, kupioPosleZahteva, type Lid, type OtvorenaGrupa } from "./interes-obavestenje";
 
 const DANAS = "2026-10-09";
 
@@ -76,5 +76,27 @@ describe("zaObavestiti", () => {
 
   it("preskače neispravan mejl", () => {
     expect(zaObavestiti([lid("c1", "A1.1", "bez-majmuna")], [grupa("g1", "A1.1", "2026-10-19")], new Set(), DANAS)).toEqual([]);
+  });
+
+  it("ćuti kad je čovek posle zahteva već kupio (slučaj Ana, 10.10.2026)", () => {
+    const ana = { ...lid("c1", "B2.1", "ana@test.rs"), trazioAt: "2026-09-09T08:55:51Z" };
+    const kupovine = new Map([["ana@test.rs", "2026-09-10T11:47:29Z"]]);
+    expect(zaObavestiti([ana], [grupa("g1", "B2.1", "2026-10-20")], new Set(), DANAS, kupovine)).toEqual([]);
+  });
+
+  it("kupovina pre zahteva ne gasi novi zahtev", () => {
+    const jelena = { ...lid("c1", "Konverzacija B1+", "j@test.rs"), trazioAt: "2026-08-20T10:00:00Z" };
+    const kupovine = new Map([["j@test.rs", "2026-07-14T10:00:00Z"]]);
+    expect(zaObavestiti([jelena], [grupa("g1", "Konverzacija B1+", "2026-10-13")], new Set(), DANAS, kupovine)).toHaveLength(1);
+  });
+});
+
+describe("kupioPosleZahteva", () => {
+  it("isti dan se računa kao rešen", () => {
+    expect(kupioPosleZahteva("2026-09-20T18:00:00Z", "2026-09-20T09:00:00Z")).toBe(true);
+  });
+  it("bez podatka nije rešen", () => {
+    expect(kupioPosleZahteva(undefined, "2026-09-20T09:00:00Z")).toBe(false);
+    expect(kupioPosleZahteva("2026-09-20T09:00:00Z", undefined)).toBe(false);
   });
 });
