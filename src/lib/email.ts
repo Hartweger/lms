@@ -95,7 +95,7 @@ const ACADEMY_MEET_PHONE = "+381 11 4250145";
 const ACADEMY_MEET_PIN = "575 421 818 2660";
 
 /**
- * „Dodaj u kalendar" za svih 12 termina odjednom (RRULE, 12 sreda od 30.9.).
+ * „Dodaj u kalendar" za svih 12 termina odjednom (RRULE, 12 sreda od 7.10. do 23.12.).
  * Vreme se NAMERNO šalje kao lokalno uz ctz=Europe/Belgrade, a ne u UTC: letnje
  * računanje vremena prestaje 25.10.2026, pa bi UTC serija od 28.10. pomerila
  * susrete na 20:30.
@@ -103,7 +103,7 @@ const ACADEMY_MEET_PIN = "575 421 818 2660";
 const ACADEMY_CALENDAR_URL =
   "https://calendar.google.com/calendar/render?action=TEMPLATE" +
   "&text=" + encodeURIComponent("NH Academy - Generacija II") +
-  "&dates=20260930T193000/20260930T210000" +
+  "&dates=20261007T193000/20261007T210000" +
   "&ctz=Europe/Belgrade" +
   "&recur=RRULE:FREQ=WEEKLY;COUNT=12" +
   "&location=" + encodeURIComponent(ACADEMY_MEET_URL) +
@@ -145,8 +145,8 @@ export async function sendAcademyWelcomeEmail(to: string, name: string) {
       <div style="background: #fdf5f7; border-left: 3px solid #c94f6d; border-radius: 6px; padding: 16px 18px; margin: 0 0 20px;">
         <div style="font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">Kad počinjemo</div>
         <div style="font-size: 15px; color: #1a1a1a; line-height: 1.7;">
-          <strong>Sreda, 30. septembar u 19:30</strong><br>
-          12 susreta, sredom, do 16. decembra<br>
+          <strong>Sredom u 19:30, od 7. oktobra</strong><br>
+          12 susreta, poslednji je 23. decembra<br>
           Preko Google Meet-a, link je isti svaki put:<br>
           <a href="${ACADEMY_MEET_URL}" style="color: #c94f6d; font-weight: 600;">${ACADEMY_MEET_URL.replace("https://", "")}</a>
         </div>
