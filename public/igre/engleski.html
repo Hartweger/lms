@@ -87,6 +87,8 @@ button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;touch-
 .izbor.slovo{font-size:40px}
 .izbor.trese,.trese{animation:trese .35s}
 .dane .izbor{font-size:30px;min-height:76px}
+.dane.mogu .izbor{font-size:22px}
+.dzungla-slika{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:#E3F3E6;border-radius:18px;padding:10px;font-size:52px;line-height:1.1;text-align:center;width:100%;max-width:300px}
 
 /* slozi rec */
 .mesta{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:10px 0 4px}
@@ -212,6 +214,10 @@ const TEME = {
     { w: "snake", e: "🐍", sr: "змија", cl: "a snake" },
     { w: "crocodile", e: "🐊", sr: "крокодил", cl: "a crocodile" }
   ] },
+  radnje: { ime: "Шта могу?", em: "🏃", opis: "Unit 1 – run, swim…", boja: "dzungla", reci: [
+    { w: "run", e: "🏃", sr: "трчати" }, { w: "swim", e: "🏊", sr: "пливати" },
+    { w: "fly", e: "🪽", sr: "летети" }, { w: "climb trees", e: "🧗", sr: "пењати се на дрвеће" }
+  ] },
   boje: { ime: "Боје", em: "🎨", opis: "colours", boja: "abc", reci: [
     { w: "red", c: "#E53935", sr: "црвена" }, { w: "blue", c: "#1E6FE0", sr: "плава" },
     { w: "yellow", c: "#FFD21F", sr: "жута" }, { w: "green", c: "#2BA84A", sr: "зелена" },
@@ -268,13 +274,15 @@ const IGRE = {
   citaj:   { ime: "Прочитај и споји", em: "📖", opis: "Прочитај реч, нађи слику", boja: "citaj", tema: true },
   sta:     { ime: "Шта је ово?", em: "🖼️", opis: "Погледај слику, изабери реч", boja: "citaj", tema: true },
   senka:   { ime: "Ко се крије?", em: "🌴", opis: "Погоди по сенци", boja: "dzungla", tema: true, samoSlike: true },
-  dane:    { ime: "Yes or No?", em: "✅", opis: "Слушај питање и одговори", boja: "slusaj", tema: true },
+  dane:    { ime: "Yes or No?", em: "✅", opis: "Слушај питање и одговори", boja: "slusaj", tema: true, bez: ["radnje"] },
   slozi:   { ime: "Сложи реч", em: "🧩", opis: "Слово по слово", boja: "igra", tema: true },
   baloni:  { ime: "Балони", em: "🎈", opis: "Чуј реч, пукни балон", boja: "igra", tema: true },
   memorija:{ ime: "Меморија", em: "🃏", opis: "Слика + реч = пар", boja: "igra", tema: true },
   trka:    { ime: "Трка", em: "⏱️", opis: "1 минут, што више речи", boja: "igra" },
   abc:     { ime: "Слова", em: "🔤", opis: "Чуј слово, нађи га", boja: "abc" },
   azRed:   { ime: "Од A до Z", em: "🚂", opis: "Додирни слова по реду", boja: "abc" },
+  vidis:   { ime: "Can you see a…?", em: "🔭", opis: "Ко се крије у џунгли?", boja: "dzungla" },
+  mogu:    { ime: "Can zebras run?", em: "🦓", opis: "Yes, they can! / No, they can't!", boja: "dzungla" },
   kontrolni:{ ime: "Unit 1 – провера", em: "📝", opis: "Као у књизи на страни 10: слова, речи, Yes/No", boja: "kontrolni" }
 };
 
@@ -297,6 +305,26 @@ const GEN = {
       govori: q, opcije: [{ html: "Yes.", v: "Yes" }, { html: "No.", v: "No" }], tacno: da ? "Yes" : "No", dane: true,
       posle: da ? `Yes, it is!` : `No, it isn't. It's ${r.cl}.`,
       pomoc: `На слици: <b>${r.w}</b> (${r.sr}). Питање: <b>${pitam.w}</b> (${pitam.sr}).` };
+  },
+  /* Unit 1: „Can you see a (monkey)?" – slika džungle sa 3 skrivene životinje */
+  vidis: () => {
+    const dz = shuffle(TEME.dzungla.reci), ima = dz.slice(0, 3), r = Math.random() < .5 ? pick(ima) : pick(dz.slice(3));
+    const da = ima.includes(r), polja = shuffle([...ima.map(x => x.e), "🌿", "🌴", "🌿", "🍃", "🌳", "🌴"]);
+    const q = `Can you see ${r.cl}?`;
+    return { uputa: "Погледај џунглу. Слушај и одговори.", prikaz: `<div class="dzungla-slika">${polja.map(e => `<span>${e}</span>`).join("")}</div><div class="pitanje-en en">${q} <button class="zvucnik mali" data-govori="${q}" aria-label="Слушај">🔊</button></div>`,
+      govori: q, opcije: [{ html: "Yes.", v: "Yes" }, { html: "No.", v: "No" }], tacno: da ? "Yes" : "No", dane: true,
+      posle: da ? "Yes, I can!" : "No, I can't.", pomoc: `<b>${r.w}</b> = ${r.sr}. Тражи ${r.e} на слици.` };
+  },
+  /* Unit 1: „Can (zebras) (run)?" – samo nesporne činjenice */
+  mogu: () => {
+    const F = [["monkeys","🐒","climb trees",1],["monkeys","🐒","fly",0],["monkeys","🐒","run",1],["lions","🦁","run",1],["lions","🦁","fly",0],
+      ["tigers","🐯","swim",1],["tigers","🐯","run",1],["tigers","🐯","fly",0],["zebras","🦓","run",1],["zebras","🦓","fly",0],["zebras","🦓","climb trees",0],
+      ["snakes","🐍","swim",1],["snakes","🐍","run",0],["snakes","🐍","fly",0],["crocodiles","🐊","swim",1],["crocodiles","🐊","fly",0],["birds","🐦","fly",1],["fish","🐟","swim",1],["fish","🐟","run",0]];
+    const [ko, e, sta, da] = pick(F), rad = TEME.radnje.reci.find(x => x.w === sta);
+    const q = `Can ${ko} ${sta}?`;
+    return { uputa: "Слушај и одговори.", prikaz: `<div><span class="emo">${e}</span> <span class="emo" style="font-size:60px">${rad.e}</span></div><div class="pitanje-en en">${q} <button class="zvucnik mali" data-govori="${q}" aria-label="Слушај">🔊</button></div>`,
+      govori: q, opcije: [{ html: "Yes, they can.", v: "Yes" }, { html: "No, they can't.", v: "No" }], tacno: da ? "Yes" : "No", dane: true, mogu: true,
+      posle: da ? "Yes, they can!" : "No, they can't!", pomoc: `<b>${sta}</b> = ${rad.sr}` };
   },
   abc: () => {
     const vrsta = pick(["cuj", "cuj", "posle", "prvo"]);
@@ -402,6 +430,8 @@ if (typeof document !== "undefined") {
       <div class="odeljak">📚 Учимо речи – додирни и слушај</div>
       <div class="plocice">${Object.entries(TEME).map(([id, t]) => `<button class="plocica mala" style="--boja:${boja(t.boja)}" data-lek="${id}"><span class="em">${t.em}</span><b>${t.ime}</b><small>${t.opis}</small></button>`).join("")}
         <button class="plocica mala" style="--boja:${boja("abc")}" data-lek="abeceda"><span class="em">🔤</span><b>Абецеда</b><small>A B C … Z</small></button></div>
+      <div class="odeljak">🐯 Unit 1 – Playroom Safari</div>
+      <div class="plocice">${["vidis", "mogu"].map(i => plocica(i)).join("")}</div>
       <div class="odeljak">Слушај 👂</div>
       <div class="plocice">${["slusaj", "dane", "baloni"].map(i => plocica(i)).join("")}</div>
       <div class="odeljak">Читај 📖</div>
@@ -427,14 +457,14 @@ if (typeof document !== "undefined") {
   }
 
   /* ---------- izbor teme ---------- */
-  function bazen(tema, samoSlike) {
-    const p = tema === "sve" ? SVE : TEME[tema].reci;
+  function bazen(tema, samoSlike, bez) {
+    const p = tema === "sve" ? SVE.filter(r => !(bez || []).includes(r.tema)) : TEME[tema].reci;
     return samoSlike ? p.filter(r => r.e) : p;
   }
   function izborTeme(id) {
     stop(); R = null;
     const g = IGRE[id];
-    const teme = Object.entries(TEME).filter(([, t]) => !g.samoSlike || t.reci.some(r => r.e));
+    const teme = Object.entries(TEME).filter(([tid, t]) => (!g.samoSlike || t.reci.some(r => r.e)) && !(g.bez || []).includes(tid));
     app.innerHTML = zaglavlje(`${g.em} ${g.ime}`, true) + `<p class="uputa" style="text-align:left">Које речи вежбамо?</p>
       <div class="teme">${teme.map(([tid, t]) => `<button class="tema${tid === "dzungla" ? " siroka" : ""}" style="--boja:${boja(t.boja)}" data-tema="${tid}"><span class="em">${t.em}</span><span><b>${t.ime}</b><small>${t.opis}</small></span></button>`).join("")}
       <button class="tema siroka" style="--boja:${boja("igra")}" data-tema="sve"><span class="em">🔀</span><span><b>Све измешано</b><small>речи из свих тема</small></span></button></div>`;
@@ -459,17 +489,17 @@ if (typeof document !== "undefined") {
   /* ---------- runda pitanja sa izborom ---------- */
   function spisakPitanja() {
     const { id, tema, g } = R;
-    if (id === "abc") return Array.from({ length: 10 }, () => () => GEN.abc());
+    if (id === "abc" || id === "vidis" || id === "mogu") return Array.from({ length: 10 }, () => () => GEN[id]());
     if (id === "kontrolni") {
       const dz = TEME.dzungla.reci;
-      const red = [["abc"], ["abc"], ["senka", 0], ["senka", 1], ["citaj", 2], ["citaj", 3], ["slusaj", 4], ["slusaj", 5], ["dane", 0], ["dane", 1]];
+      const red = [["abc"], ["abc"], ["senka", 0], ["senka", 1], ["citaj", 2], ["citaj", 3], ["slusaj", 4], ["dane", 5], ["vidis"], ["mogu"]];
       const ish = shuffle(dz);
-      return red.map(([vr, i]) => vr === "abc" ? () => { const z = GEN.abc(); return z; } : () => GEN[vr](ish[i % 6], dz));
+      return red.map(([vr, i]) => i === undefined ? () => GEN[vr]() : () => GEN[vr](ish[i % 6], dz));
     }
-    const p = bazen(tema, g.samoSlike);
+    const p = bazen(tema, g.samoSlike, g.bez);
     let reci = shuffle(p);
     while (reci.length < 10) reci = reci.concat(shuffle(p));
-    return reci.slice(0, 10).map(r => () => GEN[id](r, tema === "sve" ? SVE : null));
+    return reci.slice(0, 10).map(r => () => GEN[id](r, tema === "sve" ? p : null));
   }
   function runda() {
     stop();
@@ -486,7 +516,7 @@ if (typeof document !== "undefined") {
         <div class="karta" id="karta">
           <p class="uputa">${z.uputa}</p>
           <div class="prikaz" id="prikaz">${z.prikaz}</div>
-          <div class="izbori${z.dane ? " dane" : ""}">${z.opcije.map(o => `<button class="izbor${o.klasa ? " " + o.klasa : ""}" data-v="${o.v}">${o.html}</button>`).join("")}</div>
+          <div class="izbori${z.dane ? " dane" : ""}${z.mogu ? " mogu" : ""}">${z.opcije.map(o => `<button class="izbor${o.klasa ? " " + o.klasa : ""}" data-v="${o.v}">${o.html}</button>`).join("")}</div>
           <div class="povratna" id="povratna" aria-live="polite"></div>
           <div id="pomoc"></div>
           ${z.pomoc ? `<button class="pomoc-dugme" id="pomocBtn">💡 Помоћ</button>` : ""}
@@ -521,7 +551,7 @@ if (typeof document !== "undefined") {
 
   /* ---------- složi reč ---------- */
   function slozi() {
-    const p = bazen(R.tema).filter(r => r.w.length <= 9);
+    const p = bazen(R.tema).filter(r => r.w.length <= 9 && !r.w.includes(" "));
     let reci = shuffle(p); while (reci.length < 8) reci = reci.concat(shuffle(p));
     const S2 = { i: 0, n: 8, zv: 0, reci: reci.slice(0, 8) };
     const g = R.g;
@@ -617,7 +647,7 @@ if (typeof document !== "undefined") {
         const [x, y] = otvorene; otvorene = [];
         if (karte[x].r.w === karte[y].r.w && karte[x].slika !== karte[y].slika) {
           [x, y].forEach(j => dugmad[j].classList.add("par")); parova++; zvezdica(dugmad[y]); govori(karte[x].r.w);
-          if (parova === 6) setTimeout(() => kraj(g, 6, () => pokreni("memorija", R.tema)), 900);
+          if (parova === p.length) setTimeout(() => kraj(g, p.length, () => pokreni("memorija", R.tema)), 900);
         } else {
           zauzeto = true;
           setTimeout(() => { [x, y].forEach(j => { dugmad[j].classList.remove("okrenuta"); dugmad[j].innerHTML = `<span class="poledjina">?</span>`; }); zauzeto = false; }, 1100);
