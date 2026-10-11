@@ -19,6 +19,7 @@ import { napraviKod } from "@/lib/zack/kod";
 import type { ZackGostMeta } from "@/lib/zack/gost";
 import { POKLON_DO, jePoklonStavka, type ZackPoklonMeta } from "@/lib/zack/poklon";
 import { KONSULTACIJA_SLUG } from "@/lib/konsultacija";
+import { oznaciKupca } from "@/lib/crm/mark-customer";
 
 interface OrderItem { course_id: string; course_slug: string; title: string; price: number; }
 
@@ -675,7 +676,22 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
     }
   }
 
-  await admin.from("orders").update({ payment_status: "completed", granted: true, grant_lock_at: null }).eq("id", orderId);
+  const { error: completedError } = await admin.from("orders").update({ payment_status: "completed", granted: true, grant_lock_at: null }).eq("id", orderId);
+  // CRM: lid koji je upravo platio prelazi u „upisan" (pouka Nikoline Mataije, 11.10.2026 -
+  // dobila je preporuku kurseva tri sata posle kupovine). SAMO prva naplata: rata 2-12 bi
+  // vratila u „upisan" nekoga koga je CRM namerno vratio u „nov" posle kontakt forme
+  // (fazaPosleSignala). Zack! članstvo gore (roditelj kupuje detetu aplikaciju) se ne računa -
+  // to nije kupovina škole nemačkog, pa ne sme da sakrije lid iz levka. Best-effort, kao
+  // GA4 i Meta: pad CRM-a ne sme da obori dodelu pristupa ni mejlove.
+  // Ako upis completed nije prošao, naplata za nas još nije potvrđena - faza čeka retry.
+  if (jePrvaNaplata && !completedError) {
+    try {
+      await oznaciKupca(admin, order);
+    } catch (e) {
+      console.error(`[grant] CRM oznaka kupca pala (order ${orderId}):`, e);
+      Sentry.captureException(e);
+    }
+  }
   // Kupon troši max_uses tek na NAPLATU (jedina tačka gde order postaje completed) —
   // odbijena kartica / otkazana uplatnica ne sme da pojede limit. Idempotentno preko
   // completed-guarda na vrhu. Best-effort: brojač ne sme da obori dodelu pristupa.

@@ -311,6 +311,66 @@ describe("grantAccessForOrder", () => {
       expect(Math.abs(new Date(access.expires_at as string).getTime() - zaGodinu.getTime())).toBeLessThan(60_000);
     });
   });
+
+  describe("CRM: kupovina pomera lid u upisan", () => {
+    const lid = (over: Record<string, unknown> = {}) => ({
+      id: "c1", email: "kupac@example.com", stage: "kontaktiran", name: null, user_id: null, ...over,
+    });
+    const unlocks = [{ purchasable_course_id: "c-prod", content_course_id: "c-content" }];
+
+    it("prva naplata: lid iz levka postaje upisan, sa tragom i nalogom", async () => {
+      h.fake = createFakeAdmin({ orders: [videoOrder({ email: "KUPAC@example.com" })], course_unlocks: unlocks, crm_contacts: [lid()] });
+
+      const res = await grantAccessForOrder("o1");
+
+      expect(res.ok).toBe(true);
+      const c = h.fake.row("crm_contacts", (r) => r.id === "c1")!;
+      expect(c.stage).toBe("upisan");
+      expect(c.user_id).toBe("u1");
+      expect(c.name).toBe("Test Kupac");
+      expect(h.fake.row("crm_interactions", (r) => r.contact_id === "c1")!.summary).toContain("1001");
+    });
+
+    it("nema CRM kontakta: ne pravi ga", async () => {
+      h.fake = createFakeAdmin({ orders: [videoOrder()], course_unlocks: unlocks, crm_contacts: [] });
+      await grantAccessForOrder("o1");
+      expect(h.fake.tables.get("crm_contacts")).toHaveLength(0);
+    });
+
+    it("pad CRM upisa NE obara dodelu pristupa ni mejl (Sentry vidi)", async () => {
+      h.fake = createFakeAdmin({ orders: [videoOrder()], course_unlocks: unlocks, crm_contacts: [lid()] });
+      h.fake.failUpdate("crm_contacts", "CRM pao");
+
+      const res = await grantAccessForOrder("o1");
+
+      expect(res.ok).toBe(true);
+      expect(h.fake.row("orders", (r) => r.id === "o1")!.payment_status).toBe("completed");
+      expect(h.fake.row("course_access", (r) => r.user_id === "u1")).toBeTruthy();
+      expect(sendWelcomeEmail).toHaveBeenCalledTimes(1);
+      expect(h.sentry.captureException).toHaveBeenCalled();
+    });
+
+    it("rata 2+ ne dira fazu (kontakt vraćen u nov posle forme ostaje nov)", async () => {
+      h.fake = createFakeAdmin({
+        orders: [videoOrder({ subscription_id: "s1", installment_no: 2 })],
+        course_unlocks: unlocks,
+        subscriptions: [{ id: "s1", total_payments: 12 }],
+        crm_contacts: [lid({ stage: "nov", name: "Ana", user_id: "u1" })],
+      });
+
+      await grantAccessForOrder("o1");
+
+      expect(h.fake.row("crm_contacts", (r) => r.id === "c1")!.stage).toBe("nov");
+      expect(h.fake.tables.get("crm_interactions") ?? []).toHaveLength(0);
+    });
+
+    it("narudžbina bez imena i bez mejla ne puca", async () => {
+      h.fake = createFakeAdmin({ orders: [videoOrder({ full_name: null, email: null })], course_unlocks: unlocks, crm_contacts: [lid()] });
+      const res = await grantAccessForOrder("o1");
+      expect(res.ok).toBe(true);
+      expect(h.fake.row("crm_contacts", (r) => r.id === "c1")!.stage).toBe("kontaktiran");
+    });
+  });
 });
 
 describe("revokeAccessForOrder", () => {

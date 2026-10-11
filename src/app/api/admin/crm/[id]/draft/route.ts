@@ -7,6 +7,9 @@ import {
 import { SMILE_MODEL, buildSalesSystemPrompt } from "@/lib/naki/sales-prompt";
 import { userOwnsAnyVideoCourse } from "@/lib/coupon-ownership";
 import { buildCrmDraftUserPrompt } from "@/lib/crm/draft-prompt";
+import { opisKupca, type PlacenaNarudzbina, type PristupSaNaslovom } from "@/lib/crm/customer-status";
+import { normalizeEmail, pickAllByEmail } from "@/lib/crm/match";
+import { datumSlovima } from "@/lib/datum";
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
@@ -25,16 +28,52 @@ export async function POST(_request: Request, { params }: { params: Promise<{ id
     .from("crm_contacts").select("name,level,source,email,instagram_handle,user_id").eq("id", id).single();
   if (!contact) return NextResponse.json({ error: "Kontakt ne postoji." }, { status: 404 });
 
-  // Šta osoba već poseduje (da AI ne nudi ono što već ima)
-  let owned: string[] = [];
-  if (contact.user_id) {
-    const { data: access } = await admin
-      .from("course_access").select("courses(title)").eq("user_id", contact.user_id);
-    owned = (access ?? [])
-      .map((a: { courses: { title: string } | { title: string }[] | null }) =>
-        Array.isArray(a.courses) ? a.courses[0]?.title : a.courses?.title)
-      .filter((t): t is string => Boolean(t));
+  // Nalog polaznika: kontakt ga nema uvek upisanog (lid iz razgovora), a mejl ga ipak nalazi -
+  // isto povezivanje kao u upsertContact.
+  let userId: string | null = contact.user_id ?? null;
+  const email = normalizeEmail(contact.email);
+  if (!userId && email) {
+    const { data: prof } = await admin.from("user_profiles").select("id").ilike("email", email).maybeSingle();
+    userId = prof?.id ?? null;
   }
+
+  // Šta osoba već poseduje (da AI ne nudi ono što već ima) i da li je uopšte kupac.
+  let owned: string[] = [];
+  let pristup: PristupSaNaslovom[] = [];
+  if (userId) {
+    const { data: access } = await admin
+      .from("course_access").select("expires_at,source,courses(title)").eq("user_id", userId);
+    const rows = (access ?? []) as unknown as {
+      expires_at: string | null;
+      source: string | null;
+      courses: { title: string } | { title: string }[] | null;
+    }[];
+    pristup = rows.map((a) => ({
+      expires_at: a.expires_at,
+      source: a.source,
+      title: Array.isArray(a.courses) ? a.courses[0]?.title : a.courses?.title,
+    }));
+    owned = pristup.map((a) => a.title).filter((t): t is string => Boolean(t));
+  }
+
+  // Plaćene narudžbine po mejlu i po nalogu. Mejl-upit sa ilike može da povuče i tuđe redove
+  // (džoker „_"), pa se tačno poređenje radi posle - pogrešno upozorenje je skoro jednako
+  // loše kao propušteno.
+  const narudzbine: PlacenaNarudzbina[] = [];
+  const ORDER_COLS = "order_number,created_at,items,email";
+  if (email) {
+    const { data } = await admin.from("orders").select(ORDER_COLS)
+      .eq("payment_status", "completed").ilike("email", email).limit(50);
+    narudzbine.push(...pickAllByEmail((data ?? []) as (PlacenaNarudzbina & { email: string | null })[], email));
+  }
+  if (userId) {
+    const { data } = await admin.from("orders").select(ORDER_COLS)
+      .eq("payment_status", "completed").eq("user_id", userId).limit(50);
+    for (const n of (data ?? []) as (PlacenaNarudzbina & { email: string | null })[]) {
+      if (!narudzbine.some((x) => x.order_number === n.order_number && x.created_at === n.created_at)) narudzbine.push(n);
+    }
+  }
+  const kupac = opisKupca(narudzbine, pristup, datumSlovima);
 
   const { data: rawInteractions } = await admin
     .from("crm_interactions")
@@ -56,7 +95,7 @@ export async function POST(_request: Request, { params }: { params: Promise<{ id
 
   // Isti izvor istine kao Smile: katalog, otvoreni grupni termini, Nataša na 1:1,
   // probne i besplatne lekcije. Mejl-režim je u user poruci (src/lib/crm/draft-prompt.ts).
-  const ownsVideo = contact.user_id ? await userOwnsAnyVideoCourse(admin, contact.user_id) : false;
+  const ownsVideo = userId ? await userOwnsAnyVideoCourse(admin, userId) : false;
   const [catalogText, previewText, freeText, groupsText, natasaText] = await Promise.all([
     getCatalogText(admin),
     getPreviewLessonsText(admin),
@@ -78,6 +117,7 @@ export async function POST(_request: Request, { params }: { params: Promise<{ id
     izvor: contact.source,
     owned,
     razgovor,
+    kupac,
   });
 
   try {

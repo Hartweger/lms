@@ -54,3 +54,81 @@ export function pocetnaFaza(aktivanKupac: boolean, izvorSignala: string): "upisa
   if (izvorSignala === "kontakt-forma") return "nov";
   return aktivanKupac ? "upisan" : "nov";
 }
+
+/**
+ * Zaštita pri sastavljanju odgovora na lid: da li je osoba već kupac i šta je kupila.
+ *
+ * Pouka 11.10.2026 (Nikolina Mataija): kupila je 1:1 B2.1, a tri sata kasnije joj je iz CRM-a
+ * otišla preporuka grupnih kurseva. Ovde se gleda i plaćena narudžbina i važeći pristup.
+ * Pristup sam nije dovoljan za sve slučajeve (kupovina na uplatnicu, pristup još nije
+ * otvoren), a narudžbina sama ne vidi pristup dodeljen ručno. Ostatak stare migracije se
+ * ne računa (jeAktivanKupac).
+ */
+
+/** Plaćena narudžbina starija od ovoga ne zaustavlja ponudu: pristup traje godinu dana, pa je
+ *  osoba posle toga renewal lid (isto pravilo kao fazaPosleSignala za istekle kupce). */
+export const KUPAC_NARUDZBINA_DANA = 365;
+
+export interface PlacenaNarudzbina {
+  order_number?: string | number | null;
+  created_at: string;
+  items?: unknown;
+}
+
+export interface PristupSaNaslovom extends PristupRed {
+  title?: string | null;
+}
+
+export interface OpisKupca {
+  /** Kada, ljudski rečeno: „11. oktobra 2026 (narudžbina 2026-646)". */
+  kupio: string;
+  /** Šta je kupila: nazivi kurseva, odvojeni zarezom. */
+  sta: string;
+}
+
+function naslovi(items: unknown): string[] {
+  if (!Array.isArray(items)) return [];
+  return items
+    .map((i) => (i && typeof i === "object" ? (i as { title?: unknown }).title : null))
+    .filter((t): t is string => typeof t === "string" && t.trim().length > 0)
+    .map((t) => t.trim());
+}
+
+export function opisKupca(
+  narudzbine: PlacenaNarudzbina[] | null | undefined,
+  pristup: PristupSaNaslovom[] | null | undefined,
+  formatirajDatum: (iso: string) => string,
+  nowMs = Date.now(),
+): OpisKupca | null {
+  const granica = nowMs - KUPAC_NARUDZBINA_DANA * 24 * 3600 * 1000;
+  const sveze = (narudzbine ?? [])
+    .filter((n) => new Date(n.created_at).getTime() > granica)
+    .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+  if (sveze.length > 0) {
+    const poslednja = sveze[0];
+    const sta = [...new Set(sveze.flatMap((n) => naslovi(n.items)))];
+    const oznaka = poslednja.order_number != null && poslednja.order_number !== ""
+      ? ` (narudžbina ${poslednja.order_number})` : "";
+    return {
+      kupio: `${formatirajDatum(poslednja.created_at)}${oznaka}`,
+      sta: sta.length ? sta.join(", ") : "kurs (naziv nije zabeležen u narudžbini)",
+    };
+  }
+
+  // Bez sveže narudžbine, ali sa važećim pristupom koji nije migracioni ostatak.
+  if (jeAktivanKupac(pristup, nowMs)) {
+    const sta = [...new Set(
+      (pristup ?? [])
+        .filter((a) => !jeMigracioniOstatak(a.source)
+          && (a.expires_at === null || new Date(a.expires_at).getTime() > nowMs))
+        .map((a) => a.title?.trim())
+        .filter((t): t is string => Boolean(t)),
+    )];
+    return {
+      kupio: "datum narudžbine nije zabeležen, ali pristup na platformi je važeći",
+      sta: sta.length ? sta.join(", ") : "kurs na platformi",
+    };
+  }
+  return null;
+}

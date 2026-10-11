@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { normalizeEmail, pickMatch } from "./match";
+import { normalizeEmail, pickMatch, pickAllByEmail } from "./match";
 
 describe("normalizeEmail", () => {
   it("trimuje, lowercase-uje", () => {
@@ -29,5 +29,22 @@ describe("pickMatch", () => {
   it("mejl ima prioritet nad IG-om", () => {
     const r = [{ id: "a", email: "ana@x.rs", instagram_handle: "drugi" }];
     expect(pickMatch(r, { email: "ana@x.rs", instagram: "marko_ig" })).toBe("a");
+  });
+});
+
+describe("pickAllByEmail", () => {
+  const rows = [
+    { id: "a", email: "Ana@X.rs" },
+    { id: "b", email: "ana@x.rs " },
+    { id: "c", email: "drugi@x.rs" },
+    { id: "d", email: null },
+  ];
+  it("vraća sve redove sa istim mejlom, bez obzira na velika slova i razmake", () => {
+    expect(pickAllByEmail(rows, " ANA@x.rs").map((r) => r.id)).toEqual(["a", "b"]);
+  });
+  it("prazan ili nevalidan mejl ne poklapa ništa (ni redove bez mejla)", () => {
+    expect(pickAllByEmail(rows, null)).toEqual([]);
+    expect(pickAllByEmail(rows, "")).toEqual([]);
+    expect(pickAllByEmail(rows, "nije-mejl")).toEqual([]);
   });
 });
