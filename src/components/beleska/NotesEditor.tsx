@@ -329,10 +329,28 @@ export default function NotesEditor({
     };
   }, []);
 
+  /** „Snimi sad" na praznom, nedirnutom obrascu ne upisuje čas - samo kaže da nema šta da se snimi. */
+  async function handleSaveNow() {
+    if (!hasEditedRef.current) {
+      setSaveState("idle");
+      setSaveMessage("Nema šta da se snimi - upiši nešto u belešku.");
+      return;
+    }
+    await doSave();
+  }
+
   async function handleClose() {
     if (blocked) {
       // Nema na šta da se veže (paket pun/arhiviran, čas za ovaj datum ne postoji) - obrazac se
       // ni ne prikazuje, pa nema ni otkucanog teksta koji bi snimanje moglo da izgubi.
+      onClose();
+      return;
+    }
+    // PRAVILO: otvaranje beleške ne sme da potroši čas iz paketa. Snimanje UPISUJE čas, pa ako
+    // profesorka nije dirala ni jedno polje (samo je pogledala obrazac i zatvorila), ne snimamo.
+    // Bez ove provere je zatvaranje praznog obrasca upisivalo čas - viđeno na produkciji 01.10
+    // i 11.10.2026, dve prazne beleške i dva potrošena časa.
+    if (!hasEditedRef.current) {
       onClose();
       return;
     }
@@ -353,7 +371,8 @@ export default function NotesEditor({
       case "paket_pun":
         return saveMessage || "paket je iskorišćen";
       default:
-        return "";
+        // Mirna poruka uz dugmad (npr. „nema šta da se snimi") - vidi handleSaveNow.
+        return saveMessage || "";
     }
   }
 
@@ -458,7 +477,7 @@ export default function NotesEditor({
             {!blocked && (
               <button
                 type="button"
-                onClick={() => void doSave()}
+                onClick={() => void handleSaveNow()}
                 disabled={saveState === "saving"}
                 className="min-h-[44px] rounded-lg border border-gray-200 px-4 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
               >
