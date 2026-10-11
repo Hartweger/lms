@@ -328,6 +328,7 @@ const nextConfig: NextConfig = {
       { source: "/igre/hallo", destination: "/igre/hallo.html", permanent: false },
       { source: "/igre/dora", destination: "/igre/dora.html", permanent: false },
       { source: "/igre/matematika", destination: "/igre/dora.html", permanent: false },
+      { source: "/igre/engleski", destination: "/igre/engleski.html", permanent: false },
     ];
   },
   async headers() {

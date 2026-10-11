@@ -1,0 +1,754 @@
+<!doctype html>
+<html lang="sr-Cyrl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="light">
+<title>Енглески за други разред</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pozadina:#FFF8EC; --karta:#FFFFFF; --mastilo:#2A2433; --tiho:#6B6275;
+  --linija:#EADFCB; --tacno:#1F9D55; --tacno-svetlo:#E3F6EA;
+  --skoro:#C26A00; --skoro-svetlo:#FFF1DC;
+  --dzungla:#2E9E5B; --slusaj:#3B7DD8; --citaj:#8A4FD3; --igra:#E0603A; --abc:#D6457A; --kontrolni:#1F9D55;
+  --zvezda:#FFB800;
+  --senka:0 2px 0 rgba(42,36,51,.08), 0 6px 18px rgba(42,36,51,.06);
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--pozadina);color:var(--mastilo)}
+body{font-family:"Andika",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:18px;line-height:1.4;min-height:100vh;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;touch-action:manipulation}
+.omot{max-width:760px;margin:0 auto;padding:12px 16px 40px}
+.en{font-family:"Andika",system-ui,sans-serif}
+
+/* zaglavlje */
+.vrh{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.vrh h1{font-size:22px;margin:0;flex:1;line-height:1.15}
+.vrh .nazad{width:44px;height:44px;border-radius:14px;background:var(--karta);box-shadow:var(--senka);font-size:22px;display:grid;place-items:center}
+.zvezde-brojac{display:flex;align-items:center;gap:4px;background:var(--karta);border-radius:999px;padding:6px 12px;box-shadow:var(--senka);font-weight:700}
+.ikona-dugme{width:44px;height:44px;border-radius:14px;background:var(--karta);box-shadow:var(--senka);font-size:20px;display:grid;place-items:center}
+
+/* pocetna */
+.pozdrav{background:var(--karta);border-radius:22px;padding:16px 18px;box-shadow:var(--senka);margin-bottom:18px;display:flex;gap:14px;align-items:center}
+.pozdrav .lik{font-size:44px;line-height:1}
+.pozdrav b{font-size:22px;display:block}
+.pozdrav span{color:var(--tiho)}
+.odeljak{margin:20px 0 8px;font-size:15px;letter-spacing:.06em;text-transform:uppercase;color:var(--tiho);font-weight:700}
+.plocice{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.plocica{background:var(--karta);border-radius:20px;padding:14px 14px 12px;text-align:left;box-shadow:var(--senka);border-bottom:5px solid var(--boja);display:flex;flex-direction:column;gap:4px;min-height:118px;transition:transform .12s}
+.plocica:active{transform:scale(.97)}
+.plocica .em{font-size:30px;line-height:1}
+.plocica b{font-size:18px;line-height:1.15}
+.plocica small{color:var(--tiho);font-size:14px;line-height:1.25}
+.plocica.siroka{grid-column:1/-1;flex-direction:row;align-items:center;gap:14px;min-height:0}
+.plocica.siroka .em{font-size:38px}
+.plocica.mala{min-height:0}
+
+/* zadatak */
+.napredak{display:flex;gap:5px;margin:0 0 14px}
+.napredak i{flex:1;height:8px;border-radius:4px;background:var(--linija)}
+.napredak i.gotov{background:var(--boja)}
+.napredak i.sad{background:var(--boja);opacity:.4}
+.karta{background:var(--karta);border-radius:24px;padding:20px 18px;box-shadow:var(--senka);position:relative}
+.uputa{color:var(--tiho);font-size:17px;text-align:center;margin:0 0 6px}
+.prikaz{display:flex;flex-direction:column;align-items:center;gap:6px;min-height:120px;justify-content:center}
+.velika-rec{font-size:44px;font-weight:700;letter-spacing:.02em;color:var(--boja)}
+.pitanje-en{font-size:30px;font-weight:700;text-align:center}
+.zvucnik{width:84px;height:84px;border-radius:50%;background:var(--boja);color:#fff;font-size:38px;box-shadow:0 4px 0 rgba(0,0,0,.18);display:grid;place-items:center}
+.zvucnik:active{transform:translateY(2px);box-shadow:0 2px 0 rgba(0,0,0,.18)}
+.zvucnik.mali{width:48px;height:48px;font-size:22px}
+.povratna{margin-top:10px;font-size:18px;border-radius:14px;text-align:center;min-height:1.4em}
+.povratna.tacno{color:var(--tacno);font-weight:700}
+.povratna.skoro{background:var(--skoro-svetlo);color:#7A4300;padding:10px 14px}
+
+/* slike */
+.emo{font-size:96px;line-height:1.05;display:inline-block}
+.mrlja{display:inline-block;width:110px;height:110px;border-radius:50% 46% 52% 48%/48% 54% 46% 52%;background:var(--m);border:3px solid rgba(42,36,51,.12)}
+.jabuke{display:flex;flex-wrap:wrap;justify-content:center;gap:2px;max-width:220px;font-size:36px;line-height:1.1}
+.senka .emo{filter:brightness(0)}
+.mini{display:inline-flex;vertical-align:middle}.mini .emo{font-size:40px}.mini .mrlja{width:40px;height:40px}.mini .jabuke{font-size:14px;max-width:90px}
+.senka .emo.otkriven{filter:none;transition:filter .5s}
+
+/* izbori */
+.izbori{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}
+.izbor{min-height:64px;border-radius:18px;background:#F4EEE3;font-size:24px;font-weight:700;box-shadow:0 3px 0 #DDD2BF;padding:8px 10px;transition:transform .06s}
+.izbor:active{transform:translateY(2px)}
+.izbor:disabled{opacity:.3;box-shadow:none}
+.izbor.dobar{background:var(--tacno);color:#fff;box-shadow:0 3px 0 #15703C;opacity:1}
+.izbor.slikovni{min-height:120px;display:grid;place-items:center;background:#FBF7EF}
+.izbor.slikovni .emo{font-size:64px}
+.izbor.slikovni .mrlja{width:72px;height:72px}
+.izbor.slikovni .jabuke{font-size:22px;max-width:140px}
+.izbor.slikovni.dobar{background:var(--tacno-svetlo);box-shadow:0 0 0 4px var(--tacno)}
+.izbor.slovo{font-size:40px}
+.izbor.trese,.trese{animation:trese .35s}
+.dane .izbor{font-size:30px;min-height:76px}
+
+/* slozi rec */
+.mesta{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:10px 0 4px}
+.mesta span{width:44px;height:54px;border-bottom:4px solid var(--linija);font-size:36px;font-weight:700;display:grid;place-items:center;color:var(--boja)}
+.mesta span.sad{border-color:var(--boja)}
+.plocice-slova{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.plocice-slova button{width:58px;height:62px;border-radius:14px;background:#F4EEE3;box-shadow:0 3px 0 #DDD2BF;font-size:32px;font-weight:700}
+.plocice-slova button:disabled{visibility:hidden}
+.plocice-slova button.svetli{background:#FFF4C7;box-shadow:0 0 0 3px #F2C94C}
+
+/* A do Z */
+.abc-mreza{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:12px}
+@media (min-width:560px){.abc-mreza{grid-template-columns:repeat(7,1fr)}}
+.abc-mreza button{height:58px;border-radius:14px;background:#F4EEE3;box-shadow:0 3px 0 #DDD2BF;font-size:28px;font-weight:700}
+.abc-mreza button.gotovo{background:var(--tacno-svetlo);color:var(--tacno);box-shadow:none}
+.sledece{text-align:center;font-size:20px}
+.sledece b{font-size:30px;color:var(--abc)}
+
+.pomoc-dugme{display:block;margin:14px auto 0;background:#FFF4C7;color:#6B5200;border-radius:999px;padding:10px 20px;font-size:18px;font-weight:700;box-shadow:0 2px 0 #EAD98F}
+.pomoc{background:#FFF9E0;border-left:5px solid #F2C94C;border-radius:12px;padding:10px 12px;font-size:18px;margin-top:10px;text-align:left}
+.pomoc::before{content:"💡 "}
+.dalje{display:block;margin:16px auto 0;background:var(--boja);color:#fff;border-radius:16px;padding:14px 28px;font-size:20px;font-weight:700}
+
+/* kraj */
+.kraj{text-align:center}
+.kraj .slicica-nova{font-size:96px;line-height:1;margin:10px 0;animation:skok .7s}
+.kraj h2{margin:6px 0 4px;font-size:28px}
+.kraj p{color:var(--tiho);margin:4px 0 14px}
+.dugmad{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.dugme{border-radius:16px;padding:14px 22px;font-size:19px;font-weight:700;background:#F4EEE3;box-shadow:0 3px 0 #DDD2BF}
+.dugme.glavno{background:var(--boja);color:#fff;box-shadow:none}
+
+/* album */
+.album{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:10px}
+.album div{aspect-ratio:1;border-radius:16px;background:var(--karta);box-shadow:var(--senka);display:grid;place-items:center;font-size:36px}
+.album div.prazno{background:transparent;box-shadow:none;border:2px dashed var(--linija);font-size:18px;color:var(--linija)}
+.statistika{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.statistika div{background:var(--karta);border-radius:16px;padding:10px 14px;box-shadow:var(--senka);flex:1;min-width:130px}
+.statistika b{display:block;font-size:26px}
+
+/* izbor teme */
+.teme{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.tema{background:var(--karta);border-radius:18px;padding:14px;text-align:left;box-shadow:var(--senka);border-left:6px solid var(--boja);display:flex;gap:10px;align-items:center}
+.tema .em{font-size:32px}
+.tema b{display:block;font-size:19px;line-height:1.15}
+.tema small{color:var(--tiho);font-size:14px}
+.tema.siroka{grid-column:1/-1}
+
+/* baloni */
+.baloni{display:grid;grid-template-columns:repeat(2,1fr);gap:18px 10px;margin-top:18px;justify-items:center}
+.balon{width:128px;height:146px;position:relative;font-size:24px;font-weight:700;color:#fff;animation:lebdi 2.6s ease-in-out infinite}
+.balon .telo{position:absolute;inset:0 0 18px 0;border-radius:50% 50% 48% 48%/55% 55% 45% 45%;background:var(--bb);display:grid;place-items:center;box-shadow:inset -10px -12px 0 rgba(0,0,0,.08);padding:0 6px}
+.balon .telo::after{content:"";position:absolute;top:16%;left:22%;width:16px;height:26px;border-radius:50%;background:rgba(255,255,255,.45);transform:rotate(20deg)}
+.balon .konac{position:absolute;left:50%;bottom:0;width:2px;height:22px;background:#B9AE9B}
+.balon:nth-child(2){animation-delay:-.7s}.balon:nth-child(3){animation-delay:-1.4s}.balon:nth-child(4){animation-delay:-2s}
+.balon.pukao{animation:puca .35s forwards}
+.balon.ne{animation:trese .35s}
+
+/* memorija */
+.memorija{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media (min-width:560px){.memorija{grid-template-columns:repeat(4,1fr)}}
+.kartica{aspect-ratio:1/1.05;border-radius:16px;background:var(--igra);color:#fff;font-size:22px;font-weight:700;box-shadow:0 3px 0 #A8401F;display:grid;place-items:center;padding:4px;line-height:1.1;overflow:hidden}
+.kartica.okrenuta{background:var(--karta);color:var(--mastilo);box-shadow:var(--senka)}
+.kartica.par{background:var(--tacno-svetlo);color:var(--tacno);box-shadow:none}
+.kartica .poledjina{font-size:30px;opacity:.85}
+.kartica .emo{font-size:46px}
+.kartica .mrlja{width:54px;height:54px}
+.kartica .jabuke{font-size:15px;max-width:90px}
+
+/* trka */
+.vreme{height:14px;border-radius:7px;background:var(--linija);overflow:hidden;margin-bottom:12px}
+.vreme i{display:block;height:100%;background:var(--zvezda);transition:width 1s linear}
+.trka-skor{text-align:center;font-size:20px;margin-bottom:6px}
+.trka-skor b{font-size:28px}
+
+/* recnik (podseti se) */
+.zavesa{position:fixed;inset:0;background:rgba(42,36,51,.45);display:flex;align-items:flex-end;justify-content:center;z-index:8;padding:12px}
+@media (min-width:560px){.zavesa{align-items:center}}
+.uputstvo{background:var(--karta);border-radius:24px;padding:18px 16px 16px;max-width:600px;width:100%;max-height:90vh;overflow:auto}
+.lek-vrh{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.lek-vrh h2{flex:1;margin:0;font-size:22px}
+.lek-vrh button{width:40px;height:40px;border-radius:12px;background:var(--pozadina);font-size:18px}
+.recnik{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin:10px 0 14px}
+.recnik button{background:var(--pozadina);border-radius:16px;padding:10px 6px 8px;display:flex;flex-direction:column;align-items:center;gap:4px}
+.recnik button:active{transform:scale(.96)}
+.recnik .emo{font-size:52px}
+.recnik .mrlja{width:56px;height:56px}
+.recnik .jabuke{font-size:16px;max-width:100px;min-height:56px;align-content:center}
+.recnik b{font-size:20px}
+.recnik small{color:var(--tiho);font-size:14px}
+.recnik.slova{grid-template-columns:repeat(auto-fill,minmax(56px,1fr))}
+.recnik.slova b{font-size:30px}
+.recnik button.svira{box-shadow:0 0 0 3px var(--boja)}
+
+.leteca{position:fixed;font-size:34px;pointer-events:none;animation:leti 1s forwards;z-index:9}
+@keyframes leti{0%{opacity:0;transform:translateY(0) scale(.6)}20%{opacity:1;transform:translateY(-10px) scale(1.2)}100%{opacity:0;transform:translateY(-90px) scale(1)}}
+@keyframes trese{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+@keyframes skok{0%{transform:scale(.2)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
+@keyframes lebdi{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes puca{to{transform:scale(1.5);opacity:0}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:400px){.emo{font-size:80px}.velika-rec{font-size:38px}.balon{width:112px;height:132px;font-size:21px}.plocice-slova button{width:50px;height:56px;font-size:28px}.mesta span{width:36px;font-size:30px}}
+</style>
+</head>
+<body>
+<div class="omot" id="app"></div>
+
+<script>
+/* ===================== pomoćne ===================== */
+const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+/* ===================== reči (Happy House 2, Unit 1 + ranije) =====================
+   w = reč, sr = prevod za pomoć, cl = kako ide u „Is it ...?"
+   slika: e = emoji, c = boja (mrlja), n = broj (jabuke) */
+const TEME = {
+  dzungla: { ime: "Џунгла", em: "🐯", opis: "Unit 1 – животиње", boja: "dzungla", reci: [
+    { w: "monkey", e: "🐒", sr: "мајмун", cl: "a monkey" },
+    { w: "lion", e: "🦁", sr: "лав", cl: "a lion" },
+    { w: "tiger", e: "🐯", sr: "тигар", cl: "a tiger" },
+    { w: "zebra", e: "🦓", sr: "зебра", cl: "a zebra" },
+    { w: "snake", e: "🐍", sr: "змија", cl: "a snake" },
+    { w: "crocodile", e: "🐊", sr: "крокодил", cl: "a crocodile" }
+  ] },
+  boje: { ime: "Боје", em: "🎨", opis: "colours", boja: "abc", reci: [
+    { w: "red", c: "#E53935", sr: "црвена" }, { w: "blue", c: "#1E6FE0", sr: "плава" },
+    { w: "yellow", c: "#FFD21F", sr: "жута" }, { w: "green", c: "#2BA84A", sr: "зелена" },
+    { w: "orange", c: "#FF8A1F", sr: "наранџаста" }, { w: "pink", c: "#FF8FC4", sr: "розе" },
+    { w: "purple", c: "#8A4FD3", sr: "љубичаста" }, { w: "brown", c: "#8B5A2B", sr: "браон" },
+    { w: "black", c: "#222", sr: "црна" }, { w: "white", c: "#FFFFFF", sr: "бела" }
+  ] },
+  brojevi: { ime: "Бројеви", em: "🔢", opis: "1 – 10", boja: "slusaj", reci: [
+    "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"
+  ].map((w, i) => ({ w, n: i + 1, sr: String(i + 1) })) },
+  skola: { ime: "Школа", em: "✏️", opis: "у торби", boja: "citaj", reci: [
+    { w: "pencil", e: "✏️", sr: "оловка", cl: "a pencil" }, { w: "pen", e: "🖊️", sr: "хемијска", cl: "a pen" },
+    { w: "book", e: "📕", sr: "књига", cl: "a book" }, { w: "bag", e: "🎒", sr: "торба", cl: "a bag" },
+    { w: "ruler", e: "📏", sr: "лењир", cl: "a ruler" }, { w: "crayon", e: "🖍️", sr: "бојица", cl: "a crayon" }
+  ] },
+  ljubimci: { ime: "Љубимци", em: "🐶", opis: "pets", boja: "igra", reci: [
+    { w: "cat", e: "🐱", sr: "мачка", cl: "a cat" }, { w: "dog", e: "🐶", sr: "пас", cl: "a dog" },
+    { w: "fish", e: "🐟", sr: "риба", cl: "a fish" }, { w: "bird", e: "🐦", sr: "птица", cl: "a bird" },
+    { w: "rabbit", e: "🐰", sr: "зец", cl: "a rabbit" }, { w: "mouse", e: "🐭", sr: "миш", cl: "a mouse" }
+  ] },
+  igracke: { ime: "Играчке", em: "🧸", opis: "toys", boja: "slusaj", reci: [
+    { w: "ball", e: "⚽", sr: "лопта", cl: "a ball" }, { w: "car", e: "🚗", sr: "ауто", cl: "a car" },
+    { w: "teddy", e: "🧸", sr: "меда", cl: "a teddy" }, { w: "kite", e: "🪁", sr: "змај (на канапу)", cl: "a kite" },
+    { w: "train", e: "🚂", sr: "воз", cl: "a train" }, { w: "robot", e: "🤖", sr: "робот", cl: "a robot" }
+  ] },
+  porodica: { ime: "Породица", em: "👨‍👩‍👧‍👦", opis: "family", boja: "abc", reci: [
+    { w: "mum", e: "👩", sr: "мама", cl: "Mum" }, { w: "dad", e: "👨", sr: "тата", cl: "Dad" },
+    { w: "sister", e: "👧", sr: "сестра", cl: "my sister" }, { w: "brother", e: "👦", sr: "брат", cl: "my brother" },
+    { w: "grandma", e: "👵", sr: "бака", cl: "Grandma" }, { w: "grandpa", e: "👴", sr: "деда", cl: "Grandpa" }
+  ] }
+};
+for (const [id, t] of Object.entries(TEME)) t.reci.forEach(r => { r.tema = id; if (!r.cl) r.cl = r.w; });
+const SVE = Object.values(TEME).flatMap(t => t.reci);
+const SLOVA = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+/* engleski nazivi slova, da glas ne čita „A" kao član */
+const IME_SLOVA = { A:"ay",B:"bee",C:"see",D:"dee",E:"ee",F:"eff",G:"jee",H:"aitch",I:"eye",J:"jay",K:"kay",L:"el",M:"em",N:"en",O:"oh",P:"pee",Q:"cue",R:"ar",S:"ess",T:"tee",U:"you",V:"vee",W:"double you",X:"ex",Y:"why",Z:"zed" };
+
+function slika(r) {
+  if (r.c) return `<span class="mrlja" style="--m:${r.c}"></span>`;
+  if (r.n) return `<span class="jabuke">${"🍎".repeat(r.n)}</span>`;
+  return `<span class="emo">${r.e}</span>`;
+}
+/* ometači iz iste teme, pa dopuna iz ostalih */
+function ometaci(r, n, pool) {
+  const ista = shuffle(TEME[r.tema].reci.filter(x => x.w !== r.w));
+  const ostali = shuffle((pool || SVE).filter(x => x.w !== r.w && x.tema !== r.tema && (!!x.c === !!r.c) && (!!x.n === !!r.n)));
+  return [...ista, ...ostali].slice(0, n);
+}
+
+/* ===================== igre ===================== */
+/* tema: true = pre igre se bira tema; samoSlike = samo reči sa emoji slikom */
+const IGRE = {
+  slusaj:  { ime: "Слушај и додирни", em: "👂", opis: "Чуј реч, нађи слику", boja: "slusaj", tema: true },
+  citaj:   { ime: "Прочитај и споји", em: "📖", opis: "Прочитај реч, нађи слику", boja: "citaj", tema: true },
+  sta:     { ime: "Шта је ово?", em: "🖼️", opis: "Погледај слику, изабери реч", boja: "citaj", tema: true },
+  senka:   { ime: "Ко се крије?", em: "🌴", opis: "Погоди по сенци", boja: "dzungla", tema: true, samoSlike: true },
+  dane:    { ime: "Yes or No?", em: "✅", opis: "Слушај питање и одговори", boja: "slusaj", tema: true },
+  slozi:   { ime: "Сложи реч", em: "🧩", opis: "Слово по слово", boja: "igra", tema: true },
+  baloni:  { ime: "Балони", em: "🎈", opis: "Чуј реч, пукни балон", boja: "igra", tema: true },
+  memorija:{ ime: "Меморија", em: "🃏", opis: "Слика + реч = пар", boja: "igra", tema: true },
+  trka:    { ime: "Трка", em: "⏱️", opis: "1 минут, што више речи", boja: "igra" },
+  abc:     { ime: "Слова", em: "🔤", opis: "Чуј слово, нађи га", boja: "abc" },
+  azRed:   { ime: "Од A до Z", em: "🚂", opis: "Додирни слова по реду", boja: "abc" },
+  kontrolni:{ ime: "Unit 1 – провера", em: "📝", opis: "Као у књизи на страни 10: слова, речи, Yes/No", boja: "kontrolni" }
+};
+
+/* generatori pitanja: vraćaju { uputa, prikaz, govori, opcije:[{html,v,klasa}], tacno, posle, pomoc } */
+function opcijeSlike(r, pool) { return shuffle([r, ...ometaci(r, 3, pool)]).map(x => ({ html: slika(x), v: x.w, klasa: "slikovni" })); }
+function opcijeReci(r, pool) { return shuffle([r, ...ometaci(r, 3, pool)]).map(x => ({ html: `<span class="en">${x.w}</span>`, v: x.w })); }
+const GEN = {
+  slusaj: (r, pool) => ({ uputa: "Слушај и додирни слику.", prikaz: `<button class="zvucnik" data-govori="${r.w}" aria-label="Слушај">🔊</button>`, govori: r.w,
+    opcije: opcijeSlike(r, pool), tacno: r.w, posle: r.w, pomoc: `То је: <b>${r.sr}</b>` }),
+  citaj: (r, pool) => ({ uputa: "Прочитај и додирни слику.", prikaz: `<div class="velika-rec en">${r.w}</div>`,
+    opcije: opcijeSlike(r, pool), tacno: r.w, posle: r.w, pomoc: `<b>${r.w}</b> = ${r.sr}` }),
+  sta: (r, pool) => ({ uputa: "Шта је на слици?", prikaz: slika(r),
+    opcije: opcijeReci(r, pool), tacno: r.w, posle: r.w, pomoc: `На слици је: <b>${r.sr}</b>` }),
+  senka: (r, pool) => ({ uputa: "Ко се крије? Say the word!", prikaz: `<div class="senka">${slika(r)}</div>`,
+    opcije: opcijeReci(r, pool), tacno: r.w, posle: r.w, otkrij: true, pomoc: `Почиње на слово <b>${r.w[0].toUpperCase()}</b>.` }),
+  dane: (r, pool) => {
+    const da = Math.random() < .5, pitam = da ? r : ometaci(r, 1, pool)[0];
+    const q = `Is it ${pitam.cl}?`;
+    return { uputa: "Слушај и одговори.", prikaz: `${slika(r)}<div class="pitanje-en en">${q} <button class="zvucnik mali" data-govori="${q}" aria-label="Слушај">🔊</button></div>`,
+      govori: q, opcije: [{ html: "Yes.", v: "Yes" }, { html: "No.", v: "No" }], tacno: da ? "Yes" : "No", dane: true,
+      posle: da ? `Yes, it is!` : `No, it isn't. It's ${r.cl}.`,
+      pomoc: `На слици: <b>${r.w}</b> (${r.sr}). Питање: <b>${pitam.w}</b> (${pitam.sr}).` };
+  },
+  abc: () => {
+    const vrsta = pick(["cuj", "cuj", "posle", "prvo"]);
+    if (vrsta === "posle") {
+      const i = rnd(0, 23), t = SLOVA[i + 2];
+      const opc = shuffle([t, ...shuffle(SLOVA.filter(s => s !== t)).slice(0, 3)]);
+      return { uputa: "Које слово иде после?", prikaz: `<div class="velika-rec en">${SLOVA[i]} ${SLOVA[i + 1]} <span style="color:var(--linija)">_</span></div>`,
+        opcije: opc.map(s => ({ html: s, v: s, klasa: "slovo" })), tacno: t, posle: IME_SLOVA[t], pomoc: `Певај: … ${SLOVA.slice(Math.max(0, i - 2), i + 2).join(", ")}, …` };
+    }
+    if (vrsta === "prvo") {
+      const r = pick(SVE.filter(x => x.e)), t = r.w[0].toUpperCase();
+      const opc = shuffle([t, ...shuffle(SLOVA.filter(s => s !== t)).slice(0, 3)]);
+      return { uputa: "Којим словом почиње?", prikaz: `${slika(r)}<div class="velika-rec en"><span style="color:var(--linija)">_</span>${r.w.slice(1)}</div>`, govori: r.w,
+        opcije: opc.map(s => ({ html: s, v: s, klasa: "slovo" })), tacno: t, posle: r.w, pomoc: `Слушај: <b>${r.w}</b> 🔊` };
+    }
+    const t = pick(SLOVA), opc = shuffle([t, ...shuffle(SLOVA.filter(s => s !== t)).slice(0, 3)]);
+    return { uputa: "Слушај и нађи слово.", prikaz: `<button class="zvucnik" data-govori="${IME_SLOVA[t]}" aria-label="Слушај">🔊</button>`, govori: IME_SLOVA[t],
+      opcije: opc.map(s => ({ html: s, v: s, klasa: "slovo" })), tacno: t, posle: IME_SLOVA[t], pomoc: `Тражимо слово које се чита „${IME_SLOVA[t]}".` };
+  }
+};
+
+/* ===================== stanje ===================== */
+const KLJUC = "engleski-2razred-v1";
+const SLICICE = ["🦊","🐼","🐨","🦁","🐯","🐸","🐵","🦄","🐙","🦋","🐞","🐢","🐬","🦒","🦓","🐘","🦔","🦉","🐧","🌻","🌈","🍓","🍉","🍒","🚀","🎨","🧁","🍭","🐳","🦕","🐝","🐰","🐱","🐶","🐹","🦜","🌵","🍄","🐌","🦩"];
+let S = { zvezde: 0, slicice: [], rekord: 0, azRekord: 0, zvuk: true };
+
+/* ===================== prikaz ===================== */
+if (typeof document !== "undefined") {
+  try { const s = JSON.parse(localStorage.getItem(KLJUC)); if (s) S = Object.assign(S, s); } catch (e) {}
+  const sacuvaj = () => { try { localStorage.setItem(KLJUC, JSON.stringify(S)); } catch (e) {} };
+  const app = document.getElementById("app");
+  let R = null, tajmer = null;
+  const boja = b => `var(--${b})`;
+
+  /* ---------- glas (engleski izgovor iz pregledača) ---------- */
+  const imaGlas = "speechSynthesis" in window;
+  let glas = null;
+  function nadjiGlas() {
+    if (!imaGlas) return;
+    const g = speechSynthesis.getVoices().filter(v => /^en/i.test(v.lang));
+    glas = g.find(v => /en[-_]GB/i.test(v.lang) && /female|serena|kate|martha|libby|sonia|google uk english female/i.test(v.name))
+      || g.find(v => /en[-_]GB/i.test(v.lang)) || g.find(v => /en[-_]US/i.test(v.lang)) || g[0] || null;
+  }
+  if (imaGlas) { nadjiGlas(); speechSynthesis.onvoiceschanged = nadjiGlas; }
+  function govori(tekst) {
+    if (!imaGlas || !tekst) return;
+    try {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(tekst);
+      u.lang = glas ? glas.lang : "en-GB"; if (glas) u.voice = glas; u.rate = .8; u.pitch = 1.05;
+      speechSynthesis.speak(u);
+    } catch (e) {}
+  }
+
+  let zvukCtx = null;
+  function zvoni(vrsta) {
+    if (!S.zvuk) return;
+    try {
+      zvukCtx = zvukCtx || new (window.AudioContext || window.webkitAudioContext)();
+      const t = zvukCtx.currentTime, tonovi = vrsta === "kraj" ? [523, 659, 784, 1047] : [660, 880];
+      tonovi.forEach((f, i) => {
+        const o = zvukCtx.createOscillator(), g = zvukCtx.createGain();
+        o.type = "sine"; o.frequency.value = f; o.connect(g); g.connect(zvukCtx.destination);
+        const s = t + i * .09; g.gain.setValueAtTime(0, s); g.gain.linearRampToValueAtTime(.12, s + .02); g.gain.exponentialRampToValueAtTime(.001, s + .3);
+        o.start(s); o.stop(s + .32);
+      });
+    } catch (e) {}
+  }
+  function zvezdica(el) {
+    S.zvezde++; sacuvaj();
+    const r = (el || document.body).getBoundingClientRect(), z = document.createElement("div");
+    z.className = "leteca"; z.textContent = "⭐";
+    z.style.left = (r.left + r.width / 2 - 17) + "px"; z.style.top = (r.top + Math.min(r.height, 200) / 2) + "px";
+    document.body.appendChild(z); setTimeout(() => z.remove(), 1000);
+    const br = document.getElementById("brZvezda"); if (br) br.textContent = S.zvezde;
+    zvoni();
+  }
+  function novaSlicica() {
+    const nema = SLICICE.filter(s => !S.slicice.includes(s));
+    const s = nema.length ? pick(nema) : pick(SLICICE);
+    S.slicice.push(s); sacuvaj(); return s;
+  }
+  function zaglavlje(naslov, nazad) {
+    return `<div class="vrh">
+      ${nazad ? `<button class="nazad" data-a="pocetna" aria-label="Назад">←</button>` : ""}
+      <h1>${naslov}</h1>
+      ${nazad && R && R.tema && R.tema !== "sve" ? `<button class="ikona-dugme" data-a="recnik" aria-label="Подсети се">📚</button>` : ""}
+      <span class="zvezde-brojac">⭐ <span id="brZvezda">${S.zvezde}</span></span>
+      ${nazad ? "" : `<button class="ikona-dugme" data-a="album" aria-label="Албум">🎒</button>
+      <button class="ikona-dugme" data-a="zvuk" aria-label="Звук">${S.zvuk ? "🔔" : "🔕"}</button>`}
+    </div>`;
+  }
+  function stop() { if (tajmer) { clearInterval(tajmer); tajmer = null; } if (imaGlas) speechSynthesis.cancel(); }
+  const tackice = (n, i) => `<div class="napredak">${Array.from({ length: n }, (_, j) => `<i class="${j < i ? "gotov" : j === i ? "sad" : ""}"></i>`).join("")}</div>`;
+
+  /* ---------- početna ---------- */
+  function pocetna() {
+    stop(); R = null;
+    const plocica = (id, siroka) => { const g = IGRE[id];
+      return `<button class="plocica${siroka ? " siroka" : ""}" style="--boja:${boja(g.boja)}" data-igra="${id}"><span class="em">${g.em}</span><span><b>${g.ime}</b><br><small>${g.opis}</small></span></button>`; };
+    app.innerHTML = zaglavlje("Енглески за други разред") + `
+      <div class="pozdrav"><div class="lik">🐒</div><div><b class="en">Hello!</b><span>Шта играмо данас? Свака тачна = ⭐, свака завршена игра = нова сличица. Додирни 🔊 да чујеш реч.</span></div></div>
+      <div class="odeljak">📚 Учимо речи – додирни и слушај</div>
+      <div class="plocice">${Object.entries(TEME).map(([id, t]) => `<button class="plocica mala" style="--boja:${boja(t.boja)}" data-lek="${id}"><span class="em">${t.em}</span><b>${t.ime}</b><small>${t.opis}</small></button>`).join("")}
+        <button class="plocica mala" style="--boja:${boja("abc")}" data-lek="abeceda"><span class="em">🔤</span><b>Абецеда</b><small>A B C … Z</small></button></div>
+      <div class="odeljak">Слушај 👂</div>
+      <div class="plocice">${["slusaj", "dane", "baloni"].map(i => plocica(i)).join("")}</div>
+      <div class="odeljak">Читај 📖</div>
+      <div class="plocice">${["citaj", "sta", "senka", "slozi"].map(i => plocica(i)).join("")}</div>
+      <div class="odeljak">Слова 🔤</div>
+      <div class="plocice">${["abc", "azRed"].map(i => plocica(i)).join("")}</div>
+      <div class="odeljak">Играмо се 🎲</div>
+      <div class="plocice">${["memorija", "trka"].map(i => plocica(i)).join("")}</div>
+      <div class="odeljak">Пред контролни</div>
+      <div class="plocice">${plocica("kontrolni", true)}</div>
+      ${imaGlas ? "" : `<p style="color:var(--tiho);font-size:15px;margin-top:20px">Овај прегледач не уме да изговара речи. Отвори страну у Chrome-у или Safari-ју да би радило 🔊.</p>`}`;
+  }
+
+  /* ---------- album ---------- */
+  function album() {
+    stop();
+    const mesta = Math.max(SLICICE.length, S.slicice.length);
+    let html = "";
+    for (let i = 0; i < mesta; i++) html += S.slicice[i] ? `<div>${S.slicice[i]}</div>` : `<div class="prazno">?</div>`;
+    app.innerHTML = zaglavlje("Мој албум", true) + `
+      <div class="statistika"><div>Звездице<b>⭐ ${S.zvezde}</b></div><div>Сличице<b>${S.slicice.length}</b></div><div>Рекорд у трци<b>⏱️ ${S.rekord}</b></div></div>
+      <div class="album">${html}</div>`;
+  }
+
+  /* ---------- izbor teme ---------- */
+  function bazen(tema, samoSlike) {
+    const p = tema === "sve" ? SVE : TEME[tema].reci;
+    return samoSlike ? p.filter(r => r.e) : p;
+  }
+  function izborTeme(id) {
+    stop(); R = null;
+    const g = IGRE[id];
+    const teme = Object.entries(TEME).filter(([, t]) => !g.samoSlike || t.reci.some(r => r.e));
+    app.innerHTML = zaglavlje(`${g.em} ${g.ime}`, true) + `<p class="uputa" style="text-align:left">Које речи вежбамо?</p>
+      <div class="teme">${teme.map(([tid, t]) => `<button class="tema${tid === "dzungla" ? " siroka" : ""}" style="--boja:${boja(t.boja)}" data-tema="${tid}"><span class="em">${t.em}</span><span><b>${t.ime}</b><small>${t.opis}</small></span></button>`).join("")}
+      <button class="tema siroka" style="--boja:${boja("igra")}" data-tema="sve"><span class="em">🔀</span><span><b>Све измешано</b><small>речи из свих тема</small></span></button></div>`;
+    app.querySelectorAll("[data-tema]").forEach(b => b.onclick = () => pokreni(id, b.dataset.tema));
+  }
+  function otvori(id) {
+    const g = IGRE[id];
+    if (g.tema) return izborTeme(id);
+    pokreni(id);
+  }
+  function pokreni(id, tema) {
+    stop();
+    R = { id, tema, g: IGRE[id] };
+    if (id === "baloni") return baloni();
+    if (id === "memorija") return memorija();
+    if (id === "slozi") return slozi();
+    if (id === "trka") return trka();
+    if (id === "azRed") return azRed();
+    runda();
+  }
+
+  /* ---------- runda pitanja sa izborom ---------- */
+  function spisakPitanja() {
+    const { id, tema, g } = R;
+    if (id === "abc") return Array.from({ length: 10 }, () => () => GEN.abc());
+    if (id === "kontrolni") {
+      const dz = TEME.dzungla.reci;
+      const red = [["abc"], ["abc"], ["senka", 0], ["senka", 1], ["citaj", 2], ["citaj", 3], ["slusaj", 4], ["slusaj", 5], ["dane", 0], ["dane", 1]];
+      const ish = shuffle(dz);
+      return red.map(([vr, i]) => vr === "abc" ? () => { const z = GEN.abc(); return z; } : () => GEN[vr](ish[i % 6], dz));
+    }
+    const p = bazen(tema, g.samoSlike);
+    let reci = shuffle(p);
+    while (reci.length < 10) reci = reci.concat(shuffle(p));
+    return reci.slice(0, 10).map(r => () => GEN[id](r, tema === "sve" ? SVE : null));
+  }
+  function runda() {
+    stop();
+    Object.assign(R, { i: 0, n: 10, zv: 0, pitanja: spisakPitanja() });
+    sledece();
+  }
+  function sledece() {
+    if (R.i >= R.n) return kraj(R.g, R.zv, () => pokreni(R.id, R.tema));
+    const z = R.pitanja[R.i](); R.z = z; R.greske = 0; R.gotovo = false;
+    const g = R.g;
+    app.innerHTML = zaglavlje(`${g.em} ${g.ime}`, true) + `
+      <div style="--boja:${boja(g.boja)}">
+        ${tackice(R.n, R.i)}
+        <div class="karta" id="karta">
+          <p class="uputa">${z.uputa}</p>
+          <div class="prikaz" id="prikaz">${z.prikaz}</div>
+          <div class="izbori${z.dane ? " dane" : ""}">${z.opcije.map(o => `<button class="izbor${o.klasa ? " " + o.klasa : ""}" data-v="${o.v}">${o.html}</button>`).join("")}</div>
+          <div class="povratna" id="povratna" aria-live="polite"></div>
+          <div id="pomoc"></div>
+          ${z.pomoc ? `<button class="pomoc-dugme" id="pomocBtn">💡 Помоћ</button>` : ""}
+        </div>
+      </div>`;
+    if (z.govori) setTimeout(() => govori(z.govori), 250);
+    const pb = document.getElementById("pomocBtn"); if (pb) pb.onclick = pokaziPomoc;
+    app.querySelectorAll(".izbor").forEach(b => b.onclick = () => izabrano(b));
+  }
+  function pokaziPomoc() {
+    const p = document.getElementById("pomoc"); if (!p || p.innerHTML) return;
+    p.innerHTML = `<div class="pomoc">${R.z.pomoc}</div>`;
+    const pb = document.getElementById("pomocBtn"); if (pb) pb.remove();
+  }
+  function izabrano(b) {
+    if (R.gotovo) return;
+    const pov = document.getElementById("povratna");
+    if (b.dataset.v === R.z.tacno) {
+      R.gotovo = true; b.classList.add("dobar");
+      app.querySelectorAll(".izbor").forEach(x => { if (x !== b) x.disabled = true; });
+      if (R.z.otkrij) { const e = app.querySelector(".senka .emo"); if (e) e.classList.add("otkriven"); }
+      pov.className = "povratna tacno"; pov.textContent = pick(["Well done!", "Super!", "Great!", "Yes! Браво!", "Тачно!"]);
+      if (R.greske === 0) { R.zv++; zvezdica(b); }
+      govori(R.z.posle);
+      setTimeout(() => { R.i++; sledece(); }, R.z.dane ? 1700 : 1200);
+    } else {
+      R.greske++; b.disabled = true; b.classList.remove("trese"); void b.offsetWidth; b.classList.add("trese");
+      pov.className = "povratna skoro"; pov.textContent = R.greske === 1 ? "Скоро! Пробај још једном." : "Погледај помоћ 💡";
+      if (R.greske >= 1) pokaziPomoc();
+    }
+  }
+
+  /* ---------- složi reč ---------- */
+  function slozi() {
+    const p = bazen(R.tema).filter(r => r.w.length <= 9);
+    let reci = shuffle(p); while (reci.length < 8) reci = reci.concat(shuffle(p));
+    const S2 = { i: 0, n: 8, zv: 0, reci: reci.slice(0, 8) };
+    const g = R.g;
+    const crtaj = () => {
+      if (S2.i >= S2.n) return kraj(g, S2.zv, () => pokreni("slozi", R.tema));
+      const r = S2.reci[S2.i], slova = r.w.toUpperCase().split("");
+      let k = 0, greske = 0;
+      const plocice = shuffle(slova.map((s, j) => ({ s, j })));
+      app.innerHTML = zaglavlje(`${g.em} ${g.ime}`, true) + `
+        <div style="--boja:${boja(g.boja)}">${tackice(S2.n, S2.i)}
+        <div class="karta" id="karta">
+          <p class="uputa">Сложи реч. Додирни слова по реду.</p>
+          <div class="prikaz">${slika(r)}<button class="zvucnik mali" data-govori="${r.w}" aria-label="Слушај">🔊</button></div>
+          <div class="mesta" id="mesta">${slova.map((_, j) => `<span class="${j === 0 ? "sad" : ""}"></span>`).join("")}</div>
+          <div class="plocice-slova" id="ps">${plocice.map((p, j) => `<button data-s="${p.s}" data-j="${j}">${p.s}</button>`).join("")}</div>
+          <div class="povratna" id="povratna"></div>
+          <button class="pomoc-dugme" id="pomocBtn">💡 Које слово сад?</button>
+        </div></div>`;
+      setTimeout(() => govori(r.w), 250);
+      const mesta = [...document.querySelectorAll("#mesta span")];
+      document.getElementById("pomocBtn").onclick = () => {
+        greske++;
+        const b = [...document.querySelectorAll("#ps button")].find(x => !x.disabled && x.dataset.s === slova[k]);
+        if (b) { b.classList.add("svetli"); setTimeout(() => b.classList.remove("svetli"), 1200); }
+      };
+      document.querySelectorAll("#ps button").forEach(b => b.onclick = () => {
+        if (b.dataset.s === slova[k]) {
+          b.disabled = true; mesta[k].textContent = slova[k]; mesta[k].classList.remove("sad"); k++;
+          if (k < slova.length) mesta[k].classList.add("sad");
+          else {
+            const pov = document.getElementById("povratna"); pov.className = "povratna tacno"; pov.textContent = pick(["Well done!", "Super!", "Great!"]);
+            if (greske === 0) { S2.zv++; zvezdica(document.getElementById("karta")); } else zvoni();
+            govori(r.w);
+            setTimeout(() => { S2.i++; crtaj(); }, 1300);
+          }
+        } else {
+          greske++; b.classList.remove("trese"); void b.offsetWidth; b.classList.add("trese");
+        }
+      });
+    };
+    crtaj();
+  }
+
+  /* ---------- baloni ---------- */
+  function baloni() {
+    const p = bazen(R.tema);
+    const B = { i: 0, n: 10, zv: 0 };
+    const BOJE = ["#E0603A", "#3B7DD8", "#8A4FD3", "#1F9D55", "#E5A100", "#D6457A"];
+    let reci = shuffle(p); while (reci.length < 10) reci = reci.concat(shuffle(p));
+    const g = R.g;
+    const crtaj = () => {
+      if (B.i >= B.n) return kraj(g, B.zv, () => pokreni("baloni", R.tema));
+      const r = reci[B.i], opc = shuffle([r, ...ometaci(r, 3, R.tema === "sve" ? SVE : null)]), boje = shuffle(BOJE);
+      let greska = false;
+      app.innerHTML = zaglavlje("🎈 Балони", true) + `
+        <div style="--boja:${boja(g.boja)}">${tackice(B.n, B.i)}
+        <div class="karta"><p class="uputa">Слушај и пукни прави балон.</p>
+        <div class="prikaz" style="min-height:0"><button class="zvucnik" data-govori="${r.w}" aria-label="Слушај">🔊</button></div>
+        <div class="baloni">${opc.map((x, i) => `<button class="balon" data-v="${x.w}" style="--bb:${boje[i]}"><span class="telo en">${x.w}</span><span class="konac"></span></button>`).join("")}</div>
+        <div class="povratna" id="povratna"></div></div></div>`;
+      setTimeout(() => govori(r.w), 250);
+      app.querySelectorAll(".balon").forEach(b => b.onclick = () => {
+        if (b.dataset.v === r.w) {
+          b.classList.add("pukao"); if (!greska) { B.zv++; zvezdica(b); } else zvoni();
+          app.querySelectorAll(".balon").forEach(x => x.onclick = null);
+          setTimeout(() => { B.i++; crtaj(); }, 700);
+        } else {
+          greska = true; b.classList.remove("ne"); void b.offsetWidth; b.classList.add("ne");
+          const pv = document.getElementById("povratna"); pv.className = "povratna skoro"; pv.innerHTML = `💡 Тражимо: <span class="mini">${slika(r)}</span>`;
+          govori(r.w);
+        }
+      });
+    };
+    crtaj();
+  }
+
+  /* ---------- memorija ---------- */
+  function memorija() {
+    const p = shuffle(bazen(R.tema)).slice(0, 6);
+    const karte = shuffle(p.flatMap(r => [{ r, slika: true }, { r, slika: false }]));
+    let otvorene = [], parova = 0, zauzeto = false;
+    const g = R.g;
+    app.innerHTML = zaglavlje("🃏 Меморија", true) + `
+      <p style="margin:0 0 12px;color:var(--tiho)">Окрени две карте. Нађи слику и њену реч.</p>
+      <div class="memorija">${karte.map((k, i) => `<button class="kartica" data-i="${i}"><span class="poledjina">?</span></button>`).join("")}</div>`;
+    const dugmad = [...app.querySelectorAll(".kartica")];
+    dugmad.forEach(b => b.onclick = () => {
+      const i = +b.dataset.i, k = karte[i];
+      if (zauzeto || b.classList.contains("okrenuta") || b.classList.contains("par")) return;
+      b.classList.add("okrenuta"); b.innerHTML = k.slika ? slika(k.r) : `<span class="en">${k.r.w}</span>`; otvorene.push(i);
+      if (!k.slika) govori(k.r.w);
+      if (otvorene.length === 2) {
+        const [x, y] = otvorene; otvorene = [];
+        if (karte[x].r.w === karte[y].r.w && karte[x].slika !== karte[y].slika) {
+          [x, y].forEach(j => dugmad[j].classList.add("par")); parova++; zvezdica(dugmad[y]); govori(karte[x].r.w);
+          if (parova === 6) setTimeout(() => kraj(g, 6, () => pokreni("memorija", R.tema)), 900);
+        } else {
+          zauzeto = true;
+          setTimeout(() => { [x, y].forEach(j => { dugmad[j].classList.remove("okrenuta"); dugmad[j].innerHTML = `<span class="poledjina">?</span>`; }); zauzeto = false; }, 1100);
+        }
+      }
+    });
+  }
+
+  /* ---------- trka ---------- */
+  function trka() {
+    const T = { ostalo: 60, broj: 0 };
+    const g = R.g;
+    app.innerHTML = zaglavlje("⏱️ Трка", true) + `
+      <div class="karta" style="text-align:center;--boja:${boja(g.boja)}"><p class="pitanje">Имаш <b>1 минут</b>. Погледај слику и изабери реч – што више!<br>Грешка се не броји, само пробај опет.</p>
+      <p style="color:var(--tiho)">Рекорд: ⏱️ ${S.rekord}</p>
+      <button class="dalje" id="kreni">Крени!</button></div>`;
+    document.getElementById("kreni").onclick = () => {
+      let pret = null;
+      const zadatak = () => {
+        let r; do { r = pick(SVE); } while (r === pret); pret = r;
+        document.getElementById("trkaZ").innerHTML = `<div class="prikaz">${slika(r)}</div><div class="izbori">${shuffle([r, ...ometaci(r, 3)]).map(x => `<button class="izbor" data-v="${x.w}"><span class="en">${x.w}</span></button>`).join("")}</div>`;
+        document.querySelectorAll("#trkaZ .izbor").forEach(b => b.onclick = () => {
+          if (b.dataset.v === r.w) { T.broj++; document.getElementById("trkaBr").textContent = T.broj; zvezdica(b); zadatak(); }
+          else b.disabled = true;
+        });
+      };
+      app.innerHTML = zaglavlje("⏱️ Трка", true) + `
+        <div class="vreme"><i id="vreme" style="width:100%"></i></div>
+        <div class="trka-skor">Решено: <b id="trkaBr">0</b></div>
+        <div class="karta" id="trkaZ"></div>`;
+      zadatak();
+      tajmer = setInterval(() => {
+        T.ostalo--; const v = document.getElementById("vreme"); if (v) v.style.width = (T.ostalo / 60 * 100) + "%";
+        if (T.ostalo <= 0) {
+          clearInterval(tajmer); tajmer = null;
+          const nov = T.broj > S.rekord; if (nov) { S.rekord = T.broj; sacuvaj(); }
+          kraj(g, T.broj, () => pokreni("trka"), nov ? `Нови рекорд: ${T.broj}! 🏆` : `Решено: ${T.broj}. Рекорд је ${S.rekord}.`);
+        }
+      }, 1000);
+    };
+  }
+
+  /* ---------- od A do Z ---------- */
+  function azRed() {
+    const g = R.g, red = shuffle(SLOVA);
+    let k = 0, pocetak = Date.now(), greske = 0;
+    app.innerHTML = zaglavlje(`${g.em} ${g.ime}`, true) + `
+      <div class="karta" style="--boja:${boja(g.boja)}">
+        <div class="sledece">Сад тражиш: <b id="sled">A</b> <button class="zvucnik mali" id="cujSled" aria-label="Слушај">🔊</button></div>
+        <div class="abc-mreza">${red.map(s => `<button data-s="${s}">${s}</button>`).join("")}</div>
+        <div class="povratna" id="povratna"></div>
+      </div>`;
+    document.getElementById("cujSled").onclick = () => govori(IME_SLOVA[SLOVA[k]]);
+    app.querySelectorAll(".abc-mreza button").forEach(b => b.onclick = () => {
+      if (b.classList.contains("gotovo")) return;
+      if (b.dataset.s === SLOVA[k]) {
+        b.classList.add("gotovo"); govori(IME_SLOVA[SLOVA[k]]); k++;
+        if (k === SLOVA.length) {
+          const sek = Math.round((Date.now() - pocetak) / 1000);
+          const nov = !S.azRekord || sek < S.azRekord; if (nov) { S.azRekord = sek; sacuvaj(); }
+          const zv = Math.max(1, 10 - Math.floor(greske / 2));
+          for (let i = 0; i < zv; i++) S.zvezde++; sacuvaj();
+          return setTimeout(() => kraj(g, zv, () => pokreni("azRed"), `Цела абецеда за ${sek} секунди! ${nov ? "Нови рекорд 🏆" : `Рекорд: ${S.azRekord} с.`} ⭐ ${zv}`), 700);
+        }
+        document.getElementById("sled").textContent = SLOVA[k];
+        if (k % 5 === 0) zvoni();
+      } else {
+        greske++; b.classList.remove("trese"); void b.offsetWidth; b.classList.add("trese");
+      }
+    });
+  }
+
+  /* ---------- kraj igre ---------- */
+  function kraj(g, zv, opet, poruka) {
+    const s = novaSlicica(); zvoni("kraj"); govori("Well done!");
+    app.innerHTML = zaglavlje(`${g.em} ${g.ime}`, true) + `
+      <div class="karta kraj" style="--boja:${boja(g.boja)}">
+        <h2>Well done! 🎉</h2>
+        <p>${poruka || `У овој игри: ⭐ ${zv}`}</p>
+        <div class="slicica-nova">${s}</div>
+        <p>Нова сличица је у албуму!</p>
+        <div class="dugmad"><button class="dugme glavno" id="opet">Још једном</button><button class="dugme" data-a="pocetna">Почетна</button></div>
+      </div>`;
+    document.getElementById("opet").onclick = opet;
+  }
+
+  /* ---------- rečnik (podseti se): dodirni sliku, čuj reč ---------- */
+  function recnik(tema) {
+    const abc = tema === "abeceda", t = abc ? { ime: "Абецеда", em: "🔤", boja: "abc" } : TEME[tema];
+    const z = document.createElement("div"); z.className = "zavesa"; document.body.appendChild(z);
+    const zatvori = () => { z.remove(); document.removeEventListener("keydown", esc); };
+    const esc = e => { if (e.key === "Escape") zatvori(); };
+    document.addEventListener("keydown", esc);
+    z.onclick = e => { if (e.target === z) zatvori(); };
+    const stavke = abc
+      ? SLOVA.map(s => `<button data-g="${IME_SLOVA[s]}"><b class="en">${s}${s.toLowerCase()}</b></button>`)
+      : t.reci.map(r => `<button data-g="${r.w}">${slika(r)}<b class="en">${r.w}</b><small>${r.sr}</small></button>`);
+    const vezba = abc ? "abc" : "slusaj";
+    z.innerHTML = `<div class="uputstvo" style="--boja:${boja(t.boja)}" role="dialog" aria-label="${t.ime}">
+      <div class="lek-vrh"><h2>${t.em} ${t.ime}</h2><button id="lekX" aria-label="Затвори">✕</button></div>
+      <p style="margin:0;color:var(--tiho)">Додирни и слушај. Понови наглас! 🗣️</p>
+      <div class="recnik${abc ? " slova" : ""}">${stavke.join("")}</div>
+      <div class="dugmad">
+        ${!abc ? `<button class="dugme" id="sveRedom">🔊 Све редом</button>` : `<button class="dugme" id="sveRedom">🎵 A–Z</button>`}
+        <button class="dugme glavno" id="lekVezbaj">Вежбај →</button>
+      </div></div>`;
+    z.querySelector("#lekX").onclick = zatvori;
+    z.querySelectorAll(".recnik button").forEach(b => b.onclick = () => {
+      z.querySelectorAll(".svira").forEach(x => x.classList.remove("svira")); b.classList.add("svira"); govori(b.dataset.g);
+    });
+    z.querySelector("#sveRedom").onclick = () => govori(abc ? SLOVA.map(s => IME_SLOVA[s]).join(", ") : t.reci.map(r => r.w).join(". "));
+    z.querySelector("#lekVezbaj").onclick = () => { zatvori(); abc ? pokreni("abc") : pokreni(vezba, tema); };
+  }
+
+  /* ---------- globalni klikovi ---------- */
+  document.addEventListener("click", e => {
+    const gv = e.target.closest("[data-govori]");
+    if (gv) { govori(gv.dataset.govori); return; }
+    const a = e.target.closest("[data-a]"), ig = e.target.closest("[data-igra]");
+    if (a) {
+      if (a.dataset.a === "pocetna") pocetna();
+      else if (a.dataset.a === "album") album();
+      else if (a.dataset.a === "recnik" && R && R.tema) recnik(R.tema);
+      else if (a.dataset.a === "zvuk") { S.zvuk = !S.zvuk; sacuvaj(); a.textContent = S.zvuk ? "🔔" : "🔕"; }
+    } else if (ig) otvori(ig.dataset.igra);
+    else if (e.target.closest("[data-lek]")) recnik(e.target.closest("[data-lek]").dataset.lek);
+  });
+
+  pocetna();
+}
+if (typeof module !== "undefined") module.exports = { TEME, SVE, GEN, ometaci };
+</script>
+</body>
+</html>
