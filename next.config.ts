@@ -331,6 +331,7 @@ const nextConfig: NextConfig = {
       { source: "/igre/engleski", destination: "/igre/engleski.html", permanent: false },
       { source: "/igre/wie-alt", destination: "/igre/wie-alt.html", permanent: false },
       { source: "/igre/wie-alt-spiele", destination: "/igre/wie-alt-spiele.html", permanent: false },
+      { source: "/igre/wie-alt-zack", destination: "/igre/wie-alt-zack.html", permanent: false },
     ];
   },
   async headers() {

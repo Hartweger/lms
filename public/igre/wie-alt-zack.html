@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Zack-Spiele · Wie alt bist du?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+/* Igre po uzoru na zack! (LMS src/components/zack): papir, 3 srca, traka napretka,
+   „Zack!" samo na uspehu, greška = „Ups!" + odmah tačan odgovor, bez drugog pokušaja.
+   Milioner je jedini tamni ekran (studio), kao i u zack!-u. Gradivo: časovi 1-3. */
+:root{
+  --bg:#F4F1E9; --paper:#FCFBF7; --line:#DED8C8; --ink:#16161A; --muted:#6E6A5E;
+  --ok:#1E7A4B; --ok-soft:#E3F2E8; --bad:#E5342A; --bad-soft:#FBE5E3;
+  --blue:#0A8FB0; --blue-soft:#DDF3F9; --gold:#E9B200;
+  --display:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+  --body:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#1A1916; --paper:#24221E; --line:#3D3A33; --ink:#F2EFE6; --muted:#AAA493;
+  --ok:#5BD08B; --ok-soft:#173326; --bad:#F2837C; --bad-soft:#3A1E1D; --blue:#3CC3E4; --blue-soft:#123844; color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.5}
+.wrap{max-width:720px;margin:0 auto;padding:18px 16px 60px}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(1.9rem,6vw,2.6rem);line-height:1;margin:0}
+h1 b{color:var(--bad)}
+.sub{color:var(--muted);margin:4px 0 16px}
+a{color:var(--blue);font-weight:700}
+.menu{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.menu button{font:inherit;cursor:pointer;text-align:left;background:var(--paper);color:var(--ink);border:2px solid var(--line);border-radius:14px;padding:14px;box-shadow:0 2px 0 var(--line)}
+.menu button:hover{border-color:var(--ink)}
+.menu b{display:block;font-family:var(--display);font-size:1.3rem;line-height:1.1}
+.menu small{color:var(--muted)}
+.menu .best{display:block;margin-top:4px;font-size:.8rem;font-weight:800;color:var(--ok)}
+.menu .mil{background:#0B1B4D;color:#FFE38A;border-color:#0B1B4D}
+.menu .mil small{color:#C9D3FF}
+button:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+/* shell */
+.shell{background:var(--paper);border:2px solid var(--line);border-radius:18px;padding:16px 16px 22px}
+.bar{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.bar .x{font:inherit;cursor:pointer;border:0;background:none;color:var(--muted);font-size:1.5rem;line-height:1;padding:4px 8px}
+.bar .prog{flex:1;height:14px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar .prog i{display:block;height:100%;background:var(--ok);border-radius:99px;transition:width .3s}
+.hearts{font-size:1.3rem;letter-spacing:2px;color:var(--bad);white-space:nowrap}
+.hearts .off{color:var(--line)}
+.title{font-family:var(--display);font-weight:800;font-size:1.1rem;color:var(--muted);margin:0 0 6px}
+.q{font-family:var(--display);font-weight:800;font-size:clamp(1.6rem,6vw,2.3rem);line-height:1.15;margin:6px 0 16px;text-align:center}
+.hint{color:var(--muted);text-align:center;margin:-8px 0 14px}
+.opts{display:grid;gap:10px}
+.opt{font:inherit;cursor:pointer;width:100%;text-align:left;background:var(--paper);color:var(--ink);border:2px solid var(--line);border-radius:14px;padding:13px 16px;font-weight:800;box-shadow:0 2px 0 var(--line)}
+.opt:hover:not(:disabled){border-color:var(--ink)}
+.opt:disabled{cursor:default}
+.opt.right{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+.opt.wrong{background:var(--bad-soft);border-color:var(--bad);color:var(--bad)}
+.verdict{min-height:3.2em;margin-top:14px;text-align:center;font-weight:800}
+.verdict .z{font-family:var(--display);font-size:1.8rem;color:var(--ok);display:block;line-height:1}
+.verdict .u{font-family:var(--display);font-size:1.4rem;color:var(--bad);display:block;line-height:1}
+.go{font:inherit;cursor:pointer;display:block;margin:12px auto 0;background:var(--ink);color:var(--paper);border:0;border-radius:14px;padding:12px 28px;font-weight:800}
+.speak{font:inherit;cursor:pointer;display:block;margin:0 auto 14px;border:2px solid var(--blue);background:var(--blue-soft);color:var(--blue);border-radius:999px;padding:10px 22px;font-weight:800}
+.typed{display:block;width:100%;font:inherit;font-size:1.4rem;font-weight:800;text-align:center;padding:12px;border-radius:14px;border:2px solid var(--line);background:var(--paper);color:var(--ink)}
+.typed:focus{outline:none;border-color:var(--ink)}
+.end{text-align:center}
+.end .big{font-family:var(--display);font-weight:800;font-size:4rem;line-height:1;margin:10px 0}
+/* pairs */
+.pairs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pairs .col{display:grid;gap:10px}
+.pairs .opt{text-align:center}
+.pairs .opt.sel{border-color:var(--blue);background:var(--blue-soft)}
+.pairs .opt.gone{visibility:hidden}
+/* sentence */
+.build{min-height:62px;border-bottom:3px solid var(--ink);display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;padding:6px;margin-bottom:16px}
+.pool{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.tile{font:inherit;cursor:pointer;background:var(--paper);color:var(--ink);border:2px solid var(--line);border-radius:12px;padding:8px 14px;font-weight:800;box-shadow:0 2px 0 var(--line)}
+.tile.used{visibility:hidden}
+.gapline{font-size:1.5rem;font-weight:800;text-align:center;margin:8px 0 18px}
+.gapline span{display:inline-block;min-width:4ch;border-bottom:3px solid var(--bad);color:var(--bad)}
+/* climber */
+.cliff{position:relative;height:360px;overflow:hidden;border-radius:14px;background:linear-gradient(#DDF3F9,#F4E6C8);border:2px solid var(--line)}
+.floors{position:absolute;left:0;right:0;bottom:0;transition:transform .45s ease}
+.floor{position:absolute;left:0;right:0;height:120px;display:flex;justify-content:space-around;align-items:flex-end;padding:0 12px 8px}
+.shelf{font:inherit;cursor:pointer;width:28%;height:46px;border-radius:10px;border:3px solid #8A6A3B;background:#C99A58;color:#2C1E0A;font-family:var(--display);font-weight:800;font-size:1.5rem;box-shadow:0 4px 0 #6E5129}
+.shelf.done{background:var(--ok-soft);border-color:var(--ok);color:var(--ok);box-shadow:none}
+.shelf.miss{background:var(--bad-soft);border-color:var(--bad);color:var(--bad)}
+.shelf.past{opacity:.35;cursor:default}
+.goat{position:absolute;width:64px;height:64px;bottom:52px;left:calc(50% - 32px);transition:left .35s ease;pointer-events:none}
+.ground{position:absolute;left:0;right:0;bottom:0;height:52px;background:#C9B48A;border-top:3px solid #8A6A3B}
+.goat.hop{animation:hop .45s ease}
+@keyframes hop{50%{transform:translateY(-70px)}}
+.goat.slip{animation:slip .5s ease}
+@keyframes slip{30%{transform:translateY(-40px) rotate(-12deg)}}
+.height{position:absolute;top:8px;right:10px;background:var(--paper);border-radius:99px;padding:2px 12px;font-weight:800;font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:reduce){.floors,.goat,.bar .prog i{transition:none;animation:none!important}}
+/* millionaire: the only dark screen, lives only while the game is open */
+.studio{position:fixed;inset:0;z-index:10;background:radial-gradient(800px 500px at 50% 30%,#2443B5,#0B1B4D 60%,#050D2A);color:#fff;display:flex;flex-direction:column;padding:14px 16px;overflow:hidden}
+.studio .in{max-width:720px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:12px;height:100%}
+.studio .top{display:flex;justify-content:space-between;align-items:center}
+.studio .x{font:inherit;cursor:pointer;border:0;background:none;color:#C9D3FF;font-size:1.5rem}
+.ladder{display:flex;gap:3px;align-items:flex-end}
+.ladder i{flex:1;height:10px;border-radius:3px;background:#1D2F75}
+.ladder i.five{height:16px}
+.ladder i.past{background:#4A5DA8}
+.ladder i.now{background:#FFC93C;height:20px}
+.mq{background:linear-gradient(#0E2470,#091A55);border:2px solid #6E86E8;border-radius:40px;padding:16px 22px;text-align:center;font-weight:800;font-size:clamp(1.1rem,4.4vw,1.5rem)}
+.mopts{display:grid;gap:9px}
+.mopt{font:inherit;cursor:pointer;text-align:left;background:linear-gradient(#0E2470,#091A55);color:#fff;border:2px solid #6E86E8;border-radius:40px;padding:11px 20px;font-weight:700}
+.mopt b{color:#FFC93C;margin-right:10px}
+.mopt:disabled{cursor:default}
+.mopt.right{background:#1E7A4B;border-color:#5BD08B}
+.mopt.wrong{background:#6B2A2A;border-color:#B0605C}
+.mopt.hide{visibility:hidden}
+.life{display:flex;gap:8px;justify-content:center}
+.life button{font:inherit;cursor:pointer;border:2px solid #6E86E8;background:#0E2470;color:#FFE38A;border-radius:99px;padding:6px 14px;font-weight:800}
+.life button:disabled{opacity:.3;cursor:default}
+.rule{background:#FFF8DD;color:#3B2F00;border-radius:14px;padding:10px 14px;font-size:.95rem}
+.mgo{font:inherit;cursor:pointer;align-self:center;background:#FFC93C;color:#0B1B4D;border:0;border-radius:99px;padding:11px 30px;font-weight:800}
+.mend{text-align:center;margin:auto}
+.mend .big{font-family:var(--display);font-size:4rem;color:#FFC93C;line-height:1}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+// ---------- voice ----------
+let deVoice=null;
+function pickVoice(){if(!("speechSynthesis" in window))return;const v=speechSynthesis.getVoices();deVoice=v.find(x=>/^de(-|_)DE/i.test(x.lang))||v.find(x=>/^de/i.test(x.lang))||null;}
+if("speechSynthesis" in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice;}
+function say(t,r){if(!("speechSynthesis" in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="de-DE";if(deVoice)u.voice=deVoice;u.rate=r||.85;speechSynthesis.speak(u);}
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const norm=s=>s.trim().toLowerCase().replace(/ß/g,"ss").replace(/ä/g,"ae").replace(/ö/g,"oe").replace(/ü/g,"ue").replace(/[.!?,]/g,"").replace(/\s+/g," ");
+const store={get(k,d){try{const v=localStorage.getItem("wab-z-"+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem("wab-z-"+k,JSON.stringify(v))}catch(e){}}};
+
+// ---------- content (lesson 3, plus a little of lessons 1-2) ----------
+const NUM=["null","eins","zwei","drei","vier","fünf","sechs","sieben","acht","neun","zehn","elf","zwölf","dreizehn","vierzehn","fünfzehn","sechzehn","siebzehn","achtzehn","neunzehn","zwanzig"];
+const LNAME={A:"A",B:"Be",C:"Ce",D:"De",E:"E",F:"Eff",G:"Ge",H:"Ha",I:"I",J:"Jott",K:"Ka",L:"Ell",M:"Emm",N:"Enn",O:"O",P:"Pe",Q:"Ku",R:"Err",S:"Ess",T:"Te",U:"U",V:"Fau",W:"We",X:"Ix",Y:"Ypsilon",Z:"Zett","Ä":"Ä","Ö":"Ö","Ü":"Ü","ß":"Eszett"};
+const WORDS=[ // de, en
+ ["Wie geht's?","How are you?"],["Gut, danke.","Fine, thanks."],["Es geht.","So-so."],["Nicht so gut.","Not so good."],["Schlecht.","Bad."],["Und dir?","And you?"],
+ ["Wie alt bist du?","How old are you?"],["Wie schreibt man das?","How do you spell that?"],["die Telefonnummer","phone number"],["der Vorname","first name"],["der Nachname","last name"],["das Alter","age"],
+ ["elf","eleven"],["zwölf","twelve"],["sechzehn","sixteen"],["siebzehn","seventeen"],["zwanzig","twenty"],["null","zero"],["Tschüss!","Bye!"],["die Anmeldung","registration"]];
+const DIKTAT=[ // what you hear (spelled or spoken) -> what to type
+ {say:"spell",w:"WIEN"},{say:"spell",w:"GRAZ"},{say:"spell",w:"JONAS"},{say:"spell",w:"EVA"},{say:"spell",w:"ZOE"},{say:"spell",w:"MEYER"},
+ {say:"word",w:"elf"},{say:"word",w:"zwölf"},{say:"word",w:"sechzehn"},{say:"word",w:"siebzehn"},{say:"word",w:"zwanzig"},{say:"word",w:"danke"}];
+const SATZ=[["Wie","alt","bist","du?"],["Ich","bin","fünfzehn","Jahre","alt."],["Wie","schreibt","man","das?"],["Wie","geht","es","dir?"],["Wie","ist","deine","Telefonnummer?"],["Ich","komme","aus","den","USA."],["Ich","heiße","Chloé","Dupont."],["Mir","geht","es","super!"]];
+const DOPUNA=[
+ ["Wie alt ___ du?","bist",["bin","ist"]],["Ich ___ fünfzehn.","bin",["habe","bist"]],["Wie ___ man das?","schreibt",["heißt","bist"]],["Wie geht's? – Gut, danke. Und ___?","dir",["du","dich"]],
+ ["Wie ist ___ Telefonnummer?","deine",["dein","du"]],["Ich bin sechzehn ___ alt.","Jahre",["Jahr","Alter"]],["Ich komme ___ den USA.","aus",["in","von"]],["Woher ___ du?","kommst",["komme","kommt"]],
+ ["16 = ___","sechzehn",["sechszehn","sechzig"]],["17 = ___","siebzehn",["siebenzehn","siebzig"]]];
+// millionaire: only lessons 1-3. q, right, wrong x3, rule for "ask the teacher"
+const MIL=[
+ ["It is 8 in the morning. You say ...","Guten Morgen!",["Gute Nacht!","Guten Abend!","Tschüss!"],"Guten Morgen until about 10-11, Guten Tag in the day, Guten Abend in the evening. Gute Nacht only before sleep."],
+ ["What is the formal “you”?","Sie",["du","ihr","dich"],"du = friends, family, kids. Sie = adults you don't know, teachers, at an office."],
+ ["Ich ___ Lena.","heiße",["heißt","heißen","heiß"],"ich → -e: ich heiße, ich komme, ich wohne."],
+ ["Woher ___ du?","kommst",["komme","kommt","kommen"],"du → -st: du kommst, du wohnst. (heißen: du heißt)"],
+ ["I am from the USA.","Ich komme aus den USA.",["Ich komme aus USA.","Ich komme aus die USA.","Ich bin von USA."],"Most countries: aus Frankreich. But: aus den USA, aus der Schweiz."],
+ ["Which language do they speak in France?","Französisch",["Frankreich","Franzisch","Französin"],"Country → language often ends in -isch: Englisch, Spanisch, Französisch."],
+ ["Wo wohnst du?","Ich wohne in Belgrad.",["Ich komme aus Belgrad.","Ich heiße Belgrad.","Ich bin Belgrad."],"Wo wohnst du? → Ich wohne in ... · Woher kommst du? → Ich komme aus ..."],
+ ["How do you say 16?","sechzehn",["sechszehn","sechzig","sechsten"],"13-19: small number + zehn. Careful: sechzehn (no s), siebzehn (no en)."],
+ ["How do you say 12?","zwölf",["zweizehn","zwanzig","zwei"],"11 and 12 are special: elf, zwölf."],
+ ["Wie alt bist du?","Ich bin fünfzehn.",["Ich habe fünfzehn.","Ich bin fünfzehn alt.","Ich alt fünfzehn."],"German: Ich bin 15 / Ich bin 15 Jahre alt. Not “Ich habe” (French j'ai) and not “15 alt”."],
+ ["The German letter J sounds like ...","“yot”",["“jay”","“zhee”","“ee”"],"J = Jott. Also: V = “fow”, W = “veh”, Z = “tset”."],
+ ["The German letter E sounds like English ...","“A” in “say”",["“E” in “see”","“I” in “hi”","“O” in “go”"],"E = eh (like English A). I = ih (like English E)."],
+ ["Wie geht's? – Es geht. This means ...","so-so",["super","very bad","I'm going"],"Super! · Gut, danke. · Es geht. · Nicht so gut. · Schlecht."],
+ ["The trainer asks: Wie schreibt man das?","M – E – Y – E – R.",["Ich bin 15.","Gut, danke.","Aus Wien."],"Wie schreibt man das? = How do you spell that? Answer with letters."],
+ ["Which number is “zwanzig”?","20",["12","2","200"],"zwanzig = 20. zwei = 2, zwölf = 12."],
+ ["What is 7 + 4?","elf",["zwölf","zehn","sieben"],"7 + 4 = 11 = elf."],
+ ["You leave a friend. You say ...","Tschüss!",["Hallo!","Guten Tag!","Wie geht's?"],"Tschüss = bye (informal). Auf Wiedersehen = goodbye (formal)."],
+ ["Phone: 0 6 4 ... How do you say 0?","null",["nul","zero","nichts"],"0 = null. On the phone Germans say each digit: null, sechs, vier ..."]
+];
+
+// ---------- menu ----------
+const GAMES=[
+ {id:"brzo",name:"Quick pick",sub:"German → English, 4 answers",run:quick},
+ {id:"parovi",name:"Pairs",sub:"number + word",run:pairs},
+ {id:"diktat",name:"Dictation",sub:"listen and type",run:diktat},
+ {id:"skakac",name:"Number climber",sub:"jump on the right number",run:climber,record:true},
+ {id:"slagalica",name:"Build the sentence",sub:"put the words in order",run:slagalica},
+ {id:"dopuna",name:"Fill the gap",sub:"choose the missing word",run:dopuna},
+ {id:"milioner",name:"Millionaire",sub:"lessons 1-3 · 15 questions",run:milioner,mil:true}
+];
+const app=document.getElementById("app");
+function menu(){
+  if("speechSynthesis" in window)speechSynthesis.cancel();
+  app.innerHTML=`<h1>zack<b>!</b> · Wie alt bist du?</h1><p class="sub">German A1 · Lesson 3 · 3 hearts per game. <a href="/igre/wie-alt">10 stations</a> · <a href="/igre/wie-alt-spiele">class games</a></p>
+  <div class="menu">${GAMES.map((g,i)=>{const b=store.get("best-"+g.id,null);return `<button type="button" data-i="${i}" class="${g.mil?"mil":""}"><b>${g.name}</b><small>${g.sub}</small>${b!=null&&!g.mil?`<span class="best">${g.record?"Record: "+b+" floors":"Best: "+b}</span>`:""}</button>`;}).join("")}</div>`;
+  app.querySelectorAll(".menu button").forEach(b=>b.onclick=()=>{const g=GAMES[+b.dataset.i];g.run(g);});
+}
+
+// ---------- shell: hearts, progress, Zack!/Ups! ----------
+function shell(g,total,step){
+  // step(api) renders one question into api.body; api.answer(ok, rightText) closes it
+  let hearts=3,done=0,right=0;
+  app.innerHTML=`<div class="shell"><div class="bar"><button type="button" class="x" aria-label="Back to menu">✕</button><div class="prog"><i style="width:0"></i></div><span class="hearts" aria-label="hearts"></span></div>
+    <p class="title">${g.name}</p><div id="body"></div><div class="verdict" aria-live="polite"></div><div id="next"></div></div>`;
+  const body=app.querySelector("#body"),verdict=app.querySelector(".verdict"),next=app.querySelector("#next");
+  app.querySelector(".x").onclick=menu;
+  const paint=()=>{app.querySelector(".prog i").style.width=(total?done/total*100:0)+"%";app.querySelector(".hearts").innerHTML="♥".repeat(hearts)+`<span class="off">${"♥".repeat(3-hearts)}</span>`;};
+  const api={body,
+    answer(ok,rightText){
+      done++; if(ok){right++;verdict.innerHTML=`<span class="z">Zack!</span>${rightText?esc(rightText):""}`;}
+      else{hearts--;verdict.innerHTML=`<span class="u">Ups!</span>${esc(rightText)}`;}
+      paint();
+      const last=hearts===0||(total&&done>=total);
+      next.innerHTML=`<button type="button" class="go">${last?"Finish":"Weiter →"}</button>`;
+      const b=next.querySelector("button");b.focus();
+      b.onclick=()=>{if(last)return finish();verdict.innerHTML="";next.innerHTML="";step(api);};
+    },
+    get hearts(){return hearts}, get right(){return right}};
+  function finish(){
+    const prev=store.get("best-"+g.id,null);
+    if(prev==null||right>prev)store.set("best-"+g.id,right);
+    app.innerHTML=`<div class="shell end"><p class="title">${g.name}</p><p class="big">${right}${total?" / "+total:""}</p>
+      <p>${g.record?"floors":"correct"}${prev!=null&&right>prev?" · new record!":""}</p>
+      <button type="button" class="go" id="again">Play again</button><button type="button" class="go" id="back" style="background:none;color:var(--ink);border:2px solid var(--line)">Menu</button></div>`;
+    app.querySelector("#again").onclick=()=>g.run(g);app.querySelector("#back").onclick=menu;
+  }
+  api.finish=finish;
+  paint(); step(api);
+  return api;
+}
+function choice(api,prompt,rightAns,opts,after){
+  api.body.innerHTML=prompt+`<div class="opts">${opts.map((o,k)=>`<button type="button" class="opt" data-k="${k}">${esc(o)}</button>`).join("")}</div>`;
+  api.body.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
+    const ok=opts[+b.dataset.k]===rightAns;
+    api.body.querySelectorAll(".opt").forEach(x=>{x.disabled=true;if(opts[+x.dataset.k]===rightAns)x.classList.add("right");});
+    if(!ok)b.classList.add("wrong");
+    if(after)after(ok);
+    api.answer(ok,ok?"":rightAns);
+  });
+}
+
+// 1. Quick pick
+function quick(g){
+  const qs=shuffle(WORDS).slice(0,8);let i=0;
+  shell(g,qs.length,api=>{const [de,en]=qs[i++];const opts=shuffle([en,...shuffle(WORDS.filter(w=>w[1]!==en)).slice(0,3).map(w=>w[1])]);
+    choice(api,`<p class="q">${esc(de)}</p>`,en,opts);say(de);});
+}
+// 2. Pairs: 6 pairs, a wrong match costs a heart
+function pairs(g){
+  const nums=shuffle([0,2,6,7,11,12,13,15,16,17,19,20]).slice(0,6);let found=0,sel=null;
+  const api=shell(g,6,()=>{});
+  const L=shuffle(nums.map(n=>({n,t:String(n)}))),R=shuffle(nums.map(n=>({n,t:NUM[n]})));
+  api.body.innerHTML=`<p class="hint">Tap a number, then its word.</p><div class="pairs"><div class="col">${L.map(c=>`<button type="button" class="opt" data-s="L" data-n="${c.n}">${c.t}</button>`).join("")}</div><div class="col">${R.map(c=>`<button type="button" class="opt" data-s="R" data-n="${c.n}">${esc(c.t)}</button>`).join("")}</div></div>`;
+  const verdict=app.querySelector(".verdict"),next=app.querySelector("#next");
+  // pairs answers without the Weiter button: override the shell's answer flow
+  api.body.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
+    if(b.classList.contains("gone"))return;
+    if(!sel||sel.dataset.s===b.dataset.s){if(sel)sel.classList.remove("sel");sel=b;b.classList.add("sel");if(b.dataset.s==="R")say(b.textContent);return;}
+    const a=sel;sel=null;a.classList.remove("sel");
+    if(a.dataset.n===b.dataset.n){found++;say(NUM[+a.dataset.n]);[a,b].forEach(x=>{x.classList.add("right");setTimeout(()=>x.classList.add("gone"),500)});
+      api.answer(true,`${a.dataset.n} = ${NUM[+a.dataset.n]}`);next.innerHTML="";app.querySelector(".prog i").style.width=(found/6*100)+"%";if(found===6)setTimeout(api.finish,800);}
+    else{[a,b].forEach(x=>{x.classList.add("wrong");setTimeout(()=>x.classList.remove("wrong"),600)});
+      const n=+(a.dataset.s==="L"?a:b).dataset.n;api.answer(false,`${n} = ${NUM[n]}`);
+      app.querySelector(".prog i").style.width=(found/6*100)+"%";if(api.hearts===0)return; next.innerHTML="";}
+  });
+}
+// 3. Dictation
+function diktat(g){
+  const qs=shuffle(DIKTAT).slice(0,8);let i=0;
+  shell(g,qs.length,api=>{const d=qs[i++];const text=d.say==="spell"?d.w.split("").map(c=>LNAME[c]).join(" - "):d.w;
+    const show=d.say==="spell"?d.w[0]+d.w.slice(1).toLowerCase():d.w;
+    api.body.innerHTML=`<p class="hint">${d.say==="spell"?"The word is <b>spelled</b>. Type it.":"Listen and type the word."}</p><button type="button" class="speak">▶ Listen</button>
+      <input class="typed" autocomplete="off" spellcheck="false" aria-label="your answer"><button type="button" class="go" id="ok">Check</button>`;
+    const play=()=>say(text,d.say==="spell"?.7:.85);api.body.querySelector(".speak").onclick=play;setTimeout(play,250);
+    const inp=api.body.querySelector(".typed");inp.focus();
+    const check=()=>{if(!inp.value.trim())return;inp.disabled=true;api.body.querySelector("#ok").remove();api.answer(norm(inp.value)===norm(show),show);};
+    api.body.querySelector("#ok").onclick=check;inp.addEventListener("keydown",e=>{if(e.key==="Enter")check();});});
+}
+// 4. Number climber (skakač): goes until the hearts are gone
+function climber(g){
+  let floor=0,n,cur;
+  const H=120;
+  const goat=`<svg class="goat" id="goat" viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="30" cy="38" rx="18" ry="12" fill="#fff" stroke="#16161A" stroke-width="2.5"/><circle cx="48" cy="26" r="9" fill="#fff" stroke="#16161A" stroke-width="2.5"/><path d="M44 18 L40 9 M50 18 L52 9" stroke="#8A6A3B" stroke-width="3" stroke-linecap="round"/><circle cx="51" cy="25" r="1.8" fill="#16161A"/><path d="M50 34 L50 39" stroke="#16161A" stroke-width="2"/><path d="M18 48 L18 58 M26 49 L26 58 M36 49 L36 58 M42 47 L42 58" stroke="#16161A" stroke-width="3" stroke-linecap="round"/></svg>`;
+  const api=shell(g,0,api=>{
+    if(!api.body.querySelector(".cliff")){
+      api.body.innerHTML=`<p class="q" id="cq"></p><button type="button" class="speak" id="cs">▶ Listen</button><div class="cliff"><div class="height" id="ch">0</div><div class="floors" id="fl"><div class="ground"></div></div>${goat}</div>`;
+    }
+    n=Math.floor(Math.random()*21);
+    const opts=new Set([n]);[n+10,n-10,n+1,n-1,(n*2)%21].forEach(x=>{if(x>=0&&x<=20&&opts.size<3)opts.add(x)});while(opts.size<3)opts.add(Math.floor(Math.random()*21));
+    const f=document.createElement("div");f.className="floor";f.style.bottom=((floor+1)*H)+"px";
+    f.innerHTML=shuffle([...opts]).map(x=>`<button type="button" class="shelf" data-v="${x}">${x}</button>`).join("");
+    const fl=api.body.querySelector("#fl");fl.appendChild(f);cur=f;
+    api.body.querySelector("#cq").textContent=NUM[n];
+    api.body.querySelector("#cs").onclick=()=>say(NUM[n]);say(NUM[n]);
+    const gEl=api.body.querySelector("#goat");
+    f.querySelectorAll(".shelf").forEach(b=>b.onclick=()=>{
+      f.querySelectorAll(".shelf").forEach(x=>x.disabled=true);
+      const r=b.getBoundingClientRect(),c=api.body.querySelector(".cliff").getBoundingClientRect();
+      gEl.style.left=(r.left-c.left+r.width/2-32)+"px";
+      if(+b.dataset.v===n){b.classList.add("done");floor++;gEl.classList.remove("hop");void gEl.offsetWidth;gEl.classList.add("hop");fl.style.transform=`translateY(${floor*H}px)`;
+        api.body.querySelector("#ch").textContent=floor;
+        f.querySelectorAll(".shelf").forEach(x=>{if(x!==b)x.classList.add("past")});
+        api.answer(true,`${n} = ${NUM[n]}`);
+      }else{b.classList.add("miss");gEl.classList.remove("slip");void gEl.offsetWidth;gEl.classList.add("slip");f.querySelectorAll(`.shelf[data-v="${n}"]`).forEach(x=>x.classList.add("done"));
+        api.answer(false,`${NUM[n]} = ${n}`);
+        setTimeout(()=>f.remove(),api.hearts?900:0);}
+    });
+  });
+  // shell counts correct answers = floors climbed; climber never ends on a count, only on hearts
+  
+}
+// 5. Build the sentence
+function slagalica(g){
+  const qs=shuffle(SATZ).slice(0,6);let i=0;
+  shell(g,qs.length,api=>{const w=qs[i++];let pick=[];const tiles=shuffle(w.map((t,k)=>({t,k})));
+    api.body.innerHTML=`<p class="hint">Tap the words in the right order.</p><div class="build"></div><div class="pool">${tiles.map(t=>`<button type="button" class="tile" data-k="${t.k}">${esc(t.t)}</button>`).join("")}</div>`;
+    const build=api.body.querySelector(".build");
+    const draw=()=>{build.innerHTML=pick.map((k,p)=>`<button type="button" class="tile" data-p="${p}">${esc(w[k])}</button>`).join("");
+      api.body.querySelectorAll(".pool .tile").forEach(b=>b.classList.toggle("used",pick.includes(+b.dataset.k)));
+      build.querySelectorAll(".tile").forEach(b=>b.onclick=()=>{pick.splice(+b.dataset.p,1);draw();});
+      if(pick.length===w.length){const got=pick.map(k=>w[k]).join(" "),ok=got===w.join(" ");api.body.querySelectorAll(".tile").forEach(t=>t.disabled=true);say(w.join(" "));api.answer(ok,w.join(" "));}};
+    api.body.querySelectorAll(".pool .tile").forEach(b=>b.onclick=()=>{pick.push(+b.dataset.k);draw();});
+    draw();});
+}
+// 6. Fill the gap
+function dopuna(g){
+  const qs=shuffle(DOPUNA).slice(0,8);let i=0;
+  shell(g,qs.length,api=>{const [s,r,w]=qs[i++];const [a,b]=s.split("___");
+    choice(api,`<p class="gapline">${esc(a)}<span>&nbsp;?&nbsp;</span>${esc(b)}</p>`,r,shuffle([r,...w]),()=>{api.body.querySelector(".gapline span").textContent=r;say((a+r+b).replace(/\d+ =/,""));});});
+}
+// 7. Millionaire: no hearts, no record, no grading words. Only “X / 15”.
+function milioner(){
+  const pool=shuffle(MIL),qs=pool.slice(0,15),reserve=pool.slice(15);let i=0,right=0;const used={half:false,swap:false,ask:false};
+  const ov=document.createElement("div");ov.className="studio";document.body.appendChild(ov);document.body.style.overflow="hidden";
+  const close=()=>{ov.remove();document.body.style.overflow="";menu();};
+  function q(){
+    if(i>=qs.length){ov.innerHTML=`<div class="in"><div class="top"><span></span><button type="button" class="x" aria-label="close">✕</button></div><div class="mend"><p class="big">${right} / ${qs.length}</p><p>correct answers</p><button type="button" class="mgo" id="re">Play again</button></div></div>`;
+      ov.querySelector(".x").onclick=close;ov.querySelector("#re").onclick=()=>{ov.remove();milioner();};return;}
+    const [text,r,w,rule]=qs[i];const opts=shuffle([r,...w]);
+    ov.innerHTML=`<div class="in"><div class="top"><b style="color:#FFC93C">Millionaire</b><span>${i+1} / ${qs.length}</span><button type="button" class="x" aria-label="close">✕</button></div>
+      <div class="ladder">${qs.map((_,k)=>`<i class="${k<i?"past":k===i?"now":""} ${(k+1)%5===0?"five":""}"></i>`).join("")}</div>
+      <div class="mq">${esc(text)}</div>
+      <div class="mopts">${opts.map((o,k)=>`<button type="button" class="mopt" data-k="${k}"><b>${"ABCD"[k]}</b>${esc(o)}</button>`).join("")}</div>
+      <div class="life"><button type="button" id="half" ${used.half?"disabled":""}>50 : 50</button><button type="button" id="swap" ${used.swap||!reserve.length?"disabled":""}>New question</button><button type="button" id="ask" ${used.ask?"disabled":""}>Ask the teacher</button></div>
+      <div id="rule"></div><div style="display:flex;justify-content:center" id="nx"></div></div>`;
+    ov.querySelector(".x").onclick=close;
+    ov.querySelectorAll(".mopt").forEach(b=>b.onclick=()=>{
+      const ok=opts[+b.dataset.k]===r;if(ok)right++;
+      ov.querySelectorAll(".mopt").forEach(x=>{x.disabled=true;if(opts[+x.dataset.k]===r)x.classList.add("right");});
+      if(!ok)b.classList.add("wrong");
+      ov.querySelectorAll(".life button").forEach(x=>x.disabled=true);
+      ov.querySelector("#nx").innerHTML=`<button type="button" class="mgo">${i+1<qs.length?"Next question":"Finish"}</button>`;
+      const n=ov.querySelector("#nx button");n.focus();n.onclick=()=>{i++;q();};
+    });
+    ov.querySelector("#half").onclick=()=>{used.half=true;shuffle(opts.map((o,k)=>k).filter(k=>opts[k]!==r)).slice(0,2).forEach(k=>ov.querySelector(`.mopt[data-k="${k}"]`).classList.add("hide"));ov.querySelector("#half").disabled=true;};
+    ov.querySelector("#swap").onclick=()=>{used.swap=true;qs[i]=reserve.shift();q();};
+    ov.querySelector("#ask").onclick=()=>{used.ask=true;ov.querySelector("#rule").innerHTML=`<div class="rule"><b>Teacher:</b> ${esc(rule)}</div>`;ov.querySelector("#ask").disabled=true;};
+  }
+  q();
+}
+
+menu();
+</script>
+</body>
+</html>
