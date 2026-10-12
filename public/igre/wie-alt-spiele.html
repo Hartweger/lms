@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Spiele · Wie alt bist du?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@400;600;700&display=swap">
+<style>
+/* Igre za celu grupu (projektor) uz čas 3. Isti izgled kao stanice wie-alt.html. */
+:root{
+  --bg:#F3F8FA; --card:#FFFFFF; --ink:#16323D; --muted:#5B7480; --line:#D5E4EA;
+  --blue:#0A8FB0; --blue-soft:#DDF3F9; --coral:#E2645F; --coral-soft:#FDE6E5;
+  --ok:#1E8A4C; --ok-soft:#DFF3E7; --bad:#C2413B; --bad-soft:#FBE3E1; --gold:#E0A100;
+  --display:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+  --body:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E1A1F; --card:#16262D; --ink:#E6F1F5; --muted:#93AAB4; --line:#284049;
+  --blue:#3CC3E4; --blue-soft:#123844; --coral:#F78A85; --coral-soft:#3A2022;
+  --ok:#5BD08B; --ok-soft:#173326; --bad:#F2837C; --bad-soft:#3A1E1D; --gold:#FFC145; color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.5}
+.wrap{max-width:900px;margin:0 auto;padding:20px 16px 60px}
+header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px;margin-bottom:16px}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(2rem,6vw,2.8rem);line-height:1;margin:0;color:var(--blue)}
+h1 span{color:var(--coral)}
+h2{font-family:var(--display);font-weight:800;font-size:1.7rem;margin:0;line-height:1.1}
+.sub,.task{color:var(--muted);margin:4px 0 0}
+.task{margin:4px 0 16px}
+.task em{font-style:normal;color:var(--coral);font-weight:700}
+a{color:var(--blue);font-weight:700}
+nav{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:18px}
+nav button{font:inherit;cursor:pointer;background:var(--card);color:var(--ink);border:2px solid var(--line);border-radius:12px;padding:10px;text-align:left;font-weight:700}
+nav button small{display:block;font-weight:400;font-size:.78rem;color:var(--muted)}
+nav button[aria-current=true]{border-color:var(--blue);background:var(--blue-soft)}
+.game{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:22px 20px}
+.btn{font:inherit;cursor:pointer;border-radius:12px;border:2px solid var(--blue);background:var(--blue);color:#fff;padding:10px 18px;font-weight:800}
+.btn.ghost{background:transparent;color:var(--blue)}
+.btn.coral{background:var(--coral);border-color:var(--coral)}
+.btn:disabled{opacity:.4;cursor:default}
+button:focus-visible{outline:3px solid var(--coral);outline-offset:2px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.big{font-family:var(--display);font-weight:800;font-size:clamp(3rem,14vw,7rem);line-height:1;color:var(--blue);text-align:center;margin:10px 0}
+.mid{font-family:var(--display);font-weight:800;font-size:clamp(1.6rem,6vw,2.6rem);text-align:center;margin:6px 0}
+.fb{font-weight:800;min-height:1.6em;text-align:center}
+.fb.ok{color:var(--ok)} .fb.bad{color:var(--bad)}
+.note{font-size:.88rem;color:var(--muted)}
+/* memory */
+.mem{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.mem button{font:inherit;cursor:pointer;aspect-ratio:2/1;border-radius:12px;border:2px solid var(--line);background:var(--blue);color:#fff;font-family:var(--display);font-weight:800;font-size:clamp(.95rem,3.4vw,1.5rem);padding:4px;min-width:0;overflow-wrap:anywhere}
+.mem button.open{background:var(--card);color:var(--ink);border-color:var(--blue)}
+.mem button.done{background:var(--ok-soft);color:var(--ok);border-color:var(--ok);cursor:default}
+.teams{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.team{border:2px solid var(--line);border-radius:12px;padding:6px 14px;font-weight:800;font-variant-numeric:tabular-nums}
+.team.on{border-color:var(--coral);background:var(--coral-soft)}
+/* hangman */
+.word{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin:14px 0}
+.word span{width:clamp(30px,8vw,52px);height:clamp(42px,10vw,64px);border-bottom:4px solid var(--ink);font-family:var(--display);font-weight:800;font-size:clamp(1.6rem,6vw,2.6rem);text-align:center;line-height:1.5}
+.word span.gap{border:0;width:16px}
+.keys{display:grid;grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:6px}
+.keys button{font:inherit;cursor:pointer;border-radius:10px;border:2px solid var(--line);background:var(--card);color:var(--ink);font-weight:800;font-size:1.1rem;padding:8px 0}
+.keys button.hit{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+.keys button.miss{background:var(--bad-soft);border-color:var(--bad);color:var(--bad)}
+.lives{font-size:1.4rem;letter-spacing:.2em;text-align:center;color:var(--coral)}
+/* blitz */
+.opts{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.opts button{font:inherit;cursor:pointer;border-radius:12px;border:2px solid var(--line);background:var(--card);color:var(--ink);font-family:var(--display);font-weight:800;font-size:1.6rem;padding:14px}
+.opts button:hover{border-color:var(--blue)}
+.bar{height:12px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--coral);width:100%}
+.stats{display:flex;justify-content:space-between;font-weight:800;font-variant-numeric:tabular-nums;margin:8px 0}
+/* bingo */
+.board{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:14px}
+.board div{border:2px solid var(--line);border-radius:10px;text-align:center;font-weight:800;padding:6px 0;font-variant-numeric:tabular-nums;color:var(--muted)}
+.board div.on{background:var(--blue);border-color:var(--blue);color:#fff}
+/* salat */
+.tiles{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:12px 0}
+.tiles button{font:inherit;cursor:pointer;width:52px;height:56px;border-radius:12px;border:2px solid var(--blue);background:var(--blue-soft);color:var(--ink);font-family:var(--display);font-weight:800;font-size:1.6rem}
+.tiles button.used{visibility:hidden}
+.answer{min-height:64px;border:2px dashed var(--line);border-radius:12px;display:flex;justify-content:center;flex-wrap:wrap;gap:6px;padding:6px}
+.answer button{font:inherit;cursor:pointer;width:46px;height:50px;border-radius:10px;border:2px solid var(--coral);background:var(--coral-soft);color:var(--ink);font-family:var(--display);font-weight:800;font-size:1.4rem}
+@media (max-width:520px){.mem{grid-template-columns:repeat(3,1fr)}.board{grid-template-columns:repeat(5,1fr)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><h1>Spiele · Wie alt bist <span>du?</span></h1>
+  <p class="sub">German A1 · Lesson 3 · games for the whole class (projector). Solo practice: <a href="/igre/wie-alt">10 stations</a></p></div>
+</header>
+<nav id="nav"></nav>
+<main class="game" id="game"></main>
+</div>
+<script>
+let deVoice=null;
+function pickVoice(){if(!("speechSynthesis" in window))return;const v=speechSynthesis.getVoices();deVoice=v.find(x=>/^de(-|_)DE/i.test(x.lang))||v.find(x=>/^de/i.test(x.lang))||null;}
+if("speechSynthesis" in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice;}
+function say(t,r){if(!("speechSynthesis" in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="de-DE";if(deVoice)u.voice=deVoice;u.rate=r||.85;speechSynthesis.speak(u);}
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const NUM=["null","eins","zwei","drei","vier","fünf","sechs","sieben","acht","neun","zehn","elf","zwölf","dreizehn","vierzehn","fünfzehn","sechzehn","siebzehn","achtzehn","neunzehn","zwanzig"];
+const LNAME={A:"A",B:"Be",C:"Ce",D:"De",E:"E",F:"Eff",G:"Ge",H:"Ha",I:"I",J:"Jott",K:"Ka",L:"Ell",M:"Emm",N:"Enn",O:"O",P:"Pe",Q:"Ku",R:"Err",S:"Ess",T:"Te",U:"U",V:"Fau",W:"We",X:"Ix",Y:"Ypsilon",Z:"Zett","Ä":"Ä","Ö":"Ö","Ü":"Ü","ß":"Eszett"};
+let timers=[]; const clearTimers=()=>{timers.forEach(clearInterval);timers=[];};
+
+const GAMES=[
+ {id:"memory",name:"Memory",sub:"2 teams",run:memory},
+ {id:"galgen",name:"Buchstaben raten",sub:"say the letter in German",run:galgen},
+ {id:"blitz",name:"Zahlen-Blitz",sub:"60 seconds",run:blitz},
+ {id:"salat",name:"Buchstabensalat",sub:"spell the word",run:salat},
+ {id:"bingo",name:"Bingo",sub:"teacher calls numbers",run:bingo}
+];
+let cur=0;
+function nav(){const n=document.getElementById("nav");n.innerHTML=GAMES.map((g,i)=>`<button type="button" data-i="${i}" aria-current="${i===cur}">${g.name}<small>${g.sub}</small></button>`).join("");n.querySelectorAll("button").forEach(b=>b.onclick=()=>{cur=+b.dataset.i;show();});}
+function show(){clearTimers();if("speechSynthesis" in window)speechSynthesis.cancel();nav();GAMES[cur].run(document.getElementById("game"));}
+
+// ---------- 1. Memory: Zahl <-> Wort, two teams ----------
+function memory(el){
+  const nums=shuffle([11,12,13,15,16,17,19,20,0,7,6,2]).slice(0,8);
+  const cards=shuffle(nums.flatMap(n=>[{n,t:String(n)},{n,t:NUM[n]}]));
+  let open=[],lock=false,team=0,pts=[0,0],found=0;
+  el.innerHTML=`<h2>Memory</h2><p class="task">Find the pairs: number + word. Say the number <em>aloud</em> in German! Right pair = one more turn.</p>
+    <div class="teams"><span class="team" id="t0">Team A: 0</span><span class="team" id="t1">Team B: 0</span></div>
+    <div class="mem">${cards.map((c,i)=>`<button type="button" data-i="${i}" aria-label="card">?</button>`).join("")}</div>
+    <p class="fb" id="fb"></p><div class="row"><button type="button" class="btn ghost" id="new">New game</button></div>`;
+  const tm=()=>{[0,1].forEach(k=>{const t=el.querySelector("#t"+k);t.textContent=`Team ${"AB"[k]}: ${pts[k]}`;t.classList.toggle("on",k===team);});};
+  tm();
+  el.querySelectorAll(".mem button").forEach(b=>b.onclick=()=>{
+    const i=+b.dataset.i;if(lock||b.classList.contains("open")||b.classList.contains("done"))return;
+    b.classList.add("open");b.textContent=cards[i].t;open.push(i);
+    if(open.length<2)return;
+    const [a,c]=open, bs=el.querySelectorAll(".mem button"), fb=el.querySelector("#fb");
+    if(cards[a].n===cards[c].n){[a,c].forEach(k=>bs[k].classList.add("done"));pts[team]++;found++;open=[];say(NUM[cards[a].n]);
+      fb.className="fb ok";fb.textContent=found===nums.length?(pts[0]===pts[1]?"Unentschieden!":`Team ${pts[0]>pts[1]?"A":"B"} gewinnt!`):"Richtig! Noch einmal!";tm();}
+    else{lock=true;fb.className="fb bad";fb.textContent="Leider nicht. Next team!";
+      setTimeout(()=>{[a,c].forEach(k=>{bs[k].classList.remove("open");bs[k].textContent="?";});open=[];lock=false;team=1-team;tm();fb.textContent="";},1300);}
+  });
+  el.querySelector("#new").onclick=()=>memory(el);
+}
+
+// ---------- 2. Galgenmännchen without the gallows ----------
+const WORDS=["HALLO","TSCHÜSS","DANKE","SUPER","ZWÖLF","SECHZEHN","SIEBZEHN","ZWANZIG","FRANKREICH","BELGRAD","SPORTCLUB","TELEFON","VORNAME","NACHNAME","ALTER","DEUTSCH","ENGLISCH","WIEN","BERLIN","FÜNFZEHN","JAHRE","USA"];
+function galgen(el){
+  const w=WORDS[Math.floor(Math.random()*WORDS.length)];let guessed=new Set(),lives=7,over=false;
+  const keys="ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜ".split("");
+  el.innerHTML=`<h2>Buchstaben raten</h2><p class="task">The class says a letter <em>in German</em> (“Ich nehme ... Jott!”). The teacher clicks it. Wrong English name? No click!</p>
+    <div class="lives" id="lives"></div><div class="word" id="word"></div><div class="keys" id="keys"></div>
+    <p class="fb" id="fb"></p><div class="row"><button type="button" class="btn ghost" id="new">New word</button><button type="button" class="btn ghost" id="reveal">Show word</button></div>`;
+  const draw=()=>{
+    el.querySelector("#word").innerHTML=w.split("").map(c=>`<span>${guessed.has(c)||over?c:""}</span>`).join("");
+    el.querySelector("#lives").textContent="●".repeat(lives)+"○".repeat(7-lives);
+  };
+  el.querySelector("#keys").innerHTML=keys.map(k=>`<button type="button">${k}</button>`).join("");
+  el.querySelectorAll("#keys button").forEach(b=>b.onclick=()=>{
+    if(over||b.disabled)return;const k=b.textContent;b.disabled=true;guessed.add(k);say(LNAME[k]);
+    const fb=el.querySelector("#fb");
+    if(w.includes(k)){b.classList.add("hit");if(w.split("").every(c=>guessed.has(c))){over=true;fb.className="fb ok";fb.textContent="Super! Now spell it together: "+w.split("").join(" – ");}}
+    else{b.classList.add("miss");lives--;if(!lives){over=true;fb.className="fb bad";fb.textContent="Schade! The word is "+w+".";}}
+    draw();
+  });
+  el.querySelector("#new").onclick=()=>galgen(el);
+  el.querySelector("#reveal").onclick=()=>{over=true;draw();};
+  draw();
+}
+
+// ---------- 3. Zahlen-Blitz: hear a number, click it, 60 s ----------
+function blitz(el){
+  let best=0;try{best=+localStorage.getItem("wab-blitz")||0}catch(e){}
+  el.innerHTML=`<h2>Zahlen-Blitz</h2><p class="task">You hear a number. Click it, fast! <em>60 seconds.</em> Take turns: who has the best score?</p>
+    <p class="mid">Best: <span id="best">${best}</span></p><div class="row" style="justify-content:center"><button type="button" class="btn coral" id="go">Start!</button></div>`;
+  el.querySelector("#go").onclick=()=>{
+    let t=60,sc=0,n;
+    el.innerHTML=`<div class="bar"><i id="bar"></i></div><div class="stats"><span id="time">60 s</span><span id="sc">0 ★</span></div>
+      <div class="row" style="justify-content:center;margin:10px 0"><button type="button" class="btn ghost" id="again">▶ Again</button></div>
+      <div class="opts" id="opts"></div><p class="fb" id="fb"></p>`;
+    const next=()=>{n=Math.floor(Math.random()*21);const o=new Set([n]);[n+10,n-10,n+1,n-1,(n*3)%21].forEach(x=>{if(x>=0&&x<=20&&o.size<4)o.add(x)});while(o.size<4)o.add(Math.floor(Math.random()*21));
+      el.querySelector("#opts").innerHTML=shuffle([...o]).map(x=>`<button type="button">${x}</button>`).join("");
+      el.querySelectorAll("#opts button").forEach(b=>b.onclick=()=>{const fb=el.querySelector("#fb");if(+b.textContent===n){sc++;fb.className="fb ok";fb.textContent="Richtig!";}else{fb.className="fb bad";fb.textContent=`No: ${n} = ${NUM[n]}`;}el.querySelector("#sc").textContent=sc+" ★";next();});
+      say(NUM[n],1);};
+    el.querySelector("#again").onclick=()=>say(NUM[n],.8);
+    next();
+    timers.push(setInterval(()=>{t--;el.querySelector("#time").textContent=t+" s";el.querySelector("#bar").style.width=(t/60*100)+"%";
+      if(t<=0){clearTimers();if(sc>best){best=sc;try{localStorage.setItem("wab-blitz",sc)}catch(e){}}
+        el.innerHTML=`<h2>Zeit ist um!</h2><p class="big">${sc} ★</p><p class="mid">Best: ${best}</p><div class="row" style="justify-content:center"><button type="button" class="btn coral" id="re">Next player</button></div>`;
+        el.querySelector("#re").onclick=()=>blitz(el);}},1000));
+  };
+}
+
+// ---------- 4. Buchstabensalat: hear it spelled / unscramble ----------
+const SALAT=["HALLO","DANKE","SUPER","ELF","ZWÖLF","ACHT","NEUN","ZEHN","DREI","SECHS","ALTER","JAHRE","WIEN","GRAZ","LYON","TSCHÜSS","GUT","SCHLECHT"];
+function salat(el){
+  const w=SALAT[Math.floor(Math.random()*SALAT.length)];let ls=shuffle(w.split("").map((c,i)=>({c,i})));
+  if(ls.map(x=>x.c).join("")===w)ls=ls.reverse();
+  let pick=[];
+  el.innerHTML=`<h2>Buchstabensalat</h2><p class="task">Put the letters in order. Then <em>spell</em> the word aloud in German: “H – A – L – L – O”.</p>
+    <div class="answer" id="ans"></div><div class="tiles" id="tiles"></div>
+    <p class="fb" id="fb"></p><div class="row"><button type="button" class="btn ghost" id="hint">▶ Listen (spelled)</button><button type="button" class="btn ghost" id="new">New word</button></div>`;
+  const draw=()=>{
+    el.querySelector("#tiles").innerHTML=ls.map((x,k)=>`<button type="button" data-k="${k}" class="${pick.includes(k)?"used":""}">${x.c}</button>`).join("");
+    el.querySelector("#ans").innerHTML=pick.map((k,p)=>`<button type="button" data-p="${p}">${ls[k].c}</button>`).join("");
+    el.querySelectorAll("#tiles button").forEach(b=>b.onclick=()=>{pick.push(+b.dataset.k);say(LNAME[ls[+b.dataset.k].c]);draw();check();});
+    el.querySelectorAll("#ans button").forEach(b=>b.onclick=()=>{pick.splice(+b.dataset.p,1);draw();});
+  };
+  const check=()=>{if(pick.length!==w.length)return;const got=pick.map(k=>ls[k].c).join(""),fb=el.querySelector("#fb");
+    if(got===w){fb.className="fb ok";fb.textContent="Super! "+w;say(w);}else{fb.className="fb bad";fb.textContent="Not yet. Click a red letter to take it back.";}};
+  el.querySelector("#hint").onclick=()=>say(w.split("").map(c=>LNAME[c]).join(" - "),.7);
+  el.querySelector("#new").onclick=()=>salat(el);
+  draw();
+}
+
+// ---------- 5. Bingo caller ----------
+function bingo(el){
+  let bag=shuffle([...Array(21).keys()]),called=[];
+  el.innerHTML=`<h2>Zahlen-Bingo</h2><p class="task">Students write 9 numbers (0-20) on page 5. Teacher clicks <em>Next number</em>. Three in a row: “<em>Bingo!</em>” Then the winner reads the numbers back in German.</p>
+    <p class="big" id="num">?</p><p class="mid" id="word">&nbsp;</p>
+    <div class="row" style="justify-content:center"><button type="button" class="btn coral" id="next">Next number</button><button type="button" class="btn ghost" id="rep">▶ Again</button><button type="button" class="btn ghost" id="hide">Hide word</button><button type="button" class="btn ghost" id="new">New game</button></div>
+    <div class="board" id="board">${[...Array(21).keys()].map(n=>`<div id="b${n}">${n}</div>`).join("")}</div>`;
+  let hide=true;
+  const showWord=()=>{const n=called[called.length-1];el.querySelector("#word").textContent=n==null||hide?" ":NUM[n];};
+  el.querySelector("#next").onclick=()=>{if(!bag.length){el.querySelector("#word").textContent="All numbers called.";return;}
+    const n=bag.pop();called.push(n);el.querySelector("#num").textContent=hide?"?":n;el.querySelector("#b"+n).classList.add("on");say(NUM[n]);showWord();
+    if(hide)setTimeout(()=>{if(called[called.length-1]===n)el.querySelector("#num").textContent=n;},4000);};
+  el.querySelector("#rep").onclick=()=>{const n=called[called.length-1];if(n!=null)say(NUM[n]);};
+  el.querySelector("#hide").onclick=e=>{hide=!hide;e.target.textContent=hide?"Show word":"Hide word";showWord();};
+  el.querySelector("#hide").textContent="Show word";
+  el.querySelector("#new").onclick=()=>bingo(el);
+}
+
+show();
+</script>
+</body>
+</html>
