@@ -93,7 +93,8 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
     });
     setCodeLoading(false);
     if (error) {
-      Sentry.captureException(error);
+      // Pogrešan ili istekao kod je korisnička greška, ne bag - ne ide u Sentry.
+      if (error.code !== "otp_expired") Sentry.captureException(error);
       setCodeError("Kod nije ispravan ili je istekao. Proveri mejl ili pošalji novi link.");
       return;
     }
