@@ -215,6 +215,10 @@ export async function POST(request: Request) {
       if (fiscalize) {
         await fiscalizeOrder(order.id); // idempotentno; ne blokira pristup ako padne
       }
+      // `order` je snimak iz inserta (pending) - bez ovoga tabela prikaže „Na čekanju",
+      // a klik na „Potvrdi uplatu" vrati „already completed" (2026-653, 12.10.2026).
+      const { data: fresh } = await admin.from("orders").select("*").eq("id", order.id).single();
+      return NextResponse.json({ order: fresh ?? { ...order, payment_status: "completed", granted: true } });
     } else if (sendPaymentEmail) {
       // Pošalji kupcu podatke za uplatu (uplatnica/PayPal/kartica). Best-effort.
       try {

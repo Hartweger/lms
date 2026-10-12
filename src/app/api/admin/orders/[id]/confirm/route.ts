@@ -22,7 +22,7 @@ export async function POST(
   if (orderError || !order) return NextResponse.json({ error: "Order not found" }, { status: 404 });
 
   if (order.payment_status === "completed") {
-    return NextResponse.json({ error: "Order already completed" }, { status: 400 });
+    return NextResponse.json({ error: "Narudžbina je već potvrđena - osveži stranicu." }, { status: 400 });
   }
 
   // grantAccessForOrder daje pristup + šalje GA4 i Meta Purchase (CAPI) iz jedne tačke
