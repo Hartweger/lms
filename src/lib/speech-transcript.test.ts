@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { mergeTranscript } from "./speech-transcript";
+import { mergeTranscript, expandSpokenSymbols } from "./speech-transcript";
 
 describe("mergeTranscript", () => {
   it("nadovezuje zasebne segmente (desktop Chrome)", () => {
@@ -61,5 +61,23 @@ describe("mergeTranscript", () => {
   it("nova rečenica posle pauze se nadovezuje, ne zamenjuje", () => {
     expect(mergeTranscript("ich wohne in Berlin", "meine Wohnung ist klein"))
       .toBe("ich wohne in Berlin meine Wohnung ist klein");
+  });
+});
+
+describe("expandSpokenSymbols", () => {
+  it("€ postaje euro", () => {
+    expect(expandSpokenSymbols("das kostet 3 €").replace(/\s+/g, " ").trim())
+      .toBe("das kostet 3 euro");
+    expect(expandSpokenSymbols("3€").replace(/\s+/g, " ").trim()).toBe("3 euro");
+  });
+
+  it("vreme sa dvotačkom postaje uhr", () => {
+    expect(expandSpokenSymbols("um 9:00").replace(/\s+/g, " ").trim()).toBe("um 9 uhr");
+    expect(expandSpokenSymbols("um 9:00 uhr").replace(/\s+/g, " ").trim()).toBe("um 9 uhr");
+    expect(expandSpokenSymbols("um 7:30").replace(/\s+/g, " ").trim()).toBe("um 7 uhr 30");
+  });
+
+  it("% postaje prozent", () => {
+    expect(expandSpokenSymbols("10 %").replace(/\s+/g, " ").trim()).toBe("10 prozent");
   });
 });

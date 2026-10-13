@@ -35,3 +35,15 @@ export function mergeTranscript(prev: string, next: string): string {
   }
   return p + " " + n;
 }
+
+// Prepoznavanje govora (de-DE) neke izgovorene reči vraća kao znakove:
+// "drei Euro" -> "3 €", "neun Uhr" -> "9:00", "zehn Prozent" -> "10 %".
+// Pretvaramo ih nazad u reči pre poređenja. Očekuje mala slova, a poziva se
+// PRE skidanja interpunkcije (dvotačka u "9:30" je deo vremena).
+export function expandSpokenSymbols(s: string): string {
+  return s
+    .replace(/\b(\d{1,2}):(\d{2})(\s*uhr\b)?/g, (_, h, m) =>
+      m === "00" ? ` ${+h} uhr ` : ` ${+h} uhr ${+m} `)
+    .replace(/€/g, " euro ")
+    .replace(/%/g, " prozent ");
+}

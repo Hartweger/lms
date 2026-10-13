@@ -3,7 +3,7 @@
 import { useState, useRef } from "react";
 import SpeakButton from "@/components/SpeakButton";
 import { sanitizeHtml } from "@/lib/sanitize";
-import { mergeTranscript } from "@/lib/speech-transcript";
+import { mergeTranscript, expandSpokenSymbols } from "@/lib/speech-transcript";
 import { spellNumbers, spellDigitWise } from "@/lib/german-numbers";
 
 interface SpeakExerciseProps {
@@ -32,8 +32,9 @@ function levenshtein(a: string, b: string): number {
 // Prepoznavanje govora izgovoreni broj UVEK vrati kao cifru, pa cifre
 // pretvaramo u reči. digitWise: "0176" -> "null eins sieben sechs" (telefon),
 // inače "32" -> "zweiunddreißig"; evaluate() proba oba i uzima povoljnije.
+// Znakove (€, %, "9:00") prvo vraćamo u reči - vidi expandSpokenSymbols.
 function normalize(s: string, digitWise = false): string {
-  const t = s.trim().toLowerCase()
+  const t = expandSpokenSymbols(s.trim().toLowerCase())
     .replace(/[.!?,;:„“”‚’‘"'\-—–…()]/g, " ");
   return (digitWise ? spellDigitWise(t) : spellNumbers(t))
     .replace(/\s+/g, " ")
