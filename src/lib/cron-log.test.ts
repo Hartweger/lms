@@ -106,7 +106,7 @@ describe("EXPECTED_CRONS", () => {
   it("pokriva svih 19 cron ruta iz vercel.json", () => {
     expect(EXPECTED_CRONS.map((c) => c.name).sort()).toEqual([
       "access-audit", "activation", "business-summary", "close-groups",
-      "eseji-pregled", "expiry-reminder", "grupe-podsetnik", "honorari",
+      "eseji-pregled", "expiry-reminder", "gen2-push", "grupe-podsetnik", "honorari",
       "inactivity", "jutarnji-pregled", "naki-content-weekly", "nestpay-poll",
       "nestpay-reconcile", "prof-podsetnik", "review-recert", "review-request",
       "subscriptions-poll", "test-funnel", "zack-izvestaj", "zack-poklon-mejlovi",

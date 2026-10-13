@@ -2,6 +2,7 @@ import { Resend } from "resend";
 import * as Sentry from "@sentry/nextjs";
 import { KONSULTACIJA_CALENDAR_URL } from "@/lib/konsultacija";
 import { SITE_URL } from "@/lib/site-url";
+import { mnozina } from "@/lib/gen2-push";
 import { odjavaUrl, listUnsubscribeHeaders } from "@/lib/optout";
 import { isSuppressed } from "@/lib/email-suppression";
 import { htmlToText } from "@/lib/html-to-text";
@@ -3521,5 +3522,40 @@ export async function sendTerminOtvoren(
   } catch (e) {
     console.error("[email] sendTerminOtvoren pao:", e);
     return null;
+  }
+}
+
+// Nove poruke u Gen II kanalu (api/cron/gen2-push). Polaznica ga dobija kao
+// rezervu kad push nije stigao, Nataša (admin) za svaku poruku dok nema push.
+export async function sendGen2NovePorukeEmail(
+  to: string,
+  ime: string,
+  opts: { broj: number; poslednjeIme: string; poslednjiTekst: string; zaAdmina?: boolean },
+) {
+  try {
+    const resend = getResend();
+    if (!resend) return;
+    const prvo = ime ? ime.split(" ")[0] : "";
+    const koliko = opts.broj === 1 ? "nova poruka" : `${opts.broj} ${mnozina(opts.broj, "nova poruka", "nove poruke", "novih poruka")}`;
+    const napomena = opts.zaAdmina
+      ? "Ovaj mejl stiže za svaku novu poruku u kanalu Gen II. Kad uključiš obaveštenja u zajednici, umesto mejla stiže obaveštenje na telefon."
+      : "Ovaj mejl stiže zato što na ovom uređaju nemaš uključena obaveštenja. Uključi ih u zajednici i mejlovi prestaju.";
+    await sendEmail(resend, {
+      to,
+      subject: opts.zaAdmina && opts.broj === 1 ? `Gen II: nova poruka od ${opts.poslednjeIme}` : `Gen II: ${koliko}`,
+      replyTo: "info@hartweger.rs",
+      html: `<!DOCTYPE html><html lang="sr"><head><meta charset="utf-8"></head>
+<body style="font-family:sans-serif;line-height:1.6;color:#222">
+<h2>Zdravo${prvo ? ", " + esc(prvo) : ""}!</h2>
+<p>U kanalu <strong>Gen II</strong> te čeka ${koliko}.</p>
+<blockquote style="margin:16px 0;padding:12px 16px;border-left:3px solid #c94f6d;background:#faf9f6;white-space:pre-wrap">
+<strong>${esc(opts.poslednjeIme)}:</strong> ${esc(opts.poslednjiTekst)}
+</blockquote>
+<p style="margin:24px 0"><a href="${SITE_URL}/clanstvo/zajednica" style="background:#c94f6d;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:bold;display:inline-block">Otvori zajednicu</a></p>
+<p style="margin-top:20px;font-size:13px;color:#666">${napomena}</p>
+</body></html>`,
+    });
+  } catch (e) {
+    console.error("[email] sendGen2NovePorukeEmail pao:", e);
   }
 }

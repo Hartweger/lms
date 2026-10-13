@@ -25,6 +25,7 @@ import type {
   RealtimePostgresInsertPayload,
 } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/client";
+import PushPrijava from "@/components/clanstvo/PushPrijava";
 import {
   dodajPoruku,
   ukloniPoruku,
@@ -230,6 +231,9 @@ export default function ChatKlijent({
         })}
       </div>
       {aktivni?.opis && <p className="pb-2 text-sm text-nh-dark/60">{aktivni.opis}</p>}
+      {/* Push samo u Gen II - tamo zamenjuje WhatsApp grupu. Ostali kanali
+          ostaju na bedžu i tačkici u navigaciji. */}
+      {aktivni?.slug === "gen2" && <PushPrijava mojId={mojId} />}
 
       <div className="flex-1 space-y-3 overflow-y-auto rounded-xl border border-nh-pink-light bg-white p-4">
         {poruke.map((p) => {
