@@ -203,7 +203,7 @@ export default function SmileWidget() {
           )}
         </button>
         {!open && (
-          <button onClick={dismiss} aria-label="Sakrij Smile" title="Sakrij" style={{ position: "absolute", top: -5, right: -5, width: 22, height: 22, borderRadius: "50%", background: "#fff", border: "1px solid #e2e5e9", boxShadow: "0 1px 6px rgba(0,0,0,.22)", color: "#6b7280", fontSize: 15, lineHeight: 1, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", padding: 0 }}>×</button>
+          <button onClick={dismiss} aria-label="Sakrij Smile" title="Sakrij" style={{ position: "absolute", top: -6, right: -6, width: 24, height: 24, borderRadius: "50%", background: "#fff", border: "1px solid #e2e5e9", boxShadow: "0 1px 6px rgba(0,0,0,.22)", color: "#6b7280", fontSize: 15, lineHeight: 1, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", padding: 0 }}>×</button>
         )}
       </div>
 
