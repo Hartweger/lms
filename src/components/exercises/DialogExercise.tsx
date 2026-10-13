@@ -149,7 +149,7 @@ export default function DialogExercise({ exerciseId, config, previousAttempts, o
           <ul className="space-y-1">
             {config.goals.map((goal, i) => (
               <li key={i} className="text-sm text-gray-600 flex items-start gap-2">
-                <span className="text-plava mt-0.5">•</span>
+                <span className="text-plava-tekst mt-0.5">•</span>
                 {goal}
               </li>
             ))}
@@ -160,7 +160,7 @@ export default function DialogExercise({ exerciseId, config, previousAttempts, o
         </p>
         <button
           onClick={startDialog}
-          className="bg-plava text-white px-8 py-3 rounded-lg hover:bg-plava-dark transition-colors text-lg"
+          className="bg-plava text-na-plavoj px-8 py-3 rounded-lg hover:bg-plava-dark transition-colors text-lg"
         >
           Započni dijalog
         </button>
@@ -194,9 +194,9 @@ export default function DialogExercise({ exerciseId, config, previousAttempts, o
               <span key={i} className={i < stars ? "opacity-100" : "opacity-20"}>⭐</span>
             ))}
           </div>
-          <div className="text-4xl font-bold text-plava mb-1">{percent}%</div>
+          <div className="text-4xl font-bold text-plava-tekst mb-1">{percent}%</div>
           <p className="text-gray-500">Ispunjeno ciljeva: {summary.score} od {summary.total}</p>
-          <p className="text-plava font-bold">{earnedXp} XP</p>
+          <p className="text-plava-tekst font-bold">{earnedXp} XP</p>
         </div>
 
         {/* Rezultat nije upisan u napredak - polaznik mora da vidi i može da ponovi upis */}
@@ -209,7 +209,7 @@ export default function DialogExercise({ exerciseId, config, previousAttempts, o
               <button
                 onClick={onRetrySave}
                 disabled={saving}
-                className="mt-2 bg-plava text-white px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-plava-dark transition-colors disabled:opacity-50"
+                className="mt-2 bg-plava text-na-plavoj px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-plava-dark transition-colors disabled:opacity-50"
               >
                 {saving ? "Čuvam..." : "Sačuvaj ponovo"}
               </button>
@@ -223,7 +223,7 @@ export default function DialogExercise({ exerciseId, config, previousAttempts, o
           <ul className="space-y-2">
             {summary.goals_completed.map((g, i) => (
               <li key={i} className="flex items-center gap-2 text-sm">
-                <span className={g.completed ? "text-green-500" : "text-koral"}>
+                <span className={g.completed ? "text-green-500" : "text-koral-tekst"}>
                   {g.completed ? "✅" : "❌"}
                 </span>
                 <span className={g.completed ? "text-gray-700" : "text-gray-400"}>
@@ -241,7 +241,7 @@ export default function DialogExercise({ exerciseId, config, previousAttempts, o
             {summary.corrections.map((c, i) => (
               <div key={i} className="bg-white rounded-lg border border-gray-100 p-3">
                 <div className="flex items-start gap-2 text-sm">
-                  <span className="text-koral line-through">{c.original}</span>
+                  <span className="text-koral-tekst line-through">{c.original}</span>
                   <span className="text-gray-400">&rarr;</span>
                   <span className="text-green-600 font-medium">{c.corrected}</span>
                 </div>
@@ -258,7 +258,7 @@ export default function DialogExercise({ exerciseId, config, previousAttempts, o
           {attemptCount < MAX_ATTEMPTS ? (
             <button
               onClick={handleRetry}
-              className="bg-plava text-white px-6 py-3 rounded-lg hover:bg-plava-dark transition-colors"
+              className="bg-plava text-na-plavoj px-6 py-3 rounded-lg hover:bg-plava-dark transition-colors"
             >
               Pokušaj ponovo ({MAX_ATTEMPTS - attemptCount} preostalo)
             </button>
@@ -277,7 +277,7 @@ export default function DialogExercise({ exerciseId, config, previousAttempts, o
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <span className="text-sm text-gray-500">Razmena:</span>
-          <span className="text-sm font-bold text-plava">{turnNumber}/{config.max_turns}</span>
+          <span className="text-sm font-bold text-plava-tekst">{turnNumber}/{config.max_turns}</span>
         </div>
         <div className="flex items-center gap-1">
           {config.goals.map((_, i) => (
@@ -302,7 +302,7 @@ export default function DialogExercise({ exerciseId, config, previousAttempts, o
             <div
               className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm ${
                 msg.role === "user"
-                  ? "bg-plava text-white rounded-br-md"
+                  ? "bg-plava text-na-plavoj rounded-br-md"
                   : "bg-gray-100 text-gray-800 rounded-bl-md"
               }`}
             >
@@ -330,7 +330,7 @@ export default function DialogExercise({ exerciseId, config, previousAttempts, o
             <button
               key={i}
               onClick={() => sendMessage(choice)}
-              className="w-full text-left px-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-sm text-gray-700 hover:border-plava hover:text-plava transition-colors"
+              className="w-full text-left px-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-sm text-gray-700 hover:border-plava hover:text-plava-tekst transition-colors"
             >
               {choice}
             </button>
@@ -352,7 +352,7 @@ export default function DialogExercise({ exerciseId, config, previousAttempts, o
           <button
             onClick={() => sendMessage(input)}
             disabled={!input.trim()}
-            className="bg-plava text-white px-4 py-3 rounded-xl hover:bg-plava-dark transition-colors disabled:opacity-50"
+            className="bg-plava text-na-plavoj px-4 py-3 rounded-xl hover:bg-plava-dark transition-colors disabled:opacity-50"
           >
             ➤
           </button>

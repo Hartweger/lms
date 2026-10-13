@@ -10,7 +10,7 @@ export default function TableBlock({ headers, rows }: TableSection) {
             {headers.map((h, i) => (
               <th
                 key={i}
-                className="bg-plava text-white px-4 py-2.5 text-left font-semibold"
+                className="bg-plava text-na-plavoj px-4 py-2.5 text-left font-semibold"
               >
                 {h}
               </th>

@@ -135,7 +135,7 @@ export default function EssayExercise({ task, level, onAnswer, onExisting, exerc
   };
 
   const scoreColors: Record<number, string> = {
-    1: "text-koral",
+    1: "text-koral-tekst",
     2: "text-orange-500",
     3: "text-yellow-600",
     4: "text-green-500",
@@ -162,7 +162,7 @@ export default function EssayExercise({ task, level, onAnswer, onExisting, exerc
         <div className="mt-6 space-y-4">
           {published.professor_score != null && (() => {
             const pct = maxPoints > 0 ? published.professor_score / maxPoints : 0;
-            const color = pct >= 0.8 ? "text-green-600" : pct >= 0.6 ? "text-green-500" : pct >= 0.4 ? "text-yellow-600" : "text-koral";
+            const color = pct >= 0.8 ? "text-green-600" : pct >= 0.6 ? "text-green-500" : pct >= 0.4 ? "text-yellow-600" : "text-koral-tekst";
             const label = maxPoints <= 5 ? (scoreLabels[published.professor_score] ?? "") : (pct >= 0.6 ? "Položeno!" : "Nije položeno");
             return (
               <div className="flex items-center gap-3">
@@ -185,7 +185,7 @@ export default function EssayExercise({ task, level, onAnswer, onExisting, exerc
               {published.ai_corrections.map((c, i) => (
                 <div key={i} className="bg-white rounded-lg border border-gray-100 p-3">
                   <div className="flex items-start gap-2 text-sm">
-                    <span className="text-koral line-through">{c.original}</span>
+                    <span className="text-koral-tekst line-through">{c.original}</span>
                     <span className="text-gray-400">&rarr;</span>
                     <span className="text-green-600 font-medium">{c.corrected}</span>
                   </div>
@@ -209,7 +209,7 @@ export default function EssayExercise({ task, level, onAnswer, onExisting, exerc
           <p className="text-gray-600 bg-gray-50 rounded-lg p-4 whitespace-pre-line">{task}</p>
         </div>
         <div className="mt-6 bg-plava-light rounded-xl p-6 text-center">
-          <p className="text-lg font-medium text-plava mb-2">Tvoj Schreiben je poslat na pregled</p>
+          <p className="text-lg font-medium text-plava-tekst mb-2">Tvoj Schreiben je poslat na pregled</p>
           <p className="text-sm text-gray-500">Profesor će pregledati tvoj rad i dati ti povratnu informaciju. Rezultat ćeš videti ovde kada bude gotovo.</p>
         </div>
       </div>
@@ -232,7 +232,7 @@ export default function EssayExercise({ task, level, onAnswer, onExisting, exerc
       <button
         onClick={handleSubmit}
         disabled={checking || submitted || !text.trim()}
-        className="mt-4 bg-plava text-white px-6 py-3 rounded-lg hover:bg-plava-dark transition-colors disabled:opacity-50"
+        className="mt-4 bg-plava text-na-plavoj px-6 py-3 rounded-lg hover:bg-plava-dark transition-colors disabled:opacity-50"
       >
         {checking ? "Šaljem..." : "Pošalji Schreiben"}
       </button>

@@ -43,9 +43,9 @@ const SEF_LABEL: Record<string, string> = {
 const SEF_BOJA: Record<string, string> = {
   Approved: "text-green-600",
   Paid: "text-green-600",
-  Rejected: "text-koral font-semibold",
-  Mistake: "text-koral font-semibold",
-  GRESKA: "text-koral font-semibold",
+  Rejected: "text-koral-tekst font-semibold",
+  Mistake: "text-koral-tekst font-semibold",
+  GRESKA: "text-koral-tekst font-semibold",
   OverDue: "text-amber-600",
 };
 
@@ -64,7 +64,7 @@ function RazlogBanke({ decline, kartica }: { decline: CardDecline | null; kartic
       .filter(Boolean)
       .join(" · ");
     return (
-      <span className="text-xs text-koral max-w-[190px]" title={tooltip}>
+      <span className="text-xs text-koral-tekst max-w-[190px]" title={tooltip}>
         {vidljivo || "banka odbila"}
       </span>
     );
@@ -478,7 +478,7 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
         <div className="flex items-center gap-3">
           <button
             onClick={() => setShowNewForm((v) => !v)}
-            className="px-4 py-2 rounded-lg text-sm font-medium bg-plava text-white hover:bg-plava-dark transition-colors"
+            className="px-4 py-2 rounded-lg text-sm font-medium bg-plava text-na-plavoj hover:bg-plava-dark transition-colors"
           >
             + Nova narudžbina
           </button>
@@ -501,7 +501,7 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
                   setFirmaNadjena(false);
                 }
               }}
-              className="rounded border-gray-300 text-plava focus:ring-plava"
+              className="rounded border-gray-300 text-plava-tekst focus:ring-plava"
             />
             <span className="text-sm font-medium text-gray-700">Kupac je firma</span>
           </label>
@@ -591,7 +591,7 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
                 </div>
               </div>
               {newGroupId && (
-                <p className="text-xs text-plava mt-3">
+                <p className="text-xs text-plava-tekst mt-3">
                   Polaznik je sačuvan. Unesi sledećeg - ući će u isti predračun i istu fakturu.
                 </p>
               )}
@@ -695,7 +695,7 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
                 type="checkbox"
                 checked={newMarkPaid}
                 onChange={(e) => setNewMarkPaid(e.target.checked)}
-                className="rounded border-gray-300 text-plava focus:ring-plava"
+                className="rounded border-gray-300 text-plava-tekst focus:ring-plava"
               />
               <span className="text-sm text-gray-700">
                 Označi odmah kao plaćeno (daje pristup kursu)
@@ -707,7 +707,7 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
                   type="checkbox"
                   checked={newFiscalize}
                   onChange={(e) => setNewFiscalize(e.target.checked)}
-                  className="rounded border-gray-300 text-plava focus:ring-plava"
+                  className="rounded border-gray-300 text-plava-tekst focus:ring-plava"
                 />
                 <span className="text-sm text-gray-700">
                   Fiskalizuj račun (ne čekiraj ako račun ide preko SEF-a)
@@ -723,7 +723,7 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
                   checked={newSendEmail && !newMarkPaid}
                   disabled={newMarkPaid}
                   onChange={(e) => setNewSendEmail(e.target.checked)}
-                  className="rounded border-gray-300 text-plava focus:ring-plava"
+                  className="rounded border-gray-300 text-plava-tekst focus:ring-plava"
                 />
                 <span className="text-sm text-gray-700">
                   Pošalji kupcu podatke za uplatu (mejl sa {newPayment === "kartica" ? "linkom za karticu" : newPayment === "paypal" ? "PayPal-om" : "uplatnicom i pozivom na broj"})
@@ -737,13 +737,13 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
             )}
           </div>
           {newError && (
-            <p className="mt-3 text-sm text-koral font-medium">{newError}</p>
+            <p className="mt-3 text-sm text-koral-tekst font-medium">{newError}</p>
           )}
           <div className="mt-4 flex gap-3">
             <button
               onClick={createOrder}
               disabled={newLoading}
-              className="px-5 py-2 rounded-lg text-sm font-medium bg-plava text-white hover:bg-plava-dark transition-colors disabled:opacity-50"
+              className="px-5 py-2 rounded-lg text-sm font-medium bg-plava text-na-plavoj hover:bg-plava-dark transition-colors disabled:opacity-50"
             >
               {newLoading
                 ? "Kreiranje..."
@@ -768,7 +768,7 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
 
       {dokError && (
         <div className="mb-4 rounded-lg bg-koral/10 border border-koral/30 px-4 py-3">
-          <p className="text-sm text-koral font-medium">{dokError}</p>
+          <p className="text-sm text-koral-tekst font-medium">{dokError}</p>
         </div>
       )}
 
@@ -901,7 +901,7 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
                       <button
                         type="button"
                         onClick={() => setProductFilter(courseTitle)}
-                        className="text-left hover:text-plava hover:underline"
+                        className="text-left hover:text-plava-tekst hover:underline"
                         title="Filtriraj po ovom proizvodu"
                       >
                         {courseTitle}
@@ -938,7 +938,7 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
                             </span>
                           ) : (
                             <span
-                              className="text-xs text-koral font-medium"
+                              className="text-xs text-koral-tekst font-medium"
                               title="Pristup je oduzet, ali protivračun kod PURS-a nije izdat - klikni „Storniraj"
                             >
                               bez storno računa
@@ -975,7 +975,7 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
                             Potvrđena
                           </span>
                           <span
-                            className={`text-xs ${order.granted ? "text-green-600" : "text-koral font-medium"}`}
+                            className={`text-xs ${order.granted ? "text-green-600" : "text-koral-tekst font-medium"}`}
                           >
                             {order.granted ? "pristup ✓" : "pristup ✗"}
                           </span>
@@ -1000,7 +1000,7 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
                               onClick={() => izdajDokument(order, "predracun")}
                               disabled={dokLoading === `${order.id}-predracun`}
                               title="Napravi predračun i pošalji ga na mejl računovodstva"
-                              className="text-xs px-3 py-1.5 rounded-lg bg-white text-plava font-medium border border-plava/30 hover:bg-plava hover:text-white transition-colors disabled:opacity-50"
+                              className="text-xs px-3 py-1.5 rounded-lg bg-white text-plava-tekst font-medium border border-plava/30 hover:bg-plava hover:text-white transition-colors disabled:opacity-50"
                             >
                               {dokLoading === `${order.id}-predracun` ? "..." : "Pošalji predračun"}
                             </button>
@@ -1071,7 +1071,7 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
                               onClick={() => deleteOrder(order.id, true)}
                               disabled={isBeingDeleted}
                               title="Briše porudžbinu i šalje polazniku mejl da je otkazana"
-                              className="text-xs text-koral font-medium hover:underline disabled:opacity-50 whitespace-nowrap"
+                              className="text-xs text-koral-tekst font-medium hover:underline disabled:opacity-50 whitespace-nowrap"
                             >
                               {isBeingDeleted ? "..." : "Da + mejl"}
                             </button>
@@ -1100,7 +1100,7 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
                                 onClick={() => sendPayment(order.id)}
                                 disabled={sendingPay === order.id}
                                 title="Pošalji kupcu mejl sa podacima za uplatu"
-                                className="text-xs px-3 py-1.5 rounded-lg bg-plava-light text-plava font-medium hover:bg-plava hover:text-white transition-colors disabled:opacity-50"
+                                className="text-xs px-3 py-1.5 rounded-lg bg-plava-light text-plava-tekst font-medium hover:bg-plava hover:text-white transition-colors disabled:opacity-50"
                               >
                                 {sendingPay === order.id ? "..." : sentPay === order.id ? "✓ Poslato" : "Pošalji uplatu"}
                               </button>
@@ -1113,7 +1113,7 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
                             </button>
                             <button
                               onClick={() => setDeleteId(order.id)}
-                              className="text-xs text-gray-400 hover:text-koral hover:underline transition-colors"
+                              className="text-xs text-gray-400 hover:text-koral-tekst hover:underline transition-colors"
                             >
                               Obriši
                             </button>
@@ -1130,7 +1130,7 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
                           <button
                             onClick={() => stornoOrder(order.id)}
                             disabled={isLoading}
-                            className="text-xs text-koral font-medium hover:underline disabled:opacity-50"
+                            className="text-xs text-koral-tekst font-medium hover:underline disabled:opacity-50"
                           >
                             {isLoading ? "Storniram…" : "Da"}
                           </button>
@@ -1148,7 +1148,7 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
                               href={order.fiscal_pdf_url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-xs px-3 py-1.5 rounded-lg bg-plava-light text-plava font-medium hover:bg-plava hover:text-white transition-colors"
+                              className="text-xs px-3 py-1.5 rounded-lg bg-plava-light text-plava-tekst font-medium hover:bg-plava hover:text-white transition-colors"
                             >
                               Račun
                             </a>
@@ -1156,7 +1156,7 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
                             <button
                               onClick={() => reFiscalize(order.id)}
                               disabled={isLoading}
-                              className="text-xs text-koral font-medium hover:underline disabled:opacity-50"
+                              className="text-xs text-koral-tekst font-medium hover:underline disabled:opacity-50"
                               title="Narudžbina je potvrđena ali fiskalni račun nije izdat - klikni da fiskalizuješ"
                             >
                               {isLoading ? "Fiskalizujem…" : "⚠ Fiskalizuj"}
@@ -1175,7 +1175,7 @@ export default function NarudzbineClient({ initialOrders, courses, variantsByCou
                           {canRefundOrder(order) && (
                             <button
                               onClick={() => setStornoId(order.id)}
-                              className="text-xs text-gray-400 hover:text-koral hover:underline transition-colors"
+                              className="text-xs text-gray-400 hover:text-koral-tekst hover:underline transition-colors"
                               title="Storniraj: protivračun kod PURS-a + oduzimanje pristupa"
                             >
                               Storniraj

@@ -45,8 +45,8 @@ export default function RasporedKartice({
   const chip = (active: boolean) =>
     `px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
       active
-        ? "bg-plava text-white shadow-sm"
-        : "bg-white border border-gray-200 text-gray-600 hover:border-plava hover:text-plava"
+        ? "bg-plava text-na-plavoj shadow-sm"
+        : "bg-white border border-gray-200 text-gray-600 hover:border-plava hover:text-plava-tekst"
     }`;
 
   return (
@@ -194,14 +194,14 @@ function Kartica({ g }: { g: GrupaRaspored }) {
           ) : g.checkoutSlug ? (
             <Link
               href={`/kursevi/${g.checkoutSlug}`}
-              className="bg-koral hover:bg-koral-dark text-white font-bold py-3 px-6 rounded-xl transition-colors whitespace-nowrap"
+              className="bg-koral hover:bg-koral-dark text-na-koralnoj font-bold py-3 px-6 rounded-xl transition-colors whitespace-nowrap"
             >
               Prijavi se
             </Link>
           ) : (
             <Link
               href="/kontakt"
-              className="bg-koral hover:bg-koral-dark text-white font-bold py-3 px-6 rounded-xl transition-colors whitespace-nowrap"
+              className="bg-koral hover:bg-koral-dark text-na-koralnoj font-bold py-3 px-6 rounded-xl transition-colors whitespace-nowrap"
             >
               Javi nam se
             </Link>
@@ -214,7 +214,7 @@ function Kartica({ g }: { g: GrupaRaspored }) {
 
 function IkonicaKalendar() {
   return (
-    <svg className="w-4 h-4 mt-0.5 text-plava flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+    <svg className="w-4 h-4 mt-0.5 text-plava-tekst flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 9v9.75" />
     </svg>
   );
@@ -222,7 +222,7 @@ function IkonicaKalendar() {
 
 function IkonicaSat() {
   return (
-    <svg className="w-4 h-4 mt-0.5 text-plava flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+    <svg className="w-4 h-4 mt-0.5 text-plava-tekst flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
     </svg>
   );
@@ -230,7 +230,7 @@ function IkonicaSat() {
 
 function IkonicaOsoba() {
   return (
-    <svg className="w-4 h-4 mt-0.5 text-plava flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+    <svg className="w-4 h-4 mt-0.5 text-plava-tekst flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
     </svg>
   );

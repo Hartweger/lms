@@ -79,7 +79,7 @@ export default async function RasporedPage() {
           </div>
           <Link
             href="/besplatno-testiranje"
-            className="bg-plava hover:bg-plava-dark text-white font-bold py-3 px-8 rounded-xl transition-colors whitespace-nowrap"
+            className="bg-plava hover:bg-plava-dark text-na-plavoj font-bold py-3 px-8 rounded-xl transition-colors whitespace-nowrap"
           >
             Besplatno testiranje
           </Link>

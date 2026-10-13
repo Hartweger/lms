@@ -216,7 +216,7 @@ export default async function LekcijaStranica({ params }: PageProps) {
               >
                 <div className="flex items-center justify-between gap-3">
                   <span className="font-medium text-gray-900">{ex.title}</span>
-                  <span className={`text-xs px-3 py-1 rounded-full whitespace-nowrap ${kind.test ? "bg-koral-light text-koral-dark" : "bg-plava-light text-plava"}`}>
+                  <span className={`text-xs px-3 py-1 rounded-full whitespace-nowrap ${kind.test ? "bg-koral-light text-koral-dark" : "bg-plava-light text-plava-tekst"}`}>
                     {kind.label}
                   </span>
                 </div>
@@ -239,7 +239,7 @@ export default async function LekcijaStranica({ params }: PageProps) {
               >
                 <div className="flex items-center justify-between">
                   <span className="font-medium text-gray-900">Prevedi rečenice (AI prevod)</span>
-                  <span className="text-xs text-plava bg-plava-light px-3 py-1 rounded-full">AI prevod</span>
+                  <span className="text-xs text-plava-tekst bg-plava-light px-3 py-1 rounded-full">AI prevod</span>
                 </div>
               </Link>
             )}
@@ -250,7 +250,7 @@ export default async function LekcijaStranica({ params }: PageProps) {
               >
                 <div className="flex items-center justify-between">
                   <span className="font-medium text-gray-900">Napiši rečenice (AI vežba pisanja)</span>
-                  <span className="text-xs text-plava bg-plava-light px-3 py-1 rounded-full">AI pisanje</span>
+                  <span className="text-xs text-plava-tekst bg-plava-light px-3 py-1 rounded-full">AI pisanje</span>
                 </div>
               </Link>
             )}
@@ -284,7 +284,7 @@ export default async function LekcijaStranica({ params }: PageProps) {
           {nextLesson ? (
             <Link
               href={`/lekcija/${nextLesson.id}`}
-              className="flex-1 text-center py-3 bg-plava text-white rounded-lg text-sm font-bold hover:bg-plava-dark transition-colors"
+              className="flex-1 text-center py-3 bg-plava text-na-plavoj rounded-lg text-sm font-bold hover:bg-plava-dark transition-colors"
             >
               {nextLabel || "Sledeća →"}
             </Link>

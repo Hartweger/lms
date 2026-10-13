@@ -57,7 +57,7 @@ export default function Instaliraj() {
           <div className="mb-6">
             <button
               onClick={handleInstall}
-              className="w-full bg-plava text-white py-4 rounded-xl font-bold text-lg hover:bg-plava-dark transition-colors shadow-lg shadow-plava/20"
+              className="w-full bg-plava text-na-plavoj py-4 rounded-xl font-bold text-lg hover:bg-plava-dark transition-colors shadow-lg shadow-plava/20"
             >
               Instaliraj
             </button>
@@ -70,27 +70,27 @@ export default function Instaliraj() {
             <h2 className="font-bold text-gray-900 mb-4">iPhone / iPad</h2>
             <ol className="space-y-4 text-sm text-gray-600">
               <li className="flex gap-3">
-                <span className="shrink-0 w-7 h-7 bg-plava text-white rounded-full flex items-center justify-center text-xs font-bold">1</span>
+                <span className="shrink-0 w-7 h-7 bg-plava text-na-plavoj rounded-full flex items-center justify-center text-xs font-bold">1</span>
                 <span>
                   Otvorite <strong>hartweger.rs</strong> u Safari browseru
                   <span className="block text-xs text-gray-400 mt-0.5">(mora biti Safari, ne Chrome)</span>
                 </span>
               </li>
               <li className="flex gap-3">
-                <span className="shrink-0 w-7 h-7 bg-plava text-white rounded-full flex items-center justify-center text-xs font-bold">2</span>
+                <span className="shrink-0 w-7 h-7 bg-plava text-na-plavoj rounded-full flex items-center justify-center text-xs font-bold">2</span>
                 <span>
                   Kliknite na <strong>Share</strong> dugme
                   <span className="block text-xs text-gray-400 mt-0.5">(kvadrat sa strelicom na gore, na dnu ekrana)</span>
                 </span>
               </li>
               <li className="flex gap-3">
-                <span className="shrink-0 w-7 h-7 bg-plava text-white rounded-full flex items-center justify-center text-xs font-bold">3</span>
+                <span className="shrink-0 w-7 h-7 bg-plava text-na-plavoj rounded-full flex items-center justify-center text-xs font-bold">3</span>
                 <span>
                   Skrolujte nadole i izaberite <strong>&quot;Add to Home Screen&quot;</strong>
                 </span>
               </li>
               <li className="flex gap-3">
-                <span className="shrink-0 w-7 h-7 bg-plava text-white rounded-full flex items-center justify-center text-xs font-bold">4</span>
+                <span className="shrink-0 w-7 h-7 bg-plava text-na-plavoj rounded-full flex items-center justify-center text-xs font-bold">4</span>
                 <span>Kliknite <strong>&quot;Add&quot;</strong> - gotovo!</span>
               </li>
             </ol>
@@ -103,19 +103,19 @@ export default function Instaliraj() {
             <h2 className="font-bold text-gray-900 mb-4">Android</h2>
             <ol className="space-y-4 text-sm text-gray-600">
               <li className="flex gap-3">
-                <span className="shrink-0 w-7 h-7 bg-plava text-white rounded-full flex items-center justify-center text-xs font-bold">1</span>
+                <span className="shrink-0 w-7 h-7 bg-plava text-na-plavoj rounded-full flex items-center justify-center text-xs font-bold">1</span>
                 <span>
                   Otvorite <strong>hartweger.rs</strong> u Chrome browseru
                 </span>
               </li>
               <li className="flex gap-3">
-                <span className="shrink-0 w-7 h-7 bg-plava text-white rounded-full flex items-center justify-center text-xs font-bold">2</span>
+                <span className="shrink-0 w-7 h-7 bg-plava text-na-plavoj rounded-full flex items-center justify-center text-xs font-bold">2</span>
                 <span>
                   Kliknite na <strong>tri tacke</strong> (meni) u gornjem desnom uglu
                 </span>
               </li>
               <li className="flex gap-3">
-                <span className="shrink-0 w-7 h-7 bg-plava text-white rounded-full flex items-center justify-center text-xs font-bold">3</span>
+                <span className="shrink-0 w-7 h-7 bg-plava text-na-plavoj rounded-full flex items-center justify-center text-xs font-bold">3</span>
                 <span>
                   Izaberite <strong>&quot;Install app&quot;</strong> ili <strong>&quot;Add to Home screen&quot;</strong>
                 </span>
@@ -130,19 +130,19 @@ export default function Instaliraj() {
             <h2 className="font-bold text-gray-900 mb-4">Desktop (Chrome)</h2>
             <ol className="space-y-4 text-sm text-gray-600">
               <li className="flex gap-3">
-                <span className="shrink-0 w-7 h-7 bg-plava text-white rounded-full flex items-center justify-center text-xs font-bold">1</span>
+                <span className="shrink-0 w-7 h-7 bg-plava text-na-plavoj rounded-full flex items-center justify-center text-xs font-bold">1</span>
                 <span>
                   Otvorite <strong>hartweger.rs</strong> u Chrome browseru
                 </span>
               </li>
               <li className="flex gap-3">
-                <span className="shrink-0 w-7 h-7 bg-plava text-white rounded-full flex items-center justify-center text-xs font-bold">2</span>
+                <span className="shrink-0 w-7 h-7 bg-plava text-na-plavoj rounded-full flex items-center justify-center text-xs font-bold">2</span>
                 <span>
                   Kliknite na ikonu za instalaciju u address baru (desno od URL-a)
                 </span>
               </li>
               <li className="flex gap-3">
-                <span className="shrink-0 w-7 h-7 bg-plava text-white rounded-full flex items-center justify-center text-xs font-bold">3</span>
+                <span className="shrink-0 w-7 h-7 bg-plava text-na-plavoj rounded-full flex items-center justify-center text-xs font-bold">3</span>
                 <span>Kliknite <strong>&quot;Install&quot;</strong></span>
               </li>
             </ol>
@@ -152,15 +152,15 @@ export default function Instaliraj() {
         {/* Benefits */}
         <div className="space-y-3 text-sm">
           <div className="flex items-center gap-3 text-gray-600">
-            <span className="text-plava text-lg">&#9889;</span>
+            <span className="text-plava-tekst text-lg">&#9889;</span>
             <span>Brzi pristup bez otvaranja browsera</span>
           </div>
           <div className="flex items-center gap-3 text-gray-600">
-            <span className="text-plava text-lg">&#128241;</span>
+            <span className="text-plava-tekst text-lg">&#128241;</span>
             <span>Izgleda kao prava aplikacija (fullscreen)</span>
           </div>
           <div className="flex items-center gap-3 text-gray-600">
-            <span className="text-plava text-lg">&#127760;</span>
+            <span className="text-plava-tekst text-lg">&#127760;</span>
             <span>Uvek najnovija verzija - bez azuriranja</span>
           </div>
         </div>

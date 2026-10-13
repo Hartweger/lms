@@ -94,7 +94,7 @@ export default function ONatasiPage() {
             <h1 className="font-montserrat font-bold text-3xl md:text-5xl text-gray-900 mb-4">
               Nataša Hartweger
             </h1>
-            <p className="text-plava font-semibold text-lg mb-6">
+            <p className="text-plava-tekst font-semibold text-lg mb-6">
               Drago mi je što si ovde!
             </p>
             <p className="text-gray-600 text-lg leading-relaxed">
@@ -182,7 +182,7 @@ export default function ONatasiPage() {
                 <h3 className="font-montserrat font-bold text-lg text-gray-900">
                   {p.name}
                 </h3>
-                <p className="text-plava font-semibold text-sm mt-1 mb-3">
+                <p className="text-plava-tekst font-semibold text-sm mt-1 mb-3">
                   {p.role}
                 </p>
                 {p.bio.map((paragraph, i) => (
@@ -214,7 +214,7 @@ export default function ONatasiPage() {
           </p>
           <Link
             href="/kursevi"
-            className="inline-block bg-koral text-white px-8 py-3 rounded-xl font-semibold hover:bg-koral-dark transition-colors"
+            className="inline-block bg-koral text-na-koralnoj px-8 py-3 rounded-xl font-semibold hover:bg-koral-dark transition-colors"
           >
             Pogledaj kurseve
           </Link>

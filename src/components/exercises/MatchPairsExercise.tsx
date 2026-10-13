@@ -67,7 +67,7 @@ export default function MatchPairsExercise({ pairs, onAnswer }: MatchPairsProps)
                 matched[i] !== undefined
                   ? "border-green-500 bg-green-50 text-green-700"
                   : selectedDeIdx === i
-                  ? "border-plava bg-plava-light text-plava"
+                  ? "border-plava bg-plava-light text-plava-tekst"
                   : "border-gray-200 hover:border-plava text-gray-700 cursor-pointer"
               }`}
             >

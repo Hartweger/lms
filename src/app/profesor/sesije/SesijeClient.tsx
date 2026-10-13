@@ -83,9 +83,9 @@ export default function SesijeClient({ rows, showProfessor }: { rows: GroupSessi
 
   return (
     <div className="space-y-4">
-      {error && <p className="text-koral text-sm">{error}</p>}
+      {error && <p className="text-koral-tekst text-sm">{error}</p>}
       {archivedCount > 0 && (
-        <button type="button" onClick={() => setShowArchived(!showArchived)} className="text-sm text-plava hover:underline">
+        <button type="button" onClick={() => setShowArchived(!showArchived)} className="text-sm text-plava-tekst hover:underline">
           {showArchived ? "Sakrij završene" : `Prikaži i završene (${archivedCount})`}
         </button>
       )}
@@ -98,12 +98,12 @@ export default function SesijeClient({ rows, showProfessor }: { rows: GroupSessi
               {showProfessor && g.professorName && <span className="text-sm text-gray-500"> · {g.professorName}</span>}
               <span className="text-xs text-gray-400 ml-2">{g.sessions.length} sesija</span>
               {g.notesOnPlatform ? (
-                <button type="button" onClick={() => setNotesFor(g.id)} className="text-xs text-plava hover:underline ml-2">
+                <button type="button" onClick={() => setNotesFor(g.id)} className="text-xs text-plava-tekst hover:underline ml-2">
                   📝 Beleške za čas
                 </button>
               ) : g.notesUrl ? (
                 <span className="ml-2 inline-flex items-center gap-2">
-                  <a href={g.notesUrl} target="_blank" rel="noreferrer" className="text-xs text-plava hover:underline">📝 Beleške</a>
+                  <a href={g.notesUrl} target="_blank" rel="noreferrer" className="text-xs text-plava-tekst hover:underline">📝 Beleške</a>
                   <button type="button" onClick={() => saveNotes(g.id, g.notesUrl)} disabled={busy === g.id} className="text-xs text-gray-400 hover:underline">izmeni</button>
                 </span>
               ) : (
@@ -121,7 +121,7 @@ export default function SesijeClient({ rows, showProfessor }: { rows: GroupSessi
                 type="button"
                 onClick={() => addSession(g.id)}
                 disabled={busy === g.id}
-                className="bg-plava hover:bg-plava-dark disabled:opacity-50 text-white text-sm font-medium px-3 py-1.5 rounded-lg whitespace-nowrap"
+                className="bg-plava hover:bg-plava-dark disabled:opacity-50 text-na-plavoj text-sm font-medium px-3 py-1.5 rounded-lg whitespace-nowrap"
               >
                 {busy === g.id ? "..." : "Dodaj sesiju"}
               </button>
@@ -137,7 +137,7 @@ export default function SesijeClient({ rows, showProfessor }: { rows: GroupSessi
           ) : (
             <div className="flex flex-wrap gap-2">
               {g.sessions.map((s) => (
-                <span key={s.id} className={`inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full ${s.source === "auto" ? "bg-gray-100 text-gray-600" : "bg-plava-light text-plava"}`}>
+                <span key={s.id} className={`inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full ${s.source === "auto" ? "bg-gray-100 text-gray-600" : "bg-plava-light text-plava-tekst"}`}>
                   {g.notesOnPlatform ? (
                     <button
                       type="button"
@@ -150,7 +150,7 @@ export default function SesijeClient({ rows, showProfessor }: { rows: GroupSessi
                   ) : (
                     new Date(s.date).toLocaleDateString("sr-Latn")
                   )}
-                  <button type="button" onClick={() => removeSession(s.id, g.id)} disabled={busy === g.id} className="text-koral hover:font-bold" title="Skini (otkazan)">×</button>
+                  <button type="button" onClick={() => removeSession(s.id, g.id)} disabled={busy === g.id} className="text-koral-tekst hover:font-bold" title="Skini (otkazan)">×</button>
                 </span>
               ))}
             </div>

@@ -28,7 +28,7 @@ export default async function ProfesorHonorar({ searchParams }: { searchParams: 
     <div className="flex gap-2 mb-5">
       {[nowYear, nowYear - 1].map((y) => (
         <Link key={y} href={`/profesor/honorar?god=${y}${prof ? `&prof=${prof}` : ""}`}
-          className={`px-3 py-1.5 rounded-lg text-sm ${y === year ? "bg-plava-light text-plava font-medium" : "text-gray-600 hover:bg-gray-50"}`}>
+          className={`px-3 py-1.5 rounded-lg text-sm ${y === year ? "bg-plava-light text-plava-tekst font-medium" : "text-gray-600 hover:bg-gray-50"}`}>
           {y}.
         </Link>
       ))}
@@ -96,7 +96,7 @@ export default async function ProfesorHonorar({ searchParams }: { searchParams: 
               koji uključuju i evidenciju vođenu van platforme do 31.05.2026, pa zbunjuju.
               Saldo je jedini broj koji je uvek tačan - vidi lib/professor-payable.ts. */}
           <div className="bg-white rounded-xl shadow-sm p-4 text-center">
-            <div className="font-bold text-2xl text-plava">{fmt(payable.balance)} din</div>
+            <div className="font-bold text-2xl text-plava-tekst">{fmt(payable.balance)} din</div>
             <div className="text-xs text-gray-400 mt-1">
               {payable.balance < 0 ? "preplata - ovoliko je unapred isplaćeno" : "nenaplaćeno do danas"}
             </div>

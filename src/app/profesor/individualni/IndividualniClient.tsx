@@ -107,9 +107,9 @@ export default function IndividualniClient({ rows, showProfessor }: { rows: Enro
 
   return (
     <div>
-      {error && <p className="text-koral text-sm mb-3">{error}</p>}
+      {error && <p className="text-koral-tekst text-sm mb-3">{error}</p>}
       {archivedCount > 0 && (
-        <button type="button" onClick={() => setShowArchived(!showArchived)} className="text-sm text-plava hover:underline mb-3">
+        <button type="button" onClick={() => setShowArchived(!showArchived)} className="text-sm text-plava-tekst hover:underline mb-3">
           {showArchived ? "Sakrij završene" : `Prikaži i završene (${archivedCount})`}
         </button>
       )}
@@ -138,13 +138,13 @@ export default function IndividualniClient({ rows, showProfessor }: { rows: Enro
                     <div className="text-xs text-gray-400">{r.studentEmail}</div>
                     {r.notesUrl ? (
                       <div className="flex items-center gap-2">
-                        <a href={r.notesUrl} target="_blank" rel="noreferrer" className="text-xs text-plava hover:underline">📝 Beleške</a>
+                        <a href={r.notesUrl} target="_blank" rel="noreferrer" className="text-xs text-plava-tekst hover:underline">📝 Beleške</a>
                         <button type="button" onClick={() => saveNotes(r.id, r.notesUrl)} disabled={busy === r.id} className="text-xs text-gray-400 hover:underline">izmeni</button>
                       </div>
                     ) : (
                       <button type="button" onClick={() => saveNotes(r.id, null)} disabled={busy === r.id} className="text-xs text-gray-400 hover:underline">➕ Dodaj beleške</button>
                     )}
-                    <button type="button" onClick={() => setNotesFor(r.id)} className="block text-xs text-plava hover:underline mt-0.5">
+                    <button type="button" onClick={() => setNotesFor(r.id)} className="block text-xs text-plava-tekst hover:underline mt-0.5">
                       📓 Beleške za današnji čas
                     </button>
                   </td>
@@ -158,12 +158,12 @@ export default function IndividualniClient({ rows, showProfessor }: { rows: Enro
                     <div className="text-xs text-gray-400">{done ? "završeno" : `još ${remaining}`}</div>
                     {showProfessor && (
                       <button type="button" onClick={() => setArchived(r.id, !done, r.studentName)} disabled={busy === r.id}
-                        className="text-xs text-gray-400 hover:text-koral hover:underline mt-0.5 block">
+                        className="text-xs text-gray-400 hover:text-koral-tekst hover:underline mt-0.5 block">
                         {done ? "vrati u aktivne" : "arhiviraj"}
                       </button>
                     )}
                     {r.lessons.length > 0 && (
-                      <button type="button" onClick={() => setOpenHistory(openHistory === r.id ? null : r.id)} className="text-xs text-plava hover:underline mt-1">
+                      <button type="button" onClick={() => setOpenHistory(openHistory === r.id ? null : r.id)} className="text-xs text-plava-tekst hover:underline mt-1">
                         {openHistory === r.id ? "sakrij" : "istorija"}
                       </button>
                     )}
@@ -172,7 +172,7 @@ export default function IndividualniClient({ rows, showProfessor }: { rows: Enro
                         {r.lessons.map((l) => (
                           <li key={l.id} className="text-xs text-gray-500 flex items-center gap-2">
                             {new Date(l.date).toLocaleDateString("sr-Latn")}
-                            <button type="button" onClick={() => removeLesson(l.id, r.id)} disabled={busy === r.id} className="text-koral hover:underline">×</button>
+                            <button type="button" onClick={() => removeLesson(l.id, r.id)} disabled={busy === r.id} className="text-koral-tekst hover:underline">×</button>
                           </li>
                         ))}
                       </ul>
@@ -190,7 +190,7 @@ export default function IndividualniClient({ rows, showProfessor }: { rows: Enro
                         type="button"
                         onClick={() => addLesson(r.id)}
                         disabled={busy === r.id || refreshing || done || remaining === 0}
-                        className="bg-plava hover:bg-plava-dark disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium px-3 py-1.5 rounded-lg whitespace-nowrap"
+                        className="bg-plava hover:bg-plava-dark disabled:opacity-50 disabled:cursor-not-allowed text-na-plavoj text-sm font-medium px-3 py-1.5 rounded-lg whitespace-nowrap"
                         title={done || remaining === 0 ? "Paket je popunjen - novi čas ide u novi paket" : undefined}
                       >
                         {done || remaining === 0 ? "Paket pun" : busy === r.id ? "..." : "Upiši čas"}

@@ -388,13 +388,13 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
           ))}
         </div>
 
-        <div className="text-5xl font-bold text-plava mb-2">{percent}%</div>
+        <div className="text-5xl font-bold text-plava-tekst mb-2">{percent}%</div>
         <p className="text-gray-500 mb-1">
           {exercise.exercise_type === "dialog"
             ? `Ispunjeno ciljeva: ${score} od ${totalForScore}`
             : `Tačnih odgovora: ${score} od ${totalForScore}`}
         </p>
-        <p className="text-plava font-bold mb-1">{xp} ❤️ srca zarađeno</p>
+        <p className="text-plava-tekst font-bold mb-1">{xp} ❤️ srca zarađeno</p>
         {isModelltest && modelltestTotal ? (() => {
           const klijentPercent = Math.round((modelltestTotal.score / modelltestTotal.total) * 100);
           // Kad server odgovori, njegova presuda važi (vidi saveResults).
@@ -405,7 +405,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
           if (cekaOcenu) {
             return (
               <div className="mt-2">
-                <p className="text-lg font-bold text-plava">Čeka se ocena profesora</p>
+                <p className="text-lg font-bold text-plava-tekst">Čeka se ocena profesora</p>
                 <p className="text-sm text-gray-500">
                   {serverVerdict?.reason === "sprechen-incomplete" ? "Sprechen" : "Schreiben"} deo ocenjuje profesor. Kad bude ocenjen, sertifikat stiže na mejl ako su svi delovi iznad praga ({prag}).
                 </p>
@@ -430,7 +430,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
             </div>
           ) : (
             <div className="mt-2">
-              <p className="text-lg font-bold text-koral">Nije položeno</p>
+              <p className="text-lg font-bold text-koral-tekst">Nije položeno</p>
               <p className="text-sm text-gray-500 mb-1">
                 Ukupan rezultat: {modelltestTotal.score} od {modelltestTotal.total} ({overallPercent}%)
               </p>
@@ -451,7 +451,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
             <button
               onClick={saveResults}
               disabled={saving}
-              className="mt-2 bg-plava text-white px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-plava-dark transition-colors disabled:opacity-50"
+              className="mt-2 bg-plava text-na-plavoj px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-plava-dark transition-colors disabled:opacity-50"
             >
               {saving ? "Čuvam..." : "Sačuvaj ponovo"}
             </button>
@@ -490,14 +490,14 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
             setResults([]);
             setSaveFailed(false);
           }}
-          className="mt-6 bg-plava text-white px-6 py-3 rounded-lg hover:bg-plava-dark transition-colors"
+          className="mt-6 bg-plava text-na-plavoj px-6 py-3 rounded-lg hover:bg-plava-dark transition-colors"
         >
           Pokušaj ponovo
         </button>
         {nextExerciseId && (
           <a
             href={`/vezba/${nextExerciseId}`}
-            className="mt-3 block text-center bg-plava text-white px-6 py-3 rounded-lg hover:bg-plava-dark transition-colors font-medium"
+            className="mt-3 block text-center bg-plava text-na-plavoj px-6 py-3 rounded-lg hover:bg-plava-dark transition-colors font-medium"
           >
             Sledeća vežba →
           </a>
@@ -546,7 +546,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
                       <thead>
                         <tr>
                           {questionContext.headers.map((h: string, i: number) => (
-                            <th key={i} className="bg-plava text-white px-4 py-2 text-left font-semibold">{h}</th>
+                            <th key={i} className="bg-plava text-na-plavoj px-4 py-2 text-left font-semibold">{h}</th>
                           ))}
                         </tr>
                       </thead>
@@ -590,12 +590,12 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
       {/* Progress */}
       <div className="flex items-center justify-between mb-4">
         <span className="flex items-center gap-2">
-          <span className={`text-xs px-2 py-0.5 rounded-full ${isTest ? "bg-koral-light text-koral-dark" : "bg-plava-light text-plava"}`}>{isTest ? "🎯 Test" : "✏️ Vežba"}</span>
-          <span className="text-sm font-medium text-plava">{exercise.title}</span>
+          <span className={`text-xs px-2 py-0.5 rounded-full ${isTest ? "bg-koral-light text-koral-dark" : "bg-plava-light text-plava-tekst"}`}>{isTest ? "🎯 Test" : "✏️ Vežba"}</span>
+          <span className="text-sm font-medium text-plava-tekst">{exercise.title}</span>
         </span>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <span className="text-sm text-plava font-bold">{xp} ❤️ srca</span>
+            <span className="text-sm text-plava-tekst font-bold">{xp} ❤️ srca</span>
             {showXpAnimation && (
               <span className="text-xs text-green-500 font-bold animate-bounce">
                 +{xpGained}
@@ -872,7 +872,7 @@ export default function ExerciseRunner({ exercise, questions, level = "A1", next
           <EnterZaSledece onNext={handleNext} />
           <button
             onClick={handleNext}
-            className="bg-plava text-white px-6 py-3 rounded-lg hover:bg-plava-dark transition-colors"
+            className="bg-plava text-na-plavoj px-6 py-3 rounded-lg hover:bg-plava-dark transition-colors"
           >
             {currentIndex < questions.length - 1 ? "Sledeće pitanje \u2192" : "Završi vežbu"}
           </button>

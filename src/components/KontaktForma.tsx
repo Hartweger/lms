@@ -157,7 +157,7 @@ export default function KontaktForma() {
       <button
         type="submit"
         disabled={status === "loading"}
-        className="bg-koral text-white px-8 py-3 rounded-xl font-semibold hover:bg-koral-dark transition-colors disabled:opacity-50"
+        className="bg-koral text-na-koralnoj px-8 py-3 rounded-xl font-semibold hover:bg-koral-dark transition-colors disabled:opacity-50"
       >
         {status === "loading" ? "Šaljem..." : "Pošalji poruku"}
       </button>

@@ -196,7 +196,7 @@ export default function AdminVezbe() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       {lesson && (
-        <Link href={`/admin/kursevi/${lesson.course_id}`} className="text-sm text-plava hover:underline mb-4 inline-block">
+        <Link href={`/admin/kursevi/${lesson.course_id}`} className="text-sm text-plava-tekst hover:underline mb-4 inline-block">
           ← Nazad na kurs
         </Link>
       )}
@@ -213,7 +213,7 @@ export default function AdminVezbe() {
               onClick={() => setOpenExercise(openExercise === ex.id ? null : ex.id)}
             >
               <div className="flex items-center gap-3">
-                <span className="text-xs bg-plava-light text-plava px-2 py-1 rounded-full">
+                <span className="text-xs bg-plava-light text-plava-tekst px-2 py-1 rounded-full">
                   {typeLabels[ex.exercise_type]}
                 </span>
                 <input
@@ -227,7 +227,7 @@ export default function AdminVezbe() {
                 <span className="text-xs text-gray-400">{(questions[ex.id] || []).length} pitanja</span>
                 <button
                   onClick={(e) => { e.stopPropagation(); deleteExercise(ex.id); }}
-                  className="text-koral hover:text-koral-dark text-sm"
+                  className="text-koral-tekst hover:text-koral-dark text-sm"
                 >
                   Obriši
                 </button>
@@ -241,7 +241,7 @@ export default function AdminVezbe() {
                   <div key={q.id} className="bg-gray-50 rounded-lg p-4">
                     <div className="flex items-start justify-between mb-3">
                       <span className="text-xs text-gray-400 font-medium">Pitanje {qi + 1}</span>
-                      <button onClick={() => deleteQuestion(q.id, ex.id)} className="text-xs text-koral hover:text-koral-dark">
+                      <button onClick={() => deleteQuestion(q.id, ex.id)} className="text-xs text-koral-tekst hover:text-koral-dark">
                         Obriši
                       </button>
                     </div>
@@ -345,7 +345,7 @@ export default function AdminVezbe() {
                                 const newPairs = (q.options as { de: string; sr: string }[]).filter((_, i) => i !== pi);
                                 updateQuestion(q.id, ex.id, "options", newPairs);
                               }}
-                              className="text-koral text-sm"
+                              className="text-koral-tekst text-sm"
                             >
                               ✕
                             </button>
@@ -356,7 +356,7 @@ export default function AdminVezbe() {
                             const newPairs = [...(q.options as { de: string; sr: string }[]), { de: "", sr: "" }];
                             updateQuestion(q.id, ex.id, "options", newPairs);
                           }}
-                          className="text-sm text-plava hover:underline"
+                          className="text-sm text-plava-tekst hover:underline"
                         >
                           + Dodaj par
                         </button>
@@ -524,7 +524,7 @@ export default function AdminVezbe() {
                                     const goals = ((opts.goals as string[]) || []).filter((_: string, i: number) => i !== gi);
                                     updateDialogLocal(q.id, ex.id, "goals", goals);
                                   }}
-                                  className="text-koral text-sm"
+                                  className="text-koral-tekst text-sm"
                                 >
                                   ✕
                                 </button>
@@ -537,7 +537,7 @@ export default function AdminVezbe() {
                               const goals = [...((opts.goals as string[]) || []), ""];
                               updateDialogLocal(q.id, ex.id, "goals", goals);
                             }}
-                            className="text-sm text-plava hover:underline"
+                            className="text-sm text-plava-tekst hover:underline"
                           >
                             + Dodaj cilj
                           </button>
@@ -554,7 +554,7 @@ export default function AdminVezbe() {
                         </div>
                         <button
                           onClick={() => saveDialogToDB(q.id, ex.id)}
-                          className="w-full py-3 bg-plava text-white rounded-lg hover:bg-plava-dark transition-colors font-medium"
+                          className="w-full py-3 bg-plava text-na-plavoj rounded-lg hover:bg-plava-dark transition-colors font-medium"
                         >
                           {dialogSaved ? "✓ Sačuvano!" : "Sačuvaj dijalog"}
                         </button>
@@ -567,7 +567,7 @@ export default function AdminVezbe() {
                 {ex.exercise_type !== "dialog" && (
                   <button
                     onClick={() => addQuestion(ex.id, ex.exercise_type)}
-                    className="w-full py-3 border-2 border-dashed border-gray-200 rounded-lg text-sm text-gray-400 hover:border-plava hover:text-plava transition-colors"
+                    className="w-full py-3 border-2 border-dashed border-gray-200 rounded-lg text-sm text-gray-400 hover:border-plava hover:text-plava-tekst transition-colors"
                   >
                     + Dodaj pitanje
                   </button>
@@ -586,7 +586,7 @@ export default function AdminVezbe() {
             <button
               key={type}
               onClick={() => addExercise(type)}
-              className="px-4 py-2 bg-white border-2 border-gray-200 rounded-lg text-sm text-gray-600 hover:border-plava hover:text-plava transition-colors"
+              className="px-4 py-2 bg-white border-2 border-gray-200 rounded-lg text-sm text-gray-600 hover:border-plava hover:text-plava-tekst transition-colors"
             >
               + {label}
             </button>

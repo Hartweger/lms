@@ -580,7 +580,7 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
               />
               <span>
                 {opis.potvrda}{" "}
-                <a href="/uslovi" target="_blank" rel="noreferrer" className="text-plava underline">uslovima korišćenja</a>.
+                <a href="/uslovi" target="_blank" rel="noreferrer" className="text-plava-tekst underline">uslovima korišćenja</a>.
               </span>
             </label>
           </div>
@@ -603,12 +603,12 @@ export default function CheckoutForm({ courseSlug, courseTitle, category = null,
             {en ? (
               <>
                 I agree to the{" "}
-                <a href="/uslovi" target="_blank" rel="noreferrer" className="text-plava underline">Terms of Use and Privacy Policy</a>.
+                <a href="/uslovi" target="_blank" rel="noreferrer" className="text-plava-tekst underline">Terms of Use and Privacy Policy</a>.
               </>
             ) : (
               <>
                 Saglasan/na sam sa{" "}
-                <a href="/uslovi" target="_blank" rel="noreferrer" className="text-plava underline">uslovima korišćenja i politikom privatnosti</a>.
+                <a href="/uslovi" target="_blank" rel="noreferrer" className="text-plava-tekst underline">uslovima korišćenja i politikom privatnosti</a>.
               </>
             )}
           </span>

@@ -182,7 +182,7 @@ export default function FaqAdmin({ initial }: { initial: FaqItem[] }) {
           <button
             type="submit"
             disabled={loading}
-            className="bg-plava text-white px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 disabled:opacity-50"
+            className="bg-plava text-na-plavoj px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 disabled:opacity-50"
           >
             {editingId ? "Sačuvaj izmene" : "Dodaj"}
           </button>
@@ -221,7 +221,7 @@ export default function FaqAdmin({ initial }: { initial: FaqItem[] }) {
             <div className="flex gap-2 shrink-0">
               <button
                 onClick={() => startEdit(item)}
-                className="text-sm text-plava hover:underline"
+                className="text-sm text-plava-tekst hover:underline"
               >
                 Izmeni
               </button>

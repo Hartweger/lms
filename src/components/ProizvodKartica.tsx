@@ -30,7 +30,7 @@ export default function ProizvodKartica({ course }: { course: Course }) {
           </div>
         )}
         <div className="p-5">
-          <h3 className="font-heading font-semibold text-lg text-gray-900 group-hover:text-plava transition-colors">
+          <h3 className="font-heading font-semibold text-lg text-gray-900 group-hover:text-plava-tekst transition-colors">
             {course.title}
           </h3>
           <p className="text-sm text-gray-500 mt-2 line-clamp-2">
@@ -41,7 +41,7 @@ export default function ProizvodKartica({ course }: { course: Course }) {
               {isVariable && "od "}
               {formatPrice(course.price)} RSD
             </span>
-            <span className="text-sm text-plava font-medium group-hover:translate-x-1 transition-transform inline-block">
+            <span className="text-sm text-plava-tekst font-medium group-hover:translate-x-1 transition-transform inline-block">
               Saznaj više →
             </span>
           </div>

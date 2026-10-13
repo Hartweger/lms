@@ -227,7 +227,7 @@ export default function KuponiClient({ initialCoupons }: Props) {
                       {coupon.partners?.name && (
                         <Link
                           href={`/admin/saradnici/${coupon.partner_id}`}
-                          className="ml-2 font-sans text-xs font-normal text-plava hover:underline"
+                          className="ml-2 font-sans text-xs font-normal text-plava-tekst hover:underline"
                         >
                           saradnik: {coupon.partners.name}
                         </Link>

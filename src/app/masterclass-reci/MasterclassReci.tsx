@@ -60,7 +60,7 @@ export default function MasterclassReci() {
   if (unlocked) {
     return (
       <div className="max-w-3xl mx-auto px-4 py-12">
-        <div className="bg-plava-light inline-block px-4 py-1 rounded-full text-plava text-sm font-medium mb-4">
+        <div className="bg-plava-light inline-block px-4 py-1 rounded-full text-plava-tekst text-sm font-medium mb-4">
           Besplatan masterclass
         </div>
         <h1 className="font-heading text-3xl md:text-4xl font-bold text-gray-900 mb-6">
@@ -84,7 +84,7 @@ export default function MasterclassReci() {
             className="flex items-center gap-3 p-4 rounded-xl border border-gray-200 hover:border-plava hover:bg-plava-light/40 transition-colors">
             <span className="text-2xl">📊</span>
             <span className="font-medium text-gray-900">Prezentacija</span>
-            <span className="ml-auto text-plava text-sm font-medium">Otvori →</span>
+            <span className="ml-auto text-plava-tekst text-sm font-medium">Otvori →</span>
           </a>
           <a href={SHEET_URL} target="_blank" rel="noopener noreferrer"
             className="flex items-start gap-3 p-4 rounded-xl border border-gray-200 hover:border-plava hover:bg-plava-light/40 transition-colors">
@@ -93,19 +93,19 @@ export default function MasterclassReci() {
               <span className="font-medium text-gray-900 block">Tabela reči</span>
               <span className="text-gray-500 text-sm">Radi samo ako imaš Google nalog - kopiraj je na svoj Google Drive i koristi kao Google Sheet.</span>
             </span>
-            <span className="ml-auto text-plava text-sm font-medium whitespace-nowrap">Otvori →</span>
+            <span className="ml-auto text-plava-tekst text-sm font-medium whitespace-nowrap">Otvori →</span>
           </a>
           <a href={QUIZLET_URL} target="_blank" rel="noopener noreferrer"
             className="flex items-center gap-3 p-4 rounded-xl border border-gray-200 hover:border-plava hover:bg-plava-light/40 transition-colors">
             <span className="text-2xl">🗂️</span>
             <span className="font-medium text-gray-900">Quizlet - kartice za vežbanje</span>
-            <span className="ml-auto text-plava text-sm font-medium">Otvori →</span>
+            <span className="ml-auto text-plava-tekst text-sm font-medium">Otvori →</span>
           </a>
         </div>
 
         <div className="mt-12 rounded-2xl bg-plava-light p-6 text-center">
           <p className="text-gray-700 mb-4">Spreman/na da kreneš ozbiljnije sa nemačkim?</p>
-          <Link href="/kursevi" className="inline-block bg-plava text-white px-6 py-3 rounded-xl font-semibold hover:bg-plava-dark transition-colors">
+          <Link href="/kursevi" className="inline-block bg-plava text-na-plavoj px-6 py-3 rounded-xl font-semibold hover:bg-plava-dark transition-colors">
             Pogledaj kurseve →
           </Link>
         </div>
@@ -115,7 +115,7 @@ export default function MasterclassReci() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-12 md:py-16">
-      <div className="bg-plava-light inline-block px-4 py-1 rounded-full text-plava text-sm font-medium mb-6">
+      <div className="bg-plava-light inline-block px-4 py-1 rounded-full text-plava-tekst text-sm font-medium mb-6">
         Besplatan masterclass · ~90 minuta
       </div>
       <h1 className="font-heading text-3xl md:text-5xl font-bold text-gray-900 mb-4">
@@ -159,7 +159,7 @@ export default function MasterclassReci() {
           <button
             type="submit"
             disabled={loading}
-            className="bg-plava text-white px-6 py-3 rounded-xl font-semibold hover:bg-plava-dark transition-colors disabled:opacity-60 whitespace-nowrap"
+            className="bg-plava text-na-plavoj px-6 py-3 rounded-xl font-semibold hover:bg-plava-dark transition-colors disabled:opacity-60 whitespace-nowrap"
           >
             {loading ? "Učitavam…" : "Gledaj besplatno →"}
           </button>
@@ -169,7 +169,7 @@ export default function MasterclassReci() {
       </form>
 
       <div className="mt-10 flex items-center gap-3">
-        <div className="w-10 h-10 rounded-full bg-plava text-white flex items-center justify-center font-bold text-sm">NH</div>
+        <div className="w-10 h-10 rounded-full bg-plava text-na-plavoj flex items-center justify-center font-bold text-sm">NH</div>
         <p className="text-sm text-gray-500">Nataša Hartweger · 20+ godina iskustva · 4.000+ polaznika</p>
       </div>
     </div>

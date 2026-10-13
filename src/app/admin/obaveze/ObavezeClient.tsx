@@ -73,7 +73,7 @@ export default function ObavezeClient({ payables, pending, groups, profs, pendin
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-2xl font-bold text-gray-900">Obaveze prema profesorkama</h1>
         <a href={`/admin/finansije?godina=${new Date().getFullYear()}&mesec=${new Date().getMonth() + 1}#po-profesorkama`}
-          className="text-sm px-3 py-1.5 rounded-lg bg-plava-light text-plava font-medium">
+          className="text-sm px-3 py-1.5 rounded-lg bg-plava-light text-plava-tekst font-medium">
           Mesečni pregled honorara →
         </a>
       </div>
@@ -91,19 +91,19 @@ export default function ObavezeClient({ payables, pending, groups, profs, pendin
             {payables.map((p) => (
               <tr key={p.professorId}>
                 <td className="px-4 py-3 text-gray-900">{p.name}</td>
-                <td className="px-4 py-3 text-right font-bold text-plava">
+                <td className="px-4 py-3 text-right font-bold text-plava-tekst">
                   {fmt(p.balance)} din
                   {p.balance < 0 && <span className="block text-xs font-normal text-gray-400">preplata</span>}
                 </td>
                 <td className="px-4 py-3 text-right">
                   <button onClick={() => { setPayFor(payFor === p.professorId ? null : p.professorId); setAmount(String(Math.max(0, p.balance))); }}
-                    className="text-sm px-3 py-1.5 rounded-lg bg-plava-light text-plava font-medium">Zabeleži isplatu</button>
+                    className="text-sm px-3 py-1.5 rounded-lg bg-plava-light text-plava-tekst font-medium">Zabeleži isplatu</button>
                   {payFor === p.professorId && (
                     <div className="mt-2 flex flex-wrap gap-2 justify-end">
                       <input value={amount} onChange={(e) => setAmount(e.target.value)} type="number" min="1" placeholder="Iznos" className="w-28 border rounded-lg px-2 py-1" />
                       <input value={payDate} onChange={(e) => setPayDate(e.target.value)} type="date" className="border rounded-lg px-2 py-1" />
                       <input value={note} onChange={(e) => setNote(e.target.value)} placeholder="Napomena" className="w-32 border rounded-lg px-2 py-1" />
-                      <button disabled={busy === p.professorId} onClick={() => pay(p.professorId)} className="px-3 py-1 rounded-lg bg-plava text-white disabled:opacity-50">Snimi</button>
+                      <button disabled={busy === p.professorId} onClick={() => pay(p.professorId)} className="px-3 py-1 rounded-lg bg-plava text-na-plavoj disabled:opacity-50">Snimi</button>
                     </div>
                   )}
                 </td>
@@ -160,7 +160,7 @@ export default function ObavezeClient({ payables, pending, groups, profs, pendin
           <label className="text-sm">Grupa<br /><select value={zGroup} onChange={(e) => setZGroup(e.target.value)} required className="border rounded-lg px-2 py-1 mt-1"><option value="">-</option>{groups.map((g) => <option key={g.id} value={g.id}>{g.label}</option>)}</select></label>
           <label className="text-sm">Datum<br /><input value={zDate} onChange={(e) => setZDate(e.target.value)} type="date" required className="border rounded-lg px-2 py-1 mt-1" /></label>
           <label className="text-sm">Ko je odradio<br /><select value={zProf} onChange={(e) => setZProf(e.target.value)} required className="border rounded-lg px-2 py-1 mt-1"><option value="">-</option>{profs.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}</select></label>
-          <button disabled={busy === "zamena"} className="px-4 py-2 rounded-lg bg-plava text-white text-sm font-medium disabled:opacity-50">Primeni</button>
+          <button disabled={busy === "zamena"} className="px-4 py-2 rounded-lg bg-plava text-na-plavoj text-sm font-medium disabled:opacity-50">Primeni</button>
         </form>
         <p className="text-xs text-gray-400 mt-2">Premešta tu jednu sesiju na izabranu profesorku (ne duplira čas). Ako sesija za taj datum ne postoji, kreira je.</p>
       </section>

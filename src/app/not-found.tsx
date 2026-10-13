@@ -4,7 +4,7 @@ export default function NotFound() {
   return (
     <div className="min-h-[calc(100vh-64px)] flex items-center justify-center px-4">
       <div className="text-center">
-        <p className="text-6xl font-extrabold text-plava mb-4">404</p>
+        <p className="text-6xl font-extrabold text-plava-tekst mb-4">404</p>
         <h1 className="text-xl font-bold text-gray-900 mb-2">
           Stranica nije pronađena
         </h1>
@@ -13,7 +13,7 @@ export default function NotFound() {
         </p>
         <Link
           href="/"
-          className="inline-block bg-plava text-white px-6 py-3 rounded-lg font-bold hover:bg-plava-dark transition-colors"
+          className="inline-block bg-plava text-na-plavoj px-6 py-3 rounded-lg font-bold hover:bg-plava-dark transition-colors"
         >
           Nazad na početnu
         </Link>

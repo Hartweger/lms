@@ -290,7 +290,7 @@ export default function SpeakExercise({ question, correctAnswer, explanation, on
       {/* Sentence to speak */}
       <div className="bg-gray-50 rounded-xl p-5 mb-5 flex items-center justify-between gap-4">
         <p className="text-xl font-semibold text-gray-800">{correctAnswer}</p>
-        <SpeakButton text={correctAnswer} className="text-gray-500 hover:text-plava !w-6 !h-6" />
+        <SpeakButton text={correctAnswer} className="text-gray-500 hover:text-plava-tekst !w-6 !h-6" />
       </div>
 
       {/* Microphone mode */}
@@ -300,8 +300,8 @@ export default function SpeakExercise({ question, correctAnswer, explanation, on
             onClick={listening ? stopListening : startListening}
             className={`w-20 h-20 rounded-full flex items-center justify-center transition-all ${
               listening
-                ? "bg-koral text-white shadow-lg shadow-koral/30 animate-pulse"
-                : "bg-plava text-white shadow-lg shadow-plava/30 hover:bg-plava-dark"
+                ? "bg-koral text-na-plavoj shadow-lg shadow-koral/30 animate-pulse"
+                : "bg-plava text-na-plavoj shadow-lg shadow-plava/30 hover:bg-plava-dark"
             }`}
             aria-label={listening ? "Zaustavi snimanje" : "Počni da govoriš"}
           >
@@ -347,14 +347,14 @@ export default function SpeakExercise({ question, correctAnswer, explanation, on
             />
             <button
               onClick={() => { if (fallbackInput.trim()) evaluate(fallbackInput); }}
-              className="bg-plava text-white rounded-lg px-4 py-2 text-sm font-medium hover:bg-plava-dark shrink-0"
+              className="bg-plava text-na-plavoj rounded-lg px-4 py-2 text-sm font-medium hover:bg-plava-dark shrink-0"
             >
               Proveri
             </button>
           </div>
           <button
             onClick={() => { setMicFailed(false); setTranscript(""); }}
-            className="mt-3 text-sm text-plava hover:underline font-medium"
+            className="mt-3 text-sm text-plava-tekst hover:underline font-medium"
           >
             Pokušaj ponovo sa mikrofonom
           </button>
@@ -415,7 +415,7 @@ export default function SpeakExercise({ question, correctAnswer, explanation, on
           {result.score < 0.75 && retries < 2 && (
             <button
               onClick={handleRetry}
-              className="mt-3 text-sm text-plava hover:underline font-medium"
+              className="mt-3 text-sm text-plava-tekst hover:underline font-medium"
             >
               Pokušaj ponovo ({2 - retries} {2 - retries === 1 ? "pokušaj" : "pokušaja"} preostalo)
             </button>

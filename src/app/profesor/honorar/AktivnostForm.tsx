@@ -32,7 +32,7 @@ export default function AktivnostForm({ activities }: { activities: Activity[] }
     <div className="mt-6">
       <div className="flex items-center justify-between mb-3">
         <h3 className="font-medium text-gray-900">Dodatne aktivnosti</h3>
-        <button onClick={() => setOpen((v) => !v)} className="text-sm px-3 py-1.5 rounded-lg bg-plava-light text-plava font-medium">
+        <button onClick={() => setOpen((v) => !v)} className="text-sm px-3 py-1.5 rounded-lg bg-plava-light text-plava-tekst font-medium">
           {open ? "Otkaži" : "Prijavi aktivnost"}
         </button>
       </div>
@@ -48,7 +48,7 @@ export default function AktivnostForm({ activities }: { activities: Activity[] }
               className="flex-1 border rounded-lg px-3 py-2 text-sm" required />
           </div>
           {err && <p className="text-sm text-red-600">{err}</p>}
-          <button disabled={busy} className="px-4 py-2 rounded-lg bg-plava text-white text-sm font-medium disabled:opacity-50">
+          <button disabled={busy} className="px-4 py-2 rounded-lg bg-plava text-na-plavoj text-sm font-medium disabled:opacity-50">
             {busy ? "Šaljem…" : "Pošalji na odobravanje"}
           </button>
         </form>

@@ -115,7 +115,7 @@ export default function ProductFaq({ category, slug, lang = "sr" }: { category: 
         {faq.map((item, i) => (
           <div key={i} className="border-b border-gray-100 pb-5 last:border-0 last:pb-0">
             <h3 className="font-bold text-gray-900 text-[15px] mb-2 flex items-start gap-2.5">
-              <span className="flex-shrink-0 w-6 h-6 bg-plava/10 rounded-md flex items-center justify-center text-plava text-xs font-bold mt-0.5">?</span>
+              <span className="flex-shrink-0 w-6 h-6 bg-plava/10 rounded-md flex items-center justify-center text-plava-tekst text-xs font-bold mt-0.5">?</span>
               {item.q}
             </h3>
             <p className="text-gray-500 text-[14px] leading-relaxed pl-[34px]">{item.a}</p>

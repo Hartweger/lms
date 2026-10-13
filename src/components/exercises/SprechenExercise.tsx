@@ -114,7 +114,7 @@ export default function SprechenExercise({ task, exerciseId, lessonId, onAnswer 
 
       {submitted || alreadyPending ? (
         <div className="bg-plava-light rounded-lg p-4 text-center">
-          <p className="text-plava font-medium">Tvoj snimak je poslat na pregled 🎙️</p>
+          <p className="text-plava-tekst font-medium">Tvoj snimak je poslat na pregled 🎙️</p>
           <p className="text-sm text-gray-600 mt-1">Profesor će ga preslušati i dati ti povratnu informaciju.</p>
         </div>
       ) : (
@@ -122,7 +122,7 @@ export default function SprechenExercise({ task, exerciseId, lessonId, onAnswer 
           <p className="text-sm text-gray-500">Snimi svoj usmeni odgovor. Možeš preslušati pre slanja i, ako želiš, snimiti ponovo.</p>
 
           {!recording && !audioUrl && (
-            <button onClick={startRecording} className="inline-flex items-center gap-2 bg-koral text-white px-6 py-3 rounded-lg font-semibold hover:bg-koral-dark transition-colors">
+            <button onClick={startRecording} className="inline-flex items-center gap-2 bg-koral text-na-koralnoj px-6 py-3 rounded-lg font-semibold hover:bg-koral-dark transition-colors">
               ● Počni snimanje
             </button>
           )}
@@ -141,7 +141,7 @@ export default function SprechenExercise({ task, exerciseId, lessonId, onAnswer 
             <div className="space-y-3">
               <audio controls className="w-full" src={audioUrl} />
               <div className="flex gap-3">
-                <button onClick={submit} disabled={uploading} className="bg-plava text-white px-6 py-3 rounded-lg font-bold hover:bg-plava-dark transition-colors disabled:opacity-50">
+                <button onClick={submit} disabled={uploading} className="bg-plava text-na-plavoj px-6 py-3 rounded-lg font-bold hover:bg-plava-dark transition-colors disabled:opacity-50">
                   {uploading ? "Šaljem…" : "Pošalji na pregled"}
                 </button>
                 <button onClick={reset} disabled={uploading} className="border border-gray-300 text-gray-600 px-5 py-3 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50">

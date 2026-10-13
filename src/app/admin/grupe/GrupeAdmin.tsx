@@ -305,7 +305,7 @@ export default function GrupeAdmin({ initial }: { initial: Group[] }) {
           <button
             type="button"
             onClick={startNew}
-            className="bg-plava text-white px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90"
+            className="bg-plava text-na-plavoj px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90"
           >
             + Nova grupa
           </button>
@@ -555,7 +555,7 @@ export default function GrupeAdmin({ initial }: { initial: Group[] }) {
             <button
               type="submit"
               disabled={saving}
-              className="bg-plava text-white px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 disabled:opacity-50"
+              className="bg-plava text-na-plavoj px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 disabled:opacity-50"
             >
               {form.id ? "Sačuvaj izmene" : "Dodaj grupu"}
             </button>
@@ -688,18 +688,18 @@ export default function GrupeAdmin({ initial }: { initial: Group[] }) {
                         <td className="px-4 py-3">
                           {hasTermin(g) ? (
                             <div className="flex gap-2 text-xs">
-                              {g.meet_link && <a href={g.meet_link} target="_blank" rel="noreferrer" className="text-plava hover:underline" title="Meet">🎥 Meet</a>}
-                              {g.notes_url && <a href={g.notes_url} target="_blank" rel="noreferrer" className="text-plava hover:underline" title="Beleške">📝</a>}
+                              {g.meet_link && <a href={g.meet_link} target="_blank" rel="noreferrer" className="text-plava-tekst hover:underline" title="Meet">🎥 Meet</a>}
+                              {g.notes_url && <a href={g.notes_url} target="_blank" rel="noreferrer" className="text-plava-tekst hover:underline" title="Beleške">📝</a>}
                             </div>
                           ) : needsTermin(g) ? (
-                            <button type="button" onClick={() => napraviTerminRow(g)} disabled={saving} className="text-xs bg-plava text-white px-2 py-1 rounded-lg hover:bg-plava-dark disabled:opacity-50">Napravi termin</button>
+                            <button type="button" onClick={() => napraviTerminRow(g)} disabled={saving} className="text-xs bg-plava text-na-plavoj px-2 py-1 rounded-lg hover:bg-plava-dark disabled:opacity-50">Napravi termin</button>
                           ) : (
                             <span className="text-gray-300">-</span>
                           )}
                         </td>
                         <td className="px-4 py-3">
                           <div className="flex gap-3 whitespace-nowrap">
-                            <button type="button" onClick={() => startEdit(g)} className="text-plava hover:underline">Izmeni</button>
+                            <button type="button" onClick={() => startEdit(g)} className="text-plava-tekst hover:underline">Izmeni</button>
                             <button type="button" onClick={() => dupliraj(g)} className="text-gray-500 hover:underline">Dupliraj</button>
                             {g.status !== "otkazana" && g.status !== "zavrsena" && (
                               <button type="button" onClick={() => cancelGroup(g.id)} className="text-red-500 hover:underline">Otkaži</button>
@@ -720,7 +720,7 @@ export default function GrupeAdmin({ initial }: { initial: Group[] }) {
               </table>
             </div>
             {arhiva.length > 0 && (
-              <button type="button" onClick={() => setShowArhiva(!showArhiva)} className="text-sm text-plava hover:underline mt-3">
+              <button type="button" onClick={() => setShowArhiva(!showArhiva)} className="text-sm text-plava-tekst hover:underline mt-3">
                 {showArhiva ? "Sakrij arhivu" : `Prikaži arhivu (${arhiva.length} završenih/otkazanih)`}
               </button>
             )}

@@ -126,7 +126,7 @@ export default function UlazneFakture({
         Ne ulaze u troškove dok ne izabereš kategoriju. Do tada ne utiču ni na jedan izveštaj.
       </p>
 
-      {greska && <p className="text-sm text-koral font-medium mb-3">{greska}</p>}
+      {greska && <p className="text-sm text-koral-tekst font-medium mb-3">{greska}</p>}
 
       <div className="space-y-2">
         {redovi.map((r) => (
@@ -139,7 +139,7 @@ export default function UlazneFakture({
                 {r.dobavljac ?? "Nepoznat dobavljač"}
               </p>
               {r.upozorenje && (
-                <p className="text-xs text-koral font-medium">{r.upozorenje}</p>
+                <p className="text-xs text-koral-tekst font-medium">{r.upozorenje}</p>
               )}
               <p className="text-xs text-gray-500">
                 {r.brojDokumenta ?? "bez broja"} · {dan(r.datum)}
@@ -157,7 +157,7 @@ export default function UlazneFakture({
               href={`/api/admin/ulazne-fakture/${r.id}/pdf`}
               target="_blank"
               rel="noreferrer"
-              className="text-xs text-plava hover:underline whitespace-nowrap"
+              className="text-xs text-plava-tekst hover:underline whitespace-nowrap"
             >
               Pogledaj
             </a>
@@ -165,7 +165,7 @@ export default function UlazneFakture({
             {r.sefStatus === "Approved" ? (
               <span className="text-xs text-green-600 whitespace-nowrap">✓ prihvaćena</span>
             ) : r.sefStatus === "Rejected" ? (
-              <span className="text-xs text-koral whitespace-nowrap">odbijena</span>
+              <span className="text-xs text-koral-tekst whitespace-nowrap">odbijena</span>
             ) : (
               <>
                 <button
@@ -182,7 +182,7 @@ export default function UlazneFakture({
                     if (razlog?.trim()) posalji(r.id, { odluka: "odbij", napomena: razlog.trim() });
                   }}
                   disabled={radi === r.id}
-                  className="text-xs text-gray-400 hover:text-koral hover:underline whitespace-nowrap"
+                  className="text-xs text-gray-400 hover:text-koral-tekst hover:underline whitespace-nowrap"
                 >
                   Odbij
                 </button>
@@ -205,7 +205,7 @@ export default function UlazneFakture({
             <button
               onClick={() => posalji(r.id, { kategorija: izbor[r.id] })}
               disabled={radi === r.id || !izbor[r.id]}
-              className="text-xs px-3 py-1.5 rounded-lg bg-plava text-white font-medium hover:bg-plava-dark transition-colors disabled:opacity-40 whitespace-nowrap"
+              className="text-xs px-3 py-1.5 rounded-lg bg-plava text-na-plavoj font-medium hover:bg-plava-dark transition-colors disabled:opacity-40 whitespace-nowrap"
             >
               {radi === r.id ? "..." : "Dodaj u troškove"}
             </button>
@@ -214,7 +214,7 @@ export default function UlazneFakture({
               onClick={() => posalji(r.id, { zanemari: true })}
               disabled={radi === r.id}
               title="Skloni sa spiska bez upisa u troškove (storno, duplikat, tuđa faktura)"
-              className="text-xs text-gray-400 hover:text-koral hover:underline transition-colors whitespace-nowrap"
+              className="text-xs text-gray-400 hover:text-koral-tekst hover:underline transition-colors whitespace-nowrap"
             >
               Ne knjiži
             </button>
@@ -258,7 +258,7 @@ export default function UlazneFakture({
                   href={`/api/admin/ulazne-fakture/${r.id}/pdf`}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-xs text-plava hover:underline whitespace-nowrap"
+                  className="text-xs text-plava-tekst hover:underline whitespace-nowrap"
                 >
                   Pogledaj
                 </a>
@@ -277,7 +277,7 @@ export default function UlazneFakture({
                     if (razlog?.trim()) posalji(r.id, { odluka: "odbij", napomena: razlog.trim() });
                   }}
                   disabled={radi === r.id}
-                  className="text-xs text-gray-400 hover:text-koral hover:underline whitespace-nowrap"
+                  className="text-xs text-gray-400 hover:text-koral-tekst hover:underline whitespace-nowrap"
                 >
                   Odbij
                 </button>

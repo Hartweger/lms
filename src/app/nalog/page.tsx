@@ -96,7 +96,7 @@ export default async function NalogPage() {
         {kursevi.length === 0 && (
           <p className="text-sm text-gray-500">
             Još nemaš kurseve.{" "}
-            <Link href="/kursevi" className="text-plava">Pogledaj ponudu</Link>
+            <Link href="/kursevi" className="text-plava-tekst">Pogledaj ponudu</Link>
           </p>
         )}
       </section>
@@ -129,7 +129,7 @@ export default async function NalogPage() {
                       href={o.fiscal_pdf_url}
                       target="_blank"
                       rel="noreferrer"
-                      className="text-xs text-plava border border-gray-200 rounded-md px-2 py-1 hover:bg-gray-50 whitespace-nowrap"
+                      className="text-xs text-plava-tekst border border-gray-200 rounded-md px-2 py-1 hover:bg-gray-50 whitespace-nowrap"
                     >
                       Račun
                     </a>
@@ -149,7 +149,7 @@ export default async function NalogPage() {
 
       <p className="text-sm text-gray-400 mt-10 text-center">
         Treba ti pomoć? Piši nam na{" "}
-        <a href="mailto:info@hartweger.rs" className="text-plava">info@hartweger.rs</a>
+        <a href="mailto:info@hartweger.rs" className="text-plava-tekst">info@hartweger.rs</a>
       </p>
     </div>
   );

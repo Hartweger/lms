@@ -62,7 +62,7 @@ export default function MojeReciClient({
           </p>
           <button
             onClick={() => setUciSve(true)}
-            className="bg-plava text-white rounded-xl px-6 py-3 font-bold"
+            className="bg-plava text-na-plavoj rounded-xl px-6 py-3 font-bold"
           >
             Uči sve
           </button>

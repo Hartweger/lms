@@ -54,12 +54,12 @@ export default function SpeakButton({
     <button
       type="button"
       onClick={speak}
-      className={`inline-flex items-center justify-center shrink-0 text-gray-400 hover:text-plava transition-colors ${className}`}
+      className={`inline-flex items-center justify-center shrink-0 text-gray-400 hover:text-plava-tekst transition-colors ${className}`}
       aria-label={`Izgovori: ${text}`}
       title="Izgovori"
     >
       <svg
-        className={`w-4 h-4 ${speaking ? "text-plava animate-pulse" : ""}`}
+        className={`w-4 h-4 ${speaking ? "text-plava-tekst animate-pulse" : ""}`}
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"

@@ -45,7 +45,7 @@ export default async function SertifikatStranica({ params }: PageProps) {
             href={pdfUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block bg-plava text-white px-6 py-2.5 rounded-lg hover:bg-plava-dark transition-colors text-sm font-medium"
+            className="inline-block bg-plava text-na-plavoj px-6 py-2.5 rounded-lg hover:bg-plava-dark transition-colors text-sm font-medium"
           >
             Preuzmi PDF · Als PDF herunterladen
           </a>

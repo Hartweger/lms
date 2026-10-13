@@ -114,7 +114,7 @@ export default async function VezbaStranica({ params }: PageProps) {
     <div className="max-w-2xl mx-auto px-4 py-8">
       <div className="flex items-center justify-between mb-4">
         {lesson && (
-          <Link href={`/lekcija/${lesson.id}`} className="text-sm text-plava hover:underline">
+          <Link href={`/lekcija/${lesson.id}`} className="text-sm text-plava-tekst hover:underline">
             &larr; {lesson.title}
           </Link>
         )}

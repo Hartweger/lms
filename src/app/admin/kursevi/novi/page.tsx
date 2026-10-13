@@ -101,7 +101,7 @@ export default function NoviKurs() {
         <button
           type="submit"
           disabled={loading}
-          className="bg-plava text-white px-6 py-3 rounded-lg hover:bg-plava-dark transition-colors disabled:opacity-50"
+          className="bg-plava text-na-plavoj px-6 py-3 rounded-lg hover:bg-plava-dark transition-colors disabled:opacity-50"
         >
           {loading ? "Čuvam..." : "Kreiraj kurs"}
         </button>

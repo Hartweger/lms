@@ -227,7 +227,7 @@ export default function NakiChat() {
 
   return (
     <div className="mx-auto flex h-[70vh] max-h-[640px] w-full max-w-xl flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
-      <div className="flex items-center gap-3 bg-plava px-5 py-3 text-white">
+      <div className="flex items-center gap-3 bg-plava px-5 py-3 text-na-plavoj">
         <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-white">
           <NakiFace className="h-9 w-9" />
         </div>
@@ -240,7 +240,7 @@ export default function NakiChat() {
       {loggedIn === false && (
         <div className="border-b border-gray-100 bg-plava-light px-5 py-1.5 text-xs text-gray-600">
           Polaznik si?{" "}
-          <a href="/prijava" className="font-semibold text-plava underline">
+          <a href="/prijava" className="font-semibold text-plava-tekst underline">
             Prijavi se
           </a>{" "}
           pa pišeš bez dnevnog limita.
@@ -253,7 +253,7 @@ export default function NakiChat() {
             key={i}
             className={
               m.role === "user"
-                ? "max-w-[85%] self-end whitespace-pre-wrap rounded-2xl rounded-br-sm bg-plava px-3.5 py-2.5 text-sm leading-relaxed text-white"
+                ? "max-w-[85%] self-end whitespace-pre-wrap rounded-2xl rounded-br-sm bg-plava px-3.5 py-2.5 text-sm leading-relaxed text-na-plavoj"
                 : "max-w-[85%] self-start whitespace-pre-wrap rounded-2xl rounded-bl-sm bg-gray-100 px-3.5 py-2.5 text-sm leading-relaxed text-gray-900"
             }
           >
@@ -291,7 +291,7 @@ export default function NakiChat() {
               onChange={(e) => setGateEmail(e.target.value)}
             />
             <button
-              className="w-full rounded-lg bg-plava py-2.5 font-medium text-white transition-colors hover:bg-plava-dark disabled:opacity-50"
+              className="w-full rounded-lg bg-plava py-2.5 font-medium text-na-plavoj transition-colors hover:bg-plava-dark disabled:opacity-50"
               onClick={submitEmail}
               disabled={gateSubmitting}
             >
@@ -337,7 +337,7 @@ export default function NakiChat() {
         />
         <button
           type="submit"
-          className="rounded-lg bg-plava px-5 font-medium text-white transition-colors hover:bg-plava-dark disabled:opacity-50"
+          className="rounded-lg bg-plava px-5 font-medium text-na-plavoj transition-colors hover:bg-plava-dark disabled:opacity-50"
           disabled={sending || !input.trim()}
         >
           Pošalji

@@ -39,7 +39,7 @@ export default function QuizLevelTransition({
           <p className="text-gray-600 mb-6">Odlično! Nastavljamo na {nextLevel}.</p>
           <button
             onClick={onContinue}
-            className="bg-plava text-white px-8 py-3 rounded-xl font-medium hover:bg-plava-dark transition-colors"
+            className="bg-plava text-na-plavoj px-8 py-3 rounded-xl font-medium hover:bg-plava-dark transition-colors"
           >
             Nastavi →
           </button>
@@ -52,7 +52,7 @@ export default function QuizLevelTransition({
           <div className="flex gap-4 justify-center">
             <button
               onClick={onContinue}
-              className="bg-plava text-white px-8 py-3 rounded-xl font-medium hover:bg-plava-dark transition-colors"
+              className="bg-plava text-na-plavoj px-8 py-3 rounded-xl font-medium hover:bg-plava-dark transition-colors"
             >
               Da, nastavi →
             </button>
@@ -71,7 +71,7 @@ export default function QuizLevelTransition({
           <p className="text-gray-600 mb-6">Test je završen. Pogledaj svoj rezultat!</p>
           <button
             onClick={onStop}
-            className="bg-plava text-white px-8 py-3 rounded-xl font-medium hover:bg-plava-dark transition-colors"
+            className="bg-plava text-na-plavoj px-8 py-3 rounded-xl font-medium hover:bg-plava-dark transition-colors"
           >
             Prikaži rezultat →
           </button>

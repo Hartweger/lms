@@ -487,7 +487,7 @@ export default function NotesEditor({
             <button
               type="button"
               onClick={() => void handleClose()}
-              className="min-h-[44px] rounded-lg bg-plava px-4 text-sm font-medium text-white hover:bg-plava-dark"
+              className="min-h-[44px] rounded-lg bg-plava px-4 text-sm font-medium text-na-plavoj hover:bg-plava-dark"
             >
               Zatvori
             </button>

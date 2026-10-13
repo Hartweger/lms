@@ -143,32 +143,32 @@ export default function EditLessonSections() {
   };
 
   if (loading) return <div className="p-8 text-gray-400">Ucitavanje...</div>;
-  if (!lesson) return <div className="p-8 text-koral">Lekcija nije pronadjena.</div>;
+  if (!lesson) return <div className="p-8 text-koral-tekst">Lekcija nije pronadjena.</div>;
 
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <Link href={`/admin/kursevi/${lesson.course_id}`} className="text-sm text-plava hover:underline">
+          <Link href={`/admin/kursevi/${lesson.course_id}`} className="text-sm text-plava-tekst hover:underline">
             &larr; Nazad na kurs
           </Link>
           <h1 className="text-2xl font-bold text-gray-900 mt-1">{lesson.title}</h1>
           <p className="text-sm text-gray-400">{sections.length} sekcija</p>
         </div>
         <div className="flex items-center gap-3">
-          {saveError && <span className="text-koral text-sm">Greska: {saveError}</span>}
+          {saveError && <span className="text-koral-tekst text-sm">Greska: {saveError}</span>}
           {saved && <span className="text-green-600 text-sm">Sacuvano!</span>}
           <button
             onClick={() => save(sections)}
             disabled={saving}
-            className="bg-plava text-white px-6 py-2 rounded-lg hover:bg-plava-dark transition-colors disabled:opacity-50 text-sm font-medium"
+            className="bg-plava text-na-plavoj px-6 py-2 rounded-lg hover:bg-plava-dark transition-colors disabled:opacity-50 text-sm font-medium"
           >
             {saving ? "Cuvam..." : "Sacuvaj sve"}
           </button>
           <Link
             href={`/lekcija/${lesson.id}`}
             target="_blank"
-            className="text-sm text-gray-500 hover:text-plava border border-gray-200 px-4 py-2 rounded-lg"
+            className="text-sm text-gray-500 hover:text-plava-tekst border border-gray-200 px-4 py-2 rounded-lg"
           >
             Pregled
           </Link>
@@ -190,7 +190,7 @@ export default function EditLessonSections() {
               <button onClick={() => setJsonMode(null)} className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900">
                 Otkazi
               </button>
-              <button onClick={saveJsonEdit} className="px-4 py-2 bg-plava text-white rounded-lg text-sm hover:bg-plava-dark">
+              <button onClick={saveJsonEdit} className="px-4 py-2 bg-plava text-na-plavoj rounded-lg text-sm hover:bg-plava-dark">
                 Primeni
               </button>
             </div>
@@ -208,7 +208,7 @@ export default function EditLessonSections() {
                   {i + 1}. {section.type}
                 </span>
                 {"style" in section && section.style && (
-                  <span className="text-xs bg-plava-light text-plava px-2 py-1 rounded">
+                  <span className="text-xs bg-plava-light text-plava-tekst px-2 py-1 rounded">
                     {section.style}
                   </span>
                 )}
@@ -220,10 +220,10 @@ export default function EditLessonSections() {
                 <button onClick={() => moveSection(i, "down")} disabled={i === sections.length - 1} className="p-1 text-gray-400 hover:text-gray-700 disabled:opacity-30" title="Dole">
                   ↓
                 </button>
-                <button onClick={() => openJsonEditor(i)} className="p-1 text-gray-400 hover:text-plava" title="JSON editor">
+                <button onClick={() => openJsonEditor(i)} className="p-1 text-gray-400 hover:text-plava-tekst" title="JSON editor">
                   {"{ }"}
                 </button>
-                <button onClick={() => deleteSection(i)} className="p-1 text-gray-400 hover:text-koral" title="Obrisi">
+                <button onClick={() => deleteSection(i)} className="p-1 text-gray-400 hover:text-koral-tekst" title="Obrisi">
                   ✕
                 </button>
               </div>
@@ -302,7 +302,7 @@ export default function EditLessonSections() {
                 </pre>
                 <button
                   onClick={() => openJsonEditor(i)}
-                  className="mt-2 text-sm text-plava hover:underline"
+                  className="mt-2 text-sm text-plava-tekst hover:underline"
                 >
                   Uredi u JSON editoru
                 </button>
@@ -321,7 +321,7 @@ export default function EditLessonSections() {
               <button
                 key={type}
                 onClick={() => addSection(type)}
-                className="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg text-sm hover:bg-plava-light hover:text-plava transition-colors"
+                className="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg text-sm hover:bg-plava-light hover:text-plava-tekst transition-colors"
               >
                 + {type}
               </button>

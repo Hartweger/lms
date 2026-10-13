@@ -7,6 +7,14 @@
   --color-koral: #e57b78;
   --color-koral-light: #fdf2f2;
   --color-koral-dark: #c95b58;
+
+  /* Kontrast (pristupačnost, 13.10.2026): plava i koralna su presvetle za
+     tekst - beli tekst na njima i one same kao tekst na beloj ne prolaze
+     WCAG 4,5:1. Pozadine ostaju brend boje; tekst ide u ove nijanse. */
+  --color-plava-tekst: #24748f; /* plavi tekst/linkovi na beloj (5,3:1) */
+  --color-koral-tekst: #b0433f; /* koralni tekst na beloj (5,6:1) */
+  --color-na-plavoj: #0b2f3d; /* tekst na bg-plava dugmićima (5,8:1) */
+  --color-na-koralnoj: #3d0f0e; /* tekst na bg-koral dugmićima (5,8:1) */
   --color-zelena: #34A853;
   --color-zelena-light: #f0faf3;
   --color-narandzasta: #FF9800;

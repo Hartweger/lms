@@ -163,7 +163,7 @@ export default function UsloviPage() {
             za marketinške kampanje. Svi podaci o korisnicima/kupcima se strogo čuvaju i dostupni su samo
             zaposlenima kojima su ti podaci nužni za obavljanje posla. Svi zaposleni (i poslovni partneri)
             odgovorni su za poštovanje načela zaštite privatnosti. Više detalja u{" "}
-            <a href="#politika-privatnosti" className="text-plava hover:underline">odeljku 15 - Politika privatnosti</a>.
+            <a href="#politika-privatnosti" className="text-plava-tekst hover:underline">odeljku 15 - Politika privatnosti</a>.
           </p>
 
           <h2>11. Zaštita poverljivih podataka o transakciji</h2>
@@ -279,7 +279,7 @@ export default function UsloviPage() {
           <h2>16. Kontakt</h2>
           <p>
             Za sva pitanja, reklamacije i žalbe obratite nam se na{" "}
-            <Link href="/kontakt" className="text-plava hover:underline">kontakt formu</Link>{" "}
+            <Link href="/kontakt" className="text-plava-tekst hover:underline">kontakt formu</Link>{" "}
             ili putem emaila: <strong>info@hartweger.rs</strong>.
           </p>
         </div>

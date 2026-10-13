@@ -76,8 +76,8 @@ function groupByModules(lessons: Lesson[]) {
 }
 
 const moduleColors = [
-  "bg-plava text-white",
-  "bg-koral text-white",
+  "bg-plava text-na-plavoj",
+  "bg-koral text-na-koralnoj",
   "bg-zelena text-white",
   "bg-narandzasta text-white",
   "bg-ljubicasta text-white",
@@ -175,7 +175,7 @@ export default async function KursStranica({ params }: PageProps) {
         {hasAccess ? (
           <Link
             href="/dashboard"
-            className="bg-plava text-white px-8 py-3 rounded-lg font-medium hover:bg-plava-dark transition-colors"
+            className="bg-plava text-na-plavoj px-8 py-3 rounded-lg font-medium hover:bg-plava-dark transition-colors"
           >
             Nastavi učenje →
           </Link>
@@ -192,7 +192,7 @@ export default async function KursStranica({ params }: PageProps) {
                   ? `/kursevi/${typedCourse.slug}`
                   : "/kursevi"
             }
-            className="bg-koral text-white px-8 py-3 rounded-lg font-medium hover:bg-koral-dark transition-colors"
+            className="bg-koral text-na-koralnoj px-8 py-3 rounded-lg font-medium hover:bg-koral-dark transition-colors"
           >
             {user ? "Kupi kurs →" : "Prijavi se"}
           </a>
@@ -212,7 +212,7 @@ export default async function KursStranica({ params }: PageProps) {
             href={typedCourse.handbook_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-plava text-white px-5 py-2.5 rounded-lg font-medium hover:bg-plava-dark transition-colors text-sm shrink-0"
+            className="bg-plava text-na-plavoj px-5 py-2.5 rounded-lg font-medium hover:bg-plava-dark transition-colors text-sm shrink-0"
           >
             Otvori →
           </a>
@@ -223,7 +223,7 @@ export default async function KursStranica({ params }: PageProps) {
       {accessExpired && (
         <div className="bg-koral-light border border-koral rounded-xl p-6 mb-6 text-center">
           <p className="text-koral-dark font-medium mb-2">Tvoj pristup ovom kursu je istekao.</p>
-          <a href="https://www.hartweger.rs" className="text-plava hover:underline">
+          <a href="https://www.hartweger.rs" className="text-plava-tekst hover:underline">
             Obnovi pristup na hartweger.rs →
           </a>
         </div>
@@ -251,11 +251,11 @@ export default async function KursStranica({ params }: PageProps) {
                     >
                       <div className="flex items-center gap-3">
                         {isTest ? (
-                          <span className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-koral text-white text-xs font-bold flex items-center justify-center shrink-0">
+                          <span className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-koral text-na-koralnoj text-xs font-bold flex items-center justify-center shrink-0">
                             ✓
                           </span>
                         ) : (
-                          <span className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-plava-light text-plava text-xs md:text-sm font-bold flex items-center justify-center shrink-0">
+                          <span className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-plava-light text-plava-tekst text-xs md:text-sm font-bold flex items-center justify-center shrink-0">
                             {lesson.order_index}
                           </span>
                         )}
@@ -286,12 +286,12 @@ export default async function KursStranica({ params }: PageProps) {
                 className="block bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
               >
                 <div className="flex items-center gap-3">
-                  <span className="w-8 h-8 rounded-full bg-plava-light text-plava text-sm font-bold flex items-center justify-center">
+                  <span className="w-8 h-8 rounded-full bg-plava-light text-plava-tekst text-sm font-bold flex items-center justify-center">
                     {i + 1}
                   </span>
                   <div>
                     <div className="font-medium text-gray-900">{lesson.title}</div>
-                    <div className="text-xs text-plava">Besplatno - klikni za pregled</div>
+                    <div className="text-xs text-plava-tekst">Besplatno - klikni za pregled</div>
                   </div>
                 </div>
               </Link>

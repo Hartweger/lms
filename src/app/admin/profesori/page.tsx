@@ -143,7 +143,7 @@ export default function AdminProfesori() {
       <div>
         <button
           onClick={() => { setSelectedProf(null); setAssignments([]); }}
-          className="text-sm text-plava hover:underline mb-4 inline-block"
+          className="text-sm text-plava-tekst hover:underline mb-4 inline-block"
         >
           ← Nazad na listu
         </button>
@@ -184,7 +184,7 @@ export default function AdminProfesori() {
           <button
             onClick={addAssignment}
             disabled={!selectedStudentId || !selectedCourseId}
-            className="px-4 py-2 bg-plava text-white rounded-lg text-sm font-medium hover:bg-plava-dark transition-colors disabled:opacity-50"
+            className="px-4 py-2 bg-plava text-na-plavoj rounded-lg text-sm font-medium hover:bg-plava-dark transition-colors disabled:opacity-50"
           >
             Dodeli
           </button>
@@ -233,7 +233,7 @@ export default function AdminProfesori() {
                           <span className="text-xs text-gray-500">Sigurno?</span>
                           <button
                             onClick={() => removeAssignment(a.id)}
-                            className="text-xs text-koral font-medium hover:underline"
+                            className="text-xs text-koral-tekst font-medium hover:underline"
                           >
                             Da
                           </button>
@@ -247,7 +247,7 @@ export default function AdminProfesori() {
                       ) : (
                         <button
                           onClick={() => setConfirmDeleteId(a.id)}
-                          className="text-xs text-koral hover:underline"
+                          className="text-xs text-koral-tekst hover:underline"
                         >
                           Ukloni
                         </button>
@@ -305,7 +305,7 @@ export default function AdminProfesori() {
                     </a>
                     <button
                       onClick={() => openDetail(prof)}
-                      className="text-plava hover:underline text-sm"
+                      className="text-plava-tekst hover:underline text-sm"
                     >
                       Upravljaj
                     </button>

@@ -99,7 +99,7 @@ function itemAmounts(order: WcOrder): number[] {
 function statusBadge(status: string) {
   switch (status) {
     case "completed":
-      return { label: "Završeno", cls: "bg-plava-light text-plava" };
+      return { label: "Završeno", cls: "bg-plava-light text-plava-tekst" };
     case "pending":
       return { label: "Na čekanju", cls: "bg-yellow-50 text-yellow-600" };
     case "processing":
@@ -109,7 +109,7 @@ function statusBadge(status: string) {
     case "cancelled":
       return { label: "Otkazano", cls: "bg-gray-100 text-gray-500" };
     case "failed":
-      return { label: "Neuspešno", cls: "bg-koral-light text-koral" };
+      return { label: "Neuspešno", cls: "bg-koral-light text-koral-tekst" };
     default:
       return { label: status, cls: "bg-gray-100 text-gray-500" };
   }
@@ -119,7 +119,7 @@ function PctBadge({ value }: { value: number | null }) {
   if (value === null) return null;
   const positive = value >= 0;
   return (
-    <span className={`text-xs font-medium ${positive ? "text-zelena" : "text-koral"}`}>
+    <span className={`text-xs font-medium ${positive ? "text-zelena" : "text-koral-tekst"}`}>
       {positive ? "↑" : "↓"} {Math.abs(value)}%
     </span>
   );
@@ -523,7 +523,7 @@ export default function AnalitikaDashboard({
               onClick={() => setPeriod(value)}
               className={`text-sm px-3 py-1.5 rounded-full font-medium transition-colors ${
                 period === value
-                  ? "bg-plava-light text-plava"
+                  ? "bg-plava-light text-plava-tekst"
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200"
               }`}
             >
@@ -583,7 +583,7 @@ export default function AnalitikaDashboard({
         {/* Ukupan prihod */}
         <div className="bg-white rounded-xl p-6 shadow-sm">
           <div className="text-sm text-gray-500 mb-1">Prihod (period)</div>
-          <div className="text-2xl font-bold text-plava">{fmt(metrics.totalRevenue)}</div>
+          <div className="text-2xl font-bold text-plava-tekst">{fmt(metrics.totalRevenue)}</div>
           <div className="flex flex-col gap-0.5 mt-1">
             {hasPrev && pctRevenue !== null && (
               <span className="text-xs text-gray-400 flex items-center gap-1">
@@ -601,7 +601,7 @@ export default function AnalitikaDashboard({
         {/* Broj završenih narudžbina */}
         <div className="bg-white rounded-xl p-6 shadow-sm">
           <div className="text-sm text-gray-500 mb-1">Završene narudžbine</div>
-          <div className="text-2xl font-bold text-plava">{metrics.count}</div>
+          <div className="text-2xl font-bold text-plava-tekst">{metrics.count}</div>
           <div className="flex flex-col gap-0.5 mt-1">
             {hasPrev && pctCount !== null && (
               <span className="text-xs text-gray-400 flex items-center gap-1">
@@ -619,14 +619,14 @@ export default function AnalitikaDashboard({
         {/* Prosečna narudžbina */}
         <div className="bg-white rounded-xl p-6 shadow-sm">
           <div className="text-sm text-gray-500 mb-1">Prosečna narudžbina</div>
-          <div className="text-2xl font-bold text-plava">{fmt(Math.round(metrics.avgOrder))}</div>
+          <div className="text-2xl font-bold text-plava-tekst">{fmt(Math.round(metrics.avgOrder))}</div>
           <div className="text-xs text-gray-400 mt-1">samo završene</div>
         </div>
 
         {/* Sve narudžbine u periodu */}
         <div className="bg-white rounded-xl p-6 shadow-sm">
           <div className="text-sm text-gray-500 mb-1">Sve narudžbine</div>
-          <div className="text-2xl font-bold text-plava">{metrics.totalOrderCount}</div>
+          <div className="text-2xl font-bold text-plava-tekst">{metrics.totalOrderCount}</div>
           <div className="text-xs text-gray-400 mt-1">svi statusi</div>
         </div>
       </div>
@@ -702,7 +702,7 @@ export default function AnalitikaDashboard({
           <div className="flex flex-col items-center justify-center py-4">
             <div
               className={`text-5xl font-bold mb-2 ${
-                Number(metrics.refundRate) > 5 ? "text-koral" : "text-zelena"
+                Number(metrics.refundRate) > 5 ? "text-koral-tekst" : "text-zelena"
               }`}
             >
               {metrics.refundRate}%
@@ -713,7 +713,7 @@ export default function AnalitikaDashboard({
             <div
               className={`mt-3 text-xs px-3 py-1 rounded-full ${
                 Number(metrics.refundRate) > 5
-                  ? "bg-koral-light text-koral"
+                  ? "bg-koral-light text-koral-tekst"
                   : "bg-zelena-light text-zelena"
               }`}
             >
@@ -749,7 +749,7 @@ export default function AnalitikaDashboard({
                   <td className="px-4 py-3 text-gray-400">{idx + 1}</td>
                   <td className="px-4 py-3 font-medium text-gray-900">{item.name}</td>
                   <td className="px-4 py-3">
-                    <span className="text-xs px-2 py-1 rounded-full bg-plava-light text-plava">
+                    <span className="text-xs px-2 py-1 rounded-full bg-plava-light text-plava-tekst">
                       {categorize(item.name)}
                     </span>
                   </td>
@@ -851,25 +851,25 @@ export default function AnalitikaDashboard({
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div>
             <div className="text-sm text-gray-500 mb-1">Razgovori (period)</div>
-            <div className="text-2xl font-bold text-plava">
+            <div className="text-2xl font-bold text-plava-tekst">
               {naki.sessionsInPeriod.toLocaleString("sr-Latn-RS")}
             </div>
           </div>
           <div>
             <div className="text-sm text-gray-500 mb-1">Novi mejlovi (period)</div>
-            <div className="text-2xl font-bold text-plava">{naki.leadsInPeriod}</div>
+            <div className="text-2xl font-bold text-plava-tekst">{naki.leadsInPeriod}</div>
             <div className="text-xs text-gray-400 mt-1">ukupno baza: {naki.totalLeads}</div>
           </div>
           <div>
             <div className="text-sm text-gray-500 mb-1">Kupci preko NaKI lead-a</div>
-            <div className="text-2xl font-bold text-plava">{naki.influencedBuyers}</div>
+            <div className="text-2xl font-bold text-plava-tekst">{naki.influencedBuyers}</div>
             <div className="text-xs text-gray-400 mt-1">
               {naki.influencedCount} završenih narudžbina
             </div>
           </div>
           <div>
             <div className="text-sm text-gray-500 mb-1">Prihod (NaKI-dodirnut)</div>
-            <div className="text-2xl font-bold text-plava">{fmt(naki.influencedRevenue)}</div>
+            <div className="text-2xl font-bold text-plava-tekst">{fmt(naki.influencedRevenue)}</div>
           </div>
         </div>
       </div>

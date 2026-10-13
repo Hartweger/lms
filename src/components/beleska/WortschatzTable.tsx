@@ -141,7 +141,7 @@ export default function WortschatzTable({
               type="button"
               onClick={() => removeRow(row.id)}
               aria-label={row.de ? `Ukloni red "${row.de}"` : `Ukloni red ${i + 1}`}
-              className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg text-lg text-gray-400 hover:bg-white hover:text-koral"
+              className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg text-lg text-gray-400 hover:bg-white hover:text-koral-tekst"
             >
               ×
             </button>
@@ -151,7 +151,7 @@ export default function WortschatzTable({
       <button
         type="button"
         onClick={() => addRow(false)}
-        className="mt-3 min-h-[44px] rounded-lg border border-gray-200 bg-white px-3 text-sm font-medium text-plava hover:bg-plava-light"
+        className="mt-3 min-h-[44px] rounded-lg border border-gray-200 bg-white px-3 text-sm font-medium text-plava-tekst hover:bg-plava-light"
       >
         + dodaj red
       </button>

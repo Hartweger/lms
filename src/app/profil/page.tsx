@@ -74,7 +74,7 @@ export default function Profil() {
           <input value={fullName} onChange={(e) => setFullName(e.target.value)} className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-plava" />
         </div>
         {message && <div className="bg-plava-light text-plava-dark px-4 py-3 rounded-lg text-sm">{message}</div>}
-        <button onClick={handleSave} disabled={saving} className="w-full bg-plava text-white py-3 rounded-lg hover:bg-plava-dark transition-colors disabled:opacity-50">
+        <button onClick={handleSave} disabled={saving} className="w-full bg-plava text-na-plavoj py-3 rounded-lg hover:bg-plava-dark transition-colors disabled:opacity-50">
           {saving ? "Čuvam..." : "Sačuvaj izmene"}
         </button>
       </div>
@@ -92,7 +92,7 @@ export default function Profil() {
           </div>
           {pwError && <div role="alert" className="bg-koral-light text-koral-dark px-4 py-3 rounded-lg text-sm">{pwError}</div>}
           {pwMessage && <div className="bg-plava-light text-plava-dark px-4 py-3 rounded-lg text-sm">{pwMessage}</div>}
-          <button onClick={handleSetPassword} disabled={pwSaving} className="w-full bg-plava text-white py-3 rounded-lg hover:bg-plava-dark transition-colors disabled:opacity-50">
+          <button onClick={handleSetPassword} disabled={pwSaving} className="w-full bg-plava text-na-plavoj py-3 rounded-lg hover:bg-plava-dark transition-colors disabled:opacity-50">
             {pwSaving ? "Čuvam..." : "Sačuvaj lozinku"}
           </button>
         </div>

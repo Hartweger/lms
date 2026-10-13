@@ -160,7 +160,7 @@ export default async function AdminStudentPregled({ params }: PageProps) {
         <>
           {/* Primary Course Block */}
           <div className="bg-white rounded-xl p-5 border-2 border-plava shadow-sm mb-4">
-            <div className="text-xs font-bold text-plava tracking-wide mb-2">
+            <div className="text-xs font-bold text-plava-tekst tracking-wide mb-2">
               {primaryCourse.progress === 100 ? "KURS ZAVRŠEN" : "TRENUTNI KURS"}
             </div>
             <h2 className="font-bold text-lg text-gray-900 mb-1">
@@ -182,7 +182,7 @@ export default async function AdminStudentPregled({ params }: PageProps) {
             )}
             <Link
               href={primaryCourse.currentLessonId ? `/lekcija/${primaryCourse.currentLessonId}` : `/kurs/${primaryCourse.slug}`}
-              className="block w-full text-center bg-plava text-white py-3 rounded-lg font-bold text-sm hover:bg-plava-dark transition-colors"
+              className="block w-full text-center bg-plava text-na-plavoj py-3 rounded-lg font-bold text-sm hover:bg-plava-dark transition-colors"
             >
               Pogledaj lekciju
             </Link>
@@ -211,7 +211,7 @@ export default async function AdminStudentPregled({ params }: PageProps) {
                           Sertifikat
                         </span>
                       ) : (
-                        <span className="text-xs font-semibold text-plava bg-plava-light px-3 py-1.5 rounded-lg">
+                        <span className="text-xs font-semibold text-plava-tekst bg-plava-light px-3 py-1.5 rounded-lg">
                           {course.progress}%
                         </span>
                       )}

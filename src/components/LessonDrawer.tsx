@@ -43,7 +43,7 @@ export default function LessonDrawer({
       {/* Trigger button */}
       <button
         onClick={() => setIsOpen(true)}
-        className="text-plava font-bold text-sm flex items-center gap-1"
+        className="text-plava-tekst font-bold text-sm flex items-center gap-1"
       >
         ☰ Lekcije
       </button>
@@ -128,9 +128,9 @@ export default function LessonDrawer({
                       {isCompleted ? (
                         <span className="text-green-500 font-bold">✓</span>
                       ) : isCurrent ? (
-                        <span className="text-plava font-bold">▶</span>
+                        <span className="text-plava-tekst font-bold">▶</span>
                       ) : isTest || isModelltest ? (
-                        <span className="text-koral font-bold">✎</span>
+                        <span className="text-koral-tekst font-bold">✎</span>
                       ) : (
                         <span className="text-gray-300">○</span>
                       )}
@@ -139,7 +139,7 @@ export default function LessonDrawer({
                       <span
                         className={`block truncate ${
                           isCurrent
-                            ? "font-bold text-plava"
+                            ? "font-bold text-plava-tekst"
                             : isCompleted
                             ? "text-gray-700"
                             : isTest || isModelltest

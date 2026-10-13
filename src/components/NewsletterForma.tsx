@@ -56,7 +56,7 @@ export default function NewsletterForma() {
         <button
           type="submit"
           disabled={status === "loading"}
-          className="bg-koral text-white px-8 py-3 rounded-xl font-semibold hover:bg-koral-dark transition-colors disabled:opacity-50 whitespace-nowrap"
+          className="bg-koral text-na-koralnoj px-8 py-3 rounded-xl font-semibold hover:bg-koral-dark transition-colors disabled:opacity-50 whitespace-nowrap"
         >
           {status === "loading" ? "Šaljem..." : "Prijavi se"}
         </button>

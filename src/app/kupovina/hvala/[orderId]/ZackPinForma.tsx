@@ -128,7 +128,7 @@ export default function ZackPinForma({ orderId, imeDeteta }: { orderId: string; 
       <button
         type="submit"
         disabled={saljeSe}
-        className="mt-1 inline-block px-5 py-2.5 rounded-lg font-semibold text-white text-sm bg-plava hover:bg-plava-dark transition-colors disabled:opacity-60"
+        className="mt-1 inline-block px-5 py-2.5 rounded-lg font-semibold text-na-plavoj text-sm bg-plava hover:bg-plava-dark transition-colors disabled:opacity-60"
       >
         {saljeSe ? "Čuva se..." : "Sačuvaj PIN"}
       </button>

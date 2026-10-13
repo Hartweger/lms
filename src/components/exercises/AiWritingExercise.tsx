@@ -115,7 +115,7 @@ export default function AiWritingExercise({ lessonId, lessonTitle, instruction }
         </p>
         <button
           onClick={start}
-          className="bg-plava text-white px-8 py-3 rounded-lg font-medium hover:bg-plava-dark transition-colors"
+          className="bg-plava text-na-plavoj px-8 py-3 rounded-lg font-medium hover:bg-plava-dark transition-colors"
         >
           Počni
         </button>
@@ -134,8 +134,8 @@ export default function AiWritingExercise({ lessonId, lessonTitle, instruction }
   if (error && tasks.length === 0) {
     return (
       <div className="max-w-lg mx-auto text-center py-12 px-4">
-        <p className="text-koral mb-4">{error}</p>
-        <button onClick={restart} className="text-plava hover:underline text-sm">Pokušaj ponovo</button>
+        <p className="text-koral-tekst mb-4">{error}</p>
+        <button onClick={restart} className="text-plava-tekst hover:underline text-sm">Pokušaj ponovo</button>
       </div>
     );
   }
@@ -170,7 +170,7 @@ export default function AiWritingExercise({ lessonId, lessonTitle, instruction }
         </div>
         <Link
           href={`/lekcija/${lessonId}`}
-          className="block w-full text-center py-3 bg-plava text-white rounded-lg text-sm font-medium hover:bg-plava-dark transition-colors"
+          className="block w-full text-center py-3 bg-plava text-na-plavoj rounded-lg text-sm font-medium hover:bg-plava-dark transition-colors"
         >
           Nazad na lekciju
         </Link>
@@ -216,7 +216,7 @@ export default function AiWritingExercise({ lessonId, lessonTitle, instruction }
           <button
             onClick={check}
             disabled={!answer.trim() || checking}
-            className="w-full mt-3 bg-plava text-white py-3 rounded-xl font-medium hover:bg-plava-dark transition-colors disabled:opacity-50"
+            className="w-full mt-3 bg-plava text-na-plavoj py-3 rounded-xl font-medium hover:bg-plava-dark transition-colors disabled:opacity-50"
           >
             {checking ? "Proveravam..." : "Proveri"}
           </button>
@@ -238,14 +238,14 @@ export default function AiWritingExercise({ lessonId, lessonTitle, instruction }
           <button
             onClick={next}
             autoFocus
-            className="w-full bg-plava text-white py-3 rounded-xl font-medium hover:bg-plava-dark transition-colors"
+            className="w-full bg-plava text-na-plavoj py-3 rounded-xl font-medium hover:bg-plava-dark transition-colors"
           >
             {currentIndex + 1 >= tasks.length ? "Pogledaj rezultate" : "Sledeća →"}
           </button>
         </div>
       )}
 
-      {error && <p className="text-koral text-sm mt-3">{error}</p>}
+      {error && <p className="text-koral-tekst text-sm mt-3">{error}</p>}
     </div>
   );
 }

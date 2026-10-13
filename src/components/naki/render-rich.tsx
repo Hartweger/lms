@@ -5,7 +5,7 @@ import { type CSSProperties, type ReactNode } from "react";
 // XSS-safe: nikad ne koristi dangerouslySetInnerHTML; sve je React čvor.
 //
 // Link izgled je parametrizovan da bi se isti renderer koristio i u NakiChat
-// (Tailwind klasa "text-plava underline") i u SmileWidget (inline coral stil),
+// (Tailwind klasa "text-plava-tekst underline") i u SmileWidget (inline coral stil),
 // bez menjanja postojećeg ponašanja nijednog widget-a.
 type RenderRichOptions = {
   linkClassName?: string;
@@ -13,7 +13,7 @@ type RenderRichOptions = {
 };
 
 export function renderRich(text: string, opts: RenderRichOptions = {}): ReactNode[] {
-  const linkClassName = opts.linkClassName ?? "text-plava underline";
+  const linkClassName = opts.linkClassName ?? "text-plava-tekst underline";
   const linkStyle = opts.linkStyle;
   const withBullets = text.replace(/^- /gm, "• ");
   // markdown link | bold | kurziv | goli URL (www. ili https://) | mejl | goli domen (hartweger.rs / youtube - NaKI često izostavi https://)

@@ -64,7 +64,7 @@ export default function MesecneFakture({ redovi }: { redovi: MesecnaRed[] }) {
         Pripremaju se same prvog u mesecu. Broj se dodeljuje tek kad pošalješ.
       </p>
 
-      {greska && <p className="text-sm text-koral font-medium mb-3">{greska}</p>}
+      {greska && <p className="text-sm text-koral-tekst font-medium mb-3">{greska}</p>}
 
       <div className="space-y-2">
         {redovi.map((r) => (
@@ -86,7 +86,7 @@ export default function MesecneFakture({ redovi }: { redovi: MesecnaRed[] }) {
               href={`/api/admin/mesecne-fakture/${r.id}`}
               target="_blank"
               rel="noreferrer"
-              className="text-xs text-plava hover:underline whitespace-nowrap"
+              className="text-xs text-plava-tekst hover:underline whitespace-nowrap"
             >
               Pogledaj PDF
             </a>
@@ -97,7 +97,7 @@ export default function MesecneFakture({ redovi }: { redovi: MesecnaRed[] }) {
               <button
                 onClick={() => posalji(r.id, "posalji")}
                 disabled={radi === `${r.id}-posalji`}
-                className="text-xs px-3 py-1.5 rounded-lg bg-plava text-white font-medium hover:bg-plava-dark transition-colors disabled:opacity-50 whitespace-nowrap"
+                className="text-xs px-3 py-1.5 rounded-lg bg-plava text-na-plavoj font-medium hover:bg-plava-dark transition-colors disabled:opacity-50 whitespace-nowrap"
               >
                 {radi === `${r.id}-posalji` ? "..." : "Pošalji fakturu"}
               </button>

@@ -216,7 +216,7 @@ export default async function Dashboard() {
             Postavi pitanje, vežbaj konverzaciju ili proveri rečenicu - NaKI odgovara odmah.
           </p>
         </div>
-        <span className="inline-flex items-center gap-1 shrink-0 text-xs font-semibold text-plava bg-plava-light px-3 py-1.5 rounded-lg">
+        <span className="inline-flex items-center gap-1 shrink-0 text-xs font-semibold text-plava-tekst bg-plava-light px-3 py-1.5 rounded-lg">
           Pričaj
           <ArrowRight className="w-3.5 h-3.5" strokeWidth={2.5} />
         </span>
@@ -227,7 +227,7 @@ export default async function Dashboard() {
           {/* Primary Course Block */}
           <div className={`bg-white rounded-2xl p-6 border shadow-md mb-8 sm:flex sm:items-center sm:gap-6 ${primaryCourse.expired ? "border-gray-200 opacity-70" : "border-plava/30"}`}>
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-1.5 text-xs font-bold text-koral tracking-wide mb-2">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-koral-tekst tracking-wide mb-2">
                 <BookOpen className="w-3.5 h-3.5" strokeWidth={2.5} />
                 {primaryCourse.expired
                   ? "PRISTUP ISTEKAO"
@@ -278,7 +278,7 @@ export default async function Dashboard() {
                 isRenewable(primaryCourse.category, primaryCourse.slug) && renewSlugs.has(primaryCourse.id) && !upisom.has(primaryCourse.id) ? (
                   <Link
                     href={`/kupovina/${renewSlugs.get(primaryCourse.id)}?kupon=OBNOVI50`}
-                    className="flex items-center justify-center gap-2 w-full bg-koral text-white py-3 rounded-xl font-bold text-sm hover:bg-koral-dark transition-colors"
+                    className="flex items-center justify-center gap-2 w-full bg-koral text-na-koralnoj py-3 rounded-xl font-bold text-sm hover:bg-koral-dark transition-colors"
                   >
                     Obnovi −50%
                   </Link>
@@ -290,7 +290,7 @@ export default async function Dashboard() {
               ) : (
                 <Link
                   href={primaryCourse.currentLessonId ? `/lekcija/${primaryCourse.currentLessonId}` : `/kurs/${primaryCourse.slug}`}
-                  className="flex items-center justify-center gap-2 w-full bg-plava text-white py-3 rounded-xl font-bold text-sm hover:bg-plava-dark transition-colors"
+                  className="flex items-center justify-center gap-2 w-full bg-plava text-na-plavoj py-3 rounded-xl font-bold text-sm hover:bg-plava-dark transition-colors"
                 >
                   {allCompleted ? (
                     <RotateCcw className="w-4 h-4" strokeWidth={2.5} />
@@ -342,7 +342,7 @@ export default async function Dashboard() {
                         Sertifikat
                       </span>
                     ) : (
-                      <span className="mt-auto inline-flex items-center gap-1 self-start text-xs font-semibold text-plava bg-plava-light px-3 py-1.5 rounded-lg">
+                      <span className="mt-auto inline-flex items-center gap-1 self-start text-xs font-semibold text-plava-tekst bg-plava-light px-3 py-1.5 rounded-lg">
                         {course.progress === 0 ? "Počni" : "Nastavi"}
                         <ArrowRight className="w-3.5 h-3.5" strokeWidth={2.5} />
                       </span>
@@ -364,7 +364,7 @@ export default async function Dashboard() {
               href="https://hartweger.rs"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-plava text-white px-6 py-3 rounded-xl font-bold hover:bg-plava-dark transition-colors"
+              className="inline-flex items-center gap-2 bg-plava text-na-plavoj px-6 py-3 rounded-xl font-bold hover:bg-plava-dark transition-colors"
             >
               Kupi kurs na hartweger.rs
               <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
@@ -376,7 +376,7 @@ export default async function Dashboard() {
               Ovo je stizalo kao mejl podršci - poruka ih hvata pre toga. */}
           <div className="mt-10 max-w-lg mx-auto bg-plava-light/50 border border-plava/20 rounded-2xl p-5 text-left">
             <div className="flex items-start gap-3">
-              <Mail className="w-5 h-5 text-plava shrink-0 mt-0.5" strokeWidth={2} />
+              <Mail className="w-5 h-5 text-plava-tekst shrink-0 mt-0.5" strokeWidth={2} />
               <div className="min-w-0">
                 <h3 className="font-bold text-sm text-gray-900">
                   Kurs je plaćen, a spisak prazan?
@@ -393,7 +393,7 @@ export default async function Dashboard() {
                   )}&body=${encodeURIComponent(
                     `Zdravo,\n\nprijavljen/a sam kao ${user.email}, ali ne vidim svoje kurseve.\n\nKurs sam kupio/la sa adrese: \nIme i prezime: \n\nHvala!`
                   )}`}
-                  className="inline-flex items-center gap-1.5 mt-3 text-sm font-semibold text-plava hover:text-plava-dark transition-colors"
+                  className="inline-flex items-center gap-1.5 mt-3 text-sm font-semibold text-plava-tekst hover:text-plava-dark transition-colors"
                 >
                   Javi nam se na info@hartweger.rs
                   <ArrowRight className="w-3.5 h-3.5" strokeWidth={2.5} />

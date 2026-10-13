@@ -72,7 +72,7 @@ export default function CookieBanner() {
           Uz tvoju saglasnost pratimo kako se sajt koristi da bismo ti prikazali pravi sadržaj i
           stalno unapređivali časove i platformu. Neophodni kolačići rade uvek; analitičke i
           marketinške postavljamo samo ako prihvatiš. Detaljnije u{" "}
-          <Link href="/uslovi#politika-privatnosti" className="underline text-plava hover:text-white">
+          <Link href="/uslovi#politika-privatnosti" className="underline text-plava-tekst hover:text-white">
             politici privatnosti
           </Link>
           .
@@ -88,7 +88,7 @@ export default function CookieBanner() {
           <button
             type="button"
             onClick={() => choose("granted")}
-            className="px-6 py-2.5 rounded-md bg-plava text-white text-sm font-semibold shadow-md hover:opacity-90 transition-opacity"
+            className="px-6 py-2.5 rounded-md bg-plava text-na-plavoj text-sm font-semibold shadow-md hover:opacity-90 transition-opacity"
           >
             Prihvatam
           </button>

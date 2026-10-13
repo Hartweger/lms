@@ -33,7 +33,7 @@ export default async function BeleskaStranica({ params }: PageProps) {
 
   return (
     <main className="mx-auto max-w-2xl px-4 py-10 md:py-14">
-      <Link href="/beleske" className="text-sm text-plava">
+      <Link href="/beleske" className="text-sm text-plava-tekst">
         ← Sve beleške
       </Link>
 

@@ -65,7 +65,7 @@ export default function NavClient() {
           <Link
             key={l.href}
             href={l.href}
-            className="font-medium text-gray-600 hover:text-plava transition-colors"
+            className="font-medium text-gray-600 hover:text-plava-tekst transition-colors"
           >
             {l.label}
           </Link>
@@ -75,7 +75,7 @@ export default function NavClient() {
           <div className="relative" ref={accountRef}>
             <button
               onClick={() => setAccountOpen((o) => !o)}
-              className="flex items-center gap-1 text-plava font-medium hover:text-plava-dark transition-colors"
+              className="flex items-center gap-1 text-plava-tekst font-medium hover:text-plava-dark transition-colors"
               aria-haspopup="menu"
               aria-expanded={accountOpen}
             >
@@ -129,7 +129,7 @@ export default function NavClient() {
                 )}
                 <button
                   onClick={handleLogout}
-                  className="block w-full text-left px-4 py-2 text-sm text-koral hover:bg-gray-50"
+                  className="block w-full text-left px-4 py-2 text-sm text-koral-tekst hover:bg-gray-50"
                 >
                   Odjava
                 </button>
@@ -138,12 +138,12 @@ export default function NavClient() {
           </div>
         ) : (
           <>
-            <Link href="/besplatno-testiranje" className="text-plava font-medium hover:text-plava-dark transition-colors">
+            <Link href="/besplatno-testiranje" className="text-plava-tekst font-medium hover:text-plava-dark transition-colors">
               Besplatni test
             </Link>
             <Link
               href="/prijava"
-              className="bg-koral text-white px-5 py-2 rounded-lg font-semibold hover:bg-koral-dark transition-colors"
+              className="bg-koral text-na-koralnoj px-5 py-2 rounded-lg font-semibold hover:bg-koral-dark transition-colors"
             >
               Prijavi se
             </Link>
@@ -174,7 +174,7 @@ export default function NavClient() {
             <Link
               key={l.href}
               href={l.href}
-              className="block font-medium text-gray-600 hover:text-plava"
+              className="block font-medium text-gray-600 hover:text-plava-tekst"
               onClick={() => setMenuOpen(false)}
             >
               {l.label}
@@ -199,18 +199,18 @@ export default function NavClient() {
                   Profesor panel
                 </Link>
               )}
-              <button onClick={handleLogout} className="block text-koral">
+              <button onClick={handleLogout} className="block text-koral-tekst">
                 Odjava
               </button>
             </>
           ) : (
             <>
-              <Link href="/besplatno-testiranje" className="block text-plava font-medium" onClick={() => setMenuOpen(false)}>
+              <Link href="/besplatno-testiranje" className="block text-plava-tekst font-medium" onClick={() => setMenuOpen(false)}>
                 Besplatni test
               </Link>
               <Link
                 href="/prijava"
-                className="block bg-koral text-white px-5 py-2 rounded-lg font-semibold text-center hover:bg-koral-dark transition-colors"
+                className="block bg-koral text-na-koralnoj px-5 py-2 rounded-lg font-semibold text-center hover:bg-koral-dark transition-colors"
                 onClick={() => setMenuOpen(false)}
               >
                 Prijavi se

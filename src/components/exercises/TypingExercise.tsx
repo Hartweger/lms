@@ -89,7 +89,7 @@ export default function TypingExercise({ question, correctAnswer, explanation, o
         {!answered && (
           <button
             onClick={handleSubmit}
-            className="bg-plava text-white px-6 py-3 rounded-xl font-semibold hover:bg-plava-dark transition-colors"
+            className="bg-plava text-na-plavoj px-6 py-3 rounded-xl font-semibold hover:bg-plava-dark transition-colors"
           >
             Proveri
           </button>

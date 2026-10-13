@@ -69,7 +69,7 @@ export default async function AdminNakiPage() {
 
       {/* ── NaKI - tutor ── */}
       <section>
-        <h2 className="font-heading mb-1 text-xl font-bold text-plava">NaKI - tutor</h2>
+        <h2 className="font-heading mb-1 text-xl font-bold text-plava-tekst">NaKI - tutor</h2>
         <p className="mb-4 text-sm text-gray-500">
           Razgovori polaznika sa NaKI tutorom (učenje). {nakiRows.length} poruka.
         </p>

@@ -33,7 +33,7 @@ export default function InteresForm({ nivo }: { nivo: string }) {
     return (
       <button
         onClick={() => setOpen(true)}
-        className="bg-plava hover:bg-plava-dark text-white font-bold text-lg py-4 px-10 rounded-xl transition-all hover:-translate-y-0.5 shadow-lg"
+        className="bg-plava hover:bg-plava-dark text-na-plavoj font-bold text-lg py-4 px-10 rounded-xl transition-all hover:-translate-y-0.5 shadow-lg"
       >
         Obavesti me za sledeći termin
       </button>
@@ -56,7 +56,7 @@ export default function InteresForm({ nivo }: { nivo: string }) {
       />
       <button
         type="submit" disabled={status === "slanje"}
-        className="bg-plava hover:bg-plava-dark text-white font-bold py-3 px-6 rounded-lg disabled:opacity-60"
+        className="bg-plava hover:bg-plava-dark text-na-plavoj font-bold py-3 px-6 rounded-lg disabled:opacity-60"
       >
         {status === "slanje" ? "Šaljem…" : "Pošalji"}
       </button>

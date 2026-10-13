@@ -222,7 +222,7 @@ export default function AdminStudenti() {
                 <td className="px-6 py-4 text-right">
                   <Link
                     href={`/admin/studenti/${student.id}`}
-                    className="text-plava hover:underline"
+                    className="text-plava-tekst hover:underline"
                   >
                     Detalji
                   </Link>

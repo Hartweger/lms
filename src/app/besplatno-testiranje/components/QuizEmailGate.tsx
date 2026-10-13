@@ -51,11 +51,11 @@ export default function QuizEmailGate({ recommendedLevel, onSubmit, onSkip, isLo
           className="w-full px-5 py-4 rounded-xl border-2 border-gray-200 text-center text-lg focus:outline-none focus:border-plava transition-colors"
           disabled={isLoading}
         />
-        {error && <p role="alert" className="text-koral text-sm">{error}</p>}
+        {error && <p role="alert" className="text-koral-tekst text-sm">{error}</p>}
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full bg-plava text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-plava-dark transition-colors disabled:opacity-50"
+          className="w-full bg-plava text-na-plavoj px-8 py-4 rounded-xl text-lg font-semibold hover:bg-plava-dark transition-colors disabled:opacity-50"
         >
           {isLoading ? "Šaljem..." : "Prikaži detaljnu analizu →"}
         </button>

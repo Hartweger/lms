@@ -49,7 +49,7 @@ export default function ProveraForma() {
         <button
           type="submit"
           disabled={loading || !code.trim()}
-          className="rounded-lg bg-plava px-6 py-3 text-sm font-semibold text-white hover:bg-plava/90 disabled:opacity-50 transition-colors"
+          className="rounded-lg bg-plava px-6 py-3 text-sm font-semibold text-na-plavoj hover:bg-plava/90 disabled:opacity-50 transition-colors"
         >
           {loading ? "Proveravam..." : "Proveri"}
         </button>

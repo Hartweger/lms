@@ -25,7 +25,7 @@ export default async function AdminTestNivoa() {
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         <div className="bg-white rounded-xl shadow-sm p-4 text-center">
-          <p className="text-3xl font-bold text-plava">{total}</p>
+          <p className="text-3xl font-bold text-plava-tekst">{total}</p>
           <p className="text-sm text-gray-500">Ukupno testova</p>
         </div>
         <div className="bg-white rounded-xl shadow-sm p-4 text-center">
@@ -56,7 +56,7 @@ export default async function AdminTestNivoa() {
               <tr key={r.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 text-gray-700">{r.email || "\u2014"}</td>
                 <td className="px-6 py-4">
-                  <span className="bg-plava-light text-plava px-3 py-1 rounded-full text-sm font-medium">
+                  <span className="bg-plava-light text-plava-tekst px-3 py-1 rounded-full text-sm font-medium">
                     {r.recommended_level}
                   </span>
                 </td>

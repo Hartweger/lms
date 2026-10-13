@@ -38,7 +38,7 @@ export default function ProfesorNav() {
               href={withProf(tab.href)}
               className={`px-4 py-2 rounded-lg text-sm transition-colors ${
                 isActive
-                  ? "bg-plava-light text-plava font-medium"
+                  ? "bg-plava-light text-plava-tekst font-medium"
                   : "text-gray-600 hover:bg-gray-50"
               }`}
             >

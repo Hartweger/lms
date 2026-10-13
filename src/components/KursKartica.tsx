@@ -17,14 +17,14 @@ export default function KursKartica({ course }: { course: Course }) {
           </span>
         </div>
         <div className="p-5">
-          <h3 className="font-semibold text-lg text-gray-900 group-hover:text-plava transition-colors">
+          <h3 className="font-semibold text-lg text-gray-900 group-hover:text-plava-tekst transition-colors">
             {course.title}
           </h3>
           <p className="text-sm text-gray-500 mt-2 line-clamp-2">
             {course.description}
           </p>
           <div className="mt-4 flex items-center justify-end">
-            <span className="text-xs text-gray-400 group-hover:text-plava transition-colors">
+            <span className="text-xs text-gray-400 group-hover:text-plava-tekst transition-colors">
               Saznaj više →
             </span>
           </div>

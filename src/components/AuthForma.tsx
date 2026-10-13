@@ -151,7 +151,7 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
             type="button"
             onClick={handleVerifyCode}
             disabled={codeLoading}
-            className="mt-3 w-full bg-plava text-white py-3 rounded-lg font-medium hover:bg-plava-dark transition-colors disabled:opacity-50"
+            className="mt-3 w-full bg-plava text-na-plavoj py-3 rounded-lg font-medium hover:bg-plava-dark transition-colors disabled:opacity-50"
           >
             {codeLoading ? "Proveravam..." : "Prijavi se kodom"}
           </button>
@@ -164,7 +164,7 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
             setCode("");
             setCodeError(null);
           }}
-          className="w-full text-sm text-plava hover:underline"
+          className="w-full text-sm text-plava-tekst hover:underline"
         >
           Pogrešan mejl? Pošalji ponovo
         </button>
@@ -261,7 +261,7 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
         <button
           type="submit"
           disabled={loading || captchaPending}
-          className="w-full bg-plava text-white py-3 rounded-lg font-medium hover:bg-plava-dark transition-colors disabled:opacity-50"
+          className="w-full bg-plava text-na-plavoj py-3 rounded-lg font-medium hover:bg-plava-dark transition-colors disabled:opacity-50"
         >
           {loading ? "Učitavanje..." : captchaPending ? "Provera..." : tip === "reset" ? "Pošalji mi link" : "Prijavi se"}
         </button>
@@ -269,7 +269,7 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
 
       {tip === "prijava" && (
         <div className="space-y-2 text-sm text-center">
-          <Link href="/reset-lozinke" className="block text-plava hover:underline font-medium">
+          <Link href="/reset-lozinke" className="block text-plava-tekst hover:underline font-medium">
             Prvi put ovde ili nemaš lozinku? Napravi je
           </Link>
           <Link href="/reset-lozinke" className="block text-gray-500 hover:underline">

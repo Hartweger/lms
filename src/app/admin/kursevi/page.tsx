@@ -17,7 +17,7 @@ export default async function AdminKursevi() {
         <h1 className="text-2xl font-bold text-gray-900">Kursevi</h1>
         <Link
           href="/admin/kursevi/novi"
-          className="bg-plava text-white px-4 py-2 rounded-lg text-sm hover:bg-plava-dark transition-colors"
+          className="bg-plava text-na-plavoj px-4 py-2 rounded-lg text-sm hover:bg-plava-dark transition-colors"
         >
           + Novi kurs
         </Link>
@@ -40,7 +40,7 @@ export default async function AdminKursevi() {
                   <span
                     className={`text-xs px-2 py-1 rounded-full ${
                       course.is_published
-                        ? "bg-plava-light text-plava"
+                        ? "bg-plava-light text-plava-tekst"
                         : "bg-gray-100 text-gray-500"
                     }`}
                   >
@@ -48,7 +48,7 @@ export default async function AdminKursevi() {
                   </span>
                 </td>
                 <td className="px-6 py-4 text-right">
-                  <Link href={`/admin/kursevi/${course.id}`} className="text-plava hover:underline">
+                  <Link href={`/admin/kursevi/${course.id}`} className="text-plava-tekst hover:underline">
                     Izmeni
                   </Link>
                 </td>

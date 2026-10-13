@@ -380,9 +380,9 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
         <div className="max-w-6xl mx-auto px-4 pt-6 pb-12 md:pb-16">
           {/* Breadcrumb */}
           <nav className="flex items-center gap-2 text-sm text-gray-400 mb-8">
-            <Link href="/" className="hover:text-plava">{t.breadcrumbHome}</Link>
+            <Link href="/" className="hover:text-plava-tekst">{t.breadcrumbHome}</Link>
             <span>/</span>
-            <Link href="/kursevi" className="hover:text-plava">{t.breadcrumbCourses}</Link>
+            <Link href="/kursevi" className="hover:text-plava-tekst">{t.breadcrumbCourses}</Link>
             <span>/</span>
             <span className="text-gray-600 truncate">{course.title}</span>
           </nav>
@@ -417,7 +417,7 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
                       <span className="font-semibold text-gray-800">Preduslov: </span>
                       <span className="text-gray-600">{uslov}</span>
                       <span className="text-gray-400"> · </span>
-                      <Link href="/besplatno-testiranje" className="text-plava hover:underline font-medium">Niste sigurni? Uradite besplatno testiranje</Link>
+                      <Link href="/besplatno-testiranje" className="text-plava-tekst hover:underline font-medium">Niste sigurni? Uradite besplatno testiranje</Link>
                     </div>
                   </div>
                 );
@@ -534,15 +534,15 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
               {(category === "video" || category === "paket") && (
                 <div className="flex flex-wrap gap-3 mb-8">
                   <span className="inline-flex items-center gap-2 bg-white border border-gray-200 rounded-full px-4 py-2 text-sm text-gray-600">
-                    <svg className="w-4 h-4 text-plava" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>
+                    <svg className="w-4 h-4 text-plava-tekst" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>
                     Tvoj tempo
                   </span>
                   <span className="inline-flex items-center gap-2 bg-white border border-gray-200 rounded-full px-4 py-2 text-sm text-gray-600">
-                    <svg className="w-4 h-4 text-plava" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
+                    <svg className="w-4 h-4 text-plava-tekst" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
                     Pristup godinu dana
                   </span>
                   <span className="inline-flex items-center gap-2 bg-white border border-gray-200 rounded-full px-4 py-2 text-sm text-gray-600">
-                    <svg className="w-4 h-4 text-plava" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <svg className="w-4 h-4 text-plava-tekst" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                     Sertifikat
                   </span>
                 </div>
@@ -575,7 +575,7 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
                   <ol className="space-y-2.5">
                     {courseExtras[slug].topics!.map((t, i) => (
                       <li key={i} className="flex items-start gap-3 text-[15px] text-gray-700">
-                        <span className="flex-shrink-0 w-6 h-6 mt-0.5 rounded-full bg-plava-light text-plava font-bold text-xs flex items-center justify-center">{i + 1}</span>
+                        <span className="flex-shrink-0 w-6 h-6 mt-0.5 rounded-full bg-plava-light text-plava-tekst font-bold text-xs flex items-center justify-center">{i + 1}</span>
                         <span>{t}</span>
                       </li>
                     ))}
@@ -588,7 +588,7 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
                   <ul className="space-y-2">
                     {courseExtras[slug].audience!.map((a, i) => (
                       <li key={i} className="flex items-start gap-2 text-[15px] text-gray-700">
-                        <span className="text-plava mt-0.5">✓</span>
+                        <span className="text-plava-tekst mt-0.5">✓</span>
                         <span>{a}</span>
                       </li>
                     ))}
@@ -649,7 +649,7 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
                 {ctaLabel} - {isVariable ? t.pricePrefixFrom : ""}{heroPrimary}
               </BuyButton>
             )}
-            <Link href="/besplatno-testiranje" className="text-plava font-semibold hover:underline text-[15px]">
+            <Link href="/besplatno-testiranje" className="text-plava-tekst font-semibold hover:underline text-[15px]">
               {t.freeTestLink}
             </Link>
           </div>
@@ -669,7 +669,7 @@ export default async function KursDetaljiPage({ params }: { params: Promise<{ sl
                 return (
                   <Link key={r.slug} href={`/kursevi/${r.slug}`} className="group border border-gray-200 rounded-xl p-5 hover:border-plava hover:shadow-md transition-all">
                     <span className={`inline-block text-[11px] font-bold tracking-wide uppercase px-2.5 py-0.5 rounded-full mb-3 ${rCat.color} ${rCat.bg}`}>{rCat.label}</span>
-                    <h3 className="font-bold text-gray-900 group-hover:text-plava transition-colors mb-2 text-[15px]">{r.title}</h3>
+                    <h3 className="font-bold text-gray-900 group-hover:text-plava-tekst transition-colors mb-2 text-[15px]">{r.title}</h3>
                     <div className="flex items-baseline gap-2">
                       <span className="font-bold text-gray-900">{en && r.paypal_price_eur != null ? formatMoney(r.paypal_price_eur, "EUR") : formatMoney(r.price, "RSD")}</span>
                       {!en && r.paypal_price_eur && <span className="text-xs text-[#F78687] font-bold">≈ {r.paypal_price_eur}€</span>}

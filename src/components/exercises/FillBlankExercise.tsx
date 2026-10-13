@@ -95,7 +95,7 @@ export default function FillBlankExercise({ question, options, correctAnswer, ex
               className={`px-4 py-2 rounded-full border-2 text-sm font-medium transition-colors ${
                 isUsed
                   ? "border-green-200 text-green-400 bg-green-50 line-through"
-                  : "border-plava-light text-plava hover:bg-plava-light cursor-pointer"
+                  : "border-plava-light text-plava-tekst hover:bg-plava-light cursor-pointer"
               }`}
             >
               {word}
@@ -115,7 +115,7 @@ export default function FillBlankExercise({ question, options, correctAnswer, ex
                 className={`inline-block min-w-[100px] mx-1 px-3 py-1 border-b-[3px] rounded text-center font-semibold transition-colors ${
                   !answered
                     ? filledBlanks[i] !== null
-                      ? "border-plava bg-plava-light text-plava cursor-pointer"
+                      ? "border-plava bg-plava-light text-plava-tekst cursor-pointer"
                       : "border-gray-300 text-gray-400"
                     : wordAt(filledBlanks[i])?.toLowerCase() === correctAnswers[i]?.toLowerCase()
                     ? "border-green-500 bg-green-50 text-green-700"
@@ -170,7 +170,7 @@ export default function FillBlankExercise({ question, options, correctAnswer, ex
           disabled={!allFilled}
           className={`px-6 py-3 rounded-lg font-medium transition-colors ${
             allFilled
-              ? "bg-plava text-white hover:bg-plava-dark cursor-pointer"
+              ? "bg-plava text-na-plavoj hover:bg-plava-dark cursor-pointer"
               : "bg-gray-200 text-gray-400 cursor-not-allowed"
           }`}
         >

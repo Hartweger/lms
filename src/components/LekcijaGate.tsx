@@ -25,7 +25,7 @@ export default function LekcijaGate({
           <div className="flex justify-center gap-3">
             <Link
               href="/nalog"
-              className="px-6 py-3 rounded-lg font-semibold text-white text-sm bg-plava hover:bg-plava-dark transition-colors"
+              className="px-6 py-3 rounded-lg font-semibold text-na-plavoj text-sm bg-plava hover:bg-plava-dark transition-colors"
             >
               Moj nalog
             </Link>
@@ -44,7 +44,7 @@ export default function LekcijaGate({
           </p>
           <Link
             href="/prijava"
-            className="inline-block px-8 py-3 rounded-lg font-semibold text-white text-sm bg-plava hover:bg-plava-dark transition-colors"
+            className="inline-block px-8 py-3 rounded-lg font-semibold text-na-plavoj text-sm bg-plava hover:bg-plava-dark transition-colors"
           >
             Prijavi se
           </Link>

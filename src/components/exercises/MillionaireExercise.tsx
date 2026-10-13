@@ -201,7 +201,7 @@ export default function MillionaireExercise({ exercise, questions }: Props) {
             <button
               onClick={() => void saveResult(game)}
               disabled={saving}
-              className="mt-2 bg-plava text-white px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-plava-dark transition-colors disabled:opacity-50"
+              className="mt-2 bg-plava text-na-plavoj px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-plava-dark transition-colors disabled:opacity-50"
             >
               {saving ? "Čuvam..." : "Sačuvaj rezultat"}
             </button>

@@ -93,7 +93,7 @@ function SortTh({
     <th
       className={`px-4 py-3 text-xs font-semibold uppercase tracking-wide cursor-pointer select-none whitespace-nowrap ${
         right ? "text-right" : "text-left"
-      } ${active ? "text-plava" : "text-gray-500"} hover:text-plava`}
+      } ${active ? "text-plava-tekst" : "text-gray-500"} hover:text-plava-tekst`}
       onClick={() => onSort(col)}
     >
       {label}
@@ -273,7 +273,7 @@ export default function KupciDashboard({ orders }: { orders: WcOrder[] }) {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="bg-white rounded-xl p-6 shadow-sm">
           <div className="text-sm text-gray-500 mb-1">Ukupno kupaca</div>
-          <div className="text-2xl font-bold text-plava">
+          <div className="text-2xl font-bold text-plava-tekst">
             {stats.totalCustomers.toLocaleString("sr-Latn-RS")}
           </div>
           <div className="text-xs text-gray-400 mt-1">sa završenim narudžbinama</div>
@@ -281,7 +281,7 @@ export default function KupciDashboard({ orders }: { orders: WcOrder[] }) {
 
         <div className="bg-white rounded-xl p-6 shadow-sm">
           <div className="text-sm text-gray-500 mb-1">Prosečna potrošnja</div>
-          <div className="text-2xl font-bold text-plava">
+          <div className="text-2xl font-bold text-plava-tekst">
             {fmt(Math.round(stats.avgSpend))}
           </div>
           <div className="text-xs text-gray-400 mt-1">po kupcu</div>
@@ -289,7 +289,7 @@ export default function KupciDashboard({ orders }: { orders: WcOrder[] }) {
 
         <div className="bg-white rounded-xl p-6 shadow-sm">
           <div className="text-sm text-gray-500 mb-1">Ponovljeni kupci</div>
-          <div className="text-2xl font-bold text-plava">{stats.repeatedPct}%</div>
+          <div className="text-2xl font-bold text-plava-tekst">{stats.repeatedPct}%</div>
           <div className="text-xs text-gray-400 mt-1">
             {stats.repeated.toLocaleString("sr-Latn-RS")} kupaca · 2+ kupovina
           </div>
@@ -297,7 +297,7 @@ export default function KupciDashboard({ orders }: { orders: WcOrder[] }) {
 
         <div className="bg-white rounded-xl p-6 shadow-sm">
           <div className="text-sm text-gray-500 mb-1">Novi ovaj mesec</div>
-          <div className="text-2xl font-bold text-plava">
+          <div className="text-2xl font-bold text-plava-tekst">
             {stats.newThisMonth.toLocaleString("sr-Latn-RS")}
           </div>
           <div className="text-xs text-gray-400 mt-1">prva kupovina ovog meseca</div>
@@ -406,7 +406,7 @@ export default function KupciDashboard({ orders }: { orders: WcOrder[] }) {
           <div className="mt-6 text-center">
             <button
               onClick={() => setVisibleCount((n) => n + 50)}
-              className="px-5 py-2 rounded-lg bg-plava-light text-plava text-sm font-medium hover:bg-plava hover:text-white transition-colors"
+              className="px-5 py-2 rounded-lg bg-plava-light text-plava-tekst text-sm font-medium hover:bg-plava hover:text-white transition-colors"
             >
               Prikaži još (
               {Math.min(50, sorted.length - visibleCount)} od{" "}
@@ -431,7 +431,7 @@ function CoursePills({ courses }: { courses: string[] }) {
       {shown.map((c) => (
         <span
           key={c}
-          className="text-xs px-2 py-0.5 rounded-full bg-plava-light text-plava whitespace-nowrap"
+          className="text-xs px-2 py-0.5 rounded-full bg-plava-light text-plava-tekst whitespace-nowrap"
         >
           {c}
         </span>

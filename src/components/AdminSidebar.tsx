@@ -51,7 +51,7 @@ export default function AdminSidebar() {
             onClick={() => setOpen(false)}
             className={`block px-3 py-2 rounded-lg text-sm ${link.indent ? "pl-6" : ""} ${
               isActive
-                ? "bg-plava-light text-plava font-medium"
+                ? "bg-plava-light text-plava-tekst font-medium"
                 : "text-gray-600 hover:bg-gray-50"
             }`}
           >

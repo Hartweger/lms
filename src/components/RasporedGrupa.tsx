@@ -46,8 +46,8 @@ export default function RasporedGrupa({
   const chip = (active: boolean) =>
     `px-4 py-1.5 rounded-full text-sm font-semibold transition-colors ${
       active
-        ? "bg-plava text-white"
-        : "bg-white border border-gray-200 text-gray-600 hover:border-plava hover:text-plava"
+        ? "bg-plava text-na-plavoj"
+        : "bg-white border border-gray-200 text-gray-600 hover:border-plava hover:text-plava-tekst"
     }`;
 
   return (
@@ -154,14 +154,14 @@ export default function RasporedGrupa({
                 ) : g.checkoutSlug ? (
                   <Link
                     href={`/kursevi/${g.checkoutSlug}`}
-                    className="block w-full text-center bg-koral hover:bg-koral-dark text-white font-bold py-3 px-6 rounded-xl transition-colors"
+                    className="block w-full text-center bg-koral hover:bg-koral-dark text-na-koralnoj font-bold py-3 px-6 rounded-xl transition-colors"
                   >
                     Prijavi se
                   </Link>
                 ) : (
                   <Link
                     href="/kontakt"
-                    className="block w-full text-center bg-koral hover:bg-koral-dark text-white font-bold py-3 px-6 rounded-xl transition-colors"
+                    className="block w-full text-center bg-koral hover:bg-koral-dark text-na-koralnoj font-bold py-3 px-6 rounded-xl transition-colors"
                   >
                     Javi nam se
                   </Link>

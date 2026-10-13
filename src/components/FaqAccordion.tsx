@@ -15,7 +15,7 @@ function renderAnswer(text: string) {
   while ((m = regex.exec(text)) !== null) {
     if (m.index > last) parts.push(text.slice(last, m.index));
     const [, label, href] = m;
-    const cls = "text-plava font-medium hover:underline";
+    const cls = "text-plava-tekst font-medium hover:underline";
     if (href.startsWith("/")) {
       parts.push(<Link key={key++} href={href} className={cls}>{label}</Link>);
     } else {

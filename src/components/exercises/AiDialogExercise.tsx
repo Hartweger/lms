@@ -128,7 +128,7 @@ export default function AiDialogExercise({ lessonId, lessonTitle }: AiDialogExer
         </p>
         <button
           onClick={startDialog}
-          className="bg-plava text-white px-8 py-3 rounded-lg font-medium hover:bg-plava-dark transition-colors"
+          className="bg-plava text-na-plavoj px-8 py-3 rounded-lg font-medium hover:bg-plava-dark transition-colors"
         >
           Započni dijalog
         </button>
@@ -164,7 +164,7 @@ export default function AiDialogExercise({ lessonId, lessonTitle }: AiDialogExer
         <div>
           <Link
             href={`/lekcija/${lessonId}`}
-            className="block w-full text-center py-3 bg-plava text-white rounded-lg text-sm font-medium hover:bg-plava-dark transition-colors"
+            className="block w-full text-center py-3 bg-plava text-na-plavoj rounded-lg text-sm font-medium hover:bg-plava-dark transition-colors"
           >
             Nazad na lekciju
           </Link>
@@ -193,7 +193,7 @@ export default function AiDialogExercise({ lessonId, lessonTitle }: AiDialogExer
             <div
               className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm ${
                 msg.role === "user"
-                  ? "bg-plava text-white rounded-br-md"
+                  ? "bg-plava text-na-plavoj rounded-br-md"
                   : "bg-gray-100 text-gray-900 rounded-bl-md"
               }`}
             >

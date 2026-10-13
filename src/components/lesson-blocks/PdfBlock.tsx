@@ -15,7 +15,7 @@ export default function PdfBlock({ url, label }: PdfSection) {
         href={url}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 mt-3 text-sm text-plava hover:underline"
+        className="inline-flex items-center gap-2 mt-3 text-sm text-plava-tekst hover:underline"
       >
         Otvori PDF u novom prozoru
       </a>

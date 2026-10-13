@@ -30,7 +30,7 @@ export default function ZamenaForm({ groups, requests }: { groups: Group[]; requ
     <div className="mt-6">
       <div className="flex items-center justify-between mb-3">
         <h3 className="font-medium text-gray-900">Zamene (odradila tudji cas)</h3>
-        <button onClick={() => setOpen((v) => !v)} className="text-sm px-3 py-1.5 rounded-lg bg-plava-light text-plava font-medium">
+        <button onClick={() => setOpen((v) => !v)} className="text-sm px-3 py-1.5 rounded-lg bg-plava-light text-plava-tekst font-medium">
           {open ? "Otkazi" : "Prijavi zamenu"}
         </button>
       </div>
@@ -46,7 +46,7 @@ export default function ZamenaForm({ groups, requests }: { groups: Group[]; requ
             <input value={sessionDate} onChange={(e) => setSessionDate(e.target.value)} type="date" required className="border rounded-lg px-3 py-2 text-sm" />
           </div>
           {err && <p className="text-sm text-red-600">{err}</p>}
-          <button disabled={busy} className="px-4 py-2 rounded-lg bg-plava text-white text-sm font-medium disabled:opacity-50">
+          <button disabled={busy} className="px-4 py-2 rounded-lg bg-plava text-na-plavoj text-sm font-medium disabled:opacity-50">
             {busy ? "Saljem..." : "Posalji na odobravanje"}
           </button>
         </form>

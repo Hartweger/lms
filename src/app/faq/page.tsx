@@ -82,7 +82,7 @@ export default async function FaqPage() {
                 <a
                   key={g.value}
                   href={`#${g.value}`}
-                  className="rounded-full border border-plava/30 bg-white px-4 py-1.5 text-sm font-medium text-plava hover:bg-plava hover:text-white transition-colors"
+                  className="rounded-full border border-plava/30 bg-white px-4 py-1.5 text-sm font-medium text-plava-tekst hover:bg-plava hover:text-white transition-colors"
                 >
                   {g.label}
                 </a>
@@ -113,7 +113,7 @@ export default async function FaqPage() {
             <p className="text-gray-600 mb-4">Ne vidiš odgovor na svoje pitanje?</p>
             <Link
               href="/kontakt"
-              className="inline-block bg-plava text-white px-6 py-2.5 rounded-xl font-semibold text-sm hover:bg-plava-dark transition-colors"
+              className="inline-block bg-plava text-na-plavoj px-6 py-2.5 rounded-xl font-semibold text-sm hover:bg-plava-dark transition-colors"
             >
               Piši nam
             </Link>

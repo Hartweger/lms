@@ -34,7 +34,7 @@ function renderInline(tokens: InlineToken[]): ReactNode[] {
             href={t.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-plava underline underline-offset-2"
+            className="text-plava-tekst underline underline-offset-2"
           >
             {t.text}
           </a>
@@ -97,7 +97,7 @@ function WortschatzTable({
         {wordsetHref && (
           <a
             href={wordsetHref}
-            className="rounded-full bg-plava px-4 py-1.5 text-sm font-semibold text-white hover:bg-plava-dark"
+            className="rounded-full bg-plava px-4 py-1.5 text-sm font-semibold text-na-plavoj hover:bg-plava-dark"
           >
             Vežbaj ove reči
           </a>

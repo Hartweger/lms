@@ -179,15 +179,15 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       <section className="bg-gradient-to-b from-plava-light/60 to-white py-12 px-4">
         <div className="max-w-3xl mx-auto">
           <nav className="flex items-center gap-2 text-sm text-gray-400 mb-8">
-            <Link href="/" className="hover:text-plava">Početna</Link>
+            <Link href="/" className="hover:text-plava-tekst">Početna</Link>
             <span>/</span>
-            <Link href="/magazin" className="hover:text-plava">Magazin</Link>
+            <Link href="/magazin" className="hover:text-plava-tekst">Magazin</Link>
             <span>/</span>
             <span className="text-gray-600 truncate">{post.title}</span>
           </nav>
 
           {post.category && (
-            <span className="inline-block text-xs font-bold tracking-wide uppercase text-plava bg-plava-light px-3 py-1 rounded-full mb-4">
+            <span className="inline-block text-xs font-bold tracking-wide uppercase text-plava-tekst bg-plava-light px-3 py-1 rounded-full mb-4">
               {post.category}
             </span>
           )}
@@ -255,7 +255,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           <div className="text-sm md:text-base text-gray-700 leading-relaxed">
             <p>
               Učiš nemački? Isprobaj{" "}
-              <Link href="/naki" className="text-plava font-semibold hover:underline">
+              <Link href="/naki" className="text-plava-tekst font-semibold hover:underline">
                 NaKI
               </Link>
               {" "}- besplatnog AI asistenta za vežbanje gramatike i konverzaciju.
@@ -292,7 +292,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                     <div className="w-full h-40 bg-gradient-to-br from-plava-light to-white" />
                   )}
                   <div className="p-4">
-                    <h3 className="font-bold text-gray-900 group-hover:text-plava transition-colors text-[15px] leading-snug">
+                    <h3 className="font-bold text-gray-900 group-hover:text-plava-tekst transition-colors text-[15px] leading-snug">
                       {r.title}
                     </h3>
                   </div>

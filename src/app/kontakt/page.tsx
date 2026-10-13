@@ -49,13 +49,13 @@ export default function KontaktPage() {
             <div className="bg-gray-50 rounded-xl p-6">
               <h3 className="font-bold text-gray-900 mb-3">Društvene mreže</h3>
               <div className="space-y-2.5 text-[15px]">
-                <a href="https://www.instagram.com/hartweger_centar/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-gray-600 hover:text-plava">
+                <a href="https://www.instagram.com/hartweger_centar/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-gray-600 hover:text-plava-tekst">
                   Instagram - @hartweger_centar
                 </a>
-                <a href="https://www.youtube.com/@NatasaHartweger" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-gray-600 hover:text-plava">
+                <a href="https://www.youtube.com/@NatasaHartweger" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-gray-600 hover:text-plava-tekst">
                   YouTube - @NatasaHartweger
                 </a>
-                <a href="https://www.facebook.com/hartwegercentar" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-gray-600 hover:text-plava">
+                <a href="https://www.facebook.com/hartwegercentar" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-gray-600 hover:text-plava-tekst">
                   Facebook - @hartwegercentar
                 </a>
               </div>
@@ -64,9 +64,9 @@ export default function KontaktPage() {
             <div className="bg-gray-50 rounded-xl p-6">
               <h3 className="font-bold text-gray-900 mb-3">Brzi linkovi</h3>
               <div className="space-y-2 text-[15px]">
-                <Link href="/faq" className="block text-plava hover:underline">Česta pitanja</Link>
-                <Link href="/besplatno-testiranje" className="block text-plava hover:underline">Besplatno testiranje</Link>
-                <Link href="/kursevi" className="block text-plava hover:underline">Svi kursevi</Link>
+                <Link href="/faq" className="block text-plava-tekst hover:underline">Česta pitanja</Link>
+                <Link href="/besplatno-testiranje" className="block text-plava-tekst hover:underline">Besplatno testiranje</Link>
+                <Link href="/kursevi" className="block text-plava-tekst hover:underline">Svi kursevi</Link>
               </div>
             </div>
           </div>

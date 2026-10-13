@@ -129,7 +129,7 @@ export default function FinansijeClient({ data, year, mesec, pendingTotal, profN
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <h1 className="text-2xl font-bold">Finansije</h1>
-          <a href="/admin/obaveze" className="text-sm px-3 py-1.5 rounded-lg bg-plava-light text-plava font-medium">Obaveze prema profesorkama →</a>
+          <a href="/admin/obaveze" className="text-sm px-3 py-1.5 rounded-lg bg-plava-light text-plava-tekst font-medium">Obaveze prema profesorkama →</a>
         </div>
         <div className="flex gap-2">
           <select value={year} onChange={(e) => setPeriod(Number(e.target.value), mesec)}
@@ -298,7 +298,7 @@ export default function FinansijeClient({ data, year, mesec, pendingTotal, profN
             {sendMsg && <span className="text-xs text-gray-500">{sendMsg}</span>}
             <button onClick={posaljiObracun} disabled={!mesec || sending}
               title={!mesec ? "Izaberi konkretan mesec da bi poslala obračun." : undefined}
-              className="bg-plava text-white text-sm px-4 py-2 rounded-lg hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed">
+              className="bg-plava text-na-plavoj text-sm px-4 py-2 rounded-lg hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed">
               {sending ? "Šaljem..." : "Pošalji obračun profesorkama"}
             </button>
           </div>
@@ -341,7 +341,7 @@ export default function FinansijeClient({ data, year, mesec, pendingTotal, profN
         <div className="flex items-center justify-between mb-3">
           <h2 className="font-semibold">Troškovi - {periodLabel}</h2>
           <button onClick={() => { setEditing(null); setModalOpen(true); }}
-            className="bg-plava text-white text-sm px-4 py-2 rounded-lg hover:opacity-90">
+            className="bg-plava text-na-plavoj text-sm px-4 py-2 rounded-lg hover:opacity-90">
             + Dodaj trošak
           </button>
         </div>
@@ -363,7 +363,7 @@ export default function FinansijeClient({ data, year, mesec, pendingTotal, profN
                 <td className="py-2 px-2 text-gray-500">{e.recurring ? (e.ended_at ? `mesečni do ${e.ended_at}` : "mesečni") : "jednokratni"}</td>
                 <td className="py-2 px-2 text-gray-500">{e.course_id ? courseOptions.find((c) => c.id === e.course_id)?.title ?? "?" : "opšti"}</td>
                 <td className="py-2 pl-2 text-right whitespace-nowrap">
-                  <button onClick={() => { setEditing(e); setModalOpen(true); }} className="text-plava text-xs mr-3">Izmeni</button>
+                  <button onClick={() => { setEditing(e); setModalOpen(true); }} className="text-plava-tekst text-xs mr-3">Izmeni</button>
                   <button onClick={() => deleteExpense(e.id)} className="text-red-500 text-xs">Obriši</button>
                 </td>
               </tr>
@@ -413,7 +413,7 @@ export default function FinansijeClient({ data, year, mesec, pendingTotal, profN
               </label>
               {err && <p className="text-red-600">{err}</p>}
               <div className="flex gap-2 pt-2">
-                <button type="submit" disabled={saving} className="bg-plava text-white px-4 py-2 rounded-lg disabled:opacity-50">
+                <button type="submit" disabled={saving} className="bg-plava text-na-plavoj px-4 py-2 rounded-lg disabled:opacity-50">
                   {saving ? "Čuvam…" : "Sačuvaj"}
                 </button>
                 <button type="button" onClick={() => setModalOpen(false)} className="px-4 py-2 rounded-lg border border-gray-200">Otkaži</button>

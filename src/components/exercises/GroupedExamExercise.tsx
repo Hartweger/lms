@@ -129,7 +129,7 @@ export default function GroupedExamExercise({ exercise, questions, nextExerciseI
       <div className="mt-4 bg-plava-light rounded-2xl p-8 text-center">
         <div className="text-5xl mb-3">{pct >= 60 ? "🎉" : "💪"}</div>
         <p className="text-2xl font-bold text-gray-900 mb-1">{sc} / {questions.length} tačno</p>
-        <p className="text-lg font-semibold text-plava mb-2">{pct}%</p>
+        <p className="text-lg font-semibold text-plava-tekst mb-2">{pct}%</p>
         <p className="text-sm text-gray-600 mb-3 max-w-md mx-auto">{msg}{!saveFailed && " Rezultat je sačuvan u tvom napretku."}</p>
         {saveFailed && (
           <div className="mb-4 max-w-md mx-auto">
@@ -137,7 +137,7 @@ export default function GroupedExamExercise({ exercise, questions, nextExerciseI
               Rezultat nije sačuvan u tvom napretku. Pokušaj ponovo - ako se ponovi, odjavi se i prijavi ponovo.
             </p>
             <button onClick={saveAttempt} disabled={saving}
-              className="mt-2 bg-plava text-white px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-plava-dark transition-colors disabled:opacity-50">
+              className="mt-2 bg-plava text-na-plavoj px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-plava-dark transition-colors disabled:opacity-50">
               {saving ? "Čuvam..." : "Sačuvaj ponovo"}
             </button>
           </div>
@@ -157,9 +157,9 @@ export default function GroupedExamExercise({ exercise, questions, nextExerciseI
         )}
         <div className="flex flex-wrap items-center justify-center gap-3">
           <button onClick={restart} className="px-5 py-2.5 rounded-lg border border-gray-300 text-gray-600 hover:bg-white transition-colors text-sm font-medium">↺ Pokušaj ponovo</button>
-          <Link href={`/lekcija/${exercise.lesson_id}`} className="px-5 py-2.5 rounded-lg border border-plava text-plava hover:bg-white transition-colors text-sm font-semibold">← Nazad na lekciju</Link>
+          <Link href={`/lekcija/${exercise.lesson_id}`} className="px-5 py-2.5 rounded-lg border border-plava text-plava-tekst hover:bg-white transition-colors text-sm font-semibold">← Nazad na lekciju</Link>
           {nextLessonId && (
-            <Link href={`/lekcija/${nextLessonId}`} className="px-6 py-2.5 rounded-lg bg-plava text-white font-bold hover:bg-plava-dark transition-colors text-sm">Sledeća lekcija →</Link>
+            <Link href={`/lekcija/${nextLessonId}`} className="px-6 py-2.5 rounded-lg bg-plava text-na-plavoj font-bold hover:bg-plava-dark transition-colors text-sm">Sledeća lekcija →</Link>
           )}
         </div>
       </div>
@@ -170,8 +170,8 @@ export default function GroupedExamExercise({ exercise, questions, nextExerciseI
     <div>
       <div className="flex items-center justify-between mb-4 gap-2">
         <span className="flex items-center gap-2 min-w-0">
-          <span className={`text-xs px-2 py-0.5 rounded-full ${isTest ? "bg-koral-light text-koral-dark" : "bg-plava-light text-plava"}`}>{isTest ? "🎯 Test" : "✏️ Vežba"}</span>
-          <span className="text-sm font-medium text-plava truncate">{exercise.title}</span>
+          <span className={`text-xs px-2 py-0.5 rounded-full ${isTest ? "bg-koral-light text-koral-dark" : "bg-plava-light text-plava-tekst"}`}>{isTest ? "🎯 Test" : "✏️ Vežba"}</span>
+          <span className="text-sm font-medium text-plava-tekst truncate">{exercise.title}</span>
         </span>
         <span className="text-sm text-gray-400 whitespace-nowrap">Deo {partIdx + 1} / {groups.length}</span>
       </div>
@@ -214,7 +214,7 @@ export default function GroupedExamExercise({ exercise, questions, nextExerciseI
                     if (i === correct) cls = "border-green-500 bg-green-50 text-green-800";
                     else if (i === sel) cls = "border-koral bg-koral-light text-koral-dark";
                     else cls = "border-gray-200 opacity-60";
-                  } else if (i === sel) cls = "border-plava bg-plava-light text-plava";
+                  } else if (i === sel) cls = "border-plava bg-plava-light text-plava-tekst";
                   return (
                     <button key={i} disabled={isChecked}
                       onClick={() => setSelected({ ...selected, [q.id]: i })}
@@ -236,7 +236,7 @@ export default function GroupedExamExercise({ exercise, questions, nextExerciseI
       <div className="mt-6">
         {!isChecked ? (
           <button onClick={checkPart} disabled={!allAnswered}
-            className={`px-6 py-3 rounded-lg font-bold transition-colors ${allAnswered ? "bg-plava text-white hover:bg-plava-dark" : "bg-gray-200 text-gray-400 cursor-not-allowed"}`}>
+            className={`px-6 py-3 rounded-lg font-bold transition-colors ${allAnswered ? "bg-plava text-na-plavoj hover:bg-plava-dark" : "bg-gray-200 text-gray-400 cursor-not-allowed"}`}>
             Proveri Deo {partIdx + 1}
           </button>
         ) : (
@@ -244,7 +244,7 @@ export default function GroupedExamExercise({ exercise, questions, nextExerciseI
             <span className="text-sm font-medium text-gray-700">
               {part.filter((q) => selected[q.id] === correctOf(q)).length} / {part.length} tačno u ovom delu
             </span>
-            <button onClick={next} disabled={saving} className="px-6 py-3 rounded-lg font-bold bg-plava text-white hover:bg-plava-dark transition-colors ml-auto disabled:opacity-50">
+            <button onClick={next} disabled={saving} className="px-6 py-3 rounded-lg font-bold bg-plava text-na-plavoj hover:bg-plava-dark transition-colors ml-auto disabled:opacity-50">
               {partIdx < groups.length - 1 ? `Sledeći deo →` : saving ? "Čuvam..." : "Završi test"}
             </button>
           </div>

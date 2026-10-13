@@ -18,7 +18,7 @@ export default function ProductFeatures({ features, title }: { features: string[
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {features.map((f, i) => (
           <div key={i} className="flex items-start gap-3 bg-gray-50 rounded-xl p-4">
-            <div className="flex-shrink-0 w-9 h-9 bg-plava/10 rounded-lg flex items-center justify-center text-plava">
+            <div className="flex-shrink-0 w-9 h-9 bg-plava/10 rounded-lg flex items-center justify-center text-plava-tekst">
               {icons[i % icons.length]}
             </div>
             <span className="text-gray-700 text-[15px] leading-relaxed pt-1.5">{f}</span>

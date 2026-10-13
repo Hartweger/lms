@@ -6,7 +6,7 @@ function renderDe(de: string) {
   if (!m) return de;
   return (
     <>
-      <span className="text-plava">{m[1]}</span> {m[2]}
+      <span className="text-plava-tekst">{m[1]}</span> {m[2]}
     </>
   );
 }

@@ -164,7 +164,7 @@ export default function IzvodStavke({ redovi }: { redovi: IzvodRed[] }) {
         Ništa ne ulazi u izveštaje dok ne potvrdiš.
       </p>
 
-      {greska && <p className="text-sm text-koral font-medium mb-3">{greska}</p>}
+      {greska && <p className="text-sm text-koral-tekst font-medium mb-3">{greska}</p>}
       {poruka && <p className="text-sm text-green-700 font-medium mb-3">{poruka}</p>}
 
       <div className="space-y-2">
@@ -185,11 +185,11 @@ export default function IzvodStavke({ redovi }: { redovi: IzvodRed[] }) {
               <p className="text-xs text-gray-500">
                 {dan(r.datum)} · {(r.svrha ?? "").slice(0, 70)}
               </p>
-              <p className={`text-xs mt-0.5 ${r.neslaganje ? "text-koral font-medium" : "text-gray-400"}`}>
+              <p className={`text-xs mt-0.5 ${r.neslaganje ? "text-koral-tekst font-medium" : "text-gray-400"}`}>
                 {r.razlog}
               </p>
               {r.upozorenje && (
-                <p className="text-xs mt-0.5 text-koral font-medium">{r.upozorenje}</p>
+                <p className="text-xs mt-0.5 text-koral-tekst font-medium">{r.upozorenje}</p>
               )}
             </div>
 
@@ -206,7 +206,7 @@ export default function IzvodStavke({ redovi }: { redovi: IzvodRed[] }) {
               <button
                 onClick={() => posalji(r.id, { akcija: "uplata", orderId: r.orderId })}
                 disabled={radi === r.id}
-                className="text-xs px-3 py-1.5 rounded-lg bg-plava text-white font-medium hover:bg-plava-dark transition-colors disabled:opacity-50 whitespace-nowrap"
+                className="text-xs px-3 py-1.5 rounded-lg bg-plava text-na-plavoj font-medium hover:bg-plava-dark transition-colors disabled:opacity-50 whitespace-nowrap"
               >
                 {radi === r.id ? "..." : `Potvrdi ${r.orderNumber}`}
               </button>
@@ -227,7 +227,7 @@ export default function IzvodStavke({ redovi }: { redovi: IzvodRed[] }) {
                 <button
                   onClick={() => posalji(r.id, { akcija: "trosak", kategorija: izbor[r.id] })}
                   disabled={radi === r.id || !izbor[r.id]}
-                  className="text-xs px-3 py-1.5 rounded-lg bg-plava text-white font-medium hover:bg-plava-dark transition-colors disabled:opacity-40 whitespace-nowrap"
+                  className="text-xs px-3 py-1.5 rounded-lg bg-plava text-na-plavoj font-medium hover:bg-plava-dark transition-colors disabled:opacity-40 whitespace-nowrap"
                 >
                   {radi === r.id ? "..." : "U troškove"}
                 </button>
@@ -238,7 +238,7 @@ export default function IzvodStavke({ redovi }: { redovi: IzvodRed[] }) {
               onClick={() => posalji(r.id, { akcija: "zanemari" })}
               disabled={radi === r.id}
               title="Skloni sa spiska bez upisa"
-              className="text-xs text-gray-400 hover:text-koral hover:underline transition-colors whitespace-nowrap"
+              className="text-xs text-gray-400 hover:text-koral-tekst hover:underline transition-colors whitespace-nowrap"
             >
               Ne knjiži
             </button>

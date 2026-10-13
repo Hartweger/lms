@@ -194,7 +194,7 @@ export default async function HvalaPage({
           <p className="text-gray-500 text-sm mb-8">
             Profesorka: <strong className="text-gray-700">{profIme}</strong>
             {" - "}nije ta? Piši nam na{" "}
-            <a href="mailto:info@hartweger.rs" className="text-plava underline">info@hartweger.rs</a> i prebacujemo te.
+            <a href="mailto:info@hartweger.rs" className="text-plava-tekst underline">info@hartweger.rs</a> i prebacujemo te.
           </p>
         )}
 
@@ -251,7 +251,7 @@ export default async function HvalaPage({
               <p className="mt-3 text-sm text-gray-700">
                 <strong>PIN smo poslali na mejl</strong>, zajedno sa ovim kodom - prepiši detetu
                 oba na papirić. Ako mejl ne stigne, novi PIN postavljaš u{" "}
-                <Link href="/zack/roditelj" className="text-plava underline">
+                <Link href="/zack/roditelj" className="text-plava-tekst underline">
                   roditeljskom panelu
                 </Link>
                 .
@@ -482,7 +482,7 @@ export default async function HvalaPage({
           </p>
           <p className="text-gray-500">
             {jeKonsultacija ? "Ako se ne javimo u tom roku, piši nam na " : "Ako ne dobiješ pristup, piši nam na "}
-            <a href="mailto:info@hartweger.rs" className="text-plava hover:underline">info@hartweger.rs</a>.
+            <a href="mailto:info@hartweger.rs" className="text-plava-tekst hover:underline">info@hartweger.rs</a>.
           </p>
         </div>
         )}
@@ -494,7 +494,7 @@ export default async function HvalaPage({
               href={KONSULTACIJA_CALENDAR_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block px-6 py-3 rounded-lg font-semibold text-white text-sm bg-plava hover:bg-plava-dark transition-colors"
+              className="inline-block px-6 py-3 rounded-lg font-semibold text-na-plavoj text-sm bg-plava hover:bg-plava-dark transition-colors"
             >
               Izaberi termin →
             </a>
@@ -503,32 +503,32 @@ export default async function HvalaPage({
           ) : jeZack ? (
             <Link
               href="/zack/roditelj"
-              className="inline-block px-6 py-3 rounded-lg font-semibold text-white text-sm bg-plava hover:bg-plava-dark transition-colors"
+              className="inline-block px-6 py-3 rounded-lg font-semibold text-na-plavoj text-sm bg-plava hover:bg-plava-dark transition-colors"
             >
               Nazad u roditeljski panel →
             </Link>
           ) : user && cardOk ? (
             <Link
               href={firstLessonId ? `/lekcija/${firstLessonId}` : "/nalog"}
-              className="inline-block px-6 py-3 rounded-lg font-semibold text-white text-sm bg-plava hover:bg-plava-dark transition-colors"
+              className="inline-block px-6 py-3 rounded-lg font-semibold text-na-plavoj text-sm bg-plava hover:bg-plava-dark transition-colors"
             >
               {firstLessonId ? "Započni prvu lekciju →" : "Moj nalog →"}
             </Link>
           ) : cardOk && !firstLessonId ? (
             // KTZ/mesečni bez platforme, odjavljen: nema lekcija koje bi prijava "otključala".
-            <Link href="/nalog" className="text-sm text-plava hover:underline">
+            <Link href="/nalog" className="text-sm text-plava-tekst hover:underline">
               Moj nalog →
             </Link>
           ) : (
             <Link
               href="/prijava"
-              className="inline-block px-6 py-3 rounded-lg font-semibold text-white text-sm bg-plava hover:bg-plava-dark transition-colors"
+              className="inline-block px-6 py-3 rounded-lg font-semibold text-na-plavoj text-sm bg-plava hover:bg-plava-dark transition-colors"
             >
               Prijavi se da vidiš kurs
             </Link>
           )}
           {!jeZack && !jeKonsultacija && (
-            <Link href="/kursevi" className="text-sm text-plava hover:underline">
+            <Link href="/kursevi" className="text-sm text-plava-tekst hover:underline">
               ← Nazad na kurseve
             </Link>
           )}

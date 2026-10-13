@@ -56,7 +56,7 @@ export default function SaradnikClient({ partner, courses }: { partner: PartnerD
           <div className="flex gap-2">
             <button onClick={() => setShowEdit((v) => !v)} className="text-sm px-3 py-1.5 rounded-lg bg-gray-100 text-gray-700">Izmeni</button>
             <button onClick={() => setShowCode((v) => !v)} disabled={!partner.is_active} className="text-sm px-3 py-1.5 rounded-lg bg-gray-100 text-gray-700 disabled:opacity-50">Dodaj kod</button>
-            <button onClick={() => { setShowPay((v) => !v); setAmount(String(Math.max(0, partner.saldo))); }} className="text-sm px-3 py-1.5 rounded-lg bg-plava-light text-plava font-medium">Zabeleži isplatu</button>
+            <button onClick={() => { setShowPay((v) => !v); setAmount(String(Math.max(0, partner.saldo))); }} className="text-sm px-3 py-1.5 rounded-lg bg-plava-light text-plava-tekst font-medium">Zabeleži isplatu</button>
           </div>
         </div>
         {partner.email && <p className="text-sm text-gray-500 mt-1">{partner.email}</p>}
@@ -72,7 +72,7 @@ export default function SaradnikClient({ partner, courses }: { partner: PartnerD
           <label className="text-xs text-gray-600">Iznos po upisu<br /><input type="number" min="0" value={edit.feeRsd} onChange={(e) => setEdit({ ...edit, feeRsd: e.target.value })} className={`${inp} w-28`} /></label>
           <label className="text-xs text-gray-600">Napomena<br /><input value={edit.note} onChange={(e) => setEdit({ ...edit, note: e.target.value })} className={`${inp} w-64`} /></label>
           <button disabled={busy === "edit"} onClick={() => call("edit", `/api/admin/saradnici/${partner.id}`, "PATCH", { ...edit, feeRsd: Number(edit.feeRsd) }, () => setShowEdit(false))}
-            className="px-3 py-1 rounded-lg bg-plava text-white disabled:opacity-50">Snimi</button>
+            className="px-3 py-1 rounded-lg bg-plava text-na-plavoj disabled:opacity-50">Snimi</button>
           <button disabled={busy === "toggle"} onClick={() => { if (confirm(partner.is_active ? "Deaktivirati saradnika? Gase se i svi njegovi kodovi." : "Aktivirati saradnika? Kodove aktiviraj posebno na stranici Kuponi.")) call("toggle", `/api/admin/saradnici/${partner.id}`, "PATCH", { isActive: !partner.is_active }, () => setShowEdit(false)); }}
             className={`px-3 py-1 rounded-lg ${partner.is_active ? "bg-red-50 text-[#F78687]" : "bg-green-50 text-green-600"} disabled:opacity-50`}>
             {partner.is_active ? "Deaktiviraj" : "Aktiviraj"}
@@ -90,7 +90,7 @@ export default function SaradnikClient({ partner, courses }: { partner: PartnerD
             </select></label>
           <label className="text-xs text-gray-600">Važi do<br /><input type="date" value={code.expiresDate} onChange={(e) => setCode({ ...code, expiresDate: e.target.value })} className={inp} /></label>
           <button disabled={busy === "code"} onClick={() => call("code", `/api/admin/saradnici/${partner.id}/kuponi`, "POST", { ...code, percent: Number(code.percent), expiresDate: code.expiresDate || null }, () => { setShowCode(false); setCode({ ...code, code: "", expiresDate: "" }); })}
-            className="px-3 py-1 rounded-lg bg-plava text-white disabled:opacity-50">Snimi</button>
+            className="px-3 py-1 rounded-lg bg-plava text-na-plavoj disabled:opacity-50">Snimi</button>
         </div>
       )}
 
@@ -100,7 +100,7 @@ export default function SaradnikClient({ partner, courses }: { partner: PartnerD
           <input value={payDate} onChange={(e) => setPayDate(e.target.value)} type="date" className={inp} />
           <input value={payNote} onChange={(e) => setPayNote(e.target.value)} placeholder="Napomena" className={`${inp} w-48`} />
           <button disabled={busy === "pay"} onClick={() => call("pay", `/api/admin/saradnici/${partner.id}/isplate`, "POST", { amount: Number(amount), paidAt: payDate, note: payNote }, () => { setShowPay(false); setPayNote(""); })}
-            className="px-3 py-1 rounded-lg bg-plava text-white disabled:opacity-50">Snimi</button>
+            className="px-3 py-1 rounded-lg bg-plava text-na-plavoj disabled:opacity-50">Snimi</button>
         </div>
       )}
 

@@ -98,7 +98,7 @@ export default function GoogleRecenzije() {
                     referrerPolicy="no-referrer"
                   />
                 ) : (
-                  <div className="w-9 h-9 rounded-full bg-plava-light flex items-center justify-center text-plava text-sm font-bold">
+                  <div className="w-9 h-9 rounded-full bg-plava-light flex items-center justify-center text-plava-tekst text-sm font-bold">
                     {r.author[0]}
                   </div>
                 )}
@@ -106,7 +106,7 @@ export default function GoogleRecenzije() {
                   <p className="font-semibold text-gray-900 text-sm">{r.author}</p>
                   <div className="flex items-center gap-2">
                     <Stars count={r.rating} />
-                    <span className="text-xs text-gray-400">{toLatin(r.time)}</span>
+                    <span className="text-xs text-gray-500">{toLatin(r.time)}</span>
                   </div>
                 </div>
               </div>

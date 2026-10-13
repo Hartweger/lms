@@ -92,7 +92,7 @@ export default function IzmeniKurs() {
   };
 
   if (loading) return <div className="text-gray-400">Učitavanje...</div>;
-  if (!course) return <div className="text-koral">Kurs nije pronađen.</div>;
+  if (!course) return <div className="text-koral-tekst">Kurs nije pronađen.</div>;
 
   return (
     <div>
@@ -125,7 +125,7 @@ export default function IzmeniKurs() {
         <button
           type="submit"
           disabled={saving}
-          className="bg-plava text-white px-6 py-2 rounded-lg hover:bg-plava-dark transition-colors disabled:opacity-50 text-sm"
+          className="bg-plava text-na-plavoj px-6 py-2 rounded-lg hover:bg-plava-dark transition-colors disabled:opacity-50 text-sm"
         >
           {saving ? "Čuvam..." : "Sačuvaj izmene"}
         </button>
@@ -136,7 +136,7 @@ export default function IzmeniKurs() {
           <h2 className="text-lg font-bold text-gray-900">Lekcije</h2>
           <button
             onClick={handleAddLesson}
-            className="bg-plava text-white px-4 py-2 rounded-lg text-sm hover:bg-plava-dark transition-colors"
+            className="bg-plava text-na-plavoj px-4 py-2 rounded-lg text-sm hover:bg-plava-dark transition-colors"
           >
             + Dodaj lekciju
           </button>
@@ -146,7 +146,7 @@ export default function IzmeniKurs() {
           {lessons.map((lesson, i) => (
             <div key={lesson.id} className="bg-white rounded-xl p-5 shadow-sm">
               <div className="flex items-start gap-4">
-                <span className="w-8 h-8 rounded-full bg-plava-light text-plava text-sm font-bold flex items-center justify-center shrink-0">
+                <span className="w-8 h-8 rounded-full bg-plava-light text-plava-tekst text-sm font-bold flex items-center justify-center shrink-0">
                   {i + 1}
                 </span>
                 <div className="flex-1 space-y-3">
@@ -195,19 +195,19 @@ export default function IzmeniKurs() {
                 </div>
                 <Link
                   href={`/admin/lekcija/${lesson.id}`}
-                  className="text-plava hover:underline text-sm shrink-0"
+                  className="text-plava-tekst hover:underline text-sm shrink-0"
                 >
                   Sadrzaj
                 </Link>
                 <Link
                   href={`/admin/vezbe/${lesson.id}`}
-                  className="text-plava hover:underline text-sm shrink-0"
+                  className="text-plava-tekst hover:underline text-sm shrink-0"
                 >
                   Vežbe
                 </Link>
                 <button
                   onClick={() => handleDeleteLesson(lesson.id)}
-                  className="text-koral hover:text-koral-dark text-sm shrink-0"
+                  className="text-koral-tekst hover:text-koral-dark text-sm shrink-0"
                 >
                   Obriši
                 </button>

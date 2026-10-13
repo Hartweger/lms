@@ -36,7 +36,7 @@ export default async function AdminKupovine() {
                 <td className="px-6 py-4 text-gray-500">{p.payment_method as string}</td>
                 <td className="px-6 py-4">
                   <span className={`text-xs px-2 py-1 rounded-full ${
-                    p.status === "completed" ? "bg-plava-light text-plava" : p.status === "pending" ? "bg-yellow-50 text-yellow-600" : "bg-koral-light text-koral"
+                    p.status === "completed" ? "bg-plava-light text-plava-tekst" : p.status === "pending" ? "bg-yellow-50 text-yellow-600" : "bg-koral-light text-koral-tekst"
                   }`}>
                     {p.status === "completed" ? "Završeno" : p.status === "pending" ? "Na čekanju" : "Neuspešno"}
                   </span>

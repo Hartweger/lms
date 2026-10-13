@@ -111,7 +111,7 @@ function Pretplata({ s, onCancel }: { s: SubRow; onCancel: (id: string) => void 
                     onClick={() => setRazlog(razlog === r.key ? null : r.key)}
                     className={`text-sm px-3 py-1.5 rounded-full border ${
                       razlog === r.key
-                        ? "bg-plava text-white border-plava"
+                        ? "bg-plava text-na-plavoj border-plava"
                         : "bg-white text-gray-600 border-gray-300 hover:border-gray-400"
                     }`}
                   >
@@ -182,14 +182,14 @@ export function GrupniIIndividualni() {
               : "Termin uskoro"}
           </p>
           {g.meet_link && (
-            <a href={g.meet_link} target="_blank" rel="noreferrer" className="inline-block mt-2 text-sm text-plava">
+            <a href={g.meet_link} target="_blank" rel="noreferrer" className="inline-block mt-2 text-sm text-plava-tekst">
               Otvori Meet
             </a>
           )}
           {g.notesOnPlatform && (
             <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1">
-              <Link href="/beleske" className="text-sm text-plava">Beleške sa časova</Link>
-              <Link href="/moje-reci" className="text-sm text-plava">Moje reči</Link>
+              <Link href="/beleske" className="text-sm text-plava-tekst">Beleške sa časova</Link>
+              <Link href="/moje-reci" className="text-sm text-plava-tekst">Moje reči</Link>
             </div>
           )}
         </div>
@@ -207,14 +207,14 @@ export function GrupniIIndividualni() {
             </p>
             <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1">
               {remaining > 0 && e.calendarUrl && (
-                <a href={e.calendarUrl} target="_blank" rel="noreferrer" className="text-sm text-plava">
+                <a href={e.calendarUrl} target="_blank" rel="noreferrer" className="text-sm text-plava-tekst">
                   Zakaži sledeći čas
                 </a>
               )}
-              <Link href="/beleske" className="text-sm text-plava">
+              <Link href="/beleske" className="text-sm text-plava-tekst">
                 Beleške sa časova
               </Link>
-              <Link href="/moje-reci" className="text-sm text-plava">
+              <Link href="/moje-reci" className="text-sm text-plava-tekst">
                 Moje reči
               </Link>
             </div>
@@ -257,7 +257,7 @@ export function ProfilSekcija({ initialName, email }: { initialName: string; ema
         onChange={(e) => setName(e.target.value)}
         className="w-full px-4 py-3 border border-gray-200 rounded-lg mb-2 focus:outline-none focus:ring-2 focus:ring-plava"
       />
-      <button onClick={saveName} className="text-sm bg-plava text-white px-4 py-2 rounded-lg mb-5 hover:bg-plava-dark transition-colors">
+      <button onClick={saveName} className="text-sm bg-plava text-na-plavoj px-4 py-2 rounded-lg mb-5 hover:bg-plava-dark transition-colors">
         Sačuvaj ime
       </button>
 
@@ -277,7 +277,7 @@ export function ProfilSekcija({ initialName, email }: { initialName: string; ema
       {msg && <p className="text-sm text-plava-dark mt-3">{msg}</p>}
 
       <p className="text-sm mt-5">
-        <a href="/profil" className="text-plava">Promeni lozinku</a>
+        <a href="/profil" className="text-plava-tekst">Promeni lozinku</a>
       </p>
     </section>
   );

@@ -131,7 +131,7 @@ export default function NakiLogs({
                       key={r.id}
                       className={
                         r.role === "user"
-                          ? "max-w-[85%] self-end whitespace-pre-wrap rounded-2xl rounded-br-sm bg-plava px-3.5 py-2 text-sm text-white ml-auto"
+                          ? "max-w-[85%] self-end whitespace-pre-wrap rounded-2xl rounded-br-sm bg-plava px-3.5 py-2 text-sm text-na-plavoj ml-auto"
                           : "max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-bl-sm bg-gray-100 px-3.5 py-2 text-sm text-gray-900"
                       }
                     >

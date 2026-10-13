@@ -47,7 +47,7 @@ export default function MetodologijaPage() {
         <div className="max-w-5xl mx-auto space-y-16">
           {/* VO */}
           <div className="flex flex-col md:flex-row items-start gap-8">
-            <div className="flex-shrink-0 w-20 h-20 bg-plava text-white rounded-2xl flex items-center justify-center text-3xl font-bold">
+            <div className="flex-shrink-0 w-20 h-20 bg-plava text-na-plavoj rounded-2xl flex items-center justify-center text-3xl font-bold">
               VO
             </div>
             <div>
@@ -65,7 +65,7 @@ export default function MetodologijaPage() {
 
           {/* KU */}
           <div className="flex flex-col md:flex-row items-start gap-8">
-            <div className="flex-shrink-0 w-20 h-20 bg-plava text-white rounded-2xl flex items-center justify-center text-3xl font-bold">
+            <div className="flex-shrink-0 w-20 h-20 bg-plava text-na-plavoj rounded-2xl flex items-center justify-center text-3xl font-bold">
               KU
             </div>
             <div>
@@ -83,7 +83,7 @@ export default function MetodologijaPage() {
 
           {/* M */}
           <div className="flex flex-col md:flex-row items-start gap-8">
-            <div className="flex-shrink-0 w-20 h-20 bg-plava text-white rounded-2xl flex items-center justify-center text-3xl font-bold">
+            <div className="flex-shrink-0 w-20 h-20 bg-plava text-na-plavoj rounded-2xl flex items-center justify-center text-3xl font-bold">
               M
             </div>
             <div>
@@ -109,19 +109,19 @@ export default function MetodologijaPage() {
           </h2>
           <div className="space-y-4">
             <div className="flex items-start gap-4 bg-white rounded-xl p-5 shadow-sm">
-              <span className="text-plava text-xl mt-0.5">&#10003;</span>
+              <span className="text-plava-tekst text-xl mt-0.5">&#10003;</span>
               <p className="text-gray-700">Učiš jezik onako kako ga deca usvajaju - prvo reči, pa tek onda pravila</p>
             </div>
             <div className="flex items-start gap-4 bg-white rounded-xl p-5 shadow-sm">
-              <span className="text-plava text-xl mt-0.5">&#10003;</span>
+              <span className="text-plava-tekst text-xl mt-0.5">&#10003;</span>
               <p className="text-gray-700">Komunikacija od prvog dana - ne čekaš da &ldquo;budeš spreman&rdquo;</p>
             </div>
             <div className="flex items-start gap-4 bg-white rounded-xl p-5 shadow-sm">
-              <span className="text-plava text-xl mt-0.5">&#10003;</span>
+              <span className="text-plava-tekst text-xl mt-0.5">&#10003;</span>
               <p className="text-gray-700">Realne situacije umesto udžbeničkih primera - učiš ono što ćeš stvarno koristiti</p>
             </div>
             <div className="flex items-start gap-4 bg-white rounded-xl p-5 shadow-sm">
-              <span className="text-plava text-xl mt-0.5">&#10003;</span>
+              <span className="text-plava-tekst text-xl mt-0.5">&#10003;</span>
               <p className="text-gray-700">Stalna motivacija i podrška - nikada nisi sam u procesu učenja</p>
             </div>
           </div>
@@ -177,7 +177,7 @@ export default function MetodologijaPage() {
           </p>
           <Link
             href="/kursevi"
-            className="inline-block bg-koral text-white px-8 py-3.5 rounded-xl font-semibold hover:bg-koral-dark transition-colors shadow-lg shadow-koral/20"
+            className="inline-block bg-koral text-na-koralnoj px-8 py-3.5 rounded-xl font-semibold hover:bg-koral-dark transition-colors shadow-lg shadow-koral/20"
           >
             Pogledaj ponudu kurseva
           </Link>

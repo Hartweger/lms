@@ -191,17 +191,17 @@ export default function AdminStudentDetalji() {
         color: days <= 30 ? "text-yellow-600" : "text-green-600",
       };
     }
-    return { label: "Istekao", color: "text-koral" };
+    return { label: "Istekao", color: "text-koral-tekst" };
   }
 
   if (loading) return <div className="text-gray-400">Učitavanje...</div>;
-  if (!student) return <div className="text-koral">Student nije pronađen.</div>;
+  if (!student) return <div className="text-koral-tekst">Student nije pronađen.</div>;
 
   return (
     <div>
       <Link
         href="/admin/studenti"
-        className="text-sm text-plava hover:underline mb-4 inline-block"
+        className="text-sm text-plava-tekst hover:underline mb-4 inline-block"
       >
         ← Nazad na listu
       </Link>
@@ -228,7 +228,7 @@ export default function AdminStudentDetalji() {
           <button
             onClick={handleImpersonate}
             disabled={impLoading}
-            className="text-sm bg-plava text-white px-4 py-2 rounded-lg hover:bg-plava-dark transition-colors disabled:opacity-50"
+            className="text-sm bg-plava text-na-plavoj px-4 py-2 rounded-lg hover:bg-plava-dark transition-colors disabled:opacity-50"
           >
             {impLoading ? "Pravim link…" : "Uđi kao đak"}
           </button>
@@ -365,7 +365,7 @@ export default function AdminStudentDetalji() {
         {availableCourses.length > 0 && (
           <button
             onClick={() => setShowAddForm(!showAddForm)}
-            className="text-sm bg-plava text-white px-4 py-2 rounded-lg hover:bg-plava-dark transition-colors"
+            className="text-sm bg-plava text-na-plavoj px-4 py-2 rounded-lg hover:bg-plava-dark transition-colors"
           >
             + Dodaj pristup
           </button>
@@ -402,7 +402,7 @@ export default function AdminStudentDetalji() {
           <button
             onClick={addAccess}
             disabled={!selectedCourseId}
-            className="px-4 py-2 bg-plava text-white rounded-lg text-sm font-medium hover:bg-plava-dark transition-colors disabled:opacity-50"
+            className="px-4 py-2 bg-plava text-na-plavoj rounded-lg text-sm font-medium hover:bg-plava-dark transition-colors disabled:opacity-50"
           >
             Dodeli
           </button>
@@ -454,7 +454,7 @@ export default function AdminStudentDetalji() {
                       <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => extendAccess(access.id, access.expires_at)}
-                          className="text-xs text-plava hover:underline"
+                          className="text-xs text-plava-tekst hover:underline"
                         >
                           Produži
                         </button>
@@ -463,7 +463,7 @@ export default function AdminStudentDetalji() {
                             <span className="text-xs text-gray-500">Sigurno?</span>
                             <button
                               onClick={() => removeAccess(access.id)}
-                              className="text-xs text-koral font-medium hover:underline"
+                              className="text-xs text-koral-tekst font-medium hover:underline"
                             >
                               Da
                             </button>
@@ -477,7 +477,7 @@ export default function AdminStudentDetalji() {
                         ) : (
                           <button
                             onClick={() => setConfirmDeleteId(access.id)}
-                            className="text-xs text-koral hover:underline"
+                            className="text-xs text-koral-tekst hover:underline"
                           >
                             Ukloni
                           </button>

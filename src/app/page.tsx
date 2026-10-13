@@ -21,7 +21,7 @@ export default function Pocetna() {
         <div className="max-w-6xl mx-auto flex flex-col-reverse md:flex-row items-center">
           {/* Text */}
           <div className="flex-1 text-center md:text-left px-4 pt-6 pb-12 md:py-24">
-            <span className="inline-block bg-plava text-white text-xs font-bold tracking-widest uppercase px-4 py-1.5 rounded-full mb-5">
+            <span className="inline-block bg-plava text-na-plavoj text-xs font-bold tracking-widest uppercase px-4 py-1.5 rounded-full mb-5">
               Online škola nemačkog jezika
             </span>
             <h1 className="font-montserrat font-bold text-4xl md:text-5xl lg:text-[3.4rem] text-gray-900 mb-5 leading-[1.15]">
@@ -30,19 +30,19 @@ export default function Pocetna() {
             <p className="text-gray-600 text-lg md:text-xl mb-3 max-w-lg">
               Razvila sam VoKuM metodu uz pomoć koje je već više hiljada ljudi progovorilo.
             </p>
-            <p className="text-gray-400 text-base mb-8 max-w-lg">
+            <p className="text-gray-500 text-base mb-8 max-w-lg">
               VoKabular, KomUnikacija i Motivacija - tri stvari koje zaista prave razliku.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center md:justify-start mb-8">
               <Link
                 href="/kursevi"
-                className="text-center bg-koral text-white px-8 py-3.5 rounded-full font-semibold hover:bg-koral-dark transition-colors shadow-lg shadow-koral/20"
+                className="text-center bg-koral text-na-koralnoj px-8 py-3.5 rounded-full font-semibold hover:bg-koral-dark transition-colors shadow-lg shadow-koral/20"
               >
                 Pogledaj kurseve
               </Link>
               <Link
                 href="/besplatno-testiranje"
-                className="text-center border-2 border-plava text-plava px-8 py-3.5 rounded-full font-semibold hover:bg-plava hover:text-white transition-colors"
+                className="text-center border-2 border-plava text-plava-tekst px-8 py-3.5 rounded-full font-semibold hover:bg-plava hover:text-white transition-colors"
               >
                 Besplatno testiranje
               </Link>
@@ -95,7 +95,7 @@ export default function Pocetna() {
           <div className="mt-6">
             <Link
               href="/kontakt"
-              className="inline-block bg-plava text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-plava-dark transition-colors"
+              className="inline-block bg-plava text-na-plavoj px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-plava-dark transition-colors"
             >
               Piši mi!
             </Link>
@@ -172,7 +172,7 @@ export default function Pocetna() {
           <div className="text-center mt-10">
             <Link
               href="/metodologija"
-              className="text-plava font-semibold hover:underline"
+              className="text-plava-tekst font-semibold hover:underline"
             >
               Saznaj više o VoKuM metodi &rarr;
             </Link>
@@ -195,16 +195,16 @@ export default function Pocetna() {
               <div className="h-1.5 bg-plava" />
               <div className="p-8">
                 <h3 className="font-montserrat font-bold text-xl text-gray-900 mb-1">Grupni kursevi</h3>
-                <p className="text-plava font-medium text-sm mb-5">Uči u društvu!</p>
+                <p className="text-plava-tekst font-medium text-sm mb-5">Uči u društvu!</p>
                 <ul className="text-gray-600 text-sm space-y-2.5 mb-6">
-                  <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Video lekcije dostupne 24/7</li>
-                  <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Online časovi u grupi</li>
-                  <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Redovan raspored i struktura</li>
-                  <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Vežbanje komunikacije na času</li>
-                  <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Sertifikat HARTWEGER centra</li>
-                  <li className="flex items-start gap-2 text-gray-400"><span className="mt-0.5">&#10007;</span> Nema individualnih časova</li>
+                  <li className="flex items-start gap-2"><span className="text-plava-tekst mt-0.5">&#10003;</span> Video lekcije dostupne 24/7</li>
+                  <li className="flex items-start gap-2"><span className="text-plava-tekst mt-0.5">&#10003;</span> Online časovi u grupi</li>
+                  <li className="flex items-start gap-2"><span className="text-plava-tekst mt-0.5">&#10003;</span> Redovan raspored i struktura</li>
+                  <li className="flex items-start gap-2"><span className="text-plava-tekst mt-0.5">&#10003;</span> Vežbanje komunikacije na času</li>
+                  <li className="flex items-start gap-2"><span className="text-plava-tekst mt-0.5">&#10003;</span> Sertifikat HARTWEGER centra</li>
+                  <li className="flex items-start gap-2 text-gray-500"><span className="mt-0.5">&#10007;</span> Nema individualnih časova</li>
                 </ul>
-                <Link href="/grupni-kursevi" className="inline-block border-2 border-plava text-plava px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-plava hover:text-white transition-colors">
+                <Link href="/grupni-kursevi" className="inline-block border-2 border-plava text-plava-tekst px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-plava hover:text-white transition-colors">
                   Počnimo odmah!
                 </Link>
               </div>
@@ -214,16 +214,16 @@ export default function Pocetna() {
               <div className="h-1.5 bg-plava" />
               <div className="p-8">
                 <h3 className="font-montserrat font-bold text-xl text-gray-900 mb-1">Video kursevi</h3>
-                <p className="text-plava font-medium text-sm mb-5">Uči svojim tempom!</p>
+                <p className="text-plava-tekst font-medium text-sm mb-5">Uči svojim tempom!</p>
                 <ul className="text-gray-600 text-sm space-y-2.5 mb-6">
-                  <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Video lekcije dostupne 24/7</li>
-                  <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Testovi i materijali za vežbanje</li>
-                  <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Saveti za učenje vokabulara</li>
-                  <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Sertifikat HARTWEGER centra</li>
-                  <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Podrška u WhatsApp grupi</li>
-                  <li className="flex items-start gap-2 text-gray-400"><span className="mt-0.5">&#10007;</span> Nema časova uživo</li>
+                  <li className="flex items-start gap-2"><span className="text-plava-tekst mt-0.5">&#10003;</span> Video lekcije dostupne 24/7</li>
+                  <li className="flex items-start gap-2"><span className="text-plava-tekst mt-0.5">&#10003;</span> Testovi i materijali za vežbanje</li>
+                  <li className="flex items-start gap-2"><span className="text-plava-tekst mt-0.5">&#10003;</span> Saveti za učenje vokabulara</li>
+                  <li className="flex items-start gap-2"><span className="text-plava-tekst mt-0.5">&#10003;</span> Sertifikat HARTWEGER centra</li>
+                  <li className="flex items-start gap-2"><span className="text-plava-tekst mt-0.5">&#10003;</span> Podrška u WhatsApp grupi</li>
+                  <li className="flex items-start gap-2 text-gray-500"><span className="mt-0.5">&#10007;</span> Nema časova uživo</li>
                 </ul>
-                <Link href="/kursevi#video" className="inline-block border-2 border-plava text-plava px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-plava hover:text-white transition-colors">
+                <Link href="/kursevi#video" className="inline-block border-2 border-plava text-plava-tekst px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-plava hover:text-white transition-colors">
                   Počnimo odmah!
                 </Link>
               </div>
@@ -233,16 +233,16 @@ export default function Pocetna() {
               <div className="h-1.5 bg-plava" />
               <div className="p-8">
                 <h3 className="font-montserrat font-bold text-xl text-gray-900 mb-1">Individualni kursevi</h3>
-                <p className="text-plava font-medium text-sm mb-5">Fokus na tvoje ciljeve</p>
+                <p className="text-plava-tekst font-medium text-sm mb-5">Fokus na tvoje ciljeve</p>
                 <ul className="text-gray-600 text-sm space-y-2.5 mb-6">
-                  <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Online časovi 1:1 sa profesorom</li>
-                  <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Program prilagođen tvom cilju</li>
-                  <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Video lekcije i dodatni materijali</li>
-                  <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Tempo koji odgovara samo tebi</li>
-                  <li className="flex items-start gap-2"><span className="text-plava mt-0.5">&#10003;</span> Sertifikat HARTWEGER centra</li>
-                  <li className="flex items-start gap-2 text-gray-400"><span className="mt-0.5">&#10007;</span> Nema časova u grupi</li>
+                  <li className="flex items-start gap-2"><span className="text-plava-tekst mt-0.5">&#10003;</span> Online časovi 1:1 sa profesorom</li>
+                  <li className="flex items-start gap-2"><span className="text-plava-tekst mt-0.5">&#10003;</span> Program prilagođen tvom cilju</li>
+                  <li className="flex items-start gap-2"><span className="text-plava-tekst mt-0.5">&#10003;</span> Video lekcije i dodatni materijali</li>
+                  <li className="flex items-start gap-2"><span className="text-plava-tekst mt-0.5">&#10003;</span> Tempo koji odgovara samo tebi</li>
+                  <li className="flex items-start gap-2"><span className="text-plava-tekst mt-0.5">&#10003;</span> Sertifikat HARTWEGER centra</li>
+                  <li className="flex items-start gap-2 text-gray-500"><span className="mt-0.5">&#10007;</span> Nema časova u grupi</li>
                 </ul>
-                <Link href="/individualni-kursevi" className="inline-block border-2 border-plava text-plava px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-plava hover:text-white transition-colors">
+                <Link href="/individualni-kursevi" className="inline-block border-2 border-plava text-plava-tekst px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-plava hover:text-white transition-colors">
                   Počnimo odmah!
                 </Link>
               </div>
@@ -252,7 +252,7 @@ export default function Pocetna() {
       </section>
 
       {/* Social proof stats */}
-      <section className="py-16 px-4 bg-plava text-white">
+      <section className="py-16 px-4 bg-plava text-na-plavoj">
         <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
           <div>
             <p className="font-montserrat font-bold text-4xl md:text-5xl mb-2">65.000+</p>
@@ -275,7 +275,7 @@ export default function Pocetna() {
       {/* Footer tagline */}
       <section className="py-12 px-4 bg-white">
         <div className="max-w-3xl mx-auto text-center">
-          <p className="text-gray-400 text-lg md:text-xl italic">
+          <p className="text-gray-500 text-lg md:text-xl italic">
             Svako može da nauči nemački. Da, baš svako. Osim onih koji nikada nisu ni počeli.
           </p>
         </div>
@@ -294,7 +294,7 @@ export default function Pocetna() {
           </div>
           <Link
             href="/besplatno-testiranje"
-            className="inline-block bg-plava text-white px-8 py-3 rounded-xl font-semibold hover:bg-plava/90 transition-colors whitespace-nowrap"
+            className="inline-block bg-plava text-na-plavoj px-8 py-3 rounded-xl font-semibold hover:bg-plava/90 transition-colors whitespace-nowrap"
           >
             Besplatno testiranje
           </Link>
@@ -313,7 +313,7 @@ export default function Pocetna() {
             />
           </div>
           <div>
-            <p className="text-koral font-semibold text-sm mb-2">Blog, Ispiti, Magazin</p>
+            <p className="text-koral-tekst font-semibold text-sm mb-2">Blog, Ispiti, Magazin</p>
             <h2 className="font-montserrat font-bold text-2xl text-gray-900 mb-3">
               Gde položiti FSP - uporedna analiza svih nemačkih pokrajina (vodič za 2026)
             </h2>
@@ -322,7 +322,7 @@ export default function Pocetna() {
             </p>
             <Link
               href="/magazin/gde-poloziti-fsp-pokrajine-2026"
-              className="inline-block bg-plava text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-plava-dark transition-colors"
+              className="inline-block bg-plava text-na-plavoj px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-plava-dark transition-colors"
             >
               Prikaži još
             </Link>

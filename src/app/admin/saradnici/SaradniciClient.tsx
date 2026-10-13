@@ -92,7 +92,7 @@ export default function SaradniciClient({ partners, courses }: { partners: Partn
               {partners.map((p) => (
                 <tr key={p.id} className={`hover:bg-gray-50 ${p.is_active ? "" : "text-gray-400"}`}>
                   <td className="px-4 py-3">
-                    <Link href={`/admin/saradnici/${p.id}`} className="font-medium text-plava hover:underline">{p.name}</Link>
+                    <Link href={`/admin/saradnici/${p.id}`} className="font-medium text-plava-tekst hover:underline">{p.name}</Link>
                     {!p.is_active && <span className="ml-2 text-xs">neaktivan</span>}
                   </td>
                   <td className="px-4 py-3 font-mono text-xs">

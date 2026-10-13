@@ -37,7 +37,7 @@ function CourseCard({ course }: { course: CourseOption }) {
           <span className="text-lg mr-2">{icons[course.type]}</span>
           <span className="font-semibold text-gray-900">{course.label}</span>
         </div>
-        <span className="text-plava font-bold">{course.price}</span>
+        <span className="text-plava-tekst font-bold">{course.price}</span>
       </div>
       <p className="text-sm text-gray-500 ml-8">{course.subtitle}</p>
     </a>
@@ -85,14 +85,14 @@ export default function QuizResult({ result, showFull, onRequestEmail }: QuizRes
           {/* Nataša's message */}
           <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
             <div className="flex items-start gap-4">
-              <div className="w-10 h-10 rounded-full bg-plava text-white flex items-center justify-center font-bold text-sm shrink-0">
+              <div className="w-10 h-10 rounded-full bg-plava text-na-plavoj flex items-center justify-center font-bold text-sm shrink-0">
                 NH
               </div>
               <div>
                 <p className="font-semibold text-gray-900 mb-1">Nataša Hartweger</p>
                 <p className="text-gray-600 text-sm">
                   Hvala ti što si odvojio/la vreme za test! Ako te bilo šta zanima o kursevima ili učenju nemačkog - slobodno mi piši na{" "}
-                  <a href="mailto:info@hartweger.rs" className="text-plava hover:underline">info@hartweger.rs</a>. Rado ću pomoći.
+                  <a href="mailto:info@hartweger.rs" className="text-plava-tekst hover:underline">info@hartweger.rs</a>. Rado ću pomoći.
                 </p>
               </div>
             </div>
@@ -104,7 +104,7 @@ export default function QuizResult({ result, showFull, onRequestEmail }: QuizRes
               href="https://www.hartweger.rs/kursevi-nemackog/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-plava hover:underline font-medium"
+              className="text-plava-tekst hover:underline font-medium"
             >
               Pogledaj sve kurseve →
             </a>
@@ -124,7 +124,7 @@ export default function QuizResult({ result, showFull, onRequestEmail }: QuizRes
             {onRequestEmail ? (
               <button
                 onClick={onRequestEmail}
-                className="bg-plava text-white px-6 py-3 rounded-xl font-medium hover:bg-plava-dark transition-colors shadow-lg"
+                className="bg-plava text-na-plavoj px-6 py-3 rounded-xl font-medium hover:bg-plava-dark transition-colors shadow-lg"
               >
                 Otključaj detaljnu analizu →
               </button>

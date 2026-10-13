@@ -119,7 +119,7 @@ export default async function KupovinaPage({
             <p className="text-[15px] leading-relaxed text-gray-700">{course.description}</p>
             <p className="text-sm text-gray-500 mt-4">
               Ne možeš odjednom?{" "}
-              <a href="mailto:info@hartweger.rs" className="text-plava underline">
+              <a href="mailto:info@hartweger.rs" className="text-plava-tekst underline">
                 Piši nam
               </a>{" "}
               i dogovaramo rate.

@@ -74,13 +74,13 @@ export default async function MagazinPage() {
                     />
                   ) : (
                     <div className="w-full h-48 bg-gradient-to-br from-plava-light to-white flex items-center justify-center">
-                      <span className="text-plava text-4xl font-bold opacity-20">H</span>
+                      <span className="text-plava-tekst text-4xl font-bold opacity-20">H</span>
                     </div>
                   )}
                   <div className="p-5">
                     <p className="text-xs text-gray-400 mb-2">
                       {post.category && (
-                        <span className="uppercase tracking-wide font-semibold text-plava mr-2">{post.category}</span>
+                        <span className="uppercase tracking-wide font-semibold text-plava-tekst mr-2">{post.category}</span>
                       )}
                       {post.published_at && new Date(post.published_at).toLocaleDateString("sr-Latn-RS", {
                         day: "numeric",
@@ -88,7 +88,7 @@ export default async function MagazinPage() {
                         year: "numeric",
                       })}
                     </p>
-                    <h2 className="font-bold text-gray-900 group-hover:text-plava transition-colors mb-2 leading-snug">
+                    <h2 className="font-bold text-gray-900 group-hover:text-plava-tekst transition-colors mb-2 leading-snug">
                       {post.title}
                     </h2>
                     {post.excerpt && (

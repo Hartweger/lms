@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { LinkSection, LinkType } from "@/lib/section-types";
 
 const linkStyles: Record<LinkType, string> = {
-  kviz: "bg-koral hover:bg-koral-dark text-white",
+  kviz: "bg-koral hover:bg-koral-dark text-na-koralnoj",
   quizlet: "bg-[#4257B2] hover:bg-[#3a4d9e] text-white",
   pdf: "bg-red-600 hover:bg-red-700 text-white",
   dw: "bg-gray-900 hover:bg-gray-800 text-white",

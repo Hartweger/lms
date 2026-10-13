@@ -68,7 +68,7 @@ export default function WordOrderExercise({ words, correctAnswer, hint, onAnswer
   return (
     <div>
       <p className="text-lg font-medium text-gray-900 mb-1">Poređaj reči u pravilnu rečenicu:</p>
-      <p className="text-sm text-plava mb-4">({hint})</p>
+      <p className="text-sm text-plava-tekst mb-4">({hint})</p>
 
       {/* Placed words area */}
       <div className="min-h-[56px] border-2 border-dashed border-gray-200 rounded-xl p-3 flex gap-2 flex-wrap mb-2">
@@ -76,7 +76,7 @@ export default function WordOrderExercise({ words, correctAnswer, hint, onAnswer
           <button
             key={token.id}
             onClick={() => handleRemove(i)}
-            className="px-4 py-2 bg-plava text-white rounded-lg text-sm font-medium hover:bg-koral transition-colors"
+            className="px-4 py-2 bg-plava text-na-plavoj rounded-lg text-sm font-medium hover:bg-koral transition-colors"
             title="Klikni da vratiš"
           >
             {token.word}
@@ -110,7 +110,7 @@ export default function WordOrderExercise({ words, correctAnswer, hint, onAnswer
       {!answered && placed.length === tokens.length && (
         <button
           onClick={handleCheck}
-          className="bg-plava text-white px-6 py-3 rounded-lg hover:bg-plava-dark transition-colors"
+          className="bg-plava text-na-plavoj px-6 py-3 rounded-lg hover:bg-plava-dark transition-colors"
         >
           Proveri
         </button>

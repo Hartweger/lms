@@ -211,7 +211,7 @@ export default function AdminEseji() {
             onClick={() => setFilter(f)}
             className={`px-4 py-2 rounded-lg text-sm ${
               filter === f
-                ? "bg-plava text-white"
+                ? "bg-plava text-na-plavoj"
                 : "bg-gray-100 text-gray-600 hover:bg-gray-200"
             }`}
           >
@@ -261,7 +261,7 @@ export default function AdminEseji() {
                 <button
                   type="button"
                   onClick={() => toggleTask(essay.id)}
-                  className="text-sm text-plava hover:underline"
+                  className="text-sm text-plava-tekst hover:underline"
                 >
                   {openTasks.has(essay.id) ? "Sakrij zadatak ▲" : "Prikaži zadatak ▼"}
                 </button>
@@ -311,7 +311,7 @@ export default function AdminEseji() {
                   <div className="mt-2 space-y-1">
                     {essay.ai_corrections.map((c, i) => (
                       <div key={i} className="text-xs">
-                        <span className="text-koral line-through">{c.original}</span>
+                        <span className="text-koral-tekst line-through">{c.original}</span>
                         {" → "}
                         <span className="text-green-600 font-medium">{c.corrected}</span>
                         {c.explanation && <span className="text-gray-400"> - {c.explanation}</span>}
@@ -345,7 +345,7 @@ export default function AdminEseji() {
                             value={c.original}
                             onChange={(e) => updateCorrection(i, "original", e.target.value)}
                             placeholder="pogrešno (original)"
-                            className="flex-1 px-2 py-1.5 border border-gray-200 rounded text-sm text-koral focus:outline-none focus:ring-2 focus:ring-plava"
+                            className="flex-1 px-2 py-1.5 border border-gray-200 rounded text-sm text-koral-tekst focus:outline-none focus:ring-2 focus:ring-plava"
                           />
                           <span className="text-gray-400">→</span>
                           <input
@@ -357,7 +357,7 @@ export default function AdminEseji() {
                           <button
                             type="button"
                             onClick={() => removeCorrection(i)}
-                            className="text-koral hover:bg-red-50 rounded px-2 py-1 text-sm"
+                            className="text-koral-tekst hover:bg-red-50 rounded px-2 py-1 text-sm"
                             title="Obriši ispravku"
                           >
                             ✕
@@ -375,7 +375,7 @@ export default function AdminEseji() {
                   <button
                     type="button"
                     onClick={addCorrection}
-                    className="mt-2 text-sm text-plava hover:underline"
+                    className="mt-2 text-sm text-plava-tekst hover:underline"
                   >
                     + Dodaj ispravku
                   </button>
@@ -418,7 +418,7 @@ export default function AdminEseji() {
             ) : essay.status !== "published" ? (
               <button
                 onClick={() => startReview(essay)}
-                className="bg-plava text-white px-4 py-2 rounded-lg text-sm hover:bg-plava-dark"
+                className="bg-plava text-na-plavoj px-4 py-2 rounded-lg text-sm hover:bg-plava-dark"
               >
                 Pregledaj i oceni
               </button>

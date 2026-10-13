@@ -102,7 +102,7 @@ export default function LekcijaContent({
                 href={lesson.content}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-sm text-plava hover:underline"
+                className="inline-flex items-center gap-2 text-sm text-plava-tekst hover:underline"
               >
                 Otvori u novom prozoru
               </a>

@@ -74,7 +74,7 @@ export default function IndividualniKurseviPage() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {BENEFITI.map((b) => (
               <div key={b.title} className="flex gap-4">
-                <div className="text-plava flex-shrink-0 mt-0.5">{b.icon}</div>
+                <div className="text-plava-tekst flex-shrink-0 mt-0.5">{b.icon}</div>
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-1">{b.title}</h3>
                   <p className="text-sm text-gray-600 leading-relaxed">{b.desc}</p>
@@ -118,7 +118,7 @@ export default function IndividualniKurseviPage() {
           </div>
           <Link
             href="/besplatno-testiranje"
-            className="bg-plava hover:bg-plava-dark text-white font-bold py-3 px-8 rounded-xl transition-colors whitespace-nowrap"
+            className="bg-plava hover:bg-plava-dark text-na-plavoj font-bold py-3 px-8 rounded-xl transition-colors whitespace-nowrap"
           >
             Besplatno testiranje
           </Link>

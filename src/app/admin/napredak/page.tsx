@@ -64,13 +64,13 @@ export default async function AdminNapredak({
         <div className="flex gap-2 mt-3">
           <Link
             href="/admin/napredak"
-            className={`px-3 py-1.5 rounded-lg text-sm font-medium border ${!onlyNew ? "bg-plava text-white border-plava" : "text-gray-600 border-gray-200 hover:bg-gray-50"}`}
+            className={`px-3 py-1.5 rounded-lg text-sm font-medium border ${!onlyNew ? "bg-plava text-na-plavoj border-plava" : "text-gray-600 border-gray-200 hover:bg-gray-50"}`}
           >
             Svi upisani
           </Link>
           <Link
             href="/admin/napredak?samo=novi"
-            className={`px-3 py-1.5 rounded-lg text-sm font-medium border ${onlyNew ? "bg-plava text-white border-plava" : "text-gray-600 border-gray-200 hover:bg-gray-50"}`}
+            className={`px-3 py-1.5 rounded-lg text-sm font-medium border ${onlyNew ? "bg-plava text-na-plavoj border-plava" : "text-gray-600 border-gray-200 hover:bg-gray-50"}`}
           >
             Samo novi (ne-migrirani)
           </Link>
@@ -86,7 +86,7 @@ export default async function AdminNapredak({
       {/* Sažetak */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         <div className="bg-white rounded-xl p-6 shadow-sm">
-          <div className="text-3xl font-bold text-plava">{totalEnrolled}</div>
+          <div className="text-3xl font-bold text-plava-tekst">{totalEnrolled}</div>
           <div className="text-sm text-gray-500 mt-1">Ukupno upisa (sa lekcijama)</div>
         </div>
         <div className="bg-white rounded-xl p-6 shadow-sm">
@@ -94,7 +94,7 @@ export default async function AdminNapredak({
           <div className="text-sm text-gray-500 mt-1">Završili ceo kurs</div>
         </div>
         <div className="bg-white rounded-xl p-6 shadow-sm">
-          <div className="text-3xl font-bold text-plava">{overallRate}%</div>
+          <div className="text-3xl font-bold text-plava-tekst">{overallRate}%</div>
           <div className="text-sm text-gray-500 mt-1">Prosečna stopa završavanja</div>
         </div>
       </div>
@@ -125,7 +125,7 @@ export default async function AdminNapredak({
                     </td>
                     <td className="px-4 py-3 text-center text-gray-700">{c.enrolled}</td>
                     <td className="px-4 py-3 text-center">
-                      <span className={notStartedPct >= 50 ? "text-koral font-medium" : "text-gray-500"}>
+                      <span className={notStartedPct >= 50 ? "text-koral-tekst font-medium" : "text-gray-500"}>
                         {c.notStarted}
                       </span>
                       <span className="text-gray-400 text-xs"> ({notStartedPct}%)</span>

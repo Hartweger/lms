@@ -183,7 +183,7 @@ export default async function AdminPregled() {
         <h2 className="text-lg font-semibold text-gray-900 mb-4">Danas</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           <div>
-            <div className="text-2xl font-bold text-plava">
+            <div className="text-2xl font-bold text-plava-tekst">
               {revenueToday.toLocaleString("sr-RS")} <span className="text-base font-medium text-gray-400">RSD</span>
             </div>
             <div className="text-sm text-gray-500 mt-1">
@@ -191,11 +191,11 @@ export default async function AdminPregled() {
             </div>
           </div>
           <div>
-            <div className="text-2xl font-bold text-plava">{newToday ?? 0}</div>
+            <div className="text-2xl font-bold text-plava-tekst">{newToday ?? 0}</div>
             <div className="text-sm text-gray-500 mt-1">Nove prijave danas</div>
           </div>
           <Link href="/admin/narudzbine" className="block hover:opacity-80 transition-opacity">
-            <div className={`text-2xl font-bold ${(pendingConfirm?.length ?? 0) > 0 ? "text-koral" : "text-green-600"}`}>
+            <div className={`text-2xl font-bold ${(pendingConfirm?.length ?? 0) > 0 ? "text-koral-tekst" : "text-green-600"}`}>
               {pendingConfirm?.length ?? 0}
             </div>
             <div className="text-sm text-gray-500 mt-1">Čeka tvoju potvrdu →</div>
@@ -218,7 +218,7 @@ export default async function AdminPregled() {
                       <span className="text-gray-500">{Number(o.total).toLocaleString("sr-RS")} RSD</span>
                       <span className="hidden sm:inline text-xs text-gray-400">{paymentLabel(o.payment_method)}</span>
                       <span className="text-xs text-gray-400">{formatDate(o.created_at)}</span>
-                      <Link href="/admin/narudzbine" className="text-plava hover:underline text-xs font-medium">Potvrdi →</Link>
+                      <Link href="/admin/narudzbine" className="text-plava-tekst hover:underline text-xs font-medium">Potvrdi →</Link>
                     </div>
                   </div>
                 );
@@ -232,7 +232,7 @@ export default async function AdminPregled() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {stats.map((stat) => (
           <Link key={stat.label} href={stat.href} className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
-            <div className="text-3xl font-bold text-plava">{stat.value}</div>
+            <div className="text-3xl font-bold text-plava-tekst">{stat.value}</div>
             <div className="text-sm text-gray-500 mt-1">{stat.label}</div>
           </Link>
         ))}
@@ -243,23 +243,23 @@ export default async function AdminPregled() {
         <div className="bg-white rounded-xl p-5 shadow-sm">
           <div className="text-sm text-gray-500 mb-1">Eseji za pregled</div>
           <div className="flex items-center justify-between">
-            <span className={`text-2xl font-bold ${(pendingEssays ?? 0) > 0 ? "text-koral" : "text-green-600"}`}>
+            <span className={`text-2xl font-bold ${(pendingEssays ?? 0) > 0 ? "text-koral-tekst" : "text-green-600"}`}>
               {pendingEssays ?? 0}
             </span>
             {(pendingEssays ?? 0) > 0 && (
-              <Link href="/admin/eseji" className="text-xs text-plava hover:underline">Pregledaj →</Link>
+              <Link href="/admin/eseji" className="text-xs text-plava-tekst hover:underline">Pregledaj →</Link>
             )}
           </div>
         </div>
         <div className="bg-white rounded-xl p-5 shadow-sm">
           <div className="text-sm text-gray-500 mb-1">Aktivni pristupi</div>
-          <div className="text-2xl font-bold text-plava">{accessCount ?? 0}</div>
+          <div className="text-2xl font-bold text-plava-tekst">{accessCount ?? 0}</div>
         </div>
         <div className="bg-white rounded-xl p-5 shadow-sm">
           <div className="text-sm text-gray-500 mb-1">Dodeljeni studenti</div>
           <div className="flex items-center justify-between">
-            <span className="text-2xl font-bold text-plava">{assignmentCount ?? 0}</span>
-            <Link href="/admin/profesori" className="text-xs text-plava hover:underline">Upravljaj →</Link>
+            <span className="text-2xl font-bold text-plava-tekst">{assignmentCount ?? 0}</span>
+            <Link href="/admin/profesori" className="text-xs text-plava-tekst hover:underline">Upravljaj →</Link>
           </div>
         </div>
       </div>
@@ -301,7 +301,7 @@ export default async function AdminPregled() {
                       <td className="py-2">
                         <Link
                           href={`/admin/studenti/${row.user_id}`}
-                          className="text-plava hover:underline text-xs"
+                          className="text-plava-tekst hover:underline text-xs"
                         >
                           Upravljaj
                         </Link>
@@ -355,25 +355,25 @@ export default async function AdminPregled() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <Link
           href="/admin/studenti"
-          className="flex items-center justify-center gap-2 border border-plava text-plava py-3 rounded-lg text-sm font-medium hover:bg-plava hover:text-white transition-colors"
+          className="flex items-center justify-center gap-2 border border-plava text-plava-tekst py-3 rounded-lg text-sm font-medium hover:bg-plava hover:text-white transition-colors"
         >
           Studenti
         </Link>
         <Link
           href="/admin/profesori"
-          className="flex items-center justify-center gap-2 border border-plava text-plava py-3 rounded-lg text-sm font-medium hover:bg-plava hover:text-white transition-colors"
+          className="flex items-center justify-center gap-2 border border-plava text-plava-tekst py-3 rounded-lg text-sm font-medium hover:bg-plava hover:text-white transition-colors"
         >
           Profesori
         </Link>
         <Link
           href="/admin/eseji"
-          className="flex items-center justify-center gap-2 border border-plava text-plava py-3 rounded-lg text-sm font-medium hover:bg-plava hover:text-white transition-colors"
+          className="flex items-center justify-center gap-2 border border-plava text-plava-tekst py-3 rounded-lg text-sm font-medium hover:bg-plava hover:text-white transition-colors"
         >
           Eseji
         </Link>
         <Link
           href="/admin/pristup"
-          className="flex items-center justify-center gap-2 border border-plava text-plava py-3 rounded-lg text-sm font-medium hover:bg-plava hover:text-white transition-colors"
+          className="flex items-center justify-center gap-2 border border-plava text-plava-tekst py-3 rounded-lg text-sm font-medium hover:bg-plava hover:text-white transition-colors"
         >
           Pristup
         </Link>

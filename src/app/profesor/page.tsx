@@ -181,7 +181,7 @@ export default async function ProfesorStudenti({ searchParams }: { searchParams:
                 <td className="px-6 py-4">
                   {r.type === "1:1" ? (
                     <span className="inline-flex items-center gap-1.5">
-                      <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-plava-light text-plava">1:1</span>
+                      <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-plava-light text-plava-tekst">1:1</span>
                       <span className="text-gray-700">{r.label}</span>
                     </span>
                   ) : (

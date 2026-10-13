@@ -75,7 +75,7 @@ export default function FirmeClient({ firme }: { firme: FirmaRed[] }) {
     <div>
       <label className="block text-xs font-medium text-gray-600 mb-1">
         {oznaka}
-        {obavezno && <span className="text-koral"> · SEF ga traži</span>}
+        {obavezno && <span className="text-koral-tekst"> · SEF ga traži</span>}
       </label>
       <input
         type="text"
@@ -97,7 +97,7 @@ export default function FirmeClient({ firme }: { firme: FirmaRed[] }) {
           </p>
         </div>
         {nepotpune > 0 && (
-          <span className="text-sm text-koral font-medium">
+          <span className="text-sm text-koral-tekst font-medium">
             {nepotpune === 1 ? "1 firma nije potpuna" : `${nepotpune} firmi nije potpuno`} — faktura im
             ne može na SEF
           </span>
@@ -106,7 +106,7 @@ export default function FirmeClient({ firme }: { firme: FirmaRed[] }) {
 
       {greska && (
         <div className="mb-4 rounded-lg bg-koral/10 border border-koral/30 px-4 py-3">
-          <p className="text-sm text-koral font-medium">{greska}</p>
+          <p className="text-sm text-koral-tekst font-medium">{greska}</p>
         </div>
       )}
 
@@ -148,7 +148,7 @@ export default function FirmeClient({ firme }: { firme: FirmaRed[] }) {
                       <button
                         onClick={sacuvaj}
                         disabled={cuvanje}
-                        className="px-4 py-2 rounded-lg text-sm font-medium bg-plava text-white hover:bg-plava-dark transition-colors disabled:opacity-50"
+                        className="px-4 py-2 rounded-lg text-sm font-medium bg-plava text-na-plavoj hover:bg-plava-dark transition-colors disabled:opacity-50"
                       >
                         {cuvanje ? "Čuvanje..." : "Sačuvaj"}
                       </button>
@@ -186,14 +186,14 @@ export default function FirmeClient({ firme }: { firme: FirmaRed[] }) {
                           : `${f.brojNarudzbina} narudžbina`}
                       </p>
                       {fali.length > 0 && (
-                        <p className="text-sm text-koral font-medium mt-2">
+                        <p className="text-sm text-koral-tekst font-medium mt-2">
                           Fali: {fali.join(" i ")} — bez toga faktura ne može na SEF
                         </p>
                       )}
                     </div>
                     <button
                       onClick={() => pocniIzmenu(f)}
-                      className="text-xs px-3 py-1.5 rounded-lg bg-plava-light text-plava font-medium hover:bg-plava hover:text-white transition-colors whitespace-nowrap"
+                      className="text-xs px-3 py-1.5 rounded-lg bg-plava-light text-plava-tekst font-medium hover:bg-plava hover:text-white transition-colors whitespace-nowrap"
                     >
                       Izmeni
                     </button>

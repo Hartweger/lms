@@ -70,7 +70,7 @@ export default function CategorizeExercise({ question, categories, items, onAnsw
               onClick={() => handleItemClick(item.text)}
               className={`px-4 py-2.5 rounded-xl text-sm font-medium border-2 transition-all ${
                 selectedItem === item.text
-                  ? "border-plava bg-plava text-white shadow-md scale-105"
+                  ? "border-plava bg-plava text-na-plavoj shadow-md scale-105"
                   : "border-gray-200 text-gray-700 hover:border-plava bg-white"
               }`}
               disabled={answered}
@@ -90,7 +90,7 @@ export default function CategorizeExercise({ question, categories, items, onAnsw
               onClick={() => handleCategoryClick(ci)}
               className={`w-full py-3 px-3 rounded-xl text-sm font-bold transition-all border-2 ${
                 selectedItem
-                  ? "bg-plava-light border-plava text-plava cursor-pointer hover:bg-plava hover:text-white"
+                  ? "bg-plava-light border-plava text-plava-tekst cursor-pointer hover:bg-plava hover:text-white"
                   : "bg-gray-50 border-gray-200 text-gray-700"
               }`}
               disabled={answered || !selectedItem}
@@ -109,7 +109,7 @@ export default function CategorizeExercise({ question, categories, items, onAnsw
                       ? item.category === ci
                         ? "bg-green-100 text-green-700"
                         : "bg-red-100 text-red-600"
-                      : "bg-plava-light text-plava hover:bg-koral-light hover:text-koral cursor-pointer"
+                      : "bg-plava-light text-plava-tekst hover:bg-koral-light hover:text-koral-tekst cursor-pointer"
                   }`}
                   title={answered ? undefined : "Klikni da vratiš"}
                 >
@@ -123,12 +123,12 @@ export default function CategorizeExercise({ question, categories, items, onAnsw
 
       {/* Check */}
       {!answered && isComplete && (
-        <button onClick={handleCheck} className="mt-5 bg-plava text-white px-6 py-3 rounded-xl text-sm font-bold hover:bg-plava-dark transition-colors">
+        <button onClick={handleCheck} className="mt-5 bg-plava text-na-plavoj px-6 py-3 rounded-xl text-sm font-bold hover:bg-plava-dark transition-colors">
           Proveri
         </button>
       )}
       {answered && (
-        <button onClick={handleReset} className="mt-4 text-sm text-plava hover:underline">
+        <button onClick={handleReset} className="mt-4 text-sm text-plava-tekst hover:underline">
           Pokušaj ponovo
         </button>
       )}

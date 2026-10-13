@@ -32,7 +32,7 @@ export default function WordwallExercise({ url, onAnswer }: WordwallProps) {
         {!done ? (
           <button
             onClick={handleDone}
-            className="bg-plava text-white px-6 py-3 rounded-lg font-medium hover:bg-plava-dark transition-colors"
+            className="bg-plava text-na-plavoj px-6 py-3 rounded-lg font-medium hover:bg-plava-dark transition-colors"
           >
             Završio/la sam vežbu ✓
           </button>

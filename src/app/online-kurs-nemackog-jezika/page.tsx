@@ -110,13 +110,13 @@ export default function OnlineKursPage() {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="/besplatno-testiranje"
-              className="bg-plava hover:bg-plava-dark text-white font-bold py-3 px-8 rounded-xl transition-colors"
+              className="bg-plava hover:bg-plava-dark text-na-plavoj font-bold py-3 px-8 rounded-xl transition-colors"
             >
               Testiraj svoj nivo besplatno
             </Link>
             <Link
               href="/kursevi"
-              className="border border-plava text-plava hover:bg-plava-light font-bold py-3 px-8 rounded-xl transition-colors"
+              className="border border-plava text-plava-tekst hover:bg-plava-light font-bold py-3 px-8 rounded-xl transition-colors"
             >
               Pogledaj sve kurseve
             </Link>
@@ -142,7 +142,7 @@ export default function OnlineKursPage() {
                 <p className="text-sm text-gray-500 italic mb-5">{f.zaKoga}</p>
                 <Link
                   href={f.href}
-                  className="mt-auto text-plava font-semibold hover:underline"
+                  className="mt-auto text-plava-tekst font-semibold hover:underline"
                 >
                   {f.cta} →
                 </Link>
@@ -151,7 +151,7 @@ export default function OnlineKursPage() {
           </div>
           <p className="text-center text-sm text-gray-500 mt-8">
             Još uvek istražuješ opcije? Pročitaj naše pošteno poređenje:{" "}
-            <Link href="/magazin/kako-da-naucis-nemacki-online" className="text-plava hover:underline">
+            <Link href="/magazin/kako-da-naucis-nemacki-online" className="text-plava-tekst hover:underline">
               Kako da naučiš nemački online - svi načini, cene i za koga je šta
             </Link>
           </p>
@@ -167,7 +167,7 @@ export default function OnlineKursPage() {
           <ul className="space-y-3">
             {ZASTO.map((z) => (
               <li key={z} className="flex gap-3 items-start">
-                <span className="text-plava font-bold mt-0.5">✓</span>
+                <span className="text-plava-tekst font-bold mt-0.5">✓</span>
                 <span className="text-gray-700">{z}</span>
               </li>
             ))}
@@ -175,7 +175,7 @@ export default function OnlineKursPage() {
           <p className="text-gray-600 mt-6">
             Više o tome kako nastava izgleda i zašto VoKuM metoda daje rezultate pročitaj na
             stranici{" "}
-            <Link href="/metodologija" className="text-plava hover:underline">
+            <Link href="/metodologija" className="text-plava-tekst hover:underline">
               o metodologiji
             </Link>
             .
@@ -192,7 +192,7 @@ export default function OnlineKursPage() {
           <p className="text-gray-600 max-w-2xl mx-auto mb-6">
             Pripremamo ciljano za Goethe i TELC ispite od A1 do C1, a za lekare i medicinsko
             osoblje postoji poseban{" "}
-            <Link href="/kursevi/fsp" className="text-plava hover:underline">
+            <Link href="/kursevi/fsp" className="text-plava-tekst hover:underline">
               FSP pripremni kurs
             </Link>
             . Profesorka je licencirani ispitivač, pa znaš tačno šta te na ispitu čeka.
@@ -228,7 +228,7 @@ export default function OnlineKursPage() {
           </div>
           <Link
             href="/besplatno-testiranje"
-            className="bg-plava hover:bg-plava-dark text-white font-bold py-3 px-8 rounded-xl transition-colors whitespace-nowrap"
+            className="bg-plava hover:bg-plava-dark text-na-plavoj font-bold py-3 px-8 rounded-xl transition-colors whitespace-nowrap"
           >
             Započni test
           </Link>

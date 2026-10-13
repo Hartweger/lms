@@ -68,7 +68,7 @@ export default function LessonCompleteButton({
   const prevClasses =
     "flex-1 text-center py-3 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50 transition-colors";
   const nextClasses =
-    "flex-1 text-center py-3 bg-plava text-white rounded-lg text-sm font-bold hover:bg-plava-dark transition-colors";
+    "flex-1 text-center py-3 bg-plava text-na-plavoj rounded-lg text-sm font-bold hover:bg-plava-dark transition-colors";
 
   const PrevLink = prevLessonId ? (
     <Link href={`/lekcija/${prevLessonId}`} className={prevClasses}>
@@ -85,7 +85,7 @@ export default function LessonCompleteButton({
       <div className="mt-8">
         <div className="bg-plava-light rounded-2xl p-6 text-center">
           <div className="text-3xl mb-2">🎉</div>
-          <p className="text-lg font-bold text-plava mb-1">Čestitamo! Završio/la si ceo nivo!</p>
+          <p className="text-lg font-bold text-plava-tekst mb-1">Čestitamo! Završio/la si ceo nivo!</p>
           <p className="text-sm text-gray-600">
             Sjajan posao - istrajao/la si do kraja. Sada uvežbaj kroz Prüfungstraining lekcije i
             pripremi se za ispit. Ponosni smo na tebe! 💪
@@ -136,7 +136,7 @@ export default function LessonCompleteButton({
         <button
           onClick={markComplete}
           disabled={saving}
-          className="flex-1 bg-plava text-white py-3 rounded-lg font-bold hover:bg-plava-dark transition-colors disabled:opacity-50"
+          className="flex-1 bg-plava text-na-plavoj py-3 rounded-lg font-bold hover:bg-plava-dark transition-colors disabled:opacity-50"
         >
           {saving ? "Čuvam..." : saveFailed ? "Pokušaj ponovo" : nextLessonId ? (nextLabel || "Završi i nastavi →") : "Završi lekciju"}
         </button>

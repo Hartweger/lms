@@ -63,7 +63,7 @@ export default function PriceCard({ price, priceEur, slug, ctaLabel, isVariable,
         <div className="mt-6 pt-5 border-t border-gray-100 text-center">
           <p className="text-sm text-gray-400">
             {questionText}{" "}
-            <Link href="/kontakt" className="text-plava hover:underline font-medium">{questionLink}</Link>
+            <Link href="/kontakt" className="text-plava-tekst hover:underline font-medium">{questionLink}</Link>
           </p>
         </div>
       </div>

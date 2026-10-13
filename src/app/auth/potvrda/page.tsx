@@ -38,7 +38,7 @@ export default async function Potvrda({ searchParams }: Props) {
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
       <div className="text-center max-w-sm mx-auto">
-        <h1 className="text-2xl font-bold text-plava mb-2">{naslov}</h1>
+        <h1 className="text-2xl font-bold text-plava-tekst mb-2">{naslov}</h1>
         <p className="text-gray-500 mb-8">
           Klikni na dugme da završiš. Ovaj korak čuva tvoj link od automatskih pregleda mejla,
           pa radi i kad ga otvoriš kasnije.
@@ -50,7 +50,7 @@ export default async function Potvrda({ searchParams }: Props) {
           <input type="hidden" name="next" value={next} />
           <button
             type="submit"
-            className="w-full bg-plava text-white font-bold py-3 px-6 rounded-xl hover:opacity-90 transition"
+            className="w-full bg-plava text-na-plavoj font-bold py-3 px-6 rounded-xl hover:opacity-90 transition"
           >
             {dugme}
           </button>
@@ -58,7 +58,7 @@ export default async function Potvrda({ searchParams }: Props) {
 
         <p className="mt-6 text-sm text-gray-500">
           Ne radi?{" "}
-          <Link href="/prijava" className="text-plava hover:underline">
+          <Link href="/prijava" className="text-plava-tekst hover:underline">
             Prijavi se lozinkom ili zatraži novi link
           </Link>
         </p>
