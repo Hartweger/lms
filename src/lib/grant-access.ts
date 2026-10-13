@@ -21,6 +21,12 @@ import { POKLON_DO, jePoklonStavka, type ZackPoklonMeta } from "@/lib/zack/poklo
 import { KONSULTACIJA_SLUG } from "@/lib/konsultacija";
 import { oznaciKupca } from "@/lib/crm/mark-customer";
 
+// Beleške za NOVE 1:1 kupovine su na platformi (spec 2026-09-30, od 13.10.2026): profesorka
+// piše „📓 Beleške za današnji čas" na /profesor/individualni, polaznik čita /beleske i
+// /moje-reci. Google Doc se više ne pravi, notes_doc_url ostaje null. Tekući paketi sa
+// Doc-om ostaju kako jesu. Prekidač, ne brisanje: false vraća stari tok (GAS enrollIndividual).
+const IND_BELESKE_NA_PLATFORMI = true;
+
 interface OrderItem { course_id: string; course_slug: string; title: string; price: number; }
 
 /** NH Academy Gen II (migracija 081) - program uživo, ima svoj mejl potvrde. */
@@ -592,7 +598,7 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
     }
   }
 
-  // Individualni proizvodi: enrollment + beleške (GAS) + mejlovi. Best-effort.
+  // Individualni proizvodi: enrollment + beleške + mejlovi. Best-effort.
   let individualWelcomeSent = false;
   for (const item of items) {
     const profId = (item as { professor_id?: string | null }).professor_id;
@@ -633,17 +639,20 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
         ? ""
         : "https://drive.google.com/drive/folders/1uyIxitTor_n_oxDZ3IZ48WBJ0Jv5mpQF";
 
-      // GAS: beleške doc (bez kalendar eventa).
+      // GAS: beleške doc (bez kalendar eventa). Preskače se kad su 1:1 beleške na platformi -
+      // enrollIndividual ne radi ništa drugo osim Doc-a (nema reda u tabeli ni kalendara).
       let notesUrl: string | null = null;
-      try {
-        const r = await callGas("enrollIndividual", {
-          nivo, prof: profIme, studentName: order.full_name, studentEmail: order.email,
-          casova: pkgLessons ?? 0, rok, calendarUrl: calendarUrl ?? "", profEmail: profEmail ?? "",
-          materijaliUrl,
-        });
-        notesUrl = (r.notesUrl as string) || null;
-      } catch (ge) {
-        console.error(`[grant][ind] GAS enrollIndividual pao za ${order.email} (${nivo}):`, ge);
+      if (!IND_BELESKE_NA_PLATFORMI) {
+        try {
+          const r = await callGas("enrollIndividual", {
+            nivo, prof: profIme, studentName: order.full_name, studentEmail: order.email,
+            casova: pkgLessons ?? 0, rok, calendarUrl: calendarUrl ?? "", profEmail: profEmail ?? "",
+            materijaliUrl,
+          });
+          notesUrl = (r.notesUrl as string) || null;
+        } catch (ge) {
+          console.error(`[grant][ind] GAS enrollIndividual pao za ${order.email} (${nivo}):`, ge);
+        }
       }
       await admin.from("individual_enrollments").insert({
         user_id: order.user_id, course_id: item.course_id, professor_id: profId ?? null,
@@ -662,12 +671,14 @@ export async function grantAccessForOrder(orderId: string): Promise<{ ok: boolea
 
       await sendIndividualWelcomeEmail(order.email, order.full_name, {
         nivo, profIme, calendarUrl, notesUrl, hasPlatform, isMonthly, rok,
+        notesOnPlatform: IND_BELESKE_NA_PLATFORMI,
       });
       individualWelcomeSent = true;
 
       if (profEmail) {
         await sendProfNewIndividualStudentEmail(profEmail, profIme, {
           nivo, lessons: pkgLessons ?? 0, studentName: order.full_name, studentEmail: order.email, notesUrl,
+          notesOnPlatform: IND_BELESKE_NA_PLATFORMI,
         });
       }
     } catch (e) {

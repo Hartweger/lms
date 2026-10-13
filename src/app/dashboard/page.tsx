@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { Play, RotateCcw, ArrowRight, Award, GraduationCap, BookOpen, Mail } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import ProgressBar from "@/components/ProgressBar";
@@ -72,6 +73,16 @@ export default async function Dashboard() {
       (accessList ?? []).filter((a) => a.expires_at && a.expires_at < now).map((a) => a.course_id)
     );
     courseIds = (accessList ?? []).map((a) => a.course_id);
+
+    // KTZ mesečni 1:1 nemaju nijedan kurs (course_unlocks = 0), pa bi im ovde stajalo
+    // „Nemaš upisane kurseve". Njihovi časovi, beleške i reči su na /nalog (spec 2026-09-30).
+    if (courseIds.length === 0) {
+      const { count: indCount } = await createAdminClient()
+        .from("individual_enrollments")
+        .select("id", { count: "exact", head: true })
+        .eq("user_id", user.id);
+      if ((indCount ?? 0) > 0) redirect("/nalog");
+    }
   }
 
   let courses: CourseWithProgress[] = [];

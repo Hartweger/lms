@@ -1036,7 +1036,7 @@ export async function sendProfNewStudentEmail(
 export async function sendIndividualWelcomeEmail(
   to: string,
   name: string,
-  opts: { nivo: string; profIme?: string; calendarUrl?: string | null; notesUrl?: string | null; hasPlatform: boolean; isMonthly?: boolean; rok?: string },
+  opts: { nivo: string; profIme?: string; calendarUrl?: string | null; notesUrl?: string | null; hasPlatform: boolean; isMonthly?: boolean; rok?: string; notesOnPlatform?: boolean },
 ) {
   try {
     const resend = getResend();
@@ -1052,10 +1052,19 @@ export async function sendIndividualWelcomeEmail(
     const vaznost = opts.rok
       ? `Paket časova važi do <strong>${esc(opts.rok)}</strong>`
       : (opts.isMonthly ? "Paket časova važi <strong>mesec dana</strong> od uplate" : "Paket časova važi <strong>3 meseca</strong> od uplate");
-    const platformRow = opts.hasPlatform
+    // Beleške na platformi važe i za KTZ mesečne (bez kursa): /beleske i /moje-reci traže samo prijavu.
+    const notesPlatformRows = opts.notesOnPlatform
+      ? `<p style="font-size:14px;color:#1a1a2e;margin:0 0 6px;">📓 Beleške sa časova: profesorka ih zapisuje posle svakog časa - <a href="${SITE_URL}/beleske" style="color:#4fb1d3;">hartweger.rs/beleske</a></p>
+        <p style="font-size:14px;color:#1a1a2e;margin:0 0 6px;">🃏 Reči sa časova vežbaš kao kartice: <a href="${SITE_URL}/moje-reci" style="color:#4fb1d3;">hartweger.rs/moje-reci</a></p>`
+      : "";
+    const videoRow = opts.hasPlatform
+      ? `<p style="font-size:14px;color:#1a1a2e;margin:0 0 6px;">📚 Video lekcije i materijali te čekaju na platformi: <a href="${SITE_URL}/prijava" style="color:#4fb1d3;">hartweger.rs/prijava</a></p>`
+      : "";
+    const platformRow = (videoRow || notesPlatformRows)
       ? `<div style="background:#f8fcfd;border-left:3px solid #4fb1d3;border-radius:6px;padding:14px 16px;margin:0 0 20px;">
-        <p style="font-size:14px;color:#1a1a2e;margin:0 0 6px;">📚 Video lekcije i materijali te čekaju na platformi: <a href="${SITE_URL}/prijava" style="color:#4fb1d3;">hartweger.rs/prijava</a></p>
-        <p style="font-size:13px;color:#888;margin:0;">Prijava je bez lozinke - uneseš mejl kojim si kupio/la kurs i stigne ti link za ulazak.</p>
+        ${videoRow}
+        ${notesPlatformRows}
+        <p style="font-size:13px;color:#888;margin:0;">Prijava je bez lozinke - uneseš mejl sa kog je išla kupovina i stigne ti link za ulazak.</p>
       </div>`
       : "";
     await resend.emails.send({
@@ -1094,13 +1103,15 @@ export async function sendIndividualWelcomeEmail(
 export async function sendProfNewIndividualStudentEmail(
   profEmail: string,
   profIme: string,
-  opts: { nivo: string; lessons: number; studentName?: string; studentEmail: string; notesUrl?: string | null },
+  opts: { nivo: string; lessons: number; studentName?: string; studentEmail: string; notesUrl?: string | null; notesOnPlatform?: boolean },
 ) {
   try {
     const resend = getResend();
     if (!resend) return;
     const ime = profIme ? profIme.split(" ")[0] : "";
-    const notesRow = opts.notesUrl ? `<p>📝 <a href="${esc(opts.notesUrl)}">Beleške</a></p>` : "";
+    const notesRow = opts.notesOnPlatform
+      ? `<p>📓 Beleške pišeš na platformi, nema više Google Doc-a: na stranici <a href="${SITE_URL}/profesor/individualni">Individualni polaznici</a> klikni „📓 Beleške za današnji čas" kod polaznika. Polaznik ih vidi na svom nalogu, a reči iz beleški dobija kao kartice za vežbanje.</p>`
+      : opts.notesUrl ? `<p>📝 <a href="${esc(opts.notesUrl)}">Beleške</a></p>` : "";
     await resend.emails.send({
       from: FROM,
       to: profEmail,

@@ -24,7 +24,8 @@ vi.mock("@/lib/login-link", () => ({ createLoginLinkToken: vi.fn(() => "tok") })
 vi.mock("@/lib/first-lesson", () => ({ firstLessonForCourses: vi.fn(async () => null) }));
 
 import { grantAccessForOrder, revokeAccessForOrder } from "./grant-access";
-import { sendWelcomeEmail, sendIndividualWelcomeEmail } from "@/lib/email";
+import { sendWelcomeEmail, sendIndividualWelcomeEmail, sendProfNewIndividualStudentEmail } from "@/lib/email";
+import { callGas } from "@/lib/gas";
 
 function videoOrder(over: Record<string, unknown> = {}) {
   return {
@@ -96,6 +97,26 @@ describe("grantAccessForOrder", () => {
     expect(res.ok).toBe(true); // best-effort: 1:1 mejl ne sme da obori dodelu pristupa
     expect(h.fake.row("orders", (r) => r.id === "o1")!.payment_status).toBe("completed");
     expect(h.sentry.captureException).toHaveBeenCalled(); // ...ali pad mora da se VIDI
+  });
+
+  it("nova 1:1 kupovina: beleške na platformi - bez Google Doc-a, mejlovi upućuju na /beleske", async () => {
+    h.fake = createFakeAdmin({
+      orders: [videoOrder({
+        items: [{ course_id: "c-ind", course_slug: "individualni-b1", title: "1:1 B1", price: 30000, professor_id: "prof-1", package_lessons: 8 }],
+      })],
+      course_unlocks: [],
+      user_profiles: [{ id: "prof-1", full_name: "Prof", email: "prof@example.com" }],
+    });
+
+    await grantAccessForOrder("o1");
+
+    expect(callGas).not.toHaveBeenCalledWith("enrollIndividual", expect.anything());
+    const enr = h.fake.row("individual_enrollments", (r) => r.order_id === "o1")!;
+    expect(enr.notes_doc_url).toBeNull();
+    expect(sendIndividualWelcomeEmail).toHaveBeenCalledWith("kupac@example.com", "Test Kupac",
+      expect.objectContaining({ notesUrl: null, notesOnPlatform: true }));
+    expect(sendProfNewIndividualStudentEmail).toHaveBeenCalledWith("prof@example.com", "Prof",
+      expect.objectContaining({ notesOnPlatform: true }));
   });
 
   it("obnova: postojeći course_access (npr. wp-migracija) se PRODUŽAVA na +1g od kupovine", async () => {
