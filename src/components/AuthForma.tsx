@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import Link from "next/link";
-import * as Sentry from "@sentry/nextjs";
+import { prijaviGresku } from "@/lib/sentry-klijent";
 import { createClient } from "@/lib/supabase/client";
 import Turnstile, { TURNSTILE_SITE_KEY, type TurnstileHandle } from "@/components/Turnstile";
 
@@ -61,7 +61,7 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
     });
     consumeCaptcha();
     if (error) {
-      Sentry.captureException(error);
+      prijaviGresku(error);
       const status = error.status;
       if (status === 429) {
         setGreska("Previše pokušaja. Sačekaj minut pa probaj ponovo.");
@@ -94,7 +94,7 @@ export default function AuthForma({ tip, onSubmit }: AuthFormaProps) {
     setCodeLoading(false);
     if (error) {
       // Pogrešan ili istekao kod je korisnička greška, ne bag - ne ide u Sentry.
-      if (error.code !== "otp_expired") Sentry.captureException(error);
+      if (error.code !== "otp_expired") prijaviGresku(error);
       setCodeError("Kod nije ispravan ili je istekao. Proveri mejl ili pošalji novi link.");
       return;
     }

@@ -1,28 +1,33 @@
-// This file configures the initialization of Sentry on the client.
-// The added config here will be used whenever a users loads a page in their browser.
-// https://docs.sentry.io/platforms/javascript/guides/nextjs/
+// Sentry u browseru se NE inicijalizuje ovde odmah - SDK je najveći JS paket
+// na sajtu i usporavao je prvi prikaz na mobilnom. Učitava se tek kad se
+// stranica učita (vidi src/lib/sentry-klijent.ts, tamo je i Sentry.init).
+//
+// Do tada se greške skupljaju ovde i predaju SDK-u čim stigne, pa ni greške
+// iz prvih sekundi ne propadaju. Posle init-a Sentry ima svoje globalne
+// hvatače, pa se naši skidaju.
 
-import * as Sentry from "@sentry/nextjs";
-import { SENTRY_DENY_URLS, SENTRY_IGNORE_ERRORS } from "@/lib/sentry-ignore";
+import { sentryAkoJeUcitan, ucitajSentry } from "@/lib/sentry-klijent";
 
-Sentry.init({
-  dsn: "https://4888c4f4fdf635c39c792f36efd16896@o4511456054673408.ingest.de.sentry.io/4511456059326544",
+const naCekanju: unknown[] = [];
+const naGresku = (e: ErrorEvent) => naCekanju.push(e.error ?? e.message);
+const naOdbijanje = (e: PromiseRejectionEvent) => naCekanju.push(e.reason);
+window.addEventListener("error", naGresku);
+window.addEventListener("unhandledrejection", naOdbijanje);
 
-  // Samo produkcija - dev greške ne idu u Sentry (vidi sentry.server.config.ts).
-  enabled: process.env.NODE_ENV === "production",
+function pokreni() {
+  void ucitajSentry().then((Sentry) => {
+    window.removeEventListener("error", naGresku);
+    window.removeEventListener("unhandledrejection", naOdbijanje);
+    for (const greska of naCekanju.splice(0)) Sentry.captureException(greska);
+  });
+}
 
-  // Benigne Supabase multi-tab lock greške - ne troše kvotu.
-  ignoreErrors: SENTRY_IGNORE_ERRORS,
+if (document.readyState === "complete") {
+  pokreni();
+} else {
+  window.addEventListener("load", pokreni, { once: true });
+}
 
-  // Greške čiji stack potiče iz browser ekstenzija - ne troše kvotu.
-  denyUrls: SENTRY_DENY_URLS,
-
-  // Define how likely traces are sampled. Adjust this value in production, or use tracesSampler for greater control.
-  // 0.1 = 10% - namerno nisko da se ne potroši besplatna Sentry kvota (446+ korisnika).
-  tracesSampleRate: 0.1,
-
-  // PII se NE šalje (GDPR - EU korisnici). Session Replay isključen (kvota + privatnost).
-  sendDefaultPii: false,
-});
-
-export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;
+export function onRouterTransitionStart(href: string, navigationType: string) {
+  sentryAkoJeUcitan()?.captureRouterTransitionStart(href, navigationType);
+}

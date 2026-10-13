@@ -29,6 +29,12 @@ interface ReviewData {
   reviews: Review[];
 }
 
+// Google vraća avatar od 128 px, a prikazuje se 36 px - traži 72 px (oštro i na
+// retina ekranu), umesto da telefon skida skoro 4x veću sliku.
+function maliAvatar(url: string): string {
+  return url.replace(/=s\d+(?=-|$)/, "=s72");
+}
+
 function Stars({ count }: { count: number }) {
   return (
     <span className="text-yellow-400 text-sm">
@@ -60,7 +66,10 @@ export default function GoogleRecenzije() {
             <img
               src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_42x16dp.png"
               alt="Google"
-              className="h-5"
+              width={42}
+              height={20}
+              loading="lazy"
+              className="h-5 w-auto"
             />
             <span className="text-2xl font-bold text-gray-900">{data.rating}</span>
             <Stars count={Math.round(data.rating)} />
@@ -80,8 +89,11 @@ export default function GoogleRecenzije() {
               <div className="flex items-center gap-3 mb-3">
                 {r.photo ? (
                   <img
-                    src={r.photo}
+                    src={maliAvatar(r.photo)}
                     alt={r.author}
+                    width={36}
+                    height={36}
+                    loading="lazy"
                     className="w-9 h-9 rounded-full"
                     referrerPolicy="no-referrer"
                   />

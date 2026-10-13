@@ -7,7 +7,7 @@
 // Izgled: ista porodica kao dečja strana, samo smirenija - znak gore, papir,
 // red. Trio mini-sličica u bojama roda stoji kao mig na ono što dete dobija.
 import { useRef, useState } from "react";
-import * as Sentry from "@sentry/nextjs";
+import { prijaviGresku } from "@/lib/sentry-klijent";
 import { createClient } from "@/lib/supabase/client";
 import Turnstile, { TURNSTILE_SITE_KEY, type TurnstileHandle } from "@/components/Turnstile";
 import {
@@ -55,7 +55,7 @@ export default function RoditeljPrijava() {
     turnstileRef.current?.reset();
     setCaptchaToken(null);
     if (error) {
-      Sentry.captureException(error);
+      prijaviGresku(error);
       if (error.status === 429) {
         setPoruka("Previše pokušaja. Sačekaj minut pa probaj ponovo.");
       } else {
