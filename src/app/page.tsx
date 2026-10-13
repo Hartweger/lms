@@ -256,15 +256,15 @@ export default function Pocetna() {
         <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
           <div>
             <p className="font-montserrat font-bold text-4xl md:text-5xl mb-2">65.000+</p>
-            <p className="text-plava-light text-sm">pratilaca na Instagramu</p>
+            <p className="text-na-plavoj text-sm">pratilaca na Instagramu</p>
           </div>
           <div>
             <p className="font-montserrat font-bold text-4xl md:text-5xl mb-2">529.977+</p>
-            <p className="text-plava-light text-sm">pregleda na YouTube-u</p>
+            <p className="text-na-plavoj text-sm">pregleda na YouTube-u</p>
           </div>
           <div>
             <p className="font-montserrat font-bold text-4xl md:text-5xl mb-2">3M+</p>
-            <p className="text-plava-light text-sm">pregleda videa na Instagramu</p>
+            <p className="text-na-plavoj text-sm">pregleda videa na Instagramu</p>
           </div>
         </div>
       </section>
