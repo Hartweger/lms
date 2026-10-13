@@ -42,12 +42,40 @@ export default function IzvodStavke({ redovi }: { redovi: IzvodRed[] }) {
   );
   const [radi, setRadi] = useState<string | null>(null);
   const [greska, setGreska] = useState<string | null>(null);
-
-  if (redovi.length === 0) return null;
+  const [poruka, setPoruka] = useState<string | null>(null);
 
   const prilivi = redovi.filter((r) => r.smer === "priliv");
   const odlivi = redovi.filter((r) => r.smer === "odliv");
   const zbirOdliva = odlivi.reduce((a, r) => a + r.iznos, 0);
+
+  async function ucitaj(fajl: File | null) {
+    if (!fajl) return;
+    setRadi("ucitavanje");
+    setGreska(null);
+    try {
+      const xml = await fajl.text();
+      const res = await fetch("/api/admin/izvod", {
+        method: "POST",
+        headers: { "Content-Type": "application/xml" },
+        body: xml,
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        setGreska(json.error ?? "Izvod nije učitan.");
+        return;
+      }
+      setPoruka(
+        json.novih === 0
+          ? `Izvod ${json.izvod ?? ""} od ${json.datum ?? ""} je već učitan - ništa novo.`
+          : `Izvod ${json.izvod ?? ""}: ${json.novih} nov${json.novih === 1 ? "a stavka" : "ih stavki"} od ${json.ukupno}.`,
+      );
+      router.refresh();
+    } catch {
+      setGreska("Fajl nije pročitan. Da li je to XML izvod iz Intese?");
+    } finally {
+      setRadi(null);
+    }
+  }
 
   async function posalji(id: string, telo: Record<string, unknown>) {
     setRadi(id);
@@ -75,16 +103,37 @@ export default function IzvodStavke({ redovi }: { redovi: IzvodRed[] }) {
     <section className="rounded-xl border border-plava/30 bg-white p-4">
       <div className="flex flex-wrap items-baseline justify-between gap-2 mb-1">
         <h2 className="font-semibold">Sa bankovnog izvoda</h2>
-        <span className="text-sm text-gray-500">
-          {prilivi.length > 0 && `${prilivi.length} priliv${prilivi.length === 1 ? "" : "a"} · `}
-          {odlivi.length} trošk{odlivi.length === 1 ? "" : "ova"} · {din(zbirOdliva)}
-        </span>
+        <div className="flex items-center gap-3">
+          <span className="text-sm text-gray-500">
+            {redovi.length === 0
+              ? "nijedna ne čeka"
+              : `${prilivi.length > 0 ? `${prilivi.length} priliv${prilivi.length === 1 ? "" : "a"} · ` : ""}${odlivi.length} trošk${odlivi.length === 1 ? "" : "ova"} · ${din(zbirOdliva)}`}
+          </span>
+          <label
+            title="XML prilog iz mejla Banca Intese - isti izvod sme i dvaput, duplikata nema"
+            className={`text-xs px-3 py-1.5 rounded-lg bg-white text-gray-700 font-medium border border-gray-300 hover:bg-gray-800 hover:text-white transition-colors whitespace-nowrap ${
+              radi === "ucitavanje" ? "opacity-50 pointer-events-none" : "cursor-pointer"
+            }`}
+          >
+            {radi === "ucitavanje" ? "Učitavam..." : "Učitaj izvod"}
+            <input
+              type="file"
+              accept=".xml,text/xml,application/xml"
+              className="hidden"
+              onChange={(e) => {
+                void ucitaj(e.target.files?.[0] ?? null);
+                e.target.value = "";
+              }}
+            />
+          </label>
+        </div>
       </div>
       <p className="text-xs text-gray-500 mb-4">
         Ništa ne ulazi u izveštaje dok ne potvrdiš.
       </p>
 
       {greska && <p className="text-sm text-koral font-medium mb-3">{greska}</p>}
+      {poruka && <p className="text-sm text-green-700 font-medium mb-3">{poruka}</p>}
 
       <div className="space-y-2">
         {redovi.map((r) => (
