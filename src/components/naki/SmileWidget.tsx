@@ -187,7 +187,7 @@ export default function SmileWidget() {
 
       {/* Labela uz kružić - da se odmah vidi da je pomoć (samo kad je panel zatvoren) */}
       {!open && (
-        <button onClick={toggle} className="smile-label" aria-label="Razgovaraj sa Smile" style={{ position: "fixed", bottom: 31, right: 86, zIndex: 9998, background: "#fff", border: "1px solid #e2e5e9", borderRadius: 20, padding: "8px 14px", fontSize: 13, fontWeight: 600, color: "#0c0d24", boxShadow: "0 2px 14px rgba(0,0,0,.12)", cursor: "pointer", whiteSpace: "nowrap", display: "flex", alignItems: "center", gap: 6 }}>
+        <button onClick={toggle} className="smile-label" aria-label="Imaš pitanje? Razgovaraj sa Smile" style={{ position: "fixed", bottom: 31, right: 86, zIndex: 9998, background: "#fff", border: "1px solid #e2e5e9", borderRadius: 20, padding: "8px 14px", fontSize: 13, fontWeight: 600, color: "#0c0d24", boxShadow: "0 2px 14px rgba(0,0,0,.12)", cursor: "pointer", whiteSpace: "nowrap", display: "flex", alignItems: "center", gap: 6 }}>
           <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 22, height: 22, borderRadius: "50%", background: CORAL }}><SmileFace size={16} /></span>
           Imaš pitanje? 💬
         </button>
