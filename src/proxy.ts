@@ -90,5 +90,12 @@ export const config = {
     // tokene u kolačiće. Detetov deo (/zack i /zack/<uuid>) nema sesiju i
     // NAMERNO nije ovde.
     "/zack/roditelj",
+    // Beleške, moje reči i nalog čitaju sesiju u server komponenti — isti
+    // razlog kao /lekcija. Nisu protectedRoutes: same rade redirect na
+    // /prijava?next=..., proxy ovde samo osvežava kolačiće.
+    "/beleske",
+    "/beleske/:path*",
+    "/moje-reci",
+    "/nalog",
   ],
 };
