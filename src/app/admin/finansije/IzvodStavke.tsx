@@ -48,6 +48,30 @@ export default function IzvodStavke({ redovi }: { redovi: IzvodRed[] }) {
   const odlivi = redovi.filter((r) => r.smer === "odliv");
   const zbirOdliva = odlivi.reduce((a, r) => a + r.iznos, 0);
 
+  async function povuci() {
+    setRadi("povlacenje");
+    setGreska(null);
+    setPoruka(null);
+    try {
+      const res = await fetch("/api/admin/izvodi/povuci", { method: "POST" });
+      const json = await res.json();
+      if (!res.ok) {
+        setGreska(json.error ?? "Povlačenje nije uspelo.");
+        return;
+      }
+      setPoruka(
+        json.novih === 0
+          ? `Pregledano ${json.stiglo} izvoda iz pošte - ništa novo.`
+          : `Povučeno: ${json.novih} nov${json.novih === 1 ? "a stavka" : "ih stavki"} (izvodi ${json.izvodi.join(", ")}).`,
+      );
+      router.refresh();
+    } catch {
+      setGreska("Greška na serveru.");
+    } finally {
+      setRadi(null);
+    }
+  }
+
   async function ucitaj(fajl: File | null) {
     if (!fajl) return;
     setRadi("ucitavanje");
@@ -109,13 +133,21 @@ export default function IzvodStavke({ redovi }: { redovi: IzvodRed[] }) {
               ? "nijedna ne čeka"
               : `${prilivi.length > 0 ? `${prilivi.length} priliv${prilivi.length === 1 ? "" : "a"} · ` : ""}${odlivi.length} trošk${odlivi.length === 1 ? "" : "ova"} · ${din(zbirOdliva)}`}
           </span>
+          <button
+            onClick={povuci}
+            disabled={radi === "povlacenje"}
+            title="Čita izvode iz pošte - isti posao koji cron radi u 5:30, samo odmah"
+            className="text-xs px-3 py-1.5 rounded-lg bg-white text-gray-700 font-medium border border-gray-300 hover:bg-gray-800 hover:text-white transition-colors disabled:opacity-50 whitespace-nowrap"
+          >
+            {radi === "povlacenje" ? "Povlačim..." : "Povuci izvode"}
+          </button>
           <label
-            title="XML prilog iz mejla Banca Intese - isti izvod sme i dvaput, duplikata nema"
+            title="Ako izvod nije stigao sam: XML prilog iz mejla Banca Intese"
             className={`text-xs px-3 py-1.5 rounded-lg bg-white text-gray-700 font-medium border border-gray-300 hover:bg-gray-800 hover:text-white transition-colors whitespace-nowrap ${
               radi === "ucitavanje" ? "opacity-50 pointer-events-none" : "cursor-pointer"
             }`}
           >
-            {radi === "ucitavanje" ? "Učitavam..." : "Učitaj izvod"}
+            {radi === "ucitavanje" ? "Učitavam..." : "Učitaj ručno"}
             <input
               type="file"
               accept=".xml,text/xml,application/xml"

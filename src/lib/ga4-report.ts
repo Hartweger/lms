@@ -8,7 +8,7 @@
 //   GA4_SA_EMAIL         email service naloga (...@...iam.gserviceaccount.com)
 //   GA4_SA_PRIVATE_KEY   privatni ključ iz JSON-a (sa \n umesto preloma reda)
 //   GA4_CONV_METRIC      opciono: "conversions" (default) ili "keyEvents" za novije property-je
-import crypto from "node:crypto";
+import { pristupniToken } from "@/lib/google-sa";
 
 export type Ga4Weekly = {
   sesije: number;
@@ -22,78 +22,11 @@ export type Ga4Weekly = {
   izvori: { izvor: string; sesije: number; konverzije: number }[];
 };
 
-const b64url = (input: string) => Buffer.from(input).toString("base64url");
-
-// Privatni ključ može stići u raznim (pogrešnim) oblicima iz Vercel env-a:
-// ceo JSON, sa navodnicima, sa literalnim \n umesto preloma reda, sa \r. Normalizuj sve.
-function normalizePrivateKey(raw: string): string {
-  let k = (raw ?? "").trim();
-  if ((k.startsWith('"') && k.endsWith('"')) || (k.startsWith("'") && k.endsWith("'"))) {
-    k = k.slice(1, -1);
-  }
-  if (k.startsWith("{")) {
-    try {
-      const parsed = JSON.parse(k) as { private_key?: string };
-      if (parsed.private_key) k = parsed.private_key;
-    } catch {
-      /* nije JSON, ostavi kako jeste */
-    }
-  }
-  k = k.replace(/\\r/g, "").replace(/\\n/g, "\n").replace(/\r/g, "");
-  // Ako je već ispravan PEM, vrati kako jeste.
-  if (k.includes("BEGIN PRIVATE KEY") && k.includes("END PRIVATE KEY")) return k;
-  // Inače rekonstruiši PKCS#8 PEM iz golog base64 tela (skini sve markere i razmake).
-  const body = k.replace(/-----[^-]*-----/g, "").replace(/\s+/g, "");
-  if (/^[A-Za-z0-9+/=]+$/.test(body) && body.length > 100) {
-    const wrapped = body.match(/.{1,64}/g)?.join("\n") ?? body;
-    return `-----BEGIN PRIVATE KEY-----\n${wrapped}\n-----END PRIVATE KEY-----\n`;
-  }
-  return k;
-}
-
 async function getAccessToken(saEmail: string, rawPrivateKey: string): Promise<string | null> {
-  const privateKey = normalizePrivateKey(rawPrivateKey);
-  // Bezbedna dijagnostika (bez tajne): dužina i oblik ključa posle normalizacije.
-  console.log("[ga4] key diag", {
-    len: privateKey.length,
-    hasBegin: privateKey.includes("BEGIN PRIVATE KEY"),
-    hasEnd: privateKey.includes("END PRIVATE KEY"),
-    hasRealNewline: privateKey.includes("\n"),
-    rawLen: (rawPrivateKey ?? "").length,
-  });
-  const nowSec = Math.floor(Date.now() / 1000);
-  const header = b64url(JSON.stringify({ alg: "RS256", typ: "JWT" }));
-  const claim = b64url(
-    JSON.stringify({
-      iss: saEmail,
-      scope: "https://www.googleapis.com/auth/analytics.readonly",
-      aud: "https://oauth2.googleapis.com/token",
-      iat: nowSec,
-      exp: nowSec + 3600,
-    })
+  return pristupniToken(
+    { saEmail, privateKey: rawPrivateKey, scope: "https://www.googleapis.com/auth/analytics.readonly" },
+    "ga4",
   );
-  const signingInput = `${header}.${claim}`;
-  const signature = crypto
-    .createSign("RSA-SHA256")
-    .update(signingInput)
-    .sign(privateKey)
-    .toString("base64url");
-  const jwt = `${signingInput}.${signature}`;
-
-  const res = await fetch("https://oauth2.googleapis.com/token", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({
-      grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
-      assertion: jwt,
-    }),
-  });
-  if (!res.ok) {
-    console.error("[ga4] token error", res.status, await res.text());
-    return null;
-  }
-  const j = (await res.json()) as { access_token?: string };
-  return j.access_token ?? null;
 }
 
 type GaRow = { dimensionValues?: { value: string }[]; metricValues?: { value: string }[] };

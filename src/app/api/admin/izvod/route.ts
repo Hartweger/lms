@@ -1,81 +1,39 @@
-// Prijem bankovnog izvoda (XML sa info@mail.bancaintesa.rs).
+// Prijem bankovnog izvoda (XML sa info@mail.bancaintesa.rs) koji je Nataša sama učitala.
 //
 // Telo zahteva je sam XML. Stavke se upisuju u `bank_transactions` i tu STOJE -
 // ništa ne ulazi ni u narudžbine ni u troškove dok Nataša ne potvrdi.
 //
-// Isti izvod sme da se pošalje više puta: `fitid` je bankin jedinstven broj
-// transakcije, pa upsert ne pravi duplikate. Zato ni ponovno slanje iz e-bankinga
-// ne može da pokvari podatke.
-//
-// Ne dira već donete odluke: `order_id`, `expense_id` i `status` se ne navode u
-// upsertu, pa ostaju kakvi jesu.
+// Sam upis je u `lib/izvod-upis`, zajedno sa povlačenjem iz pošte: dva puta u istu
+// tabelu koja se raziđu daju pogrešan trošak, a to se vidi tek mnogo kasnije.
 import { NextResponse } from "next/server";
 import * as Sentry from "@sentry/nextjs";
 import { requireAdmin } from "@/lib/api-auth";
-import { procitajIzvod } from "@/lib/izvod-xml";
-import type { Json } from "@/lib/supabase/database.types";
+import { upisiIzvod } from "@/lib/izvod-upis";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   const auth = await requireAdmin();
   if (!auth.ok) return auth.response;
-  const admin = auth.admin;
 
   const xml = await request.text();
-  if (!xml.trim()) {
-    return NextResponse.json({ error: "Prazan zahtev - očekuje se XML izvoda." }, { status: 400 });
-  }
+  const ishod = await upisiIzvod(auth.admin, xml);
 
-  let izvod;
-  try {
-    izvod = procitajIzvod(xml);
-  } catch (e) {
-    const poruka = e instanceof Error ? e.message : "nečitljiv XML";
-    return NextResponse.json({ error: `Izvod nije pročitan: ${poruka}` }, { status: 400 });
-  }
-
-  if (izvod.stavke.length === 0) {
-    return NextResponse.json({ izvod: izvod.broj, datum: izvod.datum, novih: 0, ukupno: 0 });
-  }
-
-  const redovi = izvod.stavke.map((s) => ({
-    fitid: s.fitid,
-    izvod_broj: izvod.broj,
-    racun: izvod.racun,
-    smer: s.smer,
-    iznos: s.iznos,
-    datum: s.datum,
-    naziv: s.naziv,
-    racun_druge: s.racunDruge,
-    svrha: s.svrha,
-    sifra: s.sifra,
-    poziv_na_broj: s.pozivNaBroj,
-    poziv_druge: s.pozivDruge,
-    raw: s as unknown as Json,
-  }));
-
-  // Koliko ih je već poznato - da odgovor kaže šta je STVARNO novo.
-  const { data: postojeci } = await admin
-    .from("bank_transactions")
-    .select("fitid")
-    .in("fitid", redovi.map((r) => r.fitid));
-  const poznati = new Set((postojeci ?? []).map((p) => p.fitid));
-
-  const { error } = await admin
-    .from("bank_transactions")
-    .upsert(redovi, { onConflict: "fitid" });
-
-  if (error) {
-    console.error("[izvod] upis pao:", error);
-    Sentry.captureException(new Error(`[izvod] upis pao: ${error.message}`));
-    return NextResponse.json({ error: `Upis nije uspeo: ${error.message}` }, { status: 500 });
+  if (!ishod.ok) {
+    const greska = ishod.greska ?? "Izvod nije upisan.";
+    // Nečitljiv XML je Natašina greška u izboru fajla; pali upis je naša.
+    const status = greska.startsWith("Upis nije uspeo") ? 500 : 400;
+    if (status === 500) {
+      console.error("[izvod] upis pao:", greska);
+      Sentry.captureException(new Error(`[izvod] ${greska}`));
+    }
+    return NextResponse.json({ error: greska }, { status });
   }
 
   return NextResponse.json({
-    izvod: izvod.broj,
-    datum: izvod.datum,
-    ukupno: redovi.length,
-    novih: redovi.filter((r) => !poznati.has(r.fitid)).length,
+    izvod: ishod.izvod,
+    datum: ishod.datum,
+    ukupno: ishod.ukupno,
+    novih: ishod.novih,
   });
 }
