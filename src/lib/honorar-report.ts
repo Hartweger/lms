@@ -3,6 +3,7 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { computeHonorar, monthDateRange, MESECI, DEFAULT_HONORAR_IND, DEFAULT_HONORAR_GRP } from "@/lib/honorar";
 import { loadPayables } from "@/lib/professor-payable";
+import { loadGroupSessionBonuses, sumBonusByProf } from "@/lib/group-bonus";
 
 export interface MonthlyHonorarReport {
   professorId: string;
@@ -11,6 +12,7 @@ export interface MonthlyHonorarReport {
   email: string | null;
   ind: number; grp: number;
   rateInd: number; rateGrp: number;
+  grpBonus: number;       // dodatak za veličinu grupe (već uračunat u grpTotal)
   indTotal: number; grpTotal: number;
   aktivnosti: { description: string; amount: number }[];
   aktivnostiTotal: number;
@@ -41,6 +43,7 @@ export async function buildMonthlyHonorarReports(year: number, month: number): P
 
   const payables = await loadPayables();
   const balanceById = new Map(payables.map((p) => [p.professorId, p.balance]));
+  const bonusByProf = sumBonusByProf(await loadGroupSessionBonuses(admin, { from, toExclusive, upTo: toExclusive }));
 
   const reports: MonthlyHonorarReport[] = [];
   for (const p of profs ?? []) {
@@ -63,15 +66,16 @@ export async function buildMonthlyHonorarReports(year: number, month: number): P
     const rateInd = p.honorar_ind ?? DEFAULT_HONORAR_IND;
     const rateGrp = p.honorar_grp ?? DEFAULT_HONORAR_GRP;
     const h = computeHonorar(ind, grp, rateInd, rateGrp);
+    const grpBonus = bonusByProf.get(p.id) ?? 0;
     const aktivnosti = (actsRes.data ?? []).map((a) => ({ description: a.description ?? "", amount: a.amount || 0 }));
     const aktivnostiTotal = aktivnosti.reduce((s, a) => s + a.amount, 0);
     const isplate = (paysRes.data ?? []).map((x) => ({ date: x.payment_date, amount: x.amount || 0 }));
     const isplaceno = isplate.reduce((s, x) => s + x.amount, 0);
     reports.push({
       professorId: p.id, name: p.full_name || p.email || "-", fullName: p.full_name, email: p.email,
-      ind, grp, rateInd, rateGrp, indTotal: h.indTotal, grpTotal: h.grpTotal,
+      ind, grp, rateInd, rateGrp, grpBonus, indTotal: h.indTotal, grpTotal: h.grpTotal + grpBonus,
       aktivnosti, aktivnostiTotal, isplate, isplaceno,
-      total: h.total + aktivnostiTotal,
+      total: h.total + grpBonus + aktivnostiTotal,
       balance: balanceById.get(p.id) ?? null,
     });
   }

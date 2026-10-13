@@ -101,7 +101,10 @@ export function allocateOrderTotal(order: FinOrder): Allocation[] {
 export interface CourseInfo { id: string; title: string; slug: string; course_type: string | null }
 export interface ProfInfo { id: string; full_name: string | null; honorar_ind: number | null; honorar_grp: number | null }
 export interface LessonRow { lesson_date: string; professor_id: string; course_id: string | null }
-export interface SessionRow { session_date: string; professor_id: string | null; group_id: string; course_id: string | null }
+export interface SessionRow {
+  session_date: string; professor_id: string | null; group_id: string; course_id: string | null;
+  bonus?: number; // dodatak za veličinu grupe (lib/honorar.ts groupSessionBonus)
+}
 export interface GroupInfo {
   id: string; level: string; status: string; max_seats: number;
   professor_id: string | null; purchasable_course_id: string | null; session_time: string | null;
@@ -212,6 +215,7 @@ export function buildFinansije(input: FinansijeInput): FinansijeData {
   // Napomena: promena stope u user_profiles retroaktivno preračunava istoriju (svesna odluka iz spec-a).
   const rateInd = (pid: string) => profById.get(pid)?.honorar_ind ?? 0;
   const rateGrp = (pid: string | null) => (pid ? profById.get(pid)?.honorar_grp ?? 0 : 0);
+  const sessionHonorar = (s: SessionRow) => rateGrp(s.professor_id) + (s.bonus ?? 0);
   // Autorski procenat: course_id → [{professor_id, percent}]
   const royaltiesByCourse = new Map<string, { professor_id: string; percent: number }[]>();
   for (const r of (input.royalties ?? [])) {
@@ -264,7 +268,7 @@ export function buildFinansije(input: FinansijeInput): FinansijeData {
   for (const s of input.sessions) {
     const mo = monthOf(s.session_date);
     if (!mo || honorarOverrideMonths.has(mo.month) || !s.professor_id) continue;
-    const h = rateGrp(s.professor_id);
+    const h = sessionHonorar(s);
     mo.honorari[s.professor_id] = (mo.honorari[s.professor_id] ?? 0) + h;
     mo.honorariUkupno += h;
   }
@@ -326,7 +330,7 @@ export function buildFinansije(input: FinansijeInput): FinansijeData {
   }
   for (const s of input.sessions) {
     if (!inSel(s.session_date) || !s.course_id) continue;
-    bump(s.course_id, "honorar", rateGrp(s.professor_id));
+    bump(s.course_id, "honorar", sessionHonorar(s));
   }
   let opstiTroskovi = 0;
   for (const e of input.expenses) {
@@ -398,7 +402,7 @@ export function buildFinansije(input: FinansijeInput): FinansijeData {
     const prihod = selPayments.filter((p) => p.group_id === g.id).reduce((s, p) => s + p.amount, 0);
     const honorar = input.sessions
       .filter((s) => s.group_id === g.id && inSel(s.session_date))
-      .reduce((s2, s) => s2 + rateGrp(s.professor_id), 0);
+      .reduce((s2, s) => s2 + sessionHonorar(s), 0);
     const zarada = prihod - honorar;
     return {
       group_id: g.id,
@@ -418,7 +422,8 @@ export function buildFinansije(input: FinansijeInput): FinansijeData {
     const prihod = prihodCasovi + (royaltyPrihodByProf.get(p.id) ?? 0);
     const honorarCasovi =
       input.lessons.filter((l) => l.professor_id === p.id && inSel(l.lesson_date)).length * (p.honorar_ind ?? 0) +
-      input.sessions.filter((s) => s.professor_id === p.id && inSel(s.session_date)).length * (p.honorar_grp ?? 0);
+      input.sessions.filter((s) => s.professor_id === p.id && inSel(s.session_date))
+        .reduce((sum, s) => sum + (p.honorar_grp ?? 0) + (s.bonus ?? 0), 0);
     const honorar = honorarCasovi + (royaltyHonorarByProf.get(p.id) ?? 0);
     const aktivnosti = (input.activities ?? [])
       .filter((a) => a.professor_id === p.id && inSel(a.activity_date))

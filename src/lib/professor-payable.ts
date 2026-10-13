@@ -1,6 +1,7 @@
 // src/lib/professor-payable.ts
 // I/O: učitaj zarađeno (časovi + odobrene aktivnosti) i isplaćeno po profesorki, vrati saldo.
 import { createAdminClient } from "@/lib/supabase/admin";
+import { loadGroupSessionBonuses, sumBonusByProf } from "@/lib/group-bonus";
 import { computeBalance, sumActivities, type BalanceResult, DEFAULT_HONORAR_IND, DEFAULT_HONORAR_GRP } from "@/lib/honorar";
 
 export interface ProfPayable extends BalanceResult {
@@ -20,6 +21,7 @@ export async function loadPayables(profId?: string): Promise<ProfPayable[]> {
   let q = admin.from("user_profiles").select("id, full_name, email, honorar_ind, honorar_grp").not("honorar_ind", "is", null);
   if (profId) q = q.eq("id", profId);
   const { data: profs } = await q;
+  const bonusByProf = sumBonusByProf(await loadGroupSessionBonuses(admin, { upTo: today, profId }));
 
   const result: ProfPayable[] = [];
   for (const p of profs ?? []) {
@@ -38,7 +40,7 @@ export async function loadPayables(profId?: string): Promise<ProfPayable[]> {
     }
     const indCount = indRes.count; const grpCount = grpRes.count;
     const acts = actsRes.data; const pays = paysRes.data;
-    const earnedLessons = (indCount ?? 0) * rateInd + (grpCount ?? 0) * rateGrp;
+    const earnedLessons = (indCount ?? 0) * rateInd + (grpCount ?? 0) * rateGrp + (bonusByProf.get(p.id) ?? 0);
     const earnedActivities = sumActivities((acts ?? []) as { amount: number; status: "na_cekanju" | "odobreno" | "odbijeno" }[]);
     const paid = (pays ?? []).reduce((s, r) => s + (r.amount || 0), 0);
     const bal = computeBalance(earnedLessons, earnedActivities, paid);

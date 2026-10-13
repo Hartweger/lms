@@ -4,6 +4,23 @@
 export const DEFAULT_HONORAR_IND = 1400;
 export const DEFAULT_HONORAR_GRP = 1600;
 
+/**
+ * Dodatak za veličinu grupe (odluka 13.10.2026): grupe koje POČINJU od 01.11.2026. donose profesorki
+ * +150 din po času za svakog plaćenog polaznika preko trećeg (4 → +150, 5 → +300, 6 → +450).
+ * Broji se živo: polaznik upisan (beogradski datum upisa) najkasnije na dan časa ulazi u taj čas,
+ * pa kasni upis podiže honorar od tog časa nadalje. Otkazani/stornirani upisi se ne broje.
+ */
+export const GRP_BONUS_OD_STARTA = "2026-11-01";
+export const GRP_BONUS_PRAG = 3;
+export const GRP_BONUS_PO_POLAZNIKU = 150;
+
+/** Dodatak (din) za jedan održan grupni čas. enrolledDates = datumi upisa aktivnih polaznika (yyyy-mm-dd). */
+export function groupSessionBonus(groupStart: string | null, enrolledDates: string[], sessionDate: string): number {
+  if (!groupStart || groupStart < GRP_BONUS_OD_STARTA) return 0;
+  const upisano = enrolledDates.filter((d) => d <= sessionDate).length;
+  return Math.max(0, upisano - GRP_BONUS_PRAG) * GRP_BONUS_PO_POLAZNIKU;
+}
+
 export interface HonorarResult {
   ind: number; grp: number;
   indTotal: number; grpTotal: number; total: number;
@@ -20,8 +37,12 @@ export const MESECI = ["januar","februar","mart","april","maj","jun","jul","avgu
 
 export interface MonthHonorar { month: number; ind: number; grp: number; indTotal: number; grpTotal: number; total: number }
 
-/** Agregacija honorara po mesecima za godinu, iz lista datuma časova/sesija (yyyy-mm-dd). */
-export function aggregateMonthly(year: number, indDates: string[], grpDates: string[], rateInd: number, rateGrp: number): { months: MonthHonorar[]; yearTotal: number } {
+/** Agregacija honorara po mesecima za godinu, iz lista datuma časova/sesija (yyyy-mm-dd).
+ *  grpBonuses = dodatak za veličinu grupe po održanom času (vidi groupSessionBonus). */
+export function aggregateMonthly(
+  year: number, indDates: string[], grpDates: string[], rateInd: number, rateGrp: number,
+  grpBonuses: { date: string; amount: number }[] = [],
+): { months: MonthHonorar[]; yearTotal: number } {
   const months: MonthHonorar[] = Array.from({ length: 12 }, (_, i) => ({ month: i + 1, ind: 0, grp: 0, indTotal: 0, grpTotal: 0, total: 0 }));
   const bump = (dates: string[], key: "ind" | "grp") => {
     for (const d of dates) {
@@ -35,8 +56,14 @@ export function aggregateMonthly(year: number, indDates: string[], grpDates: str
   for (const mo of months) {
     const h = computeHonorar(mo.ind, mo.grp, rateInd, rateGrp);
     mo.indTotal = h.indTotal; mo.grpTotal = h.grpTotal; mo.total = h.total;
-    yearTotal += h.total;
   }
+  for (const b of grpBonuses) {
+    const [y, m] = String(b.date).split("-").map(Number);
+    if (y !== year || m < 1 || m > 12) continue;
+    months[m - 1].grpTotal += b.amount;
+    months[m - 1].total += b.amount;
+  }
+  for (const mo of months) yearTotal += mo.total;
   return { months, yearTotal };
 }
 

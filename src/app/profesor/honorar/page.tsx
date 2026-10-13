@@ -5,6 +5,7 @@ import { resolveProfessorView } from "@/lib/professor-view";
 import AktivnostForm from "./AktivnostForm";
 import ZamenaForm from "./ZamenaForm";
 import { loadPayables } from "@/lib/professor-payable";
+import { loadGroupSessionBonuses, sumBonusByProf } from "@/lib/group-bonus";
 
 export const dynamic = "force-dynamic";
 
@@ -41,11 +42,13 @@ export default async function ProfesorHonorar({ searchParams }: { searchParams: 
       admin.from("individual_lessons").select("lesson_date").eq("professor_id", ctx.profId).gte("lesson_date", from).lt("lesson_date", toExcl).lte("lesson_date", today),
       admin.from("group_sessions").select("session_date").eq("professor_id", ctx.profId).eq("cancelled", false).gte("session_date", from).lt("session_date", toExcl).lte("session_date", today),
     ]);
+    const bonusi = await loadGroupSessionBonuses(admin, { from, toExclusive: toExcl, upTo: today, profId: ctx.profId });
     const { months, yearTotal } = aggregateMonthly(
       year,
       (il ?? []).map((x) => x.lesson_date),
       (gs ?? []).map((x) => x.session_date),
       ctx.honorarInd, ctx.honorarGrp,
+      bonusi.map((b) => ({ date: b.session_date, amount: b.bonus })),
     );
     const [payable] = await loadPayables(ctx.profId);
     const { data: acts } = await admin.from("professor_activities")
@@ -105,7 +108,7 @@ export default async function ProfesorHonorar({ searchParams }: { searchParams: 
         )}
         <AktivnostForm activities={acts ?? []} />
         <ZamenaForm groups={groupOptions} requests={myZamene} />
-        <p className="text-xs text-gray-400 mt-3">Računato uživo iz održanih časova/sesija. Zvaničan obračun stiže mejlom 1. u mesecu.</p>
+        <p className="text-xs text-gray-400 mt-3">Računato uživo iz održanih časova/sesija. Za grupe koje počinju od 1.11.2026. svaki čas nosi +150 din za svakog polaznika preko trećeg (4 polaznika +150, 5 +300, 6 +450). Zvaničan obračun stiže mejlom 1. u mesecu.</p>
       </div>
     );
   }
@@ -118,6 +121,7 @@ export default async function ProfesorHonorar({ searchParams }: { searchParams: 
   ]);
   const indByProf = new Map<string, number>();
   for (const r of ilAll ?? []) indByProf.set(r.professor_id, (indByProf.get(r.professor_id) ?? 0) + 1);
+  const bonusByProf = sumBonusByProf(await loadGroupSessionBonuses(admin, { from, toExclusive: toExcl, upTo: today }));
   const grpByProf = new Map<string, number>();
   for (const r of gsAll ?? []) if (r.professor_id) grpByProf.set(r.professor_id, (grpByProf.get(r.professor_id) ?? 0) + 1);
 
@@ -125,7 +129,7 @@ export default async function ProfesorHonorar({ searchParams }: { searchParams: 
     const ind = indByProf.get(p.id) ?? 0;
     const grp = grpByProf.get(p.id) ?? 0;
     const h = computeHonorar(ind, grp, p.honorar_ind ?? 1400, p.honorar_grp ?? 1600);
-    return { name: p.full_name || "-", ind, grp, total: h.total };
+    return { name: p.full_name || "-", ind, grp, total: h.total + (bonusByProf.get(p.id) ?? 0) };
   }).sort((a, b) => b.total - a.total);
   const grand = rows.reduce((s, r) => s + r.total, 0);
 

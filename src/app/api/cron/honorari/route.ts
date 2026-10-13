@@ -32,7 +32,7 @@ async function cronHandler(request: NextRequest) {
     grandTotal += r.total;
     if (r.email) {
       await sendHonorarProfEmail(r.email, r.fullName ?? "", {
-        label, ind: r.ind, grp: r.grp, rateInd: r.rateInd, rateGrp: r.rateGrp,
+        label, ind: r.ind, grp: r.grp, rateInd: r.rateInd, rateGrp: r.rateGrp, grpBonus: r.grpBonus,
         indTotal: r.indTotal, grpTotal: r.grpTotal, total: r.total,
         aktivnosti: r.aktivnosti, isplate: r.isplate,
         balance: r.balance ?? undefined,

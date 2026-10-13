@@ -1138,6 +1138,7 @@ export async function sendHonorarProfEmail(
   profIme: string,
   opts: {
     label: string; ind: number; grp: number; rateInd: number; rateGrp: number;
+    grpBonus?: number; // dodatak za veličinu grupe, već uračunat u grpTotal
     indTotal: number; grpTotal: number; total: number; balance?: number;
     aktivnosti?: { description: string; amount: number }[];
     isplate?: { date: string; amount: number }[];
@@ -1171,7 +1172,7 @@ export async function sendHonorarProfEmail(
 <p>Tvoj obračun za <strong>${esc(opts.label)}</strong>:</p>
 <ul>
 <li>Individualni časovi: ${opts.ind} × ${fmt(opts.rateInd)} din = <strong>${fmt(opts.indTotal)} din</strong></li>
-<li>Grupne sesije: ${opts.grp} × ${fmt(opts.rateGrp)} din = <strong>${fmt(opts.grpTotal)} din</strong></li>
+<li>Grupne sesije: ${opts.grp} × ${fmt(opts.rateGrp)} din${opts.grpBonus ? ` + dodatak za veličinu grupe ${fmt(opts.grpBonus)} din` : ""} = <strong>${fmt(opts.grpTotal)} din</strong></li>
 ${aktRows}
 </ul>
 <p style="font-size:18px"><strong>Ukupno: ${fmt(opts.total)} din</strong></p>

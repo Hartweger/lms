@@ -28,7 +28,7 @@ export async function POST(request: Request) {
     const imaStavke = r.ind + r.grp + r.aktivnosti.length + r.isplate.length > 0;
     if (!imaStavke || !r.email) { preskoceno++; continue; }
     const ok = await sendHonorarProfEmail(r.email, r.fullName ?? "", {
-      label, ind: r.ind, grp: r.grp, rateInd: r.rateInd, rateGrp: r.rateGrp,
+      label, ind: r.ind, grp: r.grp, rateInd: r.rateInd, rateGrp: r.rateGrp, grpBonus: r.grpBonus,
       indTotal: r.indTotal, grpTotal: r.grpTotal, total: r.total,
       aktivnosti: r.aktivnosti, isplate: r.isplate,
       balance: r.balance ?? undefined,

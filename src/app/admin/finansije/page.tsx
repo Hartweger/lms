@@ -7,6 +7,7 @@ import type { IzvodRed } from "./IzvodStavke";
 import type { UlaznaRed } from "./UlazneFakture";
 import { buildFinansije, fillGroupCourseIds, monthKey, type ExpenseRow, type FinOrder, type FinOrderItem, type FinMonthlyRevenue, type FinMonthlyHonorar, type Kategorija } from "@/lib/finansije";
 import { loadPayables } from "@/lib/professor-payable";
+import { loadGroupSessionBonuses } from "@/lib/group-bonus";
 import wcRevenueHistory from "@/lib/wc-revenue-history.json";
 import honorariHistory from "@/lib/honorari-history.json";
 import FinansijeClient from "./FinansijeClient";
@@ -86,11 +87,16 @@ export default async function AdminFinansijePage({
     professor_id: l.professor_id,
     course_id: enrById.get(l.enrollment_id)?.course_id ?? null,
   }));
+  const bonusi = await loadGroupSessionBonuses(admin, {
+    from: `${year}-01-01`, toExclusive: `${year + 1}-01-01`, upTo: now.toISOString().slice(0, 10),
+  });
+  const bonusByKey = new Map(bonusi.map((b) => [`${b.group_id}|${b.session_date}`, b.bonus]));
   const sessions = (sessionsRes.data ?? []).map((s) => ({
     session_date: s.session_date,
     professor_id: s.professor_id,
     group_id: s.group_id,
     course_id: groupById.get(s.group_id)?.purchasable_course_id ?? null,
+    bonus: bonusByKey.get(`${s.group_id}|${s.session_date}`) ?? 0,
   }));
   const indProfByOrderId: Record<string, string> = {};
   for (const e of enrollments) if (e.order_id && e.professor_id) indProfByOrderId[e.order_id] = e.professor_id;

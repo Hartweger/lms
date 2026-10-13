@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { computeHonorar, previousMonth, monthDateRange, aggregateMonthly, computeBalance, sumActivities } from "./honorar";
+import { computeHonorar, previousMonth, monthDateRange, aggregateMonthly, computeBalance, sumActivities, groupSessionBonus } from "./honorar";
 import { computeSessionDates } from "./groups";
 
 describe("computeHonorar", () => {
@@ -43,6 +43,37 @@ describe("aggregateMonthly", () => {
     expect(r.months[5]).toEqual({ month: 6, ind: 2, grp: 1, indTotal: 2800, grpTotal: 1600, total: 4400 }); // jun
     expect(r.months[6].total).toBe(1400); // jul: 1 ind
     expect(r.yearTotal).toBe(5800); // 4400 + 1400
+  });
+});
+
+describe("groupSessionBonus", () => {
+  const upisi = (n: number, datum = "2026-10-20") => Array.from({ length: n }, () => datum);
+  it("grupa pre 01.11.2026. nema dodatak ni sa 6 polaznika", () => {
+    expect(groupSessionBonus("2026-10-19", upisi(6), "2026-11-10")).toBe(0);
+    expect(groupSessionBonus(null, upisi(6), "2026-11-10")).toBe(0);
+  });
+  it("2-3 polaznika: 0, 4: 150, 5: 300, 6: 450, 7: 600", () => {
+    expect(groupSessionBonus("2026-11-03", upisi(2), "2026-11-03")).toBe(0);
+    expect(groupSessionBonus("2026-11-03", upisi(3), "2026-11-03")).toBe(0);
+    expect(groupSessionBonus("2026-11-03", upisi(4), "2026-11-03")).toBe(150);
+    expect(groupSessionBonus("2026-11-03", upisi(5), "2026-11-03")).toBe(300);
+    expect(groupSessionBonus("2026-11-03", upisi(6), "2026-11-03")).toBe(450);
+    expect(groupSessionBonus("2026-11-03", upisi(7), "2026-11-03")).toBe(600);
+  });
+  it("živo brojanje: kasni upis važi od dana upisa nadalje", () => {
+    const d = [...upisi(3), "2026-11-10"];
+    expect(groupSessionBonus("2026-11-03", d, "2026-11-05")).toBe(0);
+    expect(groupSessionBonus("2026-11-03", d, "2026-11-10")).toBe(150);
+    expect(groupSessionBonus("2026-11-03", d, "2026-11-12")).toBe(150);
+  });
+});
+
+describe("aggregateMonthly sa dodatkom", () => {
+  it("dodatak ulazi u grp i ukupno svog meseca", () => {
+    const r = aggregateMonthly(2026, [], ["2026-11-03", "2026-12-01"], 1400, 1600,
+      [{ date: "2026-11-03", amount: 450 }, { date: "2027-01-12", amount: 150 }]);
+    expect(r.months[10]).toEqual({ month: 11, ind: 0, grp: 1, indTotal: 0, grpTotal: 2050, total: 2050 });
+    expect(r.yearTotal).toBe(3650);
   });
 });
 
