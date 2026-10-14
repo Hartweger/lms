@@ -1,0 +1,827 @@
+<!doctype html>
+<html lang="sr-Cyrl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="light">
+<title>Свет око нас за други разред</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pozadina:#FFF8EC; --karta:#FFFFFF; --mastilo:#2A2433; --tiho:#6B6275;
+  --linija:#EADFCB; --tacno:#1F9D55; --tacno-svetlo:#E3F6EA;
+  --skoro:#C26A00; --skoro-svetlo:#FFF1DC; --pogresno-svetlo:#FDECE6;
+  --skola:#3B7DD8; --drugari:#E0603A; --simboli:#C8323C; --porodica:#D6457A;
+  --potrebe:#8A4FD3; --zdravlje:#1F9D55; --ishrana:#E5A100; --igra:#2E9E9E; --kontrolni:#1F9D55;
+  --zvezda:#FFB800;
+  --senka:0 2px 0 rgba(42,36,51,.08), 0 6px 18px rgba(42,36,51,.06);
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--pozadina);color:var(--mastilo)}
+body{font-family:"Andika",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:18px;line-height:1.4;min-height:100vh;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;touch-action:manipulation}
+.omot{max-width:760px;margin:0 auto;padding:12px 16px 40px}
+
+/* zaglavlje */
+.vrh{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.vrh h1{font-size:22px;margin:0;flex:1;line-height:1.15}
+.vrh .nazad{width:44px;height:44px;border-radius:14px;background:var(--karta);box-shadow:var(--senka);font-size:22px;display:grid;place-items:center}
+.zvezde-brojac{display:flex;align-items:center;gap:4px;background:var(--karta);border-radius:999px;padding:6px 12px;box-shadow:var(--senka);font-weight:700}
+.ikona-dugme{width:44px;height:44px;border-radius:14px;background:var(--karta);box-shadow:var(--senka);font-size:20px;display:grid;place-items:center}
+
+/* pocetna */
+.pozdrav{background:var(--karta);border-radius:22px;padding:16px 18px;box-shadow:var(--senka);margin-bottom:18px;display:flex;gap:14px;align-items:center}
+.pozdrav .lik{font-size:44px;line-height:1}
+.pozdrav b{font-size:22px;display:block}
+.pozdrav span{color:var(--tiho)}
+.odeljak{margin:20px 0 8px;font-size:15px;letter-spacing:.06em;text-transform:uppercase;color:var(--tiho);font-weight:700}
+.plocice{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.plocica{background:var(--karta);border-radius:20px;padding:14px 14px 12px;text-align:left;box-shadow:var(--senka);border-bottom:5px solid var(--boja);display:flex;flex-direction:column;gap:4px;min-height:118px;transition:transform .12s}
+.plocica:active{transform:scale(.97)}
+.plocica .em{font-size:30px;line-height:1}
+.plocica b{font-size:18px;line-height:1.15}
+.plocica small{color:var(--tiho);font-size:14px;line-height:1.25}
+.plocica.siroka{grid-column:1/-1;flex-direction:row;align-items:center;gap:14px;min-height:0}
+.plocica.siroka .em{font-size:38px}
+.plocica.mala{min-height:0}
+
+/* zadatak */
+.napredak{display:flex;gap:5px;margin:0 0 14px}
+.napredak i{flex:1;height:8px;border-radius:4px;background:var(--linija)}
+.napredak i.gotov{background:var(--boja)}
+.napredak i.sad{background:var(--boja);opacity:.4}
+.karta{background:var(--karta);border-radius:24px;padding:20px 18px;box-shadow:var(--senka);position:relative}
+.uputa{color:var(--tiho);font-size:16px;text-align:center;margin:0 0 6px}
+.prikaz{display:flex;flex-direction:column;align-items:center;gap:8px;justify-content:center;text-align:center}
+.pitanje{font-size:23px;font-weight:700;line-height:1.35;text-align:center}
+.tvrdnja{font-size:24px;font-weight:700;line-height:1.35;text-align:center;background:var(--pozadina);border-radius:18px;padding:14px 16px}
+.emo{font-size:84px;line-height:1.05;display:inline-block}
+.emo.srednji{font-size:56px}
+.povratna{margin-top:10px;font-size:18px;border-radius:14px;text-align:center;min-height:1.4em}
+.povratna.tacno{color:var(--tacno);font-weight:700}
+.povratna.skoro{background:var(--skoro-svetlo);color:#7A4300;padding:10px 14px}
+.objasni{background:var(--tacno-svetlo);border-radius:14px;padding:10px 14px;margin-top:10px;font-size:18px;text-align:left}
+.objasni::before{content:"📘 "}
+.objasni.lose{background:var(--pogresno-svetlo)}
+
+/* izbori */
+.izbori{display:grid;grid-template-columns:1fr;gap:10px;margin-top:14px}
+.izbori.dva{grid-template-columns:repeat(2,1fr)}
+.izbor{min-height:58px;border-radius:18px;background:#F4EEE3;font-size:20px;font-weight:700;box-shadow:0 3px 0 #DDD2BF;padding:10px 14px;transition:transform .06s;text-align:left;line-height:1.25}
+.izbori.dva .izbor{text-align:center;font-size:24px;min-height:76px}
+.izbor:active{transform:translateY(2px)}
+.izbor:disabled{opacity:.3;box-shadow:none}
+.izbor.dobar{background:var(--tacno);color:#fff;box-shadow:0 3px 0 #15703C;opacity:1}
+.izbor.los{background:var(--pogresno-svetlo);color:#A23A1A;opacity:1;box-shadow:none}
+.izbor .ik{font-size:26px;margin-right:6px;vertical-align:middle}
+.izbor.trese,.trese{animation:trese .35s}
+.kategorije{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:14px}
+.kategorije .izbor{text-align:center;font-size:19px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.kategorije .izbor .ik{font-size:34px;margin:0}
+
+.pomoc-dugme{display:block;margin:14px auto 0;background:#FFF4C7;color:#6B5200;border-radius:999px;padding:10px 20px;font-size:18px;font-weight:700;box-shadow:0 2px 0 #EAD98F}
+.pomoc{background:#FFF9E0;border-left:5px solid #F2C94C;border-radius:12px;padding:10px 12px;font-size:18px;margin-top:10px;text-align:left}
+.pomoc::before{content:"💡 "}
+.dalje{display:block;margin:16px auto 0;background:var(--boja);color:#fff;border-radius:16px;padding:14px 28px;font-size:20px;font-weight:700}
+
+/* zastava */
+.zastava{width:min(300px,100%);aspect-ratio:3/2;border-radius:10px;overflow:hidden;box-shadow:0 0 0 3px var(--mastilo);display:grid;grid-template-rows:repeat(3,1fr);margin:6px auto}
+.zastava button{border-top:2px dashed rgba(42,36,51,.25);font-size:15px;color:var(--tiho);font-weight:700}
+.zastava button:first-child{border-top:0}
+.paleta{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:14px 0 4px}
+.paleta button{width:56px;height:56px;border-radius:50%;background:var(--b);box-shadow:0 0 0 3px #fff,0 0 0 5px var(--linija)}
+.paleta button.izabrana{box-shadow:0 0 0 3px #fff,0 0 0 6px var(--mastilo);transform:scale(1.08)}
+
+/* obroci redom */
+.redosled{display:flex;flex-direction:column;gap:8px;margin:10px 0}
+.redosled div{display:flex;align-items:center;gap:10px;background:var(--pozadina);border-radius:14px;padding:8px 12px;min-height:52px;font-size:19px}
+.redosled div i{font-style:normal;width:30px;height:30px;border-radius:50%;background:var(--linija);display:grid;place-items:center;font-size:15px;font-weight:700;flex:none}
+.redosled div.puno{background:var(--tacno-svetlo);font-weight:700}
+.redosled div.puno i{background:var(--tacno);color:#fff}
+
+/* kraj */
+.kraj{text-align:center}
+.kraj .slicica-nova{font-size:96px;line-height:1;margin:10px 0;animation:skok .7s}
+.kraj h2{margin:6px 0 4px;font-size:28px}
+.kraj p{color:var(--tiho);margin:4px 0 14px}
+.dugmad{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.dugme{border-radius:16px;padding:14px 22px;font-size:19px;font-weight:700;background:#F4EEE3;box-shadow:0 3px 0 #DDD2BF}
+.dugme.glavno{background:var(--boja);color:#fff;box-shadow:none}
+.greske{text-align:left;margin:14px 0;display:flex;flex-direction:column;gap:8px}
+.greske div{background:var(--pozadina);border-radius:14px;padding:10px 12px;font-size:17px}
+.greske div b{color:var(--tacno)}
+.ocena{font-size:56px;font-weight:700;color:var(--boja);line-height:1}
+
+/* album */
+.album{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:10px}
+.album div{aspect-ratio:1;border-radius:16px;background:var(--karta);box-shadow:var(--senka);display:grid;place-items:center;font-size:36px}
+.album div.prazno{background:transparent;box-shadow:none;border:2px dashed var(--linija);font-size:18px;color:var(--linija)}
+.statistika{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.statistika div{background:var(--karta);border-radius:16px;padding:10px 14px;box-shadow:var(--senka);flex:1;min-width:130px}
+.statistika b{display:block;font-size:26px}
+
+/* izbor lekcije */
+.teme{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.tema{background:var(--karta);border-radius:18px;padding:14px;text-align:left;box-shadow:var(--senka);border-left:6px solid var(--boja);display:flex;gap:10px;align-items:center}
+.tema .em{font-size:32px}
+.tema b{display:block;font-size:18px;line-height:1.15}
+.tema small{color:var(--tiho);font-size:14px}
+.tema.siroka{grid-column:1/-1}
+
+/* memorija */
+.memorija{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media (min-width:560px){.memorija{grid-template-columns:repeat(4,1fr)}}
+.kartica{aspect-ratio:1/1.05;border-radius:16px;background:var(--igra);color:#fff;font-size:17px;font-weight:700;box-shadow:0 3px 0 #1E6B6B;display:grid;place-items:center;padding:6px;line-height:1.15;overflow:hidden;text-align:center}
+.kartica.okrenuta{background:var(--karta);color:var(--mastilo);box-shadow:var(--senka)}
+.kartica.okrenuta.pojam{color:var(--boja);font-size:21px}
+.kartica.par{background:var(--tacno-svetlo);color:var(--tacno);box-shadow:none}
+.kartica .poledjina{font-size:30px;opacity:.85}
+
+/* podseti se (lekcija) */
+.zavesa{position:fixed;inset:0;background:rgba(42,36,51,.45);display:flex;align-items:flex-end;justify-content:center;z-index:8;padding:12px}
+@media (min-width:560px){.zavesa{align-items:center}}
+.uputstvo{background:var(--karta);border-radius:24px;padding:18px 16px 16px;max-width:620px;width:100%;max-height:90vh;overflow:auto}
+.lek-vrh{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.lek-vrh h2{flex:1;margin:0;font-size:22px;line-height:1.2}
+.lek-vrh button{width:40px;height:40px;border-radius:12px;background:var(--pozadina);font-size:18px;flex:none}
+.strana{color:var(--tiho);font-size:14px;margin:0 0 8px}
+.cinjenice{list-style:none;margin:8px 0 14px;padding:0;display:flex;flex-direction:column;gap:8px}
+.cinjenice li{background:var(--pozadina);border-radius:14px;padding:10px 12px;display:flex;gap:10px;align-items:flex-start;font-size:18px;line-height:1.4}
+.cinjenice li .ik{font-size:28px;line-height:1.1;flex:none}
+.prava{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 14px}
+.prava div{border-radius:14px;padding:10px 12px;font-size:16px;line-height:1.35}
+.prava div b{display:block;font-size:14px;letter-spacing:.05em;margin-bottom:2px}
+.prava .pravo{background:#FCE8F0}.prava .pravo b{color:#B0306A}
+.prava .obaveza{background:#EDE6FA}.prava .obaveza b{color:#6A3BB0}
+@media (max-width:420px){.prava{grid-template-columns:1fr}}
+
+.leteca{position:fixed;font-size:34px;pointer-events:none;animation:leti 1s forwards;z-index:9}
+@keyframes leti{0%{opacity:0;transform:translateY(0) scale(.6)}20%{opacity:1;transform:translateY(-10px) scale(1.2)}100%{opacity:0;transform:translateY(-90px) scale(1)}}
+@keyframes trese{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+@keyframes skok{0%{transform:scale(.2)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:400px){.emo{font-size:70px}.pitanje{font-size:21px}.tvrdnja{font-size:21px}.izbor{font-size:18px}}
+</style>
+</head>
+<body>
+<div class="omot" id="app"></div>
+
+<script>
+/* ===================== pomoćne ===================== */
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+/* ===================== lekcije (Свет око нас 2, стр. 8-21) =====================
+   podseti = kratko gradivo za čitanje; pravo/obaveza = kućica iz knjige
+   pitanja: { p, o:[tačan, ...pogrešni], e?, obj? }  ili  { t: tvrdnja, da: true/false, obj? } */
+const LEKCIJE = {
+  skola: { ime: "Поново у школи", em: "🏫", str: "8-9", boja: "skola",
+    podseti: [
+      ["👧🧒", "<b>Одељење</b> је група ученика која иде на наставу код исте учитељице или учитеља."],
+      ["🏫", "Више одељења вршњака чини <b>разред</b>."],
+      ["🤝", "<b>Вршњаци</b> су деца твојих година."],
+      ["📏", "Правила понашања у школи: не касним на час, подигнем руку кад желим нешто да кажем, чувам школске ствари, бацам отпатке у канту, ходам полако ходницима, помажем другарима, поштујем правила игре, бринем о осећањима других."],
+      ["🚪", "Пословица: <b>Лепа реч и гвоздена врата отвара.</b> Лепим речима постижемо више него викањем."],
+      ["⚖️", "Ко крши правила, мора да буде спреман да прихвати последице."]
+    ],
+    pravo: "да се школујем, да кажем оно што мислим", obaveza: "да редовно долазим у школу, радим домаће задатке и вредно учим, да саслушам друге",
+    pitanja: [
+      { p: "Група ученика која иде на наставу код исте учитељице или учитеља је…", e: "👧🧒👦", o: ["одељење", "разред", "породица", "екипа"], obj: "Одељење је једна група ученика. Више одељења чини разред." },
+      { p: "Више одељења вршњака чини…", o: ["разред", "одељење", "родбину", "клупу"], obj: "На пример, сва одељења другог разреда у твојој школи заједно чине други разред." },
+      { p: "Шта урадиш кад желиш нешто да кажеш на часу?", e: "🙋", o: ["Подигнем руку.", "Викнем из клупе.", "Устанем и причам.", "Лупам по клупи."] },
+      { p: "Где бацамо отпатке?", e: "🗑️", o: ["У канту.", "На под.", "Испод клупе.", "Кроз прозор."] },
+      { p: "Како ходамо школским ходницима?", e: "🚶", o: ["Полако.", "Трчимо што брже.", "Гурамо се.", "Скачемо по ходнику."] },
+      { p: "Шта значи пословица „Лепа реч и гвоздена врата отвара“?", e: "🚪", o: ["Лепим речима постижемо више.", "Врата се отварају само кључем.", "Гвоздена врата су тешка.", "Треба викати да те чују."] },
+      { p: "Ко крши правила, мора да буде спреман да…", o: ["прихвати последице.", "се сакрије.", "окриви другара.", "оде кући."] },
+      { p: "Ко су вршњаци?", o: ["Деца твојих година.", "Учитељи и наставници.", "Бака и деда.", "Само деца из твоје улице."] },
+      { t: "Одељење и разред значе исто.", da: false, obj: "Одељење је једна група ученика, а више одељења чини разред." },
+      { t: "Правило је да не касним на час.", da: true },
+      { t: "У школи смемо да трчимо ходницима.", da: false, obj: "Ходницима ходамо полако, да се нико не повреди." },
+      { t: "Школске ствари треба да чувамо.", da: true },
+      { t: "Имам право да кажем оно што мислим.", da: true },
+      { t: "Имам обавезу да саслушам друге.", da: true },
+      { t: "Важно је да бринемо о осећањима других.", da: true }
+    ] },
+  drugari: { ime: "С вршњацима ван школе", em: "⚽", str: "10-11", boja: "drugari",
+    podseti: [
+      ["🌳", "Другаре имаш и ван школе: у парку, на ливади, у спорту, у музичкој или плесној школи, у фолклору…"],
+      ["🎨", "Активности ван школе: спорт, свирање, играње у фолклору, цртање и бојење, игра на ливади, игра у парку."],
+      ["🤝", "Кад смо део групе, важно је да поштујемо договорена правила, да сарађујемо и да поштујемо друге."],
+      ["🏆", "Тада ће група бити успешнија, а ми задовољни и срећни."],
+      ["⚖️", "Као и у школи, ко крши правила понашања мора да буде спреман да прихвати последице."]
+    ],
+    pravo: "да будем различит/различита, да нико у групи не врши насиље нада мном", obaveza: "да прихватим различитост других, да бринем о другима, да их не повређујем и не доводим у опасност",
+    pitanja: [
+      { p: "Деца у народној ношњи играју коло. Која је то активност?", e: "💃🕺", o: ["Играње у фолклору", "Свирање", "Цртање", "Пливање"] },
+      { p: "Шта је најважније кад смо део групе?", e: "👫👬", o: ["Да поштујемо договорена правила и сарађујемо.", "Да увек будемо први.", "Да свако ради шта хоће.", "Да се не дружимо ни са ким."] },
+      { p: "Наша група ће бити успешнија ако…", o: ["сарађујемо и поштујемо друге.", "свако ради само за себе.", "се свађамо.", "кршимо правила."] },
+      { p: "Имам право да будем…", o: ["различит или различита.", "увек главни у игри.", "љут на све.", "увек први."] },
+      { p: "Имам обавезу да прихватим…", o: ["различитост других.", "само другаре који су исти као ја.", "само победу.", "само своја правила."] },
+      { p: "Где можеш да се дружиш са вршњацима ван школе?", e: "🛝", o: ["У парку, на ливади, на тренингу.", "Само у учионици.", "Нигде.", "Само код лекара."] },
+      { p: "Ако неко у групи гура, туче или вређа друге, то је…", o: ["насиље и није у реду.", "тимски рад.", "сарадња.", "лепа игра."], obj: "Имаш право да нико у групи не врши насиље над тобом. Реци то одраслој особи." },
+      { t: "Ван школе другаре можеш имати у спорту, музичкој или плесној школи.", da: true },
+      { t: "У групи свако може да ради шта хоће, правила нису важна.", da: false, obj: "У групи поштујемо договорена правила." },
+      { t: "Имам обавезу да бринем о другима и да их не доводим у опасност.", da: true },
+      { t: "Сви у групи морају да буду исти.", da: false, obj: "Имамо право да будемо различити и обавезу да прихватимо различитост других." },
+      { t: "Ко крши правила понашања у групи, мора да прихвати последице.", da: true }
+    ] },
+  simboli: { ime: "Поштујемо симболе наше домовине", em: "🇷🇸", str: "12-13", boja: "simboli",
+    podseti: [
+      ["⭐", "Симболи наше државе су <b>грб, застава и химна</b>. Свака држава има своје симболе."],
+      ["🚩", "<b>Застава</b> Републике Србије има три боје: <b>црвену, плаву и белу</b> (одозго надоле). На њој се налази грб."],
+      ["🦅", "На <b>грбу</b> је црвени штит, а на њему двоглави бели орао. На грудима орла је мали штит са крстом и четири огњила. Изнад штита је краљевска круна."],
+      ["🔥", "<b>Огњило</b> је алатка која је некада служила за паљење ватре."],
+      ["🎵", "<b>Химна</b> Републике Србије је „Боже правде“. Изводи се у свечаним приликама, на спортским такмичењима и празницима."],
+      ["🧍", "Док слушамо химну, <b>стојимо мирно, руке су спуштене уз тело</b>. Тако показујемо поштовање."],
+      ["🌍", "Поштујемо и симболе своје и симболе других држава."]
+    ],
+    pitanja: [
+      { p: "Који су симболи наше државе?", o: ["Грб, застава и химна", "Лопта, медаља и пехар", "Школа, улица и парк", "Књига, оловка и свеска"] },
+      { p: "Које боје има застава Републике Србије, одозго надоле?", o: ["Црвена, плава, бела", "Плава, бела, црвена", "Зелена, бела, црвена", "Жута, плава, црвена"], obj: "Одозго: црвена, у средини плава, доле бела." },
+      { p: "Како се зове химна Републике Србије?", e: "🎵", o: ["„Боже правде“", "„Тетка“", "„Ако желиш мишиће“", "„Лепа реч“"] },
+      { p: "Шта се налази на грбу Србије?", o: ["Двоглави бели орао на црвеном штиту", "Лав на плавом штиту", "Сунце и месец", "Зелено дрво"] },
+      { p: "Шта се налази изнад штита на грбу?", e: "👑", o: ["Краљевска круна", "Звезда", "Сунце", "Застава"] },
+      { p: "Колико огњила има око крста на малом штиту?", o: ["Четири", "Два", "Једно", "Шест"] },
+      { p: "Шта је огњило?", e: "🔥", o: ["Алатка којом се некада палила ватра", "Врста птице", "Музички инструмент", "Део униформе"] },
+      { p: "Како се понашамо док се изводи химна?", e: "🧍", o: ["Стојимо мирно, руке су спуштене уз тело.", "Причамо и смејемо се.", "Седимо и једемо.", "Трчимо около."] },
+      { p: "Када се изводи химна?", o: ["На свечаностима, празницима и спортским такмичењима", "Свако вече пре спавања", "Кад гледамо цртани филм", "Само на рођенданима"] },
+      { p: "Сава је освојио златну медаљу. Које је место заузео?", e: "🥇", o: ["Прво", "Друго", "Треће", "Последње"] },
+      { p: "Међународно такмичење је такмичење учесника…", e: "🏊", o: ["из различитих држава.", "само из једне школе.", "само из једне улице.", "само из једне породице."] },
+      { t: "Свака држава има своје симболе.", da: true },
+      { t: "Треба да поштујемо само симболе своје државе.", da: false, obj: "Поштујемо симболе своје, али и симболе других држава." },
+      { t: "Док слушамо химну, руке држимо у џеповима.", da: false, obj: "Стојимо мирно, руке су спуштене уз тело." },
+      { t: "На застави Србије налази се грб.", da: true },
+      { t: "Застава Србије има четири боје.", da: false, obj: "Има три боје: црвену, плаву и белу." }
+    ] },
+  porodica: { ime: "Породица и родбина", em: "👨‍👩‍👧", str: "14-15", boja: "porodica",
+    podseti: [
+      ["🏠", "Породицу чине родитељи, деца, бабе и деде."],
+      ["👪", "Осим породице, имамо и <b>родбину</b>: ујак, ујна, стриц, стрина, тетка, теча, браћа и сестре од стрица, ујака и тетке…"],
+      ["👨", "<b>Ујак</b> је мамин брат, а <b>ујна</b> је ујакова жена."],
+      ["🧔", "<b>Стриц</b> је татин брат, а <b>стрина</b> је стрицева жена."],
+      ["👩", "<b>Тетка</b> је мамина или татина сестра, а <b>теча</b> је теткин муж."],
+      ["🎂", "Рођаци се посећују, брину једни о другима, помажу се, друже и забављају."]
+    ],
+    pravo: "да неко брине о мени, да изнесем своје мишљење и жеље члановима породице", obaveza: "да бринем о другима, да саслушам чланове своје породице",
+    pitanja: [
+      { p: "Мамин брат је мој…", o: ["ујак", "стриц", "теча", "деда"], obj: "Ујак = мамин брат." },
+      { p: "Татин брат је мој…", o: ["стриц", "ујак", "теча", "брат"], obj: "Стриц = татин брат." },
+      { p: "Мамина сестра је моја…", o: ["тетка", "стрина", "ујна", "бака"], obj: "Тетка = мамина или татина сестра." },
+      { p: "Татина сестра је моја…", o: ["тетка", "стрина", "ујна", "мама"], obj: "Тетка = мамина или татина сестра." },
+      { p: "Ујакова жена је моја…", o: ["ујна", "стрина", "тетка", "сестра"], obj: "Ујак и ујна иду заједно." },
+      { p: "Стрицева жена је моја…", o: ["стрина", "ујна", "тетка", "бака"], obj: "Стриц и стрина иду заједно." },
+      { p: "Теткин муж је мој…", o: ["теча", "стриц", "ујак", "деда"], obj: "Тетка и теча иду заједно." },
+      { p: "Мамин тата је мој…", o: ["деда", "ујак", "стриц", "теча"] },
+      { p: "Тетка има сина. Он је мој…", o: ["брат од тетке", "ујак", "стриц", "теча"] },
+      { p: "Стриц има ћерку. Она је моја…", o: ["сестра од стрица", "тетка", "стрина", "ујна"] },
+      { p: "Ујак има сина. Он је мој…", o: ["брат од ујака", "стриц", "теча", "деда"] },
+      { t: "Ујак и стриц су исто.", da: false, obj: "Ујак је мамин брат, а стриц је татин брат." },
+      { t: "Тетка може да буде и мамина и татина сестра.", da: true },
+      { t: "Имам право да изнесем своје мишљење и жеље члановима породице.", da: true },
+      { t: "Имам обавезу да саслушам чланове своје породице.", da: true },
+      { t: "Рођаци се посећују, помажу и брину једни о другима.", da: true }
+    ] },
+  potrebe: { ime: "Моје потребе, моје жеље", em: "⚖️", str: "16-17", boja: "potrebe",
+    podseti: [
+      ["💧", "Основне <b>потребе</b>: вода и храна, одржавање хигијене, довољно сна, редован одлазак у тоалет, боравак на чистом ваздуху, облачење у складу с временским приликама."],
+      ["🌱", "Важно је да их задовољимо да бисмо били живи, здрави и да бисмо расли и развијали се."],
+      ["❤️", "Осим њих, свима су потребни и <b>сигурност, уважавање и љубав</b>."],
+      ["🎁", "<b>Жеље</b> су ствари које бисмо волели да имамо, али нам нису неопходне. Није нам увек потребно оно што желимо."],
+      ["⚖️", "Наше потребе и жеље треба да буду <b>уравнотежене</b> (подједнаке), као тасови на ваги."]
+    ],
+    pitanja: [
+      { p: "Шта је основна потреба?", o: ["💧 Вода и храна", "🎮 Нова игрица", "👟 Још једне патике", "🍭 Лизалица"] },
+      { p: "Зашто је важно да задовољимо основне потребе?", o: ["Да бисмо били живи и здрави, да растемо и да се развијамо.", "Да бисмо имали највише играчака.", "Да бисмо се хвалили другарима.", "Да бисмо увек били први."] },
+      { p: "Осим хране, воде и сна, свима су потребни и…", o: ["сигурност, уважавање и љубав.", "скупи телефони.", "слаткиши сваког дана.", "нове патике."] },
+      { p: "Тата каже: „Знам да желиш још да се играш, али потребно је да спаваш.“ Шта је ту потреба?", e: "🛏️", o: ["Сан", "Игра", "Телевизор", "Играчка"] },
+      { p: "„Лепе су те патике, али ми сада нису потребне.“ Те патике су сада…", e: "👟", o: ["жеља.", "потреба."] },
+      { p: "Наше потребе и жеље треба да буду…", e: "⚖️", o: ["уравнотежене (подједнаке).", "само жеље.", "тајна.", "увек испуњене одмах."] },
+      { p: "Напољу је хладно и пада снег. Шта ти је потребно?", e: "❄️", o: ["Топла јакна, капа и рукавице", "Кратке панталоне", "Купаћи костим", "Сандале"] },
+      { t: "Све што желимо, то нам је и потребно.", da: false, obj: "Није нам увек потребно оно што желимо." },
+      { t: "Довољно сна је основна потреба.", da: true },
+      { t: "Боравак на чистом ваздуху је основна потреба.", da: true },
+      { t: "Нова играчка је основна потреба.", da: false, obj: "Нова играчка је жеља." },
+      { t: "Љубав и сигурност су потребни свима.", da: true }
+    ] },
+  zdravlje: { ime: "Чувамо здравље", em: "🩺", str: "18-19", boja: "zdravlje",
+    podseti: [
+      ["🥤", "Пијемо довољно воде. 🥗 Хранимо се здравим и разноврсним намирницама."],
+      ["🧼", "Редовно одржавамо хигијену. 🚽 Редовно идемо у тоалет."],
+      ["🌳", "Што више времена проводимо у игри на чистом ваздуху. 😴 Довољно спавамо."],
+      ["🙌", "Многе болести можемо да избегнемо редовним и правилним <b>прањем руку</b>, хигијеном целог тела (косе, главе, ушију, очију, носа…) и здравом исхраном."],
+      ["🗣️", "Кад се не осећамо добро или приметимо нешто необично на телу (црвенило, свраб…), одмах кажемо родитељима, учитељици, тренеру или другој одраслој особи."],
+      ["🩺", "<b>Лекари</b> брину о нашем здрављу. Саветују нас шта да једемо и пијемо и које лекове да користимо."],
+      ["🦷", "Лекари који брину о зубима зову се <b>стоматолози (зубари)</b>. Редовна контрола помаже да зуби дуго буду здрави."]
+    ],
+    pravo: "да се лечим", obaveza: "да бринем о хигијени и здрављу свог тела",
+    pitanja: [
+      { p: "Како можемо да избегнемо многе болести?", e: "🧼", o: ["Редовним и правилним прањем руку", "Јелом без прања руку", "Седењем пред телевизором", "Кратким спавањем"] },
+      { p: "Нешто те боли и ниси добро. Шта урадиш прво?", e: "🤒", o: ["Кажем родитељима, учитељици или другој одраслој особи.", "Сакријем то од свих.", "Сам узмем неки лек.", "Не кажем никоме."] },
+      { p: "Ко нам саветује које лекове да користимо?", e: "🩺", o: ["Лекар", "Друг из клупе", "Продавац играчака", "Комшија"] },
+      { p: "Како се зову лекари који брину о зубима?", e: "🦷", o: ["Стоматолози (зубари)", "Пекари", "Тренери", "Учитељи"] },
+      { p: "Зашто идемо на редовну контролу зуба?", o: ["Да нам зуби дуго буду здрави.", "Да добијемо слаткиш.", "Да не идемо у школу.", "Зато што је забавно чекати."] },
+      { p: "Шта значи да одржавамо хигијену?", e: "🛁", o: ["Перемо руке, зубе и тело, чешљамо се.", "Једемо пуно слаткиша.", "Гледамо цртане.", "Дуго седимо за рачунаром."] },
+      { p: "Шта је добро за здравље?", o: ["Игра на чистом ваздуху", "Цео дан пред екраном", "Мало сна", "Газирани сокови уместо воде"] },
+      { t: "Не треба да се плашиш прегледа код лекара и зубара. То ти помаже да останеш здрав.", da: true },
+      { t: "Ако ме боли стомак, нећу то никоме да кажем.", da: false, obj: "Одмах кажемо родитељима или другој одраслој особи." },
+      { t: "Имам право да се лечим.", da: true },
+      { t: "Имам обавезу да бринем о хигијени и здрављу свог тела.", da: true },
+      { t: "Довољно је да руке перемо једном недељно.", da: false, obj: "Руке перемо редовно: пре јела, после тоалета, кад дођемо споља." },
+      { t: "Пијемо довољно воде.", da: true }
+    ] },
+  ishrana: { ime: "Здрава исхрана", em: "🥗", str: "20-21", boja: "ishrana",
+    podseti: [
+      ["🍽️", "Разноврсна и редовна исхрана важна је за наше здравље. Редовна исхрана значи <b>три оброка</b> (доручак, ручак и вечеру) и <b>две ужине</b>."],
+      ["🍞", "<b>Житарице и кромпир</b> дају нам енергију за све дневне активности."],
+      ["🍗", "<b>Месо, риба и јаја</b> помажу нам да растемо и да нам се развијају мишићи."],
+      ["🍎", "<b>Воће и поврће</b> садрже пуно састојака који нам помажу да останемо здрави. Једемо их свеже, али и у компотима, соковима, салатама, чорбама…"],
+      ["🥛", "<b>Млеко и млечни производи</b> важни су за кости и зубе. Сиреви, јогурт и кисело млеко су млечни производи."],
+      ["🍫", "<b>Слаткиши, масти и уља</b> дају нам енергију, али их уносимо умерено."],
+      ["🌾", "<b>Житарице</b> су биљке које користе људи и животиње у исхрани: пшеница, кукуруз, овас, јечам, хељда…"],
+      ["⚠️", "Газирани сокови, чипс, помфрит, пица, крекери у великој количини и дуго седење пред рачунаром и телевизором воде ка гојазности и болестима."],
+      ["👄", "Изрека: <b>Здравље на уста улази.</b> Важно је да једемо здраве оброке, онолико колико нам је потребно, и да се играмо напољу или бавимо спортом."]
+    ],
+    pitanja: [
+      { p: "Колико пута дневно треба да једемо?", e: "🍽️", o: ["Три оброка и две ужине", "Само једном", "Десет пута", "Само кад смо гладни слаткиша"] },
+      { p: "Који су три главна оброка?", o: ["Доручак, ручак и вечера", "Ужина, ужина и ужина", "Доручак, слаткиш, сок", "Ручак, чипс, пица"] },
+      { p: "Шта нам дају житарице и кромпир?", e: "🍞🥔", o: ["Енергију за све дневне активности", "Јаке кости и зубе", "Само сладак укус", "Ништа"] },
+      { p: "Месо, риба и јаја помажу нам…", e: "🍗🐟🥚", o: ["да растемо и да нам се развијају мишићи.", "да боље видимо.", "да бисмо брже заспали.", "да не идемо код зубара."] },
+      { p: "Млеко и млечни производи важни су за…", e: "🥛🧀", o: ["кости и зубе.", "косу и нокте.", "брзо трчање.", "добро расположење."] },
+      { p: "Слаткише, масти и уља једемо…", e: "🍫", o: ["умерено, мало.", "што више.", "уместо ручка.", "сваки пут кад пожелимо."] },
+      { p: "Шта је од овога житарица?", e: "🌾", o: ["Пшеница", "Јабука", "Сир", "Риба"] },
+      { p: "Шта значи изрека „Здравље на уста улази“?", e: "👄", o: ["Наше здравље зависи од онога што једемо.", "Треба много да причамо.", "Уста су најважнији део тела.", "Треба да певамо сваки дан."] },
+      { p: "Нека деца често пију газиране сокове, једу чипс и дуго седе пред рачунаром. Шта се дешава?", e: "🥤🍟", o: ["То води ка гојазности и болестима.", "Брже расту.", "Постају јачи.", "Ништа се не дешава."] },
+      { p: "Ко је написао песму „Ако желиш мишиће“?", e: "💪", o: ["Љубивоје Ршумовић", "Ђорђе Ковачевић", "Вук Караџић", "Бранко Ћопић"] },
+      { t: "Јогурт и кисело млеко су млечни производи.", da: true },
+      { t: "Слаткише треба да једемо уместо ручка.", da: false, obj: "Слаткише уносимо умерено." },
+      { t: "Воће и поврће можемо јести свеже, али и у компотима, соковима, салатама и чорбама.", da: true },
+      { t: "Кромпир нам даје енергију.", da: true },
+      { t: "Важно је да једемо онолико колико нам је потребно.", da: true },
+      { t: "Кукуруз, овас и јечам су житарице.", da: true }
+    ] }
+};
+/* „Ко је ко?" koristi samo pitanja iz rodbine */
+const RODBINA = LEKCIJE.porodica.pitanja.filter(x => x.p);
+
+/* ===================== razvrstaj ===================== */
+const RAZVRSTAJ = {
+  potrebe: { ime: "Потреба или жеља?", em: "⚖️", boja: "potrebe", lek: "potrebe",
+    kat: [["p", "Потреба", "✅"], ["z", "Жеља", "🎁"]],
+    st: [["💧", "Вода", "p"], ["🍞", "Храна", "p"], ["😴", "Довољно сна", "p"], ["🧼", "Прање руку", "p"], ["🚽", "Одлазак у тоалет", "p"],
+      ["🌳", "Игра на чистом ваздуху", "p"], ["🧥", "Топла јакна кад је хладно", "p"], ["🤗", "Љубав и сигурност", "p"],
+      ["🎮", "Нова игрица", "z"], ["👟", "Још једне патике", "z"], ["🍭", "Лизалица", "z"], ["📱", "Свој телефон", "z"],
+      ["🧸", "Нова играчка", "z"], ["🍦", "Сладолед", "z"], ["📺", "Још један цртани пре спавања", "z"]] },
+  hrana: { ime: "Где припада намирница?", em: "🍽️", boja: "ishrana", lek: "ishrana",
+    kat: [["zit", "Житарице и кромпир", "🍞"], ["voce", "Воће и поврће", "🍎"], ["mleko", "Млеко и млечни производи", "🥛"], ["meso", "Месо, риба и јаја", "🍗"], ["slatko", "Слаткиши, масти и уља", "🍫"]],
+    st: [["🍞", "Хлеб", "zit"], ["🥔", "Кромпир", "zit"], ["🌽", "Кукуруз", "zit"], ["🍝", "Тестенина", "zit"], ["🥐", "Кифла", "zit"],
+      ["🍎", "Јабука", "voce"], ["🍌", "Банана", "voce"], ["🥕", "Шаргарепа", "voce"], ["🍅", "Парадајз", "voce"], ["🥦", "Броколи", "voce"], ["🍇", "Грожђе", "voce"],
+      ["🥛", "Млеко", "mleko"], ["🧀", "Сир", "mleko"], ["🥣", "Јогурт", "mleko"],
+      ["🍗", "Пилетина", "meso"], ["🐟", "Риба", "meso"], ["🥚", "Јаје", "meso"], ["🥩", "Месо", "meso"],
+      ["🍫", "Чоколада", "slatko"], ["🍬", "Бомбона", "slatko"], ["🍰", "Торта", "slatko"], ["🫒", "Маслиново уље", "slatko"], ["🍩", "Крофна", "slatko"]] },
+  skola: { ime: "Лепо понашање?", em: "🏫", boja: "skola", lek: "skola",
+    kat: [["da", "Тако је лепо", "👍"], ["ne", "Тако не треба", "👎"]],
+    st: [["⏰", "Не касним на час.", "da"], ["🙋", "Подигнем руку кад желим нешто да кажем.", "da"], ["📚", "Чувам школске ствари.", "da"], ["🗑️", "Бацам отпатке у канту.", "da"],
+      ["🚶", "Ходам полако ходницима.", "da"], ["🤝", "Помажем другарима.", "da"], ["🎲", "Поштујем правила игре.", "da"], ["💗", "Бринем о осећањима других.", "da"],
+      ["🏃", "Трчим ходником и гурам се.", "ne"], ["📢", "Вичем на часу.", "ne"], ["✏️", "Шарам по клупи.", "ne"], ["🍬", "Бацам папириће на под.", "ne"],
+      ["😠", "Ругам се другу.", "ne"], ["🐢", "Стално касним на час.", "ne"]] },
+  pravo: { ime: "Право или обавеза?", em: "📜", boja: "porodica", lek: null,
+    kat: [["p", "Имам право…", "🙋"], ["o", "Имам обавезу…", "📋"]],
+    st: [["🎒", "…да се школујем.", "p"], ["💬", "…да кажем оно што мислим.", "p"], ["🌈", "…да будем различит/различита.", "p"], ["🛡️", "…да нико у групи не врши насиље нада мном.", "p"],
+      ["🤗", "…да неко брине о мени.", "p"], ["🩺", "…да се лечим.", "p"], ["🗣️", "…да изнесем своје мишљење и жеље.", "p"],
+      ["📝", "…да редовно долазим у школу и радим домаће задатке.", "o"], ["👂", "…да саслушам друге.", "o"], ["🤝", "…да прихватим различитост других.", "o"],
+      ["⛑️", "…да не повређујем друге и не доводим их у опасност.", "o"], ["💗", "…да бринем о другима.", "o"], ["🧼", "…да бринем о хигијени и здрављу свог тела.", "o"]] },
+  zdravo: { ime: "Здраво или не?", em: "🩺", boja: "zdravlje", lek: "zdravlje",
+    kat: [["da", "Чува здравље", "💚"], ["ne", "Није здраво", "🚫"]],
+    st: [["🥤", "Пијем довољно воде.", "da"], ["🧼", "Перем руке пре јела.", "da"], ["🪥", "Перем зубе.", "da"], ["😴", "Довољно спавам.", "da"], ["⚽", "Играм се напољу.", "da"],
+      ["🥗", "Једем воће и поврће.", "da"], ["🦷", "Идем на контролу код зубара.", "da"], ["🗣️", "Кажем мами кад ме нешто боли.", "da"],
+      ["🍟", "Сваки дан једем чипс и помфрит.", "ne"], ["🥤", "Уместо воде пијем газиране сокове.", "ne"], ["📺", "Цело поподне седим пред телевизором.", "ne"],
+      ["🌙", "Играм игрице дуго у ноћ.", "ne"], ["🍫", "Слаткише једем уместо ручка.", "ne"], ["🤐", "Кријем кад ме нешто боли.", "ne"]] }
+};
+
+/* ===================== memorija: pojam ↔ značenje ===================== */
+const MEMORIJA = {
+  rodbina: { ime: "Родбина", em: "👨‍👩‍👧", boja: "porodica", parovi: [["ујак", "мамин брат"], ["стриц", "татин брат"], ["тетка", "мамина или татина сестра"], ["ујна", "ујакова жена"], ["стрина", "стрицева жена"], ["теча", "теткин муж"]] },
+  simboli: { ime: "Симболи", em: "🇷🇸", boja: "simboli", parovi: [["застава", "црвена, плава, бела"], ["грб", "двоглави бели орао"], ["химна", "„Боже правде“"], ["огњило", "алатка за паљење ватре"], ["круна", "изнад штита на грбу"], ["🥇 злато", "прво место"]] },
+  hrana: { ime: "Храна", em: "🍽️", boja: "ishrana", parovi: [["🍞 житарице", "енергија"], ["🍗 месо, риба, јаја", "мишићи"], ["🥛 млеко", "кости и зуби"], ["🍎 воће и поврће", "да останемо здрави"], ["🍫 слаткиши", "умерено"], ["🦷 стоматолог", "зубар"]] }
+};
+
+/* ===================== igre ===================== */
+const IGRE = {
+  kviz:      { ime: "Квиз", em: "❓", opis: "Питања из лекције", boja: "skola", lekcija: true },
+  tn:        { ime: "Тачно или нетачно?", em: "✅", opis: "Да ли је тако?", boja: "zdravlje", lekcija: true },
+  razvrstaj: { ime: "Разврстај", em: "🧺", opis: "Где ово припада?", boja: "igra" },
+  rodbina:   { ime: "Ко је ко?", em: "👨‍👩‍👧", opis: "Ујак, стриц, тетка…", boja: "porodica" },
+  zastava:   { ime: "Обој заставу", em: "🎨", opis: "Које боје, којим редом?", boja: "simboli" },
+  obroci:    { ime: "Оброци редом", em: "🍽️", opis: "Од доручка до вечере", boja: "ishrana" },
+  memorija:  { ime: "Меморија", em: "🃏", opis: "Појам + значење = пар", boja: "igra" },
+  kontrolni: { ime: "Контролни", em: "📝", opis: "15 питања из свих лекција, као прави тест", boja: "kontrolni" }
+};
+
+/* ===================== stanje ===================== */
+const KLJUC = "svet-2razred-v1";
+const SLICICE = ["🦊","🐼","🐨","🦁","🐯","🐸","🐵","🦄","🐙","🦋","🐞","🐢","🐬","🦒","🦓","🐘","🦔","🦉","🐧","🌻","🌈","🍓","🍉","🍒","🚀","🎨","🧁","🍭","🐳","🦕","🐝","🐰","🐱","🐶","🐹","🦜","🌵","🍄","🐌","🦩"];
+let S = { zvezde: 0, slicice: [], kontrolni: null, zvuk: true };
+
+/* ===================== prikaz ===================== */
+if (typeof document !== "undefined") {
+  try { const s = JSON.parse(localStorage.getItem(KLJUC)); if (s) S = Object.assign(S, s); } catch (e) {}
+  const sacuvaj = () => { try { localStorage.setItem(KLJUC, JSON.stringify(S)); } catch (e) {} };
+  const app = document.getElementById("app");
+  let R = null;
+  const boja = b => `var(--${b})`;
+
+  let zvukCtx = null;
+  function zvoni(vrsta) {
+    if (!S.zvuk) return;
+    try {
+      zvukCtx = zvukCtx || new (window.AudioContext || window.webkitAudioContext)();
+      const t = zvukCtx.currentTime, tonovi = vrsta === "kraj" ? [523, 659, 784, 1047] : [660, 880];
+      tonovi.forEach((f, i) => {
+        const o = zvukCtx.createOscillator(), g = zvukCtx.createGain();
+        o.type = "sine"; o.frequency.value = f; o.connect(g); g.connect(zvukCtx.destination);
+        const s = t + i * .09; g.gain.setValueAtTime(0, s); g.gain.linearRampToValueAtTime(.12, s + .02); g.gain.exponentialRampToValueAtTime(.001, s + .3);
+        o.start(s); o.stop(s + .32);
+      });
+    } catch (e) {}
+  }
+  function zvezdica(el) {
+    S.zvezde++; sacuvaj();
+    const r = (el || document.body).getBoundingClientRect(), z = document.createElement("div");
+    z.className = "leteca"; z.textContent = "⭐";
+    z.style.left = (r.left + r.width / 2 - 17) + "px"; z.style.top = (r.top + Math.min(r.height, 200) / 2) + "px";
+    document.body.appendChild(z); setTimeout(() => z.remove(), 1000);
+    const br = document.getElementById("brZvezda"); if (br) br.textContent = S.zvezde;
+    zvoni();
+  }
+  function novaSlicica() {
+    const nema = SLICICE.filter(s => !S.slicice.includes(s));
+    const s = nema.length ? pick(nema) : pick(SLICICE);
+    S.slicice.push(s); sacuvaj(); return s;
+  }
+  function zaglavlje(naslov, nazad) {
+    return `<div class="vrh">
+      ${nazad ? `<button class="nazad" data-a="pocetna" aria-label="Назад">←</button>` : ""}
+      <h1>${naslov}</h1>
+      ${nazad && R && R.lek && LEKCIJE[R.lek] ? `<button class="ikona-dugme" data-a="podseti" aria-label="Подсети се">📚</button>` : ""}
+      <span class="zvezde-brojac">⭐ <span id="brZvezda">${S.zvezde}</span></span>
+      ${nazad ? "" : `<button class="ikona-dugme" data-a="album" aria-label="Албум">🎒</button>
+      <button class="ikona-dugme" data-a="zvuk" aria-label="Звук">${S.zvuk ? "🔔" : "🔕"}</button>`}
+    </div>`;
+  }
+  const tackice = (n, i) => `<div class="napredak">${Array.from({ length: n }, (_, j) => `<i class="${j < i ? "gotov" : j === i ? "sad" : ""}"></i>`).join("")}</div>`;
+  const plocica = (id, siroka) => { const g = IGRE[id];
+    return `<button class="plocica${siroka ? " siroka" : ""}" style="--boja:${boja(g.boja)}" data-igra="${id}"><span class="em">${g.em}</span><span><b>${g.ime}</b><br><small>${g.opis}</small></span></button>`; };
+
+  /* ---------- početna ---------- */
+  function pocetna() {
+    R = null;
+    const k = S.kontrolni;
+    app.innerHTML = zaglavlje("Свет око нас за други разред") + `
+      <div class="pozdrav"><div class="lik">🌍</div><div><b>Здраво!</b><span>Прво прочитај лекцију 📚, па се играј. Свака тачна = ⭐, свака завршена игра = нова сличица.</span></div></div>
+      <div class="odeljak">📚 Лекције - прочитај и подсети се</div>
+      <div class="plocice">${Object.entries(LEKCIJE).map(([id, l]) => `<button class="plocica mala" style="--boja:${boja(l.boja)}" data-lek="${id}"><span class="em">${l.em}</span><b>${l.ime}</b><small>стр. ${l.str}</small></button>`).join("")}</div>
+      <div class="odeljak">Питања 🤔</div>
+      <div class="plocice">${["kviz", "tn", "rodbina"].map(i => plocica(i)).join("")}</div>
+      <div class="odeljak">Играмо се 🎲</div>
+      <div class="plocice">${["razvrstaj", "memorija", "zastava", "obroci"].map(i => plocica(i)).join("")}</div>
+      <div class="odeljak">Пред контролни</div>
+      <div class="plocice">${plocica("kontrolni", true)}</div>
+      ${k ? `<p style="color:var(--tiho);font-size:15px;margin-top:10px;text-align:center">Последњи контролни: ${k.t} од ${k.n} тачно</p>` : ""}`;
+  }
+
+  /* ---------- album ---------- */
+  function album() {
+    const mesta = Math.max(SLICICE.length, S.slicice.length);
+    let html = "";
+    for (let i = 0; i < mesta; i++) html += S.slicice[i] ? `<div>${S.slicice[i]}</div>` : `<div class="prazno">?</div>`;
+    app.innerHTML = zaglavlje("Мој албум", true) + `
+      <div class="statistika"><div>Звездице<b>⭐ ${S.zvezde}</b></div><div>Сличице<b>${S.slicice.length}</b></div>${S.kontrolni ? `<div>Контролни<b>📝 ${S.kontrolni.t}/${S.kontrolni.n}</b></div>` : ""}</div>
+      <div class="album">${html}</div>`;
+  }
+
+  /* ---------- izbor lekcije / skupa ---------- */
+  function izborLekcije(id) {
+    R = null;
+    const g = IGRE[id];
+    const ima = l => id === "tn" ? l.pitanja.some(x => x.t) : l.pitanja.some(x => x.p);
+    app.innerHTML = zaglavlje(`${g.em} ${g.ime}`, true) + `<p class="uputa" style="text-align:left">Коју лекцију вежбамо?</p>
+      <div class="teme">${Object.entries(LEKCIJE).filter(([, l]) => ima(l)).map(([lid, l]) => `<button class="tema" style="--boja:${boja(l.boja)}" data-izbor="${lid}"><span class="em">${l.em}</span><span><b>${l.ime}</b><small>стр. ${l.str}</small></span></button>`).join("")}
+      <button class="tema siroka" style="--boja:${boja("igra")}" data-izbor="sve"><span class="em">🔀</span><span><b>Све измешано</b><small>питања из свих лекција</small></span></button></div>`;
+    app.querySelectorAll("[data-izbor]").forEach(b => b.onclick = () => pokreni(id, b.dataset.izbor));
+  }
+  function izborSkupa(id, skupovi) {
+    R = null;
+    const g = IGRE[id];
+    app.innerHTML = zaglavlje(`${g.em} ${g.ime}`, true) + `<p class="uputa" style="text-align:left">Шта играмо?</p>
+      <div class="teme">${Object.entries(skupovi).map(([sid, s]) => `<button class="tema" style="--boja:${boja(s.boja)}" data-izbor="${sid}"><span class="em">${s.em}</span><span><b>${s.ime}</b></span></button>`).join("")}</div>`;
+    app.querySelectorAll("[data-izbor]").forEach(b => b.onclick = () => pokreni(id, b.dataset.izbor));
+  }
+  function otvori(id) {
+    if (IGRE[id].lekcija) return izborLekcije(id);
+    if (id === "razvrstaj") return izborSkupa(id, RAZVRSTAJ);
+    if (id === "memorija") return izborSkupa(id, MEMORIJA);
+    pokreni(id);
+  }
+  function pokreni(id, izbor) {
+    const g = IGRE[id];
+    R = { id, izbor, g, lek: LEKCIJE[izbor] ? izbor : null };
+    if (id === "razvrstaj") { R.lek = RAZVRSTAJ[izbor].lek; return razvrstaj(); }
+    if (id === "memorija") return memorija();
+    if (id === "zastava") { R.lek = "simboli"; return zastava(); }
+    if (id === "obroci") { R.lek = "ishrana"; return obroci(); }
+    if (id === "rodbina") R.lek = "porodica";
+    runda();
+  }
+
+  /* ---------- runda pitanja ---------- */
+  function bazen(lek, vrsta) {
+    const ls = lek && lek !== "sve" ? [LEKCIJE[lek]] : Object.values(LEKCIJE);
+    return ls.flatMap(l => l.pitanja.filter(x => vrsta === "tn" ? x.t : vrsta === "mc" ? x.p : true).map(x => Object.assign({ boja: l.boja }, x)));
+  }
+  function spisak() {
+    const { id, izbor } = R;
+    if (id === "rodbina") return shuffle(RODBINA).slice(0, 10).map(x => Object.assign({ boja: "porodica" }, x));
+    if (id === "kontrolni") {
+      /* po 2 iz svake lekcije (1 pitanje + 1 tačno/netačno) + 1 dodatno = 15 */
+      const izab = Object.values(LEKCIJE).flatMap(l => {
+        const q = shuffle(l.pitanja.filter(x => x.p)), t = shuffle(l.pitanja.filter(x => x.t));
+        return [q[0], t[0]].filter(Boolean).map(x => Object.assign({ boja: l.boja }, x));
+      });
+      const ostalo = bazen("sve", "mc").filter(x => !izab.some(y => y.p === x.p));
+      return shuffle([...izab, pick(ostalo)]).slice(0, 15);
+    }
+    const p = shuffle(bazen(izbor, id === "tn" ? "tn" : null));
+    return p.slice(0, 10);
+  }
+  function runda() {
+    const pit = spisak();
+    Object.assign(R, { i: 0, n: pit.length, zv: 0, tacnih: 0, pitanja: pit, promaseni: [] });
+    sledece();
+  }
+  function sledece() {
+    if (R.i >= R.n) return R.id === "kontrolni" ? krajKontrolnog() : kraj(R.g, R.zv, () => pokreni(R.id, R.izbor));
+    const z = R.pitanja[R.i], test = R.id === "kontrolni";
+    /* opcije čuvamo po indeksu; tačan je uvek o[0] pre mešanja */
+    let opc;
+    if (z.t) opc = [["✅ Тачно", z.da], ["❌ Нетачно", !z.da]];
+    else opc = z.o.map((t, j) => [t, j === 0]);
+    if (!z.t) opc = shuffle(opc);
+    R.opc = opc; R.greske = 0; R.gotovo = false;
+    const dva = !!z.t || opc.length === 2;
+    app.innerHTML = zaglavlje(`${R.g.em} ${R.g.ime}`, true) + `
+      <div style="--boja:${boja(z.boja || R.g.boja)}">
+        ${tackice(R.n, R.i)}
+        <div class="karta" id="karta">
+          <p class="uputa">${z.t ? "Да ли је тачно?" : test ? `Питање ${R.i + 1} од ${R.n}` : "Изабери тачан одговор."}</p>
+          <div class="prikaz">${z.e ? `<span class="emo srednji">${z.e}</span>` : ""}${z.t ? `<div class="tvrdnja">${z.t}</div>` : `<div class="pitanje">${z.p}</div>`}</div>
+          <div class="izbori${dva ? " dva" : ""}">${opc.map((o, j) => `<button class="izbor" data-i="${j}">${o[0]}</button>`).join("")}</div>
+          <div class="povratna" id="povratna" aria-live="polite"></div>
+          <div id="posle"></div>
+        </div>
+      </div>`;
+    app.querySelectorAll(".izbor").forEach(b => b.onclick = () => odgovor(b));
+  }
+  function tacanTekst(z) { return z.t ? (z.da ? "Тачно" : "Нетачно") : z.o[0]; }
+  function odgovor(b) {
+    if (R.gotovo) return;
+    const z = R.pitanja[R.i], test = R.id === "kontrolni", ok = R.opc[+b.dataset.i][1];
+    const pov = document.getElementById("povratna"), posle = document.getElementById("posle");
+    const dugmad = [...app.querySelectorAll(".izbor")], dobro = dugmad.find(x => R.opc[+x.dataset.i][1]);
+    if (ok) {
+      R.gotovo = true; b.classList.add("dobar");
+      dugmad.forEach(x => { if (x !== b) x.disabled = true; });
+      pov.className = "povratna tacno"; pov.textContent = pick(["Браво!", "Тачно!", "Супер!", "Одлично!"]);
+      if (R.greske === 0) { R.zv++; R.tacnih++; zvezdica(b); }
+      if (z.obj) { posle.innerHTML = `<div class="objasni">${z.obj}</div><button class="dalje" id="dalje">Даље →</button>`; document.getElementById("dalje").onclick = () => { R.i++; sledece(); }; }
+      else setTimeout(() => { R.i++; sledece(); }, 1100);
+      return;
+    }
+    R.greske++;
+    /* kontrolni i tačno/netačno: jedan pokušaj, pa pokažemo tačan odgovor */
+    if (test || z.t || R.greske >= 2) {
+      R.gotovo = true; b.classList.add("los"); dobro.classList.add("dobar");
+      dugmad.forEach(x => { if (x !== b && x !== dobro) x.disabled = true; });
+      if (R.greske === 1 || test) R.promaseni.push(z);
+      pov.className = "povratna skoro"; pov.textContent = `Тачан одговор: ${tacanTekst(z)}`;
+      posle.innerHTML = `${z.obj ? `<div class="objasni lose">${z.obj}</div>` : ""}<button class="dalje" id="dalje">Даље →</button>`;
+      document.getElementById("dalje").onclick = () => { R.i++; sledece(); };
+      return;
+    }
+    b.disabled = true; b.classList.remove("trese"); void b.offsetWidth; b.classList.add("trese");
+    pov.className = "povratna skoro"; pov.textContent = "Скоро! Пробај још једном.";
+  }
+  function krajKontrolnog() {
+    const n = R.n, t = R.tacnih, s = novaSlicica();
+    S.kontrolni = { t, n, d: new Date().toISOString().slice(0, 10) }; sacuvaj();
+    zvoni("kraj");
+    const poruka = t === n ? "Све тачно! Спреман/спремна си за контролни! 🏆" : t >= n * .8 ? "Одлично! Још мало па савршено." : t >= n * .5 ? "Добро је! Прочитај лекције и пробај опет." : "Хајде да прочитамо лекције 📚 па опет.";
+    app.innerHTML = zaglavlje(`${R.g.em} ${R.g.ime}`, true) + `
+      <div class="karta kraj" style="--boja:${boja(R.g.boja)}">
+        <h2>Готово! 🎉</h2>
+        <div class="ocena">${t} / ${n}</div>
+        <p>${poruka}</p>
+        ${R.promaseni.length ? `<p style="text-align:left;color:var(--mastilo);font-weight:700;margin-bottom:0">Подсети се:</p><div class="greske">${R.promaseni.map(z => `<div>${z.t || z.p}<br><b>✓ ${tacanTekst(z)}</b>${z.obj ? `<br><span style="color:var(--tiho)">${z.obj}</span>` : ""}</div>`).join("")}</div>` : ""}
+        <div class="slicica-nova">${s}</div>
+        <p>Нова сличица је у албуму!</p>
+        <div class="dugmad"><button class="dugme glavno" id="opet">Нови контролни</button><button class="dugme" data-a="pocetna">Почетна</button></div>
+      </div>`;
+    document.getElementById("opet").onclick = () => pokreni("kontrolni");
+  }
+
+  /* ---------- razvrstaj ---------- */
+  function razvrstaj() {
+    const sk = RAZVRSTAJ[R.izbor], g = R.g;
+    const st = shuffle(sk.st).slice(0, 10);
+    const V = { i: 0, n: st.length, zv: 0 };
+    const crtaj = () => {
+      if (V.i >= V.n) return kraj(g, V.zv, () => pokreni("razvrstaj", R.izbor));
+      const [e, t, k] = st[V.i];
+      let greska = false;
+      app.innerHTML = zaglavlje(`${sk.em} ${sk.ime}`, true) + `
+        <div style="--boja:${boja(sk.boja)}">${tackice(V.n, V.i)}
+        <div class="karta"><p class="uputa">Где ово припада?</p>
+          <div class="prikaz"><span class="emo">${e}</span><div class="pitanje">${t}</div></div>
+          <div class="kategorije">${sk.kat.map(([kid, ime, ik], j) => `<button class="izbor" data-j="${j}"><span class="ik">${ik}</span>${ime}</button>`).join("")}</div>
+          <div class="povratna" id="povratna"></div></div></div>`;
+      app.querySelectorAll(".kategorije .izbor").forEach(b => b.onclick = () => {
+        const kid = sk.kat[+b.dataset.j][0];
+        if (kid === k) {
+          b.classList.add("dobar"); app.querySelectorAll(".kategorije .izbor").forEach(x => x.onclick = null);
+          if (!greska) { V.zv++; zvezdica(b); } else zvoni();
+          setTimeout(() => { V.i++; crtaj(); }, 900);
+        } else {
+          greska = true; b.disabled = true; b.classList.remove("trese"); void b.offsetWidth; b.classList.add("trese");
+          const pv = document.getElementById("povratna"); pv.className = "povratna skoro"; pv.textContent = "Размисли још мало 🤔";
+        }
+      });
+    };
+    crtaj();
+  }
+
+  /* ---------- memorija ---------- */
+  function memorija() {
+    const sk = MEMORIJA[R.izbor], g = R.g;
+    const karte = shuffle(sk.parovi.flatMap((p, i) => [{ i, t: p[0], pojam: true }, { i, t: p[1], pojam: false }]));
+    let otvorene = [], parova = 0, zauzeto = false;
+    app.innerHTML = zaglavlje(`🃏 ${sk.ime}`, true) + `
+      <p style="margin:0 0 12px;color:var(--tiho)">Окрени две карте. Нађи појам и шта он значи.</p>
+      <div class="memorija" style="--boja:${boja(sk.boja)}">${karte.map((k, i) => `<button class="kartica" data-i="${i}"><span class="poledjina">?</span></button>`).join("")}</div>`;
+    const dugmad = [...app.querySelectorAll(".kartica")];
+    dugmad.forEach(b => b.onclick = () => {
+      const i = +b.dataset.i, k = karte[i];
+      if (zauzeto || b.classList.contains("okrenuta") || b.classList.contains("par")) return;
+      b.classList.add("okrenuta"); if (k.pojam) b.classList.add("pojam"); b.textContent = k.t; otvorene.push(i);
+      if (otvorene.length === 2) {
+        const [x, y] = otvorene; otvorene = [];
+        if (karte[x].i === karte[y].i) {
+          [x, y].forEach(j => dugmad[j].classList.add("par")); parova++; zvezdica(dugmad[y]);
+          if (parova === sk.parovi.length) setTimeout(() => kraj(g, parova, () => pokreni("memorija", R.izbor)), 900);
+        } else {
+          zauzeto = true;
+          setTimeout(() => { [x, y].forEach(j => { dugmad[j].classList.remove("okrenuta", "pojam"); dugmad[j].innerHTML = `<span class="poledjina">?</span>`; }); zauzeto = false; }, 1300);
+        }
+      }
+    });
+  }
+
+  /* ---------- obojimo zastavu ---------- */
+  function zastava() {
+    const g = R.g;
+    const BOJE = [["crvena", "#C6363C", "црвена"], ["plava", "#0C4076", "плава"], ["bela", "#FFFFFF", "бела"], ["zelena", "#2BA84A", "зелена"], ["zuta", "#FFD21F", "жута"], ["crna", "#222222", "црна"]];
+    const TACNO = ["crvena", "plava", "bela"];
+    const pruge = [null, null, null];
+    let izab = null, pokusaj = 0;
+    app.innerHTML = zaglavlje(`${g.em} ${g.ime}`, true) + `
+      <div class="karta" style="--boja:${boja(g.boja)}">
+        <p class="uputa">Изабери боју, па додирни пругу. Обој заставу Републике Србије!</p>
+        <div class="zastava" id="zastava">${pruge.map((_, j) => `<button data-p="${j}">${["горе", "у средини", "доле"][j]}</button>`).join("")}</div>
+        <div class="paleta">${BOJE.map(([id, c, ime]) => `<button data-b="${id}" style="--b:${c}" aria-label="${ime}"></button>`).join("")}</div>
+        <div class="povratna" id="povratna"></div>
+        <div id="posle"><button class="dalje" id="proveri">Провери</button></div>
+      </div>`;
+    const pov = document.getElementById("povratna");
+    app.querySelectorAll(".paleta button").forEach(b => b.onclick = () => {
+      app.querySelectorAll(".paleta button").forEach(x => x.classList.remove("izabrana")); b.classList.add("izabrana"); izab = b.dataset.b;
+    });
+    app.querySelectorAll("#zastava button").forEach(b => b.onclick = () => {
+      if (!izab) { pov.className = "povratna skoro"; pov.textContent = "Прво изабери боју у кругу доле 👇"; return; }
+      const c = BOJE.find(x => x[0] === izab); pruge[+b.dataset.p] = izab;
+      b.style.background = c[1]; b.textContent = ""; pov.textContent = ""; pov.className = "povratna";
+    });
+    document.getElementById("proveri").onclick = () => {
+      if (pruge.includes(null)) { pov.className = "povratna skoro"; pov.textContent = "Обој све три пруге."; return; }
+      pokusaj++;
+      if (pruge.every((p, j) => p === TACNO[j])) {
+        const zv = pokusaj === 1 ? 3 : 1;
+        for (let i = 0; i < zv; i++) zvezdica(document.getElementById("zastava"));
+        pov.className = "povratna tacno"; pov.textContent = "Браво! Црвена, плава, бела 🇷🇸";
+        document.getElementById("posle").innerHTML = `<div class="objasni">На застави се налази и грб: двоглави бели орао на црвеном штиту, а изнад њега краљевска круна.</div><button class="dalje" id="dalje">Даље →</button>`;
+        document.getElementById("dalje").onclick = () => kraj(g, zv, () => pokreni("zastava"));
+      } else {
+        const lose = pruge.map((p, j) => p === TACNO[j] ? null : ["горња", "средња", "доња"][j]).filter(Boolean);
+        pov.className = "povratna skoro"; pov.textContent = `Није још. Погледај: ${lose.join(", ")} ${lose.length > 1 ? "пруге" : "пруга"}. Подсети се 📚 у лекцији.`;
+      }
+    };
+  }
+
+  /* ---------- obroci redom ---------- */
+  function obroci() {
+    const g = R.g;
+    const RED = [["dorucak", "🍳", "Доручак"], ["uzina", "🍎", "Ужина"], ["rucak", "🍲", "Ручак"], ["uzina", "🥪", "Ужина"], ["vecera", "🥗", "Вечера"]];
+    const dugmad = shuffle(RED.map((r, j) => ({ r, j })));
+    let k = 0, greske = 0;
+    app.innerHTML = zaglavlje(`${g.em} ${g.ime}`, true) + `
+      <div class="karta" style="--boja:${boja(g.boja)}">
+        <p class="uputa">Поређај оброке током дана, од јутра до вечери. Додирни их редом.</p>
+        <div class="redosled" id="red">${RED.map((_, j) => `<div><i>${j + 1}</i><span></span></div>`).join("")}</div>
+        <div class="kategorije" id="ponuda">${dugmad.map((d, j) => `<button class="izbor" data-j="${j}"><span class="ik">${d.r[1]}</span>${d.r[2]}</button>`).join("")}</div>
+        <div class="povratna" id="povratna"></div>
+        <div id="posle"></div>
+      </div>`;
+    const mesta = [...document.querySelectorAll("#red div")], pov = document.getElementById("povratna");
+    app.querySelectorAll("#ponuda .izbor").forEach(b => b.onclick = () => {
+      const d = dugmad[+b.dataset.j];
+      if (d.r[0] === RED[k][0]) {
+        b.disabled = true; b.style.visibility = "hidden";
+        mesta[k].classList.add("puno"); mesta[k].querySelector("span").textContent = `${d.r[1]} ${d.r[2]}`; k++; zvoni();
+        pov.textContent = ""; pov.className = "povratna";
+        if (k === RED.length) {
+          const zv = Math.max(1, 5 - greske);
+          for (let i = 0; i < zv; i++) zvezdica(document.getElementById("red"));
+          pov.className = "povratna tacno"; pov.textContent = "Браво! Три оброка и две ужине.";
+          document.getElementById("posle").innerHTML = `<div class="objasni">Редовна исхрана значи три оброка (доручак, ручак и вечеру) и две ужине.</div><button class="dalje" id="dalje">Даље →</button>`;
+          document.getElementById("dalje").onclick = () => kraj(g, zv, () => pokreni("obroci"));
+        }
+      } else {
+        greske++; b.classList.remove("trese"); void b.offsetWidth; b.classList.add("trese");
+        pov.className = "povratna skoro"; pov.textContent = k === 0 ? "Шта једемо прво ујутру?" : `Шта долази после: ${RED[k - 1][2].toLowerCase()}?`;
+      }
+    });
+  }
+
+  /* ---------- kraj igre ---------- */
+  function kraj(g, zv, opet, poruka) {
+    const s = novaSlicica(); zvoni("kraj");
+    app.innerHTML = zaglavlje(`${g.em} ${g.ime}`, true) + `
+      <div class="karta kraj" style="--boja:${boja(g.boja)}">
+        <h2>Браво! 🎉</h2>
+        <p>${poruka || `У овој игри: ⭐ ${zv}`}</p>
+        <div class="slicica-nova">${s}</div>
+        <p>Нова сличица је у албуму!</p>
+        <div class="dugmad"><button class="dugme glavno" id="opet">Још једном</button><button class="dugme" data-a="pocetna">Почетна</button></div>
+      </div>`;
+    document.getElementById("opet").onclick = opet;
+  }
+
+  /* ---------- lekcija (podseti se) ---------- */
+  function lekcija(id) {
+    const l = LEKCIJE[id];
+    const z = document.createElement("div"); z.className = "zavesa"; document.body.appendChild(z);
+    const zatvori = () => { z.remove(); document.removeEventListener("keydown", esc); };
+    const esc = e => { if (e.key === "Escape") zatvori(); };
+    document.addEventListener("keydown", esc);
+    z.onclick = e => { if (e.target === z) zatvori(); };
+    const igra = { porodica: "rodbina", simboli: "zastava", ishrana: "obroci" }[id];
+    const razv = Object.entries(RAZVRSTAJ).find(([, s]) => s.lek === id);
+    z.innerHTML = `<div class="uputstvo" style="--boja:${boja(l.boja)}" role="dialog" aria-label="${l.ime}">
+      <div class="lek-vrh"><h2>${l.em} ${l.ime}</h2><button id="lekX" aria-label="Затвори">✕</button></div>
+      <p class="strana">Уџбеник, стр. ${l.str}</p>
+      <ul class="cinjenice">${l.podseti.map(([ik, t]) => `<li><span class="ik">${ik}</span><span>${t}</span></li>`).join("")}</ul>
+      ${l.pravo ? `<div class="prava"><div class="pravo"><b>ИМАМ ПРАВО…</b>…${l.pravo}.</div><div class="obaveza"><b>ИМАМ ОБАВЕЗУ…</b>…${l.obaveza}.</div></div>` : ""}
+      <div class="dugmad">
+        <button class="dugme glavno" data-ig="kviz">❓ Квиз</button>
+        <button class="dugme" data-ig="tn">✅ Тачно/нетачно</button>
+        ${razv ? `<button class="dugme" data-ig="razvrstaj" data-sk="${razv[0]}">${razv[1].em} ${razv[1].ime}</button>` : ""}
+        ${igra ? `<button class="dugme" data-ig="${igra}">${IGRE[igra].em} ${IGRE[igra].ime}</button>` : ""}
+      </div></div>`;
+    z.querySelector("#lekX").onclick = zatvori;
+    z.querySelectorAll("[data-ig]").forEach(b => b.onclick = () => {
+      zatvori();
+      const ig = b.dataset.ig;
+      if (ig === "razvrstaj") pokreni("razvrstaj", b.dataset.sk);
+      else if (IGRE[ig].lekcija) pokreni(ig, id);
+      else pokreni(ig);
+    });
+  }
+
+  /* ---------- globalni klikovi ---------- */
+  document.addEventListener("click", e => {
+    const a = e.target.closest("[data-a]"), ig = e.target.closest("[data-igra]"), lk = e.target.closest("[data-lek]");
+    if (a) {
+      if (a.dataset.a === "pocetna") pocetna();
+      else if (a.dataset.a === "album") album();
+      else if (a.dataset.a === "podseti" && R && R.lek) lekcija(R.lek);
+      else if (a.dataset.a === "zvuk") { S.zvuk = !S.zvuk; sacuvaj(); a.textContent = S.zvuk ? "🔔" : "🔕"; }
+    } else if (ig) otvori(ig.dataset.igra);
+    else if (lk) lekcija(lk.dataset.lek);
+  });
+
+  pocetna();
+}
+if (typeof module !== "undefined") module.exports = { LEKCIJE, RAZVRSTAJ, MEMORIJA };
+</script>
+</body>
+</html>
