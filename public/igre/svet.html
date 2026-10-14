@@ -745,7 +745,7 @@ if (typeof document !== "undefined") {
     app.querySelectorAll("#ponuda .izbor").forEach(b => b.onclick = () => {
       const d = dugmad[+b.dataset.j];
       if (d.r[0] === RED[k][0]) {
-        b.disabled = true; b.style.visibility = "hidden";
+        b.remove();
         mesta[k].classList.add("puno"); mesta[k].querySelector("span").textContent = `${d.r[1]} ${d.r[2]}`; k++; zvoni();
         pov.textContent = ""; pov.className = "povratna";
         if (k === RED.length) {
