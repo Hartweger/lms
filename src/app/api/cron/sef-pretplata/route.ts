@@ -135,7 +135,7 @@ async function cronHandler(request: Request) {
     const dana = Math.floor((Date.now() - new Date(poslednja.datum).getTime()) / 86400000);
     if (dana > 4) {
       izvodiAlarm = `Poslednji izvod je od ${poslednja.datum} (pre ${dana} dana).`;
-      Sentry.captureException(new Error(`[izvodi] ${izvodiAlarm} Proveri Apps Script skriptu.`));
+      Sentry.captureException(new Error(`[izvodi] ${izvodiAlarm} Proveri adresu za prijem u Intesa Biz portalu.`));
     }
   }
 

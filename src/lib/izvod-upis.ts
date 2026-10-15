@@ -11,6 +11,23 @@
 import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { procitajIzvod } from "@/lib/izvod-xml";
+
+/**
+ * Da li izvod pripada našem računu.
+ *
+ * ZAŠTO POSTOJI: izvod stiže na adresu za prijem, a pošiljaoca u mejlu je lako
+ * lažirati. Ko bi saznao tu adresu mogao bi da pošalje izmišljen izvod i ubaci
+ * lažne uplate - a uplata se u panelu nudi kao potvrda narudžbine, pa bi jedan
+ * klik otvorio kurs koji niko nije platio. Broj računa stoji u samom dokumentu.
+ *
+ * Poređenje ide samo po ciframa: banka ume da ispiše račun sa crticama i bez njih.
+ */
+export function istiRacun(a: string | null | undefined, b: string | null | undefined): boolean {
+  const ocisti = (x: string) => x.replace(/[^0-9]/g, "");
+  if (!a || !b) return false;
+  const x = ocisti(a);
+  return x.length > 0 && x === ocisti(b);
+}
 import type { Database, Json } from "@/lib/supabase/database.types";
 
 export interface IshodUpisa {
@@ -34,6 +51,21 @@ export async function upisiIzvod(
   } catch (e) {
     const poruka = e instanceof Error ? e.message : "nečitljiv XML";
     return { ok: false, ukupno: 0, novih: 0, greska: `Izvod nije pročitan: ${poruka}` };
+  }
+
+  // Namerno tvrdo: bez podešenog računa se ne upisuje ništa. Propuštena provera
+  // ovde ne pravi grešku koja se vidi, nego lažne uplate koje izgledaju ispravno.
+  const nasRacun = process.env.IZVOD_RACUN;
+  if (!nasRacun) {
+    return { ok: false, ukupno: 0, novih: 0, greska: "IZVOD_RACUN nije podešen - izvod se ne upisuje." };
+  }
+  if (!istiRacun(izvod.racun, nasRacun)) {
+    return {
+      ok: false,
+      ukupno: 0,
+      novih: 0,
+      greska: `Izvod je za tuđi račun (${izvod.racun ?? "bez broja"}) - nije upisan.`,
+    };
   }
 
   if (izvod.stavke.length === 0) {
