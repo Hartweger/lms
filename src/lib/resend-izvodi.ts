@@ -47,7 +47,7 @@ export function resendSanducePodeseno(): boolean {
  */
 export async function povuciIzvodeIzResenda(
   koliko = 100,
-): Promise<{ ok: true; izvodi: NadjenIzvod[] } | { ok: false; greska: string }> {
+): Promise<{ ok: true; izvodi: NadjenIzvod[]; pregledano: number } | { ok: false; greska: string }> {
   const kljuc = process.env.RESEND_API_KEY;
   if (!kljuc) return { ok: false, greska: "RESEND_API_KEY nije postavljen." };
 
@@ -85,5 +85,5 @@ export async function povuciIzvodeIzResenda(
     }
   }
 
-  return { ok: true, izvodi: out };
+  return { ok: true, izvodi: out, pregledano: lista.data?.data?.length ?? 0 };
 }

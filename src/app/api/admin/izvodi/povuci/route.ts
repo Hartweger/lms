@@ -32,6 +32,7 @@ export async function POST() {
   }
 
   return NextResponse.json({
+    pregledano: posta.pregledano,
     stiglo: posta.izvodi.length,
     novih,
     izvodi: izvodi.sort((a, b) => a - b),

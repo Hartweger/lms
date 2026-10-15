@@ -61,7 +61,7 @@ export default function IzvodStavke({ redovi }: { redovi: IzvodRed[] }) {
       }
       setPoruka(
         json.novih === 0
-          ? `Pregledano ${json.stiglo} izvoda iz pošte - ništa novo.`
+          ? `Pregledano ${json.pregledano} poruka, od toga ${json.stiglo} izvoda - ništa novo.`
           : `Povučeno: ${json.novih} nov${json.novih === 1 ? "a stavka" : "ih stavki"} (izvodi ${json.izvodi.join(", ")}).`,
       );
       router.refresh();
