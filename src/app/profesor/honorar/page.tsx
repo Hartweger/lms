@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { aggregateMonthly, computeHonorar, MESECI } from "@/lib/honorar";
+import { aggregateMonthly, computeHonorar, MESECI, GRP_BONUS_OD_STARTA } from "@/lib/honorar";
 import { resolveProfessorView } from "@/lib/professor-view";
 import AktivnostForm from "./AktivnostForm";
 import ZamenaForm from "./ZamenaForm";
@@ -108,7 +108,12 @@ export default async function ProfesorHonorar({ searchParams }: { searchParams: 
         )}
         <AktivnostForm activities={acts ?? []} />
         <ZamenaForm groups={groupOptions} requests={myZamene} />
-        <p className="text-xs text-gray-400 mt-3">Računato uživo iz održanih časova/sesija. Za grupe koje počinju od 1.11.2026. svaki čas nosi +150 din za svakog polaznika preko trećeg (4 polaznika +150, 5 +300, 6 +450). Zvaničan obračun stiže mejlom 1. u mesecu.</p>
+        <p className="text-xs text-gray-400 mt-3">
+          Računato uživo iz održanih časova/sesija.
+          {/* Pravilo se profesorkama najavljuje mejlom u decembru - do starta se ne prikazuje. */}
+          {today >= GRP_BONUS_OD_STARTA && " Za grupe koje počinju od 1.1.2027. svaki čas nosi +150 din za svakog polaznika preko trećeg (4 polaznika +150, 5 +300, 6 +450)."}
+          {" "}Zvaničan obračun stiže mejlom 1. u mesecu.
+        </p>
       </div>
     );
   }

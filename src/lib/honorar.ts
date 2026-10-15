@@ -5,12 +5,12 @@ export const DEFAULT_HONORAR_IND = 1400;
 export const DEFAULT_HONORAR_GRP = 1600;
 
 /**
- * Dodatak za veličinu grupe (odluka 13.10.2026): grupe koje POČINJU od 01.11.2026. donose profesorki
+ * Dodatak za veličinu grupe (odluka 13.10.2026, start pomeren 15.10. na 2027): grupe koje POČINJU od 01.01.2027. donose profesorki
  * +150 din po času za svakog plaćenog polaznika preko trećeg (4 → +150, 5 → +300, 6 → +450).
  * Broji se živo: polaznik upisan (beogradski datum upisa) najkasnije na dan časa ulazi u taj čas,
  * pa kasni upis podiže honorar od tog časa nadalje. Otkazani/stornirani upisi se ne broje.
  */
-export const GRP_BONUS_OD_STARTA = "2026-11-01";
+export const GRP_BONUS_OD_STARTA = "2027-01-01";
 export const GRP_BONUS_PRAG = 3;
 export const GRP_BONUS_PO_POLAZNIKU = 150;
 

@@ -47,24 +47,24 @@ describe("aggregateMonthly", () => {
 });
 
 describe("groupSessionBonus", () => {
-  const upisi = (n: number, datum = "2026-10-20") => Array.from({ length: n }, () => datum);
-  it("grupa pre 01.11.2026. nema dodatak ni sa 6 polaznika", () => {
-    expect(groupSessionBonus("2026-10-19", upisi(6), "2026-11-10")).toBe(0);
-    expect(groupSessionBonus(null, upisi(6), "2026-11-10")).toBe(0);
+  const upisi = (n: number, datum = "2026-12-20") => Array.from({ length: n }, () => datum);
+  it("grupa pre 01.01.2027. nema dodatak ni sa 6 polaznika", () => {
+    expect(groupSessionBonus("2026-11-19", upisi(6), "2027-01-12")).toBe(0);
+    expect(groupSessionBonus(null, upisi(6), "2027-01-12")).toBe(0);
   });
   it("2-3 polaznika: 0, 4: 150, 5: 300, 6: 450, 7: 600", () => {
-    expect(groupSessionBonus("2026-11-03", upisi(2), "2026-11-03")).toBe(0);
-    expect(groupSessionBonus("2026-11-03", upisi(3), "2026-11-03")).toBe(0);
-    expect(groupSessionBonus("2026-11-03", upisi(4), "2026-11-03")).toBe(150);
-    expect(groupSessionBonus("2026-11-03", upisi(5), "2026-11-03")).toBe(300);
-    expect(groupSessionBonus("2026-11-03", upisi(6), "2026-11-03")).toBe(450);
-    expect(groupSessionBonus("2026-11-03", upisi(7), "2026-11-03")).toBe(600);
+    expect(groupSessionBonus("2027-01-05", upisi(2), "2027-01-05")).toBe(0);
+    expect(groupSessionBonus("2027-01-05", upisi(3), "2027-01-05")).toBe(0);
+    expect(groupSessionBonus("2027-01-05", upisi(4), "2027-01-05")).toBe(150);
+    expect(groupSessionBonus("2027-01-05", upisi(5), "2027-01-05")).toBe(300);
+    expect(groupSessionBonus("2027-01-05", upisi(6), "2027-01-05")).toBe(450);
+    expect(groupSessionBonus("2027-01-05", upisi(7), "2027-01-05")).toBe(600);
   });
   it("živo brojanje: kasni upis važi od dana upisa nadalje", () => {
-    const d = [...upisi(3), "2026-11-10"];
-    expect(groupSessionBonus("2026-11-03", d, "2026-11-05")).toBe(0);
-    expect(groupSessionBonus("2026-11-03", d, "2026-11-10")).toBe(150);
-    expect(groupSessionBonus("2026-11-03", d, "2026-11-12")).toBe(150);
+    const d = [...upisi(3), "2027-01-12"];
+    expect(groupSessionBonus("2027-01-05", d, "2027-01-07")).toBe(0);
+    expect(groupSessionBonus("2027-01-05", d, "2027-01-12")).toBe(150);
+    expect(groupSessionBonus("2027-01-05", d, "2027-01-14")).toBe(150);
   });
 });
 
