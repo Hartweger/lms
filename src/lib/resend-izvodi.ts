@@ -12,8 +12,13 @@
 import "server-only";
 import { Resend } from "resend";
 
-/** Banka; prihvata se i poddomen sa kog stiže pošta. */
-const POSILJALAC = /bancaintesa\.rs$/i;
+/**
+ * Banke od kojih primamo izvode; prihvata se i poddomen sa kog stiže pošta.
+ *
+ * Ovo je samo gruba predprovera - pravu odluku donosi broj računa iz samog
+ * dokumenta (vidi `lib/izvod-upis`), jer se pošiljalac u mejlu lako lažira.
+ */
+const POSILJALAC = /(bancaintesa|unicreditgroup)\.rs$/i;
 
 export interface NadjenIzvod {
   ime: string;

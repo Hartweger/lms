@@ -28,6 +28,19 @@ export function istiRacun(a: string | null | undefined, b: string | null | undef
   const x = ocisti(a);
   return x.length > 0 && x === ocisti(b);
 }
+
+/**
+ * Da li je račun među našima. `IZVOD_RACUN` prima više računa, razdvojenih
+ * zarezom - jedna firma ume da ima i dinarski i devizni, i račun u drugoj banci.
+ */
+export function nasRacun(racun: string | null | undefined, podeseno: string | undefined): boolean {
+  if (!podeseno) return false;
+  return podeseno
+    .split(",")
+    .map((r) => r.trim())
+    .filter(Boolean)
+    .some((r) => istiRacun(racun, r));
+}
 import type { Database, Json } from "@/lib/supabase/database.types";
 
 export interface IshodUpisa {
@@ -55,11 +68,11 @@ export async function upisiIzvod(
 
   // Namerno tvrdo: bez podešenog računa se ne upisuje ništa. Propuštena provera
   // ovde ne pravi grešku koja se vidi, nego lažne uplate koje izgledaju ispravno.
-  const nasRacun = process.env.IZVOD_RACUN;
-  if (!nasRacun) {
+  const podeseni = process.env.IZVOD_RACUN;
+  if (!podeseni) {
     return { ok: false, ukupno: 0, novih: 0, greska: "IZVOD_RACUN nije podešen - izvod se ne upisuje." };
   }
-  if (!istiRacun(izvod.racun, nasRacun)) {
+  if (!nasRacun(izvod.racun, podeseni)) {
     return {
       ok: false,
       ukupno: 0,
