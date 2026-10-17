@@ -24,6 +24,8 @@ export interface OtvorenaGrupa {
   level: string;
   /** YYYY-MM-DD */
   startDate: string;
+  /** Upisanih >= max_seats - status ostaje „otvoren", ali mesta nema. */
+  popunjena?: boolean;
 }
 
 export interface Obavestenje {
@@ -36,6 +38,8 @@ export interface Obavestenje {
  *
  * - samo grupe koje tek kreću (start_date >= danas) - niko ne želi poziv na
  *   kurs koji je prošle nedelje počeo
+ * - popunjena grupa se preskače: 16.10.2026 je Vanja dobila „termin je
+ *   otvoren" za A1.1 od 19.10 koja je dan ranije bila 6/6
  * - jedan čovek dobija NAJRANIJU grupu svog nivoa, ne sve
  * - par koji je već obavešten se preskače (ključ `${contactId}|${groupId}`)
  * - isti mejl na dva nivoa dobija samo jedno obaveštenje po pokretanju, da se
@@ -56,7 +60,7 @@ export function zaObavestiti(
 ): Obavestenje[] {
   const poNivou = new Map<string, OtvorenaGrupa[]>();
   for (const g of grupe) {
-    if (g.startDate < danas) continue;
+    if (g.startDate < danas || g.popunjena) continue;
     const lista = poNivou.get(g.level) ?? [];
     lista.push(g);
     poNivou.set(g.level, lista);

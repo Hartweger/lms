@@ -30,14 +30,27 @@ async function cronHandler(request: NextRequest) {
   const grupeRows = must(
     await admin
       .from("groups")
-      .select("id, level, start_date, days, session_time, purchasable_course_id, professor:professor_id(full_name)")
+      .select("id, level, start_date, days, session_time, max_seats, purchasable_course_id, professor:professor_id(full_name)")
       .eq("status", "otvoren")
       .gte("start_date", danas),
     "groups",
   );
+  // status ostaje „otvoren" i kad se grupa popuni, pa mesta brojimo sami
+  const upisi = (grupeRows ?? []).length
+    ? must(
+        await admin.from("group_enrollments").select("group_id")
+          .in("group_id", (grupeRows ?? []).map((g) => g.id)).is("cancelled_at", null),
+        "group_enrollments",
+      )
+    : [];
+  const upisanoPoGrupi = new Map<string, number>();
+  for (const u of upisi ?? []) upisanoPoGrupi.set(u.group_id, (upisanoPoGrupi.get(u.group_id) ?? 0) + 1);
   const grupe: OtvorenaGrupa[] = (grupeRows ?? [])
     .filter((g): g is typeof g & { start_date: string } => !!g.start_date)
-    .map((g) => ({ id: g.id, level: g.level, startDate: g.start_date }));
+    .map((g) => ({
+      id: g.id, level: g.level, startDate: g.start_date,
+      popunjena: g.max_seats != null && (upisanoPoGrupi.get(g.id) ?? 0) >= g.max_seats,
+    }));
   if (!grupe.length) return NextResponse.json({ poslato: 0, razlog: "nema otvorenih termina" });
 
   // 2) ko čeka koji nivo + ko je već obavešten (oba iz crm_interactions)

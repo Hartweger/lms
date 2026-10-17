@@ -24,6 +24,21 @@ describe("zaObavestiti", () => {
     expect(zaObavestiti([lid("c1", "B2.1")], [grupa("g1", "B2.1", "2026-10-08")], new Set(), DANAS)).toEqual([]);
   });
 
+  it("preskače popunjenu grupu i javlja za sledeću slobodnu", () => {
+    const r = zaObavestiti(
+      [lid("c1", "A1.1")],
+      [{ ...grupa("puna", "A1.1", "2026-10-19"), popunjena: true }, grupa("slobodna", "A1.1", "2026-10-28")],
+      new Set(), DANAS,
+    );
+    expect(r).toHaveLength(1);
+    expect(r[0].grupa.id).toBe("slobodna");
+  });
+
+  it("ćuti kad je jedina grupa nivoa popunjena", () => {
+    const g = { ...grupa("puna", "A1.1", "2026-10-19"), popunjena: true };
+    expect(zaObavestiti([lid("c1", "A1.1")], [g], new Set(), DANAS)).toEqual([]);
+  });
+
   it("javlja za grupu koja kreće baš danas", () => {
     expect(zaObavestiti([lid("c1", "B2.1")], [grupa("g1", "B2.1", DANAS)], new Set(), DANAS)).toHaveLength(1);
   });
