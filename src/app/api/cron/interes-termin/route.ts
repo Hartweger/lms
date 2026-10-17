@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { withCronLog, must } from "@/lib/cron-log";
 import { sendTerminOtvoren } from "@/lib/email";
-import { formatDaysFull } from "@/lib/groups";
+import { computeSeats, formatDaysFull, resolveGroupCourse } from "@/lib/groups";
 import { kljuc, zaObavestiti, type Lid, type OtvorenaGrupa } from "@/lib/interes-obavestenje";
 import { SITE_URL } from "@/lib/site-url";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -30,16 +30,17 @@ async function cronHandler(request: NextRequest) {
   const grupeRows = must(
     await admin
       .from("groups")
-      .select("id, level, start_date, days, session_time, max_seats, purchasable_course_id, professor:professor_id(full_name)")
+      .select("id, level, start_date, days, session_time, max_seats, manual_enrolled, purchasable_course_id, professor:professor_id(full_name)")
       .eq("status", "otvoren")
       .gte("start_date", danas),
     "groups",
   );
-  // status ostaje „otvoren" i kad se grupa popuni, pa mesta brojimo sami
+  // status ostaje „otvoren" i kad se grupa popuni, pa mesta brojimo sami -
+  // isto kao checkout i /raspored (computeSeats: manual_enrolled + aktivni upisi)
   const upisi = (grupeRows ?? []).length
     ? must(
         await admin.from("group_enrollments").select("group_id")
-          .in("group_id", (grupeRows ?? []).map((g) => g.id)).is("cancelled_at", null),
+          .in("group_id", (grupeRows ?? []).map((g) => g.id)).eq("status", "active"),
         "group_enrollments",
       )
     : [];
@@ -49,7 +50,9 @@ async function cronHandler(request: NextRequest) {
     .filter((g): g is typeof g & { start_date: string } => !!g.start_date)
     .map((g) => ({
       id: g.id, level: g.level, startDate: g.start_date,
-      popunjena: g.max_seats != null && (upisanoPoGrupi.get(g.id) ?? 0) >= g.max_seats,
+      popunjena: computeSeats({
+        maxSeats: g.max_seats, manualEnrolled: g.manual_enrolled, activeEnrollments: upisanoPoGrupi.get(g.id) ?? 0,
+      }).full,
     }));
   if (!grupe.length) return NextResponse.json({ poslato: 0, razlog: "nema otvorenih termina" });
 
@@ -85,28 +88,30 @@ async function cronHandler(request: NextRequest) {
   const zaSlanje = zaObavestiti(lidovi, grupe, vecObavesteni, danas, poslednjaKupovina);
   if (!zaSlanje.length) return NextResponse.json({ poslato: 0, cekaju: lidovi.length });
 
-  // 3) detalji grupe i cena - konkretan termin prodaje bolje od gole stranice
+  // 3) detalji grupe i cena - konkretan termin prodaje bolje od gole stranice.
+  // Kurs se nalazi kao na /raspored (resolveGroupCourse): skoro nijedna grupa nema
+  // purchasable_course_id, pa je mejl do 17.10.2026 vodio na /raspored bez cene.
+  const kursevi = must(
+    await admin.from("courses").select("id, slug, price, paypal_price_eur")
+      .eq("is_purchasable", true).eq("is_published", true).like("slug", "grupni%"),
+    "courses",
+  );
   const detalji = new Map(
     (grupeRows ?? []).map((g) => {
       const p = Array.isArray(g.professor) ? g.professor[0] : g.professor;
       return [g.id, {
         dani: formatDaysFull(g.days), vreme: (g.session_time ?? "").split("-")[0],
-        prof: p?.full_name ?? "", kursId: g.purchasable_course_id as string | null,
+        prof: p?.full_name ?? "", kurs: resolveGroupCourse(g, kursevi ?? []),
       }];
     }),
   );
-  const kursIds = [...new Set([...detalji.values()].map((d) => d.kursId).filter(Boolean))] as string[];
-  const kursevi = kursIds.length
-    ? must(await admin.from("courses").select("id, slug, price").in("id", kursIds), "courses")
-    : [];
-  const kursPoId = new Map((kursevi ?? []).map((c) => [c.id, c]));
 
   // 4) slanje; svaki uspeh odmah ostavlja trag, da pad na pola ne ponovi mejlove
   let poslato = 0;
   const greske: string[] = [];
   for (const { lid, grupa } of zaSlanje) {
     const d = detalji.get(grupa.id);
-    const kurs = d?.kursId ? kursPoId.get(d.kursId) : null;
+    const kurs = d?.kurs ?? null;
     try {
       const res = await sendTerminOtvoren(lid.email, lid.ime ?? "", {
         nivo: grupa.level,
